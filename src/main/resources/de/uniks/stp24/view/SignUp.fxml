@@ -74,12 +74,20 @@
       </VBox>
       <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
          <children>
-            <Button fx:id="registerButton" mnemonicParsing="false" prefHeight="75.0" prefWidth="300.0" style="-fx-background-color: #3BB143;" text="Register">
+            <Button mnemonicParsing="false" onAction="#register" prefHeight="75.0" prefWidth="300.0" style="-fx-background-color: #3BB143;" text="Register">
                <font>
                   <Font size="18.0" />
                </font>
                <VBox.margin>
                   <Insets />
+               </VBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#goBack" prefHeight="75.0" prefWidth="300.0" style="-fx-background-color: RED;" text="Return">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="10.0" />
                </VBox.margin>
             </Button>
          </children>

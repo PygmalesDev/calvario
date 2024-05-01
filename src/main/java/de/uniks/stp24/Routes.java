@@ -1,20 +1,23 @@
 package de.uniks.stp24;
 
-import de.uniks.stp24.controllers.SignUpController;
+import de.uniks.stp24.controllers.*;
 import org.fulib.fx.annotation.Route;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
+import javax.security.auth.login.LoginContext;
 
 @Singleton
 public class Routes {
-    /* TODO add routes
-    example:
-    @Route("login")
+    @Route("load")
+    @Inject
+    Provider<LoadController> load;
+
+    @Route("load")
     @Inject
     Provider<LoginController> login;
-     */
+
     @Route("signup")
     @Inject
     Provider<SignUpController> signup;

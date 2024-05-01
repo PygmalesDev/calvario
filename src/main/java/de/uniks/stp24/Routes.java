@@ -14,7 +14,7 @@ public class Routes {
     @Inject
     Provider<LoadController> load;
 
-    @Route("load")
+    @Route("login")
     @Inject
     Provider<LoginController> login;
 

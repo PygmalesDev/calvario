@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Module;
 import dagger.Provides;
 import de.uniks.stp24.Main;
+import de.uniks.stp24.rest.AuthApiService;
 import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.TokenStorage;
 import okhttp3.OkHttpClient;
@@ -51,6 +52,12 @@ public class HttpModule {
             .addConverterFactory(JacksonConverterFactory.create(mapper))
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build();
+    }
+
+    @Provides
+    @Singleton
+    AuthApiService authApiService(Retrofit retrofit){
+        return retrofit.create(AuthApiService.class);
     }
 
     @Provides

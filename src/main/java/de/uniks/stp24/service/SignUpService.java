@@ -1,7 +1,8 @@
-package de.uniks.stp24.rest;
+package de.uniks.stp24.service;
 
 import de.uniks.stp24.controllers.SignUpController;
 import de.uniks.stp24.dto.CreateUserDto;
+import de.uniks.stp24.rest.UserApiService;
 
 import javax.inject.Inject;
 import java.util.Map;

@@ -1,12 +1,15 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.dto.CreateUserDto;
 import de.uniks.stp24.service.SignUpService;
+import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
@@ -19,8 +22,9 @@ import java.util.Objects;
 @Controller
 public class SignUpController {
     public TextField usernameField;
-    public TextField passwordField;
-    public TextField errorText;
+    public PasswordField passwordField;
+    public PasswordField repeatPasswordField;
+    public Text errorTextField;
     public Button registerButton;
 
     @Param("username")
@@ -35,14 +39,28 @@ public class SignUpController {
     @Inject
     UserApiService userApiService;
 
-    private final BooleanBinding isLoginFieldEmpty =  this.usernameField.textProperty().isEmpty();
-    private final BooleanBinding isPasswordFieldEmpty = this.passwordField.textProperty().isEmpty();
+    private BooleanBinding isLoginFieldEmpty;
+    private BooleanBinding isPasswordFieldEmpty;
+    private BooleanBinding isRepeatPasswordEmpty;
+    private BooleanBinding passwordInputsMatch;
+    private BooleanBinding isPasswordTooShort;
 
     @Inject
     public SignUpController() {
     }
 
-    // Gets inputs from login screen to the signup screen fields.
+    // Sets boolean bindings for text manipulations
+    @OnRender
+    public void createBindings() {
+       this.isLoginFieldEmpty =  this.usernameField.textProperty().isEmpty();
+       this.isPasswordFieldEmpty = this.passwordField.textProperty().isEmpty();
+       this.isRepeatPasswordEmpty = this.repeatPasswordField.textProperty().isEmpty();
+       this.isPasswordTooShort = this.passwordField.lengthProperty().lessThan(8);
+       this.passwordInputsMatch = Bindings.equal(this.passwordField.textProperty(),
+               this.repeatPasswordField.textProperty());
+    }
+
+    // Gets inputs from login screen to the signup screen fields
     @OnRender
     public void applyInputs() {
         if (Objects.nonNull(this.username))
@@ -51,34 +69,43 @@ public class SignUpController {
             this.passwordField.setText(this.password);
     }
 
-    // Disables register button when input fields are empty or password inputs do not match.
+    // Disables register button when input fields are empty or password inputs do not match
     @OnRender
     public void disableRegisterButton() {
-        this.registerButton.setDisable(true);
-        this.registerButton.disableProperty().bind(
-                this.isLoginFieldEmpty.and(this.isPasswordFieldEmpty));
-        // TODO: After the second password field is added, check for the equality of password inputs!
+        this.registerButton.disableProperty()
+                .bind(this.isLoginFieldEmpty
+                        .or(this.isPasswordFieldEmpty)
+                        .or(this.isRepeatPasswordEmpty)
+                        .or(this.passwordInputsMatch).not()
+                        .or(this.isPasswordTooShort)
+                );
     }
 
-    // Shows an error message when input fields are empty or password inputs do not match.
+    // Shows an error message when input fields are empty or password inputs do not match
     @OnRender
     public void showErrorMessage() {
-        this.errorText.textProperty().bind(Bindings.createStringBinding(() -> {
-            if (this.isLoginFieldEmpty.get()) {
+        this.errorTextField.textProperty().bind(Bindings.createStringBinding(() -> {
+            if (this.isLoginFieldEmpty.get())
                 return "Please enter a username";
-            }
-            if (this.isPasswordFieldEmpty.get()) {
+            if (this.isPasswordFieldEmpty.get())
                 return "Please enter a password";
-            }
+            if (this.isPasswordTooShort.get())
+                return "Password must contain at least 8 characters";
+            if (this.isRepeatPasswordEmpty.get())
+                return "Please repeat the password";
+            if (!this.passwordInputsMatch.get())
+                return "Passwords do not match";
             return "";
-        }, this.isLoginFieldEmpty, this.isPasswordFieldEmpty));
+        }, this.isLoginFieldEmpty, this.isPasswordFieldEmpty,
+                this.isRepeatPasswordEmpty, this.passwordInputsMatch,
+                this.isPasswordTooShort));
     }
 
     public void register() {
         this.signUpService.register(this.getUsername(), this.getPassword());
     }
 
-    // Returns user to the login screen.
+    // Returns user to the login screen
     public void goBack() {
         app.show("/login",
                 Map.of("username", this.getUsername(),

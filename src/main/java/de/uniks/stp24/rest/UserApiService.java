@@ -7,6 +7,6 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface UserApiService {
-    @POST("auth/users")
+    @POST("users")
     Observable<SignUpResultDto> signup(@Body CreateUserDto dto);
 }

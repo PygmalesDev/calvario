@@ -13,10 +13,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.Title;
 
 import javax.inject.Inject;
 import javax.swing.*;
+import java.util.Map;
 
+@Title("Login")
 @Controller
 public class LoginController {
     @FXML
@@ -57,7 +60,9 @@ public class LoginController {
     }
 
     public void signup(ActionEvent actionEvent) {
-        app.show("/signup");
+        String username = this.usernameInput.getText();
+        String password = this.passwordInput.getText();
+        app.show("/signup", Map.of("username",username,"password",password));
     }
 
     public void setEn() {

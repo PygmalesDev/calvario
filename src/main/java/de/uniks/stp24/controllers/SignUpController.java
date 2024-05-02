@@ -38,7 +38,7 @@ public class SignUpController {
     private final BooleanBinding isLoginFieldEmpty =  this.usernameField.textProperty().isEmpty();
     private final BooleanBinding isPasswordFieldEmpty = this.passwordField.textProperty().isEmpty();
 
-
+    @Inject
     public SignUpController() {
     }
 

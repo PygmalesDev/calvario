@@ -11,6 +11,10 @@ public class SignUpService {
     @Inject
     UserApiService userApiService;
 
+    @Inject
+    public  SignUpService(){
+    }
+
     // Registers a new user account on server if such username does not exist
     public boolean register(String username, String password) {
         if (this.checkForAccountExistence(username))

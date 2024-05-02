@@ -9,8 +9,6 @@ import java.util.Map;
 
 public class SignUpService {
     @Inject
-    SignUpController signUpController;
-    @Inject
     UserApiService userApiService;
 
     // Registers a new user account on server if such username does not exist

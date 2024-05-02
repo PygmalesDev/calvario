@@ -24,9 +24,9 @@ public class SignUpController {
     public Button registerButton;
 
     @Param("username")
-    String username;
+    public String username;
     @Param("password")
-    String password;
+    public String password;
 
     @Inject
     App app;
@@ -44,7 +44,7 @@ public class SignUpController {
 
     // Gets inputs from login screen to the signup screen fields.
     @OnRender
-    private void applyInputs() {
+    public void applyInputs() {
         if (Objects.nonNull(this.username))
             this.usernameField.setText(this.username);
         if (Objects.nonNull(this.password))
@@ -53,7 +53,7 @@ public class SignUpController {
 
     // Disables register button when input fields are empty or password inputs do not match.
     @OnRender
-    private void disableRegisterButton() {
+    public void disableRegisterButton() {
         this.registerButton.setDisable(true);
         this.registerButton.disableProperty().bind(
                 this.isLoginFieldEmpty.and(this.isPasswordFieldEmpty));
@@ -62,7 +62,7 @@ public class SignUpController {
 
     // Shows an error message when input fields are empty or password inputs do not match.
     @OnRender
-    private void showErrorMessage() {
+    public void showErrorMessage() {
         this.errorText.textProperty().bind(Bindings.createStringBinding(() -> {
             if (this.isLoginFieldEmpty.get()) {
                 return "Please enter a username";
@@ -74,12 +74,12 @@ public class SignUpController {
         }, this.isLoginFieldEmpty, this.isPasswordFieldEmpty));
     }
 
-    private void register() {
+    public void register() {
         this.signUpService.register(this.getUsername(), this.getPassword());
     }
 
     // Returns user to the login screen.
-    private void goBack() {
+    public void goBack() {
         app.show("/login",
                 Map.of("username", this.getUsername(),
                         "password", this.getPassword()

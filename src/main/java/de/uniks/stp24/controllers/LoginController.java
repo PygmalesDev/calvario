@@ -14,10 +14,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
+import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.param.Param;
 
 import javax.inject.Inject;
 import javax.swing.*;
 import java.util.Map;
+import java.util.Objects;
 
 @Title("Login")
 @Controller
@@ -45,8 +48,21 @@ public class LoginController {
     @Inject
     LoginService loginService;
 
+    @Param("username")
+    public String username;
+    @Param("password")
+    public String password;
+
     @Inject
     public LoginController(){
+    }
+
+    @OnRender
+    public void applyInputs() {
+        if (Objects.nonNull(this.username))
+            this.usernameInput.setText(this.username);
+        if (Objects.nonNull(this.password))
+            this.passwordInput.setText(this.password);
     }
 
     public void login(ActionEvent actionEvent) {

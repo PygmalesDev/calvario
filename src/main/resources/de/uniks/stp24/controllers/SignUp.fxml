@@ -5,14 +5,18 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="500.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.SignUpController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="500.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.SignUpController">
    <children>
       <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
          <children>
@@ -47,31 +51,45 @@
                   <Insets />
                </opaqueInsets>
                <VBox.margin>
-                  <Insets bottom="25.0" />
+                  <Insets />
                </VBox.margin>
             </TextField>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <TextField fx:id="passwordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" promptText="PASSWORD">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </TextField>
-                  <ToggleButtonGroup blendMode="DARKEN" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="0.0">
-                     <toggles>
-                        <ToggleButton minHeight="-Infinity" minWidth="-Infinity">
-                           <graphic>
-                              <Icon fx:id="showPasswordIcon" content="KEYBOARD" />
-                           </graphic>
-                        </ToggleButton>
-                     </toggles>
-                  </ToggleButtonGroup>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <PasswordField fx:id="passwordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" promptText="PASSWORD">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </PasswordField>
+                        <PasswordField fx:id="repeatPasswordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" promptText="REPEAT PASSWORD">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </PasswordField>
+                     </children>
+                  </VBox>
+                  <BorderPane prefHeight="100.0" prefWidth="10.0" />
+                  <ToggleButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="5.0">
+                     <graphic>
+                        <ImageView fx:id="showPasswordToggleButton" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../Icons/Eye_Icon_32.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </ToggleButton>
+                  <BorderPane prefHeight="100.0" prefWidth="11.0" />
                </children>
             </HBox>
-            <Text fx:id="errorText" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
+            <Text fx:id="errorTextField" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
                <font>
                   <Font size="24.0" />
                </font>

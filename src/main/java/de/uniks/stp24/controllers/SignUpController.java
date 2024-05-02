@@ -75,11 +75,7 @@ public class SignUpController {
     }
 
     private void register() {
-        userApiService.signup(new CreateUserDto(this.getUsername(), this.getPassword()))
-                .subscribe(user -> app.show("/login",
-                        Map.of("username", this.getUsername(),
-                                "password", this.getPassword()
-                        )));
+        this.signUpService.register(this.getUsername(), this.getPassword());
     }
 
     // Returns user to the login screen.

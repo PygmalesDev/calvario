@@ -17,10 +17,10 @@ public class LoadController {
 
     @Inject
     public LoadController() {
-        waitAndShowSignUp();
+
     }
 
-
+    @OnRender
     public void waitAndShowSignUp() {
         try {
             TimeUnit.SECONDS.sleep(3);

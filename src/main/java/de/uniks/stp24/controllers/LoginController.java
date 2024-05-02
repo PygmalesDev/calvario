@@ -1,8 +1,6 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.dto.LoginDto;
-import de.uniks.stp24.rest.AuthApiService;
 import de.uniks.stp24.service.LoginService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +16,6 @@ import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 
 import javax.inject.Inject;
-import javax.swing.*;
 import java.util.Map;
 import java.util.Objects;
 
@@ -65,17 +62,28 @@ public class LoginController {
             this.passwordInput.setText(this.password);
     }
 
+    private boolean checkIfInputNotBlankOrEmpty(String text) {
+        return (!text.isBlank() && !text.isEmpty());
+    }
     public void login(ActionEvent actionEvent) {
-        String username = this.usernameInput.getText();
-        String password = this.passwordInput.getText();
-        //ToDo: button sperren wenn die Anfrage läuft
-        loginService.login(username, password)
-                .subscribe(result ->{
-                    app.show("/browseGames");
-                });
+        if (checkIfInputNotBlankOrEmpty(this.usernameInput.getText()) &&
+                checkIfInputNotBlankOrEmpty(this.passwordInput.getText())) {
+            this.errorLabel.setText("");
+            String username = this.usernameInput.getText();
+            String password = this.passwordInput.getText();
+            //ToDo: button sperren wenn die Anfrage läuft
+            loginService.login(username, password)
+                    .subscribe(result ->{
+                        app.show("/browseGames");
+                    });
+        } else {
+            this.errorLabel.setStyle("-fx-fill: red;");
+            this.errorLabel.setText("please put in name or/and password");
+        }
     }
 
     public void signup(ActionEvent actionEvent) {
+
         String username = this.usernameInput.getText();
         String password = this.passwordInput.getText();
         app.show("/signup", Map.of("username",username,"password",password));

@@ -2,6 +2,8 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.event.OnInit;
+import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 
@@ -17,6 +19,7 @@ public class LoadController {
     public LoadController() {
         waitAndShowSignUp();
     }
+
 
     public void waitAndShowSignUp() {
         try {

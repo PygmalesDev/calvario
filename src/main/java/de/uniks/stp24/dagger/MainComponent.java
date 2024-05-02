@@ -5,6 +5,7 @@ import dagger.Component;
 import de.uniks.stp24.App;
 import de.uniks.stp24.Routes;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Component(modules = {

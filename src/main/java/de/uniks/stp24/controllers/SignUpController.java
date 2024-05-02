@@ -11,6 +11,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import de.uniks.stp24.rest.UserApiService;
@@ -19,6 +20,7 @@ import javax.inject.Inject;
 import java.util.Map;
 import java.util.Objects;
 
+@Title("SignUp")
 @Controller
 public class SignUpController {
     public TextField usernameField;

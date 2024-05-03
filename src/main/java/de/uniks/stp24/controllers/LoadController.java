@@ -31,14 +31,12 @@ public class LoadController {
 
     @Inject
     public LoadController() {
-
     }
 
     @OnRender
     public void threadHandler() {
         Thread t = new Thread(new ThreadRunner());
         t.start();
-
     }
 
     public void showLoginScreen() {

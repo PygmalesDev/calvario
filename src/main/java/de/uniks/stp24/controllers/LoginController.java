@@ -122,12 +122,5 @@ public class LoginController {
         showPasswordText.textProperty().bindBidirectional(passwordInput.textProperty());
 
     }
-    public void showPassword(MouseEvent actionEvent) {
-
-        if (showPasswordToggleButton.isSelected() &&
-            checkIfInputNotBlankOrEmpty(passwordInput.getText()))
-            System.out.println(passwordInput.getText());;
-
-    }
 
 }

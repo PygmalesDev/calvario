@@ -50,7 +50,7 @@
                      <Font size="15.0" />
                   </font>
                </TextField>
-               <ToggleButton fx:id="showPasswordToggleButton" onMouseClicked="#showPassword" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+               <ToggleButton fx:id="showPasswordToggleButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
                   <graphic>
                      <ImageView  fitHeight="16.0" fitWidth="16.0"  pickOnBounds="true" preserveRatio="true">
                         <image>

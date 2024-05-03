@@ -1,5 +1,7 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.App;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import org.fulib.fx.annotation.controller.Controller;
@@ -20,9 +22,20 @@ public class BrowseGameController {
     @FXML Button del_game_b;
     @FXML Button log_out_b;
 
+    @Inject
+    App app;
 
     @Inject
     public BrowseGameController(){
 
+    }
+
+    //TODO: Load all Games from Server and show them on Screen
+    public void logOut(ActionEvent actionEvent) {
+        logOut();
+    }
+
+    public void logOut(){
+        app.show("/login");
     }
 }

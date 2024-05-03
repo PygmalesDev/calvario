@@ -41,7 +41,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
                            <children>
-                              <Button fx:id="log_out_b" mnemonicParsing="false" prefHeight="42.0" prefWidth="186.0" text="Log Out" />
+                              <Button fx:id="log_out_b" mnemonicParsing="false" onAction="#logOut" prefHeight="42.0" prefWidth="186.0" text="Log Out" />
                            </children>
                         </HBox>
                      </children>

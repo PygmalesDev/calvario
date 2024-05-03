@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.LoginController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.LoginController">
    <center>
    <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="500.0" spacing="30.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
       <children>
@@ -39,15 +39,20 @@
             </font></TextField>
          <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0" spacing="5.0">
             <children>
-               <Button fx:id="showPasswordButton1" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#showPassword" prefHeight="25.0" prefWidth="25.0" visible="false" />
+               <Button fx:id="showPasswordButton1" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" visible="false" />
                <PasswordField fx:id="passwordInput" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" promptText="PASSWORD">
                   <font>
                      <Font size="15.0" />
                   </font>
                </PasswordField>
-               <ToggleButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
+               <TextField fx:id="showPasswordInput" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" managed="false" visible="false">
+                  <font>
+                     <Font size="15.0" />
+                  </font>
+               </TextField>
+               <ToggleButton fx:id="showPasswordToggleButton" onMouseClicked="#showPassword" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
                   <graphic>
-                     <ImageView fx:id="showPasswordToggleButton" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                     <ImageView  fitHeight="16.0" fitWidth="16.0"  pickOnBounds="true" preserveRatio="true">
                         <image>
                            <Image url="@../Icons/Eye_Icon_32.png" />
                         </image>

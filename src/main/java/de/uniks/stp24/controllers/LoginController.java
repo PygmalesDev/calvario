@@ -81,7 +81,6 @@ public class LoginController {
         } else {
             this.errorLabel.setStyle("-fx-fill: red;");
             this.errorLabel.setText("please put in name or/and password");
-            showPasswordButton1.setVisible(true);
         }
     }
 
@@ -123,4 +122,6 @@ public class LoginController {
 
     }
 
+    public void showLicenses(ActionEvent actionEvent) {
+    }
 }

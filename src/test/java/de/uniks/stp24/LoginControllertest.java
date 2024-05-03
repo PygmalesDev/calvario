@@ -56,7 +56,20 @@ public class LoginControllertest extends ControllerTest {
     }
 
     @Test
-    void changeToRegisterScreen(){
+    void switchToRegisterScreen(){
+        // Title: Switch to register screen
+        // Start:
+        // Alice wants to start playing STPellar. However, she has no account to play with.
+
+        // Action:
+        // Alice clicks register.
+        clickOn("#signupButton");
+
+        // Result:
+        // Her screen switches to the register window.
+        waitForFxEvents();
+        assertEquals("Register", stage.getTitle());
+
     }
 
 }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.gluonhq.charm.glisten.control.ToggleButtonGroup?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.PasswordField?>
@@ -14,45 +15,45 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.LoginController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="570.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.LoginController">
    <center>
-   <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="500.0" spacing="30.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="400.0" spacing="20.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
       <children>
-         <HBox alignment="TOP_RIGHT" prefHeight="45.0" prefWidth="300.0">
+         <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="35.0">
             <children>
                <ToggleButtonGroup maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="70.0" selectionType="SINGLE">
                    <toggles>
-                       <ToggleButton contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#setEn" prefHeight="40.0" prefWidth="35.0" text="EN" />
-                       <ToggleButton contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#setDe" prefHeight="40.0" prefWidth="35.0" selected="true" text="DE" />
+                       <ToggleButton contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#setEn" prefHeight="40.0" prefWidth="35.0" selected="true" text="EN" />
+                       <ToggleButton contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#setDe" prefHeight="40.0" prefWidth="35.0"  text="DE" />
                    </toggles>
                </ToggleButtonGroup>
             </children>
          </HBox>
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="GameName" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="400.0">
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Calvario" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="300.0">
             <font>
-               <Font size="72.0" />
+               <Font size="50.0" />
             </font>
          </Text>
-         <TextField fx:id="usernameInput" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" promptText="USERNAME">
+         <TextField fx:id="usernameInput" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="USERNAME">
             <font>
                <Font size="15.0" />
             </font></TextField>
          <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0" spacing="5.0">
             <children>
-               <Button fx:id="showPasswordButton1" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" visible="false" />
-               <PasswordField fx:id="passwordInput" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" promptText="PASSWORD">
+               <Button alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" visible="false" />
+               <PasswordField fx:id="passwordInput" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="PASSWORD">
                   <font>
                      <Font size="15.0" />
                   </font>
                </PasswordField>
-               <TextField fx:id="showPasswordInput" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" managed="false" visible="false">
-                  <font>
-                     <Font size="15.0" />
-                  </font>
+               <TextField fx:id="showPasswordInput" alignment="CENTER" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" visible="false">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
                </TextField>
                <ToggleButton fx:id="showPasswordToggleButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
                   <graphic>
-                     <ImageView  fitHeight="16.0" fitWidth="16.0"  pickOnBounds="true" preserveRatio="true">
+                     <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                         <image>
                            <Image url="@../Icons/Eye_Icon_32.png" />
                         </image>
@@ -67,17 +68,27 @@
             </font></Text>
          <CheckBox fx:id="rememberMeBox" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Remember Me">
             <font>
-               <Font size="19.0" />
+               <Font size="17.0" />
             </font></CheckBox>
-         <Button fx:id="loginButton" mnemonicParsing="false" onAction="#login" prefHeight="50.0" prefWidth="300.0" text="Login">
+         <Button fx:id="loginButton" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="250.0" text="Login">
             <font>
                <Font size="15.0" />
             </font></Button>
-         <Button fx:id="signupButton" mnemonicParsing="false" onAction="#signup" prefHeight="50.0" prefWidth="300.0" text="Register">
+         <Button fx:id="signupButton" mnemonicParsing="false" onAction="#signup" prefHeight="40.0" prefWidth="250.0" text="Register">
             <font>
                <Font size="15.0" />
             </font></Button>
       </children>
    </VBox>
    </center>
+   <bottom>
+      <Button fx:id="licensesButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showLicenses" prefHeight="30.0" prefWidth="100.0" text="Licenses" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="15.0" />
+         </font>
+         <BorderPane.margin>
+            <Insets bottom="2.0" />
+         </BorderPane.margin>
+      </Button>
+   </bottom>
 </BorderPane>

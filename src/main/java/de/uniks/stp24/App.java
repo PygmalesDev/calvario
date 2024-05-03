@@ -45,8 +45,10 @@ public class App extends FulibFxApp {
             primaryStage.getScene().getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
             CSSFX.start(primaryStage);
 
-            primaryStage.setWidth(1200);
-            primaryStage.setHeight(800);
+            primaryStage.setWidth(1000);
+            primaryStage.setHeight(650);
+
+            primaryStage.centerOnScreen();
 
             // TODO add image/icon.png and uncomment
             // setAppIcon(primaryStage);

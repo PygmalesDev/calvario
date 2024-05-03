@@ -9,8 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
@@ -33,8 +32,7 @@ public class TestSignUpNewUser extends ControllerTest {
         // TODO: Understand why this line isn't needed??
         // doReturn(null).when(app).show("/login");
 
-        // TODO: Somebody has to change the name of the stage or idk
-        // assertEquals("Signup", stage.getTitle());
+        assertEquals("SignUp", stage.getTitle());
 
         assertTrue(this.signUpController.registerButton.disableProperty().get());
         clickOn("#usernameField");

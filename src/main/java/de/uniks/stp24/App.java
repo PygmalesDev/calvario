@@ -55,6 +55,7 @@ public class App extends FulibFxApp {
             autoRefresher().setup(Path.of("src/main/resources/de/uniks/stp24"));
 
             // TODO show login or main-menu
+            show("entergame");
 
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "An error occurred while starting the application: " + e.getMessage(), e);

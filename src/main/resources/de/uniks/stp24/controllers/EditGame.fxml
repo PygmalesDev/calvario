@@ -11,14 +11,14 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.EditGameController">
    <top>
-      <HBox prefHeight="18.0" prefWidth="700.0" BorderPane.alignment="CENTER" />
+      <HBox prefHeight="10.0" prefWidth="700.0" BorderPane.alignment="CENTER" />
    </top>
    <center>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0">
                <children>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="250.0">
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name:">
                            <font>
@@ -27,17 +27,17 @@
                         </Text>
                      </children>
                   </HBox>
-                  <HBox prefHeight="100.0" prefWidth="66.0" />
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="496.0">
+                  <HBox prefHeight="100.0" prefWidth="50.0" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="400.0">
                      <children>
                         <TextField fx:id="editNameTextField" prefHeight="41.0" prefWidth="227.0" />
                      </children>
                   </HBox>
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0">
                <children>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="250.0">
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
                            <font>
@@ -46,17 +46,17 @@
                         </Text>
                      </children>
                   </HBox>
-                  <HBox prefHeight="100.0" prefWidth="66.0" />
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="496.0">
+                  <HBox prefHeight="100.0" prefWidth="50.0" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="400.0">
                      <children>
                         <TextField fx:id="editPasswordTextField" prefHeight="41.0" prefWidth="227.0" />
                      </children>
                   </HBox>
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0">
                <children>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="250.0">
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Repeat Password:">
                            <font>
@@ -65,17 +65,17 @@
                         </Text>
                      </children>
                   </HBox>
-                  <HBox prefHeight="100.0" prefWidth="66.0" />
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="496.0">
+                  <HBox prefHeight="100.0" prefWidth="50.0" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="400.0">
                      <children>
                         <TextField fx:id="editRepeatPasswordTextField" prefHeight="41.0" prefWidth="227.0" />
                      </children>
                   </HBox>
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0">
                <children>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="250.0">
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Map Size:">
                            <font>
@@ -84,22 +84,22 @@
                         </Text>
                      </children>
                   </HBox>
-                  <HBox prefHeight="100.0" prefWidth="66.0" />
-                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="496.0">
+                  <HBox prefHeight="100.0" prefWidth="50.0" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="400.0">
                      <children>
                         <Spinner fx:id="editMapSizeSpinner" prefHeight="41.0" prefWidth="227.0" />
                      </children>
                   </HBox>
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0">
                <children>
-                  <HBox alignment="CENTER" prefHeight="90.0" prefWidth="480.0">
+                  <HBox alignment="CENTER" prefHeight="90.0" prefWidth="350.0">
                      <children>
                         <Button fx:id="editGameCancelButton" mnemonicParsing="false" prefHeight="45.0" prefWidth="100.0" text="Cancel" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="90.0" prefWidth="480.0">
+                  <HBox alignment="CENTER" prefHeight="90.0" prefWidth="350.0">
                      <children>
                         <Button fx:id="editGameConfirmButton" mnemonicParsing="false" prefHeight="45.0" prefWidth="100.0" text="Confirm" />
                      </children>

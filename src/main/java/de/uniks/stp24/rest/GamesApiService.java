@@ -1,0 +1,12 @@
+package de.uniks.stp24.rest;
+
+import de.uniks.stp24.dto.UpdateGameDto;
+import de.uniks.stp24.dto.UpdateGameResultDto;
+import javafx.beans.Observable;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
+
+public interface GamesApiService {
+    @POST("games")
+    Observable<UpdateGameResultDto> editGame(@Body UpdateGameDto dto);
+}

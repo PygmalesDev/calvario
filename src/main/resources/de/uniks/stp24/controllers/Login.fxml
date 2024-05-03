@@ -24,7 +24,7 @@
                <ToggleButtonGroup maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="70.0" selectionType="SINGLE">
                    <toggles>
                        <ToggleButton contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#setEn" prefHeight="40.0" prefWidth="35.0" selected="true" text="EN" />
-                       <ToggleButton contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#setDe" prefHeight="40.0" prefWidth="35.0"  text="DE" />
+                       <ToggleButton contentDisplay="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#setDe" prefHeight="40.0" prefWidth="35.0" text="DE" />
                    </toggles>
                </ToggleButtonGroup>
             </children>
@@ -46,7 +46,7 @@
                      <Font size="15.0" />
                   </font>
                </PasswordField>
-               <TextField fx:id="showPasswordInput" alignment="CENTER" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" visible="false">
+               <TextField fx:id="showPasswordText" alignment="CENTER" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" visible="false">
                      <font>
                         <Font size="15.0" />
                      </font>

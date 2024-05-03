@@ -45,8 +45,8 @@ public class App extends FulibFxApp {
             primaryStage.getScene().getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
             CSSFX.start(primaryStage);
 
-            primaryStage.setWidth(1000);
-            primaryStage.setHeight(650);
+            primaryStage.setWidth(1280);
+            primaryStage.setHeight(680);
 
             primaryStage.centerOnScreen();
 
@@ -57,7 +57,7 @@ public class App extends FulibFxApp {
             autoRefresher().setup(Path.of("src/main/resources/de/uniks/stp24"));
 
             // TODO show login or main-menu
-            show("/load");
+            //show("/load");
 
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "An error occurred while starting the application: " + e.getMessage(), e);

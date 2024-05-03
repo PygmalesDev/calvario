@@ -40,7 +40,7 @@ public class LoginControllertest extends ControllerTest {
         assertEquals("Login", stage.getTitle());
 
         // Action:
-        // Alice enters her username “alice999” and password “1234”. She clicks Login
+
         clickOn("#usernameInput");
         write("alice999");
         clickOn("#passwordInput");
@@ -68,7 +68,7 @@ public class LoginControllertest extends ControllerTest {
         // Result:
         // Her screen switches to the register window.
         waitForFxEvents();
-        assertEquals("Register", stage.getTitle());
+        assertEquals("SignUp", stage.getTitle());
 
     }
 

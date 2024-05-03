@@ -22,6 +22,10 @@ public class Routes {
     @Inject
     Provider<SignUpController> signup;
 
+    @Route("licenses")
+    @Inject
+    Provider<LicensesController> licenses;
+
     @Inject
     public Routes() {
     }

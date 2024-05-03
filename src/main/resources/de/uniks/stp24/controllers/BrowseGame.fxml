@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="534.0" style="-fx-border-color: #000000;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.BrowseGameController">
+   <children>
+      <HBox prefHeight="400.0" prefWidth="534.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane prefHeight="398.0" prefWidth="238.0" style="-fx-border-color: #000000;" HBox.hgrow="ALWAYS">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="398.0" prefWidth="238.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.799999999999983" AnchorPane.rightAnchor="1.5999999999999943" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="77.0" prefWidth="178.0">
+                                 <children>
+                                    <Button fx:id="load_game_b" mnemonicParsing="false" prefHeight="42.0" prefWidth="186.0" text="Load Game" />
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
+                           <children>
+                              <Button fx:id="new_game_b" mnemonicParsing="false" prefHeight="42.0" prefWidth="186.0" text="New Game" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
+                           <children>
+                              <Button fx:id="edit_acc_b" mnemonicParsing="false" prefHeight="42.0" prefWidth="186.0" text="Edit Account" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
+                           <children>
+                              <Button fx:id="del_game_b" mnemonicParsing="false" prefHeight="42.0" prefWidth="186.0" text="Delete Game" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
+                           <children>
+                              <Button fx:id="log_out_b" mnemonicParsing="false" prefHeight="42.0" prefWidth="186.0" text="Log Out" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="442.0" prefWidth="295.0" style="-fx-border-color: #000000;" HBox.hgrow="ALWAYS">
+               <children>
+                  <VBox alignment="CENTER" layoutX="28.8" layoutY="1.6" prefHeight="400.0" prefWidth="238.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="27.19999999999996" AnchorPane.rightAnchor="28.799999999999983" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <HBox prefHeight="27.0" prefWidth="238.0" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Running games:" />
+                        <HBox prefHeight="17.0" prefWidth="238.0" />
+                        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="237.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <Button fx:id="game_1_b" mnemonicParsing="false" text="game_1" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="237.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <Button fx:id="game_2_b" mnemonicParsing="false" text="game_2" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="237.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <Button fx:id="game_3_b" mnemonicParsing="false" text="game_3" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="237.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <Button fx:id="game_4_b" mnemonicParsing="false" text="game_4" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="237.0" style="-fx-border-color: #000000;">
+                           <children>
+                              <Button fx:id="game_5_b" mnemonicParsing="false" text="game_5" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="237.0" style="-fx-border-color: #000000;" />
+                        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="237.0" style="-fx-border-color: #000000;" />
+                        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="237.0" style="-fx-border-color: #000000;" />
+                        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="237.0" style="-fx-border-color: #000000;" />
+                        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="238.0" style="-fx-border-color: #000000;" />
+                        <HBox prefHeight="46.0" prefWidth="238.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

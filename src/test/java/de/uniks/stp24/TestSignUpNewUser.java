@@ -5,11 +5,13 @@ import de.uniks.stp24.dto.SignUpResultDto;
 import de.uniks.stp24.service.SignUpService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.stage.Stage;
+import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -21,6 +23,8 @@ public class TestSignUpNewUser extends ControllerTest {
     SignUpService signUpService;
     @InjectMocks
     SignUpController signUpController;
+    @Spy
+    Subscriber subscriber = new Subscriber();
 
     @Override
     public void start(Stage stage) throws Exception{
@@ -32,7 +36,6 @@ public class TestSignUpNewUser extends ControllerTest {
     public void testSignup() {
         doReturn(Observable.just(new SignUpResultDto("a", "b", "c", "d", "e" )))
                 .when(this.signUpService).register(any(),any());
-        doReturn(null).when(app).show("/login");
 
         assertEquals("SignUp", stage.getTitle());
         assertTrue(this.signUpController.registerButton.disableProperty().get());
@@ -55,7 +58,6 @@ public class TestSignUpNewUser extends ControllerTest {
 
         verify(this.signUpService, times(1))
                 .register("TemplateUser", "TemplateUserPassword");
-        verify(this.app, times(1))
-                .show("/login");
+        assertEquals("Login", stage.getTitle());
     }
 }

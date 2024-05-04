@@ -61,6 +61,7 @@ public class LoginController {
     private boolean checkIfInputNotBlankOrEmpty(String text) {
         return (!text.isBlank() && !text.isEmpty());
     }
+
     public void login(ActionEvent actionEvent) {
         if (checkIfInputNotBlankOrEmpty(this.usernameInput.getText()) &&
                 checkIfInputNotBlankOrEmpty(this.passwordInput.getText())) {
@@ -80,7 +81,6 @@ public class LoginController {
     }
 
     public void signup(ActionEvent actionEvent) {
-
         String username = this.usernameInput.getText();
         String password = this.passwordInput.getText();
         app.show("/signup", Map.of("username",username,"password",password));

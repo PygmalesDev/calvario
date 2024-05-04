@@ -40,7 +40,7 @@ public class LoginControllerTest extends ControllerTest {
         assertEquals("Login", stage.getTitle());
 
         // Action:
-
+        // Alice writes her username and her password
         clickOn("#usernameInput");
         write("alice999");
         clickOn("#passwordInput");

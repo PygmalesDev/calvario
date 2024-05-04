@@ -12,7 +12,7 @@ import javax.inject.Inject;
 
 public class EditGameService {
     @Inject
-    AuthApiService authApiService;
+    GamesApiService gamesApiService;
 
     @Inject
     TokenStorage tokenStorage;
@@ -21,12 +21,12 @@ public class EditGameService {
     public EditGameService() {
     }
 
-    public Observable<UpdateGameResultDto> editGame(String name, boolean started, int speed, int size, String password){
-        return GamesApiService
-                .editGame(new UpdateGameDto(name, started, speed, size, password))
+    public Observable<UpdateGameResultDto> editGame(String name, int size, String password){
+        return gamesApiService
+                .editGame(new UpdateGameDto(name, size, password))
                 .doOnNext(updateGameResult -> {
-                    tokenStorage.setToken(updateGameResult.accessToken());
-                    tokenStorage.setUserId(updateGameResult._id());
+                    //tokenStorage.setToken(updateGameResult.);
+                    //tokenStorage.setUserId(updateGameResult._id());
                 });
     }
 }

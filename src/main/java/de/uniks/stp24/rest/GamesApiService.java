@@ -2,7 +2,8 @@ package de.uniks.stp24.rest;
 
 import de.uniks.stp24.dto.UpdateGameDto;
 import de.uniks.stp24.dto.UpdateGameResultDto;
-import javafx.beans.Observable;
+
+import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 

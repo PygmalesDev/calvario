@@ -67,8 +67,9 @@ public class LoginController {
             this.errorLabel.setText("");
             String username = this.usernameInput.getText();
             String password = this.passwordInput.getText();
+            boolean rememberMe = this.rememberMeBox.isSelected();
             //ToDo: button sperren wenn die Anfrage läuft
-            loginService.login(username, password)
+            loginService.login(username, password, rememberMe)
                     .subscribe(result ->{
                         app.show("/browseGames");
                     });

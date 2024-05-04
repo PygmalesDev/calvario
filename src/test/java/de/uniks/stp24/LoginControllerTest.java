@@ -11,13 +11,13 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import javafx.stage.Stage;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
-public class LoginControllertest extends ControllerTest {
+public class LoginControllerTest extends ControllerTest {
     @Spy
     LoginService loginService;
     @InjectMocks
@@ -54,6 +54,33 @@ public class LoginControllertest extends ControllerTest {
         verify(loginService, times(1)).login("alice999", "1234");
         verify(app, times(1)).show("/browseGames");
     }
+    @Test
+    void noLoginIfMissingInputs() {
+
+        // Start:
+        // Alice is a curious person, who wants to play STPellar.
+        // She is in the log in screen and wonders what would happen,
+        // if she enters login without entering a name or password.
+        assertEquals("Login", stage.getTitle());
+
+        // Action:
+        // Alice enters her username “alice999” and password “1234”. She clicks Login
+        doubleClickOn("#usernameInput");
+        write("");
+        doubleClickOn("#passwordInput");
+        write("");
+        clickOn("#loginButton");
+
+        waitForFxEvents();
+
+        // Result:
+        // Alice remains in the login screen.
+        // The window states that she has put in name and password for login.
+        String text = lookup("#errorLabel").queryText().getText();
+
+        assertFalse((text.isBlank() || text.isEmpty()));
+
+    }
 
     @Test
     void switchToRegisterScreen(){
@@ -71,5 +98,7 @@ public class LoginControllertest extends ControllerTest {
         assertEquals("SignUp", stage.getTitle());
 
     }
+
+
 
 }

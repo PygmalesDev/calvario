@@ -64,7 +64,8 @@ public class LoginControllerTest extends ControllerTest {
         assertEquals("Login", stage.getTitle());
 
         // Action:
-        // Alice enters her username “alice999” and password “1234”. She clicks Login
+
+        // Alice enters her username "alice999" and password "1234". She clicks Login
         doubleClickOn("#usernameInput");
         write("");
         doubleClickOn("#passwordInput");

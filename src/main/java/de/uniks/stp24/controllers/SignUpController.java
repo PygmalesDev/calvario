@@ -12,9 +12,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import de.uniks.stp24.rest.UserApiService;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -38,6 +40,8 @@ public class SignUpController {
     App app;
     @Inject
     SignUpService signUpService;
+    @Inject
+    Subscriber subscriber;
     @Inject
     UserApiService userApiService;
 
@@ -78,7 +82,7 @@ public class SignUpController {
                 .bind(this.isLoginFieldEmpty
                         .or(this.isPasswordFieldEmpty)
                         .or(this.isRepeatPasswordEmpty)
-                        .or(this.passwordInputsMatch).not()
+                        .or(this.passwordInputsMatch.not())
                         .or(this.isPasswordTooShort)
                 );
     }
@@ -104,7 +108,12 @@ public class SignUpController {
     }
 
     public void register() {
-        this.signUpService.register(this.getUsername(), this.getPassword());
+        this.subscriber.subscribe(this.signUpService.register(this.getUsername(), this.getPassword()),
+                result -> this.app.show("/login",
+                        Map.of(
+                                "username", this.getUsername(),
+                                "password", this.getPassword()
+                        )));
     }
 
     // Returns user to the login screen
@@ -121,5 +130,10 @@ public class SignUpController {
 
     private String getPassword() {
         return this.passwordField.getText();
+    }
+
+    @OnDestroy
+    public void destroy() {
+        this.subscriber.dispose();
     }
 }

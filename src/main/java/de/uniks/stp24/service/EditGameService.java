@@ -22,11 +22,6 @@ public class EditGameService {
     }
 
     public Observable<UpdateGameResultDto> editGame(String name, int size, String password){
-        return gamesApiService
-                .editGame(new UpdateGameDto(name, size, password))
-                .doOnNext(updateGameResult -> {
-                    //tokenStorage.setToken(updateGameResult.);
-                    //tokenStorage.setUserId(updateGameResult._id());
-                });
+        return null;
     }
 }

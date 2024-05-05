@@ -8,6 +8,7 @@ public record Game(
         String owner,
         boolean started,
         int speed,
-        int period
+        int period,
+        GameSettings settings
 ) {
 }

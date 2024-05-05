@@ -31,7 +31,7 @@ public class LoginControllerTest extends ControllerTest {
 
     @Test
     void login(){
-        doReturn(Observable.just(new LoginResult("1", "a","b","c","d"))).when(loginService).login(any(),any());
+        doReturn(Observable.just(new LoginResult("1", "a","b","c","d"))).when(loginService).login(any(),any(), eq(false));
         doReturn(null).when(app).show("/browseGames");
 
         // Start:
@@ -51,7 +51,7 @@ public class LoginControllerTest extends ControllerTest {
 
         // Result:
         // She logged in successfully. She can now navigate through game states
-        verify(loginService, times(1)).login("alice999", "1234");
+        verify(loginService, times(1)).login("alice999", "1234", false);
         verify(app, times(1)).show("/browseGames");
     }
     @Test

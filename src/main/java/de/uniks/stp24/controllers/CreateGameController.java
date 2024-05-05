@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
 
@@ -17,6 +18,8 @@ import javax.inject.Inject;
 @Title("CreateGame")
 @Controller
 public class CreateGameController {
+    @FXML
+    HBox errorBox;
     @FXML
     Button createGameConfirmButton;
     @FXML
@@ -44,6 +47,7 @@ public class CreateGameController {
 
     @FXML
     public void initialize() {
+        createGameService.setCreateGameController(this);
         initializeSpinner();
     }
 
@@ -71,5 +75,9 @@ public class CreateGameController {
     }
     public void cancel(){
         app.show("/browseGames");
+    }
+
+    public void showErrorBox() {
+        errorBox.setVisible(true);
     }
 }

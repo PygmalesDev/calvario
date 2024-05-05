@@ -66,7 +66,7 @@ public class App extends FulibFxApp {
             if (component.loginService().autoLogin()) {
                 show("/main");
             } else {
-                show("/creategame");
+                show("/createGameController");
             }
 
         } catch (Exception e) {

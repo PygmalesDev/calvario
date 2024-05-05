@@ -5,7 +5,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class TokenStorage {
-    private String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjM2NDJkYzQ2ODJkZGJkMGQzOTQ4NmYiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJtYWdudXMiLCJpYXQiOjE3MTQ5MDA1OTksImV4cCI6MTcxNDkwNDE5OX0.Ms5wP0JAZLtTLfEu5DfQVALyIh0tEVY0s9SuCEq6dII";
+    private String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjM2NDJkYzQ2ODJkZGJkMGQzOTQ4NmYiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJtYWdudXMiLCJpYXQiOjE3MTQ5MDQ0MDMsImV4cCI6MTcxNDkwODAwM30.6cYdSFerPgbE4po0AT8jEq5BtL7Ct7mbpZQXPt5X-Ug";
     private String userId;
 
     @Inject

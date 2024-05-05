@@ -29,9 +29,9 @@ public class Routes {
     @Inject
     Provider<EditGameController> editgame;
 
-    @Route("creategame")
+    @Route("createGameController")
     @Inject
-    Provider<CreateGameController> creategame;
+    Provider<CreateGameController> createGameController;
 
     @Inject
     public Routes() {

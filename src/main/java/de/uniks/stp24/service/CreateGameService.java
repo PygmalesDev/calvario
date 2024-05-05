@@ -1,6 +1,7 @@
 package de.uniks.stp24.service;
 
 import de.uniks.stp24.dto.*;
+import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.AuthApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import io.reactivex.rxjava3.core.Observable;
@@ -18,9 +19,9 @@ public class CreateGameService {
     public CreateGameService() {
     }
 
-    public Observable<CreateGameResultDto> createGame(String name, int size, String password){
+    public Observable<CreateGameResultDto> createGame(String name, GameSettings settings, String password){
         return gamesApiService
-                .createGame(new CreateGameDto("Bambus", false,1, 100,   "kartoffel"))
+                .createGame(new CreateGameDto(name, false,1, settings,   password))
                 .doOnNext(createGameResult -> {
                     System.out.println(createGameResult);
                 });

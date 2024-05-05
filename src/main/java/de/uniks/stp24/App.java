@@ -1,5 +1,6 @@
 package de.uniks.stp24;
 
+import de.uniks.stp24.controllers.CreateGameController;
 import de.uniks.stp24.dagger.DaggerMainComponent;
 import de.uniks.stp24.dagger.MainComponent;
 import fr.brouillard.oss.cssfx.CSSFX;
@@ -9,6 +10,7 @@ import javafx.stage.Stage;
 import org.fulib.fx.FulibFxApp;
 
 import javax.imageio.ImageIO;
+import javax.inject.Inject;
 import java.awt.*;
 import java.nio.file.Path;
 import java.util.logging.Level;
@@ -16,6 +18,8 @@ import java.util.logging.Level;
 import static javafx.scene.input.KeyEvent.KEY_PRESSED;
 
 public class App extends FulibFxApp {
+    @Inject
+    CreateGameController createGameController;
     private MainComponent component;
 
     public App() {

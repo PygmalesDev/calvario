@@ -31,7 +31,7 @@
                   <HBox prefHeight="100.0" prefWidth="50.0" />
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="400.0">
                      <children>
-                        <TextField fx:id="editNameTextField" prefHeight="41.0" prefWidth="227.0" />
+                        <TextField fx:id="createNameTextField" prefHeight="41.0" prefWidth="227.0" />
                      </children>
                   </HBox>
                </children>
@@ -50,7 +50,7 @@
                   <HBox prefHeight="100.0" prefWidth="50.0" />
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="400.0">
                      <children>
-                        <PasswordField fx:id="editPasswordTextField" prefHeight="41.0" prefWidth="227.0" />
+                        <PasswordField fx:id="createPasswordTextField" prefHeight="41.0" prefWidth="227.0" />
                      </children>
                   </HBox>
                </children>
@@ -69,7 +69,7 @@
                   <HBox prefHeight="100.0" prefWidth="50.0" />
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="400.0">
                      <children>
-                        <PasswordField fx:id="editRepeatPasswordTextField" prefHeight="41.0" prefWidth="227.0" />
+                        <PasswordField fx:id="createRepeatPasswordTextField" prefHeight="41.0" prefWidth="227.0" />
                      </children>
                   </HBox>
                </children>
@@ -88,7 +88,7 @@
                   <HBox prefHeight="100.0" prefWidth="50.0" />
                   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="400.0">
                      <children>
-                        <Spinner fx:id="editMapSizeSpinner" prefHeight="41.0" prefWidth="227.0" />
+                        <Spinner fx:id="createMapSizeSpinner" prefHeight="41.0" prefWidth="227.0" />
                      </children>
                   </HBox>
                </children>
@@ -97,12 +97,12 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="90.0" prefWidth="350.0">
                      <children>
-                        <Button fx:id="editGameCancelButton" mnemonicParsing="false" onAction="#cancel" prefHeight="45.0" prefWidth="100.0" text="Cancel" />
+                        <Button fx:id="createGameCancelButton" mnemonicParsing="false" onAction="#cancel" prefHeight="45.0" prefWidth="100.0" text="Cancel" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="90.0" prefWidth="350.0">
                      <children>
-                        <Button fx:id="editGameConfirmButton" mnemonicParsing="false" onAction="#createGame" prefHeight="45.0" prefWidth="100.0" text="Confirm" />
+                        <Button fx:id="createGameConfirmButton" mnemonicParsing="false" onAction="#createGame" prefHeight="45.0" prefWidth="100.0" text="Confirm" />
                      </children>
                   </HBox>
                </children>

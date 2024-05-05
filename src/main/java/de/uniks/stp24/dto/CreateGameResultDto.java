@@ -1,5 +1,7 @@
 package de.uniks.stp24.dto;
 
+import de.uniks.stp24.model.GameSettings;
+
 public record CreateGameResultDto(
         String createdAt,
         String updatedAt,
@@ -9,6 +11,6 @@ public record CreateGameResultDto(
         boolean started,
         int speed,
         int period,
-        int size
+        GameSettings settings
 ) {
 }

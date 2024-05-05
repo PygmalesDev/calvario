@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnInit;
+import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
@@ -17,30 +18,11 @@ public class LoadController {
     @Inject
     App app;
 
-    public class ThreadRunner implements Runnable {
-        @Override
-        public void run() {
-            try {
-                Thread.sleep(3000);
-                Platform.runLater(LoadController.this::showLoginScreen);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
     @Inject
     public LoadController() {
-
     }
 
-    @OnRender
-    public void threadHandler() {
-        Thread t = new Thread(new ThreadRunner());
-        t.start();
-
-    }
-
+    @OnKey
     public void showLoginScreen() {
         app.show("/login");
     }

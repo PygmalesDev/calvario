@@ -5,6 +5,7 @@ import dagger.Module;
 import dagger.Provides;
 import de.uniks.stp24.Main;
 import de.uniks.stp24.rest.AuthApiService;
+import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.TokenStorage;
 import okhttp3.OkHttpClient;
@@ -65,4 +66,8 @@ public class HttpModule {
     UserApiService userApiService(Retrofit retrofit) {
         return retrofit.create(UserApiService.class);
     }
+
+    @Provides
+    @Singleton
+    GamesApiService gamesApiService(Retrofit retrofit) {return retrofit.create(GamesApiService.class);}
 }

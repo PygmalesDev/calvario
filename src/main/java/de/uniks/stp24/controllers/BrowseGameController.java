@@ -1,6 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.rest.GamesApiService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -24,13 +25,23 @@ public class BrowseGameController {
 
     @Inject
     App app;
+    @Inject
+    GamesApiService gamesApiService;
+
 
     @Inject
     public BrowseGameController(){
-
     }
 
+
     //TODO: Load all Games from Server and show them on Screen
+    /*
+    public void loadGames(){
+        gamesApiService.games().subscribe(System.out::println);
+       }
+     */
+
+    //Back to Login Screen after click Logout in BrowseGame Screen
     public void logOut(ActionEvent actionEvent) {
         logOut();
     }

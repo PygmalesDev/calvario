@@ -4,6 +4,7 @@ import de.uniks.stp24.App;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnInit;
@@ -29,4 +30,7 @@ public class AutoLoginController {
         app.show("/login");
     }
 
+    public void mouseClicked(MouseEvent mouseEvent) {
+        app.show("/login");
+    }
 }

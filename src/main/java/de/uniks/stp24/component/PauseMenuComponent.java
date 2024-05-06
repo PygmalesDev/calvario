@@ -1,45 +1,37 @@
-package de.uniks.stp24.controllers;
+package de.uniks.stp24.component;
 
+import de.uniks.stp24.service.InGameService;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.controller.Component;
 
 import javax.inject.Inject;
 
-@Controller
-public class PauseController {
-    @FXML
-    VBox vbox;
+@Component(view = "Pause.fxml")
+public class PauseMenuComponent extends VBox {
     @FXML
     Button resumeButton;
+
     @FXML
     Button settingsButton;
+
     @FXML
     Button quitButton;
 
     @Inject
-    public PauseController() {
+    InGameService inGameService;
 
-    }
 
-    @OnRender
-    public void render() {
-        setVisible(true);
-    }
+    @Inject
+    public PauseMenuComponent() {
 
-    public void setVisible(Boolean visible) {
-        vbox.setVisible(visible);
-    }
-
-    public VBox getVbox() {
-       return vbox;
     }
 
     public void resume(ActionEvent actionEvent) {
-
+        inGameService.setPaused(false);
     }
 
     public void settings(ActionEvent actionEvent) {
@@ -47,6 +39,7 @@ public class PauseController {
     }
 
     public void quit(ActionEvent actionEvent) {
-
+        Platform.exit();
+        System.exit(0);
     }
 }

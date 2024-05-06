@@ -1,5 +1,6 @@
 package de.uniks.stp24;
 
+import de.uniks.stp24.component.PauseMenuComponent;
 import de.uniks.stp24.controllers.*;
 import org.fulib.fx.annotation.Route;
 
@@ -15,7 +16,7 @@ public class Routes {
 
     @Route("pause")
     @Inject
-    Provider<PauseController> pause;
+    Provider<PauseMenuComponent> pause;
 
     @Inject
     public Routes() {

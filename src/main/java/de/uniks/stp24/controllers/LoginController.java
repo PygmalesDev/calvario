@@ -73,6 +73,9 @@ public class LoginController {
             loginService.login(username, password, rememberMe)
                     .subscribe(result ->{
                         app.show("/browseGames");
+                    }, error -> {
+                                this.errorLabel.setStyle("-fx-fill: red;");
+                                this.errorLabel.setText("Invalid username or password");
                     });
         } else {
             this.errorLabel.setStyle("-fx-fill: red;");

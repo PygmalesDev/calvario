@@ -30,7 +30,7 @@
                      </image>
                   </ImageView>
                </children></HBox>
-            <Label text="PRESS ANY KEY TO CONTINUE">
+            <Label onKeyPressed="#showLoginScreen" text="PRESS ANY KEY TO CONTINUE">
                <font>
                   <Font size="36.0" />
                </font>

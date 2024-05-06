@@ -1,4 +1,4 @@
-package de.uniks.stp24.dto;
+package de.uniks.stp24.model;
 
 public record Game(
         String createdAt,

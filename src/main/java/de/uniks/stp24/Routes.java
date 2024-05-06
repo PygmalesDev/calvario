@@ -22,10 +22,6 @@ public class Routes {
     @Inject
     Provider<SignUpController> signup;
 
-    @Route("browseGames")
-    @Inject
-    Provider<BrowseGameController> browseGame;
-
     @Inject
     public Routes() {
     }

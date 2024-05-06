@@ -12,7 +12,7 @@
    <children>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Game Name">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="loging in...">
                <font>
                   <Font name="Calibri" size="96.0" />
                </font>

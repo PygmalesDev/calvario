@@ -11,20 +11,20 @@ import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 
-@Title("Game Name")
+@Title("AutoLogin")
 @Controller
-public class LoadController {
+public class AutoLoginController {
 
     @Inject
     App app;
 
     @Inject
-    public LoadController() {
+    public AutoLoginController() {
     }
 
     @OnKey
     public void showLoginScreen() {
-        app.show("/login");
+        app.show("/browseGames");
     }
 
 }

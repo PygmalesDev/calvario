@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.LobbyController">
+   <children>
+      <Pane layoutX="300.0" layoutY="248.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-border-color: BLACK;">
+         <children>
+            <Pane layoutX="375.0" layoutY="1.0" prefHeight="66.0" prefWidth="226.0" style="-fx-background-color: #d8d6ff;">
+               <children>
+                  <Text layoutX="44.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="List of Players" textAlignment="CENTER">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Pane>
+            <ListView fx:id="playerListView" layoutX="374.0" layoutY="65.0" prefHeight="237.0" prefWidth="226.0" />
+            <Line endY="288.0" layoutX="373.0" layoutY="15.0" startY="-13.0" />
+            <StackPane fx:id="lobbyElement" prefHeight="302.0" prefWidth="370.0" />
+         </children>
+      </Pane>
+   </children>
+</Pane>

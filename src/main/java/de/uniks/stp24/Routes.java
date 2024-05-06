@@ -1,6 +1,6 @@
 package de.uniks.stp24;
 
-import de.uniks.stp24.controllers.EnterGameController;
+import de.uniks.stp24.controllers.LobbyController;
 import org.fulib.fx.annotation.Route;
 
 import javax.inject.Inject;
@@ -16,9 +16,9 @@ public class Routes {
     Provider<LoginController> login;
      */
 
-    @Route("entergame")
+    @Route("lobby")
     @Inject
-    Provider<EnterGameController> entergame;
+    Provider<LobbyController> lobby;
 
     @Inject
     public Routes() {

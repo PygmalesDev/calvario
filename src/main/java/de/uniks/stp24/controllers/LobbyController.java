@@ -1,15 +1,21 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.component.EnterGameComponent;
+import de.uniks.stp24.component.LobbySettingsComponent;
 import de.uniks.stp24.component.UserComponent;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.TokenStorage;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableBooleanValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.StackPane;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -21,7 +27,7 @@ import javax.inject.Provider;
 
 @Title("Enter Game")
 @Controller
-public class EnterGameController {
+public class LobbyController {
     @Inject
     App app;
 
@@ -33,6 +39,13 @@ public class EnterGameController {
 
     @Inject
     Subscriber subscriber;
+    @SubComponent
+    @Inject
+    EnterGameComponent enterGameComponent;
+
+    @SubComponent
+    @Inject
+    LobbySettingsComponent lobbySettingsComponent;
 
     @Inject
     Provider<UserComponent> userComponentProvider;
@@ -40,10 +53,13 @@ public class EnterGameController {
     @FXML
     ListView<User> playerListView;
 
+    @FXML
+    StackPane lobbyElement;
+
     private final ObservableList<User> users = FXCollections.observableArrayList();
 
     @Inject
-    public EnterGameController() {
+    public LobbyController() {
 
     }
 
@@ -64,19 +80,12 @@ public class EnterGameController {
         System.out.println(playerListView);
         this.playerListView.setCellFactory(list ->
                 new ComponentListCell<>(this.app, this.userComponentProvider));
+        this.lobbyElement.getChildren().add(this.enterGameComponent);
     }
 
     @OnDestroy
     void destroy() {
         subscriber.dispose();
-    }
-
-    public void cancel() {
-        System.out.println("Canceled");
-    }
-
-    public void joinGame() {
-        System.out.println("Joined");
     }
 
 }

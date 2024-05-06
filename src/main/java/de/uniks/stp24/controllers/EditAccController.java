@@ -24,6 +24,9 @@ public class EditAccController {
     TextField usernameInput;
 
     @Inject
+    App app;
+
+    @Inject
     public EditAccController() {
     }
 
@@ -45,5 +48,6 @@ public class EditAccController {
     }
 
     public void goBack(ActionEvent actionEvent) {
+        app.show("/browseGames");
     }
 }

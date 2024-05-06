@@ -60,7 +60,7 @@ public class App extends FulibFxApp {
             show("/load");
             //
             if (component.loginService().autoLogin()) {
-                show("/main");
+                show("/autoLogin");
             } else {
                 show("/login");
             }

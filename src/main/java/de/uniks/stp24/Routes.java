@@ -17,6 +17,9 @@ public class Routes {
     @Route("login")
     @Inject
     Provider<LoginController> login;
+    @Route("autoLogin")
+    @Inject
+    Provider<AutoLoginController> autoLogin;
 
     @Route("signup")
     @Inject

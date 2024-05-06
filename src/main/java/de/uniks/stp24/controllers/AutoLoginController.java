@@ -27,10 +27,10 @@ public class AutoLoginController {
     @OnKey()
     public void keyPressed(KeyEvent event) {
         // app.show("/browseGames");
-        app.show("/login");
+        app.show("/holder");
     }
 
     public void mouseClicked(MouseEvent mouseEvent) {
-        app.show("/login");
+        app.show("/holder");
     }
 }

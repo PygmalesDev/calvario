@@ -27,6 +27,8 @@ dependencies {
     // JavaFX
 
     implementation group: "fr.brouillard.oss", name: "cssfx", version: cssFxVersion
+    // for data-url in image cache -> to correctly load avatars from server
+    implementation group: "com.github.robtimus", name: "data-url", version: 2.0
 
     // REST
 

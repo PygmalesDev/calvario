@@ -20,6 +20,7 @@ public class Main {
     public static final String API_URL = (SERVER_PORT == 443 ? "https" : "http") + "://" + SERVER_HOSTNAME + ":" + SERVER_PORT + "/api/" + SERVER_VERSION;
 
     public static void main(String[] args) {
+        System.setProperty("java.protocol.handler.pkgs","com.github.robtimus.net.protocol");
         Application.launch(App.class, args);
     }
 }

@@ -1,6 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.component.GameComponent;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
 import io.reactivex.rxjava3.core.Observable;
@@ -15,9 +16,11 @@ import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 @Controller
 public class BrowseGameController {
@@ -35,6 +38,8 @@ public class BrowseGameController {
     GamesApiService gamesApiService;
     @Inject
     Subscriber subscriber;
+    @Inject
+    Provider<GameComponent> gameComponentProvider;
 
 
     private final ObservableList<Game> games = FXCollections.observableArrayList();
@@ -49,6 +54,7 @@ public class BrowseGameController {
     @OnRender
     void render(){
         gameList.setItems(games);
+        gameList.setCellFactory(list -> new ComponentListCell<>(app, gameComponentProvider));
     }
 
     @OnDestroy

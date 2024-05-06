@@ -26,6 +26,10 @@ public class Routes {
     @Inject
     Provider<BrowseGameController> browseGames;
 
+    @Route("autoLogin")
+    @Inject
+    Provider<AutoLoginController> autoLogin;
+
     @Inject
     public Routes() {
     }

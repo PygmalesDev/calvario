@@ -112,7 +112,8 @@ public class SignUpController {
                 result -> this.app.show("/login",
                         Map.of(
                                 "username", this.getUsername(),
-                                "password", this.getPassword()
+                                "password", this.getPassword(),
+                                "justRegistered", true
                         )));
     }
 

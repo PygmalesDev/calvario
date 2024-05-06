@@ -54,7 +54,7 @@
                      <Font size="15.0" />
                   </font>
                </PasswordField>
-               <TextField fx:id="showPasswordText" alignment="CENTER" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0">
+               <TextField fx:id="showPasswordText" alignment="CENTER" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0">
                      <font>
                         <Font size="15.0" />
                      </font>

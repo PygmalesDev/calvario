@@ -45,6 +45,8 @@ public class LoginController {
     public String username;
     @Param("password")
     public String password;
+    @Param("justRegistered")
+    public boolean justRegistered;
 
     @Inject
     public LoginController(){
@@ -56,6 +58,7 @@ public class LoginController {
             this.usernameInput.setText(this.username);
         if (Objects.nonNull(this.password))
             this.passwordInput.setText(this.password);
+        if (justRegistered){ this.errorLabel.setText("Account Registered!");}
     }
 
     private boolean checkIfInputNotBlankOrEmpty(String text) {

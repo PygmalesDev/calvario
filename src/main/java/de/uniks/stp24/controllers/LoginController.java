@@ -1,5 +1,6 @@
 package de.uniks.stp24.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
 import de.uniks.stp24.service.LoginService;
 import javafx.event.ActionEvent;
@@ -10,6 +11,7 @@ import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
+import retrofit2.HttpException;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -40,6 +42,9 @@ public class LoginController {
 
     @Inject
     LoginService loginService;
+
+    @Inject
+    ObjectMapper objectMappper;
 
     @Param("username")
     public String username;
@@ -76,13 +81,17 @@ public class LoginController {
             loginService.login(username, password, rememberMe)
                     .subscribe(result ->{
                         app.show("/browseGames");
-                    }, error -> {
-                                this.errorLabel.setStyle("-fx-fill: red;");
-                                this.errorLabel.setText("Invalid username or password");
+                    }
+                    , error -> {
+                                if (error instanceof HttpException httpError) {
+                                    System.out.println(httpError.code());
+                                    String body = httpError.response().errorBody().string();
+                                    ErrorResponse errorResponse = objectMappper.readValue(body,ErrorResponse.class);
+                                    writeText(errorResponse.statusCode());
+                                }
                     });
         } else {
-            this.errorLabel.setStyle("-fx-fill: red;");
-            this.errorLabel.setText("please put in name or/and password");
+            writeText(1);
         }
     }
 
@@ -120,5 +129,16 @@ public class LoginController {
 
     public void showLicenses(ActionEvent actionEvent) {
         app.show("/licenses");
+    }
+
+    private void writeText(int code) {
+        this.errorLabel.setStyle("-fx-fill: red;");
+        String info;
+        switch (code) {
+            case 400 -> info = "validation failed";
+            case 401 -> info = "Invalid username or password";
+            default ->  info = "please put in name or/and password";
+        }
+        this.errorLabel.setText(info);
     }
 }

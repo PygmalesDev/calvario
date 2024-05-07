@@ -2,6 +2,7 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.PauseMenuComponent;
+import de.uniks.stp24.component.SettingsComponent;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
@@ -9,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
@@ -30,7 +32,7 @@ public class InGameController {
     Pane gamePane;
 
     @FXML
-    VBox pauseMenuContainer;
+    StackPane pauseMenuContainer;
 
     @Inject
     App app;
@@ -38,6 +40,10 @@ public class InGameController {
     @SubComponent
     @Inject
     PauseMenuComponent pauseMenuComponent;
+
+    @SubComponent
+    @Inject
+    SettingsComponent settingsComponent;
 
     @Inject
     InGameService inGameService;
@@ -55,6 +61,21 @@ public class InGameController {
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         game.listeners().addPropertyChangeListener(Game.PROPERTY_PAUSED, callHandlePauseChanged);
         this.gameListenerTriple.add(new GameListenerTriple(game, callHandlePauseChanged, "PROPERTY_PAUSED"));
+
+        PropertyChangeListener callHandleShowSettings = this::handleShowSettings;
+        game.listeners().addPropertyChangeListener(Game.PROPERTY_SETTINGS, callHandleShowSettings);
+        this.gameListenerTriple.add(new GameListenerTriple(game, callHandlePauseChanged, "PROPERTY_SETTINGS"));
+    }
+
+    private void handleShowSettings(PropertyChangeEvent propertyChangeEvent) {
+        if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
+            Boolean settings = (Boolean) propertyChangeEvent.getNewValue();
+            if (settings) {
+                showSettings();
+            } else {
+                unShowSettings();
+            }
+        }
     }
 
     private void handlePauseChanged(PropertyChangeEvent propertyChangeEvent) {
@@ -70,16 +91,27 @@ public class InGameController {
 
     @OnRender
     public void render() {
+        pauseMenuContainer.setVisible(false);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
+        inGameService.setShowSettings(false);
         if (inGameService.getPaused()) {
             inGameService.setPaused(false);
         } else {
             inGameService.setPaused(true);
         }
+    }
+    public void showSettings() {
+        pauseMenuContainer.getChildren().remove(pauseMenuComponent);
+        pauseMenuContainer.getChildren().add(settingsComponent);
+
+    }
+    public void unShowSettings() {
+        pauseMenuContainer.getChildren().remove(settingsComponent);
+        pauseMenuContainer.getChildren().add(pauseMenuComponent);
     }
 
     public void pauseGame() {

@@ -27,4 +27,8 @@ public class InGameService {
     public Game getGame() {
         return game;
     }
+
+    public void setShowSettings(boolean show) {
+        game.setShowSettings(show);
+    }
 }

@@ -9,8 +9,12 @@ public class Game
 {
     protected PropertyChangeSupport listeners;
     public static final String PROPERTY_PAUSED = "paused";
+    public static final String PROPERTY_SETTINGS = "settings";
+
 
     private Boolean paused = false;
+    private Boolean showSettings = false;
+
 
     @Inject
     public Game() {
@@ -32,6 +36,24 @@ public class Game
         final Boolean oldValue = this.paused;
         this.paused = value;
         this.firePropertyChange(PROPERTY_PAUSED, oldValue, value);
+        return this;
+    }
+
+    public Boolean getShowSettings()
+    {
+        return this.showSettings;
+    }
+
+    public Game setShowSettings(Boolean value)
+    {
+        if (Objects.equals(value, this.showSettings))
+        {
+            return this;
+        }
+
+        final Boolean oldValue = this.showSettings;
+        this.showSettings = value;
+        this.firePropertyChange(PROPERTY_SETTINGS, oldValue, value);
         return this;
     }
 

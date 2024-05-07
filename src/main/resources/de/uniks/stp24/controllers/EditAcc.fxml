@@ -45,7 +45,7 @@
                                     <Font size="15.0" />
                                  </font>
                               </Text>
-                              <TextField fx:id="usernameInput">
+                              <TextField fx:id="usernameInput" disable="true">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
@@ -59,7 +59,7 @@
                                     <Font size="15.0" />
                                  </font>
                               </Text>
-                              <TextField fx:id="passwordInput">
+                              <TextField fx:id="passwordInput" disable="true">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
@@ -79,7 +79,7 @@
                               <Font size="15.0" />
                            </font>
                         </Button>
-                        <Button fx:id="editAccButton" mnemonicParsing="false" onAction="#editAcc" prefHeight="30.0" prefWidth="150.0" text="Edit Account">
+                        <Button fx:id="changeUserInfoButton" mnemonicParsing="false" onAction="#changeUserInfo" prefHeight="30.0" prefWidth="150.0" text="Edit Account">
                            <font>
                               <Font size="15.0" />
                            </font>

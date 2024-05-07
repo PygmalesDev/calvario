@@ -1,5 +1,7 @@
 package de.uniks.stp24.model;
 
+import javax.inject.Inject;
+
 public record Game(
         String createdAt,
         String updatedAt,

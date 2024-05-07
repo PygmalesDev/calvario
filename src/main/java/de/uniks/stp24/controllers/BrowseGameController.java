@@ -43,6 +43,8 @@ public class BrowseGameController {
     Provider<GameComponent> gameComponentProvider;
     @Inject
     EventListener eventListener;
+    @Inject
+    GameComponent gameComponent;
 
 
     private final ObservableList<Game> games = FXCollections.observableArrayList();
@@ -54,10 +56,7 @@ public class BrowseGameController {
 
         subscriber.subscribe(eventListener.listen("games.*.*", Game.class), event -> {
             switch (event.suffix()) {
-                case "created" -> {
-                    games.add(event.data());
-                    System.out.println("created");
-                }
+                case "created" -> games.add(event.data());
                 case "update" -> games.replaceAll(g -> g._id().equals(event.data()._id()) ? event.data() : g);
                 case "deleted" -> games.removeIf(g -> g._id().equals(event.data()._id()));
             }

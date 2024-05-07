@@ -10,7 +10,6 @@ import javax.inject.Singleton;
 
 @Module
 public class MainModule {
-
     // TODO provide resources
 
     @Provides

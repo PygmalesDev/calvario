@@ -30,8 +30,12 @@ public class ImageCacheTest extends ApplicationTest {
     public void basicTest() {
         assertNull(imageCache);
         imageCache = new ImageCache();
-        imageCache.get("icon");
-        imageCache.get("data:hallo");
+        System.out.println(imageCache.size());
+        imageCache.get("911.png");
+        imageCache.get("910.png");
+        imageCache.get("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==");
+        System.out.println(imageCache.size());
+
 
     }
 

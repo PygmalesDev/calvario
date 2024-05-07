@@ -34,12 +34,12 @@ public class ImageCache {
             if (url != null) {
                 path = url.toExternalForm();
             } else {
-                System.err.println("Failed to load image :" + path);
-                return new Image("https://via.placeholder.com/150?text=Image+not+found",true);
+                System.err.println("Failed to load image: " + path);
+                return new Image("https://fakeimg.pl/50x50?text=Image+not+found",true);
             }
         }
         final String finalPath = path;
-        final Image image =  new Image(path, background);
+        final Image image = new Image(finalPath, background);
         image.errorProperty().addListener((observable, oldValue, newValue ) -> {
                 if (newValue) {
                     System.err.println("Failed to load image: " + finalPath);
@@ -47,6 +47,14 @@ public class ImageCache {
                 }
         });
         return image;
+    }
+
+    public int size() {
+        return this.images.size();
+    }
+
+    public boolean isEmpty() {
+        return this.images.isEmpty();
     }
 
 }

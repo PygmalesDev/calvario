@@ -4,6 +4,7 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.component.GameComponent;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -40,6 +41,8 @@ public class BrowseGameController {
     Subscriber subscriber;
     @Inject
     Provider<GameComponent> gameComponentProvider;
+    @Inject
+    EventListener eventListener;
 
 
     private final ObservableList<Game> games = FXCollections.observableArrayList();
@@ -48,6 +51,17 @@ public class BrowseGameController {
     @OnInit
     void init(){
         subscriber.subscribe(gamesApiService.findAll().subscribe(this.games::setAll));
+
+        subscriber.subscribe(eventListener.listen("games.*.*", Game.class), event -> {
+            switch (event.suffix()) {
+                case "created" -> {
+                    games.add(event.data());
+                    System.out.println("created");
+                }
+                case "update" -> games.replaceAll(g -> g._id().equals(event.data()._id()) ? event.data() : g);
+                case "deleted" -> games.removeIf(g -> g._id().equals(event.data()._id()));
+            }
+        });
     }
 
     //Make list of games visible

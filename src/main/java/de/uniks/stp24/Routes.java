@@ -1,17 +1,21 @@
-package de.uniks.stp24;
+package de.uniks.stp24.controllers;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import de.uniks.stp24.controllers.*;
+import org.fulib.fx.annotation.Route;
+
+
+
 
 @Singleton
 public class Routes {
-    /* TODO add routes
-    example:
-    @Route("login")
-    @Inject
-    Provider<LoginController> login;
-     */
 
+    @Route("holder")
+    @Inject
+    Provider<PlaceHolderController> holder;
+
+    
     @Inject
     public Routes() {
     }

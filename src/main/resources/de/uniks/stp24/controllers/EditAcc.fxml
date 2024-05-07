@@ -74,7 +74,7 @@
                <children>
                   <VBox alignment="CENTER" prefHeight="400.0" prefWidth="200.0" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Button fx:id="continueButton" mnemonicParsing="false" onAction="#continueGame" prefHeight="30.0" prefWidth="150.0" text="Continue">
+                        <Button fx:id="continueButton" mnemonicParsing="false" onAction="#continueGame" prefHeight="30.0" prefWidth="150.0" text="Continue" >
                            <font>
                               <Font size="15.0" />
                            </font>

@@ -4,27 +4,24 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnRender;
 import javafx.beans.binding.BooleanBinding;
-import org.fulib.fx.annotation.param.Param;
 
 import javax.inject.Inject;
+import java.awt.*;
 import java.io.IOException;
-import java.util.Map;
 import java.util.Objects;
 
 @Title("Edit Account")
 @Controller
 public class EditAccController {
+    @FXML
+    Button changeUserInfoButton;
     @FXML
     Button cancelChangesButton;
     @FXML
@@ -64,6 +61,7 @@ public class EditAccController {
 
     @OnRender
     public void showChangingButtons(){
+        // Show save and cancel changes Buttons, if the input has changed
         this.cancelChangesButton.visibleProperty().bind(this.passwordInputChanged.or(this.usernameInputChanged));
         this.saveChangesButton.visibleProperty().bind(this.passwordInputChanged.or(this.usernameInputChanged));
     }
@@ -73,6 +71,7 @@ public class EditAccController {
     }
 
     public void cancelChanges(ActionEvent actionEvent) {
+        // Reset inputs
         this.usernameInput.setText(user.name());
         this.passwordInput.setText("");
     }
@@ -81,8 +80,10 @@ public class EditAccController {
     }
 
     public void changeUserInfo(ActionEvent actionEvent) {
+        // TextFields can be edited now
         passwordInput.setDisable(false);
         usernameInput.setDisable(false);
+        changeUserInfoButton.setStyle("-fx-background-color: #00f0f0; ");
     }
 
     public void deleteUser(ActionEvent actionEvent) throws IOException {

@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<VBox fx:id="warningContainer" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" spacing="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.WarningScreenController">
+<fx:root type="javafx.scene.layout.VBox" fx:id="warningContainer" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" spacing="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.WarningScreenComponent">
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="WARNING!">
          <font>
@@ -38,4 +38,4 @@
          </children>
       </HBox>
    </children>
-</VBox>
+</fx:root>

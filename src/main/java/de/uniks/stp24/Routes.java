@@ -1,5 +1,6 @@
 package de.uniks.stp24;
 
+import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.controllers.*;
 import org.fulib.fx.annotation.Route;
 
@@ -37,6 +38,10 @@ public class Routes {
     @Route("editAcc")
     @Inject
     Provider<EditAccController> editAcc;
+
+    @Route("warningScreen")
+    @Inject
+    Provider<WarningScreenComponent> warningScreen;
 
     @Inject
     public Routes() {

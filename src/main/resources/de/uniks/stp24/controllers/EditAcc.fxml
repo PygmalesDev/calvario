@@ -5,14 +5,14 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.EditAccController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.EditAccController">
    <children>
-      <HBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox fx:id="editAccHBox" alignment="CENTER" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane prefHeight="200.0" prefWidth="400.0">
                <children>
@@ -74,11 +74,6 @@
                <children>
                   <VBox alignment="CENTER" prefHeight="400.0" prefWidth="200.0" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Button fx:id="continueButton" mnemonicParsing="false" onAction="#continueGame" prefHeight="30.0" prefWidth="150.0" text="Continue" >
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Button>
                         <Button fx:id="changeUserInfoButton" mnemonicParsing="false" onAction="#changeUserInfo" prefHeight="30.0" prefWidth="150.0" text="Edit Account">
                            <font>
                               <Font size="15.0" />
@@ -100,5 +95,6 @@
             </AnchorPane>
          </children>
       </HBox>
+      <StackPane fx:id="warningScreenContainer" prefHeight="200.0" prefWidth="300.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="100.0" />
    </children>
 </AnchorPane>

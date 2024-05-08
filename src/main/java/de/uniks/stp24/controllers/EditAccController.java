@@ -1,13 +1,19 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnRender;
 import javafx.beans.binding.BooleanBinding;
@@ -30,6 +36,16 @@ public class EditAccController {
     TextField passwordInput;
     @FXML
     TextField usernameInput;
+    @FXML
+    StackPane warningScreenContainer;
+    @FXML
+    HBox editAccHBox;
+
+    @SubComponent
+    @Inject
+    WarningScreenComponent warningScreen;
+
+
 
     @Inject
     App app;
@@ -66,17 +82,21 @@ public class EditAccController {
         this.saveChangesButton.visibleProperty().bind(this.passwordInputChanged.or(this.usernameInputChanged));
     }
 
-    public void saveChanges(ActionEvent actionEvent) {
+    @OnRender
+    public void addWarningScreen(){
+        warningScreenContainer.setVisible(false);
+        warningScreenContainer.getChildren().add(warningScreen);
+    }
 
+    public void saveChanges(ActionEvent actionEvent) {
+        editAccHBox.setEffect(new BoxBlur());
+        warningScreenContainer.setVisible(true);
     }
 
     public void cancelChanges(ActionEvent actionEvent) {
         // Reset inputs
         this.usernameInput.setText(user.name());
         this.passwordInput.setText("");
-    }
-
-    public void continueGame(ActionEvent actionEvent) {
     }
 
     public void changeUserInfo(ActionEvent actionEvent) {

@@ -49,6 +49,7 @@ public class App extends FulibFxApp {
 
             primaryStage.setWidth(1280);
             primaryStage.setHeight(680);
+
             primaryStage.centerOnScreen();
 
             // TODO add image/icon.png and uncomment
@@ -56,9 +57,14 @@ public class App extends FulibFxApp {
             // setTaskbarIcon();
 
             //autoRefresher().setup(Path.of("src/main/resources/de/uniks/stp24"));
-            show("editAcc");
 
-            // TODO show login or main-menu
+
+            // open normal load screen or autoLogin screen depending on the preferences of the user
+            if (component.loginService().autoLogin()) {
+                show("/autoLogin");
+            } else {
+                show("/load");
+            }
 
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "An error occurred while starting the application: " + e.getMessage(), e);

@@ -64,7 +64,7 @@ Some parts of this project also include [JavaFX](openjfx.io), which is a third-p
 ### Eclipse Public License 1.0
 Some parts of this project also include [JUnit](https://junit.org/junit5), which is a third-party libray, which is licensed unter the Eclipse Public License 1.0. The complete license can be found [here](https://www.eclipse.org/legal/epl-v10.html).
 
-Please note, that you must comply with the terms oth these licenses when using or modifying the licensed software
+Please note, that you must comply with the terms of these licenses when using or modifying the licensed software
 
 ## Feedback 
 

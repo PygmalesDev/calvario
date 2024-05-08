@@ -11,11 +11,27 @@ import javax.inject.Singleton;
 @Singleton
 public class Routes {
 
-//    @Route("holder")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //    @Route("holder")
 //    @Inject
 //    Provider<PlaceHolderController> holder;
 
-    
     @Inject
     public Routes() {
     }

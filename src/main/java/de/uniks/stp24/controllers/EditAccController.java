@@ -3,6 +3,7 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.model.User;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -19,6 +20,7 @@ import org.fulib.fx.annotation.event.OnRender;
 import javafx.beans.binding.BooleanBinding;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
@@ -41,16 +43,20 @@ public class EditAccController {
     @FXML
     HBox editAccHBox;
 
+
+
     @SubComponent
     @Inject
     WarningScreenComponent warningScreen;
+
+    //WarningScreenComponent warningScreen;
 
 
 
     @Inject
     App app;
 
-
+    private BooleanBinding warningIsVisible;
     private BooleanBinding passwordInputChanged;
     private BooleanBinding usernameInputChanged;
 
@@ -73,6 +79,7 @@ public class EditAccController {
     public void createBindings(){
         this.passwordInputChanged = this.passwordInput.textProperty().isNotEqualTo("");
         this.usernameInputChanged = this.usernameInput.textProperty().isNotEqualTo(user.name());
+        this.warningIsVisible = this.warningScreenContainer.visibleProperty().not();
     }
 
     @OnRender
@@ -85,11 +92,18 @@ public class EditAccController {
     @OnRender
     public void addWarningScreen(){
         warningScreenContainer.setVisible(false);
-        warningScreenContainer.getChildren().add(warningScreen);
+    }
+    @OnRender
+    public void setBlurEffect() {
+        this.editAccHBox.effectProperty().bind(Bindings.createObjectBinding(()->{
+            if(warningIsVisible.get())
+                return null;
+            return new BoxBlur();
+        },this.warningIsVisible));
     }
 
     public void saveChanges(ActionEvent actionEvent) {
-        editAccHBox.setEffect(new BoxBlur());
+        warningScreenContainer.getChildren().add(warningScreen);
         warningScreenContainer.setVisible(true);
     }
 
@@ -113,4 +127,6 @@ public class EditAccController {
     public void goBack(ActionEvent actionEvent) {
         app.show("/browseGames");
     }
+
+
 }

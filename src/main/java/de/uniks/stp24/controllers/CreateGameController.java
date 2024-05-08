@@ -71,6 +71,7 @@ public class CreateGameController {
             GameSettings settings = new GameSettings(this.createMapSizeSpinner.getValue());
             createGameService.createGame(gameName, settings, password).subscribe(result ->
                     System.out.println(result));
+            app.show("/browseGames");
         }
     }
     public void cancel(){

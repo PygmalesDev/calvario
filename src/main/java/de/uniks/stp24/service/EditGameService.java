@@ -1,7 +1,6 @@
 package de.uniks.stp24.service;
 
 import de.uniks.stp24.dto.LoginDto;
-import de.uniks.stp24.dto.LoginResult;
 import de.uniks.stp24.dto.UpdateGameDto;
 import de.uniks.stp24.dto.UpdateGameResultDto;
 import de.uniks.stp24.rest.AuthApiService;

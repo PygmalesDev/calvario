@@ -103,4 +103,8 @@ public class BrowseGameController {
     public void logOut(){
         app.show("/login");
     }
+
+    public void newGame() {
+        app.show("/createGameController");
+    }
 }

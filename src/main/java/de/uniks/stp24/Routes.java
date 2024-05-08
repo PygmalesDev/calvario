@@ -21,13 +21,12 @@ public class Routes {
     @Route("signup")
     @Inject
     Provider<SignUpController> signup;
-
-    @Route("browseGames")
-    @Inject
     
     @Route("browseGames")
     @Inject
     Provider<BrowseGameController> browseGames;
+    @Route("licenses")
+    @Inject
     Provider<LicensesController> licenses;
     @Route("holder")
     @Inject
@@ -39,7 +38,6 @@ public class Routes {
     @Route("createGameController")
     @Inject
     Provider<CreateGameController> createGameController;
-    Provider<BrowseGameController> browseGames;
 
     @Route("autoLogin")
     @Inject

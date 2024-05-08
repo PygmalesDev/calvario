@@ -35,6 +35,11 @@ public class LobbyHostSettingsComponent extends Pane {
         this.gameID = gameID;
     }
 
+    public void startGame() {
+        // TODO: Check if all players are ready
+        System.out.println("Game started");
+    }
+
     public void leaveLobby() {
         // TODO: Switch to lobby selection screen
         this.lobbyService.leaveLobby(this.gameID).subscribe();

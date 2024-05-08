@@ -29,6 +29,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Arrays;
+import java.util.Objects;
 
 @Title("Enter Game")
 @Controller
@@ -92,14 +93,15 @@ public class LobbyController {
     // TODO: Example method, delete before PR
     @OnInit
     void setToken() {
-        tokenStorage.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjNiNDk3NTVlNmMxYWJiYzA5ZGM3ZjciLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJQeWdtYWxlcyBMaXR0bGUiLCJpYXQiOjE3MTUxNzY0MzgsImV4cCI6MTcxNTE4MDAzOH0.vlSQS46wka13g3XJFTHvax0bq-uMcOHgQZ-PPWjEmJM");
-        tokenStorage.setUserId("663b49755e6c1abbc09dc7f7");
+        tokenStorage.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjNiNmFkMTVlNmMxYWJiYzA5ZGVkZmQiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJQeWdtYWxlcyBKdW5pb3IiLCJpYXQiOjE3MTUxNzk0MjgsImV4cCI6MTcxNTE4MzAyOH0.oU9-ioO36kMeCh_klO0jQRoFVmRQfPOzk0mfN8i5604");
+        tokenStorage.setUserId("663b6ad15e6c1abbc09dedfd");
+
+        // TODO: gameID should be transferred from the lobby selection screen
+        this.gameID = "663b49085e6c1abbc09dc76f";
     }
 
     @OnInit
     void init() {
-        // TODO: gameID should be transferred from the lobby selection screen
-        this.gameID = "663b49085e6c1abbc09dc76f";
         this.subscriber.subscribe(this.gamesService.getGame(gameID), game -> {
             this.game = game;
             this.enterGameComponent.setGameName(game.name());
@@ -111,8 +113,9 @@ public class LobbyController {
         this.lobbySettingsComponent.setGameID(this.gameID);
         this.lobbyHostSettingsComponent.setGameID(this.gameID);
 
-        this.lobbyService.loadPlayers(this.gameID).subscribe(dto ->
-                Arrays.stream(dto).forEach(data -> this.addUserToList(data.user(), data)));
+        this.lobbyService.loadPlayers(this.gameID).subscribe(dto -> {
+            Arrays.stream(dto).forEach(data -> this.addUserToList(data.user(), data));
+            this.sortHostOnTop();});
 
         this.subscriber.subscribe(this.eventListener
                 .listen("games." + this.gameID + ".members.*.*", MemberDto.class), event -> {
@@ -125,6 +128,7 @@ public class LobbyController {
                 case "updated" -> this.replaceUserInList(id, event.data());
                 case "deleted" -> this.removeUserFromList(id);
             }
+            this.sortHostOnTop();
         });
     }
 
@@ -141,8 +145,14 @@ public class LobbyController {
     }
 
     private void addUserToList(String userID, MemberDto data) {
-        this.subscriber.subscribe(this.userApiService.getUser(userID), user ->
-                this.users.add(new MemberUser(user, data.ready())));
+        this.subscriber.subscribe(this.userApiService.getUser(userID), user -> {
+            if (userID.equals(this.game.owner()))
+                this.users.add(new MemberUser(new User(user.name() + " (Host)",
+                        user._id(), user.avatar(), user.createdAt(), user.updatedAt()
+                ), data.ready()));
+            else
+                this.users.add(new MemberUser(user, data.ready()));
+        });
     }
 
     private void replaceUserInList(String userID, MemberDto data) {
@@ -165,5 +175,13 @@ public class LobbyController {
                 this.lobbyElement.getChildren().add(this.enterGameComponent);
             }
         });
+    }
+
+    private void sortHostOnTop() {
+        MemberUser host = this.users.stream().filter(member ->
+                member.user().name().contains("Host")).findFirst().orElse(null);
+        this.users.removeIf(member -> member.user().name().contains("Host"));
+        if (Objects.nonNull(host))
+            this.users.addFirst(host);
     }
 }

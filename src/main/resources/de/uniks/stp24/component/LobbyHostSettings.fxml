@@ -22,7 +22,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="startJourneyButton" layoutX="16.0" layoutY="211.0" mnemonicParsing="false" onAction="#leaveLobby" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: LIGHTBLUE;" text="Star Journey">
+      <Button fx:id="startJourneyButton" layoutX="16.0" layoutY="211.0" mnemonicParsing="false" onAction="#startGame" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: LIGHTBLUE;" text="Star Journey">
          <font>
             <Font size="18.0" />
          </font>

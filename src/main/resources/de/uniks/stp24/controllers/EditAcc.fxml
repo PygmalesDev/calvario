@@ -95,6 +95,6 @@
             </AnchorPane>
          </children>
       </HBox>
-      <StackPane fx:id="warningScreenContainer" prefHeight="200.0" prefWidth="300.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="100.0" />
+      <StackPane fx:id="warningScreenContainer" visible="false" prefHeight="200.0" prefWidth="300.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="100.0" />
    </children>
 </AnchorPane>

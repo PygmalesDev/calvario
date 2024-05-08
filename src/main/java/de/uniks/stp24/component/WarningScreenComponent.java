@@ -38,7 +38,7 @@ public class WarningScreenComponent extends VBox {
 
     public void cancelDelete(ActionEvent actionEvent) {
         getParent().setVisible(false);
-        getChildren().clear();
+        //getChildren().clear();
     }
 
     public void deleteAcc(ActionEvent actionEvent) {

@@ -49,16 +49,12 @@ public class EditAccController {
     @Inject
     WarningScreenComponent warningScreen;
 
-    //WarningScreenComponent warningScreen;
-
 
 
     @Inject
     App app;
 
     private BooleanBinding warningIsVisible;
-    private BooleanBinding passwordInputChanged;
-    private BooleanBinding usernameInputChanged;
 
     //@Param("user")
     public User user = new User("a","b","c","d","e");
@@ -77,24 +73,14 @@ public class EditAccController {
 
     @OnRender
     public void createBindings(){
-        this.passwordInputChanged = this.passwordInput.textProperty().isNotEqualTo("");
-        this.usernameInputChanged = this.usernameInput.textProperty().isNotEqualTo(user.name());
         this.warningIsVisible = this.warningScreenContainer.visibleProperty().not();
     }
 
-    @OnRender
-    public void showChangingButtons(){
-        // Show save and cancel changes Buttons, if the input has changed
-        this.cancelChangesButton.visibleProperty().bind(this.passwordInputChanged.or(this.usernameInputChanged));
-        this.saveChangesButton.visibleProperty().bind(this.passwordInputChanged.or(this.usernameInputChanged));
-    }
+
 
     @OnRender
-    public void addWarningScreen(){
-        warningScreenContainer.setVisible(false);
-    }
-    @OnRender
     public void setBlurEffect() {
+        // blurs the edit account screen when the warning screen is visible
         this.editAccHBox.effectProperty().bind(Bindings.createObjectBinding(()->{
             if(warningIsVisible.get())
                 return null;
@@ -102,26 +88,49 @@ public class EditAccController {
         },this.warningIsVisible));
     }
 
-    public void saveChanges(ActionEvent actionEvent) {
+    @OnRender
+    public void setWarningScreen(){
+        // warning screen component is set but not visible
         warningScreenContainer.getChildren().add(warningScreen);
-        warningScreenContainer.setVisible(true);
+        warningScreenContainer.setVisible(false);
+    }
+
+    public void saveChanges(ActionEvent actionEvent) {
+
     }
 
     public void cancelChanges(ActionEvent actionEvent) {
-        // Reset inputs
-        this.usernameInput.setText(user.name());
-        this.passwordInput.setText("");
+        // Reset inputs and changeUserInfoButton
+        usernameInput.setText(user.name());
+        passwordInput.setText("");
+        usernameInput.setDisable(true);
+        passwordInput.setDisable(true);
+
+        cancelChangesButton.setVisible(false);
+
+        saveChangesButton.setVisible(false);
+
+
+        changeUserInfoButton.setStyle("-fx-background-color: #ffffff; ");
+        changeUserInfoButton.setDisable(false);
     }
 
     public void changeUserInfo(ActionEvent actionEvent) {
-        // TextFields can be edited now
+        // TextFields can be edited now and buttons for saving or cancel the changes show up
         passwordInput.setDisable(false);
         usernameInput.setDisable(false);
+
+        cancelChangesButton.setVisible(true);
+        saveChangesButton.setVisible(true);
+
         changeUserInfoButton.setStyle("-fx-background-color: #00f0f0; ");
+        changeUserInfoButton.setDisable(true);
     }
 
     public void deleteUser(ActionEvent actionEvent) throws IOException {
-
+        // warning screen opens
+        warningScreenContainer.setVisible(true);
+        // Todo: color of the deleteUserButton
     }
 
     public void goBack(ActionEvent actionEvent) {

@@ -1,5 +1,6 @@
 package de.uniks.stp24.component;
 
+import de.uniks.stp24.model.MemberUser;
 import de.uniks.stp24.model.User;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -14,21 +15,25 @@ import javax.inject.Inject;
 import java.util.Objects;
 
 @Component(view = "User.fxml")
-public class UserComponent extends HBox implements ReusableItemComponent<User> {
+public class UserComponent extends HBox implements ReusableItemComponent<MemberUser> {
     @FXML
     ImageView avatarImageView;
     @FXML
     Text usernameText;
+    @FXML
+    Text readyText;
 
     @Inject
-    public UserComponent() {
-
-    }
+    public UserComponent() {}
 
     @Override
-    public void setItem(@NotNull User user) {
-        this.usernameText.setText(user.name());
-        if (Objects.nonNull(user.avatar()))
-            this.avatarImageView.setImage(new Image(user.avatar()));
+    public void setItem(@NotNull MemberUser member) {
+        this.usernameText.setText(member.user().name());
+        if (member.ready())
+            this.readyText.setText("Ready");
+        else
+            this.readyText.setText("Not Ready");
+        if (Objects.nonNull(member.user().avatar()))
+            this.avatarImageView.setImage(new Image(member.user().avatar()));
     }
 }

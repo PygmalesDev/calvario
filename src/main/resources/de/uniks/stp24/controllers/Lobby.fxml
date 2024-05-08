@@ -22,7 +22,7 @@
             </Pane>
             <ListView fx:id="playerListView" layoutX="374.0" layoutY="65.0" prefHeight="237.0" prefWidth="226.0" />
             <Line endY="288.0" layoutX="373.0" layoutY="15.0" startY="-13.0" />
-            <StackPane fx:id="lobbyElement" prefHeight="302.0" prefWidth="370.0" />
+            <StackPane fx:id="lobbyElement" layoutX="2.0" layoutY="2.0" prefHeight="302.0" prefWidth="370.0" />
          </children>
       </Pane>
    </children>

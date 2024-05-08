@@ -9,13 +9,6 @@ import javax.inject.Singleton;
 
 @Singleton
 public class Routes {
-    /* TODO add routes
-    example:
-    @Route("login")
-    @Inject
-    Provider<LoginController> login;
-     */
-
     @Route("lobby")
     @Inject
     Provider<LobbyController> lobby;

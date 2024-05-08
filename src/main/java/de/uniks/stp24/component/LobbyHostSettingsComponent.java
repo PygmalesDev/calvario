@@ -10,8 +10,8 @@ import org.fulib.fx.annotation.controller.Component;
 import javax.inject.Inject;
 
 
-@Component(view = "LobbySettings.fxml")
-public class LobbySettingsComponent extends Pane {
+@Component(view = "LobbyHostSettings.fxml")
+public class LobbyHostSettingsComponent extends Pane {
     @FXML
     Text gameNameField;
     @Inject
@@ -19,7 +19,7 @@ public class LobbySettingsComponent extends Pane {
     private String gameID;
 
     @Inject
-    public LobbySettingsComponent() {
+    public LobbyHostSettingsComponent() {
 
     }
 

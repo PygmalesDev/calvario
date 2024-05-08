@@ -1,9 +1,10 @@
 package de.uniks.stp24;
 
 import de.uniks.stp24.controllers.LoginController;
-import de.uniks.stp24.dto.LoginResult;
+import de.uniks.stp24.model.LoginResult;
 import de.uniks.stp24.service.LoginService;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.control.CheckBox;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -97,9 +98,31 @@ public class LoginControllerTest extends ControllerTest {
         // Her screen switches to the register window.
         waitForFxEvents();
         assertEquals("SignUp", stage.getTitle());
-
     }
 
+    @Test
+    void clickOnRememberMe(){
+        
+        // Start:
+        // Alice is in the log in screen.
+        // She has put in her username and password. Next time she logs in she wants to use the same account
+        assertEquals("Login", stage.getTitle());
+        CheckBox rememberMe = (CheckBox) lookup("#rememberMeBox").queryParent();
+        assertFalse(rememberMe.isSelected());
 
+        clickOn("#usernameInput");
+        write("alice999\t");
+        write("1234");
+
+        // Alice activates the remember me checkbox
+        // Action:
+
+        clickOn("#rememberMeBox");
+//
+        // Result:
+        // The game will remember now she her account data.
+
+        assertTrue(rememberMe.isSelected());
+    }
 
 }

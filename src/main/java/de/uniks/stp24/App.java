@@ -60,13 +60,12 @@ public class App extends FulibFxApp {
 
             autoRefresher().setup(Path.of("src/main/resources/de/uniks/stp24"));
 
-            // TODO show login or main-menu
-            show("/load");
-            //
+
+            // open normal load screen or autoLogin screen depending on the preferences of the user
             if (component.loginService().autoLogin()) {
-                show("/main");
+                show("/autoLogin");
             } else {
-                show("/createGameController");
+                show("/load");
             }
 
         } catch (Exception e) {

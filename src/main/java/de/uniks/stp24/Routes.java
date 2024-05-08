@@ -17,6 +17,9 @@ public class Routes {
     @Route("login")
     @Inject
     Provider<LoginController> login;
+    @Route("autoLogin")
+    @Inject
+    Provider<AutoLoginController> autoLogin;
 
     @Route("signup")
     @Inject
@@ -25,6 +28,9 @@ public class Routes {
     @Route("licenses")
     @Inject
     Provider<LicensesController> licenses;
+    @Route("holder")
+    @Inject
+    Provider<PlaceHolderController> holder;
     @Route("editgame")
     @Inject
     Provider<EditGameController> editgame;

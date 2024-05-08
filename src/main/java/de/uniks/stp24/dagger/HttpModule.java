@@ -71,4 +71,8 @@ public class HttpModule {
     UserApiService userApiService(Retrofit retrofit) {
         return retrofit.create(UserApiService.class);
     }
+
+    @Provides
+    @Singleton
+    GamesApiService gamesApiService(Retrofit retrofit) {return retrofit.create(GamesApiService.class);}
 }

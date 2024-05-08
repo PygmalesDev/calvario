@@ -3,6 +3,7 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.model.User;
+import de.uniks.stp24.service.EditAccService;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,8 +17,10 @@ import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
 import javafx.beans.binding.BooleanBinding;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -43,7 +46,12 @@ public class EditAccController {
     @FXML
     HBox editAccHBox;
 
-
+    @Inject
+    EditAccService editAccService;
+    @Inject
+    Subscriber subscriber;
+    @Inject
+    App app;
 
     @SubComponent
     @Inject
@@ -51,8 +59,7 @@ public class EditAccController {
 
 
 
-    @Inject
-    App app;
+
 
     private BooleanBinding warningIsVisible;
 
@@ -96,23 +103,29 @@ public class EditAccController {
     }
 
     public void saveChanges(ActionEvent actionEvent) {
-
+        // save changed name and/or password of the user and reset the edit account screen afterward
+        subscriber.subscribe(editAccService.changeUserInfo(usernameInput.getText(), passwordInput.getText()),
+                result -> resetEditing(usernameInput.getText(), passwordInput.getText()));
+        //ToDo: error handling and message
     }
 
-    public void cancelChanges(ActionEvent actionEvent) {
+    public void resetEditing(String username, String password) {
         // Reset inputs and changeUserInfoButton
-        usernameInput.setText(user.name());
-        passwordInput.setText("");
+        usernameInput.setText(username);
+        passwordInput.setText(password);
         usernameInput.setDisable(true);
         passwordInput.setDisable(true);
 
         cancelChangesButton.setVisible(false);
-
         saveChangesButton.setVisible(false);
-
 
         changeUserInfoButton.setStyle("-fx-background-color: #ffffff; ");
         changeUserInfoButton.setDisable(false);
+    }
+
+    public void cancelChanges(ActionEvent actionEvent) {
+        // Reset inputs and changeUserInfoButton
+        resetEditing(user.name(), "");
     }
 
     public void changeUserInfo(ActionEvent actionEvent) {
@@ -137,5 +150,8 @@ public class EditAccController {
         app.show("/browseGames");
     }
 
-
+    @OnDestroy
+    public void destroy() {
+        this.subscriber.dispose();
+    }
 }

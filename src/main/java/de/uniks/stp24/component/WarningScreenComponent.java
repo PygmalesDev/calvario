@@ -1,16 +1,16 @@
 package de.uniks.stp24.component;
 
+import com.fasterxml.jackson.core.ObjectCodec;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
-import de.uniks.stp24.controllers.EditAccController;
+import de.uniks.stp24.model.ErrorResponse;
 import de.uniks.stp24.service.EditAccService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
-import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import retrofit2.HttpException;
 
 import javax.inject.Inject;
 
@@ -22,9 +22,10 @@ public class WarningScreenComponent extends VBox {
 
     @Inject
     App app;
-
     @Inject
     EditAccService editAccService;
+    @Inject
+    ObjectMapper objectMapper;
 
     @Inject
     public WarningScreenComponent() {
@@ -38,10 +39,20 @@ public class WarningScreenComponent extends VBox {
 
     public void cancelDelete(ActionEvent actionEvent) {
         getParent().setVisible(false);
-        //getChildren().clear();
     }
 
     public void deleteAcc(ActionEvent actionEvent) {
-
+        // delete user and switch back to the login screen
+        editAccService.deleteUser().subscribe(result -> {
+            app.show("/login");
+        }, error ->{
+            if(error instanceof HttpException httpError) {
+                System.out.println(httpError.code());
+                String body = httpError.response().errorBody().string();
+                ErrorResponse errorResponse = objectMapper.readValue(body,ErrorResponse.class);
+                // ToDo: error handling and message
+                //writeText(errorResponse.statusCode());
+            }
+        });
     }
 }

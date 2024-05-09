@@ -4,9 +4,8 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.component.GameComponent;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.ws.EventListener;
-import io.reactivex.rxjava3.core.Observable;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -45,6 +44,8 @@ public class BrowseGameController {
     EventListener eventListener;
     @Inject
     GameComponent gameComponent;
+    @Inject
+    BrowseGameService browseGameService;
 
 
     private final ObservableList<Game> games = FXCollections.observableArrayList();
@@ -56,7 +57,7 @@ public class BrowseGameController {
 
         subscriber.subscribe(eventListener.listen("games.*.*", Game.class), event -> {
             switch (event.suffix()) {
-                case "created" -> games.add(event.data());
+                case "created" -> games.add(0,event.data());
                 case "update" -> games.replaceAll(g -> g._id().equals(event.data()._id()) ? event.data() : g);
                 case "deleted" -> games.removeIf(g -> g._id().equals(event.data()._id()));
             }
@@ -95,7 +96,7 @@ public class BrowseGameController {
     }
 
 
-    //Back to Login Screen after click Logout in BrowseGame Screen
+    //Back to log in Screen after click Logout in BrowseGame Screen
     public void logOut(ActionEvent actionEvent) {
         logOut();
     }
@@ -106,5 +107,11 @@ public class BrowseGameController {
 
     public void newGame() {
         app.show("/createGameController");
+    }
+
+    public void editGame() {
+
+
+        app.show("/editgame");
     }
 }

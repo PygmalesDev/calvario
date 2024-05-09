@@ -11,8 +11,8 @@ import retrofit2.http.*;
 import java.util.List;
 
 public interface GamesApiService {
-    @POST("games")
-    Observable<UpdateGameResultDto> editGame(@Body UpdateGameDto dto);
+    @PATCH("games/{id}")
+    Observable<UpdateGameResultDto> editGame(@Path("id") String id, @Body UpdateGameDto dto);
 
     @POST("games")
     Observable<CreateGameResultDto> createGame(@Body CreateGameDto dto);

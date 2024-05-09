@@ -2,6 +2,7 @@ package de.uniks.stp24.component;
 
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.service.BrowseGameService;
+import de.uniks.stp24.service.EditGameService;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
@@ -20,6 +21,9 @@ public class GameComponent extends HBox implements ReusableItemComponent <Game>{
     @Inject
     BrowseGameService browseGameService;
 
+    @Inject
+    EditGameService editGameService;
+
     private Game game;
 
     @Override
@@ -34,6 +38,8 @@ public class GameComponent extends HBox implements ReusableItemComponent <Game>{
         this.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+
+                editGameService.setClickedGame(game);
                 browseGameService.handleGameSelection(game);
             }
         });

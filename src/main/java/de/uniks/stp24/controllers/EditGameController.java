@@ -1,6 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.EditGameService;
 import javafx.fxml.FXML;
@@ -40,20 +41,27 @@ public class EditGameController {
     }
     @Inject
     EditGameService editGameService;
+    @FXML
+    public void initialize() {
+        initializeSpinner();
+    }
+
+
     public void initializeSpinner(){
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(100, 1000);
         valueFactory.setValue(100);
         editMapSizeSpinner.setValueFactory(valueFactory);
+        System.out.println(editMapSizeSpinner.getValue());
     }
-
 
     public void editGame(){
         initializeSpinner();
-        int mapSize = this.editMapSizeSpinner.getValue();
+        GameSettings settings = new GameSettings(this.editMapSizeSpinner.getValue());
         String gameName = this.editNameTextField.getText();
         String password = this.editPasswordTextField.getText();
-        editGameService.editGame(gameName, mapSize, password).subscribe(result ->
+        editGameService.editGame(gameName, settings, password).subscribe(result ->
                 System.out.println(result));
+        app.show("/browseGames");
     }
     public void cancel(){
         app.show("/browseGames");

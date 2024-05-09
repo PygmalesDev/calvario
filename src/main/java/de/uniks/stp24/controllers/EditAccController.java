@@ -62,8 +62,7 @@ public class EditAccController {
 
 
     private BooleanBinding warningIsVisible;
-
-    //@Param("user")
+    //private User user;
     public User user = new User("a","b","c","d","e");
 
 
@@ -101,6 +100,7 @@ public class EditAccController {
         warningScreenContainer.getChildren().add(warningScreen);
         warningScreenContainer.setVisible(false);
     }
+
 
     public void saveChanges(ActionEvent actionEvent) {
         // save changed name and/or password of the user and reset the edit account screen afterward

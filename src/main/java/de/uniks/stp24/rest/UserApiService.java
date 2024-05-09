@@ -11,6 +11,9 @@ public interface UserApiService {
     @POST("users")
     Observable<SignUpResultDto> signup(@Body CreateUserDto dto);
 
+    @GET("users/{id}")
+    Observable<User> getUser(@Path("id") long id);
+
     @DELETE("users/{id}")
     Observable<User> delete(@Path("id") long id);
 

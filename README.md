@@ -18,7 +18,7 @@ Initial release with exclusiv features:
 - Ability to **save and load** individual **empires** offline.
 - **Multi-Language Support:** English and German.
 
-## Installation
+## How To Build a JAR
 
 To get started with **Calvario**, follow these simple steps:
 

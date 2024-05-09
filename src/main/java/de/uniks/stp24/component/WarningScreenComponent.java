@@ -5,11 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
 import de.uniks.stp24.model.ErrorResponse;
 import de.uniks.stp24.service.EditAccService;
+import de.uniks.stp24.service.TokenStorage;
+import io.reactivex.rxjava3.core.Completable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.controller.Subscriber;
 import retrofit2.HttpException;
 
 import javax.inject.Inject;
@@ -26,6 +30,10 @@ public class WarningScreenComponent extends VBox {
     EditAccService editAccService;
     @Inject
     ObjectMapper objectMapper;
+    @Inject
+    TokenStorage tokenStorage;
+    @Inject
+    Subscriber subscriber;
 
     @Inject
     public WarningScreenComponent() {
@@ -43,8 +51,8 @@ public class WarningScreenComponent extends VBox {
 
     public void deleteAcc(ActionEvent actionEvent) {
         // delete user and switch back to the login screen
-        editAccService.deleteUser().subscribe(result -> {
-            app.show("/login");
+        this.subscriber.subscribe(editAccService.deleteUser(),
+                result -> {app.show("/login");
         }, error ->{
             if(error instanceof HttpException httpError) {
                 System.out.println(httpError.code());
@@ -54,5 +62,10 @@ public class WarningScreenComponent extends VBox {
                 //writeText(errorResponse.statusCode());
             }
         });
+    }
+
+    @OnDestroy
+    public void destroy() {
+        this.subscriber.dispose();
     }
 }

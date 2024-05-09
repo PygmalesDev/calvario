@@ -14,20 +14,30 @@ public class EditAccService {
     UserApiService userApiService;
     @Inject
     App app;
+    @Inject
+    TokenStorage tokenStorage;
 
-    //private User user;
-    public User user = new User("a","b","c","d","e");
+
 
 
     @Inject
     public EditAccService() {}
 
     public Observable<User> changeUserInfo(String newUsername, String newPassword){
-        return userApiService.edit(Long.parseLong(user._id()), new UpdateUserDto(newUsername,user.avatar(), newPassword));
+        return userApiService
+                .edit(tokenStorage.getUserId(), new UpdateUserDto(newUsername, tokenStorage.getAvatar(), newPassword))
+                .doOnNext(editResult ->{
+                    tokenStorage.setName(editResult.name());
+                });
     }
 
     public Observable<User> deleteUser(){
-        return userApiService.delete(Long.parseLong(user._id()));
+        return userApiService
+                .delete(tokenStorage.getUserId())
+                .doOnNext(deleteResult ->{
+                    tokenStorage.setName(null);
+                    tokenStorage.setAvatar(null);
+                });
     }
 
 }

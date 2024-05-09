@@ -10,8 +10,10 @@ import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
+import org.fulib.fx.controller.Subscriber;
 import retrofit2.HttpException;
 
 import javax.inject.Inject;
@@ -37,6 +39,8 @@ public class LoginController {
     TextField usernameInput;
     @FXML
     TextField showPasswordText;
+    @Inject
+    Subscriber subscriber;
 
     @Inject
     App app;
@@ -79,9 +83,10 @@ public class LoginController {
             String password = this.passwordInput.getText();
             boolean rememberMe = this.rememberMeBox.isSelected();
             //ToDo: disable button during request
-            loginService.login(username, password, rememberMe)
-                    .subscribe(result ->{
-                        app.show("/browseGames");
+            loginButton.setDisable(true);
+            subscriber.subscribe(loginService.login(username, password, rememberMe),
+                    result ->{
+                        app.show("/editAcc");
                     }
                     , error -> {
                                 if (error instanceof HttpException httpError) {
@@ -141,5 +146,11 @@ public class LoginController {
             default ->  info = "please put in name or/and password";
         }
         this.errorLabel.setText(info);
+        loginButton.setDisable(false);
+    }
+
+    @OnDestroy
+    public void destroy() {
+        this.subscriber.dispose();
     }
 }

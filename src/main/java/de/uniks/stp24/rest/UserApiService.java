@@ -12,11 +12,11 @@ public interface UserApiService {
     Observable<SignUpResultDto> signup(@Body CreateUserDto dto);
 
     @GET("users/{id}")
-    Observable<User> getUser(@Path("id") long id);
+    Observable<User> getUser(@Path("id") String id);
 
     @DELETE("users/{id}")
-    Observable<User> delete(@Path("id") long id);
+    Observable<User> delete(@Path("id") String id);
 
     @PATCH("users/{id}")
-    Observable<User> edit(@Path("id") long id, @Body UpdateUserDto dto);
+    Observable<User> edit(@Path("id") String id, @Body UpdateUserDto dto);
 }

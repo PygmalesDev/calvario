@@ -4,6 +4,7 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.model.User;
 import de.uniks.stp24.service.EditAccService;
+import de.uniks.stp24.service.TokenStorage;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,6 +53,8 @@ public class EditAccController {
     Subscriber subscriber;
     @Inject
     App app;
+    @Inject
+    TokenStorage tokenStorage;
 
     @SubComponent
     @Inject
@@ -62,8 +65,7 @@ public class EditAccController {
 
 
     private BooleanBinding warningIsVisible;
-    //private User user;
-    public User user = new User("a","b","c","d","e");
+
 
 
     @Inject
@@ -72,9 +74,8 @@ public class EditAccController {
 
     @OnRender
     public void applyInputs() {
-        if (Objects.nonNull(user.name()))
-            this.usernameInput.setText(user.name());
-        // Todo: write password of the user
+        if (Objects.nonNull(tokenStorage.getName()))
+            this.usernameInput.setText(tokenStorage.getName());
     }
 
     @OnRender
@@ -119,13 +120,13 @@ public class EditAccController {
         cancelChangesButton.setVisible(false);
         saveChangesButton.setVisible(false);
 
-        changeUserInfoButton.setStyle("-fx-background-color: #ffffff; ");
+        //changeUserInfoButton.setStyle("-fx-background-color: #ffffff; ");
         changeUserInfoButton.setDisable(false);
     }
 
     public void cancelChanges(ActionEvent actionEvent) {
         // Reset inputs and changeUserInfoButton
-        resetEditing(user.name(), "");
+        resetEditing(tokenStorage.getName(), "");
     }
 
     public void changeUserInfo(ActionEvent actionEvent) {
@@ -136,7 +137,7 @@ public class EditAccController {
         cancelChangesButton.setVisible(true);
         saveChangesButton.setVisible(true);
 
-        changeUserInfoButton.setStyle("-fx-background-color: #00f0f0; ");
+        //changeUserInfoButton.setStyle("-fx-background-color: #00f0f0; ");
         changeUserInfoButton.setDisable(true);
     }
 

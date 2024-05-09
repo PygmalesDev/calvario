@@ -12,17 +12,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.GangCreationController">
    <children>
       <VBox prefHeight="680.0" prefWidth="500.0">
          <children>
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" prefHeight="150.0" prefWidth="500.0" text="GO BACK TO LOBBY">
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" prefHeight="150.0" prefWidth="500.0" style="-fx-border-color: BLACK;" text="GO BACK TO LOBBY">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
             </Button>
-            <Button fx:id="showCreationButton" mnemonicParsing="false" onAction="#showCreation" prefHeight="150.0" prefWidth="500.0" text="CREATE GANG">
+            <Button fx:id="showCreationButton" mnemonicParsing="false" onAction="#showCreation" prefHeight="150.0" prefWidth="500.0" style="-fx-border-color: BLACK;" text="CREATE GANG">
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
@@ -30,10 +31,18 @@
                   <Font name="System Bold" size="24.0" />
                </font>
             </Button>
-            <ListView fx:id="empiresListView" prefHeight="473.0" prefWidth="500.0" />
+            <Text stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR GANGS" textAlignment="CENTER" wrappingWidth="500.0">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="5.0" />
+               </VBox.margin>
+            </Text>
+            <ListView fx:id="gangsListView" prefHeight="500.0" prefWidth="500.0" />
          </children>
       </VBox>
-      <Pane fx:id="creationPane" layoutX="536.0" layoutY="22.0" prefHeight="644.0" prefWidth="704.0" visible="false">
+      <Pane fx:id="creationPane" layoutX="536.0" layoutY="22.0" prefHeight="644.0" prefWidth="704.0">
          <children>
             <TextField fx:id="gangNameText" alignment="CENTER" layoutX="114.0" layoutY="-5.0" prefHeight="75.0" prefWidth="500.0" promptText="GANG'S NAME">
                <font>

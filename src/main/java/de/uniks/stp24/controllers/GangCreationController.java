@@ -1,13 +1,22 @@
 package de.uniks.stp24.controllers;
 
+import dagger.internal.Provider;
 import de.uniks.stp24.App;
+import de.uniks.stp24.model.Gang;
+import de.uniks.stp24.component.GangComponent;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnInit;
+import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.constructs.listview.ComponentListCell;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -17,10 +26,17 @@ import java.util.Random;
 @Title("Gang Creation")
 @Controller
 public class GangCreationController {
-
     @Inject
     App app;
 
+    @Inject
+    Provider<GangComponent> gangComponentProvider;
+
+
+    @FXML
+    ListView<Gang> gangsListView;
+    @FXML
+    AnchorPane gangsPane;
     @FXML
     Pane creationPane;
     @FXML
@@ -33,6 +49,9 @@ public class GangCreationController {
     ArrayList<File> portraitsList = new ArrayList<>();
     int flagImageIndex = 0;
     int portraitImageIndex = 0;
+
+    private final ObservableList<Gang> gangs = FXCollections.observableArrayList();
+
 
     @Inject
     public GangCreationController() {
@@ -50,9 +69,14 @@ public class GangCreationController {
         for (File portrait : portraitsDir.listFiles()) {
             portraitsList.add(portrait);
         }
-        System.out.println(portraitsList);
     }
 
+    @OnRender
+    public void render() {
+        creationPane.setVisible(false);
+        this.gangsListView.setItems(this.gangs);
+        this.gangsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.gangComponentProvider));
+    }
 
     public void back() {
 
@@ -65,7 +89,7 @@ public class GangCreationController {
     }
 
     public void create() {
-
+       gangs.add(new Gang("hi", "x", "x"));
     }
 
     public void showLastFlag() {

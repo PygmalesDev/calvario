@@ -59,7 +59,6 @@ public class WarningScreenComponent extends VBox {
                 String body = httpError.response().errorBody().string();
                 ErrorResponse errorResponse = objectMapper.readValue(body,ErrorResponse.class);
                 // ToDo: error handling and message
-                //writeText(errorResponse.statusCode());
             }
         });
     }

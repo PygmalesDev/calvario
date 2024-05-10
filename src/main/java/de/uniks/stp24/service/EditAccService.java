@@ -17,9 +17,6 @@ public class EditAccService {
     @Inject
     TokenStorage tokenStorage;
 
-
-
-
     @Inject
     public EditAccService() {}
 

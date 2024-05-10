@@ -60,13 +60,7 @@ public class EditAccController {
     @Inject
     WarningScreenComponent warningScreen;
 
-
-
-
-
     private BooleanBinding warningIsVisible;
-
-
 
     @Inject
     public EditAccController() {
@@ -120,7 +114,6 @@ public class EditAccController {
         cancelChangesButton.setVisible(false);
         saveChangesButton.setVisible(false);
 
-        //changeUserInfoButton.setStyle("-fx-background-color: #ffffff; ");
         changeUserInfoButton.setDisable(false);
     }
 

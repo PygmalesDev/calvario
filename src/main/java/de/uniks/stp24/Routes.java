@@ -32,6 +32,10 @@ public class Routes {
     @Inject
     Provider<PlaceHolderController> holder;
 
+    @Route("creation")
+    @Inject
+    Provider<GangCreationController> creation;
+
     @Inject
     public Routes() {
     }

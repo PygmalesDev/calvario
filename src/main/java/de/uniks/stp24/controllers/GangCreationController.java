@@ -1,16 +1,16 @@
 package de.uniks.stp24.controllers;
 
-import dagger.internal.Provider;
 import de.uniks.stp24.App;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.component.GangComponent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
@@ -19,6 +19,7 @@ import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
@@ -32,17 +33,18 @@ public class GangCreationController {
     @Inject
     Provider<GangComponent> gangComponentProvider;
 
-
     @FXML
     ListView<Gang> gangsListView;
-    @FXML
-    AnchorPane gangsPane;
     @FXML
     Pane creationPane;
     @FXML
     ImageView flagImage;
     @FXML
     ImageView portraitImage;
+    @FXML
+    ColorPicker colorPicker;
+    @FXML
+    TextField gangNameText;
 
     Random rand = new Random();
     ArrayList<File> flagsList = new ArrayList<>();
@@ -89,7 +91,7 @@ public class GangCreationController {
     }
 
     public void create() {
-       gangs.add(new Gang("hi", "x", "x"));
+       gangs.add(new Gang(gangNameText.getText(), flagsList.get(flagImageIndex).toURI().toString(), portraitsList.get(portraitImageIndex).toURI().toString(), colorPicker.getValue()));
     }
 
     public void showLastFlag() {

@@ -58,7 +58,6 @@ public class App extends FulibFxApp {
 
             //autoRefresher().setup(Path.of("src/main/resources/de/uniks/stp24"));
 
-            //show("/editAcc");
             // open normal load screen or autoLogin screen depending on the preferences of the user
             if (component.loginService().autoLogin()) {
                 show("/autoLogin");

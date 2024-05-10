@@ -87,7 +87,7 @@ public class LoginController {
             loginButton.setDisable(true);
             subscriber.subscribe(loginService.login(username, password, rememberMe),
                     result ->{
-                        app.show("/editAcc");
+                        app.show("/browseGames");
                     }
                     , error -> {
                                 if (error instanceof HttpException httpError) {

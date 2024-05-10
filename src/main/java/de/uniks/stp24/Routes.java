@@ -32,6 +32,10 @@ public class Routes {
     @Inject
     Provider<PlaceHolderController> holder;
 
+    @Route("logout")
+    @Inject
+    Provider<LogoutController> logout;
+
     @Inject
     public Routes() {
     }

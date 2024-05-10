@@ -27,22 +27,12 @@ public class PlaceHolderController {
     @OnKey()
     public void keyPressed(KeyEvent event) {
 
-        logoutService.logout("")
-                .subscribe(res -> {
-                            System.out.println("LOGING OUT");
-                        }
-                );
         System.out.println("key pressed");
-        app.show("/login");
+        app.show("/logout");
     }
 
     public void mouseClicked(MouseEvent mouseEvent) {
-        logoutService.logout("")
-                        .subscribe(res -> {
-                            System.out.println("LOGING OUT");
-                                }
-                        );
         System.out.println("mouse clicked");
-        app.show("/login");
+        app.show("/logout");
     }
 }

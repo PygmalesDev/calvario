@@ -12,7 +12,7 @@
    <VBox alignment="TOP_CENTER" prefHeight="540.0" prefWidth="400.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
             <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="35.0" spacing="5.0" />
-         <Text fx:id="messageField" strokeType="OUTSIDE" strokeWidth="0.0" text="message" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="300.0">
+         <Text fx:id="messageField" strokeType="OUTSIDE" strokeWidth="0.0" text="logout?" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="300.0">
             <font>
                <Font size="50.0" />
             </font>

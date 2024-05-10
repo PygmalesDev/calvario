@@ -59,7 +59,7 @@ Some parts of this project also include [Dagger](https://dagger.dev/), [Retrofit
 Some parts of this project also include third-party libraries like [Mockito](https://site.mockito.org), [Fulib](https://github.com/fujaba/fulibFx) which are licensed under the MIT-License. The complete license can be found [here](https://opensource.org/licenses/MIT).
 
 ### GNU General Public License (GPL)
-Some parts of this project also include [JavaFX](openjfx.io), which is a third-party library, which is licensed unter the GPL. The complete license can be found [here](https://www.gnu.org/licenses/gpl-3.0.de.html).
+Some parts of this project also include [JavaFX](https://openjfx.io), which is a third-party library, which is licensed unter the GPL. The complete license can be found [here](https://www.gnu.org/licenses/gpl-3.0.de.html).
 
 ### Eclipse Public License 1.0
 Some parts of this project also include [JUnit](https://junit.org/junit5), which is a third-party libray, which is licensed unter the Eclipse Public License 1.0. The complete license can be found [here](https://www.eclipse.org/legal/epl-v10.html).

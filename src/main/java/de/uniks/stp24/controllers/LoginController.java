@@ -2,6 +2,7 @@ package de.uniks.stp24.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
+import de.uniks.stp24.model.ErrorResponse;
 import de.uniks.stp24.service.LoginService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -77,7 +78,7 @@ public class LoginController {
             String username = this.usernameInput.getText();
             String password = this.passwordInput.getText();
             boolean rememberMe = this.rememberMeBox.isSelected();
-            //ToDo: button sperren wenn die Anfrage läuft
+            //ToDo: disable button during request
             loginService.login(username, password, rememberMe)
                     .subscribe(result ->{
                         app.show("/browseGames");

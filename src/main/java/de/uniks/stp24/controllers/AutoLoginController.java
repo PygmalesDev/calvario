@@ -24,13 +24,13 @@ public class AutoLoginController {
     public AutoLoginController() {
     }
 
+    // show browse games screen after any click
     @OnKey()
     public void keyPressed(KeyEvent event) {
-        // app.show("/browseGames");
-        app.show("/holder");
+        app.show("/browseGames");
     }
 
     public void mouseClicked(MouseEvent mouseEvent) {
-        app.show("/holder");
+        app.show("/browseGames");
     }
 }

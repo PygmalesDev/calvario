@@ -1,9 +1,8 @@
 package de.uniks.stp24;
 
 import de.uniks.stp24.controllers.LoginController;
-import de.uniks.stp24.dto.LoginResult;
+import de.uniks.stp24.model.LoginResult;
 import de.uniks.stp24.service.LoginService;
-import de.uniks.stp24.service.PrefService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.CheckBox;
 import org.junit.jupiter.api.Test;

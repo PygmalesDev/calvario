@@ -36,8 +36,8 @@ public class CreateGameService {
     }
 
     public Observable<CreateGameResultDto> createGame(String name, GameSettings settings, String password){
+        createGameController.hideErrorBox();
         for (Game game1 : games) {
-            System.out.println(game1.name() + " ### " + name);
             if (game1.name().equals(name)){
                 isNameable = false;
                 break;
@@ -54,6 +54,8 @@ public class CreateGameService {
                         showErrorBox();
                     });
         } else {
+            createGameController.showNameTakenError();
+            isNameable = true;
             System.out.println("Name is already taken!");
             return null;
         }

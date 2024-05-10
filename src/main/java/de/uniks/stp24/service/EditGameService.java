@@ -1,6 +1,7 @@
 package de.uniks.stp24.service;
 
 import dagger.Provides;
+import de.uniks.stp24.controllers.EditGameController;
 import de.uniks.stp24.dto.UpdateGameDto;
 import de.uniks.stp24.dto.UpdateGameResultDto;
 import de.uniks.stp24.model.Game;
@@ -18,6 +19,7 @@ import javax.inject.Singleton;
 public class EditGameService {
     @Inject
     GamesApiService gamesApiService;
+    EditGameController editGameController;
 
     @Inject
     TokenStorage tokenStorage;
@@ -39,6 +41,7 @@ public class EditGameService {
     }
 
     public Observable<UpdateGameResultDto> editGame(String name, GameSettings settings, String password){
+        editGameController.hideErrorBox();
         for (Game game1 : games) {
             if (game1.name().equals(name)){
                 isNameable = false;
@@ -49,9 +52,15 @@ public class EditGameService {
         if (isNameable){
             return gamesApiService.editGame(this.game._id(), new UpdateGameDto(name,false,1, settings, password));
         } else {
+            editGameController.showNameTakenError();
+            isNameable = true;
             System.out.println("Name exists already!");
             return null;
         }
 
+    }
+
+    public void setEditGameController(EditGameController editGameController) {
+        this.editGameController = editGameController;
     }
 }

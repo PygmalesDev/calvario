@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.text.*;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import org.fulib.fx.annotation.controller.Controller;
@@ -18,6 +19,8 @@ import javax.inject.Inject;
 @Title("CreateGame")
 @Controller
 public class CreateGameController {
+    @FXML
+    Text errorMessageText;
     @FXML
     HBox errorBox;
     @FXML
@@ -72,8 +75,10 @@ public class CreateGameController {
             if (createGameService.createGame(gameName, settings, password) != null) {
                 createGameService.createGame(gameName, settings, password).subscribe(result ->
                         System.out.println(result));
+                app.show("/browseGames");
             }
-            app.show("/browseGames");
+
+
         }
     }
     public void cancel(){
@@ -82,5 +87,15 @@ public class CreateGameController {
 
     public void showErrorBox() {
         errorBox.setVisible(true);
+    }
+
+    public void showNameTakenError() {
+        errorMessageText.setText("Name exists already!");
+        errorBox.setVisible(true);
+
+    }
+
+    public void hideErrorBox() {
+        errorBox.setVisible(false);
     }
 }

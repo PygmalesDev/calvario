@@ -95,9 +95,9 @@
             </HBox>
             <HBox fx:id="errorBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" visible="false">
                <children>
-                  <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Fehler!">
+                  <Text fx:id="errorMessageText" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
                      <font>
-                        <Font size="20.0" />
+                        <Font size="22.0" />
                      </font>
                   </Text>
                </children>

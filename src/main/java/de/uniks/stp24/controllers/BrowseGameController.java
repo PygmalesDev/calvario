@@ -64,7 +64,7 @@ public class BrowseGameController {
         createGameService.setGamesList(games);
         subscriber.subscribe(eventListener.listen("games.*.*", Game.class), event -> {
             switch (event.suffix()) {
-                case "created" -> games.add(0,event.data());
+                case "created" -> games.add(event.data());
                 case "update" -> games.replaceAll(g -> g._id().equals(event.data()._id()) ? event.data() : g);
                 case "deleted" -> games.removeIf(g -> g._id().equals(event.data()._id()));
             }

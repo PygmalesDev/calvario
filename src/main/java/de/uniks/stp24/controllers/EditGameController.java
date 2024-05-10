@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnInit;
@@ -17,6 +19,10 @@ import javax.inject.Inject;
 @Title("EditGame")
 @Controller
 public class EditGameController {
+    @FXML
+    HBox errorBoxEdit;
+    @FXML
+    Text errorMessageTextEdit;
     @FXML
     Button editGameConfirmButton;
     @FXML
@@ -43,6 +49,7 @@ public class EditGameController {
     EditGameService editGameService;
     @FXML
     public void initialize() {
+        editGameService.setEditGameController(this);
         initializeSpinner();
     }
 
@@ -62,10 +69,19 @@ public class EditGameController {
         if (editGameService.editGame(gameName, settings, password) != null) {
             editGameService.editGame(gameName, settings, password)
                     .subscribe(result -> System.out.println(result));
+            app.show("/browseGames");
         }
-        app.show("/browseGames");
+
     }
     public void cancel(){
         app.show("/browseGames");
+    }
+    public void showNameTakenError() {
+        errorMessageTextEdit.setText("Name exists already!");
+        errorBoxEdit.setVisible(true);
+    }
+
+    public void hideErrorBox() {
+        errorBoxEdit.setVisible(false);
     }
 }

@@ -51,6 +51,8 @@ public class LoginController {
     @Inject
     ObjectMapper objectMappper;
 
+
+
     @Param("username")
     public String username;
     @Param("password")
@@ -82,7 +84,6 @@ public class LoginController {
             String username = this.usernameInput.getText();
             String password = this.passwordInput.getText();
             boolean rememberMe = this.rememberMeBox.isSelected();
-            //ToDo: disable button during request
             loginButton.setDisable(true);
             subscriber.subscribe(loginService.login(username, password, rememberMe),
                     result ->{

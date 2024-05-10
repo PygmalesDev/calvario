@@ -106,14 +106,14 @@ public class EditAccController {
     public void saveChanges(ActionEvent actionEvent) {
         // save changed name and/or password of the user and reset the edit account screen afterward
         subscriber.subscribe(editAccService.changeUserInfo(usernameInput.getText(), passwordInput.getText()),
-                result -> resetEditing(usernameInput.getText(), passwordInput.getText()));
+                result -> resetEditing(usernameInput.getText()));
         //ToDo: error handling and message
     }
 
-    public void resetEditing(String username, String password) {
+    public void resetEditing(String username) {
         // Reset inputs and changeUserInfoButton
         usernameInput.setText(username);
-        passwordInput.setText(password);
+        passwordInput.setText("");
         usernameInput.setDisable(true);
         passwordInput.setDisable(true);
 
@@ -126,7 +126,7 @@ public class EditAccController {
 
     public void cancelChanges(ActionEvent actionEvent) {
         // Reset inputs and changeUserInfoButton
-        resetEditing(tokenStorage.getName(), "");
+        resetEditing(tokenStorage.getName());
     }
 
     public void changeUserInfo(ActionEvent actionEvent) {

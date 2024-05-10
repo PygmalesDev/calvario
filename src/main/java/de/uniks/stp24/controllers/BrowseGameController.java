@@ -5,6 +5,8 @@ import de.uniks.stp24.component.GameComponent;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.BrowseGameService;
+import de.uniks.stp24.service.CreateGameService;
+import de.uniks.stp24.service.EditGameService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -46,6 +48,10 @@ public class BrowseGameController {
     GameComponent gameComponent;
     @Inject
     BrowseGameService browseGameService;
+    @Inject
+    EditGameService editGameService;
+    @Inject
+    CreateGameService createGameService;
 
 
     private final ObservableList<Game> games = FXCollections.observableArrayList();
@@ -54,7 +60,8 @@ public class BrowseGameController {
     @OnInit
     void init(){
         subscriber.subscribe(gamesApiService.findAll().subscribe(this.games::setAll));
-
+        editGameService.setGamesList(games);
+        createGameService.setGamesList(games);
         subscriber.subscribe(eventListener.listen("games.*.*", Game.class), event -> {
             switch (event.suffix()) {
                 case "created" -> games.add(0,event.data());

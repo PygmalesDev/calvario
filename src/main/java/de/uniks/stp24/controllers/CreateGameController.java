@@ -69,8 +69,10 @@ public class CreateGameController {
             String gameName = this.createNameTextField.getText();
             String password = this.createPasswordTextField.getText();
             GameSettings settings = new GameSettings(this.createMapSizeSpinner.getValue());
-            createGameService.createGame(gameName, settings, password).subscribe(result ->
-                    System.out.println(result));
+            if (createGameService.createGame(gameName, settings, password) != null) {
+                createGameService.createGame(gameName, settings, password).subscribe(result ->
+                        System.out.println(result));
+            }
             app.show("/browseGames");
         }
     }

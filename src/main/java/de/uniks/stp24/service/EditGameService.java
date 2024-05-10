@@ -8,6 +8,8 @@ import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
 import io.reactivex.rxjava3.annotations.Nullable;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -19,6 +21,9 @@ public class EditGameService {
 
     @Inject
     TokenStorage tokenStorage;
+    private ObservableList<Game> games = FXCollections.observableArrayList();
+    boolean isNameable = true;
+
 
     Game game;
     @Inject
@@ -29,8 +34,24 @@ public class EditGameService {
         this.game = game;
     }
 
+    public void setGamesList(ObservableList<Game> games){
+        this.games = games;
+    }
+
     public Observable<UpdateGameResultDto> editGame(String name, GameSettings settings, String password){
-        System.out.println("#########" + this.game._id());
-        return gamesApiService.editGame(this.game._id(), new UpdateGameDto(name,false,1, settings, password));
+        for (Game game1 : games) {
+            if (game1.name().equals(name)){
+                isNameable = false;
+                break;
+            }
+        }
+
+        if (isNameable){
+            return gamesApiService.editGame(this.game._id(), new UpdateGameDto(name,false,1, settings, password));
+        } else {
+            System.out.println("Name exists already!");
+            return null;
+        }
+
     }
 }

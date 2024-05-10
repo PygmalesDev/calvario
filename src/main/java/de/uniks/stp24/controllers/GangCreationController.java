@@ -46,6 +46,9 @@ public class GangCreationController {
     @FXML
     TextField gangNameText;
 
+    Boolean lockFlag = false;
+    Boolean lockPortrait = false;
+
     Random rand = new Random();
     ArrayList<File> flagsList = new ArrayList<>();
     ArrayList<File> portraitsList = new ArrayList<>();
@@ -78,6 +81,7 @@ public class GangCreationController {
         creationPane.setVisible(false);
         this.gangsListView.setItems(this.gangs);
         this.gangsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.gangComponentProvider));
+
     }
 
     public void back() {
@@ -91,7 +95,9 @@ public class GangCreationController {
     }
 
     public void create() {
-       gangs.add(new Gang(gangNameText.getText(), flagsList.get(flagImageIndex).toURI().toString(), portraitsList.get(portraitImageIndex).toURI().toString(), colorPicker.getValue()));
+        String gangName = gangNameText.getText();
+        if (gangNameText.getText().isEmpty()) gangName = "Buccaneers";
+        gangs.add(new Gang(gangName, flagsList.get(flagImageIndex).toURI().toString(), portraitsList.get(portraitImageIndex).toURI().toString(), colorPicker.getValue()));
     }
 
     public void showLastFlag() {
@@ -115,9 +121,22 @@ public class GangCreationController {
     }
 
     public void randomize() {
-        flagImageIndex = rand.nextInt(0, flagsList.size() );
-        flagImage.setImage(new Image(flagsList.get(flagImageIndex).toURI().toString()));
-        portraitImageIndex = rand.nextInt(0, portraitsList.size() );
-        portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex).toURI().toString()));
+        if (!lockFlag) {
+            flagImageIndex = rand.nextInt(0, flagsList.size());
+            flagImage.setImage(new Image(flagsList.get(flagImageIndex).toURI().toString()));
+        }
+
+        if (!lockPortrait) {
+            portraitImageIndex = rand.nextInt(0, portraitsList.size());
+            portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex).toURI().toString()));
+        }
+    }
+
+    public void lockFlag() {
+        lockFlag = !lockFlag;
+    }
+
+    public void lockPortrait() {
+        lockPortrait = !lockPortrait;
     }
 }

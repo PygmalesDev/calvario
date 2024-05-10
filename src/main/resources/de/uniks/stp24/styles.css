@@ -1,1 +1,4 @@
 /* TODO add CSS */
+.lock-button {-fx-background-image: url("Icons/unlock.jpg");}
+.lock-button:selected {-fx-background-image: url("Icons/lock.jpg");}
+

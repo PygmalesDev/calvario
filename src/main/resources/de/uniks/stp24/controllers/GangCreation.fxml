@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
@@ -91,6 +92,8 @@
                </font>
             </Button>
             <Button fx:id="randomizeButton" layoutY="-4.0" mnemonicParsing="false" onAction="#randomize" prefHeight="75.0" prefWidth="102.0" text="RANDOM" />
+            <ToggleButton layoutX="262.0" layoutY="80.0" mnemonicParsing="false" onAction="#lockFlag" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
+            <ToggleButton layoutX="552.0" layoutY="80.0" mnemonicParsing="false" onAction="#lockPortrait" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
          </children>
       </Pane>
    </children>

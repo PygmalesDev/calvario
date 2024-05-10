@@ -16,6 +16,10 @@ public class GamesService {
     GamesApiService gamesApiService;
 
     public Observable<Game> getGame(String gameID) {
-        return gamesApiService.getGame(gameID);
+        return this.gamesApiService.getGame(gameID);
+    }
+
+    public Observable<Game> deleteGame(String gameID) {
+        return this.gamesApiService.deleteGame(gameID);
     }
 }

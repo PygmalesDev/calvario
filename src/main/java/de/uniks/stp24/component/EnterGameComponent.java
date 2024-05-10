@@ -1,6 +1,8 @@
 package de.uniks.stp24.component;
 
+import de.uniks.stp24.App;
 import de.uniks.stp24.service.JoinGameService;
+import de.uniks.stp24.service.LobbyService;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -29,6 +31,8 @@ public class EnterGameComponent extends Pane {
 
     @Inject
     JoinGameService joinGameService;
+    @Inject
+    App app;
 
     @OnRender
     public void render() {
@@ -36,12 +40,15 @@ public class EnterGameComponent extends Pane {
     }
 
     public void cancel() {
-        System.out.println("Canceled");
+        this.app.show("/browsegames");
     }
 
     public void joinGame() {
-        this.joinGameService.joinGame(gameID, this.getPassword())
+        if (!this.getPassword().isEmpty())
+            this.joinGameService.joinGame(gameID, this.getPassword())
                 .subscribe();
+        else
+            this.errorMessage.setText("Please enter password!");
     }
 
     private String getPassword() {

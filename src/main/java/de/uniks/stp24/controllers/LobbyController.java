@@ -16,6 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
@@ -74,6 +75,10 @@ public class LobbyController {
 
     @FXML
     StackPane lobbyElement;
+    @FXML
+    Pane lobbyMessagePane;
+    @FXML
+    Pane lobbyMessageElement;
 
     @Param("gameid")
     String gameID;
@@ -93,13 +98,21 @@ public class LobbyController {
     // TODO: Example method, delete before PR
     @OnInit
     void setToken() {
-        tokenStorage.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjNiNmFkMTVlNmMxYWJiYzA5ZGVkZmQiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJQeWdtYWxlcyBKdW5pb3IiLCJpYXQiOjE3MTUxNzk0MjgsImV4cCI6MTcxNTE4MzAyOH0.oU9-ioO36kMeCh_klO0jQRoFVmRQfPOzk0mfN8i5604");
-        tokenStorage.setUserId("663b6ad15e6c1abbc09dedfd");
+        tokenStorage.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjNiNDk3NTVlNmMxYWJiYzA5ZGM3ZjciLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJQeWdtYWxlcyBMaXR0bGUiLCJpYXQiOjE3MTUzNjAxNzIsImV4cCI6MTcxNTM2Mzc3Mn0.NMPlQGzj73qgn0wmEPDZ1dln_iYlXePgeFgrDsvf9_g");
+        tokenStorage.setUserId("663b49755e6c1abbc09dc7f7");
+
+        // Pygmales: 663a99ef5e6c1abbc09d0939
+        // Pygmales Little: 663b49755e6c1abbc09dc7f7
 
         // TODO: gameID should be transferred from the lobby selection screen
-        this.gameID = "663b49085e6c1abbc09dc76f";
+        this.gameID = "663e5dde5e6c1abbc0a16b1b";
     }
 
+    /**
+     * Loads game data and transfers its ID and name to the subcomponents.
+     * Loads lobby members to the member list and adds event listeners.
+     * Creates event listeners.
+     */
     @OnInit
     void init() {
         this.subscriber.subscribe(this.gamesService.getGame(gameID), game -> {
@@ -115,8 +128,29 @@ public class LobbyController {
 
         this.lobbyService.loadPlayers(this.gameID).subscribe(dto -> {
             Arrays.stream(dto).forEach(data -> this.addUserToList(data.user(), data));
-            this.sortHostOnTop();});
+            this.sortHostOnTop();
+        });
 
+        this.createUserListListener();
+        this.createGameDeletedListener();
+    }
+
+    /**
+     * Creates an event listener for the case, when the game host leaves the lobby and deletes the game.
+     */
+    private void createGameDeletedListener() {
+        this.subscriber.subscribe(this.eventListener
+                .listen("games." + this.gameID + ".deleted", Game.class), event ->
+        {
+            this.lobbyMessagePane.setVisible(true);
+            this.lobbyMessageElement.setVisible(true);
+        });
+    }
+
+    /**
+     * Creates an event listener to update the member list.
+     */
+    private void createUserListListener() {
         this.subscriber.subscribe(this.eventListener
                 .listen("games." + this.gameID + ".members.*.*", MemberDto.class), event -> {
             String id = event.data().user();
@@ -132,18 +166,26 @@ public class LobbyController {
         });
     }
 
+    /**
+     * Loads players to the member list.
+     */
     @OnRender
     void render() {
+        this.lobbyMessagePane.setVisible(false);
+        this.lobbyMessageElement.setVisible(false);
+
         this.playerListView.setItems(this.users);
         this.playerListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.userComponentProvider));
         this.setStartingLobbyElement();
     }
 
-    @OnDestroy
-    void destroy() {
-        subscriber.dispose();
-    }
-
+    /**
+     * Displays new users on the member list.
+     * If a user is a host of the game, a (Host) suffix will be added to their nickname.
+     * Also displays if the player is ready or not.
+     * @param userID ID of the player
+     * @param data member data containing their readiness state
+     */
     private void addUserToList(String userID, MemberDto data) {
         this.subscriber.subscribe(this.userApiService.getUser(userID), user -> {
             if (userID.equals(this.game.owner()))
@@ -155,16 +197,31 @@ public class LobbyController {
         });
     }
 
+    /**
+     * Updates the readiness state of the player.
+     * @param userID ID of the player
+     * @param data member data containing their readiness state
+     */
     private void replaceUserInList(String userID, MemberDto data) {
         this.userApiService.getUser(userID).subscribe(replacer ->
                 this.users.replaceAll(memberUser -> memberUser.user()._id().equals(userID)
                         ? new MemberUser(replacer, data.ready()): memberUser));
     }
 
+    /**
+     * Removes a user from the member list if they leave the lobby.
+     * @param userID ID of the player
+     */
     private void removeUserFromList(String userID) {
         this.users.removeIf(memberUser -> memberUser.user()._id().equals(userID));
     }
 
+    /**
+     * When a user transitions to the lobby screen, one of three elements could be shown. <p>
+     * If the user is a host of the game, a host settings screen will be displayed. <p>
+     * If the user already is in the lobby, a member screen will be displayed. <p>
+     * If the user is not in the lobby, an entry screen will be shown.
+     */
     private void setStartingLobbyElement() {
         this.subscriber.subscribe(this.lobbyService.loadPlayers(this.gameID), dtos -> {
             if (this.tokenStorage.getUserId().equals(this.game.owner())) {
@@ -177,11 +234,24 @@ public class LobbyController {
         });
     }
 
+    /**
+     * Will be called after changes in the member list.
+     * Sorts the host of the lobby to the top of the list.
+     */
     private void sortHostOnTop() {
         MemberUser host = this.users.stream().filter(member ->
                 member.user().name().contains("Host")).findFirst().orElse(null);
         this.users.removeIf(member -> member.user().name().contains("Host"));
         if (Objects.nonNull(host))
             this.users.addFirst(host);
+    }
+
+    public void goBack() {
+        this.app.show("/browsegames");
+    }
+
+    @OnDestroy
+    void destroy() {
+        subscriber.dispose();
     }
 }

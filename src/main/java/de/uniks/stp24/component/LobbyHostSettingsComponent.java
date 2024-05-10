@@ -1,6 +1,8 @@
 package de.uniks.stp24.component;
 
 
+import de.uniks.stp24.App;
+import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.LobbyService;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
@@ -16,6 +18,10 @@ public class LobbyHostSettingsComponent extends Pane {
     Text gameNameField;
     @Inject
     LobbyService lobbyService;
+    @Inject
+    GamesApiService gamesApiService;
+    @Inject
+    App app;
     private String gameID;
 
     @Inject
@@ -41,8 +47,8 @@ public class LobbyHostSettingsComponent extends Pane {
     }
 
     public void leaveLobby() {
-        // TODO: Switch to lobby selection screen
-        this.lobbyService.leaveLobby(this.gameID).subscribe();
+        this.gamesApiService.deleteGame(this.gameID).subscribe(result ->
+                this.app.show("/browsegames"));
     }
 
     public void setGameName(String gameName) {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
@@ -22,7 +23,18 @@
             </Pane>
             <ListView fx:id="playerListView" layoutX="374.0" layoutY="65.0" prefHeight="237.0" prefWidth="226.0" />
             <Line endY="288.0" layoutX="373.0" layoutY="15.0" startY="-13.0" />
-            <StackPane fx:id="lobbyElement" layoutX="2.0" layoutY="2.0" prefHeight="302.0" prefWidth="370.0" />
+            <StackPane fx:id="lobbyElement" layoutX="2.0" layoutY="2.0" prefHeight="302.0" prefWidth="370.0" style="-fx-background-color: WHITE;" />
+         </children>
+      </Pane>
+      <Pane fx:id="lobbyMessagePane" opacity="0.5" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: GRAY;" />
+      <Pane fx:id="lobbyMessageElement" layoutX="450.0" layoutY="325.0" prefHeight="150.0" prefWidth="300.0" style="-fx-background-color: WHITE; -fx-background-radius: 15; -fx-border-color: BLACK; -fx-border-radius: 15;">
+         <children>
+            <Text layoutX="68.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Host has left the lobby!" textAlignment="CENTER">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Button fx:id="returnButton" layoutX="109.0" layoutY="83.0" mnemonicParsing="false" onAction="#goBack" prefHeight="32.0" prefWidth="83.0" text="Return" />
          </children>
       </Pane>
    </children>

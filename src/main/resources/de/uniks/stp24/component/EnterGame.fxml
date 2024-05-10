@@ -13,7 +13,7 @@
          </font>
       </Text>
       <TextField fx:id="passwordInputField" alignment="CENTER" layoutX="111.0" layoutY="134.0" promptText="Enter password" />
-      <Text fx:id="errorMessage" fill="RED" layoutX="144.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\%ErrorMessage" textAlignment="CENTER" />
+      <Text fx:id="errorMessage" fill="RED" layoutX="114.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\%ErrorMessage" textAlignment="CENTER" wrappingWidth="142.119140625" />
       <Button fx:id="cancelButton" layoutX="85.0" layoutY="208.0" mnemonicParsing="false" onAction="#cancel" prefHeight="30.0" prefWidth="80.0" text="Cancel" />
       <Button fx:id="joinButton" layoutX="206.0" layoutY="208.0" mnemonicParsing="false" onAction="#joinGame" prefHeight="30.0" prefWidth="80.0" text="Join" />
 </fx:root>

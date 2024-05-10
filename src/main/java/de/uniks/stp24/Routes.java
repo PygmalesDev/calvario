@@ -30,7 +30,7 @@ public class Routes {
     @Route("licenses")
     @Inject
     Provider<LicensesController> licenses;
-    
+
     @Route("holder")
     @Inject
     Provider<PlaceHolderController> holder;

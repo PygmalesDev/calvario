@@ -11,13 +11,20 @@ public class LogoutService {
 
     @Inject
     AuthApiService authApiService;
+    @Inject
+    PrefService prefService;
 
     @Inject
-    LogoutService(){}
+    LogoutService() {
 
+    }
+
+    // refreshToken will be now remove
+    // this way the app shouldn't try to autologin on next start
     public Observable<LogoutResult> logout(String any) {
         return authApiService.logout(new LogoutDto(any))
                 .doOnNext( result -> {
+                    prefService.removeRefreshToken();
                 });
     }
 }

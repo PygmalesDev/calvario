@@ -23,14 +23,20 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.List;
 
 @Controller
 public class BrowseGameController {
-    @FXML Button load_game_b;
-    @FXML Button new_game_b;
-    @FXML Button edit_acc_b;
-    @FXML Button del_game_b;
-    @FXML Button log_out_b;
+    @FXML
+    Button load_game_b;
+    @FXML
+    Button new_game_b;
+    @FXML
+    Button edit_acc_b;
+    @FXML
+    Button del_game_b;
+    @FXML
+    Button log_out_b;
     @FXML
     ListView<Game> gameList;
 
@@ -54,12 +60,13 @@ public class BrowseGameController {
     CreateGameService createGameService;
 
 
-    private final ObservableList<Game> games = FXCollections.observableArrayList();
+    private ObservableList<Game> games = FXCollections.observableArrayList();
 
     //Load list of games as soon as BrowseGame-Screen is shown
     @OnInit
-    void init(){
-        subscriber.subscribe(gamesApiService.findAll().subscribe(this.games::setAll));
+    void init() {
+        subscriber.subscribe(gamesApiService.findAll().subscribe(this::sortAndSetGames));
+
         editGameService.setGamesList(games);
         createGameService.setGamesList(games);
         subscriber.subscribe(eventListener.listen("games.*.*", Game.class), event -> {
@@ -71,15 +78,20 @@ public class BrowseGameController {
         });
     }
 
+    private void sortAndSetGames(List<Game> games) {
+        this.games = browseGameService.sortGames(games);
+
+    }
+
     //Make list of games visible
     @OnRender
-    void render(){
-        gameList.setItems(games);
+    void render() {
+        gameList.setItems(this.games);
         gameList.setCellFactory(list -> new ComponentListCell<>(app, gameComponentProvider));
     }
 
     @OnDestroy
-    void destroy(){
+    void destroy() {
         subscriber.dispose();
     }
 
@@ -99,7 +111,7 @@ public class BrowseGameController {
      */
 
     @Inject
-    public BrowseGameController(){
+    public BrowseGameController() {
     }
 
 
@@ -108,7 +120,7 @@ public class BrowseGameController {
         logOut();
     }
 
-    public void logOut(){
+    public void logOut() {
         app.show("/login");
     }
 

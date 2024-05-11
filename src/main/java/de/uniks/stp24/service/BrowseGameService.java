@@ -1,8 +1,12 @@
 package de.uniks.stp24.service;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 public class BrowseGameService {
     @Inject
@@ -27,5 +31,14 @@ public class BrowseGameService {
         } else {
             System.out.println("No game selected");
         }
+    }
+
+    public ObservableList<Game> sortGames(List<Game> games) {
+        ObservableList<Game> sortedGames = FXCollections.observableArrayList();
+        for (int i = games.size() - 1; i >= 0; i--) {
+            sortedGames.add(games.get(i));
+        }
+
+        return sortedGames;
     }
 }

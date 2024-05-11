@@ -1,5 +1,6 @@
 package de.uniks.stp24;
 
+import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.controllers.*;
 import org.fulib.fx.annotation.Route;
 
@@ -17,6 +18,10 @@ public class Routes {
     @Route("login")
     @Inject
     Provider<LoginController> login;
+    
+    @Route("autoLogin")
+    @Inject
+    Provider<AutoLoginController> autoLogin;
 
     @Route("signup")
     @Inject
@@ -28,6 +33,7 @@ public class Routes {
     @Route("licenses")
     @Inject
     Provider<LicensesController> licenses;
+
     @Route("holder")
     @Inject
     Provider<PlaceHolderController> holder;
@@ -39,9 +45,13 @@ public class Routes {
     @Inject
     Provider<CreateGameController> createGameController;
 
-    @Route("autoLogin")
+    @Route("editAcc")
     @Inject
-    Provider<AutoLoginController> autoLogin;
+    Provider<EditAccController> editAcc;
+
+    @Route("warningScreen")
+    @Inject
+    Provider<WarningScreenComponent> warningScreen;
 
     @Inject
     public Routes() {

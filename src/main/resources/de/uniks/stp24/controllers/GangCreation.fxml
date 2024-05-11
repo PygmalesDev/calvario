@@ -48,7 +48,7 @@
       </VBox>
       <Pane fx:id="creationPane" layoutX="536.0" layoutY="10.0" prefHeight="656.0" prefWidth="704.0">
          <children>
-            <TextField fx:id="gangNameText" alignment="CENTER" layoutX="114.0" layoutY="-5.0" prefHeight="75.0" prefWidth="500.0" promptText="GANG'S NAME">
+            <TextField fx:id="gangNameText" alignment="CENTER" layoutX="114.0" layoutY="-5.0" prefHeight="75.0" prefWidth="500.0" promptText="Buccaneers">
                <font>
                   <Font size="36.0" />
                </font>

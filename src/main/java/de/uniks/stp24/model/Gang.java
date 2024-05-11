@@ -8,6 +8,7 @@ public record Gang(
         String name,
         String flag,
         String portrait,
+        String description,
         @JsonDeserialize(using = ColorDeserializer.class) Color color) {
 }
 

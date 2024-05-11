@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -50,6 +51,8 @@ public class GangCreationController {
     ColorPicker colorPicker;
     @FXML
     TextField gangNameText;
+    @FXML
+    TextArea gangDescriptionText;
 
     Boolean lockFlag = false;
     Boolean lockPortrait = false;
@@ -88,7 +91,6 @@ public class GangCreationController {
         creationPane.setVisible(false);
         this.gangsListView.setItems(this.gangs);
         this.gangsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.gangComponentProvider));
-
     }
 
     public void back() {
@@ -104,7 +106,7 @@ public class GangCreationController {
     public void create() {
         String gangName = gangNameText.getText();
         if (gangNameText.getText().isEmpty()) gangName = "Buccaneers";
-        Gang gang = new Gang(gangName, flagsList.get(flagImageIndex).toURI().toString(), portraitsList.get(portraitImageIndex).toURI().toString(), colorPicker.getValue());
+        Gang gang = new Gang(gangName, flagsList.get(flagImageIndex).toURI().toString(), portraitsList.get(portraitImageIndex).toURI().toString(), gangDescriptionText.getText(), colorPicker.getValue());
         gangs.add(gang);
         saveLoadService.saveGang(gangs);
     }

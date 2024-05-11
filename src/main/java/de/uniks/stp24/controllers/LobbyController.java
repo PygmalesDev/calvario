@@ -96,7 +96,8 @@ public class LobbyController {
     // TODO: gameID should be transferred from the lobby selection screen
     @OnInit
     void setGameID() {
-        this.gameID = "663f8fb35e6c1abbc0a2d218";
+        // Uncomment to get into the lobby
+        //this.gameID = "663f8fb35e6c1abbc0a2d218";
     }
 
     /**
@@ -106,7 +107,7 @@ public class LobbyController {
      */
     @OnInit
     void init() {
-        this.subscriber.subscribe(this.gamesService.getGame(gameID), game -> {
+        this.subscriber.subscribe(this.gamesService.getGame(this.gameID), game -> {
             this.game = game;
             this.enterGameComponent.setGameName(game.name());
             this.lobbySettingsComponent.setGameName(game.name());

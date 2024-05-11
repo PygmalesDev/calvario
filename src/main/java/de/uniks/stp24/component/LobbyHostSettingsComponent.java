@@ -49,10 +49,11 @@ public class LobbyHostSettingsComponent extends Pane {
     @OnRender
     public void checkPlayerReadiness() {
         this.subscriber.subscribe(this.eventListener
-                        .listen("game." + this.gameID + ".members.update", MemberDto[].class), result ->
-            this.startJourneyButton.setDisable(!Arrays.stream(result.data())
-                    .map(MemberDto::ready)
-                    .reduce((a, b) -> a && b).orElse(true))
+                        .listen("games." + this.gameID + ".members.*.updated", MemberDto.class), result ->
+            this.subscriber.subscribe(this.lobbyService.loadPlayers(this.gameID), members ->
+                    this.startJourneyButton.setDisable(!Arrays.stream(members)
+                            .map(MemberDto::ready)
+                            .reduce((a,b) -> a && b).orElse(false)))
         );
     }
 

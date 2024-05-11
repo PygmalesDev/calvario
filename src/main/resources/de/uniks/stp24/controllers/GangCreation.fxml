@@ -26,7 +26,7 @@
             </Button>
             <Button fx:id="showCreationButton" mnemonicParsing="false" onAction="#showCreation" prefHeight="150.0" prefWidth="500.0" style="-fx-border-color: BLACK;" text="CREATE GANG">
                <VBox.margin>
-                  <Insets top="5.0" />
+                  <Insets top="1.0" />
                </VBox.margin>
                <font>
                   <Font name="System Bold" size="24.0" />
@@ -37,13 +37,16 @@
                   <Font name="System Bold" size="24.0" />
                </font>
                <VBox.margin>
-                  <Insets top="5.0" />
+                  <Insets top="1.0" />
                </VBox.margin>
             </Text>
-            <ListView fx:id="gangsListView" prefHeight="500.0" prefWidth="500.0" />
+            <ListView fx:id="gangsListView" prefHeight="500.0" prefWidth="500.0">
+               <VBox.margin>
+                  <Insets bottom="25.0" />
+               </VBox.margin></ListView>
          </children>
       </VBox>
-      <Pane fx:id="creationPane" layoutX="536.0" layoutY="22.0" prefHeight="644.0" prefWidth="704.0">
+      <Pane fx:id="creationPane" layoutX="536.0" layoutY="10.0" prefHeight="656.0" prefWidth="704.0">
          <children>
             <TextField fx:id="gangNameText" alignment="CENTER" layoutX="114.0" layoutY="-5.0" prefHeight="75.0" prefWidth="500.0" promptText="GANG'S NAME">
                <font>

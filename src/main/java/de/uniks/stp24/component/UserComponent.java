@@ -2,6 +2,7 @@ package de.uniks.stp24.component;
 
 import de.uniks.stp24.model.MemberUser;
 import de.uniks.stp24.model.User;
+import de.uniks.stp24.service.ImageCache;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,6 +17,8 @@ import java.util.Objects;
 
 @Component(view = "User.fxml")
 public class UserComponent extends HBox implements ReusableItemComponent<MemberUser> {
+    @Inject
+    ImageCache imageCache;
     @FXML
     ImageView avatarImageView;
     @FXML
@@ -34,6 +37,8 @@ public class UserComponent extends HBox implements ReusableItemComponent<MemberU
         else
             this.readyText.setText("Not Ready");
         if (Objects.nonNull(member.user().avatar()))
-            this.avatarImageView.setImage(new Image(member.user().avatar()));
+            this.avatarImageView.setImage(this.imageCache.get(member.user().avatar()));
+        else
+            this.avatarImageView.setImage(this.imageCache.get("Icons/Eye_Icon_32.png"));
     }
 }

@@ -83,9 +83,6 @@ public class LobbyController {
     @Param("gameid")
     String gameID;
 
-    @Param("ashost")
-    Boolean asHost;
-
     Game game;
 
     private final ObservableList<MemberUser> users = FXCollections.observableArrayList();
@@ -96,16 +93,10 @@ public class LobbyController {
     }
 
     // TODO: Example method, delete before PR
+    // TODO: gameID should be transferred from the lobby selection screen
     @OnInit
-    void setToken() {
-        tokenStorage.setToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjNiNDk3NTVlNmMxYWJiYzA5ZGM3ZjciLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJQeWdtYWxlcyBMaXR0bGUiLCJpYXQiOjE3MTUzNjAxNzIsImV4cCI6MTcxNTM2Mzc3Mn0.NMPlQGzj73qgn0wmEPDZ1dln_iYlXePgeFgrDsvf9_g");
-        tokenStorage.setUserId("663b49755e6c1abbc09dc7f7");
-
-        // Pygmales: 663a99ef5e6c1abbc09d0939
-        // Pygmales Little: 663b49755e6c1abbc09dc7f7
-
-        // TODO: gameID should be transferred from the lobby selection screen
-        this.gameID = "663e5dde5e6c1abbc0a16b1b";
+    void setGameID() {
+        this.gameID = "663f8fb35e6c1abbc0a2d218";
     }
 
     /**

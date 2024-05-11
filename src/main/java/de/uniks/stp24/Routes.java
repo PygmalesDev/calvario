@@ -43,7 +43,12 @@ public class Routes {
     Provider<WarningScreenComponent> warningScreen;
 
     @Route("lobby")
+    @Inject
     Provider<LobbyController> lobby;
+
+    @Route("login")
+    @Inject
+    Provider<LoginController> login;
 
     @Inject
     public Routes() {

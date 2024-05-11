@@ -3,6 +3,7 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.App;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.component.GangComponent;
+import de.uniks.stp24.service.SaveLoadService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
@@ -29,6 +31,9 @@ import java.util.Random;
 public class GangCreationController {
     @Inject
     App app;
+
+    @Inject
+    SaveLoadService saveLoadService;
 
     @Inject
     Provider<GangComponent> gangComponentProvider;
@@ -55,7 +60,7 @@ public class GangCreationController {
     int flagImageIndex = 0;
     int portraitImageIndex = 0;
 
-    private final ObservableList<Gang> gangs = FXCollections.observableArrayList();
+    private ObservableList<Gang> gangs;
 
 
     @Inject
@@ -74,6 +79,8 @@ public class GangCreationController {
         for (File portrait : portraitsDir.listFiles()) {
             portraitsList.add(portrait);
         }
+
+        gangs = saveLoadService.loadGangs();
     }
 
     @OnRender
@@ -97,7 +104,9 @@ public class GangCreationController {
     public void create() {
         String gangName = gangNameText.getText();
         if (gangNameText.getText().isEmpty()) gangName = "Buccaneers";
-        gangs.add(new Gang(gangName, flagsList.get(flagImageIndex).toURI().toString(), portraitsList.get(portraitImageIndex).toURI().toString(), colorPicker.getValue()));
+        Gang gang = new Gang(gangName, flagsList.get(flagImageIndex).toURI().toString(), portraitsList.get(portraitImageIndex).toURI().toString(), colorPicker.getValue());
+        gangs.add(gang);
+        saveLoadService.saveGang(gangs);
     }
 
     public void showLastFlag() {
@@ -138,5 +147,10 @@ public class GangCreationController {
 
     public void lockPortrait() {
         lockPortrait = !lockPortrait;
+    }
+
+    @OnDestroy
+    public void destroy() {
+
     }
 }

@@ -1,5 +1,6 @@
 package de.uniks.stp24.component;
 
+import de.uniks.stp24.controllers.GangCreationController;
 import de.uniks.stp24.model.Gang;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -31,6 +32,7 @@ public class GangComponent extends Pane implements ReusableItemComponent<Gang> {
 
     }
 
+
     @Override
     public void setItem(@NotNull Gang gang) {
         gangNameText.setText(gang.name());
@@ -39,6 +41,5 @@ public class GangComponent extends Pane implements ReusableItemComponent<Gang> {
         pane.setStyle("-fx-background-color: #" + gang.color().toString().substring(2));
         flagImage.setImage(new Image(gang.flag()));
         portraitImage.setImage(new Image(gang.portrait()));
-
     }
 }

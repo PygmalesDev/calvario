@@ -4,15 +4,13 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.component.GangComponent;
 import de.uniks.stp24.service.SaveLoadService;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
@@ -53,6 +51,10 @@ public class GangCreationController {
     TextField gangNameText;
     @FXML
     TextArea gangDescriptionText;
+    @FXML
+    Button createButton;
+    @FXML
+    Button editButton;
 
     Boolean lockFlag = false;
     Boolean lockPortrait = false;
@@ -91,24 +93,68 @@ public class GangCreationController {
         creationPane.setVisible(false);
         this.gangsListView.setItems(this.gangs);
         this.gangsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.gangComponentProvider));
+        gangsListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Gang gang = gangsListView.getSelectionModel().getSelectedItem();
+                if (gang != null) {
+                    creationPane.setVisible(true);
+                    gangNameText.setText(gang.name());
+                    flagImage.setImage(new Image(gang.flag()));
+                    portraitImage.setImage(new Image(gang.portrait()));
+                    gangDescriptionText.setText(gang.description());
+                    createButton.setVisible(false);
+                    editButton.setVisible(true);
+                }
+            }
+        });
     }
 
     public void back() {
 
     }
 
+    public Gang getInputGang() {
+        String gangName = gangNameText.getText();
+        if (gangNameText.getText().isEmpty()) gangName = "Buccaneers";
+        return new Gang(gangName, flagsList.get(flagImageIndex).toURI().toString(), portraitsList.get(portraitImageIndex).toURI().toString(), gangDescriptionText.getText(), colorPicker.getValue());
+    }
+
+    public void edit() {
+        int index = gangsListView.getSelectionModel().getSelectedIndex();
+        gangs.remove(index);
+        Gang gang = getInputGang();
+        gangs.add(index, gang);
+        saveLoadService.saveGang(gangs);
+        resetCreationPane();
+    }
+
     public void showCreation() {
         creationPane.setVisible(true);
+        flagImageIndex = 0;
+        portraitImageIndex = 0;
         flagImage.setImage(new Image(flagsList.get(flagImageIndex).toURI().toString()));
         portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex).toURI().toString()));
+        gangNameText.setText("");
+        gangDescriptionText.setText("");
+        createButton.setVisible(true);
+        editButton.setVisible(false);
     }
 
     public void create() {
-        String gangName = gangNameText.getText();
-        if (gangNameText.getText().isEmpty()) gangName = "Buccaneers";
-        Gang gang = new Gang(gangName, flagsList.get(flagImageIndex).toURI().toString(), portraitsList.get(portraitImageIndex).toURI().toString(), gangDescriptionText.getText(), colorPicker.getValue());
+        Gang gang = getInputGang();
         gangs.add(gang);
         saveLoadService.saveGang(gangs);
+        resetCreationPane();
+    }
+
+    public void resetCreationPane() {
+        flagImageIndex = 0;
+        portraitImageIndex = 0;
+        flagImage.setImage(new Image(flagsList.get(flagImageIndex).toURI().toString()));
+        portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex).toURI().toString()));
+        gangNameText.setText("");
+        gangDescriptionText.setText("");
     }
 
     public void showLastFlag() {

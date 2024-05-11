@@ -24,7 +24,7 @@
                   <Font name="System Bold" size="24.0" />
                </font>
             </Button>
-            <Button fx:id="showCreationButton" mnemonicParsing="false" onAction="#showCreation" prefHeight="150.0" prefWidth="500.0" style="-fx-border-color: BLACK;" text="CREATE GANG">
+            <Button fx:id="showCreationButton" mnemonicParsing="false" onAction="#showCreation" prefHeight="150.0" prefWidth="500.0" style="-fx-border-color: BLACK;" text="NEW GANG">
                <VBox.margin>
                   <Insets top="1.0" />
                </VBox.margin>
@@ -97,6 +97,7 @@
             <Button fx:id="randomizeButton" layoutY="-4.0" mnemonicParsing="false" onAction="#randomize" prefHeight="75.0" prefWidth="102.0" text="RANDOM" />
             <ToggleButton layoutX="262.0" layoutY="80.0" mnemonicParsing="false" onAction="#lockFlag" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
             <ToggleButton layoutX="552.0" layoutY="80.0" mnemonicParsing="false" onAction="#lockPortrait" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
+            <Button fx:id="editButton" layoutX="228.0" layoutY="564.0" mnemonicParsing="false" onAction="#edit" prefHeight="56.0" prefWidth="273.0" text="EDIT" />
          </children>
       </Pane>
    </children>

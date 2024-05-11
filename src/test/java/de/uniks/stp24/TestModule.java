@@ -7,6 +7,9 @@ import de.uniks.stp24.rest.GameMembersApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.UserApiService;
 import org.mockito.Mockito;
+import dagger.Provides;
+import de.uniks.stp24.rest.UserApiService;
+import org.mockito.Mockito;
 
 @Module
 public class TestModule {
@@ -16,13 +19,17 @@ public class TestModule {
     }
 
     @Provides
-    UserApiService userApiService(){
-        return Mockito.mock(UserApiService.class);
+    GameMembersApiService gameMembersApiService(){
+        return Mockito.mock(GameMembersApiService.class);
+    }
+    @Provides
+    AuthApiService authApiService(){
+        return Mockito.mock(AuthApiService.class);
     }
 
     @Provides
-    GameMembersApiService gameMembersApiService(){
-        return Mockito.mock(GameMembersApiService.class);
+    UserApiService userApiService(){
+        return Mockito.mock(UserApiService.class);
     }
 
 }

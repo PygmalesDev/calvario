@@ -12,6 +12,9 @@ mainClassName = 'de.uniks.stp24.Main'
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://nexus.gluonhq.com/nexus/content/repositories/releases/'
+    }
 }
 
 dependencies {
@@ -27,6 +30,8 @@ dependencies {
     // JavaFX
 
     implementation group: "fr.brouillard.oss", name: "cssfx", version: cssFxVersion
+    // for data-url in image cache -> to correctly load avatars from server
+    implementation group: "com.github.robtimus", name: "data-url", version: 2.0
 
     // REST
 
@@ -56,6 +61,9 @@ dependencies {
     testImplementation group: 'org.hamcrest', name: 'hamcrest', version: hamcrestVersion
 
     testAnnotationProcessor group: 'com.google.dagger', name: 'dagger-compiler', version: daggerVersion
+
+    // UI
+    implementation 'com.gluonhq:charm-glisten:5.0.2'
 }
 
 java {

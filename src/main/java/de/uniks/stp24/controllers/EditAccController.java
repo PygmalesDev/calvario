@@ -35,6 +35,10 @@ public class EditAccController {
     @FXML
     ToggleButton changeUserInfoButton;
     @FXML
+    Button deleteUserButton;
+    @FXML
+    Button goBackButton;
+    @FXML
     Button cancelChangesButton;
     @FXML
     Button saveChangesButton;
@@ -61,6 +65,7 @@ public class EditAccController {
     WarningScreenComponent warningScreen;
 
     private BooleanBinding warningIsInvisible;
+    private BooleanBinding editAccIsNotSelected;
 
     @Inject
     public EditAccController() {
@@ -75,6 +80,7 @@ public class EditAccController {
     @OnRender
     public void createBindings(){
         this.warningIsInvisible = this.warningScreenContainer.visibleProperty().not();
+        this.editAccIsNotSelected = this.changeUserInfoButton.selectedProperty().not();
     }
 
 
@@ -106,6 +112,21 @@ public class EditAccController {
         }else{
             resetEditing(tokenStorage.getName());
         }
+    }
+
+    @OnRender
+    public void disableButtons(){
+        this.deleteUserButton.disableProperty().bind(Bindings.createBooleanBinding(()->{
+            if(editAccIsNotSelected.get())
+                return false;
+            return true;
+        },this.editAccIsNotSelected));
+
+        this.goBackButton.disableProperty().bind(Bindings.createBooleanBinding(()->{
+            if(editAccIsNotSelected.get())
+                return false;
+            return true;
+        },this.editAccIsNotSelected));
     }
 
 

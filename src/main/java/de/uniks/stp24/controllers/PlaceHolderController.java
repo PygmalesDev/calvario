@@ -1,36 +1,32 @@
 package de.uniks.stp24.controllers;
 
+
 import de.uniks.stp24.App;
-import javafx.application.Platform;
-import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
-import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
-import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 
-@Title("Game Name")
+@Title("place holder")
 @Controller
-public class LoadController {
+public class PlaceHolderController {
 
     @Inject
     App app;
 
     @Inject
-    public LoadController() {
+    public PlaceHolderController() {
     }
 
-    @OnKey
-    public void showLoginScreen(KeyEvent event) {
-        app.show("/login");
+    @OnKey()
+    public void keyPressed(KeyEvent event) {
+        System.out.println("key pressed");
     }
 
     public void mouseClicked(MouseEvent mouseEvent) {
-        app.show("/login");
+        System.out.println("mouse clicked");
     }
-
 }

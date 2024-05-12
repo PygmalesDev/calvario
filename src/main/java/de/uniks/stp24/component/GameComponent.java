@@ -2,10 +2,13 @@ package de.uniks.stp24.component;
 
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.service.BrowseGameService;
+import de.uniks.stp24.service.EditGameService;
+import de.uniks.stp24.service.TokenStorage;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
@@ -20,11 +23,22 @@ public class GameComponent extends HBox implements ReusableItemComponent <Game>{
     @Inject
     BrowseGameService browseGameService;
 
+    @Inject
+    EditGameService editGameService;
+
+    @Inject
+    TokenStorage tokenStorage;
+
     private Game game;
 
     @Override
     public void setItem(@NotNull Game game) {
         game_name.setText(game.name());
+        if (game.owner().equals(tokenStorage.getUserId())){
+            game_name.setFill(Color.GREEN);
+        } else {
+            game_name.setFill(Color.BLACK);
+        }
         this.game = game;
     }
 
@@ -34,6 +48,8 @@ public class GameComponent extends HBox implements ReusableItemComponent <Game>{
         this.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+
+                editGameService.setClickedGame(game);
                 browseGameService.handleGameSelection(game);
             }
         });

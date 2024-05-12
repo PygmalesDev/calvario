@@ -38,7 +38,7 @@ public class HttpModule {
                 final Response response = chain.proceed(chain.request());
                 if (response.code() >= 300) {
                     System.err.println(chain.request());
-                    System.err.println(response.body().string());
+                    System.err.println(response);
                 }
                 return response;
             }).build();
@@ -60,6 +60,11 @@ public class HttpModule {
     AuthApiService authApiService(Retrofit retrofit){
         return retrofit.create(AuthApiService.class);
     }
+    @Provides
+    @Singleton
+    GamesApiService GamesApiService(Retrofit retrofit) {
+        return retrofit.create(GamesApiService.class);
+    }
 
     @Provides
     @Singleton
@@ -67,7 +72,4 @@ public class HttpModule {
         return retrofit.create(UserApiService.class);
     }
 
-    @Provides
-    @Singleton
-    GamesApiService gamesApiService(Retrofit retrofit) {return retrofit.create(GamesApiService.class);}
 }

@@ -17,7 +17,9 @@
                      <children>
                         <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
                            <children>
-                              <Button fx:id="new_game_b" mnemonicParsing="false" prefHeight="42.0" prefWidth="186.0" text="New Game" />
+
+                              <Button fx:id="new_game_b" mnemonicParsing="false" onAction="#newGame" prefHeight="42.0" prefWidth="186.0" text="New Game" />
+
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
@@ -31,7 +33,9 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
                            <children>
-                              <Button fx:id="edit_acc_b" mnemonicParsing="false" prefHeight="42.0" prefWidth="186.0" text="Edit Game" />
+
+                              <Button fx:id="edit_acc_b" mnemonicParsing="false" onAction="#editGame" prefHeight="42.0" prefWidth="186.0" text="Edit Game" />
+
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">

@@ -1,6 +1,8 @@
 package de.uniks.stp24.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
+import de.uniks.stp24.model.ErrorResponse;
 import de.uniks.stp24.service.LoginService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,9 +10,12 @@ import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
+import retrofit2.HttpException;
+
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -36,19 +41,26 @@ public class LoginController {
     TextField usernameInput;
     @FXML
     TextField showPasswordText;
-
-    @Inject
-    App app;
     @Inject
     Subscriber subscriber;
 
     @Inject
+    App app;
+
+    @Inject
     LoginService loginService;
+
+    @Inject
+    ObjectMapper objectMappper;
+
+
 
     @Param("username")
     public String username;
     @Param("password")
     public String password;
+    @Param("justRegistered")
+    public boolean justRegistered;
 
     @Inject
     public LoginController() {
@@ -60,6 +72,7 @@ public class LoginController {
             this.usernameInput.setText(this.username);
         if (Objects.nonNull(this.password))
             this.passwordInput.setText(this.password);
+        if (justRegistered){ this.errorLabel.setText("Account Registered!");}
     }
 
     private boolean checkIfInputNotBlankOrEmpty(String text) {
@@ -73,14 +86,23 @@ public class LoginController {
             String username = this.usernameInput.getText();
             String password = this.passwordInput.getText();
             boolean rememberMe = this.rememberMeBox.isSelected();
-            //ToDo: button sperren wenn die Anfrage läuft
-            subscriber.subscribe(loginService.login(username, password, rememberMe), result ->
-                    app.show("/browseGames")
-            );
+
+            loginButton.setDisable(true);
+            subscriber.subscribe(loginService.login(username, password, rememberMe),
+                    result ->{
+                        app.show("/browseGames");
+                    }
+                    , error -> {
+                                if (error instanceof HttpException httpError) {
+                                    System.out.println(httpError.code());
+                                    String body = httpError.response().errorBody().string();
+                                    ErrorResponse errorResponse = objectMappper.readValue(body,ErrorResponse.class);
+                                    writeText(errorResponse.statusCode());
+                                }
+                    });
 
         } else {
-            this.errorLabel.setStyle("-fx-fill: red;");
-            this.errorLabel.setText("please put in name or/and password");
+            writeText(1);
         }
     }
 
@@ -118,5 +140,22 @@ public class LoginController {
 
     public void showLicenses(ActionEvent actionEvent) {
         app.show("/licenses");
+    }
+
+    private void writeText(int code) {
+        this.errorLabel.setStyle("-fx-fill: red;");
+        String info;
+        switch (code) {
+            case 400 -> info = "validation failed";
+            case 401 -> info = "Invalid username or password";
+            default ->  info = "please put in name or/and password";
+        }
+        this.errorLabel.setText(info);
+        loginButton.setDisable(false);
+    }
+
+    @OnDestroy
+    public void destroy() {
+        this.subscriber.dispose();
     }
 }

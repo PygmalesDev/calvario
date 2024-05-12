@@ -2,12 +2,12 @@ package de.uniks.stp24.dto;
 
 import de.uniks.stp24.model.GameSettings;
 
-public record CreateGameDto(
+public record UpdateGameDto(
         String name,
         boolean started,
         int speed,
-        GameSettings settings,
+        GameSettings size,
         String password
 ) {
-}
 
+}

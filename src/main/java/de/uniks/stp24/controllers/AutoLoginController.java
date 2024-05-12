@@ -3,6 +3,8 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.App;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnInit;
@@ -22,9 +24,13 @@ public class AutoLoginController {
     public AutoLoginController() {
     }
 
-    @OnKey
-    public void showLoginScreen() {
+    // show browse games screen after any click
+    @OnKey()
+    public void keyPressed(KeyEvent event) {
         app.show("/browseGames");
     }
 
+    public void mouseClicked(MouseEvent mouseEvent) {
+        app.show("/browseGames");
+    }
 }

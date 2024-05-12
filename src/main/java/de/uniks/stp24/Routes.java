@@ -11,6 +11,7 @@ import javax.security.auth.login.LoginContext;
 
 @Singleton
 public class Routes {
+  
     @Route("load")
     @Inject
     Provider<LoadController> load;
@@ -34,6 +35,10 @@ public class Routes {
     @Route("holder")
     @Inject
     Provider<PlaceHolderController> holder;
+
+    @Route("logout")
+    @Inject
+    Provider<LogoutController> logout;
 
     @Route("editAcc")
     @Inject

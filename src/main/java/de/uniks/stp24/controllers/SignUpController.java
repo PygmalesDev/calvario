@@ -25,6 +25,8 @@ import java.util.Objects;
 @Controller
 public class SignUpController {
     @FXML
+    ToggleButton languageToggleButton;
+    @FXML
     TextField usernameField;
     @FXML
     PasswordField passwordField;

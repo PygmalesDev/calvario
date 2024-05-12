@@ -49,10 +49,10 @@ public class LoginController {
     LoginService loginService;
 
     @Inject
-    ObjectMapper objectMappper;
+    ObjectMapper objectMapper;
 
-
-
+    @Param("info")
+    public String info;
     @Param("username")
     public String username;
     @Param("password")
@@ -70,6 +70,8 @@ public class LoginController {
             this.usernameInput.setText(this.username);
         if (Objects.nonNull(this.password))
             this.passwordInput.setText(this.password);
+        if (Objects.nonNull(this.info))
+            this.errorLabel.setText(this.info);
         if (justRegistered){ this.errorLabel.setText("Account Registered!");}
     }
 
@@ -95,7 +97,7 @@ public class LoginController {
                                 if (error instanceof HttpException httpError) {
                                     System.out.println(httpError.code());
                                     String body = httpError.response().errorBody().string();
-                                    ErrorResponse errorResponse = objectMappper.readValue(body,ErrorResponse.class);
+                                    ErrorResponse errorResponse = objectMapper.readValue(body,ErrorResponse.class);
                                     writeText(errorResponse.statusCode());
                                 }
                     });

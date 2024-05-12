@@ -48,7 +48,6 @@ public class CreateGameService {
             return gamesApiService
                     .createGame(new CreateGameDto(name, false, 1, settings, password))
                     .doOnNext(createGameResult -> {
-                        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                     })
                     .doOnError(error -> {
                         showErrorBox();

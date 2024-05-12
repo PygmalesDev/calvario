@@ -11,16 +11,18 @@ import org.mockito.Mockito;
 @Module
 public class TestModule {
     @Provides
-    AuthApiService authApiService(){
+    AuthApiService authApiService() {
         return Mockito.mock(AuthApiService.class);
     }
 
     @Provides
-    UserApiService userApiService(){
+    UserApiService userApiService() {
         return Mockito.mock(UserApiService.class);
     }
 
     @Provides
-    GamesApiService gamesApiService(){return Mockito.mock(GamesApiService.class);}
+    GamesApiService gamesApiService() {
+        return Mockito.mock(GamesApiService.class);
+    }
 
 }

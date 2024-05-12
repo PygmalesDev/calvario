@@ -1,8 +1,9 @@
 package de.uniks.stp24.model;
 
 import javax.inject.Inject;
+import java.awt.*;
 
-public record Game(
+public record Game<x>(
         String createdAt,
         String updatedAt,
         String _id,

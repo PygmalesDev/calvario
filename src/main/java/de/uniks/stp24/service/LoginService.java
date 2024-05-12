@@ -33,6 +33,8 @@ public class LoginService {
             final LoginResult result = authApiService.refresh(new RefreshDto(refreshToken)).blockingFirst();
             tokenStorage.setToken(result.accessToken());
             tokenStorage.setUserId(result._id());
+            tokenStorage.setName(result.name());
+            tokenStorage.setAvatar(result.avatar());
             prefService.setRefreshToken(result.refreshToken());
             return true;
         } catch (Exception e) {
@@ -48,6 +50,8 @@ public class LoginService {
                 .doOnNext(loginResult -> {
                     tokenStorage.setToken(loginResult.accessToken());
                     tokenStorage.setUserId(loginResult._id());
+                    tokenStorage.setName(loginResult.name());
+                    tokenStorage.setAvatar(loginResult.avatar());
                     if (rememberMe) {
                         prefService.setRefreshToken(loginResult.refreshToken());
                     }

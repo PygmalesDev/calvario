@@ -26,7 +26,6 @@ public class LogoutControllerTest extends ControllerTest {
     Subscriber subscriber;
     @Spy
     LoginController loginController;
-//    @Spy
     @InjectMocks
     LogoutController logoutController;
 
@@ -39,8 +38,6 @@ public class LogoutControllerTest extends ControllerTest {
     @Test
     public void clickOnLogout() {
         doReturn(Observable.just(new LogoutResult(""))).when(logoutService).logout(any());
-//        doReturn(null).when(app).show("/login");
-//        doReturn(null).when(app).show("/browseGames");
 
         // Start:
         // Alice sees the Logout
@@ -56,8 +53,6 @@ public class LogoutControllerTest extends ControllerTest {
     }
     @Test
     public void clickOnCancel() {
-
-//        doReturn(null).when(app).show("/login");
         doReturn(null).when(app).show("/browseGames");
 
         // Start:

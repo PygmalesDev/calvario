@@ -72,7 +72,7 @@ public class Game
         return this;
     }
 
-    public int getLanguage(int lang) {
+    public int getLanguage() {
         return this.language;
     }
 

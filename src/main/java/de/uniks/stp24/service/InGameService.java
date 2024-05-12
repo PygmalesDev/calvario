@@ -28,6 +28,10 @@ public class InGameService {
         return game;
     }
 
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
     public void setShowSettings(boolean show) {
         game.setShowSettings(show);
     }
@@ -35,5 +39,10 @@ public class InGameService {
     public void setLanguage(int lang) {
         game.setLanguage(lang);
     }
+
+    public int getLanguage() {
+        return game.getLanguage();
+    }
+
 
 }

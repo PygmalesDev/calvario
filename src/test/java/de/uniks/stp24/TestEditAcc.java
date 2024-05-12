@@ -81,17 +81,25 @@ public class TestEditAcc extends ControllerTest{
     @Test
     void cancelChangeAccount(){
         // Title: Cancel changing editing account in the user administration window
-        //doReturn(Observable.just(new SignUpResultDto("a", "b", "c", "d", "e" )))
-                //.when(this.editAccService).changeUserInfo(any(),any());
         // Start:
         // Alice wants to change her Account name in STPellaris. She is in the user administrtation screen and has clicked on edit account.
         tokenStorage.setName("Alice");
         ToggleButton changeUserInfoButton = lookup("#changeUserInfoButton").query();
         Button cancelChangesButton = lookup("#cancelChangesButton").queryButton();
+        Button goBackButton = lookup("#goBackButton").query();
+        Button deleteUserButton = lookup("#deleteUserButton").query();
+
+        assertFalse(goBackButton.isDisabled());
+        assertFalse(deleteUserButton.isDisabled());
         assertFalse(cancelChangesButton.isVisible());
+
         clickOn("#changeUserInfoButton");
+
+
         assertTrue(cancelChangesButton.isVisible());
         assertTrue(changeUserInfoButton.isSelected());
+        assertTrue(goBackButton.isDisabled());
+        assertTrue(deleteUserButton.isDisabled());
 
         // Action:
         // She changes name and or password but changes her mind and clicks canel

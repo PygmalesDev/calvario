@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
@@ -23,15 +24,22 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+@Title("Browse Game")
 @Controller
-public class BrowseGameController {
-    @FXML Button load_game_b;
-    @FXML Button new_game_b;
-    @FXML Button edit_acc_b;
-    @FXML Button del_game_b;
-    @FXML Button log_out_b;
+public class
+BrowseGameController {
     @FXML
-    ListView<Game> gameList;
+    Button load_game_b;
+    @FXML
+    Button new_game_b;
+    @FXML
+    Button edit_acc_b;
+    @FXML
+    Button del_game_b;
+    @FXML
+    public Button log_out_b;
+    @FXML
+    public ListView<Game> gameList;
 
     @Inject
     App app;
@@ -51,7 +59,7 @@ public class BrowseGameController {
 
     //Load list of games as soon as BrowseGame-Screen is shown
     @OnInit
-    void init(){
+    void init() {
         subscriber.subscribe(gamesApiService.findAll().subscribe(this.games::setAll));
 
         subscriber.subscribe(eventListener.listen("games.*.*", Game.class), event -> {
@@ -65,13 +73,13 @@ public class BrowseGameController {
 
     //Make list of games visible
     @OnRender
-    void render(){
+    void render() {
         gameList.setItems(games);
         gameList.setCellFactory(list -> new ComponentListCell<>(app, gameComponentProvider));
     }
 
     @OnDestroy
-    void destroy(){
+    void destroy() {
         subscriber.dispose();
     }
 
@@ -79,19 +87,8 @@ public class BrowseGameController {
     //TODO: Load all Games from Server and show them on Screen
 
 
-
-    /*
-    public void loadGames(){
-        gamesApiService.games().subscribe(results -> {
-            List<Game> gameList = Collections.singletonList(results);
-            gameList.forEach(System.out::println);
-        });
-    }
-
-     */
-
     @Inject
-    public BrowseGameController(){
+    public BrowseGameController() {
     }
 
 
@@ -100,7 +97,7 @@ public class BrowseGameController {
         logOut();
     }
 
-    public void logOut(){
+    public void logOut() {
         app.show("/login");
     }
 }

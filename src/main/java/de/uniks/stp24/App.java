@@ -59,11 +59,14 @@ public class App extends FulibFxApp {
             // TODO show login or main-menu
             show("/load");
             //
+
             if (component.loginService().autoLogin()) {
                 show("/autoLogin");
             } else {
                 show("/login");
             }
+
+            //show("/login");
 
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "An error occurred while starting the application: " + e.getMessage(), e);

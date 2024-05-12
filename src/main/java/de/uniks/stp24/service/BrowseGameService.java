@@ -1,4 +1,5 @@
 package de.uniks.stp24.service;
+import dagger.Provides;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
 

@@ -10,10 +10,12 @@ import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Flow;
 
 @Title("Login")
 @Controller
@@ -37,6 +39,8 @@ public class LoginController {
 
     @Inject
     App app;
+    @Inject
+    Subscriber subscriber;
 
     @Inject
     LoginService loginService;
@@ -47,7 +51,7 @@ public class LoginController {
     public String password;
 
     @Inject
-    public LoginController(){
+    public LoginController() {
     }
 
     @OnRender
@@ -70,10 +74,10 @@ public class LoginController {
             String password = this.passwordInput.getText();
             boolean rememberMe = this.rememberMeBox.isSelected();
             //ToDo: button sperren wenn die Anfrage läuft
-            loginService.login(username, password, rememberMe)
-                    .subscribe(result ->{
-                        app.show("/browseGames");
-                    });
+            subscriber.subscribe(loginService.login(username, password, rememberMe), result ->
+                    app.show("/browseGames")
+            );
+
         } else {
             this.errorLabel.setStyle("-fx-fill: red;");
             this.errorLabel.setText("please put in name or/and password");
@@ -83,7 +87,7 @@ public class LoginController {
     public void signup(ActionEvent actionEvent) {
         String username = this.usernameInput.getText();
         String password = this.passwordInput.getText();
-        app.show("/signup", Map.of("username",username,"password",password));
+        app.show("/signup", Map.of("username", username, "password", password));
     }
 
     public void setEn() {

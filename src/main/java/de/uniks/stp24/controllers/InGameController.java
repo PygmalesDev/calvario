@@ -65,6 +65,16 @@ public class InGameController {
         PropertyChangeListener callHandleShowSettings = this::handleShowSettings;
         game.listeners().addPropertyChangeListener(Game.PROPERTY_SETTINGS, callHandleShowSettings);
         this.gameListenerTriple.add(new GameListenerTriple(game, callHandlePauseChanged, "PROPERTY_SETTINGS"));
+
+        PropertyChangeListener callHandleLanguageChanged = this::handleLanguageChanged;
+        game.listeners().addPropertyChangeListener(Game.PROPERTY_LANGUAGE, callHandleLanguageChanged);
+        this.gameListenerTriple.add(new GameListenerTriple(game, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
+    }
+
+    private void handleLanguageChanged(PropertyChangeEvent propertyChangeEvent) {
+        // TODO change language
+        String newLang = propertyChangeEvent.getNewValue().equals(0) ? "German" : "English";
+        System.out.println("language: " + newLang);
     }
 
     private void handleShowSettings(PropertyChangeEvent propertyChangeEvent) {

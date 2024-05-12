@@ -25,7 +25,16 @@ public class SettingsComponent extends VBox {
 
     }
 
-    public void back(ActionEvent actionEvent) {
+    public void back() {
         inGameService.setShowSettings(false);
     }
+
+    public void setToGerman() {
+        inGameService.setLanguage(0);
+    }
+
+    public void setToEnglish() {
+        inGameService.setLanguage(1);
+    }
+
 }

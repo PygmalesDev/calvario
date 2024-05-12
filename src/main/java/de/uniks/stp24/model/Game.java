@@ -10,10 +10,13 @@ public class Game
     protected PropertyChangeSupport listeners;
     public static final String PROPERTY_PAUSED = "paused";
     public static final String PROPERTY_SETTINGS = "settings";
+    public static final String PROPERTY_LANGUAGE = "language";
+
 
 
     private Boolean paused = false;
     private Boolean showSettings = false;
+    private int language = 0;
 
 
     @Inject
@@ -55,6 +58,22 @@ public class Game
         this.showSettings = value;
         this.firePropertyChange(PROPERTY_SETTINGS, oldValue, value);
         return this;
+    }
+
+    public Game setLanguage(int value) {
+        if (Objects.equals(value, this.language))
+        {
+            return this;
+        }
+
+        final int oldValue = this.language;
+        this.language = value;
+        this.firePropertyChange(PROPERTY_LANGUAGE, oldValue, value);
+        return this;
+    }
+
+    public int getLanguage(int lang) {
+        return this.language;
     }
 
     public boolean firePropertyChange(String propertyName, Object oldValue, Object newValue)

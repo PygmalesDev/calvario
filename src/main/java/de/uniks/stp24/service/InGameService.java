@@ -31,4 +31,9 @@ public class InGameService {
     public void setShowSettings(boolean show) {
         game.setShowSettings(show);
     }
+
+    public void setLanguage(int lang) {
+        game.setLanguage(lang);
+    }
+
 }

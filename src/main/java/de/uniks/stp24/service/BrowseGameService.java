@@ -1,5 +1,4 @@
 package de.uniks.stp24.service;
-import dagger.Provides;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
 import javafx.collections.FXCollections;
@@ -9,6 +8,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+@Singleton
 public class BrowseGameService {
     @Inject
     GamesApiService GamesApiService;
@@ -22,6 +22,10 @@ public class BrowseGameService {
 
     @Inject
     public BrowseGameService() {
+    }
+
+    public void setGame(Game game){
+        this.game = game;
     }
 
     public void handleGameSelection(Game game) {
@@ -41,5 +45,21 @@ public class BrowseGameService {
         }
 
         return sortedGames;
+    }
+
+    public boolean checkMyGame(){
+        System.out.println(game.name());
+        if(game != null) {
+            return game.owner().equals(tokenStorage.getUserId());
+        }
+        return false;
+    }
+
+    public void setTokenStorage(){
+        tokenStorage = new TokenStorage();
+        tokenStorage.setName(null);
+        tokenStorage.setToken(null);
+        tokenStorage.setAvatar(null);
+        tokenStorage.setUserId("testID");
     }
 }

@@ -3,6 +3,7 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.App;
 import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.CreateGameService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,6 +17,8 @@ import org.fulib.fx.annotation.controller.Title;
 
 import javax.inject.Inject;
 
+import static java.lang.Thread.sleep;
+
 @Title("CreateGame")
 @Controller
 public class CreateGameController {
@@ -24,7 +27,7 @@ public class CreateGameController {
     @FXML
     HBox errorBox;
     @FXML
-    Button createGameConfirmButton;
+    public Button createGameConfirmButton;
     @FXML
     Button createGameCancelButton;
     @FXML
@@ -40,6 +43,8 @@ public class CreateGameController {
     App app;
     @Inject
     GamesApiService gamesApiService;
+    @Inject
+    BrowseGameController browseGameController;
 
     @Inject
     public CreateGameController(){
@@ -50,6 +55,7 @@ public class CreateGameController {
 
     @FXML
     public void initialize() {
+        createGameService = (createGameService == null) ? new CreateGameService() : createGameService;
         createGameService.setCreateGameController(this);
         initializeSpinner();
     }
@@ -62,8 +68,6 @@ public class CreateGameController {
         System.out.println(createMapSizeSpinner.getValue());
     }
 
-
-
     public void createGame(){
         if (!this.createNameTextField.getText().isEmpty() &&
                 !this.createPasswordTextField.getText().isEmpty() &&
@@ -73,12 +77,11 @@ public class CreateGameController {
             String password = this.createPasswordTextField.getText();
             GameSettings settings = new GameSettings(this.createMapSizeSpinner.getValue());
             if (createGameService.createGame(gameName, settings, password) != null) {
-                createGameService.createGame(gameName, settings, password).subscribe(result ->
-                        System.out.println(result));
-                app.show("/browseGames");
+                createGameService.createGame(gameName, settings, password).subscribe(result -> {
+                    browseGameController.init();
+                        });
+                app.show(browseGameController);
             }
-
-
         }
     }
     public void cancel(){

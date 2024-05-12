@@ -7,6 +7,7 @@ import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.CreateGameService;
 import de.uniks.stp24.service.EditGameService;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,21 +26,24 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.List;
+import java.util.Optional;
 
 @Title("Browse Game")
 @Controller
 public class
 BrowseGameController {
     @FXML
-    Button load_game_b;
+    public Button load_game_b;
     @FXML
-    Button new_game_b;
+    public Button new_game_b;
     @FXML
-    Button edit_acc_b;
+    public Button edit_acc_b;
     @FXML
-    Button del_game_b;
+    public Button del_game_b;
     @FXML
     public Button log_out_b;
+    @FXML
+    public Button edit_game_b;
     @FXML
     public ListView<Game> gameList;
 
@@ -56,22 +60,28 @@ BrowseGameController {
     @Inject
     GameComponent gameComponent;
     @Inject
-    BrowseGameService browseGameService;
+    public BrowseGameService browseGameService;
     @Inject
     EditGameService editGameService;
     @Inject
     CreateGameService createGameService;
-
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
 
     //Load list of games as soon as BrowseGame-Screen is shown
     @OnInit
     void init() {
-        subscriber.subscribe(gamesApiService.findAll().subscribe(this::sortAndSetGames));
+
+        editGameService = (editGameService == null) ? new EditGameService() : editGameService;
+        createGameService = (createGameService == null) ? new CreateGameService() : createGameService;
+        browseGameService = (browseGameService == null) ? new BrowseGameService() : browseGameService;
 
         editGameService.setGamesList(games);
         createGameService.setGamesList(games);
+
+        subscriber.subscribe(gamesApiService.findAll().subscribe(this.games::setAll));
+
+
         subscriber.subscribe(eventListener.listen("games.*.*", Game.class), event -> {
             switch (event.suffix()) {
                 case "created" -> games.add(event.data());
@@ -81,14 +91,10 @@ BrowseGameController {
         });
     }
 
-    private void sortAndSetGames(List<Game> games) {
-        this.games = browseGameService.sortGames(games);
-
-    }
-
     //Make list of games visible
     @OnRender
     void render() {
+        games = browseGameService.sortGames(games);
         gameList.setItems(games);
         gameList.setCellFactory(list -> new ComponentListCell<>(app, gameComponentProvider));
     }
@@ -121,8 +127,8 @@ BrowseGameController {
     }
 
     public void editGame() {
-
-
-        app.show("/editgame");
+        if(browseGameService.checkMyGame()) {
+            app.show("/editgame");
+        }
     }
 }

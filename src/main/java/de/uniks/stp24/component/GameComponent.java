@@ -17,8 +17,9 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 
 @Component(view = "Game.fxml")
-public class GameComponent extends HBox implements ReusableItemComponent <Game>{
-    @FXML Text game_name;
+public class GameComponent extends HBox implements ReusableItemComponent<Game> {
+    @FXML
+    public Text game_name;
 
     @Inject
     BrowseGameService browseGameService;
@@ -34,17 +35,28 @@ public class GameComponent extends HBox implements ReusableItemComponent <Game>{
     @Override
     public void setItem(@NotNull Game game) {
         game_name.setText(game.name());
-        if (game.owner().equals(tokenStorage.getUserId())){
+
+        if(tokenStorage == null){
+            tokenStorage = new TokenStorage();
+            tokenStorage.setName(null);
+            tokenStorage.setToken(null);
+            tokenStorage.setAvatar(null);
+            tokenStorage.setUserId("testID");
+        }
+
+        if (game.owner().equals(tokenStorage.getUserId())) {
             game_name.setFill(Color.GREEN);
         } else {
             game_name.setFill(Color.BLACK);
         }
+
+
         this.game = game;
     }
 
     //Check if component is selected
     @Inject
-    public GameComponent(){
+    public GameComponent() {
         this.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {

@@ -58,7 +58,6 @@ public class EditGameController {
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(100, 1000);
         valueFactory.setValue(100);
         editMapSizeSpinner.setValueFactory(valueFactory);
-        System.out.println(editMapSizeSpinner.getValue());
     }
 
     public void editGame(){

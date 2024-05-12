@@ -87,7 +87,7 @@ public class LoginController {
             loginButton.setDisable(true);
             subscriber.subscribe(loginService.login(username, password, rememberMe),
                     result ->{
-                        app.show("/browseGames");
+                        app.show("/editAcc");
                     }
                     // in case of server's response => error
                     // handle with error response

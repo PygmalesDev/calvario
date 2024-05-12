@@ -16,6 +16,8 @@ public class EditAccService {
     App app;
     @Inject
     TokenStorage tokenStorage;
+    @Inject
+    PrefService prefService;
 
     @Inject
     public EditAccService() {}
@@ -34,6 +36,7 @@ public class EditAccService {
                 .doOnNext(deleteResult ->{
                     tokenStorage.setName(null);
                     tokenStorage.setAvatar(null);
+                    prefService.removeRefreshToken();
                 });
     }
 

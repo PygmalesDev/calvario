@@ -39,6 +39,14 @@ public class WarningScreenComponent extends VBox {
     public WarningScreenComponent() {
     }
 
+    //Todo: Maybe can be deleted
+    public WarningScreenComponent(EditAccService editAccService, ObjectMapper objectMapper, TokenStorage tokenStorage, Subscriber subscriber) {
+        this.editAccService = editAccService;
+        this.objectMapper = objectMapper;
+        this.tokenStorage = tokenStorage;
+        this.subscriber = subscriber;
+    }
+
 
     @OnRender
     public void setBackground(){

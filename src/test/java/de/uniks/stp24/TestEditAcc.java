@@ -2,23 +2,26 @@ package de.uniks.stp24;
 
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.controllers.EditAccController;
-import de.uniks.stp24.dto.SignUpResultDto;
-import de.uniks.stp24.model.LoginResult;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.model.User;
 import de.uniks.stp24.service.EditAccService;
+import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -31,8 +34,8 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class TestEditAcc extends ControllerTest{
-    @Spy
-    EditAccService editAccService;
+    @Mock
+    EditAccService editAccService = new EditAccService();
     @InjectMocks
     EditAccController editAccController;
     @Spy
@@ -41,11 +44,23 @@ public class TestEditAcc extends ControllerTest{
     TokenStorage tokenStorage;
     @Spy
     Subscriber subscriber;
+    @Spy
+    PrefService prefService;
+    @Spy
+    ObjectMapper objectMapper;
 
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
         app.show(editAccController);
+    }
+
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        // Injizieren Sie die abhängigen Objekte in die WarningScreenComponent
+        warningScreenComponent = new WarningScreenComponent(editAccService, objectMapper, tokenStorage, subscriber);
     }
 
 
@@ -71,12 +86,12 @@ public class TestEditAcc extends ControllerTest{
         // Start:
         // Alice wants to change her Account name in STPellaris. She is in the user administrtation screen and has clicked on edit account.
         tokenStorage.setName("Alice");
-        Button changeUserInfoButton = lookup("#changeUserInfoButton").queryButton();
+        ToggleButton changeUserInfoButton = lookup("#changeUserInfoButton").query();
         Button cancelChangesButton = lookup("#cancelChangesButton").queryButton();
         assertFalse(cancelChangesButton.isVisible());
         clickOn("#changeUserInfoButton");
-        assertTrue(changeUserInfoButton.isVisible());
-        assertTrue(changeUserInfoButton.isDisabled());
+        assertTrue(cancelChangesButton.isVisible());
+        assertTrue(changeUserInfoButton.isSelected());
 
         // Action:
         // She changes name and or password but changes her mind and clicks canel
@@ -153,7 +168,30 @@ public class TestEditAcc extends ControllerTest{
 
     @Test
     void deleteAccountTest(){
-        // Todo!!!
+        // Title: Confirm after clicking delete account button
+       /* doReturn(Observable.just(new User("Alice", "b", "c", "d", "e" ))).when(this.editAccService).deleteUser();
+        // Start:
+        // Alice wants to delete her account in STPellaris. She is in the user administration window. She clicked the delete user button and a pop up came up.
+        tokenStorage.setName("Alice");
+        clickOn("#deleteUserButton");
+        waitForFxEvents();
+
+        // Action:
+        // She clicks confrim.
+        Button deleteAccButton = lookup("#deleteAccButton").queryButton();
+        clickOn("#deleteAccButton");
+        Observable<User> observable = editAccService.deleteUser();
+        observable.doOnComplete(() -> {
+            tokenStorage.setName(null);
+            tokenStorage.setAvatar(null);
+            prefService.removeRefreshToken();}).subscribe();
+        waitForFxEvents();
+
+        // Result:
+        // The pop up disappeared. Alice is now in the log in window again.
+        verify(app, times(2)).show("/login");
+        assertNull(tokenStorage.getName());
+        //assertEquals("Login", stage.getTitle());*/
     }
 
 

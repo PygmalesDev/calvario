@@ -33,7 +33,7 @@ import java.util.Objects;
 @Controller
 public class EditAccController {
     @FXML
-    Button changeUserInfoButton;
+    ToggleButton changeUserInfoButton;
     @FXML
     Button cancelChangesButton;
     @FXML
@@ -60,7 +60,7 @@ public class EditAccController {
     @Inject
     WarningScreenComponent warningScreen;
 
-    private BooleanBinding warningIsVisible;
+    private BooleanBinding warningIsInvisible;
 
     @Inject
     public EditAccController() {
@@ -74,19 +74,18 @@ public class EditAccController {
 
     @OnRender
     public void createBindings(){
-        this.warningIsVisible = this.warningScreenContainer.visibleProperty().not();
+        this.warningIsInvisible = this.warningScreenContainer.visibleProperty().not();
     }
-
 
 
     @OnRender
     public void setBlurEffect() {
         // blurs the edit account screen when the warning screen is visible
         this.editAccHBox.effectProperty().bind(Bindings.createObjectBinding(()->{
-            if(warningIsVisible.get())
+            if(warningIsInvisible.get())
                 return null;
             return new BoxBlur();
-        },this.warningIsVisible));
+        },this.warningIsInvisible));
     }
 
     @OnRender
@@ -96,11 +95,25 @@ public class EditAccController {
         warningScreenContainer.setVisible(false);
     }
 
+    @OnRender
+    public void changeUserInfo(ActionEvent actionEvent) {
+        // If the changeUserButton is selected, username and password can be edited
+        if(changeUserInfoButton.isSelected()){
+            passwordInput.setDisable(false);
+            usernameInput.setDisable(false);
+            cancelChangesButton.setVisible(true);
+            saveChangesButton.setVisible(true);
+        }else{
+            resetEditing(tokenStorage.getName());
+        }
+    }
+
 
     public void saveChanges(ActionEvent actionEvent) {
         // save changed name and/or password of the user and reset the edit account screen afterward
         subscriber.subscribe(editAccService.changeUserInfo(usernameInput.getText(), passwordInput.getText()),
-                result -> resetEditing(usernameInput.getText()));
+                result -> {resetEditing(usernameInput.getText());
+                    changeUserInfoButton.setSelected(false);});
         //ToDo: error handling and message
     }
 
@@ -119,25 +132,14 @@ public class EditAccController {
 
     public void cancelChanges(ActionEvent actionEvent) {
         // Reset inputs and changeUserInfoButton
+        changeUserInfoButton.setSelected(false);
         resetEditing(tokenStorage.getName());
     }
 
-    public void changeUserInfo(ActionEvent actionEvent) {
-        // TextFields can be edited now and buttons for saving or cancel the changes show up
-        passwordInput.setDisable(false);
-        usernameInput.setDisable(false);
-
-        cancelChangesButton.setVisible(true);
-        saveChangesButton.setVisible(true);
-
-        //changeUserInfoButton.setStyle("-fx-background-color: #00f0f0; ");
-        changeUserInfoButton.setDisable(true);
-    }
 
     public void deleteUser(ActionEvent actionEvent) throws IOException {
         // warning screen opens
         warningScreenContainer.setVisible(true);
-        // Todo: color of the deleteUserButton
     }
 
     public void goBack(ActionEvent actionEvent) {

@@ -81,7 +81,7 @@ BrowseGameController {
 
         subscriber.subscribe(gamesApiService.findAll().subscribe(this.games::setAll));
 
-
+        //Listener for updating list of games if games are created, deleted or updated
         subscriber.subscribe(eventListener.listen("games.*.*", Game.class), event -> {
             switch (event.suffix()) {
                 case "created" -> games.add(event.data());
@@ -103,10 +103,6 @@ BrowseGameController {
     void destroy() {
         subscriber.dispose();
     }
-
-
-    //TODO: Load all Games from Server and show them on Screen
-
 
     @Inject
     public BrowseGameController() {

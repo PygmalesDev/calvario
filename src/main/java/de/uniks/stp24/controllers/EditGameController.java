@@ -16,6 +16,8 @@ import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnInit;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
+
 @Title("EditGame")
 @Controller
 public class EditGameController {
@@ -53,7 +55,6 @@ public class EditGameController {
         initializeSpinner();
     }
 
-
     public void initializeSpinner(){
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(100, 1000);
         valueFactory.setValue(100);
@@ -65,10 +66,14 @@ public class EditGameController {
         GameSettings settings = new GameSettings(this.editMapSizeSpinner.getValue());
         String gameName = this.editNameTextField.getText();
         String password = this.editPasswordTextField.getText();
-        if (editGameService.editGame(gameName, settings, password) != null) {
-            editGameService.editGame(gameName, settings, password)
-                    .subscribe(result -> System.out.println(result));
-            app.show("/browseGames");
+        if(!gameName.isEmpty() && !password.isEmpty() && !editRepeatPasswordTextField.getText().isEmpty()) {
+            if(password.equals(editRepeatPasswordTextField.getText())) {
+                if (editGameService.editGame(gameName, settings, password) != null) {
+                    editGameService.editGame(gameName, settings, password)
+                            .subscribe(System.out::println);
+                    app.show("/browseGames");
+                }
+            }
         }
 
     }

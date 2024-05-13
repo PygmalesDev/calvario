@@ -40,6 +40,7 @@ public class EditGameService {
         this.games = games;
     }
 
+    //Editing an existing game, which is yours.
     public Observable<UpdateGameResultDto> editGame(String name, GameSettings settings, String password){
         editGameController.hideErrorBox();
         for (Game game1 : games) {

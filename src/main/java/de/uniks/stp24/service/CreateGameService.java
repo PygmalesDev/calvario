@@ -35,6 +35,7 @@ public class CreateGameService {
         this.games = games;
     }
 
+    //Check if game with same name exits already. If not, create new game.
     public Observable<CreateGameResultDto> createGame(String name, GameSettings settings, String password){
         createGameController.hideErrorBox();
         for (Game game1 : games) {
@@ -55,7 +56,6 @@ public class CreateGameService {
         } else {
             createGameController.showNameTakenError();
             isNameable = true;
-            System.out.println("Name is already taken!");
             return null;
         }
     }

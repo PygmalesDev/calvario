@@ -37,13 +37,10 @@ public class GameComponent extends HBox implements ReusableItemComponent<Game> {
         game_name.setText(game.name());
 
         if(tokenStorage == null){
-            tokenStorage = new TokenStorage();
-            tokenStorage.setName(null);
-            tokenStorage.setToken(null);
-            tokenStorage.setAvatar(null);
-            tokenStorage.setUserId("testID");
+            setTestToken();
         }
 
+        //Your game will be displayed in color green
         if (game.owner().equals(tokenStorage.getUserId())) {
             game_name.setFill(Color.GREEN);
         } else {
@@ -60,10 +57,18 @@ public class GameComponent extends HBox implements ReusableItemComponent<Game> {
         this.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-
                 editGameService.setClickedGame(game);
                 browseGameService.handleGameSelection(game);
             }
         });
+    }
+
+    //Set Token for testing
+    private void setTestToken(){
+        tokenStorage = new TokenStorage();
+        tokenStorage.setName(null);
+        tokenStorage.setToken(null);
+        tokenStorage.setAvatar(null);
+        tokenStorage.setUserId("testID");
     }
 }

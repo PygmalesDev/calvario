@@ -27,7 +27,7 @@ public class CreateGameController {
     @FXML
     HBox errorBox;
     @FXML
-    public Button createGameConfirmButton;
+    Button createGameConfirmButton;
     @FXML
     Button createGameCancelButton;
     @FXML
@@ -60,12 +60,11 @@ public class CreateGameController {
         initializeSpinner();
     }
 
-
+    //Spinner for incrementing map size
     public void initializeSpinner(){
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(100, 1000);
         valueFactory.setValue(100);
         createMapSizeSpinner.setValueFactory(valueFactory);
-        System.out.println(createMapSizeSpinner.getValue());
     }
 
     public void createGame(){

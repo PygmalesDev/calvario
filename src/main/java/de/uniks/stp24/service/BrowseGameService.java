@@ -30,14 +30,9 @@ public class BrowseGameService {
 
     public void handleGameSelection(Game game) {
         this.game = game;
-
-        if (game != null) {
-            System.out.println("Selected Game: " + game.name());
-        } else {
-            System.out.println("No game selected");
-        }
     }
 
+    //Sort list of games in ListView. Recent games on top of the list.
     public ObservableList<Game> sortGames(List<Game> games) {
         ObservableList<Game> sortedGames = FXCollections.observableArrayList();
         for (int i = games.size() - 1; i >= 0; i--) {
@@ -47,14 +42,15 @@ public class BrowseGameService {
         return sortedGames;
     }
 
+    //Check if selected game is yours
     public boolean checkMyGame(){
-        System.out.println(game.name());
         if(game != null) {
             return game.owner().equals(tokenStorage.getUserId());
         }
         return false;
     }
 
+    //Set a token for testing BrowseGameController
     public void setTokenStorage(){
         tokenStorage = new TokenStorage();
         tokenStorage.setName(null);

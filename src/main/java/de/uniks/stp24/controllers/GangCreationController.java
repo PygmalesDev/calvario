@@ -1,20 +1,15 @@
 package de.uniks.stp24.controllers;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import de.uniks.stp24.App;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.component.GangComponent;
 import de.uniks.stp24.service.SaveLoadService;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.effect.BoxBlur;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -28,8 +23,7 @@ import org.fulib.fx.constructs.listview.ComponentListCell;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 import static de.uniks.stp24.service.Constants.empireTemplates;
 
@@ -70,8 +64,14 @@ public class GangCreationController {
     @FXML
     Pane deletePane;
 
-    Boolean lockFlag = false;
-    Boolean lockPortrait = false;
+    boolean lockFlag = false;
+    boolean lockPortrait = false;
+    boolean lockName = false;
+    boolean lockDescription = false;
+    boolean lockColor = false;
+    int descriptionIndex = 0;
+    int nameIndex = 0;
+    int typeIndex = 0;
 
     Random rand = new Random();
     ArrayList<File> flagsList = new ArrayList<>();
@@ -80,6 +80,26 @@ public class GangCreationController {
     int portraitImageIndex = 0;
 
     private ObservableList<Gang> gangs;
+
+    // unused FX IDs (declared here to remove warnings from fxml file)
+    @FXML
+    Button backButton;
+    @FXML
+    Button showCreationButton;
+    @FXML
+    Button lastFlagButton;
+    @FXML
+    Button lastPortraitButton;
+    @FXML
+    Button nextPortraitButton;
+    @FXML
+    Button cancelButton;
+    @FXML
+    Button randomizeButton;
+    @FXML
+    Button deleteButton;
+    @FXML
+    Button nextFlagButton;
 
 
     @Inject
@@ -90,14 +110,10 @@ public class GangCreationController {
     @OnInit
     public void init() {
         File flagsDir = new File("src/main/resources/de/uniks/stp24/assets/placeholders/Flags");
-        for (File flag : flagsDir.listFiles()) {
-            flagsList.add(flag);
-        }
+        flagsList.addAll(Arrays.asList(Objects.requireNonNull(flagsDir.listFiles())));
 
         File portraitsDir = new File("src/main/resources/de/uniks/stp24/assets/placeholders/Portraits");
-        for (File portrait : portraitsDir.listFiles()) {
-            portraitsList.add(portrait);
-        }
+        Collections.addAll(portraitsList, Objects.requireNonNull(portraitsDir.listFiles()));
         gangs = saveLoadService.loadGangs();
     }
 
@@ -109,23 +125,20 @@ public class GangCreationController {
         showDeletePaneButton.setVisible(false);
         this.gangsListView.setItems(this.gangs);
         this.gangsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.gangComponentProvider));
-        gangsListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Gang gang = gangsListView.getSelectionModel().getSelectedItem();
-                if (gang != null) {
-                    creationPane.setVisible(true);
-                    gangNameText.setText(gang.name());
-                    flagImageIndex = gang.flagIndex();
-                    flagImage.setImage(new Image(flagsList.get(flagImageIndex).toURI().toString()));
-                    portraitImageIndex = gang.portraitIndex();
-                    portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex).toURI().toString()));
-                    gangDescriptionText.setText(gang.description());
-                    createButton.setVisible(false);
-                    editButton.setVisible(true);
-                    showDeletePaneButton.setVisible(true);
-                    colorPicker.setValue(gang.color());
-                }
+        gangsListView.setOnMouseClicked(event -> {
+            Gang gang = gangsListView.getSelectionModel().getSelectedItem();
+            if (gang != null) {
+                creationPane.setVisible(true);
+                gangNameText.setText(gang.name());
+                flagImageIndex = gang.flagIndex();
+                flagImage.setImage(new Image(flagsList.get(flagImageIndex).toURI().toString()));
+                portraitImageIndex = gang.portraitIndex();
+                portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex).toURI().toString()));
+                gangDescriptionText.setText(gang.description());
+                createButton.setVisible(false);
+                editButton.setVisible(true);
+                showDeletePaneButton.setVisible(true);
+                colorPicker.setValue(gang.color());
             }
         });
     }
@@ -154,6 +167,7 @@ public class GangCreationController {
         int index = gangsListView.getSelectionModel().getSelectedIndex();
         gangs.remove(index);
         saveLoadService.saveGang(gangs);
+        resetCreationPane();
         cancel();
     }
 
@@ -164,12 +178,7 @@ public class GangCreationController {
 
     public void showCreationPane() {
         creationPane.setVisible(true);
-        flagImageIndex = 0;
-        portraitImageIndex = 0;
-        flagImage.setImage(new Image(flagsList.get(flagImageIndex).toURI().toString()));
-        portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex).toURI().toString()));
-        gangNameText.setText("");
-        gangDescriptionText.setText("");
+        resetCreationPane();
         createButton.setVisible(true);
         editButton.setVisible(false);
         showDeletePaneButton.setVisible(false);
@@ -235,16 +244,38 @@ public class GangCreationController {
             portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex).toURI().toString()));
         }
 
-        String name = empireTemplates.get("Prefix")[rand.nextInt(0, empireTemplates.get("Prefix").length)]
-                + " " + empireTemplates.get("Type")[rand.nextInt(0, empireTemplates.get("Type").length)];
-        String secondName = "";
-        if (rand.nextInt(0, 4) == 3)
-            secondName = " of " + empireTemplates.get("Suffix")[rand.nextInt(0, empireTemplates.get("Suffix").length)] +
-                    " " + empireTemplates.get("Definition")[rand.nextInt(0, empireTemplates.get("Definition").length)];
-        gangNameText.setText(name + secondName);
-        String description = empireTemplates.get("Description")[rand.nextInt(0, empireTemplates.get("Description").length)]
-                .replace("{NAME}", name);
-        gangDescriptionText.setText(description);
+        String name;
+        if (!lockName) {
+            nameIndex = rand.nextInt(0, empireTemplates.get("Prefix").length);
+            typeIndex = rand.nextInt(0, empireTemplates.get("Type").length);
+            name = empireTemplates.get("Prefix")[nameIndex]
+                    + " " + empireTemplates.get("Type")[typeIndex];
+            String secondName = "";
+            if (rand.nextInt(0, 4) == 3)
+                secondName = " of " + empireTemplates.get("Suffix")[rand.nextInt(0, empireTemplates.get("Suffix").length)] +
+                        " " + empireTemplates.get("Definition")[rand.nextInt(0, empireTemplates.get("Definition").length)];
+            gangNameText.setText(name + secondName);
+        } else {
+            name = empireTemplates.get("Prefix")[nameIndex]
+                    + " " + empireTemplates.get("Type")[typeIndex];
+        }
+
+        if (!lockDescription) {
+            descriptionIndex = rand.nextInt(0, empireTemplates.get("Description").length);
+            String description = empireTemplates.get("Description")[descriptionIndex]
+                    .replace("{NAME}", name);
+            gangDescriptionText.setText(description);
+        } else {
+            String description = empireTemplates.get("Description")[descriptionIndex]
+                    .replace("{NAME}", name);
+            gangDescriptionText.setText(description);
+        }
+
+        if (!lockColor) {
+            colorPicker.setValue(Color.color(Math.random(), Math.random(), Math.random()));
+        }
+
+
     }
 
     public void lockFlag() {
@@ -253,6 +284,18 @@ public class GangCreationController {
 
     public void lockPortrait() {
         lockPortrait = !lockPortrait;
+    }
+
+    public void lockName() {
+        lockName = !lockName;
+    }
+
+    public void lockDescription() {
+        lockDescription = !lockDescription;
+    }
+
+    public void lockColor() {
+        lockColor = !lockColor;
     }
 
     @OnDestroy

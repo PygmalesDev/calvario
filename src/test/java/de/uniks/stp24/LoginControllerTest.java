@@ -1,11 +1,11 @@
 package de.uniks.stp24;
 
 import de.uniks.stp24.controllers.LoginController;
-import de.uniks.stp24.dto.LoginResult;
+import de.uniks.stp24.model.LoginResult;
 import de.uniks.stp24.service.LoginService;
-import de.uniks.stp24.service.PrefService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.CheckBox;
+import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,6 +22,8 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 public class LoginControllerTest extends ControllerTest {
     @Spy
     LoginService loginService;
+    @Spy
+    Subscriber subscriber;
     @InjectMocks
     LoginController loginController;
 
@@ -33,7 +35,8 @@ public class LoginControllerTest extends ControllerTest {
 
     @Test
     void login(){
-        doReturn(Observable.just(new LoginResult("1", "a","b","c","d"))).when(loginService).login(any(),any(), eq(false));
+        doReturn(Observable.just(new LoginResult("1", "a","b","c","d")))
+                .when(loginService).login(any(),any(), eq(false));
         doReturn(null).when(app).show("/browseGames");
 
         // Start:

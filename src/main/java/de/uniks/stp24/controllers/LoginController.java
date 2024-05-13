@@ -2,6 +2,7 @@ package de.uniks.stp24.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
+import de.uniks.stp24.model.ErrorResponse;
 import de.uniks.stp24.service.LoginService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,8 +10,10 @@ import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
+import org.fulib.fx.controller.Subscriber;
 import retrofit2.HttpException;
 
 import javax.inject.Inject;
@@ -36,6 +39,8 @@ public class LoginController {
     TextField usernameInput;
     @FXML
     TextField showPasswordText;
+    @Inject
+    Subscriber subscriber;
 
     @Inject
     App app;
@@ -45,6 +50,8 @@ public class LoginController {
 
     @Inject
     ObjectMapper objectMappper;
+
+
 
     @Param("username")
     public String username;
@@ -77,11 +84,13 @@ public class LoginController {
             String username = this.usernameInput.getText();
             String password = this.passwordInput.getText();
             boolean rememberMe = this.rememberMeBox.isSelected();
-            //ToDo: button sperren wenn die Anfrage läuft
-            loginService.login(username, password, rememberMe)
-                    .subscribe(result ->{
+            loginButton.setDisable(true);
+            subscriber.subscribe(loginService.login(username, password, rememberMe),
+                    result ->{
                         app.show("/browseGames");
                     }
+                    // in case of server's response => error
+                    // handle with error response
                     , error -> {
                                 if (error instanceof HttpException httpError) {
                                     System.out.println(httpError.code());
@@ -91,6 +100,7 @@ public class LoginController {
                                 }
                     });
         } else {
+            // 1 is place holder for default in switch
             writeText(1);
         }
     }
@@ -131,6 +141,8 @@ public class LoginController {
         app.show("/licenses");
     }
 
+
+    // if response from server => error, choose a text depending on code
     private void writeText(int code) {
         this.errorLabel.setStyle("-fx-fill: red;");
         String info;
@@ -140,5 +152,11 @@ public class LoginController {
             default ->  info = "please put in name or/and password";
         }
         this.errorLabel.setText(info);
+        loginButton.setDisable(false);
+    }
+
+    @OnDestroy
+    public void destroy() {
+        this.subscriber.dispose();
     }
 }

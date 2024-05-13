@@ -11,7 +11,7 @@
       <ImageView fx:id="portraitImage" fitHeight="100.0" fitWidth="100.0" layoutX="100.0" pickOnBounds="true" />
       <Text fx:id="gangNameText" layoutX="203.0" layoutY="59.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="260.35546875">
          <font>
-            <Font size="24.0" />
+            <Font name="System Bold Italic" size="24.0" />
          </font>
       </Text>
    </children>

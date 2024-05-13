@@ -6,13 +6,18 @@ import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.component.GangComponent;
 import de.uniks.stp24.service.SaveLoadService;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -58,6 +63,12 @@ public class GangCreationController {
     Button createButton;
     @FXML
     Button editButton;
+    @FXML
+    Button showDeletePaneButton;
+    @FXML
+    Text toBeDeletedGangName;
+    @FXML
+    Pane deletePane;
 
     Boolean lockFlag = false;
     Boolean lockPortrait = false;
@@ -93,6 +104,9 @@ public class GangCreationController {
     @OnRender
     public void render() {
         creationPane.setVisible(false);
+        deletePane.setVisible(false);
+        editButton.setVisible(false);
+        showDeletePaneButton.setVisible(false);
         this.gangsListView.setItems(this.gangs);
         this.gangsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.gangComponentProvider));
         gangsListView.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -102,36 +116,53 @@ public class GangCreationController {
                 if (gang != null) {
                     creationPane.setVisible(true);
                     gangNameText.setText(gang.name());
-                    flagImage.setImage(new Image(gang.flag()));
-                    portraitImage.setImage(new Image(gang.portrait()));
+                    flagImageIndex = gang.flagIndex();
+                    flagImage.setImage(new Image(flagsList.get(flagImageIndex).toURI().toString()));
+                    portraitImageIndex = gang.portraitIndex();
+                    portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex).toURI().toString()));
                     gangDescriptionText.setText(gang.description());
                     createButton.setVisible(false);
                     editButton.setVisible(true);
+                    showDeletePaneButton.setVisible(true);
+                    colorPicker.setValue(gang.color());
                 }
             }
         });
     }
 
     public void back() {
-
+        app.show("/lobby");
     }
 
     public Gang getInputGang() {
         String gangName = gangNameText.getText();
         if (gangNameText.getText().isEmpty()) gangName = "Buccaneers";
-        return new Gang(gangName, flagsList.get(flagImageIndex).toURI().toString(), portraitsList.get(portraitImageIndex).toURI().toString(), gangDescriptionText.getText(), colorPicker.getValue());
+        return new Gang(gangName, flagsList.get(flagImageIndex).toURI().toString(), flagImageIndex, portraitsList.get(portraitImageIndex).toURI().toString(), portraitImageIndex, gangDescriptionText.getText(), colorPicker.getValue());
     }
 
     public void edit() {
         int index = gangsListView.getSelectionModel().getSelectedIndex();
         gangs.remove(index);
         Gang gang = getInputGang();
+        System.out.println(gang.toString());
         gangs.add(index, gang);
         saveLoadService.saveGang(gangs);
         resetCreationPane();
     }
 
-    public void showCreation() {
+    public void delete() {
+        int index = gangsListView.getSelectionModel().getSelectedIndex();
+        gangs.remove(index);
+        saveLoadService.saveGang(gangs);
+        cancel();
+    }
+
+    public void cancel() {
+        deletePane.setVisible(false);
+        creationPane.setEffect(null);
+    }
+
+    public void showCreationPane() {
         creationPane.setVisible(true);
         flagImageIndex = 0;
         portraitImageIndex = 0;
@@ -141,6 +172,19 @@ public class GangCreationController {
         gangDescriptionText.setText("");
         createButton.setVisible(true);
         editButton.setVisible(false);
+        showDeletePaneButton.setVisible(false);
+    }
+
+    public void showDeletePane() {
+        creationPane.setEffect(new BoxBlur());
+        deletePane.setVisible(true);
+        Gang gang = gangsListView.getSelectionModel().getSelectedItem();
+        if (gang.color().getRed() + gang.color().getGreen() + gang.color().getBlue() <= 1)
+            deletePane.setStyle("-fx-background-color: #949290");
+        else
+            deletePane.setStyle("-fx-background-color: #333030");
+        toBeDeletedGangName.setText(gang.name());
+        toBeDeletedGangName.setFill(gang.color());
     }
 
     public void create() {
@@ -151,6 +195,7 @@ public class GangCreationController {
     }
 
     public void resetCreationPane() {
+        colorPicker.setValue(Color.BLACK);
         flagImageIndex = 0;
         portraitImageIndex = 0;
         flagImage.setImage(new Image(flagsList.get(flagImageIndex).toURI().toString()));

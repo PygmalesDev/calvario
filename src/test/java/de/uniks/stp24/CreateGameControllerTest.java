@@ -27,7 +27,6 @@ public class CreateGameControllerTest extends ControllerTest {
 
     @Test
     void noInput(){
-        sleep(5000);
         clickOn(createGameController.createGameConfirmButton);
         WaitForAsyncUtils.waitForFxEvents();
         assertEquals("CreateGame", stage.getTitle());

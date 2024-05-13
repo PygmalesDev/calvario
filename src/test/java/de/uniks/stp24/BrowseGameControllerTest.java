@@ -101,7 +101,6 @@ public class BrowseGameControllerTest extends ControllerTest {
         browseGameController.gameList.getSelectionModel().clearAndSelect(0);
         browseGameController.gameList.getFocusModel().focus(0);
         clickOn(browseGameController.edit_game_b);
-        sleep(10000);
         WaitForAsyncUtils.waitForFxEvents();
         assertEquals("EditGame", stage.getTitle());
     }

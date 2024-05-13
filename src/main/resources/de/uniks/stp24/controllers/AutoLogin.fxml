@@ -12,7 +12,7 @@
    <children>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="...loging in...">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="...logging in...">
                <font>
                   <Font name="Calibri" size="96.0" />
                </font>
@@ -26,7 +26,7 @@
                   </ImageView>
                   <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../assets/logos/placeholder.jpg" />
+                        <Image url="@../assets/logos/DeadBirdsLogoTransparent.png" />
                      </image>
                   </ImageView>
                </children></HBox>

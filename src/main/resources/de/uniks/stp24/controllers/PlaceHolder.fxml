@@ -26,7 +26,7 @@
                         </ImageView>
                         <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../assets/logos/placeholder.jpg" />
+                                <Image url="@../assets/logos/DeadBirdsLogoTransparent.png" />
                             </image>
                         </ImageView>
                     </children></HBox>

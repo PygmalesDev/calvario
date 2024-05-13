@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
 import de.uniks.stp24.model.ErrorResponse;
 import de.uniks.stp24.service.LoginService;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
@@ -79,7 +78,7 @@ public class LoginController {
         return (!text.isBlank() && !text.isEmpty());
     }
 
-    public void login(ActionEvent actionEvent) {
+    public void login() {
         if (checkIfInputNotBlankOrEmpty(this.usernameInput.getText()) &&
                 checkIfInputNotBlankOrEmpty(this.passwordInput.getText())) {
             this.errorLabel.setText("");
@@ -88,9 +87,8 @@ public class LoginController {
             boolean rememberMe = this.rememberMeBox.isSelected();
             loginButton.setDisable(true);
             subscriber.subscribe(loginService.login(username, password, rememberMe),
-                    result ->{
-                        app.show("/editAcc");
-                    }
+                    result -> app.show("/editAcc")
+
                     // in case of server's response => error
                     // handle with error response
                     , error -> {
@@ -102,12 +100,12 @@ public class LoginController {
                                 }
                     });
         } else {
-            // 1 is place holder for default in switch
+            // 1 is used for default in switch
             writeText(1);
         }
     }
 
-    public void signup(ActionEvent actionEvent) {
+    public void signup() {
         String username = this.usernameInput.getText();
         String password = this.passwordInput.getText();
         app.show("/signup", Map.of("username",username,"password",password));
@@ -116,14 +114,14 @@ public class LoginController {
     public void setEn() {
     }
 
-    public void setDe(ActionEvent actionEvent) {
+    public void setDe() {
     }
 
     @OnRender(1)
     public void setupShowPassword() {
         // TextField showPasswordText is per default not managed
 
-        // setting properties managed and visible to change depending
+        // setting properties managed and visible to change depending on
         // showPasswordToggleButton state
         showPasswordText.managedProperty()
                 .bind(showPasswordToggleButton.selectedProperty());
@@ -139,7 +137,7 @@ public class LoginController {
 
     }
 
-    public void showLicenses(ActionEvent actionEvent) {
+    public void showLicenses() {
         app.show("/licenses");
     }
 

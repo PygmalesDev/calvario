@@ -89,7 +89,7 @@ public class LoginController {
             signupButton.setDisable(true);
             writeText(100);
             subscriber.subscribe(loginService.login(username, password, rememberMe),
-                    result -> app.show("/editAcc")
+                    result -> app.show("/browseGames")
                     // in case of server's response => error
                     // handle with error response
                     , error -> {

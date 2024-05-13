@@ -1,11 +1,9 @@
 package de.uniks.stp24.component;
 
-import de.uniks.stp24.controllers.GangCreationController;
 import de.uniks.stp24.model.Gang;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;

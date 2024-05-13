@@ -94,21 +94,21 @@
       <Button fx:id="randomizeButton" layoutY="-4.0" mnemonicParsing="false" onAction="#randomize" prefHeight="75.0" prefWidth="102.0" text="RANDOM" />
       <ToggleButton layoutX="262.0" layoutY="80.0" mnemonicParsing="false" onAction="#lockFlag" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
       <ToggleButton layoutX="552.0" layoutY="80.0" mnemonicParsing="false" onAction="#lockPortrait" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
-      <Button fx:id="editButton" layoutX="391.0" layoutY="564.0" mnemonicParsing="false" onAction="#edit" prefHeight="56.0" prefWidth="273.0" style="-fx-background-color: YELLOW;" text="EDIT">
+      <Button fx:id="editButton" layoutX="391.0" layoutY="564.0" mnemonicParsing="false" onAction="#edit" prefHeight="56.0" prefWidth="273.0" style="-fx-background-color: YELLOW;" text="EDIT" visible="false">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Button>
-      <Button fx:id="showDeletePaneButton" layoutX="64.0" layoutY="564.0" mnemonicParsing="false" onAction="#showDeletePane" prefHeight="56.0" prefWidth="273.0" style="-fx-background-color: RED;" text="DELETE">
+      <Button fx:id="showDeletePaneButton" layoutX="64.0" layoutY="564.0" mnemonicParsing="false" onAction="#showDeletePane" prefHeight="56.0" prefWidth="273.0" style="-fx-background-color: RED;" text="DELETE" visible="false">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
       </Button>
-      <ToggleButton layoutX="589.0" layoutY="-5.0" mnemonicParsing="false" onAction="#lockName" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
-      <ToggleButton layoutX="639.0" layoutY="237.0" mnemonicParsing="false" onAction="#lockDescription" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
+      <ToggleButton fx:id="lockNameButton" layoutX="595.0" layoutY="-16.0" mnemonicParsing="false" onAction="#lockName" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
+      <ToggleButton fx:id="lockDescriptionButton" layoutX="639.0" layoutY="237.0" mnemonicParsing="false" onAction="#lockDescription" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
       <ToggleButton layoutX="515.0" layoutY="479.0" mnemonicParsing="false" onAction="#lockColor" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
    </Pane>
-   <Pane fx:id="deletePane" layoutX="386.0" layoutY="156.0" prefHeight="300.0" prefWidth="500.0" style="-fx-background-color: GREY; -fx-border-color: BLACK; -fx-border-width: 3;">
+   <Pane fx:id="deletePane" layoutX="386.0" layoutY="156.0" prefHeight="300.0" prefWidth="500.0" style="-fx-background-color: GREY; -fx-border-color: BLACK; -fx-border-width: 3;" visible="false">
       <Button fx:id="cancelButton" cancelButton="true" layoutX="50.0" layoutY="175.0" mnemonicParsing="false" onAction="#cancel" prefHeight="75.0" prefWidth="150.0" style="-fx-background-color: LIGHTGREEN;" text="CANCEL">
          <font>
             <Font name="System Bold" size="24.0" />

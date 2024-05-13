@@ -30,7 +30,6 @@ public class GangComponent extends Pane implements ReusableItemComponent<Gang> {
 
     }
 
-
     @Override
     public void setItem(@NotNull Gang gang) {
         gangNameText.setText(gang.name());

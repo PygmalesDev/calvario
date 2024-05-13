@@ -100,6 +100,10 @@ public class GangCreationController {
     Button deleteButton;
     @FXML
     Button nextFlagButton;
+    @FXML
+    ToggleButton lockNameButton;
+    @FXML
+    ToggleButton lockDescriptionButton;
 
 
     @Inject

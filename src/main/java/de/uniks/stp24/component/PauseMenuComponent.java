@@ -21,6 +21,9 @@ public class PauseMenuComponent extends VBox {
     @FXML
     Button quitButton;
 
+    @FXML
+    VBox vbox;
+
     @Inject
     InGameService inGameService;
 

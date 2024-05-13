@@ -1,10 +1,9 @@
 package de.uniks.stp24.component;
 
 import de.uniks.stp24.service.InGameService;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
 
@@ -13,6 +12,10 @@ import javax.inject.Inject;
 @Component(view = "Settings.fxml")
 public class SettingsComponent extends VBox {
 
+    @FXML
+    ToggleButton germanLang;
+    @FXML
+    ToggleButton englishLang;
     @FXML
     Button backButton;
 

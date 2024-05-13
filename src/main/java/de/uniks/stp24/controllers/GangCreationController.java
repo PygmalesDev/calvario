@@ -1,5 +1,6 @@
 package de.uniks.stp24.controllers;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import de.uniks.stp24.App;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.component.GangComponent;
@@ -24,6 +25,8 @@ import javax.inject.Provider;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
+
+import static de.uniks.stp24.service.Constants.empireTemplates;
 
 @Title("Gang Creation")
 @Controller
@@ -84,7 +87,6 @@ public class GangCreationController {
         for (File portrait : portraitsDir.listFiles()) {
             portraitsList.add(portrait);
         }
-
         gangs = saveLoadService.loadGangs();
     }
 
@@ -187,6 +189,17 @@ public class GangCreationController {
             portraitImageIndex = rand.nextInt(0, portraitsList.size());
             portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex).toURI().toString()));
         }
+
+        String name = empireTemplates.get("Prefix")[rand.nextInt(0, empireTemplates.get("Prefix").length)]
+                + " " + empireTemplates.get("Type")[rand.nextInt(0, empireTemplates.get("Type").length)];
+        String secondName = "";
+        if (rand.nextInt(0, 4) == 3)
+            secondName = " of " + empireTemplates.get("Suffix")[rand.nextInt(0, empireTemplates.get("Suffix").length)] +
+                    " " + empireTemplates.get("Definition")[rand.nextInt(0, empireTemplates.get("Definition").length)];
+        gangNameText.setText(name + secondName);
+        String description = empireTemplates.get("Description")[rand.nextInt(0, empireTemplates.get("Description").length)]
+                .replace("{NAME}", name);
+        gangDescriptionText.setText(description);
     }
 
     public void lockFlag() {

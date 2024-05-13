@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Module;
 import dagger.Provides;
 import de.uniks.stp24.Main;
+import de.uniks.stp24.rest.AuthApiService;
+import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.TokenStorage;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -35,7 +37,7 @@ public class HttpModule {
                 final Response response = chain.proceed(chain.request());
                 if (response.code() >= 300) {
                     System.err.println(chain.request());
-                    System.err.println(response.body().string());
+                    System.err.println(response);
                 }
                 return response;
             }).build();
@@ -52,12 +54,15 @@ public class HttpModule {
             .build();
     }
 
-    /* TODO provide ApiServices
-    example:
     @Provides
     @Singleton
-    AuthApiService authApiService(Retrofit retrofit) {
+    AuthApiService authApiService(Retrofit retrofit){
         return retrofit.create(AuthApiService.class);
     }
-     */
+
+    @Provides
+    @Singleton
+    UserApiService userApiService(Retrofit retrofit) {
+        return retrofit.create(UserApiService.class);
+    }
 }

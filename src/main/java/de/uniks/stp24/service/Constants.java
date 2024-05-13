@@ -1,7 +1,6 @@
 package de.uniks.stp24.service;
 
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Constants {

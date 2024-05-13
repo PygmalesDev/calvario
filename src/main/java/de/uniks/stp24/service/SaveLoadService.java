@@ -21,11 +21,8 @@ public class SaveLoadService {
 
     }
 
-    public void init() {
-        this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-    }
-
     public void saveGang(ObservableList<Gang> gang) {
+        this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         try {
             if (Files.notExists(Constants.DATA_FOLDER)) {
                 Files.createDirectory(Constants.DATA_FOLDER);

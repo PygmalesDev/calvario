@@ -21,7 +21,6 @@ public class ColorDeserializer extends StdDeserializer<Color> {
         double green = node.get("green").asDouble();
         double blue = node.get("blue").asDouble();
         double opacity = node.get("opacity").asDouble();
-        Color color = new Color(red, green, blue, opacity);
-        return color;
+        return new Color(red, green, blue, opacity);
     }
 }

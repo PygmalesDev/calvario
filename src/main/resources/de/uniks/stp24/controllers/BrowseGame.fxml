@@ -40,7 +40,7 @@
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
                            <children>
-                              <Button fx:id="del_game_b" mnemonicParsing="false" prefHeight="42.0" prefWidth="186.0" text="Delete Game" />
+                              <Button fx:id="del_game_b" mnemonicParsing="false" onAction="#deleteGame" prefHeight="42.0" prefWidth="186.0" text="Delete Game" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">

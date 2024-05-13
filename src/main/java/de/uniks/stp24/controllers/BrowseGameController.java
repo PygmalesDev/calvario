@@ -12,8 +12,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.PopupControl;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -24,6 +33,7 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.io.IOException;
 
 @Title("Browse Game")
 @Controller
@@ -122,6 +132,33 @@ BrowseGameController {
     public void editGame() {
         if(browseGameService.checkMyGame()) {
             app.show("/editgame");
+        }
+    }
+
+    public void deleteGame() {
+        if(browseGameService.checkMyGame()) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("Warning.fxml"));
+                Region background = new Region();
+                background.setStyle("-fx-background-color: rgba(189, 195, 199, 1);");
+
+                Parent popupContent = loader.load();
+                StackPane popupPane = new StackPane(background, popupContent);
+
+                Stage popupStage = new Stage();
+                popupStage.initOwner(app.stage());
+                popupStage.initModality(Modality.APPLICATION_MODAL);
+                popupStage.setScene(new Scene(popupPane));
+                BoxBlur blurEffect = new BoxBlur(5, 5, 3);
+                app.stage().getScene().getRoot().setEffect(blurEffect);
+                //popupStage.show();
+                popupStage.showAndWait();
+                app.stage().getScene().getRoot().setEffect(null);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            //app.show("/warningScreen");
         }
     }
 }

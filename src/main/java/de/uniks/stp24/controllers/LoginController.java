@@ -86,9 +86,10 @@ public class LoginController {
             String password = this.passwordInput.getText();
             boolean rememberMe = this.rememberMeBox.isSelected();
             loginButton.setDisable(true);
+            signupButton.setDisable(true);
+            writeText(100);
             subscriber.subscribe(loginService.login(username, password, rememberMe),
                     result -> app.show("/editAcc")
-
                     // in case of server's response => error
                     // handle with error response
                     , error -> {
@@ -143,10 +144,15 @@ public class LoginController {
 
 
     // if response from server => error, choose a text depending on code
+    // maybe it should be considered to write a class for this
     private void writeText(int code) {
         this.errorLabel.setStyle("-fx-fill: red;");
         String info;
         switch (code) {
+            case 100 -> {
+                this.errorLabel.setStyle("-fx-fill: black;");
+                info = "... waiting response ...";
+            }
             case 400 -> info = "validation failed";
             case 401 -> info = "Invalid username or password";
             default ->  info = "please put in name or/and password";

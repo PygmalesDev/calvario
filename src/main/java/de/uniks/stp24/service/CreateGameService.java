@@ -1,16 +1,14 @@
 package de.uniks.stp24.service;
 
 import de.uniks.stp24.controllers.CreateGameController;
-import de.uniks.stp24.dto.*;
+import de.uniks.stp24.dto.CreateGameDto;
+import de.uniks.stp24.dto.CreateGameResultDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameSettings;
-import de.uniks.stp24.rest.AuthApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import io.reactivex.rxjava3.core.Observable;
-import jakarta.websocket.OnError;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import retrofit2.Response;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -50,9 +48,7 @@ public class CreateGameService {
                     .createGame(new CreateGameDto(name, false, 1, settings, password))
                     .doOnNext(createGameResult -> {
                     })
-                    .doOnError(error -> {
-                        showErrorBox();
-                    });
+                    .doOnError(error -> showErrorBox());
         } else {
             createGameController.showNameTakenError();
             isNameable = true;

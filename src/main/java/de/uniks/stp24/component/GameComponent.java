@@ -4,9 +4,7 @@ import de.uniks.stp24.model.Game;
 import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.EditGameService;
 import de.uniks.stp24.service.TokenStorage;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -54,12 +52,9 @@ public class GameComponent extends HBox implements ReusableItemComponent<Game> {
     //Check if component is selected
     @Inject
     public GameComponent() {
-        this.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                editGameService.setClickedGame(game);
-                browseGameService.handleGameSelection(game);
-            }
+        this.setOnMouseClicked(event -> {
+            editGameService.setClickedGame(game);
+            browseGameService.handleGameSelection(game);
         });
     }
 

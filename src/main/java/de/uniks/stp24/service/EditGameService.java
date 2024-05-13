@@ -1,13 +1,11 @@
 package de.uniks.stp24.service;
 
-import dagger.Provides;
 import de.uniks.stp24.controllers.EditGameController;
 import de.uniks.stp24.dto.UpdateGameDto;
 import de.uniks.stp24.dto.UpdateGameResultDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
-import io.reactivex.rxjava3.annotations.Nullable;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -55,7 +53,6 @@ public class EditGameService {
         } else {
             editGameController.showNameTakenError();
             isNameable = true;
-            System.out.println("Name exists already!");
             return null;
         }
 

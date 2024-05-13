@@ -1,18 +1,13 @@
 package de.uniks.stp24;
 
 import de.uniks.stp24.controllers.CreateGameController;
-
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
-
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

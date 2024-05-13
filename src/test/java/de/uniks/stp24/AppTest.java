@@ -8,9 +8,6 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Inject;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
 public class AppTest extends ApplicationTest {
 
     @Spy

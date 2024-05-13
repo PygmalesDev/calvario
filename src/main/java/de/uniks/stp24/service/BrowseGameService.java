@@ -28,6 +28,10 @@ public class BrowseGameService {
         this.game = game;
     }
 
+    public void resetSelectedGame(){
+        this.game = null;
+    }
+
     public void handleGameSelection(Game game) {
         this.game = game;
     }

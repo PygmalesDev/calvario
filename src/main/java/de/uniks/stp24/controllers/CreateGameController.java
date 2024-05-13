@@ -3,8 +3,9 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.App;
 import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.CreateGameService;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
@@ -16,8 +17,6 @@ import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
 
 import javax.inject.Inject;
-
-import static java.lang.Thread.sleep;
 
 @Title("CreateGame")
 @Controller
@@ -67,7 +66,7 @@ public class CreateGameController {
         createMapSizeSpinner.setValueFactory(valueFactory);
     }
 
-    public void createGame(){
+    public void createGame() {
         if (!this.createNameTextField.getText().isEmpty() &&
                 !this.createPasswordTextField.getText().isEmpty() &&
                 this.createPasswordTextField.getText().equals(createRepeatPasswordTextField.getText()) &&
@@ -76,13 +75,24 @@ public class CreateGameController {
             String password = this.createPasswordTextField.getText();
             GameSettings settings = new GameSettings(this.createMapSizeSpinner.getValue());
             if (createGameService.createGame(gameName, settings, password) != null) {
-                createGameService.createGame(gameName, settings, password).subscribe(result -> {
-                    browseGameController.init();
+                /*
+                Platform run later makes sure updating the ui will be done on ui thread
+                subscribeOn(Schedulers.io()) & subscribeOn(Schedulers.io()) makes sure
+                that call of createGame is done on a different background thread so
+                the ui is not blocked.
+                 */
+                createGameService.createGame(gameName, settings, password).subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.single())
+                        .subscribe(result -> {
+                            Platform.runLater(() -> {
+                                browseGameController.init();
+                                app.show(browseGameController);
+                            });
                         });
-                app.show(browseGameController);
             }
         }
     }
+
     public void cancel(){
         app.show("/browseGames");
     }

@@ -3,7 +3,10 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.App;
 import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.EditGameService;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
@@ -13,10 +16,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
-import org.fulib.fx.annotation.event.OnInit;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 @Title("EditGame")
 @Controller
@@ -42,6 +43,10 @@ public class EditGameController {
     App app;
     @Inject
     GamesApiService gamesApiService;
+    @Inject
+    BrowseGameService browseGameService;
+    @Inject
+    BrowseGameController browseGameController;
 
     @Inject
     public EditGameController(){
@@ -69,15 +74,20 @@ public class EditGameController {
         if(!gameName.isEmpty() && !password.isEmpty() && !editRepeatPasswordTextField.getText().isEmpty()) {
             if(password.equals(editRepeatPasswordTextField.getText())) {
                 if (editGameService.editGame(gameName, settings, password) != null) {
-                    editGameService.editGame(gameName, settings, password)
-                            .subscribe(System.out::println);
-                    app.show("/browseGames");
+                    editGameService.editGame(gameName, settings, password).subscribeOn(Schedulers.io())
+                            .observeOn(Schedulers.single())
+                            .subscribe(result -> {
+                                Platform.runLater(() -> {
+                                    browseGameController.init();
+                                    app.show(browseGameController);
+                                });
+                            });
                 }
             }
         }
-
     }
     public void cancel(){
+        browseGameService.resetSelectedGame();
         app.show("/browseGames");
     }
     public void showNameTakenError() {

@@ -7,7 +7,6 @@ import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.CreateGameService;
 import de.uniks.stp24.service.EditGameService;
-import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,8 +24,6 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.List;
-import java.util.Optional;
 
 @Title("Browse Game")
 @Controller
@@ -81,7 +78,7 @@ BrowseGameController {
 
         subscriber.subscribe(gamesApiService.findAll().subscribe(this.games::setAll));
 
-        //Listener for updating list of games if games are created, deleted or updated
+        //Listener for updating list of games if games are created, deleted or up
         subscriber.subscribe(eventListener.listen("games.*.*", Game.class), event -> {
             switch (event.suffix()) {
                 case "created" -> games.add(event.data());
@@ -110,7 +107,7 @@ BrowseGameController {
 
 
     //Back to log in Screen after click Logout in BrowseGame Screen
-    public void logOut(ActionEvent actionEvent) {
+    public void logOut(ActionEvent ignoredActionEvent) {
         logOut();
     }
 

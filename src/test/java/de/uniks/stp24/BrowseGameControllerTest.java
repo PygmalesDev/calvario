@@ -2,26 +2,16 @@ package de.uniks.stp24;
 
 import de.uniks.stp24.component.GameComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
-import de.uniks.stp24.controllers.EditAccController;
 import de.uniks.stp24.controllers.EditGameController;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.BrowseGameService;
-import de.uniks.stp24.service.CreateGameService;
-import de.uniks.stp24.service.EditGameService;
-import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import net.bytebuddy.description.ByteCodeElement;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,16 +21,11 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
-import org.w3c.dom.Text;
 
-
-import javax.inject.Inject;
 import javax.inject.Provider;
-import java.awt.*;
 import java.util.List;
-import java.util.concurrent.Flow;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class BrowseGameControllerTest extends ControllerTest {
@@ -61,8 +46,6 @@ public class BrowseGameControllerTest extends ControllerTest {
 
     @InjectMocks
     BrowseGameController browseGameController;
-    @InjectMocks
-    EditGameController editGameController;
     final Subject<Event<Game>> subject = BehaviorSubject.create();
 
     @Override

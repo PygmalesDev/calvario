@@ -43,6 +43,4 @@ public class InGameService {
     public int getLanguage() {
         return game.getLanguage();
     }
-
-
 }

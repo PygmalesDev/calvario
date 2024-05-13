@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,10 +27,10 @@ public class PauseMenuTest extends ControllerTest {
     @Spy
     InGameService inGameService;
 
-    @Mock
+    @Spy
     PauseMenuComponent pauseMenuComponent;
 
-    @Mock
+    @Spy
     SettingsComponent settingsComponent;
 
     @InjectMocks
@@ -53,17 +53,43 @@ public class PauseMenuTest extends ControllerTest {
 
     @Test
     public void testChangeLanguage() {
+        doAnswer(show -> {inGameService.setShowSettings(true);
+            return null;
+        }).when(pauseMenuComponent).settings();
+
+        doAnswer(show -> {inGameService.setLanguage(0);
+            return null;
+        }).when(settingsComponent).setToGerman();
+
+        doAnswer(show -> {inGameService.setLanguage(1);
+            return null;
+        }).when(settingsComponent).setToEnglish();
+
         press(KeyCode.ESCAPE);
         waitForFxEvents();
-        // pauseMenuComponent.setInGameService(inGameService);
+
         clickOn("#settingsButton");
         waitForFxEvents();
-        // settingsComponent.setInGameService(inGameService);
+
         clickOn("#germanLang");
         waitForFxEvents();
         assertEquals(0, inGameService.getLanguage());
+
         clickOn("#englishLang");
         waitForFxEvents();
         assertEquals(1, inGameService.getLanguage());
     }
+
+    @Test
+    public void testQuitting() {
+        doNothing().when(pauseMenuComponent).quit();
+
+        press(KeyCode.ESCAPE);
+        waitForFxEvents();
+        clickOn("#quitButton");
+        waitForFxEvents();
+
+        verify(this.pauseMenuComponent).quit();
+    }
+
 }

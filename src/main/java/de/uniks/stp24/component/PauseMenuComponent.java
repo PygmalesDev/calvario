@@ -30,19 +30,15 @@ public class PauseMenuComponent extends VBox {
 
     }
 
-    public void setInGameService(InGameService inGameService) {
-        this.inGameService = inGameService;
-    }
-
-    public void resume(ActionEvent actionEvent) {
+    public void resume() {
         inGameService.setPaused(false);
     }
 
-    public void settings(ActionEvent actionEvent) {
+    public void settings() {
         inGameService.setShowSettings(true);
     }
 
-    public void quit(ActionEvent actionEvent) {
+    public void quit() {
         Platform.exit();
         System.exit(0);
     }

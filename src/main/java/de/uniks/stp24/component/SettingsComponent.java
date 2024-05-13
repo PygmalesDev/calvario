@@ -25,10 +25,6 @@ public class SettingsComponent extends VBox {
 
     }
 
-    public void setInGameService(InGameService inGameService) {
-        this.inGameService = inGameService;
-    }
-
     public void back() {
         inGameService.setShowSettings(false);
     }

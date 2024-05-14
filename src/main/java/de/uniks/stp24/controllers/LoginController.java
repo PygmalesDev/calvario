@@ -15,13 +15,17 @@ import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 import retrofit2.HttpException;
 
+
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Flow;
 
 @Title("Login")
 @Controller
 public class LoginController {
+    @FXML
+    Button licensesButton;
     @FXML
     ToggleButton showPasswordToggleButton;
     @FXML
@@ -61,7 +65,7 @@ public class LoginController {
     public boolean justRegistered;
 
     @Inject
-    public LoginController(){
+    public LoginController() {
     }
 
     @OnRender
@@ -86,6 +90,7 @@ public class LoginController {
             String username = this.usernameInput.getText();
             String password = this.passwordInput.getText();
             boolean rememberMe = this.rememberMeBox.isSelected();
+
             loginButton.setDisable(true);
             signupButton.setDisable(true);
             writeText(100);
@@ -102,6 +107,7 @@ public class LoginController {
                                     enableButtons();
                                 }
                     });
+
         } else {
             // 1 is used for default in switch
             writeText(1);
@@ -112,7 +118,7 @@ public class LoginController {
     public void signup() {
         String username = this.usernameInput.getText();
         String password = this.passwordInput.getText();
-        app.show("/signup", Map.of("username",username,"password",password));
+        app.show("/signup", Map.of("username", username, "password", password));
     }
 
     public void setEn() {

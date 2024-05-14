@@ -1,9 +1,8 @@
-package de.uniks.stp24.model;
+package de.uniks.stp24.dto;
 
-import javax.inject.Inject;
-import java.awt.*;
+import de.uniks.stp24.model.GameSettings;
 
-public record Game<x>(
+public record CreateGameResultDto(
         String createdAt,
         String updatedAt,
         String _id,

@@ -1,5 +1,6 @@
 package de.uniks.stp24;
 
+import de.uniks.stp24.controllers.CreateGameController;
 import de.uniks.stp24.dagger.DaggerMainComponent;
 import de.uniks.stp24.dagger.MainComponent;
 import de.uniks.stp24.model.User;
@@ -10,6 +11,7 @@ import javafx.stage.Stage;
 import org.fulib.fx.FulibFxApp;
 
 import javax.imageio.ImageIO;
+import javax.inject.Inject;
 import java.awt.*;
 import java.nio.file.Path;
 import java.util.Map;
@@ -18,6 +20,8 @@ import java.util.logging.Level;
 import static javafx.scene.input.KeyEvent.KEY_PRESSED;
 
 public class App extends FulibFxApp {
+    @Inject
+    CreateGameController createGameController;
     private MainComponent component;
 
     public App() {
@@ -58,12 +62,21 @@ public class App extends FulibFxApp {
 
             //autoRefresher().setup(Path.of("src/main/resources/de/uniks/stp24"));
 
+
+            // TODO show login or main-menu
+            show("/load");
+            //
+
+
             // open normal load screen or autoLogin screen depending on the preferences of the user
+
             if (component.loginService().autoLogin()) {
                 show("/autoLogin");
             } else {
                 show("/load");
             }
+
+            //show("/login");
 
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "An error occurred while starting the application: " + e.getMessage(), e);

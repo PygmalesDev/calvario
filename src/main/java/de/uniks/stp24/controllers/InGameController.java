@@ -4,6 +4,7 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.component.PauseMenuComponent;
 import de.uniks.stp24.component.SettingsComponent;
 import de.uniks.stp24.model.Game;
+import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
 import javafx.fxml.FXML;
@@ -57,18 +58,18 @@ public class InGameController {
 
     @OnInit
     public void init() {
-        Game game = inGameService.getGame();
+        GameStatus gameStatus = inGameService.getGame();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
-        game.listeners().addPropertyChangeListener(Game.PROPERTY_PAUSED, callHandlePauseChanged);
-        this.gameListenerTriple.add(new GameListenerTriple(game, callHandlePauseChanged, "PROPERTY_PAUSED"));
+        gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
+        this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_PAUSED"));
 
         PropertyChangeListener callHandleShowSettings = this::handleShowSettings;
-        game.listeners().addPropertyChangeListener(Game.PROPERTY_SETTINGS, callHandleShowSettings);
-        this.gameListenerTriple.add(new GameListenerTriple(game, callHandlePauseChanged, "PROPERTY_SETTINGS"));
+        gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_SETTINGS, callHandleShowSettings);
+        this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_SETTINGS"));
 
         PropertyChangeListener callHandleLanguageChanged = this::handleLanguageChanged;
-        game.listeners().addPropertyChangeListener(Game.PROPERTY_LANGUAGE, callHandleLanguageChanged);
-        this.gameListenerTriple.add(new GameListenerTriple(game, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
+        gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_LANGUAGE, callHandleLanguageChanged);
+        this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
     }
 
     private void handleLanguageChanged(PropertyChangeEvent propertyChangeEvent) {

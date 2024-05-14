@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import javafx.stage.Stage;
+import org.testfx.util.WaitForAsyncUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -51,12 +52,11 @@ public class LoginControllerTest extends ControllerTest {
         clickOn("#passwordInput");
         write("1234");
         clickOn("#loginButton");
-
-        waitForFxEvents();
-
+        WaitForAsyncUtils.waitForFxEvents();
         // Result:
         // She logged in successfully. She can now navigate through game states
         verify(loginService, times(1)).login("alice999", "1234", false);
+        WaitForAsyncUtils.waitForFxEvents();
         verify(app, times(1)).show("/browseGames");
     }
     @Test

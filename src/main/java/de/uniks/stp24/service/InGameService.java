@@ -1,6 +1,7 @@
 package de.uniks.stp24.service;
 
 import de.uniks.stp24.model.Game;
+import de.uniks.stp24.model.GameStatus;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -9,7 +10,7 @@ import javax.inject.Singleton;
 public class InGameService {
 
     @Inject
-    Game game;
+    GameStatus gameStatus;
 
     @Inject
     public InGameService() {
@@ -17,30 +18,30 @@ public class InGameService {
     }
 
     public void setPaused(Boolean isPaused) {
-       game.setPaused(isPaused);
+       gameStatus.setPaused(isPaused);
     }
 
     public Boolean getPaused() {
-        return game.getPaused();
+        return gameStatus.getPaused();
     }
 
-    public Game getGame() {
-        return game;
+    public GameStatus getGame() {
+        return gameStatus;
     }
 
-    public void setGame(Game game) {
-        this.game = game;
+    public void setGame(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
     }
 
     public void setShowSettings(boolean show) {
-        game.setShowSettings(show);
+        gameStatus.setShowSettings(show);
     }
 
     public void setLanguage(int lang) {
-        game.setLanguage(lang);
+        gameStatus.setLanguage(lang);
     }
 
     public int getLanguage() {
-        return game.getLanguage();
+        return gameStatus.getLanguage();
     }
 }

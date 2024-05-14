@@ -10,40 +10,29 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="705.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.LicensesController">
-   <children>
-      <TextFlow prefHeight="200.0" prefWidth="200.0">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Licenses:">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Text>
-            <TextArea editable="false" prefHeight="415.0" prefWidth="1401.0" text="GNU:&#10;    Calvario&#10;    Copyright (C) 2024  Spiderbyte&#10;&#10;    This program is free software: you can redistribute it and/or modify&#10;    it under the terms of the GNU General Public License as published by&#10;    the Free Software Foundation, either version 3 of the License, or&#10;    (at your option) any later version.&#10;&#10;    This program is distributed in the hope that it will be useful,&#10;    but WITHOUT ANY WARRANTY; without even the implied warranty of&#10;    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&#10;    GNU General Public License for more details.&#10;&#10;    You should have received a copy of the GNU General Public License&#10;    along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.&#10;&#10;Apache:&#10;    Copyright 2024 Spiderbyte&#10;&#10;    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);&#10;    you may not use this file except in compliance with the License.&#10;    You may obtain a copy of the License at&#10;&#10;    http://www.apache.org/licenses/LICENSE-2.0&#10;&#10;    Unless required by applicable law or agreed to in writing, software&#10;    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,&#10;    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.&#10;    See the License for the specific language governing permissions and&#10;    limitations under the License.&#10;&#10;MIT:&#10;    Copyright 2024 Spiderbyte&#10;&#10;    THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,&#10;    INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,&#10;    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.&#10;    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,&#10;    DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,&#10;    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR&#10;    THE USE OR OTHER DEALINGS IN THE SOFTWARE.&#10;&#10;&#10;Spiderbyte Team:&#10;  Imran Siddique&#10;  Elena Soto Sobrino&#10;  Ashkan Kiafard&#10;  Kristian Schwarz&#10;  Mauricio Torres Florez&#10;  Ross Alexander Khrisna &#10;  Tara Stein&#10;  Hendrik Martin" />
-         </children>
-      </TextFlow>
-      <HBox alignment="CENTER_RIGHT" prefHeight="259.0" prefWidth="1400.0">
-         <children>
-            <HBox prefHeight="150.0" prefWidth="1109.0">
-               <children>
-                  <Button fx:id="backToLoginButton" mnemonicParsing="false" onAction="#backToLogin" text="Back to Login" />
-               </children>
-            </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <ImageView fitHeight="194.0" fitWidth="200.0">
-                     <image>
-                        <Image url="@../assets/logos/DeadBirdsLogoTransparent.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="245.0" fitWidth="291.0">
-                     <image>
-                        <Image url="@../assets/logos/SpiderbyteLogoTransparent.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </HBox>
-         </children>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="705.0"
+      prefWidth="1400.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="de.uniks.stp24.controllers.LicensesController">
+   <TextFlow prefHeight="200.0" prefWidth="200.0">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Licenses:">
+         <font>
+            <Font size="20.0"/>
+         </font>
+      </Text>
+      <TextArea editable="false" prefHeight="415.0" prefWidth="1401.0"
+                text="GNU:&#10;    Calvario&#10;    Copyright (C) 2024  Spiderbyte&#10;&#10;    This program is free software: you can redistribute it and/or modify&#10;    it under the terms of the GNU General Public License as published by&#10;    the Free Software Foundation, either version 3 of the License, or&#10;    (at your option) any later version.&#10;&#10;    This program is distributed in the hope that it will be useful,&#10;    but WITHOUT ANY WARRANTY; without even the implied warranty of&#10;    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the&#10;    GNU General Public License for more details.&#10;&#10;    You should have received a copy of the GNU General Public License&#10;    along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.&#10;&#10;Apache:&#10;    Copyright 2024 Spiderbyte&#10;&#10;    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);&#10;    you may not use this file except in compliance with the License.&#10;    You may obtain a copy of the License at&#10;&#10;    http://www.apache.org/licenses/LICENSE-2.0&#10;&#10;    Unless required by applicable law or agreed to in writing, software&#10;    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,&#10;    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.&#10;    See the License for the specific language governing permissions and&#10;    limitations under the License.&#10;&#10;MIT:&#10;    Copyright 2024 Spiderbyte&#10;&#10;    THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,&#10;    INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,&#10;    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.&#10;    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,&#10;    DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,&#10;    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR&#10;    THE USE OR OTHER DEALINGS IN THE SOFTWARE.&#10;&#10;&#10;Spiderbyte Team:&#10;  Imran Siddique&#10;  Elena Soto Sobrino&#10;  Ashkan Kiafard&#10;  Kristian Schwarz&#10;  Mauricio Torres Florez&#10;  Ross Alexander Khrisna &#10;  Tara Stein&#10;  Hendrik Martin"/>
+   </TextFlow>
+   <HBox alignment="CENTER_RIGHT" prefHeight="259.0" prefWidth="1400.0">
+      <HBox prefHeight="150.0" prefWidth="1109.0">
+         <Button fx:id="backToLoginButton" mnemonicParsing="false" onAction="#backToLogin" text="Back to Login"/>
       </HBox>
-   </children>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <ImageView fitHeight="194.0" fitWidth="200.0">
+            <Image url="@../assets/logos/DeadBirdsLogoTransparent.png"/>
+         </ImageView>
+         <ImageView fitHeight="245.0" fitWidth="291.0">
+            <Image url="@../assets/logos/SpiderbyteLogoTransparent.png"/>
+         </ImageView>
+      </HBox>
+   </HBox>
 </VBox>

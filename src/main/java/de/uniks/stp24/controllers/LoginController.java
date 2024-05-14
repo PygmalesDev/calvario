@@ -26,6 +26,8 @@ import java.util.concurrent.Flow;
 @Controller
 public class LoginController {
     @FXML
+    Button licensesButton;
+    @FXML
     ToggleButton showPasswordToggleButton;
     @FXML
     Text errorLabel;
@@ -141,7 +143,7 @@ public class LoginController {
 
     }
 
-    public void showLicenses(ActionEvent actionEvent) {
+    public void showLicenses() {
         app.show("/licenses");
     }
 

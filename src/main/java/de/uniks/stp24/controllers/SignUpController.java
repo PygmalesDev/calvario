@@ -1,23 +1,22 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.SignUpService;
-import javafx.beans.binding.Binding;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
-import de.uniks.stp24.rest.UserApiService;
 import org.fulib.fx.controller.Subscriber;
-
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.Objects;
@@ -25,11 +24,24 @@ import java.util.Objects;
 @Title("SignUp")
 @Controller
 public class SignUpController {
-    public TextField usernameField;
-    public PasswordField passwordField;
-    public PasswordField repeatPasswordField;
-    public Text errorTextField;
+    @FXML
+    ToggleButton languageToggleButton;
+    @FXML
+    TextField usernameField;
+    @FXML
+    PasswordField passwordField;
+    @FXML
+    PasswordField repeatPasswordField;
+    @FXML
+    Text errorTextField;
+    @FXML
     public Button registerButton;
+    @FXML
+    TextField showPasswordText;
+    @FXML
+    TextField showRepeatPasswordText;
+    @FXML
+    ToggleButton showPasswordToggleButton;
 
     @Param("username")
     public String username;
@@ -123,6 +135,40 @@ public class SignUpController {
                 Map.of("username", this.getUsername(),
                         "password", this.getPassword()
         ));
+    }
+
+    @OnRender(1)
+    public void setupShowPassword() {
+        // TextField showPasswordText is per default not managed
+        // setting properties managed and visible to change depending on
+        // showPasswordToggleButton state
+
+        //passwordField
+        showPasswordText.managedProperty()
+                .bind(showPasswordToggleButton.selectedProperty());
+        showPasswordText.visibleProperty()
+                .bind(showPasswordToggleButton.selectedProperty());
+        passwordField.managedProperty()
+                .bind(showPasswordToggleButton.selectedProperty().not());
+        passwordField.visibleProperty()
+                .bind(showPasswordToggleButton.selectedProperty().not());
+
+        // binding textValue from both fields
+        showPasswordText.textProperty().bindBidirectional(passwordField.textProperty());
+
+        //repeatPasswordField
+        showRepeatPasswordText.managedProperty()
+                .bind(showPasswordToggleButton.selectedProperty());
+        showRepeatPasswordText.visibleProperty()
+                .bind(showPasswordToggleButton.selectedProperty());
+        repeatPasswordField.managedProperty()
+                .bind(showPasswordToggleButton.selectedProperty().not());
+        repeatPasswordField.visibleProperty()
+                .bind(showPasswordToggleButton.selectedProperty().not());
+
+        // binding textValue from both fields
+        showRepeatPasswordText.textProperty().bindBidirectional(repeatPasswordField.textProperty());
+
     }
 
     private String getUsername() {

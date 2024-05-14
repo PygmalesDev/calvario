@@ -72,6 +72,8 @@ BrowseGameController {
     EditGameService editGameService;
     @Inject
     CreateGameService createGameService;
+    @Inject
+    WarningController warningController;
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
 
@@ -137,27 +139,8 @@ BrowseGameController {
 
     public void deleteGame() {
         if(browseGameService.checkMyGame()) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("Warning.fxml"));
-                Region background = new Region();
-                background.setStyle("-fx-background-color: rgba(189, 195, 199, 1);");
+            warningController.showPopup();
 
-                Parent popupContent = loader.load();
-                StackPane popupPane = new StackPane(background, popupContent);
-
-                Stage popupStage = new Stage();
-                popupStage.initOwner(app.stage());
-                popupStage.initModality(Modality.APPLICATION_MODAL);
-                popupStage.setScene(new Scene(popupPane));
-                BoxBlur blurEffect = new BoxBlur(5, 5, 3);
-                app.stage().getScene().getRoot().setEffect(blurEffect);
-                //popupStage.show();
-                popupStage.showAndWait();
-                app.stage().getScene().getRoot().setEffect(null);
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
             //app.show("/warningScreen");
         }
     }

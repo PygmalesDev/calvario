@@ -98,11 +98,13 @@ public class LoginController {
                                     String body = httpError.response().errorBody().string();
                                     ErrorResponse errorResponse = objectMapper.readValue(body,ErrorResponse.class);
                                     writeText(errorResponse.statusCode());
+                                    enableButtons();
                                 }
                     });
         } else {
             // 1 is used for default in switch
             writeText(1);
+            enableButtons();
         }
     }
 
@@ -158,7 +160,12 @@ public class LoginController {
             default ->  info = "please put in name or/and password";
         }
         this.errorLabel.setText(info);
+    }
+
+
+    public void enableButtons(){
         loginButton.setDisable(false);
+        signupButton.setDisable(false);
     }
 
     @OnDestroy

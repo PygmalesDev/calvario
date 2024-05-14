@@ -5,6 +5,7 @@ import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.SignUpService;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -23,10 +24,15 @@ import java.util.Objects;
 @Title("SignUp")
 @Controller
 public class SignUpController {
-    public TextField usernameField;
-    public PasswordField passwordField;
-    public PasswordField repeatPasswordField;
-    public Text errorTextField;
+    @FXML
+    TextField usernameField;
+    @FXML
+    PasswordField passwordField;
+    @FXML
+    PasswordField repeatPasswordField;
+    @FXML
+    Text errorTextField;
+    @FXML
     public Button registerButton;
 
     @Param("username")

@@ -23,7 +23,7 @@ public class LobbyHostSettingsComponent extends Pane {
     @FXML
     Text gameNameField;
     @FXML
-    Button startJourneyButton;
+    public Button startJourneyButton;
     @Inject
     LobbyService lobbyService;
     @Inject
@@ -46,17 +46,6 @@ public class LobbyHostSettingsComponent extends Pane {
         this.startJourneyButton.setDisable(true);
     }
 
-    @OnRender
-    public void checkPlayerReadiness() {
-        this.subscriber.subscribe(this.eventListener
-                        .listen("games." + this.gameID + ".members.*.updated", MemberDto.class), result ->
-            this.subscriber.subscribe(this.lobbyService.loadPlayers(this.gameID), members ->
-                    this.startJourneyButton.setDisable(!Arrays.stream(members)
-                            .map(MemberDto::ready)
-                            .reduce((a,b) -> a && b).orElse(false)))
-        );
-    }
-
     public void selectEmpire() {
         System.out.println("Select Empire");
     }
@@ -70,14 +59,7 @@ public class LobbyHostSettingsComponent extends Pane {
     }
 
     public void startGame() {
-        this.lobbyService.loadPlayers(this.gameID).subscribe(result -> {
-                    boolean ready = Arrays.stream(result)
-                            .map(MemberDto::ready)
-                            .reduce((a, b) -> a && b).orElse(false);
-                    if (ready)
-                        this.app.show("/ingame");
-                }
-        );
+        this.app.show("/ingame");
     }
 
     public void leaveLobby() {

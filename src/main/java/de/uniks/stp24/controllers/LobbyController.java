@@ -97,7 +97,7 @@ public class LobbyController {
     @OnInit
     void setGameID() {
         // Uncomment to get into the lobby
-        //this.gameID = "663f8fb35e6c1abbc0a2d218";
+        this.gameID = "664345ed5e6c1abbc0a8fb6f";
     }
 
     /**
@@ -125,6 +125,7 @@ public class LobbyController {
 
         this.createUserListListener();
         this.createGameDeletedListener();
+        this.createCheckPlayerReadinessListener();
     }
 
     /**
@@ -156,6 +157,17 @@ public class LobbyController {
             }
             this.sortHostOnTop();
         });
+    }
+
+    public void createCheckPlayerReadinessListener() {
+        this.subscriber.subscribe(this.eventListener
+                .listen("games." + this.gameID + ".members.*.updated", MemberDto.class), result ->
+                this.subscriber.subscribe(this.lobbyService.loadPlayers(this.gameID), members ->
+                        this.lobbyHostSettingsComponent.startJourneyButton
+                                .setDisable(!Arrays.stream(members)
+                                .map(MemberDto::ready)
+                                .reduce((a,b) -> a && b).orElse(false)))
+        );
     }
 
     /**

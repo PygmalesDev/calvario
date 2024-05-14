@@ -27,10 +27,10 @@ public class AutoLoginController {
     // show browse games screen after any click
     @OnKey()
     public void keyPressed(KeyEvent event) {
-        app.show("/lobby");
+        app.show("/login");
     }
 
     public void mouseClicked(MouseEvent mouseEvent) {
-        app.show("/lobby");
+        app.show("/login");
     }
 }

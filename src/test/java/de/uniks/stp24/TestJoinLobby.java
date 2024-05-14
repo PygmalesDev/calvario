@@ -31,6 +31,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class TestJoinLobby extends ControllerTest {
@@ -63,6 +64,9 @@ public class TestJoinLobby extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
+
+        // Mock getting userID
+        doReturn("111").when(this.tokenStorage).getUserId();
 
         // Mock getting game
         doReturn(Observable.just(new Game("1", "a","gameID","c","111",

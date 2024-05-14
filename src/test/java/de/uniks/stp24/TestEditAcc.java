@@ -17,12 +17,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -33,10 +30,8 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class TestEditAcc extends ControllerTest{
-    @Mock
-    EditAccService editAccService = new EditAccService();
-    @InjectMocks
-    EditAccController editAccController;
+    @Spy
+    EditAccService editAccService;
     @Spy
     WarningScreenComponent warningScreenComponent;
     @Spy
@@ -50,7 +45,8 @@ public class TestEditAcc extends ControllerTest{
     @Spy
     ImageCache imageCache;
 
-
+    @InjectMocks
+    EditAccController editAccController;
 
 
     @Override
@@ -59,13 +55,6 @@ public class TestEditAcc extends ControllerTest{
         app.show(editAccController);
     }
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-
-        // Injizieren Sie die abhängigen Objekte in die WarningScreenComponent
-        warningScreenComponent = new WarningScreenComponent(editAccService, objectMapper, tokenStorage, subscriber);
-    }
 
 
     @Test
@@ -85,21 +74,23 @@ public class TestEditAcc extends ControllerTest{
     @Test
     void cancelChangeAccount(){
         // Title: Cancel changing editing account in the user administration window
+        final ToggleButton changeUserInfoButton = lookup("#changeUserInfoButton").query();
+        final Button cancelChangesButton = lookup("#cancelChangesButton").queryButton();
+        final Button goBackButton = lookup("#goBackButton").query();
+        final Button deleteUserButton = lookup("#deleteUserButton").query();
+
         // Start:
         // Alice wants to change her Account name in STPellaris. She is in the user administrtation screen and has clicked on edit account.
         tokenStorage.setName("Alice");
-        ToggleButton changeUserInfoButton = lookup("#changeUserInfoButton").query();
-        Button cancelChangesButton = lookup("#cancelChangesButton").queryButton();
-        Button goBackButton = lookup("#goBackButton").query();
-        Button deleteUserButton = lookup("#deleteUserButton").query();
 
+        // The cancelChangesButton is not visible and goBack and deleteUser are enabled
         assertFalse(goBackButton.isDisabled());
         assertFalse(deleteUserButton.isDisabled());
         assertFalse(cancelChangesButton.isVisible());
 
         clickOn("#changeUserInfoButton");
 
-
+        // The cancelChangesButton is visible now and goBack and deleteUser are disabled
         assertTrue(cancelChangesButton.isVisible());
         assertTrue(changeUserInfoButton.isSelected());
         assertTrue(goBackButton.isDisabled());
@@ -114,7 +105,7 @@ public class TestEditAcc extends ControllerTest{
         clickOn("#cancelChangesButton");
         waitForFxEvents();
         // Result:
-        // Alice’s Account has not changed and she is still in the user administration screen.
+        // Alice’s Account has not changed, and she is still in the user administration screen.
         TextField username = lookup("#usernameInput").query();
         assertTrue(username.isDisabled());
         assertEquals(username.getText(), "Alice");
@@ -122,15 +113,18 @@ public class TestEditAcc extends ControllerTest{
 
     @Test
     void changeAccount() {
+        // Title: Confirming edited account
         doReturn(Observable.just(new User("Calvario", "a","b","c","d"))).when(editAccService).changeUserInfo(any(),any());
 
-        // Title: Confirming edited account
+        final TextField username = lookup("#usernameInput").query();
+        final TextField password = lookup("#passwordInput").query();
+
         // Start:
         // Alice wants to change her Account name in STPellaris. She is in the user administrtation screen and has clicked on edit account.
         tokenStorage.setName("Alice");
         clickOn("#changeUserInfoButton");
 
-        //        Action:
+        // Action:
         // She puts in a new name and password. She clicks the confirm button
         clickOn("#usernameInput");
         write("Calvario");
@@ -138,12 +132,13 @@ public class TestEditAcc extends ControllerTest{
         write("password");
         clickOn("#saveChangesButton");
         waitForFxEvents();
+
         // Result:
         // Alice stays in the same screen but her name and password changed
-        TextField username = lookup("#usernameInput").query();
+
         assertTrue(username.isDisabled());
         assertEquals("Calvario",username.getText());
-        TextField password = lookup("#passwordInput").query();
+
         assertTrue(password.isDisabled());
         assertEquals("",password.getText());
     }
@@ -181,7 +176,10 @@ public class TestEditAcc extends ControllerTest{
     @Test
     void deleteAccountTest(){
         // Title: Confirm after clicking delete account button
-       /* doReturn(Observable.just(new User("Alice", "b", "c", "d", "e" ))).when(this.editAccService).deleteUser();
+        doReturn(Observable.just(new User("1", "a","b","c","d")) ).when(editAccService).deleteUser();
+        doAnswer(answer -> {tokenStorage.setName(null);
+            app.show("/login");
+            return null;}).when(warningScreenComponent).deleteAcc();
         // Start:
         // Alice wants to delete her account in STPellaris. She is in the user administration window. She clicked the delete user button and a pop up came up.
         tokenStorage.setName("Alice");
@@ -201,9 +199,9 @@ public class TestEditAcc extends ControllerTest{
 
         // Result:
         // The pop up disappeared. Alice is now in the log in window again.
-        verify(app, times(2)).show("/login");
+        verify(app, times(1)).show("/login");
         assertNull(tokenStorage.getName());
-        //assertEquals("Login", stage.getTitle());*/
+        //assertEquals("Login", stage.getTitle());
     }
 
 

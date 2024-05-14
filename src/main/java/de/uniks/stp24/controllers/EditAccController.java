@@ -23,6 +23,7 @@ import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 import retrofit2.HttpException;
 
@@ -67,6 +68,9 @@ public class EditAccController {
     ImageCache imageCache;
     @Inject
     ObjectMapper objectMapper;
+
+    @Param("info")
+    String info;
 
     @SubComponent
     @Inject

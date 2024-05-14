@@ -56,6 +56,7 @@ public class LoginController {
     public String username;
     @Param("password")
     public String password;
+    // Todo: can be done with "info"
     @Param("justRegistered")
     public boolean justRegistered;
 

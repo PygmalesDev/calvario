@@ -20,7 +20,8 @@ public class EditAccService {
     PrefService prefService;
 
     @Inject
-    public EditAccService() {}
+    public EditAccService() {
+    }
 
     public Observable<User> changeUserInfo(String newUsername, String newPassword){
         return userApiService

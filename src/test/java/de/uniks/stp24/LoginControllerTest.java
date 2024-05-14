@@ -36,7 +36,8 @@ public class LoginControllerTest extends ControllerTest {
 
     @Test
     void login(){
-        doReturn(Observable.just(new LoginResult("1", "a","b","c","d"))).when(loginService).login(any(),any(), eq(false));
+        doReturn(Observable.just(new LoginResult("1", "a","b","c","d")))
+                .when(loginService).login(any(),any(), eq(false));
         doReturn(null).when(app).show("/browseGames");
 
         // Start:

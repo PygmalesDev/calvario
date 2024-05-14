@@ -24,9 +24,9 @@
                                 <Image url="@../assets/logos/SpiderbyteLogoTransparent.png" />
                             </image>
                         </ImageView>
-                        <ImageView fitHeight="500.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="325.0" fitWidth="345.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../assets/logos/placeholder.jpg" />
+                                <Image url="@../assets/logos/DeadBirdsLogoTransparent.png" />
                             </image>
                         </ImageView>
                     </children></HBox>

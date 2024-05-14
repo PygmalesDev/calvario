@@ -1,10 +1,11 @@
 package de.uniks.stp24;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.controllers.EditAccController;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.model.User;
 import de.uniks.stp24.service.EditAccService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
@@ -24,8 +25,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -48,6 +47,11 @@ public class TestEditAcc extends ControllerTest{
     PrefService prefService;
     @Spy
     ObjectMapper objectMapper;
+    @Spy
+    ImageCache imageCache;
+
+
+
 
     @Override
     public void start(Stage stage) throws Exception{

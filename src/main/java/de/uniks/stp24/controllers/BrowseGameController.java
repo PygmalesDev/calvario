@@ -108,10 +108,6 @@ BrowseGameController {
 
     //Back to log in Screen after click Logout in BrowseGame Screen
     public void logOut(ActionEvent ignoredActionEvent) {
-        logOut();
-    }
-
-    public void logOut() {
         app.show("/login");
     }
 

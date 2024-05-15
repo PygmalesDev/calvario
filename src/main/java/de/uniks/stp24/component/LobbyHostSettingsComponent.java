@@ -12,8 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
-import org.fulib.fx.annotation.controller.SubComponent;
-import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 

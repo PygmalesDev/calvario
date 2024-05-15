@@ -122,11 +122,6 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         // Mock getting members readiness updates
         doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.updated"), eq(MemberDto.class));
 
-        doReturn(Observable.just(new MemberDto(false, "testGameHostID", null, "88888888")))
-                .when(this.lobbyService).getMember(any(), any());
-        doReturn(Observable.just(new MemberDto(true, "testGameHostID", null, "88888888")))
-                .when(this.lobbyService).updateMember(any(), any(), any(), any());
-
         this.app.show(this.lobbyController);
     }
 
@@ -166,6 +161,12 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     @Test
     public void startGameAsHost() {
         doReturn(null).when(this.app).show("/ingame");
+
+        doReturn(Observable.just(new MemberDto(false, "testGameHostID", null, "88888888")))
+                .when(this.lobbyService).getMember(any(), any());
+
+        doReturn(Observable.just(new MemberDto(false, "testGameHostID", null, "88888888")))
+                .when(this.lobbyService).updateMember(anyString(), anyString(), anyBoolean(), any());
 
         WaitForAsyncUtils.waitForFxEvents();
         assertTrue(lookup("#startJourneyButton").queryButton().isDisabled());

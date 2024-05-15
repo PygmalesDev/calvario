@@ -4,6 +4,7 @@ import de.uniks.stp24.component.PauseMenuComponent;
 import de.uniks.stp24.component.SettingsComponent;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.service.InGameService;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -22,7 +23,7 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 @ExtendWith(MockitoExtension.class)
 public class PauseMenuTest extends ControllerTest {
     @Spy
-    Game game;
+    GameStatus gameStatus;
 
     @Spy
     InGameService inGameService;
@@ -39,8 +40,8 @@ public class PauseMenuTest extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
-        inGameService.setGame(game);
-        doReturn(game).when(this.inGameService).getGame();
+        inGameService.setGame(gameStatus);
+        doReturn(gameStatus).when(this.inGameService).getGame();
         this.app.show(this.inGameController);
     }
 
@@ -48,7 +49,7 @@ public class PauseMenuTest extends ControllerTest {
     public void testPausing() {
         press(KeyCode.ESCAPE);
         waitForFxEvents();
-        assertTrue(game.getPaused());
+        assertTrue(gameStatus.getPaused());
     }
 
     @Test

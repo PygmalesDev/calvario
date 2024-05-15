@@ -2,7 +2,6 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.service.LogoutService;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
@@ -28,20 +27,18 @@ public class LogoutController{
     @Inject
     LogoutService logoutService;
     @Inject
-    public LogoutController(){
+    public LogoutController() {
 
     }
 
-    public void logout(ActionEvent actionEvent) {
+    public void logout() {
         logoutService.logout("")
-                .subscribe(res -> {
-                            System.out.println("LOGGING OUT");
-                        }
-                );
+                .doFinally(() -> System.out.println("LOGGING OUT"))
+                .subscribe();
         app.show("/login");
     }
 
-    public void cancel(ActionEvent actionEvent) {
+    public void cancel() {
         app.show("/browseGames");
     }
 }

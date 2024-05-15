@@ -23,8 +23,6 @@ public class LogoutService {
     // this way the app shouldn't try to autologin on next start
     public Observable<LogoutResult> logout(String any) {
         return authApiService.logout(new LogoutDto(any))
-                .doOnNext( result -> {
-                    prefService.removeRefreshToken();
-                });
+                .doFinally( () -> prefService.removeRefreshToken());
     }
 }

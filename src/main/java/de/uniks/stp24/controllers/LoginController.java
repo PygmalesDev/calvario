@@ -26,6 +26,8 @@ import java.util.concurrent.Flow;
 @Controller
 public class LoginController {
     @FXML
+    Button licensesButton;
+    @FXML
     ToggleButton showPasswordToggleButton;
     @FXML
     Text errorLabel;
@@ -92,6 +94,8 @@ public class LoginController {
                     result ->{
                         app.show("/browseGames");
                     }
+                    // in case of server's response => error
+                    // handle with error response
                     , error -> {
                                 if (error instanceof HttpException httpError) {
                                     System.out.println(httpError.code());
@@ -102,6 +106,7 @@ public class LoginController {
                     });
 
         } else {
+            // 1 is place holder for default in switch
             writeText(1);
         }
     }
@@ -138,10 +143,12 @@ public class LoginController {
 
     }
 
-    public void showLicenses(ActionEvent actionEvent) {
+    public void showLicenses() {
         app.show("/licenses");
     }
 
+
+    // if response from server => error, choose a text depending on code
     private void writeText(int code) {
         this.errorLabel.setStyle("-fx-fill: red;");
         String info;

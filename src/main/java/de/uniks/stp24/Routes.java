@@ -1,5 +1,6 @@
 package de.uniks.stp24;
 
+
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.controllers.*;
 import org.fulib.fx.annotation.Route;
@@ -10,7 +11,7 @@ import javax.inject.Singleton;
 import javax.security.auth.login.LoginContext;
 
 @Singleton
-public class Routes {
+public class Routes {  
     @Route("load")
     @Inject
     Provider<LoadController> load;
@@ -45,6 +46,10 @@ public class Routes {
     @Inject
     Provider<CreateGameController> createGameController;
 
+    @Route("logout")
+    @Inject
+    Provider<LogoutController> logout;
+
     @Route("editAcc")
     @Inject
     Provider<EditAccController> editAcc;
@@ -52,6 +57,10 @@ public class Routes {
     @Route("warningScreen")
     @Inject
     Provider<WarningScreenComponent> warningScreen;
+    
+    @Route("game")
+    @Inject
+    Provider<InGameController> game;
 
     @Inject
     public Routes() {

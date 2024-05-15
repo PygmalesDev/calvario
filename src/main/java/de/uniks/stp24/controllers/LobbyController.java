@@ -1,10 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.component.EnterGameComponent;
-import de.uniks.stp24.component.LobbyHostSettingsComponent;
-import de.uniks.stp24.component.LobbySettingsComponent;
-import de.uniks.stp24.component.UserComponent;
+import de.uniks.stp24.component.*;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.UserApiService;
@@ -37,44 +34,38 @@ import java.util.Objects;
 public class LobbyController {
     @Inject
     App app;
-
     @Inject
     TokenStorage tokenStorage;
-
     @Inject
     UserApiService userApiService;
-
     @Inject
     Subscriber subscriber;
     @Inject
     LobbyService lobbyService;
-
     @Inject
     GamesService gamesService;
-
     @SubComponent
     @Inject
-    EnterGameComponent enterGameComponent;
-
+    public EnterGameComponent enterGameComponent;
     @SubComponent
     @Inject
-    LobbySettingsComponent lobbySettingsComponent;
-
+    public LobbySettingsComponent lobbySettingsComponent;
     @SubComponent
     @Inject
-    LobbyHostSettingsComponent lobbyHostSettingsComponent;
+    public LobbyHostSettingsComponent lobbyHostSettingsComponent;
+    @SubComponent
+    @Inject
+    public UserComponent userComponent;
 
     @Inject
     Provider<UserComponent> userComponentProvider;
-
     @Inject
     EventListener eventListener;
 
     @FXML
-    ListView<MemberUser> playerListView;
-
+    public ListView<MemberUser> playerListView;
     @FXML
-    StackPane lobbyElement;
+    public StackPane lobbyElement;
     @FXML
     Pane lobbyMessagePane;
     @FXML
@@ -97,7 +88,7 @@ public class LobbyController {
     @OnInit
     void setGameID() {
         // Uncomment to get into the lobby
-        this.gameID = "664345ed5e6c1abbc0a8fb6f";
+        //this.gameID = "6644ea485e6c1abbc0ac050f";
     }
 
     /**
@@ -109,23 +100,25 @@ public class LobbyController {
     void init() {
         this.subscriber.subscribe(this.gamesService.getGame(this.gameID), game -> {
             this.game = game;
+            this.gameID = game._id();
+
             this.enterGameComponent.setGameName(game.name());
+            this.enterGameComponent.setGameID(this.gameID);
             this.lobbySettingsComponent.setGameName(game.name());
+            this.lobbySettingsComponent.setGameID(this.gameID);
             this.lobbyHostSettingsComponent.setGameName(game.name());
+            this.lobbyHostSettingsComponent.setGameID(this.gameID);
+
+            this.createUserListListener();
+            this.createGameDeletedListener();
+
+            this.lobbyService.loadPlayers(this.gameID).subscribe(dto -> {
+                Arrays.stream(dto).forEach(data -> this.addUserToList(data.user(), data));
+                this.sortHostOnTop();
+            });
+
+            this.lobbyHostSettingsComponent.createCheckPlayerReadinessListener();
         });
-
-        this.enterGameComponent.setGameID(this.gameID);
-        this.lobbySettingsComponent.setGameID(this.gameID);
-        this.lobbyHostSettingsComponent.setGameID(this.gameID);
-
-        this.lobbyService.loadPlayers(this.gameID).subscribe(dto -> {
-            Arrays.stream(dto).forEach(data -> this.addUserToList(data.user(), data));
-            this.sortHostOnTop();
-        });
-
-        this.createUserListListener();
-        this.createGameDeletedListener();
-        this.createCheckPlayerReadinessListener();
     }
 
     /**
@@ -133,8 +126,7 @@ public class LobbyController {
      */
     private void createGameDeletedListener() {
         this.subscriber.subscribe(this.eventListener
-                .listen("games." + this.gameID + ".deleted", Game.class), event ->
-        {
+                .listen("games." + this.gameID + ".deleted", Game.class), event -> {
             this.lobbyMessagePane.setVisible(true);
             this.lobbyMessageElement.setVisible(true);
         });
@@ -151,23 +143,13 @@ public class LobbyController {
                 case "created" -> {
                     if (this.tokenStorage.getUserId().equals(id))
                         this.lobbyElement.getChildren().add(this.lobbySettingsComponent);
-                    this.addUserToList(id, event.data()); }
+                    this.addUserToList(id, event.data());
+                }
                 case "updated" -> this.replaceUserInList(id, event.data());
                 case "deleted" -> this.removeUserFromList(id);
             }
             this.sortHostOnTop();
         });
-    }
-
-    public void createCheckPlayerReadinessListener() {
-        this.subscriber.subscribe(this.eventListener
-                .listen("games." + this.gameID + ".members.*.updated", MemberDto.class), result ->
-                this.subscriber.subscribe(this.lobbyService.loadPlayers(this.gameID), members ->
-                        this.lobbyHostSettingsComponent.startJourneyButton
-                                .setDisable(!Arrays.stream(members)
-                                .map(MemberDto::ready)
-                                .reduce((a,b) -> a && b).orElse(false)))
-        );
     }
 
     /**
@@ -196,8 +178,10 @@ public class LobbyController {
                 this.users.add(new MemberUser(new User(user.name() + " (Host)",
                         user._id(), user.avatar(), user.createdAt(), user.updatedAt()
                 ), data.ready()));
-            else
-                this.users.add(new MemberUser(user, data.ready()));
+            else if (Objects.isNull(data.empire()))
+                this.users.add(new MemberUser(new User(user.name() + " (Spectator)",
+                        user._id(), user.avatar(), user.createdAt(), user.updatedAt()
+                ), data.ready()));
         });
     }
 
@@ -207,9 +191,20 @@ public class LobbyController {
      * @param data member data containing their readiness state
      */
     private void replaceUserInList(String userID, MemberDto data) {
-        this.userApiService.getUser(userID).subscribe(replacer ->
-                this.users.replaceAll(memberUser -> memberUser.user()._id().equals(userID)
-                        ? new MemberUser(replacer, data.ready()): memberUser));
+        this.users.replaceAll(memberUser -> {
+            if (memberUser.user()._id().equals(userID)) {
+                if (Objects.nonNull(data.empire()))
+                    return new MemberUser(new User(
+                            memberUser.user().name().replace(" (Spectator)", ""),
+                            userID, memberUser.user().avatar(), memberUser.user().createdAt(),
+                            memberUser.user().updatedAt()), data.ready());
+                else
+                    return new MemberUser(new User(
+                            memberUser.user().name(), userID, memberUser.user().avatar(),
+                            memberUser.user().createdAt(), memberUser.user().updatedAt()), data.ready());
+            } else
+                return memberUser;
+        });
     }
 
     /**

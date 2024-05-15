@@ -1,0 +1,142 @@
+package de.uniks.stp24.controller.lobby;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.EnterGameComponent;
+import de.uniks.stp24.component.LobbyHostSettingsComponent;
+import de.uniks.stp24.component.LobbySettingsComponent;
+import de.uniks.stp24.component.UserComponent;
+import de.uniks.stp24.controllers.LobbyController;
+import de.uniks.stp24.dto.MemberDto;
+import de.uniks.stp24.model.Game;
+import de.uniks.stp24.model.GameSettings;
+import de.uniks.stp24.model.User;
+import de.uniks.stp24.rest.AuthApiService;
+import de.uniks.stp24.rest.UserApiService;
+import de.uniks.stp24.service.*;
+import de.uniks.stp24.ws.Event;
+import de.uniks.stp24.ws.EventListener;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.subjects.BehaviorSubject;
+import io.reactivex.rxjava3.subjects.Subject;
+import javafx.scene.Node;
+import javafx.stage.Stage;
+import org.fulib.fx.controller.Subscriber;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.testfx.util.WaitForAsyncUtils;
+
+import javax.inject.Provider;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
+
+@ExtendWith(MockitoExtension.class)
+public class TestLobbyControllerAsMember extends ControllerTest {
+    @Spy
+    TokenStorage tokenStorage;
+    @Spy
+    ImageCache imageCache;
+    @Spy
+    ObjectMapper objectMapper;
+    @Spy
+    AuthApiService authApiService;
+
+    @Spy
+    JoinGameService joinGameService;
+    @Spy
+    UserApiService userApiService;
+    @Spy
+    LobbyService lobbyService;
+    @Spy
+    GamesService gamesService;
+    @Spy
+    Subscriber subscriber;
+    @Spy
+    EventListener eventListener = new EventListener(tokenStorage, objectMapper);
+    @Spy
+    Provider<UserComponent> userComponentProvider = new Provider(){
+        @Override
+        public UserComponent get() {
+            final UserComponent userComponent = new UserComponent(imageCache);
+            return new UserComponent(imageCache);
+        }
+    };
+
+    @InjectMocks
+    UserComponent userComponent;
+    @InjectMocks
+    EnterGameComponent enterGameComponent;
+    @InjectMocks
+    LobbySettingsComponent lobbySettingsComponent;
+    @InjectMocks
+    LobbyHostSettingsComponent lobbyHostSettingsComponent;
+    @InjectMocks
+    LobbyController lobbyController;
+
+    final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
+    final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
+
+    @Override
+    public void start(Stage stage) throws Exception{
+        super.start(stage);
+        this.lobbyController.lobbyHostSettingsComponent = this.lobbyHostSettingsComponent;
+        this.lobbyController.lobbySettingsComponent = this.lobbySettingsComponent;
+        this.lobbyController.enterGameComponent = this.enterGameComponent;
+        this.lobbyController.userComponent = this.userComponent;
+
+        // Mock getting userID
+        doReturn("testMemberUno").when(this.tokenStorage).getUserId();
+
+        // Mock getting game
+        doReturn(Observable.just(new Game("1", "a","testGameID","testGame","testGameHostID",
+                false, 1, 0, new GameSettings(1))))
+                .when(this.gamesService).getGame(any());
+
+        // Mock loading lobby members
+        doReturn(Observable.just(new MemberDto[]{
+                new MemberDto(false, "testGameHostID", null, "88888888"),
+                new MemberDto(false, "testMemberUno", null, "88888888"),
+                new MemberDto(false, "testMemberDos", null, "88888888")
+        })).when(this.lobbyService).loadPlayers(any());
+
+        // Mock getting user
+        doReturn(Observable.just(new User("testMemberUno", "testMemberUno", null, "1", "1")))
+                .when(this.userApiService).getUser(any());
+
+        // Mock getting members updates
+        doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.*"), eq(MemberDto.class));
+
+        // Mock getting members readiness updates
+        doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.updated"), eq(MemberDto.class));
+
+        // Mock deleting game
+        doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.deleted"), eq(Game.class));
+
+        this.app.show(this.lobbyController);
+    }
+
+
+    /**
+     * Tests the behavior of the lobby when the joining player is already a member of this lobby.
+     */
+    @Test
+    public void testJoinLobbyAsMember() {
+        WaitForAsyncUtils.waitForFxEvents();
+
+        // Test if the user on top of the member list is the actual host of the game
+        User member = this.lobbyController.playerListView.getItems().get(1).user();
+        assertEquals(3, this.lobbyController.playerListView.getItems().size());
+        assertFalse(member.name().contains("gameHost"));
+        assertFalse(member.name().contains("(Host)"));
+
+        // Test if the correct component is shown to the host
+        Node component = this.lobbyController.lobbyElement.getChildren().get(0);
+        assertEquals(LobbySettingsComponent.class, component.getClass());
+    }
+}

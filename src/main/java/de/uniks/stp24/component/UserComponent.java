@@ -17,8 +17,6 @@ import java.util.Objects;
 
 @Component(view = "User.fxml")
 public class UserComponent extends HBox implements ReusableItemComponent<MemberUser> {
-    @Inject
-    ImageCache imageCache;
     @FXML
     ImageView avatarImageView;
     @FXML
@@ -26,8 +24,12 @@ public class UserComponent extends HBox implements ReusableItemComponent<MemberU
     @FXML
     Text readyText;
 
+    private final ImageCache imageCache;
+
     @Inject
-    public UserComponent() {}
+    public UserComponent(ImageCache imageCache) {
+        this.imageCache = imageCache;
+    }
 
     @Override
     public void setItem(@NotNull MemberUser member) {

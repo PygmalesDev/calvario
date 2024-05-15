@@ -3,10 +3,12 @@ package de.uniks.stp24.component;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.service.LobbyService;
+import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 
@@ -16,35 +18,47 @@ public class LobbySettingsComponent extends Pane {
     @FXML
     Text gameNameField;
     @Inject
+    Subscriber subscriber;
+    @Inject
     LobbyService lobbyService;
-    private String gameID;
     @Inject
     App app;
+    @Inject
+    TokenStorage tokenStorage;
+
+    private String gameID;
 
     @Inject
     public LobbySettingsComponent() {
 
     }
 
-    public void selectEmpire() {
-        System.out.println("Select Empire");
+    public void leaveLobby() {
+        this.lobbyService.leaveLobby(this.gameID).subscribe(result ->
+                this.app.show("/browsegames"));
     }
 
-    public void ready() {
-        System.out.println("Ready");
+    public void selectEmpire() {
+        this.app.show("/creation");
+    }
+    public void setGameName(String gameName) {
+        this.gameNameField.setText(gameName);
     }
 
     public void setGameID(String gameID) {
         this.gameID = gameID;
     }
 
-    public void leaveLobby() {
-        // TODO: Switch to lobby selection screen
-        this.lobbyService.leaveLobby(this.gameID).subscribe(result ->
-                this.app.show("/browsegames"));
+    public void ready() {
+        this.subscriber.subscribe(
+                this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
+                    if (result.ready())
+                        this.subscriber.subscribe(this.lobbyService
+                                .updateMember(this.gameID, this.tokenStorage.getUserId(), false, result.empire()));
+                    else
+                        this.subscriber.subscribe(this.lobbyService
+                                .updateMember(this.gameID, this.tokenStorage.getUserId(), true, result.empire()));
+                });
     }
 
-    public void setGameName(String gameName) {
-        this.gameNameField.setText(gameName);
-    }
 }

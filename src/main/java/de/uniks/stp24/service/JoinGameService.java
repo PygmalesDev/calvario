@@ -26,17 +26,8 @@ public class JoinGameService {
         return new MemberDto(
             false,
                 this.tokenStorage.getUserId(),
-                this.loadBlankEmpire(),
+                null,
                 password
-        );
-    }
-    private Empire loadBlankEmpire() {
-        return new Empire(
-          "unnamed",
-          "description",
-          "#9ed5ff", 32, 32,
-                "uninhabitable_0",
-                new String[]{"weak"}
         );
     }
 }

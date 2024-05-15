@@ -2,7 +2,6 @@ package de.uniks.stp24;
 
 import de.uniks.stp24.component.GameComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
-import de.uniks.stp24.controllers.EditGameController;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.ws.Event;
@@ -85,7 +84,7 @@ public class BrowseGameControllerTest extends ControllerTest {
         assertEquals("Browse Game", stage.getTitle());
         clickOn(browseGameController.log_out_b);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Login", stage.getTitle());
+        assertEquals("Logout", stage.getTitle());
     }
 
 

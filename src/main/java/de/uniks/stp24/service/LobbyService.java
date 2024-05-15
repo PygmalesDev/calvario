@@ -39,7 +39,7 @@ public class LobbyService {
         return this.gameMembersApiService.getMember(gameID, userID);
     }
 
-    public Observable<JoinGameDto> leaveLobby(String gameID) {
-        return this.gameMembersApiService.leaveGame(gameID, this.tokenStorage.getUserId());
+    public Observable<JoinGameDto> leaveLobby(String gameID, String userID) {
+        return this.gameMembersApiService.leaveGame(gameID, userID);
     }
 }

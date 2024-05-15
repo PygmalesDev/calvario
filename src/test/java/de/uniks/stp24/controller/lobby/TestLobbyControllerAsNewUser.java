@@ -38,7 +38,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class TestLobbyControllerAsMember extends ControllerTest {
+public class TestLobbyControllerAsNewUser extends ControllerTest {
     @Spy
     TokenStorage tokenStorage;
     @Spy
@@ -86,7 +86,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
 
     @Override
-    public void start(Stage stage) throws Exception{
+    public void start(Stage stage) throws Exception {
         super.start(stage);
 
         this.lobbyController.lobbyHostSettingsComponent = this.lobbyHostSettingsComponent;
@@ -95,7 +95,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         this.lobbyController.userComponent = this.userComponent;
 
         // Mock getting userID
-        doReturn("testMemberUnoID").when(this.tokenStorage).getUserId();
+        doReturn("testNewUserID").when(this.tokenStorage).getUserId();
 
         // Mock getting game
         doReturn(Observable.just(new Game("1", "a","testGameID","testGame","testGameHostID",
@@ -132,32 +132,30 @@ public class TestLobbyControllerAsMember extends ControllerTest {
      * Collective method to test all functions of the lobby from the view of a member.
      */
     @Test
-    public void testLobbyFunctionsAsMember() {
-        this.testJoinLobbyAsMember();
-        this.testPressReadyAsMember();
-        this.testSwitchToEmpireSelection();
-        this.testLeaveLobbyAsMember();
+    public void testLobbyFunctionsAsNewUser() {
+        this.testOpenLobbyAsNewUser();
     }
 
     /**
-     * Tests the behavior of the lobby when the joining player is the host of this game.
+     * Tests the behavior of the lobby when new user switches to lobby screen.
      */
     @Test
-    public void testJoinLobbyAsMember() {
+    public void testOpenLobbyAsNewUser() {
         WaitForAsyncUtils.waitForFxEvents();
 
-        // Test if one of the users is a joined member
-        User member = this.lobbyController.playerListView.getItems().stream()
-                .map(MemberUser::user)
-                .filter(user -> user._id().equals("testMemberUnoID"))
-                .findFirst().orElseThrow();
-        assertEquals(3, this.lobbyController.playerListView.getItems().size());
-        assertTrue(member.name().contains("testMemberUno"));
-        assertTrue(member.name().contains("(Spectator)"));
-
-        // Test if the correct component is shown to the member
+        // Test if the correct component is shown to the user
         Node component = this.lobbyController.lobbyElement.getChildren().get(0);
-        assertEquals(LobbySettingsComponent.class, component.getClass());
+        assertEquals(EnterGameComponent.class, component.getClass());
+
+        // Test if the new user is not a member of the lobby
+        assertFalse(this.lobbyController.playerListView.getItems().stream()
+                .map(MemberUser::user)
+                .anyMatch(user -> user._id().equals("testNewUserID")));
+    }
+
+    @Test
+    public void testJoinLobbyAsNewUser() {
+
     }
 
     /**

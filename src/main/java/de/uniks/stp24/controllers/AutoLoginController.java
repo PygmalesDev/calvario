@@ -19,12 +19,13 @@ public class AutoLoginController {
     }
 
     // show browse games screen after any click
+
     @OnKey()
     public void keyPressed() {
         app.show("/browseGames");
     }
 
     public void mouseClicked() {
-        app.show("//browseGames");
+        app.show("/browseGames");
     }
 }

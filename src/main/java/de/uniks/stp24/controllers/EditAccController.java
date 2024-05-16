@@ -1,39 +1,48 @@
 package de.uniks.stp24.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.WarningScreenComponent;
-import de.uniks.stp24.model.User;
+import de.uniks.stp24.model.ErrorResponse;
 import de.uniks.stp24.service.EditAccService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.beans.binding.Bindings;
-import javafx.event.ActionEvent;
+import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
-import javafx.beans.binding.BooleanBinding;
+import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
+import retrofit2.HttpException;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
-import java.awt.*;
-import java.io.IOException;
 import java.util.Objects;
 
 @Title("Edit Account")
 @Controller
 public class EditAccController {
     @FXML
-    Button changeUserInfoButton;
+    ImageView avatarImage;
+    @FXML
+    Text errorLabelEditAcc;
+    @FXML
+    ToggleButton changeUserInfoButton;
+    @FXML
+    Button deleteUserButton;
+    @FXML
+    Button goBackButton;
     @FXML
     Button cancelChangesButton;
     @FXML
@@ -55,12 +64,18 @@ public class EditAccController {
     App app;
     @Inject
     TokenStorage tokenStorage;
+    @Inject
+    ImageCache imageCache;
+    @Inject
+    ObjectMapper objectMapper;
+
 
     @SubComponent
     @Inject
     WarningScreenComponent warningScreen;
 
-    private BooleanBinding warningIsVisible;
+    private BooleanBinding warningIsInvisible;
+    private BooleanBinding editAccIsNotSelected;
 
     @Inject
     public EditAccController() {
@@ -70,23 +85,27 @@ public class EditAccController {
     public void applyInputs() {
         if (Objects.nonNull(tokenStorage.getName()))
             this.usernameInput.setText(tokenStorage.getName());
+        this.avatarImage.setImage(imageCache.get(
+                Objects.nonNull(tokenStorage.getAvatar()) ? tokenStorage.getAvatar() : "test/911.png" ));
+        this.errorLabelEditAcc.setText("");
+
     }
 
     @OnRender
     public void createBindings(){
-        this.warningIsVisible = this.warningScreenContainer.visibleProperty().not();
+        this.warningIsInvisible = this.warningScreenContainer.visibleProperty().not();
+        this.editAccIsNotSelected = this.changeUserInfoButton.selectedProperty().not();
     }
-
 
 
     @OnRender
     public void setBlurEffect() {
         // blurs the edit account screen when the warning screen is visible
         this.editAccHBox.effectProperty().bind(Bindings.createObjectBinding(()->{
-            if(warningIsVisible.get())
+            if(warningIsInvisible.get())
                 return null;
             return new BoxBlur();
-        },this.warningIsVisible));
+        },this.warningIsInvisible));
     }
 
     @OnRender
@@ -96,12 +115,58 @@ public class EditAccController {
         warningScreenContainer.setVisible(false);
     }
 
+    @OnRender
+    public void changeUserInfo() {
+        // If the changeUserButton is selected, username and password can be edited
+        if(changeUserInfoButton.isSelected()){
+            passwordInput.setDisable(false);
+            usernameInput.setDisable(false);
+            cancelChangesButton.setVisible(true);
+            saveChangesButton.setVisible(true);
+        }else{
+            resetEditing(tokenStorage.getName());
+        }
+    }
 
-    public void saveChanges(ActionEvent actionEvent) {
+    @OnRender
+    public void disableButtons(){
+        this.deleteUserButton.disableProperty()
+                .bind(Bindings.createBooleanBinding(()-> !editAccIsNotSelected.get(),
+                        this.editAccIsNotSelected));
+
+        this.goBackButton.disableProperty()
+                .bind(Bindings.createBooleanBinding(()-> !editAccIsNotSelected.get(),
+                        this.editAccIsNotSelected));
+    }
+
+    private boolean checkIfInputNotBlankOrEmpty(String text) {
+        return (!text.isBlank() && !text.isEmpty());
+    }
+
+    public void saveChanges() {
         // save changed name and/or password of the user and reset the edit account screen afterward
-        subscriber.subscribe(editAccService.changeUserInfo(usernameInput.getText(), passwordInput.getText()),
-                result -> resetEditing(usernameInput.getText()));
-        //ToDo: error handling and message
+        if (checkIfInputNotBlankOrEmpty(usernameInput.getText()) &&
+        checkIfInputNotBlankOrEmpty(passwordInput.getText())) {
+            this.errorLabelEditAcc.setText("");
+            subscriber.subscribe(editAccService.changeUserInfo(usernameInput.getText(), passwordInput.getText()),
+                    result -> {
+                        resetEditing(usernameInput.getText());
+                        changeUserInfoButton.setSelected(false);
+                    }
+                    // in case of server's response => error
+                    // handle with error response
+                    , error -> {
+                        if (error instanceof HttpException httpError) {
+                            System.out.println(httpError.code());
+                            String body = httpError.response().errorBody().string();
+                            ErrorResponse errorResponse = objectMapper.readValue(body,ErrorResponse.class);
+                            writeText(errorResponse.statusCode());
+                        }
+                    });
+        } else {
+            writeText(1);
+
+        }
     }
 
     public void resetEditing(String username) {
@@ -117,31 +182,35 @@ public class EditAccController {
         changeUserInfoButton.setDisable(false);
     }
 
-    public void cancelChanges(ActionEvent actionEvent) {
+    public void cancelChanges() {
         // Reset inputs and changeUserInfoButton
+        this.errorLabelEditAcc.setText("");
+        changeUserInfoButton.setSelected(false);
         resetEditing(tokenStorage.getName());
     }
 
-    public void changeUserInfo(ActionEvent actionEvent) {
-        // TextFields can be edited now and buttons for saving or cancel the changes show up
-        passwordInput.setDisable(false);
-        usernameInput.setDisable(false);
 
-        cancelChangesButton.setVisible(true);
-        saveChangesButton.setVisible(true);
-
-        //changeUserInfoButton.setStyle("-fx-background-color: #00f0f0; ");
-        changeUserInfoButton.setDisable(true);
-    }
-
-    public void deleteUser(ActionEvent actionEvent) throws IOException {
+    public void deleteUser() {
         // warning screen opens
         warningScreenContainer.setVisible(true);
-        // Todo: color of the deleteUserButton
     }
 
-    public void goBack(ActionEvent actionEvent) {
+    public void goBack() {
         app.show("/browseGames");
+    }
+
+    // if response from server => error, choose a text depending on code
+    private void writeText(int code) {
+        this.errorLabelEditAcc.setStyle("-fx-fill: red;");
+        String info;
+        switch (code) {
+            case 400 -> info = "invalid password";
+            case 401 -> info = "validation failed";
+            case 403 -> info = "attempting to change someone else's user";
+            case 409 -> info = "username in use by another user";
+            default ->  info = "please put in name or/and password";
+        }
+        this.errorLabelEditAcc.setText(info);
     }
 
     @OnDestroy

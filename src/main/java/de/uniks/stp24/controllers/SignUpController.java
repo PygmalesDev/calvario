@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
@@ -20,6 +21,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 @Title("SignUp")
 @Controller
@@ -58,6 +60,9 @@ public class SignUpController {
     Subscriber subscriber;
     @Inject
     UserApiService userApiService;
+    @Inject
+    @Resource
+    ResourceBundle resources;
 
     private BooleanBinding isLoginFieldEmpty;
     private BooleanBinding isPasswordFieldEmpty;
@@ -106,15 +111,15 @@ public class SignUpController {
     public void showErrorMessage() {
         this.errorTextField.textProperty().bind(Bindings.createStringBinding(() -> {
             if (this.isLoginFieldEmpty.get())
-                return "Please enter a username";
+                return resources.getString("enter.username");
             if (this.isPasswordFieldEmpty.get())
-                return "Please enter a password";
+                return resources.getString("enter.password");
             if (this.isPasswordTooShort.get())
-                return "Password must contain at least 8 characters";
+                return resources.getString("password.8.characters");
             if (this.isRepeatPasswordEmpty.get())
-                return "Please repeat the password";
+                return resources.getString("repeat.password");
             if (!this.passwordInputsMatch.get())
-                return "Passwords do not match";
+                return resources.getString("passwords.do.not.match");
             return "";
         }, this.isLoginFieldEmpty, this.isPasswordFieldEmpty,
                 this.isRepeatPasswordEmpty, this.passwordInputsMatch,

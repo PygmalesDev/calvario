@@ -2,6 +2,7 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.GameComponent;
+import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.BrowseGameService;
@@ -12,18 +13,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.PopupControl;
-import javafx.scene.effect.BoxBlur;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -33,7 +27,6 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.io.IOException;
 
 @Title("Browse Game")
 @Controller
@@ -56,6 +49,11 @@ BrowseGameController {
 
     @Inject
     App app;
+    @FXML
+    StackPane warningWindowContainer;
+    @SubComponent
+    @Inject
+    WarningComponent warningComponent;
     @Inject
     GamesApiService gamesApiService;
     @Inject
@@ -72,8 +70,6 @@ BrowseGameController {
     EditGameService editGameService;
     @Inject
     CreateGameService createGameService;
-    @Inject
-    WarningController warningController;
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
 
@@ -135,9 +131,19 @@ BrowseGameController {
 
     public void deleteGame() {
         if(browseGameService.checkMyGame()) {
-            warningController.showPopup();
-
-            //app.show("/warningScreen");
+            showWarning();
         }
+    }
+
+    private void showWarning(){
+        if (warningWindowContainer.getChildren().isEmpty()){
+            warningWindowContainer.getChildren().add(warningComponent);
+        } else {
+            warningWindowContainer.setVisible(true);
+        }
+    }
+
+    public void removeWarning() {
+        warningWindowContainer.getChildren().remove(warningComponent);
     }
 }

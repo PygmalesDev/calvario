@@ -33,7 +33,7 @@ public class LogoutController{
     public String info;
 
     @Inject
-    public LogoutController(){
+    public LogoutController() {
 
     }
 
@@ -46,6 +46,7 @@ public class LogoutController{
                 })
                 .subscribe().dispose();
         app.show("/login", Map.of("info",info));
+
     }
 
     public void cancel() {

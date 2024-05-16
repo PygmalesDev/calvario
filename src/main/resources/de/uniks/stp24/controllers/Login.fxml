@@ -38,7 +38,7 @@
          <Button alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false"
                  prefHeight="25.0" prefWidth="25.0" visible="false"/>
          <TextField fx:id="usernameInput" alignment="CENTER" prefHeight="40.0" prefWidth="300.0"
-                    promptText="USERNAME">
+                    promptText="%username">
             <font>
                <Font size="15.0"/>
             </font>
@@ -50,7 +50,7 @@
          <Button alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false"
                  prefHeight="25.0" prefWidth="25.0" visible="false"/>
          <PasswordField fx:id="passwordInput" alignment="CENTER" prefHeight="40.0" prefWidth="300.0"
-                        promptText="PASSWORD">
+                        promptText="%password">
             <font>
                <Font size="15.0"/>
             </font>
@@ -78,25 +78,25 @@
          </font>
       </Text>
       <CheckBox fx:id="rememberMeBox" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
-                prefHeight="30.0" prefWidth="200.0" text="Remember Me">
+                prefHeight="30.0" prefWidth="200.0" text="%remember.me">
          <font>
             <Font size="17.0"/>
          </font>
       </CheckBox>
       <Button fx:id="loginButton" defaultButton="true" mnemonicParsing="false" onAction="#login" prefHeight="40.0"
-              prefWidth="250.0" text="Login">
+              prefWidth="250.0" text="%login">
          <font>
             <Font size="15.0"/>
          </font>
       </Button>
       <Button fx:id="signupButton" mnemonicParsing="false" onAction="#signup" prefHeight="40.0" prefWidth="250.0"
-              text="Register">
+              text="%register">
          <font>
             <Font size="15.0"/>
          </font>
       </Button>
       <Button fx:id="licensesButton" alignment="CENTER" mnemonicParsing="false" onAction="#showLicenses"
-              prefHeight="30.0" prefWidth="100.0" text="Licenses">
+              prefHeight="30.0" prefWidth="100.0" text="%licenses">
          <font>
             <Font size="15.0"/>
          </font>

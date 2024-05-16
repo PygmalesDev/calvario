@@ -69,8 +69,6 @@ public class EditAccController {
     @Inject
     ObjectMapper objectMapper;
 
-    @Param("info")
-    String info;
 
     @SubComponent
     @Inject

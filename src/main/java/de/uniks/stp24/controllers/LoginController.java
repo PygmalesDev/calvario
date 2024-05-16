@@ -160,7 +160,7 @@ public class LoginController {
         switch (code) {
             case 100 -> {
                 this.errorLabel.setStyle("-fx-fill: black;");
-                info = "... waiting response ...";
+                info = "... logging in ...";
             }
             case 400 -> info = "validation failed";
             case 401 -> info = "Invalid username or password";

@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
+import javafx.stage.WindowEvent;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
@@ -143,7 +144,4 @@ BrowseGameController {
         }
     }
 
-    public void removeWarning() {
-        warningWindowContainer.getChildren().remove(warningComponent);
-    }
 }

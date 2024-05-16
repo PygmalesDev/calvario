@@ -67,10 +67,17 @@ public class BrowseGameService {
 
     public Observable<Game> deleteGame() {
         if (checkMyGame()) {
-            System.out.println(game.name());
             return gamesApiService.delete(game._id());
         } else {
             return null;
+        }
+    }
+
+    public String getGameName() {
+        if (checkMyGame()){
+            return this.game.name();
+        } else {
+            return "";
         }
     }
 }

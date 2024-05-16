@@ -6,16 +6,22 @@ import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.EditAccService;
 import de.uniks.stp24.service.TokenStorage;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.WindowEvent;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 @Component(view = "Warning.fxml")
 public class WarningComponent extends VBox{
+    @FXML
+    Text gameName;
     @FXML
     VBox warningWindow;
 
@@ -27,19 +33,24 @@ public class WarningComponent extends VBox{
     Subscriber subscriber;
     @Inject
     BrowseGameService browseGameService;
+    String gameNameText;
 
     @Inject
     public WarningComponent() {
     }
 
-
     @OnRender
     public void setBackground(){
+        warningWindow.addEventHandler(WindowEvent.WINDOW_SHOWING, event -> {
+            gameNameText = browseGameService.getGameName();
+            System.out.println(gameNameText + "#######");
+            gameName.setText(gameNameText);
+        });
         warningWindow.setStyle("-fx-background-color: grey;");
     }
 
     public void deleteGame() {
-        browseGameService.deleteGame();
+        this.subscriber.subscribe(browseGameService.deleteGame());
         getParent().setVisible(false);
     }
 

@@ -96,18 +96,20 @@ public class LoginController {
             signupButton.setDisable(true);
             this.errorLabel.setStyle("-fx-fill: black;");
             this.errorLabel.setText(ResponseConstants.respLogin.get(200));
-//
+
             subscriber.subscribe(loginService.login(username, password, rememberMe),
                     result -> app.show("/browseGames")
                     // in case of server's response => error
                     // handle with error response
                     , error -> {
                         this.errorLabel.setStyle("-fx-fill: red;");
+                        // find the code in the error response
                         int code = errorService.getStatus(error);
-                        this.errorLabel.setText(new ErrorTextWriter(ResponseConstants.respLogin,code).getErrorText());
+                        // "generate"" the output
+                        this.errorLabel
+                                .setText(new ErrorTextWriter(ResponseConstants.respLogin,code).getErrorText());
                         enableButtons();
                     });
-
         } else {
             // 1 is used for default in switch
             this.errorLabel.setStyle("-fx-fill: red;");
@@ -151,14 +153,6 @@ public class LoginController {
     public void showLicenses() {
         app.show("/licenses");
     }
-
-
-    // if response from server => error, choose a text depending on code
-    // maybe it should be considered to write a class for this
-
-
-
-
 
     public void enableButtons(){
         loginButton.setDisable(false);

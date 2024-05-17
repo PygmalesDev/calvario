@@ -16,9 +16,12 @@ public class EditAccService {
     App app;
     @Inject
     TokenStorage tokenStorage;
+    @Inject
+    PrefService prefService;
 
     @Inject
-    public EditAccService() {}
+    public EditAccService() {
+    }
 
     public Observable<User> changeUserInfo(String newUsername, String newPassword){
         return userApiService
@@ -34,6 +37,7 @@ public class EditAccService {
                 .doOnNext(deleteResult ->{
                     tokenStorage.setName(null);
                     tokenStorage.setAvatar(null);
+                    prefService.removeRefreshToken();
                 });
     }
 

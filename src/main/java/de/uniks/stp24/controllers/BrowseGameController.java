@@ -11,7 +11,6 @@ import de.uniks.stp24.service.EditGameService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -65,6 +64,7 @@ BrowseGameController {
     WarningComponent warningComponent;
     @Inject
     GamesApiService gamesApiService;
+
     @Inject
     Subscriber subscriber;
     @Inject
@@ -122,10 +122,9 @@ BrowseGameController {
     public BrowseGameController() {
     }
 
-
     //Back to log in Screen after click Logout in BrowseGame Screen
-    public void logOut(ActionEvent ignoredActionEvent) {
-        app.show("/login");
+    public void logOut() {
+        app.show("/logout");
     }
 
     public void newGame() {
@@ -138,6 +137,9 @@ BrowseGameController {
         }
     }
 
+    public void editAccount() {
+        app.show("/editAcc");
+    }
     public void deleteGame() {
         if(browseGameService.checkMyGame()) {
             setBlur();

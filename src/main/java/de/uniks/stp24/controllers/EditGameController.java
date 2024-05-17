@@ -48,6 +48,7 @@ public class EditGameController {
     @Inject
     BrowseGameController browseGameController;
 
+
     @Inject
     public EditGameController(){
 
@@ -97,5 +98,9 @@ public class EditGameController {
 
     public void hideErrorBox() {
         errorBoxEdit.setVisible(false);
+    }
+
+    public void setEditGameService(EditGameService newEditGameService) {
+        editGameService = newEditGameService;
     }
 }

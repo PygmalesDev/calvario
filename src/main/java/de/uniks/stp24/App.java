@@ -3,7 +3,6 @@ package de.uniks.stp24;
 import de.uniks.stp24.controllers.CreateGameController;
 import de.uniks.stp24.dagger.DaggerMainComponent;
 import de.uniks.stp24.dagger.MainComponent;
-import de.uniks.stp24.model.User;
 import fr.brouillard.oss.cssfx.CSSFX;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -13,8 +12,6 @@ import org.fulib.fx.FulibFxApp;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import java.awt.*;
-import java.nio.file.Path;
-import java.util.Map;
 import java.util.logging.Level;
 
 import static javafx.scene.input.KeyEvent.KEY_PRESSED;
@@ -55,18 +52,12 @@ public class App extends FulibFxApp {
             primaryStage.setHeight(680);
 
             primaryStage.centerOnScreen();
-
-            // TODO add image/icon.png and uncomment
-            // setAppIcon(primaryStage);
-            // setTaskbarIcon();
+            setAppIcon(primaryStage);
+            setTaskbarIcon();
 
             //autoRefresher().setup(Path.of("src/main/resources/de/uniks/stp24"));
 
-
-            // TODO show login or main-menu
             show("/load");
-            //
-
 
             // open normal load screen or autoLogin screen depending on the preferences of the user
 
@@ -76,8 +67,6 @@ public class App extends FulibFxApp {
                 show("/load");
             }
 
-            //show("/login");
-
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "An error occurred while starting the application: " + e.getMessage(), e);
         }
@@ -85,7 +74,7 @@ public class App extends FulibFxApp {
 
 
     private void setAppIcon(Stage stage) {
-        final Image image = new Image(App.class.getResource("image/icon.png").toString());
+        final Image image = new Image(App.class.getResource("icons/icon.png").toString());
         stage.getIcons().add(image);
     }
 
@@ -96,7 +85,7 @@ public class App extends FulibFxApp {
 
         try {
             final Taskbar taskbar = Taskbar.getTaskbar();
-            final java.awt.Image image = ImageIO.read(App.class.getResource("image/icon.png"));
+            final java.awt.Image image = ImageIO.read(App.class.getResource("icons/icon.png"));
             taskbar.setIconImage(image);
         } catch (Exception ignored) {
         }

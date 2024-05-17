@@ -24,8 +24,10 @@ import java.util.Objects;
 @Title("SignUp")
 @Controller
 public class SignUpController {
+  
     @FXML
     ToggleButton languageToggleButton;
+
     @FXML
     TextField usernameField;
     @FXML

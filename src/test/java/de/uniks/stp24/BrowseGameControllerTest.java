@@ -1,16 +1,22 @@
 package de.uniks.stp24;
 
 import de.uniks.stp24.component.GameComponent;
+import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.controllers.EditGameController;
+import de.uniks.stp24.dto.UpdateGameDto;
 import de.uniks.stp24.model.Game;
+import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.EditGameService;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -26,6 +32,8 @@ import javax.inject.Provider;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class BrowseGameControllerTest extends ControllerTest {
@@ -33,8 +41,24 @@ public class BrowseGameControllerTest extends ControllerTest {
     EventListener eventListener;
     @Mock
     GamesApiService gamesApiService;
+
+    @Mock
+    GameComponent gameComponent;
+
+    @Spy
+    WarningComponent warningComponent;
     @Spy
     Subscriber subscriber = new Subscriber();
+
+    @Mock
+    EditGameService editGameService;
+
+    @Mock
+    EditGameController editGameController;
+
+    Game game = new Game(null, null, "1", "Was geht", "testID2", false, 0,0, null);
+
+
     @Spy
     Provider<GameComponent> GameComponentProvider = new Provider(){
         @Override
@@ -46,12 +70,14 @@ public class BrowseGameControllerTest extends ControllerTest {
 
     @InjectMocks
     BrowseGameController browseGameController;
+
+
     final Subject<Event<Game>> subject = BehaviorSubject.create();
 
     @Override
     public void start(Stage stage)  throws Exception{
         Mockito.doReturn(Observable.just(List.of(
-                new Game(null, null, "1", "Was geht", "testID2", false, 0,0, null),
+                game,
                 new Game(null, null, "2", "rapapa", "testID", false, 0,0, null)
         ))).when(gamesApiService).findAll();
 
@@ -85,12 +111,12 @@ public class BrowseGameControllerTest extends ControllerTest {
         assertEquals("Browse Game", stage.getTitle());
         clickOn(browseGameController.log_out_b);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Login", stage.getTitle());
+        assertEquals("Logout", stage.getTitle());
     }
 
 
     @Test
-    void editGame(){
+    void editGameNoInputs(){
         //Set selected Game as one of the games u have created
         WaitForAsyncUtils.waitForFxEvents();
         browseGameController.browseGameService.setGame(browseGameController.gameList.getItems().getFirst());
@@ -127,4 +153,48 @@ public class BrowseGameControllerTest extends ControllerTest {
         assertEquals(stage.getTitle(), "Browse Game");
     }
 
+    @Test
+    void editGameWithInputs(){
+        editGameController.setEditGameService(editGameService);
+        doNothing().when(editGameController).editGame();
+
+        doAnswer(show -> {app.show(editGameController);
+            return null;
+        }).when(app).show("/editgame");
+
+
+
+
+        //Set selected Game as one of the games u have created
+        WaitForAsyncUtils.waitForFxEvents();
+        browseGameController.browseGameService.setGame(browseGameController.gameList.getItems().getFirst());
+        browseGameController.browseGameService.setTokenStorage();
+
+        browseGameController.gameList.getSelectionModel().clearAndSelect(0);
+        browseGameController.gameList.getFocusModel().focus(0);
+
+        //Click on edit game button and check if edit game screen is now displayed.
+        clickOn(browseGameController.edit_game_b);
+        WaitForAsyncUtils.waitForFxEvents();
+        // assertEquals("EditGame", stage.getTitle());
+
+        //Click on confirm. No inputs for change was given. Screen do not change
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#editNameTextField");
+        write("testgame95");
+
+        clickOn("#editPasswordTextField");
+        write("1");
+        clickOn("#editRepeatPasswordTextField");
+        write("1");
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+
+
+        Button confirmButton = lookup("#editGameConfirmButton").queryButton();
+        clickOn(confirmButton);
+        WaitForAsyncUtils.waitForFxEvents();
+        //assertEquals("testgame95", browseGameController.gameList.getItems().get(0).name());
+    }
 }

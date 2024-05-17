@@ -57,7 +57,9 @@ public class WarningComponent extends VBox{
 
     @OnDestroy
     public void destroy() {
-        this.subscriber.dispose();
+        if(subscriber != null) {
+            this.subscriber.dispose();
+        }
     }
 
     public void onCancel() {

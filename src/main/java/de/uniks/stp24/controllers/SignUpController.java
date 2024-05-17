@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-@Title("SignUp")
+@Title("REGISTER")
 @Controller
 public class SignUpController {
   

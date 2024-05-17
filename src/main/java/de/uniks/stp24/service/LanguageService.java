@@ -11,9 +11,9 @@ import java.util.ResourceBundle;
 
 public class LanguageService {
     @Inject
-    PrefService prefService;
+    public PrefService prefService;
     @Inject
-    Provider<ResourceBundle> newResources;
+    public Provider<ResourceBundle> newResources;
 
     @Inject
     public LanguageService() {

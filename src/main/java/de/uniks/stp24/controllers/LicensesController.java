@@ -19,6 +19,7 @@ public class LicensesController {
     Button backToLoginButton;
     @Inject
     App app;
+    @Inject
     @Resource
     ResourceBundle resources;
 

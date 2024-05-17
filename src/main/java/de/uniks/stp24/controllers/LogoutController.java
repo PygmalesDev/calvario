@@ -31,6 +31,7 @@ public class LogoutController{
     App app;
     @Inject
     LogoutService logoutService;
+    @Inject
     @Resource
     ResourceBundle resources;
     @Param("info")

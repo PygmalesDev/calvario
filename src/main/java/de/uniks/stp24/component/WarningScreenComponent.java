@@ -35,6 +35,7 @@ public class WarningScreenComponent extends VBox {
     @Inject
     Subscriber subscriber;
 
+
     @Inject
     public WarningScreenComponent() {
     }
@@ -45,11 +46,11 @@ public class WarningScreenComponent extends VBox {
         warningContainer.setStyle("-fx-background-color: white;");
     }
 
-    public void cancelDelete(ActionEvent actionEvent) {
+    public void cancelDelete() {
         getParent().setVisible(false);
     }
 
-    public void deleteAcc(ActionEvent actionEvent) {
+    public void deleteAcc() {
         // delete user and switch back to the login screen
         this.subscriber.subscribe(editAccService.deleteUser(),
                 result -> {app.show("/login");
@@ -58,13 +59,17 @@ public class WarningScreenComponent extends VBox {
                 System.out.println(httpError.code());
                 String body = httpError.response().errorBody().string();
                 ErrorResponse errorResponse = objectMapper.readValue(body,ErrorResponse.class);
+                System.out.println(errorResponse.statusCode());
                 // ToDo: error handling and message
             }
         });
     }
 
+
     @OnDestroy
     public void destroy() {
-        this.subscriber.dispose();
+        if(subscriber != null) {
+            this.subscriber.dispose();
+        }
     }
 }

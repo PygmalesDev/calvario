@@ -1,19 +1,20 @@
 package de.uniks.stp24;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.controllers.EditAccController;
-import de.uniks.stp24.dto.SignUpResultDto;
-import de.uniks.stp24.model.LoginResult;
 import de.uniks.stp24.model.User;
 import de.uniks.stp24.service.EditAccService;
+import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -33,20 +32,29 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 public class TestEditAcc extends ControllerTest{
     @Spy
     EditAccService editAccService;
-    @InjectMocks
-    EditAccController editAccController;
     @Spy
     WarningScreenComponent warningScreenComponent;
     @Spy
     TokenStorage tokenStorage;
     @Spy
     Subscriber subscriber;
+    @Spy
+    PrefService prefService;
+    @Spy
+    ObjectMapper objectMapper;
+    @Spy
+    ImageCache imageCache;
+
+    @InjectMocks
+    EditAccController editAccController;
+
 
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
         app.show(editAccController);
     }
+
 
 
     @Test
@@ -66,17 +74,27 @@ public class TestEditAcc extends ControllerTest{
     @Test
     void cancelChangeAccount(){
         // Title: Cancel changing editing account in the user administration window
-        //doReturn(Observable.just(new SignUpResultDto("a", "b", "c", "d", "e" )))
-                //.when(this.editAccService).changeUserInfo(any(),any());
+        final ToggleButton changeUserInfoButton = lookup("#changeUserInfoButton").query();
+        final Button cancelChangesButton = lookup("#cancelChangesButton").queryButton();
+        final Button goBackButton = lookup("#goBackButton").query();
+        final Button deleteUserButton = lookup("#deleteUserButton").query();
+
         // Start:
         // Alice wants to change her Account name in STPellaris. She is in the user administrtation screen and has clicked on edit account.
         tokenStorage.setName("Alice");
-        Button changeUserInfoButton = lookup("#changeUserInfoButton").queryButton();
-        Button cancelChangesButton = lookup("#cancelChangesButton").queryButton();
+
+        // The cancelChangesButton is not visible and goBack and deleteUser are enabled
+        assertFalse(goBackButton.isDisabled());
+        assertFalse(deleteUserButton.isDisabled());
         assertFalse(cancelChangesButton.isVisible());
+
         clickOn("#changeUserInfoButton");
-        assertTrue(changeUserInfoButton.isVisible());
-        assertTrue(changeUserInfoButton.isDisabled());
+
+        // The cancelChangesButton is visible now and goBack and deleteUser are disabled
+        assertTrue(cancelChangesButton.isVisible());
+        assertTrue(changeUserInfoButton.isSelected());
+        assertTrue(goBackButton.isDisabled());
+        assertTrue(deleteUserButton.isDisabled());
 
         // Action:
         // She changes name and or password but changes her mind and clicks canel
@@ -87,7 +105,7 @@ public class TestEditAcc extends ControllerTest{
         clickOn("#cancelChangesButton");
         waitForFxEvents();
         // Result:
-        // Alice’s Account has not changed and she is still in the user administration screen.
+        // Alice’s Account has not changed, and she is still in the user administration screen.
         TextField username = lookup("#usernameInput").query();
         assertTrue(username.isDisabled());
         assertEquals(username.getText(), "Alice");
@@ -95,15 +113,18 @@ public class TestEditAcc extends ControllerTest{
 
     @Test
     void changeAccount() {
+        // Title: Confirming edited account
         doReturn(Observable.just(new User("Calvario", "a","b","c","d"))).when(editAccService).changeUserInfo(any(),any());
 
-        // Title: Confirming edited account
+        final TextField username = lookup("#usernameInput").query();
+        final TextField password = lookup("#passwordInput").query();
+
         // Start:
         // Alice wants to change her Account name in STPellaris. She is in the user administrtation screen and has clicked on edit account.
         tokenStorage.setName("Alice");
         clickOn("#changeUserInfoButton");
 
-        //        Action:
+        // Action:
         // She puts in a new name and password. She clicks the confirm button
         clickOn("#usernameInput");
         write("Calvario");
@@ -111,12 +132,13 @@ public class TestEditAcc extends ControllerTest{
         write("password");
         clickOn("#saveChangesButton");
         waitForFxEvents();
+
         // Result:
         // Alice stays in the same screen but her name and password changed
-        TextField username = lookup("#usernameInput").query();
+
         assertTrue(username.isDisabled());
         assertEquals("Calvario",username.getText());
-        TextField password = lookup("#passwordInput").query();
+
         assertTrue(password.isDisabled());
         assertEquals("",password.getText());
     }
@@ -153,7 +175,33 @@ public class TestEditAcc extends ControllerTest{
 
     @Test
     void deleteAccountTest(){
-        // Todo!!!
+        // Title: Confirm after clicking delete account button
+        doReturn(Observable.just(new User("1", "a","b","c","d")) ).when(editAccService).deleteUser();
+        doAnswer(answer -> {tokenStorage.setName(null);
+            app.show("/login");
+            return null;}).when(warningScreenComponent).deleteAcc();
+        // Start:
+        // Alice wants to delete her account in STPellaris. She is in the user administration window. She clicked the delete user button and a pop up came up.
+        tokenStorage.setName("Alice");
+        clickOn("#deleteUserButton");
+        waitForFxEvents();
+
+        // Action:
+        // She clicks confrim.
+        Button deleteAccButton = lookup("#deleteAccButton").queryButton();
+        clickOn("#deleteAccButton");
+        Observable<User> observable = editAccService.deleteUser();
+        observable.doOnComplete(() -> {
+            tokenStorage.setName(null);
+            tokenStorage.setAvatar(null);
+            prefService.removeRefreshToken();}).subscribe();
+        waitForFxEvents();
+
+        // Result:
+        // The pop up disappeared. Alice is now in the log in window again.
+        verify(app, times(1)).show("/login");
+        assertNull(tokenStorage.getName());
+        //assertEquals("Login", stage.getTitle());
     }
 
 

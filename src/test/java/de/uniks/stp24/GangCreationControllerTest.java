@@ -69,7 +69,7 @@ public class GangCreationControllerTest extends ControllerTest {
         String name = "Test Gang";
         clickOn("#gangNameText").write(name);
 
-        clickOn("#createButton");
+        clickOn("#ashkansButton");
         waitForFxEvents();
 
         // not ideal but good enough
@@ -107,60 +107,60 @@ public class GangCreationControllerTest extends ControllerTest {
         assertEquals(generatedDescription, description.getText());
     }
 
-//     @Test
-//     public void testDeletingGang() {
-//         // TODO: find a way to test controller without mocking every single behaviour
-//         // I couldn't do it for now, because controller needs a provider which doesn't work with @InjectMocks
-//         // I know this test is fake but I didn't found a better way for hours
+    @Test
+    public void testDeletingGang() {
+        // TODO: find a way to test controller without mocking every single behaviour
+        // I couldn't do it for now, because controller needs a provider which doesn't work with @InjectMocks
+        // I know this test is fake but I didn't found a better way for hours
 
-//         Button create =  lookup("#createButton").queryButton();
-//         Button showDeletePane =  lookup("#showDeletePaneButton").query();
-//         Pane deletePane = lookup("#deletePane").query();
+        Button create =  lookup("#ashkansButton").queryButton();
+        Button showDeletePane =  lookup("#showDeletePaneButton").query();
+        Pane deletePane = lookup("#deletePane").query();
 
-//         ListView<Gang> gangsListView = lookup("#gangsListView").query();
+        ListView<Gang> gangsListView = lookup("#gangsListView").query();
 
-//         gangsListView.setOnMouseClicked(event -> {
-//             create.setVisible(false);
-//             showDeletePane.setVisible(true);
-//         });
+        gangsListView.setOnMouseClicked(event -> {
+            create.setVisible(false);
+            showDeletePane.setVisible(true);
+        });
 
-//         doAnswer(f -> {
-//             gangs.add(new Gang("", "", 0, "", 0, "", new Color(0, 0, 0, 0)));
-//             gangsListView.setItems(this.gangs);
-//             return null;
-//         }).when(gangCreationController).create();
+        doAnswer(f -> {
+            gangs.add(new Gang("", "", 0, "", 0, "", new Color(0, 0, 0, 0)));
+            gangsListView.setItems(this.gangs);
+            return null;
+        }).when(gangCreationController).create();
 
-//         doAnswer(f -> {
-//             deletePane.setVisible(true);
-//             return null;
-//         }).when(gangCreationController).showDeletePane();
+        doAnswer(f -> {
+            deletePane.setVisible(true);
+            return null;
+        }).when(gangCreationController).showDeletePane();
 
-//         doAnswer(f -> {
-//             gangs.removeFirst();
-//             return null;
-//         }).when(gangCreationController).delete();
+        doAnswer(f -> {
+            gangs.removeFirst();
+            return null;
+        }).when(gangCreationController).delete();
 
-//         clickOn("#showCreationButton");
-//         waitForFxEvents();
+        clickOn("#showCreationButton");
+        waitForFxEvents();
 
-//         String name = "Test Gang";
-//         clickOn("#gangNameText").write(name);
+        String name = "Test Gang";
+        clickOn("#gangNameText").write(name);
 
-//         clickOn("#createButton");
-//         waitForFxEvents();
+        clickOn("#ashkansButton");
+        waitForFxEvents();
 
-//         int gangNums = gangsListView.getItems().size();
+        int gangNums = gangsListView.getItems().size();
 
-//         Gang toClick = gangsListView.getItems().getFirst();
-//         clickOn(String.valueOf(toClick));
-//         waitForFxEvents();
+        Gang toClick = gangsListView.getItems().getFirst();
+        clickOn(String.valueOf(toClick));
+        waitForFxEvents();
 
-//         clickOn(showDeletePane);
-//         waitForFxEvents();
+        clickOn(showDeletePane);
+        waitForFxEvents();
 
-//         clickOn("#deleteButton");
-//         waitForFxEvents();
+        clickOn("#deleteButton");
+        waitForFxEvents();
 
-//         assertEquals(gangNums - 1, gangsListView.getItems().size());
-//     }
+        assertEquals(gangNums - 1, gangsListView.getItems().size());
+    }
 }

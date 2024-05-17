@@ -71,6 +71,7 @@ public class BrowseGameService {
         } else {
             return null;
         }
+
     }
 
     public String getGameName() {

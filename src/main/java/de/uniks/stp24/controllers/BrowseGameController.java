@@ -15,7 +15,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.WindowEvent;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
@@ -47,6 +50,11 @@ BrowseGameController {
     public Button edit_game_b;
     @FXML
     public ListView<Game> gameList;
+    @FXML
+    public VBox browseGameVBoxButtons;
+    @FXML
+    public VBox browseGameVBoxList;
+
 
     @Inject
     App app;
@@ -132,8 +140,21 @@ BrowseGameController {
 
     public void deleteGame() {
         if(browseGameService.checkMyGame()) {
+            setBlur();
+            warningComponent.setGameName();
             showWarning();
         }
+    }
+
+    private void setBlur() {
+        BoxBlur blur = new BoxBlur(10, 10, 3);
+        browseGameVBoxList.setEffect(blur);
+        browseGameVBoxButtons.setEffect(blur);
+    }
+
+    public void removeBlur(){
+        browseGameVBoxList.setEffect(null);
+        browseGameVBoxButtons.setEffect(null);
     }
 
     private void showWarning(){

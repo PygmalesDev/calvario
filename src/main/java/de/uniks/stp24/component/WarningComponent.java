@@ -37,16 +37,17 @@ public class WarningComponent extends VBox{
 
     @Inject
     public WarningComponent() {
+
+    }
+
+    public void setGameName(){
+        gameNameText = browseGameService.getGameName();
+        gameName.setText(gameNameText);
     }
 
     @OnRender
     public void setBackground(){
-        warningWindow.addEventHandler(WindowEvent.WINDOW_SHOWING, event -> {
-            gameNameText = browseGameService.getGameName();
-            System.out.println(gameNameText + "#######");
-            gameName.setText(gameNameText);
-        });
-        warningWindow.setStyle("-fx-background-color: grey;");
+        warningWindow.setStyle("-fx-background-color: white;");
     }
 
     public void deleteGame() {

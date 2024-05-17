@@ -65,8 +65,10 @@ public class PauseMenuTest extends ControllerTest {
 
     @Test
     public void testChangeLanguage() {
+        settingsComponent.prefService = this.prefService;
         languageService.prefService = this.prefService;
         languageService.newResources = this.newResources;
+
         doAnswer(show -> {inGameService.setShowSettings(true);
             return null;
         }).when(pauseMenuComponent).settings();

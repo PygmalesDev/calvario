@@ -46,14 +46,6 @@ public class SettingsComponent extends VBox {
 
     }
 
-    /*@OnRender
-    public void initLanguage(){
-        if(prefService.getLocale() == Locale.ENGLISH){
-            englishLang.setSelected(true);
-        }else{
-            germanLang.setSelected(true);
-        }
-    }*/
 
     public void back() {
         inGameService.setShowSettings(false);

@@ -67,7 +67,7 @@
                        prefWidth="25.0">
             <graphic>
                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../Icons/Eye_Icon_32.png"/>
+                  <Image url="@../icons/Eye_Icon_32.png"/>
                </ImageView>
             </graphic>
          </ToggleButton>

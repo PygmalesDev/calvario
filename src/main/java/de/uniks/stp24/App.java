@@ -74,7 +74,7 @@ public class App extends FulibFxApp {
 
 
     private void setAppIcon(Stage stage) {
-        final Image image = new Image(App.class.getResource("test/911.png").toString());
+        final Image image = new Image(App.class.getResource("icons/icon.png").toString());
         stage.getIcons().add(image);
     }
 
@@ -85,7 +85,7 @@ public class App extends FulibFxApp {
 
         try {
             final Taskbar taskbar = Taskbar.getTaskbar();
-            final java.awt.Image image = ImageIO.read(App.class.getResource("test/911.png"));
+            final java.awt.Image image = ImageIO.read(App.class.getResource("icons/icon.png"));
             taskbar.setIconImage(image);
         } catch (Exception ignored) {
         }

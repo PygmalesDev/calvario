@@ -8,6 +8,8 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 public class AppTest extends ApplicationTest {
 
     @Spy
@@ -25,6 +27,7 @@ public class AppTest extends ApplicationTest {
 
     @Test
     public void v1() {
+        assertNotNull(app.stage().getIcons());
         // TODO login, main-menu, ...
     }
 

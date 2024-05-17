@@ -48,6 +48,10 @@ public class LoginController {
     TextField usernameInput;
     @FXML
     TextField showPasswordText;
+    @FXML
+    ToggleButton enToggleButton;
+    @FXML
+    ToggleButton deToggleButton;
 
     @Inject
     Subscriber subscriber;
@@ -66,8 +70,7 @@ public class LoginController {
     @Inject
     @Resource
     ResourceBundle resources;
-    @Inject
-    Provider<ResourceBundle> newResources;
+
 
     @Param("info")
     public String info;
@@ -81,7 +84,6 @@ public class LoginController {
 
     @Inject
     public LoginController() {
-        languageService = new LanguageService(app, prefService);
     }
 
     @OnRender
@@ -93,6 +95,11 @@ public class LoginController {
         if (Objects.nonNull(this.info))
             this.errorLabel.setText(this.info);
         if (justRegistered){ this.errorLabel.setText(resources.getString("account.registered"));}
+        if(prefService.getLocale() == Locale.ENGLISH){
+            enToggleButton.setSelected(true);
+        }else{
+            deToggleButton.setSelected(true);
+        }
     }
 
     private boolean checkIfInputNotBlankOrEmpty(String text) {
@@ -139,12 +146,21 @@ public class LoginController {
 
     @FXML
     public void setEn() {
-        languageService.setLocale(Locale.ENGLISH);
+        setLanguage(Locale.ENGLISH);
+        enToggleButton.setSelected(true);
+        deToggleButton.setSelected(false);
     }
 
     @FXML
     public void setDe() {
-        languageService.setLocale(Locale.GERMAN);
+        setLanguage(Locale.GERMAN);
+        enToggleButton.setSelected(false);
+        deToggleButton.setSelected(true);
+    }
+
+    public void setLanguage(Locale locale) {
+        resources = languageService.setLocale(locale);
+        app.refresh();
     }
 
 

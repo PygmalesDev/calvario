@@ -22,9 +22,9 @@
       <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="35.0" spacing="5.0">
          <ToggleButtonGroup maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
                             prefHeight="50.0" prefWidth="70.0" selectionType="SINGLE">
-            <ToggleButton contentDisplay="CENTER" onAction="#setEn" prefHeight="40.0" prefWidth="35.0"
-                          selected="true" text="EN"/>
-            <ToggleButton contentDisplay="CENTER" onAction="#setDe" prefHeight="40.0" prefWidth="35.0"
+            <ToggleButton fx:id="enToggleButton" contentDisplay="CENTER" onAction="#setEn" prefHeight="40.0" prefWidth="35.0"
+                          text="EN"/>
+            <ToggleButton fx:id="deToggleButton" contentDisplay="CENTER" onAction="#setDe" prefHeight="40.0" prefWidth="35.0"
                           text="DE"/>
          </ToggleButtonGroup>
       </HBox>

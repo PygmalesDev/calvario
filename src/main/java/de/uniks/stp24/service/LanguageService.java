@@ -10,24 +10,21 @@ import java.util.ResourceBundle;
 
 
 public class LanguageService {
-
-    public PrefService prefService;
     @Inject
-    @Resource
-    ResourceBundle resources;
+    PrefService prefService;
     @Inject
     Provider<ResourceBundle> newResources;
-    public App app;
 
     @Inject
-    public LanguageService(App app, PrefService prefService) {
-        this.app = app;
-        this.prefService = prefService;
+    public LanguageService() {
     }
 
-    public void setLocale(Locale locale) {
+    public ResourceBundle setLocale(Locale locale) {
         prefService.setLocale(locale);
-        resources = newResources.get();
+        return newResources.get();
+    }
+
+    public void refreshApp(App app){
         app.refresh();
     }
 }

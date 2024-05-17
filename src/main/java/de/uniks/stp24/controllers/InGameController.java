@@ -61,7 +61,6 @@ public class InGameController {
 
     @Inject
     public InGameController() {
-        languageService = new LanguageService(app, prefService);
     }
 
     @OnInit
@@ -81,9 +80,9 @@ public class InGameController {
     }
 
     private void handleLanguageChanged(PropertyChangeEvent propertyChangeEvent) {
-        // TODO change language
         Locale newLang = propertyChangeEvent.getNewValue().equals(0) ? Locale.GERMAN : Locale.ENGLISH;
         languageService.setLocale(newLang);
+        app.refresh();
     }
 
     private void handleShowSettings(PropertyChangeEvent propertyChangeEvent) {

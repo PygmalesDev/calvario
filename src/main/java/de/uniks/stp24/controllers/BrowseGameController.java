@@ -117,7 +117,9 @@ BrowseGameController {
         gameList.setCellFactory(list -> new ComponentListCell<>(app, gameComponentProvider));
     }
 
-    //Back to log in Screen after click Logout in BrowseGame Screen
+    /*
+    ============================================= On-Action buttons =============================================
+     */
     public void logOut() {
         app.show("/logout");
     }

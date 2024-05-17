@@ -1,5 +1,6 @@
-package de.uniks.stp24;
+package de.uniks.stp24.start;
 
+import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.controllers.LoginController;
 import de.uniks.stp24.model.LoginResult;
 import de.uniks.stp24.service.LoginService;
@@ -101,7 +102,7 @@ public class LoginControllerTest extends ControllerTest {
         // Result:
         // Her screen switches to the register window.
         waitForFxEvents();
-        assertEquals("SignUp", stage.getTitle());
+        assertEquals("Signup", stage.getTitle());
     }
 
     @Test

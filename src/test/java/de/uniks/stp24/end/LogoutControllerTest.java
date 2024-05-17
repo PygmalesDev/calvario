@@ -1,5 +1,6 @@
-package de.uniks.stp24;
+package de.uniks.stp24.end;
 
+import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.controllers.LoginController;
 import de.uniks.stp24.controllers.LogoutController;
 import de.uniks.stp24.model.LogoutResult;

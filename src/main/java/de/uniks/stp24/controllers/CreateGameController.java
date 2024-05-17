@@ -18,7 +18,7 @@ import org.fulib.fx.annotation.controller.Title;
 
 import javax.inject.Inject;
 
-@Title("CreateGame")
+@Title("Create Game")
 @Controller
 public class CreateGameController {
     @FXML
@@ -94,6 +94,10 @@ public class CreateGameController {
     public void cancel(){
         app.show("/browseGames");
     }
+
+    /*
+    ============================================= ERROR =============================================
+     */
 
     public void showErrorBox() {
         errorBox.setVisible(true);

@@ -19,7 +19,7 @@ import org.fulib.fx.annotation.controller.Title;
 
 import javax.inject.Inject;
 
-@Title("EditGame")
+@Title("Edit Game")
 @Controller
 public class EditGameController {
     @FXML

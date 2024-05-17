@@ -1,5 +1,6 @@
-package de.uniks.stp24;
+package de.uniks.stp24.start;
 
+import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.controllers.LoadController;
 import de.uniks.stp24.controllers.LoginController;
 import javafx.scene.input.KeyCode;
@@ -12,11 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.testfx.util.WaitForAsyncUtils.waitFor;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 @ExtendWith(MockitoExtension.class)
-public class LoadTest extends ControllerTest{
+public class LoadTest extends ControllerTest {
     @InjectMocks
     LoadController loadController;
     @InjectMocks

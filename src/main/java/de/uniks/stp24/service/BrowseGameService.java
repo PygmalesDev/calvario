@@ -1,12 +1,13 @@
 package de.uniks.stp24.service;
+
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.List;
 
 @Singleton
 public class BrowseGameService {

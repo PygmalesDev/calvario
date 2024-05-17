@@ -1,5 +1,6 @@
-package de.uniks.stp24;
+package de.uniks.stp24.game;
 
+import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.GameComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.model.Game;
@@ -149,13 +150,13 @@ public class BrowseGameControllerTest extends ControllerTest {
         //Click on edit game button and check if edit game screen is now displayed.
         clickOn(browseGameController.edit_game_b);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("EditGame", stage.getTitle());
+        assertEquals("Edit Game", stage.getTitle());
 
         //Click on confirm. No inputs for change was given. Screen do not change
         WaitForAsyncUtils.waitForFxEvents();
         Button confirmButton = lookup("#editGameConfirmButton").queryButton();
         clickOn(confirmButton);
-        assertEquals("EditGame", stage.getTitle());
+        assertEquals("Edit Game", stage.getTitle());
     }
 
     @Test

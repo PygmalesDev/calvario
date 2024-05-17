@@ -18,8 +18,7 @@ public class AutoLoginController {
     public AutoLoginController() {
     }
 
-    // show browse games screen after any click
-
+    // Show browse games screen after any click
     @OnKey()
     public void keyPressed() {
         app.show("/browseGames");

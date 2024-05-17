@@ -1,5 +1,6 @@
-package de.uniks.stp24;
+package de.uniks.stp24.start;
 
+import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.controllers.SignUpController;
 import de.uniks.stp24.dto.SignUpResultDto;
 import de.uniks.stp24.service.SignUpService;
@@ -37,7 +38,7 @@ public class TestSignUpNewUser extends ControllerTest {
         doReturn(Observable.just(new SignUpResultDto("a", "b", "c", "d", "e" )))
                 .when(this.signUpService).register(any(),any());
 
-        assertEquals("SignUp", stage.getTitle());
+        assertEquals("Signup", stage.getTitle());
         assertTrue(this.signUpController.registerButton.disableProperty().get());
 
         clickOn("#usernameField");

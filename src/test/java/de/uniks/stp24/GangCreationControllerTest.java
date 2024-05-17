@@ -69,7 +69,7 @@ public class GangCreationControllerTest extends ControllerTest {
         String name = "Test Gang";
         clickOn("#gangNameText").write(name);
 
-        clickOn("#createButton");
+        clickOn("#ashkansButton");
         waitForFxEvents();
 
         // not ideal but good enough
@@ -113,7 +113,7 @@ public class GangCreationControllerTest extends ControllerTest {
 //         // I couldn't do it for now, because controller needs a provider which doesn't work with @InjectMocks
 //         // I know this test is fake but I didn't found a better way for hours
 
-//         Button create =  lookup("#createButton").queryButton();
+//         Button create =  lookup("#ashkansButton").queryButton();
 //         Button showDeletePane =  lookup("#showDeletePaneButton").query();
 //         Pane deletePane = lookup("#deletePane").query();
 
@@ -146,7 +146,7 @@ public class GangCreationControllerTest extends ControllerTest {
 //         String name = "Test Gang";
 //         clickOn("#gangNameText").write(name);
 
-//         clickOn("#createButton");
+//         clickOn("#ashkansButton");
 //         waitForFxEvents();
 
 //         int gangNums = gangsListView.getItems().size();

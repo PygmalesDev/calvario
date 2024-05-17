@@ -54,7 +54,7 @@ public class GangCreationController {
     @FXML
     TextArea gangDescriptionText;
     // @FXML
-    public Button ashkansButton;
+    public Button createButton;
     @FXML
     Button editButton;
     @FXML
@@ -139,7 +139,7 @@ public class GangCreationController {
                 portraitImageIndex = gang.portraitIndex();
                 portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex).toURI().toString()));
                 gangDescriptionText.setText(gang.description());
-                ashkansButton.setVisible(false);
+                createButton.setVisible(false);
                 editButton.setVisible(true);
                 showDeletePaneButton.setVisible(true);
                 colorPicker.setValue(gang.color());
@@ -183,7 +183,7 @@ public class GangCreationController {
     public void showCreationPane() {
         creationPane.setVisible(true);
         resetCreationPane();
-        ashkansButton.setVisible(true);
+        createButton.setVisible(true);
         editButton.setVisible(false);
         showDeletePaneButton.setVisible(false);
     }

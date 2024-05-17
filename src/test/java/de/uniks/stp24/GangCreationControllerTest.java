@@ -69,7 +69,8 @@ public class GangCreationControllerTest extends ControllerTest {
         String name = "Test Gang";
         clickOn("#gangNameText").write(name);
 
-        clickOn("#ashkansButton");
+        waitForFxEvents();
+        clickOn("#createButton");
         waitForFxEvents();
 
         // not ideal but good enough
@@ -112,12 +113,15 @@ public class GangCreationControllerTest extends ControllerTest {
         // TODO: find a way to test controller without mocking every single behaviour
         // I couldn't do it for now, because controller needs a provider which doesn't work with @InjectMocks
         // I know this test is fake but I didn't found a better way for hours
+        waitForFxEvents();
+        Button create =  lookup("#createButton").queryButton();
+        waitForFxEvents();
 
-        Button create =  lookup("#ashkansButton").queryButton();
         Button showDeletePane =  lookup("#showDeletePaneButton").query();
         Pane deletePane = lookup("#deletePane").query();
 
         ListView<Gang> gangsListView = lookup("#gangsListView").query();
+
 
         gangsListView.setOnMouseClicked(event -> {
             create.setVisible(false);
@@ -146,7 +150,7 @@ public class GangCreationControllerTest extends ControllerTest {
         String name = "Test Gang";
         clickOn("#gangNameText").write(name);
 
-        clickOn("#ashkansButton");
+        clickOn("#createButton");
         waitForFxEvents();
 
         int gangNums = gangsListView.getItems().size();

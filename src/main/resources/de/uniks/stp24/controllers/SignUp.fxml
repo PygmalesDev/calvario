@@ -20,12 +20,12 @@
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.SignUpController">
    <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
       <ToggleButtonGroup blendMode="DARKEN">
-         <ToggleButton fx:id="languageToggleButton" selected="true" text="EN">
+         <ToggleButton fx:id="enToggleButton" onAction="#setEn" text="EN">
             <graphic>
                <Icon content="EMPTY"/>
             </graphic>
          </ToggleButton>
-         <ToggleButton text="DE">
+         <ToggleButton fx:id="deToggleButton" text="DE" onAction="#setDe">
             <graphic>
                <Icon content="EMPTY"/>
             </graphic>

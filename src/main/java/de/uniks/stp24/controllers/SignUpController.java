@@ -2,9 +2,12 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.rest.UserApiService;
+import de.uniks.stp24.service.LanguageService;
+import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.SignUpService;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -19,6 +22,7 @@ import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -46,6 +50,10 @@ public class SignUpController {
     TextField showRepeatPasswordText;
     @FXML
     ToggleButton showPasswordToggleButton;
+    @FXML
+    ToggleButton enToggleButton;
+    @FXML
+    ToggleButton deToggleButton;
 
     @Param("username")
     public String username;
@@ -61,6 +69,10 @@ public class SignUpController {
     @Inject
     UserApiService userApiService;
     @Inject
+    PrefService prefService;
+    @Inject
+    LanguageService languageService;
+    @Inject
     @Resource
     ResourceBundle resources;
 
@@ -69,6 +81,7 @@ public class SignUpController {
     private BooleanBinding isRepeatPasswordEmpty;
     private BooleanBinding passwordInputsMatch;
     private BooleanBinding isPasswordTooShort;
+
 
     @Inject
     public SignUpController() {
@@ -92,6 +105,11 @@ public class SignUpController {
             this.usernameField.setText(this.username);
         if (Objects.nonNull(this.password))
             this.passwordField.setText(this.password);
+        if(prefService.getLocale() == Locale.ENGLISH){
+            enToggleButton.setSelected(true);
+        }else{
+            deToggleButton.setSelected(true);
+        }
     }
 
     // Disables register button when input fields are empty or password inputs do not match
@@ -189,5 +207,23 @@ public class SignUpController {
     @OnDestroy
     public void destroy() {
         this.subscriber.dispose();
+    }
+
+    public void setEn() {
+        setLanguage(Locale.ENGLISH);
+        enToggleButton.setSelected(true);
+        deToggleButton.setSelected(false);
+    }
+
+    @FXML
+    public void setDe() {
+        setLanguage(Locale.GERMAN);
+        enToggleButton.setSelected(false);
+        deToggleButton.setSelected(true);
+    }
+
+    public void setLanguage(Locale locale) {
+        resources = languageService.setLocale(locale);
+        app.refresh();
     }
 }

@@ -18,6 +18,8 @@ public class ControllerTest extends ApplicationTest {
     public void start(Stage stage) throws Exception {
         super.start(stage);
         this.stage = stage;
+        stage.setX(0);
+        stage.setY(0);
         stage.requestFocus();
         app.start(stage);
     }

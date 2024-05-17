@@ -8,6 +8,7 @@ import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.CreateGameService;
 import de.uniks.stp24.service.EditGameService;
 import de.uniks.stp24.ws.EventListener;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -75,24 +76,30 @@ BrowseGameController {
         editGameService.setGamesList(games);
         createGameService.setGamesList(games);
 
-        subscriber.subscribe(gamesApiService.findAll().subscribe(this.games::setAll));
+        gamesApiService.findAll().subscribe(gameList -> {
+            Platform.runLater(() -> {
+                games.setAll(gameList);
+                // Update the ListView after data is set
+                updateListView();
+            });
+        });
 
-        //Listener for updating list of games if games are created, deleted or up
+        // Listener for updating list of games if games are created, deleted or updated
         subscriber.subscribe(eventListener.listen("games.*.*", Game.class), event -> {
-            switch (event.suffix()) {
-                case "created" -> games.add(event.data());
-                case "update" -> games.replaceAll(g -> g._id().equals(event.data()._id()) ? event.data() : g);
-                case "deleted" -> games.removeIf(g -> g._id().equals(event.data()._id()));
-            }
+            Platform.runLater(() -> {
+                switch (event.suffix()) {
+                    case "created" -> games.add(event.data());
+                    case "update" -> games.replaceAll(g -> g._id().equals(event.data()._id()) ? event.data() : g);
+                    case "deleted" -> games.removeIf(g -> g._id().equals(event.data()._id()));
+                }
+            });
         });
     }
 
     //Make list of games visible
     @OnRender
     void render() {
-        games = browseGameService.sortGames(games);
-        gameList.setItems(games);
-        gameList.setCellFactory(list -> new ComponentListCell<>(app, gameComponentProvider));
+        updateListView();
     }
 
     @OnDestroy
@@ -102,6 +109,12 @@ BrowseGameController {
 
     @Inject
     public BrowseGameController() {
+    }
+
+    public void updateListView(){
+        games = browseGameService.sortGames(games);
+        gameList.setItems(games);
+        gameList.setCellFactory(list -> new ComponentListCell<>(app, gameComponentProvider));
     }
 
     //Back to log in Screen after click Logout in BrowseGame Screen

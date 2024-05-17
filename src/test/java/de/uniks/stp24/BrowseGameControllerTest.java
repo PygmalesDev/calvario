@@ -60,6 +60,61 @@ public class BrowseGameControllerTest extends ControllerTest {
         app.show(browseGameController);
     }
 
+    /*
+    ============================================= Test browse game buttons =============================================
+     */
+
+    @Test
+    void logOut(){
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Browse Game", stage.getTitle());
+        clickOn(browseGameController.log_out_b);
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Logout", stage.getTitle());
+    }
+
+    @Test
+    void newGame(){
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Browse Game", stage.getTitle());
+        clickOn(browseGameController.new_game_b);
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Create Game", stage.getTitle());
+    }
+
+    @Test
+    void loadGame(){
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Browse Game", stage.getTitle());
+        clickOn(browseGameController.load_game_b);
+        WaitForAsyncUtils.waitForFxEvents();
+        //TODO: Wait for PR LoadGame
+        //assertEquals("Load Game", stage.getTitle());
+    }
+
+    @Test
+    void deleteGame(){
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Browse Game", stage.getTitle());
+        clickOn(browseGameController.del_game_b);
+        WaitForAsyncUtils.waitForFxEvents();
+        //TODO: Wait for PR Delete Game
+        //assertEquals("Delete Game", stage.getTitle());
+    }
+
+    @Test
+    void editAcc(){
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Browse Game", stage.getTitle());
+        clickOn(browseGameController.edit_acc_b);
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Edit Account", stage.getTitle());
+    }
+
+    /*
+    ============================================= Test ListView of Lobby =============================================
+     */
+
     @Test
     void testLobbyList(){
         //Create new Game and check if game is listed on ListView
@@ -77,16 +132,9 @@ public class BrowseGameControllerTest extends ControllerTest {
         assertEquals(2, browseGameController.gameList.getItems().size());
     }
 
-    //Check if logout-screen is displayed after clicking on logout button
-    @Test
-    void logOut(){
-        WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Browse Game", stage.getTitle());
-        clickOn(browseGameController.log_out_b);
-        WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Logout", stage.getTitle());
-    }
-
+    /*
+    ============================================= Test edit game =========================================================
+     */
 
     @Test
     void editGame(){

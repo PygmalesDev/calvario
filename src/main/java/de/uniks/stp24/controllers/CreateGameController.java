@@ -81,9 +81,7 @@ public class CreateGameController {
                 that call of createGame is done on a different background thread so
                 the ui is not blocked.
                  */
-                createGameService.createGame(gameName, settings, password).subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.single())
-                        .subscribe(result -> {
+                createGameService.createGame(gameName, settings, password).subscribe(result -> {
                             Platform.runLater(() -> {
                                 browseGameController.init();
                                 app.show(browseGameController);

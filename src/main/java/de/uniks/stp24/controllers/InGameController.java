@@ -51,7 +51,8 @@ public class InGameController {
 
     @Inject
     InGameService inGameService;
-    public LanguageService languageService;
+    @Inject
+    LanguageService languageService;
     @Inject
     @Resource
     ResourceBundle resources;
@@ -81,7 +82,7 @@ public class InGameController {
 
     private void handleLanguageChanged(PropertyChangeEvent propertyChangeEvent) {
         Locale newLang = propertyChangeEvent.getNewValue().equals(0) ? Locale.GERMAN : Locale.ENGLISH;
-        languageService.setLocale(newLang);
+        resources = languageService.setLocale(newLang);
         app.refresh();
     }
 

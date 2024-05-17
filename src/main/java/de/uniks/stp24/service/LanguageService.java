@@ -24,7 +24,4 @@ public class LanguageService {
         return newResources.get();
     }
 
-    public void refreshApp(App app){
-        app.refresh();
-    }
 }

@@ -53,8 +53,8 @@ public class GangCreationController {
     TextField gangNameText;
     @FXML
     TextArea gangDescriptionText;
-    @FXML
-    Button createButton;
+    // @FXML
+    public Button createButton;
     @FXML
     Button editButton;
     @FXML

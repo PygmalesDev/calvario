@@ -29,7 +29,7 @@
       </Text>
       <ToggleButtonGroup layoutX="229.0" layoutY="74.0" prefWidth="122.0" selectionType="SINGLE">
          <ToggleButton fx:id="germanLang" onAction="#setToGerman" prefHeight="45.0" prefWidth="45.0"
-                       selected="true" text="DE"/>
+                       text="DE"/>
          <ToggleButton fx:id="englishLang" onAction="#setToEnglish" prefHeight="45.0" prefWidth="45.0" text="EN"/>
       </ToggleButtonGroup>
    </Pane>

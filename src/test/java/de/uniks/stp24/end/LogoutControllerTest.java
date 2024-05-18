@@ -50,7 +50,7 @@ public class LogoutControllerTest extends ControllerTest {
 
         // Alice sees now the login screen
         verify(logoutService,times(1)).logout("");
-        assertEquals("Login", stage.getTitle());
+        assertEquals(resources.getString("login"),stage.getTitle());
     }
     @Test
     public void clickOnCancel() {

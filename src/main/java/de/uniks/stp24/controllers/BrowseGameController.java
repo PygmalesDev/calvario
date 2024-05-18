@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -24,6 +25,7 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.ResourceBundle;
 
 @Title("Browse Game")
 @Controller
@@ -62,6 +64,9 @@ BrowseGameController {
     EditGameService editGameService;
     @Inject
     CreateGameService createGameService;
+    @Inject
+    @Resource
+    ResourceBundle resources;
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
 

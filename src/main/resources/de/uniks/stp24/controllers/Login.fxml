@@ -11,6 +11,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -82,7 +83,7 @@
                      </ToggleButton>
                   </HBox>
                </VBox>
-               <HBox alignment="BOTTOM_RIGHT" prefHeight="222.0" prefWidth="550.0">
+               <HBox alignment="BOTTOM_CENTER" prefHeight="222.0" prefWidth="550.0">
                   <children>
                      <VBox alignment="CENTER" prefHeight="222.0" prefWidth="350.0">
                         <Text fx:id="errorLabel" strokeType="OUTSIDE" strokeWidth="0.0">
@@ -118,11 +119,7 @@
                            </VBox.margin>
                         </Button>
                      </VBox>
-                     <ImageView fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                           <Image url="@../assets/logos/captainWebjaw.png" />
-                        </image>
-                     </ImageView>
+                     <Pane fx:id="captainContainer" prefHeight="0.0" prefWidth="0.0" />
                   </children>
                </HBox>
             </VBox>

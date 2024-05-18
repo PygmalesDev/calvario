@@ -2,15 +2,19 @@ package de.uniks.stp24.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.model.ErrorResponse;
 import de.uniks.stp24.service.LanguageService;
 import de.uniks.stp24.service.LoginService;
 import de.uniks.stp24.service.PrefService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
@@ -20,16 +24,16 @@ import retrofit2.HttpException;
 
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.concurrent.Flow;
 
 @Title("%login")
 @Controller
 public class LoginController {
+    @FXML
+    Pane captainContainer;
     @FXML
     Button licensesButton;
     @FXML
@@ -67,6 +71,10 @@ public class LoginController {
     @Inject
     PrefService prefService;
 
+    @SubComponent
+    @Inject
+    BubbleComponent bubbleComponent;
+
     @Inject
     @Resource
     ResourceBundle resources;
@@ -84,6 +92,22 @@ public class LoginController {
 
     @Inject
     public LoginController() {
+    }
+
+    @OnRender
+    public void addSpeechBubble() {
+        captainContainer.getChildren().add(bubbleComponent);
+        Platform.runLater(() -> {
+            bubbleComponent.addChildren(errorLabel);
+            bubbleComponent.setCaptainText(resources.getString("pirate.login.text"));
+            errorLabel.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (errorLabel.getText().equals(resources.getString("validation.failed")) ||
+                        errorLabel.getText().equals(resources.getString("put.in.username.password")) ||
+                        errorLabel.getText().equals(resources.getString("invalid.username.or.password"))
+                ) bubbleComponent.setErrorMode(true);
+                else bubbleComponent.setErrorMode(false);
+            });
+        });
     }
 
     @OnRender
@@ -192,11 +216,9 @@ public class LoginController {
     // if response from server => error, choose a text depending on code
     // maybe it should be considered to write a class for this
     private void writeText(int code) {
-        this.errorLabel.setStyle("-fx-fill: red;");
         String info;
         switch (code) {
             case 100 -> {
-                this.errorLabel.setStyle("-fx-fill: black;");
                 info = resources.getString("logging.in");
             }
             case 400 -> info = resources.getString("validation.failed");

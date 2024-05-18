@@ -1,10 +1,12 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.LanguageService;
 import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.SignUpService;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
@@ -13,9 +15,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
@@ -42,6 +46,8 @@ public class SignUpController {
     PasswordField repeatPasswordField;
     @FXML
     Text errorTextField;
+    @FXML
+    Pane captainContainer;
     @FXML
     public Button registerButton;
     @FXML
@@ -76,6 +82,10 @@ public class SignUpController {
     @Resource
     ResourceBundle resources;
 
+    @SubComponent
+    @Inject
+    BubbleComponent bubbleComponent;
+
     private BooleanBinding isLoginFieldEmpty;
     private BooleanBinding isPasswordFieldEmpty;
     private BooleanBinding isRepeatPasswordEmpty;
@@ -85,6 +95,23 @@ public class SignUpController {
 
     @Inject
     public SignUpController() {
+    }
+
+    @OnRender
+    public void addSpeechBubble() {
+        captainContainer.getChildren().add(bubbleComponent);
+        Platform.runLater(() -> {
+            bubbleComponent.addChildren(errorTextField);
+            bubbleComponent.setCaptainText(resources.getString("pirate.register.text"));
+            errorTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (errorTextField.getText().equals(resources.getString("enter.username")) ||
+                        errorTextField.getText().equals(resources.getString("enter.password")) ||
+                        errorTextField.getText().equals(resources.getString("repeat.password")) ||
+                        errorTextField.getText().equals(resources.getString("passwords.do.not.match"))
+                        ) bubbleComponent.setErrorMode(true);
+                else bubbleComponent.setErrorMode(false);
+            });
+        });
     }
 
     // Sets boolean bindings for text manipulations

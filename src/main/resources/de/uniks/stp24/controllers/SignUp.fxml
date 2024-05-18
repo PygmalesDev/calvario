@@ -10,6 +10,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -105,24 +106,29 @@
                      </font>
                   </Text>
                </VBox>
-               <VBox alignment="CENTER" prefHeight="149.0" prefWidth="100.0">
-                  <Button fx:id="registerButton" mnemonicParsing="false" onAction="#register" prefHeight="40.0" prefWidth="250.0" text="%register">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Button>
-                  <Button cancelButton="true" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="250.0" text="%go.back">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </Button>
-               </VBox>
+               <HBox alignment="CENTER">
+                  <children>
+                     <VBox alignment="CENTER" prefHeight="149.0" prefWidth="100.0">
+                        <Button fx:id="registerButton" mnemonicParsing="false" onAction="#register" prefHeight="40.0" prefWidth="250.0" text="%register">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </Button>
+                        <Button cancelButton="true" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="250.0" text="%go.back">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </Button>
+                     </VBox>
+                     <Pane fx:id="captainContainer" prefHeight="0.0" prefWidth="0.0" />
+                  </children>
+               </HBox>
             </VBox>
             <HBox prefHeight="20.0" prefWidth="200.0" style="-fx-background-color: Black;" />
          </VBox>

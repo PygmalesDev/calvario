@@ -6,6 +6,7 @@ import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.AuthApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.UserApiService;
+import de.uniks.stp24.rest.GameMembersApiService;
 import org.mockito.Mockito;
 
 @Module
@@ -14,7 +15,6 @@ public class TestModule {
     AuthApiService authApiService() {
         return Mockito.mock(AuthApiService.class);
     }
-
     @Provides
     UserApiService userApiService() {
         return Mockito.mock(UserApiService.class);
@@ -23,6 +23,11 @@ public class TestModule {
     @Provides
     GamesApiService gamesApiService() {
         return Mockito.mock(GamesApiService.class);
+    }
+  
+     @Provides
+    GameMembersApiService gameMembersApiService(){
+        return Mockito.mock(GameMembersApiService.class);
     }
 
 }

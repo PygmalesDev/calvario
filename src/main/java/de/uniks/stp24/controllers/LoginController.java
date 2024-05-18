@@ -19,7 +19,7 @@ import javax.inject.Inject;
 import java.util.Map;
 import java.util.Objects;
 
-@Title("Login")
+@Title("LOGIN  ")
 @Controller
 public class LoginController {
     @FXML

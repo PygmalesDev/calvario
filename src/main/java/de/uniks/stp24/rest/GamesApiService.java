@@ -8,8 +8,10 @@ import de.uniks.stp24.model.Game;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.*;
 
+import javax.inject.Singleton;
 import java.util.List;
 
+@Singleton
 public interface GamesApiService {
     @PATCH("games/{id}")
     Observable<UpdateGameResultDto> editGame(@Path("id") String id, @Body UpdateGameDto dto);

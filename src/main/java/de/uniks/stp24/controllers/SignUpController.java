@@ -5,6 +5,7 @@ import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.SignUpService;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -185,5 +186,11 @@ public class SignUpController {
     @OnDestroy
     public void destroy() {
         this.subscriber.dispose();
+    }
+
+    public void setEn(ActionEvent actionEvent) {
+    }
+
+    public void setDe(ActionEvent actionEvent) {
     }
 }

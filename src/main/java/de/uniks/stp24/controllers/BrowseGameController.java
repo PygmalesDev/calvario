@@ -11,6 +11,7 @@ import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -25,6 +26,7 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 @Title("Browse Game")
@@ -80,6 +82,7 @@ BrowseGameController {
 
         editGameService.setGamesList(games);
         createGameService.setGamesList(games);
+        browseGameService.resetSelectedGame();
 
         gamesApiService.findAll().subscribe(gameList -> {
             Platform.runLater(() -> {
@@ -141,5 +144,11 @@ BrowseGameController {
 
     public void editAccount() {
         app.show("/editAcc");
+    }
+
+    public void loadGame() {
+        if(browseGameService.getGame() != null) {
+            app.show("/lobby", Map.of("gameid", browseGameService.getGame()._id()));
+        }
     }
 }

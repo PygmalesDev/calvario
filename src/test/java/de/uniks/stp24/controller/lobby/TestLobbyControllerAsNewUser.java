@@ -175,6 +175,7 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
 
         // Test inputting the incorrect password
         clickOn("#passwordInputField").write("1");
+        WaitForAsyncUtils.waitForFxEvents();
         clickOn("#joinButton");
 
         WaitForAsyncUtils.waitForFxEvents();

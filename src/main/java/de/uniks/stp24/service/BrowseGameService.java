@@ -29,6 +29,10 @@ public class BrowseGameService {
         this.game = game;
     }
 
+    public Game getGame(){
+        return this.game;
+    }
+
     public void resetSelectedGame(){
         this.game = null;
     }

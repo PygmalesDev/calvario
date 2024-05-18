@@ -1,6 +1,5 @@
-package de.uniks.stp24.start;
+package de.uniks.stp24;
 
-import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.controllers.LoadController;
 import de.uniks.stp24.controllers.LoginController;
 import javafx.scene.input.KeyCode;
@@ -31,7 +30,7 @@ public class LoadTest extends ControllerTest {
         // Start:
         // Alice has started the game STPellar. She sees the Load screen.
         // She is prompted to press a key to continue.
-        assertEquals(stage.getTitle(), "Game Name");
+        assertEquals(stage.getTitle(), "Calvario");
 
         // Action:
         // Alice presses Enter
@@ -41,7 +40,7 @@ public class LoadTest extends ControllerTest {
 
         // Result:
         // Alice should now be in Login screen.
-        assertEquals(stage.getTitle(), "Login");
+        assertEquals(stage.getTitle(), "LOGIN  ");
     }
 
 }

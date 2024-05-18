@@ -20,12 +20,12 @@
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.SignUpController">
    <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
       <ToggleButtonGroup blendMode="DARKEN">
-         <ToggleButton fx:id="languageToggleButton" selected="true" text="EN">
+         <ToggleButton fx:id="enToggleButton" onAction="#setEn" text="EN">
             <graphic>
                <Icon content="EMPTY"/>
             </graphic>
          </ToggleButton>
-         <ToggleButton text="DE">
+         <ToggleButton fx:id="deToggleButton" text="DE" onAction="#setDe">
             <graphic>
                <Icon content="EMPTY"/>
             </graphic>
@@ -39,7 +39,7 @@
    </Label>
    <VBox alignment="CENTER" prefHeight="250.0" prefWidth="500.0">
       <TextField fx:id="usernameField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
-                 prefHeight="50.0" prefWidth="350.0" promptText="USERNAME">
+                 prefHeight="50.0" prefWidth="350.0" promptText="%username">
          <font>
             <Font size="15.0"/>
          </font>
@@ -63,7 +63,7 @@
          <VBox alignment="CENTER" prefHeight="120.0" prefWidth="399.0">
             <PasswordField fx:id="passwordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity"
                            minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0"
-                           promptText="PASSWORD">
+                           promptText="%password">
                <font>
                   <Font size="15.0"/>
                </font>
@@ -83,7 +83,7 @@
             </TextField>
             <PasswordField fx:id="repeatPasswordField" alignment="CENTER" maxHeight="-Infinity"
                            maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0"
-                           prefWidth="350.0" promptText="REPEAT PASSWORD">
+                           prefWidth="350.0" promptText="%repeat.password">
                <font>
                   <Font size="15.0"/>
                </font>
@@ -127,7 +127,7 @@
 
 
       <Button fx:id="registerButton" mnemonicParsing="false" onAction="#register" prefHeight="75.0" prefWidth="300.0"
-              style="-fx-background-color: #3BB143;" text="Register">
+              style="-fx-background-color: #3BB143;" text="%register">
          <font>
             <Font size="15.0"/>
          </font>
@@ -136,7 +136,7 @@
          </VBox.margin>
       </Button>
       <Button mnemonicParsing="false" cancelButton="true" onAction="#goBack" prefHeight="75.0" prefWidth="300.0"
-              style="-fx-background-color: RED;" text="Return">
+              style="-fx-background-color: RED;" text="%go.back">
          <font>
             <Font size="15.0"/>
          </font>

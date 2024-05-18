@@ -4,6 +4,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
@@ -16,13 +17,25 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="860.0" prefWidth="1280.0" styleClass="background" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.LoginController">
-   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+   <HBox alignment="CENTER" prefHeight="860.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
-         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="606.0" prefWidth="721.0">
+         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="636.0" prefWidth="721.0">
             <children>
-               <VBox alignment="TOP_CENTER" maxHeight="540" maxWidth="400" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="400.0" spacing="20.0" styleClass="cardBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <VBox alignment="TOP_CENTER" prefHeight="636.0" prefWidth="721.0" spacing="20.0" styleClass="cardBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <HBox prefHeight="30.0" prefWidth="721.0" style="-fx-background-color: Black;">
+                     <children>
+                        <Label text="%calvario.login" textFill="WHITE">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="-20.0" />
+                     </VBox.margin>
+                  </HBox>
                   <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="35.0" spacing="5.0">
-                     <ToggleButtonGroup maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="100.0" selectionType="SINGLE">
+                     <ToggleButtonGroup prefHeight="60.0" prefWidth="100.0" selectionType="SINGLE">
                         <ToggleButton fx:id="enToggleButton" contentDisplay="CENTER" onAction="#setEn" prefHeight="60.0" prefWidth="50.0" text="EN" />
                         <ToggleButton fx:id="deToggleButton" contentDisplay="CENTER" onAction="#setDe" prefHeight="60.0" prefWidth="50.0" text="DE" />
                      </ToggleButtonGroup>

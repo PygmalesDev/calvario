@@ -12,7 +12,7 @@
    <VBox alignment="TOP_CENTER" prefHeight="540.0" prefWidth="400.0" spacing="20.0" AnchorPane.bottomAnchor="0.0"
          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="35.0" spacing="5.0"/>
-      <Text fx:id="messageField" strokeType="OUTSIDE" strokeWidth="0.0" text="logout?" textAlignment="CENTER"
+      <Text fx:id="messageField" strokeType="OUTSIDE" strokeWidth="0.0" text="%log.out" textAlignment="CENTER"
             textOrigin="CENTER" wrappingWidth="300.0">
          <font>
             <Font size="50.0"/>
@@ -24,13 +24,13 @@
          </font>
       </Text>
       <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logout" prefHeight="40.0" prefWidth="250.0"
-              text="Logout">
+              text="%log.out">
          <font>
             <Font size="15.0"/>
          </font>
       </Button>
       <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false" onAction="#cancel" prefHeight="40.0"
-              prefWidth="250.0" text="Cancel">
+              prefWidth="250.0" text="%cancel">
          <font>
             <Font size="15.0"/>
          </font>

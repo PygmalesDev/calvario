@@ -19,6 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -29,6 +30,7 @@ import retrofit2.HttpException;
 
 import javax.inject.Inject;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 @Title("Edit Account")
 @Controller
@@ -68,6 +70,9 @@ public class EditAccController {
     ImageCache imageCache;
     @Inject
     ObjectMapper objectMapper;
+    @Inject
+    @Resource
+    ResourceBundle resources;
 
 
     @SubComponent
@@ -204,11 +209,11 @@ public class EditAccController {
         this.errorLabelEditAcc.setStyle("-fx-fill: red;");
         String info;
         switch (code) {
-            case 400 -> info = "invalid password";
-            case 401 -> info = "validation failed";
-            case 403 -> info = "attempting to change someone else's user";
-            case 409 -> info = "username in use by another user";
-            default ->  info = "please put in name or/and password";
+            case 400 -> info = resources.getString("invalid.password");
+            case 401 -> info = resources.getString("validation.failed");
+            case 403 -> info = resources.getString("attempting.to.change.someone.else.user");
+            case 409 -> info = resources.getString("username.in.use.by.another.user");
+            default ->  info = resources.getString("put.in.username.password");
         }
         this.errorLabelEditAcc.setText(info);
     }

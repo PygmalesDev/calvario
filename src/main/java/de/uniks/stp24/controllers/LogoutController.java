@@ -6,12 +6,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.param.Param;
 
 import javax.inject.Inject;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 @Title("Logout")
 @Controller
@@ -29,6 +31,9 @@ public class LogoutController{
     App app;
     @Inject
     LogoutService logoutService;
+    @Inject
+    @Resource
+    ResourceBundle resources;
     @Param("info")
     public String info;
 
@@ -42,7 +47,7 @@ public class LogoutController{
         logoutService.logout("")
                 .doFinally(() -> {
                     System.out.println("LOGGING OUT");
-                    info = "logout successful on this device";
+                    info = resources.getString("logout.successful.on.this.device");
                 })
                 .subscribe().dispose();
         app.show("/login", Map.of("info",info));

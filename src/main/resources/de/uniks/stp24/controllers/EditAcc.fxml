@@ -15,26 +15,26 @@
    <HBox fx:id="editAccHBox" alignment="CENTER" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <AnchorPane prefHeight="200.0" prefWidth="400.0">
          <VBox alignment="CENTER" prefHeight="400.0" prefWidth="400.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Your Account">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%wanted">
                <font>
                   <Font name="System Bold" size="25.0" />
                </font>
             </Text>
             <ImageView fx:id="avatarImage" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="15.0">
-               <Button fx:id="saveChangesButton" mnemonicParsing="false" onAction="#saveChanges" prefHeight="30.0" prefWidth="150.0" text="Save Changes" visible="false">
+               <Button fx:id="saveChangesButton" mnemonicParsing="false" onAction="#saveChanges" prefHeight="30.0" prefWidth="150.0" text="%save" visible="false">
                   <font>
                      <Font size="15.0" />
                   </font>
                </Button>
-               <Button fx:id="cancelChangesButton" mnemonicParsing="false" onAction="#cancelChanges" prefHeight="30.0" prefWidth="150.0" text="Cancel" visible="false">
+               <Button fx:id="cancelChangesButton" mnemonicParsing="false" onAction="#cancelChanges" prefHeight="30.0" prefWidth="150.0" text="%cancel" visible="false">
                   <font>
                      <Font size="15.0" />
                   </font>
                </Button>
             </HBox>
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="15.0">
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username:">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%username">
                   <font>
                      <Font size="15.0" />
                   </font>
@@ -46,7 +46,7 @@
                </TextField>
             </HBox>
             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="15.0">
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%password">
                   <font>
                      <Font size="15.0" />
                   </font>
@@ -57,7 +57,7 @@
                   </font>
                </TextField>
             </HBox>
-            <Text fx:id="errorLabelEditAcc" strokeType="OUTSIDE" strokeWidth="0.0" text="WarningText">
+            <Text fx:id="errorLabelEditAcc" strokeType="OUTSIDE" strokeWidth="0.0" text="%text">
                <font>
                   <Font size="15.0" />
                </font>
@@ -66,17 +66,17 @@
       </AnchorPane>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <VBox alignment="CENTER" prefHeight="400.0" prefWidth="200.0" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <ToggleButton fx:id="changeUserInfoButton" mnemonicParsing="false" onAction="#changeUserInfo" prefHeight="30.0" prefWidth="150.0" text="Edit Account">
+            <ToggleButton fx:id="changeUserInfoButton" mnemonicParsing="false" onAction="#changeUserInfo" prefHeight="30.0" prefWidth="150.0" text="%edit">
                <font>
                   <Font size="15.0" />
                </font>
             </ToggleButton>
-            <Button fx:id="deleteUserButton" mnemonicParsing="false" onAction="#deleteUser" prefHeight="30.0" prefWidth="150.0" text="Delete User">
+            <Button fx:id="deleteUserButton" mnemonicParsing="false" onAction="#deleteUser" prefHeight="30.0" prefWidth="150.0" text="%delete">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" prefHeight="30.0" prefWidth="150.0" text="Go Back">
+            <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" prefHeight="30.0" prefWidth="150.0" text="%go.back">
                <font>
                   <Font size="15.0" />
                </font>

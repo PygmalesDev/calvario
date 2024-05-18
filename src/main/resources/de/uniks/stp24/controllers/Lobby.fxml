@@ -8,34 +8,40 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.LobbyController">
-   <children>
-      <Pane layoutX="300.0" layoutY="248.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-border-color: BLACK;">
-         <children>
-            <Pane layoutX="375.0" layoutY="1.0" prefHeight="66.0" prefWidth="226.0" style="-fx-background-color: #d8d6ff;">
-               <children>
-                  <Text layoutX="44.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="List of Players" textAlignment="CENTER">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Text>
-               </children>
-            </Pane>
-            <ListView fx:id="playerListView" layoutX="374.0" layoutY="65.0" maxWidth="226.0" prefHeight="237.0" prefWidth="226.0" />
-            <Line endY="288.0" layoutX="373.0" layoutY="15.0" startY="-13.0" />
-            <StackPane fx:id="lobbyElement" layoutX="2.0" layoutY="2.0" prefHeight="302.0" prefWidth="370.0" style="-fx-background-color: WHITE;" />
-         </children>
+<Pane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="de.uniks.stp24.controllers.LobbyController">
+   <Pane layoutX="300.0" layoutY="248.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+         minWidth="-Infinity">
+      <style>-fx-border-color: BLACK;</style>
+      <Pane layoutX="375.0" layoutY="1.0" prefHeight="66.0" prefWidth="226.0">
+         <style>-fx-background-color: #d8d6ff;</style>
+         <Text layoutX="44.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="List of Players"
+               textAlignment="CENTER">
+            <font>
+               <Font size="24.0"/>
+            </font>
+         </Text>
       </Pane>
-      <Pane fx:id="lobbyMessagePane" opacity="0.5" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: GRAY;" visible="false" />
-      <Pane fx:id="lobbyMessageElement" layoutX="450.0" layoutY="325.0" prefHeight="150.0" prefWidth="300.0" style="-fx-background-color: WHITE; -fx-background-radius: 15; -fx-border-color: BLACK; -fx-border-radius: 15;" visible="false">
-         <children>
-            <Text fx:id="messageText" layoutX="37.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Host has left the lobby!" textAlignment="CENTER" wrappingWidth="226.0">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <Button fx:id="returnButton" layoutX="109.0" layoutY="88.0" mnemonicParsing="false" onAction="#goBack" prefHeight="32.0" prefWidth="83.0" text="Return" />
-         </children>
-      </Pane>
-   </children>
+      <ListView fx:id="playerListView" layoutX="374.0" layoutY="65.0" maxWidth="226.0" prefHeight="237.0"
+                prefWidth="226.0"/>
+      <Line endY="288.0" layoutX="373.0" layoutY="15.0" startY="-13.0"/>
+      <StackPane fx:id="lobbyElement" layoutX="2.0" layoutY="2.0" prefHeight="302.0" prefWidth="370.0">
+         <style>-fx-background-color: WHITE;</style>
+      </StackPane>
+   </Pane>
+   <Pane fx:id="lobbyMessagePane" opacity="0.5" prefHeight="800.0" prefWidth="1200.0" visible="false">
+      <style>-fx-background-color: GRAY;</style>
+   </Pane>
+   <Pane fx:id="lobbyMessageElement" layoutX="450.0" layoutY="325.0" prefHeight="150.0" prefWidth="300.0" visible="false">
+      <style>-fx-background-color: WHITE; -fx-background-radius: 15; -fx-border-color: BLACK; -fx-border-radius: 15;
+      </style>
+      <Text fx:id="messageText" layoutX="37.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0"
+            text="Host has left the lobby!" textAlignment="CENTER" wrappingWidth="226.0">
+         <font>
+            <Font size="16.0"/>
+         </font>
+      </Text>
+      <Button fx:id="returnButton" layoutX="109.0" layoutY="88.0" mnemonicParsing="false" onAction="#goBack"
+              prefHeight="32.0" prefWidth="83.0" text="Return"/>
+   </Pane>
 </Pane>

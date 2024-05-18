@@ -1,9 +1,1 @@
 /* TODO add CSS */
-.user-component-kick-button {
-    visibility: hidden;
-    background-color: red;
-}
-
-.user-component-kick-button:hover {
-    visibility: visible;
-}

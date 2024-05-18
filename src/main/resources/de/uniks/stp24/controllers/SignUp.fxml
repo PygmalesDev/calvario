@@ -38,7 +38,7 @@
                   </image>
                </ImageView>
                <VBox alignment="CENTER" prefHeight="250.0" prefWidth="500.0">
-                  <TextField fx:id="usernameField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" promptText="%username">
+                  <TextField fx:id="usernameField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="%username">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -47,45 +47,44 @@
                      </opaqueInsets>
                   </TextField>
                   <HBox alignment="CENTER" prefHeight="120.0" prefWidth="200.0" spacing="5.0">
-                     <ToggleButton disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="14.0" prefWidth="5.0" visible="false" />
-                     <ToggleButton maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="2.0" prefWidth="2.0">
+                     <ToggleButton disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" visible="false">
                         <graphic>
                            <ImageView disable="true" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" visible="false">
                               <Image url="@../icons/Eye_Icon_32.png" />
                            </ImageView>
                         </graphic>
                      </ToggleButton>
-                     <VBox alignment="CENTER" prefHeight="120.0" prefWidth="399.0">
-                        <PasswordField fx:id="passwordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" promptText="%password">
+                     <VBox alignment="CENTER" prefHeight="120.0" prefWidth="300.0">
+                        <PasswordField fx:id="passwordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="%password">
                            <font>
                               <Font size="15.0" />
                            </font>
                            <VBox.margin>
-                              <Insets left="25.0" top="10.0" />
+                              <Insets top="10.0" />
                            </VBox.margin>
                         </PasswordField>
-                        <TextField fx:id="showPasswordText" alignment="CENTER" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0">
+                        <TextField fx:id="showPasswordText" alignment="CENTER" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0">
                            <font>
                               <Font size="15.0" />
                            </font>
                            <VBox.margin>
-                              <Insets left="25.0" top="10.0" />
+                              <Insets top="10.0" />
                            </VBox.margin>
                         </TextField>
-                        <PasswordField fx:id="repeatPasswordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="350.0" promptText="%repeat.password">
+                        <PasswordField fx:id="repeatPasswordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="%repeat.password">
                            <font>
                               <Font size="15.0" />
                            </font>
                            <VBox.margin>
-                              <Insets left="25.0" top="10.0" />
+                              <Insets top="15.0" />
                            </VBox.margin>
                         </PasswordField>
-                        <TextField fx:id="showRepeatPasswordText" alignment="CENTER" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="350.0">
+                        <TextField fx:id="showRepeatPasswordText" alignment="CENTER" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0">
                            <font>
                               <Font size="15.0" />
                            </font>
                            <VBox.margin>
-                              <Insets left="25.0" top="10.0" />
+                              <Insets top="15.0" />
                            </VBox.margin>
                         </TextField>
                      </VBox>
@@ -96,7 +95,7 @@
                            </ImageView>
                         </graphic>
                         <HBox.margin>
-                           <Insets left="10.0" />
+                           <Insets />
                         </HBox.margin>
                      </ToggleButton>
                   </HBox>
@@ -107,9 +106,7 @@
                   </Text>
                </VBox>
                <VBox alignment="CENTER" prefHeight="149.0" prefWidth="100.0">
-
-
-                  <Button fx:id="registerButton" mnemonicParsing="false" onAction="#register" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: #3BB143;" text="%register">
+                  <Button fx:id="registerButton" mnemonicParsing="false" onAction="#register" prefHeight="40.0" prefWidth="250.0" text="%register">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -117,7 +114,7 @@
                         <Insets />
                      </VBox.margin>
                   </Button>
-                  <Button cancelButton="true" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: RED;" text="%go.back">
+                  <Button cancelButton="true" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="250.0" text="%go.back">
                      <font>
                         <Font size="15.0" />
                      </font>

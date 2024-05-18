@@ -31,9 +31,9 @@
             </HBox>
             <VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="721.0" styleClass="cardBackground">
                <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="35.0">
-                  <ToggleButtonGroup prefHeight="60.0" prefWidth="100.0" selectionType="SINGLE">
-                     <ToggleButton fx:id="enToggleButton" contentDisplay="CENTER" onAction="#setEn" prefHeight="60.0" prefWidth="50.0" text="EN" />
-                     <ToggleButton fx:id="deToggleButton" contentDisplay="CENTER" onAction="#setDe" prefHeight="60.0" prefWidth="50.0" text="DE" />
+                  <ToggleButtonGroup prefHeight="60.0" prefWidth="90.0" selectionType="SINGLE">
+                     <ToggleButton fx:id="enToggleButton" contentDisplay="CENTER" onAction="#setEn" prefHeight="50.0" prefWidth="45.0" text="EN" />
+                     <ToggleButton fx:id="deToggleButton" contentDisplay="CENTER" onAction="#setDe" prefHeight="50.0" prefWidth="45.0" text="DE" />
                   </ToggleButtonGroup>
                </HBox>
                <ImageView fitHeight="150.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
@@ -42,7 +42,7 @@
                <VBox alignment="CENTER" prefHeight="160.0" prefWidth="100.0">
                   <HBox alignment="CENTER" prefHeight="40.0" prefWidth="35.0" spacing="5.0">
                      <Button alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" visible="false" />
-                     <TextField fx:id="usernameInput" alignment="CENTER" prefHeight="50.0" prefWidth="300.0" promptText="%username">
+                     <TextField fx:id="usernameInput" alignment="CENTER" prefHeight="40.0" prefWidth="300.0" promptText="%username">
                         <font>
                            <Font size="15.0" />
                         </font>
@@ -62,10 +62,13 @@
                            <Insets top="15.0" />
                         </HBox.margin>
                      </PasswordField>
-                     <TextField fx:id="showPasswordText" alignment="CENTER" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0">
+                     <TextField fx:id="showPasswordText" alignment="CENTER" managed="false" prefHeight="40.0" prefWidth="300.0">
                         <font>
                            <Font size="15.0" />
                         </font>
+                        <HBox.margin>
+                           <Insets top="15.0" />
+                        </HBox.margin>
                      </TextField>
                      <ToggleButton fx:id="showPasswordToggleButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
                         <graphic>

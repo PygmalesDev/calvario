@@ -22,6 +22,8 @@ public class BrowseGameService {
 
     private Game game;
 
+    private boolean blurStatus;
+
     @Inject
     public BrowseGameService() {
     }
@@ -75,10 +77,14 @@ public class BrowseGameService {
     }
 
     public String getGameName() {
-        if (checkMyGame()){
+        if (checkMyGame()) {
             return this.game.name();
         } else {
             return "";
         }
+    }
+
+    public boolean getBlurStatusRemoved() {
+        return blurStatus = false;
     }
 }

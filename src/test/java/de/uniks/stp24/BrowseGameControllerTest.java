@@ -8,6 +8,7 @@ import de.uniks.stp24.dto.UpdateGameDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.EditGameService;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
@@ -44,6 +45,9 @@ public class BrowseGameControllerTest extends ControllerTest {
 
     @Mock
     GameComponent gameComponent;
+
+    @Spy
+    BrowseGameService browseGameService;
 
     @Spy
     WarningComponent warningComponent;
@@ -154,47 +158,44 @@ public class BrowseGameControllerTest extends ControllerTest {
     }
 
     @Test
-    void editGameWithInputs(){
-        editGameController.setEditGameService(editGameService);
-        doNothing().when(editGameController).editGame();
-
-        doAnswer(show -> {app.show(editGameController);
-            return null;
-        }).when(app).show("/editgame");
-
-
-
-
-        //Set selected Game as one of the games u have created
+    void deleteGameCancel(){
+        doNothing().when(warningComponent).onCancel();
+        doNothing().when(warningComponent).setGameName();
         WaitForAsyncUtils.waitForFxEvents();
-        browseGameController.browseGameService.setGame(browseGameController.gameList.getItems().getFirst());
+        browseGameController.browseGameService.setGame(browseGameController.gameList.getItems().get(0));
         browseGameController.browseGameService.setTokenStorage();
 
         browseGameController.gameList.getSelectionModel().clearAndSelect(0);
         browseGameController.gameList.getFocusModel().focus(0);
 
-        //Click on edit game button and check if edit game screen is now displayed.
-        clickOn(browseGameController.edit_game_b);
         WaitForAsyncUtils.waitForFxEvents();
-        // assertEquals("EditGame", stage.getTitle());
 
-        //Click on confirm. No inputs for change was given. Screen do not change
-        WaitForAsyncUtils.waitForFxEvents();
-        clickOn("#editNameTextField");
-        write("testgame95");
-
-        clickOn("#editPasswordTextField");
-        write("1");
-        clickOn("#editRepeatPasswordTextField");
-        write("1");
+        clickOn("#del_game_b");
 
         WaitForAsyncUtils.waitForFxEvents();
 
+        clickOn("#cancelButton");
+        verify(this.warningComponent).onCancel();
+    }
 
-
-        Button confirmButton = lookup("#editGameConfirmButton").queryButton();
-        clickOn(confirmButton);
+    @Test
+    void deleteGameConfirm(){
+        doNothing().when(warningComponent).setGameName();
+        doNothing().when(warningComponent).deleteGame();
         WaitForAsyncUtils.waitForFxEvents();
-        //assertEquals("testgame95", browseGameController.gameList.getItems().get(0).name());
+        browseGameController.browseGameService.setGame(browseGameController.gameList.getItems().get(0));
+        browseGameController.browseGameService.setTokenStorage();
+
+        browseGameController.gameList.getSelectionModel().clearAndSelect(0);
+        browseGameController.gameList.getFocusModel().focus(0);
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        clickOn("#del_game_b");
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        clickOn("#confirmButton");
+        verify(this.warningComponent).deleteGame();
     }
 }

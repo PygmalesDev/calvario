@@ -9,16 +9,15 @@ import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.CreateGameService;
 import de.uniks.stp24.service.EditGameService;
 import de.uniks.stp24.ws.EventListener;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.effect.BoxBlur;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.WindowEvent;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
@@ -82,9 +81,12 @@ BrowseGameController {
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
 
+    private boolean blurStatus = false;
+
     //Load list of games as soon as BrowseGame-Screen is shown
     @OnInit
     void init() {
+
 
         editGameService = (editGameService == null) ? new EditGameService() : editGameService;
         createGameService = (createGameService == null) ? new CreateGameService() : createGameService;
@@ -148,15 +150,22 @@ BrowseGameController {
         }
     }
 
-    private void setBlur() {
+    void setBlur() {
         BoxBlur blur = new BoxBlur(10, 10, 3);
         browseGameVBoxList.setEffect(blur);
         browseGameVBoxButtons.setEffect(blur);
+        browseGameVBoxButtons.setMouseTransparent(true);
+        browseGameVBoxList.setMouseTransparent(true);
+        blurStatus = true;
     }
 
     public void removeBlur(){
         browseGameVBoxList.setEffect(null);
         browseGameVBoxButtons.setEffect(null);
+        browseGameVBoxButtons.setMouseTransparent(false);
+        browseGameVBoxList.setMouseTransparent(false);
+
+        blurStatus = false;
     }
 
     private void showWarning(){
@@ -165,6 +174,16 @@ BrowseGameController {
         } else {
             warningWindowContainer.setVisible(true);
         }
+        warningWindowContainer.visibleProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                removeBlur();
+            }
+        });
+
+    }
+
+    public void setBlurStatus(){
+        blurStatus = browseGameService.getBlurStatusRemoved();
     }
 
 }

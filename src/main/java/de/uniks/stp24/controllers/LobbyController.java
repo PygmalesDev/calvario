@@ -268,7 +268,7 @@ public class LobbyController {
     }
 
     public void goBack() {
-        this.app.show("/browsegames");
+        this.app.show("/browseGames");
     }
 
     @OnDestroy

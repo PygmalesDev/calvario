@@ -52,7 +52,7 @@ public class EnterGameComponent extends Pane {
     }
 
     public void cancel() {
-        this.app.show("/browsegames");
+        this.app.show("/browseGames");
     }
 
     public void joinGame() {

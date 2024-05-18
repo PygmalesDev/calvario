@@ -73,7 +73,7 @@ public class LobbyHostSettingsComponent extends Pane {
         this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), host ->
             this.subscriber.subscribe(this.lobbyService.updateMember(this.gameID,
                     this.tokenStorage.getUserId(), host.ready(), host.empire()), result ->
-                    this.app.show("/browsegames")));
+                    this.app.show("/browseGames")));
     }
 
     public void setGameID(String gameID) {

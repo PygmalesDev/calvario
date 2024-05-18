@@ -197,7 +197,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
      */
     @Test
     public void testLeaveLobbyAsHost() {
-        doReturn(null).when(this.app).show("/browsegames");
+        doReturn(null).when(this.app).show("/browseGames");
 
         doReturn(Observable.just(new MemberDto(false, "testGameHostID", null, "88888888")))
                 .when(this.lobbyService).getMember(any(), any());
@@ -209,7 +209,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         clickOn("#closeLobbyButton");
 
         WaitForAsyncUtils.waitForFxEvents();
-        verify(this.app, times(1)).show("/browsegames");
+        verify(this.app, times(1)).show("/browseGames");
     }
 
     /**

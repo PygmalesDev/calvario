@@ -202,11 +202,11 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
      */
     @Test
     public void leaveEnterGameScreen() {
-        doReturn(null).when(this.app).show("/browsegames");
+        doReturn(null).when(this.app).show("/browseGames");
 
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#cancelButton");
 
-        verify(this.app, times(1)).show("/browsegames");
+        verify(this.app, times(1)).show("/browseGames");
     }
 }

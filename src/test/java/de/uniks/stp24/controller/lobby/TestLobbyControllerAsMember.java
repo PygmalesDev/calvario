@@ -155,7 +155,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
      */
     @Test
     public void testLeaveLobbyAsMember() {
-        doReturn(null).when(this.app).show("/browsegames");
+        doReturn(null).when(this.app).show("/browseGames");
 
         doReturn(Observable.just(new JoinGameDto())).when(this.lobbyService).leaveLobby(any(), any());
 
@@ -173,7 +173,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         );
 
         verify(this.eventListener, times(1)).listen("games.testGameID.members.*.*", MemberDto.class);
-        verify(this.app, times(1)).show("/browsegames");
+        verify(this.app, times(1)).show("/browseGames");
     }
 
     /**
@@ -277,7 +277,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
      */
     @Test
     public void testOnLobbyDeletion() {
-        doReturn(null).when(this.app).show("/browsegames");
+        doReturn(null).when(this.app).show("/browseGames");
 
         WaitForAsyncUtils.waitForFxEvents();
 
@@ -291,6 +291,6 @@ public class TestLobbyControllerAsMember extends ControllerTest {
 
         clickOn("#returnButton");
 
-        verify(this.app, times(1)).show("/browsegames");
+        verify(this.app, times(1)).show("/browseGames");
     }
 }

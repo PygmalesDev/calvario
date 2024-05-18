@@ -37,7 +37,7 @@ public class LobbySettingsComponent extends Pane {
     public void leaveLobby() {
         this.leftLobby = true;
         this.lobbyService.leaveLobby(this.gameID, this.tokenStorage.getUserId()).subscribe(result ->
-                this.app.show("/browsegames"));
+                this.app.show("/browseGames"));
     }
 
     public void selectEmpire() {

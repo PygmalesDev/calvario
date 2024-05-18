@@ -62,7 +62,6 @@ public class HttpModule {
         return retrofit.create(GameMembersApiService.class);
     }
 
-
     @Provides
     @Singleton
     AuthApiService authApiService(Retrofit retrofit) {
@@ -70,7 +69,7 @@ public class HttpModule {
     }
     @Provides
     @Singleton
-    GamesApiService GamesApiService(Retrofit retrofit) {
+    GamesApiService gamesApiService(Retrofit retrofit) {
         return retrofit.create(GamesApiService.class);
     }
 
@@ -78,12 +77,6 @@ public class HttpModule {
     @Singleton
     UserApiService userApiService(Retrofit retrofit) {
         return retrofit.create(UserApiService.class);
-    }
-
-    @Provides
-    @Singleton
-    GamesApiService gamesApiService(Retrofit retrofit) {
-        return retrofit.create(GamesApiService.class);
     }
 
 }

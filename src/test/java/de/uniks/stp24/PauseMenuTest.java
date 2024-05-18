@@ -6,6 +6,7 @@ import de.uniks.stp24.model.Game;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.LanguageService;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,10 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+
+import javax.inject.Inject;
+import javax.inject.Provider;
+import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -29,10 +34,16 @@ public class PauseMenuTest extends ControllerTest {
     InGameService inGameService;
 
     @Spy
+    LanguageService languageService;
+
+    @Spy
     PauseMenuComponent pauseMenuComponent;
 
     @Spy
     SettingsComponent settingsComponent;
+
+    @Spy
+    Provider<ResourceBundle> newResources;
 
     @InjectMocks
     InGameController inGameController;
@@ -54,6 +65,10 @@ public class PauseMenuTest extends ControllerTest {
 
     @Test
     public void testChangeLanguage() {
+        settingsComponent.prefService = this.prefService;
+        languageService.prefService = this.prefService;
+        languageService.newResources = this.newResources;
+
         doAnswer(show -> {inGameService.setShowSettings(true);
             return null;
         }).when(pauseMenuComponent).settings();

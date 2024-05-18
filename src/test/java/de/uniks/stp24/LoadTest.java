@@ -31,7 +31,7 @@ public class LoadTest extends ControllerTest{
         // Start:
         // Alice has started the game STPellar. She sees the Load screen.
         // She is prompted to press a key to continue.
-        assertEquals(stage.getTitle(), "Game Name");
+        assertEquals( resources.getString("load"),stage.getTitle());
 
         // Action:
         // Alice presses Enter
@@ -41,7 +41,7 @@ public class LoadTest extends ControllerTest{
 
         // Result:
         // Alice should now be in Login screen.
-        assertEquals(stage.getTitle(), "Login");
+        assertEquals(resources.getString("login"),stage.getTitle());
     }
 
 }

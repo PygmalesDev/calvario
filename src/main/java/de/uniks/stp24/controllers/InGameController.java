@@ -3,17 +3,18 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.PauseMenuComponent;
 import de.uniks.stp24.component.SettingsComponent;
-import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.LanguageService;
+import de.uniks.stp24.service.PrefService;
 import javafx.fxml.FXML;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -23,20 +24,19 @@ import org.fulib.fx.annotation.event.OnRender;
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Controller
 public class InGameController {
     @FXML
     Pane gamePane;
-
     @FXML
     StackPane pauseMenuContainer;
 
     @Inject
     App app;
+    @Inject
+    PrefService prefService;
 
     @SubComponent
     @Inject
@@ -48,12 +48,17 @@ public class InGameController {
 
     @Inject
     InGameService inGameService;
+    @Inject
+    LanguageService languageService;
+    @Inject
+    @Resource
+    ResourceBundle resources;
 
     private List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
+
     @Inject
     public InGameController() {
-
     }
 
     @OnInit
@@ -73,9 +78,9 @@ public class InGameController {
     }
 
     private void handleLanguageChanged(PropertyChangeEvent propertyChangeEvent) {
-        // TODO change language
-        String newLang = propertyChangeEvent.getNewValue().equals(0) ? "German" : "English";
-        System.out.println("language: " + newLang);
+        Locale newLang = propertyChangeEvent.getNewValue().equals(0) ? Locale.GERMAN : Locale.ENGLISH;
+        //resources = languageService.setLocale(newLang);
+        //app.refresh();
     }
 
     private void handleShowSettings(PropertyChangeEvent propertyChangeEvent) {

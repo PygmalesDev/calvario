@@ -6,6 +6,8 @@ import org.mockito.Spy;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import java.util.prefs.Preferences;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  * Base class for controller tests
@@ -17,6 +19,8 @@ public class ControllerTest extends ApplicationTest {
     @Spy
     PrefService prefService;
 
+    ResourceBundle resources = ResourceBundle.getBundle("de/uniks/stp24/lang/main", Locale.ROOT);
+
     protected Stage stage;
 
     @Override
@@ -25,6 +29,7 @@ public class ControllerTest extends ApplicationTest {
         this.stage = stage;
         stage.requestFocus();
         this.prefService.removeRefreshToken();
+        prefService.setLocale(Locale.ENGLISH);
         app.start(stage);
     }
 }

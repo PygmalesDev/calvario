@@ -2,6 +2,7 @@ package de.uniks.stp24;
 
 import de.uniks.stp24.controllers.SignUpController;
 import de.uniks.stp24.dto.SignUpResultDto;
+import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.SignUpService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.text.Text;
@@ -37,7 +38,7 @@ public class TestSignUpNewUser extends ControllerTest {
         doReturn(Observable.just(new SignUpResultDto("a", "b", "c", "d", "e" )))
                 .when(this.signUpService).register(any(),any());
 
-        assertEquals("SignUp", stage.getTitle());
+        assertEquals(resources.getString("register"), stage.getTitle());
         assertTrue(this.signUpController.registerButton.disableProperty().get());
 
         clickOn("#usernameField");
@@ -58,8 +59,8 @@ public class TestSignUpNewUser extends ControllerTest {
 
         verify(this.signUpService, times(1))
                 .register("TemplateUser", "TemplateUserPassword");
-        assertEquals("Login", stage.getTitle());
+        assertEquals(resources.getString("login"), stage.getTitle());
         final Text registeredText = lookup("#errorLabel").query();;
-        assertEquals("Account Registered!", registeredText.getText());
+        assertEquals(resources.getString("account.registered"), registeredText.getText());
     }
 }

@@ -67,8 +67,6 @@ public class LoginController {
     @Inject
     LanguageService languageService;
     @Inject
-    ObjectMapper objectMapper;
-    @Inject
     PrefService prefService;
     @Inject
     @Resource

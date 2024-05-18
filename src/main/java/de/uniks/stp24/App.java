@@ -12,8 +12,6 @@ import org.fulib.fx.FulibFxApp;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import java.awt.*;
-import java.nio.file.Path;
-
 import java.util.Locale;
 import java.util.logging.Level;
 

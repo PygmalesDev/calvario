@@ -39,7 +39,7 @@ public class HttpModule {
                 final Response response = chain.proceed(chain.request());
                 if (response.code() >= 300) {
                     System.err.println(chain.request());
-                    System.err.println(response.body().string());
+                    System.err.println(response);
                 }
                 return response;
             }).build();

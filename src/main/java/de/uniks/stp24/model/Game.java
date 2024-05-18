@@ -9,9 +9,7 @@ public record Game<x>(
         String _id,
         String name,
         String owner,
-
-        Boolean started,
-
+        boolean started,
         int speed,
         int period,
         GameSettings settings

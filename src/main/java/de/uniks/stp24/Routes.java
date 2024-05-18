@@ -1,7 +1,5 @@
 package de.uniks.stp24;
 
-import de.uniks.stp24.controllers.LobbyController;
-import org.fulib.fx.annotation.Route;
 
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.controllers.*;

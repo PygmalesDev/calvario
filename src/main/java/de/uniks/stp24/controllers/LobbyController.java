@@ -93,11 +93,6 @@ public class LobbyController {
 
     }
 
-    @OnInit
-    public void setGameID() {
-        this.gameID = "6647b7165e6c1abbc0b27357";
-    }
-
     /**
      * Loads game data and transfers its ID and name to the subcomponents.
      * Loads lobby members to the member list and adds event listeners.

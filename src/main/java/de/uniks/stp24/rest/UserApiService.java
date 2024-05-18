@@ -1,10 +1,10 @@
 package de.uniks.stp24.rest;
 
+import de.uniks.stp24.model.User;
+import io.reactivex.rxjava3.core.Observable;
 import de.uniks.stp24.dto.CreateUserDto;
 import de.uniks.stp24.dto.SignUpResultDto;
 import de.uniks.stp24.dto.UpdateUserDto;
-import de.uniks.stp24.model.User;
-import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.*;
 
 public interface UserApiService {
@@ -19,4 +19,5 @@ public interface UserApiService {
 
     @PATCH("users/{id}")
     Observable<User> edit(@Path("id") String id, @Body UpdateUserDto dto);
+
 }

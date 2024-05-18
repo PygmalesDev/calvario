@@ -81,6 +81,7 @@ public class EditGameController {
                 if (editGameService.editGame(gameName, settings, password) != null) {
                     editGameService.editGame(gameName, settings, password).subscribe(result -> {
                                 Platform.runLater(() -> {
+                                    browseGameService.resetSelectedGame();
                                     browseGameController.init();
                                     app.show(browseGameController);
                                 });

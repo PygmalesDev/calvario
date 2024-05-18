@@ -19,7 +19,7 @@ public class ControllerTest extends ApplicationTest {
     @Spy
     PrefService prefService;
     @Spy
-    ResourceBundle resources = ResourceBundle.getBundle("de/uniks/stp24/lang/main", Locale.ROOT);
+    public ResourceBundle resources = ResourceBundle.getBundle("de/uniks/stp24/lang/main", Locale.ROOT);
 
     protected Stage stage;
 

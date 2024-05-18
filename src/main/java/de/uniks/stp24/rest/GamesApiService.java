@@ -26,14 +26,11 @@ public interface GamesApiService {
     @GET("games")
     Observable<List<Game>> findAll(@Query("ids") List<String> ids);
 
-    /*
     @GET("games/{id}")
-    Observable<Game> updateOne(@Path("id") String id, @Body UpdateGamesDTO dto);
-
-     */
+    Observable<Game> getGame(@Path("id") String gameID);
 
     @DELETE("games/{id}")
-    Observable<Game> deleteOne(@Path("id") String id);
+    Observable<Game> deleteGame(@Path("id") String id);
 }
 
 

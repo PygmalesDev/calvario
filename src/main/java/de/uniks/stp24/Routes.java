@@ -16,10 +16,6 @@ public class Routes {
     @Inject
     Provider<LoadController> load;
 
-    @Route("login")
-    @Inject
-    Provider<LoginController> login;
-    
     @Route("autoLogin")
     @Inject
     Provider<AutoLoginController> autoLogin;
@@ -61,6 +57,19 @@ public class Routes {
     @Route("game")
     @Inject
     Provider<InGameController> game;
+
+    @Route("creation")
+    @Inject
+    Provider<GangCreationController> creation;
+
+    @Route("lobby")
+    @Inject
+    Provider<LobbyController> lobby;
+
+    @Route("login")
+    @Inject
+    Provider<LoginController> login;
+
 
     @Inject
     public Routes() {

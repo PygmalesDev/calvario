@@ -1,15 +1,22 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
+
 import de.uniks.stp24.constants.ResponseConstants;
 import de.uniks.stp24.service.ErrorService;
-import de.uniks.stp24.service.LoginService;
-
 import de.uniks.stp24.utils.ErrorTextWriter;
+import de.uniks.stp24.model.ErrorResponse;
+import de.uniks.stp24.service.LanguageService;
+import de.uniks.stp24.service.LoginService;
+import de.uniks.stp24.service.PrefService;
+import java.util.ResourceBundle;
+import java.util.concurrent.Flow;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
@@ -17,12 +24,13 @@ import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
 
-
-@Title("Login")
+@Title("%login")
 @Controller
 public class LoginController {
     @FXML
@@ -43,17 +51,30 @@ public class LoginController {
     TextField usernameInput;
     @FXML
     TextField showPasswordText;
+    @FXML
+    ToggleButton enToggleButton;
+    @FXML
+    ToggleButton deToggleButton;
+
     @Inject
     Subscriber subscriber;
-
     @Inject
     App app;
-
     @Inject
     LoginService loginService;
-
     @Inject
     ErrorService errorService;
+    @Inject
+    LanguageService languageService;
+    @Inject
+    ObjectMapper objectMapper;
+    @Inject
+    PrefService prefService;
+    @Inject
+    @Resource
+    ResourceBundle resources;
+
+
 
     @Param("info")
     public String info;
@@ -77,7 +98,12 @@ public class LoginController {
             this.passwordInput.setText(this.password);
         if (Objects.nonNull(this.info))
             this.errorLabel.setText(this.info);
-        if (justRegistered){ this.errorLabel.setText("Account Registered!");}
+        if (justRegistered){ this.errorLabel.setText(resources.getString("account.registered"));}
+        if(prefService.getLocale() == Locale.ENGLISH){
+            enToggleButton.setSelected(true);
+        }else{
+            deToggleButton.setSelected(true);
+        }
     }
 
     private boolean checkIfInputNotBlankOrEmpty(String text) {
@@ -124,11 +150,25 @@ public class LoginController {
         app.show("/signup", Map.of("username", username, "password", password));
     }
 
+    @FXML
     public void setEn() {
+        setLanguage(Locale.ENGLISH);
+        enToggleButton.setSelected(true);
+        deToggleButton.setSelected(false);
     }
 
+    @FXML
     public void setDe() {
+        setLanguage(Locale.GERMAN);
+        enToggleButton.setSelected(false);
+        deToggleButton.setSelected(true);
     }
+
+    public void setLanguage(Locale locale) {
+        resources = languageService.setLocale(locale);
+        app.refresh();
+    }
+
 
     @OnRender(1)
     public void setupShowPassword() {

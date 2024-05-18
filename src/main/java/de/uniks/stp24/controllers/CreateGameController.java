@@ -14,9 +14,11 @@ import javafx.scene.text.*;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 
 import javax.inject.Inject;
+import java.util.ResourceBundle;
 
 @Title("CreateGame")
 @Controller
@@ -44,6 +46,9 @@ public class CreateGameController {
     GamesApiService gamesApiService;
     @Inject
     BrowseGameController browseGameController;
+    @Inject
+    @Resource
+    ResourceBundle resources;
 
     @Inject
     public CreateGameController(){
@@ -102,7 +107,7 @@ public class CreateGameController {
     }
 
     public void showNameTakenError() {
-        errorMessageText.setText("Name exists already!");
+        errorMessageText.setText(resources.getString("name.exists.already"));
         errorBox.setVisible(true);
 
     }

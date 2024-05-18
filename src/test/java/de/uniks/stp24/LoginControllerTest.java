@@ -3,6 +3,7 @@ package de.uniks.stp24;
 import de.uniks.stp24.controllers.LoginController;
 import de.uniks.stp24.model.LoginResult;
 import de.uniks.stp24.service.LoginService;
+import de.uniks.stp24.service.PrefService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.CheckBox;
 import org.fulib.fx.controller.Subscriber;
@@ -43,7 +44,7 @@ public class LoginControllerTest extends ControllerTest {
         // Start:
         // Alice has started the game STPellar. She sees the Log in screen.
         // She has already registered an account and wants to log in.
-        assertEquals("Login", stage.getTitle());
+        assertEquals(resources.getString("login"), stage.getTitle());
 
         // Action:
         // Alice writes her username and her password
@@ -66,7 +67,7 @@ public class LoginControllerTest extends ControllerTest {
         // Alice is a curious person, who wants to play STPellar.
         // She is in the log in screen and wonders what would happen,
         // if she enters login without entering a name or password.
-        assertEquals("Login", stage.getTitle());
+        assertEquals(resources.getString("login"), stage.getTitle());
 
         // Action:
 
@@ -101,7 +102,7 @@ public class LoginControllerTest extends ControllerTest {
         // Result:
         // Her screen switches to the register window.
         waitForFxEvents();
-        assertEquals("SignUp", stage.getTitle());
+        assertEquals(resources.getString("register"), stage.getTitle());
     }
 
     @Test
@@ -110,7 +111,7 @@ public class LoginControllerTest extends ControllerTest {
         // Start:
         // Alice is in the log in screen.
         // She has put in her username and password. Next time she logs in she wants to use the same account
-        assertEquals("Login", stage.getTitle());
+        assertEquals(resources.getString("login"), stage.getTitle());
         CheckBox rememberMe = (CheckBox) lookup("#rememberMeBox").queryParent();
         assertFalse(rememberMe.isSelected());
 

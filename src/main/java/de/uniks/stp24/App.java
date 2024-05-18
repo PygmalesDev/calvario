@@ -12,6 +12,7 @@ import org.fulib.fx.FulibFxApp;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import java.awt.*;
+import java.util.Locale;
 import java.util.logging.Level;
 
 import static javafx.scene.input.KeyEvent.KEY_PRESSED;
@@ -56,9 +57,8 @@ public class App extends FulibFxApp {
             setTaskbarIcon();
 
             //autoRefresher().setup(Path.of("src/main/resources/de/uniks/stp24"));
-
-            show("/load");
-
+            //show("/login");
+            Locale.setDefault(Locale.ENGLISH);
             // open normal load screen or autoLogin screen depending on the preferences of the user
 
             if (component.loginService().autoLogin()) {

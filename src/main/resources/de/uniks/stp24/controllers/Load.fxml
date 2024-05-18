@@ -26,7 +26,7 @@
             <Image url="@../assets/logos/SpiderbyteLogoTransparent.png"/>
          </ImageView>
       </HBox>
-      <Label onKeyPressed="#showLoginScreen" text="PRESS ANY KEY TO CONTINUE">
+      <Label onKeyPressed="#showLoginScreen" text="%press.any.key">
          <font>
             <Font size="36.0"/>
          </font>

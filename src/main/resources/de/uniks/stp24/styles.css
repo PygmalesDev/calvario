@@ -1,3 +1,10 @@
+Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
+    -fx-font-family: "PT Sarif";
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
+
+
 .background{
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/background.png");
     -fx-background-size: cover;

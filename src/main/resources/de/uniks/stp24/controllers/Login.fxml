@@ -22,9 +22,9 @@
             <children>
                <VBox alignment="TOP_CENTER" maxHeight="540" maxWidth="400" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="400.0" spacing="20.0" styleClass="cardBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="35.0" spacing="5.0">
-                     <ToggleButtonGroup maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="70.0" selectionType="SINGLE">
-                        <ToggleButton fx:id="enToggleButton" contentDisplay="CENTER" onAction="#setEn" prefHeight="40.0" prefWidth="35.0" text="EN" />
-                        <ToggleButton fx:id="deToggleButton" contentDisplay="CENTER" onAction="#setDe" prefHeight="40.0" prefWidth="35.0" text="DE" />
+                     <ToggleButtonGroup maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="100.0" selectionType="SINGLE">
+                        <ToggleButton fx:id="enToggleButton" contentDisplay="CENTER" onAction="#setEn" prefHeight="60.0" prefWidth="50.0" text="EN" />
+                        <ToggleButton fx:id="deToggleButton" contentDisplay="CENTER" onAction="#setDe" prefHeight="60.0" prefWidth="50.0" text="DE" />
                      </ToggleButtonGroup>
                   </HBox>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Calvario" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="300.0">

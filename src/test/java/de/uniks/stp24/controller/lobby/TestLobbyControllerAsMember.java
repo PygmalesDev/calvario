@@ -21,6 +21,7 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -129,17 +130,6 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     }
 
     /**
-     * Collective method to test all functions of the lobby from the view of a member.
-     */
-    @Test
-    public void testLobbyFunctionsAsMember() {
-        this.testJoinLobbyAsMember();
-        this.testPressReadyAsMember();
-        this.testSwitchToEmpireSelection();
-        this.testLeaveLobbyAsMember();
-    }
-
-    /**
      * Tests the behavior of the lobby when the joining player is the host of this game.
      */
     @Test
@@ -186,6 +176,9 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         verify(this.app, times(1)).show("/browsegames");
     }
 
+    /**
+     * Test proper changing of member's status after pressing the ready button on certain occasions.
+     */
     @Test
     public void testPressReadyAsMember() {
         doReturn(Observable.just(new MemberDto(false, "testMemberUnoID", null, "88888888")))
@@ -245,5 +238,59 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         clickOn("#selectEmpireButton");
 
         verify(this.app, times(1)).show("/creation");
+    }
+
+
+    /**
+     * Tests being kicked from the lobby by host.
+     */
+    @Test
+    public void testBeingKickedFromLobbyByHost() {
+        WaitForAsyncUtils.waitForFxEvents();
+
+        this.memberSubject.onNext(new Event<>("games.testGameID.members.testMemberUnoID.deleted",
+                new MemberDto(true, "testMemberUnoID", new Empire(null, null, null,
+                        0, 0, null, null), "88888888")));
+
+        WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(lookup("#lobbyMessageElement").query().isVisible());
+        assertTrue(lookup("#messageText").queryText().getText().contains("kicked"));
+    }
+
+    /**
+     * Test the notification showing after the host has left the lobby.
+     */
+    @Test
+    public void testHostLeftTheLobby() {
+        WaitForAsyncUtils.waitForFxEvents();
+
+        this.memberSubject.onNext(new Event<>("games.testGameID.members.testGameHostID.updated",
+                new MemberDto(false, "testGameHostID", null, "88888888")));
+
+        WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(lookup("#lobbyMessageElement").query().isVisible());
+        assertTrue(lookup("#messageText").queryText().getText().contains("left the lobby"));
+    }
+
+    /**
+     * Test the proper message appearing if the host deletes the lobby.
+     */
+    @Test
+    public void testOnLobbyDeletion() {
+        doReturn(null).when(this.app).show("/browsegames");
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        this.gameSubject.onNext(new Event<>("games.testGameID.deleted",
+                new Game("1", "a","testGameID","testGame","testGameHostID",
+                        false, 1, 0, new GameSettings(1))));
+
+        WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(lookup("#lobbyMessageElement").query().isVisible());
+        assertTrue(lookup("#messageText").queryText().getText().contains("deleted"));
+
+        clickOn("#returnButton");
+
+        verify(this.app, times(1)).show("/browsegames");
     }
 }

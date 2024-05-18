@@ -53,13 +53,12 @@ public class App extends FulibFxApp {
             // setTaskbarIcon();
 
             autoRefresher().setup(Path.of("src/main/resources/de/uniks/stp24"));
-            show("/load");
             // open normal load screen or autoLogin screen depending on the preferences of the user
-//            if (component.loginService().autoLogin()) {
-//                show("/autoLogin");
-//            } else {
-//                show("/load");
-//            }
+            if (component.loginService().autoLogin()) {
+                show("/autoLogin");
+            } else {
+                show("/load");
+            }
 
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "An error occurred while starting the application: " + e.getMessage(), e);

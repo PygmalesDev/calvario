@@ -7,6 +7,8 @@ import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.LobbyService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -39,9 +41,11 @@ public class LobbyHostSettingsComponent extends Pane {
     EventListener eventListener;
 
     private String gameID;
+    public boolean leftLobby;
+
     @Inject
     public LobbyHostSettingsComponent() {
-
+        this.leftLobby = false;
     }
 
     public void createCheckPlayerReadinessListener() {
@@ -62,9 +66,14 @@ public class LobbyHostSettingsComponent extends Pane {
         this.app.show("/ingame");
     }
 
+    /**
+     * Sends a blank update message to the server so the members are notified about host leaving the lobby.
+     */
     public void leaveLobby() {
-        this.subscriber.subscribe(this.gamesApiService.deleteGame(this.gameID), result ->
-                this.app.show("/browsegames"));
+        this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), host ->
+            this.subscriber.subscribe(this.lobbyService.updateMember(this.gameID,
+                    this.tokenStorage.getUserId(), host.ready(), host.empire()), result ->
+                    this.app.show("/browsegames")));
     }
 
     public void setGameID(String gameID) {

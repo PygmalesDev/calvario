@@ -21,6 +21,8 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -89,6 +91,8 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
     public void start(Stage stage) throws Exception {
         super.start(stage);
 
+        this.joinGameService.gameMembersApiService = this.gameMembersApiService;
+
         this.lobbyController.lobbyHostSettingsComponent = this.lobbyHostSettingsComponent;
         this.lobbyController.lobbySettingsComponent = this.lobbySettingsComponent;
         this.lobbyController.enterGameComponent = this.enterGameComponent;
@@ -112,12 +116,12 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
                 new MemberDto(false, "testMemberDosID", null, "88888888")
         })).when(this.lobbyService).loadPlayers(any());
 
-
         // Mock getting user
         when(this.userApiService.getUser(any()))
                 .thenReturn(Observable.just(new User("gameHost", "testGameHostID", null, "1", "1")))
                 .thenReturn(Observable.just(new User("testMemberUno", "testMemberUnoID", null, "1", "1")))
-                .thenReturn(Observable.just(new User("testMemberDos", "testMemberDosID", null, "1", "1")));
+                .thenReturn(Observable.just(new User("testMemberDos", "testMemberDosID", null, "1", "1")))
+                .thenReturn(Observable.just(new User("testNewUser", "testNewUserID", null, "1", "1")));
 
         // Mock getting members updates
         doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.*"), eq(MemberDto.class));
@@ -155,93 +159,54 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
 
     @Test
     public void testJoinLobbyAsNewUser() {
+        WaitForAsyncUtils.waitForFxEvents();
 
+        when(this.joinGameService.joinGame(anyString(), any(), any()))
+                .thenReturn(Observable.error(new IllegalAccessException()))
+                .thenReturn(Observable.just(new JoinGameDto()));
+
+//        doReturn(Observable.just(new JoinGameDto())).when(this.joinGameService).joinGame(anyString(), any(), any());
+
+        // Test pressing enter with no password entered
+        clickOn("#joinButton");
+
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Please enter password!", lookup("#errorMessage").queryText().getText());
+
+        // Test inputting the incorrect password
+        clickOn("#passwordInputField").write("1");
+        clickOn("#joinButton");
+
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Validation failed!", lookup("#errorMessage").queryText().getText());
+
+        // Test inputting the correct password
+        clickOn("#passwordInputField").write("88888888");
+        clickOn("#joinButton");
+        this.memberSubject.onNext(new Event<>("games.testTestID.members.testNewUserID.created",
+                new MemberDto(false, "testNewUserID", null, "88888888")));
+
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals(lookup("#lobbyElement").queryAs(StackPane.class).getChildren().getLast().getClass(),
+                LobbySettingsComponent.class);
+        assertEquals(4, this.lobbyController.playerListView.getItems().size());
+
+        MemberUser newUser = this.lobbyController.playerListView.getItems().getLast();
+        assertTrue(newUser.user().name().contains("testNewUser")
+                && newUser.user().name().contains("(Spectator)")
+                && !newUser.ready());
     }
 
     /**
-     * Test the proper removal of the user from member list after leaving.
+     * Test the proper switching to game browser by pressing the cancel button.
      */
     @Test
-    public void testLeaveLobbyAsMember() {
+    public void leaveEnterGameScreen() {
         doReturn(null).when(this.app).show("/browsegames");
 
-        doReturn(Observable.just(new JoinGameDto())).when(this.lobbyService).leaveLobby(any(), any());
-
         WaitForAsyncUtils.waitForFxEvents();
-        clickOn("#leaveLobbyButton");
+        clickOn("#cancelButton");
 
-        this.memberSubject.onNext(new Event<>("games.testGameID.members.*.deleted",
-                new MemberDto(false, "testMemberUnoID", null, "88888888")));
-
-        WaitForAsyncUtils.waitForFxEvents();
-        assertEquals(2, this.lobbyController.playerListView.getItems().size());
-        assertFalse(this.lobbyController.playerListView.getItems().stream()
-                .map(MemberUser::user).map(User::_id)
-                .anyMatch(id -> id.equals("tetMemberUnoID"))
-        );
-
-        verify(this.eventListener, times(1)).listen("games.testGameID.members.*.*", MemberDto.class);
         verify(this.app, times(1)).show("/browsegames");
-    }
-
-    @Test
-    public void testPressReadyAsMember() {
-        doReturn(Observable.just(new MemberDto(false, "testMemberUnoID", null, "88888888")))
-                .when(this.lobbyService).getMember(any(), any());
-
-        doReturn(Observable.just(new MemberDto(false, "testMemberUnoID", null, "88888888")))
-                .when(this.lobbyService).updateMember(anyString(), anyString(), anyBoolean(), any());
-
-        MemberUser member = this.lobbyController.playerListView.getItems().stream()
-                .filter(memberUser -> memberUser.user()._id().equals("testMemberUnoID"))
-                .findFirst().orElseThrow();
-        assertFalse(member.ready());
-
-        WaitForAsyncUtils.waitForFxEvents();
-        clickOn("#readyButton");
-
-        // Test readiness update on user that has not yet selected an empire
-        this.memberSubject.onNext(new Event<>("games.testGameID.members.testMemberUnoID.updated",
-                new MemberDto(true, "testMemberUnoID", null, "88888888")));
-
-        WaitForAsyncUtils.waitForFxEvents();
-        member = this.lobbyController.playerListView.getItems().stream()
-                .filter(memberUser -> memberUser.user()._id().equals("testMemberUnoID"))
-                .findFirst().orElseThrow();
-        assertTrue(member.ready());
-        assertTrue(member.user().name().contains("(Spectator)"));
-
-        // Test readiness update on user that has selected an empire
-        this.memberSubject.onNext(new Event<>("games.testGameID.members.testMemberUnoID.updated",
-                new MemberDto(false, "testMemberUnoID",
-                        new Empire(null, null, null, 0, 0, null, null),
-                        "88888888")));
-
-        WaitForAsyncUtils.waitForFxEvents();
-        clickOn("#readyButton");
-        this.memberSubject.onNext(new Event<>("games.testGameID.members.testMemberUnoID.updated",
-                new MemberDto(true, "testMemberUnoID",
-                        new Empire(null, null, null, 0, 0, null, null),
-                        "88888888")));
-
-        WaitForAsyncUtils.waitForFxEvents();
-        member = this.lobbyController.playerListView.getItems().stream()
-                .filter(memberUser -> memberUser.user()._id().equals("testMemberUnoID"))
-                .findFirst().orElseThrow();
-        assertTrue(member.ready());
-        assertFalse(member.user().name().contains("(Spectator)"));
-    }
-
-    /**
-     * Tests proper switching to the empire selection screen.
-     */
-    @Test
-    public void testSwitchToEmpireSelection() {
-        doReturn(null).when(this.app).show("/creation");
-
-        WaitForAsyncUtils.waitForFxEvents();
-        clickOn("#selectEmpireButton");
-
-        verify(this.app, times(1)).show("/creation");
     }
 }

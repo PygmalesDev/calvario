@@ -20,9 +20,12 @@ public class EnterGameComponent extends Pane {
     TextField passwordInputField;
     @FXML
     Text errorMessage;
-    public boolean joinLobbyBoolean;
     @Inject
     App app;
+    @Inject
+    TokenStorage tokenStorage;
+    @Inject
+    Subscriber subscriber;
 
     protected String gameID;
 
@@ -38,7 +41,6 @@ public class EnterGameComponent extends Pane {
 
     @Inject
     public EnterGameComponent() {
-        this.joinLobbyBoolean = false;
     }
 
     @Inject
@@ -55,8 +57,10 @@ public class EnterGameComponent extends Pane {
 
     public void joinGame() {
         if (!this.getPassword().isEmpty())
-            this.joinGameService.joinGame(gameID, this.getPassword())
-                .subscribe();
+            this.subscriber.subscribe(this.joinGameService.joinGame(this.gameID,
+                            this.tokenStorage.getUserId(), this.getPassword()),
+                    result -> {},
+                    error -> this.errorMessage.setText("Validation failed!"));
         else
             this.errorMessage.setText("Please enter password!");
     }

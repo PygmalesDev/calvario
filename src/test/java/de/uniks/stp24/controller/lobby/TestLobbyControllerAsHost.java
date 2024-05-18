@@ -124,17 +124,6 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     }
 
     /**
-     * Collective method to test all functions of the lobby from the view of the host.
-     */
-    @Test
-    public void testLobbyFunctionsAsHost() {
-        this.testJoinLobbyAsHost();
-        this.testSwitchToEmpireSelection();
-        this.testStartGameAsHost();
-        this.testLeaveLobbyAsHost();
-    }
-
-    /**
      * Tests the behavior of the lobby when the joining player is the host of this game.
      */
     @Test
@@ -204,22 +193,22 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     }
 
     /**
-     * Test the proper deletion of the lobby after leaving.
+     * Test leaving the lobby as host.
      */
     @Test
     public void testLeaveLobbyAsHost() {
         doReturn(null).when(this.app).show("/browsegames");
 
-        doReturn(Observable.just(new Game("1", "a","testGameID","testGame","testGameHostID",
-                false, 1, 0, new GameSettings(1))))
-                .when(this.gamesApiService).deleteGame(any());
+        doReturn(Observable.just(new MemberDto(false, "testGameHostID", null, "88888888")))
+                .when(this.lobbyService).getMember(any(), any());
 
+        doReturn(Observable.just(new MemberDto(false, "testGameHostID", null, "88888888")))
+                .when(this.lobbyService).updateMember(anyString(), anyString(), anyBoolean(), any());
 
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#closeLobbyButton");
 
         WaitForAsyncUtils.waitForFxEvents();
-        verify(this.eventListener, times(1)).listen("games.testGameID.deleted", Game.class);
         verify(this.app, times(1)).show("/browsegames");
     }
 

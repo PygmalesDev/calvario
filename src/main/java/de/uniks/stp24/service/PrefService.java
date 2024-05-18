@@ -15,7 +15,9 @@ public class PrefService {
 
     }
 
-
+    public void removeRefreshToken() {
+        prefs.remove("refreshToken");
+    }
     public String getRefreshToken() {
         return prefs.get("refreshToken",null);
     }

@@ -5,16 +5,20 @@ import de.uniks.stp24.component.*;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.UserApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.LobbyService;
 import de.uniks.stp24.service.GamesService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
@@ -24,16 +28,19 @@ import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Arrays;
 import java.util.Objects;
 
-@Title("Enter Game")
+@Title("Lobby")
 @Controller
 public class LobbyController {
     @Inject
     App app;
+    @Inject
+    ImageCache imageCache;
     @Inject
     TokenStorage tokenStorage;
     @Inject
@@ -65,6 +72,8 @@ public class LobbyController {
     @FXML
     public ListView<MemberUser> playerListView;
     @FXML
+    Text messageText;
+    @FXML
     public StackPane lobbyElement;
     @FXML
     Pane lobbyMessagePane;
@@ -77,18 +86,16 @@ public class LobbyController {
     Game game;
 
     private final ObservableList<MemberUser> users = FXCollections.observableArrayList();
+    private boolean asHost;
 
     @Inject
     public LobbyController() {
 
     }
 
-    // TODO: Example method, delete before PR
-    // TODO: gameID should be transferred from the lobby selection screen
     @OnInit
-    void setGameID() {
-        // Uncomment to get into the lobby
-        //this.gameID = "6644ea485e6c1abbc0ac050f";
+    public void setGameID() {
+        this.gameID = "6647b7165e6c1abbc0b27357";
     }
 
     /**
@@ -101,6 +108,7 @@ public class LobbyController {
         this.subscriber.subscribe(this.gamesService.getGame(this.gameID), game -> {
             this.game = game;
             this.gameID = game._id();
+            this.asHost = game.owner().equals(this.tokenStorage.getUserId());
 
             this.enterGameComponent.setGameName(game.name());
             this.enterGameComponent.setGameID(this.gameID);
@@ -129,6 +137,7 @@ public class LobbyController {
                 .listen("games." + this.gameID + ".deleted", Game.class), event -> {
             this.lobbyMessagePane.setVisible(true);
             this.lobbyMessageElement.setVisible(true);
+            this.messageText.setText("This lobby has been deleted!");
         });
     }
 
@@ -177,11 +186,11 @@ public class LobbyController {
             if (userID.equals(this.game.owner()))
                 this.users.add(new MemberUser(new User(user.name() + " (Host)",
                         user._id(), user.avatar(), user.createdAt(), user.updatedAt()
-                ), data.ready()));
+                ), data.empire(), data.ready(), this.game, this.asHost));
             else if (Objects.isNull(data.empire()))
                 this.users.add(new MemberUser(new User(user.name() + " (Spectator)",
                         user._id(), user.avatar(), user.createdAt(), user.updatedAt()
-                ), data.ready()));
+                ), null, data.ready(), this.game, this.asHost));
         });
     }
 
@@ -192,16 +201,24 @@ public class LobbyController {
      */
     private void replaceUserInList(String userID, MemberDto data) {
         this.users.replaceAll(memberUser -> {
+            if (!this.asHost && memberUser.ready() == data.ready() && userID.equals(this.game.owner())
+                    && Objects.equals(data.empire(), memberUser.empire())) {
+                this.lobbyMessagePane.setVisible(true);
+                this.lobbyMessageElement.setVisible(true);
+                return memberUser;
+            }
+
             if (memberUser.user()._id().equals(userID)) {
                 if (Objects.nonNull(data.empire()))
                     return new MemberUser(new User(
                             memberUser.user().name().replace(" (Spectator)", ""),
                             userID, memberUser.user().avatar(), memberUser.user().createdAt(),
-                            memberUser.user().updatedAt()), data.ready());
+                            memberUser.user().updatedAt()), data.empire(), data.ready(), this.game, this.asHost);
                 else
                     return new MemberUser(new User(
                             memberUser.user().name(), userID, memberUser.user().avatar(),
-                            memberUser.user().createdAt(), memberUser.user().updatedAt()), data.ready());
+                            memberUser.user().createdAt(), memberUser.user().updatedAt()),
+                            null, data.ready(), this.game, this.asHost);
             } else
                 return memberUser;
         });
@@ -212,6 +229,11 @@ public class LobbyController {
      * @param userID ID of the player
      */
     private void removeUserFromList(String userID) {
+        if (!this.lobbySettingsComponent.leftLobby && this.tokenStorage.getUserId().equals(userID)) {
+            this.messageText.setText("You were kicked from this lobby!");
+            this.lobbyMessagePane.setVisible(true);
+            this.lobbyMessageElement.setVisible(true);
+        }
         this.users.removeIf(memberUser -> memberUser.user()._id().equals(userID));
     }
 

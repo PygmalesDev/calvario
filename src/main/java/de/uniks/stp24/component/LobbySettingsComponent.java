@@ -27,6 +27,7 @@ public class LobbySettingsComponent extends Pane {
     TokenStorage tokenStorage;
 
     private String gameID;
+    public boolean leftLobby = false;
 
     @Inject
     public LobbySettingsComponent() {
@@ -34,6 +35,7 @@ public class LobbySettingsComponent extends Pane {
     }
 
     public void leaveLobby() {
+        this.leftLobby = true;
         this.lobbyService.leaveLobby(this.gameID, this.tokenStorage.getUserId()).subscribe(result ->
                 this.app.show("/browsegames"));
     }

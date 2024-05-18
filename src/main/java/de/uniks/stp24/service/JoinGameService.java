@@ -12,20 +12,20 @@ public class JoinGameService {
     @Inject
     TokenStorage tokenStorage;
     @Inject
+    public GameMembersApiService gameMembersApiService;
+
+    @Inject
     public JoinGameService() {
     }
-    @Inject
-    GameMembersApiService gameMembersApiService;
 
-    public Observable<JoinGameDto> joinGame(String gameID, String password) {
-        return gameMembersApiService.joinGame(gameID, this.loadUserLobbyDto(password));
+    public Observable<JoinGameDto> joinGame(String gameID, String userID, String password) {
+        return this.gameMembersApiService.joinGame(gameID, this.loadUserLobbyDto(password, userID));
     }
 
-
-    private MemberDto loadUserLobbyDto(String password) {
+    private MemberDto loadUserLobbyDto(String password, String userID) {
         return new MemberDto(
             false,
-                this.tokenStorage.getUserId(),
+                userID,
                 null,
                 password
         );

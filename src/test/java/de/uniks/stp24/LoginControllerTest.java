@@ -101,7 +101,7 @@ public class LoginControllerTest extends ControllerTest {
         // Result:
         // Her screen switches to the register window.
         waitForFxEvents();
-        assertEquals("Signup", stage.getTitle());
+        assertEquals("REGISTER", stage.getTitle());
     }
 
     @Test

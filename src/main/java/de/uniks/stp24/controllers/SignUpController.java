@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
@@ -22,8 +23,9 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
-@Title("Signup")
+@Title("REGISTER")
 @Controller
 public class SignUpController {
   
@@ -60,6 +62,10 @@ public class SignUpController {
     Subscriber subscriber;
     @Inject
     UserApiService userApiService;
+
+    @Inject
+    @Resource
+    ResourceBundle resources;
 
     private BooleanBinding isLoginFieldEmpty;
     private BooleanBinding isPasswordFieldEmpty;

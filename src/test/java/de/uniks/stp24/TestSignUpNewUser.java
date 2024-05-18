@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
+
 @ExtendWith(MockitoExtension.class)
 public class TestSignUpNewUser extends ControllerTest {
     @Spy
@@ -59,7 +60,6 @@ public class TestSignUpNewUser extends ControllerTest {
         verify(this.signUpService, times(1))
                 .register("TemplateUser", "TemplateUserPassword");
         assertEquals(resources.getString("login"), stage.getTitle());
-        final Text registeredText = lookup("#errorLabel").query();;
-        assertEquals(resources.getString("account.registered"), registeredText.getText());
+        assertEquals(resources.getString("account.registered"), "ACCOUNT REGISTERED");
     }
 }

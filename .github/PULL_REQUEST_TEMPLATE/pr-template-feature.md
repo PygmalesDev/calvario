@@ -3,7 +3,7 @@
 ## Related Issues
 
 ## Conventional Checklist
-- [] Code dokumentation (comments)?
+- [] Code documentation (comments)?
 - [] Consistent Code Style?
 - [] Delete Unused Code?
 - [] No Errors?

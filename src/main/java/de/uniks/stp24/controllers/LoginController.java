@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
 import de.uniks.stp24.model.ErrorResponse;
 import de.uniks.stp24.service.LoginService;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
@@ -16,13 +15,17 @@ import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 import retrofit2.HttpException;
 
+
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Flow;
 
 @Title("Login")
 @Controller
 public class LoginController {
+    @FXML
+    Button licensesButton;
     @FXML
     ToggleButton showPasswordToggleButton;
     @FXML
@@ -49,19 +52,20 @@ public class LoginController {
     LoginService loginService;
 
     @Inject
-    ObjectMapper objectMappper;
+    ObjectMapper objectMapper;
 
-
-
+    @Param("info")
+    public String info;
     @Param("username")
     public String username;
     @Param("password")
     public String password;
+    // Todo: can be done with "info"
     @Param("justRegistered")
     public boolean justRegistered;
 
     @Inject
-    public LoginController(){
+    public LoginController() {
     }
 
     @OnRender
@@ -70,6 +74,8 @@ public class LoginController {
             this.usernameInput.setText(this.username);
         if (Objects.nonNull(this.password))
             this.passwordInput.setText(this.password);
+        if (Objects.nonNull(this.info))
+            this.errorLabel.setText(this.info);
         if (justRegistered){ this.errorLabel.setText("Account Registered!");}
     }
 
@@ -77,48 +83,55 @@ public class LoginController {
         return (!text.isBlank() && !text.isEmpty());
     }
 
-    public void login(ActionEvent actionEvent) {
+    public void login() {
         if (checkIfInputNotBlankOrEmpty(this.usernameInput.getText()) &&
                 checkIfInputNotBlankOrEmpty(this.passwordInput.getText())) {
             this.errorLabel.setText("");
             String username = this.usernameInput.getText();
             String password = this.passwordInput.getText();
             boolean rememberMe = this.rememberMeBox.isSelected();
+
             loginButton.setDisable(true);
+            signupButton.setDisable(true);
+            writeText(100);
             subscriber.subscribe(loginService.login(username, password, rememberMe),
-                    result ->{
-                        app.show("/browseGames");
-                    }
+                    result -> app.show("/browseGames")
+                    // in case of server's response => error
+                    // handle with error response
                     , error -> {
                                 if (error instanceof HttpException httpError) {
                                     System.out.println(httpError.code());
                                     String body = httpError.response().errorBody().string();
-                                    ErrorResponse errorResponse = objectMappper.readValue(body,ErrorResponse.class);
+                                    ErrorResponse errorResponse = objectMapper.readValue(body,ErrorResponse.class);
                                     writeText(errorResponse.statusCode());
+                                    enableButtons();
                                 }
                     });
+
         } else {
+            // 1 is used for default in switch
             writeText(1);
+            enableButtons();
         }
     }
 
-    public void signup(ActionEvent actionEvent) {
+    public void signup() {
         String username = this.usernameInput.getText();
         String password = this.passwordInput.getText();
-        app.show("/signup", Map.of("username",username,"password",password));
+        app.show("/signup", Map.of("username", username, "password", password));
     }
 
     public void setEn() {
     }
 
-    public void setDe(ActionEvent actionEvent) {
+    public void setDe() {
     }
 
     @OnRender(1)
     public void setupShowPassword() {
         // TextField showPasswordText is per default not managed
 
-        // setting properties managed and visible to change depending
+        // setting properties managed and visible to change depending on
         // showPasswordToggleButton state
         showPasswordText.managedProperty()
                 .bind(showPasswordToggleButton.selectedProperty());
@@ -134,20 +147,32 @@ public class LoginController {
 
     }
 
-    public void showLicenses(ActionEvent actionEvent) {
+    public void showLicenses() {
         app.show("/licenses");
     }
 
+
+    // if response from server => error, choose a text depending on code
+    // maybe it should be considered to write a class for this
     private void writeText(int code) {
         this.errorLabel.setStyle("-fx-fill: red;");
         String info;
         switch (code) {
+            case 100 -> {
+                this.errorLabel.setStyle("-fx-fill: black;");
+                info = "... logging in ...";
+            }
             case 400 -> info = "validation failed";
             case 401 -> info = "Invalid username or password";
             default ->  info = "please put in name or/and password";
         }
         this.errorLabel.setText(info);
+    }
+
+
+    public void enableButtons(){
         loginButton.setDisable(false);
+        signupButton.setDisable(false);
     }
 
     @OnDestroy

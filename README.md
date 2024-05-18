@@ -61,8 +61,8 @@ Some parts of this project also include third-party libraries like [Mockito](htt
 ### GNU General Public License (GPL)
 Some parts of this project also include [JavaFX](https://openjfx.io), which is a third-party library, which is licensed unter the GPL. The complete license can be found [here](https://www.gnu.org/licenses/gpl-3.0.de.html).
 
-### Eclipse Public License 1.0
-Some parts of this project also include [JUnit](https://junit.org/junit5), which is a third-party libray, which is licensed unter the Eclipse Public License 1.0. The complete license can be found [here](https://www.eclipse.org/legal/epl-v10.html).
+### Eclipse Public License 1.0 and v 2.0
+Some parts of this project also include [JUnit](https://junit.org/junit5), which is a third-party libray, which is licensed unter the Eclipse Public License 1.0 and v 2.0. The complete license for v 1.0 can be found [here](https://www.eclipse.org/legal/epl-v10.html) and v 2.0 [here](https://www.eclipse.org/legal/epl-2.0/).
 
 Please note, that you must comply with the terms of these licenses when using or modifying the licensed software
 

@@ -11,7 +11,7 @@ public class PrefService {
 
     private final Preferences prefs = Preferences.userNodeForPackage(Main.class);
     @Inject
-    public PrefService(){
+    public PrefService() {
 
     }
 

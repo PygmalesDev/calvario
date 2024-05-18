@@ -13,7 +13,7 @@ import javax.inject.Singleton;
 import javax.security.auth.login.LoginContext;
 
 @Singleton
-public class Routes {
+public class Routes {  
     @Route("load")
     @Inject
     Provider<LoadController> load;
@@ -25,7 +25,10 @@ public class Routes {
     @Route("signup")
     @Inject
     Provider<SignUpController> signup;
-
+    
+    @Route("browseGames")
+    @Inject
+    Provider<BrowseGameController> browseGames;
     @Route("licenses")
     @Inject
     Provider<LicensesController> licenses;
@@ -33,6 +36,17 @@ public class Routes {
     @Route("holder")
     @Inject
     Provider<PlaceHolderController> holder;
+    @Route("editgame")
+    @Inject
+    Provider<EditGameController> editgame;
+
+    @Route("createGameController")
+    @Inject
+    Provider<CreateGameController> createGameController;
+
+    @Route("logout")
+    @Inject
+    Provider<LogoutController> logout;
 
     @Route("editAcc")
     @Inject
@@ -41,6 +55,10 @@ public class Routes {
     @Route("warningScreen")
     @Inject
     Provider<WarningScreenComponent> warningScreen;
+    
+    @Route("game")
+    @Inject
+    Provider<InGameController> game;
 
     @Route("lobby")
     @Inject

@@ -50,6 +50,7 @@ public class WarningComponent extends VBox{
         warningWindow.setStyle("-fx-background-color: white;");
     }
 
+    //Sets warning popup to invisible and deletes game after confirm was pressed
     public void deleteGame() {
         this.subscriber.subscribe(browseGameService.deleteGame());
         getParent().setVisible(false);

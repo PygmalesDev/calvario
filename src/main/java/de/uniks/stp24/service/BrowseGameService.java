@@ -71,7 +71,7 @@ public class BrowseGameService {
         tokenStorage.setAvatar(null);
         tokenStorage.setUserId("testID");
     }
-
+    //Calls Api DELETE if the game is from the user
     public Observable<Game> deleteGame() {
         if (checkMyGame()) {
             return gamesApiService.deleteGame(game._id());

@@ -62,7 +62,6 @@ public class CreateGameControllerTest extends ControllerTest {
     void createGameWithInputs(){
         createGameController.setCreateGameService(createGameService);
 
-        //Set selected Game as one of the games u have created
         WaitForAsyncUtils.waitForFxEvents();
 
 
@@ -79,6 +78,7 @@ public class CreateGameControllerTest extends ControllerTest {
         Button confirmButton = lookup("#createGameConfirmButton").queryButton();
         clickOn(confirmButton);
         WaitForAsyncUtils.waitForFxEvents();
+        //Confirm if the game function that creates the game was invoked
         verify(createGameService, times(1)).createGame(any(), any(), any());
     }
 

@@ -58,7 +58,6 @@ public class EditGameControllerTest extends ControllerTest {
     void editGameWithInputs(){
         editGameController.setEditGameService(editGameService);
 
-        //Set selected Game as one of the games u have created
         WaitForAsyncUtils.waitForFxEvents();
 
 
@@ -75,6 +74,8 @@ public class EditGameControllerTest extends ControllerTest {
         Button confirmButton = lookup("#editGameConfirmButton").queryButton();
         clickOn(confirmButton);
         WaitForAsyncUtils.waitForFxEvents();
+
+        //Confirm if the game function that edits the game was invoked
         verify(editGameService, times(1)).editGame(any(), any(), any());
     }
 

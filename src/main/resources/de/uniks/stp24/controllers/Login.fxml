@@ -45,43 +45,30 @@
                </ImageView>
                <VBox alignment="CENTER" prefHeight="160.0" prefWidth="100.0">
                   <HBox alignment="CENTER" prefHeight="500.0" prefWidth="35.0" spacing="5.0">
-                     <TextField fx:id="usernameInput" alignment="CENTER" prefHeight="40.0" prefWidth="300.0" promptText="%username" styleClass="inputField">
-                        <font>
-                           <Font size="15.0" />
-                        </font>
-                        <HBox.margin>
-                           <Insets />
-                        </HBox.margin>
-                     </TextField>
-                  </HBox>
-                  <HBox alignment="CENTER" prefHeight="500.0" prefWidth="35.0" spacing="5.0">
-                     <Button alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" visible="false" />
-                     <PasswordField fx:id="passwordInput" alignment="CENTER" prefHeight="40.0" prefWidth="300.0" promptText="%password" styleClass="inputField">
-                        <font>
-                           <Font size="15.0" />
-                        </font>
-                        <HBox.margin>
-                           <Insets top="15.0" />
-                        </HBox.margin>
-                     </PasswordField>
-                     <TextField fx:id="showPasswordText" alignment="CENTER" managed="false" prefHeight="40.0" prefWidth="300.0" promptText="PASSWORD" styleClass="inputField">
-                        <font>
-                           <Font size="15.0" />
-                        </font>
-                        <HBox.margin>
-                           <Insets top="15.0" />
-                        </HBox.margin>
-                     </TextField>
-                     <ToggleButton fx:id="showPasswordToggleButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
-                        <graphic>
-                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                              <Image url="@../icons/Eye_Icon_32.png" />
-                           </ImageView>
-                        </graphic>
-                        <HBox.margin>
-                           <Insets top="15.0" />
-                        </HBox.margin>
-                     </ToggleButton>
+                     <Pane>
+                        <children>
+                           <TextField fx:id="usernameInput" alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="40.0" prefWidth="300.0" promptText="%username" styleClass="inputField">
+                              <font>
+                                 <Font size="15.0" />
+                              </font>
+                           </TextField>
+                           <PasswordField fx:id="passwordInput" alignment="CENTER" layoutX="14.0" layoutY="79.0" prefHeight="40.0" prefWidth="300.0" promptText="%password" styleClass="inputField">
+                              <font>
+                                 <Font size="15.0" />
+                              </font>
+                           </PasswordField>
+                           <TextField fx:id="showPasswordText" alignment="CENTER" layoutX="14.0" layoutY="79.0" managed="false" prefHeight="40.0" prefWidth="300.0" promptText="%password" styleClass="inputField">
+                              <font>
+                                 <Font size="15.0" />
+                              </font>
+                           </TextField>
+                           <ToggleButton fx:id="showPasswordToggleButton" layoutX="324.0" layoutY="87.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="eyeButton">
+                              <graphic>
+                                 <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
+                              </graphic>
+                           </ToggleButton>
+                        </children>
+                     </Pane>
                   </HBox>
                </VBox>
                <HBox alignment="BOTTOM_CENTER" prefHeight="250.0" prefWidth="550.0">
@@ -95,13 +82,10 @@
                               <Insets />
                            </VBox.margin>
                         </Text>
-                        <CheckBox fx:id="rememberMeBox" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="%remember.me">
+                        <CheckBox fx:id="rememberMeBox" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="rememberMe" text="%remember.me">
                            <font>
                               <Font size="17.0" />
                            </font>
-                           <VBox.margin>
-                              <Insets top="5.0" />
-                           </VBox.margin>
                         </CheckBox>
                         <Button fx:id="loginButton" defaultButton="true" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="250.0" styleClass="actionButton" text="%login">
                            <font>
@@ -113,7 +97,7 @@
                            <graphic>
                               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../Icons/icon.png" />
+                                    <Image url="@../icons/enter.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -126,9 +110,9 @@
                               <Insets bottom="15.0" />
                            </VBox.margin>
                            <graphic>
-                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../Icons/icon.png" />
+                                    <Image url="@../icons/account.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -141,9 +125,9 @@
                               <Insets top="500.0" />
                            </padding>
                            <graphic>
-                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../Icons/icon.png" />
+                                    <Image url="@../icons/licenses.png" />
                                  </image>
                               </ImageView>
                            </graphic>

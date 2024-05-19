@@ -41,67 +41,45 @@
                      <Insets top="45.0" />
                   </VBox.margin>
                </ImageView>
-               <TextField fx:id="showRepeatPasswordText" alignment="CENTER" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0">
-                  <font>
-                     <Font size="15.0" />
-                  </font>
-                  <VBox.margin>
-                     <Insets top="15.0" />
-                  </VBox.margin>
-               </TextField>
                <VBox alignment="CENTER" prefHeight="250.0" prefWidth="500.0">
                   <HBox alignment="CENTER" prefHeight="1000.0" prefWidth="500.0" spacing="5.0">
-                     <ToggleButton disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" visible="false">
-                        <graphic>
-                           <ImageView disable="true" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" visible="false">
-                              <Image url="@../icons/Eye_Icon_32.png" />
-                           </ImageView>
-                        </graphic>
-                     </ToggleButton>
-                     <VBox alignment="CENTER" prefHeight="1000.0" prefWidth="400.0">
-                        <TextField fx:id="usernameField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%username" styleClass="inputField">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                        </TextField>
-                        <PasswordField fx:id="passwordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%password" styleClass="inputField">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </PasswordField>
-                        <TextField fx:id="showPasswordText" alignment="CENTER" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                        </TextField>
-                        <PasswordField fx:id="repeatPasswordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%repeat.password" styleClass="inputField">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </PasswordField>
-                     </VBox>
-                     <ToggleButton fx:id="showPasswordToggleButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
-                        <graphic>
-                           <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                              <Image url="@../icons/Eye_Icon_32.png" />
-                           </ImageView>
-                        </graphic>
-                        <HBox.margin>
-                           <Insets />
-                        </HBox.margin>
-                     </ToggleButton>
+                     <Pane>
+                        <children>
+                           <TextField fx:id="usernameField" alignment="CENTER" layoutX="9.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%username" styleClass="inputField">
+                              <font>
+                                 <Font size="15.0" />
+                              </font>
+                              <opaqueInsets>
+                                 <Insets />
+                              </opaqueInsets>
+                           </TextField>
+                           <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="9.0" layoutY="73.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%password" styleClass="inputField">
+                              <font>
+                                 <Font size="15.0" />
+                              </font>
+                           </PasswordField>
+                           <PasswordField fx:id="repeatPasswordField" alignment="CENTER" layoutX="9.0" layoutY="120.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%repeat.password" styleClass="inputField">
+                              <font>
+                                 <Font size="15.0" />
+                              </font>
+                           </PasswordField>
+                           <TextField fx:id="showPasswordText" alignment="CENTER" layoutX="9.0" layoutY="73.0" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%password" styleClass="inputField">
+                              <font>
+                                 <Font size="15.0" />
+                              </font>
+                           </TextField>
+                           <TextField fx:id="showRepeatPasswordText" alignment="CENTER" layoutX="9.0" layoutY="120.0" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%repeat.password" styleClass="inputField">
+                              <font>
+                                 <Font size="15.0" />
+                              </font>
+                           </TextField>
+                           <ToggleButton fx:id="showPasswordToggleButton" layoutX="322.0" layoutY="78.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="0.0" prefWidth="0.0" styleClass="eyeButton">
+                              <graphic>
+                                 <ImageView pickOnBounds="true" preserveRatio="true" />
+                              </graphic>
+                           </ToggleButton>
+                        </children>
+                     </Pane>
                   </HBox>
                   <Text fx:id="errorTextField" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
                      <font>
@@ -122,7 +100,7 @@
                            <graphic>
                               <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../Icons/icon.png" />
+                                    <Image url="@../icons/enter.png" />
                                  </image>
                               </ImageView>
                            </graphic>

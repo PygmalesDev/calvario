@@ -2,7 +2,7 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.rest.UserApiService;
-import de.uniks.stp24.service.SignUpService;
+import de.uniks.stp24.service.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
@@ -20,6 +20,7 @@ import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -27,10 +28,11 @@ import java.util.ResourceBundle;
 @Title("REGISTER")
 @Controller
 public class SignUpController {
-  
-    @FXML
-    ToggleButton languageToggleButton;
 
+    @FXML
+    ToggleButton enToggleButton;
+    @FXML
+    ToggleButton deToggleButton;;
     @FXML
     TextField usernameField;
     @FXML
@@ -61,7 +63,8 @@ public class SignUpController {
     Subscriber subscriber;
     @Inject
     UserApiService userApiService;
-
+    @Inject
+    LanguageService languageService;
     @Inject
     @Resource
     ResourceBundle resources;
@@ -193,9 +196,22 @@ public class SignUpController {
         this.subscriber.dispose();
     }
 
-    public void setEn(ActionEvent actionEvent) {
+    @FXML
+    public void setEn() {
+        setLanguage(Locale.ENGLISH);
+        enToggleButton.setSelected(true);
+        deToggleButton.setSelected(false);
     }
 
-    public void setDe(ActionEvent actionEvent) {
+    @FXML
+    public void setDe() {
+        setLanguage(Locale.GERMAN);
+        enToggleButton.setSelected(false);
+        deToggleButton.setSelected(true);
+    }
+
+    public void setLanguage(Locale locale) {
+        resources = languageService.setLocale(locale);
+        app.refresh();
     }
 }

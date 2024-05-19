@@ -10,6 +10,18 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-font-weight: bold;
 }
 
+.textDeleteGang {
+    -fx-font-family: "PT Sarif";
+    -fx-font-size: 24;
+}
+
+.normalButton {
+    -fx-font-family: "PT Sarif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-background-color: #FFD966;
+}
+
 .languageButton:selected {
     -fx-font-family: "PT Sarif";
     -fx-font-size: 24;

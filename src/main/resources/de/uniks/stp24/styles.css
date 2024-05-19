@@ -4,6 +4,12 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-font-weight: bold;
 }
 
+.textFieldGang {
+    -fx-font-family: "PT Sarif";
+    -fx-font-size: 36;
+    -fx-font-weight: bold;
+}
+
 .languageButton:selected {
     -fx-font-family: "PT Sarif";
     -fx-font-size: 24;

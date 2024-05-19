@@ -16,8 +16,8 @@
 
 <AnchorPane prefHeight="680.0" prefWidth="1280.0" styleClass="cardBackground" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.GangCreationController">
    <children>
-      <Pane layoutX="30.0" layoutY="14.0" prefHeight="650.0" prefWidth="1220.0" styleClass="semiTransparent">
-         <VBox prefHeight="650.0" prefWidth="500.0">
+      <Pane layoutX="30.0" layoutY="14.0" prefHeight="650.0" prefWidth="1220.0" styleClass="semiTransparent" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+         <VBox prefHeight="650.0" prefWidth="500.0" style="-fx-background-color: #999999;">
             <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" prefHeight="150.0" prefWidth="500.0" style="-fx-border-color: BLACK;" text="GO BACK TO LOBBY">
                <font>
                   <Font name="System Bold" size="24.0" />
@@ -46,9 +46,9 @@
             </ListView>
          </VBox>
          <Pane fx:id="creationPane" layoutX="520.0" layoutY="14.0" prefHeight="625.0" prefWidth="700.0">
-            <TextField fx:id="gangNameText" alignment="CENTER" layoutX="102.0" layoutY="-4.0" prefHeight="75.0" prefWidth="530.0" promptText="Buccaneers">
+            <TextField fx:id="gangNameText" alignment="CENTER" layoutX="131.0" prefHeight="75.0" prefWidth="530.0" promptText="Buccaneers" styleClass="textFieldGang">
                <font>
-                  <Font size="26.0" />
+                  <Font size="36.0" />
                </font>
             </TextField>
             <Pane layoutX="265.0" layoutY="77.0">
@@ -56,12 +56,12 @@
                   <ImageView fx:id="flagImage" fitHeight="150.0" fitWidth="150.0" layoutX="32.0" layoutY="39.0" pickOnBounds="true">
                      <Image url="@../assets/placeholders/Flags/f0.png" />
                   </ImageView>
-                  <Button fx:id="lastFlagButton" layoutY="128.0" mnemonicParsing="false" onAction="#showLastFlag" prefWidth="30.0" styleClass="downButton" text="&lt;">
+                  <Button fx:id="lastFlagButton" layoutY="128.0" mnemonicParsing="false" onAction="#showLastFlag" prefWidth="30.0" styleClass="downButton">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Button>
-                  <Button fx:id="nextFlagButton" layoutY="78.0" mnemonicParsing="false" onAction="#showNextFlag" prefHeight="25.0" prefWidth="30.0" styleClass="upButton" text="&gt;">
+                  <Button fx:id="nextFlagButton" layoutY="78.0" mnemonicParsing="false" onAction="#showNextFlag" prefHeight="25.0" prefWidth="30.0" styleClass="upButton">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -94,12 +94,12 @@
                   <ImageView fx:id="portraitImage" fitHeight="150.0" fitWidth="150.0" layoutX="32.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
                      <Image url="@../assets/placeholders/Flags/f0.png" />
                   </ImageView>
-                  <Button fx:id="lastPortraitButton" layoutY="123.0" mnemonicParsing="false" onAction="#showLastPortrait" prefWidth="30.0" styleClass="downButton" text="&lt;">
+                  <Button fx:id="lastPortraitButton" layoutY="123.0" mnemonicParsing="false" onAction="#showLastPortrait" prefWidth="30.0" styleClass="downButton">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Button>
-                  <Button fx:id="nextPortraitButton" layoutY="69.0" mnemonicParsing="false" onAction="#showNextPortrait" prefHeight="25.0" prefWidth="30.0" styleClass="upButton" text="&gt;">
+                  <Button fx:id="nextPortraitButton" layoutY="69.0" mnemonicParsing="false" onAction="#showNextPortrait" prefHeight="25.0" prefWidth="30.0" styleClass="upButton">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -117,7 +117,7 @@
                   </ImageView>
                </children>
             </Pane>
-            <Button fx:id="randomizeButton" layoutX="-5.0" layoutY="-4.0" mnemonicParsing="false" onAction="#randomize" prefHeight="75.0" prefWidth="102.0" text="RANDOM" />
+            <Button fx:id="randomizeButton" layoutX="49.0" mnemonicParsing="false" onAction="#randomize" prefHeight="75.0" prefWidth="75.0" text="RANDOM" />
             <Button fx:id="editButton" layoutX="379.0" layoutY="555.0" mnemonicParsing="false" onAction="#edit" prefHeight="56.0" prefWidth="273.0" style="-fx-background-color: YELLOW;" text="EDIT" visible="false">
                <font>
                   <Font name="System Bold" size="18.0" />
@@ -128,32 +128,34 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Button>
-            <ToggleButton fx:id="lockNameButton" layoutX="609.0" layoutY="-4.0" mnemonicParsing="false" onAction="#lockName" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+            <ToggleButton fx:id="lockNameButton" layoutX="638.0" mnemonicParsing="false" onAction="#lockName" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
             <ToggleButton fx:id="lockDescriptionButton" layoutX="633.0" layoutY="276.0" mnemonicParsing="false" onAction="#lockDescription" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
-            <Pane fx:id="colorField" layoutX="508.0" layoutY="118.0" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: RED;">
+            <Pane layoutX="478.0" layoutY="89.1015625">
                <children>
-                  <ToggleButton layoutX="124.0" layoutY="2.0" mnemonicParsing="false" onAction="#lockColor" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
-               </children></Pane>
-            <Button fx:id="lastColorButton" layoutX="478.0" layoutY="202.0" mnemonicParsing="false" onAction="#showLastColor" prefWidth="30.0" styleClass="downButton" text="&lt;">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Button>
-            <Button fx:id="nextColorButton" layoutX="478.0" layoutY="148.0" mnemonicParsing="false" onAction="#showNextColor" prefHeight="25.0" prefWidth="30.0" styleClass="upButton" text="&gt;">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Button>
-            <Text layoutX="557.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text" text="COLOR">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Text>
-            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="532.0" layoutY="92.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/color.png" />
-               </image>
-            </ImageView>
+                  <Pane fx:id="colorField" layoutX="30.0" layoutY="28.8984375" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: RED;" />
+                  <ToggleButton layoutX="155.0" layoutY="28.8984375" mnemonicParsing="false" onAction="#lockColor" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+                  <Button fx:id="lastColorButton" layoutY="112.8984375" mnemonicParsing="false" onAction="#showLastColor" prefWidth="30.0" styleClass="downButton">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="nextColorButton" layoutY="58.8984375" mnemonicParsing="false" onAction="#showNextColor" prefHeight="25.0" prefWidth="30.0" styleClass="upButton">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Text layoutX="79.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text" text="COLOR">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+                  <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="54.0" layoutY="2.8984375" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/color.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
          </Pane>
          <Pane fx:id="deletePane" layoutX="386.0" layoutY="156.0" prefHeight="300.0" prefWidth="500.0" style="-fx-background-color: GREY; -fx-border-color: BLACK; -fx-border-width: 3;" visible="false">
             <Button fx:id="cancelButton" cancelButton="true" layoutX="50.0" layoutY="175.0" mnemonicParsing="false" onAction="#cancel" prefHeight="75.0" prefWidth="150.0" style="-fx-background-color: LIGHTGREEN;" text="CANCEL">

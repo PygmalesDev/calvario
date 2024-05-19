@@ -188,14 +188,14 @@ public class GangCreationController {
         System.out.println(gang.toString());
         gangs.add(index, gang);
         saveLoadService.saveGang(gangs);
-        resetCreationPane();
+        showCreationPane();
     }
 
     public void delete() {
         int index = gangsListView.getSelectionModel().getSelectedIndex();
         gangs.remove(index);
         saveLoadService.saveGang(gangs);
-        resetCreationPane();
+        showCreationPane();
         cancel();
     }
 

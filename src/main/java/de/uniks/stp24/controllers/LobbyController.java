@@ -20,6 +20,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -33,6 +34,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 @Title("Lobby")
 @Controller
@@ -68,6 +70,9 @@ public class LobbyController {
     Provider<UserComponent> userComponentProvider;
     @Inject
     EventListener eventListener;
+    @Inject
+    @Resource
+    ResourceBundle resource;
 
     @FXML
     public ListView<MemberUser> playerListView;

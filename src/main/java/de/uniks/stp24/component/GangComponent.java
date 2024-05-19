@@ -8,10 +8,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
+import java.util.ResourceBundle;
 
 @Component(view = "Gang.fxml")
 public class GangComponent extends Pane implements ReusableItemComponent<Gang> {
@@ -24,6 +26,9 @@ public class GangComponent extends Pane implements ReusableItemComponent<Gang> {
     ImageView portraitImage;
     @FXML
     Text gangNameText;
+    @Inject
+    @Resource
+    ResourceBundle resource;
 
     @Inject
     public GangComponent() {

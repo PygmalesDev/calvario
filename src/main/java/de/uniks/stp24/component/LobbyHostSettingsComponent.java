@@ -14,11 +14,13 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.ResourceBundle;
 
 
 @Component(view = "LobbyHostSettings.fxml")
@@ -39,6 +41,9 @@ public class LobbyHostSettingsComponent extends Pane {
     GamesApiService gamesApiService;
     @Inject
     EventListener eventListener;
+    @Inject
+    @Resource
+    ResourceBundle resource;
 
     private String gameID;
     public boolean leftLobby;

@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import java.awt.*;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 @Component(view = "User.fxml")
 public class UserComponent extends StackPane implements ReusableItemComponent<MemberUser> {
@@ -36,6 +38,9 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     LobbyService lobbyService;
     @Inject
     Subscriber subscriber;
+    @Inject
+    @Resource
+    ResourceBundle resource;
 
     private final ImageCache imageCache;
     private MemberUser member;

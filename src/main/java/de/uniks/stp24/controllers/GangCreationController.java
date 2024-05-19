@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -38,6 +39,10 @@ public class GangCreationController {
 
     @Inject
     Provider<GangComponent> gangComponentProvider;
+
+    @Inject
+    @Resource
+    ResourceBundle resource;
 
     @FXML
     ListView<Gang> gangsListView;

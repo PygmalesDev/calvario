@@ -11,6 +11,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
@@ -24,7 +25,7 @@ import java.util.ResourceBundle;
 
 
 @Component(view = "LobbyHostSettings.fxml")
-public class LobbyHostSettingsComponent extends Pane {
+public class LobbyHostSettingsComponent extends AnchorPane {
     @FXML
     Text gameNameField;
     @FXML

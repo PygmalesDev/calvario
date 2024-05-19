@@ -1,5 +1,6 @@
-package de.uniks.stp24;
+package de.uniks.stp24.game;
 
+import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.controllers.CreateGameController;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -28,6 +29,6 @@ public class CreateGameControllerTest extends ControllerTest {
         Button confirmButton = lookup("#createGameConfirmButton").queryButton();
         clickOn(confirmButton);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("CreateGame", stage.getTitle());
+        assertEquals("Create Game", stage.getTitle());
     }
 }

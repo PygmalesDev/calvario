@@ -2,7 +2,6 @@ package de.uniks.stp24.component;
 
 import de.uniks.stp24.service.InGameService;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;

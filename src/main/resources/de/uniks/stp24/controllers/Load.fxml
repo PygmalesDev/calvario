@@ -20,7 +20,7 @@
             <Image url="@../assets/logos/DeadBirdsLogoTransparent.png" />
          </ImageView>
       </HBox>
-      <Label onKeyPressed="#showLoginScreen" text="%press.any.key">
+      <Label fx:id="press_any_key" onKeyPressed="#showLoginScreen" text="PRESS ANY KEY TO CONTINUE">
          <font>
             <Font size="36.0" />
          </font>

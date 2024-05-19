@@ -8,8 +8,10 @@ import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.CreateGameService;
 import de.uniks.stp24.service.EditGameService;
 import de.uniks.stp24.ws.EventListener;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -24,6 +26,7 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 @Title("Browse Game")
@@ -79,25 +82,32 @@ BrowseGameController {
 
         editGameService.setGamesList(games);
         createGameService.setGamesList(games);
+        browseGameService.resetSelectedGame();
 
-        subscriber.subscribe(gamesApiService.findAll().subscribe(this.games::setAll));
+        gamesApiService.findAll().subscribe(gameList -> {
+            Platform.runLater(() -> {
+                games.setAll(gameList);
+                // Update the ListView after data is set
+                updateListView();
+            });
+        });
 
-        //Listener for updating list of games if games are created, deleted or up
+        // Listener for updating list of games if games are created, deleted or updated
         subscriber.subscribe(eventListener.listen("games.*.*", Game.class), event -> {
-            switch (event.suffix()) {
-                case "created" -> games.add(event.data());
-                case "update" -> games.replaceAll(g -> g._id().equals(event.data()._id()) ? event.data() : g);
-                case "deleted" -> games.removeIf(g -> g._id().equals(event.data()._id()));
-            }
+            Platform.runLater(() -> {
+                switch (event.suffix()) {
+                    case "created" -> games.add(event.data());
+                    case "update" -> games.replaceAll(g -> g._id().equals(event.data()._id()) ? event.data() : g);
+                    case "deleted" -> games.removeIf(g -> g._id().equals(event.data()._id()));
+                }
+            });
         });
     }
 
     //Make list of games visible
     @OnRender
     void render() {
-        games = browseGameService.sortGames(games);
-        gameList.setItems(games);
-        gameList.setCellFactory(list -> new ComponentListCell<>(app, gameComponentProvider));
+        updateListView();
     }
 
     @OnDestroy
@@ -109,7 +119,15 @@ BrowseGameController {
     public BrowseGameController() {
     }
 
-    //Back to log in Screen after click Logout in BrowseGame Screen
+    public void updateListView(){
+        games = browseGameService.sortGames(games);
+        gameList.setItems(games);
+        gameList.setCellFactory(list -> new ComponentListCell<>(app, gameComponentProvider));
+    }
+
+    /*
+    ============================================= On-Action buttons =============================================
+     */
     public void logOut() {
         app.show("/logout");
     }
@@ -126,5 +144,11 @@ BrowseGameController {
 
     public void editAccount() {
         app.show("/editAcc");
+    }
+
+    public void loadGame() {
+        if(browseGameService.getGame() != null) {
+            app.show("/lobby", Map.of("gameid", browseGameService.getGame()._id()));
+        }
     }
 }

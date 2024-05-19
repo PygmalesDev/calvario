@@ -17,7 +17,7 @@ public class ControllerTest extends ApplicationTest {
     @Spy
     public final App app = new App();
     @Spy
-    PrefService prefService;
+    protected PrefService prefService;
     @Spy
     ResourceBundle resources = ResourceBundle.getBundle("de/uniks/stp24/lang/main", Locale.ROOT);
 
@@ -27,6 +27,8 @@ public class ControllerTest extends ApplicationTest {
     public void start(Stage stage) throws Exception {
         super.start(stage);
         this.stage = stage;
+        stage.setX(0);
+        stage.setY(0);
         stage.requestFocus();
         this.prefService.removeRefreshToken();
         prefService.setLocale(Locale.ENGLISH);

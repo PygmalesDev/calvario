@@ -54,9 +54,13 @@ public class Routes {
     @Inject
     Provider<WarningScreenComponent> warningScreen;
     
-    @Route("game")
+    @Route("ingame")
     @Inject
     Provider<InGameController> game;
+
+    @Route("creation")
+    @Inject
+    Provider<GangCreationController> creation;
 
     @Route("lobby")
     @Inject
@@ -65,6 +69,7 @@ public class Routes {
     @Route("login")
     @Inject
     Provider<LoginController> login;
+
 
     @Inject
     public Routes() {

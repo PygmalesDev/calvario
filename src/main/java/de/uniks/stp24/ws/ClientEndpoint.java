@@ -47,10 +47,16 @@ public class ClientEndpoint {
         this.userSession = null;
     }
 
+    /*
+    Array was modified and run through at the same time. Synchronisation of hole iteration
+    solves this problem.
+     */
     @OnMessage
     public void onMessage(String message) {
-        for (final Consumer<String> handler : this.messageHandlers) {
-            handler.accept(message);
+        synchronized (this.messageHandlers) {
+            for (final Consumer<String> handler : this.messageHandlers) {
+                handler.accept(message);
+            }
         }
     }
 

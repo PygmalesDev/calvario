@@ -15,11 +15,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 
 import javax.inject.Inject;
+import java.util.ResourceBundle;
 
-@Title("EditGame")
+@Title("Edit Game")
 @Controller
 public class EditGameController {
     @FXML
@@ -47,6 +49,9 @@ public class EditGameController {
     BrowseGameService browseGameService;
     @Inject
     BrowseGameController browseGameController;
+    @Inject
+    @Resource
+    ResourceBundle resources;
 
 
     @Inject
@@ -75,9 +80,7 @@ public class EditGameController {
         if(!gameName.isEmpty() && !password.isEmpty() && !editRepeatPasswordTextField.getText().isEmpty()) {
             if(password.equals(editRepeatPasswordTextField.getText())) {
                 if (editGameService.editGame(gameName, settings, password) != null) {
-                    editGameService.editGame(gameName, settings, password).subscribeOn(Schedulers.io())
-                            .observeOn(Schedulers.single())
-                            .subscribe(result -> {
+                    editGameService.editGame(gameName, settings, password).subscribe(result -> {
                                 Platform.runLater(() -> {
                                     browseGameController.init();
                                     app.show(browseGameController);
@@ -92,7 +95,7 @@ public class EditGameController {
         app.show("/browseGames");
     }
     public void showNameTakenError() {
-        errorMessageTextEdit.setText("Name exists already!");
+        errorMessageTextEdit.setText(resources.getString("name.exists.already"));
         errorBoxEdit.setVisible(true);
     }
 

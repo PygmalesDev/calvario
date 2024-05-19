@@ -11,7 +11,6 @@ import javax.inject.Inject;
 public class LoginService {
     @Inject
     AuthApiService authApiService;
-
     @Inject
     TokenStorage tokenStorage;
     @Inject
@@ -44,7 +43,7 @@ public class LoginService {
     }
 
 
-    public Observable<LoginResult> login(String username, String password, boolean rememberMe){
+    public Observable<LoginResult> login(String username, String password, boolean rememberMe) {
         return authApiService
                 .login(new LoginDto(username, password))
                 .doOnNext(loginResult -> {

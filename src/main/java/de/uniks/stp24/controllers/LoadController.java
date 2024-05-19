@@ -13,7 +13,7 @@ import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 
-@Title("Game Name")
+@Title("Calvario")
 @Controller
 public class LoadController {
 

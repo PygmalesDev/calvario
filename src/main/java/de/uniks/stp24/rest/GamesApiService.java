@@ -8,8 +8,10 @@ import de.uniks.stp24.model.Game;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.*;
 
+import javax.inject.Singleton;
 import java.util.List;
 
+@Singleton
 public interface GamesApiService {
     @PATCH("games/{id}")
     Observable<UpdateGameResultDto> editGame(@Path("id") String id, @Body UpdateGameDto dto);
@@ -26,14 +28,11 @@ public interface GamesApiService {
     @GET("games")
     Observable<List<Game>> findAll(@Query("ids") List<String> ids);
 
-    /*
     @GET("games/{id}")
-    Observable<Game> updateOne(@Path("id") String id, @Body UpdateGamesDTO dto);
-
-     */
+    Observable<Game> getGame(@Path("id") String gameID);
 
     @DELETE("games/{id}")
-    Observable<Game> delete(@Path("id") String id);
+    Observable<Game> deleteGame(@Path("id") String id);
 }
 
 

@@ -7,4 +7,6 @@ public record User(
         String createdAt,
         String updatedAt
 ) {
+
 }
+

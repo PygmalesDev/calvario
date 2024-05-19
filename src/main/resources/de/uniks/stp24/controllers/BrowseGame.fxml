@@ -13,36 +13,39 @@
       <AnchorPane prefHeight="398.0" prefWidth="238.0" style="-fx-border-color: #000000;" HBox.hgrow="ALWAYS">
          <VBox fx:id="browseGameVBoxButtons" alignment="CENTER" prefHeight="398.0" prefWidth="238.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.799999999999983" AnchorPane.rightAnchor="1.5999999999999943" AnchorPane.topAnchor="0.0">
             <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
-               <Button fx:id="new_game_b" mnemonicParsing="false" onAction="#newGame" prefHeight="42.0" prefWidth="186.0" text="New Game" />
+               <Button fx:id="new_game_b" mnemonicParsing="false" onAction="#newGame" prefHeight="42.0" prefWidth="186.0" text="%new.game" />
 
             </HBox>
             <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
                <VBox alignment="CENTER" prefHeight="77.0" prefWidth="178.0">
-                  <Button fx:id="load_game_b" mnemonicParsing="false" prefHeight="42.0" prefWidth="186.0" text="Load Game" />
+                  <Button fx:id="load_game_b" mnemonicParsing="false" onAction="#loadGame" prefHeight="42.0" prefWidth="186.0" text="%load" />
                </VBox>
             </HBox>
             <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
-               <Button fx:id="edit_game_b" mnemonicParsing="false" onAction="#editGame" prefHeight="42.0" prefWidth="186.0" text="Edit Game" />
+               <Button fx:id="edit_game_b" mnemonicParsing="false" onAction="#editGame" prefHeight="42.0" prefWidth="186.0" text="%edit.game" />
 
             </HBox>
             <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
-               <Button fx:id="del_game_b" mnemonicParsing="false" onAction="#deleteGame" prefHeight="42.0" prefWidth="186.0" text="Delete Game" />
+               <Button fx:id="del_game_b" mnemonicParsing="false" onAction="#deleteGame" prefHeight="42.0" prefWidth="186.0" text="%delete" />
             </HBox>
             <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
-               <Button fx:id="edit_acc_b" mnemonicParsing="false" prefHeight="42.0" prefWidth="186.0" text="Edit Account" />
+               <Button fx:id="edit_acc_b" mnemonicParsing="false" onAction="#editAccount" prefHeight="42.0" prefWidth="186.0" text="%edit.account" />
             </HBox>
             <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
-               <Button fx:id="log_out_b" mnemonicParsing="false" onAction="#logOut" prefHeight="42.0" prefWidth="186.0" text="Log Out" />
+               <Button fx:id="log_out_b" mnemonicParsing="false" onAction="#logOut" prefHeight="42.0" prefWidth="186.0" text="%log.out" />
             </HBox>
          </VBox>
       </AnchorPane>
       <AnchorPane prefHeight="442.0" prefWidth="295.0" style="-fx-border-color: #000000;" HBox.hgrow="ALWAYS">
          <VBox fx:id="browseGameVBoxList" alignment="CENTER" layoutX="30.0" layoutY="1.0" prefHeight="396.0" prefWidth="235.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="0.0">
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Lobbys:" />
+         <VBox alignment="CENTER" layoutX="30.0" layoutY="1.0" prefHeight="396.0" prefWidth="235.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="31.0" AnchorPane.topAnchor="0.0">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%games" />
             <HBox prefHeight="4.0" prefWidth="233.0" />
             <ListView fx:id="gameList" prefHeight="324.0" prefWidth="233.0" />
          </VBox>
-         <StackPane fx:id="warningWindowContainer" layoutX="-86.0" layoutY="123.0" prefHeight="150.0" prefWidth="200.0" />
+         </VBox>
+         <StackPane fx:id="warningWindowContainer" alignment="BOTTOM_CENTER" layoutX="-235.0" layoutY="107.0" prefHeight="293.0" prefWidth="532.0" />
       </AnchorPane>
    </HBox>
 </AnchorPane>

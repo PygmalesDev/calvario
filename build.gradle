@@ -64,6 +64,13 @@ dependencies {
 
     // UI
     implementation 'com.gluonhq:charm-glisten:5.0.2'
+
+    // --------------- Jackson ---------------
+
+    // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-jackson
+    implementation group: 'com.squareup.retrofit2', name: 'converter-jackson', version: '2.9.0'
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.3'
 }
 
 java {

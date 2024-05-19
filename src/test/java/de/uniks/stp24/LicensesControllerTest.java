@@ -1,6 +1,7 @@
 package de.uniks.stp24;
 
 import de.uniks.stp24.controllers.LoginController;
+import de.uniks.stp24.service.PrefService;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,7 @@ public class LicensesControllerTest extends ControllerTest {
     @Spy
     Subscriber subscriber = new Subscriber();
 
+
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
@@ -31,7 +33,7 @@ public class LicensesControllerTest extends ControllerTest {
     void clickOnLicenses(){
         //Start:
         //Alice is in the login screen. She wants to see licenses and credits.
-        assertEquals("Login", stage.getTitle());
+        assertEquals(resources.getString("login"), stage.getTitle());
 
         //Action:
         //She clicks licenses button.

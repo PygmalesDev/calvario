@@ -18,7 +18,7 @@
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0">
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name:">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%name">
                   <font>
                      <Font size="17.0"/>
                   </font>
@@ -31,7 +31,7 @@
          </HBox>
          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0">
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%password">
                   <font>
                      <Font size="17.0"/>
                   </font>
@@ -44,7 +44,7 @@
          </HBox>
          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0">
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Repeat Password:">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%repeat.password">
                   <font>
                      <Font size="17.0"/>
                   </font>
@@ -69,7 +69,7 @@
             </HBox>
          </HBox>
          <HBox fx:id="errorBoxEdit" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" visible="false">
-            <Text fx:id="errorMessageTextEdit" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+            <Text fx:id="errorMessageTextEdit" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="%text">
                <font>
                   <Font size="22.0"/>
                </font>
@@ -78,11 +78,11 @@
          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0">
             <HBox alignment="CENTER" prefHeight="90.0" prefWidth="350.0">
                <Button fx:id="editGameCancelButton" mnemonicParsing="false" onAction="#cancel" prefHeight="45.0"
-                       prefWidth="100.0" text="Cancel"/>
+                       prefWidth="100.0" text="%cancel"/>
             </HBox>
             <HBox alignment="CENTER" prefHeight="90.0" prefWidth="350.0">
                <Button fx:id="editGameConfirmButton" mnemonicParsing="false" onAction="#editGame"
-                       prefHeight="45.0" prefWidth="100.0" text="Confirm"/>
+                       prefHeight="45.0" prefWidth="100.0" text="%confirm"/>
             </HBox>
          </HBox>
       </VBox>

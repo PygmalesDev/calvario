@@ -1,5 +1,6 @@
-package de.uniks.stp24;
+package de.uniks.stp24.game;
 
+import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.GameComponent;
 import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
@@ -54,7 +55,7 @@ public class CreateGameControllerTest extends ControllerTest {
         Button confirmButton = lookup("#createGameConfirmButton").queryButton();
         clickOn(confirmButton);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("CreateGame", stage.getTitle());
+        assertEquals("Create Game", stage.getTitle());
     }
 
     @Test

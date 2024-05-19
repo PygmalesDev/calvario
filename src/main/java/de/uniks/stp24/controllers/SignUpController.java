@@ -5,6 +5,7 @@ import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.SignUpService;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -12,16 +13,19 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
+
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
-@Title("SignUp")
+@Title("REGISTER")
 @Controller
 public class SignUpController {
   
@@ -58,6 +62,10 @@ public class SignUpController {
     Subscriber subscriber;
     @Inject
     UserApiService userApiService;
+
+    @Inject
+    @Resource
+    ResourceBundle resources;
 
     private BooleanBinding isLoginFieldEmpty;
     private BooleanBinding isPasswordFieldEmpty;
@@ -184,5 +192,11 @@ public class SignUpController {
     @OnDestroy
     public void destroy() {
         this.subscriber.dispose();
+    }
+
+    public void setEn(ActionEvent actionEvent) {
+    }
+
+    public void setDe(ActionEvent actionEvent) {
     }
 }

@@ -77,9 +77,6 @@ public class LoginController {
     public String username;
     @Param("password")
     public String password;
-    // Todo: can be done with "info"
-    @Param("justRegistered")
-    public boolean justRegistered;
 
     @Inject
     public LoginController() {
@@ -87,16 +84,27 @@ public class LoginController {
 
     @OnRender
     public void applyInputs() {
-        if (Objects.nonNull(this.username))
+        if (Objects.nonNull(this.username)) {
             this.usernameInput.setText(this.username);
-        if (Objects.nonNull(this.password))
+        }
+        if (Objects.nonNull(this.password)) {
             this.passwordInput.setText(this.password);
-        if (Objects.nonNull(this.info))
-            this.errorLabel.setText(this.info);
-        if (justRegistered){ this.errorLabel.setText(resources.getString("account.registered"));}
-        if(prefService.getLocale() == Locale.ENGLISH){
+        }
+        if (Objects.nonNull(this.info)) {
+            switch(this.info) {
+                case "logout" -> this.errorLabel
+                        .setText(resources.getString("logout.successful.on.this.device"));
+
+                case "registered" -> this.errorLabel
+                        .setText(resources.getString("account.registered"));
+
+                default -> this.errorLabel.setText("");
+            }
+        }
+//        if (justRegistered){ this.errorLabel.setText(resources.getString("account.registered"));}
+        if(prefService.getLocale() == Locale.ENGLISH) {
             enToggleButton.setSelected(true);
-        }else{
+        } else {
             deToggleButton.setSelected(true);
         }
     }

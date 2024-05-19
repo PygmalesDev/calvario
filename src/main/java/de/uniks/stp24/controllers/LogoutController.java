@@ -47,7 +47,7 @@ public class LogoutController{
         logoutService.logout("")
                 .doFinally(() -> {
                     System.out.println("LOGGING OUT");
-                    info = resources.getString("logout.successful.on.this.device");
+                    info = "logout";
                 })
                 .subscribe().dispose();
         app.show("/login", Map.of("info",info));

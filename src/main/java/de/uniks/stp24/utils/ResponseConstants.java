@@ -41,8 +41,10 @@ public class ResponseConstants {
             -1 , "pirate.login.no.username.or.password",
             201, "try.login");
 
-    final public Map<Integer, String> respSignup = Map.of(400,"validation failed",
-            409, "name already exits",
+    final public Map<Integer, String> respSignup = Map.of(400,"pirate.general.invalid.password",
+            409, "username.in.use.by.another.user",
+            201, "try.login",
+            -2, "pirate.register.passwords.dont.match",
             -1 , "please put in name or/and password");
 
 //    static final public Map<String, Map<Integer,String>> responses = Map.of("login", respLogin,

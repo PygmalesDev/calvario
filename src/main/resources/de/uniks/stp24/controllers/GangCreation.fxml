@@ -8,140 +8,180 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.GangCreationController">
-   <VBox prefHeight="680.0" prefWidth="500.0">
-      <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" prefHeight="150.0" prefWidth="500.0" style="-fx-border-color: BLACK;" text="GO BACK TO LOBBY">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-      </Button>
-      <Button fx:id="showCreationButton" mnemonicParsing="false" onAction="#showCreationPane" prefHeight="150.0" prefWidth="500.0" style="-fx-border-color: BLACK;" text="NEW GANG">
-         <VBox.margin>
-            <Insets top="1.0" />
-         </VBox.margin>
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-      </Button>
-      <Text stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR GANGS" textAlignment="CENTER" wrappingWidth="500.0">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-         <VBox.margin>
-            <Insets top="1.0" />
-         </VBox.margin>
-      </Text>
-      <ListView fx:id="gangsListView" prefHeight="500.0" prefWidth="500.0">
-         <VBox.margin>
-            <Insets bottom="25.0" />
-         </VBox.margin>
-      </ListView>
-   </VBox>
-   <Pane fx:id="creationPane" layoutX="536.0" layoutY="10.0" prefHeight="656.0" prefWidth="704.0">
-      <TextField fx:id="gangNameText" alignment="CENTER" layoutX="114.0" layoutY="-5.0" prefHeight="75.0" prefWidth="500.0" promptText="Buccaneers">
-         <font>
-            <Font size="26.0" />
-         </font>
-      </TextField>
-      <ImageView fx:id="flagImage" fitHeight="150.0" fitWidth="150.0" layoutX="94.0" layoutY="80.0" pickOnBounds="true">
-         <Image url="@../assets/placeholders/Flags/f0.png" />
-      </ImageView>
-      <TextArea fx:id="gangDescriptionText" layoutX="52.0" layoutY="276.0" prefHeight="230.0" prefWidth="600.0" promptText="Enter description ..." wrapText="true">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </TextArea>
-      <Button fx:id="createButton" layoutX="228.0" layoutY="564.0" mnemonicParsing="false" onAction="#create" prefHeight="56.0" prefWidth="273.0" style="-fx-background-color: LIGHTGREEN;" text="CREATE">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Button>
-      <Button fx:id="lastFlagButton" layoutX="64.0" layoutY="169.0" mnemonicParsing="false" onAction="#showLastFlag" prefWidth="30.0" text="&lt;">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Button>
-      <Button fx:id="nextFlagButton" layoutX="64.0" layoutY="119.0" mnemonicParsing="false" onAction="#showNextFlag" prefHeight="25.0" prefWidth="30.0" text="&gt;">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Button>
-      <ImageView fx:id="portraitImage" fitHeight="150.0" fitWidth="150.0" layoutX="292.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
-         <Image url="@../assets/placeholders/Portraits/p2.jpg" />
-      </ImageView>
-      <Button fx:id="lastPortraitButton" layoutX="262.0" layoutY="173.0" mnemonicParsing="false" onAction="#showLastPortrait" prefWidth="30.0" text="&lt;">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Button>
-      <Button fx:id="nextPortraitButton" layoutX="262.0" layoutY="119.0" mnemonicParsing="false" onAction="#showNextPortrait" prefHeight="25.0" prefWidth="30.0" text="&gt;">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Button>
-      <Button fx:id="randomizeButton" layoutY="-4.0" mnemonicParsing="false" onAction="#randomize" prefHeight="75.0" prefWidth="102.0" text="RANDOM" />
-      <ToggleButton layoutX="216.0" layoutY="84.0" mnemonicParsing="false" onAction="#lockFlag" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
-      <ToggleButton layoutX="417.0" layoutY="84.0" mnemonicParsing="false" onAction="#lockPortrait" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
-      <Button fx:id="editButton" layoutX="391.0" layoutY="564.0" mnemonicParsing="false" onAction="#edit" prefHeight="56.0" prefWidth="273.0" style="-fx-background-color: YELLOW;" text="EDIT" visible="false">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Button>
-      <Button fx:id="showDeletePaneButton" layoutX="64.0" layoutY="564.0" mnemonicParsing="false" onAction="#showDeletePane" prefHeight="56.0" prefWidth="273.0" style="-fx-background-color: RED;" text="DELETE" visible="false">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Button>
-      <ToggleButton fx:id="lockNameButton" layoutX="589.0" layoutY="-5.0" mnemonicParsing="false" onAction="#lockName" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
-      <ToggleButton fx:id="lockDescriptionButton" layoutX="627.0" layoutY="276.0" mnemonicParsing="false" onAction="#lockDescription" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
-      <ImageView fx:id="portraitImage1" fitHeight="150.0" fitWidth="150.0" layoutX="484.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true" />
-      <Button fx:id="lastColorButton" layoutX="457.0" layoutY="173.0" mnemonicParsing="false" onAction="#showLastColor" prefWidth="30.0" text="&lt;">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Button>
-      <Button fx:id="nextColorButton" layoutX="457.0" layoutY="119.0" mnemonicParsing="false" onAction="#showNextColor" prefHeight="25.0" prefWidth="30.0" text="&gt;">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Button>
-      <ToggleButton layoutX="609.0" layoutY="84.0" mnemonicParsing="false" onAction="#lockPortrait" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
-      <Pane fx:id="colorField" layoutX="484.0" layoutY="84.0" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: RED;">
-         <children>
-            <ToggleButton layoutX="124.0" layoutY="2.0" mnemonicParsing="false" onAction="#lockColor" prefHeight="25.0" prefWidth="25.0" styleClass="lock-button" />
-         </children>
+<AnchorPane prefHeight="680.0" prefWidth="1280.0" styleClass="cardBackground" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.GangCreationController">
+   <children>
+      <Pane layoutX="30.0" layoutY="14.0" prefHeight="650.0" prefWidth="1220.0" styleClass="semiTransparent">
+         <VBox prefHeight="650.0" prefWidth="500.0">
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" prefHeight="150.0" prefWidth="500.0" style="-fx-border-color: BLACK;" text="GO BACK TO LOBBY">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="showCreationButton" mnemonicParsing="false" onAction="#showCreationPane" prefHeight="150.0" prefWidth="500.0" style="-fx-border-color: BLACK;" text="NEW GANG">
+               <VBox.margin>
+                  <Insets top="1.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Button>
+            <Text stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="YOUR GANGS" textAlignment="CENTER" wrappingWidth="500.0">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="1.0" />
+               </VBox.margin>
+            </Text>
+            <ListView fx:id="gangsListView" prefHeight="650.0" prefWidth="500.0">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </ListView>
+         </VBox>
+         <Pane fx:id="creationPane" layoutX="520.0" layoutY="14.0" prefHeight="625.0" prefWidth="700.0">
+            <TextField fx:id="gangNameText" alignment="CENTER" layoutX="102.0" layoutY="-4.0" prefHeight="75.0" prefWidth="530.0" promptText="Buccaneers">
+               <font>
+                  <Font size="26.0" />
+               </font>
+            </TextField>
+            <Pane layoutX="265.0" layoutY="77.0">
+               <children>
+                  <ImageView fx:id="flagImage" fitHeight="150.0" fitWidth="150.0" layoutX="32.0" layoutY="39.0" pickOnBounds="true">
+                     <Image url="@../assets/placeholders/Flags/f0.png" />
+                  </ImageView>
+                  <Button fx:id="lastFlagButton" layoutY="128.0" mnemonicParsing="false" onAction="#showLastFlag" prefWidth="30.0" styleClass="downButton" text="&lt;">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="nextFlagButton" layoutY="78.0" mnemonicParsing="false" onAction="#showNextFlag" prefHeight="25.0" prefWidth="30.0" styleClass="upButton" text="&gt;">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <ToggleButton layoutX="157.0" layoutY="41.0" mnemonicParsing="false" onAction="#lockFlag" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+                  <Text layoutX="91.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text" text="FLAG">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="57.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/flag.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <TextArea fx:id="gangDescriptionText" layoutX="53.0" layoutY="276.0" prefHeight="251.0" prefWidth="606.0" promptText="Enter description ..." wrapText="true">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </TextArea>
+            <Button fx:id="createButton" layoutX="219.0" layoutY="554.0" mnemonicParsing="false" onAction="#create" prefHeight="56.0" prefWidth="273.0" style="-fx-background-color: LIGHTGREEN;" text="CREATE">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Button>
+            <Pane layoutX="53.0" layoutY="87.0">
+               <children>
+                  <ImageView fx:id="portraitImage" fitHeight="150.0" fitWidth="150.0" layoutX="32.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
+                     <Image url="@../assets/placeholders/Flags/f0.png" />
+                  </ImageView>
+                  <Button fx:id="lastPortraitButton" layoutY="123.0" mnemonicParsing="false" onAction="#showLastPortrait" prefWidth="30.0" styleClass="downButton" text="&lt;">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="nextPortraitButton" layoutY="69.0" mnemonicParsing="false" onAction="#showNextPortrait" prefHeight="25.0" prefWidth="30.0" styleClass="upButton" text="&gt;">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Button>
+                  <ToggleButton layoutX="157.0" layoutY="36.0" mnemonicParsing="false" onAction="#lockPortrait" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+                  <Text layoutX="68.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text" text="PORTRAIT">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+                  <ImageView fitHeight="45.0" fitWidth="45.0" layoutX="30.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/skull.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Button fx:id="randomizeButton" layoutX="-5.0" layoutY="-4.0" mnemonicParsing="false" onAction="#randomize" prefHeight="75.0" prefWidth="102.0" text="RANDOM" />
+            <Button fx:id="editButton" layoutX="379.0" layoutY="555.0" mnemonicParsing="false" onAction="#edit" prefHeight="56.0" prefWidth="273.0" style="-fx-background-color: YELLOW;" text="EDIT" visible="false">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="showDeletePaneButton" layoutX="52.0" layoutY="555.0" mnemonicParsing="false" onAction="#showDeletePane" prefHeight="56.0" prefWidth="273.0" style="-fx-background-color: RED;" text="DELETE" visible="false">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Button>
+            <ToggleButton fx:id="lockNameButton" layoutX="609.0" layoutY="-4.0" mnemonicParsing="false" onAction="#lockName" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+            <ToggleButton fx:id="lockDescriptionButton" layoutX="633.0" layoutY="276.0" mnemonicParsing="false" onAction="#lockDescription" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+            <Pane fx:id="colorField" layoutX="508.0" layoutY="118.0" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: RED;">
+               <children>
+                  <ToggleButton layoutX="124.0" layoutY="2.0" mnemonicParsing="false" onAction="#lockColor" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+               </children></Pane>
+            <Button fx:id="lastColorButton" layoutX="478.0" layoutY="202.0" mnemonicParsing="false" onAction="#showLastColor" prefWidth="30.0" styleClass="downButton" text="&lt;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="nextColorButton" layoutX="478.0" layoutY="148.0" mnemonicParsing="false" onAction="#showNextColor" prefHeight="25.0" prefWidth="30.0" styleClass="upButton" text="&gt;">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Text layoutX="557.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text" text="COLOR">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Text>
+            <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="532.0" layoutY="92.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/color.png" />
+               </image>
+            </ImageView>
+         </Pane>
+         <Pane fx:id="deletePane" layoutX="386.0" layoutY="156.0" prefHeight="300.0" prefWidth="500.0" style="-fx-background-color: GREY; -fx-border-color: BLACK; -fx-border-width: 3;" visible="false">
+            <Button fx:id="cancelButton" cancelButton="true" layoutX="50.0" layoutY="175.0" mnemonicParsing="false" onAction="#cancel" prefHeight="75.0" prefWidth="150.0" style="-fx-background-color: LIGHTGREEN;" text="CANCEL">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Button>
+            <Button fx:id="deleteButton" layoutX="300.0" layoutY="175.0" mnemonicParsing="false" onAction="#delete" prefHeight="75.0" prefWidth="150.0" style="-fx-background-color: RED;" text="DELETE">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Button>
+            <Text fill="RED" layoutX="64.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Are you sure you want to delete " wrappingWidth="372.3828125">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Text>
+            <Text fx:id="toBeDeletedGangName" fill="WHITE" layoutX="51.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="400.0">
+               <font>
+                  <Font name="System Bold Italic" size="24.0" />
+               </font>
+            </Text>
+            <Text fill="RED" layoutX="244.0" layoutY="143.0" strokeType="OUTSIDE" strokeWidth="0.0" text="?" wrappingWidth="15.0">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Text>
+         </Pane>
       </Pane>
-   </Pane>
-   <Pane fx:id="deletePane" layoutX="386.0" layoutY="156.0" prefHeight="300.0" prefWidth="500.0" style="-fx-background-color: GREY; -fx-border-color: BLACK; -fx-border-width: 3;" visible="false">
-      <Button fx:id="cancelButton" cancelButton="true" layoutX="50.0" layoutY="175.0" mnemonicParsing="false" onAction="#cancel" prefHeight="75.0" prefWidth="150.0" style="-fx-background-color: LIGHTGREEN;" text="CANCEL">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-      </Button>
-      <Button fx:id="deleteButton" layoutX="300.0" layoutY="175.0" mnemonicParsing="false" onAction="#delete" prefHeight="75.0" prefWidth="150.0" style="-fx-background-color: RED;" text="DELETE">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-      </Button>
-      <Text fill="RED" layoutX="64.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Are you sure you want to delete " wrappingWidth="372.3828125">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-      </Text>
-      <Text fx:id="toBeDeletedGangName" fill="WHITE" layoutX="51.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="400.0">
-         <font>
-            <Font name="System Bold Italic" size="24.0" />
-         </font>
-      </Text>
-      <Text fill="RED" layoutX="244.0" layoutY="143.0" strokeType="OUTSIDE" strokeWidth="0.0" text="?" wrappingWidth="15.0">
-         <font>
-            <Font name="System Bold" size="24.0" />
-         </font>
-      </Text>
-   </Pane>
-</Pane>
+   </children>
+</AnchorPane>

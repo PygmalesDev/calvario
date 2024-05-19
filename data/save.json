@@ -1,0 +1,55 @@
+[ {
+  "name" : "Evil Traders",
+  "flag" : "file:/E:/Uni/Bachelor/SoSe2024/STP/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Flags/f5.jpg",
+  "flagIndex" : 4,
+  "portrait" : "file:/E:/Uni/Bachelor/SoSe2024/STP/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Portraits/p4.jpeg",
+  "portraitIndex" : 4,
+  "description" : "Under the black flag of Evil Traders, pirates unite in a fierce brotherhood, seeking fortune and infamy across the boundless expanse of the ocean.",
+  "color" : "#FF00FF",
+  "colorIndex" : 6
+}, {
+  "name" : "Buccaneers",
+  "flag" : "file:/E:/Uni/Bachelor/SoSe2024/STP/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Flags/f0.png",
+  "flagIndex" : 0,
+  "portrait" : "file:/E:/Uni/Bachelor/SoSe2024/STP/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Portraits/p0.jpg",
+  "portraitIndex" : 0,
+  "description" : "",
+  "color" : "#DC143C",
+  "colorIndex" : 0
+}, {
+  "name" : "Buccaneers",
+  "flag" : "file:/E:/Uni/Bachelor/SoSe2024/STP/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Flags/f0.png",
+  "flagIndex" : 0,
+  "portrait" : "file:/E:/Uni/Bachelor/SoSe2024/STP/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Portraits/p0.jpg",
+  "portraitIndex" : 0,
+  "description" : "",
+  "color" : "#DC143C",
+  "colorIndex" : 0
+}, {
+  "name" : "Buccaneers",
+  "flag" : "file:/E:/Uni/Bachelor/SoSe2024/STP/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Flags/f0.png",
+  "flagIndex" : 0,
+  "portrait" : "file:/E:/Uni/Bachelor/SoSe2024/STP/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Portraits/p0.jpg",
+  "portraitIndex" : 0,
+  "description" : "",
+  "color" : "#DC143C",
+  "colorIndex" : 0
+}, {
+  "name" : "Buccaneers",
+  "flag" : "file:/E:/Uni/Bachelor/SoSe2024/STP/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Flags/f0.png",
+  "flagIndex" : 0,
+  "portrait" : "file:/E:/Uni/Bachelor/SoSe2024/STP/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Portraits/p0.jpg",
+  "portraitIndex" : 0,
+  "description" : "",
+  "color" : "#DC143C",
+  "colorIndex" : 0
+}, {
+  "name" : "Buccaneers",
+  "flag" : "file:/E:/Uni/Bachelor/SoSe2024/STP/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Flags/f0.png",
+  "flagIndex" : 0,
+  "portrait" : "file:/E:/Uni/Bachelor/SoSe2024/STP/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Portraits/p0.jpg",
+  "portraitIndex" : 0,
+  "description" : "",
+  "color" : "#DC143C",
+  "colorIndex" : 0
+} ]

@@ -30,6 +30,53 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-background-size: 100% 100%;
 }
 
+.upButton {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/up.png");
+    -fx-background-size: inherit;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 25px;
+    -fx-pref-height: 25px;
+}
+
+.downButton {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/down.png");
+    -fx-background-size: inherit;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 25px;
+    -fx-pref-height: 25px;
+}
+
+.lockButton {
+    -fx-background-image: url("Icons/unlock.png");
+    -fx-background-color: WHITE;
+    -fx-background-size: inherit;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 25px;
+    -fx-pref-height: 25px;
+}
+.lockButton:selected {
+    -fx-background-image: url("Icons/lock.png");
+    -fx-background-color: WHITE;
+    -fx-background-size: inherit;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 25px;
+    -fx-pref-height: 25px;
+}
+
 .actionButton{
     -fx-font-family: "PT Sarif";
     -fx-font-size: 24;

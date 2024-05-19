@@ -28,7 +28,7 @@
                   </HBox>
                   <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="570.0" prefWidth="550.0" styleClass="cardBackground">
                      <children>
-                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="520.0" prefWidth="500.0" spacing="20.0">
+                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="520.0" prefWidth="500.0" spacing="20.0" styleClass="transparentBackground">
                            <children>
                               <TextField fx:id="createNameTextField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="%name" />
                               <PasswordField fx:id="createPasswordTextField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="%password" />
@@ -45,6 +45,9 @@
                               <Button fx:id="createGameCancelButton" mnemonicParsing="false" onAction="#cancel" prefHeight="45.0" prefWidth="250.0" text="%cancel" />
                               <Button fx:id="createGameConfirmButton" mnemonicParsing="false" onAction="#createGame" prefHeight="45.0" prefWidth="250.0" text="%confirm" />
                            </children>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
                         </VBox>
                         <HBox fx:id="errorBox" alignment="CENTER" prefHeight="50.0" prefWidth="200.0" visible="false">
                            <children>

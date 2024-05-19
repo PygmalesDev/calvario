@@ -28,6 +28,18 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-border-color: #000000
 }
 
+.borderedText{
+    -fx-border-color: #000000;
+    -fx-border-width: 5;
+}
+
+.capitals{
+    -fx-font-size: 30;
+    -fx-font-weight: bold;
+}
+
+
+
 /*
 .shadowEffect{
     -fx-border-color: black;

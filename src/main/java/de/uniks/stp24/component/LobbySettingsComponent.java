@@ -5,6 +5,7 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.service.LobbyService;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
@@ -16,7 +17,7 @@ import java.util.ResourceBundle;
 
 
 @Component(view = "LobbySettings.fxml")
-public class LobbySettingsComponent extends Pane {
+public class LobbySettingsComponent extends AnchorPane {
     @FXML
     Text gameNameField;
     @Inject

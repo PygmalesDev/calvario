@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import java.awt.*;
 import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 
 import static javafx.scene.input.KeyEvent.KEY_PRESSED;
@@ -62,9 +63,9 @@ public class App extends FulibFxApp {
             // open normal load screen or autoLogin screen depending on the preferences of the user
 
             if (component.loginService().autoLogin()) {
-                show("/autoLogin");
+                show("/load", Map.of("autologin",true));
             } else {
-                show("/load");
+                show("/load", Map.of("autologin",false));
             }
 
         } catch (Exception e) {

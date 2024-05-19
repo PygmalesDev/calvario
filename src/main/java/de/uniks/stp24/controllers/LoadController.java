@@ -10,6 +10,7 @@ import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.param.Param;
 
 import javax.inject.Inject;
 
@@ -20,17 +21,28 @@ public class LoadController {
     @Inject
     App app;
 
+    @Param("autologin")
+    public boolean autologin;
+
     @Inject
     public LoadController() {
     }
 
     @OnKey
     public void showLoginScreen(KeyEvent event) {
-        app.show("/login");
+        if(autologin){
+            app.show("/browseGames");
+        }else {
+            app.show("/login");
+        }
     }
 
     public void mouseClicked(MouseEvent mouseEvent) {
-        app.show("/login");
+        if(autologin){
+            app.show("/browseGames");
+        }else {
+            app.show("/login");
+        }
     }
 
 }

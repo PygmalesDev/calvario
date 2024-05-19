@@ -1,20 +1,10 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
-
-import de.uniks.stp24.utils.ResponseConstants;
-import de.uniks.stp24.service.ErrorService;
-import de.uniks.stp24.utils.ErrorTextWriter;
-import de.uniks.stp24.service.LanguageService;
 import de.uniks.stp24.service.LoginService;
-import de.uniks.stp24.service.PrefService;
-import java.util.ResourceBundle;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
@@ -29,7 +19,7 @@ import java.util.Objects;
 
 @Title("%login")
 @Controller
-public class LoginController {
+public class LoginController extends BasicController {
     @FXML
     Button licensesButton;
     @FXML
@@ -56,20 +46,7 @@ public class LoginController {
     @Inject
     Subscriber subscriber;
     @Inject
-    App app;
-    @Inject
     LoginService loginService;
-    @Inject
-    ErrorService errorService;
-    @Inject
-    LanguageService languageService;
-    @Inject
-    PrefService prefService;
-    @Inject
-    @Resource
-    ResourceBundle resources;
-    @Inject
-    ResponseConstants responseConstants;
 
     @Param("info")
     public String info;
@@ -101,7 +78,6 @@ public class LoginController {
                 default -> this.errorLabel.setText("");
             }
         }
-//        if (justRegistered){ this.errorLabel.setText(resources.getString("account.registered"));}
         if(prefService.getLocale() == Locale.ENGLISH) {
             enToggleButton.setSelected(true);
         } else {
@@ -109,13 +85,9 @@ public class LoginController {
         }
     }
 
-    private boolean checkIfInputNotBlankOrEmpty(String text) {
-        return (!text.isBlank() && !text.isEmpty());
-    }
-
     public void login() {
-        if (checkIfInputNotBlankOrEmpty(this.usernameInput.getText()) &&
-                checkIfInputNotBlankOrEmpty(this.passwordInput.getText())) {
+        if (checkIt(this.usernameInput.getText()) &&
+                checkIt(this.passwordInput.getText())) {
             this.errorLabel.setText("");
             String username = this.usernameInput.getText();
             String password = this.passwordInput.getText();
@@ -124,8 +96,7 @@ public class LoginController {
             loginButton.setDisable(true);
             signupButton.setDisable(true);
             this.errorLabel.setStyle("-fx-fill: black;");
-            this.errorLabel.setText(resources
-                    .getString(responseConstants.respLogin.get(201)));
+            this.errorLabel.setText(getErrorInfoText(responseConstants.respLogin,201));
 
             subscriber.subscribe(loginService.login(username, password, rememberMe),
                     result -> app.show("/browseGames")
@@ -137,15 +108,13 @@ public class LoginController {
                         int code = errorService.getStatus(error);
                         // "generate"" the output in the english/german
                         this.errorLabel
-                                .setText(resources
-                                        .getString(new ErrorTextWriter(responseConstants.respLogin,code).getErrorText()));
+                                .setText(getErrorInfoText(responseConstants.respLogin,code));
                         enableButtons();
                     });
         } else {
             // 1 is used for default in switch
             this.errorLabel.setStyle("-fx-fill: red;");
-            this.errorLabel.setText(resources
-                    .getString(new ErrorTextWriter(responseConstants.respLogin,-1).getErrorText()));
+            this.errorLabel.setText(getErrorInfoText(responseConstants.respLogin,-1));
             enableButtons();
         }
     }
@@ -193,7 +162,6 @@ public class LoginController {
 
         // binding textValue from both fields
         showPasswordText.textProperty().bindBidirectional(passwordInput.textProperty());
-
     }
 
     public void showLicenses() {

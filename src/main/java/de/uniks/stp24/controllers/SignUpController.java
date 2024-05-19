@@ -1,16 +1,9 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
 import de.uniks.stp24.rest.UserApiService;
-import de.uniks.stp24.service.ErrorService;
-import de.uniks.stp24.service.LanguageService;
-import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.SignUpService;
-import de.uniks.stp24.utils.ErrorTextWriter;
-import de.uniks.stp24.utils.ResponseConstants;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -18,21 +11,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
+
 import javax.inject.Inject;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 @Title("REGISTER")
 @Controller
-public class SignUpController {
+public class SignUpController extends BasicController {
   
     @FXML
     ToggleButton languageToggleButton;
@@ -64,24 +56,11 @@ public class SignUpController {
     public String password;
 
     @Inject
-    App app;
-    @Inject
     SignUpService signUpService;
     @Inject
     Subscriber subscriber;
     @Inject
     UserApiService userApiService;
-    @Inject
-    PrefService prefService;
-    @Inject
-    LanguageService languageService;
-    @Inject
-    @Resource
-    ResourceBundle resources;
-    @Inject
-    ErrorService errorService;
-    @Inject
-    ResponseConstants responseConstants;
 
     private BooleanBinding isLoginFieldEmpty;
     private BooleanBinding isPasswordFieldEmpty;
@@ -89,10 +68,8 @@ public class SignUpController {
     private BooleanBinding passwordInputsMatch;
     private BooleanBinding isPasswordTooShort;
 
-
     @Inject
-    public SignUpController() {
-    }
+    public SignUpController() {}
 
     // Sets boolean bindings for text manipulations
     @OnRender
@@ -127,7 +104,6 @@ public class SignUpController {
                 .bind(this.isLoginFieldEmpty
                         .or(this.isPasswordFieldEmpty)
                         .or(this.isRepeatPasswordEmpty)
-//                        .or(this.passwordInputsMatch.not())
                         .or(this.isPasswordTooShort)
                 );
         if (registerButton.isDisabled()) {
@@ -135,17 +111,13 @@ public class SignUpController {
         }
     }
 
-    private boolean checkIfInputNotBlankOrEmpty(String text) {
-        return (!text.isBlank() && !text.isEmpty());
-    }
-
     public void register() {
-        if (checkIfInputNotBlankOrEmpty(this.usernameField.getText()) &&
-                checkIfInputNotBlankOrEmpty(this.passwordField.getText()) &&
-                checkIfInputNotBlankOrEmpty(this.repeatPasswordField.getText()) &&
+        if (checkIt(this.usernameField.getText()) &&
+                checkIt(this.passwordField.getText()) &&
+                checkIt(this.repeatPasswordField.getText()) &&
                 this.passwordInputsMatch.getValue()) {
-            this.errorTextField.setText(resources
-                    .getString(new ErrorTextWriter(responseConstants.respSignup, 201).getErrorText()));
+                    this.errorTextField
+                            .setText(getErrorInfoText(responseConstants.respSignup, 201));
 
             this.subscriber.subscribe(this.signUpService.register(this.getUsername(), this.getPassword()),
                     result -> this.app.show("/login",
@@ -158,14 +130,12 @@ public class SignUpController {
                         int code = errorService.getStatus(error);
                     // "generate"" the output in the english/german
                     // due binding, the TextField was not accessible here -> modified
-                        errorTextField.textProperty().set(resources
-                            .getString(new ErrorTextWriter(responseConstants.respSignup, code).getErrorText()));
+                        errorTextField.setText(getErrorInfoText(responseConstants.respSignup, code));
                     });
             } else {
             int code = this.passwordInputsMatch.not().getValue() ? -2 : -1;
             this.errorTextField.setStyle("-fx-fill: red;");
-            this.errorTextField.setText(resources
-                    .getString(new ErrorTextWriter(responseConstants.respSignup,code).getErrorText()));
+            errorTextField.setText(getErrorInfoText(responseConstants.respSignup, code));
         }
     }
 

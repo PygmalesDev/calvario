@@ -1,6 +1,9 @@
-package de.uniks.stp24.constants;
+package de.uniks.stp24.utils;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Map;
+
 
 /* maps with text outputs for different server responses depending on controller/screen
 there are on /api/v1 these 19 codes:
@@ -25,20 +28,25 @@ CODE -> STRING
 503 -> Service Unavailable
 504 -> Gateway Timeout
  */
+@Singleton
 public class ResponseConstants {
 
-    static final public Map<Integer, String> respLogin = Map.of(400,"A pirate who forgot his password walk the plank!",
-            401, "Invalid username or password",
-            429, "rate limit reached",
-            -1 , "you forgot to give your name / password pirate!!",
-            201, "... boarding in ...");
+    @Inject
+    public ResponseConstants() {}
 
-    static final public Map<Integer, String> respSignup = Map.of(400,"validation failed",
+
+    final public Map<Integer, String> respLogin = Map.of(400,"pirate.general.invalid.password",
+            401, "pirate.general.invalid.password",
+            429, "pirate.general.rate.limit.reached",
+            -1 , "pirate.login.no.username.or.password",
+            201, "try.login");
+
+    final public Map<Integer, String> respSignup = Map.of(400,"validation failed",
             409, "name already exits",
             -1 , "please put in name or/and password");
 
-    static final public Map<String, Map<Integer,String>> responses = Map.of("login", respLogin,
-    "signup", respSignup);
+//    static final public Map<String, Map<Integer,String>> responses = Map.of("login", respLogin,
+//    "signup", respSignup);
 
 
 }

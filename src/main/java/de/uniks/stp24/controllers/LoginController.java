@@ -2,15 +2,13 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
 
-import de.uniks.stp24.constants.ResponseConstants;
+import de.uniks.stp24.utils.ResponseConstants;
 import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.utils.ErrorTextWriter;
-import de.uniks.stp24.model.ErrorResponse;
 import de.uniks.stp24.service.LanguageService;
 import de.uniks.stp24.service.LoginService;
 import de.uniks.stp24.service.PrefService;
 import java.util.ResourceBundle;
-import java.util.concurrent.Flow;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -24,7 +22,6 @@ import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -71,8 +68,8 @@ public class LoginController {
     @Inject
     @Resource
     ResourceBundle resources;
-
-
+    @Inject
+    ResponseConstants responseConstants;
 
     @Param("info")
     public String info;
@@ -119,7 +116,8 @@ public class LoginController {
             loginButton.setDisable(true);
             signupButton.setDisable(true);
             this.errorLabel.setStyle("-fx-fill: black;");
-            this.errorLabel.setText(ResponseConstants.respLogin.get(200));
+            this.errorLabel.setText(resources
+                    .getString(responseConstants.respLogin.get(201)));
 
             subscriber.subscribe(loginService.login(username, password, rememberMe),
                     result -> app.show("/browseGames")
@@ -129,15 +127,17 @@ public class LoginController {
                         this.errorLabel.setStyle("-fx-fill: red;");
                         // find the code in the error response
                         int code = errorService.getStatus(error);
-                        // "generate"" the output
+                        // "generate"" the output in the english/german
                         this.errorLabel
-                                .setText(new ErrorTextWriter(ResponseConstants.respLogin,code).getErrorText());
+                                .setText(resources
+                                        .getString(new ErrorTextWriter(responseConstants.respLogin,code).getErrorText()));
                         enableButtons();
                     });
         } else {
             // 1 is used for default in switch
             this.errorLabel.setStyle("-fx-fill: red;");
-            this.errorLabel.setText(new ErrorTextWriter(ResponseConstants.respLogin,-1).getErrorText());
+            this.errorLabel.setText(resources
+                    .getString(new ErrorTextWriter(responseConstants.respLogin,-1).getErrorText()));
             enableButtons();
         }
     }

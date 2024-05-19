@@ -29,8 +29,8 @@
             <VBox alignment="CENTER" prefHeight="600.0" prefWidth="721.0" style="-fx-background-color: WHITE;" styleClass="cardBackground">
                <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
                   <ToggleButtonGroup prefHeight="50.0" prefWidth="70.0">
-                     <ToggleButton fx:id="enToggleButton" onAction="#setEn" prefHeight="50.0" prefWidth="45.0" text="EN" />
-                     <ToggleButton fx:id="deToggleButton" onAction="#setDe" prefHeight="50.0" prefWidth="45.0" text="DE" />
+                     <ToggleButton fx:id="enToggleButton" onAction="#setEn" prefHeight="50.0" prefWidth="45.0" styleClass="languageButton" text="EN" />
+                     <ToggleButton fx:id="deToggleButton" onAction="#setDe" prefHeight="50.0" prefWidth="45.0" styleClass="languageButton" text="DE" />
                   </ToggleButtonGroup>
                </HBox>
                <ImageView fitHeight="150.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">

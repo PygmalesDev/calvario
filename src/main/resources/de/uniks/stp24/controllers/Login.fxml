@@ -33,8 +33,8 @@
             <VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="721.0" styleClass="cardBackground">
                <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="35.0">
                   <ToggleButtonGroup prefHeight="60.0" prefWidth="90.0" selectionType="SINGLE">
-                     <ToggleButton fx:id="enToggleButton" contentDisplay="CENTER" onAction="#setEn" prefHeight="50.0" prefWidth="45.0" text="EN" />
-                     <ToggleButton fx:id="deToggleButton" contentDisplay="CENTER" onAction="#setDe" prefHeight="50.0" prefWidth="45.0" text="DE" />
+                     <ToggleButton fx:id="enToggleButton" contentDisplay="CENTER" onAction="#setEn" prefHeight="50.0" prefWidth="45.0" styleClass="languageButton" text="EN" />
+                     <ToggleButton fx:id="deToggleButton" contentDisplay="CENTER" onAction="#setDe" prefHeight="50.0" prefWidth="45.0" styleClass="languageButton" text="DE" />
                   </ToggleButtonGroup>
                </HBox>
                <ImageView fitHeight="150.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">

@@ -4,6 +4,21 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-font-weight: bold;
 }
 
+.languageButton:selected {
+    -fx-font-family: "PT Sarif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-background-color: #BF9000;
+    -fx-text-fill: WHITE;
+}
+
+.languageButton {
+    -fx-font-family: "PT Sarif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-background-color: #FFD966;
+    -fx-text-fill: BLACK;
+}
 
 .background{
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/background.png");

@@ -113,9 +113,12 @@
                            <Font size="15.0" />
                         </font>
                         <VBox.margin>
-                           <Insets bottom="15.0" />
+                           <Insets />
                         </VBox.margin>
                      </Button>
+                     <HBox.margin>
+                        <Insets bottom="20.0" />
+                     </HBox.margin>
                   </VBox>
                   <ImageView fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -131,7 +134,7 @@
                   <Font size="15.0" />
                </font>
                <HBox.margin>
-                  <Insets top="-15.0" />
+                  <Insets top="-20.0" />
                </HBox.margin>
             </Button>
          </HBox>

@@ -1,8 +1,8 @@
 package de.uniks.stp24.model;
 
 import javax.inject.Inject;
-import java.util.Objects;
 import java.beans.PropertyChangeSupport;
+import java.util.Objects;
 
 public class GameStatus {
     protected PropertyChangeSupport listeners;

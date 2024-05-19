@@ -37,17 +37,20 @@
                   <image>
                      <Image url="@../assets/logos/Calvario.png" />
                   </image>
+                  <VBox.margin>
+                     <Insets top="50.0" />
+                  </VBox.margin>
                </ImageView>
+               <TextField fx:id="showRepeatPasswordText" alignment="CENTER" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0">
+                  <font>
+                     <Font size="15.0" />
+                  </font>
+                  <VBox.margin>
+                     <Insets top="15.0" />
+                  </VBox.margin>
+               </TextField>
                <VBox alignment="CENTER" prefHeight="250.0" prefWidth="500.0">
-                  <TextField fx:id="usernameField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="%username">
-                     <font>
-                        <Font size="15.0" />
-                     </font>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </TextField>
-                  <HBox alignment="CENTER" prefHeight="120.0" prefWidth="200.0" spacing="5.0">
+                  <HBox alignment="CENTER" prefHeight="1000.0" prefWidth="500.0" spacing="5.0">
                      <ToggleButton disable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" visible="false">
                         <graphic>
                            <ImageView disable="true" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" visible="false">
@@ -55,13 +58,21 @@
                            </ImageView>
                         </graphic>
                      </ToggleButton>
-                     <VBox alignment="CENTER" prefHeight="120.0" prefWidth="300.0">
-                        <PasswordField fx:id="passwordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="%password">
+                     <VBox alignment="CENTER" prefHeight="1000.0" prefWidth="400.0">
+                        <TextField fx:id="usernameField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%username" styleClass="inputField">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </TextField>
+                        <PasswordField fx:id="passwordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%password" styleClass="inputField">
                            <font>
                               <Font size="15.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets />
                            </VBox.margin>
                         </PasswordField>
                         <TextField fx:id="showPasswordText" alignment="CENTER" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0">
@@ -72,22 +83,14 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </TextField>
-                        <PasswordField fx:id="repeatPasswordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="%repeat.password">
+                        <PasswordField fx:id="repeatPasswordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%repeat.password" styleClass="inputField">
                            <font>
                               <Font size="15.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="15.0" />
+                              <Insets />
                            </VBox.margin>
                         </PasswordField>
-                        <TextField fx:id="showRepeatPasswordText" alignment="CENTER" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="300.0">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets top="15.0" />
-                           </VBox.margin>
-                        </TextField>
                      </VBox>
                      <ToggleButton fx:id="showPasswordToggleButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0">
                         <graphic>
@@ -99,7 +102,6 @@
                            <Insets />
                         </HBox.margin>
                      </ToggleButton>
-                     <Pane fx:id="captainContainer" prefHeight="0.0" prefWidth="0.0" />
                   </HBox>
                   <Text fx:id="errorTextField" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
                      <font>
@@ -107,10 +109,25 @@
                      </font>
                   </Text>
                </VBox>
-               <HBox alignment="TOP_CENTER">
+               <HBox alignment="TOP_CENTER" prefWidth="550.0">
                   <children>
-                     <VBox alignment="CENTER" prefHeight="149.0" prefWidth="100.0">
-                        <Button fx:id="registerButton" mnemonicParsing="false" onAction="#register" prefHeight="40.0" prefWidth="250.0" text="%register">
+                     <VBox alignment="CENTER" prefHeight="150.0" prefWidth="300.0">
+                        <Button fx:id="registerButton" mnemonicParsing="false" onAction="#register" prefHeight="40.0" prefWidth="250.0" styleClass="actionButton" text="%register">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../Icons/icon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Button cancelButton="true" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="250.0" styleClass="backButton" text="%go.back">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -118,15 +135,8 @@
                               <Insets />
                            </VBox.margin>
                         </Button>
-                        <Button cancelButton="true" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="250.0" text="%go.back">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                        </Button>
                      </VBox>
+                     <Pane fx:id="captainContainer" prefHeight="300.0" prefWidth="0.0" />
                   </children>
                </HBox>
                <HBox alignment="CENTER" />

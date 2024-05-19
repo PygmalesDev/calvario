@@ -43,6 +43,7 @@ public class BubbleComponent extends Pane {
     public void setErrorMode(boolean isError) {
         if (isError){
             captainText.setText("");
+            childText.setFill(WHITE);
             messageBubble.setStyle(messageBubble.getStyle() + "-fx-background-color: #CF2A27;");
         }
         else {
@@ -57,7 +58,7 @@ public class BubbleComponent extends Pane {
     }
 
     public void addChildren(Text child) {
-        child.setFill(WHITE);
+        child.setFill(BLACK);
         messageBubble.getChildren().add(child);
         childText = child;
     }

@@ -100,6 +100,9 @@ public class LoginController {
         Platform.runLater(() -> {
             bubbleComponent.addChildren(errorLabel);
             bubbleComponent.setCaptainText(resources.getString("pirate.login.text"));
+            if (!errorLabel.getText().equals("")) {
+                bubbleComponent.setCaptainText("");
+            }
             errorLabel.textProperty().addListener((observable, oldValue, newValue) -> {
                 if (errorLabel.getText().equals(resources.getString("validation.failed")) ||
                         errorLabel.getText().equals(resources.getString("put.in.username.password")) ||

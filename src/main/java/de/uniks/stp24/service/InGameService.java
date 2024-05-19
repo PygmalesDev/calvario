@@ -1,6 +1,5 @@
 package de.uniks.stp24.service;
 
-import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
 
 import javax.inject.Inject;

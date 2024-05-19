@@ -41,9 +41,8 @@
                   <Image url="@../assets/logos/Calvario.png" />
                </ImageView>
                <VBox alignment="CENTER" prefHeight="160.0" prefWidth="100.0">
-                  <HBox alignment="CENTER" prefHeight="40.0" prefWidth="35.0" spacing="5.0">
-                     <Button alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" visible="false" />
-                     <TextField fx:id="usernameInput" alignment="CENTER" prefHeight="40.0" prefWidth="300.0" promptText="%username">
+                  <HBox alignment="CENTER" prefHeight="500.0" prefWidth="35.0" spacing="5.0">
+                     <TextField fx:id="usernameInput" alignment="CENTER" prefHeight="40.0" prefWidth="300.0" promptText="%username" styleClass="inputField">
                         <font>
                            <Font size="15.0" />
                         </font>
@@ -51,11 +50,10 @@
                            <Insets />
                         </HBox.margin>
                      </TextField>
-                     <Button alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" visible="false" />
                   </HBox>
-                  <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0" spacing="5.0">
+                  <HBox alignment="CENTER" prefHeight="500.0" prefWidth="35.0" spacing="5.0">
                      <Button alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" visible="false" />
-                     <PasswordField fx:id="passwordInput" alignment="CENTER" prefHeight="40.0" prefWidth="300.0" promptText="%password">
+                     <PasswordField fx:id="passwordInput" alignment="CENTER" prefHeight="40.0" prefWidth="300.0" promptText="%password" styleClass="inputField">
                         <font>
                            <Font size="15.0" />
                         </font>
@@ -63,7 +61,7 @@
                            <Insets top="15.0" />
                         </HBox.margin>
                      </PasswordField>
-                     <TextField fx:id="showPasswordText" alignment="CENTER" managed="false" prefHeight="40.0" prefWidth="300.0">
+                     <TextField fx:id="showPasswordText" alignment="CENTER" managed="false" prefHeight="40.0" prefWidth="300.0" promptText="PASSWORD" styleClass="inputField">
                         <font>
                            <Font size="15.0" />
                         </font>
@@ -102,15 +100,15 @@
                               <Insets top="5.0" />
                            </VBox.margin>
                         </CheckBox>
-                        <Button fx:id="loginButton" defaultButton="true" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="250.0" text="%login">
+                        <Button fx:id="loginButton" defaultButton="true" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="250.0" styleClass="actionButton" text="%login">
                            <font>
                               <Font size="15.0" />
                            </font>
                            <VBox.margin>
-                              <Insets bottom="20.0" top="20.0" />
+                              <Insets top="20.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="signupButton" mnemonicParsing="false" onAction="#signup" prefHeight="40.0" prefWidth="250.0" text="%register">
+                        <Button fx:id="signupButton" mnemonicParsing="false" onAction="#signup" prefHeight="40.0" prefWidth="250.0" styleClass="actionButton" text="%register">
                            <font>
                               <Font size="15.0" />
                            </font>

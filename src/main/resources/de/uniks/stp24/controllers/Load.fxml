@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -13,17 +15,23 @@
          <Image url="@../assets/logos/Calvario.png" />
       </ImageView>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0">
-         <ImageView fitHeight="300.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+         <ImageView fitHeight="175.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../assets/logos/SpiderbyteLogoTransparent.png" />
          </ImageView>
          <ImageView fitHeight="300.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@../assets/logos/DeadBirdsLogoTransparent.png" />
          </ImageView>
       </HBox>
-      <Label onKeyPressed="#showLoginScreen" text="%press.any.key">
+      <Label onKeyPressed="#showLoginScreen" style="-fx-text-fill: BLACK;" styleClass="Text" text="%press.any.key">
          <font>
             <Font size="36.0" />
          </font>
+         <effect>
+            <DropShadow />
+         </effect>
+         <VBox.margin>
+            <Insets top="225.0" />
+         </VBox.margin>
       </Label>
    </VBox>
 </HBox>

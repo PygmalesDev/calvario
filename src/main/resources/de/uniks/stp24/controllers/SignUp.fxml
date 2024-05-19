@@ -71,7 +71,7 @@
                               <Insets top="10.0" />
                            </VBox.margin>
                         </TextField>
-                        <PasswordField fx:id="repeatPasswordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="%repeat.password">
+                        <PasswordField fx:id="repeatPasswordField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="%pirate.general.repeat.password">
                            <font>
                               <Font size="15.0" />
                            </font>

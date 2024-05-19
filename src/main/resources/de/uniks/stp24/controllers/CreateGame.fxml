@@ -44,7 +44,7 @@
          </HBox>
          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0">
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%repeat.password">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%pirate.general.repeat.password">
                   <font>
                      <Font size="17.0"/>
                   </font>

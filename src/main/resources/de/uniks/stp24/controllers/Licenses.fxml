@@ -29,7 +29,7 @@
                               </Text>
                            </children>
                         </HBox>
-                        <VBox styleClass="cardBackground" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="570.0" prefWidth="550.0">
+                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="570.0" prefWidth="550.0" styleClass="cardBackground">
                            <TextFlow maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="450.0" prefWidth="450.0" textAlignment="CENTER">
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%licenses">
                                  <font>

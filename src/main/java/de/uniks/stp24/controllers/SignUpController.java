@@ -7,7 +7,6 @@ import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.SignUpService;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -129,15 +128,15 @@ public class SignUpController {
     public void showErrorMessage() {
         this.errorTextField.textProperty().bind(Bindings.createStringBinding(() -> {
             if (this.isLoginFieldEmpty.get())
-                return resources.getString("enter.username");
+                return resources.getString("pirate.register.no.username.or.password");
             if (this.isPasswordFieldEmpty.get())
-                return resources.getString("enter.password");
+                return resources.getString("pirate.register.no.username.or.password");
             if (this.isPasswordTooShort.get())
-                return resources.getString("password.8.characters");
+                return resources.getString("pirate.register.8characters");
             if (this.isRepeatPasswordEmpty.get())
-                return resources.getString("repeat.password");
+                return resources.getString("pirate.general.repeat.password");
             if (!this.passwordInputsMatch.get())
-                return resources.getString("passwords.do.not.match");
+                return resources.getString("pirate.register.passwords.dont.match");
             return "";
         }, this.isLoginFieldEmpty, this.isPasswordFieldEmpty,
                 this.isRepeatPasswordEmpty, this.passwordInputsMatch,

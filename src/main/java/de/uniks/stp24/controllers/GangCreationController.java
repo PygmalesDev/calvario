@@ -48,13 +48,11 @@ public class GangCreationController {
     @FXML
     ImageView portraitImage;
     @FXML
-    ColorPicker colorPicker;
-    @FXML
     TextField gangNameText;
     @FXML
     TextArea gangDescriptionText;
-    // @FXML
-    public Button createButton;
+    @FXML
+    Button createButton;
     @FXML
     Button editButton;
     @FXML
@@ -63,6 +61,12 @@ public class GangCreationController {
     Text toBeDeletedGangName;
     @FXML
     Pane deletePane;
+    @FXML
+    Button nextColorButton;
+    @FXML
+    Button lastColorButton;
+    @FXML
+    Pane colorField;
 
     boolean lockFlag = false;
     boolean lockPortrait = false;
@@ -76,8 +80,10 @@ public class GangCreationController {
     Random rand = new Random();
     ArrayList<File> flagsList = new ArrayList<>();
     ArrayList<File> portraitsList = new ArrayList<>();
+    ArrayList<String> colorsList = new ArrayList<>();
     int flagImageIndex = 0;
     int portraitImageIndex = 0;
+    int colorIndex = 0;
 
     private ObservableList<Gang> gangs;
 
@@ -105,7 +111,6 @@ public class GangCreationController {
     @FXML
     ToggleButton lockDescriptionButton;
 
-
     @Inject
     public GangCreationController() {
 
@@ -118,6 +123,24 @@ public class GangCreationController {
 
         File portraitsDir = new File("src/main/resources/de/uniks/stp24/assets/placeholders/Portraits");
         Collections.addAll(portraitsList, Objects.requireNonNull(portraitsDir.listFiles()));
+
+        colorsList.add("#DC143C");
+        colorsList.add("#0F52BA");
+        colorsList.add("#50C878");
+        colorsList.add("#9966CC");
+        colorsList.add("#FF7F50");
+        colorsList.add("#40E0D0");
+        colorsList.add("#FF00FF");
+        colorsList.add("#FFD700");
+        colorsList.add("#C0C0C0");
+        colorsList.add("#4B0082");
+        colorsList.add("#36454F");
+        colorsList.add("#F28500");
+        colorsList.add("#E6E6FA");
+        colorsList.add("#008080");
+        colorsList.add("#800000");
+        colorsList.add("#808000");
+
         gangs = saveLoadService.loadGangs();
     }
 
@@ -142,7 +165,8 @@ public class GangCreationController {
                 createButton.setVisible(false);
                 editButton.setVisible(true);
                 showDeletePaneButton.setVisible(true);
-                colorPicker.setValue(gang.color());
+                colorIndex = gang.colorIndex();
+                colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
             }
         });
     }
@@ -154,7 +178,7 @@ public class GangCreationController {
     public Gang getInputGang() {
         String gangName = gangNameText.getText();
         if (gangNameText.getText().isEmpty()) gangName = "Buccaneers";
-        return new Gang(gangName, flagsList.get(flagImageIndex).toURI().toString(), flagImageIndex, portraitsList.get(portraitImageIndex).toURI().toString(), portraitImageIndex, gangDescriptionText.getText(), colorPicker.getValue());
+        return new Gang(gangName, flagsList.get(flagImageIndex).toURI().toString(), flagImageIndex, portraitsList.get(portraitImageIndex).toURI().toString(), portraitImageIndex, gangDescriptionText.getText(), colorsList.get(colorIndex), colorIndex);
     }
 
     public void edit() {
@@ -192,12 +216,8 @@ public class GangCreationController {
         creationPane.setEffect(new BoxBlur());
         deletePane.setVisible(true);
         Gang gang = gangsListView.getSelectionModel().getSelectedItem();
-        if (gang.color().getRed() + gang.color().getGreen() + gang.color().getBlue() <= 1)
-            deletePane.setStyle("-fx-background-color: #949290");
-        else
-            deletePane.setStyle("-fx-background-color: #333030");
         toBeDeletedGangName.setText(gang.name());
-        toBeDeletedGangName.setFill(gang.color());
+        // toBeDeletedGangName.setStyle("-fx-text-fill: " + gang.color());
     }
 
     public void create() {
@@ -208,7 +228,6 @@ public class GangCreationController {
     }
 
     public void resetCreationPane() {
-        colorPicker.setValue(Color.BLACK);
         flagImageIndex = 0;
         portraitImageIndex = 0;
         flagImage.setImage(new Image(flagsList.get(flagImageIndex).toURI().toString()));
@@ -225,6 +244,16 @@ public class GangCreationController {
     public void showNextFlag() {
         flagImageIndex = flagImageIndex + 1 < flagsList.size() ? flagImageIndex + 1 : 0;
         flagImage.setImage(new Image(flagsList.get(flagImageIndex).toURI().toString()));
+    }
+
+    public void showLastColor() {
+        colorIndex = colorIndex - 1 >= 0 ? colorIndex - 1 : colorsList.size() - 1;
+        colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
+    }
+
+    public void showNextColor() {
+        colorIndex = colorIndex + 1 < colorsList.size() ? colorIndex + 1 : 0;
+        colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
     }
 
     public void showLastPortrait() {
@@ -276,7 +305,8 @@ public class GangCreationController {
         }
 
         if (!lockColor) {
-            colorPicker.setValue(Color.color(Math.random(), Math.random(), Math.random()));
+            colorIndex = rand.nextInt(0, colorsList.size());
+            colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
         }
 
 

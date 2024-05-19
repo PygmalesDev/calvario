@@ -17,6 +17,8 @@ import javax.inject.Inject;
 public class GangComponent extends Pane implements ReusableItemComponent<Gang> {
 
     @FXML
+    Pane gangColor;
+    @FXML
     Pane pane;
     @FXML
     ImageView flagImage;
@@ -33,9 +35,7 @@ public class GangComponent extends Pane implements ReusableItemComponent<Gang> {
     @Override
     public void setItem(@NotNull Gang gang) {
         gangNameText.setText(gang.name());
-        if (gang.color().getRed() + gang.color().getGreen() + gang.color().getBlue() <= 1)
-            gangNameText.setFill(Color.WHITE);
-        pane.setStyle("-fx-background-color: #" + gang.color().toString().substring(2));
+        gangColor.setStyle("-fx-background-color: " + gang.color());
         flagImage.setImage(new Image(gang.flag()));
         portraitImage.setImage(new Image(gang.portrait()));
     }

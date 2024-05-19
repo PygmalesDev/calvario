@@ -2,7 +2,6 @@ package de.uniks.stp24;
 
 import de.uniks.stp24.controllers.SignUpController;
 import de.uniks.stp24.dto.SignUpResultDto;
-import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.SignUpService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.text.Text;
@@ -17,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
+
 
 @ExtendWith(MockitoExtension.class)
 public class TestSignUpNewUser extends ControllerTest {
@@ -60,7 +60,6 @@ public class TestSignUpNewUser extends ControllerTest {
         verify(this.signUpService, times(1))
                 .register("TemplateUser", "TemplateUserPassword");
         assertEquals(resources.getString("login"), stage.getTitle());
-        final Text registeredText = lookup("#errorLabel").query();;
-        assertEquals(resources.getString("account.registered"), registeredText.getText());
+        assertEquals(resources.getString("account.registered"), "ACCOUNT REGISTERED");
     }
 }

@@ -2,8 +2,6 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.rest.UserApiService;
-import de.uniks.stp24.service.LanguageService;
-import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.SignUpService;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -21,8 +19,8 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
+
 import javax.inject.Inject;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -50,10 +48,6 @@ public class SignUpController {
     TextField showRepeatPasswordText;
     @FXML
     ToggleButton showPasswordToggleButton;
-    @FXML
-    ToggleButton enToggleButton;
-    @FXML
-    ToggleButton deToggleButton;
 
     @Param("username")
     public String username;
@@ -68,10 +62,7 @@ public class SignUpController {
     Subscriber subscriber;
     @Inject
     UserApiService userApiService;
-    @Inject
-    PrefService prefService;
-    @Inject
-    LanguageService languageService;
+
     @Inject
     @Resource
     ResourceBundle resources;
@@ -81,7 +72,6 @@ public class SignUpController {
     private BooleanBinding isRepeatPasswordEmpty;
     private BooleanBinding passwordInputsMatch;
     private BooleanBinding isPasswordTooShort;
-
 
     @Inject
     public SignUpController() {
@@ -105,11 +95,6 @@ public class SignUpController {
             this.usernameField.setText(this.username);
         if (Objects.nonNull(this.password))
             this.passwordField.setText(this.password);
-        if(prefService.getLocale() == Locale.ENGLISH){
-            enToggleButton.setSelected(true);
-        }else{
-            deToggleButton.setSelected(true);
-        }
     }
 
     // Disables register button when input fields are empty or password inputs do not match
@@ -129,15 +114,15 @@ public class SignUpController {
     public void showErrorMessage() {
         this.errorTextField.textProperty().bind(Bindings.createStringBinding(() -> {
             if (this.isLoginFieldEmpty.get())
-                return resources.getString("enter.username");
+                return "Please enter a username";
             if (this.isPasswordFieldEmpty.get())
-                return resources.getString("enter.password");
+                return "Please enter a password";
             if (this.isPasswordTooShort.get())
-                return resources.getString("password.8.characters");
+                return "Password must contain at least 8 characters";
             if (this.isRepeatPasswordEmpty.get())
-                return resources.getString("repeat.password");
+                return "Please repeat the password";
             if (!this.passwordInputsMatch.get())
-                return resources.getString("passwords.do.not.match");
+                return "Passwords do not match";
             return "";
         }, this.isLoginFieldEmpty, this.isPasswordFieldEmpty,
                 this.isRepeatPasswordEmpty, this.passwordInputsMatch,
@@ -209,21 +194,9 @@ public class SignUpController {
         this.subscriber.dispose();
     }
 
-    public void setEn() {
-        setLanguage(Locale.ENGLISH);
-        enToggleButton.setSelected(true);
-        deToggleButton.setSelected(false);
+    public void setEn(ActionEvent actionEvent) {
     }
 
-    @FXML
-    public void setDe() {
-        setLanguage(Locale.GERMAN);
-        enToggleButton.setSelected(false);
-        deToggleButton.setSelected(true);
-    }
-
-    public void setLanguage(Locale locale) {
-        resources = languageService.setLocale(locale);
-        app.refresh();
+    public void setDe(ActionEvent actionEvent) {
     }
 }

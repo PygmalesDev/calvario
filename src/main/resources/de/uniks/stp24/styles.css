@@ -14,3 +14,103 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/card.png");
     -fx-background-size: 100% 100%;
 }
+
+.transparentBackground{
+    -fx-background-color: #BF900080;
+}
+
+.backgroundLightYellow{
+    -fx-background-color: #FFD966;
+}
+
+.menuLogic{
+    -fx-background-color: #999999;
+    -fx-border-color: #000000
+}
+
+/*
+.shadowEffect{
+    -fx-border-color: black;
+}
+
+.shadowEffect:bottom{
+    -fx-effect: dropshadow( one-pass-box , black, 10, 1, 5, 5);
+}
+
+.shadow {
+    position: absolute;
+    height: 100%;
+    width: 4;
+    left: 0;
+    top: 0;
+    box-shadow: -4 0 3 black;
+}
+*/
+
+
+.actionButton{
+    -fx-font-family: "PT Sarif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
+    -fx-background-size: inherit;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 300px;
+    -fx-pref-height: 75px;
+}
+
+.backButton{
+    -fx-font-family: "PT Sarif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/backButton.png");
+    -fx-background-size: inherit;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 75px;
+}
+
+.licensesButton{
+    -fx-font-family: "PT Sarif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/licensesButton.png");
+    -fx-background-size: inherit;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 100px;
+}
+
+.chatBubble {
+    -fx-shape: "M 20 0 H 280 A 20 20 0 0 1 300 20 V 80 A 1000000000 20 0 0 1 280 80 H 40 L -10 100 L 10 80 A 20 20 0 0 1 20 60 Z";
+    -fx-background-color: #FFD966;
+    -fx-background-insets: 0,1;
+    -fx-padding: 30;
+}
+
+.inputField {
+    -fx-font-family: "PT Sarif";
+    -fx-font-size: 22;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/fields/textField.png");
+    -fx-background-size: inherit;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 400px;
+    -fx-pref-height: 65px;
+}

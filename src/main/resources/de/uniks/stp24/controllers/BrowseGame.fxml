@@ -23,9 +23,9 @@
                         </Text>
                      </children>
                   </HBox>
-                  <VBox alignment="CENTER" prefHeight="570.0" prefWidth="700.0" styleClass="cardBackground">
+                  <VBox alignment="CENTER" prefHeight="570.0" prefWidth="800.0" styleClass="cardBackground">
                      <children>
-                        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="530.0" prefWidth="750.0" style="-fx-border-color: #000000; -fx-background-color: #bf900080;">
+                        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="530.0" prefWidth="750.0" style="-fx-border-color: #000000" styleClass="transparentBackground">
                            <HBox prefHeight="400.0" prefWidth="534.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                               <AnchorPane prefHeight="398.0" prefWidth="250.0" style="-fx-border-color: #000000;" HBox.hgrow="ALWAYS">
                                  <VBox alignment="CENTER" prefHeight="398.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -55,12 +55,12 @@
                               </AnchorPane>
                               <AnchorPane prefHeight="442.0" prefWidth="500.0" style="-fx-border-color: #000000;" HBox.hgrow="ALWAYS">
                                  <VBox alignment="CENTER" layoutX="30.0" layoutY="1.0" prefHeight="396.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="0.0">
-                                    <HBox alignment="CENTER" prefHeight="30.0" prefWidth="233.0" style="-fx-background-color: #999999;">
+                                    <HBox alignment="CENTER" prefHeight="30.0" prefWidth="233.0" styleClass="menuLogic">
                                        <children>
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%games" />
                                        </children></HBox>
                                     <ListView fx:id="gameList" prefHeight="450.0" prefWidth="233.0" />
-                                    <HBox maxHeight="-Infinity" prefHeight="20.0" prefWidth="200.0" style="-fx-background-color: #999999;" />
+                                    <HBox maxHeight="-Infinity" prefHeight="20.0" prefWidth="200.0" styleClass="menuLogic" />
                                  </VBox>
                               </AnchorPane>
                            </HBox>

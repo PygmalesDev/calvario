@@ -11,7 +11,6 @@ import javax.inject.Inject;
 public class LoginService {
     @Inject
     AuthApiService authApiService;
-
     @Inject
     TokenStorage tokenStorage;
     @Inject

@@ -8,6 +8,7 @@ import de.uniks.stp24.service.EditAccService;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.WindowEvent;
@@ -20,6 +21,10 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 @Component(view = "Warning.fxml")
 public class WarningComponent extends VBox{
+    @FXML
+    Button cancelButton;
+    @FXML
+    Button confirmButton;
     @FXML
     Text gameName;
     @FXML

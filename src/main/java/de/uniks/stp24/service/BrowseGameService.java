@@ -23,8 +23,6 @@ public class BrowseGameService {
 
     private Game game;
 
-    private boolean blurStatus;
-
     @Inject
     public BrowseGameService() {
     }
@@ -87,9 +85,5 @@ public class BrowseGameService {
         } else {
             return "";
         }
-    }
-
-    public boolean getBlurStatusRemoved() {
-        return blurStatus = false;
     }
 }

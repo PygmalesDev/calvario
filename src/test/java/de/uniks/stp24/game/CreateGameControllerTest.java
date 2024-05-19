@@ -1,12 +1,7 @@
 package de.uniks.stp24.game;
 
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.GameComponent;
-import de.uniks.stp24.component.WarningComponent;
-import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.controllers.CreateGameController;
-import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.CreateGameService;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -14,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
 
@@ -24,22 +18,10 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CreateGameControllerTest extends ControllerTest {
-    @Mock
-    GamesApiService gamesApiService;
-
-    @Mock
-    BrowseGameService browseGameService;
-
-    @Mock
-    GameComponent gameComponent;
-    @Mock
-    BrowseGameController browseGameController;
 
     @Mock
     CreateGameService createGameService;
 
-    @Spy
-    WarningComponent warningComponent;
     @InjectMocks
     CreateGameController createGameController;
 

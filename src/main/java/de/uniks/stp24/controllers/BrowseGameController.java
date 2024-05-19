@@ -212,9 +212,4 @@ BrowseGameController {
         });
 
     }
-
-    public void setBlurStatus(){
-        blurStatus = browseGameService.getBlurStatusRemoved();
-    }
-
 }

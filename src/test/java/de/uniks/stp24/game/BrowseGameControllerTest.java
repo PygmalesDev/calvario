@@ -4,21 +4,14 @@ import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.GameComponent;
 import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
-import de.uniks.stp24.controllers.EditGameController;
-import de.uniks.stp24.dto.UpdateGameDto;
 import de.uniks.stp24.model.Game;
-import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.BrowseGameService;
-import de.uniks.stp24.service.EditGameService;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -34,8 +27,8 @@ import javax.inject.Provider;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class BrowseGameControllerTest extends ControllerTest {
@@ -44,22 +37,11 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Mock
     GamesApiService gamesApiService;
 
-    @Mock
-    GameComponent gameComponent;
-
-    @Spy
-    BrowseGameService browseGameService;
-
     @Spy
     WarningComponent warningComponent;
     @Spy
     Subscriber subscriber = new Subscriber();
 
-    @Mock
-    EditGameService editGameService;
-
-    @Mock
-    EditGameController editGameController;
 
     Game game = new Game(null, null, "1", "Was geht", "testID2", false, 0,0, null);
 

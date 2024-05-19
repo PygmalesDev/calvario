@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnRender;
 
 
 import javax.inject.Inject;
@@ -29,6 +30,11 @@ public class BubbleComponent extends Pane {
 
     }
 
+    @OnRender
+    public void init() {
+        messageBubble.setStyle(messageBubble.getStyle() + "-fx-background-color: #FFD966;");
+    }
+
     public void setCaptainText(String text) {
         captainText.setText(text);
         lastText = text;
@@ -36,14 +42,13 @@ public class BubbleComponent extends Pane {
 
     public void setErrorMode(boolean isError) {
         if (isError){
-            setCaptainText("");
-            childText.setFill(WHITE);
-            messageBubble.setStyle(messageBubble.getStyle() + "-fx-background-color: red;");
+            captainText.setText("");
+            messageBubble.setStyle(messageBubble.getStyle() + "-fx-background-color: #CF2A27;");
         }
         else {
-            // setCaptainText(lastText);
-            childText.setFill(BLACK);
-            messageBubble.setStyle(messageBubble.getStyle() + "-fx-background-color: LIGHTGRAY;");
+            if (childText.getText().equals(""))
+                captainText.setText(lastText);
+            messageBubble.setStyle(messageBubble.getStyle() + "-fx-background-color: #FFD966;");
         }
     }
 

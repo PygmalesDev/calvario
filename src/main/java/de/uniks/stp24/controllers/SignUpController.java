@@ -103,12 +103,14 @@ public class SignUpController {
         Platform.runLater(() -> {
             bubbleComponent.addChildren(errorTextField);
             bubbleComponent.setCaptainText(resources.getString("pirate.register.text"));
+            if (!getPassword().equals("")) {
+                bubbleComponent.setErrorMode(true);
+            }
             errorTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (errorTextField.getText().equals(resources.getString("enter.username")) ||
-                        errorTextField.getText().equals(resources.getString("enter.password")) ||
+                if (errorTextField.getText().equals(resources.getString("password.8.characters")) ||
                         errorTextField.getText().equals(resources.getString("repeat.password")) ||
                         errorTextField.getText().equals(resources.getString("passwords.do.not.match"))
-                        ) bubbleComponent.setErrorMode(true);
+                        ) {bubbleComponent.setErrorMode(true);}
                 else bubbleComponent.setErrorMode(false);
             });
         });
@@ -155,15 +157,15 @@ public class SignUpController {
     @OnRender
     public void showErrorMessage() {
         this.errorTextField.textProperty().bind(Bindings.createStringBinding(() -> {
-            if (this.isLoginFieldEmpty.get())
-                return resources.getString("enter.username");
-            if (this.isPasswordFieldEmpty.get())
-                return resources.getString("enter.password");
-            if (this.isPasswordTooShort.get())
+//            if (this.isLoginFieldEmpty.get())
+//                return resources.getString("enter.username");
+//            if (this.isPasswordFieldEmpty.get())
+//                return resources.getString("enter.password");
+            if (this.isPasswordTooShort.get() && !this.isPasswordFieldEmpty.get())
                 return resources.getString("password.8.characters");
-            if (this.isRepeatPasswordEmpty.get())
+            if (this.isRepeatPasswordEmpty.get() && !this.isPasswordFieldEmpty.get())
                 return resources.getString("repeat.password");
-            if (!this.passwordInputsMatch.get())
+            if (!this.passwordInputsMatch.get() && !this.isPasswordFieldEmpty.get() && !this.isPasswordFieldEmpty.get())
                 return resources.getString("passwords.do.not.match");
             return "";
         }, this.isLoginFieldEmpty, this.isPasswordFieldEmpty,

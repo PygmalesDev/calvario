@@ -4,7 +4,6 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.component.*;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.*;
-import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.LobbyService;
@@ -32,13 +31,11 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import javax.inject.Singleton;
 import java.util.Arrays;
 import java.util.Objects;
 
 @Title("Lobby")
 @Controller
-@Singleton
 public class LobbyController {
     @Inject
     App app;
@@ -48,8 +45,6 @@ public class LobbyController {
     TokenStorage tokenStorage;
     @Inject
     UserApiService userApiService;
-    @Inject
-    GamesApiService gamesApiService;
     @Inject
     Subscriber subscriber;
     @Inject
@@ -95,6 +90,7 @@ public class LobbyController {
 
     @Inject
     public LobbyController() {
+
     }
 
     /**

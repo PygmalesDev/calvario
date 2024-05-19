@@ -37,15 +37,26 @@ public class ResponseConstants {
 
     final public Map<Integer, String> respLogin = Map.of(400,"pirate.general.invalid.password",
             401, "pirate.general.invalid.password",
+            404, "404",
             429, "pirate.general.rate.limit.reached",
             -1 , "pirate.login.no.username.or.password",
             201, "try.login");
 
     final public Map<Integer, String> respSignup = Map.of(400,"pirate.general.invalid.password",
+            404, "404",
             409, "username.in.use.by.another.user",
+            429,"pirate.general.rate.limit.reached",
             201, "try.login",
             -2, "pirate.register.passwords.dont.match",
             -1 , "please put in name or/and password");
+
+    final public Map<Integer, String> respEditAcc = Map.of(400, "invalid.password",
+            401, "validation.failed",
+            403, "attempting.to.change.someone.else.user",
+            404, "404",
+            409, "username.in.use.by.another.user",
+            429,"pirate.general.rate.limit.reached",
+            -1, "put.in.username.password");
 
 //    static final public Map<String, Map<Integer,String>> responses = Map.of("login", respLogin,
 //    "signup", respSignup);

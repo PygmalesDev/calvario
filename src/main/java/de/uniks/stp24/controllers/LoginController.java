@@ -75,6 +75,9 @@ public class LoginController extends BasicController {
                 case "registered" -> this.errorLabel
                         .setText(resources.getString("account.registered"));
 
+                case "deleted" -> this.errorLabel
+                        .setText(resources.getString("account.deleted"));
+
                 default -> this.errorLabel.setText("");
             }
         }

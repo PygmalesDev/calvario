@@ -1,29 +1,29 @@
 package de.uniks.stp24.component;
 
-import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
-import de.uniks.stp24.model.ErrorResponse;
 import de.uniks.stp24.service.EditAccService;
+import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.service.TokenStorage;
-import io.reactivex.rxjava3.core.Completable;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
-import retrofit2.HttpException;
 
 import javax.inject.Inject;
+import java.util.Map;
 
 @Component(view = "WarningScreen.fxml")
 public class WarningScreenComponent extends VBox {
 
     @FXML
+    Text warningText;
+    @FXML
     VBox warningContainer;
-
     @Inject
     App app;
     @Inject
@@ -34,12 +34,12 @@ public class WarningScreenComponent extends VBox {
     TokenStorage tokenStorage;
     @Inject
     Subscriber subscriber;
-
+    @Inject
+    ErrorService errorService;
 
     @Inject
     public WarningScreenComponent() {
     }
-
 
     @OnRender
     public void setBackground(){
@@ -53,23 +53,23 @@ public class WarningScreenComponent extends VBox {
     public void deleteAcc() {
         // delete user and switch back to the login screen
         this.subscriber.subscribe(editAccService.deleteUser(),
-                result -> {app.show("/login");
-        }, error ->{
-            if(error instanceof HttpException httpError) {
-                System.out.println(httpError.code());
-                String body = httpError.response().errorBody().string();
-                ErrorResponse errorResponse = objectMapper.readValue(body,ErrorResponse.class);
-                System.out.println(errorResponse.statusCode());
+            result -> app.show("/login",
+                        Map.of("info","deleted"))
+            , error -> {
+                System.out.println(errorService.getStatus(error));
                 // ToDo: error handling and message
-            }
+                // where should it be shown?
         });
     }
-
 
     @OnDestroy
     public void destroy() {
         if(subscriber != null) {
             this.subscriber.dispose();
         }
+    }
+
+    public void setWarning(String text) {
+        this.warningText.setText(text);
     }
 }

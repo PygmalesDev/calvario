@@ -66,20 +66,16 @@
             </VBox>
          </children>
       </HBox>
-      <Pane fx:id="lobbyMessagePane" disable="true" opacity="0.5" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: GRAY;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <HBox alignment="CENTER" disable="true" prefHeight="100.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Pane fx:id="lobbyMessageElement" layoutX="490.0" layoutY="355.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="300.0" style="-fx-background-color: WHITE; -fx-background-radius: 15; -fx-border-color: BLACK; -fx-border-radius: 15;" visible="false">
          <children>
-            <Pane fx:id="lobbyMessageElement" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="300.0" style="-fx-background-color: WHITE; -fx-background-radius: 15; -fx-border-color: BLACK; -fx-border-radius: 15;" visible="false">
-               <children>
-                  <Text fx:id="messageText" layoutX="37.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Host has left the lobby!" textAlignment="CENTER" wrappingWidth="226.0">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <Button fx:id="returnButton" layoutX="109.0" layoutY="88.0" mnemonicParsing="false" onAction="#goBack" prefHeight="32.0" prefWidth="83.0" text="Return" />
-               </children>
-            </Pane>
+            <Text fx:id="messageText" layoutX="37.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Host has left the lobby!" textAlignment="CENTER" wrappingWidth="226.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Button fx:id="returnButton" layoutX="109.0" layoutY="88.0" mnemonicParsing="false" onAction="#goBack" prefHeight="32.0" prefWidth="83.0" text="Return" />
          </children>
-      </HBox>
+      </Pane>
+      <Pane fx:id="lobbyMessagePane" disable="true" opacity="0.5" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: GRAY;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    </children>
 </AnchorPane>

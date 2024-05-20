@@ -202,6 +202,7 @@ BrowseGameController {
         if (warningWindowContainer.getChildren().isEmpty()){
             warningWindowContainer.getChildren().add(warningComponent);
             StackPane.setAlignment(warningComponent, Pos.CENTER);
+            warningWindowContainer.setVisible(true);
         } else {
             warningWindowContainer.setVisible(true);
         }

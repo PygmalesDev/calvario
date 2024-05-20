@@ -139,8 +139,7 @@ public class EditAccController extends BasicController {
 
     public void saveChanges() {
         // save changed name and/or password of the user and reset the edit account screen afterward
-        if (checkIt(usernameInput.getText()) &&
-        checkIt(passwordInput.getText())) {
+        if (checkIt(usernameInput.getText(),passwordInput.getText())) {
             this.errorLabelEditAcc.setStyle("-fx-fill: black;");
             this.errorLabelEditAcc.setText("");
             subscriber.subscribe(editAccService.changeUserInfo(usernameInput.getText(), passwordInput.getText()),

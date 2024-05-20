@@ -44,6 +44,7 @@ public class CreateGameController extends BasicController {
 
     @Inject
     public CreateGameController(){
+
     }
     @Inject
     CreateGameService createGameService;
@@ -55,6 +56,7 @@ public class CreateGameController extends BasicController {
         initializeSpinner();
         errorMessageText.setText("");
         errorBox.setVisible(true);
+        this.controlResponses = responseConstants.respCreateGame;
     }
 
     //Spinner for incrementing map size
@@ -65,13 +67,12 @@ public class CreateGameController extends BasicController {
     }
 
     public void createGame() {
+        String gameName = this.createNameTextField.getText();
+        String password = this.createPasswordTextField.getText();
         boolean pwdMatch = (this.createPasswordTextField.getText().equals(createRepeatPasswordTextField.getText()));
-        if (checkIt(createNameTextField.getText()) &&
-                checkIt(createPasswordTextField.getText()) &&
+        if (checkIt(gameName, password) &&
                 pwdMatch &&
                 this.createMapSizeSpinner.getValue() != null) {
-            String gameName = this.createNameTextField.getText();
-            String password = this.createPasswordTextField.getText();
             GameSettings settings = new GameSettings(this.createMapSizeSpinner.getValue());
             if (createGameService.createGame(gameName, settings, password) != null) {
                 /*
@@ -82,19 +83,19 @@ public class CreateGameController extends BasicController {
                  */
                 createGameService.createGame(gameName, settings, password).subscribeOn(Schedulers.io())
                         .observeOn(Schedulers.single())
-                        .subscribe(result -> {
-                            Platform.runLater(() -> {
-                                browseGameController.init();
-                                app.show(browseGameController);
-                            });
-                            }, error -> {
-                            int code = errorService.getStatus(error);
-                            errorMessageText.setText(getErrorInfoText(responseConstants.respCreateGame,code));
-                        });
+                        .subscribe(result ->
+                                        Platform.runLater(() -> {
+                                            browseGameController.init();
+                                            app.show(browseGameController);
+                                        }),
+                                error -> {
+                                    int code = errorService.getStatus(error);
+                                    errorMessageText.setText(getErrorInfoText(this.controlResponses,code));
+                                });
             }
         } else {
-            errorMessageText.setText(getErrorInfoText(responseConstants.respCreateGame,
-                !pwdMatch ? -2 : -1));
+            errorMessageText.setText(getErrorInfoText(this.controlResponses,
+                    !pwdMatch ? -2 : -1));
         }
     }
 
@@ -103,7 +104,7 @@ public class CreateGameController extends BasicController {
     }
 
     public void showError(int code) {
-        errorMessageText.setText(getErrorInfoText(responseConstants.respCreateGame,code));
+        errorMessageText.setText(getErrorInfoText(this.controlResponses,code));
     }
 
 }

@@ -7,6 +7,7 @@ import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
@@ -15,7 +16,6 @@ import javax.inject.Inject;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-
 
 @Title("%login")
 @Controller
@@ -58,6 +58,10 @@ public class LoginController extends BasicController {
     @Inject
     public LoginController() {
     }
+    @OnInit
+    public void init() {
+        this.controlResponses = responseConstants.respLogin;
+    }
 
     @OnRender
     public void applyInputs() {
@@ -89,11 +93,10 @@ public class LoginController extends BasicController {
     }
 
     public void login() {
-        if (checkIt(this.usernameInput.getText()) &&
-                checkIt(this.passwordInput.getText())) {
+        String username = this.usernameInput.getText();
+        String password = this.passwordInput.getText();
+        if (checkIt(username,password)) {
             this.errorLabel.setText("");
-            String username = this.usernameInput.getText();
-            String password = this.passwordInput.getText();
             boolean rememberMe = this.rememberMeBox.isSelected();
 
             loginButton.setDisable(true);
@@ -111,13 +114,13 @@ public class LoginController extends BasicController {
                         int code = errorService.getStatus(error);
                         // "generate"" the output in the english/german
                         this.errorLabel
-                                .setText(getErrorInfoText(responseConstants.respLogin,code));
+                                .setText(getErrorInfoText(this.controlResponses,code));
                         enableButtons();
                     });
         } else {
             // 1 is used for default in switch
             this.errorLabel.setStyle("-fx-fill: red;");
-            this.errorLabel.setText(getErrorInfoText(responseConstants.respLogin,-1));
+            this.errorLabel.setText(getErrorInfoText(this.controlResponses,-1));
             enableButtons();
         }
     }
@@ -146,7 +149,6 @@ public class LoginController extends BasicController {
         resources = languageService.setLocale(locale);
         app.refresh();
     }
-
 
     @OnRender(1)
     public void setupShowPassword() {

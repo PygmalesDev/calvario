@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
@@ -71,6 +72,11 @@ public class SignUpController extends BasicController {
     @Inject
     public SignUpController() {}
 
+    @OnInit
+    public void init(){
+        this.controlResponses = responseConstants.respSignup;
+    }
+
     // Sets boolean bindings for text manipulations
     @OnRender
     public void createBindings() {
@@ -112,12 +118,12 @@ public class SignUpController extends BasicController {
     }
 
     public void register() {
-        if (checkIt(this.usernameField.getText()) &&
-                checkIt(this.passwordField.getText()) &&
-                checkIt(this.repeatPasswordField.getText()) &&
+        if (checkIt(this.usernameField.getText(),
+                this.passwordField.getText(),
+                this.repeatPasswordField.getText()) &&
                 this.passwordInputsMatch.getValue()) {
                     this.errorTextField
-                            .setText(getErrorInfoText(responseConstants.respSignup, 201));
+                            .setText(getErrorInfoText(this.controlResponses, 201));
 
             this.subscriber.subscribe(this.signUpService.register(this.getUsername(), this.getPassword()),
                     result -> this.app.show("/login",
@@ -130,12 +136,12 @@ public class SignUpController extends BasicController {
                         int code = errorService.getStatus(error);
                     // "generate"" the output in the english/german
                     // due binding, the TextField was not accessible here -> modified
-                        errorTextField.setText(getErrorInfoText(responseConstants.respSignup, code));
+                        errorTextField.setText(getErrorInfoText(this.controlResponses, code));
                     });
             } else {
             int code = this.passwordInputsMatch.not().getValue() ? -2 : -1;
             this.errorTextField.setStyle("-fx-fill: red;");
-            errorTextField.setText(getErrorInfoText(responseConstants.respSignup, code));
+            errorTextField.setText(getErrorInfoText(this.controlResponses, code));
         }
     }
 

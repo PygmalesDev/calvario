@@ -19,7 +19,6 @@ import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -46,10 +45,6 @@ public class SignUpController extends BasicController {
     TextField showRepeatPasswordText;
     @FXML
     ToggleButton showPasswordToggleButton;
-    @FXML
-    ToggleButton enToggleButton;
-    @FXML
-    ToggleButton deToggleButton;
 
     @Param("username")
     public String username;
@@ -95,11 +90,6 @@ public class SignUpController extends BasicController {
             this.usernameField.setText(this.username);
         if (Objects.nonNull(this.password))
             this.passwordField.setText(this.password);
-        if(prefService.getLocale() == Locale.ENGLISH){
-            enToggleButton.setSelected(true);
-        }else{
-            deToggleButton.setSelected(true);
-        }
     }
 
     // Disables register button when input fields are empty or password inputs do not match
@@ -115,6 +105,7 @@ public class SignUpController extends BasicController {
         if (registerButton.isDisabled()) {
             errorTextField.setText(resources.getString("info.register"));
         }
+
     }
 
     public void register() {
@@ -201,20 +192,8 @@ public class SignUpController extends BasicController {
     }
 
     public void setEn() {
-        setLanguage(Locale.ENGLISH);
-        enToggleButton.setSelected(true);
-        deToggleButton.setSelected(false);
     }
 
-    @FXML
     public void setDe() {
-        setLanguage(Locale.GERMAN);
-        enToggleButton.setSelected(false);
-        deToggleButton.setSelected(true);
-    }
-
-    public void setLanguage(Locale locale) {
-        resources = languageService.setLocale(locale);
-        app.refresh();
     }
 }

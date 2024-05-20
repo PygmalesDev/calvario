@@ -3,7 +3,6 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.CreateGameService;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -17,7 +16,7 @@ import org.fulib.fx.annotation.controller.Title;
 
 import javax.inject.Inject;
 
-@Title("CreateGame")
+@Title("Create Game")
 @Controller
 public class CreateGameController extends BasicController {
     @FXML
@@ -81,17 +80,16 @@ public class CreateGameController extends BasicController {
                 that call of createGame is done on a different background thread so
                 the ui is not blocked.
                  */
-                createGameService.createGame(gameName, settings, password).subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.single())
-                        .subscribe(result ->
-                                        Platform.runLater(() -> {
-                                            browseGameController.init();
-                                            app.show(browseGameController);
-                                        }),
-                                error -> {
-                                    int code = errorService.getStatus(error);
-                                    errorMessageText.setText(getErrorInfoText(this.controlResponses,code));
-                                });
+                createGameService.createGame(gameName, settings, password).subscribe(result -> {
+                            Platform.runLater(() -> {
+                                browseGameController.init();
+                                app.show(browseGameController);
+                            });
+                        },
+                                    error -> {
+                                        int code = errorService.getStatus(error);
+                                        errorMessageText.setText(getErrorInfoText(this.controlResponses,code));
+                        });
             }
         } else {
             errorMessageText.setText(getErrorInfoText(this.controlResponses,
@@ -105,6 +103,10 @@ public class CreateGameController extends BasicController {
 
     public void showError(int code) {
         errorMessageText.setText(getErrorInfoText(this.controlResponses,code));
+    }
+
+    public void setCreateGameService(CreateGameService createGameService) {
+        this.createGameService = createGameService;
     }
 
 }

@@ -47,6 +47,7 @@ public class CreateGameService {
             return gamesApiService
                     .createGame(new CreateGameDto(name, false, 1, settings, password))
                     .doOnError(error -> createGameController.showError(errorService.getStatus(error)));
+
         } else {
             // code 409 -> name exits already
             createGameController.showError(409);

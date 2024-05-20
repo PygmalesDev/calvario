@@ -50,7 +50,7 @@ public class WarningScreenComponent extends VBox {
     }
 
     public void deleteAcc() {
-        // delete user and switch back to the login screen
+        //Delete user and switch back to the login screen
         this.subscriber.subscribe(editAccService.deleteUser(),
             result -> app.show("/login",
                         Map.of("info","deleted"))

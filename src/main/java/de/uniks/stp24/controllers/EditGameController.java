@@ -1,11 +1,9 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
 import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.EditGameService;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -15,13 +13,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 
 import javax.inject.Inject;
-import java.util.ResourceBundle;
 
-@Title("EditGame")
+@Title("Edit Game")
 @Controller
 public class EditGameController extends BasicController {
     @FXML
@@ -47,6 +43,7 @@ public class EditGameController extends BasicController {
     BrowseGameService browseGameService;
     @Inject
     BrowseGameController browseGameController;
+
 
     @Inject
     EditGameService editGameService;
@@ -76,12 +73,10 @@ public class EditGameController extends BasicController {
         boolean pwdMatch = password.equals(editRepeatPasswordTextField.getText());
         if(checkIt(gameName,password) && pwdMatch) {
             if (editGameService.editGame(gameName, settings, password) != null) {
-                editGameService.editGame(gameName, settings, password).subscribeOn(Schedulers.io())
-                        .observeOn(Schedulers.single())
-                        .subscribe(result ->
-                                        Platform.runLater(() -> {
-                                            browseGameController.init();
-                                            app.show(browseGameController);
+                editGameService.editGame(gameName, settings, password).subscribe(result ->
+                    Platform.runLater(() -> {
+                        browseGameController.init();
+                        app.show(browseGameController);
                                         }),
                                 error -> {
                                     int code = errorService.getStatus(error);
@@ -99,5 +94,9 @@ public class EditGameController extends BasicController {
     }
     public void showError(int code) {
         errorMessageTextEdit.setText(getErrorInfoText(this.controlResponses,code));
+    }
+
+    public void setEditGameService(EditGameService newEditGameService) {
+        editGameService = newEditGameService;
     }
 }

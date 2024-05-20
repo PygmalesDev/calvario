@@ -1,6 +1,7 @@
-package de.uniks.stp24;
+package de.uniks.stp24.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.controllers.EditAccController;
 import de.uniks.stp24.model.User;
@@ -29,7 +30,7 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 
 @ExtendWith(MockitoExtension.class)
-public class TestEditAcc extends ControllerTest{
+public class TestEditAcc extends ControllerTest {
     @Spy
     EditAccService editAccService;
     @Spy

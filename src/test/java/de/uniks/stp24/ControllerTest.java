@@ -18,7 +18,7 @@ public class ControllerTest extends ApplicationTest {
     @Spy
     public final App app = new App();
     @Spy
-    PrefService prefService;
+    protected PrefService prefService;
     @Spy
     ResponseConstants responseConstants;
     @Spy

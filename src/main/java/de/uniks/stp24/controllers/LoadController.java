@@ -6,9 +6,10 @@ import org.fulib.fx.annotation.event.OnKey;
 
 import javax.inject.Inject;
 
-@Title("%load")
+@Title("Calvario")
 @Controller
 public class LoadController extends BasicController{
+
 
     @Inject
     public LoadController() {

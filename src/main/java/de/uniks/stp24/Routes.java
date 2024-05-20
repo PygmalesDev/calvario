@@ -1,6 +1,7 @@
 package de.uniks.stp24;
 
 
+import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.controllers.*;
 import org.fulib.fx.annotation.Route;
@@ -53,8 +54,12 @@ public class Routes {
     @Route("warningScreen")
     @Inject
     Provider<WarningScreenComponent> warningScreen;
+
+    @Route("warning")
+    @Inject
+    Provider<WarningComponent> warning;
     
-    @Route("game")
+    @Route("ingame")
     @Inject
     Provider<InGameController> game;
 

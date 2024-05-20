@@ -72,6 +72,7 @@ public class BrowseGameService {
     //Calls Api DELETE if the game is from the user
     public Observable<Game> deleteGame() {
         if (checkMyGame()) {
+            //TODO add Error handling for deleting a game
             return gamesApiService.deleteGame(game._id());
         } else {
             return null;

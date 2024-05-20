@@ -10,10 +10,8 @@ import de.uniks.stp24.service.CreateGameService;
 import de.uniks.stp24.service.EditGameService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -207,13 +205,11 @@ BrowseGameController {
     }
 
     private void showWarning(){
-        if (warningWindowContainer.getChildren().isEmpty()){
+        if (warningWindowContainer.getChildren().isEmpty()) {
             warningWindowContainer.getChildren().add(warningComponent);
             StackPane.setAlignment(warningComponent, Pos.CENTER);
-            warningWindowContainer.setVisible(true);
-        } else {
-            warningWindowContainer.setVisible(true);
         }
+        warningWindowContainer.setVisible(true);
         warningWindowContainer.visibleProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 removeBlur();

@@ -1,13 +1,5 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
-import de.uniks.stp24.constants.ResponseConstants;
-import de.uniks.stp24.service.ErrorService;
-import de.uniks.stp24.utils.ErrorTextWriter;
-import de.uniks.stp24.service.LanguageService;
-import de.uniks.stp24.service.LoginService;
-import de.uniks.stp24.service.PrefService;
-import java.util.ResourceBundle;
 import de.uniks.stp24.service.LoginService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

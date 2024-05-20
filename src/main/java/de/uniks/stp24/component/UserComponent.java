@@ -72,6 +72,6 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
         if (Objects.nonNull(member.user().avatar()))
             this.avatarImageView.setImage(this.imageCache.get(member.user().avatar()));
         else
-            this.avatarImageView.setImage(this.imageCache.get("Icons/Eye_Icon_32.png"));
+            this.avatarImageView.setImage(this.imageCache.get("icons/Eye_Icon_32.png"));
     }
 }

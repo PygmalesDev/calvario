@@ -1,10 +1,8 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
 import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.CreateGameService;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -15,17 +13,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.*;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 
 import javax.inject.Inject;
-import java.util.ResourceBundle;
 
 @Title("Create Game")
 @Controller
-public class CreateGameController {
+public class CreateGameController extends BasicController {
     @FXML
     Text errorMessageText;
     @FXML
@@ -49,14 +46,9 @@ public class CreateGameController {
     VBox cardBackgroundVBox;
 
     @Inject
-    App app;
-    @Inject
     GamesApiService gamesApiService;
     @Inject
     BrowseGameController browseGameController;
-    @Inject
-    @Resource
-    ResourceBundle resources;
 
     @Inject
     public CreateGameController(){
@@ -70,6 +62,9 @@ public class CreateGameController {
         createGameService = (createGameService == null) ? new CreateGameService() : createGameService;
         createGameService.setCreateGameController(this);
         initializeSpinner();
+        errorMessageText.setText("");
+        errorBox.setVisible(true);
+        this.controlResponses = responseConstants.respCreateGame;
     }
 
     //Spinner for incrementing map size
@@ -80,12 +75,12 @@ public class CreateGameController {
     }
 
     public void createGame() {
-        if (!this.createNameTextField.getText().isEmpty() &&
-                !this.createPasswordTextField.getText().isEmpty() &&
-                this.createPasswordTextField.getText().equals(createRepeatPasswordTextField.getText()) &&
+        String gameName = this.createNameTextField.getText();
+        String password = this.createPasswordTextField.getText();
+        boolean pwdMatch = (this.createPasswordTextField.getText().equals(createRepeatPasswordTextField.getText()));
+        if (checkIt(gameName, password) &&
+                pwdMatch &&
                 this.createMapSizeSpinner.getValue() != null) {
-            String gameName = this.createNameTextField.getText();
-            String password = this.createPasswordTextField.getText();
             GameSettings settings = new GameSettings(this.createMapSizeSpinner.getValue());
             if (createGameService.createGame(gameName, settings, password) != null) {
                 /*
@@ -99,8 +94,15 @@ public class CreateGameController {
                                 browseGameController.init();
                                 app.show(browseGameController);
                             });
+                        },
+                                    error -> {
+                                        int code = errorService.getStatus(error);
+                                        errorMessageText.setText(getErrorInfoText(this.controlResponses,code));
                         });
             }
+        } else {
+            errorMessageText.setText(getErrorInfoText(this.controlResponses,
+                    !pwdMatch ? -2 : -1));
         }
     }
 
@@ -108,22 +110,8 @@ public class CreateGameController {
         app.show("/browseGames");
     }
 
-    /*
-    ============================================= ERROR =============================================
-     */
-
-    public void showErrorBox() {
-        errorBox.setVisible(true);
-    }
-
-    public void showNameTakenError() {
-        errorMessageText.setText(resources.getString("name.exists.already"));
-        errorBox.setVisible(true);
-
-    }
-
-    public void hideErrorBox() {
-        errorBox.setVisible(false);
+    public void showError(int code) {
+        errorMessageText.setText(getErrorInfoText(this.controlResponses,code));
     }
 
     public void setCreateGameService(CreateGameService createGameService) {
@@ -136,3 +124,4 @@ public class CreateGameController {
         cardBackgroundVBox.setStyle("-fx-background-image: null");
     }
 }
+

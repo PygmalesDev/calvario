@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 
 @Title("Logout")
 @Controller
-public class LogoutController{
+public class LogoutController extends BasicController {
 
     @FXML
     Button logoutButton;
@@ -27,13 +27,10 @@ public class LogoutController{
     Text messageField;
     @FXML
     Text errorLabel;
-    @Inject
-    App app;
+
     @Inject
     LogoutService logoutService;
-    @Inject
-    @Resource
-    ResourceBundle resources;
+
     @Param("info")
     public String info;
 
@@ -47,7 +44,7 @@ public class LogoutController{
         logoutService.logout("")
                 .doFinally(() -> {
                     System.out.println("LOGGING OUT");
-                    info = resources.getString("logout.successful.on.this.device");
+                    info = "logout";
                 })
                 .subscribe().dispose();
         app.show("/login", Map.of("info",info));

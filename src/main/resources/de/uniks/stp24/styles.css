@@ -4,6 +4,10 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-font-weight: bold;
 }
 
+.lock-button {-fx-background-image: url("icons/unlock.jpg");}
+.lock-button:selected {-fx-background-image: url("icons/lock.jpg");}
+
+
 
 .background{
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/background.png");

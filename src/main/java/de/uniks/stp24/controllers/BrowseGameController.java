@@ -8,6 +8,7 @@ import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.CreateGameService;
 import de.uniks.stp24.service.EditGameService;
+import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -82,6 +83,9 @@ BrowseGameController {
     public BrowseGameService browseGameService;
     @Inject
     EditGameService editGameService;
+
+    @Inject
+    PopupBuilder popupBuilder;
     @Inject
     CreateGameService createGameService;
     @Inject
@@ -199,7 +203,9 @@ BrowseGameController {
     }
 
     private void showWarning(){
-        if (warningWindowContainer.getChildren().isEmpty()){
+        PopupBuilder popupBuilder1 = new PopupBuilder("/de/uniks/stp24/component/Warning.fxml","Warning");
+        popupBuilder1.showPopup();
+        /*if (warningWindowContainer.getChildren().isEmpty()){
             warningWindowContainer.getChildren().add(warningComponent);
             StackPane.setAlignment(warningComponent, Pos.CENTER);
         } else {
@@ -209,7 +215,7 @@ BrowseGameController {
             if (!newValue) {
                 removeBlur();
             }
-        });
+        });*/
 
     }
 }

@@ -117,4 +117,8 @@ public class CreateGameController {
     public void hideErrorBox() {
         errorBox.setVisible(false);
     }
+
+    public void setCreateGameService(CreateGameService createGameService) {
+        this.createGameService = createGameService;
+    }
 }

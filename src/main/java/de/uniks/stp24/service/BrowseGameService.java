@@ -1,7 +1,9 @@
 package de.uniks.stp24.service;
 
 import de.uniks.stp24.model.Game;
+import de.uniks.stp24.model.User;
 import de.uniks.stp24.rest.GamesApiService;
+import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -12,7 +14,7 @@ import java.util.List;
 @Singleton
 public class BrowseGameService {
     @Inject
-    GamesApiService GamesApiService;
+    GamesApiService gamesApiService;
 
     @Inject
     TokenStorage tokenStorage;
@@ -66,5 +68,23 @@ public class BrowseGameService {
         tokenStorage.setToken(null);
         tokenStorage.setAvatar(null);
         tokenStorage.setUserId("testID");
+    }
+    //Calls Api DELETE if the game is from the user
+    public Observable<Game> deleteGame() {
+        if (checkMyGame()) {
+            //TODO add Error handling for deleting a game
+            return gamesApiService.deleteGame(game._id());
+        } else {
+            return null;
+        }
+
+    }
+
+    public String getGameName() {
+        if (checkMyGame()) {
+            return this.game.name();
+        } else {
+            return "";
+        }
     }
 }

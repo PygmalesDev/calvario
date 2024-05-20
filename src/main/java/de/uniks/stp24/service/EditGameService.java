@@ -49,6 +49,7 @@ public class EditGameService {
         }
 
         if (isNameable){
+            System.out.println("here");
             return gamesApiService.editGame(this.game._id(), new UpdateGameDto(name,false,1, settings, password));
         } else {
             editGameController.showNameTakenError();

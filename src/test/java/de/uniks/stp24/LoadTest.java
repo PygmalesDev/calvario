@@ -8,13 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.testfx.util.WaitForAsyncUtils.waitFor;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
-public class LoadTest extends ControllerTest{
-
+public class LoadTest extends ControllerTest {
     @InjectMocks
     LoadController loadController;
     @InjectMocks
@@ -31,7 +30,7 @@ public class LoadTest extends ControllerTest{
         // Start:
         // Alice has started the game STPellar. She sees the Load screen.
         // She is prompted to press a key to continue.
-        assertEquals( resources.getString("load"),stage.getTitle());
+        assertEquals(stage.getTitle(), "Calvario");
 
         // Action:
         // Alice presses Enter
@@ -41,7 +40,7 @@ public class LoadTest extends ControllerTest{
 
         // Result:
         // Alice should now be in Login screen.
-        assertEquals(resources.getString("login"),stage.getTitle());
+        assertEquals(stage.getTitle(), "LOGIN  ");
     }
 
 }

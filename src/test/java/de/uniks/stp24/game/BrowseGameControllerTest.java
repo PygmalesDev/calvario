@@ -1,6 +1,8 @@
-package de.uniks.stp24;
+package de.uniks.stp24.game;
 
+import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.GameComponent;
+import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
@@ -25,6 +27,8 @@ import javax.inject.Provider;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class BrowseGameControllerTest extends ControllerTest {
@@ -32,8 +36,16 @@ public class BrowseGameControllerTest extends ControllerTest {
     EventListener eventListener;
     @Mock
     GamesApiService gamesApiService;
+
+    @Spy
+    WarningComponent warningComponent;
     @Spy
     Subscriber subscriber = new Subscriber();
+
+
+    Game game = new Game(null, null, "1", "Was geht", "testID2", false, 0,0, null);
+
+
     @Spy
     Provider<GameComponent> GameComponentProvider = new Provider(){
         @Override
@@ -45,12 +57,14 @@ public class BrowseGameControllerTest extends ControllerTest {
 
     @InjectMocks
     BrowseGameController browseGameController;
+
+
     final Subject<Event<Game>> subject = BehaviorSubject.create();
 
     @Override
     public void start(Stage stage)  throws Exception{
         Mockito.doReturn(Observable.just(List.of(
-                new Game(null, null, "1", "Was geht", "testID2", false, 0,0, null),
+                game,
                 new Game(null, null, "2", "rapapa", "testID", false, 0,0, null)
         ))).when(gamesApiService).findAll();
 
@@ -59,6 +73,61 @@ public class BrowseGameControllerTest extends ControllerTest {
         super.start(stage);
         app.show(browseGameController);
     }
+
+    /*
+    ============================================= Test browse game buttons =============================================
+     */
+
+    @Test
+    void logOut(){
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Browse Game", stage.getTitle());
+        clickOn(browseGameController.log_out_b);
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Logout", stage.getTitle());
+    }
+
+    @Test
+    void newGame(){
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Browse Game", stage.getTitle());
+        clickOn(browseGameController.new_game_b);
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Create Game", stage.getTitle());
+    }
+
+    @Test
+    void loadGame(){
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Browse Game", stage.getTitle());
+        clickOn(browseGameController.load_game_b);
+        WaitForAsyncUtils.waitForFxEvents();
+        //TODO: Wait for PR LoadGame
+        //assertEquals("Load Game", stage.getTitle());
+    }
+
+    @Test
+    void deleteGame(){
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Browse Game", stage.getTitle());
+        clickOn(browseGameController.del_game_b);
+        WaitForAsyncUtils.waitForFxEvents();
+        //TODO: Wait for PR Delete Game
+        //assertEquals("Delete Game", stage.getTitle());
+    }
+
+    @Test
+    void editAcc(){
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Browse Game", stage.getTitle());
+        clickOn(browseGameController.edit_acc_b);
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("Edit Account", stage.getTitle());
+    }
+
+    /*
+    ============================================= Test ListView of Lobby =============================================
+     */
 
     @Test
     void testLobbyList(){
@@ -77,19 +146,12 @@ public class BrowseGameControllerTest extends ControllerTest {
         assertEquals(2, browseGameController.gameList.getItems().size());
     }
 
-    //Check if logout-screen is displayed after clicking on logout button
-    @Test
-    void logOut(){
-        WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Browse Game", stage.getTitle());
-        clickOn(browseGameController.log_out_b);
-        WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Logout", stage.getTitle());
-    }
-
+    /*
+    ============================================= Test edit game =========================================================
+     */
 
     @Test
-    void editGame(){
+    void editGameNoInputs(){
         //Set selected Game as one of the games u have created
         WaitForAsyncUtils.waitForFxEvents();
         browseGameController.browseGameService.setGame(browseGameController.gameList.getItems().getFirst());
@@ -101,13 +163,13 @@ public class BrowseGameControllerTest extends ControllerTest {
         //Click on edit game button and check if edit game screen is now displayed.
         clickOn(browseGameController.edit_game_b);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("EditGame", stage.getTitle());
+        assertEquals("Edit Game", stage.getTitle());
 
         //Click on confirm. No inputs for change was given. Screen do not change
         WaitForAsyncUtils.waitForFxEvents();
         Button confirmButton = lookup("#editGameConfirmButton").queryButton();
         clickOn(confirmButton);
-        assertEquals("EditGame", stage.getTitle());
+        assertEquals("Edit Game", stage.getTitle());
     }
 
     @Test
@@ -126,4 +188,45 @@ public class BrowseGameControllerTest extends ControllerTest {
         assertEquals(stage.getTitle(), "Browse Game");
     }
 
+    @Test
+    void deleteGameCancel(){
+        doNothing().when(warningComponent).onCancel();
+        doNothing().when(warningComponent).setGameName();
+        WaitForAsyncUtils.waitForFxEvents();
+        browseGameController.browseGameService.setGame(browseGameController.gameList.getItems().get(0));
+        browseGameController.browseGameService.setTokenStorage();
+
+        browseGameController.gameList.getSelectionModel().clearAndSelect(0);
+        browseGameController.gameList.getFocusModel().focus(0);
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        clickOn("#del_game_b");
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        clickOn("#cancelButton");
+        verify(this.warningComponent).onCancel();
+    }
+
+    @Test
+    void deleteGameConfirm(){
+        doNothing().when(warningComponent).setGameName();
+        doNothing().when(warningComponent).deleteGame();
+        WaitForAsyncUtils.waitForFxEvents();
+        browseGameController.browseGameService.setGame(browseGameController.gameList.getItems().get(0));
+        browseGameController.browseGameService.setTokenStorage();
+
+        browseGameController.gameList.getSelectionModel().clearAndSelect(0);
+        browseGameController.gameList.getFocusModel().focus(0);
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        clickOn("#del_game_b");
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        clickOn("#confirmButton");
+        verify(this.warningComponent).deleteGame();
+    }
 }

@@ -17,7 +17,7 @@ public class ControllerTest extends ApplicationTest {
     @Spy
     public final App app = new App();
     @Spy
-    PrefService prefService;
+    protected PrefService prefService;
     @Spy
     ResourceBundle resources = ResourceBundle.getBundle("de/uniks/stp24/lang/main", Locale.ROOT);
 

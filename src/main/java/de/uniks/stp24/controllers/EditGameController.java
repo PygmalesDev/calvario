@@ -21,7 +21,7 @@ import org.fulib.fx.annotation.controller.Title;
 import javax.inject.Inject;
 import java.util.ResourceBundle;
 
-@Title("EditGame")
+@Title("Edit Game")
 @Controller
 public class EditGameController {
     @FXML
@@ -53,6 +53,7 @@ public class EditGameController {
     @Resource
     ResourceBundle resources;
 
+
     @Inject
     public EditGameController(){
 
@@ -79,9 +80,7 @@ public class EditGameController {
         if(!gameName.isEmpty() && !password.isEmpty() && !editRepeatPasswordTextField.getText().isEmpty()) {
             if(password.equals(editRepeatPasswordTextField.getText())) {
                 if (editGameService.editGame(gameName, settings, password) != null) {
-                    editGameService.editGame(gameName, settings, password).subscribeOn(Schedulers.io())
-                            .observeOn(Schedulers.single())
-                            .subscribe(result -> {
+                    editGameService.editGame(gameName, settings, password).subscribe(result -> {
                                 Platform.runLater(() -> {
                                     browseGameController.init();
                                     app.show(browseGameController);
@@ -102,5 +101,9 @@ public class EditGameController {
 
     public void hideErrorBox() {
         errorBoxEdit.setVisible(false);
+    }
+
+    public void setEditGameService(EditGameService newEditGameService) {
+        editGameService = newEditGameService;
     }
 }

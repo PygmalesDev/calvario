@@ -46,8 +46,8 @@ public class CreateGameService {
         if (isNameable) {
             return gamesApiService
                     .createGame(new CreateGameDto(name, false, 1, settings, password))
-                    .doOnNext(createGameResult -> {
-                    })
+                    //.doOnNext(createGameResult -> {
+                    //})
                     .doOnError(error -> showErrorBox());
         } else {
             createGameController.showNameTakenError();

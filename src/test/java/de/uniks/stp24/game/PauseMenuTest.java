@@ -1,8 +1,8 @@
-package de.uniks.stp24;
+package de.uniks.stp24.game;
 
+import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.PauseMenuComponent;
 import de.uniks.stp24.component.SettingsComponent;
-import de.uniks.stp24.model.Game;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.service.InGameService;
@@ -12,7 +12,6 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 

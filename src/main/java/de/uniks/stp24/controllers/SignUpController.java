@@ -10,6 +10,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Resource;
@@ -20,6 +23,7 @@ import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.swing.text.html.ImageView;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -49,6 +53,13 @@ public class SignUpController {
     TextField showRepeatPasswordText;
     @FXML
     ToggleButton showPasswordToggleButton;
+
+    @FXML
+    AnchorPane backgroundAnchorPane;
+    @FXML
+    VBox cardBackgroundVBox;
+    @FXML
+    Image calvarioLogoRegister;
 
     @Param("username")
     public String username;
@@ -194,6 +205,9 @@ public class SignUpController {
     @OnDestroy
     public void destroy() {
         this.subscriber.dispose();
+        backgroundAnchorPane.setStyle("-fx-background-image: null");
+        cardBackgroundVBox.setStyle("-fx-background-image: null");
+        calvarioLogoRegister = null;
     }
 
     @FXML

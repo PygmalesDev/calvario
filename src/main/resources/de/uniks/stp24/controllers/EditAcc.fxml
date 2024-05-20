@@ -13,125 +13,99 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="860.0" prefWidth="1280.0" styleClass="background" xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.EditAccController">
-   <HBox alignment="CENTER" layoutY="-6.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-         AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<AnchorPane fx:id="backgroundAnchorPane" prefHeight="860.0" prefWidth="1280.0" styleClass="background" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.EditAccController">
+   <HBox alignment="CENTER" layoutY="-6.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="630.0" prefWidth="800.0">
-         <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="40.0" prefWidth="800.0"
-               style="-fx-background-color: Black;">
+         <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="40.0" prefWidth="800.0" style="-fx-background-color: Black;">
             <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="%calvario.browseGame">
                <font>
-                  <Font size="16.0"/>
+                  <Font size="16.0" />
                </font>
             </Text>
          </HBox>
-         <VBox alignment="CENTER" prefHeight="570.0" prefWidth="800.0" styleClass="cardBackground">
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="530.0" prefWidth="750.0"
-                        styleClass="transparentBackground">
-               <HBox fx:id="editAccHBox" alignment="CENTER" prefHeight="570.0" prefWidth="800.0"
-                     AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                     AnchorPane.topAnchor="0.0">
+         <VBox fx:id="cardBackgroundVBox" alignment="CENTER" prefHeight="570.0" prefWidth="800.0" styleClass="cardBackground">
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="530.0" prefWidth="750.0" styleClass="transparentBackground">
+               <HBox fx:id="editAccHBox" alignment="CENTER" prefHeight="570.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <AnchorPane prefHeight="570.0" prefWidth="500.0">
-                     <VBox alignment="CENTER" prefHeight="400.0" prefWidth="550.0" spacing="10.0"
-                           AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0"
-                              prefWidth="170.0" style="-fx-border-color: Black;"
-                              styleClass="backgroundLightYellow">
+                     <VBox alignment="CENTER" prefHeight="400.0" prefWidth="550.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="170.0" style="-fx-border-color: Black;" styleClass="backgroundLightYellow">
                            <VBox.margin>
-                              <Insets top="20.0"/>
+                              <Insets top="20.0" />
                            </VBox.margin>
-                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%wanted"
-                                 textAlignment="CENTER" wrappingWidth="108.92333984375">
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%wanted" textAlignment="CENTER" wrappingWidth="108.92333984375">
                               <font>
-                                 <Font name="System Bold" size="25.0"/>
+                                 <Font name="System Bold" size="25.0" />
                               </font>
                            </Text>
                            <Separator prefWidth="200.0" style="-fx-background-color: black;">
                               <VBox.margin>
-                                 <Insets top="15.0"/>
+                                 <Insets top="15.0" />
                               </VBox.margin>
                            </Separator>
-                           <ImageView fx:id="avatarImage" fitHeight="100.0" fitWidth="100.0"
-                                      pickOnBounds="true" preserveRatio="true">
+                           <ImageView fx:id="avatarImage" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                               <VBox.margin>
-                                 <Insets top="20.0"/>
+                                 <Insets top="20.0" />
                               </VBox.margin>
                            </ImageView>
                         </VBox>
                         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="15.0">
-                           <Button fx:id="saveChangesButton" mnemonicParsing="false" onAction="#saveChanges"
-                                   prefHeight="30.0" prefWidth="150.0" text="%save" visible="false">
+                           <Button fx:id="saveChangesButton" mnemonicParsing="false" onAction="#saveChanges" prefHeight="30.0" prefWidth="150.0" text="%save" visible="false">
                               <font>
-                                 <Font size="15.0"/>
+                                 <Font size="15.0" />
                               </font>
                            </Button>
-                           <Button fx:id="cancelChangesButton" mnemonicParsing="false"
-                                   onAction="#cancelChanges" prefHeight="30.0" prefWidth="150.0" text="%cancel"
-                                   visible="false">
+                           <Button fx:id="cancelChangesButton" mnemonicParsing="false" onAction="#cancelChanges" prefHeight="30.0" prefWidth="150.0" text="%cancel" visible="false">
                               <font>
-                                 <Font size="15.0"/>
+                                 <Font size="15.0" />
                               </font>
                            </Button>
                         </HBox>
                         <VBox alignment="CENTER" maxWidth="-Infinity" prefHeight="200.0" prefWidth="350.0">
-                           <TextField fx:id="usernameInput" alignment="CENTER" disable="true"
-                                      promptText="%username">
+                           <TextField fx:id="usernameInput" alignment="CENTER" disable="true" promptText="%username">
                               <font>
-                                 <Font size="15.0"/>
+                                 <Font size="15.0" />
                               </font>
                            </TextField>
-                           <TextField fx:id="passwordInput" alignment="CENTER" disable="true"
-                                      promptText="%password">
+                           <TextField fx:id="passwordInput" alignment="CENTER" disable="true" promptText="%password">
                               <font>
-                                 <Font size="15.0"/>
+                                 <Font size="15.0" />
                               </font>
                               <VBox.margin>
-                                 <Insets top="20.0"/>
+                                 <Insets top="20.0" />
                               </VBox.margin>
                            </TextField>
                         </VBox>
                         <Text fx:id="errorLabelEditAcc" strokeType="OUTSIDE" strokeWidth="0.0" text="%text">
                            <font>
-                              <Font size="15.0"/>
+                              <Font size="15.0" />
                            </font>
                         </Text>
                      </VBox>
                   </AnchorPane>
                   <AnchorPane prefHeight="200.0" prefWidth="300.0">
-                     <VBox alignment="CENTER" layoutX="-7.0" prefHeight="400.0" prefWidth="200.0"
-                           spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-7.0"
-                           AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="0.0">
-                        <ToggleButton fx:id="changeUserInfoButton" mnemonicParsing="false"
-                                      onAction="#changeUserInfo" prefHeight="30.0" prefWidth="150.0"
-                                      text="%edit">
+                     <VBox alignment="CENTER" layoutX="-7.0" prefHeight="400.0" prefWidth="200.0" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="0.0">
+                        <ToggleButton fx:id="changeUserInfoButton" mnemonicParsing="false" onAction="#changeUserInfo" prefHeight="30.0" prefWidth="150.0" text="%edit">
                            <font>
-                              <Font size="15.0"/>
+                              <Font size="15.0" />
                            </font>
                         </ToggleButton>
-                        <Button fx:id="deleteUserButton" mnemonicParsing="false" onAction="#deleteUser"
-                                prefHeight="30.0" prefWidth="150.0" text="%delete">
+                        <Button fx:id="deleteUserButton" mnemonicParsing="false" onAction="#deleteUser" prefHeight="30.0" prefWidth="150.0" text="%delete">
                            <font>
-                              <Font size="15.0"/>
+                              <Font size="15.0" />
                            </font>
                         </Button>
-                        <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack"
-                                prefHeight="30.0" prefWidth="150.0" text="%go.back">
+                        <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" prefHeight="30.0" prefWidth="150.0" text="%go.back">
                            <font>
-                              <Font size="15.0"/>
+                              <Font size="15.0" />
                            </font>
                         </Button>
                      </VBox>
                   </AnchorPane>
                </HBox>
-               <StackPane fx:id="warningScreenContainer" prefHeight="200.0" prefWidth="300.0" visible="false"
-                          AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="150.0"
-                          AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="100.0"/>
+               <StackPane fx:id="warningScreenContainer" prefHeight="200.0" prefWidth="300.0" visible="false" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="100.0" />
             </AnchorPane>
          </VBox>
-         <HBox alignment="CENTER" maxHeight="-Infinity" prefHeight="20.0" prefWidth="800.0"
-               style="-fx-background-color: black;"/>
+         <HBox alignment="CENTER" maxHeight="-Infinity" prefHeight="20.0" prefWidth="800.0" style="-fx-background-color: black;" />
       </VBox>
    </HBox>
 </AnchorPane>

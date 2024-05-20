@@ -5,15 +5,16 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.constants.ResponseConstants;
 import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.utils.ErrorTextWriter;
-import de.uniks.stp24.model.ErrorResponse;
 import de.uniks.stp24.service.LanguageService;
 import de.uniks.stp24.service.LoginService;
 import de.uniks.stp24.service.PrefService;
 import java.util.ResourceBundle;
-import java.util.concurrent.Flow;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Resource;
@@ -24,7 +25,6 @@ import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -55,6 +55,13 @@ public class LoginController {
     ToggleButton enToggleButton;
     @FXML
     ToggleButton deToggleButton;
+
+    @FXML
+    AnchorPane backgroundAnchorPane;
+    @FXML
+    VBox cardBackgroundVBox;
+    @FXML
+    Image calvarioLogoLogin;
 
     @Inject
     Subscriber subscriber;
@@ -200,5 +207,8 @@ public class LoginController {
     @OnDestroy
     public void destroy() {
         this.subscriber.dispose();
+        backgroundAnchorPane.setStyle("-fx-background-image: null");
+        cardBackgroundVBox.setStyle("-fx-background-image: null");
+        calvarioLogoLogin = null;
     }
 }

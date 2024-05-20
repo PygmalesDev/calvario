@@ -10,12 +10,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.*;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
+import org.fulib.fx.annotation.event.OnDestroy;
 
 import javax.inject.Inject;
 import java.util.ResourceBundle;
@@ -39,6 +42,11 @@ public class CreateGameController {
     TextField createRepeatPasswordTextField;
     @FXML
     Spinner<Integer> createMapSizeSpinner;
+
+    @FXML
+    AnchorPane backgroundAnchorPane;
+    @FXML
+    VBox cardBackgroundVBox;
 
     @Inject
     App app;
@@ -120,5 +128,11 @@ public class CreateGameController {
 
     public void setCreateGameService(CreateGameService createGameService) {
         this.createGameService = createGameService;
+    }
+
+    @OnDestroy
+    public void destroy(){
+        backgroundAnchorPane.setStyle("-fx-background-image: null");
+        cardBackgroundVBox.setStyle("-fx-background-image: null");
     }
 }

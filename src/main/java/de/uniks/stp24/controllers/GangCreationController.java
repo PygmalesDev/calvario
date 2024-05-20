@@ -309,6 +309,9 @@ public class GangCreationController {
 
     @OnDestroy
     public void destroy() {
-
+        flagImage = null;
+        portraitImage = null;
+        //portraitsList = null;
+        //flagsList = null;
     }
 }

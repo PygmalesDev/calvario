@@ -179,7 +179,7 @@ BrowseGameController {
     public void deleteGame() {
         if(browseGameService.checkMyGame()) {
             setBlur();
-            warningComponent.setGameName(browseGameService.getGameName());
+            warningComponent.setGameName();
             showWarning();
         }
     }
@@ -203,8 +203,8 @@ BrowseGameController {
     }
 
     private void showWarning(){
-        PopupBuilder popup = new PopupBuilder();
-        popup.showPopup(warningWindowContainer);
+        //PopupBuilder popup = new PopupBuilder();
+        //popup.showPopup(warningWindowContainer);
         //PopupBuilder popupBuilder1 = new PopupBuilder("/de/uniks/stp24/component/Warning.fxml","Warning");
         //popupBuilder1.showPopup();
         if (warningWindowContainer.getChildren().isEmpty()){
@@ -218,7 +218,6 @@ BrowseGameController {
                 removeBlur();
             }
         });
-
-
+        //popupBuilder.showWarningPopup(warningWindowContainer, this::removeBlur);
     }
 }

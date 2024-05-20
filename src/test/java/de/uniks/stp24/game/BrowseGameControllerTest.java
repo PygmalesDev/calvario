@@ -191,7 +191,7 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Test
     void deleteGameCancel(){
         doNothing().when(warningComponent).onCancel();
-        doNothing().when(warningComponent).setGameName(browseGameController.browseGameService.getGameName());
+        doNothing().when(warningComponent).setGameName();
         WaitForAsyncUtils.waitForFxEvents();
         browseGameController.browseGameService.setGame(browseGameController.gameList.getItems().get(0));
         browseGameController.browseGameService.setTokenStorage();
@@ -211,7 +211,7 @@ public class BrowseGameControllerTest extends ControllerTest {
 
     @Test
     void deleteGameConfirm(){
-        doNothing().when(warningComponent).setGameName(browseGameController.browseGameService.getGameName());
+        doNothing().when(warningComponent).setGameName();
         doNothing().when(warningComponent).deleteGame();
         WaitForAsyncUtils.waitForFxEvents();
         browseGameController.browseGameService.setGame(browseGameController.gameList.getItems().get(0));

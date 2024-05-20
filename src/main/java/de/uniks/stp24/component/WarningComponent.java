@@ -40,7 +40,7 @@ public class WarningComponent extends VBox{
     @Inject
     BrowseGameService browseGameService;
     String gameNameText;
-    private Consumer<Void> onPopupClose;
+
 
 
     @Inject
@@ -52,20 +52,14 @@ public class WarningComponent extends VBox{
         warningWindow.setStyle("-fx-background-color: white;");
     }
 
-    public void setGameName(String gameNameText) {
+    public void setGameName() {
+        gameNameText = browseGameService.getGameName();
         gameName.setText(gameNameText);
     }
 
     public void deleteGame() {
         this.subscriber.subscribe(browseGameService.deleteGame());
         setVisible(false);
-        if (onPopupClose != null) {
-            try {
-                onPopupClose.accept(null);
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 
     @OnDestroy
@@ -79,9 +73,6 @@ public class WarningComponent extends VBox{
         getParent().setVisible(false);
     }
 
-    public void setOnPopupClose(Consumer<Void> onPopupClose) {
-        this.onPopupClose = onPopupClose;
-    }
 }
 
 

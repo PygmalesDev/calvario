@@ -10,10 +10,6 @@ import org.fulib.fx.annotation.controller.SubComponent;
 import javax.inject.Inject;
 
 public class PopupBuilder {
-    private String fxmlFile;
-    private String title;
-    private Stage popupStage;
-
     @Inject
     App app;
 
@@ -32,5 +28,14 @@ public class PopupBuilder {
         } else {
             container.setVisible(true);
         }
+    }
+
+    public void showWarningPopup(StackPane container) {
+        showPopup(container);
+        /*container.visibleProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                removeBlurCallback.run();
+            }
+        });*/
     }
 }

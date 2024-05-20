@@ -35,8 +35,7 @@ public class CreateGameService {
     }
 
     //Check if game with same name exits already. If not, create new game.
-    public Observable<CreateGameResultDto> createGame(String name, GameSettings settings, String password){
-//        createGameController.hideErrorBox();
+    public Observable<CreateGameResultDto> createGame(String name, GameSettings settings, String password) {
         for (Game game1 : games) {
             if (game1.name().equals(name)){
                 isNameable = false;

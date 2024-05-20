@@ -11,7 +11,6 @@ import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -56,7 +55,7 @@ public class WarningScreenComponent extends VBox {
             result -> app.show("/login",
                         Map.of("info","deleted"))
             , error -> {
-                System.out.println(errorService.getStatus(error));
+                errorService.getStatus(error);
                 // ToDo: error handling and message
                 // where should it be shown?
         });

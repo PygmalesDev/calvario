@@ -65,7 +65,16 @@ public class ResponseConstants {
             409, "gamename.already.exists",
             429,"pirate.general.rate.limit.reached",
             -1, "put.in.username.password",
-            -2, "password.do.not.match");
+            -2, "passwords.do.not.match");
+
+    final public Map<Integer, String> respEditGame = Map.of(400, "invalid.password",
+            401, "validation.failed",
+            403, "attempting.to.change.someone.else.user",
+            404, "404",
+            409, "gamename.already.exists",
+            429,"pirate.general.rate.limit.reached",
+            -1, "put.in.username.password",
+            -2, "passwords.do.not.match");
 
 //    static final public Map<String, Map<Integer,String>> responses = Map.of("login", respLogin,
 //    "signup", respSignup);

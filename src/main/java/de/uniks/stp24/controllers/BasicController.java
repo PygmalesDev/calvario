@@ -30,18 +30,27 @@ public class BasicController {
     @Inject
     ResponseConstants responseConstants;
 
+    public Map<Integer,String> controlResponses;
+
 
     @Inject
     public BasicController() {}
 
-    public boolean checkIt(String text) {
-        return checkIfInputNotBlankOrEmpty(text);
+    // check if one or more string aren't empty or blank
+    public boolean checkIt(String ... texts) {
+        if (texts.length == 0) return false;
+        boolean cond = true;
+        for (String str : texts) {
+            cond &= checkIfInputNotBlankOrEmpty(str);
+        }
+        return cond;
     }
 
     private boolean checkIfInputNotBlankOrEmpty(String text) {
         return (!text.isBlank() && !text.isEmpty());
     }
 
+    // look for a text (info or error) in a respective dictionary
     public String getErrorInfoText(Map<Integer,String> map, int code) {
         return resources.getString(
                 new ErrorTextWriter(map,code).getErrorText()

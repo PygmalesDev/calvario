@@ -40,8 +40,6 @@ public class TestEditAcc extends ControllerTest {
     @Spy
     Subscriber subscriber;
     @Spy
-    PrefService prefService;
-    @Spy
     ObjectMapper objectMapper;
     @Spy
     ImageCache imageCache;

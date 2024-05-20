@@ -1,11 +1,9 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
 import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.SignUpService;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
@@ -13,9 +11,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
@@ -23,11 +21,10 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 @Title("REGISTER")
 @Controller
-public class SignUpController {
+public class SignUpController extends BasicController {
   
     @FXML
     ToggleButton languageToggleButton;
@@ -55,17 +52,11 @@ public class SignUpController {
     public String password;
 
     @Inject
-    App app;
-    @Inject
     SignUpService signUpService;
     @Inject
     Subscriber subscriber;
     @Inject
     UserApiService userApiService;
-
-    @Inject
-    @Resource
-    ResourceBundle resources;
 
     private BooleanBinding isLoginFieldEmpty;
     private BooleanBinding isPasswordFieldEmpty;
@@ -74,7 +65,11 @@ public class SignUpController {
     private BooleanBinding isPasswordTooShort;
 
     @Inject
-    public SignUpController() {
+    public SignUpController() {}
+
+    @OnInit
+    public void init(){
+        this.controlResponses = responseConstants.respSignup;
     }
 
     // Sets boolean bindings for text manipulations
@@ -98,45 +93,47 @@ public class SignUpController {
     }
 
     // Disables register button when input fields are empty or password inputs do not match
+    // modified passwords do not need to match
     @OnRender
     public void disableRegisterButton() {
         this.registerButton.disableProperty()
                 .bind(this.isLoginFieldEmpty
                         .or(this.isPasswordFieldEmpty)
                         .or(this.isRepeatPasswordEmpty)
-                        .or(this.passwordInputsMatch.not())
                         .or(this.isPasswordTooShort)
                 );
-    }
+        if (registerButton.isDisabled()) {
+            errorTextField.setText(resources.getString("info.register"));
+        }
 
-    // Shows an error message when input fields are empty or password inputs do not match
-    @OnRender
-    public void showErrorMessage() {
-        this.errorTextField.textProperty().bind(Bindings.createStringBinding(() -> {
-            if (this.isLoginFieldEmpty.get())
-                return "Please enter a username";
-            if (this.isPasswordFieldEmpty.get())
-                return "Please enter a password";
-            if (this.isPasswordTooShort.get())
-                return "Password must contain at least 8 characters";
-            if (this.isRepeatPasswordEmpty.get())
-                return "Please repeat the password";
-            if (!this.passwordInputsMatch.get())
-                return "Passwords do not match";
-            return "";
-        }, this.isLoginFieldEmpty, this.isPasswordFieldEmpty,
-                this.isRepeatPasswordEmpty, this.passwordInputsMatch,
-                this.isPasswordTooShort));
     }
 
     public void register() {
-        this.subscriber.subscribe(this.signUpService.register(this.getUsername(), this.getPassword()),
-                result -> this.app.show("/login",
-                        Map.of(
-                                "username", this.getUsername(),
-                                "password", this.getPassword(),
-                                "justRegistered", true
-                        )));
+        if (checkIt(this.usernameField.getText(),
+                this.passwordField.getText(),
+                this.repeatPasswordField.getText()) &&
+                this.passwordInputsMatch.getValue()) {
+                    this.errorTextField
+                            .setText(getErrorInfoText(this.controlResponses, 201));
+
+            this.subscriber.subscribe(this.signUpService.register(this.getUsername(), this.getPassword()),
+                    result -> this.app.show("/login",
+                            Map.of(
+                                    "username", this.getUsername(),
+                                    "password", this.getPassword(),
+                                    "info", "registered"
+                            )),
+                    error -> {
+                        int code = errorService.getStatus(error);
+                    // "generate"" the output in the english/german
+                    // due binding, the TextField was not accessible here -> modified
+                        errorTextField.setText(getErrorInfoText(this.controlResponses, code));
+                    });
+            } else {
+            int code = this.passwordInputsMatch.not().getValue() ? -2 : -1;
+            this.errorTextField.setStyle("-fx-fill: red;");
+            errorTextField.setText(getErrorInfoText(this.controlResponses, code));
+        }
     }
 
     // Returns user to the login screen
@@ -194,9 +191,9 @@ public class SignUpController {
         this.subscriber.dispose();
     }
 
-    public void setEn(ActionEvent actionEvent) {
+    public void setEn() {
     }
 
-    public void setDe(ActionEvent actionEvent) {
+    public void setDe() {
     }
 }

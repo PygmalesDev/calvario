@@ -20,7 +20,7 @@
             <Insets top="20.0" />
          </VBox.margin>
       </Text>
-      <Text fx:id="warningText" strokeType="OUTSIDE" strokeWidth="0.0" text="You are about to delete you're Account. Press Delete if you are sure about that. " textAlignment="CENTER" wrappingWidth="180.0">
+      <Text fx:id="warningText" strokeType="OUTSIDE" strokeWidth="0.0" text=" ... " textAlignment="CENTER" wrappingWidth="180.0">
          <font>
             <Font size="13.0" />
          </font>

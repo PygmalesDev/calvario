@@ -7,8 +7,10 @@ import okhttp3.ResponseBody;
 import retrofit2.HttpException;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.IOException;
 
+@Singleton
 public class ErrorService {
     @Inject
     ObjectMapper objectMapper;

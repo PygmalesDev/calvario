@@ -2,6 +2,7 @@ package de.uniks.stp24.game;
 
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.GameComponent;
+import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
@@ -26,6 +27,8 @@ import javax.inject.Provider;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class BrowseGameControllerTest extends ControllerTest {
@@ -33,8 +36,16 @@ public class BrowseGameControllerTest extends ControllerTest {
     EventListener eventListener;
     @Mock
     GamesApiService gamesApiService;
+
+    @Spy
+    WarningComponent warningComponent;
     @Spy
     Subscriber subscriber = new Subscriber();
+
+
+    Game game = new Game(null, null, "1", "Was geht", "testID2", false, 0,0, null);
+
+
     @Spy
     Provider<GameComponent> GameComponentProvider = new Provider(){
         @Override
@@ -46,12 +57,14 @@ public class BrowseGameControllerTest extends ControllerTest {
 
     @InjectMocks
     BrowseGameController browseGameController;
+
+
     final Subject<Event<Game>> subject = BehaviorSubject.create();
 
     @Override
     public void start(Stage stage)  throws Exception{
         Mockito.doReturn(Observable.just(List.of(
-                new Game(null, null, "1", "Was geht", "testID2", false, 0,0, null),
+                game,
                 new Game(null, null, "2", "rapapa", "testID", false, 0,0, null)
         ))).when(gamesApiService).findAll();
 
@@ -138,7 +151,7 @@ public class BrowseGameControllerTest extends ControllerTest {
      */
 
     @Test
-    void editGame(){
+    void editGameNoInputs(){
         //Set selected Game as one of the games u have created
         WaitForAsyncUtils.waitForFxEvents();
         browseGameController.browseGameService.setGame(browseGameController.gameList.getItems().getFirst());
@@ -175,4 +188,45 @@ public class BrowseGameControllerTest extends ControllerTest {
         assertEquals(stage.getTitle(), "Browse Game");
     }
 
+    @Test
+    void deleteGameCancel(){
+        doNothing().when(warningComponent).onCancel();
+        doNothing().when(warningComponent).setGameName();
+        WaitForAsyncUtils.waitForFxEvents();
+        browseGameController.browseGameService.setGame(browseGameController.gameList.getItems().get(0));
+        browseGameController.browseGameService.setTokenStorage();
+
+        browseGameController.gameList.getSelectionModel().clearAndSelect(0);
+        browseGameController.gameList.getFocusModel().focus(0);
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        clickOn("#del_game_b");
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        clickOn("#cancelButton");
+        verify(this.warningComponent).onCancel();
+    }
+
+    @Test
+    void deleteGameConfirm(){
+        doNothing().when(warningComponent).setGameName();
+        doNothing().when(warningComponent).deleteGame();
+        WaitForAsyncUtils.waitForFxEvents();
+        browseGameController.browseGameService.setGame(browseGameController.gameList.getItems().get(0));
+        browseGameController.browseGameService.setTokenStorage();
+
+        browseGameController.gameList.getSelectionModel().clearAndSelect(0);
+        browseGameController.gameList.getFocusModel().focus(0);
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        clickOn("#del_game_b");
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        clickOn("#confirmButton");
+        verify(this.warningComponent).deleteGame();
+    }
 }

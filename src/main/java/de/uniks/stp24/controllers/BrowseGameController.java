@@ -2,6 +2,7 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.GameComponent;
+import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.BrowseGameService;
@@ -9,14 +10,20 @@ import de.uniks.stp24.service.CreateGameService;
 import de.uniks.stp24.service.EditGameService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -47,11 +54,22 @@ BrowseGameController {
     public Button edit_game_b;
     @FXML
     public ListView<Game> gameList;
+    @FXML
+    public VBox browseGameVBoxButtons;
+    @FXML
+    public VBox browseGameVBoxList;
+
 
     @Inject
     App app;
+    @FXML
+    StackPane warningWindowContainer;
+    @SubComponent
+    @Inject
+    WarningComponent warningComponent;
     @Inject
     GamesApiService gamesApiService;
+
     @Inject
     Subscriber subscriber;
     @Inject
@@ -72,9 +90,12 @@ BrowseGameController {
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
 
+    private boolean blurStatus = false;
+
     //Load list of games as soon as BrowseGame-Screen is shown
     @OnInit
     void init() {
+
 
         editGameService = (editGameService == null) ? new EditGameService() : editGameService;
         createGameService = (createGameService == null) ? new CreateGameService() : createGameService;
@@ -150,5 +171,45 @@ BrowseGameController {
         if(browseGameService.getGame() != null) {
             app.show("/lobby", Map.of("gameid", browseGameService.getGame()._id()));
         }
+    }
+    public void deleteGame() {
+        if(browseGameService.checkMyGame()) {
+            setBlur();
+            warningComponent.setGameName();
+            showWarning();
+        }
+    }
+
+    void setBlur() {
+        BoxBlur blur = new BoxBlur(10, 10, 3);
+        browseGameVBoxList.setEffect(blur);
+        browseGameVBoxButtons.setEffect(blur);
+        browseGameVBoxButtons.setMouseTransparent(true);
+        browseGameVBoxList.setMouseTransparent(true);
+        blurStatus = true;
+    }
+
+    public void removeBlur(){
+        browseGameVBoxList.setEffect(null);
+        browseGameVBoxButtons.setEffect(null);
+        browseGameVBoxButtons.setMouseTransparent(false);
+        browseGameVBoxList.setMouseTransparent(false);
+
+        blurStatus = false;
+    }
+
+    private void showWarning(){
+        if (warningWindowContainer.getChildren().isEmpty()){
+            warningWindowContainer.getChildren().add(warningComponent);
+            StackPane.setAlignment(warningComponent, Pos.CENTER);
+        } else {
+            warningWindowContainer.setVisible(true);
+        }
+        warningWindowContainer.visibleProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                removeBlur();
+            }
+        });
+
     }
 }

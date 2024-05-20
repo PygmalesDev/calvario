@@ -53,6 +53,7 @@ public class EditGameController {
     @Resource
     ResourceBundle resources;
 
+
     @Inject
     public EditGameController(){
 
@@ -100,5 +101,9 @@ public class EditGameController {
 
     public void hideErrorBox() {
         errorBoxEdit.setVisible(false);
+    }
+
+    public void setEditGameService(EditGameService newEditGameService) {
+        editGameService = newEditGameService;
     }
 }

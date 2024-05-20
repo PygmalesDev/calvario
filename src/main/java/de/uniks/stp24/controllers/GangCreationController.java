@@ -185,7 +185,6 @@ public class GangCreationController {
         int index = gangsListView.getSelectionModel().getSelectedIndex();
         gangs.remove(index);
         Gang gang = getInputGang();
-        System.out.println(gang.toString());
         gangs.add(index, gang);
         saveLoadService.saveGang(gangs);
         showCreationPane();

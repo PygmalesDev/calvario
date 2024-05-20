@@ -179,7 +179,7 @@ BrowseGameController {
     public void deleteGame() {
         if(browseGameService.checkMyGame()) {
             setBlur();
-            warningComponent.setGameName();
+            warningComponent.setGameName(browseGameService.getGameName());
             showWarning();
         }
     }
@@ -203,9 +203,11 @@ BrowseGameController {
     }
 
     private void showWarning(){
-        PopupBuilder popupBuilder1 = new PopupBuilder("/de/uniks/stp24/component/Warning.fxml","Warning");
-        popupBuilder1.showPopup();
-        /*if (warningWindowContainer.getChildren().isEmpty()){
+        PopupBuilder popup = new PopupBuilder();
+        popup.showPopup(warningWindowContainer);
+        //PopupBuilder popupBuilder1 = new PopupBuilder("/de/uniks/stp24/component/Warning.fxml","Warning");
+        //popupBuilder1.showPopup();
+        if (warningWindowContainer.getChildren().isEmpty()){
             warningWindowContainer.getChildren().add(warningComponent);
             StackPane.setAlignment(warningComponent, Pos.CENTER);
         } else {
@@ -215,7 +217,8 @@ BrowseGameController {
             if (!newValue) {
                 removeBlur();
             }
-        });*/
+        });
+
 
     }
 }

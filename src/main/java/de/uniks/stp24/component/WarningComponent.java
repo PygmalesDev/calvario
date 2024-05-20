@@ -6,6 +6,7 @@ import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.EditAccService;
 import de.uniks.stp24.service.TokenStorage;
+import io.reactivex.rxjava3.functions.Consumer;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -39,37 +40,47 @@ public class WarningComponent extends VBox{
     @Inject
     BrowseGameService browseGameService;
     String gameNameText;
+    private Consumer<Void> onPopupClose;
+
 
     @Inject
     public WarningComponent() {
 
     }
-
-    public void setGameName(){
-        gameNameText = browseGameService.getGameName();
-        gameName.setText(gameNameText);
-    }
-
     @OnRender
-    public void setBackground(){
+    public void setBackground() {
         warningWindow.setStyle("-fx-background-color: white;");
     }
 
-    //Sets warning popup to invisible and deletes game after confirm was pressed
+    public void setGameName(String gameNameText) {
+        gameName.setText(gameNameText);
+    }
+
     public void deleteGame() {
         this.subscriber.subscribe(browseGameService.deleteGame());
-        getParent().setVisible(false);
+        setVisible(false);
+        if (onPopupClose != null) {
+            try {
+                onPopupClose.accept(null);
+            } catch (Throwable e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @OnDestroy
     public void destroy() {
-        if(subscriber != null) {
+        if (subscriber != null) {
             this.subscriber.dispose();
         }
     }
 
     public void onCancel() {
         getParent().setVisible(false);
+    }
+
+    public void setOnPopupClose(Consumer<Void> onPopupClose) {
+        this.onPopupClose = onPopupClose;
     }
 }
 

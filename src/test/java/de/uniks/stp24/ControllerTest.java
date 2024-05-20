@@ -1,6 +1,7 @@
 package de.uniks.stp24;
 
 import de.uniks.stp24.service.PrefService;
+import de.uniks.stp24.utils.ResponseConstants;
 import javafx.stage.Stage;
 import org.mockito.Spy;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -18,6 +19,8 @@ public class ControllerTest extends ApplicationTest {
     public final App app = new App();
     @Spy
     PrefService prefService;
+    @Spy
+    ResponseConstants responseConstants;
     @Spy
     ResourceBundle resources = ResourceBundle.getBundle("de/uniks/stp24/lang/main", Locale.ROOT);
 

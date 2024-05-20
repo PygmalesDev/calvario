@@ -16,9 +16,9 @@
 
 <AnchorPane prefHeight="680.0" prefWidth="1280.0" styleClass="cardBackground" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.GangCreationController">
    <children>
-      <Pane layoutX="30.0" layoutY="14.0" prefHeight="650.0" prefWidth="1220.0" styleClass="semiTransparent" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+      <Pane layoutX="14.0" layoutY="14.0" prefHeight="670.0" prefWidth="1200.0" styleClass="semiTransparent" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <VBox prefHeight="650.0" prefWidth="500.0" style="-fx-background-color: #999999;">
-            <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" prefHeight="150.0" prefWidth="500.0" style="-fx-border-color: BLACK;" styleClass="normalButton" text="GO BACK ">
+            <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" prefHeight="150.0" prefWidth="500.0" style="-fx-border-color: BLACK;" styleClass="bigButton" text="GO BACK ">
                <font>
                   <Font name="System Bold" size="24.0" />
                </font>
@@ -30,7 +30,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="showCreationButton" mnemonicParsing="false" onAction="#showCreationPane" prefHeight="150.0" prefWidth="500.0" style="-fx-border-color: BLACK;" styleClass="normalButton" text="NEW ISLAND">
+            <Button fx:id="showCreationButton" mnemonicParsing="false" onAction="#showCreationPane" prefHeight="150.0" prefWidth="500.0" style="-fx-border-color: BLACK;" styleClass="bigButton" text="NEW ISLAND">
                <VBox.margin>
                   <Insets top="1.0" />
                </VBox.margin>
@@ -59,7 +59,7 @@
                </VBox.margin>
             </ListView>
          </VBox>
-         <Pane fx:id="creationPane" layoutX="520.0" layoutY="14.0" prefHeight="625.0" prefWidth="700.0">
+         <Pane fx:id="creationPane" layoutX="520.0" layoutY="14.0" prefHeight="625.0" prefWidth="700.0" style="-fx-background-color: #FFE599;">
             <TextField fx:id="gangNameText" alignment="CENTER" layoutX="131.0" prefHeight="75.0" prefWidth="530.0" promptText="Buccaneers" styleClass="textFieldGang">
                <font>
                   <Font size="36.0" />
@@ -81,7 +81,7 @@
                      </font>
                   </Button>
                   <ToggleButton layoutX="157.0" layoutY="43.0" mnemonicParsing="false" onAction="#lockFlag" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
-                  <Text layoutX="91.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text" text="FLAG">
+                  <Text layoutX="91.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text" text="FLAG" underline="true">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -126,7 +126,7 @@
                      </font>
                   </Button>
                   <ToggleButton layoutX="157.0" layoutY="35.0" mnemonicParsing="false" onAction="#lockPortrait" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
-                  <Text layoutX="68.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text" text="PORTRAIT">
+                  <Text layoutX="68.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text" text="PORTRAIT" underline="true">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -170,8 +170,8 @@
                   </ImageView>
                </graphic>
             </Button>
-            <ToggleButton fx:id="lockNameButton" layoutX="638.0" mnemonicParsing="false" onAction="#lockName" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
-            <ToggleButton fx:id="lockDescriptionButton" layoutX="633.0" layoutY="276.0" mnemonicParsing="false" onAction="#lockDescription" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+            <ToggleButton fx:id="lockNameButton" layoutX="636.0" mnemonicParsing="false" onAction="#lockName" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+            <ToggleButton fx:id="lockDescriptionButton" layoutX="634.0" layoutY="276.0" mnemonicParsing="false" onAction="#lockDescription" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
             <Pane layoutX="478.0" layoutY="89.1015625">
                <children>
                   <Pane fx:id="colorField" layoutX="30.0" layoutY="28.8984375" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: RED;" />
@@ -186,7 +186,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Button>
-                  <Text layoutX="79.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text" text="COLOR">
+                  <Text layoutX="79.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Text" text="COLOR" underline="true">
                      <font>
                         <Font size="24.0" />
                      </font>

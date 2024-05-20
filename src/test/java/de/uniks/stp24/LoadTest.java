@@ -9,8 +9,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.testfx.util.WaitForAsyncUtils.waitFor;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
+import java.util.ResourceBundle;
+
 
 @ExtendWith(MockitoExtension.class)
 public class LoadTest extends ControllerTest {
@@ -18,6 +19,7 @@ public class LoadTest extends ControllerTest {
     LoadController loadController;
     @InjectMocks
     LoginController loginController;
+
 
     @Override
     public void start(Stage stage) throws Exception{
@@ -30,7 +32,7 @@ public class LoadTest extends ControllerTest {
         // Start:
         // Alice has started the game STPellar. She sees the Load screen.
         // She is prompted to press a key to continue.
-        assertEquals(stage.getTitle(), "Calvario");
+        assertEquals("Calvario", stage.getTitle());
 
         // Action:
         // Alice presses Enter
@@ -40,7 +42,7 @@ public class LoadTest extends ControllerTest {
 
         // Result:
         // Alice should now be in Login screen.
-        assertEquals(stage.getTitle(), "LOGIN  ");
+        assertEquals("LOGIN", stage.getTitle());
     }
 
 }

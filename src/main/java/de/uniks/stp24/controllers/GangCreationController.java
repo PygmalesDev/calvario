@@ -118,10 +118,10 @@ public class GangCreationController {
 
     @OnInit
     public void init() {
-        File flagsDir = new File("src/main/resources/de/uniks/stp24/assets/placeholders/Flags");
+        File flagsDir = new File("src/main/resources/de/uniks/stp24/assets/Flags");
         flagsList.addAll(Arrays.asList(Objects.requireNonNull(flagsDir.listFiles())));
 
-        File portraitsDir = new File("src/main/resources/de/uniks/stp24/assets/placeholders/Portraits");
+        File portraitsDir = new File("src/main/resources/de/uniks/stp24/assets/Portraits");
         Collections.addAll(portraitsList, Objects.requireNonNull(portraitsDir.listFiles()));
 
         colorsList.add("#DC143C");
@@ -230,8 +230,10 @@ public class GangCreationController {
     public void resetCreationPane() {
         flagImageIndex = 0;
         portraitImageIndex = 0;
+        colorIndex = 0;
         flagImage.setImage(new Image(flagsList.get(flagImageIndex).toURI().toString()));
         portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex).toURI().toString()));
+        colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
         gangNameText.setText("");
         gangDescriptionText.setText("");
     }

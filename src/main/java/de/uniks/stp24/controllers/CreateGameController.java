@@ -1,6 +1,5 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
 import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.CreateGameService;
@@ -10,19 +9,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.text.*;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 
 import javax.inject.Inject;
-import java.util.ResourceBundle;
 
 @Title("CreateGame")
 @Controller
-public class CreateGameController {
+public class CreateGameController extends BasicController {
     @FXML
     Text errorMessageText;
     @FXML
@@ -41,18 +38,12 @@ public class CreateGameController {
     Spinner<Integer> createMapSizeSpinner;
 
     @Inject
-    App app;
-    @Inject
     GamesApiService gamesApiService;
     @Inject
     BrowseGameController browseGameController;
-    @Inject
-    @Resource
-    ResourceBundle resources;
 
     @Inject
     public CreateGameController(){
-
     }
     @Inject
     CreateGameService createGameService;
@@ -62,6 +53,8 @@ public class CreateGameController {
         createGameService = (createGameService == null) ? new CreateGameService() : createGameService;
         createGameService.setCreateGameController(this);
         initializeSpinner();
+        errorMessageText.setText("");
+        errorBox.setVisible(true);
     }
 
     //Spinner for incrementing map size
@@ -72,9 +65,10 @@ public class CreateGameController {
     }
 
     public void createGame() {
-        if (!this.createNameTextField.getText().isEmpty() &&
-                !this.createPasswordTextField.getText().isEmpty() &&
-                this.createPasswordTextField.getText().equals(createRepeatPasswordTextField.getText()) &&
+        boolean pwdMatch = (this.createPasswordTextField.getText().equals(createRepeatPasswordTextField.getText()));
+        if (checkIt(createNameTextField.getText()) &&
+                checkIt(createPasswordTextField.getText()) &&
+                pwdMatch &&
                 this.createMapSizeSpinner.getValue() != null) {
             String gameName = this.createNameTextField.getText();
             String password = this.createPasswordTextField.getText();
@@ -93,8 +87,14 @@ public class CreateGameController {
                                 browseGameController.init();
                                 app.show(browseGameController);
                             });
+                            }, error -> {
+                            int code = errorService.getStatus(error);
+                            errorMessageText.setText(getErrorInfoText(responseConstants.respCreateGame,code));
                         });
             }
+        } else {
+            errorMessageText.setText(getErrorInfoText(responseConstants.respCreateGame,
+                !pwdMatch ? -2 : -1));
         }
     }
 
@@ -102,17 +102,8 @@ public class CreateGameController {
         app.show("/browseGames");
     }
 
-    public void showErrorBox() {
-        errorBox.setVisible(true);
+    public void showError(int code) {
+        errorMessageText.setText(getErrorInfoText(responseConstants.respCreateGame,code));
     }
 
-    public void showNameTakenError() {
-        errorMessageText.setText(resources.getString("name.exists.already"));
-        errorBox.setVisible(true);
-
-    }
-
-    public void hideErrorBox() {
-        errorBox.setVisible(false);
-    }
 }

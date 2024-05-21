@@ -105,13 +105,14 @@ BrowseGameController {
         createGameService = (createGameService == null) ? new CreateGameService() : createGameService;
         browseGameService = (browseGameService == null) ? new BrowseGameService() : browseGameService;
 
-        editGameService.setGamesList(games);
-        createGameService.setGamesList(games);
+
         browseGameService.resetSelectedGame();
 
         gamesApiService.findAll().subscribe(gameList -> {
             Platform.runLater(() -> {
                 games.setAll(gameList);
+                editGameService.setGamesList(games);
+                createGameService.setGamesList(games);
                 // Update the ListView after data is set
                 updateListView();
             });

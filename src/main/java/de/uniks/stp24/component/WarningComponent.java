@@ -5,6 +5,7 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.EditAccService;
+import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.functions.Consumer;
 import javafx.event.EventHandler;
@@ -39,6 +40,7 @@ public class WarningComponent extends VBox{
     Subscriber subscriber;
     @Inject
     BrowseGameService browseGameService;
+
     String gameNameText;
 
 
@@ -70,7 +72,7 @@ public class WarningComponent extends VBox{
     }
 
     public void onCancel() {
-        getParent().setVisible(false);
+        setVisible(false);
     }
 
 }

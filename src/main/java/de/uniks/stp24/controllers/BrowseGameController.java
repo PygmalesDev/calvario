@@ -20,6 +20,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Controller;
@@ -59,6 +60,8 @@ BrowseGameController {
     public VBox browseGameVBoxButtons;
     @FXML
     public VBox browseGameVBoxList;
+    @FXML
+    public HBox browseGameHBox;
 
 
     @Inject
@@ -91,6 +94,7 @@ BrowseGameController {
     @Inject
     @Resource
     ResourceBundle resources;
+    PopupBuilder popup = new PopupBuilder();
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
 
@@ -178,36 +182,35 @@ BrowseGameController {
     }
     public void deleteGame() {
         if(browseGameService.checkMyGame()) {
-            setBlur();
             warningComponent.setGameName();
-            showWarning();
+            popup.showPopup(warningWindowContainer, warningComponent);
+            popup.setBlur(browseGameVBoxList, browseGameVBoxButtons);
         }
     }
 
     void setBlur() {
-        BoxBlur blur = new BoxBlur(10, 10, 3);
+        /*BoxBlur blur = new BoxBlur(10, 10, 3);
         browseGameVBoxList.setEffect(blur);
         browseGameVBoxButtons.setEffect(blur);
         browseGameVBoxButtons.setMouseTransparent(true);
         browseGameVBoxList.setMouseTransparent(true);
-        blurStatus = true;
+        blurStatus = true;*/
     }
 
     public void removeBlur(){
-        browseGameVBoxList.setEffect(null);
+        /*browseGameVBoxList.setEffect(null);
         browseGameVBoxButtons.setEffect(null);
         browseGameVBoxButtons.setMouseTransparent(false);
         browseGameVBoxList.setMouseTransparent(false);
 
-        blurStatus = false;
+        blurStatus = false;*/
     }
 
     private void showWarning(){
-        //PopupBuilder popup = new PopupBuilder();
-        //popup.showPopup(warningWindowContainer);
+
         //PopupBuilder popupBuilder1 = new PopupBuilder("/de/uniks/stp24/component/Warning.fxml","Warning");
         //popupBuilder1.showPopup();
-        if (warningWindowContainer.getChildren().isEmpty()){
+        /*if (warningWindowContainer.getChildren().isEmpty()){
             warningWindowContainer.getChildren().add(warningComponent);
             StackPane.setAlignment(warningComponent, Pos.CENTER);
         } else {
@@ -217,7 +220,7 @@ BrowseGameController {
             if (!newValue) {
                 removeBlur();
             }
-        });
+        });*/
         //popupBuilder.showWarningPopup(warningWindowContainer, this::removeBlur);
     }
 }

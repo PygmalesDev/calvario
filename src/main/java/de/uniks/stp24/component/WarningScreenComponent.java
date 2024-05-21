@@ -9,12 +9,14 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.Map;
+
 
 @Component(view = "WarningScreen.fxml")
 public class WarningScreenComponent extends VBox {
@@ -34,7 +36,9 @@ public class WarningScreenComponent extends VBox {
     @Inject
     Subscriber subscriber;
     @Inject
+
     ErrorService errorService;
+
 
     @Inject
     public WarningScreenComponent() {

@@ -3,6 +3,9 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.service.LoginService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
@@ -42,6 +45,13 @@ public class LoginController extends BasicController {
     ToggleButton enToggleButton;
     @FXML
     ToggleButton deToggleButton;
+
+    @FXML
+    AnchorPane backgroundAnchorPane;
+    @FXML
+    VBox cardBackgroundVBox;
+    @FXML
+    Image calvarioLogoLogin;
 
     @Inject
     Subscriber subscriber;
@@ -181,5 +191,8 @@ public class LoginController extends BasicController {
     @OnDestroy
     public void destroy() {
         this.subscriber.dispose();
+        backgroundAnchorPane.setStyle("-fx-background-image: null");
+        cardBackgroundVBox.setStyle("-fx-background-image: null");
+        calvarioLogoLogin = null;
     }
 }

@@ -10,10 +10,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
+import org.fulib.fx.annotation.event.OnDestroy;
 
 import javax.inject.Inject;
 
@@ -36,6 +39,11 @@ public class EditGameController extends BasicController {
     TextField editRepeatPasswordTextField;
     @FXML
     Spinner<Integer> editMapSizeSpinner;
+
+    @FXML
+    AnchorPane backgroundAnchorPane;
+    @FXML
+    VBox cardBackgroundVBox;
 
     @Inject
     GamesApiService gamesApiService;
@@ -98,5 +106,11 @@ public class EditGameController extends BasicController {
 
     public void setEditGameService(EditGameService newEditGameService) {
         editGameService = newEditGameService;
+    }
+
+    @OnDestroy
+    public void destroy(){
+        backgroundAnchorPane.setStyle("-fx-background-image: null");
+        cardBackgroundVBox.setStyle("-fx-background-image: null");
     }
 }

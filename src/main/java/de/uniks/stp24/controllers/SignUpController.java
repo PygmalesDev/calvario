@@ -1,7 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.rest.UserApiService;
-import de.uniks.stp24.service.SignUpService;
+import de.uniks.stp24.service.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
@@ -9,6 +9,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Title;
@@ -19,6 +22,8 @@ import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.swing.text.html.ImageView;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -29,6 +34,10 @@ public class SignUpController extends BasicController {
     @FXML
     ToggleButton languageToggleButton;
 
+    @FXML
+    ToggleButton enToggleButton;
+    @FXML
+    ToggleButton deToggleButton;;
     @FXML
     TextField usernameField;
     @FXML
@@ -45,6 +54,13 @@ public class SignUpController extends BasicController {
     TextField showRepeatPasswordText;
     @FXML
     ToggleButton showPasswordToggleButton;
+
+    @FXML
+    AnchorPane backgroundAnchorPane;
+    @FXML
+    VBox cardBackgroundVBox;
+    @FXML
+    Image calvarioLogoRegister;
 
     @Param("username")
     public String username;
@@ -189,11 +205,26 @@ public class SignUpController extends BasicController {
     @OnDestroy
     public void destroy() {
         this.subscriber.dispose();
+        backgroundAnchorPane.setStyle("-fx-background-image: null");
+        cardBackgroundVBox.setStyle("-fx-background-image: null");
+        calvarioLogoRegister = null;
     }
 
+    @FXML
     public void setEn() {
+        setLanguage(Locale.ENGLISH);
+        enToggleButton.setSelected(true);
+        deToggleButton.setSelected(false);
     }
 
     public void setDe() {
+        setLanguage(Locale.GERMAN);
+        enToggleButton.setSelected(false);
+        deToggleButton.setSelected(true);
+    }
+
+    public void setLanguage(Locale locale) {
+        resources = languageService.setLocale(locale);
+        app.refresh();
     }
 }

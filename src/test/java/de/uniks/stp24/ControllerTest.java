@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 public class ControllerTest extends ApplicationTest {
 
     @Spy
-    public final App app = new App();
+    public App app = new App();
     @Spy
     protected PrefService prefService;
     @Spy
@@ -36,5 +36,13 @@ public class ControllerTest extends ApplicationTest {
         this.prefService.removeRefreshToken();
         prefService.setLocale(Locale.ENGLISH);
         app.start(stage);
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        app.stop();
+        app = null;
+        stage = null;
     }
 }

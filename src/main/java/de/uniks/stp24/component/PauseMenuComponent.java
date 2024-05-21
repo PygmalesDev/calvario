@@ -6,8 +6,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 
 import javax.inject.Inject;
+import java.util.ResourceBundle;
 
 @Component(view = "Pause.fxml")
 public class PauseMenuComponent extends VBox {
@@ -25,6 +27,10 @@ public class PauseMenuComponent extends VBox {
 
     @Inject
     InGameService inGameService;
+
+    @Inject
+    @Resource
+    ResourceBundle resource;
 
 
     @Inject

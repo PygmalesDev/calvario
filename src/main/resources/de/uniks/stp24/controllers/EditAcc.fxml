@@ -31,7 +31,7 @@
                      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="550.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                         <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="170.0" style="-fx-border-color: Black;" styleClass="backgroundLightYellow">
                            <VBox.margin>
-                              <Insets top="20.0" />
+                              <Insets top="15.0" />
                            </VBox.margin>
                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%wanted" textAlignment="CENTER" wrappingWidth="108.92333984375">
                               <font>
@@ -52,7 +52,7 @@
                               </children>
                            </VBox>
                         </VBox>
-                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="15.0">
+                        <HBox alignment="CENTER" prefHeight="35.0" prefWidth="200.0" spacing="15.0">
                            <Button fx:id="saveChangesButton" mnemonicParsing="false" onAction="#saveChanges" prefHeight="30.0" prefWidth="150.0" styleClass="deleteAndSaveButton" text="%save" visible="false">
                               <font>
                                  <Font size="15.0" />
@@ -79,12 +79,12 @@
                            </Button>
                         </HBox>
                         <VBox alignment="BOTTOM_CENTER" maxWidth="-Infinity" prefHeight="150.0" prefWidth="350.0">
-                           <TextField fx:id="usernameInput" alignment="CENTER" disable="true" promptText="%username" styleClass="inputField">
+                           <TextField fx:id="usernameInput" alignment="CENTER" editable="false" promptText="%username" styleClass="inputField">
                               <font>
                                  <Font size="15.0" />
                               </font>
                            </TextField>
-                           <TextField fx:id="passwordInput" alignment="CENTER" disable="true" promptText="%password" styleClass="inputField">
+                           <TextField fx:id="passwordInput" alignment="CENTER" editable="false" promptText="%password" styleClass="inputField">
                               <font>
                                  <Font size="15.0" />
                               </font>

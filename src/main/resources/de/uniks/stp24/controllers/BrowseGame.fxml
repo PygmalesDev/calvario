@@ -37,7 +37,7 @@
                               </graphic></Button>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="80.0" prefWidth="230.0">
-                           <Button fx:id="new_game_b" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#newGame" styleClass="smallActionButton" text="%new.game">
+                           <Button fx:id="new_game_b" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#newGame" styleClass="smallActionButton" text="%new">
                               <graphic>
                                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -47,7 +47,7 @@
                               </graphic></Button>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="80.0" prefWidth="230.0">
-                           <Button fx:id="edit_game_b" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#editGame" styleClass="smallActionButton" text="%edit.game">
+                           <Button fx:id="edit_game_b" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#editGame" styleClass="smallActionButton" text="%edit">
                               <graphic>
                                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                     <image>

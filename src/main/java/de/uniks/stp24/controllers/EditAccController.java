@@ -134,8 +134,8 @@ public class EditAccController extends BasicController {
     public void changeUserInfo() {
         // If the changeUserButton is selected, username and password can be edited
         if(changeUserInfoButton.isSelected()){
-            passwordInput.setDisable(false);
-            usernameInput.setDisable(false);
+            passwordInput.setEditable(true);
+            usernameInput.setEditable(true);
             cancelChangesButton.setVisible(true);
             saveChangesButton.setVisible(true);
             changeUserInfoButton.setStyle("-fx-text-fill: #2B78E4");
@@ -187,8 +187,8 @@ public class EditAccController extends BasicController {
         // Reset inputs and changeUserInfoButton
         usernameInput.setText(username);
         passwordInput.setText("");
-        usernameInput.setDisable(true);
-        passwordInput.setDisable(true);
+        usernameInput.setEditable(false);
+        passwordInput.setEditable(false);
         cancelChangesButton.setVisible(false);
         saveChangesButton.setVisible(false);
         changeUserInfoButton.setDisable(false);

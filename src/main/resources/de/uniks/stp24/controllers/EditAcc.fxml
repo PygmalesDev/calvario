@@ -29,13 +29,13 @@
                <HBox fx:id="editAccHBox" alignment="CENTER" prefHeight="570.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <AnchorPane prefHeight="570.0" prefWidth="500.0">
                      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="550.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="170.0" style="-fx-border-color: Black;" styleClass="backgroundLightYellow">
+                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: Black;" styleClass="backgroundLightYellow">
                            <VBox.margin>
                               <Insets top="15.0" />
                            </VBox.margin>
-                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%wanted" textAlignment="CENTER" wrappingWidth="108.92333984375">
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="capitals" text="%wanted" textAlignment="CENTER" wrappingWidth="190.92333984375">
                               <font>
-                                 <Font name="System Bold" size="25.0" />
+                                 <Font name="System Bold" size="24.0" />
                               </font>
                            </Text>
                            <Line endX="100.0" startX="-100.0" strokeWidth="2.0">

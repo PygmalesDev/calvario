@@ -2,14 +2,16 @@
 /********* General ***********************************************************************/
 @font-face{
     font-family: 'PT Serif';
-    src: url("/de/uniks/stp24/assets/fonts/PTSerif-Bold.ttf")
+    src: url('/de/uniks/stp24/assets/fonts/PTSerif-Bold.ttf');
 }
 
 
 Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
+    -fx-font-family: "PT Serif";
     -fx-font-size: 18;
     -fx-font-weight: bold;
 }
+
 
 .borderedText {
     -fx-border-color: #000000;
@@ -17,7 +19,8 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 }
 
 .capitals {
-    -fx-font-size: 30;
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 24;
     -fx-font-weight: bold;
 }
 
@@ -62,6 +65,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 /***************** Buttons *********************************************************/
 
 .languageButton:selected {
+    -fx-font-family: "PT Serif";
     -fx-font-size: 24;
     -fx-font-weight: bold;
     -fx-background-color: #BF9000;
@@ -69,6 +73,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 }
 
 .languageButton {
+    -fx-font-family: "PT Serif";
     -fx-font-size: 24;
     -fx-font-weight: bold;
     -fx-background-color: #FFD966;
@@ -76,12 +81,13 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 }
 
 .deleteAndSaveButton{
+    -fx-font-family: "PT Serif";
     -fx-font-size: 20;
     -fx-font-weight: bold;
     -fx-text-fill: White;
     -fx-background-color: Black;
     -fx-alignment: center;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.7), 2, 0, 5, 5);
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.75), 2, 0, 7, 7);
     -fx-pref-width: 180px;
     -fx-pref-height: 35px;
 }
@@ -136,6 +142,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 }
 
 .actionButton{
+    -fx-font-family: "PT Serif";
     -fx-font-size: 22;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
@@ -150,6 +157,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 }
 
 .smallActionButton{
+    -fx-font-family: "PT Serif";
     -fx-font-size: 16;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
@@ -177,6 +185,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 }
 
 .rememberMe {
+    -fx-font-family: "PT Serif";
     -fx-font-size: 24;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
@@ -191,6 +200,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 
 
 .backButton{
+    -fx-font-family: "PT Serif";
     -fx-font-size: 22;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
@@ -205,6 +215,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 }
 
 .licensesButton{
+    -fx-font-family: "PT Serif";
     -fx-font-size: 24;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
@@ -226,6 +237,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 }
 
 .inputField {
+    -fx-font-family: "PT Serif";
     -fx-font-size: 22;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
@@ -261,6 +273,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 /********************** Empire Screen ********************************************************/
 
 .gangNameLabel {
+    -fx-font-family: "PT Serif";
     -fx-font-size: 24;
     -fx-font-weight: bold;
 }
@@ -270,21 +283,25 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 }
 
 .textFieldGang {
+    -fx-font-family: "PT Serif";
     -fx-font-size: 32;
     -fx-font-weight: bold;
 }
 
 .textDeleteGang {
+    -fx-font-family: "PT Serif";
     -fx-font-size: 24;
 }
 
 .bigButton {
+    -fx-font-family: "PT Serif";
     -fx-font-size: 24;
     -fx-font-weight: bold;
     -fx-background-color: #FFD966;
 }
 
 .normalButton {
+    -fx-font-family: "PT Serif";
     -fx-font-size: 24;
     -fx-font-weight: bold;
     -fx-background-color: #FFD966;

@@ -100,4 +100,55 @@
     "saturation" : 0.6123292137748124,
     "brightness" : 0.6048108339309692
   }
+}, {
+  "name" : "Dead Heroes",
+  "flag" : "file:/C:/Users/hendr/Documents/Fork/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Flags/f8.jpg",
+  "flagIndex" : 7,
+  "portrait" : "file:/C:/Users/hendr/Documents/Fork/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Portraits/p3.jpg",
+  "portraitIndex" : 3,
+  "description" : "Infamous plunderers who strike fear into the hearts of sailors, amassing wealth through piracy and intimidation",
+  "color" : {
+    "red" : 0.36318689584732056,
+    "green" : 0.1794939488172531,
+    "blue" : 0.03555302321910858,
+    "opacity" : 1.0,
+    "opaque" : true,
+    "hue" : 26.36008135120093,
+    "saturation" : 0.902108188302987,
+    "brightness" : 0.36318689584732056
+  }
+}, {
+  "name" : "Buccaneers",
+  "flag" : "file:/C:/Users/hendr/Documents/Fork/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Flags/f0.png",
+  "flagIndex" : 0,
+  "portrait" : "file:/C:/Users/hendr/Documents/Fork/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Portraits/p0.jpg",
+  "portraitIndex" : 0,
+  "description" : "",
+  "color" : {
+    "red" : 0.0,
+    "green" : 0.0,
+    "blue" : 0.0,
+    "opacity" : 1.0,
+    "opaque" : true,
+    "hue" : 0.0,
+    "saturation" : 0.0,
+    "brightness" : 0.0
+  }
+}, {
+  "name" : "Buccaneers",
+  "flag" : "file:/C:/Users/hendr/Documents/Fork/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Flags/f0.png",
+  "flagIndex" : 0,
+  "portrait" : "file:/C:/Users/hendr/Documents/Fork/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Portraits/p0.jpg",
+  "portraitIndex" : 0,
+  "description" : "",
+  "color" : {
+    "red" : 0.0,
+    "green" : 0.0,
+    "blue" : 0.0,
+    "opacity" : 1.0,
+    "opaque" : true,
+    "hue" : 0.0,
+    "saturation" : 0.0,
+    "brightness" : 0.0
+  }
 } ]

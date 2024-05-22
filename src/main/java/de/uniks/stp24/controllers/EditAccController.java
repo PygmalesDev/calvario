@@ -84,6 +84,8 @@ public class EditAccController extends BasicController {
 
     private BooleanBinding editAccIsNotSelected;
 
+    PopupBuilder popup = new PopupBuilder();
+
 
 
     @Inject
@@ -176,8 +178,8 @@ public class EditAccController extends BasicController {
 
     public void deleteUser() {
         // warning screen opens
-        popupBuilder.showPopup(warningScreenContainer, warningScreen);
-        popupBuilder.setBlur(editAccHBox, null);
+        popup.showPopup(warningScreenContainer, warningScreen);
+        popup.setBlur(editAccHBox, null);
     }
 
     public void goBack() {

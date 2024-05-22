@@ -219,6 +219,7 @@ public class EditAccController extends BasicController {
         // warning screen opens
         popup.showPopup(warningScreenContainer, warningScreen);
         popup.setBlur(editAccHBox, null);
+        warningScreen.setWarning(resources.getString("warning.deleteAccount"));
     }
 
     public void goBack() {

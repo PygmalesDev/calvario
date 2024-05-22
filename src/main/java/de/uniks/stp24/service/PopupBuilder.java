@@ -10,9 +10,6 @@ import javafx.scene.layout.StackPane;
 import javax.inject.Inject;
 
 public class PopupBuilder {
-    @Inject
-    App app;
-
     Node screenOneToBlur;
     Node screenTwoToBlur;
 

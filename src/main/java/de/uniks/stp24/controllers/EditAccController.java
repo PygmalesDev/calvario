@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -55,6 +56,10 @@ public class EditAccController extends BasicController {
     StackPane warningScreenContainer;
     @FXML
     HBox editAccHBox;
+    @FXML
+    ImageView editIconImageView;
+    @FXML
+    ImageView deleteIconImageView;
 
     @FXML
     AnchorPane backgroundAnchorPane;
@@ -81,6 +86,11 @@ public class EditAccController extends BasicController {
 
     private BooleanBinding warningIsInvisible;
     private BooleanBinding editAccIsNotSelected;
+    private Image editIconBlueImage = new Image(getClass().getResource("/de/uniks/stp24/icons/editBlue.png").toExternalForm());
+    private Image editIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/editBlack.png").toExternalForm());
+    private Image deleteIconRedImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteRed.png").toExternalForm());
+    private Image deleteIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteBlack.png").toExternalForm());
+
 
     @Inject
     public EditAccController() {
@@ -128,6 +138,8 @@ public class EditAccController extends BasicController {
             usernameInput.setDisable(false);
             cancelChangesButton.setVisible(true);
             saveChangesButton.setVisible(true);
+            changeUserInfoButton.setStyle("-fx-text-fill: #2B78E4");
+            editIconImageView.setImage(editIconBlueImage);
         }else{
             resetEditing(tokenStorage.getName());
         }
@@ -180,6 +192,8 @@ public class EditAccController extends BasicController {
         cancelChangesButton.setVisible(false);
         saveChangesButton.setVisible(false);
         changeUserInfoButton.setDisable(false);
+        editIconImageView.setImage(editIconBlackImage);
+        changeUserInfoButton.setStyle("-fx-text-fill: Black");
     }
 
     public void cancelChanges() {
@@ -187,6 +201,21 @@ public class EditAccController extends BasicController {
         this.errorLabelEditAcc.setText("");
         changeUserInfoButton.setSelected(false);
         resetEditing(tokenStorage.getName());
+    }
+
+    @OnRender
+    public void changeDeleteButtonView(){
+        this.deleteUserButton.styleProperty().bind(Bindings.createStringBinding(()->{
+            if(warningIsInvisible.get())
+                return "-fx-text-fill: Black";
+            return "-fx-text-fill: #CF2A27";
+        },this.warningIsInvisible));
+
+        this.deleteIconImageView.imageProperty().bind(Bindings.createObjectBinding(()->{
+            if(warningIsInvisible.get())
+                return deleteIconBlackImage;
+            return deleteIconRedImage;
+        },this.warningIsInvisible));
     }
 
     public void deleteUser() {

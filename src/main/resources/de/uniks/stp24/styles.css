@@ -3,7 +3,7 @@
 
 Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-font-family: "PT Sarif";
-    -fx-font-size: 16;
+    -fx-font-size: 18;
     -fx-font-weight: bold;
 }
 
@@ -37,12 +37,21 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 .backgroundLightYellow {
     -fx-background-color: #FFD966;
     -fx-border-color: #000000;
-    -fx-border-width: 1;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 0, 0, 10, 5);
+    -fx-grid-lines-visible: true;
+    -fx-horizontal-grid-lines-visible: true;
+    -fx-border-width: 2;
 }
 
 .menuLogic {
     -fx-background-color: #999999;
     -fx-border-color: #000000
+}
+
+.image-view-wrapper{
+    -fx-border-color: black;
+    -fx-border-style: solid;
+    -fx-border-width: 2;
 }
 
 /************************************************************************************/
@@ -64,7 +73,15 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-text-fill: BLACK;
 }
 
-
+.deleteAndSaveButton{
+    -fx-font-family: "PT Sarif";
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-text-fill: White;
+    -fx-background-color: Black;
+    -fx-alignment: left-center;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.7), 2, 0, 5, 5);
+}
 
 
 
@@ -117,11 +134,11 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 
 .actionButton{
     -fx-font-family: "PT Sarif";
-    -fx-font-size: 24;
+    -fx-font-size: 22;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
-    -fx-background-size: inherit;
+    -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 0;
@@ -132,15 +149,15 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 
 .smallActionButton{
     -fx-font-family: "PT Sarif";
-    -fx-font-size: 15;
+    -fx-font-size: 16;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-alignment: center-left;
-    -fx-padding: 0 0 0 20;
+    -fx-alignment: center;
+    -fx-padding: 0 0 0 0;
     -fx-border-width: 0;
     -fx-pref-width: 230px;
     -fx-pref-height: 75px;
@@ -149,7 +166,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 .eyeButton{
     -fx-background-image: url("/de/uniks/stp24/icons/eye.png");
     -fx-background-color: transparent;
-    -fx-background-size: inherit;
+    -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 0;
@@ -175,11 +192,11 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 
 .backButton{
     -fx-font-family: "PT Sarif";
-    -fx-font-size: 24;
+    -fx-font-size: 22;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/backButton.png");
-    -fx-background-size: inherit;
+    -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 0;
@@ -194,7 +211,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-font-weight: bold;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/licensesButton.png");
-    -fx-background-size: inherit;
+    -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 0;
@@ -216,7 +233,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-font-weight: bold;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/fields/textField.png");
-    -fx-background-size: inherit;
+    -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 0;
@@ -234,6 +251,10 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 .browseGameList .list-cell:selected{
     -fx-text-fill: #FFFFFF;
     -fx-background-color: #CF2A27;
+}
+
+.editButton:selected{
+    -fx-image: url("/de/uniks/stp24/icons/editBlue.png");
 }
 
 

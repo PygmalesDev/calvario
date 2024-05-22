@@ -132,7 +132,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 
 .smallActionButton{
     -fx-font-family: "PT Sarif";
-    -fx-font-size: 16;
+    -fx-font-size: 15;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
@@ -142,7 +142,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-alignment: center-left;
     -fx-padding: 0 0 0 20;
     -fx-border-width: 0;
-    -fx-pref-width: 220px;
+    -fx-pref-width: 230px;
     -fx-pref-height: 75px;
 }
 

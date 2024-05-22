@@ -1,8 +1,8 @@
 package de.uniks.stp24.controllers;
 
-
 import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.service.LoginService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -18,8 +18,6 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
-import retrofit2.HttpException;
-
 
 import javax.inject.Inject;
 import java.util.Locale;
@@ -65,6 +63,9 @@ public class LoginController extends BasicController {
     Subscriber subscriber;
     @Inject
     LoginService loginService;
+    @SubComponent
+    @Inject
+    BubbleComponent bubbleComponent;
 
     @Param("info")
     public String info;
@@ -73,11 +74,6 @@ public class LoginController extends BasicController {
     @Param("password")
     public String password;
 
-    // not in main
-//    // Todo: can be done with "info"
-//    @Param("justRegistered")
-//    public boolean justRegistered;
-
     @Inject
     public LoginController() {
     }
@@ -85,6 +81,18 @@ public class LoginController extends BasicController {
     @OnInit
     public void init() {
         this.controlResponses = responseConstants.respLogin;
+    }
+
+    @OnRender
+    public void addSpeechBubble() {
+        captainContainer.getChildren().add(bubbleComponent);
+        Platform.runLater(() -> {
+            bubbleComponent.addChildren(errorLabel);
+            bubbleComponent.setCaptainText(resources.getString("pirate.login.welcome"));
+            if (!errorLabel.getText().equals("")) {
+                bubbleComponent.setCaptainText("");
+            }
+        });
     }
 
     @OnRender
@@ -116,11 +124,6 @@ public class LoginController extends BasicController {
         }
     }
 
-    // not in main
-//    private boolean checkIfInputNotBlankOrEmpty(String text) {
-//        return (!text.isBlank() && !text.isEmpty());
-//    }
-
     public void login() {
         String username = this.usernameInput.getText();
         String password = this.passwordInput.getText();
@@ -130,7 +133,8 @@ public class LoginController extends BasicController {
 
             loginButton.setDisable(true);
             signupButton.setDisable(true);
-            this.errorLabel.setStyle("-fx-fill: black;");
+            bubbleComponent.setErrorMode(false);
+            bubbleComponent.setCaptainText("");
             this.errorLabel.setText(getErrorInfoText(responseConstants.respLogin,201));
 
             subscriber.subscribe(loginService.login(username, password, rememberMe),
@@ -138,19 +142,18 @@ public class LoginController extends BasicController {
                     // in case of server's response => error
                     // handle with error response
                     , error -> {
-                        this.errorLabel.setStyle("-fx-fill: red;");
                         // find the code in the error response
                         int code = errorService.getStatus(error);
                         // "generate"" the output in the english/german
-                        this.errorLabel
-                                .setText(getErrorInfoText(this.controlResponses,code));
+                        this.errorLabel.setText(getErrorInfoText(this.controlResponses,code));
                         enableButtons();
+                        bubbleComponent.setErrorMode(true);
                     });
         } else {
             // 1 is used for default in switch
-            this.errorLabel.setStyle("-fx-fill: red;");
             this.errorLabel.setText(getErrorInfoText(this.controlResponses,-1));
             enableButtons();
+            bubbleComponent.setErrorMode(true);
         }
     }
 
@@ -201,24 +204,6 @@ public class LoginController extends BasicController {
     public void showLicenses() {
         app.show("/licenses");
     }
-
-
-    // not in main
-//    // if response from server => error, choose a text depending on code
-//    // maybe it should be considered to write a class for this
-//    private void writeText(int code) {
-//        String info;
-//        switch (code) {
-//            case 100 -> {
-//                info = resources.getString("logging.in");
-//            }
-//            case 400 -> info = resources.getString("validation.failed");
-//            case 401 -> info = resources.getString("invalid.username.or.password");
-//            default ->  info = resources.getString("put.in.username.password");
-//        }
-//        this.errorLabel.setText(info);
-//    }
-
 
     public void enableButtons(){
         loginButton.setDisable(false);

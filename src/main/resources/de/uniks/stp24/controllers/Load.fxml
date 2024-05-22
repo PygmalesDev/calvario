@@ -9,26 +9,26 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#mouseClicked" prefHeight="1050.0" prefWidth="1400.0" style="-fx-background-color: WHITE;" styleClass="background" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.LoadController">
+<HBox fx:id="backgroundHBox" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#mouseClicked" prefHeight="1050.0" prefWidth="1400.0" style="-fx-background-color: WHITE;" styleClass="background" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.LoadController">
    <VBox alignment="CENTER" prefHeight="1050.0" prefWidth="1153.0">
-      <ImageView fitHeight="147.0" fitWidth="425.0" pickOnBounds="true" preserveRatio="true">
-         <Image url="@../assets/logos/Calvario.png" />
+      <ImageView  fitHeight="147.0" fitWidth="425.0" pickOnBounds="true" preserveRatio="true">
+         <Image fx:id="calvarioLogoLoad" url="@../assets/logos/Calvario.png" />
          <VBox.margin>
             <Insets top="200.0" />
          </VBox.margin>
       </ImageView>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="700.0">
-         <ImageView fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../assets/logos/SpiderbyteLogoTransparent.png" />
+         <ImageView  fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+            <Image fx:id="spiderbyteLogoLoad" url="@../assets/logos/SpiderbyteLogoTransparent.png" />
          </ImageView>
-         <ImageView fitHeight="130.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@../assets/logos/DeadBirdsLogoTransparent.png" />
+         <ImageView  fitHeight="130.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true">
+            <Image fx:id="deadBirdsLogo" url="@../assets/logos/DeadBirdsLogoTransparent.png" />
             <HBox.margin>
                <Insets bottom="10.0" />
             </HBox.margin>
          </ImageView>
       </HBox>
-      <Label alignment="CENTER" onKeyPressed="#showLoginScreen" prefHeight="53.0" prefWidth="1105.0" style="-fx-text-fill: BLACK;" styleClass="Text" text="%press.any.key">
+      <Label alignment="CENTER" onKeyPressed="#showLoginScreen" prefHeight="53.0" prefWidth="1105.0" style="-fx-text-fill: BLACK;" styleClass="capitals" text="%press.any.key">
          <font>
             <Font size="36.0" />
          </font>

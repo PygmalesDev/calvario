@@ -45,8 +45,6 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-background-color: #FFD966;
     -fx-border-color: #000000;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 0, 0, 10, 5);
-    -fx-grid-lines-visible: true;
-    -fx-horizontal-grid-lines-visible: true;
     -fx-border-width: 2;
 }
 
@@ -273,10 +271,77 @@ ToggleButton:hover{
     -fx-background-color: #CF2A27;
 }
 
-.editButton:selected{
-    -fx-image: url("/de/uniks/stp24/icons/editBlue.png");
+.browseGameList .scroll-bar:vertical{
+    -fx-background-color: #ffffff;
 }
 
+.browseGameList .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color: #030303;
+}
+
+.browseGameList .increment-button .increment-arrow, scroll-bar .decrement-button .decrement-arrow{
+    -fx-background-color: #030303;
+}
+
+
+/**********************************************************************************************/
+/********************** Spinner ********************************************************/
+.spinner{
+    -fx-padding: 0 10 0 10;
+    -fx-background-color: #FFD966;
+    -fx-border-color: #000000;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 0, 0, 8, 8);
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-pref-width: 350px;
+    -fx-pref-height: 45px;
+}
+
+.spinner .text-field{
+    -fx-font-family: "PT Serif";
+    -fx-background-color: #FFD966;
+    -fx-alignment: center;
+    -fx-font-size: 16px;
+    -fx-border-radius: 10;
+}
+
+.spinner .increment-arrow,
+.spinner .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+    -fx-pref-width: 10px;
+    -fx-pref-height: 10px;
+}
+
+.spinner .increment-arrow-button{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/up.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 0;
+}
+
+.spinner .decrement-arrow-button{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/down.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+
+.textFieldGame{
+    -fx-background-color: #FFD966;
+    -fx-border-color: #000000;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 0, 0, 8, 8);
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-pref-width: 350px;
+    -fx-pref-height: 45px;
+}
 
 
 

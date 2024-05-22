@@ -6,7 +6,7 @@
 }
 
 
-Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
+Text, TextField, PasswordField, Button, CheckBox, ToggleButton{
     -fx-font-family: "PT Serif";
     -fx-font-size: 18;
     -fx-font-weight: bold;
@@ -281,6 +281,24 @@ ToggleButton:hover{
 
 .browseGameList .increment-button .increment-arrow, scroll-bar .decrement-button .decrement-arrow{
     -fx-background-color: #030303;
+}
+
+.browseGameList .scroll-bar .spinner .increment-arrow-button{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/up.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 0;
+}
+
+.browseGameList .scroll-bar .spinner .decrement-arrow-button{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/down.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 0;
 }
 
 

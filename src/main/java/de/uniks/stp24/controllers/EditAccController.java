@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.service.EditAccService;
 import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -11,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -78,6 +78,8 @@ public class EditAccController extends BasicController {
     @Inject
     ObjectMapper objectMapper;
     @Inject
+    PopupBuilder popupBuilder;
+    @Inject
     @Resource
     ResourceBundle resources;
 
@@ -85,12 +87,15 @@ public class EditAccController extends BasicController {
     @Inject
     WarningScreenComponent warningScreen;
 
-    private BooleanBinding warningIsInvisible;
     private BooleanBinding editAccIsNotSelected;
     public Image editIconBlueImage;
     public Image editIconBlackImage;
     public Image deleteIconRedImage;
     public Image deleteIconBlackImage;
+
+
+    PopupBuilder popup = new PopupBuilder();
+
 
 
     @Inject
@@ -117,26 +122,7 @@ public class EditAccController extends BasicController {
 
     @OnRender
     public void createBindings(){
-        this.warningIsInvisible = this.warningScreenContainer.visibleProperty().not();
         this.editAccIsNotSelected = this.changeUserInfoButton.selectedProperty().not();
-    }
-
-    @OnRender
-    public void setBlurEffect() {
-        // blurs the edit account screen when the warning screen is visible
-        this.editAccHBox.effectProperty().bind(Bindings.createObjectBinding(()->{
-            if(warningIsInvisible.get())
-                return null;
-            return new BoxBlur();
-        },this.warningIsInvisible));
-    }
-
-    @OnRender
-    public void setWarningScreen(){
-        // warning screen component is set but not visible
-        warningScreenContainer.getChildren().add(warningScreen);
-        warningScreen.setWarning(resources.getString("warning.deleteAccount"));
-        warningScreenContainer.setVisible(false);
     }
 
     @OnRender
@@ -212,25 +198,11 @@ public class EditAccController extends BasicController {
         resetEditing(tokenStorage.getName());
     }
 
-    @OnRender
-    public void changeDeleteButtonView(){
-        // delete Button has red text and icon when selected
-        this.deleteUserButton.styleProperty().bind(Bindings.createStringBinding(()->{
-            if(warningIsInvisible.get())
-                return "-fx-text-fill: Black";
-            return "-fx-text-fill: #CF2A27";
-        },this.warningIsInvisible));
-
-        this.deleteIconImageView.imageProperty().bind(Bindings.createObjectBinding(()->{
-            if(warningIsInvisible.get())
-                return deleteIconBlackImage;
-            return deleteIconRedImage;
-        },this.warningIsInvisible));
-    }
-
     public void deleteUser() {
         // warning screen opens
-        warningScreenContainer.setVisible(true);
+        popup.showPopup(warningScreenContainer, warningScreen);
+        popup.setBlur(editAccHBox, null);
+        warningScreen.setWarning(resources.getString("warning.deleteAccount"));
     }
 
     public void goBack() {

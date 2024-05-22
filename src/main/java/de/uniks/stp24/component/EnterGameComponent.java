@@ -6,16 +6,19 @@ import de.uniks.stp24.service.LobbyService;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import java.util.ResourceBundle;
 
 @Component(view = "EnterGame.fxml")
-public class EnterGameComponent extends Pane {
+public class EnterGameComponent extends AnchorPane {
     @FXML
     TextField passwordInputField;
     @FXML
@@ -26,6 +29,9 @@ public class EnterGameComponent extends Pane {
     TokenStorage tokenStorage;
     @Inject
     Subscriber subscriber;
+    @Inject
+    @Resource
+    ResourceBundle resource;
 
     protected String gameID;
 

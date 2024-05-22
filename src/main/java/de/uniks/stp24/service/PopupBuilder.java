@@ -23,32 +23,53 @@ public class PopupBuilder {
     public void showPopup(StackPane container, Node component) {
         if (container.getChildren().isEmpty()){
             container.getChildren().add(component);
+            container.setVisible(true);
             StackPane.setAlignment(component, Pos.CENTER);
         } else {
             component.setVisible(true);
+            container.setVisible(true);
         }
-        component.visibleProperty().addListener((observable, oldValue, newValue) -> {
+
+       component.visibleProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 removeBlur();
+                container.setMouseTransparent(true);
+            } else {
+                container.setMouseTransparent(false);
+            }
+        });
+
+        container.visibleProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                removeBlur();
+                container.setMouseTransparent(true);
+            } else {
+                container.setMouseTransparent(false);
             }
         });
     }
 
     public void setBlur(Node screenToBlur, Node screenTwoToBlur){
             this.screenOneToBlur = screenToBlur;
-            this.screenTwoToBlur = screenTwoToBlur;
+
             BoxBlur blur = new BoxBlur(10, 10, 3);
             this.screenOneToBlur.setEffect(blur);
             this.screenOneToBlur.setMouseTransparent(true);
-            this.screenTwoToBlur.setEffect(blur);
-            this.screenTwoToBlur.setMouseTransparent(true);
+            if (screenTwoToBlur != null){
+                this.screenTwoToBlur = screenTwoToBlur;
+                this.screenTwoToBlur.setEffect(blur);
+                this.screenTwoToBlur.setMouseTransparent(true);
+            }
+
 
     }
 
     public void removeBlur(){
         screenOneToBlur.setEffect(null);
         screenOneToBlur.setMouseTransparent(false);
-        screenTwoToBlur.setEffect(null);
-        screenTwoToBlur.setMouseTransparent(false);
+        if (screenTwoToBlur != null) {
+            screenTwoToBlur.setEffect(null);
+            screenTwoToBlur.setMouseTransparent(false);
+        }
     }
 }

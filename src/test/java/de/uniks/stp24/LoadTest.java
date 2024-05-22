@@ -40,7 +40,7 @@ public class LoadTest extends ControllerTest {
 
         // Result:
         // Alice should now be in Login screen.
-        assertEquals(stage.getTitle(), "LOGIN  ");
+        assertEquals(stage.getTitle(), "LOGIN");
     }
 
 }

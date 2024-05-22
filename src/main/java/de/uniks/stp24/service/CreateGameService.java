@@ -17,9 +17,10 @@ import javax.inject.Singleton;
 public class CreateGameService {
     @Inject
     GamesApiService gamesApiService;
-
     @Inject
     TokenStorage tokenStorage;
+    @Inject
+    ErrorService errorService;
 
     private boolean isNameable = true;
     private ObservableList<Game> games = FXCollections.observableArrayList();
@@ -34,8 +35,7 @@ public class CreateGameService {
     }
 
     //Check if game with same name exits already. If not, create new game.
-    public Observable<CreateGameResultDto> createGame(String name, GameSettings settings, String password){
-        createGameController.hideErrorBox();
+    public Observable<CreateGameResultDto> createGame(String name, GameSettings settings, String password) {
         for (Game game1 : games) {
             if (game1.name().equals(name)){
                 isNameable = false;
@@ -46,11 +46,11 @@ public class CreateGameService {
         if (isNameable) {
             return gamesApiService
                     .createGame(new CreateGameDto(name, false, 1, settings, password))
-                    //.doOnNext(createGameResult -> {
-                    //})
-                    .doOnError(error -> showErrorBox());
+                    .doOnError(error -> createGameController.showError(errorService.getStatus(error)));
+
         } else {
-            createGameController.showNameTakenError();
+            // code 409 -> name exits already
+            createGameController.showError(409);
             isNameable = true;
             return null;
         }
@@ -58,7 +58,5 @@ public class CreateGameService {
     public void setCreateGameController(CreateGameController createGameController){
         this.createGameController = createGameController;
     }
-    public void showErrorBox(){
-        createGameController.showErrorBox();
-    }
+
 }

@@ -1,21 +1,4 @@
 [ {
-  "name" : "Explorers",
-  "flag" : "file:/E:/Uni/Bachelor/SoSe2024/STP/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Flags/f4.jpg",
-  "flagIndex" : 3,
-  "portrait" : "file:/E:/Uni/Bachelor/SoSe2024/STP/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Portraits/p3.jpg",
-  "portraitIndex" : 3,
-  "description" : "NO LAND IS UNCHARTED",
-  "color" : {
-    "red" : 0.7019608020782471,
-    "green" : 0.4000000059604645,
-    "blue" : 0.10196078568696976,
-    "opacity" : 1.0,
-    "opaque" : true,
-    "hue" : 29.803921213142246,
-    "saturation" : 0.8547486050715347,
-    "brightness" : 0.7019608020782471
-  }
-}, {
   "name" : "BOUNTY HUNTERS",
   "flag" : "file:/E:/Uni/Bachelor/SoSe2024/STP/stp-24-team-s/src/main/resources/de/uniks/stp24/assets/placeholders/Flags/f6.png",
   "flagIndex" : 5,

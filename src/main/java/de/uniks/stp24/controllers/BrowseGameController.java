@@ -11,15 +11,14 @@ import de.uniks.stp24.service.EditGameService;
 import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -62,6 +61,11 @@ BrowseGameController {
     public VBox browseGameVBoxList;
     @FXML
     public HBox browseGameHBox;
+
+    @FXML
+    AnchorPane backgroundAnchorPane;
+    @FXML
+    VBox cardBackgroundVBox;
 
 
     @Inject
@@ -108,13 +112,14 @@ BrowseGameController {
         createGameService = (createGameService == null) ? new CreateGameService() : createGameService;
         browseGameService = (browseGameService == null) ? new BrowseGameService() : browseGameService;
 
-        editGameService.setGamesList(games);
-        createGameService.setGamesList(games);
+
         browseGameService.resetSelectedGame();
 
         gamesApiService.findAll().subscribe(gameList -> {
             Platform.runLater(() -> {
                 games.setAll(gameList);
+                editGameService.setGamesList(games);
+                createGameService.setGamesList(games);
                 // Update the ListView after data is set
                 updateListView();
             });
@@ -141,6 +146,8 @@ BrowseGameController {
     @OnDestroy
     void destroy() {
         subscriber.dispose();
+        backgroundAnchorPane.setStyle("-fx-background-image: null");
+        cardBackgroundVBox.setStyle("-fx-background-image: null");
     }
 
     @Inject
@@ -186,5 +193,4 @@ BrowseGameController {
             popup.setBlur(browseGameVBoxList, browseGameVBoxButtons);
         }
     }
-
 }

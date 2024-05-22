@@ -107,11 +107,7 @@
                               <Font size="15.0" />
                            </font>
                            <graphic>
-                              <ImageView fx:id="editIconImageView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icons/editBlack.png" />
-                                 </image>
-                              </ImageView>
+                              <ImageView fx:id="editIconImageView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />
                            </graphic>
                         </ToggleButton>
                         <Button fx:id="deleteUserButton" mnemonicParsing="false" onAction="#deleteUser" prefHeight="30.0" prefWidth="150.0" styleClass="actionButton" text="%delete">

@@ -63,6 +63,16 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 
 /************************************************************************************/
 /***************** Buttons *********************************************************/
+Button:hover{
+    -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.5),15,0,0,0);
+    -fx-cursor: hand;
+}
+
+ToggleButton:hover{
+    -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.5),15,0,0,0);
+    -fx-cursor: hand;
+}
+
 
 .languageButton:selected {
     -fx-font-family: "PT Serif";
@@ -155,6 +165,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-pref-width: 300px;
     -fx-pref-height: 75px;
 }
+
 
 .smallActionButton{
     -fx-font-family: "PT Serif";

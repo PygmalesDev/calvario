@@ -24,6 +24,7 @@ import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
@@ -86,14 +87,22 @@ public class EditAccController extends BasicController {
 
     private BooleanBinding warningIsInvisible;
     private BooleanBinding editAccIsNotSelected;
-    private Image editIconBlueImage = new Image(getClass().getResource("/de/uniks/stp24/icons/editBlue.png").toExternalForm());
-    private Image editIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/editBlack.png").toExternalForm());
-    private Image deleteIconRedImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteRed.png").toExternalForm());
-    private Image deleteIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteBlack.png").toExternalForm());
+    public Image editIconBlueImage;
+    public Image editIconBlackImage;
+    public Image deleteIconRedImage;
+    public Image deleteIconBlackImage;
 
 
     @Inject
     public EditAccController() {
+    }
+
+    @OnInit
+    public void init(){
+        editIconBlueImage = new Image(getClass().getResource("/de/uniks/stp24/icons/editBlue.png").toExternalForm());
+        editIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/editBlack.png").toExternalForm());
+        deleteIconRedImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteRed.png").toExternalForm());
+        deleteIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteBlack.png").toExternalForm());
     }
 
     @OnRender
@@ -205,6 +214,7 @@ public class EditAccController extends BasicController {
 
     @OnRender
     public void changeDeleteButtonView(){
+        // delete Button has red text and icon when selected
         this.deleteUserButton.styleProperty().bind(Bindings.createStringBinding(()->{
             if(warningIsInvisible.get())
                 return "-fx-text-fill: Black";

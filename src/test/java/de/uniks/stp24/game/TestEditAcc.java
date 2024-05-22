@@ -14,10 +14,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -53,8 +55,6 @@ public class TestEditAcc extends ControllerTest {
         super.start(stage);
         app.show(editAccController);
     }
-
-
 
     @Test
     void switchToBrowseGamesScreen(){
@@ -106,7 +106,7 @@ public class TestEditAcc extends ControllerTest {
         // Result:
         // Alice’s Account has not changed, and she is still in the user administration screen.
         TextField username = lookup("#usernameInput").query();
-        assertTrue(username.isDisabled());
+        assertFalse(username.isEditable());
         assertEquals(username.getText(), "Alice");
     }
 
@@ -135,10 +135,10 @@ public class TestEditAcc extends ControllerTest {
         // Result:
         // Alice stays in the same screen but her name and password changed
 
-        assertTrue(username.isDisabled());
+        assertFalse(username.isEditable());
         assertEquals("Calvario",username.getText());
 
-        assertTrue(password.isDisabled());
+        assertFalse(password.isEditable());
         assertEquals("",password.getText());
     }
 

@@ -25,7 +25,7 @@ public class PopupBuilder {
             container.getChildren().add(component);
             StackPane.setAlignment(component, Pos.CENTER);
         } else {
-            container.setVisible(true);
+            component.setVisible(true);
         }
         component.visibleProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {

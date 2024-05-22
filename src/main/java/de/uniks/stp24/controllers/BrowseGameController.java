@@ -98,7 +98,6 @@ BrowseGameController {
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
 
-    private boolean blurStatus = false;
 
     //Load list of games as soon as BrowseGame-Screen is shown
     @OnInit
@@ -188,39 +187,4 @@ BrowseGameController {
         }
     }
 
-    void setBlur() {
-        /*BoxBlur blur = new BoxBlur(10, 10, 3);
-        browseGameVBoxList.setEffect(blur);
-        browseGameVBoxButtons.setEffect(blur);
-        browseGameVBoxButtons.setMouseTransparent(true);
-        browseGameVBoxList.setMouseTransparent(true);
-        blurStatus = true;*/
-    }
-
-    public void removeBlur(){
-        /*browseGameVBoxList.setEffect(null);
-        browseGameVBoxButtons.setEffect(null);
-        browseGameVBoxButtons.setMouseTransparent(false);
-        browseGameVBoxList.setMouseTransparent(false);
-
-        blurStatus = false;*/
-    }
-
-    private void showWarning(){
-
-        //PopupBuilder popupBuilder1 = new PopupBuilder("/de/uniks/stp24/component/Warning.fxml","Warning");
-        //popupBuilder1.showPopup();
-        /*if (warningWindowContainer.getChildren().isEmpty()){
-            warningWindowContainer.getChildren().add(warningComponent);
-            StackPane.setAlignment(warningComponent, Pos.CENTER);
-        } else {
-            warningWindowContainer.setVisible(true);
-        }
-        warningWindowContainer.visibleProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                removeBlur();
-            }
-        });*/
-        //popupBuilder.showWarningPopup(warningWindowContainer, this::removeBlur);
-    }
 }

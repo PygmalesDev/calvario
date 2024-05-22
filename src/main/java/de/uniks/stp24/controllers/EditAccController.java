@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -24,6 +25,7 @@ import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
@@ -56,6 +58,10 @@ public class EditAccController extends BasicController {
     StackPane warningScreenContainer;
     @FXML
     HBox editAccHBox;
+    @FXML
+    ImageView editIconImageView;
+    @FXML
+    ImageView deleteIconImageView;
 
     @FXML
     AnchorPane backgroundAnchorPane;
@@ -83,6 +89,11 @@ public class EditAccController extends BasicController {
     WarningScreenComponent warningScreen;
 
     private BooleanBinding editAccIsNotSelected;
+    public Image editIconBlueImage;
+    public Image editIconBlackImage;
+    public Image deleteIconRedImage;
+    public Image deleteIconBlackImage;
+
 
     PopupBuilder popup = new PopupBuilder();
 
@@ -90,6 +101,14 @@ public class EditAccController extends BasicController {
 
     @Inject
     public EditAccController() {
+    }
+
+    @OnInit
+    public void init(){
+        editIconBlueImage = new Image(getClass().getResource("/de/uniks/stp24/icons/editBlue.png").toExternalForm());
+        editIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/editBlack.png").toExternalForm());
+        deleteIconRedImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteRed.png").toExternalForm());
+        deleteIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteBlack.png").toExternalForm());
     }
 
     @OnRender
@@ -111,10 +130,12 @@ public class EditAccController extends BasicController {
     public void changeUserInfo() {
         // If the changeUserButton is selected, username and password can be edited
         if(changeUserInfoButton.isSelected()){
-            passwordInput.setDisable(false);
-            usernameInput.setDisable(false);
+            passwordInput.setEditable(true);
+            usernameInput.setEditable(true);
             cancelChangesButton.setVisible(true);
             saveChangesButton.setVisible(true);
+            changeUserInfoButton.setStyle("-fx-text-fill: #2B78E4");
+            editIconImageView.setImage(editIconBlueImage);
         }else{
             resetEditing(tokenStorage.getName());
         }
@@ -162,11 +183,13 @@ public class EditAccController extends BasicController {
         // Reset inputs and changeUserInfoButton
         usernameInput.setText(username);
         passwordInput.setText("");
-        usernameInput.setDisable(true);
-        passwordInput.setDisable(true);
+        usernameInput.setEditable(false);
+        passwordInput.setEditable(false);
         cancelChangesButton.setVisible(false);
         saveChangesButton.setVisible(false);
         changeUserInfoButton.setDisable(false);
+        editIconImageView.setImage(editIconBlackImage);
+        changeUserInfoButton.setStyle("-fx-text-fill: Black");
     }
 
     public void cancelChanges() {
@@ -174,6 +197,22 @@ public class EditAccController extends BasicController {
         this.errorLabelEditAcc.setText("");
         changeUserInfoButton.setSelected(false);
         resetEditing(tokenStorage.getName());
+    }
+
+    @OnRender
+    public void changeDeleteButtonView(){
+        // delete Button has red text and icon when selected
+        this.deleteUserButton.styleProperty().bind(Bindings.createStringBinding(()->{
+            if(warningIsInvisible.get())
+                return "-fx-text-fill: Black";
+            return "-fx-text-fill: #CF2A27";
+        },this.warningIsInvisible));
+
+        this.deleteIconImageView.imageProperty().bind(Bindings.createObjectBinding(()->{
+            if(warningIsInvisible.get())
+                return deleteIconBlackImage;
+            return deleteIconRedImage;
+        },this.warningIsInvisible));
     }
 
     public void deleteUser() {

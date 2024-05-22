@@ -28,7 +28,7 @@
             </HBox.margin>
          </ImageView>
       </HBox>
-      <Label alignment="CENTER" onKeyPressed="#showLoginScreen" prefHeight="53.0" prefWidth="1105.0" style="-fx-text-fill: BLACK;" styleClass="Text" text="%press.any.key">
+      <Label alignment="CENTER" onKeyPressed="#showLoginScreen" prefHeight="53.0" prefWidth="1105.0" style="-fx-text-fill: BLACK;" styleClass="capitals" text="%press.any.key">
          <font>
             <Font size="36.0" />
          </font>

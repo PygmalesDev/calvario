@@ -3,8 +3,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-<fx:root alignment="CENTER" prefHeight="26.0" prefWidth="400" style="-fx-border-color: #000000;"
-         type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-         fx:controller="de.uniks.stp24.component.GameComponent">
-    <Text fx:id="game_name" strokeType="OUTSIDE" strokeWidth="0.0" text="game_x"/>
+<fx:root alignment="CENTER" prefHeight="26.0" prefWidth="300.0" type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.GameComponent">
+    <Text fx:id="game_name" strokeType="OUTSIDE" strokeWidth="0.0" text="game_x" />
 </fx:root>

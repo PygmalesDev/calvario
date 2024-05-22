@@ -38,7 +38,7 @@
                   </ToggleButtonGroup>
                </HBox>
                <ImageView fitHeight="150.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../assets/logos/Calvario.png" />
+                  <Image fx:id="calvarioLogoRegister" url="@../assets/logos/Calvario.png" />
                   <VBox.margin>
                      <Insets top="5.0" />
                   </VBox.margin>

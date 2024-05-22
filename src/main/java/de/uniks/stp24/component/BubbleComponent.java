@@ -69,6 +69,6 @@ public class BubbleComponent extends Pane {
 
     @OnDestroy
     public void destroy() {
-        captainLogo.setStyle("-fx-background-image: null");
+        captainLogo.setImage(null);
     }
 }

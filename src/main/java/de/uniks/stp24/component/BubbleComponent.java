@@ -2,11 +2,13 @@ package de.uniks.stp24.component;
 
 import javafx.fxml.FXML;
 
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
 
 
@@ -19,6 +21,8 @@ import static javafx.scene.paint.Color.WHITE;
 public class BubbleComponent extends Pane {
     @FXML
     Text captainText;
+    @FXML
+    ImageView captainLogo;
     @FXML
     TextFlow messageBubble;
     Text childText;
@@ -61,5 +65,10 @@ public class BubbleComponent extends Pane {
         child.setFill(BLACK);
         messageBubble.getChildren().add(child);
         childText = child;
+    }
+
+    @OnDestroy
+    public void destroy() {
+        captainLogo.setStyle("-fx-background-image: null");
     }
 }

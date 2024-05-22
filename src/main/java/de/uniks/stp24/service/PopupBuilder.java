@@ -1,6 +1,5 @@
 package de.uniks.stp24.service;
 
-import de.uniks.stp24.App;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.effect.BoxBlur;

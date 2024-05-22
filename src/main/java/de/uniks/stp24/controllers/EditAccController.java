@@ -12,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -197,22 +196,6 @@ public class EditAccController extends BasicController {
         this.errorLabelEditAcc.setText("");
         changeUserInfoButton.setSelected(false);
         resetEditing(tokenStorage.getName());
-    }
-
-    @OnRender
-    public void changeDeleteButtonView(){
-        // delete Button has red text and icon when selected
-        this.deleteUserButton.styleProperty().bind(Bindings.createStringBinding(()->{
-            if(warningIsInvisible.get())
-                return "-fx-text-fill: Black";
-            return "-fx-text-fill: #CF2A27";
-        },this.warningIsInvisible));
-
-        this.deleteIconImageView.imageProperty().bind(Bindings.createObjectBinding(()->{
-            if(warningIsInvisible.get())
-                return deleteIconBlackImage;
-            return deleteIconRedImage;
-        },this.warningIsInvisible));
     }
 
     public void deleteUser() {

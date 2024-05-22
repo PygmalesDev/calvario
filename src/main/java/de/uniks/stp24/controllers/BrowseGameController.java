@@ -8,6 +8,7 @@ import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.CreateGameService;
 import de.uniks.stp24.service.EditGameService;
+import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -18,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Controller;
@@ -57,6 +59,8 @@ BrowseGameController {
     public VBox browseGameVBoxButtons;
     @FXML
     public VBox browseGameVBoxList;
+    @FXML
+    public HBox browseGameHBox;
 
     @FXML
     AnchorPane backgroundAnchorPane;
@@ -86,15 +90,18 @@ BrowseGameController {
     public BrowseGameService browseGameService;
     @Inject
     EditGameService editGameService;
+
+    @Inject
+    PopupBuilder popupBuilder;
     @Inject
     CreateGameService createGameService;
     @Inject
     @Resource
     ResourceBundle resources;
+    PopupBuilder popup = new PopupBuilder();
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
 
-    private boolean blurStatus = false;
 
     //Load list of games as soon as BrowseGame-Screen is shown
     @OnInit
@@ -181,41 +188,9 @@ BrowseGameController {
     }
     public void deleteGame() {
         if(browseGameService.checkMyGame()) {
-            setBlur();
             warningComponent.setGameName();
-            showWarning();
+            popup.showPopup(warningWindowContainer, warningComponent);
+            popup.setBlur(browseGameVBoxList, browseGameVBoxButtons);
         }
-    }
-
-    void setBlur() {
-        BoxBlur blur = new BoxBlur(10, 10, 3);
-        browseGameVBoxList.setEffect(blur);
-        browseGameVBoxButtons.setEffect(blur);
-        browseGameVBoxButtons.setMouseTransparent(true);
-        browseGameVBoxList.setMouseTransparent(true);
-        blurStatus = true;
-    }
-
-    public void removeBlur(){
-        browseGameVBoxList.setEffect(null);
-        browseGameVBoxButtons.setEffect(null);
-        browseGameVBoxButtons.setMouseTransparent(false);
-        browseGameVBoxList.setMouseTransparent(false);
-
-        blurStatus = false;
-    }
-
-    private void showWarning(){
-        if (warningWindowContainer.getChildren().isEmpty()) {
-            warningWindowContainer.getChildren().add(warningComponent);
-            StackPane.setAlignment(warningComponent, Pos.CENTER);
-        }
-        warningWindowContainer.setVisible(true);
-        warningWindowContainer.visibleProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                removeBlur();
-            }
-        });
-
     }
 }

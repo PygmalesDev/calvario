@@ -5,7 +5,9 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.EditAccService;
+import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.TokenStorage;
+import io.reactivex.rxjava3.functions.Consumer;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -38,39 +40,41 @@ public class WarningComponent extends VBox{
     Subscriber subscriber;
     @Inject
     BrowseGameService browseGameService;
+
     String gameNameText;
+
+
 
     @Inject
     public WarningComponent() {
 
     }
+    @OnRender
+    public void setBackground() {
+        warningWindow.setStyle("-fx-background-color: white;");
+    }
 
-    public void setGameName(){
+    public void setGameName() {
         gameNameText = browseGameService.getGameName();
         gameName.setText(gameNameText);
     }
 
-    @OnRender
-    public void setBackground(){
-        warningWindow.setStyle("-fx-background-color: white;");
-    }
-
-    //Sets warning popup to invisible and deletes game after confirm was pressed
     public void deleteGame() {
         this.subscriber.subscribe(browseGameService.deleteGame());
-        getParent().setVisible(false);
+        setVisible(false);
     }
 
     @OnDestroy
     public void destroy() {
-        if(subscriber != null) {
+        if (subscriber != null) {
             this.subscriber.dispose();
         }
     }
 
     public void onCancel() {
-        getParent().setVisible(false);
+        setVisible(false);
     }
+
 }
 
 

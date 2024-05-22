@@ -47,7 +47,7 @@ public class GameComponent extends HBox implements ReusableItemComponent<Game> {
         if (game.owner().equals(tokenStorage.getUserId())) {
             game_name.setFill(Color.GREEN);
         } else {
-            game_name.setFill(Color.BLACK);
+            //game_name.setFill(Color.BLACK);
         }
 
 

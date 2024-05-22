@@ -2,6 +2,8 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -24,27 +26,65 @@
                <HBox prefHeight="400.0" prefWidth="534.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <AnchorPane prefHeight="398.0" prefWidth="250.0" style="-fx-border-color: #000000;" HBox.hgrow="ALWAYS">
                      <VBox fx:id="browseGameVBoxButtons" alignment="CENTER" prefHeight="398.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
-                           <Button fx:id="new_game_b" mnemonicParsing="false" onAction="#newGame" prefHeight="42.0" prefWidth="186.0" text="%new.game" />
-
+                        <HBox alignment="CENTER" prefHeight="80.0" prefWidth="230.0">
+                           <Button fx:id="load_game_b" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#loadGame" styleClass="smallActionButton" text="%load">
+                              <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../icons/downBlack.png" />
+                                       </image>
+                                    </ImageView>
+                              </graphic></Button>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
-                           <VBox alignment="CENTER" prefHeight="77.0" prefWidth="178.0">
-                              <Button fx:id="load_game_b" mnemonicParsing="false" onAction="#loadGame" prefHeight="42.0" prefWidth="186.0" text="%load" />
-                           </VBox>
+                        <HBox alignment="CENTER" prefHeight="80.0" prefWidth="230.0">
+                           <Button fx:id="new_game_b" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#newGame" styleClass="smallActionButton" text="%new.game">
+                              <graphic>
+                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../icons/add1.png" />
+                                    </image>
+                                 </ImageView>
+                              </graphic></Button>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
-                           <Button fx:id="edit_game_b" mnemonicParsing="false" onAction="#editGame" prefHeight="42.0" prefWidth="186.0" text="%edit.game" />
-
+                        <HBox alignment="CENTER" prefHeight="80.0" prefWidth="230.0">
+                           <Button fx:id="edit_game_b" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#editGame" styleClass="smallActionButton" text="%edit.game">
+                              <graphic>
+                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../icons/pen.png" />
+                                    </image>
+                                 </ImageView>
+                              </graphic></Button>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
-                           <Button fx:id="del_game_b" mnemonicParsing="false" onAction="#deleteGame" prefHeight="42.0" prefWidth="186.0" text="%delete" />
+                        <HBox alignment="CENTER" prefHeight="80.0" prefWidth="230.0">
+                           <Button fx:id="del_game_b" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#deleteGame" styleClass="smallActionButton" text="%delete">
+                              <graphic>
+                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../icons/deleteBlack.png" />
+                                    </image>
+                                 </ImageView>
+                              </graphic></Button>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
-                           <Button fx:id="edit_acc_b" mnemonicParsing="false" onAction="#editAccount" prefHeight="42.0" prefWidth="186.0" text="%edit.account" />
+                        <HBox alignment="CENTER" prefHeight="80.0" prefWidth="230.0">
+                           <Button fx:id="edit_acc_b" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#editAccount" styleClass="smallActionButton" text="%edit.account">
+                              <graphic>
+                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../icons/pen.png" />
+                                    </image>
+                                 </ImageView>
+                              </graphic></Button>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="62.0" prefWidth="230.0">
-                           <Button fx:id="log_out_b" mnemonicParsing="false" onAction="#logOut" prefHeight="42.0" prefWidth="186.0" text="%log.out" />
+                        <HBox alignment="CENTER" prefHeight="80.0" prefWidth="230.0">
+                           <Button fx:id="log_out_b"  mnemonicParsing="false" onAction="#logOut" styleClass="smallActionButton" text="%log.out">
+                              <graphic>
+                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../icons/enter.png" />
+                                    </image>
+                                 </ImageView>
+                              </graphic></Button>
                         </HBox>
                      </VBox>
                   </AnchorPane>
@@ -53,7 +93,7 @@
                         <HBox alignment="CENTER" prefHeight="30.0" prefWidth="233.0" styleClass="menuLogic">
                            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%games" />
                         </HBox>
-                        <ListView fx:id="gameList" prefHeight="450.0" prefWidth="233.0" />
+                           <ListView fx:id="gameList" prefHeight="450.0" prefWidth="233.0" styleClass="browseGameList, backgroundLightYellow"/>
                         <HBox maxHeight="-Infinity" prefHeight="20.0" prefWidth="200.0" styleClass="menuLogic" />
                      </VBox>
                   </AnchorPane>

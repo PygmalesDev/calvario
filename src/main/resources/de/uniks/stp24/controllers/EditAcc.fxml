@@ -2,14 +2,15 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -17,7 +18,7 @@
    <HBox alignment="CENTER" layoutY="-6.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="630.0" prefWidth="800.0">
          <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="40.0" prefWidth="800.0" style="-fx-background-color: Black;">
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="%calvario.browseGame">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="%calvario.userAdministration">
                <font>
                   <Font size="16.0" />
                </font>
@@ -28,45 +29,62 @@
                <HBox fx:id="editAccHBox" alignment="CENTER" prefHeight="570.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <AnchorPane prefHeight="570.0" prefWidth="500.0">
                      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="550.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="170.0" style="-fx-border-color: Black;" styleClass="backgroundLightYellow">
+                        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: Black;" styleClass="backgroundLightYellow">
                            <VBox.margin>
-                              <Insets top="20.0" />
+                              <Insets top="15.0" />
                            </VBox.margin>
-                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%wanted" textAlignment="CENTER" wrappingWidth="108.92333984375">
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="capitals" text="%wanted" textAlignment="CENTER" wrappingWidth="190.92333984375">
                               <font>
-                                 <Font name="System Bold" size="25.0" />
+                                 <Font name="System Bold" size="24.0" />
                               </font>
                            </Text>
-                           <Separator prefWidth="200.0" style="-fx-background-color: black;">
+                           <Line endX="100.0" startX="-100.0" strokeWidth="2.0">
                               <VBox.margin>
-                                 <Insets top="15.0" />
+                                 <Insets top="10.0" />
                               </VBox.margin>
-                           </Separator>
-                           <ImageView fx:id="avatarImage" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           </Line>
+                           <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="100.0" styleClass="image-view-wrapper">
                               <VBox.margin>
-                                 <Insets top="20.0" />
+                                 <Insets top="10.0" />
                               </VBox.margin>
-                           </ImageView>
+                              <children>
+                                 <ImageView fx:id="avatarImage" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+                              </children>
+                           </VBox>
                         </VBox>
-                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="200.0" spacing="15.0">
-                           <Button fx:id="saveChangesButton" mnemonicParsing="false" onAction="#saveChanges" prefHeight="30.0" prefWidth="150.0" text="%save" visible="false">
+                        <HBox alignment="CENTER" prefHeight="35.0" prefWidth="200.0" spacing="15.0">
+                           <Button fx:id="saveChangesButton" mnemonicParsing="false" onAction="#saveChanges" prefHeight="30.0" prefWidth="150.0" styleClass="deleteAndSaveButton" text="%save" visible="false">
                               <font>
                                  <Font size="15.0" />
                               </font>
+                              <graphic>
+                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../icons/downWhite.png" />
+                                    </image>
+                                 </ImageView>
+                              </graphic>
                            </Button>
-                           <Button fx:id="cancelChangesButton" mnemonicParsing="false" onAction="#cancelChanges" prefHeight="30.0" prefWidth="150.0" text="%cancel" visible="false">
+                           <Button fx:id="cancelChangesButton" mnemonicParsing="false" onAction="#cancelChanges" prefHeight="30.0" prefWidth="150.0" styleClass="deleteAndSaveButton" text="%cancel" visible="false">
                               <font>
                                  <Font size="15.0" />
                               </font>
+                              <graphic>
+                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                       <Image url="@../icons/cancelWhite.png" />
+                                    </image>
+                                 </ImageView>
+                              </graphic>
                            </Button>
                         </HBox>
-                        <VBox alignment="CENTER" maxWidth="-Infinity" prefHeight="200.0" prefWidth="350.0">
-                           <TextField fx:id="usernameInput" alignment="CENTER" disable="true" promptText="%username">
+                        <VBox alignment="BOTTOM_CENTER" maxWidth="-Infinity" prefHeight="150.0" prefWidth="350.0">
+                           <TextField fx:id="usernameInput" alignment="CENTER" editable="false" promptText="%username" styleClass="inputField">
                               <font>
                                  <Font size="15.0" />
                               </font>
                            </TextField>
-                           <TextField fx:id="passwordInput" alignment="CENTER" disable="true" promptText="%password">
+                           <TextField fx:id="passwordInput" alignment="CENTER" editable="false" promptText="%password" styleClass="inputField">
                               <font>
                                  <Font size="15.0" />
                               </font>
@@ -84,17 +102,27 @@
                   </AnchorPane>
                   <AnchorPane prefHeight="200.0" prefWidth="300.0">
                      <VBox alignment="CENTER" layoutX="-7.0" prefHeight="400.0" prefWidth="200.0" spacing="25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="0.0">
-                        <ToggleButton fx:id="changeUserInfoButton" mnemonicParsing="false" onAction="#changeUserInfo" prefHeight="30.0" prefWidth="150.0" text="%edit">
+                        <ToggleButton fx:id="changeUserInfoButton" mnemonicParsing="false" onAction="#changeUserInfo" prefHeight="30.0" prefWidth="150.0" styleClass="actionButton" text="%edit">
                            <font>
                               <Font size="15.0" />
                            </font>
+                           <graphic>
+                              <ImageView fx:id="editIconImageView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" />
+                           </graphic>
                         </ToggleButton>
-                        <Button fx:id="deleteUserButton" mnemonicParsing="false" onAction="#deleteUser" prefHeight="30.0" prefWidth="150.0" text="%delete">
+                        <Button fx:id="deleteUserButton" mnemonicParsing="false" onAction="#deleteUser" prefHeight="30.0" prefWidth="150.0" styleClass="actionButton" text="%delete">
                            <font>
                               <Font size="15.0" />
                            </font>
+                           <graphic>
+                              <ImageView fx:id="deleteIconImageView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../icons/deleteBlack.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
                         </Button>
-                        <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" prefHeight="30.0" prefWidth="150.0" text="%go.back">
+                        <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" prefHeight="30.0" prefWidth="150.0" styleClass="backButton" text="%go.back">
                            <font>
                               <Font size="15.0" />
                            </font>

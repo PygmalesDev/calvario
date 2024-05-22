@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.image.Image?>
@@ -89,13 +90,16 @@
                      </VBox>
                   </AnchorPane>
                   <AnchorPane prefHeight="442.0" prefWidth="450.0" style="-fx-border-color: #000000;" HBox.hgrow="ALWAYS">
-                     <VBox fx:id="browseGameVBoxList" alignment="CENTER" layoutX="30.0" layoutY="1.0" prefHeight="396.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="0.0">
-                        <HBox alignment="CENTER" prefHeight="30.0" prefWidth="233.0" styleClass="menuLogic">
-                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%games" />
-                        </HBox>
-                           <ListView fx:id="gameList" prefHeight="450.0" prefWidth="500.0" styleClass="browseGameList, backgroundLightYellow" />
-                        <HBox maxHeight="-Infinity" prefHeight="20.0" prefWidth="200.0" styleClass="menuLogic" />
+                     <VBox fx:id="browseGameVBoxList" alignment="CENTER" layoutX="30.0" layoutY="1.0" prefHeight="396.0" prefWidth="500.0" styleClass="backgroundList" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="10.0">
+                           <ListView fx:id="gameList" maxWidth="-Infinity" prefHeight="370.0" prefWidth="280.0" styleClass="listBrowseGame" />
                      </VBox>
+                     <HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="45.0" prefWidth="230.0" style="-fx-background-color: transparent;" styleClass="listHeader" AnchorPane.bottomAnchor="455.0" AnchorPane.leftAnchor="140.0" AnchorPane.rightAnchor="140.0" AnchorPane.topAnchor="27.0">
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="%games">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Text>
+                     </HBox>
                   </AnchorPane>
                </HBox>
                <StackPane fx:id="warningWindowContainer" alignment="BOTTOM_CENTER" prefHeight="400.0" prefWidth="450.0" visible="false" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="70.0" />

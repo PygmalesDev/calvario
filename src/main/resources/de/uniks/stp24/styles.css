@@ -238,6 +238,18 @@ ToggleButton:hover{
     -fx-pref-height: 100px;
 }
 
+.woodButton{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/woodButton.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 80px;
+}
+
 .chatBubble {
     -fx-shape: "M 20 0 H 280 A 20 20 0 0 1 300 20 V 80 A 1000000000 20 0 0 1 280 80 H 40 L -10 100 L 10 80 A 20 20 0 0 1 20 60 Z";
     -fx-background-color: #FFD966;
@@ -260,30 +272,61 @@ ToggleButton:hover{
     -fx-pref-height: 65px;
 }
 
-.browseGameList .list-cell{
-    -fx-text-fill: Black;
-    -fx-background-color: #FFD966;
-    -fx-border-color: Black;
+
+.listBrowseGame, .listEnterGame{
+    -fx-background-color: transparent;
 }
 
-.browseGameList .list-cell:selected{
+.listBrowseGame .list-cell{
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-pref-width: 240;
+    -fx-pref-height: 50;
+}
+
+.userComponentText{
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
+
+.listEnterGame .list-cell{
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-pref-width: 200;
+    -fx-pref-height: 50;
+}
+
+/*.listBrowseGame .list-cell:selected{
     -fx-text-fill: #FFFFFF;
-    -fx-background-color: #CF2A27;
-}
+    -fx-background-color: transparent;
+}*/
 
-.browseGameList .scroll-bar:vertical{
+.listBrowseGame .scroll-bar:vertical, .listEnterGame .scroll-bar:vertical{
     -fx-background-color: #ffffff;
 }
 
-.browseGameList .virtual-flow .scroll-bar:vertical .thumb{
+.listBrowseGame .virtual-flow .scroll-bar:vertical .thumb, .listEnterGame .virtual-flow .scroll-bar:vertical .thumb{
     -fx-background-color: #030303;
 }
 
-.browseGameList .increment-button .increment-arrow, scroll-bar .decrement-button .decrement-arrow{
+.listBrowseGame .increment-button .increment-arrow, scroll-bar .decrement-button .decrement-arrow{
     -fx-background-color: #030303;
 }
 
-.browseGameList .scroll-bar .spinner .increment-arrow-button{
+/*.listBrowseAndEnterGame .scroll-bar .spinner .increment-arrow-button{
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/icons/up.png");
     -fx-background-size: 100% 100%;
@@ -292,9 +335,18 @@ ToggleButton:hover{
     -fx-border-width: 0;
 }
 
-.browseGameList .scroll-bar .spinner .decrement-arrow-button{
+.listBrowseAndEnterGame .scroll-bar .spinner .decrement-arrow-button{
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/icons/down.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 0;
+}*/
+
+.listHeader{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/fields/listCapital.png");
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
@@ -302,25 +354,43 @@ ToggleButton:hover{
 }
 
 
+.backgroundList{
+    -fx-background-image: url("/de/uniks/stp24/assets/lists/backgroundListView.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.backgroundSettingList{
+    -fx-background-image: url("/de/uniks/stp24/assets/lists/backgroundSettingScreen.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+
 /**********************************************************************************************/
 /********************** Spinner ********************************************************/
 .spinner{
-    -fx-padding: 0 10 0 10;
-    -fx-background-color: #FFD966;
-    -fx-border-color: #000000;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 0, 0, 8, 8);
-    -fx-border-width: 2;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
-    -fx-pref-width: 350px;
-    -fx-pref-height: 45px;
+    -fx-padding: 5 50 5 90;
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 22;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/fields/textField.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 0;
+    -fx-pref-width: 400px;
+    -fx-pref-height: 80px;
 }
 
 .spinner .text-field{
     -fx-font-family: "PT Serif";
-    -fx-background-color: #FFD966;
+    -fx-background-color: transparent;
     -fx-alignment: center;
-    -fx-font-size: 16px;
+    -fx-font-size: 20px;
     -fx-border-radius: 10;
 }
 
@@ -328,8 +398,8 @@ ToggleButton:hover{
 .spinner .decrement-arrow {
     -fx-background-color: transparent;
     -fx-background-image: none;
-    -fx-pref-width: 10px;
-    -fx-pref-height: 10px;
+    -fx-pref-height: 5;
+    -fx-pref-width: 5;
 }
 
 .spinner .increment-arrow-button{
@@ -338,7 +408,6 @@ ToggleButton:hover{
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-border-width: 0;
 }
 
 .spinner .decrement-arrow-button{
@@ -350,15 +419,21 @@ ToggleButton:hover{
 }
 
 
+
+
 .textFieldGame{
-    -fx-background-color: #FFD966;
-    -fx-border-color: #000000;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 0, 0, 8, 8);
-    -fx-border-width: 2;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
-    -fx-pref-width: 350px;
-    -fx-pref-height: 45px;
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 22;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/fields/textField.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 400px;
+    -fx-pref-height: 80px;
 }
 
 

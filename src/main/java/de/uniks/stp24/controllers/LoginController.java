@@ -1,22 +1,20 @@
 package de.uniks.stp24.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import de.uniks.stp24.App;
+
 import de.uniks.stp24.component.BubbleComponent;
-import de.uniks.stp24.model.ErrorResponse;
-import de.uniks.stp24.service.LanguageService;
 import de.uniks.stp24.service.LoginService;
-import de.uniks.stp24.service.PrefService;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
@@ -27,11 +25,10 @@ import javax.inject.Inject;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 @Title("%login")
 @Controller
-public class LoginController {
+public class LoginController extends BasicController {
     @FXML
     Pane captainContainer;
     @FXML
@@ -57,28 +54,17 @@ public class LoginController {
     @FXML
     ToggleButton deToggleButton;
 
+    @FXML
+    AnchorPane backgroundAnchorPane;
+    @FXML
+    VBox cardBackgroundVBox;
+    @FXML
+    Image calvarioLogoLogin;
+
     @Inject
     Subscriber subscriber;
     @Inject
-    App app;
-    @Inject
     LoginService loginService;
-
-    @Inject
-    LanguageService languageService;
-    @Inject
-    ObjectMapper objectMapper;
-    @Inject
-    PrefService prefService;
-
-    @SubComponent
-    @Inject
-    BubbleComponent bubbleComponent;
-
-    @Inject
-    @Resource
-    ResourceBundle resources;
-
 
     @Param("info")
     public String info;
@@ -86,81 +72,84 @@ public class LoginController {
     public String username;
     @Param("password")
     public String password;
-    // Todo: can be done with "info"
-    @Param("justRegistered")
-    public boolean justRegistered;
+
+    // not in main
+//    // Todo: can be done with "info"
+//    @Param("justRegistered")
+//    public boolean justRegistered;
 
     @Inject
     public LoginController() {
     }
 
-    @OnRender
-    public void addSpeechBubble() {
-        captainContainer.getChildren().add(bubbleComponent);
-        Platform.runLater(() -> {
-            bubbleComponent.addChildren(errorLabel);
-            bubbleComponent.setCaptainText(resources.getString("pirate.login.text"));
-            if (!errorLabel.getText().equals("")) {
-                bubbleComponent.setCaptainText("");
-            }
-            errorLabel.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (errorLabel.getText().equals(resources.getString("validation.failed")) ||
-                        errorLabel.getText().equals(resources.getString("put.in.username.password")) ||
-                        errorLabel.getText().equals(resources.getString("invalid.username.or.password"))
-                ) bubbleComponent.setErrorMode(true);
-                else bubbleComponent.setErrorMode(false);
-            });
-        });
+    @OnInit
+    public void init() {
+        this.controlResponses = responseConstants.respLogin;
     }
 
     @OnRender
     public void applyInputs() {
-        if (Objects.nonNull(this.username))
+        if (Objects.nonNull(this.username)) {
             this.usernameInput.setText(this.username);
-        if (Objects.nonNull(this.password))
+        }
+        if (Objects.nonNull(this.password)) {
             this.passwordInput.setText(this.password);
-        if (Objects.nonNull(this.info))
-            this.errorLabel.setText(this.info);
-        if (justRegistered){ this.errorLabel.setText(resources.getString("account.registered"));}
-        if(prefService.getLocale() == Locale.ENGLISH){
+        }
+        if (Objects.nonNull(this.info)) {
+            switch(this.info) {
+                case "logout" -> this.errorLabel
+                        .setText(resources.getString("logout.successful.on.this.device"));
+
+                case "registered" -> this.errorLabel
+                        .setText(resources.getString("account.registered"));
+
+                case "deleted" -> this.errorLabel
+                        .setText(resources.getString("account.deleted"));
+
+                default -> this.errorLabel.setText("");
+            }
+        }
+        if(prefService.getLocale() == Locale.ENGLISH) {
             enToggleButton.setSelected(true);
-        }else{
+        } else {
             deToggleButton.setSelected(true);
         }
     }
 
-    private boolean checkIfInputNotBlankOrEmpty(String text) {
-        return (!text.isBlank() && !text.isEmpty());
-    }
+    // not in main
+//    private boolean checkIfInputNotBlankOrEmpty(String text) {
+//        return (!text.isBlank() && !text.isEmpty());
+//    }
 
     public void login() {
-        if (checkIfInputNotBlankOrEmpty(this.usernameInput.getText()) &&
-                checkIfInputNotBlankOrEmpty(this.passwordInput.getText())) {
+        String username = this.usernameInput.getText();
+        String password = this.passwordInput.getText();
+        if (checkIt(username,password)) {
             this.errorLabel.setText("");
-            String username = this.usernameInput.getText();
-            String password = this.passwordInput.getText();
             boolean rememberMe = this.rememberMeBox.isSelected();
 
             loginButton.setDisable(true);
             signupButton.setDisable(true);
-            writeText(100);
+            this.errorLabel.setStyle("-fx-fill: black;");
+            this.errorLabel.setText(getErrorInfoText(responseConstants.respLogin,201));
+
             subscriber.subscribe(loginService.login(username, password, rememberMe),
                     result -> app.show("/browseGames")
                     // in case of server's response => error
                     // handle with error response
                     , error -> {
-                                if (error instanceof HttpException httpError) {
-                                    System.out.println(httpError.code());
-                                    String body = httpError.response().errorBody().string();
-                                    ErrorResponse errorResponse = objectMapper.readValue(body,ErrorResponse.class);
-                                    writeText(errorResponse.statusCode());
-                                    enableButtons();
-                                }
+                        this.errorLabel.setStyle("-fx-fill: red;");
+                        // find the code in the error response
+                        int code = errorService.getStatus(error);
+                        // "generate"" the output in the english/german
+                        this.errorLabel
+                                .setText(getErrorInfoText(this.controlResponses,code));
+                        enableButtons();
                     });
-
         } else {
             // 1 is used for default in switch
-            writeText(1);
+            this.errorLabel.setStyle("-fx-fill: red;");
+            this.errorLabel.setText(getErrorInfoText(this.controlResponses,-1));
             enableButtons();
         }
     }
@@ -190,7 +179,6 @@ public class LoginController {
         app.refresh();
     }
 
-
     @OnRender(1)
     public void setupShowPassword() {
         // TextField showPasswordText is per default not managed
@@ -208,7 +196,6 @@ public class LoginController {
 
         // binding textValue from both fields
         showPasswordText.textProperty().bindBidirectional(passwordInput.textProperty());
-
     }
 
     public void showLicenses() {
@@ -216,20 +203,21 @@ public class LoginController {
     }
 
 
-    // if response from server => error, choose a text depending on code
-    // maybe it should be considered to write a class for this
-    private void writeText(int code) {
-        String info;
-        switch (code) {
-            case 100 -> {
-                info = resources.getString("logging.in");
-            }
-            case 400 -> info = resources.getString("validation.failed");
-            case 401 -> info = resources.getString("invalid.username.or.password");
-            default ->  info = resources.getString("put.in.username.password");
-        }
-        this.errorLabel.setText(info);
-    }
+    // not in main
+//    // if response from server => error, choose a text depending on code
+//    // maybe it should be considered to write a class for this
+//    private void writeText(int code) {
+//        String info;
+//        switch (code) {
+//            case 100 -> {
+//                info = resources.getString("logging.in");
+//            }
+//            case 400 -> info = resources.getString("validation.failed");
+//            case 401 -> info = resources.getString("invalid.username.or.password");
+//            default ->  info = resources.getString("put.in.username.password");
+//        }
+//        this.errorLabel.setText(info);
+//    }
 
 
     public void enableButtons(){
@@ -240,5 +228,8 @@ public class LoginController {
     @OnDestroy
     public void destroy() {
         this.subscriber.dispose();
+        backgroundAnchorPane.setStyle("-fx-background-image: null");
+        cardBackgroundVBox.setStyle("-fx-background-image: null");
+        calvarioLogoLogin = null;
     }
 }

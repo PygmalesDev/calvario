@@ -1,9 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.uniks.stp24.App;
 import de.uniks.stp24.component.WarningScreenComponent;
-import de.uniks.stp24.model.ErrorResponse;
 import de.uniks.stp24.service.EditAccService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
@@ -14,19 +12,21 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.BoxBlur;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
-import retrofit2.HttpException;
 
 import javax.inject.Inject;
 import java.util.Objects;
@@ -34,7 +34,7 @@ import java.util.ResourceBundle;
 
 @Title("Edit Account")
 @Controller
-public class EditAccController {
+public class EditAccController extends BasicController {
     @FXML
     ImageView avatarImage;
     @FXML
@@ -57,13 +57,20 @@ public class EditAccController {
     StackPane warningScreenContainer;
     @FXML
     HBox editAccHBox;
+    @FXML
+    ImageView editIconImageView;
+    @FXML
+    ImageView deleteIconImageView;
+
+    @FXML
+    AnchorPane backgroundAnchorPane;
+    @FXML
+    VBox cardBackgroundVBox;
 
     @Inject
     EditAccService editAccService;
     @Inject
     Subscriber subscriber;
-    @Inject
-    App app;
     @Inject
     TokenStorage tokenStorage;
     @Inject
@@ -74,16 +81,28 @@ public class EditAccController {
     @Resource
     ResourceBundle resources;
 
-
     @SubComponent
     @Inject
     WarningScreenComponent warningScreen;
 
     private BooleanBinding warningIsInvisible;
     private BooleanBinding editAccIsNotSelected;
+    public Image editIconBlueImage;
+    public Image editIconBlackImage;
+    public Image deleteIconRedImage;
+    public Image deleteIconBlackImage;
+
 
     @Inject
     public EditAccController() {
+    }
+
+    @OnInit
+    public void init(){
+        editIconBlueImage = new Image(getClass().getResource("/de/uniks/stp24/icons/editBlue.png").toExternalForm());
+        editIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/editBlack.png").toExternalForm());
+        deleteIconRedImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteRed.png").toExternalForm());
+        deleteIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteBlack.png").toExternalForm());
     }
 
     @OnRender
@@ -102,7 +121,6 @@ public class EditAccController {
         this.editAccIsNotSelected = this.changeUserInfoButton.selectedProperty().not();
     }
 
-
     @OnRender
     public void setBlurEffect() {
         // blurs the edit account screen when the warning screen is visible
@@ -117,6 +135,7 @@ public class EditAccController {
     public void setWarningScreen(){
         // warning screen component is set but not visible
         warningScreenContainer.getChildren().add(warningScreen);
+        warningScreen.setWarning(resources.getString("warning.deleteAccount"));
         warningScreenContainer.setVisible(false);
     }
 
@@ -124,10 +143,12 @@ public class EditAccController {
     public void changeUserInfo() {
         // If the changeUserButton is selected, username and password can be edited
         if(changeUserInfoButton.isSelected()){
-            passwordInput.setDisable(false);
-            usernameInput.setDisable(false);
+            passwordInput.setEditable(true);
+            usernameInput.setEditable(true);
             cancelChangesButton.setVisible(true);
             saveChangesButton.setVisible(true);
+            changeUserInfoButton.setStyle("-fx-text-fill: #2B78E4");
+            editIconImageView.setImage(editIconBlueImage);
         }else{
             resetEditing(tokenStorage.getName());
         }
@@ -144,14 +165,10 @@ public class EditAccController {
                         this.editAccIsNotSelected));
     }
 
-    private boolean checkIfInputNotBlankOrEmpty(String text) {
-        return (!text.isBlank() && !text.isEmpty());
-    }
-
     public void saveChanges() {
         // save changed name and/or password of the user and reset the edit account screen afterward
-        if (checkIfInputNotBlankOrEmpty(usernameInput.getText()) &&
-        checkIfInputNotBlankOrEmpty(passwordInput.getText())) {
+        if (checkIt(usernameInput.getText(),passwordInput.getText())) {
+            this.errorLabelEditAcc.setStyle("-fx-fill: black;");
             this.errorLabelEditAcc.setText("");
             subscriber.subscribe(editAccService.changeUserInfo(usernameInput.getText(), passwordInput.getText()),
                     result -> {
@@ -161,15 +178,16 @@ public class EditAccController {
                     // in case of server's response => error
                     // handle with error response
                     , error -> {
-                        if (error instanceof HttpException httpError) {
-                            System.out.println(httpError.code());
-                            String body = httpError.response().errorBody().string();
-                            ErrorResponse errorResponse = objectMapper.readValue(body,ErrorResponse.class);
-                            writeText(errorResponse.statusCode());
-                        }
+                        this.errorLabelEditAcc.setStyle("-fx-fill: red;");
+                        // find the code in the error response
+                        int code = errorService.getStatus(error);
+                        // "generate"" the output in the english/german
+                        this.errorLabelEditAcc
+                                .setText(getErrorInfoText(responseConstants.respEditAcc,code));
                     });
         } else {
-            writeText(1);
+            this.errorLabelEditAcc.setStyle("-fx-fill: red;");
+            this.errorLabelEditAcc.setText(getErrorInfoText(responseConstants.respEditAcc,-1));
 
         }
     }
@@ -178,13 +196,13 @@ public class EditAccController {
         // Reset inputs and changeUserInfoButton
         usernameInput.setText(username);
         passwordInput.setText("");
-        usernameInput.setDisable(true);
-        passwordInput.setDisable(true);
-
+        usernameInput.setEditable(false);
+        passwordInput.setEditable(false);
         cancelChangesButton.setVisible(false);
         saveChangesButton.setVisible(false);
-
         changeUserInfoButton.setDisable(false);
+        editIconImageView.setImage(editIconBlackImage);
+        changeUserInfoButton.setStyle("-fx-text-fill: Black");
     }
 
     public void cancelChanges() {
@@ -194,6 +212,21 @@ public class EditAccController {
         resetEditing(tokenStorage.getName());
     }
 
+    @OnRender
+    public void changeDeleteButtonView(){
+        // delete Button has red text and icon when selected
+        this.deleteUserButton.styleProperty().bind(Bindings.createStringBinding(()->{
+            if(warningIsInvisible.get())
+                return "-fx-text-fill: Black";
+            return "-fx-text-fill: #CF2A27";
+        },this.warningIsInvisible));
+
+        this.deleteIconImageView.imageProperty().bind(Bindings.createObjectBinding(()->{
+            if(warningIsInvisible.get())
+                return deleteIconBlackImage;
+            return deleteIconRedImage;
+        },this.warningIsInvisible));
+    }
 
     public void deleteUser() {
         // warning screen opens
@@ -204,22 +237,10 @@ public class EditAccController {
         app.show("/browseGames");
     }
 
-    // if response from server => error, choose a text depending on code
-    private void writeText(int code) {
-        this.errorLabelEditAcc.setStyle("-fx-fill: red;");
-        String info;
-        switch (code) {
-            case 400 -> info = resources.getString("invalid.password");
-            case 401 -> info = resources.getString("validation.failed");
-            case 403 -> info = resources.getString("attempting.to.change.someone.else.user");
-            case 409 -> info = resources.getString("username.in.use.by.another.user");
-            default ->  info = resources.getString("put.in.username.password");
-        }
-        this.errorLabelEditAcc.setText(info);
-    }
-
     @OnDestroy
     public void destroy() {
         this.subscriber.dispose();
+        backgroundAnchorPane.setStyle("-fx-background-image: null");
+        cardBackgroundVBox.setStyle("-fx-background-image: null");
     }
 }

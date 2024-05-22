@@ -1,60 +1,31 @@
-Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
-    -fx-font-family: "PT Sarif";
-    -fx-font-size: 16;
+/*++++++++++++++++++++++++++++++++++******************************************************/
+/********* General ***********************************************************************/
+@font-face{
+    font-family: 'PT Serif';
+    src: url('/de/uniks/stp24/assets/fonts/PTSerif-Bold.ttf');
+}
+
+
+Text, TextField, PasswordField, Button, CheckBox, ToggleButton{
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 18;
     -fx-font-weight: bold;
 }
 
-.gangNameLabel {
-    -fx-font-family: "PT Sarif";
+
+.borderedText {
+    -fx-border-color: #000000;
+    -fx-border-width: 5;
+}
+
+.capitals {
+    -fx-font-family: "PT Serif";
     -fx-font-size: 24;
     -fx-font-weight: bold;
 }
 
-.semiTransparent{
-    -fx-background-color: rgba(191, 144, 0, 0.7);
-}
-
-.textFieldGang {
-    -fx-font-family: "PT Sarif";
-    -fx-font-size: 32;
-    -fx-font-weight: bold;
-}
-
-.textDeleteGang {
-    -fx-font-family: "PT Sarif";
-    -fx-font-size: 24;
-}
-
-.bigButton {
-    -fx-font-family: "PT Sarif";
-    -fx-font-size: 24;
-    -fx-font-weight: bold;
-    -fx-background-color: #FFD966;
-}
-
-.normalButton {
-    -fx-font-family: "PT Sarif";
-    -fx-font-size: 24;
-    -fx-font-weight: bold;
-    -fx-background-color: #FFD966;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
-}
-
-.languageButton:selected {
-    -fx-font-family: "PT Sarif";
-    -fx-font-size: 24;
-    -fx-font-weight: bold;
-    -fx-background-color: #BF9000;
-    -fx-text-fill: WHITE;
-}
-
-.languageButton {
-    -fx-font-family: "PT Sarif";
-    -fx-font-size: 24;
-    -fx-font-weight: bold;
-    -fx-background-color: #FFD966;
-    -fx-text-fill: BLACK;
-}
+/*********************************************************************************************/
+/********* Backgrounds ***********************************************************************/
 
 .background{
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/background.png");
@@ -65,6 +36,71 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/card.png");
     -fx-background-size: 100% 100%;
 }
+
+.transparentBackground {
+    -fx-background-color: #BF900080;
+}
+
+.backgroundLightYellow {
+    -fx-background-color: #FFD966;
+    -fx-border-color: #000000;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 0, 0, 10, 5);
+    -fx-border-width: 2;
+}
+
+.menuLogic {
+    -fx-background-color: #999999;
+    -fx-border-color: #000000
+}
+
+.image-view-wrapper{
+    -fx-border-color: black;
+    -fx-border-style: solid;
+    -fx-border-width: 2;
+}
+
+/************************************************************************************/
+/***************** Buttons *********************************************************/
+Button:hover{
+    -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.5),15,0,0,0);
+    -fx-cursor: hand;
+}
+
+ToggleButton:hover{
+    -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.5),15,0,0,0);
+    -fx-cursor: hand;
+}
+
+
+.languageButton:selected {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-background-color: #BF9000;
+    -fx-text-fill: WHITE;
+}
+
+.languageButton {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-background-color: #FFD966;
+    -fx-text-fill: BLACK;
+}
+
+.deleteAndSaveButton{
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-text-fill: White;
+    -fx-background-color: Black;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.75), 2, 0, 7, 7);
+    -fx-pref-width: 180px;
+    -fx-pref-height: 35px;
+}
+
+
 
 .upButton {
     -fx-background-color: transparent;
@@ -114,12 +150,12 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 }
 
 .actionButton{
-    -fx-font-family: "PT Sarif";
-    -fx-font-size: 24;
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 22;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
-    -fx-background-size: inherit;
+    -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 0;
@@ -128,10 +164,27 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-pref-height: 75px;
 }
 
+
+.smallActionButton{
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-alignment: center;
+    -fx-padding: 0 0 0 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 230px;
+    -fx-pref-height: 75px;
+}
+
 .eyeButton{
     -fx-background-image: url("/de/uniks/stp24/icons/eye.png");
     -fx-background-color: transparent;
-    -fx-background-size: inherit;
+    -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 0;
@@ -141,7 +194,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 }
 
 .rememberMe {
-    -fx-font-family: "PT Sarif";
+    -fx-font-family: "PT Serif";
     -fx-font-size: 24;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
@@ -156,12 +209,12 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 
 
 .backButton{
-    -fx-font-family: "PT Sarif";
-    -fx-font-size: 24;
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 22;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/backButton.png");
-    -fx-background-size: inherit;
+    -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 0;
@@ -171,12 +224,12 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 }
 
 .licensesButton{
-    -fx-font-family: "PT Sarif";
+    -fx-font-family: "PT Serif";
     -fx-font-size: 24;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/licensesButton.png");
-    -fx-background-size: inherit;
+    -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 0;
@@ -193,17 +246,159 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 }
 
 .inputField {
-    -fx-font-family: "PT Sarif";
+    -fx-font-family: "PT Serif";
     -fx-font-size: 22;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/fields/textField.png");
-    -fx-background-size: inherit;
+    -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
     -fx-pref-width: 400px;
     -fx-pref-height: 65px;
+}
+
+.browseGameList .list-cell{
+    -fx-text-fill: Black;
+    -fx-background-color: #FFD966;
+    -fx-border-color: Black;
+}
+
+.browseGameList .list-cell:selected{
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: #CF2A27;
+}
+
+.browseGameList .scroll-bar:vertical{
+    -fx-background-color: #ffffff;
+}
+
+.browseGameList .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color: #030303;
+}
+
+.browseGameList .increment-button .increment-arrow, scroll-bar .decrement-button .decrement-arrow{
+    -fx-background-color: #030303;
+}
+
+.browseGameList .scroll-bar .spinner .increment-arrow-button{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/up.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 0;
+}
+
+.browseGameList .scroll-bar .spinner .decrement-arrow-button{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/down.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 0;
+}
+
+
+/**********************************************************************************************/
+/********************** Spinner ********************************************************/
+.spinner{
+    -fx-padding: 0 10 0 10;
+    -fx-background-color: #FFD966;
+    -fx-border-color: #000000;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 0, 0, 8, 8);
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-pref-width: 350px;
+    -fx-pref-height: 45px;
+}
+
+.spinner .text-field{
+    -fx-font-family: "PT Serif";
+    -fx-background-color: #FFD966;
+    -fx-alignment: center;
+    -fx-font-size: 16px;
+    -fx-border-radius: 10;
+}
+
+.spinner .increment-arrow,
+.spinner .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+    -fx-pref-width: 10px;
+    -fx-pref-height: 10px;
+}
+
+.spinner .increment-arrow-button{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/up.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 0;
+}
+
+.spinner .decrement-arrow-button{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/down.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+
+.textFieldGame{
+    -fx-background-color: #FFD966;
+    -fx-border-color: #000000;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 0, 0, 8, 8);
+    -fx-border-width: 2;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-pref-width: 350px;
+    -fx-pref-height: 45px;
+}
+
+
+
+/**********************************************************************************************/
+/********************** Empire Screen ********************************************************/
+
+.gangNameLabel {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+}
+
+.semiTransparent{
+    -fx-background-color: rgba(191, 144, 0, 0.7);
+}
+
+.textFieldGang {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 32;
+    -fx-font-weight: bold;
+}
+
+.textDeleteGang {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 24;
+}
+
+.bigButton {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-background-color: #FFD966;
+}
+
+.normalButton {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-background-color: #FFD966;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
 }
 

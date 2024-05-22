@@ -9,10 +9,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
+import java.util.ResourceBundle;
 
 @Component(view = "Game.fxml")
 public class GameComponent extends HBox implements ReusableItemComponent<Game> {
@@ -27,6 +29,9 @@ public class GameComponent extends HBox implements ReusableItemComponent<Game> {
 
     @Inject
     TokenStorage tokenStorage;
+    @Inject
+    @Resource
+    ResourceBundle resource;
 
     private Game game;
 

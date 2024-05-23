@@ -113,6 +113,7 @@ public class LoginController extends BasicController {
 
                 case "deleted" -> this.errorLabel
                         .setText(resources.getString("account.deleted"));
+                case "error" -> this.errorLabel.setText("ONERROR");
 
                 default -> this.errorLabel.setText("");
             }

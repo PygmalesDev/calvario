@@ -3,6 +3,7 @@ package de.uniks.stp24.component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
 import de.uniks.stp24.service.BrowseGameService;
+import de.uniks.stp24.service.ErrorService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -11,10 +12,10 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
-
 import javax.inject.Inject;
+
 @Component(view = "Warning.fxml")
-public class WarningComponent extends VBox{
+public class WarningComponent extends VBox {
     @FXML
     Button cancelButton;
     @FXML
@@ -32,10 +33,9 @@ public class WarningComponent extends VBox{
     Subscriber subscriber;
     @Inject
     BrowseGameService browseGameService;
-
     String gameNameText;
-
-
+    @Inject
+    ErrorService errorService;
 
     @Inject
     public WarningComponent() {
@@ -52,8 +52,12 @@ public class WarningComponent extends VBox{
     }
 
     public void deleteGame() {
-        this.subscriber.subscribe(browseGameService.deleteGame());
-        setVisible(false);
+        this.subscriber.subscribe(browseGameService.deleteGame(),
+          result -> {},
+          //TODO: WHAT SHOULD HAPPEN WITH ERROR?
+          // Map it back to browse games?
+          error -> errorService.getMessage(error));
+          setVisible(false);
     }
 
     @OnDestroy
@@ -66,6 +70,7 @@ public class WarningComponent extends VBox{
     public void onCancel() {
         setVisible(false);
     }
+
 
 }
 

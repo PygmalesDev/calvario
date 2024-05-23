@@ -1,5 +1,6 @@
 package de.uniks.stp24;
 
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.controllers.LoginController;
 import de.uniks.stp24.model.LoginResult;
 import de.uniks.stp24.service.LoginService;
@@ -25,6 +26,8 @@ public class LoginControllerTest extends ControllerTest {
     LoginService loginService;
     @Spy
     Subscriber subscriber;
+    @Spy
+    BubbleComponent bubbleComponent;
     @InjectMocks
     LoginController loginController;
 

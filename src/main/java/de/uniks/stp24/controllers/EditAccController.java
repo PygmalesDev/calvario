@@ -214,5 +214,9 @@ public class EditAccController extends BasicController {
         this.subscriber.dispose();
         backgroundAnchorPane.setStyle("-fx-background-image: null");
         cardBackgroundVBox.setStyle("-fx-background-image: null");
+        editIconBlueImage = null;
+        editIconBlackImage = null;
+        deleteIconRedImage = null;
+        deleteIconBlackImage = null;
     }
 }

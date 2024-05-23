@@ -1,7 +1,9 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.*;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
@@ -11,9 +13,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -22,7 +26,6 @@ import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
-import javax.swing.text.html.ImageView;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -35,10 +38,6 @@ public class SignUpController extends BasicController {
     ToggleButton languageToggleButton;
 
     @FXML
-    ToggleButton enToggleButton;
-    @FXML
-    ToggleButton deToggleButton;;
-    @FXML
     TextField usernameField;
     @FXML
     PasswordField passwordField;
@@ -47,6 +46,8 @@ public class SignUpController extends BasicController {
     @FXML
     Text errorTextField;
     @FXML
+    Pane captainContainer;
+    @FXML
     public Button registerButton;
     @FXML
     TextField showPasswordText;
@@ -54,7 +55,10 @@ public class SignUpController extends BasicController {
     TextField showRepeatPasswordText;
     @FXML
     ToggleButton showPasswordToggleButton;
-
+    @FXML
+    ToggleButton enToggleButton;
+    @FXML
+    ToggleButton deToggleButton;
     @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
@@ -67,12 +71,17 @@ public class SignUpController extends BasicController {
     @Param("password")
     public String password;
 
+
     @Inject
     SignUpService signUpService;
     @Inject
     Subscriber subscriber;
     @Inject
     UserApiService userApiService;
+
+    @SubComponent
+    @Inject
+    BubbleComponent bubbleComponent;
 
     private BooleanBinding isLoginFieldEmpty;
     private BooleanBinding isPasswordFieldEmpty;
@@ -86,6 +95,18 @@ public class SignUpController extends BasicController {
     @OnInit
     public void init(){
         this.controlResponses = responseConstants.respSignup;
+    }
+
+    @OnRender
+    public void addSpeechBubble() {
+        captainContainer.getChildren().add(bubbleComponent);
+        Platform.runLater(() -> {
+            bubbleComponent.addChildren(errorTextField);
+            bubbleComponent.setCaptainText("");
+            if (!errorTextField.getText().equals("")) {
+                bubbleComponent.setCaptainText("");
+            }
+        });
     }
 
     // Sets boolean bindings for text manipulations
@@ -108,6 +129,26 @@ public class SignUpController extends BasicController {
             this.passwordField.setText(this.password);
     }
 
+    // Shows an error message when input fields are empty or password inputs do not match
+    @OnRender
+    public void showErrorMessage() {
+        this.errorTextField.textProperty().bind(Bindings.createStringBinding(() -> {
+                    if (this.isLoginFieldEmpty.get())
+                        return resources.getString("pirate.register.tell.name");
+                    if (this.isPasswordFieldEmpty.get())
+                        return resources.getString("pirate.general.enter.password");
+                    if (this.isPasswordTooShort.get() && !this.isPasswordFieldEmpty.get())
+                        return resources.getString("pirate.register.8characters");
+                    if (this.isRepeatPasswordEmpty.get() && !this.isPasswordFieldEmpty.get())
+                        return resources.getString("pirate.general.repeat.password");
+                    if (!this.passwordInputsMatch.get() && !this.isPasswordFieldEmpty.get() && !this.isPasswordFieldEmpty.get())
+                        return resources.getString("pirate.register.passwords.dont.match");
+                    return resources.getString("pirate.register.possible");
+                }, this.isLoginFieldEmpty, this.isPasswordFieldEmpty,
+                this.isRepeatPasswordEmpty, this.passwordInputsMatch,
+                this.isPasswordTooShort));
+    }
+
     // Disables register button when input fields are empty or password inputs do not match
     // modified passwords do not need to match
     @OnRender
@@ -119,18 +160,24 @@ public class SignUpController extends BasicController {
                         .or(this.isPasswordTooShort)
                 );
         if (registerButton.isDisabled()) {
-            errorTextField.setText(resources.getString("info.register"));
+            // TODO for MT: change the logic? for different cases
+            // errorTextField.setText(resources.getString("info.register"));
         }
-
     }
 
     public void register() {
+        // TODO @mtfmtf
+        // When there is error with registering, showErrorMessage() does not work
+        // You can try to call showErrorMessage() after you get the error from server but then the error from server is
+        // not shown
         if (checkIt(this.usernameField.getText(),
                 this.passwordField.getText(),
                 this.repeatPasswordField.getText()) &&
                 this.passwordInputsMatch.getValue()) {
-                    this.errorTextField
+                this.errorTextField.textProperty().unbind();
+                this.errorTextField
                             .setText(getErrorInfoText(this.controlResponses, 201));
+                bubbleComponent.setErrorMode(false);
 
             this.subscriber.subscribe(this.signUpService.register(this.getUsername(), this.getPassword()),
                     result -> this.app.show("/login",
@@ -143,12 +190,15 @@ public class SignUpController extends BasicController {
                         int code = errorService.getStatus(error);
                     // "generate"" the output in the english/german
                     // due binding, the TextField was not accessible here -> modified
+                        this.errorTextField.textProperty().unbind();
                         errorTextField.setText(getErrorInfoText(this.controlResponses, code));
+                        bubbleComponent.setErrorMode(true);
                     });
             } else {
             int code = this.passwordInputsMatch.not().getValue() ? -2 : -1;
-            this.errorTextField.setStyle("-fx-fill: red;");
+            this.errorTextField.textProperty().unbind();
             errorTextField.setText(getErrorInfoText(this.controlResponses, code));
+            bubbleComponent.setErrorMode(true);
         }
     }
 

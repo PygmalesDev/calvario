@@ -59,7 +59,7 @@ public class WarningComponent extends VBox{
 
     public void deleteGame() {
         this.subscriber.subscribe(browseGameService.deleteGame());
-        setVisible(false);
+        this.getParent().setVisible(false);
     }
 
     @OnDestroy
@@ -70,7 +70,7 @@ public class WarningComponent extends VBox{
     }
 
     public void onCancel() {
-        setVisible(false);
+        this.getParent().setVisible(false);
     }
 
 }

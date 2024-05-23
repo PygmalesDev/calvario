@@ -129,7 +129,6 @@ public class EditAccController extends BasicController {
     public void createBindings(){
         this.editAccIsNotSelected = this.changeUserInfoButton.selectedProperty().not();
         this.warningIsInvisible = this.warningScreenContainer.visibleProperty().not();
-
     }
 
     @OnRender

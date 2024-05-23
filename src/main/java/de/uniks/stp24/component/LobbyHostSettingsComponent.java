@@ -11,11 +11,14 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
@@ -30,6 +33,8 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     Text gameNameField;
     @FXML
     public Button startJourneyButton;
+    @FXML
+    ImageView readyIconImageView;
     @Inject
     Subscriber subscriber;
     @Inject
@@ -38,6 +43,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     App app;
     @Inject
     TokenStorage tokenStorage;
+
     @Inject
     GamesApiService gamesApiService;
     @Inject
@@ -48,10 +54,18 @@ public class LobbyHostSettingsComponent extends AnchorPane {
 
     private String gameID;
     public boolean leftLobby;
+    private Image readyIconBlueImage;
+    private Image readyIconGreenImage;
 
     @Inject
     public LobbyHostSettingsComponent() {
         this.leftLobby = false;
+    }
+
+    @OnInit
+    public void init(){
+        readyIconBlueImage = new Image(getClass().getResource("/de/uniks/stp24/icons/approveBlue.png").toExternalForm());
+        readyIconGreenImage = new Image(getClass().getResource("/de/uniks/stp24/icons/approveGreen.png").toExternalForm());
     }
 
     public void createCheckPlayerReadinessListener() {
@@ -95,12 +109,15 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     public void ready() {
         this.subscriber.subscribe(
                 this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
-                    if (result.ready())
+                    if (result.ready()) {
                         this.subscriber.subscribe(this.lobbyService
                                 .updateMember(this.gameID, this.tokenStorage.getUserId(), false, result.empire()));
-                    else
+                        readyIconImageView.setImage(readyIconBlueImage);
+                    }else{
                         this.subscriber.subscribe(this.lobbyService
                                 .updateMember(this.gameID, this.tokenStorage.getUserId(), true, result.empire()));
+                        readyIconImageView.setImage(readyIconGreenImage);
+                    }
                 });
     }
 }

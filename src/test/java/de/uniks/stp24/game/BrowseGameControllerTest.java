@@ -2,10 +2,13 @@ package de.uniks.stp24.game;
 
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.GameComponent;
+import de.uniks.stp24.component.LogoutComponent;
 import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.model.Game;
+import de.uniks.stp24.model.LogoutResult;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
@@ -27,8 +30,10 @@ import javax.inject.Provider;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class BrowseGameControllerTest extends ControllerTest {
@@ -39,6 +44,11 @@ public class BrowseGameControllerTest extends ControllerTest {
 
     @Spy
     WarningComponent warningComponent;
+    @Spy
+    BrowseGameService browseGameService;
+
+    @InjectMocks
+    LogoutComponent logoutComponent;
     @Spy
     Subscriber subscriber = new Subscriber();
 
@@ -63,6 +73,7 @@ public class BrowseGameControllerTest extends ControllerTest {
 
     @Override
     public void start(Stage stage)  throws Exception{
+        browseGameController.logoutComponent = logoutComponent;
         Mockito.doReturn(Observable.just(List.of(
                 game,
                 new Game(null, null, "2", "rapapa", "testID", false, 0,0, null)
@@ -84,7 +95,7 @@ public class BrowseGameControllerTest extends ControllerTest {
         assertEquals("Browse Game", stage.getTitle());
         clickOn(browseGameController.log_out_b);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Logout", stage.getTitle());
+        assertNotNull(lookup("#logoutButton").queryButton());
     }
 
     @Test
@@ -228,5 +239,46 @@ public class BrowseGameControllerTest extends ControllerTest {
 
         clickOn("#confirmButton");
         verify(this.warningComponent).deleteGame();
+    }
+
+    @Test
+    public void clickOnLogout() {
+        doReturn(Observable.just(new LogoutResult(""))).when(browseGameService).logout(any());
+
+        // Start:
+        // Alice sees the Logout
+        assertEquals("Browse Game", stage.getTitle());
+
+        // Alice clicks on logout
+        clickOn("#log_out_b");
+        waitForFxEvents();
+
+        clickOn("#logoutButton");
+
+        waitForFxEvents();
+
+        // Alice sees now the login screen
+        verify(browseGameController.browseGameService,times(1)).logout("");
+        //assertEquals(resources.getString("login"),stage.getTitle());
+    }
+
+    @Test
+    public void clickOnCancel() {
+        // Start:
+        // Alice has unintended clicked the logout button
+        // and see the logout screen
+        assertEquals("Browse Game", stage.getTitle());
+
+        // Alice clicks on cancel
+        clickOn("#log_out_b");
+        waitForFxEvents();
+
+        clickOn("#cancelButton");
+
+        waitForFxEvents();
+
+        // Alice return to the browse game login screen
+        // must be fixed when browsegames.fxml is available
+        assertEquals("Browse Game", stage.getTitle());
     }
 }

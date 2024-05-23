@@ -11,7 +11,7 @@ import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Resource;
@@ -47,7 +47,7 @@ public class GangCreationController {
     @FXML
     ListView<Gang> gangsListView;
     @FXML
-    Pane creationPane;
+    VBox creationBox;
     @FXML
     ImageView flagImage;
     @FXML
@@ -151,7 +151,7 @@ public class GangCreationController {
 
     @OnRender
     public void render() {
-        creationPane.setVisible(false);
+        creationBox.setVisible(false);
         deletePane.setVisible(false);
         editButton.setVisible(false);
         showDeletePaneButton.setVisible(false);
@@ -160,7 +160,7 @@ public class GangCreationController {
         gangsListView.setOnMouseClicked(event -> {
             Gang gang = gangsListView.getSelectionModel().getSelectedItem();
             if (gang != null) {
-                creationPane.setVisible(true);
+                creationBox.setVisible(true);
                 gangNameText.setText(gang.name());
                 flagImageIndex = gang.flagIndex();
                 flagImage.setImage(new Image(flagsList.get(flagImageIndex).toURI().toString()));
@@ -205,11 +205,11 @@ public class GangCreationController {
 
     public void cancel() {
         deletePane.setVisible(false);
-        creationPane.setEffect(null);
+        creationBox.setEffect(null);
     }
 
     public void showCreationPane() {
-        creationPane.setVisible(true);
+        creationBox.setVisible(true);
         resetCreationPane();
         createButton.setVisible(true);
         editButton.setVisible(false);
@@ -217,7 +217,7 @@ public class GangCreationController {
     }
 
     public void showDeletePane() {
-        creationPane.setEffect(new BoxBlur());
+        creationBox.setEffect(new BoxBlur());
         deletePane.setVisible(true);
         Gang gang = gangsListView.getSelectionModel().getSelectedItem();
         toBeDeletedGangName.setText(gang.name());

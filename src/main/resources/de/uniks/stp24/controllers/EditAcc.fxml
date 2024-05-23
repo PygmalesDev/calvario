@@ -8,6 +8,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
@@ -128,6 +129,7 @@
                            </font>
                         </Button>
                      </VBox>
+                     <Pane fx:id="captainContainer" layoutX="122.0" layoutY="313.0" prefHeight="50.0" prefWidth="79.0" />
                   </AnchorPane>
                </HBox>
                <StackPane fx:id="warningScreenContainer" prefHeight="200.0" prefWidth="300.0" visible="false" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="100.0" />

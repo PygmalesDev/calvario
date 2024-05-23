@@ -42,10 +42,7 @@ public class LogoutController extends BasicController {
     public void logout() {
 
         logoutService.logout("")
-                .doFinally(() -> {
-                    System.out.println("LOGGING OUT");
-                    info = "logout";
-                })
+                .doFinally(() -> info = "logout")
                 .subscribe().dispose();
         app.show("/login", Map.of("info",info));
 

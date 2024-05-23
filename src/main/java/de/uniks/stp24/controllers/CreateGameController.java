@@ -77,11 +77,12 @@ public class CreateGameController extends BasicController {
     public void createGame() {
         String gameName = this.createNameTextField.getText();
         String password = this.createPasswordTextField.getText();
+        GameSettings settings = new GameSettings(this.createMapSizeSpinner.getValue());
         boolean pwdMatch = (this.createPasswordTextField.getText().equals(createRepeatPasswordTextField.getText()));
         if (checkIt(gameName, password) &&
                 pwdMatch &&
-                this.createMapSizeSpinner.getValue() != null) {
-            GameSettings settings = new GameSettings(this.createMapSizeSpinner.getValue());
+                this.createMapSizeSpinner.getValue() != null &&
+            createGameService.isCreable(gameName)) {
             if (createGameService.createGame(gameName, settings, password) != null) {
                 /*
                 Platform run later makes sure updating the ui will be done on ui thread
@@ -89,7 +90,7 @@ public class CreateGameController extends BasicController {
                 that call of createGame is done on a different background thread so
                 the ui is not blocked.
                  */
-                createGameService.createGame(gameName, settings, password).subscribe(result -> {
+                /*createGameService.createGame(gameName, settings, password).subscribe(result -> {
                             Platform.runLater(() -> {
                                 browseGameController.init();
                                 app.show(browseGameController);
@@ -98,9 +99,21 @@ public class CreateGameController extends BasicController {
                                     error -> {
                                         int code = errorService.getStatus(error);
                                         errorMessageText.setText(getErrorInfoText(this.controlResponses,code));
-                        });
+                        });*/
+                subscriber.subscribe(createGameService.createGame(gameName, settings, password),
+                  result -> {
+                      Platform.runLater(() -> {
+                          browseGameController.init();
+                          app.show(browseGameController);
+                      });
+                  },
+                  error -> {
+                      int code = errorService.getStatus(error);
+                      errorMessageText.setText(getErrorInfoText(this.controlResponses,code));
+                  });
             }
         } else {
+            if (!createGameService.isCreable(gameName)) System.out.println("HALLO");
             errorMessageText.setText(getErrorInfoText(this.controlResponses,
                     !pwdMatch ? -2 : -1));
         }

@@ -1,6 +1,5 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
 import de.uniks.stp24.component.GameComponent;
 import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.model.Game;
@@ -14,28 +13,24 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
-import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 @Title("Browse Game")
 @Controller
@@ -94,10 +89,14 @@ BrowseGameController extends BasicController {
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
 
+    @Param("info")
+    String errorText;
+
 
     //Load list of games as soon as BrowseGame-Screen is shown
     @OnInit
     void init() {
+        this.controlResponses = responseConstants.respDelGame;
 
 
         editGameService = (editGameService == null) ? new EditGameService() : editGameService;
@@ -107,7 +106,7 @@ BrowseGameController extends BasicController {
 
         browseGameService.resetSelectedGame();
 
-        gamesApiService.findAll().subscribe(gameList -> {
+       /* gamesApiService.findAll().subscribe(gameList -> {
             Platform.runLater(() -> {
                 games.setAll(gameList);
                 editGameService.setGamesList(games);
@@ -119,8 +118,8 @@ BrowseGameController extends BasicController {
           error -> {
                 System.out.println("error " + errorService.getStatus(error));
                 System.out.println("-> " + errorService.getMessage(error));
-        });
-        //TODO SO BESSER
+        });*/
+        //TODO BETTER AS SUBSCRIBER
         subscriber.subscribe(gamesApiService.findAll(),
           gameList -> {
               Platform.runLater(() -> {
@@ -132,6 +131,7 @@ BrowseGameController extends BasicController {
               });},
           //TODO ERROR HANDLING! AT THE MOMENT LIST IS NOT WORKING
           error -> {
+              System.out.println("ERROR FIND ALL()");
               System.out.println("error " + errorService.getStatus(error));
               System.out.println("-> " + errorService.getMessage(error));
           });
@@ -144,8 +144,13 @@ BrowseGameController extends BasicController {
                     case "update" -> games.replaceAll(g -> g._id().equals(event.data()._id()) ? event.data() : g);
                     case "deleted" -> games.removeIf(g -> g._id().equals(event.data()._id()));
                 }
+            });},
+            error -> {
+                System.out.println("ERROR EVENT LISTENER games*.*?)\n");
+                System.out.println("error " + errorService.getStatus(error));
+                System.out.println("-> " + errorService.getMessage(error));
             });
-        });
+
     }
 
     //Make list of games visible
@@ -157,6 +162,7 @@ BrowseGameController extends BasicController {
     @OnDestroy
     void destroy() {
         subscriber.dispose();
+
         backgroundAnchorPane.setStyle("-fx-background-image: null");
         cardBackgroundVBox.setStyle("-fx-background-image: null");
     }
@@ -202,6 +208,10 @@ BrowseGameController extends BasicController {
             warningComponent.setGameName();
             popup.showPopup(warningWindowContainer, warningComponent);
             popup.setBlur(browseGameVBoxList, browseGameVBoxButtons);
+        } else {
+            errorText = getErrorInfoText(this.controlResponses,403);
         }
     }
+
+
 }

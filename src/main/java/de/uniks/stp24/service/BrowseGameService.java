@@ -15,11 +15,12 @@ import java.util.List;
 public class BrowseGameService {
     @Inject
     GamesApiService gamesApiService;
-
     @Inject
     TokenStorage tokenStorage;
     @Inject
     PrefService prefService;
+    @Inject
+    ErrorService errorService;
 
     private Game game;
 
@@ -72,12 +73,10 @@ public class BrowseGameService {
     //Calls Api DELETE if the game is from the user
     public Observable<Game> deleteGame() {
         if (checkMyGame()) {
-            //TODO add Error handling for deleting a game
             return gamesApiService.deleteGame(game._id());
         } else {
             return null;
         }
-
     }
 
     public String getGameName() {

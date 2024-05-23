@@ -93,13 +93,13 @@ public class CreateGameController extends BasicController {
               },
               error -> {
                   int code = errorService.getStatus(error);
-                  errorMessageText.setText(getErrorInfoText(this.controlResponses,code));
+                  errorMessageText.setText(getErrorInfoText(code));
               });
 
         } else if (!createGameService.nameIsAvailable(gameName)) {
-            errorMessageText.setText(getErrorInfoText(this.controlResponses,409)); }
+            errorMessageText.setText(getErrorInfoText(409)); }
         else {
-            errorMessageText.setText(getErrorInfoText(this.controlResponses,
+            errorMessageText.setText(getErrorInfoText(
               !pwdMatch ? -2 : -1));
         }
     }
@@ -109,7 +109,7 @@ public class CreateGameController extends BasicController {
     }
 
     public void showError(int code) {
-        errorMessageText.setText(getErrorInfoText(this.controlResponses,code));
+        errorMessageText.setText(getErrorInfoText(code));
     }
 
     public void setCreateGameService(CreateGameService createGameService) {

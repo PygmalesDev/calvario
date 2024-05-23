@@ -19,6 +19,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
@@ -86,40 +87,21 @@ BrowseGameController extends BasicController {
     @Inject
     CreateGameService createGameService;
     PopupBuilder popup = new PopupBuilder();
+    // the fxml has no containers (text, label) for errors;
+    private
+    Text textInfo;
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
-
-    @Param("info")
-    String errorText;
-
 
     //Load list of games as soon as BrowseGame-Screen is shown
     @OnInit
     void init() {
         this.controlResponses = responseConstants.respDelGame;
 
-
         editGameService = (editGameService == null) ? new EditGameService() : editGameService;
         createGameService = (createGameService == null) ? new CreateGameService() : createGameService;
         browseGameService = (browseGameService == null) ? new BrowseGameService() : browseGameService;
-
-
         browseGameService.resetSelectedGame();
-
-       /* gamesApiService.findAll().subscribe(gameList -> {
-            Platform.runLater(() -> {
-                games.setAll(gameList);
-                editGameService.setGamesList(games);
-                createGameService.setGamesList(games);
-                // Update the ListView after data is set
-                updateListView();
-            });},
-          //TODO ERROR HANDLING!
-          error -> {
-                System.out.println("error " + errorService.getStatus(error));
-                System.out.println("-> " + errorService.getMessage(error));
-        });*/
-        //TODO BETTER AS SUBSCRIBER
         subscriber.subscribe(gamesApiService.findAll(),
           gameList -> {
               Platform.runLater(() -> {
@@ -129,11 +111,9 @@ BrowseGameController extends BasicController {
                   // Update the ListView after data is set
                   updateListView();
               });},
-          //TODO ERROR HANDLING! AT THE MOMENT LIST IS NOT WORKING
           error -> {
-              System.out.println("ERROR FIND ALL()");
-              System.out.println("error " + errorService.getStatus(error));
-              System.out.println("-> " + errorService.getMessage(error));
+              int code = errorService.getStatus(error);
+              this.textInfo.setText(getErrorInfoText(code));
           });
 
         // Listener for updating list of games if games are created, deleted or updated
@@ -146,9 +126,8 @@ BrowseGameController extends BasicController {
                 }
             });},
             error -> {
-                System.out.println("ERROR EVENT LISTENER games*.*?)\n");
-                System.out.println("error " + errorService.getStatus(error));
-                System.out.println("-> " + errorService.getMessage(error));
+                int code = errorService.getStatus(error);
+                this.textInfo.setText(getErrorInfoText(code));
             });
 
     }
@@ -162,7 +141,6 @@ BrowseGameController extends BasicController {
     @OnDestroy
     void destroy() {
         subscriber.dispose();
-
         backgroundAnchorPane.setStyle("-fx-background-image: null");
         cardBackgroundVBox.setStyle("-fx-background-image: null");
     }
@@ -209,9 +187,8 @@ BrowseGameController extends BasicController {
             popup.showPopup(warningWindowContainer, warningComponent);
             popup.setBlur(browseGameVBoxList, browseGameVBoxButtons);
         } else {
-            errorText = getErrorInfoText(this.controlResponses,403);
+            this.textInfo.setText(getErrorInfoText(403));
         }
     }
-
 
 }

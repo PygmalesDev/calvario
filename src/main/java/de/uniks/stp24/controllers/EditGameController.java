@@ -20,7 +20,7 @@ import org.fulib.fx.annotation.event.OnDestroy;
 
 import javax.inject.Inject;
 
-@Title("Edit Game")
+@Title("%calvario.editGame")
 @Controller
 public class EditGameController extends BasicController {
     @FXML
@@ -92,13 +92,12 @@ public class EditGameController extends BasicController {
                 });},
               error -> {
                   int code = errorService.getStatus(error);
-                  errorMessageTextEdit.setText(getErrorInfoText(this.controlResponses, code));
+                  errorMessageTextEdit.setText(getErrorInfoText(code));
               });
         } else if(!editGameService.nameIsAvailable(gameName)) {
-            errorMessageTextEdit.setText(getErrorInfoText(this.controlResponses,409));
+            errorMessageTextEdit.setText(getErrorInfoText(409));
         } else {
-            errorMessageTextEdit.setText(getErrorInfoText(this.controlResponses,
-              !pwdMatch ? -2 : -1));
+            errorMessageTextEdit.setText(getErrorInfoText(!pwdMatch ? -2 : -1));
         }
     }
     public void cancel(){
@@ -106,7 +105,7 @@ public class EditGameController extends BasicController {
         app.show("/browseGames");
     }
     public void showError(int code) {
-        errorMessageTextEdit.setText(getErrorInfoText(this.controlResponses,code));
+        errorMessageTextEdit.setText(getErrorInfoText(code));
     }
 
     public void setEditGameService(EditGameService newEditGameService) {

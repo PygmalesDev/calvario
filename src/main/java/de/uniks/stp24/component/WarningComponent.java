@@ -16,7 +16,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 
 @Component(view = "Warning.fxml")
-public class WarningComponent extends VBox{
+public class WarningComponent extends VBox {
     @FXML
     Button cancelButton;
     @FXML
@@ -55,7 +55,8 @@ public class WarningComponent extends VBox{
     public void deleteGame() {
         this.subscriber.subscribe(browseGameService.deleteGame(),
           result -> {},
-          //TODO: WHAT SHOULD HAPPEN ON ERROR?
+          //TODO: WHAT SHOULD HAPPEN WITH ERROR?
+          // Map it back to browse games?
           error -> errorService.getMessage(error));
           setVisible(false);
     }

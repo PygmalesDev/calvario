@@ -19,10 +19,5 @@ public class LogoutService {
 
     }
 
-    // refreshToken will be removed from device
-    // this way the app shouldn't try to autologin on next start
-    public Observable<LogoutResult> logout(String any) {
-        return authApiService.logout(new LogoutDto(any))
-                .doOnDispose(() -> prefService.removeRefreshToken());
-    }
+
 }

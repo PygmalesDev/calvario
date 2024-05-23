@@ -1,7 +1,10 @@
 package de.uniks.stp24.service;
 
+import de.uniks.stp24.dto.LogoutDto;
 import de.uniks.stp24.model.Game;
+import de.uniks.stp24.model.LogoutResult;
 import de.uniks.stp24.model.User;
+import de.uniks.stp24.rest.AuthApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.FXCollections;
@@ -20,6 +23,9 @@ public class BrowseGameService {
     TokenStorage tokenStorage;
     @Inject
     PrefService prefService;
+
+    @Inject
+    AuthApiService authApiService;
 
     private Game game;
 
@@ -78,6 +84,13 @@ public class BrowseGameService {
             return null;
         }
 
+    }
+
+    // refreshToken will be removed from device
+    // this way the app shouldn't try to autologin on next start
+    public Observable<LogoutResult> logout(String any) {
+        return authApiService.logout(new LogoutDto(any))
+                .doOnDispose(() -> prefService.removeRefreshToken());
     }
 
     public String getGameName() {

@@ -2,6 +2,7 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.GameComponent;
+import de.uniks.stp24.component.LogoutComponent;
 import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
@@ -75,6 +76,11 @@ BrowseGameController {
     @SubComponent
     @Inject
     WarningComponent warningComponent;
+
+    @SubComponent
+    @Inject
+    LogoutComponent logoutComponent;
+
     @Inject
     GamesApiService gamesApiService;
 
@@ -99,6 +105,7 @@ BrowseGameController {
     @Resource
     ResourceBundle resources;
     PopupBuilder popup = new PopupBuilder();
+    PopupBuilder popupLogout = new PopupBuilder();
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
 
@@ -164,7 +171,8 @@ BrowseGameController {
     ============================================= On-Action buttons =============================================
      */
     public void logOut() {
-        app.show("/logout");
+        popupLogout.showPopup(warningWindowContainer, logoutComponent);
+        popupLogout.setBlur(browseGameVBoxList, browseGameVBoxButtons);
     }
 
     public void newGame() {

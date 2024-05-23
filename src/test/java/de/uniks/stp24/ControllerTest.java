@@ -3,6 +3,7 @@ package de.uniks.stp24;
 import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.utils.ResponseConstants;
 import javafx.stage.Stage;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.testfx.framework.junit5.ApplicationTest;
 

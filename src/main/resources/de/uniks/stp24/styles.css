@@ -302,7 +302,7 @@ ToggleButton:hover{
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-pref-width: 240;
+    -fx-pref-width: 100;
     -fx-pref-height: 50;
 }
 
@@ -330,19 +330,30 @@ ToggleButton:hover{
     -fx-background-color: transparent;
 }*/
 
+
+
 .listBrowseGame .scroll-bar:vertical, .listEnterGame .scroll-bar:vertical{
-    -fx-background-color: #ffffff;
+    -fx-background-color: White;
+    -fx-border-width: 1;
 }
 
 .listBrowseGame .virtual-flow .scroll-bar:vertical .thumb, .listEnterGame .virtual-flow .scroll-bar:vertical .thumb{
     -fx-background-color: #030303;
 }
 
-.listBrowseGame .increment-button .increment-arrow, scroll-bar .decrement-button .decrement-arrow{
+/*.listBrowseGame .scroll-bar .increment-button .increment-arrow, scroll-bar .decrement-button .decrement-arrow{
     -fx-background-color: #030303;
+}*/
+
+.listBrowseGame .scroll-bar .spinner .increment-arrow, .listBrowseGame .scroll-bar .spinner .decrement-arrow{
+    -fx-background-color: transparent;
+    -fx-body-color: transparent;
+    -fx-background-image: none;
 }
 
-/*.listBrowseAndEnterGame .scroll-bar .spinner .increment-arrow-button{
+
+
+.listBrowseGame .scroll-bar .spinner .increment-arrow-button{
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/icons/up.png");
     -fx-background-size: 100% 100%;
@@ -351,14 +362,14 @@ ToggleButton:hover{
     -fx-border-width: 0;
 }
 
-.listBrowseAndEnterGame .scroll-bar .spinner .decrement-arrow-button{
+.listBrowseGame .scroll-bar .spinner .decrement-arrow-button{
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/icons/down.png");
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-border-width: 0;
-}*/
+}
 
 .listHeader{
     -fx-background-color: transparent;

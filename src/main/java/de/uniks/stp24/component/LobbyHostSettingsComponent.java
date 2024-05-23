@@ -21,6 +21,7 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 
@@ -89,7 +90,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
         this.gameNameField.setText(gameName);
     }
     public void selectEmpire() {
-        this.app.show("/creation");
+        this.app.show("/creation", Map.of("gameid", this.gameID));
     }
 
     public void ready() {

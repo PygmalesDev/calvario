@@ -19,6 +19,7 @@ import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 
 import javax.inject.Inject;
@@ -120,6 +121,8 @@ public class GangCreationController {
     public GangCreationController() {
 
     }
+    @Param("gameid")
+    String gameID;
 
     @OnInit
     public void init() {
@@ -177,7 +180,7 @@ public class GangCreationController {
     }
 
     public void back() {
-        app.show("/lobby");
+        app.show("/lobby", Map.of("gameid", this.gameID));
     }
 
     public Gang getInputGang() {

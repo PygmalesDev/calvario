@@ -97,6 +97,7 @@ BrowseGameController extends BasicController {
     @OnInit
     void init() {
         this.controlResponses = responseConstants.respDelGame;
+        this.textInfo = new Text("");
 
         editGameService = (editGameService == null) ? new EditGameService() : editGameService;
         createGameService = (createGameService == null) ? new CreateGameService() : createGameService;

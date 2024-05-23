@@ -20,7 +20,7 @@ import org.fulib.fx.annotation.event.OnDestroy;
 
 import javax.inject.Inject;
 
-@Title("%calvario.editGame")
+@Title("Edit Game")
 @Controller
 public class EditGameController extends BasicController {
     @FXML

@@ -17,7 +17,7 @@
                </font>
             </Text>
          </HBox>
-         <VBox styleClass="deleteAndSaveButton" alignment="CENTER" layoutY="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
+         <VBox alignment="CENTER" layoutY="50.0" styleClass="deleteAndSaveButton" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
             <children>
                <VBox prefHeight="100.0" prefWidth="100.0">
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
@@ -37,14 +37,14 @@
                </VBox>
                <HBox alignment="CENTER" prefHeight="70.0" prefWidth="200.0">
                   <HBox alignment="CENTER" prefHeight="70.0" prefWidth="200.0">
-                     <Button styleClass="deleteAndSaveButton" fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancel" style="-fx-background-color: #008000;" text="Cancel">
+                     <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#onCancel" styleClass="deleteAndSaveButton" text="Cancel">
                         <font>
                            <Font size="18.0" />
                         </font>
                      </Button>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                     <Button styleClass="deleteAndSaveButton" fx:id="confirmButton" mnemonicParsing="false" onAction="#deleteGame" style="-fx-background-color: #FF0000;" text="Confirm">
+                     <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#deleteGame" styleClass="deleteAndSaveButton" text="Confirm">
                         <font>
                            <Font size="18.0" />
                         </font>

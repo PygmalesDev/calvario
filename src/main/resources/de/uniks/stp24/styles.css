@@ -266,8 +266,8 @@ ToggleButton:hover{
 }
 
 .chatBubble {
-    -fx-shape: "M 20 0 H 280 A 20 20 0 0 1 300 20 V 80 A 1000000000 20 0 0 1 280 80 H 40 L -10 100 L 10 80 A 20 20 0 0 1 20 60 Z";
-    -fx-background-color: #FFD966;
+    -fx-background-image: url("de/uniks/stp24/assets/fields/chat_bubble.png");
+    -fx-background-color: transparent;
     -fx-background-insets: 0,1;
     -fx-padding: 30;
 }
@@ -293,6 +293,20 @@ ToggleButton:hover{
     -fx-pref-height: 65px;
 }
 
+.kickUserButton{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/super_small_red_cross.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-pref-width: 15px;
+    -fx-pref-height: 15px;
+    -fx-min-height: 15;
+    -fx-min-width: 15;
+}
+
+/**********************************************************************************************************************************/
+/************************* Lists **************************************************************************************************/
 
 .listBrowseGame, .listEnterGame{
     -fx-background-color: transparent;
@@ -326,14 +340,11 @@ ToggleButton:hover{
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-pref-width: 200;
-    -fx-pref-height: 50;
+    -fx-pref-width: 180;
+    -fx-pref-height: 70;
 }
 
-/*.listBrowseGame .list-cell:selected{
-    -fx-text-fill: #FFFFFF;
-    -fx-background-color: transparent;
-}*/
+
 
 
 

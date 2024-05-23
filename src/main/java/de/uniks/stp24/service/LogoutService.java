@@ -9,10 +9,10 @@ import javax.inject.Inject;
 
 public class LogoutService {
 
-    @Inject
-    AuthApiService authApiService;
-    @Inject
-    PrefService prefService;
+    //@Inject
+    //AuthApiService authApiService;
+    //@Inject
+    //PrefService prefService;
 
     @Inject
     LogoutService() {

@@ -60,8 +60,6 @@ BrowseGameController {
     public VBox browseGameVBoxButtons;
     @FXML
     public VBox browseGameVBoxList;
-    @FXML
-    public HBox browseGameHBox;
 
     @FXML
     AnchorPane backgroundAnchorPane;

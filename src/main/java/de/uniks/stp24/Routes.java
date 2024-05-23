@@ -50,7 +50,7 @@ public class Routes {
 
     @Route("logout")
     @Inject
-    Provider<LogoutComponent> logoutScreen;
+    Provider<LogoutComponent> logout;
     @Route("warning")
     @Inject
     Provider<WarningComponent> warning;

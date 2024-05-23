@@ -77,7 +77,7 @@ BrowseGameController {
 
     @SubComponent
     @Inject
-    LogoutComponent logoutComponent;
+    public LogoutComponent logoutComponent;
 
     @Inject
     GamesApiService gamesApiService;

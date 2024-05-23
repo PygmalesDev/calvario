@@ -4,7 +4,6 @@ package de.uniks.stp24.component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
 import de.uniks.stp24.service.BrowseGameService;
-import de.uniks.stp24.service.LogoutService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -22,12 +21,11 @@ import java.util.ResourceBundle;
 @Component(view = "Logout.fxml")
 public class LogoutComponent extends VBox {
     @FXML
+    Text warningText;
+    @FXML
     Button cancelButton;
     @FXML
     Button logoutButton;
-    @FXML Text errorLabel;
-    @FXML
-    Text messageField;
     @FXML
     VBox logoutWindow;
 
@@ -50,8 +48,9 @@ public class LogoutComponent extends VBox {
     }
 
     @OnRender
-    public void setBackground() {
+    public void render() {
         logoutWindow.setStyle("-fx-background-color: white;");
+        warningText.setText("You will be logged out.");
     }
 
     public void logout() {
@@ -64,8 +63,8 @@ public class LogoutComponent extends VBox {
         setVisible(false);
     }
 
-    public void setText(String text){
-        messageField.setText(text);
+    public void setText(){
+
     }
 
     @OnDestroy

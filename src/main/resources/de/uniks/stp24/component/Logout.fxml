@@ -42,7 +42,7 @@
                               <Font size="15.0" />
                            </font>
                         </Button>
-                        <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logout" prefHeight="30.0" prefWidth="70.0" styleClass="deleteAndSaveButton" >
+                        <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logout" prefHeight="30.0" prefWidth="70.0" styleClass="deleteAndSaveButton" text="logout" >
                            <font>
                               <Font size="15.0" />
                            </font>

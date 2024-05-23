@@ -29,9 +29,6 @@ public class Routes {
     @Inject
     Provider<LicensesController> licenses;
 
-    @Route("holder")
-    @Inject
-    Provider<PlaceHolderController> holder;
     @Route("editgame")
     @Inject
     Provider<EditGameController> editgame;

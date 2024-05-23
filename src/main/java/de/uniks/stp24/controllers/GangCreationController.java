@@ -38,7 +38,7 @@ public class GangCreationController {
     SaveLoadService saveLoadService;
 
     @Inject
-    Provider<GangComponent> gangComponentProvider;
+    public Provider<GangComponent> gangComponentProvider;
 
     @Inject
     @Resource

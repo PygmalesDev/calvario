@@ -41,25 +41,25 @@ public class CreateGameService {
 
     //Check if game with same name exits already. If not, create new game.
     public Observable<CreateGameResultDto> createGame(String name, GameSettings settings, String password) {
-        for (Game game1 : games) {
+        /*for (Game game1 : games) {
             if (game1.name().equals(name)){
                 isNameable = false;
                 break;
             }
-        }
+        }*/
 
-        if (isNameable) {
-            System.out.println("NAMEABLE");
+        /*if (isNameable) {
+            System.out.println("NAMEABLE");*/
             return gamesApiService
                     .createGame(new CreateGameDto(name, false, 1, settings, password))
                     .doOnError(error -> createGameController.showError(errorService.getStatus(error)));
 
-        } else {
+        /*} else {
             // code 409 -> name exits already
             createGameController.showError(409);
             isNameable = true;
             return null;
-        }
+        }*/
     }
     public void setCreateGameController(CreateGameController createGameController){
         this.createGameController = createGameController;
@@ -74,18 +74,16 @@ public class CreateGameService {
             }
         }
     }
-    public boolean isCreable(String name) {
+
+    public boolean nameIsAvailable(String name) {
+        // wait for server list to work
+//        refreshNames();
         if (!gameNames.contains(name)) {
             gameNames.add(name);
-        return true;}
-        for (String game1 : gameNames) {
-            if (game1.equals(name)){
-                System.out.println("FUCK!");
-                return false;
-            }
+            return true;
         }
-        System.out.println("NO FUCK");
-        return true;
+        return false;
+
     }
 
 }

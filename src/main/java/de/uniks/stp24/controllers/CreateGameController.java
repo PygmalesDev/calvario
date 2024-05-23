@@ -82,7 +82,7 @@ public class CreateGameController extends BasicController {
         if (checkIt(gameName, password) &&
                 pwdMatch &&
                 this.createMapSizeSpinner.getValue() != null &&
-            createGameService.isCreable(gameName)) {
+            createGameService.nameIsAvailable(gameName)) {
             if (createGameService.createGame(gameName, settings, password) != null) {
                 /*
                 Platform run later makes sure updating the ui will be done on ui thread
@@ -112,8 +112,9 @@ public class CreateGameController extends BasicController {
                       errorMessageText.setText(getErrorInfoText(this.controlResponses,code));
                   });
             }
-        } else {
-            if (!createGameService.isCreable(gameName)) System.out.println("HALLO");
+        } else if (!createGameService.nameIsAvailable(gameName)) {
+            errorMessageText.setText(getErrorInfoText(this.controlResponses,409)); }
+        else {
             errorMessageText.setText(getErrorInfoText(this.controlResponses,
                     !pwdMatch ? -2 : -1));
         }

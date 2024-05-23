@@ -2,6 +2,7 @@ package de.uniks.stp24.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.controllers.EditAccController;
 import de.uniks.stp24.model.User;
@@ -45,6 +46,8 @@ public class TestEditAcc extends ControllerTest {
     ObjectMapper objectMapper;
     @Spy
     ImageCache imageCache;
+    @Spy
+    BubbleComponent bubbleComponent;
 
     @InjectMocks
     EditAccController editAccController;

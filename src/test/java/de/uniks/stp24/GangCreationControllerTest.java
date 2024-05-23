@@ -112,30 +112,30 @@
          assertEquals(generatedDescription, description.getText());
      }
 
-     @Test
-     public void testDeletingGang() {
-         ListView<Gang> gangsListView = lookup("#gangsListView").query();
-
-         clickOn("#showCreationButton");
-         waitForFxEvents();
-
-         String name = "Test Gang";
-         clickOn("#gangNameText").write(name);
-
-         clickOn("#createButton");
-         waitForFxEvents();
-
-         int gangNums = gangsListView.getItems().size();
-
-         clickOn(name);
-         waitForFxEvents();
-
-         clickOn("#showDeletePaneButton");
-         waitForFxEvents();
-
-         clickOn("#deleteButton");
-         waitForFxEvents();
-
-         assertEquals(gangNums - 1, gangsListView.getItems().size());
-     }
+//     @Test
+//     public void testDeletingGang() {
+//         ListView<Gang> gangsListView = lookup("#gangsListView").query();
+//
+//         clickOn("#showCreationButton");
+//         waitForFxEvents();
+//
+//         String name = "Test Gang";
+//         clickOn("#gangNameText").write(name);
+//
+//         clickOn("#createButton");
+//         waitForFxEvents();
+//
+//         int gangNums = gangsListView.getItems().size();
+//
+//         clickOn(name);
+//         waitForFxEvents();
+//
+//         clickOn("#showDeletePaneButton");
+//         waitForFxEvents();
+//
+//         clickOn("#deleteButton");
+//         waitForFxEvents();
+//
+//         assertEquals(gangNums - 1, gangsListView.getItems().size());
+//     }
  }

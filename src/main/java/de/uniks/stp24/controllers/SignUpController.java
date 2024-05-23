@@ -127,6 +127,11 @@ public class SignUpController extends BasicController {
             this.usernameField.setText(this.username);
         if (Objects.nonNull(this.password))
             this.passwordField.setText(this.password);
+        if(prefService.getLocale() == Locale.ENGLISH) {
+            enToggleButton.setSelected(true);
+        } else {
+            deToggleButton.setSelected(true);
+        }
     }
 
     // Shows an error message when input fields are empty or password inputs do not match

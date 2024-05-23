@@ -10,6 +10,7 @@ import de.uniks.stp24.service.LobbyService;
 import de.uniks.stp24.service.GamesService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
@@ -83,11 +84,22 @@ public class LobbyController {
     Pane lobbyMessagePane;
     @FXML
     Pane lobbyMessageElement;
+    @FXML
+    Pane captainContainer;
+
 
     @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
+
+    @SubComponent
+    @Inject
+    BubbleComponent bubbleComponent;
+
+    @Inject
+    @Resource
+    ResourceBundle resources;
 
     @Param("gameid")
     String gameID;
@@ -100,6 +112,18 @@ public class LobbyController {
     @Inject
     public LobbyController() {
 
+    }
+
+    @OnRender
+    public void addSpeechBubble() {
+        captainContainer.getChildren().add(bubbleComponent);
+        Platform.runLater(() -> {
+            if (asHost) {
+                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
+            } else {
+                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.password"));
+            }
+        });
     }
 
     /**
@@ -154,8 +178,11 @@ public class LobbyController {
             String id = event.data().user();
             switch (event.suffix()) {
                 case "created" -> {
-                    if (this.tokenStorage.getUserId().equals(id))
+                    if (this.tokenStorage.getUserId().equals(id)) {
+                        this.lobbyElement.getChildren().remove(this.enterGameComponent);
                         this.lobbyElement.getChildren().add(this.lobbySettingsComponent);
+                        bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
+                    }
                     this.addUserToList(id, event.data());
                 }
                 case "updated" -> this.replaceUserInList(id, event.data());

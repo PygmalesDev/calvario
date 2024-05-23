@@ -1,12 +1,10 @@
 package de.uniks.stp24.service;
 
-import javafx.beans.Observable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import org.fulib.fx.annotation.event.OnDestroy;
 
 import javax.inject.Inject;
 

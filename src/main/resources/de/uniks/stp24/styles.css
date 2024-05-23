@@ -6,12 +6,11 @@
 }
 
 
-Text, TextField, PasswordField, Button, CheckBox, ToggleButton{
+Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-font-family: "PT Serif";
     -fx-font-size: 18;
     -fx-font-weight: bold;
 }
-
 
 .borderedText {
     -fx-border-color: #000000;
@@ -271,6 +270,12 @@ ToggleButton:hover{
     -fx-background-color: #FFD966;
     -fx-background-insets: 0,1;
     -fx-padding: 30;
+}
+
+.captainText {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
 }
 
 .inputField {

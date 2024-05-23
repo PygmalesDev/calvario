@@ -1,6 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.component.GameComponent;
 import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.model.Game;
@@ -18,10 +19,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.effect.BoxBlur;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
@@ -67,6 +65,9 @@ BrowseGameController {
     @FXML
     VBox cardBackgroundVBox;
 
+    @FXML
+    Pane captainContainer;
+
 
     @Inject
     App app;
@@ -95,12 +96,24 @@ BrowseGameController {
     PopupBuilder popupBuilder;
     @Inject
     CreateGameService createGameService;
+    @SubComponent
+    @Inject
+    BubbleComponent bubbleComponent;
     @Inject
     @Resource
     ResourceBundle resources;
     PopupBuilder popup = new PopupBuilder();
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
+
+
+    @OnRender
+    public void addSpeechBubble() {
+        captainContainer.getChildren().add(bubbleComponent);
+        Platform.runLater(() -> {
+            bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.which.game"));
+        });
+    }
 
 
     //Load list of games as soon as BrowseGame-Screen is shown

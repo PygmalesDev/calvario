@@ -11,7 +11,7 @@ import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Resource;
@@ -47,7 +47,7 @@ public class GangCreationController {
     @FXML
     ListView<Gang> gangsListView;
     @FXML
-    Pane creationPane;
+    VBox creationBox;
     @FXML
     ImageView flagImage;
     @FXML
@@ -151,7 +151,7 @@ public class GangCreationController {
 
     @OnRender
     public void render() {
-        creationPane.setVisible(false);
+        creationBox.setVisible(false);
         deletePane.setVisible(false);
         editButton.setVisible(false);
         showDeletePaneButton.setVisible(false);
@@ -160,17 +160,17 @@ public class GangCreationController {
         gangsListView.setOnMouseClicked(event -> {
             Gang gang = gangsListView.getSelectionModel().getSelectedItem();
             if (gang != null) {
-                creationPane.setVisible(true);
+                creationBox.setVisible(true);
                 gangNameText.setText(gang.name());
-                flagImageIndex = gang.flagIndex();
+                flagImageIndex = gang.flagIndex()%flagsList.size();
                 flagImage.setImage(new Image(flagsList.get(flagImageIndex).toURI().toString()));
-                portraitImageIndex = gang.portraitIndex();
+                portraitImageIndex = gang.portraitIndex()%portraitsList.size();
                 portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex).toURI().toString()));
                 gangDescriptionText.setText(gang.description());
                 createButton.setVisible(false);
                 editButton.setVisible(true);
                 showDeletePaneButton.setVisible(true);
-                colorIndex = gang.colorIndex();
+                colorIndex = gang.colorIndex()%colorsList.size();
                 colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
             }
         });
@@ -183,7 +183,8 @@ public class GangCreationController {
     public Gang getInputGang() {
         String gangName = gangNameText.getText();
         if (gangNameText.getText().isEmpty()) gangName = "Buccaneers";
-        return new Gang(gangName, flagsList.get(flagImageIndex).toURI().toString(), flagImageIndex, portraitsList.get(portraitImageIndex).toURI().toString(), portraitImageIndex, gangDescriptionText.getText(), colorsList.get(colorIndex), colorIndex);
+        System.out.println(flagImageIndex + "" + portraitsList + "" + colorIndex);
+        return new Gang(gangName, flagsList.get(flagImageIndex).toURI().toString(), flagImageIndex%flagsList.size(), portraitsList.get(portraitImageIndex).toURI().toString(), portraitImageIndex%portraitsList.size(), gangDescriptionText.getText(), colorsList.get(colorIndex), colorIndex%colorsList.size());
     }
 
     public void edit() {
@@ -205,11 +206,11 @@ public class GangCreationController {
 
     public void cancel() {
         deletePane.setVisible(false);
-        creationPane.setEffect(null);
+        creationBox.setEffect(null);
     }
 
     public void showCreationPane() {
-        creationPane.setVisible(true);
+        creationBox.setVisible(true);
         resetCreationPane();
         createButton.setVisible(true);
         editButton.setVisible(false);
@@ -217,7 +218,7 @@ public class GangCreationController {
     }
 
     public void showDeletePane() {
-        creationPane.setEffect(new BoxBlur());
+        creationBox.setEffect(new BoxBlur());
         deletePane.setVisible(true);
         Gang gang = gangsListView.getSelectionModel().getSelectedItem();
         toBeDeletedGangName.setText(gang.name());

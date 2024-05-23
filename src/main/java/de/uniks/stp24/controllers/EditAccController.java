@@ -1,11 +1,13 @@
 package de.uniks.stp24.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.service.EditAccService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.TokenStorage;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
@@ -14,10 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
@@ -32,6 +31,8 @@ import java.util.Objects;
 @Title("Edit Account")
 @Controller
 public class EditAccController extends BasicController {
+    @FXML
+    Pane captainContainer;
     @FXML
     ImageView avatarImage;
     @FXML
@@ -76,6 +77,10 @@ public class EditAccController extends BasicController {
     PopupBuilder popupBuilder;
     @SubComponent
     @Inject
+    BubbleComponent bubbleComponent;
+
+    @SubComponent
+    @Inject
     WarningScreenComponent warningScreen;
 
     private BooleanBinding editAccIsNotSelected;
@@ -88,6 +93,14 @@ public class EditAccController extends BasicController {
 
     @Inject
     public EditAccController() {
+    }
+
+    @OnRender
+    public void addSpeechBubble() {
+        captainContainer.getChildren().add(bubbleComponent);
+        Platform.runLater(() -> {
+            bubbleComponent.setCaptainText(resources.getString("pirate.editAcc.go.into.hiding"));
+        });
     }
 
     @OnInit

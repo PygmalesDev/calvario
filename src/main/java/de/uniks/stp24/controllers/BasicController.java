@@ -7,6 +7,7 @@ import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.utils.ErrorTextWriter;
 import de.uniks.stp24.utils.ResponseConstants;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -29,6 +30,8 @@ public class BasicController {
     ErrorService errorService;
     @Inject
     ResponseConstants responseConstants;
+    @Inject
+    Subscriber subscriber;
 
     public Map<Integer,String> controlResponses;
 

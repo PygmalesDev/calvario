@@ -40,7 +40,7 @@ import java.util.ResourceBundle;
 @Title("Browse Game")
 @Controller
 public class
-BrowseGameController {
+BrowseGameController extends BasicController {
     @FXML
     public Button load_game_b;
     @FXML
@@ -67,9 +67,6 @@ BrowseGameController {
     @FXML
     VBox cardBackgroundVBox;
 
-
-    @Inject
-    App app;
     @FXML
     StackPane warningWindowContainer;
     @SubComponent
@@ -78,8 +75,6 @@ BrowseGameController {
     @Inject
     GamesApiService gamesApiService;
 
-    @Inject
-    Subscriber subscriber;
     @Inject
     Provider<GameComponent> gameComponentProvider;
     @Inject
@@ -95,9 +90,6 @@ BrowseGameController {
     PopupBuilder popupBuilder;
     @Inject
     CreateGameService createGameService;
-    @Inject
-    @Resource
-    ResourceBundle resources;
     PopupBuilder popup = new PopupBuilder();
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
@@ -122,8 +114,27 @@ BrowseGameController {
                 createGameService.setGamesList(games);
                 // Update the ListView after data is set
                 updateListView();
-            });
+            });},
+          //TODO ERROR HANDLING!
+          error -> {
+                System.out.println("error " + errorService.getStatus(error));
+                System.out.println("-> " + errorService.getMessage(error));
         });
+        //TODO SO BESSER
+        subscriber.subscribe(gamesApiService.findAll(),
+          gameList -> {
+              Platform.runLater(() -> {
+                  games.setAll(gameList);
+                  editGameService.setGamesList(games);
+                  createGameService.setGamesList(games);
+                  // Update the ListView after data is set
+                  updateListView();
+              });},
+          //TODO ERROR HANDLING! AT THE MOMENT LIST IS NOT WORKING
+          error -> {
+              System.out.println("error " + errorService.getStatus(error));
+              System.out.println("-> " + errorService.getMessage(error));
+          });
 
         // Listener for updating list of games if games are created, deleted or updated
         subscriber.subscribe(eventListener.listen("games.*.*", Game.class), event -> {

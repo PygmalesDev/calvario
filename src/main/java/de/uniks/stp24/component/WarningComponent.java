@@ -3,10 +3,7 @@ package de.uniks.stp24.component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.BrowseGameController;
-import de.uniks.stp24.service.BrowseGameService;
-import de.uniks.stp24.service.EditAccService;
-import de.uniks.stp24.service.PopupBuilder;
-import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.*;
 import io.reactivex.rxjava3.functions.Consumer;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -40,8 +37,9 @@ public class WarningComponent extends VBox{
     Subscriber subscriber;
     @Inject
     BrowseGameService browseGameService;
-
     String gameNameText;
+    @Inject
+    ErrorService errorService;
 
 
 
@@ -60,7 +58,9 @@ public class WarningComponent extends VBox{
     }
 
     public void deleteGame() {
-        this.subscriber.subscribe(browseGameService.deleteGame());
+        this.subscriber.subscribe(browseGameService.deleteGame(),
+          result -> {},
+          error -> System.out.println("CANT DELETE GAME"));
         setVisible(false);
     }
 

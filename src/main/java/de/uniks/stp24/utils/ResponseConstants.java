@@ -76,6 +76,12 @@ public class ResponseConstants {
             -1, "put.in.username.password",
             -2, "passwords.do.not.match");
 
+    final public Map<Integer, String> respDelGame = Map.of(400 ,"invalid.password",
+    401, "validation.failed",
+    403, "attempting.to.change.someone.else.game",
+    404, "404",
+    429, "rate.limit.reached");
+
 //    static final public Map<String, Map<Integer,String>> responses = Map.of("login", respLogin,
 //    "signup", respSignup);
 

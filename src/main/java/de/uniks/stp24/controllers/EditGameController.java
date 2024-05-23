@@ -52,7 +52,6 @@ public class EditGameController extends BasicController {
     @Inject
     BrowseGameController browseGameController;
 
-
     @Inject
     EditGameService editGameService;
     @Inject
@@ -73,27 +72,30 @@ public class EditGameController extends BasicController {
         editMapSizeSpinner.setValueFactory(valueFactory);
     }
 
-    public void editGame(){
+    public void editGame() {
         initializeSpinner();
         GameSettings settings = new GameSettings(this.editMapSizeSpinner.getValue());
         String gameName = this.editNameTextField.getText();
         String password = this.editPasswordTextField.getText();
         boolean pwdMatch = password.equals(editRepeatPasswordTextField.getText());
-        if(checkIt(gameName,password) && pwdMatch) {
-            if (editGameService.editGame(gameName, settings, password) != null) {
-                editGameService.editGame(gameName, settings, password).subscribe(result ->
-                    Platform.runLater(() -> {
-                        browseGameController.init();
-                        app.show(browseGameController);
-                                        }),
-                                error -> {
-                                    int code = errorService.getStatus(error);
-                                    errorMessageTextEdit.setText(getErrorInfoText(this.controlResponses, code));
-                                });
-            }
+        if (checkIt(gameName, password) &&
+          pwdMatch &&
+          editGameService.nameIsAvailable(gameName)) {
+            subscriber.subscribe(editGameService.editGame(gameName, settings, password),
+              result -> {
+                Platform.runLater(() -> {
+                    browseGameController.init();
+                    app.show(browseGameController);
+                });},
+              error -> {
+                  int code = errorService.getStatus(error);
+                  errorMessageTextEdit.setText(getErrorInfoText(this.controlResponses, code));
+              });
+        } else if(!editGameService.nameIsAvailable(gameName)) {
+            errorMessageTextEdit.setText(getErrorInfoText(this.controlResponses,409));
         } else {
             errorMessageTextEdit.setText(getErrorInfoText(this.controlResponses,
-                    !pwdMatch ? -2 : -1));
+              !pwdMatch ? -2 : -1));
         }
     }
     public void cancel(){

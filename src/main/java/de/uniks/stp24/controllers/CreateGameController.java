@@ -82,8 +82,7 @@ public class CreateGameController extends BasicController {
         if (checkIt(gameName, password) &&
                 pwdMatch &&
                 this.createMapSizeSpinner.getValue() != null &&
-            createGameService.nameIsAvailable(gameName)) {
-            if (createGameService.createGame(gameName, settings, password) != null) {
+                createGameService.nameIsAvailable(gameName)) {
                 /*
                 Platform run later makes sure updating the ui will be done on ui thread
                 subscribeOn(Schedulers.io()) & subscribeOn(Schedulers.io()) makes sure
@@ -111,7 +110,7 @@ public class CreateGameController extends BasicController {
                       int code = errorService.getStatus(error);
                       errorMessageText.setText(getErrorInfoText(this.controlResponses,code));
                   });
-            }
+
         } else if (!createGameService.nameIsAvailable(gameName)) {
             errorMessageText.setText(getErrorInfoText(this.controlResponses,409)); }
         else {

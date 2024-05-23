@@ -24,8 +24,6 @@ public class EditGameService {
     @Inject
     ErrorService errorService;
     private ObservableList<Game> games = FXCollections.observableArrayList();
-    boolean isNameable = true;
-
     Game game;
     @Inject
     public EditGameService() {
@@ -41,25 +39,21 @@ public class EditGameService {
 
     //Editing an existing game, which is yours.
     public Observable<UpdateGameResultDto> editGame(String name, GameSettings settings, String password){
-        for (Game game1 : games) {
-            if (game1.name().equals(name)){
-                isNameable = false;
-                break;
-            }
-        }
-
-        if (isNameable){
             return gamesApiService
                     .editGame(this.game._id(), new UpdateGameDto(name,false,1, settings, password))
                     .doOnError(error -> editGameController.showError(errorService.getStatus(error)));
-        } else {
-            editGameController.showError(409);
-            isNameable = true;
-            return null;
-        }
     }
 
     public void setEditGameController(EditGameController editGameController) {
         this.editGameController = editGameController;
+    }
+
+    public boolean nameIsAvailable(String name){
+        for (Game game1 : games) {
+            if (game1.name().equals(name)){
+                return false;
+            }
+        }
+        return true;
     }
 }

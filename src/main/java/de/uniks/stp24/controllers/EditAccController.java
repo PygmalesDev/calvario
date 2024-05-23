@@ -12,6 +12,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -29,6 +31,8 @@ import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -88,6 +92,7 @@ public class EditAccController extends BasicController {
     WarningScreenComponent warningScreen;
 
     private BooleanBinding editAccIsNotSelected;
+    private BooleanBinding warningIsInvisible;
     public Image editIconBlueImage;
     public Image editIconBlackImage;
     public Image deleteIconRedImage;
@@ -123,6 +128,8 @@ public class EditAccController extends BasicController {
     @OnRender
     public void createBindings(){
         this.editAccIsNotSelected = this.changeUserInfoButton.selectedProperty().not();
+        this.warningIsInvisible = this.warningScreenContainer.visibleProperty().not();
+
     }
 
     @OnRender
@@ -150,6 +157,26 @@ public class EditAccController extends BasicController {
                 .bind(Bindings.createBooleanBinding(()-> !editAccIsNotSelected.get(),
                         this.editAccIsNotSelected));
     }
+
+
+
+    @OnRender
+    public void changeDeleteButtonView(){
+        // delete Button has red text and icon when selected
+        this.deleteUserButton.styleProperty().bind(Bindings.createStringBinding(()->{
+            if(warningIsInvisible.get())
+                return "-fx-text-fill: Black";
+            return "-fx-text-fill: #CF2A27";
+        },this.warningIsInvisible));
+
+        this.deleteIconImageView.imageProperty().bind(Bindings.createObjectBinding(()->{
+            if(warningIsInvisible.get())
+                return deleteIconBlackImage;
+            return deleteIconRedImage;
+        },this.warningIsInvisible));
+    }
+
+
 
     public void saveChanges() {
         // save changed name and/or password of the user and reset the edit account screen afterward
@@ -202,7 +229,7 @@ public class EditAccController extends BasicController {
         // warning screen opens
         popup.showPopup(warningScreenContainer, warningScreen);
         popup.setBlur(editAccHBox, null);
-        warningScreen.setWarning(resources.getString("warning.deleteAccount"));
+        warningScreen.setWarning(resources.getString("warning.deleteAccount") + tokenStorage.getName() + ".");
     }
 
     public void goBack() {

@@ -17,7 +17,7 @@
    <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="630.0" prefWidth="550.0">
          <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="550.0" style="-fx-background-color: Black;">
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="%calvario.newGame">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="%calvario.editGame">
                <font>
                   <Font size="16.0" />
                </font>

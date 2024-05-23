@@ -1,7 +1,7 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
 import de.uniks.stp24.component.GameComponent;
+import de.uniks.stp24.component.LogoutComponent;
 import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
@@ -14,33 +14,29 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
-import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 @Title("Browse Game")
 @Controller
 public class
-BrowseGameController {
+BrowseGameController extends BasicController {
     @FXML
     public Button load_game_b;
     @FXML
@@ -60,26 +56,26 @@ BrowseGameController {
     @FXML
     public VBox browseGameVBoxList;
     @FXML
-    public HBox browseGameHBox;
+    StackPane logoutWarningContainer;
 
     @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
 
-
-    @Inject
-    App app;
     @FXML
     StackPane warningWindowContainer;
     @SubComponent
     @Inject
     WarningComponent warningComponent;
+
+    @SubComponent
+    @Inject
+    public LogoutComponent logoutComponent;
+
     @Inject
     GamesApiService gamesApiService;
 
-    @Inject
-    Subscriber subscriber;
     @Inject
     Provider<GameComponent> gameComponentProvider;
     @Inject
@@ -95,35 +91,37 @@ BrowseGameController {
     PopupBuilder popupBuilder;
     @Inject
     CreateGameService createGameService;
-    @Inject
-    @Resource
-    ResourceBundle resources;
     PopupBuilder popup = new PopupBuilder();
 
-    private ObservableList<Game> games = FXCollections.observableArrayList();
+    // the fxml has no containers (text, label) for errors;
+    private
+    Text textInfo;
 
+    private ObservableList<Game> games = FXCollections.observableArrayList();
 
     //Load list of games as soon as BrowseGame-Screen is shown
     @OnInit
     void init() {
-
+        this.controlResponses = responseConstants.respDelGame;
+        this.textInfo = new Text("");
 
         editGameService = (editGameService == null) ? new EditGameService() : editGameService;
         createGameService = (createGameService == null) ? new CreateGameService() : createGameService;
         browseGameService = (browseGameService == null) ? new BrowseGameService() : browseGameService;
-
-
         browseGameService.resetSelectedGame();
-
-        gamesApiService.findAll().subscribe(gameList -> {
-            Platform.runLater(() -> {
-                games.setAll(gameList);
-                editGameService.setGamesList(games);
-                createGameService.setGamesList(games);
-                // Update the ListView after data is set
-                updateListView();
-            });
-        });
+        subscriber.subscribe(gamesApiService.findAll(),
+          gameList -> {
+              Platform.runLater(() -> {
+                  games.setAll(gameList);
+                  editGameService.setGamesList(games);
+                  createGameService.setGamesList(games);
+                  // Update the ListView after data is set
+                  updateListView();
+              });},
+          error -> {
+              int code = errorService.getStatus(error);
+              this.textInfo.setText(getErrorInfoText(code));
+          });
 
         // Listener for updating list of games if games are created, deleted or updated
         subscriber.subscribe(eventListener.listen("games.*.*", Game.class), event -> {
@@ -133,8 +131,12 @@ BrowseGameController {
                     case "update" -> games.replaceAll(g -> g._id().equals(event.data()._id()) ? event.data() : g);
                     case "deleted" -> games.removeIf(g -> g._id().equals(event.data()._id()));
                 }
+            });},
+            error -> {
+                int code = errorService.getStatus(error);
+                this.textInfo.setText(getErrorInfoText(code));
             });
-        });
+
     }
 
     //Make list of games visible
@@ -163,8 +165,10 @@ BrowseGameController {
     /*
     ============================================= On-Action buttons =============================================
      */
+
     public void logOut() {
-        app.show("/logout");
+        popup.showPopup(logoutWarningContainer, logoutComponent);
+        popup.setBlur(browseGameVBoxList, browseGameVBoxButtons);
     }
 
     public void newGame() {
@@ -191,6 +195,9 @@ BrowseGameController {
             warningComponent.setGameName();
             popup.showPopup(warningWindowContainer, warningComponent);
             popup.setBlur(browseGameVBoxList, browseGameVBoxButtons);
+        } else {
+            this.textInfo.setText(getErrorInfoText(403));
         }
     }
+
 }

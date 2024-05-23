@@ -35,6 +35,8 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 @ExtendWith(MockitoExtension.class)
 public class TestEditAcc extends ControllerTest {
     @Spy
+    BubbleComponent bubbleComponent;
+    @Spy
     EditAccService editAccService;
     @Spy
     WarningScreenComponent warningScreenComponent;

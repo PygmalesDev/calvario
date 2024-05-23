@@ -1,7 +1,9 @@
 package de.uniks.stp24.service;
 
+import de.uniks.stp24.dto.LogoutDto;
 import de.uniks.stp24.model.Game;
-import de.uniks.stp24.model.User;
+import de.uniks.stp24.model.LogoutResult;
+import de.uniks.stp24.rest.AuthApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.FXCollections;
@@ -15,11 +17,15 @@ import java.util.List;
 public class BrowseGameService {
     @Inject
     GamesApiService gamesApiService;
-
     @Inject
     TokenStorage tokenStorage;
     @Inject
     PrefService prefService;
+    @Inject
+    ErrorService errorService;
+
+    @Inject
+    AuthApiService authApiService;
 
     private Game game;
 
@@ -72,12 +78,17 @@ public class BrowseGameService {
     //Calls Api DELETE if the game is from the user
     public Observable<Game> deleteGame() {
         if (checkMyGame()) {
-            //TODO add Error handling for deleting a game
             return gamesApiService.deleteGame(game._id());
         } else {
             return null;
         }
+    }
 
+    // refreshToken will be removed from device
+    // this way the app shouldn't try to autologin on next start
+    public Observable<LogoutResult> logout(String any) {
+        return authApiService.logout(new LogoutDto(any))
+                .doOnDispose(() -> prefService.removeRefreshToken());
     }
 
     public String getGameName() {

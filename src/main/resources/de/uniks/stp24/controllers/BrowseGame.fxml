@@ -15,7 +15,7 @@
 
 <AnchorPane fx:id="backgroundAnchorPane" prefHeight="860.0" prefWidth="1280.0" styleClass="background" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.BrowseGameController">
    <HBox alignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="630.0" prefWidth="800.0">
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="630.0" prefWidth="850.0">
          <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="40.0" prefWidth="800.0" style="-fx-background-color: Black;">
             <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="%calvario.browseGame">
                <font>
@@ -24,7 +24,7 @@
             </Text>
          </HBox>
          <VBox fx:id="cardBackgroundVBox" alignment="CENTER" prefHeight="570.0" prefWidth="800.0" styleClass="cardBackground">
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="530.0" prefWidth="750.0" style="-fx-border-color: #000000" styleClass="transparentBackground">
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="530.0" prefWidth="800.0" style="-fx-border-color: #000000" styleClass="transparentBackground">
                <HBox prefHeight="400.0" prefWidth="534.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <AnchorPane prefHeight="398.0" prefWidth="300.0" style="-fx-border-color: #000000;" HBox.hgrow="ALWAYS">
                      <VBox fx:id="browseGameVBoxButtons" alignment="CENTER" prefHeight="398.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

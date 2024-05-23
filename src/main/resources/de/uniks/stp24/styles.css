@@ -38,12 +38,14 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 
 .transparentBackground {
     -fx-background-color: #BF900080;
+    -fx-border-color: #000000;
+    -fx-border-width: 2;
 }
 
 .backgroundLightYellowWithShadow {
     -fx-background-color: #FFD966;
-    -fx-border-color: #000000;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 0, 0, 10, 5);
+    -fx-border-color: #000000;
     -fx-border-width: 2;
 }
 
@@ -266,6 +268,13 @@ ToggleButton:hover{
 }
 
 .chatBubble {
+    /*-fx-background-image: url("de/uniks/stp24/assets/fields/chat_bubble.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    /*-fx-background-insets: 0,1;
+    -fx-padding: 30;*/
     -fx-shape: "M 20 0 H 280 A 20 20 0 0 1 300 20 V 80 A 1000000000 20 0 0 1 280 80 H 40 L -10 100 L 10 80 A 20 20 0 0 1 20 60 Z";
     -fx-background-color: #FFD966;
     -fx-background-insets: 0,1;

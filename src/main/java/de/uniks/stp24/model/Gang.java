@@ -11,6 +11,7 @@ public record Gang(
         String portrait,
         int portraitIndex,
         String description,
-        @JsonDeserialize(using = ColorDeserializer.class) Color color) {
+        String color,
+        int colorIndex) {
 }
 

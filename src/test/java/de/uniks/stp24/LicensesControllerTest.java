@@ -1,5 +1,6 @@
 package de.uniks.stp24;
 
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.controllers.LoginController;
 import de.uniks.stp24.service.PrefService;
 import javafx.stage.Stage;
@@ -18,6 +19,9 @@ public class LicensesControllerTest extends ControllerTest {
 
     @InjectMocks
     LoginController loginController;
+
+    @Spy
+    BubbleComponent bubbleComponent;
 
     @Spy
     Subscriber subscriber = new Subscriber();

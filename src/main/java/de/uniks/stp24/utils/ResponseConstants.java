@@ -44,7 +44,7 @@ public class ResponseConstants {
 
     final public Map<Integer, String> respSignup = Map.of(400,"pirate.general.invalid.password",
             404, "404",
-            409, "username.in.use.by.another.user",
+            409, "pirate.general.name.exists.already",
             429,"pirate.general.rate.limit.reached",
             201, "try.login",
             -2, "pirate.register.passwords.dont.match",

@@ -55,9 +55,19 @@ public class BasicController {
 
     // look for a text (info or error) in a respective dictionary
     public String getErrorInfoText(Map<Integer,String> map, int code) {
-        return resources.getString(
-                new ErrorTextWriter(map,code).getErrorText()
-        );
+        if (map == null || map.isEmpty())
+            return resources.getString("no.dict");
+        if( !map.containsKey(code)) {
+            return resources.getString("no.entry.dict");
+        } else {
+            return resources.getString(
+              new ErrorTextWriter(map,code).getErrorText()
+            );
+        }
+    }
+
+    public String getErrorInfoText(int code) {
+        return getErrorInfoText(this.controlResponses,code);
     }
 
 }

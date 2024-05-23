@@ -26,6 +26,7 @@ public class BubbleComponent extends Pane {
     @FXML
     TextFlow messageBubble;
     Text childText;
+    boolean errorStatus;
 
     String lastText = "";
 
@@ -48,13 +49,19 @@ public class BubbleComponent extends Pane {
         if (isError){
             captainText.setText("");
             childText.setFill(WHITE);
+            this.errorStatus = true;
             messageBubble.setStyle(messageBubble.getStyle() + "-fx-background-color: #CF2A27;");
         }
         else {
             if (childText.getText().equals(""))
                 captainText.setText(lastText);
+            this.errorStatus = false;
             messageBubble.setStyle(messageBubble.getStyle() + "-fx-background-color: #FFD966;");
         }
+    }
+
+    public boolean getErrorMode() {
+        return this.errorStatus;
     }
 
     public void setBubbleVisible(boolean show) {

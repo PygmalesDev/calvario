@@ -27,7 +27,7 @@ public class PopupBuilder {
             container.setVisible(true);
         }
 
-       component.visibleProperty().addListener((observable, oldValue, newValue) -> {
+        component.visibleProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 removeBlur();
                 container.setMouseTransparent(true);

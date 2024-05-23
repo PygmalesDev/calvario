@@ -2,6 +2,7 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.GameComponent;
+import de.uniks.stp24.component.LogoutComponent;
 import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
@@ -14,12 +15,9 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Controller;
@@ -60,7 +58,7 @@ BrowseGameController {
     @FXML
     public VBox browseGameVBoxList;
     @FXML
-    public HBox browseGameHBox;
+    StackPane logoutWarningContainer;
 
     @FXML
     AnchorPane backgroundAnchorPane;
@@ -75,6 +73,11 @@ BrowseGameController {
     @SubComponent
     @Inject
     WarningComponent warningComponent;
+
+    @SubComponent
+    @Inject
+    public LogoutComponent logoutComponent;
+
     @Inject
     GamesApiService gamesApiService;
 
@@ -99,6 +102,7 @@ BrowseGameController {
     @Resource
     ResourceBundle resources;
     PopupBuilder popup = new PopupBuilder();
+    PopupBuilder popupLogout = new PopupBuilder();
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
 
@@ -164,7 +168,8 @@ BrowseGameController {
     ============================================= On-Action buttons =============================================
      */
     public void logOut() {
-        app.show("/logout");
+        popupLogout.showPopup(logoutWarningContainer, logoutComponent);
+        popupLogout.setBlur(browseGameVBoxList, browseGameVBoxButtons);
     }
 
     public void newGame() {

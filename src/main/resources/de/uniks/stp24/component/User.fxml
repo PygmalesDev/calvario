@@ -6,40 +6,29 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<fx:root maxHeight="40.0" maxWidth="200.0" prefWidth="100.0" type="StackPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.UserComponent">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="70.0" prefWidth="180.0" type="StackPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.UserComponent">
    <children>
-      <javafx.scene.layout.HBox>
-            <ImageView fx:id="avatarImageView" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
-         <VBox maxHeight="37.0" maxWidth="100.0" prefHeight="37.0" prefWidth="100.0">
+      <javafx.scene.layout.HBox fx:id="userHBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="70.0" prefWidth="180.0">
+            <ImageView fx:id="avatarImageView" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+            <HBox.margin>
+               <Insets left="5.0" />
+            </HBox.margin></ImageView>
+         <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="55.0" prefWidth="94.0">
             <HBox.margin>
                <Insets left="10.0" right="10.0" />
             </HBox.margin>
             <children>
-                  <Text fx:id="usernameText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userComponentText" text="\%PlayerNickname" wrappingWidth="110.705078125" />
+                  <Text fx:id="usernameText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userComponentText" text="\%PlayerNickname" wrappingWidth="96.705078125" />
                <Text fx:id="readyText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userComponentText" text="\%ready">
                   <VBox.margin>
-                     <Insets top="5.0" />
+                     <Insets top="2.0" />
                   </VBox.margin>
                </Text>
             </children>
-            <padding>
-               <Insets right="20.0" />
-            </padding>
          </VBox>
-         <padding>
-            <Insets bottom="7.0" top="7.0" />
-         </padding>
+         <Button fx:id="kickButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#kickUser" prefHeight="10.0" prefWidth="10.0" styleClass="kickUserButton" />
       </javafx.scene.layout.HBox>
-      <Button fx:id="kickButton" mnemonicParsing="false" onAction="#kickUser" prefHeight="5.0" prefWidth="5.0" styleClass=".user-component-kick-button" text="X">
-         <font>
-            <Font size="10.0" />
-         </font>
-         <StackPane.margin>
-            <Insets bottom="20.0" left="180.0" />
-         </StackPane.margin>
-      </Button>
    </children>
 </fx:root>

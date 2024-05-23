@@ -72,7 +72,7 @@
                      <graphic>
                         <ImageView fitHeight="6700.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../icons/flag.png" />
+                              <Image url="@../icons/startGame.png" />
                            </image>
                         </ImageView>
                      </graphic>

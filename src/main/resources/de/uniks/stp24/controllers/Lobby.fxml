@@ -29,10 +29,10 @@
                   </AnchorPane>
                   <AnchorPane prefHeight="500.0" prefWidth="350.0" style="-fx-border-color: black;">
                      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="300.0" styleClass="backgroundList" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
-                        <ListView fx:id="playerListView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="180.0" styleClass="listEnterGame"/>
+                        <ListView fx:id="playerListView" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="210.0" styleClass="listEnterGame" />
                      </VBox>
                      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="280.0" styleClass="listHeader" AnchorPane.bottomAnchor="428.6666666666667" AnchorPane.leftAnchor="85.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="30.0">
-                        <Text styleClass="userComponentText" strokeType="OUTSIDE" strokeWidth="0.0" text="%pirates" textAlignment="CENTER">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userComponentText" text="%pirates" textAlignment="CENTER">
                            <font>
                               <Font size="10.0" />
                            </font>

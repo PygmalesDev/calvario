@@ -107,10 +107,10 @@
                   </AnchorPane>
                </HBox>
                <StackPane fx:id="warningWindowContainer" alignment="BOTTOM_CENTER" prefHeight="400.0" prefWidth="450.0" visible="false" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="70.0" />
-               <Pane fx:id="captainContainer" layoutX="650.0" layoutY="-50.0" prefHeight="0.0" prefWidth="135.0" />
             </AnchorPane>
          </VBox>
          <HBox alignment="CENTER" maxHeight="-Infinity" prefHeight="20.0" prefWidth="800.0" style="-fx-background-color: black;" />
       </VBox>
    </HBox>
+   <Pane fx:id="captainContainer" layoutX="928.0" layoutY="6.0" prefHeight="0.0" prefWidth="135.0" />
 </AnchorPane>

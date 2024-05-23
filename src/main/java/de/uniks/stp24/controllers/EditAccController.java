@@ -89,7 +89,7 @@ public class EditAccController extends BasicController {
 
     @SubComponent
     @Inject
-    WarningScreenComponent warningScreen;
+    public WarningScreenComponent warningScreen;
 
     private BooleanBinding editAccIsNotSelected;
     private BooleanBinding warningIsInvisible;

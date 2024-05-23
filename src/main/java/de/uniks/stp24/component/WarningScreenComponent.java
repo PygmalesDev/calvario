@@ -26,6 +26,7 @@ public class WarningScreenComponent extends VBox {
     Text warningText;
     @FXML
     VBox warningContainer;
+
     @Inject
     App app;
     @Inject

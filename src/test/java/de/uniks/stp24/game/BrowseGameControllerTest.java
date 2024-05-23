@@ -10,6 +10,9 @@ import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.LogoutResult;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.BrowseGameService;
+import de.uniks.stp24.service.CreateGameService;
+import de.uniks.stp24.service.EditGameService;
+import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
@@ -49,7 +52,12 @@ public class BrowseGameControllerTest extends ControllerTest {
     BrowseGameService browseGameService;
     @Spy
     BubbleComponent bubbleComponent;
-
+    @Spy
+    PopupBuilder popupBuilder;
+    @Spy
+    CreateGameService createGameService;
+    @Spy
+    EditGameService editGameService;
     @InjectMocks
     LogoutComponent logoutComponent;
     @Spy

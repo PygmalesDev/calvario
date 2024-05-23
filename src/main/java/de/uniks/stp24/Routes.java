@@ -1,6 +1,7 @@
 package de.uniks.stp24;
 
 
+import de.uniks.stp24.component.LogoutComponent;
 import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.controllers.*;
@@ -28,9 +29,6 @@ public class Routes {
     @Inject
     Provider<LicensesController> licenses;
 
-    @Route("holder")
-    @Inject
-    Provider<PlaceHolderController> holder;
     @Route("editgame")
     @Inject
     Provider<EditGameController> editgame;
@@ -38,10 +36,6 @@ public class Routes {
     @Route("createGameController")
     @Inject
     Provider<CreateGameController> createGameController;
-
-    @Route("logout")
-    @Inject
-    Provider<LogoutController> logout;
 
     @Route("editAcc")
     @Inject
@@ -51,6 +45,9 @@ public class Routes {
     @Inject
     Provider<WarningScreenComponent> warningScreen;
 
+    @Route("logout")
+    @Inject
+    Provider<LogoutComponent> logout;
     @Route("warning")
     @Inject
     Provider<WarningComponent> warning;

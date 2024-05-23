@@ -108,6 +108,7 @@ public class LobbyController {
 
     private final ObservableList<MemberUser> users = FXCollections.observableArrayList();
     private boolean asHost;
+    private boolean wasKicked;
 
     @Inject
     public LobbyController() {
@@ -117,13 +118,10 @@ public class LobbyController {
     @OnRender
     public void addSpeechBubble() {
         captainContainer.getChildren().add(bubbleComponent);
-        Platform.runLater(() -> {
-            if (asHost) {
+            if (asHost)
                 bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
-            } else {
+            else
                 bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.password"));
-            }
-        });
     }
 
     /**
@@ -214,6 +212,7 @@ public class LobbyController {
      */
     private void addUserToList(String userID, MemberDto data) {
         this.subscriber.subscribe(this.userApiService.getUser(userID), user -> {
+
             if (userID.equals(this.game.owner()))
                 this.users.add(new MemberUser(new User(user.name() + " (Host)",
                         user._id(), user.avatar(), user.createdAt(), user.updatedAt()
@@ -232,7 +231,8 @@ public class LobbyController {
      */
     private void replaceUserInList(String userID, MemberDto data) {
         this.users.replaceAll(memberUser -> {
-            if (!this.asHost && memberUser.ready() == data.ready() && userID.equals(this.game.owner())
+            if (!this.asHost && memberUser.user()._id().equals(userID)
+                    && memberUser.ready() == data.ready() && userID.equals(this.game.owner())
                     && Objects.equals(data.empire(), memberUser.empire())) {
                 this.lobbyMessagePane.setVisible(true);
                 this.lobbyMessageElement.setVisible(true);
@@ -264,6 +264,7 @@ public class LobbyController {
             this.messageText.setText("You were kicked from this lobby!");
             this.lobbyMessagePane.setVisible(true);
             this.lobbyMessageElement.setVisible(true);
+            this.wasKicked = true;
         }
         this.users.removeIf(memberUser -> memberUser.user()._id().equals(userID));
     }
@@ -299,8 +300,11 @@ public class LobbyController {
     }
 
     public void goBack() {
-        this.lobbyService.leaveLobby(this.gameID, this.tokenStorage.getUserId()).subscribe(result ->
-                this.app.show("/browseGames"));
+        if (!this.wasKicked)
+            this.lobbyService.leaveLobby(this.gameID, this.tokenStorage.getUserId()).subscribe(result ->
+                    this.app.show("/browseGames"));
+
+        this.app.show("/browseGames");
     }
 
     @OnDestroy

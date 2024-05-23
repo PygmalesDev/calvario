@@ -299,7 +299,8 @@ public class LobbyController {
     }
 
     public void goBack() {
-        this.app.show("/browseGames");
+        this.lobbyService.leaveLobby(this.gameID, this.tokenStorage.getUserId()).subscribe(result ->
+                this.app.show("/browseGames"));
     }
 
     @OnDestroy

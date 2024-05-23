@@ -162,15 +162,15 @@ public class GangCreationController {
             if (gang != null) {
                 creationBox.setVisible(true);
                 gangNameText.setText(gang.name());
-                flagImageIndex = gang.flagIndex();
+                flagImageIndex = gang.flagIndex()%flagsList.size();
                 flagImage.setImage(new Image(flagsList.get(flagImageIndex).toURI().toString()));
-                portraitImageIndex = gang.portraitIndex();
+                portraitImageIndex = gang.portraitIndex()%portraitsList.size();
                 portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex).toURI().toString()));
                 gangDescriptionText.setText(gang.description());
                 createButton.setVisible(false);
                 editButton.setVisible(true);
                 showDeletePaneButton.setVisible(true);
-                colorIndex = gang.colorIndex();
+                colorIndex = gang.colorIndex()%colorsList.size();
                 colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
             }
         });
@@ -183,7 +183,8 @@ public class GangCreationController {
     public Gang getInputGang() {
         String gangName = gangNameText.getText();
         if (gangNameText.getText().isEmpty()) gangName = "Buccaneers";
-        return new Gang(gangName, flagsList.get(flagImageIndex).toURI().toString(), flagImageIndex, portraitsList.get(portraitImageIndex).toURI().toString(), portraitImageIndex, gangDescriptionText.getText(), colorsList.get(colorIndex), colorIndex);
+        System.out.println(flagImageIndex + "" + portraitsList + "" + colorIndex);
+        return new Gang(gangName, flagsList.get(flagImageIndex).toURI().toString(), flagImageIndex%flagsList.size(), portraitsList.get(portraitImageIndex).toURI().toString(), portraitImageIndex%portraitsList.size(), gangDescriptionText.getText(), colorsList.get(colorIndex), colorIndex%colorsList.size());
     }
 
     public void edit() {

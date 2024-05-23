@@ -376,6 +376,28 @@ ToggleButton:hover{
 /**********************************************************************************************/
 /********************** Empire Screen ********************************************************/
 
+.listIslands .scroll-bar:vertical{
+    -fx-background-color: transparent;
+    -fx-border-width: 1;
+}
+
+.listIslands .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color: #030303;
+}
+
+.listIslands .scroll-bar:vertical .increment-button .increment-arrow, .listIslands .scroll-bar .decrement-button .decrement-arrow
+{
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+}
+
+.listIslands .scroll-bar:horizontal .increment-arrow,
+.listIslands .scroll-bar:horizontal .decrement-arrow,
+.listIslands .scroll-bar:horizontal .increment-button,
+.listIslands .scroll-bar:horizontal .decrement-button {
+    -fx-padding:0;
+}
+
 .gangNameLabel {
     -fx-font-family: "PT Serif";
     -fx-font-size: 24;

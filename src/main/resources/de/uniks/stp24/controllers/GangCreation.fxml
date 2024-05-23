@@ -56,7 +56,7 @@
                      <Insets top="1.0" />
                   </VBox.margin>
                </Text>
-               <ListView fx:id="gangsListView" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="1000.0" prefWidth="500.0">
+               <ListView fx:id="gangsListView" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="1000.0" prefWidth="500.0" styleClass="listIslands">
                   <VBox.margin>
                      <Insets />
                   </VBox.margin>
@@ -210,7 +210,7 @@
                               </ImageView>
                            </graphic>
                            <HBox.margin>
-                              <Insets />
+                              <Insets left="20.0" />
                            </HBox.margin>
                         </Button>
                         <Button fx:id="createButton" maxHeight="64.0" mnemonicParsing="false" onAction="#create" prefHeight="62.0" prefWidth="255.0" styleClass="normalButton" text="CREATE">
@@ -237,7 +237,7 @@
                               </ImageView>
                            </graphic>
                            <HBox.margin>
-                              <Insets />
+                              <Insets right="20.0" />
                            </HBox.margin>
                         </Button>
                      </children>

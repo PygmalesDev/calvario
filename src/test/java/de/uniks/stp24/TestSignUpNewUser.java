@@ -1,5 +1,6 @@
 package de.uniks.stp24;
 
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.controllers.SignUpController;
 import de.uniks.stp24.dto.SignUpResultDto;
 import de.uniks.stp24.service.SignUpService;
@@ -22,6 +23,8 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 public class TestSignUpNewUser extends ControllerTest {
     @Spy
     SignUpService signUpService;
+    @Spy
+    BubbleComponent bubbleComponent;
     @InjectMocks
     SignUpController signUpController;
     @Spy

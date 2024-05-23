@@ -1,13 +1,17 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.service.LoginService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -23,6 +27,8 @@ import java.util.Objects;
 @Title("%login")
 @Controller
 public class LoginController extends BasicController {
+    @FXML
+    Pane captainContainer;
     @FXML
     Button licensesButton;
     @FXML
@@ -57,6 +63,9 @@ public class LoginController extends BasicController {
     Subscriber subscriber;
     @Inject
     LoginService loginService;
+    @SubComponent
+    @Inject
+    BubbleComponent bubbleComponent;
 
     @Param("info")
     public String info;
@@ -68,9 +77,22 @@ public class LoginController extends BasicController {
     @Inject
     public LoginController() {
     }
+
     @OnInit
     public void init() {
         this.controlResponses = responseConstants.respLogin;
+    }
+
+    @OnRender
+    public void addSpeechBubble() {
+        captainContainer.getChildren().add(bubbleComponent);
+        Platform.runLater(() -> {
+            bubbleComponent.addChildren(errorLabel);
+            bubbleComponent.setCaptainText(resources.getString("pirate.login.welcome"));
+            if (!errorLabel.getText().equals("")) {
+                bubbleComponent.setCaptainText("");
+            }
+        });
     }
 
     @OnRender
@@ -111,7 +133,8 @@ public class LoginController extends BasicController {
 
             loginButton.setDisable(true);
             signupButton.setDisable(true);
-            this.errorLabel.setStyle("-fx-fill: black;");
+            bubbleComponent.setErrorMode(false);
+            bubbleComponent.setCaptainText("");
             this.errorLabel.setText(getErrorInfoText(responseConstants.respLogin,201));
 
             subscriber.subscribe(loginService.login(username, password, rememberMe),
@@ -119,19 +142,18 @@ public class LoginController extends BasicController {
                     // in case of server's response => error
                     // handle with error response
                     , error -> {
-                        this.errorLabel.setStyle("-fx-fill: red;");
                         // find the code in the error response
                         int code = errorService.getStatus(error);
                         // "generate"" the output in the english/german
-                        this.errorLabel
-                                .setText(getErrorInfoText(this.controlResponses,code));
+                        this.errorLabel.setText(getErrorInfoText(this.controlResponses,code));
                         enableButtons();
+                        bubbleComponent.setErrorMode(true);
                     });
         } else {
             // 1 is used for default in switch
-            this.errorLabel.setStyle("-fx-fill: red;");
             this.errorLabel.setText(getErrorInfoText(this.controlResponses,-1));
             enableButtons();
+            bubbleComponent.setErrorMode(true);
         }
     }
 

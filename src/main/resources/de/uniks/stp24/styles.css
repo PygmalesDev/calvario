@@ -80,7 +80,7 @@ ToggleButton:hover{
 
 .languageButton:selected {
     -fx-font-family: "PT Serif";
-    -fx-font-size: 24;
+    -fx-font-size: 20;
     -fx-font-weight: bold;
     -fx-background-color: #BF9000;
     -fx-text-fill: WHITE;
@@ -88,7 +88,7 @@ ToggleButton:hover{
 
 .languageButton {
     -fx-font-family: "PT Serif";
-    -fx-font-size: 24;
+    -fx-font-size: 20;
     -fx-font-weight: bold;
     -fx-background-color: #FFD966;
     -fx-text-fill: BLACK;
@@ -209,10 +209,20 @@ ToggleButton:hover{
     -fx-background-position: center;
     -fx-border-width: 1;
     -fx-border-color: BLACK;
-    -fx-pref-width: 300px;
+    -fx-pref-width: 310px;
     -fx-pref-height: 50px;
 }
 
+.rememberMe .box {
+    -fx-background-color: #FFD966;
+    -fx-border-color: #000000;
+    -fx-border-radius: 0;
+}
+
+.rememberMe:selected .mark {
+    -fx-background-color: #bf9000;
+    -fx-border-color: #5d5454;
+}
 
 .backButton{
     -fx-font-family: "PT Serif";

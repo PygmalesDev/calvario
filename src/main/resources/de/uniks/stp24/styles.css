@@ -308,7 +308,7 @@ ToggleButton:hover{
 
 .userComponentText{
     -fx-font-family: "PT Serif";
-    -fx-font-size: 16;
+    -fx-font-size: 13;
     -fx-font-weight: bold;
 }
 
@@ -341,9 +341,8 @@ ToggleButton:hover{
     -fx-background-color: #030303;
 }
 
-.listBrowseGame .scroll-bar .increment-button .increment-arrow, .listBrowseGame .scroll-bar .decrement-button .decrement-arrow{
-    /*-fx-background-color: #030303;*/
-    -fx-body-color: transparent;
+.listBrowseGame .scroll-bar:vertical .increment-button .increment-arrow, .listBrowseGame .scroll-bar .decrement-button .decrement-arrow, .listEnterGame .scroll-bar .increment-button .increment-arrow, .listEnterGame .scroll-bar .decrement-button .decrement-arrow
+{
     -fx-background-color: transparent;
     -fx-background-image: none;
 }
@@ -356,23 +355,7 @@ ToggleButton:hover{
 
 
 
-.listBrowseGame .scroll-bar .spinner .increment-button .increment-arrow{
-    -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/icons/up.png");
-    -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-border-width: 0;
-}
 
-.listBrowseGame .scroll-bar .spinner .decrement-button .decrement-arrow{
-    -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/icons/down.png");
-    -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-border-width: 0;
-}
 
 .listHeader{
     -fx-background-color: transparent;

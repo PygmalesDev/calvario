@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="680.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.InGameController">
-   <children>
-      <Pane fx:id="gamePane" prefHeight="680.0" prefWidth="1280.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0">
-         <Text layoutX="339.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="EPIC GAMEPLAY" textAlignment="CENTER" wrappingWidth="602.26171875">
-            <font>
-               <Font size="72.0" />
-            </font>
-         </Text>
-      </Pane>
-      <StackPane fx:id="pauseMenuContainer" layoutY="480.0" prefHeight="400.0" prefWidth="650.0" visible="false" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="100.0" />
-   </children>
-</AnchorPane>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.InGameController">
+   <Pane fx:id="gamePane" prefHeight="680.0" prefWidth="1280.0">
+      <Text fx:id="epic_gameplay" layoutX="339.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="EPIC GAMEPLAY" textAlignment="CENTER" wrappingWidth="602.26171875">
+         <font>
+            <Font size="72.0" />
+         </font>
+      </Text>
+   </Pane>
+   <StackPane fx:id="pauseMenuContainer" layoutX="440.0" layoutY="40.0" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: WHITE; -fx-border-color: BLACK; -fx-border-width: 5;" visible="false" />
+</Pane>

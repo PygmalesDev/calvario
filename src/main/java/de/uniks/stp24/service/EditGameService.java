@@ -38,6 +38,8 @@ public class EditGameService {
     }
 
     //Editing an existing game, which is yours.
+    // class was modified! some code was deleted
+    // error handle occurs now in controller
     public Observable<UpdateGameResultDto> editGame(String name, GameSettings settings, String password){
             return gamesApiService
                     .editGame(this.game._id(), new UpdateGameDto(name,false,1, settings, password))
@@ -49,8 +51,8 @@ public class EditGameService {
     }
 
     public boolean nameIsAvailable(String name){
-        for (Game game1 : games) {
-            if (game1.name().equals(name)){
+        for (Game it : games) {
+            if (it.name().equals(name)){
                 return false;
             }
         }

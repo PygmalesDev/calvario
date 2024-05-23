@@ -50,13 +50,14 @@ public class ResponseConstants {
             -2, "pirate.register.passwords.dont.match",
             -1 , "please put in name or/and password");
 
-    final public Map<Integer, String> respEditAcc = Map.of(400, "invalid.password",
+    final public Map<Integer, String> respEditAcc = Map.of(400, "pwd.8characters",
             401, "validation.failed",
             403, "attempting.to.change.someone.else.user",
             404, "404",
             409, "username.in.use.by.another.user",
             429,"pirate.general.rate.limit.reached",
-            -1, "put.in.username.password");
+            -1, "put.in.username.password",
+            -2, "enter.password");
 
     final public Map<Integer, String> respCreateGame = Map.of(400, "invalid.password",
             401, "validation.failed",

@@ -72,6 +72,9 @@ public class EditGameController extends BasicController {
         editMapSizeSpinner.setValueFactory(valueFactory);
     }
 
+    // class was modified! some code was refactored
+    // now use subscriber
+
     public void editGame() {
         initializeSpinner();
         GameSettings settings = new GameSettings(this.editMapSizeSpinner.getValue());

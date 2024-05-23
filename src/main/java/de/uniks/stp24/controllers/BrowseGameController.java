@@ -15,12 +15,9 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Controller;
@@ -60,6 +57,8 @@ BrowseGameController {
     public VBox browseGameVBoxButtons;
     @FXML
     public VBox browseGameVBoxList;
+    @FXML
+    StackPane logoutWarningContainer;
 
     @FXML
     AnchorPane backgroundAnchorPane;
@@ -169,7 +168,7 @@ BrowseGameController {
     ============================================= On-Action buttons =============================================
      */
     public void logOut() {
-        popupLogout.showPopup(warningWindowContainer, logoutComponent);
+        popupLogout.showPopup(logoutWarningContainer, logoutComponent);
         popupLogout.setBlur(browseGameVBoxList, browseGameVBoxButtons);
     }
 

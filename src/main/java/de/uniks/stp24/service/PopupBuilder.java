@@ -1,16 +1,21 @@
 package de.uniks.stp24.service;
 
+import javafx.beans.Observable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import org.fulib.fx.annotation.event.OnDestroy;
 
 import javax.inject.Inject;
 
 public class PopupBuilder {
     Node screenOneToBlur;
     Node screenTwoToBlur;
+    Pane container = new Pane();
+
+    Node component;
 
     @Inject
     public PopupBuilder(){
@@ -18,6 +23,8 @@ public class PopupBuilder {
     }
 
     public void showPopup(Pane container, Node component) {
+        this.container = container;
+        this.component = component;
         if (container.getChildren().isEmpty()){
             container.getChildren().add(component);
             container.setVisible(true);
@@ -27,23 +34,8 @@ public class PopupBuilder {
             container.setVisible(true);
         }
 
-       component.visibleProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                removeBlur();
-                container.setMouseTransparent(true);
-            } else {
-                container.setMouseTransparent(false);
-            }
-        });
-
-        container.visibleProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
-                removeBlur();
-                container.setMouseTransparent(true);
-            } else {
-                container.setMouseTransparent(false);
-            }
-        });
+        component.visibleProperty().addListener(this::listenVisibilityComponent);
+        container.visibleProperty().addListener(this::listenVisibilityContainer);
     }
 
     public void setBlur(Node screenToBlur, Node screenTwoToBlur){
@@ -68,5 +60,29 @@ public class PopupBuilder {
             screenTwoToBlur.setEffect(null);
             screenTwoToBlur.setMouseTransparent(false);
         }
+    }
+
+    private void listenVisibilityContainer(Observable observable, Boolean oldValue, Boolean newValue){
+        if (!newValue) {
+            removeBlur();
+            container.setMouseTransparent(true);
+        } else {
+            container.setMouseTransparent(false);
+        }
+    }
+
+    private void listenVisibilityComponent(Observable observable, Boolean oldValue, Boolean newValue){
+        if (!newValue) {
+            removeBlur();
+            component.setMouseTransparent(true);
+        } else {
+            component.setMouseTransparent(false);
+        }
+    }
+
+    @OnDestroy
+    public void destroy(){
+        container.visibleProperty().removeListener(this::listenVisibilityContainer);
+        component.visibleProperty().removeListener(this::listenVisibilityContainer);
     }
 }

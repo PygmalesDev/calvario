@@ -19,17 +19,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 @Title("Edit Account")
 @Controller
@@ -71,8 +68,6 @@ public class EditAccController extends BasicController {
     @Inject
     EditAccService editAccService;
     @Inject
-    Subscriber subscriber;
-    @Inject
     TokenStorage tokenStorage;
     @Inject
     ImageCache imageCache;
@@ -80,10 +75,6 @@ public class EditAccController extends BasicController {
     ObjectMapper objectMapper;
     @Inject
     PopupBuilder popupBuilder;
-    @Inject
-    @Resource
-    ResourceBundle resources;
-
     @SubComponent
     @Inject
     BubbleComponent bubbleComponent;
@@ -98,10 +89,7 @@ public class EditAccController extends BasicController {
     public Image deleteIconRedImage;
     public Image deleteIconBlackImage;
 
-
     PopupBuilder popup = new PopupBuilder();
-
-
 
     @Inject
     public EditAccController() {
@@ -148,7 +136,7 @@ public class EditAccController extends BasicController {
             saveChangesButton.setVisible(true);
             changeUserInfoButton.setStyle("-fx-text-fill: #2B78E4");
             editIconImageView.setImage(editIconBlueImage);
-        }else{
+        } else {
             resetEditing(tokenStorage.getName());
         }
     }
@@ -186,7 +174,8 @@ public class EditAccController extends BasicController {
                     });
         } else {
             this.errorLabelEditAcc.setStyle("-fx-fill: red;");
-            this.errorLabelEditAcc.setText(getErrorInfoText(responseConstants.respEditAcc,-1));
+            this.errorLabelEditAcc.setText(getErrorInfoText(responseConstants.respEditAcc,
+              passwordInput.getLength() > 8 ? -1 : -2 ));
 
         }
     }

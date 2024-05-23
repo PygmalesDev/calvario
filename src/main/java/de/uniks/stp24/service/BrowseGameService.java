@@ -17,11 +17,12 @@ import java.util.List;
 public class BrowseGameService {
     @Inject
     GamesApiService gamesApiService;
-
     @Inject
     TokenStorage tokenStorage;
     @Inject
     PrefService prefService;
+    @Inject
+    ErrorService errorService;
 
     @Inject
     AuthApiService authApiService;
@@ -81,7 +82,6 @@ public class BrowseGameService {
         } else {
             return null;
         }
-
     }
 
     // refreshToken will be removed from device

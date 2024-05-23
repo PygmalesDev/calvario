@@ -7,6 +7,7 @@ import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.utils.ErrorTextWriter;
 import de.uniks.stp24.utils.ResponseConstants;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -29,6 +30,8 @@ public class BasicController {
     ErrorService errorService;
     @Inject
     ResponseConstants responseConstants;
+    @Inject
+    Subscriber subscriber;
 
     public Map<Integer,String> controlResponses;
 
@@ -52,9 +55,19 @@ public class BasicController {
 
     // look for a text (info or error) in a respective dictionary
     public String getErrorInfoText(Map<Integer,String> map, int code) {
-        return resources.getString(
-                new ErrorTextWriter(map,code).getErrorText()
-        );
+        if (map == null || map.isEmpty())
+            return resources.getString("no.dict");
+        if( !map.containsKey(code)) {
+            return resources.getString("no.entry.dict");
+        } else {
+            return resources.getString(
+              new ErrorTextWriter(map,code).getErrorText()
+            );
+        }
+    }
+
+    public String getErrorInfoText(int code) {
+        return getErrorInfoText(this.controlResponses,code);
     }
 
 }

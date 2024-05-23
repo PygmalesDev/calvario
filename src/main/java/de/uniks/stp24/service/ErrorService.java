@@ -31,7 +31,7 @@ public class ErrorService {
         return switch(ex) {
             case HttpException httpEx -> String.join("\n", getErrorResponse(httpEx).message());
             case ErrorResponseException errorResponseException -> errorResponseException.getMessage();
-            default -> ex.getMessage();
+            default -> "not httpEx nor errorResponseEx but \n" + ex.getMessage();
         };
     }
 

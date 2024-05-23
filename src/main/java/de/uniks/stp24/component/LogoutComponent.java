@@ -1,5 +1,6 @@
 package de.uniks.stp24.component;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
 import de.uniks.stp24.service.BrowseGameService;
@@ -16,50 +17,54 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import java.util.ResourceBundle;
 
-@Component(view = "Warning.fxml")
-public class WarningComponent extends VBox{
+
+@Component(view = "Logout.fxml")
+public class LogoutComponent extends VBox {
+    @FXML
+    Text warningText;
     @FXML
     Button cancelButton;
     @FXML
-    Button confirmButton;
+    Button logoutButton;
     @FXML
-    Text gameName;
-    @FXML
-    VBox warningWindow;
+    VBox logoutWindow;
 
     @Inject
     App app;
     @Inject
+    BrowseGameService browseGameService;
+    @Inject
     ObjectMapper objectMapper;
+
     @Inject
     Subscriber subscriber;
-    @Inject
-    BrowseGameService browseGameService;
     @Inject
     @Resource
     ResourceBundle resources;
 
-    String gameNameText;
-
-
-
     @Inject
-    public WarningComponent() {
+    public LogoutComponent(){
 
     }
+
     @OnRender
-    public void setBackground() {
-        warningWindow.setStyle("-fx-background-color: white;");
+    public void render() {
+        logoutWindow.setStyle("-fx-background-color: white;");
+        warningText.setText("You will be logged out.");
     }
 
-    public void setGameName() {
-        gameNameText = browseGameService.getGameName();
-        gameName.setText(gameNameText);
-    }
-
-    public void deleteGame() {
-        this.subscriber.subscribe(browseGameService.deleteGame());
+    public void logout() {
+        this.subscriber.subscribe(browseGameService.logout(""));
         setVisible(false);
+        app.show("/login");
+    }
+
+    public void cancel() {
+        setVisible(false);
+    }
+
+    public void setText(){
+
     }
 
     @OnDestroy
@@ -68,11 +73,4 @@ public class WarningComponent extends VBox{
             this.subscriber.dispose();
         }
     }
-
-    public void onCancel() {
-        setVisible(false);
-    }
-
 }
-
-

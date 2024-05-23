@@ -82,13 +82,13 @@ BrowseGameController extends BasicController {
 
     @SubComponent
     @Inject
-    WarningComponent warningComponent;
+    public WarningComponent warningComponent;
     @SubComponent
     @Inject
     public LogoutComponent logoutComponent;
     @SubComponent
     @Inject
-    BubbleComponent bubbleComponent;
+    public BubbleComponent bubbleComponent;
 
     @Inject
     GamesApiService gamesApiService;
@@ -237,5 +237,7 @@ BrowseGameController extends BasicController {
         subscriber.dispose();
         backgroundAnchorPane.setStyle("-fx-background-image: null");
         cardBackgroundVBox.setStyle("-fx-background-image: null");
+        deleteIconBlackImage = null;
+        deleteIconRedImage = null;
     }
 }

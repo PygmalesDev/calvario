@@ -12,7 +12,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
+import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -39,8 +41,8 @@ public class LobbySettingsComponent extends AnchorPane {
 
     private String gameID;
     public boolean leftLobby = false;
-    private Image readyIconBlueImage;
-    private Image readyIconGreenImage;
+    public Image readyIconBlueImage;
+    public Image readyIconGreenImage;
 
     @Inject
     public LobbySettingsComponent() {
@@ -51,6 +53,15 @@ public class LobbySettingsComponent extends AnchorPane {
     public void init(){
         readyIconBlueImage = new Image(getClass().getResource("/de/uniks/stp24/icons/approveBlue.png").toExternalForm());
         readyIconGreenImage = new Image(getClass().getResource("/de/uniks/stp24/icons/approveGreen.png").toExternalForm());
+    }
+
+
+    public void setReadyButton(boolean ready){
+        if (!ready) {
+            readyIconImageView.setImage(readyIconBlueImage);
+        }else{
+            readyIconImageView.setImage(readyIconGreenImage);
+        }
     }
 
     public void leaveLobby() {
@@ -83,6 +94,12 @@ public class LobbySettingsComponent extends AnchorPane {
                         readyIconImageView.setImage(readyIconGreenImage);
                     }
                 });
+    }
+
+    @OnDestroy
+    public void destroy(){
+        readyIconBlueImage = null;
+        readyIconGreenImage = null;
     }
 
 }

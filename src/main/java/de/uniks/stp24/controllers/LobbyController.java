@@ -149,7 +149,13 @@ public class LobbyController {
             this.createGameDeletedListener();
 
             this.lobbyService.loadPlayers(this.gameID).subscribe(dto -> {
-                Arrays.stream(dto).forEach(data -> this.addUserToList(data.user(), data));
+                Arrays.stream(dto).forEach(data -> {
+                        this.addUserToList(data.user(), data);
+                        if(data.user().equals(this.tokenStorage.getUserId())){
+                            this.lobbySettingsComponent.setReadyButton(data.ready());
+                            this.lobbyHostSettingsComponent.setReadyButton(data.ready());
+                        }
+                });
                 this.sortHostOnTop();
             });
 

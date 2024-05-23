@@ -18,6 +18,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
@@ -54,8 +55,8 @@ public class LobbyHostSettingsComponent extends AnchorPane {
 
     private String gameID;
     public boolean leftLobby;
-    private Image readyIconBlueImage;
-    private Image readyIconGreenImage;
+    public Image readyIconBlueImage;
+    public Image readyIconGreenImage;
 
     @Inject
     public LobbyHostSettingsComponent() {
@@ -75,6 +76,14 @@ public class LobbyHostSettingsComponent extends AnchorPane {
                         this.startJourneyButton.setDisable(!Arrays.stream(members)
                                 .map(MemberDto::ready)
                                 .reduce(Boolean::logicalAnd).orElse(true))));
+    }
+
+    public void setReadyButton(boolean ready){
+        if (!ready) {
+            readyIconImageView.setImage(readyIconBlueImage);
+        }else{
+            readyIconImageView.setImage(readyIconGreenImage);
+        }
     }
 
     @OnRender
@@ -119,5 +128,11 @@ public class LobbyHostSettingsComponent extends AnchorPane {
                         readyIconImageView.setImage(readyIconGreenImage);
                     }
                 });
+    }
+
+    @OnDestroy
+    public void destroy(){
+        readyIconBlueImage = null;
+        readyIconGreenImage = null;
     }
 }

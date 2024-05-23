@@ -1,6 +1,7 @@
 package de.uniks.stp24.game;
 
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.component.GameComponent;
 import de.uniks.stp24.component.LogoutComponent;
 import de.uniks.stp24.component.WarningComponent;
@@ -46,6 +47,8 @@ public class BrowseGameControllerTest extends ControllerTest {
     WarningComponent warningComponent;
     @Spy
     BrowseGameService browseGameService;
+    @Spy
+    BubbleComponent bubbleComponent;
 
     @InjectMocks
     LogoutComponent logoutComponent;
@@ -74,6 +77,8 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Override
     public void start(Stage stage)  throws Exception{
         browseGameController.logoutComponent = logoutComponent;
+        browseGameController.bubbleComponent = bubbleComponent;
+        browseGameController.warningComponent = warningComponent;
         Mockito.doReturn(Observable.just(List.of(
                 game,
                 new Game(null, null, "2", "rapapa", "testID", false, 0,0, null)

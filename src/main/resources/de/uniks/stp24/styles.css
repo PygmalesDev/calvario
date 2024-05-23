@@ -336,7 +336,7 @@ ToggleButton:hover{
 
 .userComponentText{
     -fx-font-family: "PT Serif";
-    -fx-font-size: 13;
+    -fx-font-size: 10;
     -fx-font-weight: bold;
 }
 

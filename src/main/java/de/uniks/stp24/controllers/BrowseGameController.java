@@ -166,11 +166,10 @@ BrowseGameController extends BasicController {
     ============================================= On-Action buttons =============================================
      */
 
-    //TODO NEW LOGOUT METHOD
-    /*public void logOut() {
-        popupLogout.showPopup(logoutWarningContainer, logoutComponent);
-        popupLogout.setBlur(browseGameVBoxList, browseGameVBoxButtons);
-    }*/
+    public void logOut() {
+        popup.showPopup(logoutWarningContainer, logoutComponent);
+        popup.setBlur(browseGameVBoxList, browseGameVBoxButtons);
+    }
 
     public void newGame() {
         app.show("/createGameController");

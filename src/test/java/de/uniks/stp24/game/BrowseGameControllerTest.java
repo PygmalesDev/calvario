@@ -89,15 +89,14 @@ public class BrowseGameControllerTest extends ControllerTest {
     ============================================= Test browse game buttons =============================================
      */
 
-    //TODO REFACTOR TEST!
-    /*@Test
+    @Test
     void logOut(){
         WaitForAsyncUtils.waitForFxEvents();
         assertEquals("Browse Game", stage.getTitle());
         clickOn(browseGameController.log_out_b);
         WaitForAsyncUtils.waitForFxEvents();
         assertNotNull(lookup("#logoutButton").queryButton());
-    }*/
+    }
 
     @Test
     void newGame(){
@@ -243,7 +242,6 @@ public class BrowseGameControllerTest extends ControllerTest {
     }
 
     //TODO REFACTOR TEST!
-/*
     @Test
     public void clickOnLogout() {
         doReturn(Observable.just(new LogoutResult(""))).when(browseGameService).logout(any());
@@ -264,10 +262,9 @@ public class BrowseGameControllerTest extends ControllerTest {
         verify(browseGameController.browseGameService,times(1)).logout("");
         //assertEquals(resources.getString("login"),stage.getTitle());
     }
-*/
 
-    //TODO REFACTOR TEST!
-    /*@Test
+
+    @Test
     public void clickOnCancel() {
         // Start:
         // Alice has unintended clicked the logout button
@@ -285,5 +282,5 @@ public class BrowseGameControllerTest extends ControllerTest {
         // Alice return to the browse game login screen
         // must be fixed when browsegames.fxml is available
         assertEquals("Browse Game", stage.getTitle());
-    }*/
+    }
 }

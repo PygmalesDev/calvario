@@ -18,6 +18,7 @@ import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 
@@ -71,7 +72,7 @@ public class LobbySettingsComponent extends AnchorPane {
     }
 
     public void selectEmpire() {
-        this.app.show("/creation");
+        this.app.show("/creation", Map.of("gameid", this.gameID));
     }
     public void setGameName(String gameName) {
         this.gameNameField.setText(gameName);

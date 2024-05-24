@@ -17,7 +17,6 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.scene.Node;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -31,6 +30,8 @@ import javax.inject.Provider;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -224,11 +225,11 @@ public class TestLobbyControllerAsHost extends ControllerTest {
      */
     @Test
     public void testSwitchToEmpireSelection() {
-        doReturn(null).when(this.app).show("/creation");
+        doReturn(null).when(this.app).show(eq("/creation"), any());
 
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#selectEmpireButton");
 
-        verify(this.app, times(1)).show("/creation");
+        verify(this.app, times(1)).show(eq("/creation"), any());
     }
 }

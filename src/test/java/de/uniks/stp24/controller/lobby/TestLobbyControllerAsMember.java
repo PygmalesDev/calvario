@@ -30,6 +30,8 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import javax.inject.Provider;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -231,12 +233,15 @@ public class TestLobbyControllerAsMember extends ControllerTest {
      */
     @Test
     public void testSwitchToEmpireSelection() {
-        doReturn(null).when(this.app).show("/creation");
+        doReturn(null).when(this.app).show(eq("/creation"), any());
 
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#selectEmpireButton");
 
-        verify(this.app, times(1)).show("/creation");
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        verify(this.app, times(1)).show(eq("/creation"), any());
     }
 
 

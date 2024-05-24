@@ -199,7 +199,7 @@ public class GangCreationController {
             if (Objects.nonNull(gang)) empire = new Empire(gang.name(), gang.description(), gang.color(),
                     gang.flagIndex()%this.flagsList.size(), gang.portraitIndex()%this.portraitsList.size(),
                     "uninhabitable_0", new String[]{});
-
+            System.out.println(this.gameID + " " + this.tokenStorage.getUserId() + "" + result.ready() + " " + empire + " " + lobbyService);
             this.subscriber.subscribe(this.lobbyService.updateMember(
                     this.gameID, this.tokenStorage.getUserId(),result.ready(), empire), result2 ->
                         app.show("/lobby", Map.of("gameid", this.gameID)));

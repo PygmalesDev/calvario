@@ -157,7 +157,6 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     @Test
     public void testLeaveLobbyAsMember() {
         doReturn(null).when(this.app).show("/browseGames");
-
         doReturn(Observable.just(new JoinGameDto())).when(this.lobbyService).leaveLobby(any(), any());
 
         WaitForAsyncUtils.waitForFxEvents();
@@ -265,12 +264,8 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     public void testHostLeftTheLobby() {
         WaitForAsyncUtils.waitForFxEvents();
 
-        sleep(3000);
-
         this.memberSubject.onNext(new Event<>("games.testGameID.members.testGameHostID.updated",
                 new MemberDto(false, "testGameHostID", null, "88888888")));
-
-        sleep(3000);
 
         WaitForAsyncUtils.waitForFxEvents();
         assertTrue(lookup("#lobbyMessageElement").query().isVisible());
@@ -283,6 +278,8 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     @Test
     public void testOnLobbyDeletion() {
         doReturn(null).when(this.app).show("/browseGames");
+        doReturn(Observable.just(new JoinGameDto()))
+                .when(this.lobbyService).leaveLobby(any(), any());
 
         WaitForAsyncUtils.waitForFxEvents();
 
@@ -293,7 +290,6 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
         assertTrue(lookup("#lobbyMessageElement").query().isVisible());
         assertTrue(lookup("#messageText").queryText().getText().contains("deleted"));
-
         clickOn("#returnButton");
 
         verify(this.app, times(1)).show("/browseGames");

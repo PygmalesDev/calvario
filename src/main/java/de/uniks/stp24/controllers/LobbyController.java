@@ -312,16 +312,16 @@ public class LobbyController {
     }
 
     public void goBack() {
-        if (!this.wasKicked)
-            this.lobbyService.leaveLobby(this.gameID, this.tokenStorage.getUserId()).subscribe(result ->
-                    this.app.show("/browseGames"));
-
-        this.app.show("/browseGames");
+        if (!this.wasKicked) this.subscriber.subscribe(
+                this.lobbyService.leaveLobby(this.gameID, this.tokenStorage.getUserId()),
+                result -> this.app.show("/browseGames"));
+        else
+            this.app.show("/browseGames");
     }
 
     @OnDestroy
     void destroy() {
-        subscriber.dispose();
+         subscriber.dispose();
         backgroundAnchorPane.setStyle("-fx-background-image: null");
         cardBackgroundVBox.setStyle("-fx-background-image: null");
     }

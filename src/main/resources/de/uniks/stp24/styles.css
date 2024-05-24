@@ -537,3 +537,7 @@ ToggleButton:hover{
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
 }
 
+.backgroundTextArea .content{
+    -fx-background-color: #FFD966;
+}
+

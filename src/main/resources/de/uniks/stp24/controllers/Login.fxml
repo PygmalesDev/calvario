@@ -121,9 +121,6 @@
                            <font>
                               <Font size="15.0" />
                            </font>
-                           <padding>
-                              <Insets top="500.0" />
-                           </padding>
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

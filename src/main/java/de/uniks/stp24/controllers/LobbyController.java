@@ -231,6 +231,10 @@ public class LobbyController {
                 this.users.add(new MemberUser(new User(user.name() + " (Spectator)",
                         user._id(), user.avatar(), user.createdAt(), user.updatedAt()
                 ), null, data.ready(), this.game, this.asHost));
+            else
+                this.users.add(new MemberUser(new User(user.name(),
+                        user._id(), user.avatar(), user.createdAt(), user.updatedAt()
+                ), null, data.ready(), this.game, this.asHost));
         });
     }
 

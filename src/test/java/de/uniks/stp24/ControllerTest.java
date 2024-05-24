@@ -42,6 +42,7 @@ public class ControllerTest extends ApplicationTest {
         this.prefService.removeRefreshToken();
         prefService.setLocale(Locale.ENGLISH);
         app.start(stage);
+        stage.getScene().getStylesheets().clear();
     }
 
     @Override

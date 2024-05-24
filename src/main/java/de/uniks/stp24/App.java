@@ -77,10 +77,11 @@ public class App extends FulibFxApp {
 
        @Override
     public void stop() {
-                super.stop();
-                cssFxStop.run();
-              autoRefresher().close();
-           }
+        super.stop();
+        cssFxStop.run();
+        autoRefresher().close();
+        //this.component = null;
+    }
 
 
     private void setAppIcon(Stage stage) {

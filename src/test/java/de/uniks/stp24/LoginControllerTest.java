@@ -25,7 +25,7 @@ public class LoginControllerTest extends ControllerTest {
     @Spy
     LoginService loginService;
     @Spy
-    Subscriber subscriber;
+    Subscriber subscriber = spy(Subscriber.class);
     @Spy
     BubbleComponent bubbleComponent;
     @InjectMocks

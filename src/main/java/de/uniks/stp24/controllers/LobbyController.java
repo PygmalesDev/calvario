@@ -10,6 +10,7 @@ import de.uniks.stp24.service.LobbyService;
 import de.uniks.stp24.service.GamesService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
@@ -66,12 +67,12 @@ public class LobbyController {
     public UserComponent userComponent;
 
     @Inject
-    Provider<UserComponent> userComponentProvider;
+    public Provider<UserComponent> userComponentProvider;
     @Inject
     EventListener eventListener;
     @Inject
     @Resource
-    ResourceBundle resource;
+    public ResourceBundle resource;
 
     @FXML
     public ListView<MemberUser> playerListView;
@@ -83,11 +84,22 @@ public class LobbyController {
     Pane lobbyMessagePane;
     @FXML
     Pane lobbyMessageElement;
+    @FXML
+    Pane captainContainer;
+
 
     @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
+
+    @SubComponent
+    @Inject
+    public BubbleComponent bubbleComponent;
+
+    @Inject
+    @Resource
+    ResourceBundle resources;
 
     @Param("gameid")
     String gameID;
@@ -96,10 +108,23 @@ public class LobbyController {
 
     private final ObservableList<MemberUser> users = FXCollections.observableArrayList();
     private boolean asHost;
+    private boolean wasKicked;
+    private boolean isHostReady;
 
     @Inject
     public LobbyController() {
 
+    }
+
+    @OnRender
+    public void addSpeechBubble() {
+        captainContainer.getChildren().add(bubbleComponent);
+        Platform.runLater(() -> {
+            if (asHost)
+                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
+            else
+                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.password"));
+            });
     }
 
     /**
@@ -125,7 +150,15 @@ public class LobbyController {
             this.createGameDeletedListener();
 
             this.lobbyService.loadPlayers(this.gameID).subscribe(dto -> {
-                Arrays.stream(dto).forEach(data -> this.addUserToList(data.user(), data));
+                Arrays.stream(dto).forEach(data -> {
+                    this.addUserToList(data.user(), data);
+                    if (data.user().equals(this.game.owner()))
+                        this.isHostReady = data.ready();
+                    if(data.user().equals(this.tokenStorage.getUserId())){
+                            this.lobbySettingsComponent.setReadyButton(data.ready());
+                            this.lobbyHostSettingsComponent.setReadyButton(data.ready());
+                        }
+                });
                 this.sortHostOnTop();
             });
 
@@ -154,8 +187,11 @@ public class LobbyController {
             String id = event.data().user();
             switch (event.suffix()) {
                 case "created" -> {
-                    if (this.tokenStorage.getUserId().equals(id))
+                    if (this.tokenStorage.getUserId().equals(id)) {
+                        this.lobbyElement.getChildren().remove(this.enterGameComponent);
                         this.lobbyElement.getChildren().add(this.lobbySettingsComponent);
+                        bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
+                    }
                     this.addUserToList(id, event.data());
                 }
                 case "updated" -> this.replaceUserInList(id, event.data());
@@ -204,14 +240,17 @@ public class LobbyController {
      * @param data member data containing their readiness state
      */
     private void replaceUserInList(String userID, MemberDto data) {
-        this.users.replaceAll(memberUser -> {
-            if (!this.asHost && memberUser.ready() == data.ready() && userID.equals(this.game.owner())
-                    && Objects.equals(data.empire(), memberUser.empire())) {
-                this.lobbyMessagePane.setVisible(true);
-                this.lobbyMessageElement.setVisible(true);
-                return memberUser;
-            }
+        if (this.users.stream().anyMatch(memberUser -> !this.asHost && memberUser.user()._id().equals(this.game.owner())
+                        && this.isHostReady == data.ready()
+                        && Objects.equals(data.empire(), memberUser.empire()))) {
+            this.lobbyMessagePane.setVisible(true);
+            this.lobbyMessageElement.setVisible(true);
+        }
 
+        if (data.user().equals(this.game.owner()))
+            this.isHostReady = data.ready();
+
+        this.users.replaceAll(memberUser -> {
             if (memberUser.user()._id().equals(userID)) {
                 if (Objects.nonNull(data.empire()))
                     return new MemberUser(new User(
@@ -237,6 +276,7 @@ public class LobbyController {
             this.messageText.setText("You were kicked from this lobby!");
             this.lobbyMessagePane.setVisible(true);
             this.lobbyMessageElement.setVisible(true);
+            this.wasKicked = true;
         }
         this.users.removeIf(memberUser -> memberUser.user()._id().equals(userID));
     }
@@ -272,12 +312,16 @@ public class LobbyController {
     }
 
     public void goBack() {
-        this.app.show("/browseGames");
+        if (!this.wasKicked) this.subscriber.subscribe(
+                this.lobbyService.leaveLobby(this.gameID, this.tokenStorage.getUserId()),
+                result -> this.app.show("/browseGames"));
+        else
+            this.app.show("/browseGames");
     }
 
     @OnDestroy
     void destroy() {
-        subscriber.dispose();
+         subscriber.dispose();
         backgroundAnchorPane.setStyle("-fx-background-image: null");
         cardBackgroundVBox.setStyle("-fx-background-image: null");
     }

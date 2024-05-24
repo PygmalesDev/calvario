@@ -28,6 +28,9 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import javax.inject.Provider;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,17 +61,10 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     @Spy
     GamesService gamesService;
     @Spy
-    Subscriber subscriber;
+    Subscriber subscriber = spy(Subscriber.class);
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
-    @Spy
-    Provider<UserComponent> userComponentProvider = new Provider(){
-        @Override
-        public UserComponent get() {
-            final UserComponent userComponent = new UserComponent(imageCache);
-            return new UserComponent(imageCache);
-        }
-    };
+
     @InjectMocks
     UserComponent userComponent;
     @InjectMocks
@@ -79,6 +75,13 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     LobbyHostSettingsComponent lobbyHostSettingsComponent;
     @InjectMocks
     LobbyController lobbyController;
+    @InjectMocks
+    BubbleComponent bubbleComponent;
+
+    Provider<UserComponent> userComponentProvider = ()->{
+            final UserComponent userComponent = new UserComponent(imageCache);
+            return new UserComponent(imageCache);
+        };
 
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
@@ -87,10 +90,13 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     public void start(Stage stage) throws Exception{
         super.start(stage);
 
+        this.lobbyController.resource = this.resources;
+        this.lobbyController.bubbleComponent = this.bubbleComponent;
         this.lobbyController.lobbyHostSettingsComponent = this.lobbyHostSettingsComponent;
         this.lobbyController.lobbySettingsComponent = this.lobbySettingsComponent;
         this.lobbyController.enterGameComponent = this.enterGameComponent;
         this.lobbyController.userComponent = this.userComponent;
+        this.lobbyController.userComponentProvider = this.userComponentProvider;
 
         // Mock getting userID
         doReturn("testGameHostID").when(this.tokenStorage).getUserId();

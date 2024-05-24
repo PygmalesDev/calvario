@@ -16,6 +16,7 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 
 @Component(view = "WarningScreen.fxml")
@@ -25,6 +26,7 @@ public class WarningScreenComponent extends VBox {
     Text warningText;
     @FXML
     VBox warningContainer;
+
     @Inject
     App app;
     @Inject
@@ -36,17 +38,14 @@ public class WarningScreenComponent extends VBox {
     @Inject
     Subscriber subscriber;
     @Inject
-
     ErrorService errorService;
+    @Inject
+    @Resource
+    ResourceBundle resources;
 
 
     @Inject
     public WarningScreenComponent() {
-    }
-
-    @OnRender
-    public void setBackground(){
-        warningContainer.setStyle("-fx-background-color: white;");
     }
 
     public void cancelDelete() {

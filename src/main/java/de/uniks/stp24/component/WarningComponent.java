@@ -9,10 +9,14 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
+
+import javax.inject.Inject;
+import java.util.ResourceBundle;
 
 @Component(view = "Warning.fxml")
 public class WarningComponent extends VBox {
@@ -33,6 +37,10 @@ public class WarningComponent extends VBox {
     Subscriber subscriber;
     @Inject
     BrowseGameService browseGameService;
+    @Inject
+    @Resource
+    ResourceBundle resources;
+
     String gameNameText;
     @Inject
     ErrorService errorService;
@@ -68,7 +76,7 @@ public class WarningComponent extends VBox {
     }
 
     public void onCancel() {
-        setVisible(false);
+        this.getParent().setVisible(false);
     }
 
 

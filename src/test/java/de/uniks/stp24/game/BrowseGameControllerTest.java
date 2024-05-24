@@ -1,14 +1,17 @@
 package de.uniks.stp24.game;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.component.GameComponent;
 import de.uniks.stp24.component.LogoutComponent;
 import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.LogoutResult;
+import de.uniks.stp24.model.User;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.BrowseGameService;
+import de.uniks.stp24.service.*;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
@@ -26,11 +29,11 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
 
+import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
@@ -43,14 +46,27 @@ public class BrowseGameControllerTest extends ControllerTest {
     GamesApiService gamesApiService;
 
     @Spy
-    WarningComponent warningComponent;
+    PopupBuilder popupBuilder;
     @Spy
     BrowseGameService browseGameService;
-
+    @Spy
+    Subscriber subscriber = spy(Subscriber.class);
+    @Spy
+    CreateGameService createGameService;
+    @Spy
+    EditGameService editGameService;
+    @Spy
+    ObjectMapper objectMapper;
+    @Spy
+    GameComponent gameComponent;
+    @Spy
+    ErrorService errorService;
     @InjectMocks
     LogoutComponent logoutComponent;
-    @Spy
-    Subscriber subscriber = new Subscriber();
+    @InjectMocks
+    BubbleComponent bubbleComponent;
+    @InjectMocks
+    WarningComponent warningComponent;
 
 
     Game game = new Game(null, null, "1", "Was geht", "testID2", false, 0,0, null);
@@ -73,7 +89,10 @@ public class BrowseGameControllerTest extends ControllerTest {
 
     @Override
     public void start(Stage stage)  throws Exception{
+        browseGameController.gameComponent = gameComponent;
         browseGameController.logoutComponent = logoutComponent;
+        browseGameController.bubbleComponent = bubbleComponent;
+        browseGameController.warningComponent = warningComponent;
         Mockito.doReturn(Observable.just(List.of(
                 game,
                 new Game(null, null, "2", "rapapa", "testID", false, 0,0, null)
@@ -201,8 +220,8 @@ public class BrowseGameControllerTest extends ControllerTest {
 
     @Test
     void deleteGameCancel(){
-        doNothing().when(warningComponent).onCancel();
-        doNothing().when(warningComponent).setGameName();
+        //doNothing().when(warningComponent).onCancel();
+        //doNothing().when(warningComponent).setGameName();
         WaitForAsyncUtils.waitForFxEvents();
         browseGameController.browseGameService.setGame(browseGameController.gameList.getItems().get(0));
         browseGameController.browseGameService.setTokenStorage();
@@ -217,13 +236,15 @@ public class BrowseGameControllerTest extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         clickOn("#cancelButton");
-        verify(this.warningComponent).onCancel();
+        assertFalse(warningComponent.getParent().isVisible());
+        //verify(this.warningComponent).onCancel();
     }
 
     @Test
     void deleteGameConfirm(){
-        doNothing().when(warningComponent).setGameName();
-        doNothing().when(warningComponent).deleteGame();
+        //doNothing().when(warningComponent).setGameName();
+        //doNothing().when(warningComponent).deleteGame();
+        doReturn(Observable.just(new Game("1", "a","b","c","d",true,4, 5, null)) ).when(this.browseGameService).deleteGame();
         WaitForAsyncUtils.waitForFxEvents();
         browseGameController.browseGameService.setGame(browseGameController.gameList.getItems().get(0));
         browseGameController.browseGameService.setTokenStorage();
@@ -238,7 +259,8 @@ public class BrowseGameControllerTest extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         clickOn("#confirmButton");
-        verify(this.warningComponent).deleteGame();
+        verify(browseGameService, times(1)).deleteGame();
+        //verify(this.warningComponent).deleteGame();
     }
 
     //TODO REFACTOR TEST!

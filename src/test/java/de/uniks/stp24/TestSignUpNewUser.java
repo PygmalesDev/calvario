@@ -28,7 +28,7 @@ public class TestSignUpNewUser extends ControllerTest {
     @InjectMocks
     SignUpController signUpController;
     @Spy
-    Subscriber subscriber = new Subscriber();
+    Subscriber subscriber = spy(Subscriber.class);
 
     @Override
     public void start(Stage stage) throws Exception{

@@ -97,7 +97,7 @@ BrowseGameController extends BasicController {
     @Inject
     EventListener eventListener;
     @Inject
-    GameComponent gameComponent;
+    public GameComponent gameComponent;
     @Inject
     public BrowseGameService browseGameService;
     @Inject
@@ -108,6 +108,10 @@ BrowseGameController extends BasicController {
     CreateGameService createGameService;
     PopupBuilder popup = new PopupBuilder();
     PopupBuilder popupLogout = new PopupBuilder();
+
+    @Inject
+    public BrowseGameController(){
+    }
 
     // the fxml has no containers (text, label) for errors;
     private

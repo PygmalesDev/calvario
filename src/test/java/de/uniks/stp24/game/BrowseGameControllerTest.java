@@ -11,10 +11,7 @@ import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.LogoutResult;
 import de.uniks.stp24.model.User;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.BrowseGameService;
-import de.uniks.stp24.service.CreateGameService;
-import de.uniks.stp24.service.EditGameService;
-import de.uniks.stp24.service.PopupBuilder;
+import de.uniks.stp24.service.*;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
@@ -60,6 +57,10 @@ public class BrowseGameControllerTest extends ControllerTest {
     EditGameService editGameService;
     @Spy
     ObjectMapper objectMapper;
+    @Spy
+    GameComponent gameComponent;
+    @Spy
+    ErrorService errorService;
     @InjectMocks
     LogoutComponent logoutComponent;
     @InjectMocks
@@ -88,6 +89,7 @@ public class BrowseGameControllerTest extends ControllerTest {
 
     @Override
     public void start(Stage stage)  throws Exception{
+        browseGameController.gameComponent = gameComponent;
         browseGameController.logoutComponent = logoutComponent;
         browseGameController.bubbleComponent = bubbleComponent;
         browseGameController.warningComponent = warningComponent;

@@ -48,8 +48,6 @@ public class TestEditAcc extends ControllerTest {
     ObjectMapper objectMapper;
     @Spy
     ImageCache imageCache;
-    @Spy
-    BubbleComponent bubbleComponent;
 
     @InjectMocks
     EditAccController editAccController;

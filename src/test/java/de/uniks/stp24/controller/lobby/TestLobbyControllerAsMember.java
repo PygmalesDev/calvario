@@ -2,10 +2,7 @@ package de.uniks.stp24.controller.lobby;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.EnterGameComponent;
-import de.uniks.stp24.component.LobbyHostSettingsComponent;
-import de.uniks.stp24.component.LobbySettingsComponent;
-import de.uniks.stp24.component.UserComponent;
+import de.uniks.stp24.component.*;
 import de.uniks.stp24.controllers.LobbyController;
 import de.uniks.stp24.dto.JoinGameDto;
 import de.uniks.stp24.dto.MemberDto;
@@ -61,17 +58,15 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     @Spy
     GamesService gamesService;
     @Spy
-    Subscriber subscriber;
+    Subscriber subscriber = spy(Subscriber.class);
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
-    @Spy
-    Provider<UserComponent> userComponentProvider = new Provider(){
-        @Override
-        public UserComponent get() {
-            final UserComponent userComponent = new UserComponent(imageCache);
-            return new UserComponent(imageCache);
-        }
+
+    Provider<UserComponent> userComponentProvider = ()->{
+        final UserComponent userComponent = new UserComponent(imageCache);
+        return new UserComponent(imageCache);
     };
+
     @InjectMocks
     UserComponent userComponent;
     @InjectMocks
@@ -82,6 +77,8 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     LobbyHostSettingsComponent lobbyHostSettingsComponent;
     @InjectMocks
     LobbyController lobbyController;
+    @InjectMocks
+    BubbleComponent bubbleComponent;
 
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
@@ -90,10 +87,13 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     public void start(Stage stage) throws Exception{
         super.start(stage);
 
+        this.lobbyController.resource = this.resources;
+        this.lobbyController.bubbleComponent = this.bubbleComponent;
         this.lobbyController.lobbyHostSettingsComponent = this.lobbyHostSettingsComponent;
         this.lobbyController.lobbySettingsComponent = this.lobbySettingsComponent;
         this.lobbyController.enterGameComponent = this.enterGameComponent;
         this.lobbyController.userComponent = this.userComponent;
+        this.lobbyController.userComponentProvider = this.userComponentProvider;
 
         // Mock getting userID
         doReturn("testMemberUnoID").when(this.tokenStorage).getUserId();
@@ -156,7 +156,6 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     @Test
     public void testLeaveLobbyAsMember() {
         doReturn(null).when(this.app).show("/browseGames");
-
         doReturn(Observable.just(new JoinGameDto())).when(this.lobbyService).leaveLobby(any(), any());
 
         WaitForAsyncUtils.waitForFxEvents();
@@ -269,7 +268,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
 
         WaitForAsyncUtils.waitForFxEvents();
         assertTrue(lookup("#lobbyMessageElement").query().isVisible());
-        assertTrue(lookup("#messageText").queryText().getText().contains("left the lobby"));
+        assertTrue(lookup("#messageText").queryText().getText().contains("LEFT THE LOBBY"));
     }
 
     /**
@@ -278,6 +277,8 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     @Test
     public void testOnLobbyDeletion() {
         doReturn(null).when(this.app).show("/browseGames");
+        doReturn(Observable.just(new JoinGameDto()))
+                .when(this.lobbyService).leaveLobby(any(), any());
 
         WaitForAsyncUtils.waitForFxEvents();
 
@@ -288,7 +289,6 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
         assertTrue(lookup("#lobbyMessageElement").query().isVisible());
         assertTrue(lookup("#messageText").queryText().getText().contains("deleted"));
-
         clickOn("#returnButton");
 
         verify(this.app, times(1)).show("/browseGames");

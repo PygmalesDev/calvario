@@ -6,6 +6,7 @@ import de.uniks.stp24.service.LobbyService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
@@ -28,6 +29,8 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     Text readyText;
     @FXML
     Button kickButton;
+    @FXML
+    HBox userHBox;
     @Inject
     LobbyService lobbyService;
     @Inject
@@ -55,7 +58,7 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
         this.member = member;
         this.kickButton.setId("kick"+member.user()._id());
         if (member.user()._id().equals(member.game().owner()) || !member.asHost())
-            this.getChildren().remove(this.kickButton);
+            this.userHBox.getChildren().remove(this.kickButton);
 
         this.usernameText.setText(member.user().name());
         if (member.ready())

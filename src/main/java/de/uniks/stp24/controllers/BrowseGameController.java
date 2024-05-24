@@ -1,5 +1,8 @@
 package de.uniks.stp24.controllers;
 
+import com.fasterxml.jackson.databind.introspect.TypeResolutionContext;
+import de.uniks.stp24.App;
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.component.GameComponent;
 import de.uniks.stp24.component.LogoutComponent;
 import de.uniks.stp24.component.WarningComponent;
@@ -11,14 +14,20 @@ import de.uniks.stp24.service.EditGameService;
 import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
@@ -57,51 +66,68 @@ BrowseGameController extends BasicController {
     public VBox browseGameVBoxList;
     @FXML
     StackPane logoutWarningContainer;
-
+    @FXML
+    ImageView deleteIconImageView;
+    @FXML
+    AnchorPane gameListAnchorPane;
     @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
 
     @FXML
+    Pane captainContainer;
+    @FXML
     StackPane warningWindowContainer;
+
     @SubComponent
     @Inject
-    WarningComponent warningComponent;
-
+    public WarningComponent warningComponent;
     @SubComponent
     @Inject
     public LogoutComponent logoutComponent;
+    @SubComponent
+    @Inject
+    public BubbleComponent bubbleComponent;
 
     @Inject
     GamesApiService gamesApiService;
-
     @Inject
     Provider<GameComponent> gameComponentProvider;
     @Inject
     EventListener eventListener;
     @Inject
-    GameComponent gameComponent;
+    public GameComponent gameComponent;
     @Inject
     public BrowseGameService browseGameService;
     @Inject
     EditGameService editGameService;
-
     @Inject
     PopupBuilder popupBuilder;
     @Inject
     CreateGameService createGameService;
     PopupBuilder popup = new PopupBuilder();
+    PopupBuilder popupLogout = new PopupBuilder();
+
+    @Inject
+    public BrowseGameController(){
+    }
 
     // the fxml has no containers (text, label) for errors;
     private
     Text textInfo;
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
+    private BooleanBinding deleteWarningIsInvisible;
+    private Image deleteIconRedImage;
+    private Image deleteIconBlackImage;
+
 
     //Load list of games as soon as BrowseGame-Screen is shown
     @OnInit
     void init() {
+        deleteIconRedImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteRed.png").toExternalForm());
+        deleteIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteBlack.png").toExternalForm());
         this.controlResponses = responseConstants.respDelGame;
         this.textInfo = new Text("");
 
@@ -139,21 +165,37 @@ BrowseGameController extends BasicController {
 
     }
 
+    @OnRender
+    public void addSpeechBubble() {
+        captainContainer.getChildren().add(bubbleComponent);
+        Platform.runLater(() -> bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.which.game")));
+    }
+
     //Make list of games visible
     @OnRender
     void render() {
         updateListView();
+        this.deleteWarningIsInvisible = this.warningWindowContainer.visibleProperty().not();
     }
 
-    @OnDestroy
-    void destroy() {
-        subscriber.dispose();
-        backgroundAnchorPane.setStyle("-fx-background-image: null");
-        cardBackgroundVBox.setStyle("-fx-background-image: null");
-    }
+    @OnRender
+    public void changeDeleteButtonView(){
+        // delete Button has red text and icon when selected and the captain says something different
+        this.del_game_b.styleProperty().bind(Bindings.createStringBinding(()->{
+            if(deleteWarningIsInvisible.get()) {
+                bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.which.game"));
+                return "-fx-text-fill: Black";
+            }else {
+                bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.whiping.off.the.map"));
+                return "-fx-text-fill: #CF2A27";
+            }
+        },this.deleteWarningIsInvisible));
 
-    @Inject
-    public BrowseGameController() {
+        this.deleteIconImageView.imageProperty().bind(Bindings.createObjectBinding(()->{
+            if(deleteWarningIsInvisible.get())
+                return deleteIconBlackImage;
+            return deleteIconRedImage;
+        },this.deleteWarningIsInvisible));
     }
 
     public void updateListView(){
@@ -168,7 +210,7 @@ BrowseGameController extends BasicController {
 
     public void logOut() {
         popup.showPopup(logoutWarningContainer, logoutComponent);
-        popup.setBlur(browseGameVBoxList, browseGameVBoxButtons);
+        popup.setBlur(gameListAnchorPane, browseGameVBoxButtons);
     }
 
     public void newGame() {
@@ -194,10 +236,19 @@ BrowseGameController extends BasicController {
         if(browseGameService.checkMyGame()) {
             warningComponent.setGameName();
             popup.showPopup(warningWindowContainer, warningComponent);
-            popup.setBlur(browseGameVBoxList, browseGameVBoxButtons);
+            popup.setBlur(gameListAnchorPane, browseGameVBoxButtons);
         } else {
             this.textInfo.setText(getErrorInfoText(403));
         }
+    }
+
+    @OnDestroy
+    void destroy() {
+        subscriber.dispose();
+        backgroundAnchorPane.setStyle("-fx-background-image: null");
+        cardBackgroundVBox.setStyle("-fx-background-image: null");
+        deleteIconBlackImage = null;
+        deleteIconRedImage = null;
     }
 
 }

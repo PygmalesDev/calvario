@@ -34,7 +34,6 @@ public class BubbleComponent extends Pane {
 
     @OnRender
     public void init() {
-        messageBubble.setStyle(messageBubble.getStyle() + "-fx-background-color: #FFD966;");
     }
 
     public void setCaptainText(String text) {

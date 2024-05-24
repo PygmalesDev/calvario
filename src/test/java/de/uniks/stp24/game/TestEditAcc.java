@@ -6,10 +6,7 @@ import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.controllers.EditAccController;
 import de.uniks.stp24.model.User;
-import de.uniks.stp24.service.EditAccService;
-import de.uniks.stp24.service.ImageCache;
-import de.uniks.stp24.service.PrefService;
-import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.*;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -39,22 +36,26 @@ public class TestEditAcc extends ControllerTest {
     @Spy
     EditAccService editAccService;
     @Spy
-    WarningScreenComponent warningScreenComponent;
-    @Spy
     TokenStorage tokenStorage;
     @Spy
-    Subscriber subscriber;
+    Subscriber subscriber = spy(Subscriber.class);
     @Spy
     ObjectMapper objectMapper;
     @Spy
     ImageCache imageCache;
+    @Spy
+    PopupBuilder popupBuilder;
+    @Spy
+    ErrorService errorService;
 
     @InjectMocks
     EditAccController editAccController;
-
+    @InjectMocks
+    WarningScreenComponent warningScreenComponent;
 
     @Override
     public void start(Stage stage) throws Exception{
+        this.editAccController.warningScreen = this.warningScreenComponent;
         super.start(stage);
         app.show(editAccController);
     }
@@ -178,10 +179,7 @@ public class TestEditAcc extends ControllerTest {
     @Test
     void deleteAccountTest(){
         // Title: Confirm after clicking delete account button
-        doReturn(Observable.just(new User("1", "a","b","c","d")) ).when(editAccService).deleteUser();
-        doAnswer(answer -> {tokenStorage.setName(null);
-            app.show("/login");
-            return null;}).when(warningScreenComponent).deleteAcc();
+        doReturn(Observable.just(new User("1", "a","b","c","d")) ).when(this.editAccService).deleteUser();
         // Start:
         // Alice wants to delete her account in STPellaris. She is in the user administration window. She clicked the delete user button and a pop up came up.
         tokenStorage.setName("Alice");
@@ -196,7 +194,8 @@ public class TestEditAcc extends ControllerTest {
         observable.doOnComplete(() -> {
             tokenStorage.setName(null);
             tokenStorage.setAvatar(null);
-            prefService.removeRefreshToken();}).subscribe();
+            prefService.removeRefreshToken();
+        app.show("/login");}).subscribe();
         waitForFxEvents();
 
         // Result:

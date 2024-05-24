@@ -10,10 +10,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
+import java.awt.event.MouseEvent;
 import java.util.ResourceBundle;
 
 @Component(view = "Game.fxml")
@@ -45,7 +47,7 @@ public class GameComponent extends HBox implements ReusableItemComponent<Game> {
 
         //Your game will be displayed in color green
         if (game.owner().equals(tokenStorage.getUserId())) {
-            game_name.setFill(Color.GREEN);
+            game_name.setFill(Color.BLUE);
         } else {
             game_name.setFill(Color.BLACK);
         }
@@ -60,6 +62,7 @@ public class GameComponent extends HBox implements ReusableItemComponent<Game> {
         this.setOnMouseClicked(event -> {
             editGameService.setClickedGame(game);
             browseGameService.handleGameSelection(game);
+            game_name.setFill(Color.RED);
         });
     }
 
@@ -71,4 +74,5 @@ public class GameComponent extends HBox implements ReusableItemComponent<Game> {
         tokenStorage.setAvatar(null);
         tokenStorage.setUserId("testID");
     }
+
 }

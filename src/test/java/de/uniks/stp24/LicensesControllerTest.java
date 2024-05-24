@@ -12,6 +12,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.spy;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,7 +25,7 @@ public class LicensesControllerTest extends ControllerTest {
     BubbleComponent bubbleComponent;
 
     @Spy
-    Subscriber subscriber = new Subscriber();
+    Subscriber subscriber = spy(Subscriber.class);
 
 
     @Override

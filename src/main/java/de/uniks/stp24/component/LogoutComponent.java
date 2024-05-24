@@ -55,12 +55,12 @@ public class LogoutComponent extends VBox {
 
     public void logout() {
         this.subscriber.subscribe(browseGameService.logout(""));
-        setVisible(false);
+        this.getParent().setVisible(false);
         app.show("/login");
     }
 
     public void cancel() {
-        setVisible(false);
+        this.getParent().setVisible(false);
     }
 
     public void setText(){

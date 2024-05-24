@@ -5,17 +5,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0"
-      prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="de.uniks.stp24.controllers.InGameController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="680.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.InGameController">
    <Pane fx:id="gamePane" prefHeight="680.0" prefWidth="1280.0">
-      <Text layoutX="339.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="EPIC GAMEPLAY"
-            textAlignment="CENTER" wrappingWidth="602.26171875">
+      <Text fx:id="epic_gameplay" layoutX="339.0" layoutY="369.0" strokeType="OUTSIDE" strokeWidth="0.0" text="EPIC GAMEPLAY" textAlignment="CENTER" wrappingWidth="602.26171875">
          <font>
-            <Font size="72.0"/>
+            <Font size="72.0" />
          </font>
       </Text>
    </Pane>
-   <StackPane fx:id="pauseMenuContainer" layoutX="440.0" layoutY="40.0" prefHeight="600.0" prefWidth="400.0"
-              style="-fx-background-color: WHITE; -fx-border-color: BLACK; -fx-border-width: 5;" visible="false"/>
+   <StackPane fx:id="pauseMenuContainer" layoutX="440.0" layoutY="40.0" prefHeight="600.0" prefWidth="400.0" style="-fx-background-color: WHITE; -fx-border-color: BLACK; -fx-border-width: 5;" visible="false" />
 </Pane>

@@ -25,7 +25,7 @@ public class BasicController {
     LanguageService languageService;
     @Inject
     @Resource
-    ResourceBundle resources;
+    public ResourceBundle resources;
     @Inject
     ErrorService errorService;
     @Inject

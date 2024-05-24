@@ -67,7 +67,7 @@ public class LobbyController {
     public UserComponent userComponent;
 
     @Inject
-    Provider<UserComponent> userComponentProvider;
+    public Provider<UserComponent> userComponentProvider;
     @Inject
     EventListener eventListener;
     @Inject

@@ -53,7 +53,7 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Spy
     BrowseGameService browseGameService;
     @Spy
-    Subscriber subscriber = new Subscriber();
+    Subscriber subscriber = spy(Subscriber.class);
     @Spy
     CreateGameService createGameService;
     @Spy

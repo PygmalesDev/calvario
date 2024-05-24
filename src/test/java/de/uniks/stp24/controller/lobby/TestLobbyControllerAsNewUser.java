@@ -59,17 +59,9 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
     @Spy
     GamesService gamesService;
     @Spy
-    Subscriber subscriber;
+    Subscriber subscriber = spy(Subscriber.class);
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
-    @Spy
-    Provider<UserComponent> userComponentProvider = new Provider(){
-        @Override
-        public UserComponent get() {
-            final UserComponent userComponent = new UserComponent(imageCache);
-            return new UserComponent(imageCache);
-        }
-    };
     @InjectMocks
     UserComponent userComponent;
     @InjectMocks
@@ -82,6 +74,12 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
     LobbyController lobbyController;
     @InjectMocks
     BubbleComponent bubbleComponent;
+
+    Provider<UserComponent> userComponentProvider = ()->{
+        final UserComponent userComponent = new UserComponent(imageCache);
+        return new UserComponent(imageCache);
+    };
+
 
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
@@ -98,6 +96,7 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
         this.lobbyController.lobbySettingsComponent = this.lobbySettingsComponent;
         this.lobbyController.enterGameComponent = this.enterGameComponent;
         this.lobbyController.userComponent = this.userComponent;
+        this.lobbyController.userComponentProvider = this.userComponentProvider;
 
         // Mock getting userID
         doReturn("testNewUserID").when(this.tokenStorage).getUserId();

@@ -30,7 +30,7 @@ public class EditGameControllerTest extends ControllerTest {
     BrowseGameController browseGameController;
 
     @Spy
-    Subscriber subscriber = new Subscriber();
+    Subscriber subscriber = spy(Subscriber.class);
 
     @Mock
     EditGameService editGameService;

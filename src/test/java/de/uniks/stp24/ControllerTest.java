@@ -1,15 +1,20 @@
 package de.uniks.stp24;
 
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.utils.ResponseConstants;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import java.util.prefs.Preferences;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+
+import static org.mockito.Mockito.spy;
 
 /**
  * Base class for controller tests
@@ -17,7 +22,7 @@ import java.util.ResourceBundle;
 public class ControllerTest extends ApplicationTest {
 
     @Spy
-    public App app = new App();
+    public App app = spy(App.class);
     @Spy
     public PrefService prefService;
     @Spy
@@ -46,4 +51,17 @@ public class ControllerTest extends ApplicationTest {
         app = null;
         stage = null;
     }
+
+    @AfterAll
+    public static void tearDown() {
+        Mockito.framework().clearInlineMocks();
+    }
+    @AfterEach
+    public void tearDown2() {
+        System.gc();
+    }
+
+    /*public void clear() {
+        imageCache.clear();
+    }*/
 }

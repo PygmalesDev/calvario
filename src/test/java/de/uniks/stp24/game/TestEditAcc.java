@@ -35,7 +35,7 @@ public class TestEditAcc extends ControllerTest {
     @Spy
     TokenStorage tokenStorage;
     @Spy
-    Subscriber subscriber;
+    Subscriber subscriber = spy(Subscriber.class);
     @Spy
     ObjectMapper objectMapper;
     @Spy

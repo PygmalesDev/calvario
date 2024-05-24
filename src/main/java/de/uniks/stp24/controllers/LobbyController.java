@@ -108,6 +108,8 @@ public class LobbyController {
 
     private final ObservableList<MemberUser> users = FXCollections.observableArrayList();
     private boolean asHost;
+    private boolean wasKicked;
+    private boolean isHostReady;
 
     @Inject
     public LobbyController() {
@@ -118,12 +120,11 @@ public class LobbyController {
     public void addSpeechBubble() {
         captainContainer.getChildren().add(bubbleComponent);
         Platform.runLater(() -> {
-            if (asHost) {
+            if (asHost)
                 bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
-            } else {
+            else
                 bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.password"));
-            }
-        });
+            });
     }
 
     /**
@@ -151,7 +152,9 @@ public class LobbyController {
             this.lobbyService.loadPlayers(this.gameID).subscribe(dto -> {
                 Arrays.stream(dto).forEach(data -> {
                         this.addUserToList(data.user(), data);
-                        if(data.user().equals(this.tokenStorage.getUserId())){
+                    if (data.user().equals(this.game.owner()))
+                        this.isHostReady = data.ready();
+                    if(data.user().equals(this.tokenStorage.getUserId())){
                             this.lobbySettingsComponent.setReadyButton(data.ready());
                             this.lobbyHostSettingsComponent.setReadyButton(data.ready());
                         }
@@ -237,14 +240,18 @@ public class LobbyController {
      * @param data member data containing their readiness state
      */
     private void replaceUserInList(String userID, MemberDto data) {
-        this.users.replaceAll(memberUser -> {
-            if (!this.asHost && memberUser.ready() == data.ready() && userID.equals(this.game.owner())
-                    && Objects.equals(data.empire(), memberUser.empire())) {
-                this.lobbyMessagePane.setVisible(true);
-                this.lobbyMessageElement.setVisible(true);
-                return memberUser;
-            }
+        if (this.users.stream().anyMatch(memberUser ->
+                !this.asHost && memberUser.asHost()
+                        && this.isHostReady == data.ready()
+                        && Objects.equals(data.empire(), memberUser.empire()))) {
+            this.lobbyMessagePane.setVisible(true);
+            this.lobbyMessageElement.setVisible(true);
+        }
 
+        if (data.user().equals(this.game.owner()))
+            this.isHostReady = data.ready();
+
+        this.users.replaceAll(memberUser -> {
             if (memberUser.user()._id().equals(userID)) {
                 if (Objects.nonNull(data.empire()))
                     return new MemberUser(new User(
@@ -270,6 +277,7 @@ public class LobbyController {
             this.messageText.setText("You were kicked from this lobby!");
             this.lobbyMessagePane.setVisible(true);
             this.lobbyMessageElement.setVisible(true);
+            this.wasKicked = true;
         }
         this.users.removeIf(memberUser -> memberUser.user()._id().equals(userID));
     }
@@ -305,6 +313,10 @@ public class LobbyController {
     }
 
     public void goBack() {
+        if (!this.wasKicked)
+            this.lobbyService.leaveLobby(this.gameID, this.tokenStorage.getUserId()).subscribe(result ->
+                    this.app.show("/browseGames"));
+
         this.app.show("/browseGames");
     }
 

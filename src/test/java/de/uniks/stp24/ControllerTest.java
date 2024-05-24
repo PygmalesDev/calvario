@@ -47,6 +47,7 @@ public class ControllerTest extends ApplicationTest {
         app.setComponent(testComponent);
         app.start(stage);
         stage.requestFocus();
+        stage.getScene().getStylesheets().clear();
     }
 
     @Override

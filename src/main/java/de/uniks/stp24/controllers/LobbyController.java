@@ -134,6 +134,7 @@ public class LobbyController {
      */
     @OnInit
     void init() {
+        System.out.println(gameID);
         this.subscriber.subscribe(this.gamesService.getGame(this.gameID), game -> {
             this.game = game;
             this.gameID = game._id();

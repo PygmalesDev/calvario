@@ -1,11 +1,13 @@
 package de.uniks.stp24.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.service.EditAccService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.TokenStorage;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
@@ -16,29 +18,25 @@ import javafx.scene.effect.BlurType;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 @Title("Edit Account")
 @Controller
 public class EditAccController extends BasicController {
+    @FXML
+    Pane captainContainer;
     @FXML
     ImageView avatarImage;
     @FXML
@@ -74,8 +72,6 @@ public class EditAccController extends BasicController {
     @Inject
     EditAccService editAccService;
     @Inject
-    Subscriber subscriber;
-    @Inject
     TokenStorage tokenStorage;
     @Inject
     ImageCache imageCache;
@@ -83,9 +79,9 @@ public class EditAccController extends BasicController {
     ObjectMapper objectMapper;
     @Inject
     PopupBuilder popupBuilder;
+    @SubComponent
     @Inject
-    @Resource
-    ResourceBundle resources;
+    BubbleComponent bubbleComponent;
 
     @SubComponent
     @Inject
@@ -98,13 +94,18 @@ public class EditAccController extends BasicController {
     public Image deleteIconRedImage;
     public Image deleteIconBlackImage;
 
-
     PopupBuilder popup = new PopupBuilder();
-
-
 
     @Inject
     public EditAccController() {
+    }
+
+    @OnRender
+    public void addSpeechBubble() {
+        captainContainer.getChildren().add(bubbleComponent);
+        Platform.runLater(() -> {
+            bubbleComponent.setCaptainText(resources.getString("pirate.editAcc.go.into.hiding"));
+        });
     }
 
     @OnInit
@@ -141,7 +142,7 @@ public class EditAccController extends BasicController {
             saveChangesButton.setVisible(true);
             changeUserInfoButton.setStyle("-fx-text-fill: #2B78E4");
             editIconImageView.setImage(editIconBlueImage);
-        }else{
+        } else {
             resetEditing(tokenStorage.getName());
         }
     }
@@ -199,7 +200,8 @@ public class EditAccController extends BasicController {
                     });
         } else {
             this.errorLabelEditAcc.setStyle("-fx-fill: red;");
-            this.errorLabelEditAcc.setText(getErrorInfoText(responseConstants.respEditAcc,-1));
+            this.errorLabelEditAcc.setText(getErrorInfoText(responseConstants.respEditAcc,
+              passwordInput.getLength() > 8 ? -1 : -2 ));
 
         }
     }

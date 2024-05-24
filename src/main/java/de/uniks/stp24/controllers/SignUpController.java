@@ -70,15 +70,13 @@ public class SignUpController extends BasicController {
     public String username;
     @Param("password")
     public String password;
-
+    private Text mirrorText;
+    private String lastMsg;
 
     @Inject
     SignUpService signUpService;
     @Inject
-    Subscriber subscriber;
-    @Inject
     UserApiService userApiService;
-
     @SubComponent
     @Inject
     BubbleComponent bubbleComponent;
@@ -88,6 +86,7 @@ public class SignUpController extends BasicController {
     private BooleanBinding isRepeatPasswordEmpty;
     private BooleanBinding passwordInputsMatch;
     private BooleanBinding isPasswordTooShort;
+    private BooleanBinding mirrorChangeText;
 
     @Inject
     public SignUpController() {}
@@ -95,6 +94,9 @@ public class SignUpController extends BasicController {
     @OnInit
     public void init(){
         this.controlResponses = responseConstants.respSignup;
+        lastMsg = "";
+        this.mirrorText = new Text(lastMsg);
+        mirrorText.setVisible(false);
     }
 
     @OnRender
@@ -110,6 +112,7 @@ public class SignUpController extends BasicController {
     }
 
     // Sets boolean bindings for text manipulations
+
     @OnRender
     public void createBindings() {
        this.isLoginFieldEmpty =  this.usernameField.textProperty().isEmpty();
@@ -118,6 +121,7 @@ public class SignUpController extends BasicController {
        this.isPasswordTooShort = this.passwordField.lengthProperty().lessThan(8);
        this.passwordInputsMatch = Bindings.equal(this.passwordField.textProperty(),
                this.repeatPasswordField.textProperty());
+       this.mirrorChangeText = Bindings.equal(lastMsg, mirrorText.textProperty());
     }
 
     // Gets inputs from login screen to the signup screen fields
@@ -140,18 +144,26 @@ public class SignUpController extends BasicController {
         this.errorTextField.textProperty().bind(Bindings.createStringBinding(() -> {
                     if (this.isLoginFieldEmpty.get())
                         return resources.getString("pirate.register.tell.name");
+
                     if (this.isPasswordFieldEmpty.get())
                         return resources.getString("pirate.general.enter.password");
+
                     if (this.isPasswordTooShort.get() && !this.isPasswordFieldEmpty.get())
                         return resources.getString("pirate.register.8characters");
+
                     if (this.isRepeatPasswordEmpty.get() && !this.isPasswordFieldEmpty.get())
                         return resources.getString("pirate.general.repeat.password");
-                    if (!this.passwordInputsMatch.get() && !this.isPasswordFieldEmpty.get() && !this.isPasswordFieldEmpty.get())
+
+                    if (!this.passwordInputsMatch.get() && !this.isPasswordFieldEmpty.get() &&
+                      !this.isPasswordFieldEmpty.get())
                         return resources.getString("pirate.register.passwords.dont.match");
-                    return resources.getString("pirate.register.possible");
-                }, this.isLoginFieldEmpty, this.isPasswordFieldEmpty,
+
+                    if(!this.mirrorChangeText.get())
+                        return lastMsg;
+              return resources.getString("pirate.register.possible");
+          }, this.isLoginFieldEmpty, this.isPasswordFieldEmpty,
                 this.isRepeatPasswordEmpty, this.passwordInputsMatch,
-                this.isPasswordTooShort));
+                this.isPasswordTooShort, this.mirrorChangeText));
     }
 
     // Disables register button when input fields are empty or password inputs do not match
@@ -164,24 +176,15 @@ public class SignUpController extends BasicController {
                         .or(this.isRepeatPasswordEmpty)
                         .or(this.isPasswordTooShort)
                 );
-        if (registerButton.isDisabled()) {
-            // TODO for MT: change the logic? for different cases
-            // errorTextField.setText(resources.getString("info.register"));
-        }
     }
 
     public void register() {
-        // TODO @mtfmtf
-        // When there is error with registering, showErrorMessage() does not work
-        // You can try to call showErrorMessage() after you get the error from server but then the error from server is
-        // not shown
         if (checkIt(this.usernameField.getText(),
                 this.passwordField.getText(),
                 this.repeatPasswordField.getText()) &&
                 this.passwordInputsMatch.getValue()) {
-                this.errorTextField.textProperty().unbind();
-                this.errorTextField
-                            .setText(getErrorInfoText(this.controlResponses, 201));
+                this.mirrorText
+                            .setText(getErrorInfoText(201));
                 bubbleComponent.setErrorMode(false);
 
             this.subscriber.subscribe(this.signUpService.register(this.getUsername(), this.getPassword()),
@@ -195,23 +198,25 @@ public class SignUpController extends BasicController {
                         int code = errorService.getStatus(error);
                     // "generate"" the output in the english/german
                     // due binding, the TextField was not accessible here -> modified
-                        this.errorTextField.textProperty().unbind();
-                        errorTextField.setText(getErrorInfoText(this.controlResponses, code));
+                        lastMsg = getErrorInfoText(code);
+                        mirrorText.setText(lastMsg);
                         bubbleComponent.setErrorMode(true);
                     });
             } else {
             int code = this.passwordInputsMatch.not().getValue() ? -2 : -1;
-            this.errorTextField.textProperty().unbind();
-            errorTextField.setText(getErrorInfoText(this.controlResponses, code));
+            lastMsg = getErrorInfoText(code);
+            mirrorText.setText(lastMsg);
             bubbleComponent.setErrorMode(true);
         }
     }
 
     // Returns user to the login screen
     public void goBack() {
+        String info = bubbleComponent.getErrorMode() ? "error" : "hello";
         app.show("/login",
                 Map.of("username", this.getUsername(),
-                        "password", this.getPassword()
+                        "password", this.getPassword(),
+                  "info", info
         ));
     }
 

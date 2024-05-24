@@ -261,6 +261,7 @@ public class BrowseGameControllerTest extends ControllerTest {
         //verify(this.warningComponent).deleteGame();
     }
 
+    //TODO REFACTOR TEST!
     @Test
     public void clickOnLogout() {
         doReturn(Observable.just(new LogoutResult(""))).when(browseGameService).logout(any());
@@ -281,6 +282,7 @@ public class BrowseGameControllerTest extends ControllerTest {
         verify(browseGameController.browseGameService,times(1)).logout("");
         //assertEquals(resources.getString("login"),stage.getTitle());
     }
+
 
     @Test
     public void clickOnCancel() {

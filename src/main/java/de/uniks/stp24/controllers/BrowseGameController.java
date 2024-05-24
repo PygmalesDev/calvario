@@ -28,20 +28,19 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
-import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 @Title("Browse Game")
 @Controller
@@ -75,6 +74,7 @@ BrowseGameController extends BasicController {
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
+
     @FXML
     Pane captainContainer;
     @FXML
@@ -93,8 +93,6 @@ BrowseGameController extends BasicController {
     @Inject
     GamesApiService gamesApiService;
     @Inject
-    Subscriber subscriber;
-    @Inject
     Provider<GameComponent> gameComponentProvider;
     @Inject
     EventListener eventListener;
@@ -108,18 +106,17 @@ BrowseGameController extends BasicController {
     PopupBuilder popupBuilder;
     @Inject
     CreateGameService createGameService;
-
     PopupBuilder popup = new PopupBuilder();
     PopupBuilder popupLogout = new PopupBuilder();
+
+    // the fxml has no containers (text, label) for errors;
+    private
+    Text textInfo;
 
     private ObservableList<Game> games = FXCollections.observableArrayList();
     private BooleanBinding deleteWarningIsInvisible;
     private Image deleteIconRedImage;
     private Image deleteIconBlackImage;
-
-    @Inject
-    public BrowseGameController() {
-    }
 
 
     //Load list of games as soon as BrowseGame-Screen is shown
@@ -127,22 +124,26 @@ BrowseGameController extends BasicController {
     void init() {
         deleteIconRedImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteRed.png").toExternalForm());
         deleteIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteBlack.png").toExternalForm());
+        this.controlResponses = responseConstants.respDelGame;
+        this.textInfo = new Text("");
 
         editGameService = (editGameService == null) ? new EditGameService() : editGameService;
         createGameService = (createGameService == null) ? new CreateGameService() : createGameService;
         browseGameService = (browseGameService == null) ? new BrowseGameService() : browseGameService;
-
         browseGameService.resetSelectedGame();
-
-        gamesApiService.findAll().subscribe(gameList -> {
-            Platform.runLater(() -> {
-                games.setAll(gameList);
-                editGameService.setGamesList(games);
-                createGameService.setGamesList(games);
-                // Update the ListView after data is set
-                updateListView();
-            });
-        });
+        subscriber.subscribe(gamesApiService.findAll(),
+          gameList -> {
+              Platform.runLater(() -> {
+                  games.setAll(gameList);
+                  editGameService.setGamesList(games);
+                  createGameService.setGamesList(games);
+                  // Update the ListView after data is set
+                  updateListView();
+              });},
+          error -> {
+              int code = errorService.getStatus(error);
+              this.textInfo.setText(getErrorInfoText(code));
+          });
 
         // Listener for updating list of games if games are created, deleted or updated
         subscriber.subscribe(eventListener.listen("games.*.*", Game.class), event -> {
@@ -152,8 +153,12 @@ BrowseGameController extends BasicController {
                     case "update" -> games.replaceAll(g -> g._id().equals(event.data()._id()) ? event.data() : g);
                     case "deleted" -> games.removeIf(g -> g._id().equals(event.data()._id()));
                 }
+            });},
+            error -> {
+                int code = errorService.getStatus(error);
+                this.textInfo.setText(getErrorInfoText(code));
             });
-        });
+
     }
 
     @OnRender
@@ -198,9 +203,10 @@ BrowseGameController extends BasicController {
     /*
     ============================================= On-Action buttons =============================================
      */
+
     public void logOut() {
-        popupLogout.showPopup(logoutWarningContainer, logoutComponent);
-        popupLogout.setBlur(browseGameVBoxButtons, gameListAnchorPane);
+        popup.showPopup(logoutWarningContainer, logoutComponent);
+        popup.setBlur(browseGameVBoxList, browseGameVBoxButtons);
     }
 
     public void newGame() {
@@ -226,7 +232,9 @@ BrowseGameController extends BasicController {
         if(browseGameService.checkMyGame()) {
             warningComponent.setGameName();
             popup.showPopup(warningWindowContainer, warningComponent);
-            popup.setBlur(browseGameVBoxButtons, gameListAnchorPane);
+            popup.setBlur(browseGameVBoxList, browseGameVBoxButtons);
+        } else {
+            this.textInfo.setText(getErrorInfoText(403));
         }
     }
 
@@ -238,4 +246,5 @@ BrowseGameController extends BasicController {
         deleteIconBlackImage = null;
         deleteIconRedImage = null;
     }
+
 }

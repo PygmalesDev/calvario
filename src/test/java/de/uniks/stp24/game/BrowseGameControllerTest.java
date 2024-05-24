@@ -32,6 +32,7 @@ import org.testfx.util.WaitForAsyncUtils;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.List;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -67,9 +68,11 @@ public class BrowseGameControllerTest extends ControllerTest {
     BubbleComponent bubbleComponent;
     @InjectMocks
     WarningComponent warningComponent;
+    @Mock
+    Comparable<Game> comparable;
 
 
-    Game game = new Game(null, null, "1", "Was geht", "testID2", false, 0,0, null);
+    Game game = new Game("11", null, "1", "Was geht", "testID2", false, 0,0, null);
 
 
     @Spy
@@ -95,7 +98,7 @@ public class BrowseGameControllerTest extends ControllerTest {
         browseGameController.warningComponent = warningComponent;
         Mockito.doReturn(Observable.just(List.of(
                 game,
-                new Game(null, null, "2", "rapapa", "testID", false, 0,0, null)
+                new Game("88888", null, "2", "rapapa", "testID", false, 0,0, null)
         ))).when(gamesApiService).findAll();
 
         Mockito.doReturn(subject).when(eventListener).listen("games.*.*", Game.class);
@@ -164,12 +167,12 @@ public class BrowseGameControllerTest extends ControllerTest {
         //Create new Game and check if game is listed on ListView
         WaitForAsyncUtils.waitForFxEvents();
         assertEquals(2, browseGameController.gameList.getItems().size());
-        subject.onNext(new Event<>("games.3.created", new Game(null, null, "3", "taschaka", "testID2", false, 0,0, null)));
+        subject.onNext(new Event<>("games.3.created", new Game("22", null, "3", "taschaka", "testID2", false, 0,0, null)));
 
         //Delete existing game and check if game is still listed or not.
         WaitForAsyncUtils.waitForFxEvents();
         assertEquals(3, browseGameController.gameList.getItems().size());
-        subject.onNext(new Event<>("games.652.deleted", new Game(null, null, "2", "rapapa", "testID", false, 0,0, null)));
+        subject.onNext(new Event<>("games.652.deleted", new Game("22", null, "2", "rapapa", "testID", false, 0,0, null)));
 
         //Check amount of Listview items
         WaitForAsyncUtils.waitForFxEvents();

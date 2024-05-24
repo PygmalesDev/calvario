@@ -269,7 +269,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
 
         WaitForAsyncUtils.waitForFxEvents();
         assertTrue(lookup("#lobbyMessageElement").query().isVisible());
-        assertTrue(lookup("#messageText").queryText().getText().contains("left the lobby"));
+        assertTrue(lookup("#messageText").queryText().getText().contains("LEFT THE LOBBY"));
     }
 
     /**

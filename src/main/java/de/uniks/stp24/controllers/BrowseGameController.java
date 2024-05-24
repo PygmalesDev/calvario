@@ -200,7 +200,7 @@ BrowseGameController extends BasicController {
      */
     public void logOut() {
         popupLogout.showPopup(logoutWarningContainer, logoutComponent);
-        popupLogout.setBlur(browseGameVBoxList, browseGameVBoxButtons);
+        popupLogout.setBlur(browseGameVBoxButtons, gameListAnchorPane);
     }
 
     public void newGame() {

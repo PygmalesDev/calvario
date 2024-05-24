@@ -1,9 +1,12 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.component.GangComponent;
+import de.uniks.stp24.service.LobbyService;
 import de.uniks.stp24.service.SaveLoadService;
+import de.uniks.stp24.service.TokenStorage;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -19,7 +22,9 @@ import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -38,7 +43,14 @@ public class GangCreationController {
     SaveLoadService saveLoadService;
 
     @Inject
-    Provider<GangComponent> gangComponentProvider;
+    LobbyService lobbyService;
+    @Inject
+    Subscriber subscriber;
+    @Inject
+    TokenStorage tokenStorage;
+
+    @Inject
+    public Provider<GangComponent> gangComponentProvider;
 
     @Inject
     @Resource
@@ -120,6 +132,8 @@ public class GangCreationController {
     public GangCreationController() {
 
     }
+    @Param("gameid")
+    String gameID;
 
     @OnInit
     public void init() {
@@ -177,7 +191,20 @@ public class GangCreationController {
     }
 
     public void back() {
-        app.show("/lobby");
+        Gang gang = this.gangsListView.getSelectionModel().getSelectedItem();
+
+        this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
+            Empire empire = null;
+
+            if (Objects.nonNull(gang)) empire = new Empire(gang.name(), gang.description(), gang.color(),
+                    gang.flagIndex()%this.flagsList.size(), gang.portraitIndex()%this.portraitsList.size(),
+                    "uninhabitable_0", new String[]{});
+
+            this.subscriber.subscribe(this.lobbyService.updateMember(
+                    this.gameID, this.tokenStorage.getUserId(),result.ready(), empire), result2 ->
+                        app.show("/lobby", Map.of("gameid", this.gameID)));
+        });
+
     }
 
     public Gang getInputGang() {

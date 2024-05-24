@@ -1,7 +1,7 @@
 package de.uniks.stp24.component;
 
+import de.uniks.stp24.App;
 import de.uniks.stp24.service.InGameService;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
@@ -25,6 +25,8 @@ public class PauseMenuComponent extends AnchorPane {
 
     @FXML
     VBox vbox;
+    @Inject
+    App app;
 
     @Inject
     InGameService inGameService;
@@ -44,11 +46,10 @@ public class PauseMenuComponent extends AnchorPane {
     }
 
     public void settings() {
-        inGameService.setShowSettings(true);
+        inGameService.setShowSettings(false);
     }
 
     public void quit() {
-        Platform.exit();
-        System.exit(0);
+        app.show("/browseGames");
     }
 }

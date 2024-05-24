@@ -35,7 +35,7 @@ public class GangComponent extends Pane implements ReusableItemComponent<Gang> {
     @Override
     public void setItem(@NotNull Gang gang) {
         java.awt.Color color = java.awt.Color.decode(gang.color());
-        System.out.println(color.getRed() + color.decode("#FFCCEE").getGreen() + color.getBlue());
+        //System.out.println(color.getRed() + color.decode("#FFCCEE").getGreen() + color.getBlue());
         if (color.getRed() + color.decode("#FFCCEE").getGreen() + color.getBlue() <= 500)
             gangNameText.setStyle("-fx-text-fill: white;");
 

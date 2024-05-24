@@ -210,7 +210,7 @@ BrowseGameController extends BasicController {
 
     public void logOut() {
         popup.showPopup(logoutWarningContainer, logoutComponent);
-        popup.setBlur(browseGameVBoxList, browseGameVBoxButtons);
+        popup.setBlur(gameListAnchorPane, browseGameVBoxButtons);
     }
 
     public void newGame() {
@@ -236,7 +236,7 @@ BrowseGameController extends BasicController {
         if(browseGameService.checkMyGame()) {
             warningComponent.setGameName();
             popup.showPopup(warningWindowContainer, warningComponent);
-            popup.setBlur(browseGameVBoxList, browseGameVBoxButtons);
+            popup.setBlur(gameListAnchorPane, browseGameVBoxButtons);
         } else {
             this.textInfo.setText(getErrorInfoText(403));
         }

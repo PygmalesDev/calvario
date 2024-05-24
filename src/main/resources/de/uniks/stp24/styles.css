@@ -134,7 +134,7 @@ ToggleButton:hover{
 }
 
 .lockButton {
-    -fx-background-image: url("Icons/unlock.png");
+    -fx-background-image: url("icons/unlock.png");
     -fx-background-color: WHITE;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
@@ -145,7 +145,7 @@ ToggleButton:hover{
     -fx-pref-height: 25px;
 }
 .lockButton:selected {
-    -fx-background-image: url("Icons/lock.png");
+    -fx-background-image: url("icons/lock.png");
     -fx-background-color: WHITE;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;

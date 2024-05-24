@@ -23,6 +23,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-font-weight: bold;
 }
 
+
 /*********************************************************************************************/
 /********* Backgrounds ***********************************************************************/
 
@@ -300,6 +301,20 @@ ToggleButton:hover{
     -fx-border-width: 0;
     -fx-pref-width: 400px;
     -fx-pref-height: 65px;
+}
+
+.searchField {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 22;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/fields/textField.png");
+    -fx-background-size: 100% 100%;
+    -fx-pref-width: 320px;
+    -fx-pref-height: 80px;
+    -fx-prompt-text-fill: #df0202;
+    -fx-prompt-text-size: 12;
+    -fx-text-fill: #df0202;
 }
 
 .kickUserButton{

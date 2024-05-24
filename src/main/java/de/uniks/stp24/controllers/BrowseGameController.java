@@ -1,6 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import com.fasterxml.jackson.databind.introspect.TypeResolutionContext;
+import com.sun.javafx.binding.SelectBinding;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.component.GameComponent;
@@ -16,11 +17,13 @@ import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.StringBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -40,7 +43,9 @@ import org.fulib.fx.constructs.listview.ComponentListCell;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Comparator;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Title("Browse Game")
 @Controller
@@ -74,6 +79,9 @@ BrowseGameController extends BasicController {
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
+
+    @FXML
+    TextField searchLine;
 
     @FXML
     Pane captainContainer;
@@ -122,6 +130,22 @@ BrowseGameController extends BasicController {
     private Image deleteIconRedImage;
     private Image deleteIconBlackImage;
 
+    @OnRender
+    void createBindings() {
+        gameList.setItems(games);
+        gameList.setCellFactory(list -> new ComponentListCell<>(app, gameComponentProvider));
+        this.searchLine.textProperty().addListener((observable, oldValue, newValue) -> {
+            this.gameList.scrollTo(0);
+            if (newValue.isEmpty()) this.games.sort(Comparator.comparing(Game::createdAt).reversed());
+            else this.games.sort(Comparator.comparing(game -> !game.name().toLowerCase().contains(newValue.toLowerCase())));
+        });
+    }
+
+    private void sortNewGamesOnTop() {
+        this.games.sort(Comparator.comparing(Game::createdAt).reversed());
+    }
+
+
 
     //Load list of games as soon as BrowseGame-Screen is shown
     @OnInit
@@ -141,8 +165,7 @@ BrowseGameController extends BasicController {
                   games.setAll(gameList);
                   editGameService.setGamesList(games);
                   createGameService.setGamesList(games);
-                  // Update the ListView after data is set
-                  updateListView();
+                  this.sortNewGamesOnTop();
               });},
           error -> {
               int code = errorService.getStatus(error);
@@ -157,6 +180,7 @@ BrowseGameController extends BasicController {
                     case "update" -> games.replaceAll(g -> g._id().equals(event.data()._id()) ? event.data() : g);
                     case "deleted" -> games.removeIf(g -> g._id().equals(event.data()._id()));
                 }
+                this.sortNewGamesOnTop();
             });},
             error -> {
                 int code = errorService.getStatus(error);
@@ -174,7 +198,6 @@ BrowseGameController extends BasicController {
     //Make list of games visible
     @OnRender
     void render() {
-        updateListView();
         this.deleteWarningIsInvisible = this.warningWindowContainer.visibleProperty().not();
     }
 
@@ -198,11 +221,7 @@ BrowseGameController extends BasicController {
         },this.deleteWarningIsInvisible));
     }
 
-    public void updateListView(){
-        games = browseGameService.sortGames(games);
-        gameList.setItems(games);
-        gameList.setCellFactory(list -> new ComponentListCell<>(app, gameComponentProvider));
-    }
+
 
     /*
     ============================================= On-Action buttons =============================================

@@ -29,8 +29,6 @@ import java.util.*;
 @Controller
 public class InGameController {
     @FXML
-    Pane gamePane;
-    @FXML
     StackPane pauseMenuContainer;
 
     @Inject
@@ -131,12 +129,10 @@ public class InGameController {
     }
 
     public void pauseGame() {
-        gamePane.setEffect(new BoxBlur());
         pauseMenuContainer.setVisible(true);
     }
 
     public void resumeGame() {
-        gamePane.setEffect(null);
         pauseMenuContainer.setVisible(false);
     }
 

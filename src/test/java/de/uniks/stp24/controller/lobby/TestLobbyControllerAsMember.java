@@ -2,10 +2,7 @@ package de.uniks.stp24.controller.lobby;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.EnterGameComponent;
-import de.uniks.stp24.component.LobbyHostSettingsComponent;
-import de.uniks.stp24.component.LobbySettingsComponent;
-import de.uniks.stp24.component.UserComponent;
+import de.uniks.stp24.component.*;
 import de.uniks.stp24.controllers.LobbyController;
 import de.uniks.stp24.dto.JoinGameDto;
 import de.uniks.stp24.dto.MemberDto;
@@ -82,6 +79,8 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     LobbyHostSettingsComponent lobbyHostSettingsComponent;
     @InjectMocks
     LobbyController lobbyController;
+    @InjectMocks
+    BubbleComponent bubbleComponent;
 
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
@@ -90,6 +89,8 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     public void start(Stage stage) throws Exception{
         super.start(stage);
 
+        this.lobbyController.resource = this.resources;
+        this.lobbyController.bubbleComponent = this.bubbleComponent;
         this.lobbyController.lobbyHostSettingsComponent = this.lobbyHostSettingsComponent;
         this.lobbyController.lobbySettingsComponent = this.lobbySettingsComponent;
         this.lobbyController.enterGameComponent = this.enterGameComponent;
@@ -264,8 +265,12 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     public void testHostLeftTheLobby() {
         WaitForAsyncUtils.waitForFxEvents();
 
+        sleep(3000);
+
         this.memberSubject.onNext(new Event<>("games.testGameID.members.testGameHostID.updated",
                 new MemberDto(false, "testGameHostID", null, "88888888")));
+
+        sleep(3000);
 
         WaitForAsyncUtils.waitForFxEvents();
         assertTrue(lookup("#lobbyMessageElement").query().isVisible());

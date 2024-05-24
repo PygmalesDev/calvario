@@ -72,7 +72,7 @@ public class LobbyController {
     EventListener eventListener;
     @Inject
     @Resource
-    ResourceBundle resource;
+    public ResourceBundle resource;
 
     @FXML
     public ListView<MemberUser> playerListView;
@@ -95,7 +95,7 @@ public class LobbyController {
 
     @SubComponent
     @Inject
-    BubbleComponent bubbleComponent;
+    public BubbleComponent bubbleComponent;
 
     @Inject
     @Resource
@@ -151,7 +151,7 @@ public class LobbyController {
 
             this.lobbyService.loadPlayers(this.gameID).subscribe(dto -> {
                 Arrays.stream(dto).forEach(data -> {
-                        this.addUserToList(data.user(), data);
+                    this.addUserToList(data.user(), data);
                     if (data.user().equals(this.game.owner()))
                         this.isHostReady = data.ready();
                     if(data.user().equals(this.tokenStorage.getUserId())){
@@ -240,8 +240,7 @@ public class LobbyController {
      * @param data member data containing their readiness state
      */
     private void replaceUserInList(String userID, MemberDto data) {
-        if (this.users.stream().anyMatch(memberUser ->
-                !this.asHost && memberUser.asHost()
+        if (this.users.stream().anyMatch(memberUser -> !this.asHost && memberUser.user()._id().equals(this.game.owner())
                         && this.isHostReady == data.ready()
                         && Objects.equals(data.empire(), memberUser.empire()))) {
             this.lobbyMessagePane.setVisible(true);

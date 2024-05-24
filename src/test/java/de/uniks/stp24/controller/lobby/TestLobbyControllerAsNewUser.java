@@ -2,10 +2,7 @@ package de.uniks.stp24.controller.lobby;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.EnterGameComponent;
-import de.uniks.stp24.component.LobbyHostSettingsComponent;
-import de.uniks.stp24.component.LobbySettingsComponent;
-import de.uniks.stp24.component.UserComponent;
+import de.uniks.stp24.component.*;
 import de.uniks.stp24.controllers.LobbyController;
 import de.uniks.stp24.dto.JoinGameDto;
 import de.uniks.stp24.dto.MemberDto;
@@ -83,6 +80,8 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
     LobbyHostSettingsComponent lobbyHostSettingsComponent;
     @InjectMocks
     LobbyController lobbyController;
+    @InjectMocks
+    BubbleComponent bubbleComponent;
 
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
@@ -93,6 +92,8 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
 
         this.joinGameService.gameMembersApiService = this.gameMembersApiService;
 
+        this.lobbyController.resource = this.resources;
+        this.lobbyController.bubbleComponent = this.bubbleComponent;
         this.lobbyController.lobbyHostSettingsComponent = this.lobbyHostSettingsComponent;
         this.lobbyController.lobbySettingsComponent = this.lobbySettingsComponent;
         this.lobbyController.enterGameComponent = this.enterGameComponent;
@@ -174,7 +175,9 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
         assertEquals("Please enter password!", lookup("#errorMessage").queryText().getText());
 
         // Test inputting the incorrect password
-        clickOn("#passwordInputField").write("1");
+        clickOn("#passwordInputField");
+        write("1");
+
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#joinButton");
 
@@ -182,7 +185,9 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
         assertEquals("Validation failed!", lookup("#errorMessage").queryText().getText());
 
         // Test inputting the correct password
-        clickOn("#passwordInputField").write("88888888");
+        clickOn("#passwordInputField");
+        write("88888888");
+
         clickOn("#joinButton");
         this.memberSubject.onNext(new Event<>("games.testTestID.members.testNewUserID.created",
                 new MemberDto(false, "testNewUserID", null, "88888888")));

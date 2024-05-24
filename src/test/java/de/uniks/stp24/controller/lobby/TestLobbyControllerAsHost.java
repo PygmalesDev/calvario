@@ -17,6 +17,7 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -59,6 +60,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     Subscriber subscriber;
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
+
     @Spy
     Provider<UserComponent> userComponentProvider = new Provider(){
         @Override
@@ -77,6 +79,9 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     LobbyHostSettingsComponent lobbyHostSettingsComponent;
     @InjectMocks
     LobbyController lobbyController;
+    @InjectMocks
+    BubbleComponent bubbleComponent;
+
 
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
@@ -85,6 +90,8 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     public void start(Stage stage) throws Exception{
         super.start(stage);
 
+        this.lobbyController.resource = this.resources;
+        this.lobbyController.bubbleComponent = this.bubbleComponent;
         this.lobbyController.lobbyHostSettingsComponent = this.lobbyHostSettingsComponent;
         this.lobbyController.lobbySettingsComponent = this.lobbySettingsComponent;
         this.lobbyController.enterGameComponent = this.enterGameComponent;

@@ -30,12 +30,15 @@
                      <Pane fx:id="captainContainer" layoutY="335.0" prefHeight="0.0" prefWidth="135.0" />
                      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="41.0" layoutY="27.0" prefHeight="40.0" prefWidth="350.0" styleClass="borderedText">
                         <graphic>
-                           <Text fx:id="gameNameField" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="gameName" text="%%GameName" textAlignment="CENTER" wrappingWidth="243.19580078125">
+                           <Text fx:id="gameNameField" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="gameName" text="\%GameName" textAlignment="CENTER" wrappingWidth="243.19580078125">
                               <font>
                                  <Font size="31.0" />
                               </font>
                            </Text>
                         </graphic>
+                        <padding>
+                           <Insets bottom="5.0" />
+                        </padding>
                      </Label>
                   </AnchorPane>
                   <AnchorPane prefHeight="500.0" prefWidth="350.0">

@@ -34,7 +34,7 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-@Title("Lobby")
+@Title("%enter.game")
 @Controller
 public class LobbyController {
     @Inject
@@ -68,9 +68,7 @@ public class LobbyController {
     public Provider<UserComponent> userComponentProvider;
     @Inject
     EventListener eventListener;
-    @Inject
-    @Resource
-    public ResourceBundle resource;
+
 
     @FXML
     public ListView<MemberUser> playerListView;
@@ -98,7 +96,7 @@ public class LobbyController {
 
     @Inject
     @Resource
-    ResourceBundle resources;
+    public ResourceBundle resources;
 
     @Param("gameid")
     String gameID;
@@ -172,7 +170,7 @@ public class LobbyController {
                 .listen("games." + this.gameID + ".deleted", Game.class), event -> {
             this.lobbyMessagePane.setVisible(true);
             this.lobbyMessageElement.setVisible(true);
-            this.messageText.setText("This lobby has been deleted!");
+            this.messageText.setText(resources.getString("lobby.has.been.deleted"));
         });
     }
 
@@ -277,7 +275,7 @@ public class LobbyController {
      */
     private void removeUserFromList(String userID) {
         if (!this.lobbySettingsComponent.leftLobby && this.tokenStorage.getUserId().equals(userID)) {
-            this.messageText.setText("You were kicked from this lobby!");
+            this.messageText.setText(resources.getString("kicked.from.lobby"));
             this.lobbyMessagePane.setVisible(true);
             this.lobbyMessageElement.setVisible(true);
             this.wasKicked = true;

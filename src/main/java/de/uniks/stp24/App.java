@@ -60,15 +60,15 @@ public class App extends FulibFxApp {
             setTaskbarIcon();
 
             //autoRefresher().setup(Path.of("src/main/resources/de/uniks/stp24"));
-            //show("/login");
+            show("/ingame");
             Locale.setDefault(Locale.ENGLISH);
             // open normal load screen or autoLogin screen depending on the preferences of the user
 
-            if (component.loginService().autoLogin()) {
+            /*if (component.loginService().autoLogin()) {
                 show("/load", Map.of("autologin",true));
             } else {
                 show("/load", Map.of("autologin",false));
-            }
+            }*/
 
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "An error occurred while starting the application: " + e.getMessage(), e);

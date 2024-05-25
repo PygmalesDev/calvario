@@ -23,7 +23,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: black;">
                            <children>
-                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="%licenses">
+                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="%calvario.licenses">
                                  <font>
                                     <Font size="20.0" />
                                  </font>

@@ -89,7 +89,8 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     public void start(Stage stage) throws Exception{
         super.start(stage);
 
-        this.lobbyController.resource = this.resources;
+        this.userComponent.resource = this.resources;
+        this.lobbyController.resources = this.resources;
         this.lobbyController.bubbleComponent = this.bubbleComponent;
         this.lobbyController.lobbyHostSettingsComponent = this.lobbyHostSettingsComponent;
         this.lobbyController.lobbySettingsComponent = this.lobbySettingsComponent;

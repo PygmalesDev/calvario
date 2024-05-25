@@ -38,11 +38,11 @@ public class InGameController {
 
     @SubComponent
     @Inject
-    PauseMenuComponent pauseMenuComponent;
+    public PauseMenuComponent pauseMenuComponent;
 
     @SubComponent
     @Inject
-    SettingsComponent settingsComponent;
+    public SettingsComponent settingsComponent;
 
     @Inject
     InGameService inGameService;

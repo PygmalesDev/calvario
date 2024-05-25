@@ -30,7 +30,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-@Title("REGISTER")
+@Title("%register")
 @Controller
 public class SignUpController extends BasicController {
   

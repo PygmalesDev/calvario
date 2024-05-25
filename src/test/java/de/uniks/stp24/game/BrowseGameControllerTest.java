@@ -117,7 +117,7 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Test
     void logOut(){
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Browse Game", stage.getTitle());
+        assertEquals(resources.getString("browse.game"), stage.getTitle());
         clickOn(browseGameController.log_out_b);
         WaitForAsyncUtils.waitForFxEvents();
         assertNotNull(lookup("#logoutButton").queryButton());
@@ -126,16 +126,16 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Test
     void newGame(){
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Browse Game", stage.getTitle());
+        assertEquals(resources.getString("browse.game"), stage.getTitle());
         clickOn(browseGameController.new_game_b);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Create Game", stage.getTitle());
+        assertEquals(resources.getString("create.game"), stage.getTitle());
     }
 
     @Test
     void loadGame(){
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Browse Game", stage.getTitle());
+        assertEquals(resources.getString("browse.game"), stage.getTitle());
         clickOn(browseGameController.load_game_b);
         WaitForAsyncUtils.waitForFxEvents();
         //TODO: Wait for PR LoadGame
@@ -145,7 +145,7 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Test
     void deleteGame(){
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Browse Game", stage.getTitle());
+        assertEquals(resources.getString("browse.game"), stage.getTitle());
         clickOn(browseGameController.del_game_b);
         WaitForAsyncUtils.waitForFxEvents();
         //TODO: Wait for PR Delete Game
@@ -155,10 +155,10 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Test
     void editAcc(){
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Browse Game", stage.getTitle());
+        assertEquals(resources.getString("browse.game"), stage.getTitle());
         clickOn(browseGameController.edit_acc_b);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Edit Account", stage.getTitle());
+        assertEquals(resources.getString("edit.account"), stage.getTitle());
     }
 
     /*
@@ -199,13 +199,13 @@ public class BrowseGameControllerTest extends ControllerTest {
         //Click on edit game button and check if edit game screen is now displayed.
         clickOn(browseGameController.edit_game_b);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Edit Game", stage.getTitle());
+        assertEquals(resources.getString("edit.game"), stage.getTitle());
 
         //Click on confirm. No inputs for change was given. Screen do not change
         WaitForAsyncUtils.waitForFxEvents();
         Button confirmButton = lookup("#editGameConfirmButton").queryButton();
         clickOn(confirmButton);
-        assertEquals("Edit Game", stage.getTitle());
+        assertEquals(resources.getString("edit.game"), stage.getTitle());
     }
 
     @Test
@@ -221,7 +221,7 @@ public class BrowseGameControllerTest extends ControllerTest {
         //Click on confirm changes nothing. Screen is still browse game.
         clickOn(browseGameController.edit_game_b);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals(stage.getTitle(), "Browse Game");
+        assertEquals(resources.getString("browse.game"),stage.getTitle());
     }
 
     @Test
@@ -276,7 +276,7 @@ public class BrowseGameControllerTest extends ControllerTest {
 
         // Start:
         // Alice sees the Logout
-        assertEquals("Browse Game", stage.getTitle());
+        assertEquals(resources.getString("browse.game"), stage.getTitle());
 
         // Alice clicks on logout
         clickOn("#log_out_b");
@@ -297,7 +297,7 @@ public class BrowseGameControllerTest extends ControllerTest {
         // Start:
         // Alice has unintended clicked the logout button
         // and see the logout screen
-        assertEquals("Browse Game", stage.getTitle());
+        assertEquals(resources.getString("browse.game"), stage.getTitle());
 
         // Alice clicks on cancel
         clickOn("#log_out_b");
@@ -309,6 +309,6 @@ public class BrowseGameControllerTest extends ControllerTest {
 
         // Alice return to the browse game login screen
         // must be fixed when browsegames.fxml is available
-        assertEquals("Browse Game", stage.getTitle());
+        assertEquals(resources.getString("browse.game"), stage.getTitle());
     }
 }

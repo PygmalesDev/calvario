@@ -5,6 +5,7 @@ import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.component.GangComponent;
 import de.uniks.stp24.service.LobbyService;
+import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.SaveLoadService;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.collections.ObservableList;
@@ -35,8 +36,9 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import static de.uniks.stp24.service.Constants.empireTemplates;
+import static de.uniks.stp24.service.Constants.empireTemplatesGerman;
 
-@Title("Gang Creation")
+@Title("%create.island")
 @Controller
 public class GangCreationController {
     @Inject
@@ -51,6 +53,8 @@ public class GangCreationController {
     Subscriber subscriber;
     @Inject
     TokenStorage tokenStorage;
+    @Inject
+    PrefService prefService;
 
     @Inject
     public Provider<GangComponent> gangComponentProvider;
@@ -58,6 +62,7 @@ public class GangCreationController {
     @Inject
     @Resource
     ResourceBundle resource;
+
 
     @FXML
     ListView<Gang> gangsListView;
@@ -104,6 +109,7 @@ public class GangCreationController {
     int flagImageIndex = 0;
     int portraitImageIndex = 0;
     int colorIndex = 0;
+    Map<String, String[]> empireConstants;
 
     private ObservableList<Gang> gangs;
 
@@ -140,6 +146,12 @@ public class GangCreationController {
 
     @OnInit
     public void init() {
+        if(prefService.getLocale().equals(Locale.GERMAN)){
+            empireConstants = empireTemplatesGerman;
+        }else{
+            empireConstants = empireTemplates;
+        }
+
         final File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
         String flagsPath = "de/uniks/stp24/assets/Flags";
         String portraitsPath = "uniks/stp24/assets/Portraits";
@@ -356,27 +368,27 @@ public class GangCreationController {
 
         String name;
         if (!lockName) {
-            nameIndex = rand.nextInt(0, empireTemplates.get("Prefix").length);
-            typeIndex = rand.nextInt(0, empireTemplates.get("Type").length);
-            name = empireTemplates.get("Prefix")[nameIndex]
-                    + " " + empireTemplates.get("Type")[typeIndex];
+            nameIndex = rand.nextInt(0, empireConstants.get("Prefix").length);
+            typeIndex = rand.nextInt(0, empireConstants.get("Type").length);
+            name = empireConstants.get("Prefix")[nameIndex]
+                    + " " + empireConstants.get("Type")[typeIndex];
             String secondName = "";
             if (rand.nextInt(0, 4) == 3)
-                secondName = " of " + empireTemplates.get("Suffix")[rand.nextInt(0, empireTemplates.get("Suffix").length)] +
-                        " " + empireTemplates.get("Definition")[rand.nextInt(0, empireTemplates.get("Definition").length)];
+                secondName = " " + resource.getString("of") + " " + empireConstants.get("Suffix")[rand.nextInt(0, empireConstants.get("Suffix").length)] +
+                        " " + empireConstants.get("Definition")[rand.nextInt(0, empireConstants.get("Definition").length)];
             gangNameText.setText(name + secondName);
         } else {
-            name = empireTemplates.get("Prefix")[nameIndex]
-                    + " " + empireTemplates.get("Type")[typeIndex];
+            name = empireConstants.get("Prefix")[nameIndex]
+                    + " " + empireConstants.get("Type")[typeIndex];
         }
 
         if (!lockDescription) {
-            descriptionIndex = rand.nextInt(0, empireTemplates.get("Description").length);
-            String description = empireTemplates.get("Description")[descriptionIndex]
+            descriptionIndex = rand.nextInt(0, empireConstants.get("Description").length);
+            String description = empireConstants.get("Description")[descriptionIndex]
                     .replace("{NAME}", name);
             gangDescriptionText.setText(description);
         } else {
-            String description = empireTemplates.get("Description")[descriptionIndex]
+            String description = empireConstants.get("Description")[descriptionIndex]
                     .replace("{NAME}", name);
             gangDescriptionText.setText(description);
         }

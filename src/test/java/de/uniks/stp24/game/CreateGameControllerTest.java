@@ -41,7 +41,7 @@ public class CreateGameControllerTest extends ControllerTest {
         Button confirmButton = lookup("#createGameConfirmButton").queryButton();
         clickOn(confirmButton);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Create Game", stage.getTitle());
+        assertEquals(resources.getString("create.game"), stage.getTitle());
     }
 
     @Test

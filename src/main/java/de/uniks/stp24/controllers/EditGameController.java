@@ -25,7 +25,7 @@ import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 
-@Title("Edit Game")
+@Title("%edit.game")
 @Controller
 public class EditGameController extends BasicController {
     @FXML

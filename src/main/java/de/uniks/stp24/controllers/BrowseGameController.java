@@ -44,7 +44,7 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Title("Browse Game")
+@Title("%browse.game")
 @Controller
 public class
 BrowseGameController extends BasicController {

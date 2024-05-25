@@ -26,7 +26,7 @@
                   </font>
                </Text>
             </HBox>
-            <VBox fx:id="cardBackgroundVBox" alignment="CENTER" prefHeight="600.0" prefWidth="721.0" style="-fx-background-color: WHITE;" styleClass="cardBackground">
+            <VBox fx:id="cardBackgroundVBox" alignment="CENTER" prefHeight="600.0" prefWidth="721.0" styleClass="cardBackground">
                <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
                   <ToggleButtonGroup prefHeight="50.0" prefWidth="70.0">
                      <ToggleButton fx:id="enToggleButton" onAction="#setEn" prefHeight="60.0" prefWidth="60.0" styleClass="languageButton" text="EN" />

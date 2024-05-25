@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.text.TextFlow?>
 
 <fx:root type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.BubbleComponent">
    <ImageView fx:id="captainLogo" fitHeight="100.0" fitWidth="150.0" layoutX="-10.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true">
       <Image url="@../assets/logos/captainWebjaw.png" />
    </ImageView>
-   <TextFlow fx:id="messageBubble" focusTraversable="true" layoutX="74.0" layoutY="29.0" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="100.0" minWidth="-Infinity" prefWidth="250.0" styleClass="chatBubble" textAlignment="JUSTIFY">
-      <children>
-         <Text fx:id="captainText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="captainText">
-            <font>
-               <Font size="10.0" />
-            </font>
-         </Text>
-      </children></TextFlow>
+   <Pane fx:id="backgroundBubble" layoutX="28.0" layoutY="26.0" prefHeight="113.0" prefWidth="215.0" styleClass="captainPane" />
+   <TextArea fx:id="captainText" editable="false" layoutX="46.0" layoutY="29.0" prefHeight="113.0" prefWidth="188.0" styleClass="captainText" wrapText="true">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </TextArea>
 </fx:root>

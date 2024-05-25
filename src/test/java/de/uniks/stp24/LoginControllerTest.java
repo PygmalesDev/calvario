@@ -85,7 +85,7 @@ public class LoginControllerTest extends ControllerTest {
         // Result:
         // Alice remains in the login screen.
         // The window states that she has put in name and password for login.
-        String text = lookup("#errorLabel").queryText().getText();
+        String text = lookup("#captainText").queryText().getText();
 
         assertFalse((text.isBlank() || text.isEmpty()));
 

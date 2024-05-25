@@ -6,6 +6,7 @@ import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.ErrorService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
@@ -17,6 +18,7 @@ import javax.inject.Inject;
 
 import javax.inject.Inject;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 @Component(view = "Warning.fxml")
 public class WarningComponent extends VBox {
@@ -59,11 +61,17 @@ public class WarningComponent extends VBox {
         gameName.setText(gameNameText);
     }
 
+    StackPane changableView;
+    public void setView(StackPane view) {
+        this.changableView = view;
+    }
+
     public void deleteGame() {
         this.subscriber.subscribe(browseGameService.deleteGame(),
-          result -> {},
-          //TODO: WHAT SHOULD HAPPEN WITH ERROR?
-          // Map it back to browse games?
+          result -> changableView.setVisible(false),
+                //TODO: WHAT SHOULD HAPPEN WITH ERROR?
+                // Map it back to browse games?
+                // nothing :)
           error -> errorService.getMessage(error));
           setVisible(false);
     }

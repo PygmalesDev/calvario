@@ -16,6 +16,7 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -86,7 +87,8 @@ public class LobbyController {
     Pane lobbyMessageElement;
     @FXML
     Pane captainContainer;
-
+    @FXML
+    Text gameNameField;
 
     @FXML
     AnchorPane backgroundAnchorPane;
@@ -116,17 +118,6 @@ public class LobbyController {
 
     }
 
-    @OnRender
-    public void addSpeechBubble() {
-        captainContainer.getChildren().add(bubbleComponent);
-        Platform.runLater(() -> {
-            if (asHost)
-                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
-            else
-                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.password"));
-            });
-    }
-
     /**
      * Loads game data and transfers its ID and name to the subcomponents.
      * Loads lobby members to the member list and adds event listeners.
@@ -139,12 +130,15 @@ public class LobbyController {
             this.gameID = game._id();
             this.asHost = game.owner().equals(this.tokenStorage.getUserId());
 
-            this.enterGameComponent.setGameName(game.name());
             this.enterGameComponent.setGameID(this.gameID);
-            this.lobbySettingsComponent.setGameName(game.name());
             this.lobbySettingsComponent.setGameID(this.gameID);
-            this.lobbyHostSettingsComponent.setGameName(game.name());
             this.lobbyHostSettingsComponent.setGameID(this.gameID);
+
+            this.enterGameComponent.errorMessage.textProperty().addListener(((observable, oldValue, newValue) -> {
+                this.bubbleComponent.setErrorMode(true);
+                this.bubbleComponent.setCaptainText(newValue);
+            }));
+            this.gameNameField.setText(this.game.name());
 
             this.createUserListListener();
             this.createGameDeletedListener();
@@ -190,7 +184,8 @@ public class LobbyController {
                     if (this.tokenStorage.getUserId().equals(id)) {
                         this.lobbyElement.getChildren().remove(this.enterGameComponent);
                         this.lobbyElement.getChildren().add(this.lobbySettingsComponent);
-                        bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
+                        this.bubbleComponent.setErrorMode(false);
+                        this.bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
                     }
                     this.addUserToList(id, event.data());
                 }
@@ -210,6 +205,7 @@ public class LobbyController {
         this.lobbyMessageElement.setVisible(false);
 
         this.playerListView.setItems(this.users);
+        this.captainContainer.getChildren().add(this.bubbleComponent);
         this.playerListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.userComponentProvider));
         this.setStartingLobbyElement();
     }
@@ -294,10 +290,13 @@ public class LobbyController {
     private void setStartingLobbyElement() {
         this.subscriber.subscribe(this.lobbyService.loadPlayers(this.gameID), dtos -> {
             if (this.tokenStorage.getUserId().equals(this.game.owner())) {
+                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
                 this.lobbyElement.getChildren().add(this.lobbyHostSettingsComponent);
             } else if (Arrays.stream(dtos).map(MemberDto::user).anyMatch(id -> id.equals(this.tokenStorage.getUserId()))) {
+                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
                 this.lobbyElement.getChildren().add(this.lobbySettingsComponent);
             } else {
+                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.password"));
                 this.lobbyElement.getChildren().add(this.enterGameComponent);
             }
         });

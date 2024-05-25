@@ -9,10 +9,7 @@ import de.uniks.stp24.component.LogoutComponent;
 import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.BrowseGameService;
-import de.uniks.stp24.service.CreateGameService;
-import de.uniks.stp24.service.EditGameService;
-import de.uniks.stp24.service.PopupBuilder;
+import de.uniks.stp24.service.*;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -113,6 +110,8 @@ BrowseGameController extends BasicController {
     @Inject
     PopupBuilder popupBuilder;
     @Inject
+    TokenStorage tokenStorage;
+    @Inject
     CreateGameService createGameService;
     PopupBuilder popup = new PopupBuilder();
     PopupBuilder popupLogout = new PopupBuilder();
@@ -136,13 +135,14 @@ BrowseGameController extends BasicController {
         gameList.setCellFactory(list -> new ComponentListCell<>(app, gameComponentProvider));
         this.searchLine.textProperty().addListener((observable, oldValue, newValue) -> {
             this.gameList.scrollTo(0);
-            if (newValue.isEmpty()) this.games.sort(Comparator.comparing(Game::createdAt).reversed());
+            if (newValue.isEmpty()) sortNewGamesOnTop();
             else this.games.sort(Comparator.comparing(game -> !game.name().toLowerCase().contains(newValue.toLowerCase())));
         });
     }
 
     private void sortNewGamesOnTop() {
         this.games.sort(Comparator.comparing(Game::createdAt).reversed());
+        this.games.sort(Comparator.comparing(game -> !game.owner().equals(this.tokenStorage.getUserId())));
     }
 
 
@@ -206,18 +206,14 @@ BrowseGameController extends BasicController {
         // delete Button has red text and icon when selected and the captain says something different
         this.del_game_b.styleProperty().bind(Bindings.createStringBinding(()->{
             if(deleteWarningIsInvisible.get()) {
+                this.deleteIconImageView.setImage(deleteIconBlackImage);
                 bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.which.game"));
                 return "-fx-text-fill: Black";
             }else {
+                this.deleteIconImageView.setImage(deleteIconRedImage);
                 bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.whiping.off.the.map"));
                 return "-fx-text-fill: #CF2A27";
             }
-        },this.deleteWarningIsInvisible));
-
-        this.deleteIconImageView.imageProperty().bind(Bindings.createObjectBinding(()->{
-            if(deleteWarningIsInvisible.get())
-                return deleteIconBlackImage;
-            return deleteIconRedImage;
         },this.deleteWarningIsInvisible));
     }
 
@@ -251,9 +247,11 @@ BrowseGameController extends BasicController {
             app.show("/lobby", Map.of("gameid", browseGameService.getGame()._id()));
         }
     }
+
     public void deleteGame() {
         if(browseGameService.checkMyGame()) {
             warningComponent.setGameName();
+            warningComponent.setView(this.warningWindowContainer);
             popup.showPopup(warningWindowContainer, warningComponent);
             popup.setBlur(gameListAnchorPane, browseGameVBoxButtons);
         } else {

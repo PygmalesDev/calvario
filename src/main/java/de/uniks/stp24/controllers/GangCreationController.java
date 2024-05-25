@@ -254,7 +254,6 @@ public class GangCreationController {
     public Gang getInputGang() {
         String gangName = gangNameText.getText();
         if (gangNameText.getText().isEmpty()) gangName = "Buccaneers";
-//        System.out.println(flagImageIndex + "" + portraitsList + "" + colorIndex);
         return new Gang(gangName, flagsList.get(flagImageIndex), flagImageIndex%flagsList.size(), portraitsList.get(portraitImageIndex), portraitImageIndex%portraitsList.size(), gangDescriptionText.getText(), colorsList.get(colorIndex), colorIndex%colorsList.size());
     }
 

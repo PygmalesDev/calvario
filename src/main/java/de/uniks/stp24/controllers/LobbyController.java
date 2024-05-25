@@ -251,7 +251,6 @@ public class LobbyController {
             switch (memberUser.user().name()) {}
             if (memberUser.user()._id().equals(userID)) {
                 if (Objects.nonNull(data.empire())) {
-                    System.out.println(memberUser.user().name() + " " + memberUser.empire());
                     return new MemberUser(new User(
                             memberUser.user().name().replace(" (Spectator)", ""),
                             userID, memberUser.user().avatar(), memberUser.user().createdAt(),
@@ -259,7 +258,6 @@ public class LobbyController {
                 }
                 else {
                     String suffix = " (Spectator)";
-                    System.out.println(memberUser.user().name() + " " + memberUser.empire());
                     if (memberUser.user().name().contains("(Spectator)"))
                         suffix = "";
                     return new MemberUser(new User(

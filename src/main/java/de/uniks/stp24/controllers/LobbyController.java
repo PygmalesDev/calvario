@@ -145,11 +145,18 @@ public class LobbyController {
                     this.addUserToList(data.user(), data);
                     if (data.user().equals(this.game.owner()))
                         this.isHostReady = data.ready();
-                    if(data.user().equals(this.tokenStorage.getUserId())){
+                    if (data.user().equals(this.tokenStorage.getUserId())){
                             this.lobbySettingsComponent.setReadyButton(data.ready());
                             this.lobbyHostSettingsComponent.setReadyButton(data.ready());
                         }
                 });
+
+                this.lobbyHostSettingsComponent.startJourneyButton.setDisable(
+                        !Arrays.stream(dto)
+                                .map(MemberDto::ready)
+                                .reduce(Boolean::logicalAnd).orElse(true)
+                );
+
                 this.sortMemberList();
             });
 
@@ -216,18 +223,13 @@ public class LobbyController {
      */
     private void addUserToList(String userID, MemberDto data) {
         this.subscriber.subscribe(this.userApiService.getUser(userID), user -> {
-            if (userID.equals(this.game.owner()))
-                this.users.add(new MemberUser(new User(user.name() + " (Host)",
-                        user._id(), user.avatar(), user.createdAt(), user.updatedAt()
-                ), data.empire(), data.ready(), this.game, this.asHost));
-            else if (Objects.isNull(data.empire()))
-                this.users.add(new MemberUser(new User(user.name() + " (Spectator)",
-                        user._id(), user.avatar(), user.createdAt(), user.updatedAt()
-                ), null, data.ready(), this.game, this.asHost));
-            else
-                this.users.add(new MemberUser(new User(user.name(),
-                        user._id(), user.avatar(), user.createdAt(), user.updatedAt()
-                ), null, data.ready(), this.game, this.asHost));
+            String suffix = "";
+            if (userID.equals(this.game.owner())) suffix += " (Host)";
+            if (Objects.isNull(data.empire())) suffix += " (Spectator)";
+
+            this.users.add(new MemberUser(new User(user.name() + suffix,
+                    user._id(), user.avatar(), user.createdAt(), user.updatedAt()
+            ), data.empire(), data.ready(), this.game, this.asHost));
         });
     }
 
@@ -248,7 +250,6 @@ public class LobbyController {
             this.isHostReady = data.ready();
 
         this.users.replaceAll(memberUser -> {
-            switch (memberUser.user().name()) {}
             if (memberUser.user()._id().equals(userID)) {
                 if (Objects.nonNull(data.empire())) {
                     return new MemberUser(new User(

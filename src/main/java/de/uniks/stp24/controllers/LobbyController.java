@@ -105,7 +105,7 @@ public class LobbyController {
 
     Game game;
 
-    private final ObservableList<MemberUser> users = FXCollections.observableArrayList();
+    private ObservableList<MemberUser> users = FXCollections.observableArrayList();
     private boolean asHost;
     private boolean wasKicked;
     private boolean isHostReady;
@@ -305,7 +305,7 @@ public class LobbyController {
      */
     private void sortMemberList() {
         this.users.sort(Comparator.comparing(MemberUser::ready).reversed());
-        this.users.sort(Comparator.comparing(MemberUser::asHost).reversed());
+        this.users.sort(Comparator.comparing(member -> !member.user()._id().equals(this.game.owner())));
     }
 
     public void goBack() {

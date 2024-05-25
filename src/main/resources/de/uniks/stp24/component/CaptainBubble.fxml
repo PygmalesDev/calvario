@@ -11,7 +11,7 @@
       <Image url="@../assets/logos/captainWebjaw.png" />
    </ImageView>
    <Pane fx:id="backgroundBubble" layoutX="28.0" layoutY="26.0" prefHeight="113.0" prefWidth="215.0" styleClass="captainPane" />
-   <TextArea fx:id="captainText" editable="false" layoutX="46.0" layoutY="29.0" prefHeight="113.0" prefWidth="188.0" styleClass="captainText" wrapText="true">
+   <TextArea fx:id="captainText" disable="true" editable="false" layoutX="46.0" layoutY="29.0" prefHeight="113.0" prefWidth="188.0" styleClass="captainText" wrapText="true">
       <font>
          <Font size="14.0" />
       </font>

@@ -290,14 +290,26 @@ ToggleButton:hover{
     -fx-font-size: 14;
     -fx-font-weight: bold;
     -fx-background-color: transparent;
+    -fx-focus-traversable: false;
 }
+
+.captainText:disabled {
+    -fx-opacity: 1;
+}
+
 .captainText .scroll-pane .viewport {
     -fx-background-color: transparent;
 }
 
+.backgroundTextArea {
+    -fx-font-size: 14;
+    -fx-font-family: "PT Serif";
+
+}
 
 .backgroundTextArea .content{
     -fx-background-color: #FFD966;
+    -fx-cursor: default;
 }
 
 .backgroundTextArea .scroll-bar:vertical{

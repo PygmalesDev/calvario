@@ -248,17 +248,25 @@ public class LobbyController {
             this.isHostReady = data.ready();
 
         this.users.replaceAll(memberUser -> {
+            switch (memberUser.user().name()) {}
             if (memberUser.user()._id().equals(userID)) {
-                if (Objects.nonNull(data.empire()))
+                if (Objects.nonNull(data.empire())) {
+                    System.out.println(memberUser.user().name() + " " + memberUser.empire());
                     return new MemberUser(new User(
                             memberUser.user().name().replace(" (Spectator)", ""),
                             userID, memberUser.user().avatar(), memberUser.user().createdAt(),
                             memberUser.user().updatedAt()), data.empire(), data.ready(), this.game, this.asHost);
-                else
+                }
+                else {
+                    String suffix = " (Spectator)";
+                    System.out.println(memberUser.user().name() + " " + memberUser.empire());
+                    if (memberUser.user().name().contains("(Spectator)"))
+                        suffix = "";
                     return new MemberUser(new User(
-                            memberUser.user().name(), userID, memberUser.user().avatar(),
+                            memberUser.user().name() + suffix, userID, memberUser.user().avatar(),
                             memberUser.user().createdAt(), memberUser.user().updatedAt()),
                             null, data.ready(), this.game, this.asHost);
+                }
             } else
                 return memberUser;
         });

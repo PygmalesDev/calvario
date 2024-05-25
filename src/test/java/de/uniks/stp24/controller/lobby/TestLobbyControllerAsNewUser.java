@@ -171,7 +171,8 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
         clickOn("#joinButton");
 
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Please enter password!", lookup("#errorMessage").queryText().getText());
+        assertEquals(this.resources.getString("pirate.enterGame.noPassword"),
+                lookup("#errorMessage").queryText().getText());
 
         // Test inputting the incorrect password
         clickOn("#passwordInputField");
@@ -181,7 +182,8 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
         clickOn("#joinButton");
 
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Validation failed!", lookup("#errorMessage").queryText().getText());
+        assertEquals(this.resources.getString("pirate.enterGame.wrongPassword").replace("{password}", "1"),
+                lookup("#errorMessage").queryText().getText());
 
         // Test inputting the correct password
         clickOn("#passwordInputField");

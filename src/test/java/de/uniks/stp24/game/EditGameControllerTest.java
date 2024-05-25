@@ -1,6 +1,7 @@
 package de.uniks.stp24.game;
 
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.controllers.EditGameController;
 import de.uniks.stp24.dto.UpdateGameDto;
@@ -36,6 +37,8 @@ public class EditGameControllerTest extends ControllerTest {
 
     @Spy
     Subscriber subscriber = spy(Subscriber.class);
+    @Spy
+    BubbleComponent bubbleComponent;
 
     @Mock
     EditGameService editGameService;

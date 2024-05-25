@@ -47,6 +47,9 @@ public class BrowseGameControllerTest extends ControllerTest {
     GamesApiService gamesApiService;
 
     @Spy
+    TokenStorage tokenStorage;
+
+    @Spy
     PopupBuilder popupBuilder;
     @Spy
     BrowseGameService browseGameService;

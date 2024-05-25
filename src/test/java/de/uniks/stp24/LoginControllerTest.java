@@ -6,6 +6,7 @@ import de.uniks.stp24.model.LoginResult;
 import de.uniks.stp24.service.LoginService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextArea;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -85,7 +86,7 @@ public class LoginControllerTest extends ControllerTest {
         // Result:
         // Alice remains in the login screen.
         // The window states that she has put in name and password for login.
-        String text = lookup("#captainText").queryText().getText();
+        String text = ((TextArea) lookup("#captainText").query()).getText();
 
         assertFalse((text.isBlank() || text.isEmpty()));
 

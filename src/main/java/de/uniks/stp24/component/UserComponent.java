@@ -3,6 +3,7 @@ package de.uniks.stp24.component;
 import de.uniks.stp24.model.MemberUser;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.LobbyService;
+import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -33,6 +34,8 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     HBox userHBox;
     @Inject
     LobbyService lobbyService;
+    @Inject
+    TokenStorage tokenStorage;
     @Inject
     Subscriber subscriber;
     @Inject
@@ -66,9 +69,8 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
         else
             this.readyText.setText("Not Ready");
 
-        if (Objects.nonNull(member.user().avatar()))
-            this.avatarImageView.setImage(this.imageCache.get(member.user().avatar()));
-        else
-            this.avatarImageView.setImage(this.imageCache.get("icons/Eye_Icon_32.png"));
+        this.avatarImageView.setImage(this.imageCache.get(Objects.nonNull(this.member.user().avatar())
+                ? this.member.user().avatar()
+                : "test/911.png" ));
     }
 }

@@ -140,7 +140,6 @@ public class GangCreationController {
 
     @OnInit
     public void init() {
-        // Versuch 1
         final File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
         String flagsPath = "de/uniks/stp24/assets/Flags";
         String portraitsPath = "uniks/stp24/assets/Portraits";

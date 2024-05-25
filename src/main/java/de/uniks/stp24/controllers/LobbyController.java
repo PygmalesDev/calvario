@@ -10,13 +10,9 @@ import de.uniks.stp24.service.LobbyService;
 import de.uniks.stp24.service.GamesService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -34,6 +30,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -153,7 +150,7 @@ public class LobbyController {
                             this.lobbyHostSettingsComponent.setReadyButton(data.ready());
                         }
                 });
-                this.sortHostOnTop();
+                this.sortMemberList();
             });
 
             this.lobbyHostSettingsComponent.createCheckPlayerReadinessListener();
@@ -192,7 +189,7 @@ public class LobbyController {
                 case "updated" -> this.replaceUserInList(id, event.data());
                 case "deleted" -> this.removeUserFromList(id);
             }
-            this.sortHostOnTop();
+            this.sortMemberList();
         });
     }
 
@@ -306,12 +303,9 @@ public class LobbyController {
      * Will be called after changes in the member list.
      * Sorts the host of the lobby to the top of the list.
      */
-    private void sortHostOnTop() {
-        MemberUser host = this.users.stream().filter(member ->
-                member.user().name().contains("Host")).findFirst().orElse(null);
-        this.users.removeIf(member -> member.user().name().contains("Host"));
-        if (Objects.nonNull(host))
-            this.users.addFirst(host);
+    private void sortMemberList() {
+        this.users.sort(Comparator.comparing(MemberUser::ready).reversed());
+        this.users.sort(Comparator.comparing(MemberUser::asHost).reversed());
     }
 
     public void goBack() {

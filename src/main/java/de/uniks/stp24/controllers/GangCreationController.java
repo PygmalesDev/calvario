@@ -4,9 +4,12 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.component.GangComponent;
+import de.uniks.stp24.model.GangElement;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.LobbyService;
 import de.uniks.stp24.service.SaveLoadService;
 import de.uniks.stp24.service.TokenStorage;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -33,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static de.uniks.stp24.service.Constants.empireTemplates;
 
@@ -55,12 +59,17 @@ public class GangCreationController {
     @Inject
     public Provider<GangComponent> gangComponentProvider;
 
+    private final ObservableList<GangElement> gangElements = FXCollections.observableArrayList();
+
+    @Inject
+    ImageCache imageCache;
+
     @Inject
     @Resource
     ResourceBundle resource;
 
     @FXML
-    ListView<Gang> gangsListView;
+    ListView<GangElement> gangsListView;
     @FXML
     VBox creationBox;
     @FXML
@@ -110,8 +119,6 @@ public class GangCreationController {
     int portraitImageIndex = 0;
     int colorIndex = 0;
 
-    private ObservableList<Gang> gangs;
-
     // unused FX IDs (declared here to remove warnings from fxml file)
     @FXML
     Button backButton;
@@ -144,44 +151,36 @@ public class GangCreationController {
     String gameID;
 
     @OnInit
-    public void init(){
-        initImages();
-
-        initColors();
-
-        gangs = saveLoadService.loadGangs();
-    }
-
-    private void initImages() {
-        for (int i = 0; i <= imagesCount; i++) {
-            InputStream flagStream = GangCreationController.class.getResourceAsStream(resourcesPaths + flagsFolderPath + i + ".png");
-            InputStream portraitStream = GangCreationController.class.getResourceAsStream(resourcesPaths + portraitsFolderPath + i + ".png");
-            addImagesToList(flagStream, flagsList);
-            addImagesToList(portraitStream, portraitsList);
-        }
-    }
-
-    public static void addImagesToList(InputStream stream, ArrayList<Image> list) {
-        byte[] imageData;
-        if (stream != null) {
-            try {
-                imageData = stream.readAllBytes();
-                list.add(new Image(new ByteArrayInputStream(imageData)));
-            } catch (IOException e) {
-                System.out.println("Could not load image :(");
-            }
-        } else {
-            System.out.println("Resource not found");
-        }
-    }
-
-    private void initColors() {
+    public void init() {
         String[] colorsArray = {"#DC143C", "#0F52BA", "#50C878", "#9966CC", "#FF7F50",
                 "#40E0D0", "#FF00FF", "#FFD700", "#C0C0C0", "#4B0082",
                 "#36454F", "#F28500", "#E6E6FA", "#008080", "#800000", "#808000"};
 
-        colorsList.addAll(Arrays.asList(colorsArray));
+        this.colorsList.addAll(Arrays.asList(colorsArray));
+        for (int i = 0; i <= imagesCount; i++) {
+            this.flagsList.add(this.imageCache.get(resourcesPaths + flagsFolderPath + i + ".png"));
+            this.portraitsList.add(this.imageCache.get(resourcesPaths + portraitsFolderPath + i + ".png"));
+        }
+
+        this.saveLoadService.loadGangs().forEach(gang ->
+                this.gangElements.add(new GangElement(gang,
+                        this.flagsList.get(gang.flagIndex()),
+                        this.portraitsList.get(gang.portraitIndex()))));
     }
+
+//    public static void addImagesToList(InputStream stream, ArrayList<Image> list) {
+//        byte[] imageData;
+//        if (stream != null) {
+//            try {
+//                imageData = stream.readAllBytes();
+//                list.add(new Image(new ByteArrayInputStream(imageData)));
+//            } catch (IOException e) {
+//                System.out.println("Could not load image :(");
+//            }
+//        } else {
+//            System.out.println("Resource not found");
+//        }
+//    }
 
     @OnRender
     public void render() {
@@ -189,11 +188,12 @@ public class GangCreationController {
         deletePane.setVisible(false);
         editButton.setVisible(false);
         showDeletePaneButton.setVisible(false);
-        this.gangsListView.setItems(this.gangs);
+        this.gangsListView.setItems(this.gangElements);
         this.gangsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.gangComponentProvider));
         gangsListView.setOnMouseClicked(event -> {
-            Gang gang = gangsListView.getSelectionModel().getSelectedItem();
-            if (gang != null) {
+            GangElement gangComp = gangsListView.getSelectionModel().getSelectedItem();
+            if (gangComp.gang() != null) {
+                Gang gang = gangComp.gang();
                 creationBox.setVisible(true);
                 gangNameText.setText(gang.name());
                 flagImageIndex = gang.flagIndex()%flagsList.size();
@@ -211,7 +211,7 @@ public class GangCreationController {
     }
 
     public void back() {
-        Gang gang = this.gangsListView.getSelectionModel().getSelectedItem();
+        Gang gang = this.gangsListView.getSelectionModel().getSelectedItem().gang();
 
         this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
             Empire empire = null;
@@ -237,19 +237,36 @@ public class GangCreationController {
 
     public void edit() {
         int index = gangsListView.getSelectionModel().getSelectedIndex();
-        gangs.remove(index);
+        gangElements.remove(index);
+
         Gang gang = getInputGang();
-        gangs.add(index, gang);
+        gangElements.add(index, createGangElement(gang));
+
+        ObservableList<Gang> gangs = FXCollections.observableArrayList();
+        gangElements.forEach(gangElement -> gangs.add(gangElement.gang()));
         saveLoadService.saveGang(gangs);
+
         showCreationPane();
     }
 
     public void delete() {
         int index = gangsListView.getSelectionModel().getSelectedIndex();
-        gangs.remove(index);
-        saveLoadService.saveGang(gangs);
+        gangElements.remove(index);
+
+        saveLoadService.saveGang(createGangsObservableList());
+
         showCreationPane();
         cancel();
+    }
+
+    private GangElement createGangElement(Gang gang) {
+        return new GangElement(gang, this.flagsList.get(gang.flagIndex()), this.portraitsList.get(gang.portraitIndex()));
+    }
+
+    private ObservableList<Gang> createGangsObservableList() {
+        ObservableList<Gang> gangs = FXCollections.observableArrayList();
+        gangElements.forEach(gangElement -> gangs.add(gangElement.gang()));
+        return gangs;
     }
 
     public void cancel() {
@@ -268,14 +285,16 @@ public class GangCreationController {
     public void showDeletePane() {
         creationBox.setEffect(new BoxBlur());
         deletePane.setVisible(true);
-        Gang gang = gangsListView.getSelectionModel().getSelectedItem();
-        toBeDeletedGangName.setText(gang.name());
+        GangElement gang = gangsListView.getSelectionModel().getSelectedItem();
+        toBeDeletedGangName.setText(gang.gang().name());
     }
 
     public void create() {
         Gang gang = getInputGang();
-        gangs.add(gang);
-        saveLoadService.saveGang(gangs);
+
+        gangElements.add(createGangElement(gang));
+        saveLoadService.saveGang(createGangsObservableList());
+
         resetCreationPane();
     }
 

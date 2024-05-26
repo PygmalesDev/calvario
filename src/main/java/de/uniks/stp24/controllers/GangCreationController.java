@@ -165,12 +165,12 @@ public class GangCreationController {
                 File flagsDir = new File("src/main/resources/de/uniks/stp24/assets/Flags");
                 for (File file : flagsDir.listFiles()) {
                     System.out.println(file);
-                    image = new Image(String.valueOf(file));
+                    image = new Image(String.valueOf(file).replace("src\\main\\resources", ""));
                     flagsList.add(image);
                 }
                 File portraitsDir = new File("src/main/resources/de/uniks/stp24/assets/Portraits");
                 for (File file : portraitsDir.listFiles()) {
-                    image = new Image(String.valueOf(file));
+                    image = new Image(String.valueOf(file).replace("src\\main\\resources", ""));
                     portraitsList.add(image);
                 }
             }

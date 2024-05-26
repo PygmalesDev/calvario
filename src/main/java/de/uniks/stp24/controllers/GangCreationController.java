@@ -195,17 +195,17 @@ public class GangCreationController {
     }
 
     public void back() {
-        Gang gang = this.gangsListView.getSelectionModel().getSelectedItem().gang();
+        GangElement gangElement = this.gangsListView.getSelectionModel().getSelectedItem();
 
         this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
             Empire empire = null;
 
-            if (Objects.nonNull(gang)) empire = new Empire(gang.name(), gang.description(), gang.color(),
-                    gang.flagIndex()%this.flagsList.size(), gang.portraitIndex()%this.portraitsList.size(),
+            if (Objects.nonNull(gangElement)) empire = new Empire(gangElement.gang().name(), gangElement.gang().description(), gangElement.gang().color(),
+                    gangElement.gang().flagIndex()%this.flagsList.size(), gangElement.gang().portraitIndex()%this.portraitsList.size(),
                     "uninhabitable_0", new String[]{});
 
             this.subscriber.subscribe(this.lobbyService.updateMember(
-                    this.gameID, this.tokenStorage.getUserId(),result.ready(), empire), result2 ->
+                    this.gameID, this.tokenStorage.getUserId(), result.ready(), empire), result2 ->
                         app.show("/lobby", Map.of("gameid", this.gameID)));
         });
 

@@ -7,11 +7,13 @@
  import de.uniks.stp24.model.Gang;
  import de.uniks.stp24.model.GangElement;
  import de.uniks.stp24.service.ImageCache;
+ import de.uniks.stp24.service.LobbyService;
  import de.uniks.stp24.service.SaveLoadService;
  import javafx.collections.FXCollections;
  import javafx.collections.ObservableList;
  import javafx.scene.control.TextArea;
  import javafx.scene.control.TextField;
+ import javafx.scene.input.MouseButton;
  import org.junit.jupiter.api.BeforeEach;
  import org.mockito.InjectMocks;
  import org.mockito.Spy;
@@ -40,6 +42,9 @@
 
      @Spy
      ImageCache imageCache;
+
+     @Mock
+     LobbyService lobbyService;
 
      ObservableList<Gang> gangs = FXCollections.observableArrayList();
      String name = "Test Gang";
@@ -82,18 +87,24 @@
          clickOn("#showCreationButton");
          waitForFxEvents();
 
+         String gangName = "Ashkanian";
+
          clickOn("#gangNameText");
          waitForFxEvents();
 
-         String gangName = "Ashkanian";
+         release(MouseButton.PRIMARY);
+         waitForFxEvents();
 
          write(gangName);
          waitForFxEvents();
 
+         String gangDescription = "Ruled by King Ashkan";
+
          clickOn("#gangDescriptionText");
          waitForFxEvents();
 
-         String gangDescription = "Ruled by King Ashkan";
+         release(MouseButton.PRIMARY);
+         waitForFxEvents();
 
          write(gangDescription);
          waitForFxEvents();
@@ -113,10 +124,13 @@
          clickOn("#showCreationButton");
          waitForFxEvents();
 
+         String gangName = "Ashkanian";
+
          clickOn("#gangNameText");
          waitForFxEvents();
 
-         String gangName = "Ashkanian";
+         release(MouseButton.PRIMARY);
+         waitForFxEvents();
 
          write(gangName);
          waitForFxEvents();
@@ -131,10 +145,13 @@
          clickOn(gangName);
          waitForFxEvents();
 
+         String gangDescription = "Ruled by King Ashkan";
+
          clickOn("#gangDescriptionText");
          waitForFxEvents();
 
-         String gangDescription = "Ruled by King Ashkan";
+         release(MouseButton.PRIMARY);
+         waitForFxEvents();
 
          write(gangDescription);
          waitForFxEvents();
@@ -275,5 +292,15 @@
          waitForFxEvents();
 
          assertEquals(gangNums - 1, gangsListView.getItems().size());
+     }
+
+     @Test
+     public void goingBackToLobbyNoGang() {
+         doReturn(null).when(lobbyService).updateMember(null, null, false, null);
+
+         clickOn("#backButton");
+         waitForFxEvents();
+
+         verify(lobbyService).updateMember(null, null, false, null);
      }
  }

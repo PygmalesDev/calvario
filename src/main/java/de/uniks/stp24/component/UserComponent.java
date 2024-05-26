@@ -38,16 +38,17 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     TokenStorage tokenStorage;
     @Inject
     Subscriber subscriber;
-    @Inject
-    @Resource
-    public ResourceBundle resource;
 
+
+    @Resource
+    final ResourceBundle resource;
     private final ImageCache imageCache;
     private MemberUser member;
 
     @Inject
-    public UserComponent(ImageCache imageCache) {
+    public UserComponent(ImageCache imageCache, ResourceBundle resource) {
         this.imageCache = imageCache;
+        this.resource = resource;
     }
 
     public void kickUser() {

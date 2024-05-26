@@ -1,3 +1,4 @@
+
 package de.uniks.stp24.controller.lobby;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -76,8 +77,8 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
     BubbleComponent bubbleComponent;
 
     Provider<UserComponent> userComponentProvider = ()->{
-        final UserComponent userComponent = new UserComponent(imageCache);
-        return new UserComponent(imageCache);
+        final UserComponent userComponent = new UserComponent(imageCache, resources);
+        return new UserComponent(imageCache, resources);
     };
 
 
@@ -90,8 +91,6 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
 
         this.joinGameService.gameMembersApiService = this.gameMembersApiService;
 
-        this.userComponent.resource = this.resources;
-        this.lobbyController.resources = this.resources;
         this.lobbyController.bubbleComponent = this.bubbleComponent;
         this.lobbyController.lobbyHostSettingsComponent = this.lobbyHostSettingsComponent;
         this.lobbyController.lobbySettingsComponent = this.lobbySettingsComponent;
@@ -218,3 +217,4 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
         verify(this.app, times(1)).show("/browseGames");
     }
 }
+

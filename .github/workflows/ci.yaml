@@ -33,4 +33,10 @@ jobs:
           paths: build/reports/jacoco/test/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: ${{ secrets.STP_MIN_COVERAGE }}
-          - uses: actions/upload-artifact@v4
+
+      - name : Upload screenshot of failed jobs  
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: build/failed-test-screenshots/

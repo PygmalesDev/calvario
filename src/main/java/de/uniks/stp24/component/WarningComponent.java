@@ -66,13 +66,16 @@ public class WarningComponent extends VBox {
         this.changableView = view;
     }
 
+    //TODO: WHAT SHOULD HAPPEN WITH ERROR?
+    // Map it back to browse games?
+    // Pygmales: There should not be any errors!
     public void deleteGame() {
         this.subscriber.subscribe(browseGameService.deleteGame(),
-          result -> changableView.setVisible(false),
-                //TODO: WHAT SHOULD HAPPEN WITH ERROR?
-                // Map it back to browse games?
-                // nothing :)
-          error -> errorService.getMessage(error));
+          result -> {
+            changableView.setVisible(false);
+            browseGameService.handleGameSelection(null);
+            },
+                error -> errorService.getMessage(error));
           setVisible(false);
     }
 

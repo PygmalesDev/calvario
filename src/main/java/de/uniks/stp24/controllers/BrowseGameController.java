@@ -249,7 +249,7 @@ BrowseGameController extends BasicController {
     }
 
     public void deleteGame() {
-        if(browseGameService.checkMyGame()) {
+        if (browseGameService.checkMyGame()) {
             warningComponent.setGameName();
             warningComponent.setView(this.warningWindowContainer);
             popup.showPopup(warningWindowContainer, warningComponent);

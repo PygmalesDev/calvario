@@ -158,22 +158,6 @@ public class GangCreationController {
             InputStream portraitStream = GangCreationController.class.getResourceAsStream(resourcesPaths + portraitsFolderPath + i + ".png");
             addImagesToList(flagStream, flagsList);
             addImagesToList(portraitStream, portraitsList);
-
-            if (flagsList.size() == 0 && portraitsList.size() == 0) {
-                // this can only happen with CI Bot
-                Image image = null;
-                File flagsDir = new File("src/main/resources/de/uniks/stp24/assets/Flags");
-                for (File file : flagsDir.listFiles()) {
-                    System.out.println(file);
-                    image = new Image(String.valueOf(file).replace("src\\main\\resources", ""));
-                    flagsList.add(image);
-                }
-                File portraitsDir = new File("src/main/resources/de/uniks/stp24/assets/Portraits");
-                for (File file : portraitsDir.listFiles()) {
-                    image = new Image(String.valueOf(file).replace("src\\main\\resources", ""));
-                    portraitsList.add(image);
-                }
-            }
         }
     }
 

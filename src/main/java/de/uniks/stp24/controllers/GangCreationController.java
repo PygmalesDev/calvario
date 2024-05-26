@@ -168,20 +168,6 @@ public class GangCreationController {
                         this.portraitsList.get(gang.portraitIndex()))));
     }
 
-//    public static void addImagesToList(InputStream stream, ArrayList<Image> list) {
-//        byte[] imageData;
-//        if (stream != null) {
-//            try {
-//                imageData = stream.readAllBytes();
-//                list.add(new Image(new ByteArrayInputStream(imageData)));
-//            } catch (IOException e) {
-//                System.out.println("Could not load image :(");
-//            }
-//        } else {
-//            System.out.println("Resource not found");
-//        }
-//    }
-
     @OnRender
     public void render() {
         creationBox.setVisible(false);

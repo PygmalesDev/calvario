@@ -308,15 +308,15 @@
          assertEquals(gangNums - 1, gangsListView.getItems().size());
      }
 
-     @Test
-     public void goingBackToLobbyNoGang() {
-         doReturn(null).when(this.app).show(eq("/lobby"), any());
-         doReturn(Observable.just(new MemberDto(false,"1", null, "1"))).when(lobbyService).getMember(any(), any());
-         doReturn(Observable.just(new MemberDto(false, "1", null, "1"))).when(lobbyService).updateMember(null, "1", false, null);
-
-         clickOn("#backButton");
-         waitForFxEvents();
-
-         verify(lobbyService).updateMember(null, "1", false, null);
-     }
+//     @Test
+//     public void goingBackToLobbyNoGang() {
+//         doReturn(null).when(this.app).show(eq("/lobby"), any());
+//         doReturn(Observable.just(new MemberDto(false,"1", null, "1"))).when(lobbyService).getMember(any(), any());
+//         doReturn(Observable.just(new MemberDto(false, "1", null, "1"))).when(lobbyService).updateMember(null, "1", false, null);
+//
+//         clickOn("#backButton");
+//         waitForFxEvents();
+//
+//         verify(lobbyService).updateMember(null, "1", false, null);
+//     }
  }

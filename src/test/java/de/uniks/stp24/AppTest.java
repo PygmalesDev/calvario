@@ -10,21 +10,14 @@ import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class AppTest extends ApplicationTest {
+public class AppTest extends ControllerTest {
 
     @Spy
     public final App app = new App();
     @Inject
     TokenStorage tokenStorage;
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        super.start(stage);
-        app.setComponent(DaggerTestComponent.builder().mainApp(app).build());
-        app.start(stage);
-        stage.requestFocus();
-    }
-
+    @Test
     public void v1() {
         // TODO login, main-menu, ...
     }

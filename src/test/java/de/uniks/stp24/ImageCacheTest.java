@@ -10,21 +10,13 @@ import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class ImageCacheTest extends ApplicationTest {
+public class ImageCacheTest extends ControllerTest {
 
     @Inject
     ImageCache imageCache;
 
     @Spy
     public final App app = new App();
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        super.start(stage);
-        app.setComponent(DaggerTestComponent.builder().mainApp(app).build());
-        app.start(stage);
-        stage.requestFocus();
-    }
 
     @Test
     public void basicTest() {

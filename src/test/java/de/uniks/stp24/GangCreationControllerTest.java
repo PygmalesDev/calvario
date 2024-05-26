@@ -5,6 +5,7 @@
  import de.uniks.stp24.component.GangComponent;
  import de.uniks.stp24.controllers.GangCreationController;
  import de.uniks.stp24.model.Gang;
+ import de.uniks.stp24.service.ImageCache;
  import de.uniks.stp24.service.SaveLoadService;
  import javafx.collections.FXCollections;
  import javafx.collections.ObservableList;
@@ -34,6 +35,9 @@
 
      @Spy
      ObjectMapper objectMapper;
+
+     @Spy
+     ImageCache imageCache;
 
      ObservableList<Gang> gangs = FXCollections.observableArrayList();
      String name = "Test Gang";

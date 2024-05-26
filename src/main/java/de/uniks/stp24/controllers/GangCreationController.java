@@ -28,11 +28,10 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import static de.uniks.stp24.service.Constants.empireTemplates;
 
@@ -98,9 +97,14 @@ public class GangCreationController {
     int typeIndex = 0;
 
     Random rand = new Random();
-    ArrayList<String> flagsList = new ArrayList<>();
-    ArrayList<String> portraitsList = new ArrayList<>();
+    
+    ArrayList<Image> flagsList = new ArrayList<>();
+    ArrayList<Image> portraitsList = new ArrayList<>();
     ArrayList<String> colorsList = new ArrayList<>();
+    String resourcesPaths = "/de/uniks/stp24/assets/";
+    String flagsFolderPath = "flags/flag_";
+    String portraitsFolderPath = "portraits/captain_";
+    int imagesCount = 16;
     int flagImageIndex = 0;
     int portraitImageIndex = 0;
     int colorIndex = 0;
@@ -139,72 +143,43 @@ public class GangCreationController {
     String gameID;
 
     @OnInit
-    public void init() {
-        final File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
-        String flagsPath = "de/uniks/stp24/assets/Flags";
-        String portraitsPath = "uniks/stp24/assets/Portraits";
+    public void init(){
+        initImages();
 
-        if(jarFile.isFile()) {
-            // running with JAR
-
-            final JarFile jar;
-
-            try {
-                jar = new JarFile(jarFile);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            final Enumeration<JarEntry> entries = jar.entries();
-
-            while(entries.hasMoreElements()) {
-                JarEntry jarEntry = entries.nextElement();
-                final String name = jarEntry.getName();
-                if (name.toLowerCase().contains(flagsPath.toLowerCase()) && !jarEntry.isDirectory()) {
-                    flagsList.add(name);
-                } else if (name.toLowerCase().contains(portraitsPath.toLowerCase()) && !jarEntry.isDirectory()) {
-                    portraitsList.add(name);
-                }
-            }
-
-            try {
-                jar.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-        } else {
-            // running with IDE
-
-            File flagsDir = new File("src/main/resources/" + flagsPath);
-            for (File path : flagsDir.listFiles()) {
-                flagsList.add(path.toURI().toString());
-            }
-
-            File portraitsDir = new File("src/main/resources/de/" + portraitsPath);
-            for (File path : portraitsDir.listFiles()) {
-                portraitsList.add(path.toURI().toString());
-            }
-        }
-
-        colorsList.add("#DC143C");
-        colorsList.add("#0F52BA");
-        colorsList.add("#50C878");
-        colorsList.add("#9966CC");
-        colorsList.add("#FF7F50");
-        colorsList.add("#40E0D0");
-        colorsList.add("#FF00FF");
-        colorsList.add("#FFD700");
-        colorsList.add("#C0C0C0");
-        colorsList.add("#4B0082");
-        colorsList.add("#36454F");
-        colorsList.add("#F28500");
-        colorsList.add("#E6E6FA");
-        colorsList.add("#008080");
-        colorsList.add("#800000");
-        colorsList.add("#808000");
+        initColors();
 
         gangs = saveLoadService.loadGangs();
+    }
+
+    private void initImages() {
+        for (int i = 0; i <= imagesCount; i++) {
+            InputStream flagStream = GangCreationController.class.getResourceAsStream(resourcesPaths + flagsFolderPath + i + ".png");
+            InputStream portraitStream = GangCreationController.class.getResourceAsStream(resourcesPaths + portraitsFolderPath + i + ".png");
+            addImagesToList(flagStream, flagsList);
+            addImagesToList(portraitStream, portraitsList);
+        }
+    }
+
+    public static void addImagesToList(InputStream stream, ArrayList<Image> list) {
+        byte[] imageData;
+        if (stream != null) {
+            try {
+                imageData = stream.readAllBytes();
+                list.add(new Image(new ByteArrayInputStream(imageData)));
+            } catch (IOException e) {
+                System.out.println("Could not load image :(");
+            }
+        } else {
+            System.out.println("Resource not found");
+        }
+    }
+
+    private void initColors() {
+        String[] colorsArray = {"#DC143C", "#0F52BA", "#50C878", "#9966CC", "#FF7F50",
+                "#40E0D0", "#FF00FF", "#FFD700", "#C0C0C0", "#4B0082",
+                "#36454F", "#F28500", "#E6E6FA", "#008080", "#800000", "#808000"};
+
+        colorsList.addAll(Arrays.asList(colorsArray));
     }
 
     @OnRender
@@ -221,9 +196,9 @@ public class GangCreationController {
                 creationBox.setVisible(true);
                 gangNameText.setText(gang.name());
                 flagImageIndex = gang.flagIndex()%flagsList.size();
-                flagImage.setImage(new Image(flagsList.get(flagImageIndex)));
+                flagImage.setImage(flagsList.get(flagImageIndex));
                 portraitImageIndex = gang.portraitIndex()%portraitsList.size();
-                portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex)));
+                portraitImage.setImage(portraitsList.get(portraitImageIndex));
                 gangDescriptionText.setText(gang.description());
                 createButton.setVisible(false);
                 editButton.setVisible(true);
@@ -254,8 +229,9 @@ public class GangCreationController {
     public Gang getInputGang() {
         String gangName = gangNameText.getText();
         if (gangNameText.getText().isEmpty()) gangName = "Buccaneers";
-//        System.out.println(flagImageIndex + "" + portraitsList + "" + colorIndex);
-        return new Gang(gangName, flagsList.get(flagImageIndex), flagImageIndex%flagsList.size(), portraitsList.get(portraitImageIndex), portraitImageIndex%portraitsList.size(), gangDescriptionText.getText(), colorsList.get(colorIndex), colorIndex%colorsList.size());
+        flagImageIndex = flagImageIndex%flagsList.size();
+        portraitImageIndex = portraitImageIndex%portraitsList.size();
+        return new Gang(gangName, flagImageIndex, portraitImageIndex, gangDescriptionText.getText(), colorsList.get(colorIndex), colorIndex%colorsList.size());
     }
 
     public void edit() {
@@ -307,8 +283,8 @@ public class GangCreationController {
         flagImageIndex = 0;
         portraitImageIndex = 0;
         colorIndex = 0;
-        flagImage.setImage(new Image(flagsList.get(flagImageIndex)));
-        portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex)));
+        flagImage.setImage(flagsList.get(flagImageIndex));
+        portraitImage.setImage(portraitsList.get(portraitImageIndex));
         colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
         gangNameText.setText("");
         gangDescriptionText.setText("");
@@ -316,12 +292,12 @@ public class GangCreationController {
 
     public void showLastFlag() {
         flagImageIndex = flagImageIndex - 1 >= 0 ? flagImageIndex - 1 : flagsList.size() - 1;
-        flagImage.setImage(new Image(flagsList.get(flagImageIndex)));
+        flagImage.setImage(flagsList.get(flagImageIndex));
     }
 
     public void showNextFlag() {
         flagImageIndex = flagImageIndex + 1 < flagsList.size() ? flagImageIndex + 1 : 0;
-        flagImage.setImage(new Image(flagsList.get(flagImageIndex)));
+        flagImage.setImage(flagsList.get(flagImageIndex));
     }
 
     public void showLastColor() {
@@ -336,23 +312,23 @@ public class GangCreationController {
 
     public void showLastPortrait() {
         portraitImageIndex = portraitImageIndex - 1 >= 0 ? portraitImageIndex - 1 : portraitsList.size() - 1;
-        portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex)));
+        portraitImage.setImage(portraitsList.get(portraitImageIndex));
     }
 
     public void showNextPortrait() {
         portraitImageIndex = portraitImageIndex + 1 < portraitsList.size() ? portraitImageIndex + 1 : 0;
-        portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex)));
+        portraitImage.setImage(portraitsList.get(portraitImageIndex));
     }
 
     public void randomize() {
         if (!lockFlag) {
             flagImageIndex = rand.nextInt(0, flagsList.size());
-            flagImage.setImage(new Image(flagsList.get(flagImageIndex)));
+            flagImage.setImage(flagsList.get(flagImageIndex));
         }
 
         if (!lockPortrait) {
             portraitImageIndex = rand.nextInt(0, portraitsList.size());
-            portraitImage.setImage(new Image(portraitsList.get(portraitImageIndex)));
+            portraitImage.setImage(portraitsList.get(portraitImageIndex));
         }
 
         String name;

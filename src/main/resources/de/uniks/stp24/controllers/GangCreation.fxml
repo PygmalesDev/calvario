@@ -95,7 +95,7 @@
                         <Pane>
                            <children>
                               <ImageView fx:id="portraitImage" fitHeight="150.0" fitWidth="150.0" layoutX="32.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
-                                 <Image url="@../assets/placeholders/Flags/f0.png" />
+                                 <Image url="@../assets/flags/flag_0.png" />
                               </ImageView>
                               <Button fx:id="lastPortraitButton" layoutY="123.0" mnemonicParsing="false" onAction="#showLastPortrait" prefWidth="30.0" styleClass="downButton">
                                  <font>
@@ -123,7 +123,7 @@
                         <Pane>
                            <children>
                               <ImageView fx:id="flagImage" fitHeight="150.0" fitWidth="150.0" layoutX="32.0" layoutY="41.0" pickOnBounds="true">
-                                 <Image url="@../assets/placeholders/Flags/f0.png" />
+                                 <Image url="@../assets/flags/flag_0.png" />
                               </ImageView>
                               <Button fx:id="lastFlagButton" layoutY="128.0" mnemonicParsing="false" onAction="#showLastFlag" prefWidth="30.0" styleClass="downButton">
                                  <font>

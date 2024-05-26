@@ -149,7 +149,7 @@
          write(gangName);
          waitForFxEvents();
 
-         lookup("#createButton").queryButton().fire();
+         clickOn(lookup("#createButton").queryButton());
          waitForFxEvents();
 
          GangElement selectedGang;

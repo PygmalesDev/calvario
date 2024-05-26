@@ -5,12 +5,14 @@
  import de.uniks.stp24.component.GangComponent;
  import de.uniks.stp24.controllers.GangCreationController;
  import de.uniks.stp24.model.Gang;
+ import de.uniks.stp24.model.GangElement;
  import de.uniks.stp24.service.ImageCache;
  import de.uniks.stp24.service.SaveLoadService;
  import javafx.collections.FXCollections;
  import javafx.collections.ObservableList;
  import javafx.scene.control.TextArea;
  import javafx.scene.control.TextField;
+ import org.junit.jupiter.api.BeforeEach;
  import org.mockito.InjectMocks;
  import org.mockito.Spy;
  import javafx.stage.Stage;
@@ -42,10 +44,10 @@
      ObservableList<Gang> gangs = FXCollections.observableArrayList();
      String name = "Test Gang";
      Gang gang = new Gang(name, 0, 0, "", "#000000", 0);
+     ListView<GangElement> gangsListView;
 
      @Mock
      SaveLoadService saveLoadService;
-
 
      @Spy
      Provider<GangComponent> gangComponentProvider = new Provider(){
@@ -66,11 +68,14 @@
          this.app.show(this.gangCreationController);
      }
 
+     @BeforeEach
+     public void initListView() {
+         gangsListView = lookup("#gangsListView").query();
+     }
+
      @Test
      public void testCreatingNewGang() {
          doNothing().when(saveLoadService).saveGang(any());
-
-         ListView<Gang> gangsListView = lookup("#gangsListView").query();
 
          int gangNums = gangsListView.getItems().size();
 
@@ -97,16 +102,14 @@
          waitForFxEvents();
 
           assertEquals(gangNums + 1, gangsListView.getItems().size());
-          Gang selectedGang = gangsListView.getItems().get(1);
-          assertEquals(gangName, selectedGang.name());
-          assertEquals(gangDescription, selectedGang.description());
+          GangElement selectedGang = gangsListView.getItems().get(1);
+          assertEquals(gangName, selectedGang.gang().name());
+          assertEquals(gangDescription, selectedGang.gang().description());
           verify(saveLoadService).saveGang(any());
      }
 
      @Test
      public void testEditGang() {
-         ListView<Gang> gangsListView = lookup("#gangsListView").query();
-
          clickOn("#showCreationButton");
          waitForFxEvents();
 
@@ -121,9 +124,9 @@
          clickOn("#createButton");
          waitForFxEvents();
 
-         Gang selectedGang;
+         GangElement selectedGang;
          selectedGang = gangsListView.getItems().get(1);
-         assertTrue(selectedGang.description().isEmpty());
+         assertTrue(selectedGang.gang().description().isEmpty());
 
          clickOn(gangName);
          waitForFxEvents();
@@ -149,11 +152,11 @@
          waitForFxEvents();
 
          selectedGang = gangsListView.getItems().get(1);
-         assertEquals(gangName, selectedGang.name());
-         assertEquals(gangDescription, selectedGang.description());
-         assertEquals(1, selectedGang.flagIndex());
-         assertEquals(1, selectedGang.portraitIndex());
-         assertEquals(1, selectedGang.colorIndex());
+         assertEquals(gangName, selectedGang.gang().name());
+         assertEquals(gangDescription, selectedGang.gang().description());
+         assertEquals(1, selectedGang.gang().flagIndex());
+         assertEquals(1, selectedGang.gang().portraitIndex());
+         assertEquals(1, selectedGang.gang().colorIndex());
 
          clickOn(gangName);
          waitForFxEvents();
@@ -178,35 +181,32 @@
 
          // before edit
          selectedGang = gangsListView.getItems().get(1);
-         assertEquals(1, selectedGang.flagIndex());
-         assertEquals(1, selectedGang.portraitIndex());
-         assertEquals(1, selectedGang.colorIndex());
+         assertEquals(1, selectedGang.gang().flagIndex());
+         assertEquals(1, selectedGang.gang().portraitIndex());
+         assertEquals(1, selectedGang.gang().colorIndex());
 
          clickOn("#editButton");
          waitForFxEvents();
 
          // after edit
          selectedGang = gangsListView.getItems().get(1);
-         assertEquals(16, selectedGang.flagIndex());
-         assertEquals(16, selectedGang.portraitIndex());
-         assertEquals(15, selectedGang.colorIndex());
+         assertEquals(16, selectedGang.gang().flagIndex());
+         assertEquals(16, selectedGang.gang().portraitIndex());
+         assertEquals(15, selectedGang.gang().colorIndex());
      }
 
      @Test
      public void loadingGangsFromSave() {
-         ListView<Gang> gangsListView = lookup("#gangsListView").query();
          assertEquals( 1, gangsListView.getItems().size());
-         Gang loadedGang = gangsListView.getItems().get(0);
-         assertEquals(name, loadedGang.name());
-         assertEquals(0, loadedGang.flagIndex());
-         assertEquals(0, loadedGang.portraitIndex());
-         assertEquals(0, loadedGang.colorIndex());
+         GangElement loadedGang = gangsListView.getItems().get(0);
+         assertEquals(name, loadedGang.gang().name());
+         assertEquals(0, loadedGang.gang().flagIndex());
+         assertEquals(0, loadedGang.gang().portraitIndex());
+         assertEquals(0, loadedGang.gang().colorIndex());
      }
 
      @Test
      public void testRandomGenerationAndLocking() {
-         ListView<Gang> gangsListView = lookup("#gangsListView").query();
-
          clickOn("#showCreationButton");
          waitForFxEvents();
 
@@ -249,16 +249,14 @@
          clickOn("#createButton");
          waitForFxEvents();
 
-         Gang selectedGang = gangsListView.getItems().get(1);
-         assertEquals(0, selectedGang.flagIndex());
-         assertEquals(0, selectedGang.portraitIndex());
-         assertEquals(0, selectedGang.colorIndex());
+         GangElement selectedGang = gangsListView.getItems().get(1);
+         assertEquals(0, selectedGang.gang().flagIndex());
+         assertEquals(0, selectedGang.gang().portraitIndex());
+         assertEquals(0, selectedGang.gang().colorIndex());
      }
 
      @Test
      public void testDeletingGang() {
-         ListView<Gang> gangsListView = lookup("#gangsListView").query();
-
          clickOn("#showCreationButton");
          waitForFxEvents();
 

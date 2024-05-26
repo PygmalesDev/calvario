@@ -163,9 +163,7 @@ public class GangCreationController {
         }
 
         this.saveLoadService.loadGangs().forEach(gang ->
-                this.gangElements.add(new GangElement(gang,
-                        this.flagsList.get(gang.flagIndex()),
-                        this.portraitsList.get(gang.portraitIndex()))));
+                this.gangElements.add(createGangElement(gang)));
     }
 
     @OnRender

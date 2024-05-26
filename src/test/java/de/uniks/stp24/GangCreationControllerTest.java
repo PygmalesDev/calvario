@@ -4,16 +4,21 @@
  import de.uniks.stp24.component.BubbleComponent;
  import de.uniks.stp24.component.GangComponent;
  import de.uniks.stp24.controllers.GangCreationController;
+ import de.uniks.stp24.dto.MemberDto;
  import de.uniks.stp24.model.Gang;
  import de.uniks.stp24.model.GangElement;
+ import de.uniks.stp24.rest.GameMembersApiService;
  import de.uniks.stp24.service.ImageCache;
  import de.uniks.stp24.service.LobbyService;
  import de.uniks.stp24.service.SaveLoadService;
+ import de.uniks.stp24.service.TokenStorage;
+ import io.reactivex.rxjava3.core.Observable;
  import javafx.collections.FXCollections;
  import javafx.collections.ObservableList;
  import javafx.scene.control.TextArea;
  import javafx.scene.control.TextField;
  import javafx.scene.input.MouseButton;
+ import org.fulib.fx.controller.Subscriber;
  import org.junit.jupiter.api.BeforeEach;
  import org.mockito.InjectMocks;
  import org.mockito.Spy;
@@ -43,7 +48,16 @@
      @Spy
      ImageCache imageCache;
 
-     @Mock
+     @Spy
+     TokenStorage tokenStorage;
+
+     @Spy
+     Subscriber subscriber;
+
+     @Spy
+     GameMembersApiService gameMembersApiService;
+
+     @Spy
      LobbyService lobbyService;
 
      ObservableList<Gang> gangs = FXCollections.observableArrayList();
@@ -135,7 +149,7 @@
          write(gangName);
          waitForFxEvents();
 
-         clickOn("#createButton");
+         lookup("#createButton").queryButton().fire();
          waitForFxEvents();
 
          GangElement selectedGang;
@@ -296,11 +310,13 @@
 
      @Test
      public void goingBackToLobbyNoGang() {
-         doReturn(null).when(lobbyService).updateMember(null, null, false, null);
+         doReturn(null).when(this.app).show(eq("/lobby"), any());
+         doReturn(Observable.just(new MemberDto(false,"1", null, "1"))).when(lobbyService).getMember(any(), any());
+         doReturn(Observable.just(new MemberDto(false, "1", null, "1"))).when(lobbyService).updateMember(null, "1", false, null);
 
          clickOn("#backButton");
          waitForFxEvents();
 
-         verify(lobbyService).updateMember(null, null, false, null);
+         verify(lobbyService).updateMember(null, "1", false, null);
      }
  }

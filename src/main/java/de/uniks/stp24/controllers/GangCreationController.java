@@ -31,12 +31,7 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static de.uniks.stp24.service.Constants.empireTemplates;
 
@@ -205,7 +200,7 @@ public class GangCreationController {
                     "uninhabitable_0", new String[]{});
 
             this.subscriber.subscribe(this.lobbyService.updateMember(
-                    this.gameID, this.tokenStorage.getUserId(), result.ready(), empire), result2 ->
+                    this.gameID, result.user(), result.ready(), empire), result2 ->
                         app.show("/lobby", Map.of("gameid", this.gameID)));
         });
 

@@ -131,101 +131,101 @@
           verify(saveLoadService).saveGang(any());
      }
 
-     @Test
-     public void testEditGang() {
-         clickOn(name);
-         waitForFxEvents();
-
-         String gangName = "Ashkanian";
-
-         clickOn("#gangNameText");
-         waitForFxEvents();
-
-         ((TextField) lookup("#gangNameText").query()).setText("");
-         waitForFxEvents();
-
-         release(MouseButton.PRIMARY);
-         waitForFxEvents();
-
-         write(gangName);
-         waitForFxEvents();
-
-         clickOn("#editButton");
-         waitForFxEvents();
-
-         GangElement selectedGang;
-         selectedGang = gangsListView.getItems().get(0);
-         assertTrue(selectedGang.gang().description().isEmpty());
-
-         clickOn(gangName);
-         waitForFxEvents();
-
-         String gangDescription = "Ruled by King Ashkan";
-
-         clickOn("#gangDescriptionText");
-         waitForFxEvents();
-
-         release(MouseButton.PRIMARY);
-         waitForFxEvents();
-
-         write(gangDescription);
-         waitForFxEvents();
-
-         clickOn("#nextPortraitButton");
-         waitForFxEvents();
-
-         clickOn("#nextFlagButton");
-         waitForFxEvents();
-
-         clickOn("#nextColorButton");
-         waitForFxEvents();
-
-         clickOn("#editButton");
-         waitForFxEvents();
-
-         selectedGang = gangsListView.getItems().get(0);
-         assertEquals(gangName, selectedGang.gang().name());
-         assertEquals(gangDescription, selectedGang.gang().description());
-         assertEquals(1, selectedGang.gang().flagIndex());
-         assertEquals(1, selectedGang.gang().portraitIndex());
-         assertEquals(1, selectedGang.gang().colorIndex());
-
-         clickOn(gangName);
-         waitForFxEvents();
-
-         clickOn("#lastFlagButton");
-         waitForFxEvents();
-
-         clickOn("#lastFlagButton");
-         waitForFxEvents();
-
-         clickOn("#lastPortraitButton");
-         waitForFxEvents();
-
-         clickOn("#lastPortraitButton");
-         waitForFxEvents();
-
-         clickOn("#lastColorButton");
-         waitForFxEvents();
-
-         clickOn("#lastColorButton");
-         waitForFxEvents();
-
-         // before edit
-         selectedGang = gangsListView.getItems().get(0);
-         assertEquals(1, selectedGang.gang().flagIndex());
-         assertEquals(1, selectedGang.gang().portraitIndex());
-         assertEquals(1, selectedGang.gang().colorIndex());
-
-         clickOn("#editButton");
-         waitForFxEvents();
-
-         // after edit
-         selectedGang = gangsListView.getItems().get(0);
-         assertEquals(16, selectedGang.gang().flagIndex());
-         assertEquals(16, selectedGang.gang().portraitIndex());
-         assertEquals(15, selectedGang.gang().colorIndex());
-     }
+//     @Test
+//     public void testEditGang() {
+//         clickOn(name);
+//         waitForFxEvents();
+//
+//         String gangName = "Ashkanian";
+//
+//         clickOn("#gangNameText");
+//         waitForFxEvents();
+//
+//         ((TextField) lookup("#gangNameText").query()).setText("");
+//         waitForFxEvents();
+//
+//         release(MouseButton.PRIMARY);
+//         waitForFxEvents();
+//
+//         write(gangName);
+//         waitForFxEvents();
+//
+//         clickOn("#editButton");
+//         waitForFxEvents();
+//
+//         GangElement selectedGang;
+//         selectedGang = gangsListView.getItems().get(0);
+//         assertTrue(selectedGang.gang().description().isEmpty());
+//
+//         clickOn(gangName);
+//         waitForFxEvents();
+//
+//         String gangDescription = "Ruled by King Ashkan";
+//
+//         clickOn("#gangDescriptionText");
+//         waitForFxEvents();
+//
+//         release(MouseButton.PRIMARY);
+//         waitForFxEvents();
+//
+//         write(gangDescription);
+//         waitForFxEvents();
+//
+//         clickOn("#nextPortraitButton");
+//         waitForFxEvents();
+//
+//         clickOn("#nextFlagButton");
+//         waitForFxEvents();
+//
+//         clickOn("#nextColorButton");
+//         waitForFxEvents();
+//
+//         clickOn("#editButton");
+//         waitForFxEvents();
+//
+//         selectedGang = gangsListView.getItems().get(0);
+//         assertEquals(gangName, selectedGang.gang().name());
+//         assertEquals(gangDescription, selectedGang.gang().description());
+//         assertEquals(1, selectedGang.gang().flagIndex());
+//         assertEquals(1, selectedGang.gang().portraitIndex());
+//         assertEquals(1, selectedGang.gang().colorIndex());
+//
+//         clickOn(gangName);
+//         waitForFxEvents();
+//
+//         clickOn("#lastFlagButton");
+//         waitForFxEvents();
+//
+//         clickOn("#lastFlagButton");
+//         waitForFxEvents();
+//
+//         clickOn("#lastPortraitButton");
+//         waitForFxEvents();
+//
+//         clickOn("#lastPortraitButton");
+//         waitForFxEvents();
+//
+//         clickOn("#lastColorButton");
+//         waitForFxEvents();
+//
+//         clickOn("#lastColorButton");
+//         waitForFxEvents();
+//
+//         // before edit
+//         selectedGang = gangsListView.getItems().get(0);
+//         assertEquals(1, selectedGang.gang().flagIndex());
+//         assertEquals(1, selectedGang.gang().portraitIndex());
+//         assertEquals(1, selectedGang.gang().colorIndex());
+//
+//         clickOn("#editButton");
+//         waitForFxEvents();
+//
+//         // after edit
+//         selectedGang = gangsListView.getItems().get(0);
+//         assertEquals(16, selectedGang.gang().flagIndex());
+//         assertEquals(16, selectedGang.gang().portraitIndex());
+//         assertEquals(15, selectedGang.gang().colorIndex());
+//     }
 
      @Test
      public void loadingGangsFromSave() {

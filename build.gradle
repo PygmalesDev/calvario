@@ -95,6 +95,19 @@ javafx {
     }
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/main/resources'
+            includes ["**/*.png"]
+        }
+    }
+}
+
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
 shadowJar {
     archiveClassifier = project.findProperty('platform') ?: 'all'
 }

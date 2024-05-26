@@ -34,7 +34,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: ${{ secrets.STP_MIN_COVERAGE }}
           - uses: actions/upload-artifact@v4     
-            if: always()
+        if: always()
             with:
               name: screenshots
               path: build/failed-test-screenshots/

@@ -4,7 +4,6 @@
  import de.uniks.stp24.component.BubbleComponent;
  import de.uniks.stp24.component.GangComponent;
  import de.uniks.stp24.controllers.GangCreationController;
- import de.uniks.stp24.dto.MemberDto;
  import de.uniks.stp24.model.Gang;
  import de.uniks.stp24.model.GangElement;
  import de.uniks.stp24.rest.GameMembersApiService;
@@ -12,7 +11,6 @@
  import de.uniks.stp24.service.LobbyService;
  import de.uniks.stp24.service.SaveLoadService;
  import de.uniks.stp24.service.TokenStorage;
- import io.reactivex.rxjava3.core.Observable;
  import javafx.collections.FXCollections;
  import javafx.collections.ObservableList;
  import javafx.scene.control.TextArea;
@@ -135,12 +133,15 @@
 
      @Test
      public void testEditGang() {
-         clickOn("#showCreationButton");
+         clickOn(name);
          waitForFxEvents();
 
          String gangName = "Ashkanian";
 
          clickOn("#gangNameText");
+         waitForFxEvents();
+
+         ((TextField) lookup("#gangNameText").query()).setText("");
          waitForFxEvents();
 
          release(MouseButton.PRIMARY);
@@ -149,11 +150,11 @@
          write(gangName);
          waitForFxEvents();
 
-         clickOn(lookup("#createButton").queryButton());
+         clickOn("#editButton");
          waitForFxEvents();
 
          GangElement selectedGang;
-         selectedGang = gangsListView.getItems().get(1);
+         selectedGang = gangsListView.getItems().get(0);
          assertTrue(selectedGang.gang().description().isEmpty());
 
          clickOn(gangName);
@@ -182,7 +183,7 @@
          clickOn("#editButton");
          waitForFxEvents();
 
-         selectedGang = gangsListView.getItems().get(1);
+         selectedGang = gangsListView.getItems().get(0);
          assertEquals(gangName, selectedGang.gang().name());
          assertEquals(gangDescription, selectedGang.gang().description());
          assertEquals(1, selectedGang.gang().flagIndex());
@@ -211,7 +212,7 @@
          waitForFxEvents();
 
          // before edit
-         selectedGang = gangsListView.getItems().get(1);
+         selectedGang = gangsListView.getItems().get(0);
          assertEquals(1, selectedGang.gang().flagIndex());
          assertEquals(1, selectedGang.gang().portraitIndex());
          assertEquals(1, selectedGang.gang().colorIndex());
@@ -220,7 +221,7 @@
          waitForFxEvents();
 
          // after edit
-         selectedGang = gangsListView.getItems().get(1);
+         selectedGang = gangsListView.getItems().get(0);
          assertEquals(16, selectedGang.gang().flagIndex());
          assertEquals(16, selectedGang.gang().portraitIndex());
          assertEquals(15, selectedGang.gang().colorIndex());

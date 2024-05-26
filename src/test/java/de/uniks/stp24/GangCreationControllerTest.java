@@ -68,7 +68,7 @@
 
          ListView<Gang> gangsListView = lookup("#gangsListView").query();
 
-          int gangNums = gangsListView.getItems().size();
+         int gangNums = gangsListView.getItems().size();
 
          clickOn("#showCreationButton");
          waitForFxEvents();

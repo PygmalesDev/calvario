@@ -39,4 +39,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: screenshots
-          path: failed-test-screenshots/
+          path: CI/cute dogs

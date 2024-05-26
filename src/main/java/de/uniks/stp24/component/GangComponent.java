@@ -8,7 +8,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import org.fulib.fx.annotation.controller.Component;
-import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +27,7 @@ public class GangComponent extends Pane implements ReusableItemComponent<Gang> {
     @FXML
     ImageView portraitImage;
     @FXML
-    Label gangNameText;
+    Label gangNameTextComponent;
 
     ArrayList<Image> flagsList = new ArrayList<>();
     ArrayList<Image> portraitsList = new ArrayList<>();
@@ -59,9 +58,9 @@ public class GangComponent extends Pane implements ReusableItemComponent<Gang> {
         java.awt.Color color = java.awt.Color.decode(gang.color());
         //System.out.println(color.getRed() + color.decode("#FFCCEE").getGreen() + color.getBlue());
         if (color.getRed() + color.decode("#FFCCEE").getGreen() + color.getBlue() <= 500)
-            gangNameText.setStyle("-fx-text-fill: white;");
+            gangNameTextComponent.setStyle("-fx-text-fill: white;");
 
-        gangNameText.setText(gang.name());
+        gangNameTextComponent.setText(gang.name());
         pane.setStyle("-fx-background-color: " + gang.color());
         gangColor.setStyle("-fx-background-color: " + gang.color());
         flagImage.setImage(flagsList.get(gang.flagIndex()));

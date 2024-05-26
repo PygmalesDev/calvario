@@ -269,7 +269,6 @@ public class GangCreationController {
         deletePane.setVisible(true);
         Gang gang = gangsListView.getSelectionModel().getSelectedItem();
         toBeDeletedGangName.setText(gang.name());
-        // toBeDeletedGangName.setStyle("-fx-text-fill: " + gang.color());
     }
 
     public void create() {

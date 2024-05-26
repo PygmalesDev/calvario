@@ -78,7 +78,7 @@ public class GangCreationController {
     @FXML
     Button createButton;
     @FXML
-    Button editButton;
+    public Button editButton;
     @FXML
     Button showDeletePaneButton;
     @FXML

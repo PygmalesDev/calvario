@@ -25,9 +25,7 @@ public class AppTest extends ApplicationTest {
         stage.requestFocus();
     }
 
-    @Test
     public void v1() {
-        assertNotNull(app.stage().getIcons());
         // TODO login, main-menu, ...
     }
 

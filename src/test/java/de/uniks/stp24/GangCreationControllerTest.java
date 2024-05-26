@@ -136,6 +136,8 @@
          clickOn(name);
          waitForFxEvents();
 
+         String gangName = "Ashkanian";
+
          clickOn("#gangNameText");
          waitForFxEvents();
 
@@ -145,7 +147,7 @@
          release(MouseButton.PRIMARY);
          waitForFxEvents();
 
-         write("Ashkanian");
+         write(gangName);
          waitForFxEvents();
 
          clickOn("#editButton");
@@ -155,7 +157,7 @@
          selectedGang = gangsListView.getItems().get(0);
          assertTrue(selectedGang.gang().description().isEmpty());
 
-         clickOn("Ashkanian");
+         clickOn(gangName);
          waitForFxEvents();
 
          String gangDescription = "Ruled by King Ashkan";
@@ -182,13 +184,13 @@
          waitForFxEvents();
 
          selectedGang = gangsListView.getItems().get(0);
-         assertEquals("Ashkanian", selectedGang.gang().name());
+         assertEquals(gangName, selectedGang.gang().name());
          assertEquals(gangDescription, selectedGang.gang().description());
          assertEquals(1, selectedGang.gang().flagIndex());
          assertEquals(1, selectedGang.gang().portraitIndex());
          assertEquals(1, selectedGang.gang().colorIndex());
 
-         clickOn("Ashkanian");
+         clickOn(gangName);
          waitForFxEvents();
 
          clickOn("#lastFlagButton");

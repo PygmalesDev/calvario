@@ -294,7 +294,6 @@ public class BrowseGameControllerTest extends ControllerTest {
         // Alice sees now the login screen
         // The game's prefService does not contain a refresh token for her account
         verify(browseGameService, times(2)).logout("");
-        System.out.println(prefService.getRefreshToken());
         verify(app, times(1)).show("/login");
         assertNull(prefService.getRefreshToken());
     }

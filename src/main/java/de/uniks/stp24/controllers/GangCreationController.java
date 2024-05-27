@@ -119,13 +119,16 @@ public class GangCreationController extends BasicController {
     ToggleButton lockNameButton;
     @FXML
     ToggleButton lockDescriptionButton;
+    @Param("gameid")
+    String gameID;
+    // the fxml has no containers (text, label) for errors;
+    private
+    Text textInfo;
 
     @Inject
     public GangCreationController() {
 
     }
-    @Param("gameid")
-    String gameID;
 
     @OnInit
     public void init(){
@@ -166,7 +169,6 @@ public class GangCreationController extends BasicController {
         String[] colorsArray = {"#DC143C", "#0F52BA", "#50C878", "#9966CC", "#FF7F50",
                 "#40E0D0", "#FF00FF", "#FFD700", "#C0C0C0", "#4B0082",
                 "#36454F", "#F28500", "#E6E6FA", "#008080", "#800000", "#808000"};
-
         colorsList.addAll(Arrays.asList(colorsArray));
     }
 
@@ -199,7 +201,6 @@ public class GangCreationController extends BasicController {
 
     public void back() {
         Gang gang = this.gangsListView.getSelectionModel().getSelectedItem();
-
         this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
             Empire empire = null;
 
@@ -210,6 +211,10 @@ public class GangCreationController extends BasicController {
             this.subscriber.subscribe(this.lobbyService.updateMember(
                     this.gameID, this.tokenStorage.getUserId(),result.ready(), empire), result2 ->
                         app.show("/lobby", Map.of("gameid", this.gameID)));
+        },
+          error -> {
+            int code = errorService.getStatus(error);
+          this.textInfo.setText(getErrorInfoText(code));
         });
 
     }
@@ -349,8 +354,6 @@ public class GangCreationController extends BasicController {
             colorIndex = rand.nextInt(0, colorsList.size());
             colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
         }
-
-
     }
 
     public void lockFlag() {

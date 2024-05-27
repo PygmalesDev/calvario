@@ -62,8 +62,6 @@ public class LobbyController extends BasicController {
     public Provider<UserComponent> userComponentProvider;
     @Inject
     EventListener eventListener;
-
-
     @FXML
     public ListView<MemberUser> playerListView;
     @FXML
@@ -78,7 +76,6 @@ public class LobbyController extends BasicController {
     Pane captainContainer;
     @FXML
     Text gameNameField;
-
     @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
@@ -154,7 +151,11 @@ public class LobbyController extends BasicController {
 
             this.lobbyHostSettingsComponent.createCheckPlayerReadinessListener();
         },
-          error -> {});
+          error -> {
+            int code = errorService.getStatus(error);
+            this.enterGameComponent
+            .errorMessage.textProperty().set(getErrorInfoText(code));
+        });
     }
 
     /**
@@ -167,7 +168,11 @@ public class LobbyController extends BasicController {
             this.lobbyMessageElement.setVisible(true);
             this.messageText.setText(resources.getString("lobby.has.been.deleted"));
         },
-          error -> {});
+          error -> {
+            int code = errorService.getStatus(error);
+              this.enterGameComponent
+                .errorMessage.textProperty().set(getErrorInfoText(code));
+        });
     }
 
     /**
@@ -192,7 +197,11 @@ public class LobbyController extends BasicController {
             }
             this.sortMemberList();
         },
-          error -> {});
+          error -> {
+              int code = errorService.getStatus(error);
+              this.enterGameComponent
+                .errorMessage.textProperty().set(getErrorInfoText(code));
+          });
     }
 
     /**
@@ -300,7 +309,11 @@ public class LobbyController extends BasicController {
                 this.lobbyElement.getChildren().add(this.enterGameComponent);
             }
         },
-        error -> {});
+        error -> {
+            int code = errorService.getStatus(error);
+            this.enterGameComponent
+              .errorMessage.textProperty().set(getErrorInfoText(code));
+        });
     }
 
     /**

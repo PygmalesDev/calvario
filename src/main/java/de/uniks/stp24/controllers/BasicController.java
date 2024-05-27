@@ -4,7 +4,6 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.service.LanguageService;
 import de.uniks.stp24.service.PrefService;
-import de.uniks.stp24.utils.ErrorTextWriter;
 import de.uniks.stp24.utils.ResponseConstants;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.controller.Subscriber;
@@ -56,13 +55,9 @@ public class BasicController {
     public String getErrorInfoText(Map<Integer,String> map, int code) {
         if (map == null || map.isEmpty())
             return resources.getString("no.dict");
-        if( !map.containsKey(code)) {
-            return resources.getString("no.entry.dict");
-        } else {
-            return resources.getString(
-              new ErrorTextWriter(map,code).getErrorText()
-            );
-        }
+        return resources.getString(
+          map.getOrDefault(code, "no.entry.dict")
+        );
     }
 
     public String getErrorInfoText(int code) {

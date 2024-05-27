@@ -125,7 +125,7 @@ public class LoginController extends BasicController {
             loginButton.setDisable(true);
             signupButton.setDisable(true);
             bubbleComponent.setErrorMode(false);
-            this.bubbleComponent.setCaptainText(getErrorInfoText(responseConstants.respLogin,201));
+            this.bubbleComponent.setCaptainText(getErrorInfoText(201));
 
             subscriber.subscribe(loginService.login(username, password, rememberMe),
                     result -> app.show("/browseGames")
@@ -136,13 +136,13 @@ public class LoginController extends BasicController {
                         int code = errorService.getStatus(error);
                         // "generate"" the output in the english/german
                         bubbleComponent.setErrorMode(true);
-                        this.bubbleComponent.setCaptainText(getErrorInfoText(this.controlResponses,code));
+                        this.bubbleComponent.setCaptainText(getErrorInfoText(code));
                         enableButtons();
                     });
         } else {
             // 1 is used for default in switch
             bubbleComponent.setErrorMode(true);
-            this.bubbleComponent.setCaptainText(getErrorInfoText(this.controlResponses,-1));
+            this.bubbleComponent.setCaptainText(getErrorInfoText(-1));
             enableButtons();
         }
     }

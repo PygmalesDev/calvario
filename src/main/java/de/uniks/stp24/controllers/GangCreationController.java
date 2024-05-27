@@ -1,11 +1,9 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.component.GangComponent;
 import de.uniks.stp24.service.LobbyService;
-import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.SaveLoadService;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.collections.ObservableList;
@@ -18,51 +16,32 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
-import org.fulib.fx.controller.Subscriber;
-
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-
 import static de.uniks.stp24.service.Constants.empireTemplatesEnglish;
 import static de.uniks.stp24.service.Constants.empireTemplatesGerman;
 
 @Title("%create.island")
 @Controller
-public class GangCreationController {
-    @Inject
-    App app;
-
+public class GangCreationController extends BasicController {
     @Inject
     SaveLoadService saveLoadService;
-
     @Inject
     LobbyService lobbyService;
     @Inject
-    Subscriber subscriber;
-    @Inject
     TokenStorage tokenStorage;
     @Inject
-    PrefService prefService;
-
-    @Inject
     public Provider<GangComponent> gangComponentProvider;
-
-    @Inject
-    @Resource
-    ResourceBundle resource;
-
-
     @FXML
     ListView<Gang> gangsListView;
     @FXML
@@ -152,13 +131,11 @@ public class GangCreationController {
     public void init(){
         initImages();
         initColors();
-
         if(prefService.getLocale().equals(Locale.GERMAN)) {
             empireTemplates = empireTemplatesGerman;
-        }else {
+        } else {
             empireTemplates = empireTemplatesEnglish;
         }
-
         gangs = saveLoadService.loadGangs();
     }
 
@@ -349,7 +326,7 @@ public class GangCreationController {
                     + " " + empireTemplates.get("Type")[typeIndex];
             String secondName = "";
             if (rand.nextInt(0, 4) == 3)
-                secondName = " " + resource.getString("of") + " " + empireTemplates.get("Suffix")[rand.nextInt(0, empireTemplates.get("Suffix").length)] +
+                secondName = " " + resources.getString("of") + " " + empireTemplates.get("Suffix")[rand.nextInt(0, empireTemplates.get("Suffix").length)] +
                         " " + empireTemplates.get("Definition")[rand.nextInt(0, empireTemplates.get("Definition").length)];
             gangNameText.setText(name + secondName);
         } else {

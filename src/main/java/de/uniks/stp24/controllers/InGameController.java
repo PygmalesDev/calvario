@@ -1,20 +1,14 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
 import de.uniks.stp24.component.PauseMenuComponent;
 import de.uniks.stp24.component.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
-import de.uniks.stp24.service.LanguageService;
-import de.uniks.stp24.service.PrefService;
 import javafx.fxml.FXML;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -27,33 +21,19 @@ import java.beans.PropertyChangeListener;
 import java.util.*;
 
 @Controller
-public class InGameController {
+public class InGameController extends BasicController {
     @FXML
     StackPane pauseMenuContainer;
-
-    @Inject
-    App app;
-    @Inject
-    PrefService prefService;
-
     @SubComponent
     @Inject
     public PauseMenuComponent pauseMenuComponent;
-
     @SubComponent
     @Inject
     public SettingsComponent settingsComponent;
-
     @Inject
     InGameService inGameService;
-    @Inject
-    LanguageService languageService;
-    @Inject
-    @Resource
-    ResourceBundle resources;
 
     private List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
-
 
     @Inject
     public InGameController() {
@@ -112,11 +92,7 @@ public class InGameController {
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
         inGameService.setShowSettings(false);
-        if (inGameService.getPaused()) {
-            inGameService.setPaused(false);
-        } else {
-            inGameService.setPaused(true);
-        }
+        inGameService.setPaused(!inGameService.getPaused());
     }
     public void showSettings() {
         pauseMenuContainer.getChildren().remove(pauseMenuComponent);
@@ -138,8 +114,7 @@ public class InGameController {
 
     @OnDestroy
     public void destroy() {
-        this.gameListenerTriple.forEach(triple -> {
-            triple.game().listeners().removePropertyChangeListener(triple.propertyName(), triple.listener());
-        });
+        this.gameListenerTriple.forEach(triple -> triple.game().listeners()
+          .removePropertyChangeListener(triple.propertyName(), triple.listener()));
     }
 }

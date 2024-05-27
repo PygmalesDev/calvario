@@ -35,7 +35,6 @@ public class BasicController {
 
     public Map<Integer,String> controlResponses;
 
-
     @Inject
     public BasicController() {}
 

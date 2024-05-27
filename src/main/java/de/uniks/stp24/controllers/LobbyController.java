@@ -1,6 +1,5 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
 import de.uniks.stp24.component.*;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.*;
@@ -25,7 +24,6 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
-import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -36,17 +34,14 @@ import java.util.ResourceBundle;
 
 @Title("%enter.game")
 @Controller
-public class LobbyController {
-    @Inject
-    App app;
+public class LobbyController extends BasicController {
+
     @Inject
     ImageCache imageCache;
     @Inject
     TokenStorage tokenStorage;
     @Inject
     UserApiService userApiService;
-    @Inject
-    Subscriber subscriber;
     @Inject
     LobbyService lobbyService;
     @Inject
@@ -63,7 +58,6 @@ public class LobbyController {
     @SubComponent
     @Inject
     public UserComponent userComponent;
-
     @Inject
     public Provider<UserComponent> userComponentProvider;
     @Inject
@@ -159,7 +153,8 @@ public class LobbyController {
             });
 
             this.lobbyHostSettingsComponent.createCheckPlayerReadinessListener();
-        });
+        },
+          error -> {});
     }
 
     /**
@@ -171,7 +166,8 @@ public class LobbyController {
             this.lobbyMessagePane.setVisible(true);
             this.lobbyMessageElement.setVisible(true);
             this.messageText.setText(resources.getString("lobby.has.been.deleted"));
-        });
+        },
+          error -> {});
     }
 
     /**
@@ -195,7 +191,8 @@ public class LobbyController {
                 case "deleted" -> this.removeUserFromList(id);
             }
             this.sortMemberList();
-        });
+        },
+          error -> {});
     }
 
     /**
@@ -228,7 +225,8 @@ public class LobbyController {
             this.users.add(new MemberUser(new User(user.name() + suffix,
                     user._id(), user.avatar(), user.createdAt(), user.updatedAt()
             ), data.empire(), data.ready(), this.game, this.asHost));
-        });
+        },
+          error -> {});
     }
 
     /**
@@ -301,7 +299,8 @@ public class LobbyController {
                 bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.password"));
                 this.lobbyElement.getChildren().add(this.enterGameComponent);
             }
-        });
+        },
+        error -> {});
     }
 
     /**

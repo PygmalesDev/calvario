@@ -14,8 +14,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -26,10 +24,7 @@ import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
-
 import javax.inject.Inject;
-import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import java.util.Objects;
 
 @Title("%edit.account")
@@ -63,12 +58,10 @@ public class EditAccController extends BasicController {
     ImageView editIconImageView;
     @FXML
     ImageView deleteIconImageView;
-
     @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
-
     @Inject
     EditAccService editAccService;
     @Inject
@@ -82,18 +75,15 @@ public class EditAccController extends BasicController {
     @SubComponent
     @Inject
     BubbleComponent bubbleComponent;
-
     @SubComponent
     @Inject
     public WarningScreenComponent warningScreen;
-
     private BooleanBinding editAccIsNotSelected;
     private BooleanBinding warningIsInvisible;
     public Image editIconBlueImage;
     public Image editIconBlackImage;
     public Image deleteIconRedImage;
     public Image deleteIconBlackImage;
-
     PopupBuilder popup = new PopupBuilder();
 
     @Inject
@@ -110,10 +100,10 @@ public class EditAccController extends BasicController {
 
     @OnInit
     public void init(){
-        editIconBlueImage = new Image(getClass().getResource("/de/uniks/stp24/icons/editBlue.png").toExternalForm());
-        editIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/editBlack.png").toExternalForm());
-        deleteIconRedImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteRed.png").toExternalForm());
-        deleteIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteBlack.png").toExternalForm());
+        editIconBlueImage = imageCache.get("icons/editBlue.png");
+        editIconBlackImage = imageCache.get("icons/editBlack.png");
+        deleteIconRedImage = imageCache.get("icons/deleteRed.png");
+        deleteIconBlackImage = imageCache.get("icons/deleteBlack.png");
     }
 
     @OnRender
@@ -123,7 +113,6 @@ public class EditAccController extends BasicController {
         this.avatarImage.setImage(imageCache.get(
                 Objects.nonNull(tokenStorage.getAvatar()) ? tokenStorage.getAvatar() : "test/911.png" ));
         this.errorLabelEditAcc.setText("");
-
     }
 
     @OnRender
@@ -158,8 +147,6 @@ public class EditAccController extends BasicController {
                         this.editAccIsNotSelected));
     }
 
-
-
     @OnRender
     public void changeDeleteButtonView(){
         // delete Button has red text and icon when selected
@@ -176,12 +163,9 @@ public class EditAccController extends BasicController {
         },this.warningIsInvisible));
     }
 
-
-
     public void saveChanges() {
         // save changed name and/or password of the user and reset the edit account screen afterward
         if (checkIt(usernameInput.getText(),passwordInput.getText())) {
-            this.errorLabelEditAcc.setStyle("-fx-fill: black;");
             this.errorLabelEditAcc.setText("");
             subscriber.subscribe(editAccService.changeUserInfo(usernameInput.getText(), passwordInput.getText()),
                     result -> {
@@ -191,18 +175,14 @@ public class EditAccController extends BasicController {
                     // in case of server's response => error
                     // handle with error response
                     , error -> {
-                        this.errorLabelEditAcc.setStyle("-fx-fill: red;");
                         // find the code in the error response
                         int code = errorService.getStatus(error);
                         // "generate"" the output in the english/german
                         this.errorLabelEditAcc
-                                .setText(getErrorInfoText(responseConstants.respEditAcc,code));
+                                .setText(getErrorInfoText(code));
                     });
         } else {
-            this.errorLabelEditAcc.setStyle("-fx-fill: red;");
-            this.errorLabelEditAcc.setText(getErrorInfoText(responseConstants.respEditAcc,
-              passwordInput.getLength() > 8 ? -1 : -2 ));
-
+            this.errorLabelEditAcc.setText(getErrorInfoText(passwordInput.getLength() > 8 ? -1 : -2 ));
         }
     }
 

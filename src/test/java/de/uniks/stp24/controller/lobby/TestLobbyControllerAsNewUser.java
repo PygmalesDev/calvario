@@ -1,3 +1,4 @@
+
 package de.uniks.stp24.controller.lobby;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -76,8 +77,8 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
     BubbleComponent bubbleComponent;
 
     Provider<UserComponent> userComponentProvider = ()->{
-        final UserComponent userComponent = new UserComponent(imageCache);
-        return new UserComponent(imageCache);
+        final UserComponent userComponent = new UserComponent(imageCache, resources);
+        return new UserComponent(imageCache, resources);
     };
 
 
@@ -90,7 +91,6 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
 
         this.joinGameService.gameMembersApiService = this.gameMembersApiService;
 
-        this.lobbyController.resource = this.resources;
         this.lobbyController.bubbleComponent = this.bubbleComponent;
         this.lobbyController.lobbyHostSettingsComponent = this.lobbyHostSettingsComponent;
         this.lobbyController.lobbySettingsComponent = this.lobbySettingsComponent;
@@ -171,7 +171,8 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
         clickOn("#joinButton");
 
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Please enter password!", lookup("#errorMessage").queryText().getText());
+        assertEquals(this.resources.getString("pirate.enterGame.noPassword"),
+                lookup("#errorMessage").queryText().getText());
 
         // Test inputting the incorrect password
         clickOn("#passwordInputField");
@@ -181,7 +182,8 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
         clickOn("#joinButton");
 
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Validation failed!", lookup("#errorMessage").queryText().getText());
+        assertEquals(this.resources.getString("pirate.enterGame.wrongPassword").replace("{password}", "1"),
+                lookup("#errorMessage").queryText().getText());
 
         // Test inputting the correct password
         clickOn("#passwordInputField");
@@ -215,3 +217,4 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
         verify(this.app, times(1)).show("/browseGames");
     }
 }
+

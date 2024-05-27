@@ -79,8 +79,8 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     BubbleComponent bubbleComponent;
 
     Provider<UserComponent> userComponentProvider = ()->{
-            final UserComponent userComponent = new UserComponent(imageCache);
-            return new UserComponent(imageCache);
+            final UserComponent userComponent = new UserComponent(imageCache, resources);
+            return new UserComponent(imageCache, resources);
         };
 
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
@@ -90,7 +90,6 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     public void start(Stage stage) throws Exception{
         super.start(stage);
 
-        this.lobbyController.resource = this.resources;
         this.lobbyController.bubbleComponent = this.bubbleComponent;
         this.lobbyController.lobbyHostSettingsComponent = this.lobbyHostSettingsComponent;
         this.lobbyController.lobbySettingsComponent = this.lobbySettingsComponent;

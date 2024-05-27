@@ -50,7 +50,7 @@ public class LogoutComponent extends VBox {
     @OnRender
     public void render() {
         logoutWindow.setStyle("-fx-background-color: white;");
-        warningText.setText("You will be logged out.");
+        warningText.setText(resources.getString("you.will.be.logged.out"));
     }
 
     public void logout() {

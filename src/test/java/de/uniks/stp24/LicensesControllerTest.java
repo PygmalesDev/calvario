@@ -48,7 +48,7 @@ public class LicensesControllerTest extends ControllerTest {
 
         //Result:
         //Alice is in the license screen
-        assertEquals("Licenses", stage.getTitle());
+        assertEquals(resources.getString("licenses"), stage.getTitle());
     }
 
 }

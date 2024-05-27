@@ -30,12 +30,11 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-import static de.uniks.stp24.service.Constants.empireTemplates;
+import static de.uniks.stp24.service.Constants.empireTemplatesEnglish;
 import static de.uniks.stp24.service.Constants.empireTemplatesGerman;
 
 @Title("%create.island")
@@ -114,7 +113,7 @@ public class GangCreationController {
     int flagImageIndex = 0;
     int portraitImageIndex = 0;
     int colorIndex = 0;
-    Map<String, String[]> empireConstants;
+    Map<String, String[]> empireTemplates;
 
     private ObservableList<Gang> gangs;
 
@@ -153,6 +152,12 @@ public class GangCreationController {
     public void init(){
         initImages();
         initColors();
+
+        if(prefService.getLocale().equals(Locale.GERMAN)) {
+            empireTemplates = empireTemplatesGerman;
+        }else {
+            empireTemplates = empireTemplatesEnglish;
+        }
 
         gangs = saveLoadService.loadGangs();
     }
@@ -338,27 +343,27 @@ public class GangCreationController {
 
         String name;
         if (!lockName) {
-            nameIndex = rand.nextInt(0, empireConstants.get("Prefix").length);
-            typeIndex = rand.nextInt(0, empireConstants.get("Type").length);
-            name = empireConstants.get("Prefix")[nameIndex]
-                    + " " + empireConstants.get("Type")[typeIndex];
+            nameIndex = rand.nextInt(0, empireTemplates.get("Prefix").length);
+            typeIndex = rand.nextInt(0, empireTemplates.get("Type").length);
+            name = empireTemplates.get("Prefix")[nameIndex]
+                    + " " + empireTemplates.get("Type")[typeIndex];
             String secondName = "";
             if (rand.nextInt(0, 4) == 3)
-                secondName = " " + resource.getString("of") + " " + empireConstants.get("Suffix")[rand.nextInt(0, empireConstants.get("Suffix").length)] +
-                        " " + empireConstants.get("Definition")[rand.nextInt(0, empireConstants.get("Definition").length)];
+                secondName = " " + resource.getString("of") + " " + empireTemplates.get("Suffix")[rand.nextInt(0, empireTemplates.get("Suffix").length)] +
+                        " " + empireTemplates.get("Definition")[rand.nextInt(0, empireTemplates.get("Definition").length)];
             gangNameText.setText(name + secondName);
         } else {
-            name = empireConstants.get("Prefix")[nameIndex]
-                    + " " + empireConstants.get("Type")[typeIndex];
+            name = empireTemplates.get("Prefix")[nameIndex]
+                    + " " + empireTemplates.get("Type")[typeIndex];
         }
 
         if (!lockDescription) {
-            descriptionIndex = rand.nextInt(0, empireConstants.get("Description").length);
-            String description = empireConstants.get("Description")[descriptionIndex]
+            descriptionIndex = rand.nextInt(0, empireTemplates.get("Description").length);
+            String description = empireTemplates.get("Description")[descriptionIndex]
                     .replace("{NAME}", name);
             gangDescriptionText.setText(description);
         } else {
-            String description = empireConstants.get("Description")[descriptionIndex]
+            String description = empireTemplates.get("Description")[descriptionIndex]
                     .replace("{NAME}", name);
             gangDescriptionText.setText(description);
         }

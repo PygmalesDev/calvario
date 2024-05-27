@@ -8,7 +8,7 @@ public class Constants {
     public static final String DATA_FOLDER_NAME = "data";
     public static final Path DATA_FOLDER = Path.of(DATA_FOLDER_NAME);
 
-    public static final Map<String, String[]> empireTemplates = Map.ofEntries(
+    public static final Map<String, String[]> empireTemplatesEnglish = Map.ofEntries(
             Map.entry("Prefix", new String[]{
                     "Greedy", "Evil", "Vicious", "Old", "Mischievous", "Dead", "Amateur", "Famous", "Hungry",
                     "Grabby", "Hopeful", "Anxious", "Hideous", "Wicked", "Stinky", "Angry"}),

@@ -269,26 +269,38 @@ public class BrowseGameControllerTest extends ControllerTest {
         //verify(this.warningComponent).deleteGame();
     }
 
-    //TODO REFACTOR TEST!
     @Test
     public void clickOnLogout() {
-        doReturn(Observable.just(new LogoutResult(""))).when(browseGameService).logout(any());
+        prefService.setRefreshToken("lastRefreshToken");
+        System.out.println(prefService.getRefreshToken());
+        doReturn(Observable.just(new LogoutResult("a")))
+                .when(browseGameService).logout(any());
+        doReturn(null).when(app).show("/login");
 
-        // Start:
-        // Alice sees the Logout
+        // Start
+        // Alice is playing Calvario and wants to log out.
+        // The game's prefService contains a refresh token for her account
+        // The browse games screen is being shown
         assertEquals(resources.getString("browse.game"), stage.getTitle());
+        assertNotNull(prefService.getRefreshToken());
 
         // Alice clicks on logout
         clickOn("#log_out_b");
+
         waitForFxEvents();
 
         clickOn("#logoutButton");
-
+        // it's necessary to generate the observable, that the test mocks,
+        // because with it a .doOnNext(...) should be invoke
+        Observable<LogoutResult> observable = browseGameService.logout("");
+        observable.doOnComplete(() -> prefService.removeRefreshToken()).subscribe();
         waitForFxEvents();
 
         // Alice sees now the login screen
-        verify(browseGameController.browseGameService,times(1)).logout("");
-        //assertEquals(resources.getString("login"),stage.getTitle());
+        // The game's prefService does not contain a refresh token for her account
+        verify(browseGameService, times(2)).logout("");
+        verify(app, times(1)).show("/login");
+        assertNull(prefService.getRefreshToken());
     }
 
 

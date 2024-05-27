@@ -9,7 +9,7 @@
    <ImageView fx:id="flagImage" fitHeight="75.0" fitWidth="75.0" layoutX="150.0" layoutY="38.0" pickOnBounds="true" style="-fx-border-color: BLACK; -fx-border-width: 10;" />
    <ImageView fx:id="portraitImage" fitHeight="150.0" fitWidth="150.0" layoutY="-1.0" pickOnBounds="true" style="-fx-border-color: BLACK; -fx-border-width: 10;" />
    <Pane fx:id="gangColor" layoutX="150.0" layoutY="74.0" prefHeight="75.0" prefWidth="75.0" visible="false" />
-   <Label fx:id="gangNameText" layoutX="238.0" prefHeight="150.0" prefWidth="238.0" styleClass="gangNameLabel" textAlignment="JUSTIFY" wrapText="true">
+   <Label fx:id="gangNameTextComponent" layoutX="238.0" prefHeight="150.0" prefWidth="238.0" styleClass="gangNameLabel" textAlignment="JUSTIFY" wrapText="true">
       <font>
          <Font size="36.0" />
       </font>

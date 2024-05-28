@@ -32,7 +32,7 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Objects;
 
-@Title("Edit Account")
+@Title("%edit.account")
 @Controller
 public class EditAccController extends BasicController {
     @FXML

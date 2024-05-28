@@ -63,6 +63,6 @@ public class TestSignUpNewUser extends ControllerTest {
         verify(this.signUpService, times(1))
                 .register("TemplateUser", "TemplateUserPassword");
         assertEquals(resources.getString("login"), stage.getTitle());
-        assertEquals(resources.getString("account.registered"), "ACCOUNT REGISTERED");
+        assertEquals(resources.getString("account.registered"), "ACCOUNT REGISTERED!");
     }
 }

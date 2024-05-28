@@ -3,6 +3,7 @@ package de.uniks.stp24.component;
 import de.uniks.stp24.model.MemberUser;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.LobbyService;
+import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -34,17 +35,20 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     @Inject
     LobbyService lobbyService;
     @Inject
-    Subscriber subscriber;
+    TokenStorage tokenStorage;
     @Inject
-    @Resource
-    ResourceBundle resource;
+    Subscriber subscriber;
 
+
+    @Resource
+    final ResourceBundle resource;
     private final ImageCache imageCache;
     private MemberUser member;
 
     @Inject
-    public UserComponent(ImageCache imageCache) {
+    public UserComponent(ImageCache imageCache, ResourceBundle resource) {
         this.imageCache = imageCache;
+        this.resource = resource;
     }
 
     public void kickUser() {
@@ -62,13 +66,12 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
 
         this.usernameText.setText(member.user().name());
         if (member.ready())
-            this.readyText.setText("Ready");
+            this.readyText.setText(resource.getString("ready"));
         else
-            this.readyText.setText("Not Ready");
+            this.readyText.setText(resource.getString("not.ready"));
 
-        if (Objects.nonNull(member.user().avatar()))
-            this.avatarImageView.setImage(this.imageCache.get(member.user().avatar()));
-        else
-            this.avatarImageView.setImage(this.imageCache.get("icons/Eye_Icon_32.png"));
+        this.avatarImageView.setImage(this.imageCache.get(Objects.nonNull(this.member.user().avatar())
+                ? this.member.user().avatar()
+                : "test/911.png" ));
     }
 }

@@ -1,6 +1,7 @@
 package de.uniks.stp24.component;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.controllers.LobbyController;
 import de.uniks.stp24.service.JoinGameService;
 import de.uniks.stp24.service.LobbyService;
 import de.uniks.stp24.service.TokenStorage;
@@ -22,7 +23,7 @@ public class EnterGameComponent extends AnchorPane {
     @FXML
     TextField passwordInputField;
     @FXML
-    Text errorMessage;
+    public Text errorMessage;
     @Inject
     App app;
     @Inject
@@ -35,14 +36,8 @@ public class EnterGameComponent extends AnchorPane {
 
     protected String gameID;
 
-    @FXML
-    Text gameNameField;
     public void setGameID(String gameID) {
         this.gameID = gameID;
-    }
-
-    public void setGameName(String gameName) {
-        this.gameNameField.setText(gameName);
     }
 
     @Inject
@@ -54,7 +49,8 @@ public class EnterGameComponent extends AnchorPane {
 
     @OnRender
     public void render() {
-        this.errorMessage.setText("");
+        this.errorMessage.setVisible(false);
+        this.errorMessage.setStyle("-fx-font-size: 0");
     }
 
     public void cancel() {
@@ -66,9 +62,10 @@ public class EnterGameComponent extends AnchorPane {
             this.subscriber.subscribe(this.joinGameService.joinGame(this.gameID,
                             this.tokenStorage.getUserId(), this.getPassword()),
                     result -> {},
-                    error -> this.errorMessage.setText("Validation failed!"));
+                    error -> this.errorMessage.setText(this.resource.getString("pirate.enterGame.wrongPassword")
+                            .replace("{password}", this.getPassword())));
         else
-            this.errorMessage.setText("Please enter password!");
+            this.errorMessage.setText(this.resource.getString("pirate.enterGame.noPassword"));
     }
 
     private String getPassword() {

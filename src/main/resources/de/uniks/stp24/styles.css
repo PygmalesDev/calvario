@@ -1,8 +1,8 @@
 /*++++++++++++++++++++++++++++++++++******************************************************/
 /********* General ***********************************************************************/
-@font-face{
+@font-face {
     font-family: 'PT Serif';
-    src: url('/de/uniks/stp24/assets/fonts/PTSerif-Bold.ttf');
+    src: url("/de/uniks/stp24/assets/fonts/PTSerif-Bold.ttf");
 }
 
 
@@ -13,8 +13,14 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 }
 
 .borderedText {
-    -fx-border-color: #000000;
-    -fx-border-width: 5;
+    -fx-pref-height: 100;
+    -fx-background-size: 100% 100%;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/fields/textField.png");
+}
+
+.gameName {
+    -fx-font-size: 30;
 }
 
 .capitals {
@@ -22,6 +28,11 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-font-size: 24;
     -fx-font-weight: bold;
 }
+
+.gameName {
+
+}
+
 
 /*********************************************************************************************/
 /********* Backgrounds ***********************************************************************/
@@ -267,24 +278,46 @@ ToggleButton:hover{
     -fx-pref-height: 80px;
 }
 
-.chatBubble {
-    /*-fx-background-image: url("de/uniks/stp24/assets/fields/chat_bubble.png");
+.captainPane {
+    -fx-background-image: url("/de/uniks/stp24/assets/fields/chat_bubble.png");
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    /*-fx-background-insets: 0,1;
-    -fx-padding: 30;*/
-    -fx-shape: "M 20 0 H 280 A 20 20 0 0 1 300 20 V 80 A 1000000000 20 0 0 1 280 80 H 40 L -10 100 L 10 80 A 20 20 0 0 1 20 60 Z";
-    -fx-background-color: #FFD966;
-    -fx-background-insets: 0,1;
-    -fx-padding: 30;
+    -fx-background-position: left;
 }
 
 .captainText {
     -fx-font-family: "PT Serif";
     -fx-font-size: 14;
     -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-focus-traversable: false;
+}
+
+.captainText:disabled {
+    -fx-opacity: 1;
+}
+
+.captainText .scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.backgroundTextArea {
+    -fx-font-size: 14;
+    -fx-font-family: "PT Serif";
+
+}
+
+.backgroundTextArea .content{
+    -fx-background-color: #FFD966;
+    -fx-cursor: default;
+}
+
+.backgroundTextArea .scroll-bar:vertical{
+    -fx-background-color: #FFD966;
+}
+
+.captainText .scroll-pane .content{
+    -fx-background-color: transparent;
 }
 
 .inputField {
@@ -300,6 +333,20 @@ ToggleButton:hover{
     -fx-border-width: 0;
     -fx-pref-width: 400px;
     -fx-pref-height: 65px;
+}
+
+.searchField {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 22;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/fields/textField.png");
+    -fx-background-size: 100% 100%;
+    -fx-pref-width: 320px;
+    -fx-pref-height: 80px;
+    -fx-prompt-text-fill: #df0202;
+    -fx-prompt-text-size: 12;
+    -fx-text-fill: #df0202;
 }
 
 .kickUserButton{
@@ -353,34 +400,30 @@ ToggleButton:hover{
     -fx-pref-height: 70;
 }
 
-
-
-
-
-.listBrowseGame .scroll-bar:vertical, .listEnterGame .scroll-bar:vertical{
+.listBrowseGame .scroll-bar:vertical,
+.listEnterGame .scroll-bar:vertical{
     -fx-background-color: transparent;
     -fx-border-width: 1;
 }
 
-.listBrowseGame .virtual-flow .scroll-bar:vertical .thumb, .listEnterGame .virtual-flow .scroll-bar:vertical .thumb{
-    -fx-background-color: #030303;
+.listBrowseGame .virtual-flow .scroll-bar:vertical .thumb {
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/listViewThumb.png");
 }
 
-.listBrowseGame .scroll-bar:vertical .increment-button .increment-arrow, .listBrowseGame .scroll-bar .decrement-button .decrement-arrow, .listEnterGame .scroll-bar .increment-button .increment-arrow, .listEnterGame .scroll-bar .decrement-button .decrement-arrow
+.listEnterGame .virtual-flow .scroll-bar:vertical .thumb,
+.backgroundTextArea .scroll-bar:vertical .thumb {
+    -fx-background-color: black;
+}
+
+.listBrowseGame .scroll-bar:vertical .increment-button .increment-arrow, .listBrowseGame .scroll-bar .decrement-button .decrement-arrow,
+.listEnterGame .scroll-bar .increment-button .increment-arrow, .listEnterGame .scroll-bar .decrement-button .decrement-arrow,
+.backgroundTextArea .scroll-bar:vertical .increment-button .increment-arrow, .backgroundTextArea .decrement-button .decrement-arrow
 {
     -fx-background-color: transparent;
     -fx-background-image: none;
 }
-
-/*.listBrowseGame .scroll-bar .spinner .increment-arrow, .listBrowseGame .scroll-bar .spinner .decrement-arrow{
-    -fx-background-color: transparent;
-    -fx-body-color: transparent;
-    -fx-background-image: none;
-}*/
-
-
-
-
 
 .listHeader{
     -fx-background-color: transparent;
@@ -537,7 +580,4 @@ ToggleButton:hover{
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
 }
 
-.backgroundTextArea .content{
-    -fx-background-color: #FFD966;
-}
 

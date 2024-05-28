@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -104,6 +105,7 @@
                            </HBox.margin>
                         </Text>
                      </HBox>
+                     <TextField fx:id="searchLine" alignment="CENTER" layoutX="81.0" layoutY="436.0" prefHeight="30.0" prefWidth="160.0" promptText="%search.game" styleClass="searchField" />
                   </AnchorPane>
                </HBox>
                <StackPane fx:id="warningWindowContainer" alignment="BOTTOM_CENTER" prefHeight="400.0" prefWidth="450.0" visible="false" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="70.0" />

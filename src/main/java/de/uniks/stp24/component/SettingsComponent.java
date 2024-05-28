@@ -10,12 +10,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
-import org.fulib.fx.annotation.event.OnRender;
-
 import javax.inject.Inject;
-import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.prefs.Preferences;
 
 @Component(view = "Settings.fxml")
 public class SettingsComponent extends VBox {
@@ -40,12 +36,10 @@ public class SettingsComponent extends VBox {
     @Resource
     ResourceBundle resources;
 
-
     @Inject
     public SettingsComponent() {
 
     }
-
 
     public void back() {
         inGameService.setShowSettings(false);

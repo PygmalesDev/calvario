@@ -3,7 +3,6 @@ package de.uniks.stp24.component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
 import de.uniks.stp24.service.BrowseGameService;
-import de.uniks.stp24.service.ErrorService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
@@ -15,10 +14,7 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
-
-import javax.inject.Inject;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 
 @Component(view = "Warning.fxml")
 public class WarningComponent extends VBox {
@@ -44,8 +40,6 @@ public class WarningComponent extends VBox {
     ResourceBundle resources;
 
     String gameNameText;
-    @Inject
-    ErrorService errorService;
 
     @Inject
     public WarningComponent() {
@@ -61,21 +55,17 @@ public class WarningComponent extends VBox {
         gameName.setText(gameNameText);
     }
 
-    StackPane changableView;
+    StackPane changeableView;
     public void setView(StackPane view) {
-        this.changableView = view;
+        this.changeableView = view;
     }
 
-    //TODO: WHAT SHOULD HAPPEN WITH ERROR?
-    // Map it back to browse games?
-    // Pygmales: There should not be any errors!
     public void deleteGame() {
         this.subscriber.subscribe(browseGameService.deleteGame(),
           result -> {
-            changableView.setVisible(false);
+            changeableView.setVisible(false);
             browseGameService.handleGameSelection(null);
-            },
-                error -> errorService.getMessage(error));
+            });
           setVisible(false);
     }
 
@@ -89,7 +79,6 @@ public class WarningComponent extends VBox {
     public void onCancel() {
         this.getParent().setVisible(false);
     }
-
 
 }
 

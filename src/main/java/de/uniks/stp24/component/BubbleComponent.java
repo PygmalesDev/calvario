@@ -8,11 +8,7 @@ import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
-
-
 import javax.inject.Inject;
-
-
 import static java.lang.Math.ceil;
 import static javafx.scene.paint.Color.BLACK;
 

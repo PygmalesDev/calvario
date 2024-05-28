@@ -2,7 +2,6 @@ package de.uniks.stp24.service;
 
 import de.uniks.stp24.dto.JoinGameDto;
 import de.uniks.stp24.dto.MemberDto;
-import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.rest.GameMembersApiService;
 import io.reactivex.rxjava3.core.Observable;
 

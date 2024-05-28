@@ -5,6 +5,8 @@ import de.uniks.stp24.service.*;
 import de.uniks.stp24.utils.ResponseConstants;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.controller.Subscriber;
+import org.jetbrains.annotations.NotNull;
+
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -41,7 +43,7 @@ public class BasicController {
     public BasicController() {}
 
     // check if one or more string aren't empty or blank
-    public boolean checkIt(String ... texts) {
+    public boolean checkIt(String @NotNull ... texts) {
         if (texts.length == 0) return false;
         boolean cond = true;
         for (String str : texts) {
@@ -50,7 +52,7 @@ public class BasicController {
         return cond;
     }
 
-    private boolean checkIfInputNotBlankOrEmpty(String text) {
+    private boolean checkIfInputNotBlankOrEmpty(@NotNull String text) {
         return (!text.isBlank() && !text.isEmpty());
     }
 

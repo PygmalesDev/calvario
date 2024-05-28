@@ -102,7 +102,6 @@ BrowseGameController extends BasicController {
     @Inject
     CreateGameService createGameService;
     PopupBuilder popup = new PopupBuilder();
-    PopupBuilder popupLogout = new PopupBuilder();
 
     @Inject
     public BrowseGameController(){
@@ -152,7 +151,6 @@ BrowseGameController extends BasicController {
                   createGameService.setGamesList(games);
                   this.sortNewGamesOnTop();
               }),
-//          error -> this.textInfo.setText(getErrorInfoText(error))
           error -> {
             bubbleComponent.setErrorMode(true);
             bubbleComponent.setCaptainText(getErrorInfoText(error));

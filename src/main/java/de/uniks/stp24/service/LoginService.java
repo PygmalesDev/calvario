@@ -42,7 +42,6 @@ public class LoginService {
         }
     }
 
-
     public Observable<LoginResult> login(String username, String password, boolean rememberMe) {
         return authApiService
                 .login(new LoginDto(username, password))

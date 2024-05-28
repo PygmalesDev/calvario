@@ -29,7 +29,6 @@ public class SaveLoadService {
             }
             this.objectMapper.writeValue(Paths.get(fileName).toFile(), gang);
         } catch (IOException e) {
-            // TODO handle
             throw new RuntimeException(e);
         }
     }
@@ -40,7 +39,7 @@ public class SaveLoadService {
             try {
                 gangs = FXCollections.observableArrayList(Arrays.asList(objectMapper.readValue(Paths.get(fileName).toFile(), Gang[].class)));
             } catch (IOException e) {
-                System.out.println(e);
+                System.out.println(e.getMessage());
                 return gangs;
             }
         }

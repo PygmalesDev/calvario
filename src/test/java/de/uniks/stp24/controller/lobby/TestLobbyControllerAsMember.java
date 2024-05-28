@@ -65,10 +65,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
 
-    Provider<UserComponent> userComponentProvider = ()->{
-        final UserComponent userComponent = new UserComponent(imageCache, resources);
-        return new UserComponent(imageCache, resources);
-    };
+    Provider<UserComponent> userComponentProvider = ()-> new UserComponent(imageCache, resources);
 
     @InjectMocks
     UserComponent userComponent;

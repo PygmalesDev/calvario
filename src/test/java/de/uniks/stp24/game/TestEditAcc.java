@@ -179,7 +179,12 @@ public class TestEditAcc extends ControllerTest {
     @Test
     void deleteAccountTest(){
         // Title: Confirm after clicking delete account button
-        doReturn(Observable.just(new User("1", "a","b","c","d")) ).when(this.editAccService).deleteUser();
+        doAnswer(show -> { tokenStorage.setName(null);
+            tokenStorage.setAvatar(null);
+            prefService.removeRefreshToken();
+            return Observable.just(new User("1", "a","b","c","d"));
+        }).when(this.editAccService).deleteUser();
+
         // Start:
         // Alice wants to delete her account in STPellaris. She is in the user administration window. She clicked the delete user button and a pop up came up.
         tokenStorage.setName("Alice");
@@ -190,19 +195,12 @@ public class TestEditAcc extends ControllerTest {
         // She clicks confrim.
         Button deleteAccButton = lookup("#deleteAccButton").queryButton();
         clickOn("#deleteAccButton");
-        Observable<User> observable = editAccService.deleteUser();
-        observable.doOnComplete(() -> {
-            tokenStorage.setName(null);
-            tokenStorage.setAvatar(null);
-            prefService.removeRefreshToken();
-        app.show("/login");}).subscribe();
         waitForFxEvents();
 
         // Result:
         // The pop up disappeared. Alice is now in the log in window again.
-        verify(app, times(1)).show("/login");
         assertNull(tokenStorage.getName());
-        //assertEquals("Login", stage.getTitle());
+        assertEquals(resources.getString("login"), stage.getTitle());
     }
 
 

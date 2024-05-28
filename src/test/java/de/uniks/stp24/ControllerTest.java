@@ -61,8 +61,4 @@ public class ControllerTest extends ApplicationTest {
     public void tearDown2() {
         System.gc();
     }
-
-    /*public void clear() {
-        imageCache.clear();
-    }*/
 }

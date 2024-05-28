@@ -76,11 +76,7 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
     @InjectMocks
     BubbleComponent bubbleComponent;
 
-    Provider<UserComponent> userComponentProvider = ()->{
-        final UserComponent userComponent = new UserComponent(imageCache, resources);
-        return new UserComponent(imageCache, resources);
-    };
-
+    Provider<UserComponent> userComponentProvider = ()-> new UserComponent(imageCache, resources);
 
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();

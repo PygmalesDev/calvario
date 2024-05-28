@@ -1,5 +1,6 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.BrowseGameService;
@@ -12,15 +13,19 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.annotation.event.OnInit;
+import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 
-@Title("Edit Game")
+@Title("%edit.game")
 @Controller
 public class EditGameController extends BasicController {
     @FXML
@@ -51,13 +56,18 @@ public class EditGameController extends BasicController {
     BrowseGameService browseGameService;
     @Inject
     BrowseGameController browseGameController;
+    @Inject
+    @SubComponent
+    BubbleComponent bubbleComponent;
+    @FXML
+    Pane captainContainer;
 
     @Inject
     EditGameService editGameService;
     @Inject
     public EditGameController() {
     }
-    @FXML
+    @OnRender
     public void initialize() {
         editGameService.setEditGameController(this);
         initializeSpinner();
@@ -66,9 +76,16 @@ public class EditGameController extends BasicController {
         this.controlResponses = responseConstants.respEditGame;
     }
 
+    @OnRender
+    public void setCaptain() {
+        this.captainContainer.getChildren().add(this.bubbleComponent);
+        this.bubbleComponent.setCaptainText("");
+    }
+
     public void initializeSpinner(){
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(100, 1000);
         valueFactory.setValue(100);
+        editMapSizeSpinner.setEditable(true);
         editMapSizeSpinner.setValueFactory(valueFactory);
     }
 
@@ -76,7 +93,8 @@ public class EditGameController extends BasicController {
     // now use subscriber
 
     public void editGame() {
-        initializeSpinner();
+        this.bubbleComponent.setErrorMode(false);
+
         GameSettings settings = new GameSettings(this.editMapSizeSpinner.getValue());
         String gameName = this.editNameTextField.getText();
         String password = this.editPasswordTextField.getText();
@@ -86,18 +104,20 @@ public class EditGameController extends BasicController {
           editGameService.nameIsAvailable(gameName)) {
             subscriber.subscribe(editGameService.editGame(gameName, settings, password),
               result -> {
-                Platform.runLater(() -> {
                     browseGameController.init();
                     app.show(browseGameController);
-                });},
+                    },
               error -> {
                   int code = errorService.getStatus(error);
-                  errorMessageTextEdit.setText(getErrorInfoText(code));
+                  this.bubbleComponent.setErrorMode(true);
+                  this.bubbleComponent.setCaptainText(getErrorInfoText(code));
               });
         } else if(!editGameService.nameIsAvailable(gameName)) {
-            errorMessageTextEdit.setText(getErrorInfoText(409));
+            this.bubbleComponent.setErrorMode(true);
+           this.bubbleComponent.setCaptainText(getErrorInfoText(409));
         } else {
-            errorMessageTextEdit.setText(getErrorInfoText(!pwdMatch ? -2 : -1));
+            this.bubbleComponent.setErrorMode(true);
+            this.bubbleComponent.setCaptainText(getErrorInfoText(!pwdMatch ? -2 : -1));
         }
     }
     public void cancel(){

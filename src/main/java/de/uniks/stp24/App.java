@@ -60,7 +60,7 @@ public class App extends FulibFxApp {
             setTaskbarIcon();
 
             //autoRefresher().setup(Path.of("src/main/resources/de/uniks/stp24"));
-            //show("/login");
+            //show("/ingame");
             Locale.setDefault(Locale.ENGLISH);
             // open normal load screen or autoLogin screen depending on the preferences of the user
 

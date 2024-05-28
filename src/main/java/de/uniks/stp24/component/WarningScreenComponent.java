@@ -17,6 +17,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.function.Function;
 
 
 @Component(view = "WarningScreen.fxml")

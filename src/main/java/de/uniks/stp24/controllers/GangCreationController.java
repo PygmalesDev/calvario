@@ -7,6 +7,7 @@ import de.uniks.stp24.component.GangComponent;
 import de.uniks.stp24.model.GangElement;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.LobbyService;
+import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.SaveLoadService;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.collections.FXCollections;
@@ -33,9 +34,10 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.*;
 
-import static de.uniks.stp24.service.Constants.empireTemplates;
+import static de.uniks.stp24.service.Constants.empireTemplatesEnglish;
+import static de.uniks.stp24.service.Constants.empireTemplatesGerman;
 
-@Title("Gang Creation")
+@Title("%create.island")
 @Controller
 public class GangCreationController {
     @Inject
@@ -50,6 +52,8 @@ public class GangCreationController {
     Subscriber subscriber;
     @Inject
     TokenStorage tokenStorage;
+    @Inject
+    PrefService prefService;
 
     @Inject
     public Provider<GangComponent> gangComponentProvider;
@@ -62,6 +66,7 @@ public class GangCreationController {
     @Inject
     @Resource
     ResourceBundle resource;
+
 
     @FXML
     ListView<GangElement> gangsListView;
@@ -113,6 +118,7 @@ public class GangCreationController {
     int flagImageIndex = 0;
     int portraitImageIndex = 0;
     int colorIndex = 0;
+    Map<String, String[]> empireTemplates;
 
     // unused FX IDs (declared here to remove warnings from fxml file)
     @FXML
@@ -337,7 +343,7 @@ public class GangCreationController {
                     + " " + empireTemplates.get("Type")[typeIndex];
             String secondName = "";
             if (rand.nextInt(0, 4) == 3)
-                secondName = " of " + empireTemplates.get("Suffix")[rand.nextInt(0, empireTemplates.get("Suffix").length)] +
+                secondName = " " + resource.getString("of") + " " + empireTemplates.get("Suffix")[rand.nextInt(0, empireTemplates.get("Suffix").length)] +
                         " " + empireTemplates.get("Definition")[rand.nextInt(0, empireTemplates.get("Definition").length)];
             gangNameText.setText(name + secondName);
         } else {

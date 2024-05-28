@@ -15,7 +15,7 @@ import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 
-@Title("Licenses")
+@Title("%licenses")
 @Controller
 public class LicensesController extends BasicController {
 

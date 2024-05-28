@@ -132,11 +132,8 @@ public class LoginController extends BasicController {
                     // in case of server's response => error
                     // handle with error response
                     , error -> {
-                        // find the code in the error response
-                        int code = errorService.getStatus(error);
-                        // "generate"" the output in the english/german
                         bubbleComponent.setErrorMode(true);
-                        this.bubbleComponent.setCaptainText(getErrorInfoText(code));
+                        this.bubbleComponent.setCaptainText(getErrorInfoText(error));
                         enableButtons();
                     });
         } else {

@@ -19,7 +19,6 @@ import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
-
 import javax.inject.Inject;
 
 @Title("%create.game")
@@ -100,9 +99,8 @@ public class CreateGameController extends BasicController {
                       app.show(browseGameController);
               },
               error -> {
-                  int code = errorService.getStatus(error);
                   this.bubbleComponent.setErrorMode(true);
-                  this.bubbleComponent.setCaptainText(getErrorInfoText(code));
+                  this.bubbleComponent.setCaptainText(getErrorInfoText(error));
               });
 
         } else if (!createGameService.nameIsAvailable(gameName)) {
@@ -119,8 +117,8 @@ public class CreateGameController extends BasicController {
         app.show("/browseGames");
     }
 
-    public void showError(int code) {
-        errorMessageText.setText(getErrorInfoText(code));
+    public void showError(Throwable error) {
+        errorMessageText.setText(getErrorInfoText(error));
     }
 
     public void setCreateGameService(CreateGameService createGameService) {

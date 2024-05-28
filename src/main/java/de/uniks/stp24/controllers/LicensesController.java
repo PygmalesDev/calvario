@@ -12,7 +12,6 @@ import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
-
 import javax.inject.Inject;
 
 @Title("%licenses")
@@ -25,7 +24,6 @@ public class LicensesController extends BasicController {
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
-
     @FXML
     Pane captainContainer;
 
@@ -36,9 +34,9 @@ public class LicensesController extends BasicController {
     @OnRender
     public void addSpeechBubble() {
         captainContainer.getChildren().add(bubbleComponent);
-        Platform.runLater(() -> {
-            bubbleComponent.setCaptainText(resources.getString("pirate.licenses"));
-        });
+        Platform.runLater(() -> bubbleComponent
+          .setCaptainText(resources.getString("pirate.licenses"))
+        );
     }
 
     @Inject

@@ -5,7 +5,6 @@ import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.component.GangComponent;
 import de.uniks.stp24.service.LobbyService;
 import de.uniks.stp24.service.SaveLoadService;
-import de.uniks.stp24.service.TokenStorage;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -38,8 +37,6 @@ public class GangCreationController extends BasicController {
     SaveLoadService saveLoadService;
     @Inject
     LobbyService lobbyService;
-    @Inject
-    TokenStorage tokenStorage;
     @Inject
     public Provider<GangComponent> gangComponentProvider;
     @FXML
@@ -201,7 +198,8 @@ public class GangCreationController extends BasicController {
 
     public void back() {
         Gang gang = this.gangsListView.getSelectionModel().getSelectedItem();
-        this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
+        this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
+          result -> {
             Empire empire = null;
 
             if (Objects.nonNull(gang)) empire = new Empire(gang.name(), gang.description(), gang.color(),
@@ -212,10 +210,8 @@ public class GangCreationController extends BasicController {
                     this.gameID, this.tokenStorage.getUserId(),result.ready(), empire), result2 ->
                         app.show("/lobby", Map.of("gameid", this.gameID)));
         },
-          error -> {
-            int code = errorService.getStatus(error);
-          this.textInfo.setText(getErrorInfoText(code));
-        });
+          error -> this.textInfo.setText(getErrorInfoText(error))
+        );
 
     }
 
@@ -380,7 +376,5 @@ public class GangCreationController extends BasicController {
     public void destroy() {
         flagImage = null;
         portraitImage = null;
-        //portraitsList = null;
-        //flagsList = null;
     }
 }

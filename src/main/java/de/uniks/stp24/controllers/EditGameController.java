@@ -20,7 +20,6 @@ import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
-
 import javax.inject.Inject;
 
 @Title("%edit.game")
@@ -91,7 +90,6 @@ public class EditGameController extends BasicController {
 
     public void editGame() {
         this.bubbleComponent.setErrorMode(false);
-
         GameSettings settings = new GameSettings(this.editMapSizeSpinner.getValue());
         String gameName = this.editNameTextField.getText();
         String password = this.editPasswordTextField.getText();
@@ -105,9 +103,8 @@ public class EditGameController extends BasicController {
                       app.show(browseGameController);
                   },
                    error -> {
-                      int code = errorService.getStatus(error);
                       this.bubbleComponent.setErrorMode(true);
-                      this.bubbleComponent.setCaptainText(getErrorInfoText(code));
+                      this.bubbleComponent.setCaptainText(getErrorInfoText(error));
 });
         } else if(!editGameService.nameIsAvailable(gameName)) {
             this.bubbleComponent.setErrorMode(true);

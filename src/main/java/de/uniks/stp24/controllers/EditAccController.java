@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.service.EditAccService;
-import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PopupBuilder;
-import de.uniks.stp24.service.TokenStorage;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -65,10 +63,6 @@ public class EditAccController extends BasicController {
     @Inject
     EditAccService editAccService;
     @Inject
-    TokenStorage tokenStorage;
-    @Inject
-    ImageCache imageCache;
-    @Inject
     ObjectMapper objectMapper;
     @Inject
     PopupBuilder popupBuilder;
@@ -93,9 +87,9 @@ public class EditAccController extends BasicController {
     @OnRender
     public void addSpeechBubble() {
         captainContainer.getChildren().add(bubbleComponent);
-        Platform.runLater(() -> {
-            bubbleComponent.setCaptainText(resources.getString("pirate.editAcc.go.into.hiding"));
-        });
+        Platform.runLater(() -> bubbleComponent
+            .setCaptainText(resources.getString("pirate.editAcc.go.into.hiding"))
+        );
     }
 
     @OnInit
@@ -104,6 +98,7 @@ public class EditAccController extends BasicController {
         editIconBlackImage = imageCache.get("icons/editBlack.png");
         deleteIconRedImage = imageCache.get("icons/deleteRed.png");
         deleteIconBlackImage = imageCache.get("icons/deleteBlack.png");
+        this.controlResponses = responseConstants.respEditAcc;
     }
 
     @OnRender
@@ -141,7 +136,6 @@ public class EditAccController extends BasicController {
         this.deleteUserButton.disableProperty()
                 .bind(Bindings.createBooleanBinding(()-> !editAccIsNotSelected.get(),
                         this.editAccIsNotSelected));
-
         this.goBackButton.disableProperty()
                 .bind(Bindings.createBooleanBinding(()-> !editAccIsNotSelected.get(),
                         this.editAccIsNotSelected));
@@ -174,13 +168,10 @@ public class EditAccController extends BasicController {
                     }
                     // in case of server's response => error
                     // handle with error response
-                    , error -> {
-                        // find the code in the error response
-                        int code = errorService.getStatus(error);
-                        // "generate"" the output in the english/german
+                    , error ->
                         this.errorLabelEditAcc
-                                .setText(getErrorInfoText(code));
-                    });
+                                .setText(getErrorInfoText(error))
+                    );
         } else {
             this.errorLabelEditAcc.setText(getErrorInfoText(passwordInput.getLength() > 8 ? -1 : -2 ));
         }

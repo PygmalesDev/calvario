@@ -37,8 +37,6 @@ import java.util.ResourceBundle;
 public class LobbyController extends BasicController {
 
     @Inject
-    ImageCache imageCache;
-    @Inject
     TokenStorage tokenStorage;
     @Inject
     UserApiService userApiService;
@@ -125,10 +123,8 @@ public class LobbyController extends BasicController {
                 this.bubbleComponent.setCaptainText(newValue);
             }));
             this.gameNameField.setText(this.game.name());
-
             this.createUserListListener();
             this.createGameDeletedListener();
-
             this.lobbyService.loadPlayers(this.gameID).subscribe(dto -> {
                 Arrays.stream(dto).forEach(data -> {
                     this.addUserToList(data.user(), data);
@@ -163,16 +159,14 @@ public class LobbyController extends BasicController {
      */
     private void createGameDeletedListener() {
         this.subscriber.subscribe(this.eventListener
-                .listen("games." + this.gameID + ".deleted", Game.class), event -> {
+                .listen("games." + this.gameID + ".deleted", Game.class),
+          event -> {
             this.lobbyMessagePane.setVisible(true);
             this.lobbyMessageElement.setVisible(true);
             this.messageText.setText(resources.getString("lobby.has.been.deleted"));
         },
-          error -> {
-            int code = errorService.getStatus(error);
-              this.enterGameComponent
-                .errorMessage.textProperty().set(getErrorInfoText(code));
-        });
+          error -> this.enterGameComponent
+            .errorMessage.textProperty().set(getErrorInfoText(error)));
     }
 
     /**
@@ -180,7 +174,8 @@ public class LobbyController extends BasicController {
      */
     private void createUserListListener() {
         this.subscriber.subscribe(this.eventListener
-                .listen("games." + this.gameID + ".members.*.*", MemberDto.class), event -> {
+                .listen("games." + this.gameID + ".members.*.*", MemberDto.class),
+          event -> {
             String id = event.data().user();
             switch (event.suffix()) {
                 case "created" -> {
@@ -197,11 +192,9 @@ public class LobbyController extends BasicController {
             }
             this.sortMemberList();
         },
-          error -> {
-              int code = errorService.getStatus(error);
-              this.enterGameComponent
-                .errorMessage.textProperty().set(getErrorInfoText(code));
-          });
+          error -> this.enterGameComponent
+                .errorMessage.textProperty().set(getErrorInfoText(error))
+          );
     }
 
     /**
@@ -211,7 +204,6 @@ public class LobbyController extends BasicController {
     void render() {
         this.lobbyMessagePane.setVisible(false);
         this.lobbyMessageElement.setVisible(false);
-
         this.playerListView.setItems(this.users);
         this.captainContainer.getChildren().add(this.bubbleComponent);
         this.playerListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.userComponentProvider));
@@ -309,11 +301,8 @@ public class LobbyController extends BasicController {
                 this.lobbyElement.getChildren().add(this.enterGameComponent);
             }
         },
-        error -> {
-            int code = errorService.getStatus(error);
-            this.enterGameComponent
-              .errorMessage.textProperty().set(getErrorInfoText(code));
-        });
+        error -> this.enterGameComponent
+          .errorMessage.textProperty().set(getErrorInfoText(error)));
     }
 
     /**

@@ -182,26 +182,21 @@ public class SignUpController extends BasicController {
                                     "info", "registered"
                             )),
                     error -> {
-                        int code = errorService.getStatus(error);
-                        // "generate"" the output in the english/german
-                        // due binding, the TextField was not accessible here -> modified
                         bubbleComponent.setErrorMode(true);
-                        this.bubbleComponent.setCaptainText(getErrorInfoText(code));
+                        this.bubbleComponent.setCaptainText(getErrorInfoText(error));
                     });
             } else {
-            int code = this.passwordInputsMatch.not().getValue() ? -2 : -1;
             bubbleComponent.setErrorMode(true);
-            this.bubbleComponent.setCaptainText(getErrorInfoText(code));
+            this.bubbleComponent
+              .setCaptainText(getErrorInfoText(this.passwordInputsMatch.not().getValue() ? -2 : -1));
         }
     }
 
     // Returns user to the login screen
     public void goBack() {
-        String info = bubbleComponent.getErrorMode() ? "error" : "hello";
         app.show("/login",
                 Map.of("username", this.getUsername(),
-                        "password", this.getPassword(),
-                  "info", info
+                        "password", this.getPassword()
         ));
     }
 

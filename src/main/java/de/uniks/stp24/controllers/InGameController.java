@@ -14,7 +14,6 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
-
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -33,7 +32,7 @@ public class InGameController extends BasicController {
     @Inject
     InGameService inGameService;
 
-    private List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
+    private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
     @Inject
     public InGameController() {

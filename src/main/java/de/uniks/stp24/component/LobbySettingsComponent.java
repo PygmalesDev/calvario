@@ -25,8 +25,6 @@ import java.util.ResourceBundle;
 @Component(view = "LobbySettings.fxml")
 public class LobbySettingsComponent extends AnchorPane {
     @FXML
-    Text gameNameField;
-    @FXML
     ImageView readyIconImageView;
     @Inject
     Subscriber subscriber;
@@ -74,10 +72,6 @@ public class LobbySettingsComponent extends AnchorPane {
     public void selectEmpire() {
         this.app.show("/creation", Map.of("gameid", this.gameID));
     }
-    public void setGameName(String gameName) {
-        this.gameNameField.setText(gameName);
-    }
-
     public void setGameID(String gameID) {
         this.gameID = gameID;
     }

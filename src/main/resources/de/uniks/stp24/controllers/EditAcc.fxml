@@ -19,7 +19,7 @@
    <HBox alignment="CENTER" layoutY="-6.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="630.0" prefWidth="800.0">
          <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="40.0" prefWidth="800.0" style="-fx-background-color: Black;">
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="%calvario.userAdministration">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="%calvario.editAcc">
                <font>
                   <Font size="16.0" />
                </font>
@@ -59,7 +59,7 @@
                                  <Font size="15.0" />
                               </font>
                               <graphic>
-                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                        <Image url="@../icons/downWhite.png" />
                                     </image>
@@ -71,7 +71,7 @@
                                  <Font size="15.0" />
                               </font>
                               <graphic>
-                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                        <Image url="@../icons/cancelWhite.png" />
                                     </image>

@@ -30,7 +30,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-@Title("REGISTER")
+@Title("%register")
 @Controller
 public class SignUpController extends BasicController {
   
@@ -102,13 +102,6 @@ public class SignUpController extends BasicController {
     @OnRender
     public void addSpeechBubble() {
         captainContainer.getChildren().add(bubbleComponent);
-        Platform.runLater(() -> {
-            bubbleComponent.addChildren(errorTextField);
-            bubbleComponent.setCaptainText("");
-            if (!errorTextField.getText().equals("")) {
-                bubbleComponent.setCaptainText("");
-            }
-        });
     }
 
     // Sets boolean bindings for text manipulations
@@ -142,25 +135,24 @@ public class SignUpController extends BasicController {
     @OnRender
     public void showErrorMessage() {
         this.errorTextField.textProperty().bind(Bindings.createStringBinding(() -> {
-                    if (this.isLoginFieldEmpty.get())
-                        return resources.getString("pirate.register.tell.name");
+            this.bubbleComponent.captainText.setText("");
+            this.bubbleComponent.setErrorMode(true);
+            if (this.isLoginFieldEmpty.get())
+                this.bubbleComponent.setCaptainText(resources.getString("pirate.register.tell.name"));
+            else if (this.isPasswordFieldEmpty.get())
+                this.bubbleComponent.setCaptainText(resources.getString("pirate.general.enter.password"));
+            else if (this.isPasswordTooShort.get() && !this.isPasswordFieldEmpty.get())
+                this.bubbleComponent.setCaptainText(resources.getString("pirate.register.8characters"));
+            else if (this.isRepeatPasswordEmpty.get() && !this.isPasswordFieldEmpty.get())
+                this.bubbleComponent.setCaptainText(resources.getString("pirate.general.repeat.password"));
+            else if (!this.passwordInputsMatch.get() && !this.isPasswordFieldEmpty.get() && !this.isPasswordFieldEmpty.get())
+                this.bubbleComponent.setCaptainText(resources.getString("pirate.register.passwords.dont.match"));
+            else {
+                this.bubbleComponent.setErrorMode(false);
+                this.bubbleComponent.setCaptainText(resources.getString("pirate.register.possible"));
+            }
 
-                    if (this.isPasswordFieldEmpty.get())
-                        return resources.getString("pirate.general.enter.password");
-
-                    if (this.isPasswordTooShort.get() && !this.isPasswordFieldEmpty.get())
-                        return resources.getString("pirate.register.8characters");
-
-                    if (this.isRepeatPasswordEmpty.get() && !this.isPasswordFieldEmpty.get())
-                        return resources.getString("pirate.general.repeat.password");
-
-                    if (!this.passwordInputsMatch.get() && !this.isPasswordFieldEmpty.get() &&
-                      !this.isPasswordFieldEmpty.get())
-                        return resources.getString("pirate.register.passwords.dont.match");
-
-                    if(!this.mirrorChangeText.get())
-                        return lastMsg;
-              return resources.getString("pirate.register.possible");
+            return "";
           }, this.isLoginFieldEmpty, this.isPasswordFieldEmpty,
                 this.isRepeatPasswordEmpty, this.passwordInputsMatch,
                 this.isPasswordTooShort, this.mirrorChangeText));
@@ -179,13 +171,11 @@ public class SignUpController extends BasicController {
     }
 
     public void register() {
-        if (checkIt(this.usernameField.getText(),
-                this.passwordField.getText(),
-                this.repeatPasswordField.getText()) &&
-                this.passwordInputsMatch.getValue()) {
-                this.mirrorText
-                            .setText(getErrorInfoText(201));
-                bubbleComponent.setErrorMode(false);
+        if (checkIt(this.usernameField.getText(), this.passwordField.getText(),
+                this.repeatPasswordField.getText()) && this.passwordInputsMatch.getValue()) {
+
+            bubbleComponent.setErrorMode(false);
+            this.bubbleComponent.setCaptainText(getErrorInfoText(201));
 
             this.subscriber.subscribe(this.signUpService.register(this.getUsername(), this.getPassword()),
                     result -> this.app.show("/login",
@@ -196,17 +186,15 @@ public class SignUpController extends BasicController {
                             )),
                     error -> {
                         int code = errorService.getStatus(error);
-                    // "generate"" the output in the english/german
-                    // due binding, the TextField was not accessible here -> modified
-                        lastMsg = getErrorInfoText(code);
-                        mirrorText.setText(lastMsg);
+                        // "generate"" the output in the english/german
+                        // due binding, the TextField was not accessible here -> modified
                         bubbleComponent.setErrorMode(true);
+                        this.bubbleComponent.setCaptainText(getErrorInfoText(code));
                     });
             } else {
             int code = this.passwordInputsMatch.not().getValue() ? -2 : -1;
-            lastMsg = getErrorInfoText(code);
-            mirrorText.setText(lastMsg);
             bubbleComponent.setErrorMode(true);
+            this.bubbleComponent.setCaptainText(getErrorInfoText(code));
         }
     }
 

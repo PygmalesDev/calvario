@@ -49,16 +49,6 @@ public class BrowseGameService {
         this.game = game;
     }
 
-    //Sort list of games in ListView. Recent games on top of the list.
-    public ObservableList<Game> sortGames(List<Game> games) {
-        ObservableList<Game> sortedGames = FXCollections.observableArrayList();
-        for (int i = games.size() - 1; i >= 0; i--) {
-            sortedGames.add(games.get(i));
-        }
-
-        return sortedGames;
-    }
-
     //Check if selected game is yours
     public boolean checkMyGame(){
         if(game != null) {

@@ -1,3 +1,4 @@
+
 package de.uniks.stp24.controller.lobby;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -65,8 +66,8 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
 
     Provider<UserComponent> userComponentProvider = ()->{
-        final UserComponent userComponent = new UserComponent(imageCache);
-        return new UserComponent(imageCache);
+        final UserComponent userComponent = new UserComponent(imageCache, resources);
+        return new UserComponent(imageCache, resources);
     };
 
     @InjectMocks
@@ -89,7 +90,6 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     public void start(Stage stage) throws Exception{
         super.start(stage);
 
-        this.lobbyController.resource = this.resources;
         this.lobbyController.bubbleComponent = this.bubbleComponent;
         this.lobbyController.lobbyHostSettingsComponent = this.lobbyHostSettingsComponent;
         this.lobbyController.lobbySettingsComponent = this.lobbySettingsComponent;
@@ -299,3 +299,4 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         verify(this.app, times(1)).show("/browseGames");
     }
 }
+

@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Module;
 import dagger.Provides;
 import de.uniks.stp24.Main;
-import de.uniks.stp24.rest.AuthApiService;
-import de.uniks.stp24.rest.GameMembersApiService;
-import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.rest.UserApiService;
+import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.TokenStorage;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -67,6 +64,7 @@ public class HttpModule {
     AuthApiService authApiService(Retrofit retrofit) {
         return retrofit.create(AuthApiService.class);
     }
+
     @Provides
     @Singleton
     GamesApiService gamesApiService(Retrofit retrofit) {
@@ -77,6 +75,12 @@ public class HttpModule {
     @Singleton
     UserApiService userApiService(Retrofit retrofit) {
         return retrofit.create(UserApiService.class);
+    }
+
+    @Provides
+    @Singleton
+    EmpireApiService empireApiService(Retrofit retrofit) {
+        return retrofit.create(EmpireApiService.class);
     }
 
 }

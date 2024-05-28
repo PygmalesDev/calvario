@@ -48,38 +48,34 @@
                      <Insets right="10.0" />
                   </padding></Spinner>
                <HBox alignment="CENTER">
-                  <children>
-                     <VBox alignment="CENTER">
-                        <children>
-                           <Button fx:id="editGameConfirmButton" mnemonicParsing="false" onAction="#editGame" prefHeight="45.0" prefWidth="250.0" styleClass="actionButton" text="%confirm">
-                              <graphic>
-                                 <ImageView fx:id="editIconImageView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                       <Image url="@../icons/confirm.png" />
-                                    </image>
-                                 </ImageView>
-                              </graphic>
-                           </Button>
-                           <Button fx:id="editGameCancelButton" mnemonicParsing="false" onAction="#cancel" prefHeight="45.0" prefWidth="250.0" styleClass="actionButton" text="%cancel">
-                              <graphic>
-                                 <ImageView fx:id="editIconImageView1" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                       <Image url="@../icons/cross.png" />
-                                    </image>
-                                 </ImageView>
-                              </graphic>
-                           </Button>
-                        </children>
-                        <HBox.margin>
-                           <Insets />
-                        </HBox.margin>
-                     </VBox>
-                     <Pane fx:id="captainContainer" prefHeight="0.0" prefWidth="0.0">
-                        <HBox.margin>
-                           <Insets bottom="200.0" />
-                        </HBox.margin>
-                     </Pane>
-                  </children>
+                  <VBox alignment="CENTER">
+                     <HBox.margin>
+                        <Insets/>
+                     </HBox.margin>
+                     <Button fx:id="editGameConfirmButton" mnemonicParsing="false" onAction="#editGame"
+                             prefHeight="45.0" prefWidth="250.0" styleClass="actionButton" text="%confirm">
+                        <graphic>
+                           <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true"
+                                      preserveRatio="true">
+                              <Image url="@../icons/confirm.png"/>
+                           </ImageView>
+                        </graphic>
+                     </Button>
+                     <Button fx:id="editGameCancelButton" mnemonicParsing="false" onAction="#cancel"
+                             prefHeight="45.0" prefWidth="250.0" styleClass="actionButton" text="%cancel">
+                        <graphic>
+                           <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true"
+                                      preserveRatio="true">
+                              <Image url="@../icons/cross.png"/>
+                           </ImageView>
+                        </graphic>
+                     </Button>
+                  </VBox>
+                  <Pane fx:id="captainContainer" prefHeight="0.0" prefWidth="0.0">
+                     <HBox.margin>
+                        <Insets bottom="200.0"/>
+                     </HBox.margin>
+                  </Pane>
                </HBox>
             </VBox>
             <HBox fx:id="errorBoxEdit" alignment="CENTER" prefHeight="50.0" prefWidth="200.0" visible="false">

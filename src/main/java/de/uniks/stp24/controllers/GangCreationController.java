@@ -78,7 +78,7 @@ public class GangCreationController {
     @FXML
     Button createButton;
     @FXML
-    public Button editButton;
+    Button editButton;
     @FXML
     Button showDeletePaneButton;
     @FXML
@@ -171,7 +171,7 @@ public class GangCreationController {
         this.gangsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.gangComponentProvider));
         gangsListView.setOnMouseClicked(event -> {
             GangElement gangComp = gangsListView.getSelectionModel().getSelectedItem();
-            if (gangComp.gang() != null) {
+            if (gangComp!= null && gangComp.gang() != null) {
                 Gang gang = gangComp.gang();
                 creationBox.setVisible(true);
                 gangNameText.setText(gang.name());

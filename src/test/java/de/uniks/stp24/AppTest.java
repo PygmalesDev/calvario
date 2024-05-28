@@ -1,5 +1,6 @@
 package de.uniks.stp24;
 
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.AuthApiService;
@@ -16,9 +17,12 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testfx.matcher.base.WindowMatchers;
@@ -32,6 +36,7 @@ import static org.mockito.Mockito.*;
 import static org.testfx.api.FxAssert.verifyThat;
 
 
+
 public class AppTest extends ControllerTest {
     private LoginService loginService;
     private AuthApiService authApiService;
@@ -42,6 +47,9 @@ public class AppTest extends ControllerTest {
     private UserApiService userApiService;
     private TokenStorage tokenStorage;
 
+    @Spy
+    BubbleComponent bubbleComponent;
+
     final Subject<Event<Game>> subject = BehaviorSubject.create();
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
 
@@ -51,14 +59,14 @@ public class AppTest extends ControllerTest {
         LoginResult loginResult = new LoginResult("1", "JustATest", null, "a", "r");
         LoginDto loginDto = new LoginDto("JustATest", "testpassword");
         RefreshDto refreshDto = new RefreshDto("r");
-        Game game1 = new Game(null, null, "1", "Was geht", "1", false, 0,0, null);
-        Game game2 = new Game(null, null, "2", "rapapa", "testID", false, 0,0, null);
-        Game game3 = new Game(null, null, "123", "AwesomeLobby123", "1", false, 0, 0, null);
+        Game game1 = new Game("2024-05-28T12:55:25.688Z", null, "1", "Was geht", "1", false, 0,0, null);
+        Game game2 = new Game("2024-05-28T13:55:25.688Z", null, "2", "rapapa", "testID", false, 0,0, null);
+        Game game3 = new Game("2024-05-28T14:55:25.688Z", null, "123", "AwesomeLobby123", "1", false, 0, 0, null);
 
         User user = new User("JustATest", "1", null, null, null);
 
         GameSettings gameSettings = new GameSettings(100);
-        CreateGameResultDto createGameResultDto = new CreateGameResultDto(null,null,game3._id(), "AwesomeLobby","1", false,1, 1, gameSettings);
+        CreateGameResultDto createGameResultDto = new CreateGameResultDto("2024-05-28T14:55:25.688Z",null,game3._id(), "AwesomeLobby123","1", false,1, 1, gameSettings);
         CreateGameDto createGameDto = new CreateGameDto("AwesomeLobby123", false, 1, gameSettings, "123");
 
         MemberDto memberDto = new MemberDto(false, user._id(), null, null);
@@ -88,12 +96,10 @@ public class AppTest extends ControllerTest {
 
         doReturn(Observable.just(createGameResultDto)).when(createGameService).createGame(any(), any(), any());
 
-        Event<Game> gameEvent = new Event<>("games." + game3._id() + ".created", new Game(null, null, game3._id(), createGameDto.name(), "1", false, 0,0, null));
+        Event<Game> gameEvent = new Event<>("games." + game3._id() + ".created", new Game("2024-05-28T14:55:25.688Z", null, game3._id(), createGameDto.name(), "1", false, 0,0, null));
         doReturn(Observable.empty()).doReturn(Observable.just(gameEvent)).when(eventListener).listen(eq("games.*.*"), eq(Game.class));
 
         doReturn(Observable.just(game3)).when(gamesApiService).getGame(game3._id());
-
-
 
         when(lobbyService.loadPlayers(any()))
                 .thenReturn(Observable.just(memberDtos))
@@ -161,26 +167,24 @@ public class AppTest extends ControllerTest {
         write("testpassword");
         clickOn("#repeatPasswordField");
         write("testpassword");
+        assertEquals(((TextArea) lookup("#captainText").query()).getText(), resources.getString("pirate.register.possible"));
+
         clickOn("#registerButton");
         WaitForAsyncUtils.waitForFxEvents();
-
         verifyThat(window("LOGIN"), WindowMatchers.isShowing());
-        final Text registeredText = lookup("#errorLabel").query();
-        assertEquals("ACCOUNT REGISTERED", registeredText.getText());
     }
 
     private void loginUser(){
         clickOn("#loginButton");
         WaitForAsyncUtils.waitForFxEvents();
-        WaitForAsyncUtils.waitForFxEvents();
-        verifyThat(window("Browse Game"), WindowMatchers.isShowing());
+        verifyThat(window("BROWSE GAME"), WindowMatchers.isShowing());
         WaitForAsyncUtils.waitForFxEvents();
     }
 
     private void goToNewGame(){
         clickOn("#new_game_b");
         WaitForAsyncUtils.waitForFxEvents();
-        verifyThat(window("Create Game"), WindowMatchers.isShowing());
+        verifyThat(window("CREATE GAME"), WindowMatchers.isShowing());
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -194,16 +198,16 @@ public class AppTest extends ControllerTest {
         clickOn("#createMapSizeSpinner");
         clickOn("#createGameConfirmButton");
         WaitForAsyncUtils.waitForFxEvents();
-        verifyThat(window("Browse Game"), WindowMatchers.isShowing());
+        verifyThat(window("BROWSE GAME"), WindowMatchers.isShowing());
     }
 
     private void loadGame(){
         ListView<String> listView = lookup("#gameList").query();
-        Node listCell = listView.lookupAll(".list-cell").toArray(new Node[0])[2];
+        Node listCell = listView.lookupAll(".list-cell").toArray(new Node[0])[0];
         clickOn(listCell);
         clickOn("#load_game_b");
         WaitForAsyncUtils.waitForFxEvents();
-        verifyThat(window("Lobby"), WindowMatchers.isShowing());
+        verifyThat(window("ENTER GAME"), WindowMatchers.isShowing());
     }
 
     private void selectEmpire(){

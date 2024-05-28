@@ -2,6 +2,7 @@ package de.uniks.stp24;
 
 import dagger.Module;
 import dagger.Provides;
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.AuthApiService;
@@ -66,10 +67,6 @@ public class TestModule {
     TokenStorage tokenStorage(){
         return Mockito.mock(TokenStorage.class);
     }
-
-
-
-
 }
 
 

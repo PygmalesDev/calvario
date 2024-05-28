@@ -1,6 +1,7 @@
 package de.uniks.stp24;
 
 import dagger.Component;
+import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.dagger.MainComponent;
 import de.uniks.stp24.dagger.MainModule;

@@ -109,7 +109,8 @@ public class LobbyController extends BasicController {
      */
     @OnInit
     void init() {
-        this.subscriber.subscribe(this.gamesService.getGame(this.gameID), game -> {
+        this.subscriber.subscribe(this.gamesService.getGame(this.gameID),
+          game -> {
             this.game = game;
             this.gameID = game._id();
             this.asHost = game.owner().equals(this.tokenStorage.getUserId());
@@ -147,11 +148,9 @@ public class LobbyController extends BasicController {
 
             this.lobbyHostSettingsComponent.createCheckPlayerReadinessListener();
         },
-          error -> {
-            int code = errorService.getStatus(error);
-            this.enterGameComponent
-            .errorMessage.textProperty().set(getErrorInfoText(code));
-        });
+          error -> this.enterGameComponent
+            .errorMessage.textProperty().set(getErrorInfoText(error))
+        );
     }
 
     /**
@@ -164,7 +163,7 @@ public class LobbyController extends BasicController {
             this.lobbyMessagePane.setVisible(true);
             this.lobbyMessageElement.setVisible(true);
             this.messageText.setText(resources.getString("lobby.has.been.deleted"));
-        },
+          },
           error -> this.enterGameComponent
             .errorMessage.textProperty().set(getErrorInfoText(error)));
     }
@@ -317,7 +316,8 @@ public class LobbyController extends BasicController {
     public void goBack() {
         if (!this.wasKicked) this.subscriber.subscribe(
                 this.lobbyService.leaveLobby(this.gameID, this.tokenStorage.getUserId()),
-                result -> this.app.show("/browseGames"));
+                result -> this.app.show("/browseGames"),
+                error -> {});
         else
             this.app.show("/browseGames");
     }

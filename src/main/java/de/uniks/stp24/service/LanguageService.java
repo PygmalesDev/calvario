@@ -1,5 +1,8 @@
 package de.uniks.stp24.service;
 
+import de.uniks.stp24.App;
+import org.fulib.fx.annotation.controller.Resource;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Locale;

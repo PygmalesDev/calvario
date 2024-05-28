@@ -37,7 +37,7 @@ public class EditGameService {
         this.games = games;
     }
 
-    // Editing an existing game, which is yours.
+    //Editing an existing game, which is yours.
     // class was modified! some code was deleted
     // error handle occurs now in controller
     public Observable<UpdateGameResultDto> editGame(String name, GameSettings settings, String password){

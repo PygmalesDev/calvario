@@ -57,6 +57,8 @@ public class PopupBuilder {
                 this.screenTwoToBlur.setEffect(blur);
                 this.screenTwoToBlur.setMouseTransparent(true);
             }
+
+
     }
 
     public void removeBlur(){

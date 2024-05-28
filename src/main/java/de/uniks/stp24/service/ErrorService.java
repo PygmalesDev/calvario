@@ -9,7 +9,6 @@ import retrofit2.HttpException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
-import java.util.Objects;
 
 @Singleton
 public class ErrorService {
@@ -37,8 +36,8 @@ public class ErrorService {
     }
 
     private ErrorResponse getErrorResponse(HttpException httpEx) {
-        try (ResponseBody body = Objects.requireNonNull(httpEx.response()).errorBody()) {
-            return objectMapper.readValue(Objects.requireNonNull(body).string(), ErrorResponse.class);
+        try (ResponseBody body = httpEx.response().errorBody()) {
+            return objectMapper.readValue(body.string(), ErrorResponse.class);
         } catch (IOException e) {
             throw  new RuntimeException(e);
         }

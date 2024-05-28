@@ -252,36 +252,6 @@
             </VBox>
         </items>
       </SplitPane>
-      <Pane fx:id="deletePane" prefHeight="300.0" prefWidth="500.0" style="-fx-border-color: BLACK; -fx-border-width: 3;" styleClass="backgroundLightYellow" visible="false" AnchorPane.leftAnchor="600.0" AnchorPane.topAnchor="200.0">
-         <HBox alignment="CENTER" prefHeight="40.0" prefWidth="500.0" style="-fx-background-color: Black;">
-            <children>
-               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="%warning">
-                  <font>
-                     <Font size="22.0" />
-                  </font>
-               </Text>
-            </children>
-         </HBox>
-         <Button fx:id="cancelButton" cancelButton="true" layoutX="50.0" layoutY="230.0" mnemonicParsing="false" onAction="#cancel" prefHeight="50.0" prefWidth="150.0" styleClass="deleteAndSaveButton" text="%cancel">
-            <font>
-               <Font name="System Bold" size="24.0" />
-            </font>
-         </Button>
-         <Button fx:id="deleteButton" layoutX="300.0" layoutY="230.0" mnemonicParsing="false" onAction="#delete" prefHeight="50.0" prefWidth="150.0" styleClass="deleteAndSaveButton" text="%delete">
-            <font>
-               <Font name="System Bold" size="24.0" />
-            </font>
-         </Button>
-         <Text layoutX="41.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="textDeleteGang" text="%warning.deleteEmpire" textAlignment="CENTER" wrappingWidth="417.3828125">
-            <font>
-               <Font name="System Bold" size="24.0" />
-            </font>
-         </Text>
-         <Text fx:id="toBeDeletedGangName" layoutX="50.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="textDeleteGang" textAlignment="CENTER" wrappingWidth="400.0">
-            <font>
-               <Font name="System Bold Italic" size="24.0" />
-            </font>
-         </Text>
-      </Pane>
+      <Pane fx:id="deletePane" prefHeight="300.0" prefWidth="500.0" style="-fx-border-color: BLACK; -fx-border-width: 3;" styleClass="backgroundLightYellow" visible="false" AnchorPane.leftAnchor="600.0" AnchorPane.topAnchor="200.0" />
    </children>
 </AnchorPane>

@@ -1,13 +1,11 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.component.GangDeletionComponent;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.component.GangComponent;
-import de.uniks.stp24.service.LobbyService;
-import de.uniks.stp24.service.PrefService;
-import de.uniks.stp24.service.SaveLoadService;
-import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -19,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -54,6 +53,13 @@ public class GangCreationController {
     TokenStorage tokenStorage;
     @Inject
     PrefService prefService;
+
+    @Inject
+    PopupBuilder popupBuilder;
+
+    @SubComponent
+    @Inject
+    GangDeletionComponent gangDeletionComponent;
 
     @Inject
     public Provider<GangComponent> gangComponentProvider;
@@ -140,6 +146,8 @@ public class GangCreationController {
     ToggleButton lockNameButton;
     @FXML
     ToggleButton lockDescriptionButton;
+
+    PopupBuilder popup = new PopupBuilder();
 
     @Inject
     public GangCreationController() {
@@ -259,7 +267,7 @@ public class GangCreationController {
         gangs.remove(index);
         saveLoadService.saveGang(gangs);
         showCreationPane();
-        cancel();
+        //cancel();
     }
 
     public void cancel() {
@@ -276,10 +284,11 @@ public class GangCreationController {
     }
 
     public void showDeletePane() {
-        creationBox.setEffect(new BoxBlur());
-        deletePane.setVisible(true);
-        Gang gang = gangsListView.getSelectionModel().getSelectedItem();
-        toBeDeletedGangName.setText(gang.name());
+        popup.showPopup(deletePane, gangDeletionComponent);
+        //creationBox.setEffect(new BoxBlur());
+        //deletePane.setVisible(true);
+        //Gang gang = gangsListView.getSelectionModel().getSelectedItem();
+        //toBeDeletedGangName.setText(gang.name());
     }
 
     public void create() {

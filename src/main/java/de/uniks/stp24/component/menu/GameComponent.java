@@ -1,4 +1,4 @@
-package de.uniks.stp24.component;
+package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.service.BrowseGameService;
@@ -10,12 +10,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
-import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
-import java.awt.event.MouseEvent;
 import java.util.ResourceBundle;
 
 @Component(view = "Game.fxml")

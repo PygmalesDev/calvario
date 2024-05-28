@@ -1,4 +1,4 @@
-package de.uniks.stp24.component;
+package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.service.InGameService;
@@ -10,12 +10,9 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
-import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
-import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.prefs.Preferences;
 
 @Component(view = "Settings.fxml")
 public class SettingsComponent extends VBox {

@@ -1,4 +1,4 @@
-package de.uniks.stp24.component;
+package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.controllers.GangCreationController;
 import de.uniks.stp24.model.Gang;

@@ -10,7 +10,7 @@
 
 <fx:root fx:id="logoutWindow" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
          prefHeight="250.0" prefWidth="450.0" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21"
-         xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.LogoutComponent">
+         xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.menu.LogoutComponent">
    <AnchorPane prefHeight="250.0" prefWidth="450.0">
       <HBox alignment="CENTER" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: Black;"
             AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

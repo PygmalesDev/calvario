@@ -1,4 +1,4 @@
-package de.uniks.stp24.component;
+package de.uniks.stp24.component.menu;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
@@ -11,13 +11,11 @@ import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
-import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.function.Function;
 
 
 @Component(view = "WarningScreen.fxml")

@@ -1,12 +1,9 @@
 package de.uniks.stp24.controllers;
 
-import com.fasterxml.jackson.databind.introspect.TypeResolutionContext;
-import com.sun.javafx.binding.SelectBinding;
-import de.uniks.stp24.App;
-import de.uniks.stp24.component.BubbleComponent;
-import de.uniks.stp24.component.GameComponent;
-import de.uniks.stp24.component.LogoutComponent;
-import de.uniks.stp24.component.WarningComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
+import de.uniks.stp24.component.menu.GameComponent;
+import de.uniks.stp24.component.menu.LogoutComponent;
+import de.uniks.stp24.component.menu.WarningComponent;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.*;
@@ -14,7 +11,6 @@ import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.binding.StringBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -26,7 +22,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
@@ -35,14 +30,12 @@ import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Comparator;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Title("%browse.game")
 @Controller

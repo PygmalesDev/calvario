@@ -1,4 +1,4 @@
-package de.uniks.stp24.component;
+package de.uniks.stp24.component.menu;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;

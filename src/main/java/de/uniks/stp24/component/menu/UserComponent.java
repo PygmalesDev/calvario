@@ -1,4 +1,4 @@
-package de.uniks.stp24.component;
+package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.model.MemberUser;
 import de.uniks.stp24.service.ImageCache;

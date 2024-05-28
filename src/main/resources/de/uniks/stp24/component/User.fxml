@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="70.0" prefWidth="180.0" type="StackPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.UserComponent">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="70.0" prefWidth="180.0" type="StackPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.menu.UserComponent">
    <children>
       <javafx.scene.layout.HBox fx:id="userHBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="70.0" prefWidth="180.0">
             <ImageView fx:id="avatarImageView" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">

@@ -3,7 +3,7 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.App;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
-import de.uniks.stp24.component.GangComponent;
+import de.uniks.stp24.component.menu.GangComponent;
 import de.uniks.stp24.service.LobbyService;
 import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.SaveLoadService;

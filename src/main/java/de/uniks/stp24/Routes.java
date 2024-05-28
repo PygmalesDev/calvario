@@ -1,16 +1,15 @@
 package de.uniks.stp24;
 
 
-import de.uniks.stp24.component.LogoutComponent;
-import de.uniks.stp24.component.WarningComponent;
-import de.uniks.stp24.component.WarningScreenComponent;
+import de.uniks.stp24.component.menu.LogoutComponent;
+import de.uniks.stp24.component.menu.WarningComponent;
+import de.uniks.stp24.component.menu.WarningScreenComponent;
 import de.uniks.stp24.controllers.*;
 import org.fulib.fx.annotation.Route;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
-import javax.security.auth.login.LoginContext;
 
 @Singleton
 public class Routes {  

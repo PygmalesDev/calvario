@@ -1,4 +1,4 @@
-package de.uniks.stp24.component;
+package de.uniks.stp24.component.menu;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;

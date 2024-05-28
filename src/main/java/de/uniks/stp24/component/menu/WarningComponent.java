@@ -1,4 +1,4 @@
-package de.uniks.stp24.component;
+package de.uniks.stp24.component.menu;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
@@ -16,9 +16,7 @@ import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 
-import javax.inject.Inject;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 
 @Component(view = "Warning.fxml")
 public class WarningComponent extends VBox {

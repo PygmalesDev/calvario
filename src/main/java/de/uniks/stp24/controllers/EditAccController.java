@@ -28,6 +28,10 @@ import java.util.Objects;
 @Controller
 public class EditAccController extends BasicController {
     @FXML
+    VBox editAccVBoxLeftToBlur;
+    @FXML
+    VBox editAccVBoxRightToBlur;
+    @FXML
     Pane captainContainer;
     @FXML
     ImageView avatarImage;
@@ -196,7 +200,7 @@ public class EditAccController extends BasicController {
     public void deleteUser() {
         // warning screen opens
         popup.showPopup(warningScreenContainer, warningScreen);
-        popup.setBlur(editAccHBox, null);
+        popup.setBlur(editAccVBoxLeftToBlur, editAccVBoxRightToBlur);
         warningScreen.setWarning(resources.getString("warning.deleteAccount") + tokenStorage.getName() + ".");
     }
 

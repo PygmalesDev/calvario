@@ -1,14 +1,26 @@
 package de.uniks.stp24.rest;
 
-import de.uniks.stp24.dto.ResourceDto;
+import de.uniks.stp24.dto.*;
 import io.reactivex.rxjava3.core.Observable;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.PATCH;
+import retrofit2.http.Path;
 
 import javax.inject.Singleton;
 import java.util.List;
 
 @Singleton
 public interface EmpireApiService {
+    @GET("games/{game}/empires")
+    Observable<ReadEmpireDto> readEmpires(@Path("game") String game);
+
+    @GET("games/{game}/empires/{empire}")
+    Observable<EmpireDto> getEmpire(@Path("game") String game, @Path("empire") String empire);
+
+    @PATCH("games/{game}/empires/{empire}")
+    Observable<EmpireDto> updateEmpire(@Path("game") String game, @Path("empire") String empire, @Body UpdateEmpireDto updateEmpireDto);
+
     @GET("presets/resources")
     Observable<List<ResourceDto>> getResources();
 }

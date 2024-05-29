@@ -1,6 +1,7 @@
 package de.uniks.stp24;
 
 
+import de.uniks.stp24.component.GangDeletionComponent;
 import de.uniks.stp24.component.LogoutComponent;
 import de.uniks.stp24.component.WarningComponent;
 import de.uniks.stp24.component.WarningScreenComponent;
@@ -44,6 +45,10 @@ public class Routes {
     @Route("warningScreen")
     @Inject
     Provider<WarningScreenComponent> warningScreen;
+
+    @Route("gangDeletion")
+    @Inject
+    Provider<GangDeletionComponent> gangDeletion;
 
     @Route("logout")
     @Inject

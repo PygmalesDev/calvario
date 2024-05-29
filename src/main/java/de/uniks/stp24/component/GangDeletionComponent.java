@@ -27,10 +27,20 @@ public class GangDeletionComponent extends VBox {
     @Resource
     ResourceBundle resources;
 
+    GangCreationController gangCreationController;
+
 
     @Inject
     public GangDeletionComponent() {
 
+    }
+
+    public void setGangCreationController(GangCreationController gangCreationController){
+        this.gangCreationController = gangCreationController;
+    }
+
+    public void setWarningText(String warningText){
+        this.warningText.setText("YOU ARE ABOUT TO DELETE: " + warningText);
     }
 
     public void cancelDelete() {
@@ -38,6 +48,9 @@ public class GangDeletionComponent extends VBox {
     }
 
     public void deleteGang(){
+        gangCreationController.delete();
         getParent().setVisible(false);
     }
+
+
 }

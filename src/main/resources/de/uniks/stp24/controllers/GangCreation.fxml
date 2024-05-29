@@ -252,6 +252,6 @@
             </VBox>
         </items>
       </SplitPane>
-      <Pane fx:id="deletePane" prefHeight="300.0" prefWidth="500.0" style="-fx-border-color: BLACK; -fx-border-width: 3;" styleClass="backgroundLightYellow" visible="false" AnchorPane.leftAnchor="600.0" AnchorPane.topAnchor="200.0" />
+      <Pane fx:id="deletePane" prefHeight="250.0" prefWidth="450.0" style="-fx-border-color: BLACK; -fx-border-width: 3;" styleClass="backgroundLightYellow" visible="false" AnchorPane.leftAnchor="640.0" AnchorPane.topAnchor="200.0" />
    </children>
 </AnchorPane>

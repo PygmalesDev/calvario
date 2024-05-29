@@ -15,6 +15,7 @@ import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.BeforeAll;
@@ -152,7 +153,8 @@ public class TestEditAcc extends ControllerTest {
         //Start:
         //Alice wants to delete her account in STPellaris. She is in the user administration window. She clicked the delete user button and a pop up came up.
         tokenStorage.setName("Alice");
-        HBox editAccHBox = (HBox) lookup("#editAccHBox").query();
+        VBox editAccVBoxRightToBlur = (VBox) lookup("#editAccVBoxRightToBlur").query();
+        VBox editAccVBoxLeftToBlur = (VBox) lookup("#editAccVBoxLeftToBlur").query();
         StackPane warningScreenContainer = (StackPane) lookup("#warningScreenContainer").query();
         clickOn("#deleteUserButton");
         waitForFxEvents();
@@ -163,13 +165,15 @@ public class TestEditAcc extends ControllerTest {
         Button deleteUserButton = lookup("#deleteUserButton").queryButton();
         assertTrue(cancelDeleteButton.isVisible());
         assertFalse(cancelDeleteButton.isDisabled());
-        assertEquals(BoxBlur.class, editAccHBox.getEffect().getClass());
+        assertEquals(BoxBlur.class, editAccVBoxLeftToBlur.getEffect().getClass());
+        assertEquals(BoxBlur.class, editAccVBoxRightToBlur.getEffect().getClass());
 
         //Result:
         //The pop up disappeared. Alice stays in the same window and her account was not deleted.
         clickOn("#cancelDeleteButton");
         waitForFxEvents();
-        assertNull(editAccHBox.getEffect());
+        assertNull(editAccVBoxLeftToBlur.getEffect());
+        assertNull(editAccVBoxRightToBlur.getEffect());
         assertFalse(warningScreenContainer.isVisible());
         assertTrue(deleteUserButton.isVisible());
         assertFalse(deleteUserButton.isDisabled());

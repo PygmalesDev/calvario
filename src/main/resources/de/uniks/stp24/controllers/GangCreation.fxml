@@ -109,11 +109,10 @@
                      <Font name="System Bold" size="12.0"/>
                   </font>
                </Button>
-               <ToggleButton layoutX="157.0" layoutY="41.0"
+               <ToggleButton fx:id="lockPortraitButton" layoutX="157.0" layoutY="41.0"
                              mnemonicParsing="false" onAction="#lockPortrait" prefHeight="25.0"
                              prefWidth="25.0" styleClass="lockButton"/>
-               <Text layoutX="68.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                     text="%portrait" underline="true">
+               <Text layoutX="68.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%portrait" underline="true">
                   <font>
                      <Font size="24.0"/>
                   </font>
@@ -143,11 +142,10 @@
                      <Font name="System Bold" size="12.0"/>
                   </font>
                </Button>
-               <ToggleButton layoutX="157.0" layoutY="41.0" mnemonicParsing="false"
+               <ToggleButton fx:id="lockFlagButton" layoutX="157.0" layoutY="41.0" mnemonicParsing="false"
                              onAction="#lockFlag" prefHeight="25.0" prefWidth="25.0"
                              styleClass="lockButton"/>
-               <Text layoutX="73.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                     text="%flag" underline="true">
+               <Text layoutX="73.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%flag" underline="true">
                   <font>
                      <Font size="24.0"/>
                   </font>
@@ -163,7 +161,7 @@
                </HBox.margin>
                <Pane fx:id="colorField" layoutX="32.0" layoutY="41.0" prefHeight="150.0" prefWidth="150.0"
                      style="-fx-background-color: RED;"/>
-               <ToggleButton layoutX="157.0" layoutY="41.0" mnemonicParsing="false"
+               <ToggleButton fx:id="lockColorButton" layoutX="157.0" layoutY="41.0" mnemonicParsing="false"
                              onAction="#lockColor" prefHeight="25.0" prefWidth="25.0"
                              styleClass="lockButton"/>
                <Button fx:id="lastColorButton" layoutY="121.0" mnemonicParsing="false"
@@ -178,8 +176,7 @@
                      <Font name="System Bold" size="12.0"/>
                   </font>
                </Button>
-               <Text layoutX="68.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                     text="%colour" underline="true">
+               <Text layoutX="68.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%colour" underline="true">
                   <font>
                      <Font size="24.0"/>
                   </font>
@@ -252,38 +249,6 @@
          </HBox>
       </VBox>
    </SplitPane>
-   <Pane fx:id="deletePane" prefHeight="300.0" prefWidth="500.0" style="-fx-border-color: BLACK; -fx-border-width: 3;"
-         styleClass="backgroundLightYellow" visible="false" AnchorPane.leftAnchor="600.0" AnchorPane.topAnchor="200.0">
-      <HBox alignment="CENTER" prefHeight="40.0" prefWidth="500.0" style="-fx-background-color: Black;">
-         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="%warning">
-            <font>
-               <Font size="22.0"/>
-            </font>
-         </Text>
-      </HBox>
-      <Button fx:id="cancelButton" cancelButton="true" layoutX="50.0" layoutY="230.0" mnemonicParsing="false"
-              onAction="#cancel" prefHeight="50.0" prefWidth="150.0" styleClass="deleteAndSaveButton" text="%cancel">
-         <font>
-            <Font name="System Bold" size="24.0"/>
-         </font>
-      </Button>
-      <Button fx:id="deleteButton" layoutX="300.0" layoutY="230.0" mnemonicParsing="false" onAction="#delete"
-              prefHeight="50.0" prefWidth="150.0" styleClass="deleteAndSaveButton" text="%delete">
-         <font>
-            <Font name="System Bold" size="24.0"/>
-         </font>
-      </Button>
-      <Text layoutX="41.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="textDeleteGang"
-            text="%warning.deleteEmpire" textAlignment="CENTER" wrappingWidth="417.3828125">
-         <font>
-            <Font name="System Bold" size="24.0"/>
-         </font>
-      </Text>
-      <Text fx:id="toBeDeletedGangName" layoutX="50.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0"
-            styleClass="textDeleteGang" textAlignment="CENTER" wrappingWidth="400.0">
-         <font>
-            <Font name="System Bold Italic" size="24.0"/>
-         </font>
-      </Text>
-   </Pane>
+   <Pane fx:id="deletePane" prefHeight="250.0" prefWidth="450.0" style="-fx-border-color: BLACK; -fx-border-width: 3;"
+         styleClass="backgroundLightYellow" visible="false" AnchorPane.leftAnchor="640.0" AnchorPane.topAnchor="200.0"/>
 </AnchorPane>

@@ -1,7 +1,6 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.BubbleComponent;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -34,9 +33,8 @@ public class LicensesController extends BasicController {
     @OnRender
     public void addSpeechBubble() {
         captainContainer.getChildren().add(bubbleComponent);
-        Platform.runLater(() -> bubbleComponent
-          .setCaptainText(resources.getString("pirate.licenses"))
-        );
+        bubbleComponent
+          .setCaptainText(resources.getString("pirate.licenses"));
     }
 
     @Inject

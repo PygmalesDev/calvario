@@ -187,7 +187,7 @@ public class TestEditAcc extends ControllerTest {
         waitForFxEvents();
 
         // Action:
-        // She clicks confrim.
+        // She clicks confirm.
         Button deleteAccButton = lookup("#deleteAccButton").queryButton();
         clickOn("#deleteAccButton");
         Observable<User> observable = editAccService.deleteUser();
@@ -195,7 +195,7 @@ public class TestEditAcc extends ControllerTest {
             tokenStorage.setName(null);
             tokenStorage.setAvatar(null);
             prefService.removeRefreshToken();
-        app.show("/login");}).subscribe();
+        app.show("/login");}).subscribe(result ->{}, error -> {});
         waitForFxEvents();
 
         // Result:

@@ -54,7 +54,6 @@ public class InGameController extends BasicController {
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
     }
 
-    // not used yet
     private void handleLanguageChanged(PropertyChangeEvent propertyChangeEvent) {
         Locale newLang = propertyChangeEvent.getNewValue().equals(0) ? Locale.GERMAN : Locale.ENGLISH;
     }

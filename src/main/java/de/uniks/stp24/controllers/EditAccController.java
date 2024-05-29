@@ -5,7 +5,6 @@ import de.uniks.stp24.component.BubbleComponent;
 import de.uniks.stp24.component.WarningScreenComponent;
 import de.uniks.stp24.service.EditAccService;
 import de.uniks.stp24.service.PopupBuilder;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
@@ -87,9 +86,8 @@ public class EditAccController extends BasicController {
     @OnRender
     public void addSpeechBubble() {
         captainContainer.getChildren().add(bubbleComponent);
-        Platform.runLater(() -> bubbleComponent
-            .setCaptainText(resources.getString("pirate.editAcc.go.into.hiding"))
-        );
+          bubbleComponent
+            .setCaptainText(resources.getString("pirate.editAcc.go.into.hiding"));
     }
 
     @OnInit
@@ -168,12 +166,10 @@ public class EditAccController extends BasicController {
                     }
                     // in case of server's response => error
                     // handle with error response
-                    , error ->
-                        this.errorLabelEditAcc
-                                .setText(getErrorInfoText(error))
-                    );
+                    , error -> this.bubbleComponent.setCaptainText(getErrorInfoText(error))
+              );
         } else {
-            this.errorLabelEditAcc.setText(getErrorInfoText(passwordInput.getLength() > 8 ? -1 : -2 ));
+            this.bubbleComponent.setCaptainText(getErrorInfoText(passwordInput.getLength() > 8 ? -1 : -2 ));
         }
     }
 

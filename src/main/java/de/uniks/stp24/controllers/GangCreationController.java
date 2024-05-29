@@ -118,9 +118,7 @@ public class GangCreationController extends BasicController {
     ToggleButton lockDescriptionButton;
     @Param("gameid")
     String gameID;
-    // the fxml has no containers (text, label) for errors;
-    private
-    Text textInfo;
+
 
     @Inject
     public GangCreationController() {
@@ -210,9 +208,8 @@ public class GangCreationController extends BasicController {
                     this.gameID, this.tokenStorage.getUserId(),result.ready(), empire), result2 ->
                         app.show("/lobby", Map.of("gameid", this.gameID)));
         },
-          error -> this.textInfo.setText(getErrorInfoText(error))
+          error -> {}
         );
-
     }
 
     public Gang getInputGang() {

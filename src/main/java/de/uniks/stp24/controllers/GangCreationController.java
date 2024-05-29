@@ -3,18 +3,17 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.component.GangComponent;
-import de.uniks.stp24.service.LobbyService;
-import de.uniks.stp24.service.SaveLoadService;
+import de.uniks.stp24.service.*;
+import de.uniks.stp24.component.GangDeletionComponent;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -37,6 +36,14 @@ public class GangCreationController extends BasicController {
     SaveLoadService saveLoadService;
     @Inject
     LobbyService lobbyService;
+
+    @Inject
+    PopupBuilder popupBuilder;
+
+    @SubComponent
+    @Inject
+    GangDeletionComponent gangDeletionComponent;
+
     @Inject
     public Provider<GangComponent> gangComponentProvider;
     @FXML
@@ -57,8 +64,6 @@ public class GangCreationController extends BasicController {
     Button editButton;
     @FXML
     Button showDeletePaneButton;
-    @FXML
-    Text toBeDeletedGangName;
     @FXML
     Pane deletePane;
     @FXML
@@ -105,11 +110,7 @@ public class GangCreationController extends BasicController {
     @FXML
     Button nextPortraitButton;
     @FXML
-    Button cancelButton;
-    @FXML
     Button randomizeButton;
-    @FXML
-    Button deleteButton;
     @FXML
     Button nextFlagButton;
     @FXML
@@ -120,6 +121,8 @@ public class GangCreationController extends BasicController {
     String gameID;
 
 
+    PopupBuilder popup = new PopupBuilder();
+
     @Inject
     public GangCreationController() {
 
@@ -129,6 +132,7 @@ public class GangCreationController extends BasicController {
     public void init(){
         initImages();
         initColors();
+        gangDeletionComponent.setGangCreationController(this);
         if(prefService.getLocale().equals(Locale.GERMAN)) {
             empireTemplates = empireTemplatesGerman;
         } else {
@@ -233,13 +237,6 @@ public class GangCreationController extends BasicController {
         int index = gangsListView.getSelectionModel().getSelectedIndex();
         gangs.remove(index);
         saveLoadService.saveGang(gangs);
-        showCreationPane();
-        cancel();
-    }
-
-    public void cancel() {
-        deletePane.setVisible(false);
-        creationBox.setEffect(null);
     }
 
     public void showCreationPane() {
@@ -251,10 +248,11 @@ public class GangCreationController extends BasicController {
     }
 
     public void showDeletePane() {
-        creationBox.setEffect(new BoxBlur());
-        deletePane.setVisible(true);
         Gang gang = gangsListView.getSelectionModel().getSelectedItem();
-        toBeDeletedGangName.setText(gang.name());
+        gangDeletionComponent.setWarningText(gang.name());
+        popup.showPopup(deletePane, gangDeletionComponent);
+        popup.setBlur(gangsListView, creationBox);
+
     }
 
     public void create() {

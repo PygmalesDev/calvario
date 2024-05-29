@@ -29,7 +29,7 @@
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="530.0" prefWidth="750.0" styleClass="transparentBackground">
                <HBox fx:id="editAccHBox" alignment="CENTER" prefHeight="570.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <AnchorPane prefHeight="570.0" prefWidth="500.0">
-                     <VBox alignment="CENTER" prefHeight="400.0" prefWidth="550.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <VBox fx:id="editAccVBoxLeftToBlur" alignment="CENTER" prefHeight="400.0" prefWidth="550.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                         <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: Black;" styleClass="backgroundLightYellowWithShadow">
                            <VBox.margin>
                               <Insets top="15.0" />
@@ -98,7 +98,7 @@
                      </VBox>
                   </AnchorPane>
                   <AnchorPane prefHeight="200.0" prefWidth="300.0">
-                     <VBox alignment="BOTTOM_CENTER" layoutX="-7.0" prefHeight="370.0" prefWidth="275.0" spacing="25.0" AnchorPane.bottomAnchor="160.0" AnchorPane.leftAnchor="-7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="0.0">
+                     <VBox fx:id="editAccVBoxRightToBlur" alignment="BOTTOM_CENTER" layoutX="-7.0" prefHeight="370.0" prefWidth="275.0" spacing="25.0" AnchorPane.bottomAnchor="160.0" AnchorPane.leftAnchor="-7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="0.0">
                         <ToggleButton fx:id="changeUserInfoButton" mnemonicParsing="false" onAction="#changeUserInfo" prefHeight="30.0" prefWidth="150.0" styleClass="actionButton" text="%edit">
                            <font>
                               <Font size="15.0" />

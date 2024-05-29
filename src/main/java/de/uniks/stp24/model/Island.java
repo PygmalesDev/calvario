@@ -3,13 +3,12 @@ package de.uniks.stp24.model;
 public record Island(
   String owner,
   String avatar,
-  int latitude,
-  int meridian,
+  int posX,
+  int posY,
   IslandType type,
   int crewCapacity,
   int resourceCapacity,
   int upgradeLevel,
-  Site[] sites,
-
+  Site[] sites
 ) {
 }

@@ -1,0 +1,35 @@
+
+@font-face {
+    font-family: 'Stencil';
+    src: url("/de/uniks/stp24/assets/fonts/Stencil.ttf");
+}
+
+.flagToggle:pressed {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/toggleFlagButtonOn.png");
+}
+
+.flagToggle {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/toggleFlagButtonOff.png");
+}
+
+#x1 {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/timeButton1.png");
+}
+
+#x2 {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/timeButton2.png");
+}
+
+#x3 {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/timeButton2.png");
+}
+
+#pause {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/timeButtonPause.png");
+}

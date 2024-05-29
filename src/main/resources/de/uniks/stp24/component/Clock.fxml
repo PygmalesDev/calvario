@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchor" prefHeight="1200.0" prefWidth="1800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.ClockComponent">
+   <HBox alignment="TOP_CENTER" layoutX="804.0" layoutY="14.0" AnchorPane.leftAnchor="804.0">
+      <VBox>
+         <ToggleButton fx:id="flagToggle" mnemonicParsing="false" onAction="#turnFlags" prefHeight="35.0" prefWidth="35.0" style="-fx-background-radius: 20;" styleClass="flagToggle" translateX="8.0" translateY="25.0" />
+      </VBox>
+      <HBox>
+         <ToggleButton id="pause" fx:id="pauseClockButton" mnemonicParsing="false" onAction="#pauseClock" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 20;">
+            <font>
+               <Font size="9.0" />
+            </font>
+         </ToggleButton>
+      </HBox>
+      <VBox alignment="CENTER" prefHeight="50.0" prefWidth="60.0">
+         <Label fx:id="seasonLabel" prefHeight="30.0" text="\%season">
+            <font>
+               <Font size="20.0" />
+            </font>
+         </Label>
+         <Label fx:id="countdownLabel" prefHeight="17.0" text="\%countdown" />
+      </VBox>
+      <VBox prefHeight="50.0">
+         <Button id="x3" mnemonicParsing="false" onAction="#x3" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 20;" translateX="-10.0" fx:id="x3Button">
+            <font>
+               <Font size="9.0" />
+            </font>
+         </Button>
+         <Button id="x2" mnemonicParsing="false" onAction="#x2" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 20;" translateX="-4.0" fx:id="x2Button">
+            <font>
+               <Font size="9.0" />
+            </font>
+         </Button>
+         <Button id="x2" mnemonicParsing="false" onAction="#x1" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 20;" fx:id="x1Button">
+            <font>
+               <Font size="9.0" />
+            </font>
+         </Button>
+         <HBox.margin>
+            <Insets right="2.0" />
+         </HBox.margin>
+      </VBox>
+      <VBox alignment="TOP_CENTER" prefWidth="60.0" spacing="3.0">
+         <HBox.margin>
+            <Insets left="2.0" />
+         </HBox.margin>
+         <ImageView fx:id="randomEventImage" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+         <Label fx:id="remainingSeasonsLabel" alignment="CENTER" prefHeight="30.0" prefWidth="30.0" text="X" />
+      </VBox>
+   </HBox>
+</AnchorPane>

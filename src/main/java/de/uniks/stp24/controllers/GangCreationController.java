@@ -236,7 +236,7 @@ public class GangCreationController {
 
             if (Objects.nonNull(gang)) empire = new Empire(gang.name(), gang.description(), gang.color(),
                     gang.flagIndex()%this.flagsList.size(), gang.portraitIndex()%this.portraitsList.size(),
-                    "uninhabitable_0", new String[]{});
+                    new String[]{},"uninhabitable_0");
 
             this.subscriber.subscribe(this.lobbyService.updateMember(
                     this.gameID, this.tokenStorage.getUserId(),result.ready(), empire), result2 ->

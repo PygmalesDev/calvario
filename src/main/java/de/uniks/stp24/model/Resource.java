@@ -4,4 +4,5 @@ public record Resource(
     String resourceID,
     int count
 ) {
+
 }

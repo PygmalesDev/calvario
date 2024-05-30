@@ -6,7 +6,8 @@ public record Empire(
         String color,
         int flag,
         int portrait,
-        String homeSystem,
-        String[] traits
+        String[] traits,
+        String homeSystem
+
 ) {
 }

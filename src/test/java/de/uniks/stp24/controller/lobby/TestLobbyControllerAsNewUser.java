@@ -3,7 +3,7 @@ package de.uniks.stp24.controller.lobby;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.*;
+import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.LobbyController;
 import de.uniks.stp24.dto.JoinGameDto;
 import de.uniks.stp24.dto.MemberDto;
@@ -19,7 +19,6 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
@@ -76,11 +75,7 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
     @InjectMocks
     BubbleComponent bubbleComponent;
 
-    Provider<UserComponent> userComponentProvider = ()->{
-        final UserComponent userComponent = new UserComponent(imageCache, resources);
-        return new UserComponent(imageCache, resources);
-    };
-
+    Provider<UserComponent> userComponentProvider = ()-> new UserComponent(imageCache, resources);
 
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();

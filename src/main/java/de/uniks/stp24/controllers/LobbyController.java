@@ -1,7 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.component.*;
+import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.UserApiService;

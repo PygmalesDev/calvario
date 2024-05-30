@@ -29,7 +29,7 @@
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="530.0" prefWidth="750.0" styleClass="transparentBackground">
                <HBox fx:id="editAccHBox" alignment="CENTER" prefHeight="570.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <AnchorPane prefHeight="570.0" prefWidth="500.0">
-                     <VBox alignment="CENTER" prefHeight="400.0" prefWidth="550.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <VBox fx:id="editAccVBoxLeftToBlur" alignment="CENTER" prefHeight="400.0" prefWidth="550.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                         <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: Black;" styleClass="backgroundLightYellowWithShadow">
                            <VBox.margin>
                               <Insets top="15.0" />
@@ -44,13 +44,13 @@
                                  <Insets top="10.0" />
                               </VBox.margin>
                            </Line>
-                           <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="100.0" styleClass="image-view-wrapper">
+                           <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0"
+                                 prefWidth="100.0" styleClass="image-view-wrapper">
                               <VBox.margin>
-                                 <Insets top="10.0" />
+                                 <Insets top="10.0"/>
                               </VBox.margin>
-                              <children>
-                                 <ImageView fx:id="avatarImage" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
-                              </children>
+                              <ImageView fx:id="avatarImage" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true"
+                                         preserveRatio="true"/>
                            </VBox>
                         </VBox>
                         <HBox alignment="CENTER" prefHeight="35.0" prefWidth="200.0" spacing="15.0">
@@ -60,9 +60,7 @@
                               </font>
                               <graphic>
                                  <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                       <Image url="@../icons/downWhite.png" />
-                                    </image>
+                                    <Image url="@../icons/downWhite.png"/>
                                  </ImageView>
                               </graphic>
                            </Button>
@@ -72,9 +70,7 @@
                               </font>
                               <graphic>
                                  <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                       <Image url="@../icons/cancelWhite.png" />
-                                    </image>
+                                    <Image url="@../icons/cancelWhite.png"/>
                                  </ImageView>
                               </graphic>
                            </Button>
@@ -102,7 +98,7 @@
                      </VBox>
                   </AnchorPane>
                   <AnchorPane prefHeight="200.0" prefWidth="300.0">
-                     <VBox alignment="BOTTOM_CENTER" layoutX="-7.0" prefHeight="370.0" prefWidth="275.0" spacing="25.0" AnchorPane.bottomAnchor="160.0" AnchorPane.leftAnchor="-7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="0.0">
+                     <VBox fx:id="editAccVBoxRightToBlur" alignment="BOTTOM_CENTER" layoutX="-7.0" prefHeight="370.0" prefWidth="275.0" spacing="25.0" AnchorPane.bottomAnchor="160.0" AnchorPane.leftAnchor="-7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="0.0">
                         <ToggleButton fx:id="changeUserInfoButton" mnemonicParsing="false" onAction="#changeUserInfo" prefHeight="30.0" prefWidth="150.0" styleClass="actionButton" text="%edit">
                            <font>
                               <Font size="15.0" />
@@ -116,10 +112,9 @@
                               <Font size="15.0" />
                            </font>
                            <graphic>
-                              <ImageView fx:id="deleteIconImageView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icons/deleteBlack.png" />
-                                 </image>
+                              <ImageView fx:id="deleteIconImageView" fitHeight="40.0" fitWidth="40.0"
+                                         pickOnBounds="true" preserveRatio="true">
+                                 <Image url="@../icons/deleteBlack.png"/>
                               </ImageView>
                            </graphic>
                         </Button>

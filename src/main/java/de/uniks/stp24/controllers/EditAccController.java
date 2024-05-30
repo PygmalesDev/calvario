@@ -1,8 +1,8 @@
 package de.uniks.stp24.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.uniks.stp24.component.BubbleComponent;
-import de.uniks.stp24.component.WarningScreenComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
+import de.uniks.stp24.component.menu.WarningScreenComponent;
 import de.uniks.stp24.service.EditAccService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PopupBuilder;
@@ -14,8 +14,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -28,13 +26,15 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
-import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import java.util.Objects;
 
 @Title("%edit.account")
 @Controller
 public class EditAccController extends BasicController {
+    @FXML
+    VBox editAccVBoxLeftToBlur;
+    @FXML
+    VBox editAccVBoxRightToBlur;
     @FXML
     Pane captainContainer;
     @FXML
@@ -229,7 +229,7 @@ public class EditAccController extends BasicController {
     public void deleteUser() {
         // warning screen opens
         popup.showPopup(warningScreenContainer, warningScreen);
-        popup.setBlur(editAccHBox, null);
+        popup.setBlur(editAccVBoxLeftToBlur, editAccVBoxRightToBlur);
         warningScreen.setWarning(resources.getString("warning.deleteAccount") + tokenStorage.getName() + ".");
     }
 

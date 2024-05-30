@@ -10,7 +10,6 @@ import javafx.scene.layout.Pane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
-
 import javax.inject.Inject;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -52,11 +51,9 @@ public class GangComponent extends Pane implements ReusableItemComponent<Gang> {
 
     @Override
     public void setItem(@NotNull Gang gang) {
-        if (flagsList.size() == 0 || portraitsList.size() == 0)
+        if (flagsList.isEmpty() || portraitsList.isEmpty())
             initImages();
-
         java.awt.Color color = java.awt.Color.decode(gang.color());
-        //System.out.println(color.getRed() + color.decode("#FFCCEE").getGreen() + color.getBlue());
         if (color.getRed() + color.decode("#FFCCEE").getGreen() + color.getBlue() <= 500)
             gangNameTextComponent.setStyle("-fx-text-fill: white;");
 

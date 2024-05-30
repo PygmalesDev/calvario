@@ -188,7 +188,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         assertFalse(lookup("#startJourneyButton").queryButton().isDisabled());
         clickOn("#startJourneyButton");
 
-        verify(this.app, times(1)).show("/ingame");
+        verify(this.app, times(2)).show("/ingame");
     }
 
     /**

@@ -5,6 +5,7 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.service.EditAccService;
 import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.utils.ResponseConstants;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -12,11 +13,9 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.controller.Subscriber;
-
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.ResourceBundle;
-
 
 @Component(view = "WarningScreen.fxml")
 public class WarningScreenComponent extends VBox {
@@ -25,7 +24,6 @@ public class WarningScreenComponent extends VBox {
     Text warningText;
     @FXML
     VBox warningContainer;
-
     @Inject
     App app;
     @Inject
@@ -39,9 +37,10 @@ public class WarningScreenComponent extends VBox {
     @Inject
     ErrorService errorService;
     @Inject
+    ResponseConstants responseConstants;
+    @Inject
     @Resource
     ResourceBundle resources;
-
 
     @Inject
     public WarningScreenComponent() {
@@ -55,11 +54,10 @@ public class WarningScreenComponent extends VBox {
         //Delete user and switch back to the login screen
         this.subscriber.subscribe(editAccService.deleteUser(),
             result -> app.show("/login",
-                        Map.of("info","deleted"))
-            , error -> {
-                errorService.getStatus(error);
-                // ToDo: error handling and message
-                // where should it be shown?
+                        Map.of("info","deleted")),
+            error -> {
+                int code = errorService.getStatus(error);
+                warningText.setText(responseConstants.resStdText.getOrDefault(code,"no.entry"));
         });
     }
 

@@ -163,16 +163,20 @@ public class EditAccController extends BasicController {
         // save changed name and/or password of the user and reset the edit account screen afterward
         if (checkIt(usernameInput.getText(),passwordInput.getText())) {
             this.errorLabelEditAcc.setText("");
+            this.bubbleComponent.setErrorMode(false);
             subscriber.subscribe(editAccService.changeUserInfo(usernameInput.getText(), passwordInput.getText()),
-                    result -> {
-                        resetEditing(usernameInput.getText());
-                        changeUserInfoButton.setSelected(false);
-                    }
-                    // in case of server's response => error
-                    // handle with error response
-                    , error -> this.bubbleComponent.setCaptainText(getErrorInfoText(error))
-              );
+                result -> {
+                    resetEditing(usernameInput.getText());
+                    changeUserInfoButton.setSelected(false);
+                }
+                // in case of server's response => error
+                // handle with error response
+                , error -> {
+                    this.bubbleComponent.setErrorMode(true);
+                    this.bubbleComponent.setCaptainText(getErrorInfoText(error));
+                });
         } else {
+            this.bubbleComponent.setErrorMode(true);
             this.bubbleComponent.setCaptainText(getErrorInfoText(passwordInput.getLength() > 8 ? -1 : -2 ));
         }
     }
@@ -192,7 +196,8 @@ public class EditAccController extends BasicController {
 
     public void cancelChanges() {
         // Reset inputs and changeUserInfoButton
-        this.errorLabelEditAcc.setText("");
+        this.bubbleComponent.setErrorMode(false);
+        this.bubbleComponent.setCaptainText(resources.getString("pirate.editAcc.go.into.hiding"));
         changeUserInfoButton.setSelected(false);
         resetEditing(tokenStorage.getName());
     }

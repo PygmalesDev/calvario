@@ -8,16 +8,27 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
 
-@Component(view = "ResourcesOverview.fxml")
-public class ResourcesOverviewComponent extends VBox {
-    public Button closeProductionOverviewButton;
+import javax.inject.Inject;
+
+@Component(view = "StorageOverview.fxml")
+public class StorageOverviewComponent extends VBox {
+    @FXML
+    public Button closeStorageOverviewButton;
+    @FXML
     public ListView resourceListView;
+    @FXML
     public HBox economyButton;
+    @FXML
     public Button populationButton;
+    @FXML
     public Button productionButton;
+    @FXML
     public Button tacticsButton;
     @FXML
     Label empireNameLabel;
+
+    @Inject
+    public StorageOverviewComponent() {}
 
 
     public void showPopulation(){
@@ -31,8 +42,9 @@ public class ResourcesOverviewComponent extends VBox {
     public void showProduction(){}
     public void showTactics(){}
 
-    public void closeProductionOverview(){
 
+    public void closeStorageOverview(){
+        this.getParent().setVisible(false);
     }
 
 

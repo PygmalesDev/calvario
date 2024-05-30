@@ -1,6 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
@@ -8,6 +9,7 @@ import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.LanguageService;
 import de.uniks.stp24.service.PrefService;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
@@ -28,6 +30,8 @@ import java.util.*;
 public class InGameController {
     @FXML
     StackPane pauseMenuContainer;
+    @FXML
+    StackPane storageOverviewContainer;
 
     @Inject
     App app;
@@ -41,6 +45,11 @@ public class InGameController {
     @SubComponent
     @Inject
     public SettingsComponent settingsComponent;
+
+    @SubComponent
+    @Inject
+    public StorageOverviewComponent storageOverviewComponent;
+
 
     @Inject
     InGameService inGameService;
@@ -105,6 +114,9 @@ public class InGameController {
     public void render() {
         pauseMenuContainer.setVisible(false);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
+
+        storageOverviewContainer.setVisible(false);
+        storageOverviewContainer.getChildren().add(storageOverviewComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -139,5 +151,12 @@ public class InGameController {
         this.gameListenerTriple.forEach(triple -> {
             triple.game().listeners().removePropertyChangeListener(triple.propertyName(), triple.listener());
         });
+    }
+
+    public void showStorage() {
+        storageOverviewContainer.setVisible(true);
+    }
+
+    public void showIslandOverview() {
     }
 }

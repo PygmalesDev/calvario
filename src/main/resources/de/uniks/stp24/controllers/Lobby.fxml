@@ -65,14 +65,12 @@
    <Pane fx:id="lobbyMessagePane" disable="true" opacity="0.5" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: GRAY;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    <Pane fx:id="lobbyMessageElement" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="300.0" visible="false" AnchorPane.bottomAnchor="500.0" AnchorPane.leftAnchor="490.0" AnchorPane.rightAnchor="490.0" AnchorPane.topAnchor="210.0">
       <VBox alignment="CENTER" prefHeight="150.0" prefWidth="300.0" spacing="20.0" styleClass="backgroundLightYellow">
-         <children>
-            <Text fx:id="messageText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundLightYellow" text="%host.has.left.lobby" textAlignment="CENTER" wrappingWidth="226.0">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Text>
-            <Button fx:id="returnButton" mnemonicParsing="false" onAction="#goBack" prefHeight="32.0" prefWidth="83.0" styleClass="deleteAndSaveButton" text="Return" />
-         </children>
+         <Text fx:id="messageText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="backgroundLightYellow" text="%host.has.left.lobby" textAlignment="CENTER" wrappingWidth="226.0">
+            <font>
+               <Font size="16.0" />
+            </font>
+         </Text>
+         <Button fx:id="returnButton" mnemonicParsing="false" onAction="#goBack" prefHeight="32.0" prefWidth="83.0" styleClass="deleteAndSaveButton" text="Return" />
       </VBox>
    </Pane>
 </AnchorPane>

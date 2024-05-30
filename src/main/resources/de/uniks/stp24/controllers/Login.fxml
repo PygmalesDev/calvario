@@ -38,7 +38,7 @@
                   </ToggleButtonGroup>
                </HBox>
                <ImageView fitHeight="150.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
-                  <Image fx:id="calvarioLogoRegister" url="@../assets/logos/Calvario.png" />
+                  <Image url="@../assets/logos/Calvario.png" />
                   <VBox.margin>
                      <Insets top="5.0" />
                   </VBox.margin>
@@ -46,92 +46,94 @@
                <VBox alignment="CENTER" prefHeight="160.0" prefWidth="100.0">
                   <HBox alignment="CENTER" prefHeight="500.0" prefWidth="35.0" spacing="5.0">
                      <Pane>
-                        <children>
-                           <TextField fx:id="usernameInput" alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="40.0" prefWidth="300.0" promptText="%username" styleClass="inputField">
-                              <font>
-                                 <Font size="15.0" />
-                              </font>
-                           </TextField>
-                           <PasswordField fx:id="passwordInput" alignment="CENTER" layoutX="14.0" layoutY="79.0" prefHeight="40.0" prefWidth="300.0" promptText="%password" styleClass="inputField">
-                              <font>
-                                 <Font size="15.0" />
-                              </font>
-                           </PasswordField>
-                           <TextField fx:id="showPasswordText" alignment="CENTER" layoutX="14.0" layoutY="79.0" managed="false" prefHeight="40.0" prefWidth="300.0" promptText="%password" styleClass="inputField">
-                              <font>
-                                 <Font size="15.0" />
-                              </font>
-                           </TextField>
-                           <ToggleButton fx:id="showPasswordToggleButton" layoutX="324.0" layoutY="87.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="eyeButton">
-                              <graphic>
-                                 <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" />
-                              </graphic>
-                           </ToggleButton>
-                        </children>
+                        <TextField fx:id="usernameInput" alignment="CENTER" layoutX="14.0" layoutY="14.0"
+                                   prefHeight="40.0" prefWidth="300.0" promptText="%username" styleClass="inputField">
+                           <font>
+                              <Font size="15.0"/>
+                           </font>
+                        </TextField>
+                        <PasswordField fx:id="passwordInput" alignment="CENTER" layoutX="14.0" layoutY="79.0"
+                                       prefHeight="40.0" prefWidth="300.0" promptText="%password"
+                                       styleClass="inputField">
+                           <font>
+                              <Font size="15.0"/>
+                           </font>
+                        </PasswordField>
+                        <TextField fx:id="showPasswordText" alignment="CENTER" layoutX="14.0" layoutY="79.0"
+                                   managed="false" prefHeight="40.0" prefWidth="300.0" promptText="%password"
+                                   styleClass="inputField">
+                           <font>
+                              <Font size="15.0"/>
+                           </font>
+                        </TextField>
+                        <ToggleButton fx:id="showPasswordToggleButton" layoutX="324.0" layoutY="87.0"
+                                      maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                                      minWidth="-Infinity" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0"
+                                      styleClass="eyeButton">
+                           <graphic>
+                              <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true"/>
+                           </graphic>
+                        </ToggleButton>
                      </Pane>
                   </HBox>
                </VBox>
                <HBox alignment="BOTTOM_CENTER" prefHeight="250.0" prefWidth="550.0">
-                  <children>
-                     <VBox alignment="CENTER" prefHeight="250.0" prefWidth="350.0">
-                        <Text fx:id="errorLabel" strokeType="OUTSIDE" strokeWidth="0.0">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </Text>
-                        <CheckBox fx:id="rememberMeBox" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" styleClass="rememberMe" text="%remember.me">
-                           <font>
-                              <Font size="17.0" />
-                           </font>
-                        </CheckBox>
-                        <Button fx:id="loginButton" defaultButton="true" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="250.0" styleClass="actionButton" text="%login">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets top="20.0" />
-                           </VBox.margin>
-                           <graphic>
-                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icons/enter.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="signupButton" mnemonicParsing="false" onAction="#signup" prefHeight="40.0" prefWidth="250.0" styleClass="actionButton" text="%register">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets bottom="15.0" />
-                           </VBox.margin>
-                           <graphic>
-                              <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icons/account.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button fx:id="licensesButton" alignment="CENTER" mnemonicParsing="false" onAction="#showLicenses" prefHeight="40.0" prefWidth="100.0" styleClass="licensesButton" text="%licenses">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <graphic>
-                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icons/licenses.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                     </VBox>
-                     <Pane fx:id="captainContainer" prefHeight="0.0" prefWidth="0.0" />
-                  </children>
+                  <VBox alignment="CENTER" prefHeight="250.0" prefWidth="350.0">
+                     <Text fx:id="errorLabel" strokeType="OUTSIDE" strokeWidth="0.0">
+                        <font>
+                           <Font size="15.0"/>
+                        </font>
+                        <VBox.margin>
+                           <Insets/>
+                        </VBox.margin>
+                     </Text>
+                     <CheckBox fx:id="rememberMeBox" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
+                               prefHeight="30.0" prefWidth="200.0" styleClass="rememberMe" text="%remember.me">
+                        <font>
+                           <Font size="17.0"/>
+                        </font>
+                     </CheckBox>
+                     <Button fx:id="loginButton" defaultButton="true" mnemonicParsing="false" onAction="#login"
+                             prefHeight="40.0" prefWidth="250.0" styleClass="actionButton" text="%login">
+                        <font>
+                           <Font size="15.0"/>
+                        </font>
+                        <VBox.margin>
+                           <Insets top="20.0"/>
+                        </VBox.margin>
+                        <graphic>
+                           <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                              <Image url="@../icons/enter.png"/>
+                           </ImageView>
+                        </graphic>
+                     </Button>
+                     <Button fx:id="signupButton" mnemonicParsing="false" onAction="#signup" prefHeight="40.0"
+                             prefWidth="250.0" styleClass="actionButton" text="%register">
+                        <font>
+                           <Font size="15.0"/>
+                        </font>
+                        <VBox.margin>
+                           <Insets bottom="15.0"/>
+                        </VBox.margin>
+                        <graphic>
+                           <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                              <Image url="@../icons/account.png"/>
+                           </ImageView>
+                        </graphic>
+                     </Button>
+                     <Button fx:id="licensesButton" alignment="CENTER" mnemonicParsing="false" onAction="#showLicenses"
+                             prefHeight="40.0" prefWidth="100.0" styleClass="licensesButton" text="%licenses">
+                        <font>
+                           <Font size="15.0"/>
+                        </font>
+                        <graphic>
+                           <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                              <Image url="@../icons/licenses.png"/>
+                           </ImageView>
+                        </graphic>
+                     </Button>
+                  </VBox>
+                  <Pane fx:id="captainContainer" prefHeight="0.0" prefWidth="0.0"/>
                </HBox>
             </VBox>
             <HBox alignment="CENTER" prefHeight="20.0" prefWidth="550.0" style="-fx-background-color: black;" />

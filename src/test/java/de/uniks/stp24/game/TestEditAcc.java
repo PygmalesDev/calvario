@@ -2,8 +2,8 @@ package de.uniks.stp24.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.BubbleComponent;
-import de.uniks.stp24.component.WarningScreenComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
+import de.uniks.stp24.component.menu.WarningScreenComponent;
 import de.uniks.stp24.controllers.EditAccController;
 import de.uniks.stp24.model.User;
 import de.uniks.stp24.service.*;
@@ -12,13 +12,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.BoxBlur;
-import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -183,7 +181,12 @@ public class TestEditAcc extends ControllerTest {
     @Test
     void deleteAccountTest(){
         // Title: Confirm after clicking delete account button
-        doReturn(Observable.just(new User("1", "a","b","c","d")) ).when(this.editAccService).deleteUser();
+        doAnswer(show -> { tokenStorage.setName(null);
+            tokenStorage.setAvatar(null);
+            prefService.removeRefreshToken();
+            return Observable.just(new User("1", "a","b","c","d"));
+        }).when(this.editAccService).deleteUser();
+
         // Start:
         // Alice wants to delete her account in STPellaris. She is in the user administration window. She clicked the delete user button and a pop up came up.
         tokenStorage.setName("Alice");
@@ -194,19 +197,12 @@ public class TestEditAcc extends ControllerTest {
         // She clicks confrim.
         Button deleteAccButton = lookup("#deleteAccButton").queryButton();
         clickOn("#deleteAccButton");
-        Observable<User> observable = editAccService.deleteUser();
-        observable.doOnComplete(() -> {
-            tokenStorage.setName(null);
-            tokenStorage.setAvatar(null);
-            prefService.removeRefreshToken();
-        app.show("/login");}).subscribe();
         waitForFxEvents();
 
         // Result:
         // The pop up disappeared. Alice is now in the log in window again.
-        verify(app, times(1)).show("/login");
         assertNull(tokenStorage.getName());
-        //assertEquals("Login", stage.getTitle());
+        assertEquals(resources.getString("login"), stage.getTitle());
     }
 
 

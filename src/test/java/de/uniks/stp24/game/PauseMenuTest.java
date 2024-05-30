@@ -1,8 +1,8 @@
 package de.uniks.stp24.game;
 
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.PauseMenuComponent;
-import de.uniks.stp24.component.SettingsComponent;
+import de.uniks.stp24.component.menu.PauseMenuComponent;
+import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.service.InGameService;
@@ -16,7 +16,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.ResourceBundle;
 

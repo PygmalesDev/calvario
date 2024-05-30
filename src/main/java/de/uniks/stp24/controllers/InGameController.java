@@ -1,7 +1,7 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.PauseMenuComponent;
-import de.uniks.stp24.component.SettingsComponent;
+import de.uniks.stp24.component.menu.PauseMenuComponent;
+import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
@@ -94,8 +94,8 @@ public class InGameController extends BasicController {
     public void showSettings() {
         pauseMenuContainer.getChildren().remove(pauseMenuComponent);
         pauseMenuContainer.getChildren().add(settingsComponent);
-
     }
+
     public void unShowSettings() {
         pauseMenuContainer.getChildren().remove(settingsComponent);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);

@@ -1,6 +1,6 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.BubbleComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;

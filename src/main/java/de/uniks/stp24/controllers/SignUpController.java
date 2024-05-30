@@ -1,6 +1,6 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.BubbleComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.*;
 import javafx.beans.binding.Bindings;

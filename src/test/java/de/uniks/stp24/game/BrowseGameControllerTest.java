@@ -2,10 +2,10 @@ package de.uniks.stp24.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.BubbleComponent;
-import de.uniks.stp24.component.GameComponent;
-import de.uniks.stp24.component.LogoutComponent;
-import de.uniks.stp24.component.WarningComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
+import de.uniks.stp24.component.menu.GameComponent;
+import de.uniks.stp24.component.menu.LogoutComponent;
+import de.uniks.stp24.component.menu.WarningComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.LogoutResult;

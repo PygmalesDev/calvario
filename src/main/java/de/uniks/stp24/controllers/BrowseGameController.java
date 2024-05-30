@@ -1,9 +1,9 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.BubbleComponent;
-import de.uniks.stp24.component.GameComponent;
-import de.uniks.stp24.component.LogoutComponent;
-import de.uniks.stp24.component.WarningComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
+import de.uniks.stp24.component.menu.GameComponent;
+import de.uniks.stp24.component.menu.LogoutComponent;
+import de.uniks.stp24.component.menu.WarningComponent;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.*;
@@ -152,7 +152,6 @@ BrowseGameController extends BasicController {
                   createGameService.setGamesList(games);
                   this.sortNewGamesOnTop();
               }),
-//          error -> this.textInfo.setText(getErrorInfoText(error))
           error -> {
             bubbleComponent.setErrorMode(true);
             bubbleComponent.setCaptainText(getErrorInfoText(error));

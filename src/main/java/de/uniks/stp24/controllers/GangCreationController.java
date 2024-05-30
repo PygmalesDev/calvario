@@ -1,10 +1,10 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.component.menu.GangComponent;
+import de.uniks.stp24.component.menu.GangDeletionComponent;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
-import de.uniks.stp24.component.GangComponent;
 import de.uniks.stp24.service.*;
-import de.uniks.stp24.component.GangDeletionComponent;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -36,14 +36,11 @@ public class GangCreationController extends BasicController {
     SaveLoadService saveLoadService;
     @Inject
     LobbyService lobbyService;
-
     @Inject
     PopupBuilder popupBuilder;
-
     @SubComponent
     @Inject
     GangDeletionComponent gangDeletionComponent;
-
     @Inject
     public Provider<GangComponent> gangComponentProvider;
     @FXML
@@ -97,6 +94,7 @@ public class GangCreationController extends BasicController {
     Map<String, String[]> empireTemplates;
 
     private ObservableList<Gang> gangs;
+    PopupBuilder popup = new PopupBuilder();
 
     // unused FX IDs (declared here to remove warnings from fxml file)
     @FXML
@@ -119,9 +117,13 @@ public class GangCreationController extends BasicController {
     ToggleButton lockDescriptionButton;
     @Param("gameid")
     String gameID;
+    @FXML
+    ToggleButton lockFlagButton;
+    @FXML
+    ToggleButton lockPortraitButton;
+    @FXML
+    ToggleButton lockColorButton;
 
-
-    PopupBuilder popup = new PopupBuilder();
 
     @Inject
     public GangCreationController() {
@@ -206,7 +208,7 @@ public class GangCreationController extends BasicController {
 
             if (Objects.nonNull(gang)) empire = new Empire(gang.name(), gang.description(), gang.color(),
                     gang.flagIndex()%this.flagsList.size(), gang.portraitIndex()%this.portraitsList.size(),
-                    "uninhabitable_0", new String[]{});
+                    new String[]{},"uninhabitable_0");
 
             this.subscriber.subscribe(this.lobbyService.updateMember(
                     this.gameID, this.tokenStorage.getUserId(),result.ready(), empire), result2 ->

@@ -2,7 +2,7 @@ package de.uniks.stp24.model;
 
 public record Island(
   String owner,
-  String avatar,
+  int flagIndex,
   int posX,
   int posY,
   IslandType type,

@@ -1,11 +1,7 @@
 package de.uniks.stp24.model;
 
-import javafx.scene.image.Image;
-
 public record Site(
-    Image icon,
-    String name,
-    String Description,
+    String siteID,
     Resource[] required,
     int maxBuildings,
     Building[] buildings

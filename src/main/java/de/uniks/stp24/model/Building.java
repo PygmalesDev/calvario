@@ -1,14 +1,12 @@
 package de.uniks.stp24.model;
 
-import javafx.scene.image.Image;
+import java.util.Map;
 
 public record Building(
-  Image icon,
-  String name,
-  String description,
-  Resource[] required,
-  Resource[] production,
-  Resource[] consumption,
+  String buildingID,
+  Map<Resource, Integer> required,
+  Map<Resource, Integer> production,
+  Map<Resource, Integer> consumption,
   int capacity,
   int upgrade
 ) {

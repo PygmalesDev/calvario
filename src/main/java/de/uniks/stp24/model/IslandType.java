@@ -6,5 +6,6 @@ public enum IslandType {
     MISTY,
     DESERTED,
     BANDIT,
-    GOLDEN
+    ANCIENT,
+    MOUNTY
 }

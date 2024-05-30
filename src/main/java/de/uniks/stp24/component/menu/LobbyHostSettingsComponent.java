@@ -83,7 +83,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     }
 
     public void startGame() {
-        this.app.show("/ingame");
+        this.app.show("/ingame", Map.of("gameid", this.gameID));
     }
 
     /**

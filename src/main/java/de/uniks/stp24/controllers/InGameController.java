@@ -1,5 +1,6 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.component.ClockComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
@@ -14,6 +15,8 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.param.Param;
+
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -29,8 +32,13 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public SettingsComponent settingsComponent;
+    @SubComponent
+    @Inject
+    public ClockComponent clockComponent;
     @Inject
     InGameService inGameService;
+    @Param("gameid")
+    String gameId;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
@@ -114,4 +122,5 @@ public class InGameController extends BasicController {
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
           .removePropertyChangeListener(triple.propertyName(), triple.listener()));
     }
+
 }

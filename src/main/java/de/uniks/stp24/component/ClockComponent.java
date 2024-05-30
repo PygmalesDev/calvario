@@ -1,10 +1,11 @@
 package de.uniks.stp24.component;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.menu.TimerService;
+import javafx.scene.layout.HBox;
 import org.fulib.fx.annotation.controller.Component;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.param.Param;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
@@ -22,7 +24,7 @@ import java.beans.PropertyChangeListener;
 import java.util.Objects;
 
 @Component(view = "Clock.fxml")
-public class ClockComponent extends AnchorPane {
+public class ClockComponent extends HBox {
 
     @FXML
     ToggleButton flagToggle;
@@ -45,12 +47,17 @@ public class ClockComponent extends AnchorPane {
     @FXML
     Label countdownLabel;
 
+    @Param("gameid")
+    String gameId;
+
     @Inject
     App app;
     @Inject
     TimerService timerService;
     @Inject
     InGameService inGameService;
+    @Inject
+    GamesApiService gamesApiService;
 
     @Inject
     public ClockComponent() {
@@ -58,14 +65,14 @@ public class ClockComponent extends AnchorPane {
     }
 
     @OnInit
-    public void onInit() {
+    public void init() {
 
         PropertyChangeListener callHandleTimeChange = this::timeChange;
         timerService.listeners().addPropertyChangeListener("countdown", callHandleTimeChange);
     }
 
     @OnRender
-    public void onRender() {
+    public void render() {
 
         String css = Objects.requireNonNull(this.getClass().getResource("/de/uniks/stp24/clock.css")).toExternalForm();
         this.getStylesheets().add(css);

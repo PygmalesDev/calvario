@@ -1,6 +1,7 @@
 package de.uniks.stp24.service;
 
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.service.menu.TimerService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -8,6 +9,8 @@ import javax.inject.Singleton;
 @Singleton
 public class InGameService {
 
+    @Inject
+    TimerService timerService;
     @Inject
     GameStatus gameStatus;
 

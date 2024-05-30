@@ -1,8 +1,8 @@
 // package de.uniks.stp24;
 //
 // import com.fasterxml.jackson.databind.ObjectMapper;
-// import de.uniks.stp24.component.BubbleComponent;
-// import de.uniks.stp24.component.GangComponent;
+// import de.uniks.stp24.component.menu.BubbleComponent;
+// import de.uniks.stp24.component.menu.GangComponent;
 // import de.uniks.stp24.controllers.GangCreationController;
 // import de.uniks.stp24.model.Gang;
 // import de.uniks.stp24.service.SaveLoadService;

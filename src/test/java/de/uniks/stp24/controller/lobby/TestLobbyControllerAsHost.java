@@ -2,7 +2,7 @@ package de.uniks.stp24.controller.lobby;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.*;
+import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.LobbyController;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.*;
@@ -27,11 +27,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javax.inject.Provider;
-
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -78,10 +73,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     @InjectMocks
     BubbleComponent bubbleComponent;
 
-    Provider<UserComponent> userComponentProvider = ()->{
-            final UserComponent userComponent = new UserComponent(imageCache, resources);
-            return new UserComponent(imageCache, resources);
-        };
+    Provider<UserComponent> userComponentProvider = ()-> new UserComponent(imageCache, resources);
 
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();

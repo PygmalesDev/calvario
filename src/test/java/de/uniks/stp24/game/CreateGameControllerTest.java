@@ -1,7 +1,7 @@
 package de.uniks.stp24.game;
 
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.BubbleComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.controllers.CreateGameController;
 import de.uniks.stp24.service.CreateGameService;
 import javafx.scene.control.Button;

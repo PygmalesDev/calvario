@@ -1,11 +1,10 @@
 package de.uniks.stp24;
 
-import de.uniks.stp24.component.BubbleComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.controllers.SignUpController;
 import de.uniks.stp24.dto.SignUpResultDto;
 import de.uniks.stp24.service.SignUpService;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;

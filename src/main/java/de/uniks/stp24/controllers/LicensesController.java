@@ -1,7 +1,6 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.BubbleComponent;
-import javafx.application.Platform;
+import de.uniks.stp24.component.menu.BubbleComponent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -12,7 +11,6 @@ import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
-
 import javax.inject.Inject;
 
 @Title("%licenses")
@@ -25,7 +23,6 @@ public class LicensesController extends BasicController {
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
-
     @FXML
     Pane captainContainer;
 
@@ -36,9 +33,8 @@ public class LicensesController extends BasicController {
     @OnRender
     public void addSpeechBubble() {
         captainContainer.getChildren().add(bubbleComponent);
-        Platform.runLater(() -> {
-            bubbleComponent.setCaptainText(resources.getString("pirate.licenses"));
-        });
+        bubbleComponent
+          .setCaptainText(resources.getString("pirate.licenses"));
     }
 
     @Inject

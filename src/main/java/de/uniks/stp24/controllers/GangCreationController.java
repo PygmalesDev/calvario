@@ -1,6 +1,5 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
 import de.uniks.stp24.component.menu.GangComponent;
 import de.uniks.stp24.component.menu.GangDeletionComponent;
 import de.uniks.stp24.model.Empire;
@@ -14,7 +13,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -22,51 +20,29 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
-import org.fulib.fx.controller.Subscriber;
-
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-
 import static de.uniks.stp24.service.Constants.empireTemplatesEnglish;
 import static de.uniks.stp24.service.Constants.empireTemplatesGerman;
 
 @Title("%create.island")
 @Controller
-public class GangCreationController {
-    @Inject
-    App app;
-
+public class GangCreationController extends BasicController {
     @Inject
     SaveLoadService saveLoadService;
-
     @Inject
     LobbyService lobbyService;
     @Inject
-    Subscriber subscriber;
-    @Inject
-    TokenStorage tokenStorage;
-    @Inject
-    PrefService prefService;
-
-    @Inject
     PopupBuilder popupBuilder;
-
     @SubComponent
     @Inject
     GangDeletionComponent gangDeletionComponent;
-
     @Inject
     public Provider<GangComponent> gangComponentProvider;
-
-    @Inject
-    @Resource
-    ResourceBundle resource;
-
-
     @FXML
     ListView<Gang> gangsListView;
     @FXML
@@ -118,6 +94,7 @@ public class GangCreationController {
     Map<String, String[]> empireTemplates;
 
     private ObservableList<Gang> gangs;
+    PopupBuilder popup = new PopupBuilder();
 
     // unused FX IDs (declared here to remove warnings from fxml file)
     @FXML
@@ -138,6 +115,8 @@ public class GangCreationController {
     ToggleButton lockNameButton;
     @FXML
     ToggleButton lockDescriptionButton;
+    @Param("gameid")
+    String gameID;
     @FXML
     ToggleButton lockFlagButton;
     @FXML
@@ -145,28 +124,22 @@ public class GangCreationController {
     @FXML
     ToggleButton lockColorButton;
 
-    PopupBuilder popup = new PopupBuilder();
 
     @Inject
     public GangCreationController() {
 
     }
-    @Param("gameid")
-    String gameID;
 
     @OnInit
     public void init(){
         initImages();
         initColors();
-
         gangDeletionComponent.setGangCreationController(this);
-
         if(prefService.getLocale().equals(Locale.GERMAN)) {
             empireTemplates = empireTemplatesGerman;
-        }else {
+        } else {
             empireTemplates = empireTemplatesEnglish;
         }
-
         gangs = saveLoadService.loadGangs();
     }
 
@@ -197,7 +170,6 @@ public class GangCreationController {
         String[] colorsArray = {"#DC143C", "#0F52BA", "#50C878", "#9966CC", "#FF7F50",
                 "#40E0D0", "#FF00FF", "#FFD700", "#C0C0C0", "#4B0082",
                 "#36454F", "#F28500", "#E6E6FA", "#008080", "#800000", "#808000"};
-
         colorsList.addAll(Arrays.asList(colorsArray));
     }
 
@@ -230,8 +202,8 @@ public class GangCreationController {
 
     public void back() {
         Gang gang = this.gangsListView.getSelectionModel().getSelectedItem();
-
-        this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
+        this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
+          result -> {
             Empire empire = null;
 
             if (Objects.nonNull(gang)) empire = new Empire(gang.name(), gang.description(), gang.color(),
@@ -241,8 +213,9 @@ public class GangCreationController {
             this.subscriber.subscribe(this.lobbyService.updateMember(
                     this.gameID, this.tokenStorage.getUserId(),result.ready(), empire), result2 ->
                         app.show("/lobby", Map.of("gameid", this.gameID)));
-        });
-
+        },
+          error -> {}
+        );
     }
 
     public Gang getInputGang() {
@@ -352,7 +325,7 @@ public class GangCreationController {
                     + " " + empireTemplates.get("Type")[typeIndex];
             String secondName = "";
             if (rand.nextInt(0, 4) == 3)
-                secondName = " " + resource.getString("of") + " " + empireTemplates.get("Suffix")[rand.nextInt(0, empireTemplates.get("Suffix").length)] +
+                secondName = " " + resources.getString("of") + " " + empireTemplates.get("Suffix")[rand.nextInt(0, empireTemplates.get("Suffix").length)] +
                         " " + empireTemplates.get("Definition")[rand.nextInt(0, empireTemplates.get("Definition").length)];
             gangNameText.setText(name + secondName);
         } else {
@@ -375,8 +348,6 @@ public class GangCreationController {
             colorIndex = rand.nextInt(0, colorsList.size());
             colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
         }
-
-
     }
 
     public void lockFlag() {

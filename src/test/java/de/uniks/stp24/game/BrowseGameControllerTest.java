@@ -27,7 +27,6 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
-
 import javax.inject.Provider;
 import java.util.List;
 
@@ -42,10 +41,10 @@ public class BrowseGameControllerTest extends ControllerTest {
     EventListener eventListener;
     @Mock
     GamesApiService gamesApiService;
-
     @Spy
     TokenStorage tokenStorage;
-
+    @Spy
+    ImageCache imageCache;
     @Spy
     PopupBuilder popupBuilder;
     @Spy

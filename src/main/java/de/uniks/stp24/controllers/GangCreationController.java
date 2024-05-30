@@ -1,8 +1,8 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.component.GangComponent;
-import de.uniks.stp24.component.GangDeletionComponent;
+import de.uniks.stp24.component.menu.GangComponent;
+import de.uniks.stp24.component.menu.GangDeletionComponent;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.service.*;
@@ -138,6 +138,12 @@ public class GangCreationController {
     ToggleButton lockNameButton;
     @FXML
     ToggleButton lockDescriptionButton;
+    @FXML
+    ToggleButton lockFlagButton;
+    @FXML
+    ToggleButton lockPortraitButton;
+    @FXML
+    ToggleButton lockColorButton;
 
     PopupBuilder popup = new PopupBuilder();
 
@@ -230,7 +236,7 @@ public class GangCreationController {
 
             if (Objects.nonNull(gang)) empire = new Empire(gang.name(), gang.description(), gang.color(),
                     gang.flagIndex()%this.flagsList.size(), gang.portraitIndex()%this.portraitsList.size(),
-                    "uninhabitable_0", new String[]{});
+                    new String[]{},"uninhabitable_0");
 
             this.subscriber.subscribe(this.lobbyService.updateMember(
                     this.gameID, this.tokenStorage.getUserId(),result.ready(), empire), result2 ->

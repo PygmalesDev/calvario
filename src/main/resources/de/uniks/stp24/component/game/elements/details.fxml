@@ -5,38 +5,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
-<VBox alignment="TOP_CENTER" prefHeight="184.0" prefWidth="374.0" style="-fx-border-color: #000000;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <HBox alignment="CENTER" prefHeight="50.0" prefWidth="372.0">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%place_holder" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="140.0" prefWidth="372.0">
-         <children>
-            <VBox alignment="TOP_CENTER" prefHeight="139.0" prefWidth="126.0">
-               <children>
-                  <HBox alignment="CENTER" prefHeight="20.0" prefWidth="150.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%place_holder" />
-                     </children>
-                  </HBox>
-                  <ListView prefHeight="121.0" prefWidth="62.0" />
-               </children>
-            </VBox>
-            <VBox prefHeight="139.0" prefWidth="25.0" />
-            <VBox alignment="TOP_CENTER" prefHeight="139.0" prefWidth="126.0">
-               <children>
-                  <HBox alignment="CENTER" prefHeight="20.0" prefWidth="150.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%place_holder" />
-                     </children>
-                  </HBox>
-                  <ListView prefHeight="121.0" prefWidth="62.0" />
-               </children>
-            </VBox>
-         </children>
-      </HBox>
-   </children>
-</VBox>
+<fx:root type="javafx.scene.layout.VBox" alignment="TOP_CENTER" prefHeight="132.0" prefWidth="330.0"
+         style="-fx-border-color: #000000;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder"/>
+   <HBox alignment="CENTER" prefHeight="118.0" prefWidth="329.0">
+      <VBox alignment="TOP_CENTER" prefHeight="114.0" prefWidth="139.0">
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder"/>
+         <ListView prefHeight="200.0" prefWidth="200.0"/>
+      </VBox>
+      <VBox prefHeight="114.0" prefWidth="20.0"/>
+      <VBox alignment="TOP_CENTER" prefHeight="114.0" prefWidth="139.0">
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder"/>
+         <ListView prefHeight="200.0" prefWidth="200.0"/>
+      </VBox>
+   </HBox>
+</fx:root>

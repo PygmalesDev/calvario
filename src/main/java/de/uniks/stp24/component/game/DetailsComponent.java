@@ -1,4 +1,5 @@
 package de.uniks.stp24.component.game;
+import javafx.scene.layout.VBox;
 
-public class DetailsComponent {
+public class DetailsComponent extends VBox {
 }

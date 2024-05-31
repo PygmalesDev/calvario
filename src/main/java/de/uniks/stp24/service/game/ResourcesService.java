@@ -22,24 +22,20 @@ public class ResourcesService {
     @Inject
     public ResourcesService() {}
 
-    public Observable<EmpireDto> getEmpire(String game, String empire){
-        return this.empireApiService.getEmpire(game, empire);
-    }
-
 
     public List<Resource> generateResourceList(Map<String, Integer> resourceMap){
         for(Map.Entry<String, Integer> entry : resourceMap.entrySet()){
-            String name = entry.getKey();
+            String resourceID = entry.getKey();
             int count = entry.getValue();
-            int proSeason = 0;///getProSeason(name, count);
-            Resource.ResourceType type = getResourceTyp(name);
-            Resource resource = new Resource(name, count, proSeason, type);
+            int changeProSeason = 0;///getProSeason(name, count);
+            Resource.ResourceType type = getResourceType(resourceID);
+            Resource resource = new Resource(resourceID, count, changeProSeason, type);
             resourceList.add(resource);
         }
         return this.resourceList;
     }
 
-    public Resource.ResourceType getResourceTyp(String name){
+    public Resource.ResourceType getResourceType(String name){
         for(Map.Entry<Resource.ResourceType, List<String>> entry : resourceTypes.entrySet()){
             if(entry.getValue().contains(name)){
                 return entry.getKey();

@@ -1,6 +1,5 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.*;
@@ -25,7 +24,6 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
-import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -36,17 +34,12 @@ import java.util.ResourceBundle;
 
 @Title("%enter.game")
 @Controller
-public class LobbyController {
-    @Inject
-    App app;
-    @Inject
-    ImageCache imageCache;
+public class LobbyController extends BasicController {
+
     @Inject
     TokenStorage tokenStorage;
     @Inject
     UserApiService userApiService;
-    @Inject
-    Subscriber subscriber;
     @Inject
     LobbyService lobbyService;
     @Inject
@@ -63,13 +56,10 @@ public class LobbyController {
     @SubComponent
     @Inject
     public UserComponent userComponent;
-
     @Inject
     public Provider<UserComponent> userComponentProvider;
     @Inject
     EventListener eventListener;
-
-
     @FXML
     public ListView<MemberUser> playerListView;
     @FXML
@@ -84,7 +74,6 @@ public class LobbyController {
     Pane captainContainer;
     @FXML
     Text gameNameField;
-
     @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
@@ -120,7 +109,8 @@ public class LobbyController {
      */
     @OnInit
     void init() {
-        this.subscriber.subscribe(this.gamesService.getGame(this.gameID), game -> {
+        this.subscriber.subscribe(this.gamesService.getGame(this.gameID),
+          game -> {
             this.game = game;
             this.gameID = game._id();
             this.asHost = game.owner().equals(this.tokenStorage.getUserId());
@@ -134,10 +124,8 @@ public class LobbyController {
                 this.bubbleComponent.setCaptainText(newValue);
             }));
             this.gameNameField.setText(this.game.name());
-
             this.createUserListListener();
             this.createGameDeletedListener();
-
             this.lobbyService.loadPlayers(this.gameID).subscribe(dto -> {
                 Arrays.stream(dto).forEach(data -> {
                     this.addUserToList(data.user(), data);
@@ -159,7 +147,10 @@ public class LobbyController {
             });
 
             this.lobbyHostSettingsComponent.createCheckPlayerReadinessListener();
-        });
+        },
+          error -> this.enterGameComponent
+            .errorMessage.textProperty().set(getErrorInfoText(error))
+        );
     }
 
     /**
@@ -167,11 +158,14 @@ public class LobbyController {
      */
     private void createGameDeletedListener() {
         this.subscriber.subscribe(this.eventListener
-                .listen("games." + this.gameID + ".deleted", Game.class), event -> {
+                .listen("games." + this.gameID + ".deleted", Game.class),
+          event -> {
             this.lobbyMessagePane.setVisible(true);
             this.lobbyMessageElement.setVisible(true);
             this.messageText.setText(resources.getString("lobby.has.been.deleted"));
-        });
+          },
+          error -> this.enterGameComponent
+            .errorMessage.textProperty().set(getErrorInfoText(error)));
     }
 
     /**
@@ -179,7 +173,8 @@ public class LobbyController {
      */
     private void createUserListListener() {
         this.subscriber.subscribe(this.eventListener
-                .listen("games." + this.gameID + ".members.*.*", MemberDto.class), event -> {
+                .listen("games." + this.gameID + ".members.*.*", MemberDto.class),
+          event -> {
             String id = event.data().user();
             switch (event.suffix()) {
                 case "created" -> {
@@ -195,7 +190,10 @@ public class LobbyController {
                 case "deleted" -> this.removeUserFromList(id);
             }
             this.sortMemberList();
-        });
+        },
+          error -> this.enterGameComponent
+                .errorMessage.textProperty().set(getErrorInfoText(error))
+          );
     }
 
     /**
@@ -205,7 +203,6 @@ public class LobbyController {
     void render() {
         this.lobbyMessagePane.setVisible(false);
         this.lobbyMessageElement.setVisible(false);
-
         this.playerListView.setItems(this.users);
         this.captainContainer.getChildren().add(this.bubbleComponent);
         this.playerListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.userComponentProvider));
@@ -228,7 +225,8 @@ public class LobbyController {
             this.users.add(new MemberUser(new User(user.name() + suffix,
                     user._id(), user.avatar(), user.createdAt(), user.updatedAt()
             ), data.empire(), data.ready(), this.game, this.asHost));
-        });
+        },
+          error -> {});
     }
 
     /**
@@ -301,7 +299,9 @@ public class LobbyController {
                 bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.password"));
                 this.lobbyElement.getChildren().add(this.enterGameComponent);
             }
-        });
+        },
+        error -> this.enterGameComponent
+          .errorMessage.textProperty().set(getErrorInfoText(error)));
     }
 
     /**
@@ -316,7 +316,8 @@ public class LobbyController {
     public void goBack() {
         if (!this.wasKicked) this.subscriber.subscribe(
                 this.lobbyService.leaveLobby(this.gameID, this.tokenStorage.getUserId()),
-                result -> this.app.show("/browseGames"));
+                result -> this.app.show("/browseGames"),
+                error -> {});
         else
             this.app.show("/browseGames");
     }

@@ -6,8 +6,6 @@ import de.uniks.stp24.component.menu.WarningScreenComponent;
 import de.uniks.stp24.service.menu.EditAccService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PopupBuilder;
-import de.uniks.stp24.service.TokenStorage;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
@@ -24,7 +22,6 @@ import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
-
 import javax.inject.Inject;
 import java.util.Objects;
 
@@ -63,18 +60,12 @@ public class EditAccController extends BasicController {
     ImageView editIconImageView;
     @FXML
     ImageView deleteIconImageView;
-
     @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
-
     @Inject
     EditAccService editAccService;
-    @Inject
-    TokenStorage tokenStorage;
-    @Inject
-    ImageCache imageCache;
     @Inject
     ObjectMapper objectMapper;
     @Inject
@@ -82,18 +73,15 @@ public class EditAccController extends BasicController {
     @SubComponent
     @Inject
     BubbleComponent bubbleComponent;
-
     @SubComponent
     @Inject
     public WarningScreenComponent warningScreen;
-
     private BooleanBinding editAccIsNotSelected;
     private BooleanBinding warningIsInvisible;
     public Image editIconBlueImage;
     public Image editIconBlackImage;
     public Image deleteIconRedImage;
     public Image deleteIconBlackImage;
-
     PopupBuilder popup = new PopupBuilder();
 
     @Inject
@@ -103,17 +91,17 @@ public class EditAccController extends BasicController {
     @OnRender
     public void addSpeechBubble() {
         captainContainer.getChildren().add(bubbleComponent);
-        Platform.runLater(() -> {
-            bubbleComponent.setCaptainText(resources.getString("pirate.editAcc.go.into.hiding"));
-        });
+          bubbleComponent
+            .setCaptainText(resources.getString("pirate.editAcc.go.into.hiding"));
     }
 
     @OnInit
     public void init(){
-        editIconBlueImage = new Image(getClass().getResource("/de/uniks/stp24/icons/editBlue.png").toExternalForm());
-        editIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/editBlack.png").toExternalForm());
-        deleteIconRedImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteRed.png").toExternalForm());
-        deleteIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteBlack.png").toExternalForm());
+        editIconBlueImage = imageCache.get("icons/editBlue.png");
+        editIconBlackImage = imageCache.get("icons/editBlack.png");
+        deleteIconRedImage = imageCache.get("icons/deleteRed.png");
+        deleteIconBlackImage = imageCache.get("icons/deleteBlack.png");
+        this.controlResponses = responseConstants.respEditAcc;
     }
 
     @OnRender
@@ -123,7 +111,6 @@ public class EditAccController extends BasicController {
         this.avatarImage.setImage(imageCache.get(
                 Objects.nonNull(tokenStorage.getAvatar()) ? tokenStorage.getAvatar() : "test/911.png" ));
         this.errorLabelEditAcc.setText("");
-
     }
 
     @OnRender
@@ -152,13 +139,10 @@ public class EditAccController extends BasicController {
         this.deleteUserButton.disableProperty()
                 .bind(Bindings.createBooleanBinding(()-> !editAccIsNotSelected.get(),
                         this.editAccIsNotSelected));
-
         this.goBackButton.disableProperty()
                 .bind(Bindings.createBooleanBinding(()-> !editAccIsNotSelected.get(),
                         this.editAccIsNotSelected));
     }
-
-
 
     @OnRender
     public void changeDeleteButtonView(){
@@ -176,33 +160,25 @@ public class EditAccController extends BasicController {
         },this.warningIsInvisible));
     }
 
-
-
     public void saveChanges() {
         // save changed name and/or password of the user and reset the edit account screen afterward
         if (checkIt(usernameInput.getText(),passwordInput.getText())) {
-            this.errorLabelEditAcc.setStyle("-fx-fill: black;");
             this.errorLabelEditAcc.setText("");
+            this.bubbleComponent.setErrorMode(false);
             subscriber.subscribe(editAccService.changeUserInfo(usernameInput.getText(), passwordInput.getText()),
-                    result -> {
-                        resetEditing(usernameInput.getText());
-                        changeUserInfoButton.setSelected(false);
-                    }
-                    // in case of server's response => error
-                    // handle with error response
-                    , error -> {
-                        this.errorLabelEditAcc.setStyle("-fx-fill: red;");
-                        // find the code in the error response
-                        int code = errorService.getStatus(error);
-                        // "generate"" the output in the english/german
-                        this.errorLabelEditAcc
-                                .setText(getErrorInfoText(responseConstants.respEditAcc,code));
-                    });
+                result -> {
+                    resetEditing(usernameInput.getText());
+                    changeUserInfoButton.setSelected(false);
+                }
+                // in case of server's response => error
+                // handle with error response
+                , error -> {
+                    this.bubbleComponent.setErrorMode(true);
+                    this.bubbleComponent.setCaptainText(getErrorInfoText(error));
+                });
         } else {
-            this.errorLabelEditAcc.setStyle("-fx-fill: red;");
-            this.errorLabelEditAcc.setText(getErrorInfoText(responseConstants.respEditAcc,
-              passwordInput.getLength() > 8 ? -1 : -2 ));
-
+            this.bubbleComponent.setErrorMode(true);
+            this.bubbleComponent.setCaptainText(getErrorInfoText(passwordInput.getLength() > 8 ? -1 : -2 ));
         }
     }
 
@@ -221,7 +197,8 @@ public class EditAccController extends BasicController {
 
     public void cancelChanges() {
         // Reset inputs and changeUserInfoButton
-        this.errorLabelEditAcc.setText("");
+        this.bubbleComponent.setErrorMode(false);
+        this.bubbleComponent.setCaptainText(resources.getString("pirate.editAcc.go.into.hiding"));
         changeUserInfoButton.setSelected(false);
         resetEditing(tokenStorage.getName());
     }

@@ -11,7 +11,6 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
-
 import javax.inject.Inject;
 import java.util.ResourceBundle;
 

@@ -38,7 +38,7 @@ public class CreateGameService {
     public Observable<CreateGameResultDto> createGame(String name, GameSettings settings, String password) {
             return gamesApiService
                     .createGame(new CreateGameDto(name, false, 1, settings, password))
-                    .doOnError(error -> createGameController.showError(errorService.getStatus(error)));
+                    .doOnError(error -> createGameController.showError(error));
     }
     public void setCreateGameController(CreateGameController createGameController){
         this.createGameController = createGameController;

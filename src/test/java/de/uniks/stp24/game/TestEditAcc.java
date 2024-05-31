@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
-
 @ExtendWith(MockitoExtension.class)
 public class TestEditAcc extends ControllerTest {
     @Spy
@@ -82,7 +81,7 @@ public class TestEditAcc extends ControllerTest {
         final Button deleteUserButton = lookup("#deleteUserButton").query();
 
         // Start:
-        // Alice wants to change her Account name in STPellaris. She is in the user administrtation screen and has clicked on edit account.
+        // Alice wants to change her Account name in Calvario. She is in the user administration screen and has clicked on edit account.
         tokenStorage.setName("Alice");
 
         // The cancelChangesButton is not visible and goBack and deleteUser are enabled
@@ -122,7 +121,7 @@ public class TestEditAcc extends ControllerTest {
         final TextField password = lookup("#passwordInput").query();
 
         // Start:
-        // Alice wants to change her Account name in STPellaris. She is in the user administrtation screen and has clicked on edit account.
+        // Alice wants to change her Account name in Calvario. She is in the user administrtation screen and has clicked on edit account.
         tokenStorage.setName("Alice");
         clickOn("#changeUserInfoButton");
 
@@ -188,13 +187,13 @@ public class TestEditAcc extends ControllerTest {
         }).when(this.editAccService).deleteUser();
 
         // Start:
-        // Alice wants to delete her account in STPellaris. She is in the user administration window. She clicked the delete user button and a pop up came up.
+        // Alice wants to delete her account in Calvario. She is in the user administration window. She clicked the delete user button and a pop up came up.
         tokenStorage.setName("Alice");
         clickOn("#deleteUserButton");
         waitForFxEvents();
 
         // Action:
-        // She clicks confrim.
+        // She clicks confirm.
         Button deleteAccButton = lookup("#deleteAccButton").queryButton();
         clickOn("#deleteAccButton");
         waitForFxEvents();
@@ -204,9 +203,5 @@ public class TestEditAcc extends ControllerTest {
         assertNull(tokenStorage.getName());
         assertEquals(resources.getString("login"), stage.getTitle());
     }
-
-
-
-
 
 }

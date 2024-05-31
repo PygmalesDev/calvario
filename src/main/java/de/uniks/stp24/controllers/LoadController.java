@@ -2,17 +2,13 @@ package de.uniks.stp24.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.param.Param;
 import javax.inject.Inject;
-import java.util.ResourceBundle;
 
 @Title("Calvario")
 @Controller
@@ -35,7 +31,7 @@ public class LoadController extends BasicController{
     }
 
     @OnKey
-    public void showLoginScreen(KeyEvent event) {
+    public void showLoginScreen() {
         if(autologin){
             app.show("/browseGames");
         }else {
@@ -43,7 +39,7 @@ public class LoadController extends BasicController{
         }
     }
 
-    public void mouseClicked(MouseEvent mouseEvent) {
+    public void mouseClicked() {
         if(autologin){
             app.show("/browseGames");
         }else {

@@ -65,10 +65,7 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
             this.userHBox.getChildren().remove(this.kickButton);
 
         this.usernameText.setText(member.user().name());
-        if (member.ready())
-            this.readyText.setText(resource.getString("ready"));
-        else
-            this.readyText.setText(resource.getString("not.ready"));
+        this.readyText.setText(resource.getString(member.ready() ? "ready" : "not.ready"));
 
         this.avatarImageView.setImage(this.imageCache.get(Objects.nonNull(this.member.user().avatar())
                 ? this.member.user().avatar()

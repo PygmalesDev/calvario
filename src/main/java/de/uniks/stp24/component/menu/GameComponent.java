@@ -12,7 +12,6 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
-
 import javax.inject.Inject;
 import java.util.ResourceBundle;
 
@@ -38,19 +37,15 @@ public class GameComponent extends HBox implements ReusableItemComponent<Game> {
     @Override
     public void setItem(@NotNull Game game) {
         game_name.setText(game.name());
-
         if(tokenStorage == null){
             setTestToken();
         }
-
         //Your game will be displayed in color green
         if (game.owner().equals(tokenStorage.getUserId())) {
             game_name.setFill(Color.BLUE);
         } else {
             game_name.setFill(Color.BLACK);
         }
-
-
         this.game = game;
     }
 

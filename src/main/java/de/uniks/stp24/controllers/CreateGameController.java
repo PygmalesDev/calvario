@@ -19,7 +19,6 @@ import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
-
 import javax.inject.Inject;
 
 @Title("%create.game")
@@ -41,12 +40,10 @@ public class CreateGameController extends BasicController {
     TextField createRepeatPasswordTextField;
     @FXML
     Spinner<Integer> createMapSizeSpinner;
-
     @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
-
     @Inject
     GamesApiService gamesApiService;
     @Inject
@@ -69,8 +66,6 @@ public class CreateGameController extends BasicController {
         createGameService = (createGameService == null) ? new CreateGameService() : createGameService;
         createGameService.setCreateGameController(this);
         initializeSpinner();
-        errorMessageText.setText("");
-        errorBox.setVisible(true);
         this.controlResponses = responseConstants.respCreateGame;
     }
 
@@ -79,7 +74,6 @@ public class CreateGameController extends BasicController {
         this.captainContainer.getChildren().add(this.bubbleComponent);
         this.bubbleComponent.setCaptainText(this.resources.getString("pirate.newGame"));
     }
-
 
     //Spinner for incrementing map size
     public void initializeSpinner(){
@@ -105,9 +99,8 @@ public class CreateGameController extends BasicController {
                       app.show(browseGameController);
               },
               error -> {
-                  int code = errorService.getStatus(error);
                   this.bubbleComponent.setErrorMode(true);
-                  this.bubbleComponent.setCaptainText(getErrorInfoText(code));
+                  this.bubbleComponent.setCaptainText(getErrorInfoText(error));
               });
 
         } else if (!createGameService.nameIsAvailable(gameName)) {
@@ -124,8 +117,8 @@ public class CreateGameController extends BasicController {
         app.show("/browseGames");
     }
 
-    public void showError(int code) {
-        errorMessageText.setText(getErrorInfoText(code));
+    public void showError(Throwable error) {
+        errorMessageText.setText(getErrorInfoText(error));
     }
 
     public void setCreateGameService(CreateGameService createGameService) {

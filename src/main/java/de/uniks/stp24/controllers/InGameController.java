@@ -13,20 +13,18 @@ import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
-
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
 
 @Controller
-public class InGameController {
+public class InGameController extends BasicController {
     @FXML
     StackPane pauseMenuContainer;
     @FXML
@@ -40,7 +38,6 @@ public class InGameController {
     @SubComponent
     @Inject
     public PauseMenuComponent pauseMenuComponent;
-
     @SubComponent
     @Inject
     public SettingsComponent settingsComponent;
@@ -52,14 +49,8 @@ public class InGameController {
 
     @Inject
     InGameService inGameService;
-    @Inject
-    LanguageService languageService;
-    @Inject
-    @Resource
-    ResourceBundle resources;
 
-    private List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
-
+    private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
     @Inject
     public InGameController() {
@@ -83,8 +74,6 @@ public class InGameController {
 
     private void handleLanguageChanged(PropertyChangeEvent propertyChangeEvent) {
         Locale newLang = propertyChangeEvent.getNewValue().equals(0) ? Locale.GERMAN : Locale.ENGLISH;
-        //resources = languageService.setLocale(newLang);
-        //app.refresh();
     }
 
     private void handleShowSettings(PropertyChangeEvent propertyChangeEvent) {
@@ -121,17 +110,13 @@ public class InGameController {
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
         inGameService.setShowSettings(false);
-        if (inGameService.getPaused()) {
-            inGameService.setPaused(false);
-        } else {
-            inGameService.setPaused(true);
-        }
+        inGameService.setPaused(!inGameService.getPaused());
     }
     public void showSettings() {
         pauseMenuContainer.getChildren().remove(pauseMenuComponent);
         pauseMenuContainer.getChildren().add(settingsComponent);
-
     }
+
     public void unShowSettings() {
         pauseMenuContainer.getChildren().remove(settingsComponent);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
@@ -147,9 +132,8 @@ public class InGameController {
 
     @OnDestroy
     public void destroy() {
-        this.gameListenerTriple.forEach(triple -> {
-            triple.game().listeners().removePropertyChangeListener(triple.propertyName(), triple.listener());
-        });
+        this.gameListenerTriple.forEach(triple -> triple.game().listeners()
+          .removePropertyChangeListener(triple.propertyName(), triple.listener()));
     }
 
     public void showStorage() {

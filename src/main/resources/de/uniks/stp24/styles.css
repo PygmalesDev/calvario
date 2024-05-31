@@ -266,6 +266,12 @@ ToggleButton:hover{
     -fx-pref-height: 100px;
 }
 
+.lobbyButton{
+    -fx-background-color: transparent;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 80px;
+}
+
 .woodButton{
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/woodButton.png");

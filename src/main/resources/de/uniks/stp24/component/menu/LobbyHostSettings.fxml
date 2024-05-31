@@ -15,44 +15,44 @@
    </padding>
    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="500.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-         <Button mnemonicParsing="false" onAction="#selectEmpire" prefHeight="80.0" prefWidth="150.0" styleClass="woodButton">
+         <Button mnemonicParsing="false" onAction="#selectEmpire" prefHeight="80.0" prefWidth="150.0" styleClass="lobbyButton">
             <font>
                <Font size="18.0" />
             </font>
             <graphic>
-               <ImageView fx:id="selectEmpireButton" fitHeight="6700.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+               <ImageView fx:id="selectEmpireButton" fitHeight="85.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true">
                   <Image url="@../../icons/island.png" />
                </ImageView>
             </graphic>
          </Button>
-         <Button fx:id="readyButton" mnemonicParsing="false" onAction="#ready" prefHeight="80.0" prefWidth="150.0" styleClass="woodButton">
+         <Button fx:id="readyButton" mnemonicParsing="false" onAction="#ready" prefHeight="80.0" prefWidth="150.0" styleClass="lobbyButton">
             <font>
                <Font size="18.0" />
             </font>
             <graphic>
-               <ImageView fx:id="readyIconImageView" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+               <ImageView fx:id="readyIconImageView" fitHeight="70.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
                   <Image url="@../../icons/approveBlue.png" />
                </ImageView>
             </graphic>
          </Button>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-         <Button mnemonicParsing="false" onAction="#leaveLobby" prefHeight="80.0" prefWidth="150.0" styleClass="woodButton" textOverrun="CLIP" wrapText="true">
+         <Button mnemonicParsing="false" onAction="#leaveLobby" prefHeight="80.0" prefWidth="150.0" styleClass="lobbyButton" textOverrun="CLIP" wrapText="true">
             <font>
                <Font size="18.0" />
             </font>
             <graphic>
-               <ImageView fx:id="closeLobbyButton" fitHeight="6700.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+               <ImageView fx:id="closeLobbyButton" fitHeight="75.0" fitWidth="165.0" pickOnBounds="true" preserveRatio="true">
                   <Image url="@../../icons/leaveMan.png" />
                </ImageView>
             </graphic>
          </Button>
-         <Button fx:id="startJourneyButton" mnemonicParsing="false" onAction="#startGame" prefHeight="80.0" prefWidth="150.0" styleClass="woodButton">
+         <Button fx:id="startJourneyButton" mnemonicParsing="false" onAction="#startGame" prefHeight="80.0" prefWidth="150.0" styleClass="lobbyButton">
             <font>
                <Font size="18.0" />
             </font>
             <graphic>
-               <ImageView fitHeight="6700.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+               <ImageView fitHeight="85.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true">
                   <Image url="@../../icons/startGame.png" />
                </ImageView>
             </graphic>

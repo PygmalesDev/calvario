@@ -2,7 +2,7 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.service.*;
-import de.uniks.stp24.utils.ErrorTextWriter;
+import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.utils.ResponseConstants;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.controller.Subscriber;

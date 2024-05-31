@@ -4,11 +4,15 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
+import de.uniks.stp24.model.Empire;
+import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
-import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.service.PrefService;
+import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.menu.GamesService;
+import de.uniks.stp24.service.menu.LobbyService;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
@@ -18,6 +22,8 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.param.Param;
+
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -34,6 +40,14 @@ public class InGameController extends BasicController {
     App app;
     @Inject
     PrefService prefService;
+    @Inject
+    InGameService inGameService;
+    @Inject
+    GamesService gamesService;
+    @Inject
+    LobbyService lobbyService;
+    @Inject
+    EmpireService empireService;
 
     @SubComponent
     @Inject
@@ -46,9 +60,12 @@ public class InGameController extends BasicController {
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
 
+    @Param("gameID")
+    public String gameID;
 
-    @Inject
-    InGameService inGameService;
+
+    Game game;
+    String empireID;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
@@ -58,7 +75,24 @@ public class InGameController extends BasicController {
 
     @OnInit
     public void init() {
-        GameStatus gameStatus = inGameService.getGame();
+        this.subscriber.subscribe(this.gamesService.getGame(this.gameID),
+                game -> {
+                    this.game = game;
+                    this.gameID = game._id();
+                    this.storageOverviewComponent.setGameID(this.gameID);
+                });
+
+        this.subscriber.subscribe(this.empireService.getEmpires(this.gameID),
+                dto -> {
+                    Arrays.stream(dto).forEach(data -> {
+                        if(data.user().equals(tokenStorage.getUserId())) {
+                            this.empireID = data._id();
+                        }
+                    });
+                    this.storageOverviewComponent.setEmpireID(this.empireID);
+                });
+
+        GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_PAUSED"));

@@ -6,7 +6,6 @@ import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.menu.LanguageService;
@@ -19,9 +18,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
-import javax.inject.Provider;
-import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -65,8 +61,8 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
-        inGameService.setGame(gameStatus);
-        doReturn(gameStatus).when(this.inGameService).getGame();
+        inGameService.setGameStatus(gameStatus);
+        doReturn(gameStatus).when(this.inGameService).getGameStatus();
         this.app.show(this.inGameController);
     }
 

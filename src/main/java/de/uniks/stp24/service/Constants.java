@@ -1,6 +1,9 @@
 package de.uniks.stp24.service;
 
+import de.uniks.stp24.model.Resource;
+
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 
 public class Constants {
@@ -8,6 +11,7 @@ public class Constants {
     public static final String DATA_FOLDER_NAME = "data";
     public static final Path DATA_FOLDER = Path.of(DATA_FOLDER_NAME);
 
+    // Description and names for Empires
     public static final Map<String, String[]> empireTemplatesEnglish = Map.ofEntries(
             Map.entry("Prefix", new String[]{
                     "Greedy", "Evil", "Vicious", "Old", "Mischievous", "Dead", "Amateur", "Famous", "Hungry",
@@ -68,5 +72,12 @@ public class Constants {
                     "Angeführt von gerissenen Kapitänen dominieren diese Seeräuber die Handelsrouten und hinterlassen eine Spur von Angst und Neid bei rivalisierenden Seefahrern.",
                     "In der schattenhaften Welt der Piraterie versetzt der Name {NAME} Kaufleute in Angst und Schrecken, während sie in ihren verborgenen Inselverstecken unvorstellbare Schätze horten."
             })
+    );
+
+    // Types for Resources
+    public static final Map<Resource.ResourceType, List<String>> resourceTypes = Map.of(
+            Resource.ResourceType.ECONOMY, List.of("Doubloons", "scout reports", "Tear of the Sea", "Cursed Amethyst", "Calvarite"),
+            Resource.ResourceType.POPULATION, List.of("Crew", "Undead Barrager", "Serpent Assasin", "Contained Curse", "Captain", "Steerman", "Makey"),
+            Resource.ResourceType.TACTICS, List.of("Pistol", "Bomb", "Sable", "Cannon", "Rookie Boarder", "Sailmaker", "Risen Flagman")
     );
 }

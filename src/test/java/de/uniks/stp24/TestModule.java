@@ -3,10 +3,7 @@ package de.uniks.stp24;
 import dagger.Module;
 import dagger.Provides;
 import de.uniks.stp24.model.Game;
-import de.uniks.stp24.rest.AuthApiService;
-import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.rest.UserApiService;
-import de.uniks.stp24.rest.GameMembersApiService;
+import de.uniks.stp24.rest.*;
 import org.mockito.Mockito;
 
 @Module
@@ -28,6 +25,11 @@ public class TestModule {
      @Provides
     GameMembersApiService gameMembersApiService(){
         return Mockito.mock(GameMembersApiService.class);
+    }
+
+    @Provides
+    EmpireApiService empireApiService() {
+        return Mockito.mock(EmpireApiService.class);
     }
 
 }

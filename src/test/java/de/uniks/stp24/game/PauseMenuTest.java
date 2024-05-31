@@ -1,14 +1,18 @@
 package de.uniks.stp24.game;
 
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.service.InGameService;
-import de.uniks.stp24.service.LanguageService;
+import de.uniks.stp24.service.game.ResourcesService;
+import de.uniks.stp24.service.menu.LanguageService;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,7 +36,13 @@ public class PauseMenuTest extends ControllerTest {
     InGameService inGameService;
 
     @Spy
+    Subscriber subscriber = spy(Subscriber.class);
+
+    @Spy
     LanguageService languageService;
+
+    @Spy
+    ResourcesService resourcesService;
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
@@ -40,8 +50,11 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     SettingsComponent settingsComponent;
 
-    @Spy
-    Provider<ResourceBundle> newResources;
+    @InjectMocks
+    StorageOverviewComponent storageOverviewComponent;
+
+    //@Spy
+    //Provider<ResourceBundle> newResources;
 
     @InjectMocks
     InGameController inGameController;
@@ -51,6 +64,7 @@ public class PauseMenuTest extends ControllerTest {
         super.start(stage);
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
+        this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         inGameService.setGame(gameStatus);
         doReturn(gameStatus).when(this.inGameService).getGame();
         this.app.show(this.inGameController);

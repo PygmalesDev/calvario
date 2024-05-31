@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<HBox alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root type="javafx.scene.layout.HBox" alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.ResourceComponent">
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="90.0">
          <children>
@@ -37,4 +37,4 @@
          </HBox.margin>
       </Text>
    </children>
-</HBox>
+</fx:root>

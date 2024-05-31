@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="771.0" prefWidth="477.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox layoutX="51.0" layoutY="72.0" prefHeight="701.0" prefWidth="477.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="105.0" prefWidth="477.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="173.0" prefWidth="416.0" style="-fx-border-color: #000000;">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%place_holder" />
+                        <VBox prefHeight="200.0" prefWidth="100.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="40.0" prefWidth="450.0">
+               <children>
+                  <VBox prefHeight="40.0" prefWidth="42.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="105.0" prefWidth="477.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="173.0" prefWidth="416.0" style="-fx-border-color: #000000;">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%place_holder" />
+                        <VBox prefHeight="200.0" prefWidth="100.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="40.0" prefWidth="450.0">
+               <children>
+                  <VBox prefHeight="40.0" prefWidth="42.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="105.0" prefWidth="477.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="173.0" prefWidth="416.0" style="-fx-border-color: #000000;">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%place_holder" />
+                        <VBox prefHeight="200.0" prefWidth="100.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="40.0" prefWidth="450.0">
+               <children>
+                  <VBox prefHeight="40.0" prefWidth="42.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="105.0" prefWidth="477.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="105.0" prefWidth="416.0" style="-fx-border-color: #000000;">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%place_holder" />
+                        <VBox prefHeight="200.0" prefWidth="100.0" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="27.0" prefWidth="477.0" />
+            <HBox alignment="CENTER" prefHeight="110.0" prefWidth="477.0">
+               <children>
+                  <HBox prefHeight="123.0" prefWidth="256.0" style="-fx-border-color: #000000;">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="123.0" prefWidth="190.0">
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="38.0" prefWidth="164.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="38.0" prefWidth="38.0" />
+                                    <VBox alignment="CENTER" prefHeight="38.0" prefWidth="38.0">
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%x" />
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="38.0" prefWidth="38.0" />
+                                    <VBox alignment="CENTER" prefHeight="38.0" prefWidth="38.0">
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%x" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="38.0" prefWidth="164.0">
+                                 <children>
+                                    <VBox alignment="CENTER" prefHeight="38.0" prefWidth="38.0" />
+                                    <VBox alignment="CENTER" prefHeight="38.0" prefWidth="38.0">
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%x" />
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="CENTER" prefHeight="38.0" prefWidth="38.0" />
+                                    <VBox alignment="CENTER" prefHeight="38.0" prefWidth="38.0">
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%x" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="123.0" prefWidth="118.0">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="55.0" prefWidth="92.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%x" />
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" prefHeight="47.0" prefWidth="92.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <VBox alignment="CENTER" prefHeight="123.0" prefWidth="130.0" style="-fx-border-color: #000000;" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Pane layoutX="372.0" layoutY="16.0" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #ff0000;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0" />
+      <Pane layoutX="6.0" layoutY="16.0" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #acac13;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="16.0" />
+      <Pane layoutX="13.0" layoutY="18.0" prefHeight="40.0" prefWidth="40.0" AnchorPane.rightAnchor="425.0" AnchorPane.topAnchor="102.0" />
+      <Pane layoutX="11.0" layoutY="35.0" prefHeight="40.0" prefWidth="40.0" AnchorPane.topAnchor="247.0" />
+      <Pane layoutX="12.0" layoutY="36.0" prefHeight="40.0" prefWidth="40.0" AnchorPane.topAnchor="395.0" />
+      <Pane layoutX="12.0" layoutY="36.0" prefHeight="40.0" prefWidth="40.0" AnchorPane.topAnchor="535.0" />
+   </children>
+</AnchorPane>

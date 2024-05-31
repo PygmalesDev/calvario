@@ -14,10 +14,14 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
+
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 @Controller
 public class InGameController extends BasicController {
@@ -113,5 +117,9 @@ public class InGameController extends BasicController {
     public void destroy() {
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
           .removePropertyChangeListener(triple.propertyName(), triple.listener()));
+    }
+
+    public void showOverview() {
+
     }
 }

@@ -1,17 +1,17 @@
-package de.uniks.stp24.service;
+package de.uniks.stp24.service.menu;
 
 import de.uniks.stp24.dto.LogoutDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.LogoutResult;
 import de.uniks.stp24.rest.AuthApiService;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.ErrorService;
+import de.uniks.stp24.service.PrefService;
+import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.List;
 
 @Singleton
 public class BrowseGameService {

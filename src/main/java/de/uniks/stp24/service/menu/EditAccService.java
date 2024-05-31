@@ -1,10 +1,11 @@
-package de.uniks.stp24.service;
+package de.uniks.stp24.service.menu;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.UpdateUserDto;
 import de.uniks.stp24.model.User;
 import de.uniks.stp24.rest.UserApiService;
-import io.reactivex.rxjava3.core.Completable;
+import de.uniks.stp24.service.PrefService;
+import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
 
 import javax.inject.Inject;

@@ -4,7 +4,7 @@ package de.uniks.stp24.component.menu;
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.LobbyService;
+import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;

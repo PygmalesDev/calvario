@@ -1,9 +1,11 @@
-package de.uniks.stp24.service;
+package de.uniks.stp24.service.menu;
 
 import de.uniks.stp24.dto.LoginDto;
 import de.uniks.stp24.model.LoginResult;
 import de.uniks.stp24.dto.RefreshDto;
 import de.uniks.stp24.rest.AuthApiService;
+import de.uniks.stp24.service.PrefService;
+import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
 
 import javax.inject.Inject;

@@ -1,7 +1,7 @@
 package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.service.JoinGameService;
+import de.uniks.stp24.service.menu.JoinGameService;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;

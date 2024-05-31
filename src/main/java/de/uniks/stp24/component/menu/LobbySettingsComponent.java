@@ -2,7 +2,7 @@ package de.uniks.stp24.component.menu;
 
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.service.LobbyService;
+import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;

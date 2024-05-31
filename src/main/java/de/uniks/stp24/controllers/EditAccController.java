@@ -3,7 +3,7 @@ package de.uniks.stp24.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.component.menu.WarningScreenComponent;
-import de.uniks.stp24.service.EditAccService;
+import de.uniks.stp24.service.menu.EditAccService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.TokenStorage;

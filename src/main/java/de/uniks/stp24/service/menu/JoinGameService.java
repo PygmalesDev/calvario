@@ -1,9 +1,9 @@
-package de.uniks.stp24.service;
+package de.uniks.stp24.service.menu;
 
 import de.uniks.stp24.dto.JoinGameDto;
 import de.uniks.stp24.dto.MemberDto;
-import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.rest.GameMembersApiService;
+import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
 
 import javax.inject.Inject;

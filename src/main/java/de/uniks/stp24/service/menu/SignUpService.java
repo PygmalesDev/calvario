@@ -1,4 +1,4 @@
-package de.uniks.stp24.service;
+package de.uniks.stp24.service.menu;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.CreateUserDto;

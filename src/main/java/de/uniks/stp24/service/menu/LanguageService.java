@@ -1,7 +1,6 @@
-package de.uniks.stp24.service;
+package de.uniks.stp24.service.menu;
 
-import de.uniks.stp24.App;
-import org.fulib.fx.annotation.controller.Resource;
+import de.uniks.stp24.service.PrefService;
 
 import javax.inject.Inject;
 import javax.inject.Provider;

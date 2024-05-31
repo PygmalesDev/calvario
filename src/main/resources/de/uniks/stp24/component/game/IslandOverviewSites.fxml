@@ -1,130 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="771.0" prefWidth="477.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" style="-fx-border-color: #000000;" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.OverviewSitesComponent">
    <children>
-      <VBox layoutX="51.0" layoutY="72.0" prefHeight="701.0" prefWidth="477.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <VBox layoutX="136.0" layoutY="16.0" prefHeight="584.0" prefWidth="380.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="173.0" prefWidth="450.0">
+            <VBox prefHeight="52.0" prefWidth="400.0" />
+            <HBox alignment="CENTER" prefHeight="133.0" prefWidth="400.0">
                <children>
-                  <VBox alignment="CENTER" prefHeight="157.0" prefWidth="374.0" style="-fx-border-color: #000000;">
+                  <VBox alignment="CENTER" prefHeight="134.0" prefWidth="330.0" style="-fx-border-color: #000000;">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%picture" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%image" />
                      </children>
                   </VBox>
                </children>
             </HBox>
-            <HBox prefHeight="40.0" prefWidth="450.0" />
-            <HBox alignment="CENTER" prefHeight="208.0" prefWidth="450.0">
+            <VBox prefHeight="36.0" prefWidth="400.0" />
+            <HBox alignment="CENTER" prefHeight="136.0" prefWidth="400.0">
                <children>
-                  <VBox prefHeight="157.0" prefWidth="374.0" style="-fx-border-color: #000000;">
+                  <VBox alignment="TOP_CENTER" prefHeight="122.0" prefWidth="330.0" style="-fx-border-color: #000000;">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="374.0">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder" />
+                        <VBox alignment="CENTER" prefHeight="75.0" prefWidth="329.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%place_holder" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder" />
                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="103.0" prefWidth="374.0">
+                        </VBox>
+                        <HBox alignment="CENTER" prefHeight="44.0" prefWidth="329.0">
                            <children>
-                              <VBox prefHeight="103.0" prefWidth="119.0" style="-fx-border-color: #000000;" />
-                              <VBox prefHeight="103.0" prefWidth="182.0" style="-fx-border-color: #000000;" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="46.0" prefWidth="374.0">
-                           <children>
-                              <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showDetails" prefWidth="75.0" text="DETAILS" />
-                              <VBox prefHeight="46.0" prefWidth="69.0" />
-                              <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showUpgrades" prefWidth="75.0" text="UPGRADES" />
+                              <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="75.0" text="DETAILS" />
+                              <VBox prefHeight="44.0" prefWidth="21.0" />
+                              <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="75.0" text="SITES" />
+                              <VBox prefHeight="44.0" prefWidth="21.0" />
+                              <Button maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefWidth="75.0" text="UPGRADES" />
                            </children>
                         </HBox>
                      </children>
                   </VBox>
                </children>
             </HBox>
-            <HBox prefHeight="40.0" prefWidth="450.0" />
-            <HBox alignment="CENTER" prefHeight="189.0" prefWidth="477.0">
+            <VBox prefHeight="36.0" prefWidth="400.0" />
+            <HBox alignment="CENTER" prefHeight="132.0" prefWidth="400.0">
                <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="184.0" prefWidth="374.0" style="-fx-border-color: #000000;">
+                  <VBox alignment="TOP_CENTER" prefHeight="132.0" prefWidth="330.0" style="-fx-border-color: #000000;">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="374.0">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder" />
+                        <HBox alignment="CENTER" prefHeight="118.0" prefWidth="329.0">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%place_holder" />
-                           </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="50.0" prefWidth="372.0">
-                           <children>
-                              <VBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #000000;">
+                              <VBox alignment="TOP_CENTER" prefHeight="114.0" prefWidth="139.0">
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%site_1" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder" />
+                                    <ListView prefHeight="200.0" prefWidth="200.0" />
                                  </children>
                               </VBox>
-                              <VBox prefHeight="50.0" prefWidth="20.0" />
-                              <VBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #000000;">
+                              <VBox prefHeight="114.0" prefWidth="20.0" />
+                              <VBox alignment="TOP_CENTER" prefHeight="114.0" prefWidth="139.0">
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%site_2" />
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="50.0" prefWidth="20.0" />
-                              <VBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #000000;">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%site_3" />
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="50.0" prefWidth="20.0" />
-                              <VBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #000000;">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%site_4" />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
-                        <VBox prefHeight="11.0" prefWidth="372.0" />
-                        <HBox alignment="CENTER" prefHeight="49.0" prefWidth="372.0">
-                           <children>
-                              <VBox alignment="TOP_CENTER" prefHeight="50.0" prefWidth="50.0">
-                                 <children>
-                                    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="21.0" prefWidth="48.0">
-                                       <children>
-                                          <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="22.0" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="50.0" prefWidth="20.0" />
-                              <VBox alignment="TOP_CENTER" prefHeight="50.0" prefWidth="50.0">
-                                 <children>
-                                    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="21.0" prefWidth="48.0">
-                                       <children>
-                                          <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="22.0" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="50.0" prefWidth="20.0" />
-                              <VBox alignment="TOP_CENTER" prefHeight="50.0" prefWidth="50.0">
-                                 <children>
-                                    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="21.0" prefWidth="48.0">
-                                       <children>
-                                          <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="22.0" />
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="50.0" prefWidth="20.0" />
-                              <VBox alignment="TOP_CENTER" prefHeight="50.0" prefWidth="50.0">
-                                 <children>
-                                    <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="21.0" prefWidth="48.0">
-                                       <children>
-                                          <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="22.0" />
-                                       </children>
-                                    </HBox>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder" />
+                                    <ListView prefHeight="200.0" prefWidth="200.0" />
                                  </children>
                               </VBox>
                            </children>
@@ -133,10 +73,9 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox prefHeight="40.0" prefWidth="450.0" />
          </children>
       </VBox>
-      <Pane layoutX="372.0" layoutY="16.0" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #ff0000;" AnchorPane.rightAnchor="0.0" />
-      <Pane layoutX="143.0" prefHeight="95.0" prefWidth="134.0" style="-fx-background-color: #0088ff;" AnchorPane.leftAnchor="160.0" AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="0.0" />
+      <Pane layoutX="360.0" layoutY="18.0" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #ff0000;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0" />
+      <Pane layoutX="151.2" prefHeight="77.0" prefWidth="99.0" style="-fx-background-color: #0088ff;" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="0.0" />
    </children>
-</AnchorPane>
+</fx:root>

@@ -1,5 +1,7 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.component.game.OverviewSitesComponent;
+import de.uniks.stp24.component.game.OverviewUpgradeComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
@@ -7,7 +9,9 @@ import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -22,6 +26,8 @@ import java.util.*;
 @Controller
 public class InGameController extends BasicController {
     @FXML
+    public StackPane overviewContainer;
+    @FXML
     StackPane pauseMenuContainer;
     @SubComponent
     @Inject
@@ -29,6 +35,12 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public SettingsComponent settingsComponent;
+    @SubComponent
+    @Inject
+    public OverviewSitesComponent overviewSitesComponent;
+    @SubComponent
+    @Inject
+    public OverviewUpgradeComponent overviewUpgradeComponent;
     @Inject
     InGameService inGameService;
 
@@ -84,6 +96,9 @@ public class InGameController extends BasicController {
     public void render() {
         pauseMenuContainer.setVisible(false);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
+
+        overviewContainer.setVisible(false);
+        overviewContainer.getChildren().add(overviewSitesComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -113,5 +128,10 @@ public class InGameController extends BasicController {
     public void destroy() {
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
           .removePropertyChangeListener(triple.propertyName(), triple.listener()));
+    }
+
+    public void showOverview() {
+        System.out.println("Moin");
+        overviewContainer.setVisible(true);
     }
 }

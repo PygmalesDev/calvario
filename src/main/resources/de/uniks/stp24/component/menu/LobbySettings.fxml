@@ -14,7 +14,7 @@
       <Insets bottom="50.0" top="-60.0" />
    </padding>
    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <Button fx:id="selectEmpireButton" mnemonicParsing="false" onAction="#selectEmpire" prefHeight="50.0" prefWidth="150.0" styleClass="lobbyButton">
+      <Button fx:id="selectEmpireButton" mnemonicParsing="false" onAction="#selectEmpire" prefHeight="50.0" prefWidth="150.0" styleClass="lobbyButton" text="IMRAN">
          <font>
             <Font size="18.0" />
          </font>

@@ -39,7 +39,7 @@
                </HBox>
                <AnchorPane prefHeight="200.0" prefWidth="200.0">
                   <children>
-                     <ImageView fitHeight="201.0" fitWidth="481.0" layoutX="50.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                     <ImageView fitHeight="201.0" fitWidth="481.0" layoutX="44.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@../../../../../../../../../../Downloads/calvario_new.png" />
                      </ImageView>
                   </children>

@@ -239,6 +239,7 @@ public class GangCreationController extends BasicController {
         int index = gangsListView.getSelectionModel().getSelectedIndex();
         gangs.remove(index);
         saveLoadService.saveGang(gangs);
+        resetCreationPane();
     }
 
     public void showCreationPane() {

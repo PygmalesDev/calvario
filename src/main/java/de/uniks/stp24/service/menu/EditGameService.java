@@ -1,6 +1,7 @@
 package de.uniks.stp24.service.menu;
 
 import de.uniks.stp24.controllers.EditGameController;
+import de.uniks.stp24.dto.StartGameDto;
 import de.uniks.stp24.dto.UpdateGameDto;
 import de.uniks.stp24.dto.UpdateGameResultDto;
 import de.uniks.stp24.model.Game;
@@ -46,6 +47,12 @@ public class EditGameService {
             return gamesApiService
                     .editGame(this.game._id(), new UpdateGameDto(name,false,1, settings, password))
                     .doOnError(error -> editGameController.showError(errorService.getStatus(error)));
+    }
+
+    public Observable<UpdateGameResultDto> startGame(String id){
+        return gamesApiService
+                .startGame(id, new StartGameDto(true))
+                .doOnError(error -> editGameController.showError(errorService.getStatus(error)));
     }
 
     public void setEditGameController(EditGameController editGameController) {

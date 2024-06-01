@@ -3,6 +3,7 @@ package de.uniks.stp24.component.menu;
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
@@ -41,6 +42,8 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     ImageCache imageCache;
     @Inject
     GamesApiService gamesApiService;
+    @Inject
+    EditGameService editGameService;
     @Inject
     EventListener eventListener;
     @Inject
@@ -83,8 +86,10 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     }
 
     public void startGame() {
-        this.app.show("/ingame", Map.of("gameID", this.gameID));
+        subscriber.subscribe(editGameService.startGame(this.gameID),
+                result -> this.app.show("/ingame", Map.of("gameID", this.gameID)), error -> {});
     }
+
 
     /**
      * Sends a blank update message to the server so the members are notified about host leaving the lobby.

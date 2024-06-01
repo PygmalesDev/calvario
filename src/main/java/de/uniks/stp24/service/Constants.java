@@ -76,8 +76,17 @@ public class Constants {
 
     // Types for Resources
     public static final Map<Resource.ResourceType, List<String>> resourceTypes = Map.of(
-            Resource.ResourceType.ECONOMY, List.of("Doubloons", "scout reports", "Tear of the Sea", "Cursed Amethyst", "Calvarite"),
+            Resource.ResourceType.ECONOMY, List.of("Doubloons", "scout_reports", "Tear of the Sea", "Cursed Amethyst", "Calvarite"),
             Resource.ResourceType.POPULATION, List.of("Crew", "Undead Barrager", "Serpent Assasin", "Contained Curse", "Captain", "Steerman", "Makey"),
             Resource.ResourceType.TACTICS, List.of("Pistol", "Bomb", "Sable", "Cannon", "Rookie Boarder", "Sailmaker", "Risen Flagman")
+    );
+
+    public static final Map<String, Integer> initialResources = Map.of(
+            /*"credits",0,
+            "population",0,
+            "energy", 0,
+            "water",1,
+            "bomb",1,
+            "captain",1*/
     );
 }

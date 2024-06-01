@@ -1,12 +1,16 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
 import javafx.fxml.FXML;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
@@ -22,6 +26,10 @@ import java.util.*;
 @Controller
 public class InGameController extends BasicController {
     @FXML
+    ScrollPane mapScroll;
+    @FXML
+    AnchorPane mapPane;
+    @FXML
     StackPane pauseMenuContainer;
     @SubComponent
     @Inject
@@ -31,6 +39,9 @@ public class InGameController extends BasicController {
     public SettingsComponent settingsComponent;
     @Inject
     InGameService inGameService;
+    @SubComponent
+    @Inject
+    IslandComponent islandComponent;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
@@ -113,5 +124,18 @@ public class InGameController extends BasicController {
     public void destroy() {
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
           .removePropertyChangeListener(triple.propertyName(), triple.listener()));
+    }
+
+    @OnRender(1)
+    public void createMap(){
+        AnchorPane loco = islandComponent;
+
+        this.mapPane.getChildren().add(loco);
+        mapPane.getChildren().getLast().setLayoutX(10);
+        mapPane.getChildren().getLast().setLayoutY(10);
+
+    }
+    public void showCoordinates(MouseEvent mouseEvent) {
+        System.out.println(mouseEvent.getX());
     }
 }

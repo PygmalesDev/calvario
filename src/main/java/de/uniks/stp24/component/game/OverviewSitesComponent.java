@@ -73,4 +73,8 @@ public class OverviewSitesComponent extends AnchorPane {
         this.inGameController = inGameController;
     }
 
+    public void closeOverview(){
+        inGameController.overviewContainer.setVisible(false);
+    }
+
 }

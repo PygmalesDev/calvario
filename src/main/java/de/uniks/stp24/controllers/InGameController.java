@@ -95,6 +95,7 @@ public class InGameController extends BasicController {
     @OnRender
     public void render() {
         overviewSitesComponent.setIngameController(this);
+        overviewUpgradeComponent.setIngameController(this);
         pauseMenuContainer.setVisible(false);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
 

@@ -34,9 +34,9 @@
       </HBox>
       <VBox prefHeight="36.0" prefWidth="400.0" />
       <HBox alignment="CENTER" prefHeight="132.0" prefWidth="400.0">
-         <StackPane fx:id="sitesContainer" prefHeight="150.0" prefWidth="330.0" style="-fx-border-color: #000000;"/>
+         <StackPane fx:id="sitesContainer" prefHeight="150.0" prefWidth="330.0" style="-fx-border-color: #000000;" />
       </HBox>
    </VBox>
-   <Pane layoutX="360.0" layoutY="18.0" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #ff0000;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0" />
+   <Pane layoutX="360.0" layoutY="18.0" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #ff0000;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0" />
    <Pane layoutX="151.2" prefHeight="77.0" prefWidth="99.0" style="-fx-background-color: #0088ff;" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="0.0" />
 </fx:root>

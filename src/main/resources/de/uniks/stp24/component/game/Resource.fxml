@@ -6,35 +6,34 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-
-<fx:root type="javafx.scene.layout.HBox" alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.ResourceComponent">
-   <children>
-      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="90.0">
-         <children>
-            <ImageView fx:id="resourceIconImageView" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../icons/Resources/ametyst.png" />
-               </image>
-            </ImageView>
-            <Text fx:id="countText" strokeType="OUTSIDE" strokeWidth="0.0" text="x200">
-               <HBox.margin>
-                  <Insets left="5.0" />
-               </HBox.margin>
-            </Text>
-         </children>
+<fx:root alignment="CENTER_LEFT" maxWidth="-Infinity" prefHeight="25.0" prefWidth="180.0"
+         type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="de.uniks.stp24.component.game.ResourceComponent">
+   <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="130.0">
+      <HBox.margin>
+         <Insets left="5.0"/>
+      </HBox.margin>
+      <ImageView fx:id="resourceIconImageView" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true"
+                 preserveRatio="true">
+         <Image url="@../../icons/Resources/fuel.png"/>
+      </ImageView>
+      <Text fx:id="countText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="resourceText" text="x200">
          <HBox.margin>
-            <Insets left="5.0" />
-         </HBox.margin>
-      </HBox>
-      <Text fx:id="changeProSeasonText" strokeType="OUTSIDE" strokeWidth="0.0" text="+300">
-         <HBox.margin>
-            <Insets />
+            <Insets left="5.0"/>
          </HBox.margin>
       </Text>
-      <Text fx:id="descriptionText" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" visible="false">
+      <Text fx:id="descriptionText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="resourceText"
+            text="Description">
          <HBox.margin>
-            <Insets left="10.0" />
+            <Insets left="3.0"/>
          </HBox.margin>
       </Text>
-   </children>
+   </HBox>
+   <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="45.0">
+      <HBox.margin>
+         <Insets right="2.0"/>
+      </HBox.margin>
+      <Text fx:id="changeProSeasonText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="resourceText"
+            text="+300"/>
+   </HBox>
 </fx:root>

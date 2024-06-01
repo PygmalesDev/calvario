@@ -2,9 +2,9 @@ package de.uniks.stp24.model;
 
 
 public record Resource(
-    String name,
+    String resourceID,
     int count,
-    int proSeason,
+    int changePerSeason,
     ResourceType type
 ) {
 

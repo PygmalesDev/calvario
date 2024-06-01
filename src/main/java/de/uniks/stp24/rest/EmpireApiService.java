@@ -13,7 +13,7 @@ import java.util.List;
 @Singleton
 public interface EmpireApiService {
     @GET("games/{game}/empires")
-    Observable<ReadEmpireDto[]> getEmpires(@Path("game") String game);
+    Observable<ReadEmpireDto[]> getEmpires(@Path("game") String gameID);
 
     @GET("games/{game}/empires/{empire}")
     Observable<EmpireDto> getEmpire(@Path("game") String game, @Path("empire") String empire);

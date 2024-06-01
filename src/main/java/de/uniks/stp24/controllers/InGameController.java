@@ -1,15 +1,11 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
-import de.uniks.stp24.model.Empire;
-import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
-import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -36,10 +32,7 @@ public class InGameController extends BasicController {
     @FXML
     StackPane storageOverviewContainer;
 
-    @Inject
-    App app;
-    @Inject
-    PrefService prefService;
+
     @Inject
     InGameService inGameService;
     @Inject
@@ -55,7 +48,6 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public SettingsComponent settingsComponent;
-
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
@@ -63,8 +55,6 @@ public class InGameController extends BasicController {
     @Param("gameID")
     public String gameID;
 
-
-    Game game;
     String empireID;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
@@ -75,22 +65,17 @@ public class InGameController extends BasicController {
 
     @OnInit
     public void init() {
-        this.subscriber.subscribe(this.gamesService.getGame(this.gameID),
-                game -> {
-                    this.game = game;
-                    this.gameID = game._id();
-                    this.storageOverviewComponent.setGameID(this.gameID);
-                });
-
-        this.subscriber.subscribe(this.empireService.getEmpires(this.gameID),
-                dto -> {
-                    Arrays.stream(dto).forEach(data -> {
-                        if(data.user().equals(tokenStorage.getUserId())) {
-                            this.empireID = data._id();
-                        }
-                    });
-                    this.storageOverviewComponent.setEmpireID(this.empireID);
-                });
+        //Loading of the empireID from a user's empire and setting gameID and empireID in Components.
+        //Initialising the Storage listView
+        System.out.println(this.gameID);
+        this.storageOverviewComponent.setGameID(this.gameID);
+        subscriber.subscribe(empireService.getEmpires(this.gameID), dto -> Arrays.stream(dto).forEach(data -> {
+            if(data.user().equals(tokenStorage.getUserId())) {
+                this.empireID = data._id();
+                this.storageOverviewComponent.setEmpireID(this.empireID);
+                System.out.println(empireID);
+                this.storageOverviewComponent.initStorageList();
+            }}));
 
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
@@ -168,12 +153,15 @@ public class InGameController extends BasicController {
     public void destroy() {
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
           .removePropertyChangeListener(triple.propertyName(), triple.listener()));
+        this.subscriber.dispose();
     }
 
     public void showStorage() {
-        storageOverviewContainer.setVisible(true);
+        storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
     public void showIslandOverview() {
+
+
     }
 }

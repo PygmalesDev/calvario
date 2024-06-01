@@ -15,19 +15,4 @@ public class OverviewUpgradeComponent extends AnchorPane {
     public OverviewUpgradeComponent() {
 
     }
-
-    @OnInit
-    void init() {
-
-    }
-
-    @OnRender
-    void render() {
-
-    }
-
-    @OnDestroy
-    void destroy() {
-
-    }
 }

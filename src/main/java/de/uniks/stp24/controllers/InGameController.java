@@ -94,11 +94,14 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void render() {
+        overviewSitesComponent.setIngameController(this);
         pauseMenuContainer.setVisible(false);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
 
         overviewContainer.setVisible(false);
+        overviewSitesComponent.setContainer();
         overviewContainer.getChildren().add(overviewSitesComponent);
+        overviewContainer.getChildren().add(overviewUpgradeComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -131,7 +134,10 @@ public class InGameController extends BasicController {
     }
 
     public void showOverview() {
-        System.out.println("Moin");
         overviewContainer.setVisible(true);
+        overviewSitesComponent.sitesContainer.setVisible(true);
+        overviewSitesComponent.sitesButton.setDisable(true);
+        inGameService.showOnly(overviewContainer, overviewSitesComponent);
+        inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.sitesComponent);
     }
 }

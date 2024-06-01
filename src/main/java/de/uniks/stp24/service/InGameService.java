@@ -1,6 +1,8 @@
 package de.uniks.stp24.service;
 
 import de.uniks.stp24.model.GameStatus;
+import javafx.scene.Node;
+import javafx.scene.layout.StackPane;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -43,4 +45,12 @@ public class InGameService {
     public int getLanguage() {
         return gameStatus.getLanguage();
     }
+
+    public void showOnly(StackPane stackPane, Node nodeToShow) {
+        for (Node node : stackPane.getChildren()) {
+            node.setVisible(node == nodeToShow);
+        }
+    }
+
+
 }

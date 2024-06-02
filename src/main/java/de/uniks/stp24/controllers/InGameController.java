@@ -4,14 +4,15 @@ import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -26,9 +27,11 @@ import java.util.*;
 @Controller
 public class InGameController extends BasicController {
     @FXML
-    ScrollPane mapScroll;
+    ScrollPane mapPane;
     @FXML
-    AnchorPane mapPane;
+    Pane mapGrid;
+    @FXML
+    StackPane zoomPane;
     @FXML
     StackPane pauseMenuContainer;
     @SubComponent
@@ -39,9 +42,14 @@ public class InGameController extends BasicController {
     public SettingsComponent settingsComponent;
     @Inject
     InGameService inGameService;
+//    @Inject
+//    Provider<IslandComponent> islandComponentProvider;
     @SubComponent
     @Inject
     IslandComponent islandComponent;
+    @SubComponent
+    @Inject
+    IslandComponent islandComponent2;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
@@ -128,14 +136,28 @@ public class InGameController extends BasicController {
 
     @OnRender(1)
     public void createMap(){
-        AnchorPane loco = islandComponent;
+//        islandComponent.setPosition(20,30);
+        IslandComponent loco = islandComponent;
+        loco.setPosition(30,80);
+//        ImageView loco = new IslandComponentProvider().getIslandComponent();
+        ImageView loco2 = islandComponent2.applyIcon(IslandType.MOUNTY);
 
-        this.mapPane.getChildren().add(loco);
-        mapPane.getChildren().getLast().setLayoutX(10);
-        mapPane.getChildren().getLast().setLayoutY(10);
+        loco.setLayoutX(loco.getPosX());
+        loco.setLayoutY(loco.getPosY());
+//        loco.setLayoutX(20);
+//        loco.setLayoutY(20);
+
+
+        loco2.setLayoutX(100);
+        loco2.setLayoutY(50);
+        this.mapGrid.getChildren().addAll(loco,loco2);
+
+
+
+
 
     }
     public void showCoordinates(MouseEvent mouseEvent) {
-        System.out.println(mouseEvent.getX());
+
     }
 }

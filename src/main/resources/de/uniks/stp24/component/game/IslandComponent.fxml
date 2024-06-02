@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+
+<fx:root fx:id="islandImage" fitHeight="32.0" fitWidth="32.0" onMouseClicked="#showInfo" pickOnBounds="true" preserveRatio="true" type="ImageView" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.IslandComponent">
+<Image url="@../../gameIcons/isle.jpeg" />
+</fx:root>

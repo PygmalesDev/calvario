@@ -4,32 +4,89 @@
     src: url("/de/uniks/stp24/assets/fonts/Stencil.ttf");
 }
 
-.flagToggle:pressed {
+Label {
+    -fx-font-family: 'Stencil';
+}
+
+.flagToggle:selected {
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/toggleFlagButtonOn.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 5, 5);
 }
 
 .flagToggle {
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/toggleFlagButtonOff.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 5, 5);
+
 }
 
 #x1 {
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/timeButton1.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 5, 5);
+
 }
 
 #x2 {
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/timeButton2.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 5, 5);
+
 }
 
 #x3 {
     -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/assets/buttons/timeButton2.png");
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/timeButton3.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 5, 5);
+
 }
 
 #pause {
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/timeButtonPause.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 5, 5);
+
+}
+
+.clock {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/clockEmpty.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 5, 5);
+}
+
+#remainingSeasonsLabel {
+    -fx-font-family: Stencil;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/remainingSeasonsLabel.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 5, 5);
+    -fx-padding: -2 0 0 0;
+}
+
+#randomEvent {
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 5, 5);
 }

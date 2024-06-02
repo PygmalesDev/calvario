@@ -6,6 +6,7 @@ import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.menu.TimerService;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
@@ -37,6 +38,8 @@ public class InGameController extends BasicController {
     public ClockComponent clockComponent;
     @Inject
     InGameService inGameService;
+    @Inject
+    TimerService timerService;
     @Param("gameid")
     String gameId;
 
@@ -60,6 +63,16 @@ public class InGameController extends BasicController {
         PropertyChangeListener callHandleLanguageChanged = this::handleLanguageChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_LANGUAGE, callHandleLanguageChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
+
+        PropertyChangeListener callHandleTimeChanged = this::handleTimeChanged;
+        timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_COUNTDOWN, callHandleTimeChanged);
+    }
+
+    private void handleTimeChanged(PropertyChangeEvent propertyChangeEvent) {
+        if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
+            int time = (int) propertyChangeEvent.getNewValue();
+            clockComponent.setCountdownLabel(time);
+        }
     }
 
     private void handleLanguageChanged(PropertyChangeEvent propertyChangeEvent) {
@@ -90,8 +103,9 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void render() {
-        pauseMenuContainer.setVisible(false);
-        pauseMenuContainer.getChildren().add(pauseMenuComponent);
+        timerService.start();
+        pauseMenuContainer.setVisible(true);
+        pauseMenuContainer.getChildren().add(clockComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -121,6 +135,8 @@ public class InGameController extends BasicController {
     public void destroy() {
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
           .removePropertyChangeListener(triple.propertyName(), triple.listener()));
+
+        timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_COUNTDOWN, this::handleTimeChanged);
     }
 
 }

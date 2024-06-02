@@ -10,38 +10,44 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="anchor" prefHeight="860.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.ClockComponent">
-   <HBox alignment="TOP_CENTER" layoutX="540.0" layoutY="14.0">
+<fx:root fx:id="anchor" prefHeight="860.0" prefWidth="1280.0" type="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.ClockComponent">
+   <HBox alignment="TOP_CENTER" layoutX="540.0" layoutY="14.0" prefHeight="100.0" AnchorPane.bottomAnchor="680.0" AnchorPane.leftAnchor="540.0" AnchorPane.rightAnchor="540.0">
       <VBox>
-         <ToggleButton fx:id="flagToggle" mnemonicParsing="false" onAction="#turnFlags" prefHeight="35.0" prefWidth="35.0" style="-fx-background-radius: 20;" styleClass="flagToggle" translateX="8.0" translateY="25.0" />
+         <ToggleButton fx:id="flagToggle" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#showFlags" prefHeight="40.0" prefWidth="40.0" style="-fx-background-radius: 20;" styleClass="flagToggle" translateX="20.0" translateY="12.0" />
       </VBox>
       <HBox>
-         <ToggleButton id="pause" fx:id="pauseClockButton" mnemonicParsing="false" onAction="#pauseClock" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 20;">
+         <ToggleButton id="pause" fx:id="pauseClockButton" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onAction="#pauseClock" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 20;" translateX="11.0">
             <font>
                <Font size="9.0" />
             </font>
          </ToggleButton>
       </HBox>
-      <VBox fx:id="clockVBox" alignment="CENTER" prefHeight="50.0" prefWidth="60.0">
-         <Label fx:id="seasonLabel" prefHeight="30.0" text="XY">
+      <VBox fx:id="clockVBox" alignment="TOP_CENTER" minHeight="80.0" minWidth="82.0" prefHeight="80.0" prefWidth="82.0" styleClass="clock">
+         <Label fx:id="seasonLabel" text="XY" translateY="5.0">
             <font>
                <Font size="20.0" />
             </font>
+            <VBox.margin>
+               <Insets top="15.0" />
+            </VBox.margin>
          </Label>
-         <Label fx:id="countdownLabel" prefHeight="17.0" text="X:XX" />
+         <Label fx:id="countdownLabel" text="X:XX" translateY="2.0">
+            <font>
+               <Font size="14.0" />
+            </font></Label>
       </VBox>
       <VBox prefHeight="50.0">
-         <Button id="x3" mnemonicParsing="false" onAction="#x3" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 20;" translateX="-10.0" fx:id="x3Button">
+         <Button id="x3" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onAction="#x3" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 20;" translateX="-11.0" translateY="2.0" fx:id="x3Button">
             <font>
                <Font size="9.0" />
             </font>
          </Button>
-         <Button id="x2" mnemonicParsing="false" onAction="#x2" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 20;" translateX="-4.0" fx:id="x2Button">
+         <Button id="x2" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onAction="#x2" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 20;" translateX="-2.0" fx:id="x2Button">
             <font>
                <Font size="9.0" />
             </font>
          </Button>
-         <Button id="x2" mnemonicParsing="false" onAction="#x1" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 20;" fx:id="x1Button">
+         <Button id="x1" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onAction="#x1" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 20;" fx:id="x1Button">
             <font>
                <Font size="9.0" />
             </font>
@@ -54,8 +60,11 @@
          <HBox.margin>
             <Insets left="2.0" />
          </HBox.margin>
-         <ImageView fx:id="randomEventImage" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
-         <Label fx:id="remainingSeasonsLabel" alignment="CENTER" prefHeight="30.0" prefWidth="30.0" text="X" />
+         <ImageView id="randomEvent" fx:id="randomEventImage" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+         <Label fx:id="remainingSeasonsLabel" alignment="CENTER" prefHeight="30.0" prefWidth="30.0" text="X" translateY="-2.0">
+            <font>
+               <Font size="14.0" />
+            </font></Label>
       </VBox>
    </HBox>
-</AnchorPane>
+</fx:root>

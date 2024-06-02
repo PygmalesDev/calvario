@@ -4,7 +4,9 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.menu.TimerService;
-import javafx.scene.layout.HBox;
+import javafx.application.Platform;
+import javafx.scene.image.Image;
+import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,12 +22,13 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Objects;
 
-@Component(view = "Clock.fxml")
-public class ClockComponent extends HBox {
 
+@Component(view = "Clock.fxml")
+public class ClockComponent extends AnchorPane {
+
+    public VBox clockVBox;
     @FXML
     ToggleButton flagToggle;
     @FXML
@@ -67,8 +70,6 @@ public class ClockComponent extends HBox {
     @OnInit
     public void init() {
 
-        PropertyChangeListener callHandleTimeChange = this::timeChange;
-        timerService.listeners().addPropertyChangeListener("countdown", callHandleTimeChange);
     }
 
     @OnRender
@@ -80,9 +81,12 @@ public class ClockComponent extends HBox {
         timerService.start();
         seasonLabel.setText("1");
         countdownLabel.setText(translateCountdown(timerService.getCountdown()));
+        randomEventImage.setImage(new Image("de/uniks/stp24/assets/events/goodEvent.png"));
+        remainingSeasonsLabel.setText("3");
     }
 
-    public void turnFlags() {
+    public void showFlags() {
+        timerService.setShowFlags(!timerService.getShowFlags());
     }
 
     private void timeChange(@NotNull PropertyChangeEvent change) {
@@ -103,21 +107,32 @@ public class ClockComponent extends HBox {
 
     public void pauseClock() {
         if (pauseClockButton.isSelected()) {
+            System.out.println("pause");
             timerService.stop();
         } else {
+            System.out.println("resume");
             timerService.resume();
         }
     }
 
     public void x3() {
+        System.out.println("x3");
         timerService.setSpeed(3);
     }
 
     public void x2() {
+        System.out.println("x2");
         timerService.setSpeed(2);
     }
 
     public void x1() {
+        System.out.println("x1");
         timerService.setSpeed(1);
+    }
+
+    public void setCountdownLabel(int value) {
+        Platform.runLater(() -> {
+            countdownLabel.setText(translateCountdown(value));
+        });
     }
 }

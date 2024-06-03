@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.menu;
 
+import de.uniks.stp24.model.Resource;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -11,7 +12,7 @@ import org.fulib.fx.annotation.controller.Component;
 
 import javax.inject.Inject;
 
-@Component(view = "buildingProperties.fxml")
+@Component(view = "BuildingProperties.fxml")
 public class BuildingPropertiesComponent extends AnchorPane {
 
     @FXML
@@ -23,7 +24,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @FXML
     StackPane resourceContainerTop;
     @FXML
-    GridView buildingPropertiesGridView;
+    GridView<Resource> buildingPropertiesGridView;
     @FXML
     Text buildingName;
     @FXML

@@ -1,5 +1,6 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.component.menu.BuildingPropertiesComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
@@ -26,6 +27,14 @@ import java.util.Objects;
 @Controller
 public class InGameController extends BasicController {
     @FXML
+    StackPane siteProperties;
+    @FXML
+    StackPane buildingProperties;
+    @FXML
+    StackPane buildingsWindow;
+    @FXML
+    StackPane overviewContainer;
+    @FXML
     StackPane pauseMenuContainer;
     @SubComponent
     @Inject
@@ -33,6 +42,10 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public SettingsComponent settingsComponent;
+
+    @SubComponent
+    @Inject
+    public BuildingPropertiesComponent buildingPropertiesComponent;
     @Inject
     InGameService inGameService;
 
@@ -86,6 +99,10 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void render() {
+        buildingProperties.setVisible(true);
+        buildingProperties.getChildren().add(buildingPropertiesComponent);
+
+        pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
     }

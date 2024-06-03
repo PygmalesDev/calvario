@@ -12,6 +12,7 @@ import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import java.util.Map;
 
 @Title("Calvario")
 @Controller
@@ -30,7 +31,7 @@ public class LoadController extends BasicController{
     @Inject
     LoginService loginService;
 
-
+    private String autologinError = "";
     public boolean autologin;
 
     @Inject
@@ -49,7 +50,8 @@ public class LoadController extends BasicController{
             // login with saved refreshToken
             subscriber.subscribe(loginService.autologin(refreshToken),
                     result -> this.autologin = true,
-                    error -> {});
+                    error -> {autologinError = "autologinFailed";
+                            prefService.removeRefreshToken();});
         } catch (Exception e) {
             e.printStackTrace();
             this.autologin = false;
@@ -61,7 +63,7 @@ public class LoadController extends BasicController{
         if(autologin){
             app.show("/browseGames");
         }else {
-            app.show("/login");
+            app.show("/login", Map.of("info",autologinError));
         }
     }
 
@@ -69,7 +71,7 @@ public class LoadController extends BasicController{
         if(autologin){
             app.show("/browseGames");
         }else {
-            app.show("/login");
+            app.show("/login", Map.of("info",autologinError));
         }
     }
 

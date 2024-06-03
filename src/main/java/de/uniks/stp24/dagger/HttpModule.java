@@ -83,4 +83,8 @@ public class HttpModule {
         return retrofit.create(EmpireApiService.class);
     }
 
+    @Provides
+    @Singleton
+    GameSystemsService gameSystemsService(Retrofit retrofit) {return retrofit.create(GameSystemsService.class);}
+
 }

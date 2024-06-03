@@ -140,7 +140,10 @@ public class InGameController extends BasicController {
     public void createMap() {
 
         System.out.println("your game: "+ gameID);
-        this.mapGrid.setStyle("-fx-background-image: url('/de/uniks/stp24/gameIcons/sea.png')");
+        this.mapGrid.setStyle("-fx-background-image: url('/de/uniks/stp24/icons/sea.png')");
+        this.subscriber.subscribe(islandsService.getIslands(gameID),
+          result -> System.out.println(result),
+          error -> System.out.println("KEINESWEGS"));
         List<Point2D> isles = islandsService.testRender();
         for (Point2D p : isles) {
             System.out.println(p);

@@ -3,6 +3,8 @@ package de.uniks.stp24.service;
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
+import de.uniks.stp24.rest.GameSystemsService;
+import io.reactivex.rxjava3.core.Observable;
 import javafx.geometry.Point2D;
 
 import javax.inject.Inject;
@@ -15,8 +17,8 @@ import java.util.random.RandomGenerator;
 
 @Singleton
 public class IslandsService {
-//    @Inject
-//    GameSystemsService gameSystemsService;
+    @Inject
+    GameSystemsService gameSystemsService;
 
     private final List<Island> isles = new ArrayList<>();
     static final RandomGenerator randomGenerator = new Random(1234);
@@ -24,9 +26,9 @@ public class IslandsService {
     @Inject
     public IslandsService() {}
 
-//    public Observable<Island[]> getIslands(String gameID) {
-//        return this.gameSystemsService.getSystems(gameID);//
-//    }
+    public Observable<Island[]> getIslands(String gameID) {
+        return this.gameSystemsService.getSystems(gameID);//
+    }
 
     private void generateIslands(Island[] arrayOfIsland) {
         for (Island isle : arrayOfIsland) {
@@ -51,7 +53,7 @@ public class IslandsService {
     public List<Point2D> testRender(){
         double x, y;
         List<Point2D> test = new ArrayList<>();
-        while (test.size() < 20) {
+        while (test.size() < 70) {
             x = RandomGenerator.getDefault().nextDouble(1800);
             y = RandomGenerator.getDefault().nextDouble(1200);
             Point2D tmp = new Point2D(x,y);

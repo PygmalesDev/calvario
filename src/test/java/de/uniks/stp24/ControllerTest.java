@@ -31,17 +31,26 @@ public class ControllerTest extends ApplicationTest {
     public ResourceBundle resources = ResourceBundle.getBundle("de/uniks/stp24/lang/main", Locale.ROOT);
 
     protected Stage stage;
+    protected TestComponent testComponent;
 
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
         this.stage = stage;
-        stage.setX(0);
-        stage.setY(0);
-        stage.requestFocus();
-        this.prefService.removeRefreshToken();
-        prefService.setLocale(Locale.ENGLISH);
+
+        if (prefService != null) {
+            stage.setX(0);
+            stage.setY(0);
+            prefService.setLocale(Locale.ENGLISH);
+            this.prefService.removeRefreshToken();
+        }
+
+        testComponent = (TestComponent) DaggerTestComponent.builder().mainApp(app).build();
+        app.setComponent(testComponent);
+
         app.start(stage);
+        stage.requestFocus();
+
         stage.getScene().getStylesheets().clear();
     }
 
@@ -57,6 +66,7 @@ public class ControllerTest extends ApplicationTest {
     public static void tearDown() {
         Mockito.framework().clearInlineMocks();
     }
+
     @AfterEach
     public void tearDown2() {
         System.gc();

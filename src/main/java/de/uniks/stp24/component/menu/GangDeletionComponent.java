@@ -27,6 +27,7 @@ public class GangDeletionComponent extends VBox {
     @Resource
     ResourceBundle resources;
 
+
     GangCreationController gangCreationController;
 
 

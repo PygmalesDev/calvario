@@ -35,8 +35,8 @@ public class HttpModule {
             }).addInterceptor(chain -> {
                 final Response response = chain.proceed(chain.request());
                 if (response.code() >= 300) {
-                    //System.err.println(chain.request());
-                    //System.err.println(response);
+                    System.err.println(chain.request());
+                    System.err.println(response);
                 }
                 return response;
             }).build();

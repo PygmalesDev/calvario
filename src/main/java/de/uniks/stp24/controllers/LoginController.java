@@ -98,7 +98,7 @@ public class LoginController extends BasicController {
         }
         if (Objects.nonNull(this.info)) {
             switch(this.info) {
-                case "autologinFailed", "deleted" -> this.bubbleComponent.setCaptainText(resources.getString("account.deleted"));
+                case "autologinFailed", "deleted" -> this.bubbleComponent.setCaptainText(resources.getString("pirate.account.deleted"));
                 case "logout" -> this.bubbleComponent.setCaptainText(resources.getString("logout.successful.on.this.device"));
 
                 case "registered" -> this.bubbleComponent.setCaptainText(resources.getString("account.registered"));

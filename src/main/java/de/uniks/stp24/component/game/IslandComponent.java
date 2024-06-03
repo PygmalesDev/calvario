@@ -5,16 +5,22 @@ import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.service.ImageCache;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import org.fulib.fx.annotation.controller.Component;
 
 import javax.inject.Inject;
 
 @Component(view = "IslandComponent.fxml")
-public class IslandComponent extends ImageView {
+public class IslandComponent extends Pane {
     @Inject
     ImageCache imageCache;
     @FXML
     ImageView islandImage;
+    @FXML
+    StackPane flagPane;
+    @FXML
+    ImageView flagImage;
     private Island island;
     int x ,y ;
 

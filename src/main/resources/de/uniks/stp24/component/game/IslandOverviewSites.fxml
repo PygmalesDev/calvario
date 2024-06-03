@@ -20,15 +20,24 @@
       <HBox alignment="CENTER" prefHeight="136.0" prefWidth="400.0">
          <VBox alignment="TOP_CENTER" prefHeight="122.0" prefWidth="330.0" style="-fx-border-color: #000000;">
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder" />
-            <VBox alignment="CENTER" prefHeight="75.0" prefWidth="329.0">
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder" />
-            </VBox>
+            <HBox prefHeight="13.0" prefWidth="328.0">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder" wrappingWidth="127.947265625" />
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder" wrappingWidth="104.947265625" />
+            </HBox>
+            <HBox prefHeight="74.0" prefWidth="328.0">
+               <VBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="126.0">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder" />
+               </VBox>
+               <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder" />
+               </VBox>
+            </HBox>
             <HBox alignment="CENTER" prefHeight="44.0" prefWidth="329.0">
                <Button fx:id="detailsButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showDetails" prefWidth="75.0" text="DETAILS" />
                <VBox prefHeight="44.0" prefWidth="21.0" />
                <Button fx:id="sitesButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showSites" prefWidth="75.0" text="SITES" />
                <VBox prefHeight="44.0" prefWidth="21.0" />
-               <Button fx:id="upgradesButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showUpgrades" prefWidth="75.0" text="UPGRADES" />
+               <Button fx:id="buildingsButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showBuildings" prefWidth="78.0" text="BUILDINGS" />
             </HBox>
          </VBox>
       </HBox>
@@ -39,4 +48,5 @@
    </VBox>
    <Pane layoutX="360.0" layoutY="18.0" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #ff0000;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0" />
    <Pane layoutX="151.2" prefHeight="77.0" prefWidth="99.0" style="-fx-background-color: #0088ff;" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="0.0" />
+   <Pane layoutX="287.0" layoutY="-6.0" onMouseClicked="#showUpgrades" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #00FF00;" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="270.0" />
 </fx:root>

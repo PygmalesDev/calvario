@@ -16,7 +16,7 @@ public class ResourcesService {
 
     /*
     Click logik:
-    1.  Ich muss ein Click auf eine Insel simulieren
+    1.  Ich muss ein Click auf eine Insel simulieren ***
     2.  Nach diesem Klick, soll sich IslandOverviewSites öffnen
             -> Click auf UPGRADES öffnet IslandOverviewUpgrades
                 -> Click auf Back zurück zu IslandOverviewSites

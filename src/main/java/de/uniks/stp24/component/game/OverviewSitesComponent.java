@@ -24,9 +24,9 @@ public class OverviewSitesComponent extends AnchorPane {
     @FXML
     public Button sitesButton;
     @FXML
-    public Button upgradesButton;
-    @FXML
     public StackPane sitesContainer;
+    @FXML
+    public Button buildingsButton;
 
     @SubComponent
     @Inject
@@ -34,6 +34,10 @@ public class OverviewSitesComponent extends AnchorPane {
     @SubComponent
     @Inject
     public DetailsComponent detailsComponent;
+    @SubComponent
+    @Inject
+    public BuildingsComponent buildingsComponent;
+
 
     @Inject
     public InGameService inGameService;
@@ -48,7 +52,7 @@ public class OverviewSitesComponent extends AnchorPane {
     public void showDetails() {
         detailsButton.setDisable(true);
         sitesButton.setDisable(false);
-        upgradesButton.setDisable(false);
+        buildingsButton.setDisable(false);
         inGameService.showOnly(sitesContainer, detailsComponent);
     }
 
@@ -56,10 +60,17 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewUpgradeComponent);
     }
 
+    public void showBuildings(){
+        buildingsButton.setDisable(true);
+        sitesButton.setDisable(false);
+        detailsButton.setDisable(false);
+        inGameService.showOnly(sitesContainer, buildingsComponent);
+    }
+
     public void showSites(){
         detailsButton.setDisable(false);
         sitesButton.setDisable(true);
-        upgradesButton.setDisable(false);
+        buildingsButton.setDisable(false);
         inGameService.showOnly(sitesContainer, sitesComponent);
     }
 

@@ -290,6 +290,8 @@ public class GangCreationController extends BasicController {
         colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
         gangNameText.setText("");
         gangDescriptionText.setText("");
+        editButton.setVisible(false);
+        showDeletePaneButton.setVisible(false);
     }
 
     public void showLastFlag() {

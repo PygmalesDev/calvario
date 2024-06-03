@@ -22,7 +22,7 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
     @FXML
     public Text descriptionText;
     @FXML
-    public Text changeProSeasonText;
+    public Text changePerSeasonText;
     @Inject
     @org.fulib.fx.annotation.controller.Resource
     ResourceBundle langBundle;
@@ -32,23 +32,21 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
     boolean showCount;
     boolean showName;
     boolean showIcon;
-    boolean showChangeProSeason;
+    boolean showChangePerSeason;
 
     @Inject
-    public ResourceComponent(boolean showCount, boolean showName, boolean showIcon, boolean showChangeProSeason) {
+    public ResourceComponent(boolean showCount, boolean showName, boolean showIcon, boolean showChangePerSeason) {
         this.showCount = showCount;
         this.showName = showName;
         this.showIcon = showIcon;
-        this.showChangeProSeason = showChangeProSeason;
+        this.showChangePerSeason = showChangePerSeason;
     }
 
     //Todo: resourceID in translations, imagePaths, constants
 
     @Override
     public void setItem(@NotNull Resource resource){
-        System.out.println(showName);
         if(showName){
-            System.out.println(resource.resourceID());
             descriptionText.setText(resource.resourceID());
         }else{
             descriptionText.setVisible(false);
@@ -66,16 +64,16 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
             resourceIconImageView.setVisible(false);
         }
 
-        if(showChangeProSeason){
+        if(showChangePerSeason){
             if(resource.changePerSeason() == 0){
-                changeProSeasonText.setVisible(false);
+                changePerSeasonText.setVisible(false);
             }else {
                 String sign;
                 sign = (resource.changePerSeason() > 0) ? "+" : "-";
-                changeProSeasonText.setText(sign + resource.changePerSeason());
+                changePerSeasonText.setText(sign + resource.changePerSeason());
             }
         }else{
-            changeProSeasonText.setVisible(false);
+            changePerSeasonText.setVisible(false);
         }
     }
 

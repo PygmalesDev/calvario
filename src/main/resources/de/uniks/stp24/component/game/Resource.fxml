@@ -33,7 +33,7 @@
       <HBox.margin>
          <Insets right="2.0"/>
       </HBox.margin>
-      <Text fx:id="changeProSeasonText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="resourceText"
+      <Text fx:id="changePerSeasonText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="resourceText"
             text="+300"/>
    </HBox>
 </fx:root>

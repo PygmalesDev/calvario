@@ -3,6 +3,7 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ResourcesService;
@@ -45,17 +46,20 @@ public class StorageOverviewComponent extends VBox {
     @Inject
     EventListener eventListener;
 
+    private String lastUpdate;
     private String gameID;
     private String empireID;
+    private Map<String, Integer> resourcesLastSeasonChange;
 
     @Inject
-    public StorageOverviewComponent() {}
+    public StorageOverviewComponent() {
+        lastUpdate = "";
+    }
 
 
     /** Initialising the resource list **/
     public void initStorageList(){
         this.subscriber.subscribe(this.empireService.getEmpire(gameID, empireID), this::resourceListGeneration);
-        this.createEmpireListener();
     }
 
 
@@ -68,16 +72,41 @@ public class StorageOverviewComponent extends VBox {
     private void resourceListGeneration(EmpireDto empireDto){
         Map<String, Integer> resourceMap = empireDto.resources();
         System.out.println(resourceMap);
-        ObservableList<Resource> resourceList = resourcesService.generateResourceList(resourceMap);
+        ObservableList<Resource> resourceList = resourcesService.generateResourceList(resourceMap, resourceListView.getItems());
         this.resourceListView.setItems(resourceList);
     }
 
 
     /** Listener for the empire: Changes of the resources will change the list in the storage overview.**/
-    private void createEmpireListener(){
+    public void createEmpireListener(){
         this.subscriber.subscribe(this.eventListener
                         .listen("games." + this.gameID + ".empires." + this.empireID + ".updated", EmpireDto.class),
-                event -> resourceListGeneration(event.data()));
+                event -> {
+                    if(!lastUpdate.equals(event.data().updatedAt())){
+                        System.out.println("update listener listened something");
+                        System.out.println(event.data().updatedAt());
+                        resourceListGeneration(event.data());
+                        this.lastUpdate = event.data().updatedAt();
+                    }else{
+                        System.out.println("updateTime wrong");}
+                    },
+                error -> {
+                    System.out.println("errorListener");
+                });
+    }
+
+
+    /** Listener for the season: Change of the season will change the changePerSeason of a resource **/
+    public void seasonListener(){
+        this.subscriber.subscribe(this.eventListener
+                .listen("games." + this.gameID + ".ticked", Game.class),
+                event -> {if(!lastUpdate.equals(event.data().updatedAt())){
+                    //Todo: calculate new changePerSeason + generate List
+                    ObservableList<Resource> resourceList = resourcesService.updateChangePerSeason(resourceListView.getItems(), resourcesLastSeasonChange);
+                    this.resourceListView.setItems(resourceList);
+                    System.out.println("seasonChange");
+                    this.lastUpdate = event.data().updatedAt();
+                }});
     }
 
 

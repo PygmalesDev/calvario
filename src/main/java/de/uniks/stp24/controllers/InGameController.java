@@ -69,13 +69,20 @@ public class InGameController extends BasicController {
         //Initialising the Storage listView
         System.out.println(this.gameID);
         this.storageOverviewComponent.setGameID(this.gameID);
-        subscriber.subscribe(empireService.getEmpires(this.gameID), dto -> Arrays.stream(dto).forEach(data -> {
-            if(data.user().equals(tokenStorage.getUserId())) {
+        subscriber.subscribe(empireService.getEmpires(this.gameID), dto -> {Arrays.stream(dto).forEach(data -> {
+            if (data.user().equals(tokenStorage.getUserId())) {
                 this.empireID = data._id();
                 this.storageOverviewComponent.setEmpireID(this.empireID);
                 System.out.println(empireID);
                 this.storageOverviewComponent.initStorageList();
-            }}));
+
+            }
+        });
+            this.storageOverviewComponent.createEmpireListener();
+            this.storageOverviewComponent.seasonListener();
+        });
+
+        System.out.println("listener created");
 
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;

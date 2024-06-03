@@ -21,7 +21,7 @@ public class LoginService {
     }
 
     public boolean autoLogin() {
-        // checks if user wants to login automatically: there is a refreshToken if the user selected remember me before
+        // checks if user wants to log in automatically: there is a refreshToken if the user selected remember me before
         final String refreshToken = prefService.getRefreshToken();
         if (refreshToken == null || System.getenv("DISABLE_AUTO_LOGIN") != null) {
             // no automatic login possible
@@ -29,8 +29,11 @@ public class LoginService {
         }
         try {
             // login with saved refreshToken
-            final LoginResult result = authApiService.refresh(new RefreshDto(refreshToken)).blockingFirst();
+            final LoginResult result = authApiService.refresh(new RefreshDto(refreshToken)).doOnError(
+              error -> System.out.println("FEHLER AUTOLOGIN")
+            ).blockingFirst();
             tokenStorage.setToken(result.accessToken());
+            System.out.println(result.accessToken());
             tokenStorage.setUserId(result._id());
             tokenStorage.setName(result.name());
             tokenStorage.setAvatar(result.avatar());

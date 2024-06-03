@@ -75,10 +75,9 @@ public class InGameController extends BasicController {
                 this.storageOverviewComponent.setEmpireID(this.empireID);
                 System.out.println(empireID);
                 this.storageOverviewComponent.initStorageList();
-
+                this.storageOverviewComponent.createEmpireListener();
             }
         });
-            this.storageOverviewComponent.createEmpireListener();
             this.storageOverviewComponent.seasonListener();
         });
 

@@ -102,8 +102,8 @@ public class StorageOverviewComponent extends VBox {
                 .listen("games." + this.gameID + ".ticked", Game.class),
                 event -> {if(!lastUpdate.equals(event.data().updatedAt())){
                     //Todo: calculate new changePerSeason + generate List
-                    ObservableList<Resource> resourceList = resourcesService.updateChangePerSeason(resourceListView.getItems(), resourcesLastSeasonChange);
-                    this.resourceListView.setItems(resourceList);
+                    //ObservableList<Resource> resourceList = resourcesService.updateChangePerSeason(resourceListView.getItems(), resourcesLastSeasonChange);
+                    //this.resourceListView.setItems(resourceList);
                     System.out.println("seasonChange");
                     this.lastUpdate = event.data().updatedAt();
                 }});

@@ -77,6 +77,12 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-border-width: 2;
 }
 
+.island-overview{
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/island-overview.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}
+
 /************************************************************************************/
 /***************** Buttons *********************************************************/
 Button:hover{

@@ -2,14 +2,13 @@ package de.uniks.stp24.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.BubbleComponent;
-import de.uniks.stp24.component.GameComponent;
-import de.uniks.stp24.component.LogoutComponent;
-import de.uniks.stp24.component.WarningComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
+import de.uniks.stp24.component.menu.GameComponent;
+import de.uniks.stp24.component.menu.LogoutComponent;
+import de.uniks.stp24.component.menu.WarningComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.LogoutResult;
-import de.uniks.stp24.model.User;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.*;
 import de.uniks.stp24.ws.Event;
@@ -28,8 +27,6 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
-
-import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.List;
 
@@ -44,7 +41,10 @@ public class BrowseGameControllerTest extends ControllerTest {
     EventListener eventListener;
     @Mock
     GamesApiService gamesApiService;
-
+    @Spy
+    TokenStorage tokenStorage;
+    @Spy
+    ImageCache imageCache;
     @Spy
     PopupBuilder popupBuilder;
     @Spy
@@ -67,9 +67,11 @@ public class BrowseGameControllerTest extends ControllerTest {
     BubbleComponent bubbleComponent;
     @InjectMocks
     WarningComponent warningComponent;
+    @Mock
+    Comparable<Game> comparable;
 
 
-    Game game = new Game(null, null, "1", "Was geht", "testID2", false, 0,0, null);
+    Game game = new Game("11", null, "1", "Was geht", "testID2", false, 0,0, null);
 
 
     @Spy
@@ -95,7 +97,7 @@ public class BrowseGameControllerTest extends ControllerTest {
         browseGameController.warningComponent = warningComponent;
         Mockito.doReturn(Observable.just(List.of(
                 game,
-                new Game(null, null, "2", "rapapa", "testID", false, 0,0, null)
+                new Game("88888", null, "2", "rapapa", "testID", false, 0,0, null)
         ))).when(gamesApiService).findAll();
 
         Mockito.doReturn(subject).when(eventListener).listen("games.*.*", Game.class);
@@ -111,7 +113,7 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Test
     void logOut(){
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Browse Game", stage.getTitle());
+        assertEquals(resources.getString("browse.game"), stage.getTitle());
         clickOn(browseGameController.log_out_b);
         WaitForAsyncUtils.waitForFxEvents();
         assertNotNull(lookup("#logoutButton").queryButton());
@@ -120,16 +122,16 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Test
     void newGame(){
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Browse Game", stage.getTitle());
+        assertEquals(resources.getString("browse.game"), stage.getTitle());
         clickOn(browseGameController.new_game_b);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Create Game", stage.getTitle());
+        assertEquals(resources.getString("create.game"), stage.getTitle());
     }
 
     @Test
     void loadGame(){
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Browse Game", stage.getTitle());
+        assertEquals(resources.getString("browse.game"), stage.getTitle());
         clickOn(browseGameController.load_game_b);
         WaitForAsyncUtils.waitForFxEvents();
         //TODO: Wait for PR LoadGame
@@ -139,7 +141,7 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Test
     void deleteGame(){
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Browse Game", stage.getTitle());
+        assertEquals(resources.getString("browse.game"), stage.getTitle());
         clickOn(browseGameController.del_game_b);
         WaitForAsyncUtils.waitForFxEvents();
         //TODO: Wait for PR Delete Game
@@ -149,10 +151,10 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Test
     void editAcc(){
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Browse Game", stage.getTitle());
+        assertEquals(resources.getString("browse.game"), stage.getTitle());
         clickOn(browseGameController.edit_acc_b);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Edit Account", stage.getTitle());
+        assertEquals(resources.getString("edit.account"), stage.getTitle());
     }
 
     /*
@@ -164,12 +166,12 @@ public class BrowseGameControllerTest extends ControllerTest {
         //Create new Game and check if game is listed on ListView
         WaitForAsyncUtils.waitForFxEvents();
         assertEquals(2, browseGameController.gameList.getItems().size());
-        subject.onNext(new Event<>("games.3.created", new Game(null, null, "3", "taschaka", "testID2", false, 0,0, null)));
+        subject.onNext(new Event<>("games.3.created", new Game("22", null, "3", "taschaka", "testID2", false, 0,0, null)));
 
         //Delete existing game and check if game is still listed or not.
         WaitForAsyncUtils.waitForFxEvents();
         assertEquals(3, browseGameController.gameList.getItems().size());
-        subject.onNext(new Event<>("games.652.deleted", new Game(null, null, "2", "rapapa", "testID", false, 0,0, null)));
+        subject.onNext(new Event<>("games.652.deleted", new Game("22", null, "2", "rapapa", "testID", false, 0,0, null)));
 
         //Check amount of Listview items
         WaitForAsyncUtils.waitForFxEvents();
@@ -193,13 +195,13 @@ public class BrowseGameControllerTest extends ControllerTest {
         //Click on edit game button and check if edit game screen is now displayed.
         clickOn(browseGameController.edit_game_b);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Edit Game", stage.getTitle());
+        assertEquals(resources.getString("edit.game"), stage.getTitle());
 
         //Click on confirm. No inputs for change was given. Screen do not change
         WaitForAsyncUtils.waitForFxEvents();
         Button confirmButton = lookup("#editGameConfirmButton").queryButton();
         clickOn(confirmButton);
-        assertEquals("Edit Game", stage.getTitle());
+        assertEquals(resources.getString("edit.game"), stage.getTitle());
     }
 
     @Test
@@ -215,7 +217,7 @@ public class BrowseGameControllerTest extends ControllerTest {
         //Click on confirm changes nothing. Screen is still browse game.
         clickOn(browseGameController.edit_game_b);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals(stage.getTitle(), "Browse Game");
+        assertEquals(resources.getString("browse.game"),stage.getTitle());
     }
 
     @Test
@@ -263,26 +265,38 @@ public class BrowseGameControllerTest extends ControllerTest {
         //verify(this.warningComponent).deleteGame();
     }
 
-    //TODO REFACTOR TEST!
     @Test
     public void clickOnLogout() {
-        doReturn(Observable.just(new LogoutResult(""))).when(browseGameService).logout(any());
+        prefService.setRefreshToken("lastRefreshToken");
+        System.out.println(prefService.getRefreshToken());
+        doReturn(Observable.just(new LogoutResult("a")))
+                .when(browseGameService).logout(any());
+        doReturn(null).when(app).show("/login");
 
-        // Start:
-        // Alice sees the Logout
-        assertEquals("Browse Game", stage.getTitle());
+        // Start
+        // Alice is playing Calvario and wants to log out.
+        // The game's prefService contains a refresh token for her account
+        // The browse games screen is being shown
+        assertEquals(resources.getString("browse.game"), stage.getTitle());
+        assertNotNull(prefService.getRefreshToken());
 
         // Alice clicks on logout
         clickOn("#log_out_b");
+
         waitForFxEvents();
 
         clickOn("#logoutButton");
-
+        // it's necessary to generate the observable, that the test mocks,
+        // because with it a .doOnNext(...) should be invoke
+        Observable<LogoutResult> observable = browseGameService.logout("");
+        observable.doOnComplete(() -> prefService.removeRefreshToken()).subscribe();
         waitForFxEvents();
 
         // Alice sees now the login screen
-        verify(browseGameController.browseGameService,times(1)).logout("");
-        //assertEquals(resources.getString("login"),stage.getTitle());
+        // The game's prefService does not contain a refresh token for her account
+        verify(browseGameService, times(2)).logout("");
+        verify(app, times(1)).show("/login");
+        assertNull(prefService.getRefreshToken());
     }
 
 
@@ -291,7 +305,7 @@ public class BrowseGameControllerTest extends ControllerTest {
         // Start:
         // Alice has unintended clicked the logout button
         // and see the logout screen
-        assertEquals("Browse Game", stage.getTitle());
+        assertEquals(resources.getString("browse.game"), stage.getTitle());
 
         // Alice clicks on cancel
         clickOn("#log_out_b");
@@ -303,6 +317,6 @@ public class BrowseGameControllerTest extends ControllerTest {
 
         // Alice return to the browse game login screen
         // must be fixed when browsegames.fxml is available
-        assertEquals("Browse Game", stage.getTitle());
+        assertEquals(resources.getString("browse.game"), stage.getTitle());
     }
 }

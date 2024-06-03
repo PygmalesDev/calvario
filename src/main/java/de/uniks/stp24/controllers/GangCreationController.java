@@ -1,6 +1,7 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
+import de.uniks.stp24.component.menu.GangComponent;
+import de.uniks.stp24.component.menu.GangDeletionComponent;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.component.GangComponent;
@@ -13,44 +14,36 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
-import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
-import org.fulib.fx.controller.Subscriber;
-
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.*;
+import static de.uniks.stp24.service.Constants.empireTemplatesEnglish;
+import static de.uniks.stp24.service.Constants.empireTemplatesGerman;
 
-import static de.uniks.stp24.service.Constants.empireTemplates;
-
-@Title("Gang Creation")
+@Title("%create.island")
 @Controller
-public class GangCreationController {
-    @Inject
-    App app;
-
+public class GangCreationController extends BasicController {
     @Inject
     SaveLoadService saveLoadService;
-
     @Inject
     LobbyService lobbyService;
     @Inject
-    Subscriber subscriber;
+    PopupBuilder popupBuilder;
+    @SubComponent
     @Inject
-    TokenStorage tokenStorage;
-
+    GangDeletionComponent gangDeletionComponent;
     @Inject
     public Provider<GangComponent> gangComponentProvider;
 
@@ -82,8 +75,6 @@ public class GangCreationController {
     @FXML
     Button showDeletePaneButton;
     @FXML
-    Text toBeDeletedGangName;
-    @FXML
     Pane deletePane;
     @FXML
     Button nextColorButton;
@@ -113,7 +104,9 @@ public class GangCreationController {
     int flagImageIndex = 0;
     int portraitImageIndex = 0;
     int colorIndex = 0;
+    Map<String, String[]> empireTemplates;
 
+    PopupBuilder popup = new PopupBuilder();
     // unused FX IDs (declared here to remove warnings from fxml file)
     @FXML
     Button backButton;
@@ -126,24 +119,27 @@ public class GangCreationController {
     @FXML
     Button nextPortraitButton;
     @FXML
-    Button cancelButton;
-    @FXML
     Button randomizeButton;
-    @FXML
-    Button deleteButton;
     @FXML
     Button nextFlagButton;
     @FXML
     ToggleButton lockNameButton;
     @FXML
     ToggleButton lockDescriptionButton;
+    @Param("gameid")
+    String gameID;
+    @FXML
+    ToggleButton lockFlagButton;
+    @FXML
+    ToggleButton lockPortraitButton;
+    @FXML
+    ToggleButton lockColorButton;
+
 
     @Inject
     public GangCreationController() {
 
     }
-    @Param("gameid")
-    String gameID;
 
     @OnInit
     public void init() {
@@ -202,8 +198,9 @@ public class GangCreationController {
             this.subscriber.subscribe(this.lobbyService.updateMember(
                     this.gameID, result.user(), result.ready(), empire), result2 ->
                         app.show("/lobby", Map.of("gameid", this.gameID)));
-        });
-
+        },
+          error -> {}
+        );
     }
 
     public Gang getInputGang() {
@@ -230,12 +227,9 @@ public class GangCreationController {
 
     public void delete() {
         int index = gangsListView.getSelectionModel().getSelectedIndex();
-        gangElements.remove(index);
-
-        saveLoadService.saveGang(createGangsObservableList());
-
-        showCreationPane();
-        cancel();
+        gangs.remove(index);
+        saveLoadService.saveGang(gangs);
+        resetCreationPane();
     }
 
     private GangElement createGangElement(Gang gang) {
@@ -262,10 +256,11 @@ public class GangCreationController {
     }
 
     public void showDeletePane() {
-        creationBox.setEffect(new BoxBlur());
-        deletePane.setVisible(true);
-        GangElement gang = gangsListView.getSelectionModel().getSelectedItem();
-        toBeDeletedGangName.setText(gang.gang().name());
+        Gang gang = gangsListView.getSelectionModel().getSelectedItem();
+        gangDeletionComponent.setWarningText(gang.name());
+        popup.showPopup(deletePane, gangDeletionComponent);
+        popup.setBlur(gangsListView, creationBox);
+
     }
 
     public void create() {
@@ -337,7 +332,7 @@ public class GangCreationController {
                     + " " + empireTemplates.get("Type")[typeIndex];
             String secondName = "";
             if (rand.nextInt(0, 4) == 3)
-                secondName = " of " + empireTemplates.get("Suffix")[rand.nextInt(0, empireTemplates.get("Suffix").length)] +
+                secondName = " " + resources.getString("of") + " " + empireTemplates.get("Suffix")[rand.nextInt(0, empireTemplates.get("Suffix").length)] +
                         " " + empireTemplates.get("Definition")[rand.nextInt(0, empireTemplates.get("Definition").length)];
             gangNameText.setText(name + secondName);
         } else {
@@ -360,8 +355,6 @@ public class GangCreationController {
             colorIndex = rand.nextInt(0, colorsList.size());
             colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
         }
-
-
     }
 
     public void lockFlag() {
@@ -388,7 +381,5 @@ public class GangCreationController {
     public void destroy() {
         flagImage = null;
         portraitImage = null;
-        //portraitsList = null;
-        //flagsList = null;
     }
 }

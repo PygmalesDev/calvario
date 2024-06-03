@@ -1,9 +1,9 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.CreateGameService;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
@@ -11,15 +11,17 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
-
+import org.fulib.fx.annotation.event.OnRender;
 import javax.inject.Inject;
 
-@Title("Create Game")
+@Title("%create.game")
 @Controller
 public class CreateGameController extends BasicController {
     @FXML
@@ -38,16 +40,19 @@ public class CreateGameController extends BasicController {
     TextField createRepeatPasswordTextField;
     @FXML
     Spinner<Integer> createMapSizeSpinner;
-
     @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
-
     @Inject
     GamesApiService gamesApiService;
     @Inject
     BrowseGameController browseGameController;
+    @Inject
+    @SubComponent
+    BubbleComponent bubbleComponent;
+    @FXML
+    Pane captainContainer;
 
     @Inject
     public CreateGameController(){
@@ -56,14 +61,18 @@ public class CreateGameController extends BasicController {
     @Inject
     CreateGameService createGameService;
 
-    @FXML
+    @OnRender
     public void initialize() {
         createGameService = (createGameService == null) ? new CreateGameService() : createGameService;
         createGameService.setCreateGameController(this);
         initializeSpinner();
-        errorMessageText.setText("");
-        errorBox.setVisible(true);
         this.controlResponses = responseConstants.respCreateGame;
+    }
+
+    @OnRender
+    public void setCaptain() {
+        this.captainContainer.getChildren().add(this.bubbleComponent);
+        this.bubbleComponent.setCaptainText(this.resources.getString("pirate.newGame"));
     }
 
     //Spinner for incrementing map size
@@ -86,20 +95,20 @@ public class CreateGameController extends BasicController {
           createGameService.nameIsAvailable(gameName)) {
             subscriber.subscribe(createGameService.createGame(gameName, settings, password),
               result -> {
-                  Platform.runLater(() -> {
                       browseGameController.init();
                       app.show(browseGameController);
-                  });
               },
               error -> {
-                  int code = errorService.getStatus(error);
-                  errorMessageText.setText(getErrorInfoText(code));
+                  this.bubbleComponent.setErrorMode(true);
+                  this.bubbleComponent.setCaptainText(getErrorInfoText(error));
               });
 
         } else if (!createGameService.nameIsAvailable(gameName)) {
-            errorMessageText.setText(getErrorInfoText(409)); }
+            this.bubbleComponent.setErrorMode(true);
+            this.bubbleComponent.setCaptainText(getErrorInfoText(409)); }
         else {
-            errorMessageText.setText(getErrorInfoText(
+            this.bubbleComponent.setErrorMode(true);
+            this.bubbleComponent.setCaptainText(getErrorInfoText(
               !pwdMatch ? -2 : -1));
         }
     }
@@ -108,8 +117,8 @@ public class CreateGameController extends BasicController {
         app.show("/browseGames");
     }
 
-    public void showError(int code) {
-        errorMessageText.setText(getErrorInfoText(code));
+    public void showError(Throwable error) {
+        errorMessageText.setText(getErrorInfoText(error));
     }
 
     public void setCreateGameService(CreateGameService createGameService) {

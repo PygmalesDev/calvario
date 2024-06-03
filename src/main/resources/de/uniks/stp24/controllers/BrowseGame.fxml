@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -31,20 +32,16 @@
                         <HBox alignment="CENTER" prefHeight="80.0" prefWidth="230.0">
                            <Button fx:id="load_game_b" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#loadGame" styleClass="smallActionButton" text="%load">
                               <graphic>
-                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../icons/downBlack.png" />
-                                       </image>
-                                    </ImageView>
+                                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                    <Image url="@../icons/downBlack.png"/>
+                                 </ImageView>
                               </graphic></Button>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="80.0" prefWidth="230.0">
                            <Button fx:id="new_game_b" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#newGame" styleClass="smallActionButton" text="%new">
                               <graphic>
                                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                       <Image url="@../icons/add1.png" />
-                                    </image>
+                                    <Image url="@../icons/add1.png"/>
                                  </ImageView>
                               </graphic></Button>
                         </HBox>
@@ -52,19 +49,16 @@
                            <Button fx:id="edit_game_b" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#editGame" styleClass="smallActionButton" text="%edit">
                               <graphic>
                                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                       <Image url="@../icons/pen.png" />
-                                    </image>
+                                    <Image url="@../icons/pen.png"/>
                                  </ImageView>
                               </graphic></Button>
                         </HBox>
                         <HBox alignment="CENTER" prefHeight="80.0" prefWidth="230.0">
                            <Button fx:id="del_game_b" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#deleteGame" styleClass="smallActionButton" text="%delete">
                               <graphic>
-                                 <ImageView fx:id="deleteIconImageView" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                       <Image url="@../icons/deleteBlack.png" />
-                                    </image>
+                                 <ImageView fx:id="deleteIconImageView" fitHeight="40.0" fitWidth="40.0"
+                                            pickOnBounds="true" preserveRatio="true">
+                                    <Image url="@../icons/deleteBlack.png"/>
                                  </ImageView>
                               </graphic></Button>
                         </HBox>
@@ -72,9 +66,7 @@
                            <Button fx:id="edit_acc_b" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#editAccount" styleClass="smallActionButton" text="%edit.account">
                               <graphic>
                                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                       <Image url="@../icons/pen.png" />
-                                    </image>
+                                    <Image url="@../icons/pen.png"/>
                                  </ImageView>
                               </graphic></Button>
                         </HBox>
@@ -82,9 +74,7 @@
                            <Button fx:id="log_out_b" mnemonicParsing="false" onAction="#logOut" styleClass="smallActionButton" text="%log.out">
                               <graphic>
                                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                       <Image url="@../icons/enter.png" />
-                                    </image>
+                                    <Image url="@../icons/enter.png"/>
                                  </ImageView>
                               </graphic></Button>
                         </HBox>
@@ -104,6 +94,7 @@
                            </HBox.margin>
                         </Text>
                      </HBox>
+                     <TextField fx:id="searchLine" alignment="CENTER" layoutX="81.0" layoutY="436.0" prefHeight="30.0" prefWidth="160.0" promptText="%search.game" styleClass="searchField" />
                   </AnchorPane>
                </HBox>
                <StackPane fx:id="warningWindowContainer" alignment="BOTTOM_CENTER" prefHeight="400.0" prefWidth="450.0" visible="false" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="70.0" />

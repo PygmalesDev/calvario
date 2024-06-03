@@ -1,11 +1,10 @@
 package de.uniks.stp24;
 
-import de.uniks.stp24.component.BubbleComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.controllers.SignUpController;
 import de.uniks.stp24.dto.SignUpResultDto;
 import de.uniks.stp24.service.SignUpService;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -63,6 +62,6 @@ public class TestSignUpNewUser extends ControllerTest {
         verify(this.signUpService, times(1))
                 .register("TemplateUser", "TemplateUserPassword");
         assertEquals(resources.getString("login"), stage.getTitle());
-        assertEquals(resources.getString("account.registered"), "ACCOUNT REGISTERED");
+        assertEquals(resources.getString("account.registered"), "ACCOUNT REGISTERED!");
     }
 }

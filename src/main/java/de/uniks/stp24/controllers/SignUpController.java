@@ -1,9 +1,8 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.BubbleComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.*;
-import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
@@ -23,20 +22,18 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
-import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
-@Title("REGISTER")
+@Title("%register")
 @Controller
 public class SignUpController extends BasicController {
   
     @FXML
     ToggleButton languageToggleButton;
-
     @FXML
     TextField usernameField;
     @FXML
@@ -102,13 +99,6 @@ public class SignUpController extends BasicController {
     @OnRender
     public void addSpeechBubble() {
         captainContainer.getChildren().add(bubbleComponent);
-        Platform.runLater(() -> {
-            bubbleComponent.addChildren(errorTextField);
-            bubbleComponent.setCaptainText("");
-            if (!errorTextField.getText().equals("")) {
-                bubbleComponent.setCaptainText("");
-            }
-        });
     }
 
     // Sets boolean bindings for text manipulations
@@ -142,25 +132,24 @@ public class SignUpController extends BasicController {
     @OnRender
     public void showErrorMessage() {
         this.errorTextField.textProperty().bind(Bindings.createStringBinding(() -> {
-                    if (this.isLoginFieldEmpty.get())
-                        return resources.getString("pirate.register.tell.name");
+            this.bubbleComponent.captainText.setText("");
+            this.bubbleComponent.setErrorMode(true);
+            if (this.isLoginFieldEmpty.get())
+                this.bubbleComponent.setCaptainText(resources.getString("pirate.register.tell.name"));
+            else if (this.isPasswordFieldEmpty.get())
+                this.bubbleComponent.setCaptainText(resources.getString("pirate.general.enter.password"));
+            else if (this.isPasswordTooShort.get() && !this.isPasswordFieldEmpty.get())
+                this.bubbleComponent.setCaptainText(resources.getString("pirate.register.8characters"));
+            else if (this.isRepeatPasswordEmpty.get() && !this.isPasswordFieldEmpty.get())
+                this.bubbleComponent.setCaptainText(resources.getString("pirate.general.repeat.password"));
+            else if (!this.passwordInputsMatch.get() && !this.isPasswordFieldEmpty.get() && !this.isPasswordFieldEmpty.get())
+                this.bubbleComponent.setCaptainText(resources.getString("pirate.register.passwords.dont.match"));
+            else {
+                this.bubbleComponent.setErrorMode(false);
+                this.bubbleComponent.setCaptainText(resources.getString("pirate.register.possible"));
+            }
 
-                    if (this.isPasswordFieldEmpty.get())
-                        return resources.getString("pirate.general.enter.password");
-
-                    if (this.isPasswordTooShort.get() && !this.isPasswordFieldEmpty.get())
-                        return resources.getString("pirate.register.8characters");
-
-                    if (this.isRepeatPasswordEmpty.get() && !this.isPasswordFieldEmpty.get())
-                        return resources.getString("pirate.general.repeat.password");
-
-                    if (!this.passwordInputsMatch.get() && !this.isPasswordFieldEmpty.get() &&
-                      !this.isPasswordFieldEmpty.get())
-                        return resources.getString("pirate.register.passwords.dont.match");
-
-                    if(!this.mirrorChangeText.get())
-                        return lastMsg;
-              return resources.getString("pirate.register.possible");
+            return "";
           }, this.isLoginFieldEmpty, this.isPasswordFieldEmpty,
                 this.isRepeatPasswordEmpty, this.passwordInputsMatch,
                 this.isPasswordTooShort, this.mirrorChangeText));
@@ -179,13 +168,11 @@ public class SignUpController extends BasicController {
     }
 
     public void register() {
-        if (checkIt(this.usernameField.getText(),
-                this.passwordField.getText(),
-                this.repeatPasswordField.getText()) &&
-                this.passwordInputsMatch.getValue()) {
-                this.mirrorText
-                            .setText(getErrorInfoText(201));
-                bubbleComponent.setErrorMode(false);
+        if (checkIt(this.usernameField.getText(), this.passwordField.getText(),
+                this.repeatPasswordField.getText()) && this.passwordInputsMatch.getValue()) {
+
+            bubbleComponent.setErrorMode(false);
+            this.bubbleComponent.setCaptainText(getErrorInfoText(201));
 
             this.subscriber.subscribe(this.signUpService.register(this.getUsername(), this.getPassword()),
                     result -> this.app.show("/login",
@@ -195,28 +182,21 @@ public class SignUpController extends BasicController {
                                     "info", "registered"
                             )),
                     error -> {
-                        int code = errorService.getStatus(error);
-                    // "generate"" the output in the english/german
-                    // due binding, the TextField was not accessible here -> modified
-                        lastMsg = getErrorInfoText(code);
-                        mirrorText.setText(lastMsg);
                         bubbleComponent.setErrorMode(true);
+                        this.bubbleComponent.setCaptainText(getErrorInfoText(error));
                     });
             } else {
-            int code = this.passwordInputsMatch.not().getValue() ? -2 : -1;
-            lastMsg = getErrorInfoText(code);
-            mirrorText.setText(lastMsg);
             bubbleComponent.setErrorMode(true);
+            this.bubbleComponent
+              .setCaptainText(getErrorInfoText(this.passwordInputsMatch.not().getValue() ? -2 : -1));
         }
     }
 
     // Returns user to the login screen
     public void goBack() {
-        String info = bubbleComponent.getErrorMode() ? "error" : "hello";
         app.show("/login",
                 Map.of("username", this.getUsername(),
-                        "password", this.getPassword(),
-                  "info", info
+                        "password", this.getPassword()
         ));
     }
 

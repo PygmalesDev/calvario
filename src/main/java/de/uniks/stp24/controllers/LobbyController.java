@@ -1,18 +1,13 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.App;
-import de.uniks.stp24.component.*;
+import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.UserApiService;
-import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.LobbyService;
 import de.uniks.stp24.service.GamesService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -28,27 +23,22 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
-import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-@Title("Lobby")
+@Title("%enter.game")
 @Controller
-public class LobbyController {
-    @Inject
-    App app;
-    @Inject
-    ImageCache imageCache;
+public class LobbyController extends BasicController {
+
     @Inject
     TokenStorage tokenStorage;
     @Inject
     UserApiService userApiService;
-    @Inject
-    Subscriber subscriber;
     @Inject
     LobbyService lobbyService;
     @Inject
@@ -65,15 +55,10 @@ public class LobbyController {
     @SubComponent
     @Inject
     public UserComponent userComponent;
-
     @Inject
     public Provider<UserComponent> userComponentProvider;
     @Inject
     EventListener eventListener;
-    @Inject
-    @Resource
-    public ResourceBundle resource;
-
     @FXML
     public ListView<MemberUser> playerListView;
     @FXML
@@ -86,8 +71,8 @@ public class LobbyController {
     Pane lobbyMessageElement;
     @FXML
     Pane captainContainer;
-
-
+    @FXML
+    Text gameNameField;
     @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
@@ -99,14 +84,14 @@ public class LobbyController {
 
     @Inject
     @Resource
-    ResourceBundle resources;
+    public ResourceBundle resources;
 
     @Param("gameid")
     String gameID;
 
     Game game;
 
-    private final ObservableList<MemberUser> users = FXCollections.observableArrayList();
+    private ObservableList<MemberUser> users = FXCollections.observableArrayList();
     private boolean asHost;
     private boolean wasKicked;
     private boolean isHostReady;
@@ -116,17 +101,6 @@ public class LobbyController {
 
     }
 
-    @OnRender
-    public void addSpeechBubble() {
-        captainContainer.getChildren().add(bubbleComponent);
-        Platform.runLater(() -> {
-            if (asHost)
-                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
-            else
-                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.password"));
-            });
-    }
-
     /**
      * Loads game data and transfers its ID and name to the subcomponents.
      * Loads lobby members to the member list and adds event listeners.
@@ -134,36 +108,48 @@ public class LobbyController {
      */
     @OnInit
     void init() {
-        this.subscriber.subscribe(this.gamesService.getGame(this.gameID), game -> {
+        this.subscriber.subscribe(this.gamesService.getGame(this.gameID),
+          game -> {
             this.game = game;
             this.gameID = game._id();
             this.asHost = game.owner().equals(this.tokenStorage.getUserId());
 
-            this.enterGameComponent.setGameName(game.name());
             this.enterGameComponent.setGameID(this.gameID);
-            this.lobbySettingsComponent.setGameName(game.name());
             this.lobbySettingsComponent.setGameID(this.gameID);
-            this.lobbyHostSettingsComponent.setGameName(game.name());
             this.lobbyHostSettingsComponent.setGameID(this.gameID);
 
+            this.enterGameComponent.errorMessage.textProperty().addListener(((observable, oldValue, newValue) -> {
+                this.bubbleComponent.setErrorMode(true);
+                this.bubbleComponent.setCaptainText(newValue);
+            }));
+            this.gameNameField.setText(this.game.name());
             this.createUserListListener();
             this.createGameDeletedListener();
-
             this.lobbyService.loadPlayers(this.gameID).subscribe(dto -> {
                 Arrays.stream(dto).forEach(data -> {
                     this.addUserToList(data.user(), data);
                     if (data.user().equals(this.game.owner()))
                         this.isHostReady = data.ready();
-                    if(data.user().equals(this.tokenStorage.getUserId())){
+                    if (data.user().equals(this.tokenStorage.getUserId())){
                             this.lobbySettingsComponent.setReadyButton(data.ready());
                             this.lobbyHostSettingsComponent.setReadyButton(data.ready());
                         }
                 });
-                this.sortHostOnTop();
+
+                this.lobbyHostSettingsComponent.startJourneyButton.setDisable(
+                        !Arrays.stream(dto)
+                                .map(MemberDto::ready)
+                                .reduce(Boolean::logicalAnd).orElse(true)
+                );
+
+                this.sortMemberList();
             });
 
             this.lobbyHostSettingsComponent.createCheckPlayerReadinessListener();
-        });
+        },
+          error -> this.enterGameComponent
+            .errorMessage.textProperty().set(getErrorInfoText(error))
+        );
     }
 
     /**
@@ -171,11 +157,14 @@ public class LobbyController {
      */
     private void createGameDeletedListener() {
         this.subscriber.subscribe(this.eventListener
-                .listen("games." + this.gameID + ".deleted", Game.class), event -> {
+                .listen("games." + this.gameID + ".deleted", Game.class),
+          event -> {
             this.lobbyMessagePane.setVisible(true);
             this.lobbyMessageElement.setVisible(true);
-            this.messageText.setText("This lobby has been deleted!");
-        });
+            this.messageText.setText(resources.getString("lobby.has.been.deleted"));
+          },
+          error -> this.enterGameComponent
+            .errorMessage.textProperty().set(getErrorInfoText(error)));
     }
 
     /**
@@ -183,22 +172,27 @@ public class LobbyController {
      */
     private void createUserListListener() {
         this.subscriber.subscribe(this.eventListener
-                .listen("games." + this.gameID + ".members.*.*", MemberDto.class), event -> {
+                .listen("games." + this.gameID + ".members.*.*", MemberDto.class),
+          event -> {
             String id = event.data().user();
             switch (event.suffix()) {
                 case "created" -> {
                     if (this.tokenStorage.getUserId().equals(id)) {
                         this.lobbyElement.getChildren().remove(this.enterGameComponent);
                         this.lobbyElement.getChildren().add(this.lobbySettingsComponent);
-                        bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
+                        this.bubbleComponent.setErrorMode(false);
+                        this.bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
                     }
                     this.addUserToList(id, event.data());
                 }
                 case "updated" -> this.replaceUserInList(id, event.data());
                 case "deleted" -> this.removeUserFromList(id);
             }
-            this.sortHostOnTop();
-        });
+            this.sortMemberList();
+        },
+          error -> this.enterGameComponent
+                .errorMessage.textProperty().set(getErrorInfoText(error))
+          );
     }
 
     /**
@@ -208,8 +202,8 @@ public class LobbyController {
     void render() {
         this.lobbyMessagePane.setVisible(false);
         this.lobbyMessageElement.setVisible(false);
-
         this.playerListView.setItems(this.users);
+        this.captainContainer.getChildren().add(this.bubbleComponent);
         this.playerListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.userComponentProvider));
         this.setStartingLobbyElement();
     }
@@ -223,19 +217,15 @@ public class LobbyController {
      */
     private void addUserToList(String userID, MemberDto data) {
         this.subscriber.subscribe(this.userApiService.getUser(userID), user -> {
-            if (userID.equals(this.game.owner()))
-                this.users.add(new MemberUser(new User(user.name() + " (Host)",
-                        user._id(), user.avatar(), user.createdAt(), user.updatedAt()
-                ), data.empire(), data.ready(), this.game, this.asHost));
-            else if (Objects.isNull(data.empire()))
-                this.users.add(new MemberUser(new User(user.name() + " (Spectator)",
-                        user._id(), user.avatar(), user.createdAt(), user.updatedAt()
-                ), null, data.ready(), this.game, this.asHost));
-            else
-                this.users.add(new MemberUser(new User(user.name(),
-                        user._id(), user.avatar(), user.createdAt(), user.updatedAt()
-                ), null, data.ready(), this.game, this.asHost));
-        });
+            String suffix = "";
+            if (userID.equals(this.game.owner())) suffix += " (Host)";
+            if (Objects.isNull(data.empire())) suffix += " (Spectator)";
+
+            this.users.add(new MemberUser(new User(user.name() + suffix,
+                    user._id(), user.avatar(), user.createdAt(), user.updatedAt()
+            ), data.empire(), data.ready(), this.game, this.asHost));
+        },
+          error -> {});
     }
 
     /**
@@ -256,16 +246,21 @@ public class LobbyController {
 
         this.users.replaceAll(memberUser -> {
             if (memberUser.user()._id().equals(userID)) {
-                if (Objects.nonNull(data.empire()))
+                if (Objects.nonNull(data.empire())) {
                     return new MemberUser(new User(
                             memberUser.user().name().replace(" (Spectator)", ""),
                             userID, memberUser.user().avatar(), memberUser.user().createdAt(),
                             memberUser.user().updatedAt()), data.empire(), data.ready(), this.game, this.asHost);
-                else
+                }
+                else {
+                    String suffix = " (Spectator)";
+                    if (memberUser.user().name().contains("(Spectator)"))
+                        suffix = "";
                     return new MemberUser(new User(
-                            memberUser.user().name(), userID, memberUser.user().avatar(),
+                            memberUser.user().name() + suffix, userID, memberUser.user().avatar(),
                             memberUser.user().createdAt(), memberUser.user().updatedAt()),
                             null, data.ready(), this.game, this.asHost);
+                }
             } else
                 return memberUser;
         });
@@ -277,7 +272,7 @@ public class LobbyController {
      */
     private void removeUserFromList(String userID) {
         if (!this.lobbySettingsComponent.leftLobby && this.tokenStorage.getUserId().equals(userID)) {
-            this.messageText.setText("You were kicked from this lobby!");
+            this.messageText.setText(resources.getString("kicked.from.lobby"));
             this.lobbyMessagePane.setVisible(true);
             this.lobbyMessageElement.setVisible(true);
             this.wasKicked = true;
@@ -294,31 +289,34 @@ public class LobbyController {
     private void setStartingLobbyElement() {
         this.subscriber.subscribe(this.lobbyService.loadPlayers(this.gameID), dtos -> {
             if (this.tokenStorage.getUserId().equals(this.game.owner())) {
+                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
                 this.lobbyElement.getChildren().add(this.lobbyHostSettingsComponent);
             } else if (Arrays.stream(dtos).map(MemberDto::user).anyMatch(id -> id.equals(this.tokenStorage.getUserId()))) {
+                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
                 this.lobbyElement.getChildren().add(this.lobbySettingsComponent);
             } else {
+                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.password"));
                 this.lobbyElement.getChildren().add(this.enterGameComponent);
             }
-        });
+        },
+        error -> this.enterGameComponent
+          .errorMessage.textProperty().set(getErrorInfoText(error)));
     }
 
     /**
      * Will be called after changes in the member list.
      * Sorts the host of the lobby to the top of the list.
      */
-    private void sortHostOnTop() {
-        MemberUser host = this.users.stream().filter(member ->
-                member.user().name().contains("Host")).findFirst().orElse(null);
-        this.users.removeIf(member -> member.user().name().contains("Host"));
-        if (Objects.nonNull(host))
-            this.users.addFirst(host);
+    private void sortMemberList() {
+        this.users.sort(Comparator.comparing(MemberUser::ready).reversed());
+        this.users.sort(Comparator.comparing(member -> !member.user()._id().equals(this.game.owner())));
     }
 
     public void goBack() {
         if (!this.wasKicked) this.subscriber.subscribe(
                 this.lobbyService.leaveLobby(this.gameID, this.tokenStorage.getUserId()),
-                result -> this.app.show("/browseGames"));
+                result -> this.app.show("/browseGames"),
+                error -> {});
         else
             this.app.show("/browseGames");
     }

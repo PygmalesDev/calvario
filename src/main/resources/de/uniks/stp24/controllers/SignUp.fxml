@@ -26,7 +26,7 @@
                   </font>
                </Text>
             </HBox>
-            <VBox fx:id="cardBackgroundVBox" alignment="CENTER" prefHeight="600.0" prefWidth="721.0" style="-fx-background-color: WHITE;" styleClass="cardBackground">
+            <VBox fx:id="cardBackgroundVBox" alignment="CENTER" prefHeight="600.0" prefWidth="721.0" styleClass="cardBackground">
                <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
                   <ToggleButtonGroup prefHeight="50.0" prefWidth="70.0">
                      <ToggleButton fx:id="enToggleButton" onAction="#setEn" prefHeight="60.0" prefWidth="60.0" styleClass="languageButton" text="EN" />
@@ -34,51 +34,60 @@
                   </ToggleButtonGroup>
                </HBox>
                <ImageView fitHeight="150.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                     <Image fx:id="calvarioLogoRegister" url="@../assets/logos/Calvario.png" />
-                  </image>
                   <VBox.margin>
-                     <Insets top="45.0" />
+                     <Insets top="45.0"/>
                   </VBox.margin>
+                  <Image fx:id="calvarioLogoRegister" url="@../assets/logos/Calvario.png"/>
                </ImageView>
                <VBox alignment="CENTER" prefHeight="250.0" prefWidth="500.0">
                   <HBox alignment="CENTER" prefHeight="1000.0" prefWidth="500.0" spacing="5.0">
                      <Pane>
-                        <children>
-                           <TextField fx:id="usernameField" alignment="CENTER" layoutX="9.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%username" styleClass="inputField">
-                              <font>
-                                 <Font size="15.0" />
-                              </font>
-                              <opaqueInsets>
-                                 <Insets />
-                              </opaqueInsets>
-                           </TextField>
-                           <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="9.0" layoutY="73.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%password" styleClass="inputField">
-                              <font>
-                                 <Font size="15.0" />
-                              </font>
-                           </PasswordField>
-                           <PasswordField fx:id="repeatPasswordField" alignment="CENTER" layoutX="9.0" layoutY="120.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%repeat.password" styleClass="inputField">
-                              <font>
-                                 <Font size="15.0" />
-                              </font>
-                           </PasswordField>
-                           <TextField fx:id="showPasswordText" alignment="CENTER" layoutX="9.0" layoutY="73.0" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%password" styleClass="inputField">
-                              <font>
-                                 <Font size="15.0" />
-                              </font>
-                           </TextField>
-                           <TextField fx:id="showRepeatPasswordText" alignment="CENTER" layoutX="9.0" layoutY="120.0" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%repeat.password" styleClass="inputField">
-                              <font>
-                                 <Font size="15.0" />
-                              </font>
-                           </TextField>
-                           <ToggleButton fx:id="showPasswordToggleButton" layoutX="322.0" layoutY="78.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="0.0" prefWidth="0.0" styleClass="eyeButton">
-                              <graphic>
-                                 <ImageView pickOnBounds="true" preserveRatio="true" />
-                              </graphic>
-                           </ToggleButton>
-                        </children>
+                        <TextField fx:id="usernameField" alignment="CENTER" layoutX="9.0" layoutY="14.0"
+                                   maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0"
+                                   promptText="%username" styleClass="inputField">
+                           <font>
+                              <Font size="15.0"/>
+                           </font>
+                           <opaqueInsets>
+                              <Insets/>
+                           </opaqueInsets>
+                        </TextField>
+                        <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="9.0" layoutY="73.0"
+                                       maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0"
+                                       promptText="%password" styleClass="inputField">
+                           <font>
+                              <Font size="15.0"/>
+                           </font>
+                        </PasswordField>
+                        <PasswordField fx:id="repeatPasswordField" alignment="CENTER" layoutX="9.0" layoutY="120.0"
+                                       maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0"
+                                       promptText="%repeat.password" styleClass="inputField">
+                           <font>
+                              <Font size="15.0"/>
+                           </font>
+                        </PasswordField>
+                        <TextField fx:id="showPasswordText" alignment="CENTER" layoutX="9.0" layoutY="73.0"
+                                   managed="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0"
+                                   prefWidth="300.0" promptText="%password" styleClass="inputField">
+                           <font>
+                              <Font size="15.0"/>
+                           </font>
+                        </TextField>
+                        <TextField fx:id="showRepeatPasswordText" alignment="CENTER" layoutX="9.0" layoutY="120.0"
+                                   managed="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0"
+                                   prefWidth="300.0" promptText="%repeat.password" styleClass="inputField">
+                           <font>
+                              <Font size="15.0"/>
+                           </font>
+                        </TextField>
+                        <ToggleButton fx:id="showPasswordToggleButton" layoutX="322.0" layoutY="78.0"
+                                      maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                                      minWidth="-Infinity" mnemonicParsing="false" prefHeight="0.0" prefWidth="0.0"
+                                      styleClass="eyeButton">
+                           <graphic>
+                              <ImageView pickOnBounds="true" preserveRatio="true"/>
+                           </graphic>
+                        </ToggleButton>
                      </Pane>
                   </HBox>
                   <Text fx:id="errorTextField" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0">
@@ -88,34 +97,32 @@
                   </Text>
                </VBox>
                <HBox alignment="TOP_CENTER" prefWidth="550.0">
-                  <children>
-                     <VBox alignment="CENTER" prefHeight="150.0" prefWidth="300.0">
-                        <Button fx:id="registerButton" mnemonicParsing="false" onAction="#register" prefHeight="40.0" prefWidth="250.0" styleClass="actionButton" text="%register">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <graphic>
-                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../icons/enter.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
-                        <Button cancelButton="true" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0" prefWidth="250.0" styleClass="backButton" text="%go.back">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </Button>
-                     </VBox>
-                     <Pane fx:id="captainContainer" prefHeight="300.0" prefWidth="0.0" />
-                  </children>
+                  <VBox alignment="CENTER" prefHeight="150.0" prefWidth="300.0">
+                     <Button fx:id="registerButton" mnemonicParsing="false" onAction="#register" prefHeight="40.0"
+                             prefWidth="250.0" styleClass="actionButton" text="%register">
+                        <font>
+                           <Font size="15.0"/>
+                        </font>
+                        <VBox.margin>
+                           <Insets/>
+                        </VBox.margin>
+                        <graphic>
+                           <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                              <Image url="@../icons/enter.png"/>
+                           </ImageView>
+                        </graphic>
+                     </Button>
+                     <Button cancelButton="true" mnemonicParsing="false" onAction="#goBack" prefHeight="40.0"
+                             prefWidth="250.0" styleClass="backButton" text="%go.back">
+                        <font>
+                           <Font size="15.0"/>
+                        </font>
+                        <VBox.margin>
+                           <Insets/>
+                        </VBox.margin>
+                     </Button>
+                  </VBox>
+                  <Pane fx:id="captainContainer" prefHeight="300.0" prefWidth="0.0"/>
                </HBox>
                <HBox alignment="CENTER" />
             </VBox>

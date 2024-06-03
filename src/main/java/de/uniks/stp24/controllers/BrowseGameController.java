@@ -1,17 +1,12 @@
 package de.uniks.stp24.controllers;
 
-import com.fasterxml.jackson.databind.introspect.TypeResolutionContext;
-import de.uniks.stp24.App;
-import de.uniks.stp24.component.BubbleComponent;
-import de.uniks.stp24.component.GameComponent;
-import de.uniks.stp24.component.LogoutComponent;
-import de.uniks.stp24.component.WarningComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
+import de.uniks.stp24.component.menu.GameComponent;
+import de.uniks.stp24.component.menu.LogoutComponent;
+import de.uniks.stp24.component.menu.WarningComponent;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.BrowseGameService;
-import de.uniks.stp24.service.CreateGameService;
-import de.uniks.stp24.service.EditGameService;
-import de.uniks.stp24.service.PopupBuilder;
+import de.uniks.stp24.service.*;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -21,12 +16,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
@@ -35,14 +30,13 @@ import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
-
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Comparator;
 import java.util.Map;
 
-@Title("Browse Game")
+@Title("%browse.game")
 @Controller
 public class
 BrowseGameController extends BasicController {
@@ -74,7 +68,8 @@ BrowseGameController extends BasicController {
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
-
+    @FXML
+    TextField searchLine;
     @FXML
     Pane captainContainer;
     @FXML
@@ -117,17 +112,32 @@ BrowseGameController extends BasicController {
     private
     Text textInfo;
 
-    private ObservableList<Game> games = FXCollections.observableArrayList();
+    private final ObservableList<Game> games = FXCollections.observableArrayList();
     private BooleanBinding deleteWarningIsInvisible;
     private Image deleteIconRedImage;
     private Image deleteIconBlackImage;
 
+    @OnRender
+    void createBindings() {
+        gameList.setItems(games);
+        gameList.setCellFactory(list -> new ComponentListCell<>(app, gameComponentProvider));
+        this.searchLine.textProperty().addListener((observable, oldValue, newValue) -> {
+            this.gameList.scrollTo(0);
+            if (newValue.isEmpty()) sortNewGamesOnTop();
+            else this.games.sort(Comparator.comparing(game -> !game.name().toLowerCase().contains(newValue.toLowerCase())));
+        });
+    }
+
+    private void sortNewGamesOnTop() {
+        this.games.sort(Comparator.comparing(Game::createdAt).reversed());
+        this.games.sort(Comparator.comparing(game -> !game.owner().equals(this.tokenStorage.getUserId())));
+    }
 
     //Load list of games as soon as BrowseGame-Screen is shown
     @OnInit
     void init() {
-        deleteIconRedImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteRed.png").toExternalForm());
-        deleteIconBlackImage = new Image(getClass().getResource("/de/uniks/stp24/icons/deleteBlack.png").toExternalForm());
+        deleteIconRedImage = imageCache.get("icons/deleteRed.png");
+        deleteIconBlackImage = imageCache.get("icons/deleteBlack.png");
         this.controlResponses = responseConstants.respDelGame;
         this.textInfo = new Text("");
 
@@ -136,32 +146,31 @@ BrowseGameController extends BasicController {
         browseGameService = (browseGameService == null) ? new BrowseGameService() : browseGameService;
         browseGameService.resetSelectedGame();
         subscriber.subscribe(gamesApiService.findAll(),
-          gameList -> {
-              Platform.runLater(() -> {
+          gameList -> Platform.runLater(() -> {
                   games.setAll(gameList);
                   editGameService.setGamesList(games);
                   createGameService.setGamesList(games);
-                  // Update the ListView after data is set
-                  updateListView();
-              });},
+                  this.sortNewGamesOnTop();
+              }),
           error -> {
-              int code = errorService.getStatus(error);
-              this.textInfo.setText(getErrorInfoText(code));
-          });
+            bubbleComponent.setErrorMode(true);
+            bubbleComponent.setCaptainText(getErrorInfoText(error));
+        }
+          );
 
         // Listener for updating list of games if games are created, deleted or updated
-        subscriber.subscribe(eventListener.listen("games.*.*", Game.class), event -> {
-            Platform.runLater(() -> {
+        subscriber.subscribe(eventListener.listen("games.*.*", Game.class),
+            event -> Platform.runLater(() -> {
                 switch (event.suffix()) {
                     case "created" -> games.add(event.data());
                     case "update" -> games.replaceAll(g -> g._id().equals(event.data()._id()) ? event.data() : g);
                     case "deleted" -> games.removeIf(g -> g._id().equals(event.data()._id()));
                 }
-            });},
-            error -> {
-                int code = errorService.getStatus(error);
-                this.textInfo.setText(getErrorInfoText(code));
-            });
+                this.sortNewGamesOnTop();
+            }),
+            error -> this.textInfo.setText(getErrorInfoText(error))
+            );
+        this.controlResponses = responseConstants.respGetGame;
 
     }
 
@@ -174,7 +183,6 @@ BrowseGameController extends BasicController {
     //Make list of games visible
     @OnRender
     void render() {
-        updateListView();
         this.deleteWarningIsInvisible = this.warningWindowContainer.visibleProperty().not();
     }
 
@@ -183,25 +191,15 @@ BrowseGameController extends BasicController {
         // delete Button has red text and icon when selected and the captain says something different
         this.del_game_b.styleProperty().bind(Bindings.createStringBinding(()->{
             if(deleteWarningIsInvisible.get()) {
+                this.deleteIconImageView.setImage(deleteIconBlackImage);
                 bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.which.game"));
                 return "-fx-text-fill: Black";
             }else {
+                this.deleteIconImageView.setImage(deleteIconRedImage);
                 bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.whiping.off.the.map"));
                 return "-fx-text-fill: #CF2A27";
             }
         },this.deleteWarningIsInvisible));
-
-        this.deleteIconImageView.imageProperty().bind(Bindings.createObjectBinding(()->{
-            if(deleteWarningIsInvisible.get())
-                return deleteIconBlackImage;
-            return deleteIconRedImage;
-        },this.deleteWarningIsInvisible));
-    }
-
-    public void updateListView(){
-        games = browseGameService.sortGames(games);
-        gameList.setItems(games);
-        gameList.setCellFactory(list -> new ComponentListCell<>(app, gameComponentProvider));
     }
 
     /*
@@ -232,9 +230,11 @@ BrowseGameController extends BasicController {
             app.show("/lobby", Map.of("gameid", browseGameService.getGame()._id()));
         }
     }
+
     public void deleteGame() {
-        if(browseGameService.checkMyGame()) {
+        if (browseGameService.checkMyGame()) {
             warningComponent.setGameName();
+            warningComponent.setView(this.warningWindowContainer);
             popup.showPopup(warningWindowContainer, warningComponent);
             popup.setBlur(gameListAnchorPane, browseGameVBoxButtons);
         } else {

@@ -8,7 +8,7 @@ public class Constants {
     public static final String DATA_FOLDER_NAME = "data";
     public static final Path DATA_FOLDER = Path.of(DATA_FOLDER_NAME);
 
-    public static final Map<String, String[]> empireTemplates = Map.ofEntries(
+    public static final Map<String, String[]> empireTemplatesEnglish = Map.ofEntries(
             Map.entry("Prefix", new String[]{
                     "Greedy", "Evil", "Vicious", "Old", "Mischievous", "Dead", "Amateur", "Famous", "Hungry",
                     "Grabby", "Hopeful", "Anxious", "Hideous", "Wicked", "Stinky", "Angry"}),
@@ -36,6 +36,37 @@ public class Constants {
                     "With their cunning tactics and insatiable greed, the members of {NAME} strike fear into the hearts of sailors, dominating the oceans with impunity.",
                     "Led by cunning captains, the {NAME} dominate the trade routes, leaving a wake of fear and envy among rival seafarers.",
                     "In the shadowy world of piracy, the name {NAME} strikes dread into the hearts of merchants as they hoard treasures beyond imagination in their hidden island strongholds."
+            })
+    );
+
+    public static final Map<String, String[]> empireTemplatesGerman = Map.ofEntries(
+            Map.entry("Prefix", new String[]{
+                    "Gierige", "Böse", "Siegessichere", "Alte", "Schelmische", "Tote", "Amateurhafte", "Berühmte", "Hungrige",
+                    "Übergriffige", "Hoffnungsvolle", "Ängstliche", "Abscheuliche", "Gemeine", "Stinkende", "Wütende"}),
+            Map.entry("Type", new String[]{
+                    "Piraten", "Seeräuber", "Diebe", "Händler", "Korsaren", "Entdecker", "Abenteurer", "Reisende",
+                    "Wanderer", "Helden", "Freibeuter", "Kriminelle", "Banditen", "Einbrecher", "Schützen", "Bösewichte", "Schurken",
+                    "Fürsten", "Herzöge", "Könige", "Herrscher", "Barone", "Kapitäne"}),
+            Map.entry("Suffix", new String[]{
+                    "Eisigen", "Schattigen", "Stählernen", "Eisernen", "Versunkenen", "Chaotischen", "Korrupten", "Steinigen", "Zeitlosen", "Gefährlichen", "Untergegangenen",
+                    "Roten", "Braunen", "Feuerroten", "Azurblauen", "Saphirblauen", "Goldenen", "Dampfenden", "Geheimen", "Schwarzen", "Dunkelen", "Kryptischen",
+                    "Trüben", "Düsteren", "Sonnenlosen", "Tiefen", "Mysteriösen"}),
+            Map.entry("Definition", new String[]{
+                    "Festungen", "Verstecke", "Buchten", "Strände", "Inseln", "Riffe", "Archipele", "Häfen", "Enklaven", "Imperien",
+                    "Reiche", "Klippen", "Herrschaftsgebiete", "Zufluchtsorte", "Felsen", "Meere", "Seen", "Lagunen", "Gewässer"}),
+            Map.entry("Description", new String[]{
+                    "Dieses rücksichtsloses Piratenkartell ist bekannt für seine skrupellosen Taktiken und unersättliche Gier auf hoher See.",
+                    "Berüchtigte Plünderer, die den Seeleuten Angst einjagen und durch Piraterie und Einschüchterung Reichtümer anhäufen.",
+                    "Ein schattenhaftes Syndikat von Freibeutern, deren Flagge einen Totenkopf und gekreuzte Krummsäbel trägt und ihre gnadenlose Jagd nach Reichtümern symbolisiert.",
+                    "Legenden der maritimen Unterwelt, deren Name unter Seeleuten voller Angst geflüstert wird, während sie die Wellen mit eiserner Faust beherrschen.",
+                    "In den gefährlichen Gewässern des Calvario ist diese Piratenallianz dafür bekannt, Reichtümer zu horten und überall eine Schneise der Verwüstung zu hinterlassen.",
+                    "Unter dieser schwarzen Flagge vereinen sich Piraten in einer erbitterten Bruderschaft, die nach Reichtum und Ruhm über die grenzenlose Weite des Ozeans strebt.",
+                    "Im gefährlichen Reich der Sieben Meere gilt dies Piratenbande als Meister des Plünderns, gefürchtet für ihre gnadenlosen Überfälle und uneinnehmbaren Verstecke.",
+                    "Unter dieser schwarzen Flagge wird der Ozean zur Bühne für gewagte Abenteuer und unermessliche Reichtümer, wo jede Welle Geschichten ihrer legendären Taten flüstert.",
+                    "Gefürchtete Piraten und Meister der maritimen Unterwelt, regieren mit eiserner Faust und einem unstillbaren Durst nach Gold.",
+                    "Mit ihren gerissenen Taktiken und unersättlicher Gier jagen die Mitglieder dieser Freibeutergruppe den Seeleuten Angst ein und beherrschen die Ozeane.",
+                    "Angeführt von gerissenen Kapitänen dominieren diese Seeräuber die Handelsrouten und hinterlassen eine Spur von Angst und Neid bei rivalisierenden Seefahrern.",
+                    "In der schattenhaften Welt der Piraterie versetzt der Name {NAME} Kaufleute in Angst und Schrecken, während sie in ihren verborgenen Inselverstecken unvorstellbare Schätze horten."
             })
     );
 }

@@ -2,8 +2,8 @@ package de.uniks.stp24.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.BubbleComponent;
-import de.uniks.stp24.component.WarningScreenComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
+import de.uniks.stp24.component.menu.WarningScreenComponent;
 import de.uniks.stp24.controllers.EditAccController;
 import de.uniks.stp24.model.User;
 import de.uniks.stp24.service.*;
@@ -12,12 +12,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.BoxBlur;
-import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,7 +25,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
-
 
 @ExtendWith(MockitoExtension.class)
 public class TestEditAcc extends ControllerTest {
@@ -83,7 +80,7 @@ public class TestEditAcc extends ControllerTest {
         final Button deleteUserButton = lookup("#deleteUserButton").query();
 
         // Start:
-        // Alice wants to change her Account name in STPellaris. She is in the user administrtation screen and has clicked on edit account.
+        // Alice wants to change her Account name in Calvario. She is in the user administration screen and has clicked on edit account.
         tokenStorage.setName("Alice");
 
         // The cancelChangesButton is not visible and goBack and deleteUser are enabled
@@ -123,7 +120,7 @@ public class TestEditAcc extends ControllerTest {
         final TextField password = lookup("#passwordInput").query();
 
         // Start:
-        // Alice wants to change her Account name in STPellaris. She is in the user administrtation screen and has clicked on edit account.
+        // Alice wants to change her Account name in Calvario. She is in the user administrtation screen and has clicked on edit account.
         tokenStorage.setName("Alice");
         clickOn("#changeUserInfoButton");
 
@@ -152,7 +149,8 @@ public class TestEditAcc extends ControllerTest {
         //Start:
         //Alice wants to delete her account in STPellaris. She is in the user administration window. She clicked the delete user button and a pop up came up.
         tokenStorage.setName("Alice");
-        HBox editAccHBox = (HBox) lookup("#editAccHBox").query();
+        VBox editAccVBoxRightToBlur = (VBox) lookup("#editAccVBoxRightToBlur").query();
+        VBox editAccVBoxLeftToBlur = (VBox) lookup("#editAccVBoxLeftToBlur").query();
         StackPane warningScreenContainer = (StackPane) lookup("#warningScreenContainer").query();
         clickOn("#deleteUserButton");
         waitForFxEvents();
@@ -163,13 +161,15 @@ public class TestEditAcc extends ControllerTest {
         Button deleteUserButton = lookup("#deleteUserButton").queryButton();
         assertTrue(cancelDeleteButton.isVisible());
         assertFalse(cancelDeleteButton.isDisabled());
-        assertEquals(BoxBlur.class, editAccHBox.getEffect().getClass());
+        assertEquals(BoxBlur.class, editAccVBoxLeftToBlur.getEffect().getClass());
+        assertEquals(BoxBlur.class, editAccVBoxRightToBlur.getEffect().getClass());
 
         //Result:
         //The pop up disappeared. Alice stays in the same window and her account was not deleted.
         clickOn("#cancelDeleteButton");
         waitForFxEvents();
-        assertNull(editAccHBox.getEffect());
+        assertNull(editAccVBoxLeftToBlur.getEffect());
+        assertNull(editAccVBoxRightToBlur.getEffect());
         assertFalse(warningScreenContainer.isVisible());
         assertTrue(deleteUserButton.isVisible());
         assertFalse(deleteUserButton.isDisabled());
@@ -179,34 +179,28 @@ public class TestEditAcc extends ControllerTest {
     @Test
     void deleteAccountTest(){
         // Title: Confirm after clicking delete account button
-        doReturn(Observable.just(new User("1", "a","b","c","d")) ).when(this.editAccService).deleteUser();
+        doAnswer(show -> { tokenStorage.setName(null);
+            tokenStorage.setAvatar(null);
+            prefService.removeRefreshToken();
+            return Observable.just(new User("1", "a","b","c","d"));
+        }).when(this.editAccService).deleteUser();
+
         // Start:
-        // Alice wants to delete her account in STPellaris. She is in the user administration window. She clicked the delete user button and a pop up came up.
+        // Alice wants to delete her account in Calvario. She is in the user administration window. She clicked the delete user button and a pop up came up.
         tokenStorage.setName("Alice");
         clickOn("#deleteUserButton");
         waitForFxEvents();
 
         // Action:
-        // She clicks confrim.
+        // She clicks confirm.
         Button deleteAccButton = lookup("#deleteAccButton").queryButton();
         clickOn("#deleteAccButton");
-        Observable<User> observable = editAccService.deleteUser();
-        observable.doOnComplete(() -> {
-            tokenStorage.setName(null);
-            tokenStorage.setAvatar(null);
-            prefService.removeRefreshToken();
-        app.show("/login");}).subscribe();
         waitForFxEvents();
 
         // Result:
         // The pop up disappeared. Alice is now in the log in window again.
-        verify(app, times(1)).show("/login");
         assertNull(tokenStorage.getName());
-        //assertEquals("Login", stage.getTitle());
+        assertEquals(resources.getString("login"), stage.getTitle());
     }
-
-
-
-
 
 }

@@ -1,8 +1,7 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.BubbleComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.service.LoginService;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -86,13 +85,7 @@ public class LoginController extends BasicController {
     @OnRender
     public void addSpeechBubble() {
         captainContainer.getChildren().add(bubbleComponent);
-        Platform.runLater(() -> {
-            bubbleComponent.addChildren(errorLabel);
-            bubbleComponent.setCaptainText(resources.getString("pirate.login.welcome"));
-            if (!errorLabel.getText().equals("")) {
-                bubbleComponent.setCaptainText("");
-            }
-        });
+        bubbleComponent.setCaptainText(resources.getString("pirate.login.welcome"));
     }
 
     @OnRender
@@ -105,17 +98,14 @@ public class LoginController extends BasicController {
         }
         if (Objects.nonNull(this.info)) {
             switch(this.info) {
-                case "logout" -> this.errorLabel
-                        .setText(resources.getString("logout.successful.on.this.device"));
+                case "logout" -> this.bubbleComponent.setCaptainText(resources.getString("logout.successful.on.this.device"));
 
-                case "registered" -> this.errorLabel
-                        .setText(resources.getString("account.registered"));
+                case "registered" -> this.bubbleComponent.setCaptainText(resources.getString("account.registered"));
 
-                case "deleted" -> this.errorLabel
-                        .setText(resources.getString("account.deleted"));
-                case "error" -> this.errorLabel.setText("ONERROR");
+                case "deleted" -> this.bubbleComponent.setCaptainText(resources.getString("account.deleted"));
+                case "error" -> this.bubbleComponent.setCaptainText("ONERROR");
 
-                default -> this.errorLabel.setText("");
+                default -> this.bubbleComponent.setCaptainText("");
             }
         }
         if(prefService.getLocale() == Locale.ENGLISH) {
@@ -129,32 +119,27 @@ public class LoginController extends BasicController {
         String username = this.usernameInput.getText();
         String password = this.passwordInput.getText();
         if (checkIt(username,password)) {
-            this.errorLabel.setText("");
             boolean rememberMe = this.rememberMeBox.isSelected();
 
             loginButton.setDisable(true);
             signupButton.setDisable(true);
             bubbleComponent.setErrorMode(false);
-            bubbleComponent.setCaptainText("");
-            this.errorLabel.setText(getErrorInfoText(responseConstants.respLogin,201));
+            this.bubbleComponent.setCaptainText(getErrorInfoText(201));
 
             subscriber.subscribe(loginService.login(username, password, rememberMe),
                     result -> app.show("/browseGames")
                     // in case of server's response => error
                     // handle with error response
                     , error -> {
-                        // find the code in the error response
-                        int code = errorService.getStatus(error);
-                        // "generate"" the output in the english/german
-                        this.errorLabel.setText(getErrorInfoText(this.controlResponses,code));
-                        enableButtons();
                         bubbleComponent.setErrorMode(true);
+                        this.bubbleComponent.setCaptainText(getErrorInfoText(error));
+                        enableButtons();
                     });
         } else {
             // 1 is used for default in switch
-            this.errorLabel.setText(getErrorInfoText(this.controlResponses,-1));
-            enableButtons();
             bubbleComponent.setErrorMode(true);
+            this.bubbleComponent.setCaptainText(getErrorInfoText(-1));
+            enableButtons();
         }
     }
 

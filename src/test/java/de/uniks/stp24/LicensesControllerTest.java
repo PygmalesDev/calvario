@@ -1,8 +1,7 @@
 package de.uniks.stp24;
 
-import de.uniks.stp24.component.BubbleComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.controllers.LoginController;
-import de.uniks.stp24.service.PrefService;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -48,7 +47,7 @@ public class LicensesControllerTest extends ControllerTest {
 
         //Result:
         //Alice is in the license screen
-        assertEquals("Licenses", stage.getTitle());
+        assertEquals(resources.getString("licenses"), stage.getTitle());
     }
 
 }

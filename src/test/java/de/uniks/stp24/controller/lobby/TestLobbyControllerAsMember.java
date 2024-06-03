@@ -1,8 +1,9 @@
+
 package de.uniks.stp24.controller.lobby;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.*;
+import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.LobbyController;
 import de.uniks.stp24.dto.JoinGameDto;
 import de.uniks.stp24.dto.MemberDto;
@@ -18,7 +19,6 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -29,8 +29,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javax.inject.Provider;
-
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -64,10 +62,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
 
-    Provider<UserComponent> userComponentProvider = ()->{
-        final UserComponent userComponent = new UserComponent(imageCache);
-        return new UserComponent(imageCache);
-    };
+    Provider<UserComponent> userComponentProvider = ()-> new UserComponent(imageCache, resources);
 
     @InjectMocks
     UserComponent userComponent;
@@ -89,7 +84,6 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     public void start(Stage stage) throws Exception{
         super.start(stage);
 
-        this.lobbyController.resource = this.resources;
         this.lobbyController.bubbleComponent = this.bubbleComponent;
         this.lobbyController.lobbyHostSettingsComponent = this.lobbyHostSettingsComponent;
         this.lobbyController.lobbySettingsComponent = this.lobbySettingsComponent;
@@ -299,3 +293,4 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         verify(this.app, times(1)).show("/browseGames");
     }
 }
+

@@ -1,8 +1,8 @@
 [ {
-  "name" : "Evil Corsairs",
-  "flagIndex" : 3,
-  "portraitIndex" : 4,
-  "description" : "With their cunning tactics and insatiable greed, the members of Evil Corsairs strike fear into the hearts of sailors, dominating the oceans with impunity.",
-  "color" : "#36454F",
-  "colorIndex" : 10
+  "name" : "Wicked Dukes",
+  "flagIndex" : 15,
+  "portraitIndex" : 2,
+  "description" : "The feared Wicked Dukes, masters of the maritime underworld, ruled with an iron fist and a thirst for gold that knew no bounds.",
+  "color" : "#F28500",
+  "colorIndex" : 11
 } ]

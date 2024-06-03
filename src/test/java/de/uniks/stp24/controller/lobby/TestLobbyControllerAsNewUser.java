@@ -1,8 +1,9 @@
+
 package de.uniks.stp24.controller.lobby;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.*;
+import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.LobbyController;
 import de.uniks.stp24.dto.JoinGameDto;
 import de.uniks.stp24.dto.MemberDto;
@@ -18,7 +19,6 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
@@ -75,11 +75,7 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
     @InjectMocks
     BubbleComponent bubbleComponent;
 
-    Provider<UserComponent> userComponentProvider = ()->{
-        final UserComponent userComponent = new UserComponent(imageCache);
-        return new UserComponent(imageCache);
-    };
-
+    Provider<UserComponent> userComponentProvider = ()-> new UserComponent(imageCache, resources);
 
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
@@ -90,7 +86,6 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
 
         this.joinGameService.gameMembersApiService = this.gameMembersApiService;
 
-        this.lobbyController.resource = this.resources;
         this.lobbyController.bubbleComponent = this.bubbleComponent;
         this.lobbyController.lobbyHostSettingsComponent = this.lobbyHostSettingsComponent;
         this.lobbyController.lobbySettingsComponent = this.lobbySettingsComponent;
@@ -171,7 +166,8 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
         clickOn("#joinButton");
 
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Please enter password!", lookup("#errorMessage").queryText().getText());
+        assertEquals(this.resources.getString("pirate.enterGame.noPassword"),
+                lookup("#errorMessage").queryText().getText());
 
         // Test inputting the incorrect password
         clickOn("#passwordInputField");
@@ -181,7 +177,8 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
         clickOn("#joinButton");
 
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Validation failed!", lookup("#errorMessage").queryText().getText());
+        assertEquals(this.resources.getString("pirate.enterGame.wrongPassword").replace("{password}", "1"),
+                lookup("#errorMessage").queryText().getText());
 
         // Test inputting the correct password
         clickOn("#passwordInputField");
@@ -215,3 +212,4 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
         verify(this.app, times(1)).show("/browseGames");
     }
 }
+

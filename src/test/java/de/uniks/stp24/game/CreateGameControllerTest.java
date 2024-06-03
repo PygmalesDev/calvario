@@ -1,6 +1,7 @@
 package de.uniks.stp24.game;
 
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.controllers.CreateGameController;
 import de.uniks.stp24.service.CreateGameService;
 import javafx.scene.control.Button;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
 
@@ -24,6 +26,8 @@ public class CreateGameControllerTest extends ControllerTest {
 
     @InjectMocks
     CreateGameController createGameController;
+    @Spy
+    BubbleComponent bubbleComponent;
 
     @Override
     public void start(Stage stage)  throws Exception{
@@ -37,7 +41,7 @@ public class CreateGameControllerTest extends ControllerTest {
         Button confirmButton = lookup("#createGameConfirmButton").queryButton();
         clickOn(confirmButton);
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("Create Game", stage.getTitle());
+        assertEquals(resources.getString("create.game"), stage.getTitle());
     }
 
     @Test

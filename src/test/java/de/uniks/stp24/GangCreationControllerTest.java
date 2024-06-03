@@ -1,7 +1,8 @@
  package de.uniks.stp24;
 
  import com.fasterxml.jackson.databind.ObjectMapper;
- import de.uniks.stp24.component.GangComponent;
+ import de.uniks.stp24.component.menu.GangComponent;
+ import de.uniks.stp24.component.menu.GangDeletionComponent;
  import de.uniks.stp24.controllers.GangCreationController;
  import de.uniks.stp24.model.Gang;
  import de.uniks.stp24.model.GangElement;
@@ -70,10 +71,13 @@
 
      @InjectMocks
      GangCreationController gangCreationController;
+     @InjectMocks
+     GangDeletionComponent gangDeletionComponent;
 
      @Override
      public void start(Stage stage) throws Exception{
          super.start(stage);
+         this.gangCreationController.gangDeletionComponent = this.gangDeletionComponent;
          gangs.add(gang);
          doReturn(gangs).when(saveLoadService).loadGangs();
 
@@ -292,7 +296,7 @@
          clickOn("#showDeletePaneButton");
          waitForFxEvents();
 
-         clickOn("#deleteButton");
+         clickOn("#deleteGangButton");
          waitForFxEvents();
 
          assertEquals(gangNums - 1, gangsListView.getItems().size());

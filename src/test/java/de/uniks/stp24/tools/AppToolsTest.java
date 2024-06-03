@@ -1,5 +1,8 @@
-package de.uniks.stp24;
+package de.uniks.stp24.tools;
 
+import de.uniks.stp24.App;
+import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.DaggerTestComponent;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
@@ -11,19 +14,14 @@ import javax.inject.Inject;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class AppToolsTest extends ApplicationTest {
-
-    @Spy
-    public final App app = new App();
+public class AppToolsTest extends ControllerTest {
     @Inject
     TokenStorage tokenStorage;
 
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
-        app.setComponent(DaggerTestComponent.builder().mainApp(app).build());
         app.start(stage);
-        stage.requestFocus();
     }
 
     @Test

@@ -232,8 +232,6 @@ public class GangCreationController extends BasicController {
 
     public void delete() {
         int index = gangsListView.getSelectionModel().getSelectedIndex();
-        System.out.println(index);
-
         gangElements.remove(index);
         saveLoadService.saveGang(createGangsObservableList());
         resetCreationPane();
@@ -292,6 +290,7 @@ public class GangCreationController extends BasicController {
         gangDescriptionText.setText("");
         editButton.setVisible(false);
         showDeletePaneButton.setVisible(false);
+        createButton.setVisible(true);
     }
 
     public void showLastFlag() {

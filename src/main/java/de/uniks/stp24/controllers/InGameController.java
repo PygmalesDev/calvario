@@ -4,12 +4,12 @@ import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.IslandsService;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
@@ -19,6 +19,8 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.param.Param;
+
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -42,14 +44,11 @@ public class InGameController extends BasicController {
     public SettingsComponent settingsComponent;
     @Inject
     InGameService inGameService;
-//    @Inject
-//    Provider<IslandComponent> islandComponentProvider;
-    @SubComponent
     @Inject
-    IslandComponent islandComponent;
-    @SubComponent
-    @Inject
-    IslandComponent islandComponent2;
+    IslandsService islandsService;
+
+    @Param("gameID")
+    String gameID;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
@@ -71,6 +70,7 @@ public class InGameController extends BasicController {
         PropertyChangeListener callHandleLanguageChanged = this::handleLanguageChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_LANGUAGE, callHandleLanguageChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
+
     }
 
     private void handleLanguageChanged(PropertyChangeEvent propertyChangeEvent) {
@@ -98,6 +98,8 @@ public class InGameController extends BasicController {
             }
         }
     }
+
+
 
     @OnRender
     public void render() {
@@ -135,22 +137,20 @@ public class InGameController extends BasicController {
     }
 
     @OnRender(1)
-    public void createMap(){
-//        islandComponent.setPosition(20,30);
-        IslandComponent loco = islandComponent;
-        loco.setPosition(30,80);
-//        ImageView loco = new IslandComponentProvider().getIslandComponent();
-        ImageView loco2 = islandComponent2.applyIcon(IslandType.MOUNTY);
+    public void createMap() {
 
-        loco.setLayoutX(loco.getPosX());
-        loco.setLayoutY(loco.getPosY());
-//        loco.setLayoutX(20);
-//        loco.setLayoutY(20);
-
-
-        loco2.setLayoutX(100);
-        loco2.setLayoutY(50);
-        this.mapGrid.getChildren().addAll(loco,loco2);
+        System.out.println("your game: "+ gameID);
+        this.mapGrid.setStyle("-fx-background-image: url('/de/uniks/stp24/gameIcons/sea.png')");
+        List<Point2D> isles = islandsService.testRender();
+        for (Point2D p : isles) {
+            System.out.println(p);
+            IslandComponent tmp = islandsService.createIslandPane(p,
+              app.initAndRender(new IslandComponent())
+              );
+            tmp.setLayoutX(tmp.getPosX());
+            tmp.setLayoutY(tmp.getPosY());
+            this.mapGrid.getChildren().add(tmp);
+        }
 
 
 

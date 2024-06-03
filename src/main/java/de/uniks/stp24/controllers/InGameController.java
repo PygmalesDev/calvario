@@ -10,6 +10,7 @@ import de.uniks.stp24.service.InGameService;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
@@ -28,6 +29,8 @@ public class InGameController extends BasicController {
     @FXML
     public StackPane overviewContainer;
     @FXML
+    public Pane rudder_pain;
+    @FXML
     StackPane pauseMenuContainer;
     @SubComponent
     @Inject
@@ -45,6 +48,7 @@ public class InGameController extends BasicController {
     InGameService inGameService;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
+    public boolean islandClicked = false;
 
     @Inject
     public InGameController() {
@@ -94,6 +98,7 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void render() {
+        rudder_pain.setVisible(false);
         overviewSitesComponent.setIngameController(this);
         overviewUpgradeComponent.setIngameController(this);
         pauseMenuContainer.setVisible(false);
@@ -135,10 +140,23 @@ public class InGameController extends BasicController {
     }
 
     public void showOverview() {
+        islandClicked = true;
         overviewContainer.setVisible(true);
         overviewSitesComponent.sitesContainer.setVisible(true);
         overviewSitesComponent.sitesButton.setDisable(true);
         inGameService.showOnly(overviewContainer, overviewSitesComponent);
         inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.sitesComponent);
+    }
+
+    public void showRudder() {
+        if(!islandClicked) {
+            rudder_pain.setVisible(true);
+        }
+    }
+
+    public void unshowRudder() {
+        if(!islandClicked) {
+            rudder_pain.setVisible(false);
+        }
     }
 }

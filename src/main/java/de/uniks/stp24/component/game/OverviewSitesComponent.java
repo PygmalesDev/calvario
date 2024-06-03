@@ -85,6 +85,8 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void closeOverview(){
+        inGameController.islandClicked = false;
+        inGameController.rudder_pain.setVisible(false);
         inGameController.overviewContainer.setVisible(false);
     }
 

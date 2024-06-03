@@ -31,7 +31,7 @@ public class LoadController extends BasicController{
     @Inject
     LoginService loginService;
 
-    private String autologinError = "";
+    private String autologinText = "normalLogin";
     public boolean autologin;
 
     @Inject
@@ -45,16 +45,19 @@ public class LoadController extends BasicController{
         if (refreshToken == null || System.getenv("DISABLE_AUTO_LOGIN") != null) {
             // no automatic login possible
             this.autologin = false;
-        }
-        try {
-            // login with saved refreshToken
-            subscriber.subscribe(loginService.autologin(refreshToken),
-                    result -> this.autologin = true,
-                    error -> {autologinError = "autologinFailed";
-                            prefService.removeRefreshToken();});
-        } catch (Exception e) {
-            e.printStackTrace();
-            this.autologin = false;
+        }else {
+            try {
+                // login with saved refreshToken
+                subscriber.subscribe(loginService.autologin(refreshToken),
+                        result -> this.autologin = true,
+                        error -> {
+                            autologinText = "autologinFailed";
+                            prefService.removeRefreshToken();
+                        });
+            } catch (Exception e) {
+                e.printStackTrace();
+                this.autologin = false;
+            }
         }
     }
 
@@ -63,7 +66,7 @@ public class LoadController extends BasicController{
         if(autologin){
             app.show("/browseGames");
         }else {
-            app.show("/login", Map.of("info",autologinError));
+            app.show("/login", Map.of("info",autologinText));
         }
     }
 
@@ -71,7 +74,7 @@ public class LoadController extends BasicController{
         if(autologin){
             app.show("/browseGames");
         }else {
-            app.show("/login", Map.of("info",autologinError));
+            app.show("/login", Map.of("info",autologinText));
         }
     }
 

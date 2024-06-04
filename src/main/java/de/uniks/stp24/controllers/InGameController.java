@@ -62,7 +62,6 @@ public class InGameController extends BasicController {
     @OnInit
     public void init() {
         GameStatus gameStatus = inGameService.getGame();
-        islandsService.getIslands(gameID);
 
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
@@ -139,32 +138,33 @@ public class InGameController extends BasicController {
 
         System.out.println("your game: "+ gameID);
         this.mapGrid.setStyle("-fx-background-image: url('/de/uniks/stp24/icons/sea.png')");
+        System.out.println(islandsService.getIslands().size());
 
 //        if (islandsService.getIslands(gameID)) {
-//            islandsService.getIslands().stream().forEach(
-//              island -> {
-//                  IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
-//                    app.initAndRender(new IslandComponent())
-//                  );
-//                  tmp.setLayoutX(tmp.getPosX());
-//                  tmp.setLayoutY(tmp.getPosY());
-//                  islandComponentList.add(tmp);
-//                  this.mapGrid.getChildren().add(tmp);
-//              }
-//            );
+            islandsService.getIslands().stream().forEach(
+              island -> {
+                  IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
+                    app.initAndRender(new IslandComponent())
+                  );
+                  tmp.setLayoutX(tmp.getPosX());
+                  tmp.setLayoutY(tmp.getPosY());
+                  islandComponentList.add(tmp);
+                  this.mapGrid.getChildren().add(tmp);
+              }
+            );
 //        }
 //        else {
-          List<Point2D> isles = islandsService.testRender();
-            for (Point2D p : isles) {
-                System.out.println(p);
-                IslandComponent tmp = islandsService.createIslandPane(p,
-                  app.initAndRender(new IslandComponent())
-                  );
-                tmp.setLayoutX(tmp.getPosX());
-                tmp.setLayoutY(tmp.getPosY());
-                islandComponentList.add(tmp);
-                this.mapGrid.getChildren().add(tmp);
-            }
+//          List<Point2D> isles = islandsService.testRender();
+//            for (Point2D p : isles) {
+//                System.out.println(p);
+//                IslandComponent tmp = islandsService.createIslandPane(p,
+//                  app.initAndRender(new IslandComponent())
+//                  );
+//                tmp.setLayoutX(tmp.getPosX());
+//                tmp.setLayoutY(tmp.getPosY());
+//                islandComponentList.add(tmp);
+//                this.mapGrid.getChildren().add(tmp);
+//            }
 //        }
 
 

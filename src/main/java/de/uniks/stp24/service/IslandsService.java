@@ -90,6 +90,7 @@ public class IslandsService {
         return component;
     }
 
+    // for tests
     public List<Point2D> testRender(){
         double x, y;
         List<Point2D> test = new ArrayList<>();
@@ -102,6 +103,7 @@ public class IslandsService {
         return test;
     }
 
+    // for tests or offline (?)
     // set position and icon for the map
     public IslandComponent createIslandPane(Point2D p, IslandComponent isle) {
         isle.setPosition(p.getX(),p.getY());
@@ -109,7 +111,6 @@ public class IslandsService {
         int flag = randomGenerator.nextInt(0, 5);
         isle.applyIcon(IslandType.values()[icon]);
         isle.setFlagImage(flag);
-
         return isle;
     }
 

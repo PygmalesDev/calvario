@@ -86,9 +86,10 @@ public class LobbyHostSettingsComponent extends AnchorPane {
 
     public void startGame() {
         subscriber.subscribe(editGameService.startGame(this.gameID),
-          result -> {//this.app.show("/ingame", Map.of("gameID", this.gameID)),
+          result -> {
             islandsService.retrieveIslands(this.gameID);
-            this.startJourneyButton.setDisable(true);},
+            this.startJourneyButton.setDisable(true);
+            },
           error -> this.startJourneyButton.setDisable(false));
     }
 

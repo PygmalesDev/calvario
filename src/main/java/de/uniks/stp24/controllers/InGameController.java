@@ -1,9 +1,6 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.menu.BuildingPropertiesComponent;
-import de.uniks.stp24.component.menu.BuildingsWindowComponent;
-import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
+import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
@@ -53,6 +50,10 @@ public class InGameController extends BasicController {
     @Inject
     public BuildingsWindowComponent buildingsWindowComponent;
 
+    @SubComponent
+    @Inject
+    public SitePropertiesComponent sitePropertiesComponent;
+
     @Inject
     InGameService inGameService;
 
@@ -60,6 +61,8 @@ public class InGameController extends BasicController {
 
     PopupBuilder popupBuildingProperties = new PopupBuilder();
     PopupBuilder popupBuildingWindow = new PopupBuilder();
+
+    PopupBuilder popupSiteProperties= new PopupBuilder();
 
     @Inject
     public InGameController() {
@@ -113,6 +116,8 @@ public class InGameController extends BasicController {
         //buildingProperties.getChildren().add(buildingPropertiesComponent);
         popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
         popupBuildingProperties.showPopup(buildingProperties, buildingPropertiesComponent);
+        popupSiteProperties.showPopup(siteProperties, sitePropertiesComponent);
+
         pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
         //pauseMenuContainer.getChildren().add(pauseMenuComponent);

@@ -14,7 +14,6 @@ import org.fulib.fx.annotation.event.OnKey;
 
 import javax.inject.Inject;
 
-import static java.lang.Thread.sleep;
 
 @Component(view = "IslandComponent.fxml")
 public class IslandComponent extends Pane {
@@ -28,6 +27,7 @@ public class IslandComponent extends Pane {
     ImageView flagImage;
     private Island island;
     double x ,y ;
+    // images as placeholder for flags (instead color?)
     final String[] flags = {
       "847.png", "863.png", "911.png", "927.png", "959.png"
     };
@@ -43,18 +43,8 @@ public class IslandComponent extends Pane {
 
     // an icon should be used depending on island type
     public void applyIcon(IslandType type){
-        //TODO should be modified later to apply the right island types
         String pathToIcon = "icons/islands/";
-        switch (type){
-            case HOMELAND -> pathToIcon += "regular.png";
-            case LUSHY -> pathToIcon += "uninhabitable_0.png";
-            case MISTY -> pathToIcon += "golden_0.png";
-            case DESERTED -> pathToIcon += "uninhabitable_1.png";
-            case BANDIT -> pathToIcon += "ancient_military.png";
-            case ANCIENT -> pathToIcon += "uninhabitable_2.png";
-            case MOUNTY -> pathToIcon += "uninhabitable_3.png";
-            default -> pathToIcon = "icons/Isle.jpeg";
-        }
+        pathToIcon += type.name() + ".png";
         this.islandImage.setImage(imageCache.get(pathToIcon));
     }
 
@@ -88,7 +78,7 @@ public class IslandComponent extends Pane {
         this.flagPane.setVisible(!this.flagPane.isVisible());
     }
 
-
+    // by the moment change visibility of flag (image)
     public void showInfo() {
         //TODO show info pane!
         System.out.println("Isle at " + x + ", " + y);

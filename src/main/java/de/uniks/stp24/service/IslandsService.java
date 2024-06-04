@@ -4,21 +4,23 @@ import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsService;
-import io.reactivex.rxjava3.core.Observable;
 import javafx.geometry.Point2D;
+import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.random.RandomGenerator;
-
 @Singleton
 public class IslandsService {
+
+    @Inject
+    Subscriber subscriber;
     @Inject
     GameSystemsService gameSystemsService;
+    @Inject
+    ErrorService errorService;
 
     private final List<Island> isles = new ArrayList<>();
     static final RandomGenerator randomGenerator = new Random(1234);
@@ -26,28 +28,55 @@ public class IslandsService {
     @Inject
     public IslandsService() {}
 
-    public Observable<Island[]> getIslands(String gameID) {
-        return this.gameSystemsService.getSystems(gameID);//
+    public void getIslands(String gameID) {
+        this.isles.clear();
+        subscriber.subscribe(gameSystemsService.getSystems(gameID),
+            dto -> {
+                Arrays.stream(dto).forEach(data -> {
+                    Island tmp = new Island(data.owner(),
+                        1,
+                        data.x(),
+                        data.y(),
+                        IslandType.valueOf(data.type()),
+                        data.population(),
+                        data.capacity(),
+                        data.upgrade().ordinal());
+                    isles.add(tmp);
+
+                });
+                System.out.println(isles.size() + " islands generated");
+            },
+          error -> errorService.getStatus(error));
     }
 
-    private void generateIslands(Island[] arrayOfIsland) {
-        for (Island isle : arrayOfIsland) {
-            Island tmp = new Island(isle.owner(),
-              isle.flagIndex(),
-              isle.posX(),
-              isle.posY(),
-              isle.type(),
-              isle.crewCapacity(),
-              isle.resourceCapacity(),
-              isle.upgradeLevel(),
-              isle.sites()
-            );
-            isles.add(tmp);
-        }
-    }
 
     public List<Island> getIslands() {
         return Collections.unmodifiableList(this.isles);
+    }
+
+    /*
+    at the moment island list is not available when the map is rendering.
+    this is because  of the asynchronous response :(
+
+   therefore there are some methods that would be used
+   and some that could be removed
+    */
+
+    // coordinate system on server has origin at screen center
+    // and are not too big apply a factor 10 for increase and
+    // an offset to match our screen size
+    public IslandComponent createIslandPaneFromDto(Island isleDto, IslandComponent component) {
+        double offsetV = 900.0;
+        double offsetH = 600.0;
+        component.setPosition(isleDto.posX()*10 + offsetH,
+          isleDto.posY()*10 + offsetV);
+        // todo read values from dto
+        int icon = randomGenerator.nextInt(0, 6);
+        int flag = randomGenerator.nextInt(0, 5);
+        component.applyIcon(IslandType.values()[icon]);
+        component.setFlagImage(flag);
+
+        return component;
     }
 
     public List<Point2D> testRender(){
@@ -71,5 +100,10 @@ public class IslandsService {
         isle.setFlagImage(flag);
 
         return isle;
+    }
+
+    @OnDestroy
+    public void destroy(){
+        this.subscriber.dispose();
     }
 }

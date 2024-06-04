@@ -8,7 +8,7 @@ public record Island(
   IslandType type,
   int crewCapacity,
   int resourceCapacity,
-  int upgradeLevel,
-  Site[] sites
+  int upgradeLevel
+//  Site[] sites
 ) {
 }

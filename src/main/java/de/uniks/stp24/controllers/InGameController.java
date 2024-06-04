@@ -8,6 +8,7 @@ import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandsService;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -153,7 +154,7 @@ public class InGameController extends BasicController {
 //            );
 //        }
 //        else {
-/*            List<Point2D> isles = islandsService.testRender();
+          List<Point2D> isles = islandsService.testRender();
             for (Point2D p : isles) {
                 System.out.println(p);
                 IslandComponent tmp = islandsService.createIslandPane(p,
@@ -162,8 +163,8 @@ public class InGameController extends BasicController {
                 tmp.setLayoutX(tmp.getPosX());
                 tmp.setLayoutY(tmp.getPosY());
                 islandComponentList.add(tmp);
-                this.mapGrid.getChildren().add(tmp);*/
-//            }
+                this.mapGrid.getChildren().add(tmp);
+            }
 //        }
 
 

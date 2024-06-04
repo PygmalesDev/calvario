@@ -18,7 +18,6 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.annotation.param.Param;
 
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
@@ -52,9 +51,7 @@ public class InGameController extends BasicController {
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
 
-    @Param("gameID")
-    public String gameID;
-
+    String gameID;
     String empireID;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
@@ -67,18 +64,12 @@ public class InGameController extends BasicController {
     public void init() {
         //Loading of the empireID from a user's empire and setting gameID and empireID in Components.
         //Initialising the Storage listView
+
+        gameID = tokenStorage.getGameId();
+        empireID = tokenStorage.getEmpireId();
         System.out.println(this.gameID);
-        this.storageOverviewComponent.setGameID(this.gameID);
-        subscriber.subscribe(empireService.getEmpires(this.gameID), dto -> {Arrays.stream(dto).forEach(data -> {
-            if (data.user().equals(tokenStorage.getUserId())) {
-                this.empireID = data._id();
-                this.storageOverviewComponent.setEmpireID(this.empireID);
-                System.out.println(empireID);
-                this.storageOverviewComponent.initStorageList();
-                this.storageOverviewComponent.createEmpireListener();
-            }
-        });
-        });
+        System.out.println(empireID);
+
 
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;

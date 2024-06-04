@@ -3,8 +3,8 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
@@ -16,6 +16,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
@@ -45,21 +46,27 @@ public class StorageOverviewComponent extends VBox {
     EmpireService empireService;
     @Inject
     EventListener eventListener;
+    @Inject
+    TokenStorage tokenStorage;
 
     private String lastUpdate;
-    private String gameID;
-    private String empireID;
-    private Map<String, Integer> resourcesLastSeasonChange;
 
     @Inject
     public StorageOverviewComponent() {
         lastUpdate = "";
     }
 
+    @OnInit
+    public void init(){
+        createEmpireListener();
+    }
+
 
     /** Initialising the resource list **/
+
+    @OnRender
     public void initStorageList(){
-        this.subscriber.subscribe(this.empireService.getEmpire(gameID, empireID), this::resourceListGeneration);
+        this.subscriber.subscribe(this.empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()), this::resourceListGeneration);
     }
 
 
@@ -79,15 +86,13 @@ public class StorageOverviewComponent extends VBox {
     /** Listener for the empire: Changes of the resources will change the list in the storage overview.**/
     public void createEmpireListener(){
         this.subscriber.subscribe(this.eventListener
-                        .listen("games." + this.gameID + ".empires." + this.empireID + ".updated", EmpireDto.class),
+                        .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
                 event -> {
                     if(!lastUpdate.equals(event.data().updatedAt())){
                         resourceListGeneration(event.data());
                         this.lastUpdate = event.data().updatedAt();
                     }},
-                error -> {
-                    System.out.println("errorListener");
-                });
+                error -> System.out.println("errorListener"));
     }
 
 
@@ -99,8 +104,6 @@ public class StorageOverviewComponent extends VBox {
     }
 
 
-    public void setGameID(String gameID) {this.gameID = gameID;}
-    public void setEmpireID(String empireID) {this.empireID = empireID;}
 
 
     @OnDestroy

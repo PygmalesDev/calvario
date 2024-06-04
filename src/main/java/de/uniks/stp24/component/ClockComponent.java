@@ -18,17 +18,17 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
-import org.jetbrains.annotations.NotNull;
-
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Objects;
 
 
 @Component(view = "Clock.fxml")
 public class ClockComponent extends AnchorPane {
 
-    public VBox clockVBox;
+    @FXML
+    VBox clockVBox;
     @FXML
     ToggleButton flagToggle;
     @FXML
@@ -70,6 +70,14 @@ public class ClockComponent extends AnchorPane {
     @OnInit
     public void init() {
 
+        PropertyChangeListener callHandleTimeChanged = this::handleTimeChanged;
+        timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_COUNTDOWN, callHandleTimeChanged);
+
+        PropertyChangeListener callHandleSpeedChanged = this::handleSpeedChanged;
+        timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_SPEED, callHandleSpeedChanged);
+
+        PropertyChangeListener callHandleSeasonChanged = this::handleSeasonChanged;
+        timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_SEASON, callHandleSeasonChanged);
     }
 
     @OnRender
@@ -79,19 +87,44 @@ public class ClockComponent extends AnchorPane {
         this.getStylesheets().add(css);
 
         timerService.start();
-        seasonLabel.setText("1");
+        seasonLabel.setText(timerService.getSeason() + "");
         countdownLabel.setText(translateCountdown(timerService.getCountdown()));
+
+        // Dummy data for special Event
         randomEventImage.setImage(new Image("de/uniks/stp24/assets/events/goodEvent.png"));
         remainingSeasonsLabel.setText("3");
+    }
+
+    @OnDestroy
+    public void destroy() {
+        timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_COUNTDOWN, this::handleTimeChanged);
+        timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_SPEED, this::handleSpeedChanged);
+        timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_SEASON, this::handleSeasonChanged);
+        timerService.stop();
     }
 
     public void showFlags() {
         timerService.setShowFlags(!timerService.getShowFlags());
     }
 
-    private void timeChange(@NotNull PropertyChangeEvent change) {
-        int countdown = (int) change.getNewValue();
-        countdownLabel.setText(translateCountdown(countdown));
+    public void pauseClock() {
+        if (timerService.isRunning()) {
+            timerService.stop();
+        } else {
+            timerService.resume();
+        }
+    }
+
+    public void x3() {
+        changingSpeed(3);
+    }
+
+    public void x2() {
+        changingSpeed(2);
+    }
+
+    public void x1() {
+        changingSpeed(1);
     }
 
     private String translateCountdown(int countdown) {
@@ -99,40 +132,37 @@ public class ClockComponent extends AnchorPane {
         return (countdown / 60) + ":" + suffix + (countdown % 60);
     }
 
-    @OnDestroy
-    public void onDestroy() {
-        timerService.listeners().removePropertyChangeListener("countdown", this::timeChange);
-        timerService.stop();
-    }
-
-    public void pauseClock() {
-        if (pauseClockButton.isSelected()) {
-            System.out.println("pause");
-            timerService.stop();
-        } else {
-            System.out.println("resume");
+    public void changingSpeed(int speed) {
+        if (!timerService.isRunning()) {
             timerService.resume();
+        }
+        if (timerService.getSpeed() != speed) {
+            timerService.setSpeed(speed);
         }
     }
 
-    public void x3() {
-        System.out.println("x3");
-        timerService.setSpeed(3);
+    private void handleSeasonChanged(PropertyChangeEvent propertyChangeEvent) {
+        if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
+            int season = (int) propertyChangeEvent.getNewValue();
+            Platform.runLater(() -> {
+                seasonLabel.setText(String.valueOf(season));
+            });
+        }
     }
 
-    public void x2() {
-        System.out.println("x2");
-        timerService.setSpeed(2);
+    private void handleSpeedChanged(PropertyChangeEvent propertyChangeEvent) {
+        if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
+            int speed = (int) propertyChangeEvent.getNewValue();
+            timerService.setSpeed(speed);
+        }
     }
 
-    public void x1() {
-        System.out.println("x1");
-        timerService.setSpeed(1);
-    }
-
-    public void setCountdownLabel(int value) {
-        Platform.runLater(() -> {
-            countdownLabel.setText(translateCountdown(value));
-        });
+    private void handleTimeChanged(PropertyChangeEvent propertyChangeEvent) {
+        if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
+            int time = (int) propertyChangeEvent.getNewValue();
+            Platform.runLater(() -> {
+                countdownLabel.setText(translateCountdown(time));
+            });
+        }
     }
 }

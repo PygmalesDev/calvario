@@ -6,18 +6,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="de.uniks.stp24.controllers.InGameController">
-   <HBox alignment="CENTER" layoutX="500.0" layoutY="302.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-         AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="EPIC GAMEPLAY" textAlignment="CENTER"
-            wrappingWidth="602.26171875">
+<AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.InGameController">
+   <HBox alignment="CENTER" layoutX="500.0" layoutY="302.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="EPIC GAMEPLAY" textAlignment="CENTER" wrappingWidth="602.26171875">
          <font>
-            <Font size="72.0"/>
+            <Font size="72.0" />
          </font>
       </Text>
    </HBox>
-   <StackPane fx:id="pauseMenuContainer" layoutX="440.0" layoutY="40.0" prefHeight="600.0" prefWidth="400.0" style=": ;"
-              visible="false" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="440.0"
-              AnchorPane.rightAnchor="440.0" AnchorPane.topAnchor="40.0"/>
+   <StackPane fx:id="pauseMenuContainer" layoutX="440.0" layoutY="40.0" prefHeight="600.0" prefWidth="400.0" style=": ;" visible="false" AnchorPane.leftAnchor="440.0" AnchorPane.rightAnchor="440.0" AnchorPane.topAnchor="40.0" />
+   <StackPane fx:id="clockComponentContainer" prefHeight="115.0" prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.rightAnchor="550.0" AnchorPane.topAnchor="10.0" />
 </AnchorPane>

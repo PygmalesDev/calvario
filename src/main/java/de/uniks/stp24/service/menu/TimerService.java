@@ -10,12 +10,15 @@ public class TimerService {
 
     protected PropertyChangeSupport listeners;
     public static final String PROPERTY_COUNTDOWN = "countdown";
+    public static final String PROPERTY_SPEED = "speed";
+    public static final String PROPERTY_SEASON = "season";
 
     @Inject
     GameStatus gameStatus;
     Timer timer = new Timer();
-    String time;
-    int countdown = 5 * 60;
+    final int TIME = 60;
+    int countdown = TIME;
+    int season = 0;
     int speed = 1;
     boolean showFlags = false;
 
@@ -28,6 +31,7 @@ public class TimerService {
 
     public void start() {
         isRunning = true;
+
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
@@ -35,15 +39,14 @@ public class TimerService {
                     return;
                 }
                 if (countdown > 0) {
-                    String suffix = countdown % 60 < 10 ? "0" : "";
-                    time = (countdown / 60) + ":" + suffix + (countdown % 60);
-                    setCountdown(countdown - speed);
+                    setCountdown(countdown - 1);
                 } else {
-                    setCountdown(5 * 60);
+                    setSeason(season + 1);
+                    setCountdown(TIME);
                 }
             }
         };
-        timer.scheduleAtFixedRate(task, 0, 1000);
+        timer.scheduleAtFixedRate(task, 0, 1000 / speed);
     }
 
     public void stop() {
@@ -55,29 +58,37 @@ public class TimerService {
     }
 
     public void resume() {
+        isRunning = true;
         timer = new Timer();
         start();
     }
 
-    public void setSpeed(int speed) {
-        this.speed = speed;
-        stop();
-        resume();
+    public int getSeason() {
+        return season;
+    }
+
+    public void setSeason(int value) {
+        int oldValue;
+        if (value == this.season) {
+            return;
+        }
+        oldValue = this.season;
+        this.season = value;
+        this.firePropertyChange(PROPERTY_SEASON, oldValue, value);
     }
 
     public int getCountdown() {
         return countdown;
     }
 
-    public TimerService setCountdown(int value) {
-        int oldValue = 0;
+    public void setCountdown(int value) {
+        int oldValue;
         if (value == this.countdown) {
-            return this;
+            return;
         }
         oldValue = this.countdown;
         this.countdown = value;
         this.firePropertyChange(PROPERTY_COUNTDOWN, oldValue, value);
-        return this;
     }
 
     public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
@@ -93,6 +104,24 @@ public class TimerService {
         return this.listeners;
     }
 
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int value) {
+        int oldValue;
+        if (value == this.speed) {
+            return;
+        }
+        oldValue = this.speed;
+        this.speed = value;
+
+        stop();
+        resume();
+
+        this.firePropertyChange(PROPERTY_COUNTDOWN, oldValue, value);
+    }
+
 
     public void setShowFlags(boolean showFlags) {
         this.showFlags = showFlags;
@@ -101,4 +130,9 @@ public class TimerService {
     public boolean getShowFlags() {
         return showFlags;
     }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
+
 }

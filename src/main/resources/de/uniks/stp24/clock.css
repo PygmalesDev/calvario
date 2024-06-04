@@ -69,7 +69,7 @@ Label {
 
 .clock {
     -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/clockEmpty.png");
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/clock.png");
     -fx-background-size: cover;
     -fx-background-repeat: no-repeat;
     -fx-border-color: transparent;

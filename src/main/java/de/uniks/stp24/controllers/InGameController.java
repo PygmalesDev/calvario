@@ -27,6 +27,8 @@ import java.util.*;
 public class InGameController extends BasicController {
     @FXML
     StackPane pauseMenuContainer;
+    @FXML
+    StackPane clockComponentContainer;
     @SubComponent
     @Inject
     public PauseMenuComponent pauseMenuComponent;
@@ -64,16 +66,9 @@ public class InGameController extends BasicController {
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_LANGUAGE, callHandleLanguageChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
 
-        PropertyChangeListener callHandleTimeChanged = this::handleTimeChanged;
-        timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_COUNTDOWN, callHandleTimeChanged);
+
     }
 
-    private void handleTimeChanged(PropertyChangeEvent propertyChangeEvent) {
-        if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
-            int time = (int) propertyChangeEvent.getNewValue();
-            clockComponent.setCountdownLabel(time);
-        }
-    }
 
     private void handleLanguageChanged(PropertyChangeEvent propertyChangeEvent) {
         Locale newLang = propertyChangeEvent.getNewValue().equals(0) ? Locale.GERMAN : Locale.ENGLISH;
@@ -103,9 +98,13 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void render() {
+
+
         timerService.start();
-        pauseMenuContainer.setVisible(true);
-        pauseMenuContainer.getChildren().add(clockComponent);
+        pauseMenuContainer.setVisible(false);
+        pauseMenuContainer.getChildren().add(pauseMenuComponent);
+
+        clockComponentContainer.getChildren().add(clockComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -135,8 +134,6 @@ public class InGameController extends BasicController {
     public void destroy() {
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
           .removePropertyChangeListener(triple.propertyName(), triple.listener()));
-
-        timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_COUNTDOWN, this::handleTimeChanged);
     }
 
 }

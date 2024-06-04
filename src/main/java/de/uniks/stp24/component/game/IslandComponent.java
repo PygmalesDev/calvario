@@ -81,7 +81,7 @@ public class IslandComponent extends Pane {
     // by the moment change visibility of flag (image)
     public void showInfo() {
         //TODO show info pane!
-        System.out.println("Isle at " + x + ", " + y);
+        System.out.println(island.type() + " isle at " + x + ", " + y);
         this.flagPane.setVisible(!this.flagPane.isVisible());
     }
 

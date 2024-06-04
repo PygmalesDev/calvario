@@ -1,5 +1,6 @@
 package de.uniks.stp24.service;
 
+import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
@@ -14,7 +15,8 @@ import java.util.*;
 import java.util.random.RandomGenerator;
 @Singleton
 public class IslandsService {
-
+    @Inject
+    App app;
     @Inject
     Subscriber subscriber;
     @Inject
@@ -23,16 +25,23 @@ public class IslandsService {
     ErrorService errorService;
 
     private final List<Island> isles = new ArrayList<>();
+    // private final Map<String, List<String>>  = new HashMap<>();
     static final RandomGenerator randomGenerator = new Random(1234);
 
     @Inject
     public IslandsService() {}
 
-    public void getIslands(String gameID) {
+
+    // this method will be used by changing from lobby to ingame
+    //
+    public void retrieveIslands(String gameID) {
         this.isles.clear();
         subscriber.subscribe(gameSystemsService.getSystems(gameID),
             dto -> {
                 Arrays.stream(dto).forEach(data -> {
+                    // List<String> = new ArrayList<>(data.links().keySet());
+                    System.out.println(data.links().keySet().size() + " " + data.type()
+                    + " " + data.x() + " " + data.y() + " " + data.owner() );
                     Island tmp = new Island(data.owner(),
                         1,
                         data.x(),
@@ -42,15 +51,15 @@ public class IslandsService {
                         data.capacity(),
                         data.upgrade().ordinal());
                     isles.add(tmp);
-
                 });
                 System.out.println(isles.size() + " islands generated");
+                this.app.show("/ingame", Map.of("gameID", gameID));
             },
           error -> errorService.getStatus(error));
     }
 
 
-    public List<Island> getIslands() {
+    public List<Island> getListOfIslands() {
         return Collections.unmodifiableList(this.isles);
     }
 
@@ -66,14 +75,16 @@ public class IslandsService {
     // and are not too big apply a factor 10 for increase and
     // an offset to match our screen size
     public IslandComponent createIslandPaneFromDto(Island isleDto, IslandComponent component) {
-        double offsetV = 900.0;
-        double offsetH = 600.0;
-        component.setPosition(isleDto.posX()*10 + offsetH,
-          isleDto.posY()*10 + offsetV);
+        component.applyInfo(isleDto);
+        double offsetV = 600.0;
+        double offsetH = 900.0;
+        component.setPosition(isleDto.posX() * 6 + offsetH,
+          isleDto.posY() * 6 + offsetV);
         // todo read values from dto
-        int icon = randomGenerator.nextInt(0, 6);
+        component.applyIcon(isleDto.type());
         int flag = randomGenerator.nextInt(0, 5);
-        component.applyIcon(IslandType.values()[icon]);
+//        component.applyIcon(IslandType.values()[icon]);
+
         component.setFlagImage(flag);
 
         return component;

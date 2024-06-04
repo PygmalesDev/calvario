@@ -46,9 +46,9 @@ public class InGameController extends BasicController {
     InGameService inGameService;
     @Inject
     IslandsService islandsService;
-
     @Param("gameID")
     String gameID;
+    List<IslandComponent> islandComponentList = new ArrayList<>();
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
@@ -130,12 +130,6 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setVisible(false);
     }
 
-    @OnDestroy
-    public void destroy() {
-        this.gameListenerTriple.forEach(triple -> triple.game().listeners()
-          .removePropertyChangeListener(triple.propertyName(), triple.listener()));
-    }
-
     @OnRender(1)
     public void createMap() {
 
@@ -154,6 +148,7 @@ public class InGameController extends BasicController {
               );
             tmp.setLayoutX(tmp.getPosX());
             tmp.setLayoutY(tmp.getPosY());
+            islandComponentList.add(tmp);
             this.mapGrid.getChildren().add(tmp);
         }
 
@@ -162,7 +157,14 @@ public class InGameController extends BasicController {
 
 
     }
+
     public void showCoordinates(MouseEvent mouseEvent) {
 
+    }
+    @OnDestroy
+    public void destroy() {
+        islandComponentList.forEach(IslandComponent::destroy);
+        this.gameListenerTriple.forEach(triple -> triple.game().listeners()
+          .removePropertyChangeListener(triple.propertyName(), triple.listener()));
     }
 }

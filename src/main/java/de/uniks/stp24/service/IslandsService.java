@@ -54,18 +54,21 @@ public class IslandsService {
         double x, y;
         List<Point2D> test = new ArrayList<>();
         while (test.size() < 70) {
-            x = RandomGenerator.getDefault().nextDouble(1800);
-            y = RandomGenerator.getDefault().nextDouble(1200);
+            x = randomGenerator.nextDouble(1800);
+            y = randomGenerator.nextDouble(1200);
             Point2D tmp = new Point2D(x,y);
             if (!test.contains(tmp)) test.add(tmp);
         }
         return test;
     }
 
+    // set position and icon for the map
     public IslandComponent createIslandPane(Point2D p, IslandComponent isle) {
         isle.setPosition(p.getX(),p.getY());
-        int icon = RandomGenerator.getDefault().nextInt(0, 6);
+        int icon = randomGenerator.nextInt(0, 6);
+        int flag = randomGenerator.nextInt(0, 5);
         isle.applyIcon(IslandType.values()[icon]);
+        isle.setFlagImage(flag);
 
         return isle;
     }

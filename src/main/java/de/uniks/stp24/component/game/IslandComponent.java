@@ -9,9 +9,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnKey;
 
 import javax.inject.Inject;
+
+import static java.lang.Thread.sleep;
 
 @Component(view = "IslandComponent.fxml")
 public class IslandComponent extends Pane {
@@ -25,6 +28,9 @@ public class IslandComponent extends Pane {
     ImageView flagImage;
     private Island island;
     double x ,y ;
+    final String[] flags = {
+      "847.png", "863.png", "911.png", "927.png", "959.png"
+    };
 
     @Inject
     public IslandComponent(){
@@ -32,24 +38,29 @@ public class IslandComponent extends Pane {
             this.imageCache = new ImageCache();
         }
         this.islandImage = new ImageView();
-        this.islandImage.setImage(imageCache.get("gameIcons/isle.jpeg"));
+        this.islandImage.setImage(imageCache.get("icons/isle.jpeg"));
     }
 
     // an icon should be used depending on island type
     public void applyIcon(IslandType type){
         //TODO should be modified later to apply the right island types
-        String pathToIcon;
+        String pathToIcon = "icons/islands/";
         switch (type){
-            case HOMELAND -> pathToIcon = "gameIcons/islands/homeland_0.png";
-            case LUSHY -> pathToIcon = "gameIcons/islands/lush_0.png";
-            case MISTY -> pathToIcon = "gameIcons/islands/uninhabited_0.png";
-            case DESERTED -> pathToIcon = "gameIcons/islands/uninhabited_1.png";
-            case BANDIT -> pathToIcon = "gameIcons/islands/bandits_0.png";
-            case ANCIENT -> pathToIcon = "gameIcons/islands/uninhabited_2.png";
-            case MOUNTY -> pathToIcon = "gameIcons/islands/uninhabited_3.png";
-            default -> pathToIcon = "gameIcons/Isle.jpeg";
+            case HOMELAND -> pathToIcon += "regular.png";
+            case LUSHY -> pathToIcon += "uninhabitable_0.png";
+            case MISTY -> pathToIcon += "golden_0.png";
+            case DESERTED -> pathToIcon += "uninhabitable_1.png";
+            case BANDIT -> pathToIcon += "ancient_military.png";
+            case ANCIENT -> pathToIcon += "uninhabitable_2.png";
+            case MOUNTY -> pathToIcon += "uninhabitable_3.png";
+            default -> pathToIcon = "icons/Isle.jpeg";
         }
         this.islandImage.setImage(imageCache.get(pathToIcon));
+    }
+
+    public void setFlagImage(int flag){
+        this.flagImage
+          .setImage(imageCache.get("test/" + flags[flag]));
     }
 
     public void applyInfo(Island islandInfo){
@@ -81,6 +92,13 @@ public class IslandComponent extends Pane {
     public void showInfo() {
         //TODO show info pane!
         System.out.println("Isle at " + x + ", " + y);
+        this.flagPane.setVisible(!this.flagPane.isVisible());
+    }
+
+    @OnDestroy
+    public void destroy(){
+        flagImage = null;
+        islandImage = null;
     }
 
 

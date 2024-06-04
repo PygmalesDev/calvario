@@ -66,12 +66,11 @@ public class StorageOverviewComponent extends VBox {
     @OnRender
     void render(){
         this.resourceListView.setCellFactory(list -> new ComponentListCell<>(app, resourceComponentProvider));
-        //Todo: changePerSeason changes
+        //Todo: changePerSeason
     }
 
     private void resourceListGeneration(EmpireDto empireDto){
         Map<String, Integer> resourceMap = empireDto.resources();
-        System.out.println(resourceMap);
         ObservableList<Resource> resourceList = resourcesService.generateResourceList(resourceMap, resourceListView.getItems());
         this.resourceListView.setItems(resourceList);
     }
@@ -83,31 +82,16 @@ public class StorageOverviewComponent extends VBox {
                         .listen("games." + this.gameID + ".empires." + this.empireID + ".updated", EmpireDto.class),
                 event -> {
                     if(!lastUpdate.equals(event.data().updatedAt())){
-                        System.out.println("update listener listened something");
-                        System.out.println(event.data().updatedAt());
                         resourceListGeneration(event.data());
                         this.lastUpdate = event.data().updatedAt();
-                    }else{
-                        System.out.println("updateTime wrong");}
-                    },
+                    }},
                 error -> {
                     System.out.println("errorListener");
                 });
     }
 
 
-    /** Listener for the season: Change of the season will change the changePerSeason of a resource **/
-    public void seasonListener(){
-        this.subscriber.subscribe(this.eventListener
-                .listen("games." + this.gameID + ".ticked", Game.class),
-                event -> {if(!lastUpdate.equals(event.data().updatedAt())){
-                    //Todo: calculate new changePerSeason + generate List
-                    //ObservableList<Resource> resourceList = resourcesService.updateChangePerSeason(resourceListView.getItems(), resourcesLastSeasonChange);
-                    //this.resourceListView.setItems(resourceList);
-                    System.out.println("seasonChange");
-                    this.lastUpdate = event.data().updatedAt();
-                }});
-    }
+
 
 
     public void closeStorageOverview(){

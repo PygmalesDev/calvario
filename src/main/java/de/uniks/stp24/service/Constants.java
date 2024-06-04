@@ -73,4 +73,39 @@ public class Constants {
                     "In der schattenhaften Welt der Piraterie versetzt der Name {NAME} Kaufleute in Angst und Schrecken, während sie in ihren verborgenen Inselverstecken unvorstellbare Schätze horten."
             })
     );
+
+    public static final Map<String, String> resourceTranslation = Map.of(
+            "credits", "resource.doubloons",
+            "minerals", "resource.sparklingGeode",
+            "population", "resource.crewmates",
+            "energy", "resource.gunpowder",
+            "food", "resource.provisions",
+            "fuel","resource.coal",
+            "research", "resource.scoutReports",
+            "alloys", "resource.gemmyAlloys",
+            "consumer_goods","resource.rum"
+    );
+
+    public static final Map<String, String> siteTranslation = Map.of(
+            "city", "site.village",
+            "energy", "site.thaumaturgy",
+            "mining","site.mining",
+            "agriculture","site.harvesting",
+            "industry", "site.production",
+            "research", "site.expedition",
+            "ancient_fondry","site.epoch",
+            "ancient_factory","site.merchant",
+            "ancient_refinery", "site.coalmine"
+    );
+
+    public static final Map<String, String> buildingTranslation = Map.of(
+            "exchange", "building.seaside",
+            "power_plant","building.theurgy",
+            "mine","building.resonatingDelves",
+            "farm","building.farmside",
+            "research_lab","building.soutHub",
+            "foundry","building.alloySmeltery",
+            "factory","building.chophouse",
+            "refinery","coalQuarry"
+    );
 }

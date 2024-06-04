@@ -7,6 +7,7 @@ import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.component.menu.GangComponent;
 import de.uniks.stp24.model.GangElement;
 import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.menu.LobbyService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

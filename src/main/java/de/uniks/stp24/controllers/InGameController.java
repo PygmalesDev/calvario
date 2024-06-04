@@ -78,10 +78,7 @@ public class InGameController extends BasicController {
                 this.storageOverviewComponent.createEmpireListener();
             }
         });
-            this.storageOverviewComponent.seasonListener();
         });
-
-        System.out.println("listener created");
 
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;

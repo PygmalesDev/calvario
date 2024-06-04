@@ -2,6 +2,8 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.OverviewSitesComponent;
 import de.uniks.stp24.component.game.OverviewUpgradeComponent;
+import de.uniks.stp24.component.menu.LobbyHostSettingsComponent;
+import de.uniks.stp24.component.menu.LobbySettingsComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
@@ -19,6 +21,7 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
+
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -46,6 +49,8 @@ public class InGameController extends BasicController {
     public OverviewUpgradeComponent overviewUpgradeComponent;
     @Inject
     InGameService inGameService;
+    @Inject
+    LobbyHostSettingsComponent lobbyHostSettingsComponent;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
     public boolean islandClicked = false;
@@ -56,6 +61,11 @@ public class InGameController extends BasicController {
 
     @OnInit
     public void init() {
+        this.subscriber.subscribe(inGameService.getAllIslands(lobbyHostSettingsComponent.gameID),
+                islands -> {
+                    System.out.println(islands.size());
+                });
+
         GameStatus gameStatus = inGameService.getGame();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
@@ -115,6 +125,7 @@ public class InGameController extends BasicController {
         inGameService.setShowSettings(false);
         inGameService.setPaused(!inGameService.getPaused());
     }
+
     public void showSettings() {
         pauseMenuContainer.getChildren().remove(pauseMenuComponent);
         pauseMenuContainer.getChildren().add(settingsComponent);
@@ -136,7 +147,7 @@ public class InGameController extends BasicController {
     @OnDestroy
     public void destroy() {
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
-          .removePropertyChangeListener(triple.propertyName(), triple.listener()));
+                .removePropertyChangeListener(triple.propertyName(), triple.listener()));
     }
 
     public void showOverview() {
@@ -149,13 +160,13 @@ public class InGameController extends BasicController {
     }
 
     public void showRudder() {
-        if(!islandClicked) {
+        if (!islandClicked) {
             rudder_pain.setVisible(true);
         }
     }
 
     public void unshowRudder() {
-        if(!islandClicked) {
+        if (!islandClicked) {
             rudder_pain.setVisible(false);
         }
     }

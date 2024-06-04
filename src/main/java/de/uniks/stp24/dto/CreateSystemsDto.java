@@ -1,9 +1,11 @@
-package de.uniks.stp24.model;
+package de.uniks.stp24.dto;
+
+import de.uniks.stp24.model.IslandType;
 
 import java.util.ArrayList;
 import java.util.Map;
 
-public record Island(
+public record CreateSystemsDto(
         String createdAt,
         String updatedAt,
         String _id,
@@ -20,5 +22,6 @@ public record Island(
         int x,
         int y,
         String owner
-) {
+        ) {
+
 }

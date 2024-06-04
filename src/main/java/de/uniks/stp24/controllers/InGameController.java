@@ -1,11 +1,13 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.menu.BuildingPropertiesComponent;
+import de.uniks.stp24.component.menu.BuildingsWindowComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.PopupBuilder;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
@@ -46,10 +48,18 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public BuildingPropertiesComponent buildingPropertiesComponent;
+
+    @SubComponent
+    @Inject
+    public BuildingsWindowComponent buildingsWindowComponent;
+
     @Inject
     InGameService inGameService;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
+
+    PopupBuilder popupBuildingProperties = new PopupBuilder();
+    PopupBuilder popupBuildingWindow = new PopupBuilder();
 
     @Inject
     public InGameController() {
@@ -99,12 +109,13 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void render() {
-        buildingProperties.setVisible(true);
-        buildingProperties.getChildren().add(buildingPropertiesComponent);
-
+        //buildingProperties.setVisible(true);
+        //buildingProperties.getChildren().add(buildingPropertiesComponent);
+        popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
+        popupBuildingProperties.showPopup(buildingProperties, buildingPropertiesComponent);
         pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
-        pauseMenuContainer.getChildren().add(pauseMenuComponent);
+        //pauseMenuContainer.getChildren().add(pauseMenuComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)

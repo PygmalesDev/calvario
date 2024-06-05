@@ -1,6 +1,6 @@
 package de.uniks.stp24;
 
-import de.uniks.stp24.component.BubbleComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.controllers.LoginController;
 import de.uniks.stp24.model.LoginResult;
 import de.uniks.stp24.service.LoginService;

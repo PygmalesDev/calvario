@@ -1,11 +1,10 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.BubbleComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.BrowseGameService;
 import de.uniks.stp24.service.EditGameService;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
@@ -20,9 +19,7 @@ import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
-import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
-
 import javax.inject.Inject;
 
 @Title("%edit.game")
@@ -44,7 +41,6 @@ public class EditGameController extends BasicController {
     TextField editRepeatPasswordTextField;
     @FXML
     Spinner<Integer> editMapSizeSpinner;
-
     @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
@@ -89,32 +85,30 @@ public class EditGameController extends BasicController {
         editMapSizeSpinner.setValueFactory(valueFactory);
     }
 
-    // class was modified! some code was refactored
-    // now use subscriber
+// class was modified! some code was refactored
+// now use subscriber
 
     public void editGame() {
         this.bubbleComponent.setErrorMode(false);
-
         GameSettings settings = new GameSettings(this.editMapSizeSpinner.getValue());
         String gameName = this.editNameTextField.getText();
         String password = this.editPasswordTextField.getText();
         boolean pwdMatch = password.equals(editRepeatPasswordTextField.getText());
         if (checkIt(gameName, password) &&
-          pwdMatch &&
-          editGameService.nameIsAvailable(gameName)) {
-            subscriber.subscribe(editGameService.editGame(gameName, settings, password),
-              result -> {
-                    browseGameController.init();
-                    app.show(browseGameController);
-                    },
-              error -> {
-                  int code = errorService.getStatus(error);
-                  this.bubbleComponent.setErrorMode(true);
-                  this.bubbleComponent.setCaptainText(getErrorInfoText(code));
-              });
+            pwdMatch &&
+            editGameService.nameIsAvailable(gameName)) {
+                subscriber.subscribe(editGameService.editGame(gameName, settings, password),
+                  result -> {
+                      browseGameController.init();
+                      app.show(browseGameController);
+                  },
+                   error -> {
+                      this.bubbleComponent.setErrorMode(true);
+                      this.bubbleComponent.setCaptainText(getErrorInfoText(error));
+});
         } else if(!editGameService.nameIsAvailable(gameName)) {
             this.bubbleComponent.setErrorMode(true);
-           this.bubbleComponent.setCaptainText(getErrorInfoText(409));
+            this.bubbleComponent.setCaptainText(getErrorInfoText(409));
         } else {
             this.bubbleComponent.setErrorMode(true);
             this.bubbleComponent.setCaptainText(getErrorInfoText(!pwdMatch ? -2 : -1));

@@ -2,14 +2,13 @@ package de.uniks.stp24.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.BubbleComponent;
-import de.uniks.stp24.component.GameComponent;
-import de.uniks.stp24.component.LogoutComponent;
-import de.uniks.stp24.component.WarningComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
+import de.uniks.stp24.component.menu.GameComponent;
+import de.uniks.stp24.component.menu.LogoutComponent;
+import de.uniks.stp24.component.menu.WarningComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.LogoutResult;
-import de.uniks.stp24.model.User;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.*;
 import de.uniks.stp24.ws.Event;
@@ -28,11 +27,8 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
-
-import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.List;
-import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,10 +41,10 @@ public class BrowseGameControllerTest extends ControllerTest {
     EventListener eventListener;
     @Mock
     GamesApiService gamesApiService;
-
     @Spy
     TokenStorage tokenStorage;
-
+    @Spy
+    ImageCache imageCache;
     @Spy
     PopupBuilder popupBuilder;
     @Spy

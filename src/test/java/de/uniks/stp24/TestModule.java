@@ -23,6 +23,7 @@ public class TestModule {
     AuthApiService authApiService() {
         return Mockito.mock(AuthApiService.class);
     }
+
     @Provides
     @Singleton
     UserApiService userApiService() {
@@ -40,12 +41,6 @@ public class TestModule {
         return Mockito.mock(GameMembersApiService.class);
     }
 
-    @Provides
-    @Singleton
-    GameMembersApiService gameMembersApiService(){
-      return Mockito.mock(GameMembersApiService.class);
-    }
-      
     @Provides
     @Singleton
     CreateGameService createGameService(){

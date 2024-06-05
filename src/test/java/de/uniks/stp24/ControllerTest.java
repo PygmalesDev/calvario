@@ -44,13 +44,11 @@ public class ControllerTest extends ApplicationTest {
             prefService.setLocale(Locale.ENGLISH);
             this.prefService.removeRefreshToken();
         }
-
         testComponent = (TestComponent) DaggerTestComponent.builder().mainApp(app).build();
         app.setComponent(testComponent);
 
         app.start(stage);
         stage.requestFocus();
-
         stage.getScene().getStylesheets().clear();
     }
 
@@ -60,6 +58,10 @@ public class ControllerTest extends ApplicationTest {
         app.stop();
         app = null;
         stage = null;
+        testComponent = null;
+        prefService = null;
+        responseConstants = null;
+        resources = null;
     }
 
     @AfterAll

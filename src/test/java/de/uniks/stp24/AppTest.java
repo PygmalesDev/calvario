@@ -1,6 +1,7 @@
 package de.uniks.stp24;
 
-import de.uniks.stp24.component.BubbleComponent;
+
+import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.AuthApiService;
@@ -127,7 +128,7 @@ public class AppTest extends ControllerTest {
         }).when(userApiService).getUser(any());
 
         doReturn("1").when(tokenStorage).getUserId();
-        doReturn(Observable.just(new MemberDto(false, user._id(), new Empire("Buccaneers", "", "#DC143C", 0, 0, "uninhabitable_0", new String[]{}), null))).when(lobbyService).updateMember(game3._id(),user._id(), false, null);
+        doReturn(Observable.just(new MemberDto(false, user._id(), new Empire("Buccaneers", "", "#DC143C", 0, 0, new String[]{},"uninhabitable_0"), null))).when(lobbyService).updateMember(game3._id(),user._id(), false, null);
     }
 
     @Test

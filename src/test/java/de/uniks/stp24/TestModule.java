@@ -2,7 +2,7 @@ package de.uniks.stp24;
 
 import dagger.Module;
 import dagger.Provides;
-import de.uniks.stp24.component.BubbleComponent;
+import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.AuthApiService;

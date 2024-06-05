@@ -1,3 +1,12 @@
+## Type of Pull Request
+<!-- Specify the type of changes in this pull request -->
+- [ ] New Feature
+- [ ] Bug Fix
+- [ ] Enhancement
+- [ ] Refactoring
+- [ ] Documentation Update
+- [ ] Other (please specify): ___________
+
 ## Description
 <!-- Describe your changes in detail. Include the motivation behind the changes and the context in which they were made. -->
 

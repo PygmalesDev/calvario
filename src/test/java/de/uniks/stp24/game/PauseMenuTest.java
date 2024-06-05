@@ -75,8 +75,6 @@ public class PauseMenuTest extends ControllerTest {
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
 
-    //@Spy
-    //Provider<ResourceBundle> newResources;
 
     @InjectMocks
     InGameController inGameController;
@@ -89,7 +87,6 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         inGameService.setGameStatus(gameStatus);
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
-        doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());
         this.app.show(this.inGameController);
     }
 

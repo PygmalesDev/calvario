@@ -64,11 +64,10 @@ public class InGameController extends BasicController {
 
     @OnInit
     public void init() {
-        //Loading of the empireID from a user's empire and setting gameID and empireID in Components.
-        //Initialising the Storage listView
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
+        //Todo: Outprint for Swagger - can be deleted later
         System.out.println(this.gameID);
         System.out.println(empireID);
 

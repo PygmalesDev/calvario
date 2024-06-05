@@ -63,57 +63,10 @@ public class StorageOverviewComponent extends VBox {
         lastUpdate = "";
     }
 
-    @OnInit
-    public void init(){
-        resourceComponentProvider.get().gameResourceBundle = this.gameResourceBundle;
-        createEmpireListener();
-    }
-
-
-    /** Initialising the resource list **/
-
-    @OnRender
-    public void initStorageList(){
-        this.resourceListView.setSelectionModel(null);
-        this.subscriber.subscribe(this.empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()), this::resourceListGeneration);
-    }
-
-
-    @OnRender
-    void render(){
-        this.resourceListView.setCellFactory(list -> new ComponentListCell<>(app, resourceComponentProvider));
-        //Todo: changePerSeason
-    }
-
-    private void resourceListGeneration(EmpireDto empireDto){
-        Map<String, Integer> resourceMap = empireDto.resources();
-        ObservableList<Resource> resourceList = resourcesService.generateResourceList(resourceMap, resourceListView.getItems());
-        this.resourceListView.setItems(resourceList);
-    }
-
-
-    /** Listener for the empire: Changes of the resources will change the list in the storage overview.**/
-    public void createEmpireListener(){
-        this.subscriber.subscribe(this.eventListener
-                        .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
-                event -> {
-                    if(!lastUpdate.equals(event.data().updatedAt())){
-                        resourceListGeneration(event.data());
-                        this.lastUpdate = event.data().updatedAt();
-                    }},
-                error -> System.out.println("errorListener"));
-
-    }
-
-
-
-
 
     public void closeStorageOverview(){
         this.getParent().setVisible(false);
     }
-
-
 
 
     @OnDestroy

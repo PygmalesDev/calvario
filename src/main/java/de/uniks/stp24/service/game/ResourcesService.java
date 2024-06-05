@@ -38,8 +38,4 @@ public class ResourcesService {
         return resourceList;
     }
 
-    public ObservableList<Resource> updateChangePerSeason(ObservableList<Resource> items, Map<String, Integer> resourcesLastSeasonChange){
-        return null;
-    }
-
 }

@@ -10,7 +10,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.InGameController">
    <HBox alignment="CENTER" layoutX="500.0" layoutY="302.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="EPIC GAMEPLAY" textAlignment="CENTER" wrappingWidth="602.26171875">
+      <Text fx:id="epic_gameplay" strokeType="OUTSIDE" strokeWidth="0.0" text="EPIC GAMEPLAY" textAlignment="CENTER" wrappingWidth="602.26171875">
          <font>
             <Font size="72.0" />
          </font>

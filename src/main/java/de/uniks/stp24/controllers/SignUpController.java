@@ -76,7 +76,7 @@ public class SignUpController extends BasicController {
     UserApiService userApiService;
     @SubComponent
     @Inject
-    BubbleComponent bubbleComponent;
+    public BubbleComponent bubbleComponent;
 
     private BooleanBinding isLoginFieldEmpty;
     private BooleanBinding isPasswordFieldEmpty;

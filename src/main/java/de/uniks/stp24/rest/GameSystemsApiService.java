@@ -22,5 +22,4 @@ public interface GameSystemsApiService {
 
     @PATCH("games/{game}/systems/{id}")
     Observable<CreateSystemsDto> updateIsland(@Path("game") String gameID, @Path("id") String ownerID, @Body CreateSystemsDto dto);
-
 }

@@ -47,7 +47,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @Resource
     ResourceBundle resource;
 
-    private String gameID;
+    public String gameID;
     public boolean leftLobby;
     public Image readyIconBlueImage;
     public Image readyIconGreenImage;

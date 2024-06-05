@@ -25,7 +25,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
 
-@Title("Ingame")
+@Title("CALVARIO")
 @Controller
 public class InGameController extends BasicController {
     @FXML

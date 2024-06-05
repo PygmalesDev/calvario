@@ -166,7 +166,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         doReturn(Observable.just(new MemberDto(false, "testGameHostID", null, "88888888")))
                 .when(this.lobbyService).updateMember(anyString(), anyString(), anyBoolean(), any());
 
-        Empire testEmpire =new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
+        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
 
         when(this.lobbyService.loadPlayers(any()))
                 .thenReturn(Observable.just(new MemberDto[]{

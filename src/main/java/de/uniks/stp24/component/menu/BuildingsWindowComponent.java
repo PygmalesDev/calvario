@@ -11,23 +11,24 @@ import javax.inject.Inject;
 @Component(view = "BuildingsWindow.fxml")
 public class BuildingsWindowComponent extends AnchorPane {
     @FXML
+    Button building8;
+    @FXML
+    Button building7;
+    @FXML
+    Button building6;
+    @FXML
+    Button building5;
+    @FXML
+    Button building4;
+    @FXML
+    Button building3;
+    @FXML
+    Button building2;
+    @FXML
+    Button building1;
+    @FXML
     Button closeWindowButton;
-    @FXML
-    ImageView buildingImage8;
-    @FXML
-    ImageView buildingImage7;
-    @FXML
-    ImageView buildingImage6;
-    @FXML
-    ImageView buildingImage5;
-    @FXML
-    ImageView buildingImage4;
-    @FXML
-    ImageView buildingImage3;
-    @FXML
-    ImageView buildingImage2;
-    @FXML
-    ImageView buildingImage1;
+
 
     @Inject
     public BuildingsWindowComponent(){

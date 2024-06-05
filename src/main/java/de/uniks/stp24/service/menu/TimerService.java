@@ -1,6 +1,11 @@
 package de.uniks.stp24.service.menu;
 
+import de.uniks.stp24.dto.UpdateGameResultDto;
+import de.uniks.stp24.dto.UpdateSpeedDto;
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.rest.GamesApiService;
+import io.reactivex.rxjava3.core.Observable;
+
 import javax.inject.Inject;
 import java.beans.PropertyChangeSupport;
 import java.util.Timer;
@@ -15,18 +20,31 @@ public class TimerService {
 
     @Inject
     GameStatus gameStatus;
+    @Inject
+    GamesApiService gamesApiService;
+
     Timer timer = new Timer();
     final int TIME = 60;
     int countdown = TIME;
     int season = 0;
     int speed = 1;
     boolean showFlags = false;
-
     private volatile boolean isRunning = false;
+
 
     @Inject
     public TimerService() {
 
+    }
+
+    public Observable<UpdateGameResultDto> setSpeed(String gamesid, int speed) {
+        return gamesApiService
+                .editSpeed(gamesid, new UpdateSpeedDto(speed))
+                .doOnNext(updateGameResultDto -> {
+                    // After changing the speed,
+                    // the local countdown till next season will be updated
+                    setSpeedLocal(updateGameResultDto.speed());
+                });
     }
 
     public void start() {
@@ -108,9 +126,9 @@ public class TimerService {
         return speed;
     }
 
-    public void setSpeed(int value) {
+    public void setSpeedLocal(int value) {
         int oldValue;
-        if (value == this.speed) {
+        if (value == this.speed || value == 0) {
             return;
         }
         oldValue = this.speed;

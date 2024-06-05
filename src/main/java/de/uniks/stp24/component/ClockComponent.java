@@ -3,6 +3,7 @@ package de.uniks.stp24.component;
 import de.uniks.stp24.App;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.menu.TimerService;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
@@ -18,6 +19,7 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
+import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -56,11 +58,15 @@ public class ClockComponent extends AnchorPane {
     @Inject
     App app;
     @Inject
+    TokenStorage tokenStorage;
+    @Inject
     TimerService timerService;
     @Inject
     InGameService inGameService;
     @Inject
     GamesApiService gamesApiService;
+    @Inject
+    Subscriber subscriber;
 
     @Inject
     public ClockComponent() {
@@ -90,6 +96,17 @@ public class ClockComponent extends AnchorPane {
         seasonLabel.setText(timerService.getSeason() + "");
         countdownLabel.setText(translateCountdown(timerService.getCountdown()));
 
+        subscriber.subscribe(gamesApiService.getGame(gameId),
+            result -> {
+            // Only owner of the game can change the speed
+                if (!(Objects.equals(result.owner(), tokenStorage.getUserId()))) {
+                    x1Button.setVisible(false);
+                    x2Button.setVisible(false);
+                    x3Button.setVisible(false);
+                    pauseClockButton.setVisible(false);
+                }
+            });
+
         // Dummy data for special Event
         randomEventImage.setImage(new Image("de/uniks/stp24/assets/events/goodEvent.png"));
         remainingSeasonsLabel.setText("3");
@@ -101,6 +118,10 @@ public class ClockComponent extends AnchorPane {
         timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_SPEED, this::handleSpeedChanged);
         timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_SEASON, this::handleSeasonChanged);
         timerService.stop();
+
+        if (subscriber != null) {
+            subscriber.dispose();
+        }
     }
 
     public void showFlags() {
@@ -109,8 +130,10 @@ public class ClockComponent extends AnchorPane {
 
     public void pauseClock() {
         if (timerService.isRunning()) {
+            subscriber.subscribe(timerService.setSpeed(gameId, 0));
             timerService.stop();
         } else {
+            subscriber.subscribe(timerService.setSpeed(gameId, timerService.getSpeed()));
             timerService.resume();
         }
     }
@@ -137,32 +160,28 @@ public class ClockComponent extends AnchorPane {
             timerService.resume();
         }
         if (timerService.getSpeed() != speed) {
-            timerService.setSpeed(speed);
+            subscriber.subscribe(timerService.setSpeed(gameId, speed));
         }
     }
 
     private void handleSeasonChanged(PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             int season = (int) propertyChangeEvent.getNewValue();
-            Platform.runLater(() -> {
-                seasonLabel.setText(String.valueOf(season));
-            });
+            Platform.runLater(() -> seasonLabel.setText(String.valueOf(season)));
         }
     }
 
     private void handleSpeedChanged(PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             int speed = (int) propertyChangeEvent.getNewValue();
-            timerService.setSpeed(speed);
+            timerService.setSpeedLocal(speed);
         }
     }
 
     private void handleTimeChanged(PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             int time = (int) propertyChangeEvent.getNewValue();
-            Platform.runLater(() -> {
-                countdownLabel.setText(translateCountdown(time));
-            });
+            Platform.runLater(() -> countdownLabel.setText(translateCountdown(time)));
         }
     }
 }

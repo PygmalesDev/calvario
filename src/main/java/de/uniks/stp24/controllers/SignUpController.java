@@ -60,8 +60,7 @@ public class SignUpController extends BasicController {
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
-    @FXML
-    Image calvarioLogoRegister;
+
 
     @Param("username")
     public String username;
@@ -247,7 +246,6 @@ public class SignUpController extends BasicController {
         this.subscriber.dispose();
         backgroundAnchorPane.setStyle("-fx-background-image: null");
         cardBackgroundVBox.setStyle("-fx-background-image: null");
-        calvarioLogoRegister = null;
     }
 
     @FXML

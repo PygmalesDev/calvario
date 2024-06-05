@@ -673,3 +673,46 @@ ToggleButton:hover{
 }
 
 
+/*Loading, Login, Register*/
+.calvarioTextLogoLogin {
+    -fx-background-image: url("/de/uniks/stp24/assets/logos/calvario_new.png");
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+    -fx-background-size: 60% 100%;
+    -fx-background-repeat: no-repeat;
+
+}
+
+.calvarioTextLogoRegister {
+    -fx-background-image: url("/de/uniks/stp24/assets/logos/calvario_new.png");
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+    -fx-background-size: 60% 100%;
+    -fx-background-repeat: no-repeat;
+
+}
+
+
+.calvarioLogo {
+    -fx-background-image: url("/de/uniks/stp24/assets/logos/logo_new.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+.spiderbyterLogo{
+    -fx-background-image: url("/de/uniks/stp24/assets/logos/SpiderbyteLogoTransparent.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 150% 150%;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+.deadbirdsocietyLogo{
+    -fx-background-image: url("/de/uniks/stp24/assets/logos/DeadBirdsLogoTransparent.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 80% 80%;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}

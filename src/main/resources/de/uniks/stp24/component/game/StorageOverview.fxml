@@ -40,10 +40,10 @@
             <Insets left="5.0" />
          </VBox.margin>
          <HBox alignment="TOP_CENTER" prefWidth="130.0">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="resourceText" text="Overall"/>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="resourceText" text="Overall" />
          </HBox>
          <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="resourceText" text="Pro Season" />
       </HBox>
-      <ListView fx:id="resourceListView" prefHeight="300.0" prefWidth="220.0" />
+      <ListView fx:id="resourceListView" focusTraversable="false" prefHeight="300.0" prefWidth="220.0" />
    </VBox>
 </fx:root>

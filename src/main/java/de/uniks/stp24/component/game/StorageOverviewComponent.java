@@ -22,8 +22,10 @@ import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 @Component(view = "StorageOverview.fxml")
 public class StorageOverviewComponent extends VBox {
@@ -34,7 +36,6 @@ public class StorageOverviewComponent extends VBox {
     @FXML
     Label empireNameLabel;
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, true);
 
     @Inject
     App app;
@@ -49,7 +50,13 @@ public class StorageOverviewComponent extends VBox {
     @Inject
     TokenStorage tokenStorage;
 
+    @Inject
+    @Named("gameResourceBundle")
+    ResourceBundle gameResourceBundle;
+
     private String lastUpdate;
+    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, true, gameResourceBundle);
+
 
     @Inject
     public StorageOverviewComponent() {
@@ -58,6 +65,7 @@ public class StorageOverviewComponent extends VBox {
 
     @OnInit
     public void init(){
+        resourceComponentProvider.get().gameResourceBundle = this.gameResourceBundle;
         createEmpireListener();
     }
 
@@ -66,6 +74,7 @@ public class StorageOverviewComponent extends VBox {
 
     @OnRender
     public void initStorageList(){
+        this.resourceListView.setSelectionModel(null);
         this.subscriber.subscribe(this.empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()), this::resourceListGeneration);
     }
 
@@ -93,6 +102,7 @@ public class StorageOverviewComponent extends VBox {
                         this.lastUpdate = event.data().updatedAt();
                     }},
                 error -> System.out.println("errorListener"));
+
     }
 
 

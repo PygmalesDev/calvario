@@ -1,10 +1,9 @@
 package de.uniks.stp24.service;
 
-import de.uniks.stp24.model.Resource;
 
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class Constants {
     // Folder
@@ -103,9 +102,25 @@ public class Constants {
             "power_plant","building.theurgy",
             "mine","building.resonatingDelves",
             "farm","building.farmside",
-            "research_lab","building.soutHub",
+            "research_lab","building.scoutHub",
             "foundry","building.alloySmeltery",
             "factory","building.chophouse",
             "refinery","coalQuarry"
     );
+
+
+    public static final Map<String, String> islandTranslation = Map.ofEntries(
+            Map.entry("uninhabitable_0", "island.plundered"),
+            Map.entry("uninhabitable_1", "island.breezy"),
+            Map.entry("uninhabitable_2", "island.waveless"),
+            Map.entry("uninhabitable_3", "island.serene"),
+            Map.entry("regular", "island.bandit"),
+            Map.entry("energy", "island.smouldering"),
+            Map.entry("mining", "island.echoing"),
+            Map.entry("agriculture", "island.lushy"),
+            Map.entry("ancient_technology", "island.forlorn"),
+            Map.entry("ancient_industry", "island.amazonian"),
+            Map.entry("ancient_military", "everfrozen")
+    );
+
 }

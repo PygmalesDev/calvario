@@ -4,13 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.LobbyController;
+import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.MemberDto;
+import de.uniks.stp24.dto.UpdateGameResultDto;
 import de.uniks.stp24.model.*;
-import de.uniks.stp24.rest.AuthApiService;
-import de.uniks.stp24.rest.GameMembersApiService;
-import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.rest.UserApiService;
+import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.JoinGameService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -31,10 +32,13 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import javax.inject.Provider;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
+import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class TestLobbyControllerAsHost extends ControllerTest {
@@ -42,6 +46,8 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     TokenStorage tokenStorage;
     @Spy
     GamesApiService gamesApiService;
+    @Spy
+    EmpireApiService empireApiService;
     @Spy
     GameMembersApiService gameMembersApiService;
     @Spy
@@ -59,9 +65,13 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     @Spy
     GamesService gamesService;
     @Spy
+    EmpireService empireService;
+    @Spy
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
+    @Spy
+    EditGameService editGameService;
 
     @InjectMocks
     UserComponent userComponent;
@@ -121,7 +131,6 @@ public class TestLobbyControllerAsHost extends ControllerTest {
 
         // Mock getting members readiness updates
         doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.updated"), eq(MemberDto.class));
-
         this.app.show(this.lobbyController);
     }
 
@@ -157,19 +166,30 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         doReturn(Observable.just(new MemberDto(false, "testGameHostID", null, "88888888")))
                 .when(this.lobbyService).updateMember(anyString(), anyString(), anyBoolean(), any());
 
+        Empire testEmpire =new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
+
         when(this.lobbyService.loadPlayers(any()))
                 .thenReturn(Observable.just(new MemberDto[]{
-                        new MemberDto(false, "testGameHostID", null, "88888888"),
+                        new MemberDto(false, "testGameHostID", testEmpire, "88888888"),
                         new MemberDto(true, "testMemberUnoID", null, "88888888"),
                         new MemberDto(false, "testMemberDosID", null, "88888888")}))
                 .thenReturn(Observable.just(new MemberDto[]{
-                        new MemberDto(false, "testGameHostID", null, "88888888"),
+                        new MemberDto(false, "testGameHostID", testEmpire, "88888888"),
                         new MemberDto(true, "testMemberUnoID", null, "88888888"),
                         new MemberDto(true, "testMemberDosID", null, "88888888")}))
                 .thenReturn(Observable.just(new MemberDto[]{
-                        new MemberDto(true, "testGameHostID", null, "88888888"),
+                        new MemberDto(true, "testGameHostID", testEmpire, "88888888"),
                         new MemberDto(true, "testMemberUnoID", null, "88888888"),
                         new MemberDto(true, "testMemberDosID", null, "88888888")}));
+
+        doReturn(Observable.just(new UpdateGameResultDto("1", "a","testGameID","testGame","testGameHostID",
+                        true, 1, 0, new GameSettings(1)))).when(this.editGameService).startGame(any());
+
+
+        doReturn(Observable.just(new EmpireDto[]{new EmpireDto("1","a","testEmpireID", "testGameID",
+                "testGameHostID","testGame","a","a",1, 2, "a",
+                new String[]{"1"}, Map.of("energy",3) , null)})).when(this.empireService).getEmpires(any());
+
 
         WaitForAsyncUtils.waitForFxEvents();
         assertTrue(lookup("#startJourneyButton").queryButton().isDisabled());
@@ -190,8 +210,10 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
         assertFalse(lookup("#startJourneyButton").queryButton().isDisabled());
         clickOn("#startJourneyButton");
+        waitForFxEvents();
+        assertEquals("Ingame",stage.getTitle());
+        //verify(this.app, times(1)).show("/ingame");
 
-        verify(this.app, times(1)).show("/ingame");
     }
 
     /**

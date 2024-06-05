@@ -85,6 +85,6 @@ public class HttpModule {
 
     @Provides
     @Singleton
-    GameSystemsService gameSystemsService(Retrofit retrofit) {return retrofit.create(GameSystemsService.class);}
+    GameSystemsApiService gameSystemsService(Retrofit retrofit) {return retrofit.create(GameSystemsApiService.class);}
 
 }

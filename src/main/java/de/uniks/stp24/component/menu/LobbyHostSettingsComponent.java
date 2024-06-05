@@ -26,6 +26,8 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @FXML
     public Button startJourneyButton;
     @FXML
+    public Button readyButton;
+    @FXML
     ImageView readyIconImageView;
     @Inject
     Subscriber subscriber;
@@ -89,6 +91,8 @@ public class LobbyHostSettingsComponent extends AnchorPane {
           result -> {
             islandsService.retrieveIslands(this.gameID);
             this.startJourneyButton.setDisable(true);
+            this.readyButton.setDisable(true);
+
             },
           error -> this.startJourneyButton.setDisable(false));
     }

@@ -135,12 +135,10 @@ public class InGameController extends BasicController {
     @OnRender
     public void createMap()  {
 
-        System.out.println("your game: "+ gameID);
+        // sea should be inserted using css -> remove this line
         this.mapGrid.setStyle("-fx-background-image: url('/de/uniks/stp24/icons/sea.png')");
 
-        System.out.println(islandsService.getListOfIslands().size());
-
-        islandsService.getListOfIslands().stream().forEach(
+        islandsService.getListOfIslands().forEach(
           island -> {
               IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
                 app.initAndRender(new IslandComponent())
@@ -152,11 +150,14 @@ public class InGameController extends BasicController {
           }
         );
 
+        //todo draw connections
+
     }
 
     public void showCoordinates(MouseEvent mouseEvent) {
-
+        // todo select island to show info
     }
+
     @OnDestroy
     public void destroy() {
         islandComponentList.forEach(IslandComponent::destroy);

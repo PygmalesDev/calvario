@@ -13,7 +13,6 @@ import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import java.awt.*;
 import java.util.Locale;
-import java.util.Map;
 import java.util.logging.Level;
 
 import static javafx.scene.input.KeyEvent.KEY_PRESSED;
@@ -64,11 +63,7 @@ public class App extends FulibFxApp {
             Locale.setDefault(Locale.ENGLISH);
             // open normal load screen or autoLogin screen depending on the preferences of the user
 
-            if (component.loginService().autoLogin()) {
-                show("/load", Map.of("autologin",true));
-            } else {
-                show("/load", Map.of("autologin",false));
-            }
+            show("/load");
 
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "An error occurred while starting the application: " + e.getMessage(), e);

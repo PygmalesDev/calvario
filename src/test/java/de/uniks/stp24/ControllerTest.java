@@ -37,7 +37,8 @@ public class ControllerTest extends ApplicationTest {
     public void start(Stage stage) throws Exception {
         super.start(stage);
         this.stage = stage;
-        if(prefService != null){
+
+        if (prefService != null) {
             stage.setX(0);
             stage.setY(0);
             prefService.setLocale(Locale.ENGLISH);
@@ -45,6 +46,7 @@ public class ControllerTest extends ApplicationTest {
         }
         testComponent = (TestComponent) DaggerTestComponent.builder().mainApp(app).build();
         app.setComponent(testComponent);
+
         app.start(stage);
         stage.requestFocus();
         stage.getScene().getStylesheets().clear();
@@ -66,6 +68,7 @@ public class ControllerTest extends ApplicationTest {
     public static void tearDown() {
         Mockito.framework().clearInlineMocks();
     }
+
     @AfterEach
     public void tearDown2() {
         System.gc();

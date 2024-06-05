@@ -20,26 +20,17 @@ public class LoginService {
     public LoginService() {
     }
 
-    public boolean autoLogin() {
-        // checks if user wants to login automatically: there is a refreshToken if the user selected remember me before
-        final String refreshToken = prefService.getRefreshToken();
-        if (refreshToken == null || System.getenv("DISABLE_AUTO_LOGIN") != null) {
-            // no automatic login possible
-            return false;
-        }
-        try {
-            // login with saved refreshToken
-            final LoginResult result = authApiService.refresh(new RefreshDto(refreshToken)).blockingFirst();
-            tokenStorage.setToken(result.accessToken());
-            tokenStorage.setUserId(result._id());
-            tokenStorage.setName(result.name());
-            tokenStorage.setAvatar(result.avatar());
-            prefService.setRefreshToken(result.refreshToken());
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    public Observable<LoginResult> autologin(String refreshToken) {
+        return authApiService.refresh(new RefreshDto(refreshToken))
+                .doOnNext(loginResult -> {
+                    tokenStorage.setToken(loginResult.accessToken());
+                    tokenStorage.setUserId(loginResult._id());
+                    tokenStorage.setName(loginResult.name());
+                    tokenStorage.setAvatar(loginResult.avatar());
+                    prefService.setRefreshToken(loginResult.refreshToken());
+                }
+
+    );
     }
 
 

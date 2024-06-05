@@ -5,7 +5,7 @@
 ## Conventional Checklist
 - [] Code documentation (comments)?
 - [] Consistent Code Style?
-- [] Delete Unused Code?
+- [] No Unused Code?
 - [] No Errors?
 - [] No Warnings?
 
@@ -16,5 +16,7 @@
 - [] Windows
 - [] MacOS
 - [] Linux
+
+## How would you rate the difficulty of this task (as a Fibonacci number e.g., 1, 2, 3, 5, 8, ...)?
 
 ## Other Information

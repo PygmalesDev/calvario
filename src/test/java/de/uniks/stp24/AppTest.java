@@ -39,6 +39,7 @@ import static org.testfx.api.FxAssert.verifyThat;
 
 
 public class AppTest extends ControllerTest {
+
     private LoginService loginService;
     private AuthApiService authApiService;
     private GamesApiService gamesApiService;
@@ -118,7 +119,6 @@ public class AppTest extends ControllerTest {
         doReturn(Observable.just(new MemberDto(true, user._id(), null, null))).when(lobbyService).updateMember(game3._id(), user._id(), true, null);
 
         doReturn(true).when(createGameService).nameIsAvailable("AwesomeLobby123");
-
         doAnswer(new Answer<Observable<User>>() {
             @Override
             public Observable<User> answer(InvocationOnMock invocation) throws Throwable {

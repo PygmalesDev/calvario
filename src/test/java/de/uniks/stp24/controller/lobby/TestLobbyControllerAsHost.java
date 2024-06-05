@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.LobbyController;
-import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.MemberDto;
+import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.dto.UpdateGameResultDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.*;
@@ -186,9 +186,8 @@ public class TestLobbyControllerAsHost extends ControllerTest {
                         true, 1, 0, new GameSettings(1)))).when(this.editGameService).startGame(any());
 
 
-        doReturn(Observable.just(new EmpireDto[]{new EmpireDto("1","a","testEmpireID", "testGameID",
-                "testGameHostID","testGame","a","a",1, 2, "a",
-                new String[]{"1"}, Map.of("energy",3) , null)})).when(this.empireService).getEmpires(any());
+        doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", "testGameID",
+                "testGameHostID","testGame","a","a",1, 2, "a")})).when(this.empireService).getEmpires(any());
 
 
         WaitForAsyncUtils.waitForFxEvents();
@@ -211,8 +210,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         assertFalse(lookup("#startJourneyButton").queryButton().isDisabled());
         clickOn("#startJourneyButton");
         waitForFxEvents();
-        assertEquals("Ingame",stage.getTitle());
-        //verify(this.app, times(1)).show("/ingame");
+        verify(this.app, times(1)).show("/ingame");
 
     }
 

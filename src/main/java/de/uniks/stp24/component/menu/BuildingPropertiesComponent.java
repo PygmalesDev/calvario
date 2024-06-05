@@ -54,9 +54,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
     public void destroy(){
-        subscriber.subscribe(resourcesService.destroyBuilding(), result -> {
-            onClose();
-        });
+//        subscriber.subscribe(resourcesService.destroyBuilding(lobbyHostSettingsComponent.gameID, tokenStorage.getUserId()), result -> {
+//            onClose();
+//        });
     }
 
     public void onClose(){

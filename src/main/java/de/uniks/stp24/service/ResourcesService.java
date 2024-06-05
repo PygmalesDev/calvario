@@ -2,6 +2,7 @@ package de.uniks.stp24.service;
 
 import de.uniks.stp24.dto.CreateSystemsDto;
 import de.uniks.stp24.dto.CreateSystemsResultDto;
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import io.reactivex.rxjava3.core.Observable;
@@ -13,6 +14,10 @@ public class ResourcesService {
 
     @Inject
     GameSystemsApiService gameSystemsApiService;
+    @Inject
+    public ResourcesService() {
+
+    }
 
     public boolean hasEnoughResources(Map<Resource, Integer> resourceMap){
         return false;
@@ -23,6 +28,8 @@ public class ResourcesService {
     }
 
 //    public Observable<CreateSystemsResultDto> destroyBuilding(String gameID, String ownerID) {
+//        Observable<CreateSystemsResultDto> system = gameSystemsApiService.getCertainSystem(gameID, ownerID);
+//
 //        return gameSystemsApiService.updateIsland(new CreateSystemsDto());
 //    }
 

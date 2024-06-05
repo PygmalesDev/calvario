@@ -21,6 +21,9 @@ public interface GameSystemsApiService {
     @GET("games/{game}/systems/{id}")
     Observable<Island> getCertainIsland(@Path("game") String gameID, @Path("id") String ownerID);
 
+    @GET("games/{game}/systems/{id}")
+    Observable<CreateSystemsResultDto> getCertainSystem(@Path("game") String gameID, @Path("id") String ownerID);
+
     @PATCH("games/{game}/systems/{id}")
     Observable<CreateSystemsResultDto> updateIsland(@Path("game") String gameID, @Path("id") String ownerID, @Body CreateSystemsDto dto);
 }

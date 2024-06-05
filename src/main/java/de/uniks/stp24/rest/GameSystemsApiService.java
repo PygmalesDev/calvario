@@ -1,6 +1,7 @@
 package de.uniks.stp24.rest;
 
 import de.uniks.stp24.dto.CreateSystemsDto;
+import de.uniks.stp24.dto.CreateSystemsResultDto;
 import de.uniks.stp24.model.Island;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.Body;
@@ -21,5 +22,5 @@ public interface GameSystemsApiService {
     Observable<Island> getCertainIsland(@Path("game") String gameID, @Path("id") String ownerID);
 
     @PATCH("games/{game}/systems/{id}")
-    Observable<CreateSystemsDto> updateIsland(@Path("game") String gameID, @Path("id") String ownerID, @Body CreateSystemsDto dto);
+    Observable<CreateSystemsResultDto> updateIsland(@Path("game") String gameID, @Path("id") String ownerID, @Body CreateSystemsDto dto);
 }

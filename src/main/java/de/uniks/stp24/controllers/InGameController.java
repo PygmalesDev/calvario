@@ -51,6 +51,7 @@ public class InGameController extends BasicController {
     List<IslandComponent> islandComponentList = new ArrayList<>();
     @Inject
     Subscriber subscriber;
+    boolean pause = false;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
@@ -93,8 +94,9 @@ public class InGameController extends BasicController {
 
     private void handlePauseChanged(PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
-            Boolean paused = (Boolean) propertyChangeEvent.getNewValue();
-            if (paused) {
+//            Boolean paused = (Boolean) propertyChangeEvent.getNewValue();
+            pause = (Boolean) propertyChangeEvent.getNewValue();
+            if (pause) {
                 pauseGame();
             } else {
                 resumeGame();
@@ -110,8 +112,15 @@ public class InGameController extends BasicController {
 
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
+        pause = !pause;
         inGameService.setShowSettings(false);
-        inGameService.setPaused(!inGameService.getPaused());
+        inGameService.setPaused(pause);
+        if (pause) {pauseGame();}
+        else {resumeGame();}
+    }
+    @OnKey(code = KeyCode.P)
+    public void test(){
+
     }
     public void showSettings() {
         pauseMenuContainer.getChildren().remove(pauseMenuComponent);
@@ -122,13 +131,12 @@ public class InGameController extends BasicController {
         pauseMenuContainer.getChildren().remove(settingsComponent);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
     }
-
     public void pauseGame() {
-        pauseMenuContainer.setVisible(true);
+        pauseMenuContainer.setVisible(pause);
     }
 
     public void resumeGame() {
-        pauseMenuContainer.setVisible(false);
+        pauseMenuContainer.setVisible(pause);
     }
 
 

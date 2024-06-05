@@ -43,17 +43,15 @@ public class PauseMenuComponent extends AnchorPane {
 
     }
 
-    @OnKey(code = KeyCode.C)
     public void resume() {
-        if (inGameService.getPaused()) inGameService.setPaused(false);
+        if(inGameService.getPaused())inGameService.setPaused(false);
     }
 
-    public void settings() {
-        inGameService.setShowSettings(false);
+    public void settings() {inGameService.setShowSettings(false);
     }
 
     @OnKey(code = KeyCode.Q)
     public void quit() {
-        if (inGameService.getPaused()) app.show("/browseGames");
+        if(inGameService.getPaused()) app.show("/browseGames");
     }
 }

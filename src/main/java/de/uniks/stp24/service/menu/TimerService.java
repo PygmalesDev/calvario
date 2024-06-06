@@ -27,7 +27,7 @@ public class TimerService {
     final int TIME = 60;
     int countdown = TIME;
     int season;
-    int speed = 1;
+    int speed;
     boolean showFlags = false;
     private volatile boolean isRunning = false;
 
@@ -49,9 +49,14 @@ public class TimerService {
     }
 
     public void start() {
+
+        if (speed == 0) {
+            return;
+        }
+
         isRunning = true;
 
-        TimerTask task = new TimerTask() {
+        TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 if (!isRunning) {
@@ -59,13 +64,11 @@ public class TimerService {
                 }
                 if (countdown > 0) {
                     setCountdown(countdown - 1);
-                } else {
-                    setSeason(season + 1);
-                    setCountdown(TIME);
                 }
+                // if countdown == 0 -> Wait for Server response to call reset() Method
             }
         };
-        timer.scheduleAtFixedRate(task, 0, 1000 / speed);
+        timer.scheduleAtFixedRate(timerTask, 0, 1000 / speed);
     }
 
     public void stop() {
@@ -80,6 +83,10 @@ public class TimerService {
         isRunning = true;
         timer = new Timer();
         start();
+    }
+
+    public void reset() {
+        setCountdown(TIME);
     }
 
     public int getSeason() {

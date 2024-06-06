@@ -8,7 +8,6 @@ import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.ImageCache;
-import de.uniks.stp24.service.LobbyService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;

@@ -2,15 +2,16 @@ package de.uniks.stp24.component;
 
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.menu.TimerService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
-import javafx.scene.image.Image;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
@@ -18,7 +19,6 @@ import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
@@ -42,20 +42,23 @@ public class ClockComponent extends AnchorPane {
     @FXML
     AnchorPane anchor;
     @FXML
-    Button x1Button;
+    ToggleGroup speed;
     @FXML
-    Button x2Button;
+    RadioButton x1Button;
     @FXML
-    Button x3Button;
+    RadioButton x2Button;
     @FXML
-    ToggleButton pauseClockButton;
+    RadioButton x3Button;
+    @FXML
+    RadioButton pauseClockButton;
     @FXML
     Label seasonLabel;
     @FXML
     Label countdownLabel;
 
-    @Param("gameid")
     String gameId;
+
+    ImageCache imageCache = new ImageCache();
 
     @Inject
     TokenStorage tokenStorage;
@@ -76,6 +79,8 @@ public class ClockComponent extends AnchorPane {
     @OnInit
     public void init() {
 
+        gameId = tokenStorage.getGameId();
+
         createUpdateSeasonListener();
         createUpdateSpeedListener();
 
@@ -95,13 +100,27 @@ public class ClockComponent extends AnchorPane {
         this.getStylesheets().add(css);
 
         // adding spectator sign
-        if (!tokenStorage.isSpectator()) {
-            spectatorImage.setImage(new Image("de/uniks/stp24/gameIcons/spectatorSign.png"));
+        if (tokenStorage.isSpectator()) {
+            spectatorImage.setImage(imageCache.get("gameIcons/spectatorSign.png"));
         }
 
         subscriber.subscribe(gamesApiService.getGame(gameId),
                 // Set Clock and Season for the current Game
                 game -> {
+                    switch (game.speed()) {
+                        case 0:
+                            pauseClockButton.setSelected(true);
+                            break;
+                        case 1:
+                            x1Button.setSelected(true);
+                            break;
+                        case 2:
+                            x2Button.setSelected(true);
+                            break;
+                        case 3:
+                            x3Button.setSelected(true);
+                            break;
+                    }
                     timerService.setSpeedLocal(game.speed());
                     timerService.setSeason(game.period());
                 });
@@ -122,7 +141,7 @@ public class ClockComponent extends AnchorPane {
             });
 
         // Dummy data for special Event
-        randomEventImage.setImage(new Image("de/uniks/stp24/assets/events/goodEvent.png"));
+        randomEventImage.setImage(imageCache.get("assets/events/goodEvent.png"));
         remainingSeasonsLabel.setText("3");
     }
 
@@ -136,14 +155,19 @@ public class ClockComponent extends AnchorPane {
         if (subscriber != null) {
             subscriber.dispose();
         }
+        timerService.stop();
     }
+
+    /////////////---------------------------------------WS-EventListeners---------------------------------//////////////
 
     public void createUpdateSeasonListener() {
         subscriber.subscribe(this.eventListener
                 .listen("games." + gameId + ".ticked", Game.class),
                 event -> {
+                    System.out.println("Season changed");
                     Game game = event.data();
                     timerService.setSeason(game.period());
+                    timerService.reset();
                 },
                 error -> System.out.println("Error bei Season: " + error.getMessage()));
     }
@@ -152,11 +176,14 @@ public class ClockComponent extends AnchorPane {
         subscriber.subscribe(this.eventListener
                 .listen("games." + gameId + ".updated", Game.class),
                 event -> {
+                    System.out.println("Update Speed");
                     Game game = event.data();
                     timerService.setSpeedLocal(game.speed());
                 },
                 error -> System.out.println("Error bei Speed: " + error.getMessage()));
     }
+
+    ///////////////--------------------------------------------onAction------------------------------------/////////////
 
     public void showFlags() {
         timerService.setShowFlags(!timerService.getShowFlags());
@@ -184,9 +211,18 @@ public class ClockComponent extends AnchorPane {
         changingSpeed(1);
     }
 
+    ////////////--------------------------------Auxiliary Methods-----------------------------------------//////////////
+
     private String translateCountdown(int countdown) {
         String suffix = (countdown % 60) < 10 ? "0" : "";
         return (countdown / 60) + ":" + suffix + (countdown % 60);
+    }
+
+    // Set size of seasonLabel in case of long season number
+    private void setSeasonLabelSize() {
+        if (timerService.getSeason() > 999) {
+            seasonLabel.setStyle("-fx-font-size: 15px;");
+        }
     }
 
     public void changingSpeed(int speed) {
@@ -198,9 +234,12 @@ public class ClockComponent extends AnchorPane {
         }
     }
 
+    ////////////--------------------------------PropertyChangeListener------------------------------------//////////////
+
     private void handleSeasonChanged(PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             int season = (int) propertyChangeEvent.getNewValue();
+            setSeasonLabelSize();
             Platform.runLater(() -> seasonLabel.setText(String.valueOf(season)));
         }
     }

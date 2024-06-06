@@ -1,7 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.menu.BubbleComponent;
-import de.uniks.stp24.service.LoginService;
+import de.uniks.stp24.service.menu.LoginService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;

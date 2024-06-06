@@ -8,9 +8,9 @@
  import de.uniks.stp24.model.GangElement;
  import de.uniks.stp24.rest.GameMembersApiService;
  import de.uniks.stp24.service.ImageCache;
- import de.uniks.stp24.service.LobbyService;
  import de.uniks.stp24.service.SaveLoadService;
  import de.uniks.stp24.service.TokenStorage;
+ import de.uniks.stp24.service.menu.LobbyService;
  import javafx.collections.FXCollections;
  import javafx.collections.ObservableList;
  import javafx.scene.control.TextArea;

@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.service.ImageCache;
@@ -17,24 +18,31 @@ import javax.inject.Inject;
 
 @Component(view = "IslandComponent.fxml")
 public class IslandComponent extends Pane {
-    @Inject
-    ImageCache imageCache;
+    @FXML
+    public ImageView rudderImage;
     @FXML
     ImageView islandImage;
     @FXML
-    StackPane flagPane;
+    public StackPane flagPane;
     @FXML
     ImageView flagImage;
+    @Inject
+    ImageCache imageCache;
+
+    private InGameController inGameController;
     private Island island;
-    double x ,y ;
+    double x, y;
+    public boolean islandIsSelected = false;
+
+
     // images as placeholder for flags (instead color?)
     final String[] flags = {
-      "847.png", "863.png", "911.png", "927.png", "959.png"
+            "847.png", "863.png", "911.png", "927.png", "959.png"
     };
 
     @Inject
-    public IslandComponent(){
-        if(this.imageCache == null) {
+    public IslandComponent() {
+        if (this.imageCache == null) {
             this.imageCache = new ImageCache();
         }
         this.islandImage = new ImageView();
@@ -42,18 +50,18 @@ public class IslandComponent extends Pane {
     }
 
     // an icon should be used depending on island type
-    public void applyIcon(IslandType type){
+    public void applyIcon(IslandType type) {
         String pathToIcon = "icons/islands/";
         pathToIcon += type.name() + ".png";
         this.islandImage.setImage(imageCache.get(pathToIcon));
     }
 
-    public void setFlagImage(int flag){
+    public void setFlagImage(int flag) {
         this.flagImage
-          .setImage(imageCache.get("test/" + flags[flag]));
+                .setImage(imageCache.get("test/" + flags[flag]));
     }
 
-    public void applyInfo(Island islandInfo){
+    public void applyInfo(Island islandInfo) {
         this.island = islandInfo;
         applyIcon(this.island.type());
     }
@@ -67,14 +75,17 @@ public class IslandComponent extends Pane {
 
     public double getPosX() {
 //        this.x = island.posX();
-        return this.x;}
+        return this.x;
+    }
+
     public double getPosY() {
 //          this.y = island.posY();
-        return this.y;}
+        return this.y;
+    }
 
     // switch the visibility of all flags
     @OnKey(code = KeyCode.A, shift = true)
-    public void showFlag(){
+    public void showFlag() {
         this.flagPane.setVisible(!this.flagPane.isVisible());
     }
 
@@ -85,8 +96,44 @@ public class IslandComponent extends Pane {
         this.flagPane.setVisible(!this.flagPane.isVisible());
     }
 
+    public void showRudder() {
+        rudderImage.setVisible(true);
+
+    }
+
+    public void unshowRudder() {
+        if (!islandIsSelected) {
+            rudderImage.setVisible(false);
+        }
+    }
+
+    public void showIslandOverview() {
+        if (inGameController.selectedIsland != null && inGameController.selectedIsland != this) {
+            inGameController.selectedIsland.rudderImage.setVisible(false);
+            inGameController.selectedIsland.islandIsSelected = false;
+            inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
+            inGameController.selectedIsland = null;
+        } else if (inGameController.selectedIsland == this) {
+            inGameController.overviewContainer.setVisible(false);
+            this.rudderImage.setVisible(false);
+            this.islandIsSelected = false;
+            this.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
+            inGameController.selectedIsland = null;
+            return;
+        }
+
+        islandIsSelected = true;
+        showInfo();
+        inGameController.showOverview();
+        inGameController.selectedIsland = this;
+    }
+
+    public void setInGameController(InGameController inGameController) {
+        this.inGameController = inGameController;
+    }
+
     @OnDestroy
-    public void destroy(){
+    public void destroy() {
         flagImage = null;
         islandImage = null;
     }

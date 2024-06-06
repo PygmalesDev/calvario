@@ -58,10 +58,4 @@ public class InGameService {
             node.setVisible(node == nodeToShow);
         }
     }
-
-    public Observable<List<Island>> getAllIslands(String gameID) {
-        return this.gameSystemsApiService.getAllIslands(gameID);
-    }
-
-
 }

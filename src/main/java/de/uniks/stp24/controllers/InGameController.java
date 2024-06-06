@@ -1,31 +1,25 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.OverviewSitesComponent;
 import de.uniks.stp24.component.game.OverviewUpgradeComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.LobbyHostSettingsComponent;
-
-import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
-
+import de.uniks.stp24.service.IslandsService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
-import de.uniks.stp24.service.IslandsService;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
-
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
@@ -33,8 +27,6 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
-
-import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -50,8 +42,6 @@ import java.util.Objects;
 public class InGameController extends BasicController {
     @FXML
     public StackPane overviewContainer;
-    @FXML
-    public Pane rudder_pain;
     @FXML
     ScrollPane mapPane;
     @FXML
@@ -90,18 +80,20 @@ public class InGameController extends BasicController {
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
 
+    @Inject
+    IslandsService islandsService;
+    @Inject
+    Subscriber subscriber;
+
+    public IslandComponent selectedIsland;
+
+    boolean pause = false;
+    List<IslandComponent> islandComponentList = new ArrayList<>();
     String gameID;
     String empireID;
 
-    @Inject
-    IslandsService islandsService;
-    List<IslandComponent> islandComponentList = new ArrayList<>();
-    @Inject
-    Subscriber subscriber;
-    boolean pause = false;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
-    public boolean islandClicked = false;
 
     @Inject
     public InGameController() {
@@ -162,7 +154,6 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void render() {
-        rudder_pain.setVisible(false);
         overviewSitesComponent.setIngameController(this);
         overviewUpgradeComponent.setIngameController(this);
         pauseMenuContainer.setVisible(false);
@@ -220,6 +211,8 @@ public class InGameController extends BasicController {
               );
               tmp.setLayoutX(tmp.getPosX());
               tmp.setLayoutY(tmp.getPosY());
+              tmp.rudderImage.setVisible(false);
+              tmp.setInGameController(this);
               islandComponentList.add(tmp);
               this.mapGrid.getChildren().add(tmp);
           }
@@ -241,7 +234,6 @@ public class InGameController extends BasicController {
     }
 
     public void showOverview() {
-        islandClicked = true;
         overviewContainer.setVisible(true);
         overviewSitesComponent.sitesContainer.setVisible(true);
         overviewSitesComponent.sitesButton.setDisable(true);
@@ -249,26 +241,11 @@ public class InGameController extends BasicController {
         inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.sitesComponent);
     }
 
-    public void showRudder() {
-        if (!islandClicked) {
-            rudder_pain.setVisible(true);
-        }
-    }
-
-    public void unshowRudder() {
-        if (!islandClicked) {
-            rudder_pain.setVisible(false);
-        }
-
-        this.subscriber.dispose();
-    }
-
     public void showStorage() {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
     public void showIslandOverview() {
-
 
     }
 }

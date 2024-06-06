@@ -41,6 +41,8 @@ public class OverviewSitesComponent extends AnchorPane {
 
     @Inject
     public InGameService inGameService;
+    @Inject
+    public IslandComponent islandComponent;
 
     private InGameController inGameController;
 
@@ -85,9 +87,11 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void closeOverview(){
-        inGameController.islandClicked = false;
-        inGameController.rudder_pain.setVisible(false);
         inGameController.overviewContainer.setVisible(false);
+        inGameController.selectedIsland.rudderImage.setVisible(false);
+        inGameController.selectedIsland.islandIsSelected = false;
+        inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
+        inGameController.selectedIsland = null;
     }
 
 }

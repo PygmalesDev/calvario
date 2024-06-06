@@ -8,10 +8,12 @@ import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandsService;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -33,6 +35,8 @@ import java.util.*;
 @Title("CALVARIO")
 @Controller
 public class InGameController extends BasicController {
+    public Button showStorageButton;
+    public Button showIslandButton;
     @FXML
     ScrollPane mapPane;
     @FXML
@@ -41,10 +45,8 @@ public class InGameController extends BasicController {
     StackPane zoomPane;
     @FXML
     StackPane pauseMenuContainer;
-    @FXML
-    StackPane storageOverviewContainer;
-
-
+//    @FXML
+//    StackPane storageOverviewContainer;
     @Inject
     InGameService inGameService;
     @Inject
@@ -53,6 +55,8 @@ public class InGameController extends BasicController {
     LobbyService lobbyService;
     @Inject
     EmpireService empireService;
+    @Param("test")
+    String test;
 
     @SubComponent
     @Inject
@@ -60,18 +64,21 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public SettingsComponent settingsComponent;
+    @Inject
+    TokenStorage tokenStorage;
 
+    String gameID;
     @Inject
     IslandsService islandsService;
-    String gameID;
     List<IslandComponent> islandComponentList = new ArrayList<>();
     @Inject
     Subscriber subscriber;
     boolean pause = false;
 
 
-    @SubComponent
-    public StorageOverviewComponent storageOverviewComponent;
+//    @SubComponent
+//    @Inject
+//    public StorageOverviewComponent storageOverviewComponent;
 
     String empireID;
 
@@ -140,8 +147,8 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setVisible(false);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
 
-        storageOverviewContainer.setVisible(false);
-        storageOverviewContainer.getChildren().add(storageOverviewComponent);
+//        storageOverviewContainer.setVisible(false);
+//        storageOverviewContainer.getChildren().add(storageOverviewComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -152,10 +159,7 @@ public class InGameController extends BasicController {
         if (pause) {pauseGame();}
         else {resumeGame();}
     }
-    @OnKey(code = KeyCode.P)
-    public void test(){
 
-    }
     public void showSettings() {
         pauseMenuContainer.getChildren().remove(pauseMenuComponent);
         pauseMenuContainer.getChildren().add(settingsComponent);
@@ -180,7 +184,7 @@ public class InGameController extends BasicController {
         // sea should be inserted using css -> remove this line
         this.mapGrid.setStyle("-fx-background-image: url('/de/uniks/stp24/icons/sea.png')");
 
-        islandsService.getListOfIslands().forEach(
+       /* islandsService.getListOfIslands().forEach(
           island -> {
               IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
                 app.initAndRender(new IslandComponent())
@@ -190,7 +194,7 @@ public class InGameController extends BasicController {
               islandComponentList.add(tmp);
               this.mapGrid.getChildren().add(tmp);
           }
-        );
+        );*/
 
         //todo draw connections
 
@@ -208,9 +212,9 @@ public class InGameController extends BasicController {
         this.subscriber.dispose();
     }
 
-    public void showStorage() {
-        storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
-    }
+//    public void showStorage() {
+//        storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
+//    }
 
     public void showIslandOverview() {
 

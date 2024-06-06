@@ -22,9 +22,13 @@ public class IslandsService {
     GameSystemsApiService gameSystemsService;
     @Inject
     ErrorService errorService;
+    @Inject
+    TokenStorage tokenStorage;
 
     private final List<Island> isles = new ArrayList<>();
     // private final Map<String, List<String>>  = new HashMap<>();
+
+    // after development is ready remove this
     static final RandomGenerator randomGenerator = new Random(1234);
 
     @Inject
@@ -50,8 +54,7 @@ public class IslandsService {
                         data.upgrade().ordinal());
                     isles.add(tmp);
                 });
-                System.out.println(isles.size() + " islands generated");
-                this.app.show("/ingame", Map.of("gameID", gameID));
+                this.app.show("/ingame");
             },
           error -> errorService.getStatus(error));
     }

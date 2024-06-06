@@ -108,12 +108,12 @@ public class LobbyHostSettingsComponent extends AnchorPane {
                     for(ReadEmpireDto data :dto){
                         if (data.user().equals(tokenStorage.getUserId())) {
                             this.tokenStorage.setEmpireId(data._id());
-                            this.app.show("/ingame");
                         }
                     }
+                    System.out.println("RESOURCES READY");
                 },
                 error -> {});
-            islandsService.retrieveIslands(this.gameID);
+            islandsService.retrieveIslands(gameID);
             this.startJourneyButton.setDisable(true);
             this.readyButton.setDisable(true);
             },

@@ -1,11 +1,11 @@
 package de.uniks.stp24.service;
 
-import de.uniks.stp24.dto.CreateSystemsDto;
-import de.uniks.stp24.dto.CreateSystemsResultDto;
-import de.uniks.stp24.model.Island;
+import de.uniks.stp24.dto.SystemsDto;
+import de.uniks.stp24.dto.SystemsResultDto;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import io.reactivex.rxjava3.core.Observable;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -14,6 +14,9 @@ public class ResourcesService {
 
     @Inject
     GameSystemsApiService gameSystemsApiService;
+
+    @Inject
+    Subscriber subscriber;
     @Inject
     public ResourcesService() {
 
@@ -27,11 +30,9 @@ public class ResourcesService {
 
     }
 
-//    public Observable<CreateSystemsResultDto> destroyBuilding(String gameID, String ownerID) {
-//        Observable<CreateSystemsResultDto> system = gameSystemsApiService.getCertainSystem(gameID, ownerID);
-//
-//        return gameSystemsApiService.updateIsland(new CreateSystemsDto());
-//    }
+    public Observable<SystemsResultDto> destroyBuilding(String gameID, String ownerID) {
+        return gameSystemsApiService.updateIsland(new SystemsDto());
+    }
 
     /*
     Click logik:

@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.menu;
 
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.ResourcesService;
 import de.uniks.stp24.service.TokenStorage;
@@ -16,6 +17,8 @@ import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component(view = "BuildingProperties.fxml")
 public class BuildingPropertiesComponent extends AnchorPane {
@@ -48,15 +51,17 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @Inject
     TokenStorage tokenStorage;
 
+    public List<Island> islands = new ArrayList<>();
+
     @Inject
     public BuildingPropertiesComponent(){
 
     }
 
     public void destroy(){
-//        subscriber.subscribe(resourcesService.destroyBuilding(lobbyHostSettingsComponent.gameID, tokenStorage.getUserId()), result -> {
-//            onClose();
-//        });
+        subscriber.subscribe(resourcesService.destroyBuilding(lobbyHostSettingsComponent.gameID, tokenStorage.getUserId()), result -> {
+            onClose();
+        });
     }
 
     public void onClose(){

@@ -5,7 +5,7 @@ import de.uniks.stp24.model.IslandType;
 import java.util.ArrayList;
 import java.util.Map;
 
-public record CreateSystemsResultDto(
+public record SystemsResultDto(
         String createdAt,
         String updatedAt,
         String _id,

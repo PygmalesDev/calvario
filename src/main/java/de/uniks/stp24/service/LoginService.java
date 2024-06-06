@@ -28,9 +28,7 @@ public class LoginService {
                     tokenStorage.setName(loginResult.name());
                     tokenStorage.setAvatar(loginResult.avatar());
                     prefService.setRefreshToken(loginResult.refreshToken());
-                }
-
-    );
+                });
     }
 
 

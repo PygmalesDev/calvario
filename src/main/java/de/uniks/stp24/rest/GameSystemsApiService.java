@@ -1,5 +1,12 @@
 package de.uniks.stp24.rest;
 
+import de.uniks.stp24.dto.SystemDto;
+import io.reactivex.rxjava3.core.Observable;
+import retrofit2.http.*;
+
+public interface GameSystemsApiService {
+    @GET("games/{game}/systems")
+    Observable<SystemDto[]> getSystems(@Path("game") String gameID);
 import de.uniks.stp24.dto.SystemsDto;
 import de.uniks.stp24.dto.SystemsResultDto;
 import de.uniks.stp24.model.Island;

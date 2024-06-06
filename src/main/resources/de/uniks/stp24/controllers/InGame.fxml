@@ -11,6 +11,12 @@
          <Font size="72.0" />
       </font>
    </Text>
+   <ScrollPane fx:id="mapPane" pannable="true" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: LIGHTBLUE;" HBox.hgrow="ALWAYS">
+            <StackPane fx:id="zoomPane" prefHeight="1161.0" prefWidth="1652.0" style="-fx-background-color: TRANSPARENT;">
+                <Pane fx:id="mapGrid" onMouseClicked="#showCoordinates" prefHeight="1200.0" prefWidth="1800.0" style="-fx-background-color: LIGHTBLUE;">
+                </Pane>
+            </StackPane>
+        </ScrollPane>
    <StackPane fx:id="pauseMenuContainer" layoutX="440.0" layoutY="40.0" prefHeight="600.0" prefWidth="400.0" style=": ;" visible="false" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="440.0" AnchorPane.rightAnchor="440.0" AnchorPane.topAnchor="40.0" />
    <StackPane fx:id="overviewContainer" prefHeight="600.0" prefWidth="400.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="850.0" AnchorPane.topAnchor="40.0" />
    <StackPane fx:id="buildingsWindow" layoutX="650.0" layoutY="40.0" prefHeight="350.0" prefWidth="200.0" AnchorPane.bottomAnchor="290.0" AnchorPane.leftAnchor="650.0" AnchorPane.rightAnchor="430.0" AnchorPane.topAnchor="40.0" />

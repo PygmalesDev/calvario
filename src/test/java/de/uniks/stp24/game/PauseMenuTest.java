@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 
 import javax.inject.Provider;
+import java.security.Key;
 import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -102,7 +103,8 @@ public class PauseMenuTest extends ControllerTest {
 
         press(KeyCode.ESCAPE);
         waitForFxEvents();
-        clickOn("#quitButton");
+        press(KeyCode.Q);
+//        clickOn("#quitButton");
         waitForFxEvents();
 
         verify(app, times(1)).show("/browseGames");

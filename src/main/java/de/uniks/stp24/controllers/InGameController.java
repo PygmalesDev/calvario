@@ -5,15 +5,26 @@ import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.PopupBuilder;
+import de.uniks.stp24.component.game.IslandComponent;
+import de.uniks.stp24.component.menu.PauseMenuComponent;
+import de.uniks.stp24.component.menu.SettingsComponent;
+import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.records.GameListenerTriple;
+import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.IslandsService;
 import javafx.fxml.FXML;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.StackPane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.param.Param;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
@@ -26,6 +37,11 @@ import java.util.Objects;
 @Controller
 public class InGameController extends BasicController {
     @FXML
+    ScrollPane mapPane;
+    @FXML
+    Pane mapGrid;
+    @FXML
+    StackPane zoomPane;
     StackPane siteProperties;
     @FXML
     StackPane buildingProperties;
@@ -56,6 +72,14 @@ public class InGameController extends BasicController {
 
     @Inject
     InGameService inGameService;
+    @Inject
+    IslandsService islandsService;
+    @Param("gameID")
+    String gameID;
+    List<IslandComponent> islandComponentList = new ArrayList<>();
+    @Inject
+    Subscriber subscriber;
+    boolean pause = false;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
@@ -71,6 +95,7 @@ public class InGameController extends BasicController {
     @OnInit
     public void init() {
         GameStatus gameStatus = inGameService.getGame();
+
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_PAUSED"));
@@ -82,6 +107,7 @@ public class InGameController extends BasicController {
         PropertyChangeListener callHandleLanguageChanged = this::handleLanguageChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_LANGUAGE, callHandleLanguageChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
+
     }
 
     private void handleLanguageChanged(PropertyChangeEvent propertyChangeEvent) {
@@ -101,8 +127,9 @@ public class InGameController extends BasicController {
 
     private void handlePauseChanged(PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
-            Boolean paused = (Boolean) propertyChangeEvent.getNewValue();
-            if (paused) {
+//            Boolean paused = (Boolean) propertyChangeEvent.getNewValue();
+            pause = (Boolean) propertyChangeEvent.getNewValue();
+            if (pause) {
                 pauseGame();
             } else {
                 resumeGame();
@@ -125,8 +152,15 @@ public class InGameController extends BasicController {
 
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
+        pause = !pause;
         inGameService.setShowSettings(false);
-        inGameService.setPaused(!inGameService.getPaused());
+        inGameService.setPaused(pause);
+        if (pause) {pauseGame();}
+        else {resumeGame();}
+    }
+    @OnKey(code = KeyCode.P)
+    public void test(){
+
     }
     public void showSettings() {
         pauseMenuContainer.getChildren().remove(pauseMenuComponent);
@@ -137,17 +171,44 @@ public class InGameController extends BasicController {
         pauseMenuContainer.getChildren().remove(settingsComponent);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
     }
-
     public void pauseGame() {
-        pauseMenuContainer.setVisible(true);
+        pauseMenuContainer.setVisible(pause);
     }
 
     public void resumeGame() {
-        pauseMenuContainer.setVisible(false);
+        pauseMenuContainer.setVisible(pause);
+    }
+
+
+    @OnRender
+    public void createMap()  {
+
+        // sea should be inserted using css -> remove this line
+        this.mapGrid.setStyle("-fx-background-image: url('/de/uniks/stp24/icons/sea.png')");
+
+        islandsService.getListOfIslands().forEach(
+          island -> {
+              IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
+                app.initAndRender(new IslandComponent())
+              );
+              tmp.setLayoutX(tmp.getPosX());
+              tmp.setLayoutY(tmp.getPosY());
+              islandComponentList.add(tmp);
+              this.mapGrid.getChildren().add(tmp);
+          }
+        );
+
+        //todo draw connections
+
+    }
+
+    public void showCoordinates(MouseEvent mouseEvent) {
+        // todo select island to show info
     }
 
     @OnDestroy
     public void destroy() {
+        islandComponentList.forEach(IslandComponent::destroy);
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
           .removePropertyChangeListener(triple.propertyName(), triple.listener()));
     }

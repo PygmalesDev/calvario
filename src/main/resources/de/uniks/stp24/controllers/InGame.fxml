@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -11,7 +13,7 @@
          <Font size="72.0" />
       </font>
    </Text>
-   <ScrollPane fx:id="mapPane" pannable="true" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: LIGHTBLUE;" HBox.hgrow="ALWAYS">
+   <ScrollPane fx:id="mapPane" pannable="true" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: LIGHTBLUE;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <StackPane fx:id="zoomPane" prefHeight="1161.0" prefWidth="1652.0" style="-fx-background-color: TRANSPARENT;">
                 <Pane fx:id="mapGrid" onMouseClicked="#showCoordinates" prefHeight="1200.0" prefWidth="1800.0" style="-fx-background-color: LIGHTBLUE;">
                 </Pane>

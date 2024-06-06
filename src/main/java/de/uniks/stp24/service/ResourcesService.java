@@ -2,6 +2,7 @@ package de.uniks.stp24.service;
 
 import de.uniks.stp24.dto.SystemsDto;
 import de.uniks.stp24.dto.SystemsResultDto;
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import io.reactivex.rxjava3.core.Observable;
@@ -30,7 +31,7 @@ public class ResourcesService {
 
     }
 
-    public Observable<SystemsResultDto> destroyBuilding(String gameID, String ownerID) {
+    public Observable<SystemsResultDto> destroyBuilding(String gameID, Island island) {
         return gameSystemsApiService.updateIsland(new SystemsDto());
     }
 

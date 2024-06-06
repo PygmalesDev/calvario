@@ -5,4 +5,18 @@
   "description" : "The feared Wicked Dukes, masters of the maritime underworld, ruled with an iron fist and a thirst for gold that knew no bounds.",
   "color" : "#F28500",
   "colorIndex" : 11
+}, {
+  "name" : "Mischievous Kings of Sunken Empire",
+  "flagIndex" : 13,
+  "portraitIndex" : 11,
+  "description" : "Under the black flag of Mischievous Kings, the oceans become a stage for daring escapades and untold riches, where every wave whispers tales of their legendary exploits.",
+  "color" : "#0F52BA",
+  "colorIndex" : 1
+}, {
+  "name" : "Anxious Captains",
+  "flagIndex" : 6,
+  "portraitIndex" : 3,
+  "description" : "In the treacherous waters of the Calvario, Anxious Captains as the most feared pirate alliance, hoarding riches and leaving a trail of chaos in its wake.",
+  "color" : "#808000",
+  "colorIndex" : 15
 } ]

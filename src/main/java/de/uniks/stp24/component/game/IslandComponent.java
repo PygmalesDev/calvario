@@ -3,16 +3,19 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnKey;
 
 import javax.inject.Inject;
+import java.util.ResourceBundle;
 
 
 @Component(view = "IslandComponent.fxml")
@@ -25,6 +28,12 @@ public class IslandComponent extends Pane {
     StackPane flagPane;
     @FXML
     ImageView flagImage;
+    @Inject
+    TokenStorage tokenStorage;
+
+    @Inject
+    @Resource
+    ResourceBundle resource;
     private Island island;
     double x ,y ;
     // images as placeholder for flags (instead color?)
@@ -81,8 +90,13 @@ public class IslandComponent extends Pane {
     // by the moment change visibility of flag (image)
     public void showInfo() {
         //TODO show info pane!
+        this.tokenStorage.setIsland(island);
         System.out.println(island.type() + " isle at " + x + ", " + y);
         this.flagPane.setVisible(!this.flagPane.isVisible());
+    }
+
+    public Island getIsland(){
+        return this.island;
     }
 
     @OnDestroy
@@ -92,4 +106,8 @@ public class IslandComponent extends Pane {
     }
 
 
+    public IslandComponent setTokenStorage(TokenStorage tokenStorage) {
+        this.tokenStorage = tokenStorage;
+        return this;
+    }
 }

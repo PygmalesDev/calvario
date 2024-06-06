@@ -1,5 +1,7 @@
 package de.uniks.stp24.service;
 
+import de.uniks.stp24.model.Island;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -9,6 +11,7 @@ public class TokenStorage {
     private String userId;
     private String name;
     private String avatar;
+    private Island island;
 
     @Inject
     public TokenStorage() {
@@ -37,4 +40,11 @@ public class TokenStorage {
     public String getAvatar() {return avatar;}
 
     public void setAvatar(String avatar) {this.avatar = avatar;}
+
+    public Island getIsland(){
+        return this.island;
+    }
+    public void setIsland(Island island){
+        this.island = island;
+    }
 }

@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.menu;
 
+import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.ResourcesService;
@@ -14,12 +15,13 @@ import net.bytebuddy.description.ByteCodeElement;
 import org.controlsfx.control.GridView;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.SubComponent;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
-
 @Component(view = "BuildingProperties.fxml")
 public class BuildingPropertiesComponent extends AnchorPane {
 
@@ -48,18 +50,27 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @Inject
     public LobbyHostSettingsComponent lobbyHostSettingsComponent;
 
+
     @Inject
     TokenStorage tokenStorage;
 
     public List<Island> islands = new ArrayList<>();
+
+    private Island island;
 
     @Inject
     public BuildingPropertiesComponent(){
 
     }
 
-    public void destroy(){
-        subscriber.subscribe(resourcesService.destroyBuilding(lobbyHostSettingsComponent.gameID, tokenStorage.getUserId()), result -> {
+    public void setIsland(Island island){
+
+    }
+
+    public void destroyBuilding(){
+        this.island = tokenStorage.getIsland();
+        System.out.println(this.island.type());
+        subscriber.subscribe(resourcesService.destroyBuilding(lobbyHostSettingsComponent.gameID, island), result -> {
             onClose();
         });
     }

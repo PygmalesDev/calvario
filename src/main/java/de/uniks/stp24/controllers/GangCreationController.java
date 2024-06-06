@@ -267,7 +267,6 @@ public class GangCreationController extends BasicController {
             popup.showPopup(deletePane, gangDeletionComponent);
             popup.setBlur(gangsListView, creationBox);
         }
-
     }
 
     public void create() {

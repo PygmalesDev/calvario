@@ -42,6 +42,7 @@ public class InGameController extends BasicController {
     Pane mapGrid;
     @FXML
     StackPane zoomPane;
+    @FXML
     StackPane siteProperties;
     @FXML
     StackPane buildingProperties;
@@ -189,7 +190,7 @@ public class InGameController extends BasicController {
         islandsService.getListOfIslands().forEach(
           island -> {
               IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
-                app.initAndRender(new IslandComponent())
+                app.initAndRender(new IslandComponent().setTokenStorage(tokenStorage))
               );
               tmp.setLayoutX(tmp.getPosX());
               tmp.setLayoutY(tmp.getPosY());

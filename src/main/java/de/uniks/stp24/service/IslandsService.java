@@ -69,12 +69,13 @@ public class IslandsService {
      * coordinate system on server has origin at screen center
      * and are not too big apply a factor 10 for increase and
      * an offset to match our screen size
+     * i set 2560 x 1440
      *  thus the size of the pane should be considered
      */
     public IslandComponent createIslandPaneFromDto(Island isleDto, IslandComponent component) {
         component.applyInfo(isleDto);
-        double offsetH = 900.0 - component.widthProperty().getValue() * 0.5;
-        double offsetV = 600.0 - component.heightProperty().getValue() * 0.5;
+        double offsetH = 1280 - component.widthProperty().getValue() * 0.5;
+        double offsetV = 720 - component.heightProperty().getValue() * 0.5;
         component.setPosition(isleDto.posX() * 6 + offsetH,
           isleDto.posY() * 6 + offsetV);
         // todo read values from dto

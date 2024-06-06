@@ -45,8 +45,8 @@ public class InGameController extends BasicController {
     StackPane zoomPane;
     @FXML
     StackPane pauseMenuContainer;
-//    @FXML
-//    StackPane storageOverviewContainer;
+    @FXML
+    StackPane storageOverviewContainer;
     @Inject
     InGameService inGameService;
     @Inject
@@ -55,9 +55,6 @@ public class InGameController extends BasicController {
     LobbyService lobbyService;
     @Inject
     EmpireService empireService;
-    @Param("test")
-    String test;
-
     @SubComponent
     @Inject
     public PauseMenuComponent pauseMenuComponent;
@@ -76,9 +73,9 @@ public class InGameController extends BasicController {
     boolean pause = false;
 
 
-//    @SubComponent
-//    @Inject
-//    public StorageOverviewComponent storageOverviewComponent;
+    @SubComponent
+    @Inject
+    public StorageOverviewComponent storageOverviewComponent;
 
     String empireID;
 
@@ -91,7 +88,7 @@ public class InGameController extends BasicController {
 
     @OnInit
     public void init() {
-
+        // is this necessary?
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
         //Todo: Outprint for Swagger - can be deleted later
@@ -147,8 +144,8 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setVisible(false);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
 
-//        storageOverviewContainer.setVisible(false);
-//        storageOverviewContainer.getChildren().add(storageOverviewComponent);
+        storageOverviewContainer.setVisible(false);
+        storageOverviewContainer.getChildren().add(storageOverviewComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -184,7 +181,7 @@ public class InGameController extends BasicController {
         // sea should be inserted using css -> remove this line
         this.mapGrid.setStyle("-fx-background-image: url('/de/uniks/stp24/icons/sea.png')");
 
-       /* islandsService.getListOfIslands().forEach(
+        islandsService.getListOfIslands().forEach(
           island -> {
               IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
                 app.initAndRender(new IslandComponent())
@@ -194,7 +191,7 @@ public class InGameController extends BasicController {
               islandComponentList.add(tmp);
               this.mapGrid.getChildren().add(tmp);
           }
-        );*/
+        );
 
         //todo draw connections
 
@@ -212,9 +209,10 @@ public class InGameController extends BasicController {
         this.subscriber.dispose();
     }
 
-//    public void showStorage() {
-//        storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
-//    }
+    @OnKey(code = KeyCode.S)
+    public void showStorage() {
+        storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
+    }
 
     public void showIslandOverview() {
 

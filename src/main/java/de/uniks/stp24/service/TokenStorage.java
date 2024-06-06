@@ -9,6 +9,7 @@ public class TokenStorage {
     private String userId;
     private String name;
     private String avatar;
+    private boolean isSpectator;
 
     @Inject
     public TokenStorage() {
@@ -37,4 +38,8 @@ public class TokenStorage {
     public String getAvatar() {return avatar;}
 
     public void setAvatar(String avatar) {this.avatar = avatar;}
+
+    public boolean isSpectator() {return isSpectator;}
+
+    public void setSpectator(boolean spectator) {isSpectator = spectator;}
 }

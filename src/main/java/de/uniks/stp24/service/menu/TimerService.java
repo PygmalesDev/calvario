@@ -26,7 +26,7 @@ public class TimerService {
     Timer timer = new Timer();
     final int TIME = 60;
     int countdown = TIME;
-    int season = 0;
+    int season;
     int speed = 1;
     boolean showFlags = false;
     private volatile boolean isRunning = false;
@@ -44,6 +44,7 @@ public class TimerService {
                     // After changing the speed,
                     // the local countdown till next season will be updated
                     setSpeedLocal(updateGameResultDto.speed());
+                    System.out.println("Speed changed to: " + updateGameResultDto.speed());
                 });
     }
 

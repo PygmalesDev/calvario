@@ -1,6 +1,7 @@
 package de.uniks.stp24.component;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.rest.GameMembersApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
@@ -29,6 +30,8 @@ import java.util.Objects;
 @Component(view = "Clock.fxml")
 public class ClockComponent extends AnchorPane {
 
+    @FXML
+    ImageView spectatorImage;
     @FXML
     VBox clockVBox;
     @FXML
@@ -66,6 +69,8 @@ public class ClockComponent extends AnchorPane {
     @Inject
     GamesApiService gamesApiService;
     @Inject
+    GameMembersApiService gameMembersApiService;
+    @Inject
     Subscriber subscriber;
 
     @Inject
@@ -91,6 +96,18 @@ public class ClockComponent extends AnchorPane {
 
         String css = Objects.requireNonNull(this.getClass().getResource("/de/uniks/stp24/clock.css")).toExternalForm();
         this.getStylesheets().add(css);
+
+        // adding spectator sign
+        if (!tokenStorage.isSpectator()) {
+            spectatorImage.setImage(new Image("de/uniks/stp24/gameIcons/spectatorSign.png"));
+        }
+
+        subscriber.subscribe(gamesApiService.getGame(gameId),
+                // Set Clock and Season for the current Game
+                game -> {
+                    timerService.setSpeedLocal(game.speed());
+                    timerService.setSeason(game.period());
+                });
 
         timerService.start();
         seasonLabel.setText(timerService.getSeason() + "");

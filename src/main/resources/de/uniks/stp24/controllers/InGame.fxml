@@ -14,6 +14,6 @@
          </font>
       </Text>
    </HBox>
+   <StackPane fx:id="clockComponentContainer" prefHeight="115.0" prefWidth="200.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="5.0" />
    <StackPane fx:id="pauseMenuContainer" layoutX="440.0" layoutY="40.0" prefHeight="600.0" prefWidth="400.0" style=": ;" visible="false" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="440.0" AnchorPane.rightAnchor="440.0" AnchorPane.topAnchor="40.0" />
-   <StackPane fx:id="clockComponentContainer" prefHeight="115.0" prefWidth="200.0" AnchorPane.leftAnchor="550.0" AnchorPane.rightAnchor="550.0" AnchorPane.topAnchor="10.0" />
 </AnchorPane>

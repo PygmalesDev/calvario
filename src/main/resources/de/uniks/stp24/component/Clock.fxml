@@ -13,6 +13,10 @@
 <fx:root fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="75.0" prefWidth="230.0" type="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.ClockComponent">
    <HBox alignment="TOP_CENTER" layoutX="540.0" layoutY="14.0" minHeight="90.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
       <VBox>
+         <ImageView fx:id="spectatorImage" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true"
+                    translateX="15.0"/>
+      </VBox>
+      <VBox>
          <ToggleButton fx:id="flagToggle" maxHeight="40.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#showFlags" prefHeight="40.0" prefWidth="40.0" style="-fx-background-radius: 20;" styleClass="flagToggle" translateX="20.0" translateY="12.0" />
       </VBox>
       <HBox>

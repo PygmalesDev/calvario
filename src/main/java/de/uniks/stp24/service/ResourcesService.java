@@ -2,6 +2,7 @@ package de.uniks.stp24.service;
 
 import de.uniks.stp24.dto.SystemsDto;
 import de.uniks.stp24.dto.SystemsResultDto;
+import de.uniks.stp24.model.Building;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
@@ -18,6 +19,10 @@ public class ResourcesService {
 
     @Inject
     Subscriber subscriber;
+
+    @Inject
+    TokenStorage tokenStorage;
+
     @Inject
     public ResourcesService() {
 
@@ -32,7 +37,14 @@ public class ResourcesService {
     }
 
     public Observable<SystemsResultDto> destroyBuilding(String gameID, Island island) {
-        return gameSystemsApiService.updateIsland(new SystemsDto());
+        String[] buildings = island.buildings();
+
+        if (island.owner().equals(tokenStorage.getUserId())){
+            return gameSystemsApiService.updateIsland(gameID, island.id_(), new SystemsDto(island.name(),
+                    island.districts(), island.buildings(),island.upgrade(), island.owner()));
+        }
+        return null;
+
     }
 
     /*

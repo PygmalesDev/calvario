@@ -40,7 +40,12 @@ public class IslandsService {
                     List<String> linkedIsles = new ArrayList<>(data.links().keySet());
                     System.out.println(linkedIsles.size() + " " + data.type()
                     + " " + data.x() + " " + data.y() + " " + data.owner() );
-                    Island tmp = new Island(data.owner(),
+                    Island tmp = new Island(data.upgrade(),
+                        data.buildings(),
+                        data.districts(),
+                        data.name(),
+                        data._id(),
+                        data.owner(),
                         1,
                         data.x(),
                         data.y(),

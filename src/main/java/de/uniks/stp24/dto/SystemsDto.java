@@ -6,8 +6,8 @@ import java.util.Map;
 public record SystemsDto(
         String name,
         Map<String, Integer> districts,
-        ArrayList<String> buildings,
-        String upgrade,
+        String[] buildings,
+        Upgrade upgrade,
         String owner
 
 ) {

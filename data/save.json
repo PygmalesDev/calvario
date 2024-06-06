@@ -5,4 +5,18 @@
   "description" : "In the treacherous waters of the Calvario, Mischievous Adventurers as the most feared pirate alliance, hoarding riches and leaving a trail of chaos in its wake.",
   "color" : "#36454F",
   "colorIndex" : 10
+}, {
+  "name" : "Buccaneers",
+  "flagIndex" : 0,
+  "portraitIndex" : 0,
+  "description" : "",
+  "color" : "#DC143C",
+  "colorIndex" : 0
+}, {
+  "name" : "Buccaneers",
+  "flagIndex" : 0,
+  "portraitIndex" : 0,
+  "description" : "",
+  "color" : "#DC143C",
+  "colorIndex" : 0
 } ]

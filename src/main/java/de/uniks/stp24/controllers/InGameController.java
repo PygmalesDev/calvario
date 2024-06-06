@@ -3,9 +3,8 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.OverviewSitesComponent;
 import de.uniks.stp24.component.game.OverviewUpgradeComponent;
-import de.uniks.stp24.component.menu.LobbyHostSettingsComponent;
-import de.uniks.stp24.component.menu.LobbySettingsComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
+import de.uniks.stp24.component.menu.LobbyHostSettingsComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
@@ -16,10 +15,8 @@ import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
@@ -31,7 +28,10 @@ import org.fulib.fx.annotation.event.OnRender;
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 @Title("CALVARIO")
 @Controller

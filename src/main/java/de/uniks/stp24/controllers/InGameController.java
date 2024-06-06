@@ -67,6 +67,10 @@ public class InGameController extends BasicController {
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
+        System.out.println(empireID +
+         "game con game");
+        System.out.println(empireID +
+                "game con empire");
         //Todo: Outprint for Swagger - can be deleted later
         System.out.println(this.gameID);
         System.out.println(empireID);
@@ -116,7 +120,6 @@ public class InGameController extends BasicController {
     public void render() {
         pauseMenuContainer.setVisible(false);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
-
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
     }
@@ -155,8 +158,5 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
-    public void showIslandOverview() {
-
-
-    }
+    public void showIslandOverview() {    }
 }

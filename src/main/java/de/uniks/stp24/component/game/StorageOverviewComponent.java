@@ -65,6 +65,10 @@ public class StorageOverviewComponent extends VBox {
 
 
     public void closeStorageOverview(){
+        System.out.println("storage game:"
+                + tokenStorage.getGameId());
+        System.out.println("storage empire:"
+                +tokenStorage.getEmpireId());
         this.getParent().setVisible(false);
     }
 
@@ -73,6 +77,7 @@ public class StorageOverviewComponent extends VBox {
     void destroy(){
         this.subscriber.dispose();
     }
+
 
 
 }

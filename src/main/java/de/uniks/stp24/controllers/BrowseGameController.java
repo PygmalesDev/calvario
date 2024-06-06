@@ -4,13 +4,14 @@ import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.component.menu.GameComponent;
 import de.uniks.stp24.component.menu.LogoutComponent;
 import de.uniks.stp24.component.menu.WarningComponent;
+import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.*;
-import de.uniks.stp24.service.menu.BrowseGameService;
-import de.uniks.stp24.service.menu.CreateGameService;
-import de.uniks.stp24.service.menu.EditGameService;
+import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.menu.*;
 import de.uniks.stp24.ws.EventListener;
+import io.reactivex.rxjava3.core.Observable;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -37,6 +38,7 @@ import org.fulib.fx.constructs.listview.ComponentListCell;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 @Title("%browse.game")
@@ -89,9 +91,11 @@ BrowseGameController extends BasicController {
     public BubbleComponent bubbleComponent;
 
     @Inject
-    GamesApiService gamesApiService;
+    EmpireService empireService;
     @Inject
-    Provider<GameComponent> gameComponentProvider;
+    LobbyService lobbyService;
+    @Inject
+    GamesApiService gamesApiService;
     @Inject
     EventListener eventListener;
     @Inject
@@ -106,6 +110,8 @@ BrowseGameController extends BasicController {
     CreateGameService createGameService;
     PopupBuilder popup = new PopupBuilder();
     PopupBuilder popupLogout = new PopupBuilder();
+
+    Provider<GameComponent> gameComponentProvider = () -> new GameComponent(this.bubbleComponent, this.browseGameService, this.editGameService, this.tokenStorage, this.resources);
 
     @Inject
     public BrowseGameController(){
@@ -228,9 +234,32 @@ BrowseGameController extends BasicController {
         app.show("/editAcc");
     }
 
+    private void startGame(String empireId, boolean isSpectator){
+        this.tokenStorage.setGameId(browseGameService.getGame()._id());
+        this.tokenStorage.setEmpireId(empireId);
+        this.tokenStorage.setIsSpectator(false);
+        app.show("/ingame");
+    }
+
     public void loadGame() {
         if(browseGameService.getGame() != null) {
-            app.show("/lobby", Map.of("gameid", browseGameService.getGame()._id()));
+            if(browseGameService.getGame().started()) {
+                subscriber.subscribe(lobbyService.getMember(browseGameService.getGame()._id(), tokenStorage.getUserId()),
+                        memberDto -> {
+                            subscriber.subscribe(empireService.getEmpires(browseGameService.getGame()._id()), dto -> {
+                                for(ReadEmpireDto data : dto){
+                                    if (data.user().equals(tokenStorage.getUserId())) {
+                                        startGame(data._id(), false);
+                                    }
+                                }
+                                startGame(null, true);
+                            }, error -> {});
+                        }, error ->{
+                            bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.game.started"));
+                        });
+            }else {
+                app.show("/lobby", Map.of("gameid", browseGameService.getGame()._id()));
+            }
         }
     }
 

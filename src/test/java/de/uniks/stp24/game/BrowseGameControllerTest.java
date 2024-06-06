@@ -61,8 +61,6 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Spy
     ObjectMapper objectMapper;
     @Spy
-    GameComponent gameComponent;
-    @Spy
     ErrorService errorService;
     @InjectMocks
     LogoutComponent logoutComponent;
@@ -76,15 +74,16 @@ public class BrowseGameControllerTest extends ControllerTest {
 
     Game game = new Game("11", null, "1", "Was geht", "testID2", false, 0,0, null);
 
+    Provider<GameComponent> GameComponentProvider = () -> new GameComponent(bubbleComponent, browseGameService, editGameService, tokenStorage,resources);
 
-    @Spy
-    Provider<GameComponent> GameComponentProvider = new Provider(){
-        @Override
-        public GameComponent get() {
-            final GameComponent gameComponent = new GameComponent();
-            return new GameComponent();
-        }
-    };
+//    @Spy
+//    Provider<GameComponent> GameComponentProvider = new Provider(){
+//        @Override
+//        public GameComponent get() {
+//            final GameComponent gameComponent = new GameComponent();
+//            return new GameComponent();
+//        }
+//    };
 
     @InjectMocks
     BrowseGameController browseGameController;
@@ -94,7 +93,6 @@ public class BrowseGameControllerTest extends ControllerTest {
 
     @Override
     public void start(Stage stage)  throws Exception{
-        browseGameController.gameComponent = gameComponent;
         browseGameController.logoutComponent = logoutComponent;
         browseGameController.bubbleComponent = bubbleComponent;
         browseGameController.warningComponent = warningComponent;

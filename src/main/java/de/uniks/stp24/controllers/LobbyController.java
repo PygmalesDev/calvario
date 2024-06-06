@@ -200,6 +200,9 @@ public class LobbyController extends BasicController {
           );
     }
 
+    /**
+     * Creates an event listener that sends all members to ingame when the game is started.
+     */
     private void createGameStartedListener(){
         this.subscriber.subscribe(this.eventListener
                         .listen("games." + this.gameID + ".updated", Game.class),
@@ -214,13 +217,17 @@ public class LobbyController extends BasicController {
                                     if (data.user().equals(tokenStorage.getUserId())) {
                                         this.tokenStorage.setEmpireId(data._id());
                                         this.tokenStorage.setIsSpectator(false);
+                                        System.out.println("lobby:"
+                                         + tokenStorage.getEmpireId());
+                                        this.app.show("/ingame");
+
                                     }
                                 }
                                 }, error -> {});
                         }else {
                             tokenStorage.setIsSpectator(true);
+                            this.app.show("/ingame");
                         }
-                        this.app.show("/ingame");
                         }, error -> {});}
             }, error -> this.enterGameComponent.errorMessage.textProperty().set(getErrorInfoText(error)));
     }

@@ -132,6 +132,8 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         // Mock getting members readiness updates
         doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.updated"), eq(MemberDto.class));
         this.app.show(this.lobbyController);
+
+        doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.updated"), eq(Game.class));
     }
 
     /**
@@ -158,15 +160,15 @@ public class TestLobbyControllerAsHost extends ControllerTest {
      */
     @Test
     public void testStartGameAsHost() {
+        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
+
         doReturn(null).when(this.app).show("/ingame");
 
-        doReturn(Observable.just(new MemberDto(false, "testGameHostID", null, "88888888")))
+        doReturn(Observable.just(new MemberDto(false, "testGameHostID", testEmpire, "88888888")))
                 .when(this.lobbyService).getMember(any(), any());
 
         doReturn(Observable.just(new MemberDto(false, "testGameHostID", null, "88888888")))
                 .when(this.lobbyService).updateMember(anyString(), anyString(), anyBoolean(), any());
-
-        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
 
         when(this.lobbyService.loadPlayers(any()))
                 .thenReturn(Observable.just(new MemberDto[]{
@@ -208,7 +210,11 @@ public class TestLobbyControllerAsHost extends ControllerTest {
 
         WaitForAsyncUtils.waitForFxEvents();
         assertFalse(lookup("#startJourneyButton").queryButton().isDisabled());
+
         clickOn("#startJourneyButton");
+        this.gameSubject.onNext(new Event<>("games.testGameID.updated", new Game("1", "a","testGameID","testGame","testGameHostID",
+                true, 1, 0, new GameSettings(1))));
+
         waitForFxEvents();
         verify(this.app, times(1)).show("/ingame");
 

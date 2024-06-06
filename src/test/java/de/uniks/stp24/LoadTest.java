@@ -4,13 +4,14 @@ import de.uniks.stp24.controllers.LoadController;
 import de.uniks.stp24.controllers.LoginController;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
-import java.util.ResourceBundle;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -19,6 +20,9 @@ public class LoadTest extends ControllerTest {
     LoadController loadController;
     @InjectMocks
     LoginController loginController;
+
+    @Spy
+    Subscriber subscriber;
 
 
     @Override

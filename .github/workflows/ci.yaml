@@ -33,3 +33,10 @@ jobs:
           paths: build/reports/jacoco/test/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: ${{ secrets.STP_MIN_COVERAGE }}
+
+      - name : Pics of cute dogs  
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: .github/workflows/CI/cutedogs

@@ -1,13 +1,16 @@
 package de.uniks.stp24.service;
 
+
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class Constants {
     // Folder
     public static final String DATA_FOLDER_NAME = "data";
     public static final Path DATA_FOLDER = Path.of(DATA_FOLDER_NAME);
 
+    // Description and names for Empires
     public static final Map<String, String[]> empireTemplatesEnglish = Map.ofEntries(
             Map.entry("Prefix", new String[]{
                     "Greedy", "Evil", "Vicious", "Old", "Mischievous", "Dead", "Amateur", "Famous", "Hungry",
@@ -69,4 +72,55 @@ public class Constants {
                     "In der schattenhaften Welt der Piraterie versetzt der Name {NAME} Kaufleute in Angst und Schrecken, während sie in ihren verborgenen Inselverstecken unvorstellbare Schätze horten."
             })
     );
+
+    public static final Map<String, String> resourceTranslation = Map.of(
+            "credits", "resource.doubloons",
+            "minerals", "resource.sparklingGeode",
+            "population", "resource.crewmates",
+            "energy", "resource.gunpowder",
+            "food", "resource.provisions",
+            "fuel","resource.coal",
+            "research", "resource.scoutReports",
+            "alloys", "resource.gemmyAlloys",
+            "consumer_goods","resource.rum"
+    );
+
+    public static final Map<String, String> siteTranslation = Map.of(
+            "city", "site.village",
+            "energy", "site.thaumaturgy",
+            "mining","site.mining",
+            "agriculture","site.harvesting",
+            "industry", "site.production",
+            "research", "site.expedition",
+            "ancient_fondry","site.epoch",
+            "ancient_factory","site.merchant",
+            "ancient_refinery", "site.coalmine"
+    );
+
+    public static final Map<String, String> buildingTranslation = Map.of(
+            "exchange", "building.seaside",
+            "power_plant","building.theurgy",
+            "mine","building.resonatingDelves",
+            "farm","building.farmside",
+            "research_lab","building.scoutHub",
+            "foundry","building.alloySmeltery",
+            "factory","building.chophouse",
+            "refinery","coalQuarry"
+    );
+
+
+    public static final Map<String, String> islandTranslation = Map.ofEntries(
+            Map.entry("uninhabitable_0", "island.plundered"),
+            Map.entry("uninhabitable_1", "island.breezy"),
+            Map.entry("uninhabitable_2", "island.waveless"),
+            Map.entry("uninhabitable_3", "island.serene"),
+            Map.entry("regular", "island.bandit"),
+            Map.entry("energy", "island.smouldering"),
+            Map.entry("mining", "island.echoing"),
+            Map.entry("agriculture", "island.lushy"),
+            Map.entry("ancient_technology", "island.forlorn"),
+            Map.entry("ancient_industry", "island.amazonian"),
+            Map.entry("ancient_military", "everfrozen")
+    );
+
 }

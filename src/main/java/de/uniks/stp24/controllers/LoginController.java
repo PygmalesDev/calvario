@@ -1,7 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.menu.BubbleComponent;
-import de.uniks.stp24.service.LoginService;
+import de.uniks.stp24.service.menu.LoginService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -98,11 +98,10 @@ public class LoginController extends BasicController {
         }
         if (Objects.nonNull(this.info)) {
             switch(this.info) {
+                case "normalLogin" -> this.bubbleComponent.setCaptainText(resources.getString("pirate.login.welcome"));
+                case "autologinFailed", "deleted" -> this.bubbleComponent.setCaptainText(resources.getString("pirate.account.deleted"));
                 case "logout" -> this.bubbleComponent.setCaptainText(resources.getString("logout.successful.on.this.device"));
-
                 case "registered" -> this.bubbleComponent.setCaptainText(resources.getString("account.registered"));
-
-                case "deleted" -> this.bubbleComponent.setCaptainText(resources.getString("account.deleted"));
                 case "error" -> this.bubbleComponent.setCaptainText("ONERROR");
 
                 default -> this.bubbleComponent.setCaptainText("");

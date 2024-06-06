@@ -2,8 +2,14 @@ package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.MemberDto;
+import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.IslandsService;
+import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.menu.EditGameService;
+import de.uniks.stp24.service.menu.LobbyService;
+import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -46,6 +52,8 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @Inject
     EventListener eventListener;
     @Inject
+    EmpireService empireService;
+    @Inject
     @Resource
     ResourceBundle resource;
     @Inject
@@ -86,13 +94,28 @@ public class LobbyHostSettingsComponent extends AnchorPane {
         this.startJourneyButton.setDisable(true);
     }
 
+    /** when starting a game:
+     * initial resources (EmpireService),
+     * island information (IslandsService)
+     * must be retrieved
+     */
     public void startGame() {
         subscriber.subscribe(editGameService.startGame(this.gameID),
           result -> {
+            this.tokenStorage.setGameId(gameID);
+            subscriber.subscribe(empireService.getEmpires(this.gameID),
+                dto -> {
+                    for(ReadEmpireDto data :dto){
+                        if (data.user().equals(tokenStorage.getUserId())) {
+                            this.tokenStorage.setEmpireId(data._id());
+                            this.app.show("/ingame");
+                        }
+                    }
+                },
+                error -> {});
             islandsService.retrieveIslands(this.gameID);
             this.startJourneyButton.setDisable(true);
             this.readyButton.setDisable(true);
-
             },
           error -> this.startJourneyButton.setDisable(false));
     }

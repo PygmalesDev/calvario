@@ -3,7 +3,7 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.CreateGameService;
+import de.uniks.stp24.service.menu.CreateGameService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;

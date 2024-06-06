@@ -1,8 +1,8 @@
 package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.model.Game;
-import de.uniks.stp24.service.BrowseGameService;
-import de.uniks.stp24.service.EditGameService;
+import de.uniks.stp24.service.menu.BrowseGameService;
+import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;

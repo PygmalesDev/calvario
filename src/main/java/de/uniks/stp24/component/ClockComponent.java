@@ -1,11 +1,10 @@
 package de.uniks.stp24.component;
 
-import de.uniks.stp24.App;
-import de.uniks.stp24.rest.GameMembersApiService;
+import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.menu.TimerService;
+import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
@@ -59,19 +58,15 @@ public class ClockComponent extends AnchorPane {
     String gameId;
 
     @Inject
-    App app;
-    @Inject
     TokenStorage tokenStorage;
     @Inject
     TimerService timerService;
     @Inject
-    InGameService inGameService;
-    @Inject
     GamesApiService gamesApiService;
     @Inject
-    GameMembersApiService gameMembersApiService;
-    @Inject
     Subscriber subscriber;
+    @Inject
+    EventListener eventListener;
 
     @Inject
     public ClockComponent() {
@@ -80,6 +75,9 @@ public class ClockComponent extends AnchorPane {
 
     @OnInit
     public void init() {
+
+        createUpdateSeasonListener();
+        createUpdateSpeedListener();
 
         PropertyChangeListener callHandleTimeChanged = this::handleTimeChanged;
         timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_COUNTDOWN, callHandleTimeChanged);
@@ -90,7 +88,6 @@ public class ClockComponent extends AnchorPane {
         PropertyChangeListener callHandleSeasonChanged = this::handleSeasonChanged;
         timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_SEASON, callHandleSeasonChanged);
     }
-
     @OnRender
     public void render() {
 
@@ -139,6 +136,26 @@ public class ClockComponent extends AnchorPane {
         if (subscriber != null) {
             subscriber.dispose();
         }
+    }
+
+    public void createUpdateSeasonListener() {
+        subscriber.subscribe(this.eventListener
+                .listen("games." + gameId + ".ticked", Game.class),
+                event -> {
+                    Game game = event.data();
+                    timerService.setSeason(game.period());
+                },
+                error -> System.out.println("Error bei Season: " + error.getMessage()));
+    }
+
+    public void createUpdateSpeedListener() {
+        subscriber.subscribe(this.eventListener
+                .listen("games." + gameId + ".updated", Game.class),
+                event -> {
+                    Game game = event.data();
+                    timerService.setSpeedLocal(game.speed());
+                },
+                error -> System.out.println("Error bei Speed: " + error.getMessage()));
     }
 
     public void showFlags() {

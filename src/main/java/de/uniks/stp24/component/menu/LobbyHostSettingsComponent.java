@@ -98,6 +98,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
                 for(ReadEmpireDto data :dto){
                     if (data.user().equals(tokenStorage.getUserId())) {
                         this.tokenStorage.setEmpireId(data._id());
+                        this.tokenStorage.setIsSpectator(false);
                         this.app.show("/ingame");
                     }
                 }

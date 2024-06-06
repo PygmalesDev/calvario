@@ -2,9 +2,11 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.dto.MemberDto;
+import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.TokenStorage;
@@ -44,6 +46,8 @@ public class LobbyController extends BasicController {
     LobbyService lobbyService;
     @Inject
     GamesService gamesService;
+    @Inject
+    EmpireService empireService;
     @SubComponent
     @Inject
     public EnterGameComponent enterGameComponent;
@@ -145,7 +149,7 @@ public class LobbyController extends BasicController {
 
                 this.sortMemberList();
             });
-
+            this.createGameStartedListener();
             this.lobbyHostSettingsComponent.createCheckPlayerReadinessListener();
         },
           error -> this.enterGameComponent
@@ -194,6 +198,36 @@ public class LobbyController extends BasicController {
           error -> this.enterGameComponent
                 .errorMessage.textProperty().set(getErrorInfoText(error))
           );
+    }
+
+    private void createGameStartedListener(){
+        this.subscriber.subscribe(this.eventListener
+                        .listen("games." + this.gameID + ".updated", Game.class),
+                event -> {
+            if(event.data().started()) {
+                this.tokenStorage.setGameId(gameID);
+                if(!asHost){
+                    subscriber.subscribe(lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
+                            memberDto -> {
+                        if(Objects.nonNull(memberDto.empire())){
+                                    subscriber.subscribe(empireService.getEmpires(this.gameID), dto -> {
+                                        for(ReadEmpireDto data :dto){
+                                            if (data.user().equals(tokenStorage.getUserId())) {
+                                                this.tokenStorage.setEmpireId(data._id());
+                                                this.tokenStorage.setIsSpectator(false);
+                                                this.app.show("/ingame");
+                                            }
+                                        }
+                                    }, error -> {});
+                                }else{
+                                    tokenStorage.setIsSpectator(true);
+                                    this.app.show("/ingame");
+                                }
+
+                            }, error -> {});}
+                    }
+                }, error -> this.enterGameComponent
+                        .errorMessage.textProperty().set(getErrorInfoText(error)));
     }
 
     /**

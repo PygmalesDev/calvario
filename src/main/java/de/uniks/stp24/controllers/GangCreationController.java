@@ -204,6 +204,7 @@ public class GangCreationController extends BasicController {
             this.subscriber.subscribe(this.lobbyService.updateMember(
                     this.gameID, result.user(), result.ready(), empire), result2 ->
                         app.show("/lobby", Map.of("gameid", this.gameID)));
+
         },
           error -> {}
         );

@@ -88,5 +88,4 @@ public class HttpModule {
     GameSystemsApiService gameSystemsApiService(Retrofit retrofit) {
         return retrofit.create(GameSystemsApiService.class);
     }
-
 }

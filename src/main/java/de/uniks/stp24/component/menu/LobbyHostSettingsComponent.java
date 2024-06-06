@@ -9,6 +9,7 @@ import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.*;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -33,6 +34,8 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @FXML
     public Button startJourneyButton;
     @FXML
+    public Button readyButton;
+    @FXML
     ImageView readyIconImageView;
     @Inject
     Subscriber subscriber;
@@ -55,6 +58,8 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @Inject
     @Resource
     ResourceBundle resource;
+    @Inject
+    IslandsService islandsService;
 
     public String gameID;
     public boolean leftLobby;
@@ -104,7 +109,11 @@ public class LobbyHostSettingsComponent extends AnchorPane {
                     }
                 }
             }, error -> {});
-        }, error -> {});
+
+                    islandsService.retrieveIslands(this.gameID);
+                    this.startJourneyButton.setDisable(true);
+                    this.readyButton.setDisable(true);
+        }, error -> this.startJourneyButton.setDisable(false));
     }
 
 

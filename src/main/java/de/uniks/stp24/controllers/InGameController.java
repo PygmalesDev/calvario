@@ -1,22 +1,31 @@
 package de.uniks.stp24.controllers;
 
-
 import de.uniks.stp24.component.game.OverviewSitesComponent;
 import de.uniks.stp24.component.game.OverviewUpgradeComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.LobbyHostSettingsComponent;
+
+import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
+
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
+import de.uniks.stp24.service.IslandsService;
 import javafx.fxml.FXML;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
@@ -24,6 +33,9 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
+
+import org.fulib.fx.annotation.param.Param;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
@@ -40,6 +52,12 @@ public class InGameController extends BasicController {
     public StackPane overviewContainer;
     @FXML
     public Pane rudder_pain;
+    @FXML
+    ScrollPane mapPane;
+    @FXML
+    Pane mapGrid;
+    @FXML
+    StackPane zoomPane;
     @FXML
     StackPane pauseMenuContainer;
     @FXML
@@ -75,6 +93,12 @@ public class InGameController extends BasicController {
     String gameID;
     String empireID;
 
+    @Inject
+    IslandsService islandsService;
+    List<IslandComponent> islandComponentList = new ArrayList<>();
+    @Inject
+    Subscriber subscriber;
+    boolean pause = false;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
     public boolean islandClicked = false;
@@ -85,10 +109,6 @@ public class InGameController extends BasicController {
 
     @OnInit
     public void init() {
-        this.subscriber.subscribe(inGameService.getAllIslands(lobbyHostSettingsComponent.gameID),
-                islands -> {
-                    System.out.println(islands.size());
-                });
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
@@ -98,6 +118,7 @@ public class InGameController extends BasicController {
 
 
         GameStatus gameStatus = inGameService.getGameStatus();
+
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_PAUSED"));
@@ -109,6 +130,7 @@ public class InGameController extends BasicController {
         PropertyChangeListener callHandleLanguageChanged = this::handleLanguageChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_LANGUAGE, callHandleLanguageChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
+
     }
 
     private void handleLanguageChanged(PropertyChangeEvent propertyChangeEvent) {
@@ -128,8 +150,9 @@ public class InGameController extends BasicController {
 
     private void handlePauseChanged(PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
-            Boolean paused = (Boolean) propertyChangeEvent.getNewValue();
-            if (paused) {
+//            Boolean paused = (Boolean) propertyChangeEvent.getNewValue();
+            pause = (Boolean) propertyChangeEvent.getNewValue();
+            if (pause) {
                 pauseGame();
             } else {
                 resumeGame();
@@ -155,8 +178,15 @@ public class InGameController extends BasicController {
 
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
+        pause = !pause;
         inGameService.setShowSettings(false);
-        inGameService.setPaused(!inGameService.getPaused());
+        inGameService.setPaused(pause);
+        if (pause) {pauseGame();}
+        else {resumeGame();}
+    }
+    @OnKey(code = KeyCode.P)
+    public void test(){
+
     }
 
     public void showSettings() {
@@ -168,17 +198,44 @@ public class InGameController extends BasicController {
         pauseMenuContainer.getChildren().remove(settingsComponent);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
     }
-
     public void pauseGame() {
-        pauseMenuContainer.setVisible(true);
+        pauseMenuContainer.setVisible(pause);
     }
 
     public void resumeGame() {
-        pauseMenuContainer.setVisible(false);
+        pauseMenuContainer.setVisible(pause);
+    }
+
+
+    @OnRender
+    public void createMap()  {
+
+        // sea should be inserted using css -> remove this line
+        this.mapGrid.setStyle("-fx-background-image: url('/de/uniks/stp24/icons/sea.png')");
+
+        islandsService.getListOfIslands().forEach(
+          island -> {
+              IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
+                app.initAndRender(new IslandComponent())
+              );
+              tmp.setLayoutX(tmp.getPosX());
+              tmp.setLayoutY(tmp.getPosY());
+              islandComponentList.add(tmp);
+              this.mapGrid.getChildren().add(tmp);
+          }
+        );
+
+        //todo draw connections
+
+    }
+
+    public void showCoordinates(MouseEvent mouseEvent) {
+        // todo select island to show info
     }
 
     @OnDestroy
     public void destroy() {
+        islandComponentList.forEach(IslandComponent::destroy);
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
                 .removePropertyChangeListener(triple.propertyName(), triple.listener()));
     }

@@ -51,8 +51,8 @@ public class EditGameService {
 
     public Observable<UpdateGameResultDto> startGame(String id){
         return gamesApiService
-                .startGame(id, new StartGameDto(true))
-                .doOnError(error -> editGameController.showError(errorService.getStatus(error)));
+          .startGame(id, new StartGameDto(true))
+          .doOnError(error -> editGameController.showError(errorService.getStatus(error)));
     }
 
     public void setEditGameController(EditGameController editGameController) {

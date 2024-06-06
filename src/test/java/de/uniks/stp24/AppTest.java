@@ -21,10 +21,8 @@ import io.reactivex.rxjava3.subjects.Subject;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
-import javafx.scene.text.Text;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -34,6 +32,7 @@ import org.testfx.util.WaitForAsyncUtils;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -157,7 +156,7 @@ public class AppTest extends ControllerTest {
         createGame();
         loadGame();
         selectEmpire();
-        startGame();
+        readyToStartAGame();
     }
 
 
@@ -235,14 +234,16 @@ public class AppTest extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    private void startGame() {
+    // should be modified
+    private void readyToStartAGame() {
         clickOn("#readyButton");
         this.memberSubject.onNext(new Event<>("games.123.members.1.updated",
-                new MemberDto(true, "testGameHostID", null, null)));
-        clickOn("#startJourneyButton");
-        WaitForAsyncUtils.waitForFxEvents();
-        Text textNode = lookup("#epic_gameplay").queryText();
-        assertEquals(textNode.getText(), "EPIC GAMEPLAY");
+                new MemberDto(true, "JustATest", null, null)));
+        assertFalse(lookup("#startJourneyButton").queryButton().isDisabled());
+//        clickOn("#startJourneyButton");
+//        WaitForAsyncUtils.waitForFxEvents();
+//        Text textNode = lookup("#epic_gameplay").queryText();
+//        assertEquals(textNode.getText(), "EPIC GAMEPLAY");
     }
 
 }

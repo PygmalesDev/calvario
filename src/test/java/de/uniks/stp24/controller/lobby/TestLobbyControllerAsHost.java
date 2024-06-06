@@ -59,6 +59,8 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     @Spy
     JoinGameService joinGameService;
     @Spy
+    EditGameService editGameService;
+    @Spy
     UserApiService userApiService;
     @Spy
     LobbyService lobbyService;
@@ -70,8 +72,6 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
-    @Spy
-    EditGameService editGameService;
 
     @InjectMocks
     UserComponent userComponent;
@@ -157,7 +157,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
      * Tests proper game starting only after all the members have clicked the ready button.
      */
     @Test
-    public void testStartGameAsHost() {
+    public void testBeReadyToStartGameAsHost() {
         doReturn(null).when(this.app).show("/ingame");
 
         doReturn(Observable.just(new MemberDto(false, "testGameHostID", null, "88888888")))
@@ -211,6 +211,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         clickOn("#startJourneyButton");
         waitForFxEvents();
         verify(this.app, times(1)).show("/ingame");
+        WaitForAsyncUtils.waitForFxEvents();
 
     }
 

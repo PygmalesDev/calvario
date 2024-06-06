@@ -7,9 +7,11 @@ import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.AuthApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.UserApiService;
-import de.uniks.stp24.service.CreateGameService;
-import de.uniks.stp24.service.LobbyService;
-import de.uniks.stp24.service.LoginService;
+import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.menu.CreateGameService;
+import de.uniks.stp24.service.menu.EditGameService;
+import de.uniks.stp24.service.menu.LobbyService;
+import de.uniks.stp24.service.menu.LoginService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
@@ -40,14 +42,16 @@ import static org.testfx.api.FxAssert.verifyThat;
 
 public class AppTest extends ControllerTest {
 
-    private LoginService loginService;
-    private AuthApiService authApiService;
-    private GamesApiService gamesApiService;
-    private CreateGameService createGameService;
-    private EventListener eventListener;
-    private LobbyService lobbyService;
-    private UserApiService userApiService;
-    private TokenStorage tokenStorage;
+    LoginService loginService;
+    AuthApiService authApiService;
+    GamesApiService gamesApiService;
+    CreateGameService createGameService;
+    EventListener eventListener;
+    LobbyService lobbyService;
+    UserApiService userApiService;
+    TokenStorage tokenStorage;
+    EditGameService editGameService;
+    EmpireService empireService;
 
     @Spy
     BubbleComponent bubbleComponent;
@@ -75,8 +79,10 @@ public class AppTest extends ControllerTest {
         MemberDto[] memberDtos = new MemberDto[1];
         memberDtos[0] = memberDto;
 
+
         userApiService = testComponent.userApiService();
         doReturn(Observable.just(signUpResult)).when(userApiService).signup(any());
+
 
         authApiService = testComponent.authApiService();
         loginService = testComponent.loginService();
@@ -85,6 +91,8 @@ public class AppTest extends ControllerTest {
         eventListener = testComponent.eventListener();
         lobbyService = testComponent.lobbyService();
         tokenStorage = testComponent.tokenStorage();
+        empireService = testComponent.empireService();
+        editGameService = testComponent.editGameService();
 
         doReturn(Observable.just(loginResult)).when(authApiService).login(loginDto);
         doReturn(Observable.just(loginResult)).when(authApiService).refresh(refreshDto);
@@ -129,6 +137,15 @@ public class AppTest extends ControllerTest {
 
         doReturn("1").when(tokenStorage).getUserId();
         doReturn(Observable.just(new MemberDto(false, user._id(), new Empire("Buccaneers", "", "#DC143C", 0, 0, new String[]{},"uninhabitable_0"), null))).when(lobbyService).updateMember(game3._id(),user._id(), false, null);
+        doReturn(Observable.just(new MemberDto(true, user._id(), new Empire("Buccaneers", "", "#DC143C", 0, 0, new String[]{},"uninhabitable_0"), null))).when(lobbyService).updateMember(game3._id(),user._id(), true, null);
+        doReturn(Observable.just(new UpdateGameResultDto("2024-05-28T14:55:25.688Z", null,game3._id(),"testGame", user._id(),
+                true, 0, 0, null))).when(this.editGameService).startGame(any());
+
+
+        doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", game3._id(),
+                user._id(),"tesEmpire","a","#DC143C",0, 0, "uninhabitable_0")})).when(this.empireService).getEmpires(any());
+
+
     }
 
     @Test
@@ -221,8 +238,7 @@ public class AppTest extends ControllerTest {
     private void startGame() {
         clickOn("#readyButton");
         this.memberSubject.onNext(new Event<>("games.123.members.1.updated",
-                new MemberDto(true, "JustATest", null, null)));
-
+                new MemberDto(true, "testGameHostID", null, null)));
         clickOn("#startJourneyButton");
         WaitForAsyncUtils.waitForFxEvents();
         Text textNode = lookup("#epic_gameplay").queryText();

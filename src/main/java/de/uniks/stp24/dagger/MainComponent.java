@@ -4,9 +4,8 @@ import dagger.BindsInstance;
 import dagger.Component;
 import de.uniks.stp24.App;
 import de.uniks.stp24.Routes;
-import de.uniks.stp24.service.LoginService;
+import de.uniks.stp24.service.menu.LoginService;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Component(modules = {

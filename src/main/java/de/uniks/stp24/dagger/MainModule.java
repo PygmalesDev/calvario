@@ -7,6 +7,7 @@ import dagger.Module;
 import dagger.Provides;
 import de.uniks.stp24.service.PrefService;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.ResourceBundle;
 
@@ -15,6 +16,12 @@ public class MainModule {
     @Provides
     ResourceBundle bundle(PrefService prefService){
         return ResourceBundle.getBundle("de/uniks/stp24/lang/main", prefService.getLocale());
+    }
+
+    @Provides
+    @Named("gameResourceBundle")
+    ResourceBundle gameBundle(PrefService prefService) {
+        return ResourceBundle.getBundle("de/uniks/stp24/lang/game", prefService.getLocale());
     }
 
     @Provides

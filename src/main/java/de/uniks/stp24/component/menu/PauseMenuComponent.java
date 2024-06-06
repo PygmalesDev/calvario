@@ -32,7 +32,7 @@ public class PauseMenuComponent extends AnchorPane {
 
     @Inject
     @Resource
-    ResourceBundle resource;
+    public ResourceBundle resources;
 
 
     @Inject

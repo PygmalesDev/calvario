@@ -206,28 +206,23 @@ public class LobbyController extends BasicController {
                 event -> {
             if(event.data().started()) {
                 this.tokenStorage.setGameId(gameID);
-                if(!asHost){
                     subscriber.subscribe(lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
                             memberDto -> {
                         if(Objects.nonNull(memberDto.empire())){
-                                    subscriber.subscribe(empireService.getEmpires(this.gameID), dto -> {
-                                        for(ReadEmpireDto data :dto){
-                                            if (data.user().equals(tokenStorage.getUserId())) {
-                                                this.tokenStorage.setEmpireId(data._id());
-                                                this.tokenStorage.setIsSpectator(false);
-                                                this.app.show("/ingame");
-                                            }
-                                        }
-                                    }, error -> {});
-                                }else{
-                                    tokenStorage.setIsSpectator(true);
-                                    this.app.show("/ingame");
+                            subscriber.subscribe(empireService.getEmpires(this.gameID), dto -> {
+                                for(ReadEmpireDto data : dto){
+                                    if (data.user().equals(tokenStorage.getUserId())) {
+                                        this.tokenStorage.setEmpireId(data._id());
+                                        this.tokenStorage.setIsSpectator(false);
+                                    }
                                 }
-
-                            }, error -> {});}
-                    }
-                }, error -> this.enterGameComponent
-                        .errorMessage.textProperty().set(getErrorInfoText(error)));
+                                }, error -> {});
+                        }else {
+                            tokenStorage.setIsSpectator(true);
+                        }
+                        this.app.show("/ingame");
+                        }, error -> {});}
+            }, error -> this.enterGameComponent.errorMessage.textProperty().set(getErrorInfoText(error)));
     }
 
     /**

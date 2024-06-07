@@ -3,6 +3,7 @@ package de.uniks.stp24.service.menu;
 import de.uniks.stp24.controllers.BasicController;
 import de.uniks.stp24.dto.JoinGameDto;
 import de.uniks.stp24.dto.MemberDto;
+import de.uniks.stp24.dto.MemberExtendedDto;
 import de.uniks.stp24.dto.UpdateMemberDto;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.rest.GameMembersApiService;
@@ -24,6 +25,10 @@ public class LobbyService extends BasicController {
     public LobbyService() {}
     public Observable<MemberDto[]> loadPlayers(String gameID) {
         return this.gameMembersApiService.getMembers(gameID);
+    }
+
+    public Observable<MemberExtendedDto[]> loadInGamePlayers(String gameID) {
+        return this.gameMembersApiService.getInGameMembers(gameID);
     }
 
     public Observable<MemberDto> updateMember(String gameID, String userID, boolean ready, Empire empire) {

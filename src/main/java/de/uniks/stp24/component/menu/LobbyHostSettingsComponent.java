@@ -32,8 +32,6 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @FXML
     public Button startJourneyButton;
     @FXML
-    public Button readyButton;
-    @FXML
     ImageView readyIconImageView;
     @Inject
     Subscriber subscriber;
@@ -99,7 +97,14 @@ public class LobbyHostSettingsComponent extends AnchorPane {
      * island information (IslandsService)
      * must be retrieved
      */
+
     public void startGame() {
+        subscriber.subscribe(editGameService.startGame(this.gameID),
+          result -> {}
+          //Todo: do this for every member of the game
+          , error -> {});
+        // todo delete after migrate this
+        /*
         subscriber.subscribe(editGameService.startGame(this.gameID),
           result -> {
             this.tokenStorage.setGameId(gameID);
@@ -117,7 +122,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
             this.startJourneyButton.setDisable(true);
             this.readyButton.setDisable(true);
             },
-          error -> this.startJourneyButton.setDisable(false));
+          error -> this.startJourneyButton.setDisable(false));*/
     }
 
     /**

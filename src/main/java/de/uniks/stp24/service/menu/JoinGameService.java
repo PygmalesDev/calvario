@@ -27,6 +27,7 @@ public class JoinGameService {
             false,
                 userID,
                 null,
+                null,
                 password
         );
     }

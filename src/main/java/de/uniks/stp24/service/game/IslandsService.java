@@ -1,6 +1,7 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.component.game.IslandComponent;
+import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
@@ -31,15 +32,17 @@ public class IslandsService extends BasicService {
 
     // this method will be used when changing from lobby to ingame
     // and retrieve islands when game starts
+    // todo remove printouts
     public void retrieveIslands(String gameID) {
         this.isles.clear();
-        retrieveMembersInfo(gameID);
         subscriber.subscribe(gameSystemsService.getSystems(gameID),
             dto -> {
                 Arrays.stream(dto).forEach(data -> {
                     List<String> linkedIsles = new ArrayList<>(data.links().keySet());
-                    System.out.println(linkedIsles.size() + " " + data.type()
-                    + " " + data.x() + " " + data.y() + " " + data.owner() );
+//                    System.out.println(linkedIsles.size() + " " + data.type()
+//                    + " " + data.x() + " " + data.y() + " " + data.owner() );
+                    if(data.owner()!=null) System.out.println("YIPPIE ONWER "  +
+                      data.owner() + " flag " + tokenStorage.getFlagIndex(data.owner()));
                     Island tmp = new Island(data.owner(),
                         // todo flagIndex could be retrieved from server -> games/{game}/members/{user}
                         Objects.isNull(data.owner()) ? -1 : tokenStorage.getFlagIndex(data.owner()),
@@ -65,22 +68,6 @@ public class IslandsService extends BasicService {
         return Collections.unmodifiableList(this.isles);
     }
 
-    // look for flagIndex of all players with an empire in game
-    public void retrieveMembersInfo(String gameID){
-        subscriber.subscribe(lobbyService.loadPlayers(gameID),
-          dto -> {
-            Arrays.stream(dto).forEach(member -> {
-                if(member.ready() && Objects.nonNull(member.empire())) {
-                    tokenStorage.saveFlag(member.user(),member.empire().flag());
-                    //todo look if this works properly
-                    System.out.println(member.user());
-                    System.out.println(member.empire().flag());
-                }
-            });
-          },
-          error -> errorService.getStatus(error));
-    }
-
     /**
      * coordinate system on server has origin at screen center
      * and are not too big apply a factor 10 for increase and
@@ -99,8 +86,8 @@ public class IslandsService extends BasicService {
         // todo read values from tokenStorage -> owner = null -> no flag!
         // for the moment let set random flag index
         int flag = randomGenerator.nextInt(0, 5);
-        component.setFlagImage(flag);
-//        component.setFlagImage(isleDto.flagIndex());
+//        if (Upgrade.values()[isleDto.upgradeLevel()]!= Upgrade.unexplored) component.setFlagImage(flag);
+        component.setFlagImage(isleDto.flagIndex());
         return component;
     }
 

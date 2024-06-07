@@ -14,7 +14,7 @@
    </padding>
    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="500.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-         <Button mnemonicParsing="false" onAction="#selectEmpire" prefHeight="80.0" prefWidth="150.0" styleClass="lobbyButtonSelectEmpire" text="%select.empire" textFill="WHITE">
+         <Button fx:id="selectEmpireButton" mnemonicParsing="false" onAction="#selectEmpire" prefHeight="80.0" prefWidth="150.0" styleClass="lobbyButtonSelectEmpire" text="%select.empire" textFill="WHITE">
             <font>
                <Font size="18.0" />
             </font>
@@ -33,7 +33,7 @@
          </Button>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-         <Button mnemonicParsing="false" onAction="#leaveLobby" prefHeight="80.0" prefWidth="150.0" styleClass="lobbyButtonLeave" textOverrun="CLIP" wrapText="true">
+         <Button fx:id="closeLobbyButton" mnemonicParsing="false" onAction="#leaveLobby" prefHeight="80.0" prefWidth="150.0" styleClass="lobbyButtonLeave" textOverrun="CLIP" wrapText="true">
             <font>
                <Font size="18.0" />
             </font>

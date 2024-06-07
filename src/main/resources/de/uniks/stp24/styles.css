@@ -709,12 +709,13 @@ ToggleButton:hover{
     -fx-background-repeat: no-repeat;
 }
 
-.deadbirdsocietyLogo{
+.deadbirdsocietyLogo {
     -fx-background-image: url("/de/uniks/stp24/assets/logos/DeadBirdsLogoTransparent.png");
     -fx-background-color: transparent;
     -fx-background-size: 80% 80%;
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
+}
 /***************************************************************************************************/
 /***************************************************************************************************/
 /*********************************** Release 2 *****************************************************/

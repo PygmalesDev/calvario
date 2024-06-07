@@ -8,6 +8,7 @@ import de.uniks.stp24.component.menu.LobbyHostSettingsComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandsService;
@@ -233,12 +234,14 @@ public class InGameController extends BasicController {
                 .removePropertyChangeListener(triple.propertyName(), triple.listener()));
     }
 
-    public void showOverview() {
+    public void showOverview(Island island ) {
         overviewContainer.setVisible(true);
         overviewSitesComponent.sitesContainer.setVisible(true);
-        overviewSitesComponent.sitesButton.setDisable(true);
+        overviewSitesComponent.buildingsButton.setDisable(true);
         inGameService.showOnly(overviewContainer, overviewSitesComponent);
-        inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.sitesComponent);
+        inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
+
+        overviewSitesComponent.setOverviewSites(island);
     }
 
     public void showStorage() {

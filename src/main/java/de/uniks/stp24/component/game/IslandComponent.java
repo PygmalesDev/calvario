@@ -93,6 +93,7 @@ public class IslandComponent extends Pane {
     public void showInfo() {
         //TODO show info pane!
         System.out.println(island.type() + " isle at " + x + ", " + y);
+        System.out.println(island.crewCapacity());
         this.flagPane.setVisible(!this.flagPane.isVisible());
     }
 
@@ -124,7 +125,7 @@ public class IslandComponent extends Pane {
 
         islandIsSelected = true;
         showInfo();
-        inGameController.showOverview();
+        inGameController.showOverview(this.island);
         inGameController.selectedIsland = this;
     }
 

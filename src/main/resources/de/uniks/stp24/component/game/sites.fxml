@@ -7,48 +7,48 @@
 
 <fx:root alignment="TOP_CENTER" prefHeight="184.0" prefWidth="374.0" style="-fx-border-color: #000000;" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.SitesComponent">
    <HBox alignment="CENTER" prefHeight="50.0" prefWidth="374.0">
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%place_holder" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="Sites" />
    </HBox>
    <HBox alignment="CENTER" prefHeight="50.0" prefWidth="372.0">
       <VBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #000000;">
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%site_1" />
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%site_1" />
       </VBox>
       <VBox prefHeight="50.0" prefWidth="20.0" />
       <VBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #000000;">
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%site_2" />
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%site_2" />
       </VBox>
       <VBox prefHeight="50.0" prefWidth="20.0" />
       <VBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #000000;">
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%site_3" />
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%site_3" />
       </VBox>
       <VBox prefHeight="50.0" prefWidth="20.0" />
       <VBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #000000;">
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%site_4" />
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%site_4" />
       </VBox>
    </HBox>
    <VBox prefHeight="11.0" prefWidth="372.0" />
    <HBox alignment="CENTER" prefHeight="49.0" prefWidth="372.0">
       <VBox alignment="TOP_CENTER" prefHeight="50.0" prefWidth="50.0">
          <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="21.0" prefWidth="48.0">
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="22.0" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="22.0" styleClass="overview-text" />
          </HBox>
       </VBox>
       <VBox prefHeight="50.0" prefWidth="20.0" />
       <VBox alignment="TOP_CENTER" prefHeight="50.0" prefWidth="50.0">
          <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="21.0" prefWidth="48.0">
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="22.0" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="22.0" styleClass="overview-text" />
          </HBox>
       </VBox>
       <VBox prefHeight="50.0" prefWidth="20.0" />
       <VBox alignment="TOP_CENTER" prefHeight="50.0" prefWidth="50.0">
          <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="21.0" prefWidth="48.0">
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="22.0" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="22.0" styleClass="overview-text" />
          </HBox>
       </VBox>
       <VBox prefHeight="50.0" prefWidth="20.0" />
       <VBox alignment="TOP_CENTER" prefHeight="50.0" prefWidth="50.0">
          <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="21.0" prefWidth="48.0">
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="22.0" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="22.0" styleClass="overview-text" />
          </HBox>
       </VBox>
    </HBox>

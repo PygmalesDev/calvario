@@ -2,6 +2,7 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.BasicController;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.service.InGameService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -27,6 +29,10 @@ public class OverviewSitesComponent extends AnchorPane {
     public StackPane sitesContainer;
     @FXML
     public Button buildingsButton;
+    @FXML
+    public Text island_name;
+    @FXML
+    public Text island_inf;
 
     @SubComponent
     @Inject
@@ -45,6 +51,7 @@ public class OverviewSitesComponent extends AnchorPane {
     public IslandComponent islandComponent;
 
     private InGameController inGameController;
+    private Island island;
 
     @Inject
     public OverviewSitesComponent() {
@@ -80,6 +87,7 @@ public class OverviewSitesComponent extends AnchorPane {
         sitesContainer.setVisible(false);
         sitesContainer.getChildren().add(sitesComponent);
         sitesContainer.getChildren().add(detailsComponent);
+        sitesContainer.getChildren().add(buildingsComponent);
     }
 
     public void setIngameController(InGameController inGameController){
@@ -92,6 +100,11 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameController.selectedIsland.islandIsSelected = false;
         inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
         inGameController.selectedIsland = null;
+    }
+
+    public void setOverviewSites(Island island){
+        this.island = island;
+        island_name.setText(String.valueOf(island.type()));
     }
 
 }

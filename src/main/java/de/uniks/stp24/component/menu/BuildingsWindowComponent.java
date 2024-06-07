@@ -1,37 +1,91 @@
 package de.uniks.stp24.component.menu;
 
+import de.uniks.stp24.model.Island;
+import de.uniks.stp24.service.ResourcesService;
+import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import java.util.concurrent.Flow;
 
 @Component(view = "BuildingsWindow.fxml")
 public class BuildingsWindowComponent extends AnchorPane {
     @FXML
-    Button building8;
+    Button buildingRefinery;
     @FXML
-    Button building7;
+    Button buildingFactory;
     @FXML
-    Button building6;
+    Button buildingFoundry;
     @FXML
-    Button building5;
+    Button buildingResearchLab;
     @FXML
-    Button building4;
+    Button buildingFarm;
     @FXML
-    Button building3;
+    Button buildingMine;
     @FXML
-    Button building2;
+    Button buildingPowerPlant;
     @FXML
-    Button building1;
+    Button buildingExchange;
     @FXML
     Button closeWindowButton;
+
+    @Inject
+    TokenStorage tokenStorage;
+
+    @Inject
+    Subscriber subscriber;
+
+    @Inject
+    ResourcesService resourcesService;
+
+    private Island island;
+
+    private String buildingToAdd;
 
 
     @Inject
     public BuildingsWindowComponent(){
+
+    }
+
+    public void buildExchange(){
+        this.buildingToAdd = "exchange";
+        this.island = tokenStorage.getIsland();
+        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
+            onClose();
+        });
+    }
+
+    public void buildPowerPlant(){
+
+    }
+
+    public void buildMine(){
+
+    }
+
+    public void buildFarm(){
+
+    }
+
+    public void buildResearchLab(){
+
+    }
+
+    public void buildFoundry(){
+
+    }
+
+    public void buildFactory(){
+
+    }
+
+    public void buildRefinery(){
 
     }
 

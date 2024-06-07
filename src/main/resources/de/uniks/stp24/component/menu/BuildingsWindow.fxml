@@ -22,20 +22,20 @@
          <Font size="6.0"/>
       </font>
    </Button>
-   <Button fx:id="building1" layoutX="35.0" layoutY="58.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0"
+   <Button fx:id="buildingExchange" layoutX="35.0" layoutY="58.0" mnemonicParsing="false" onAction = "#buildExchange" prefHeight="50.0" prefWidth="50.0"
            text="B1" style="-fx-font-size: 12;"/>
-   <Button fx:id="building2" layoutX="116.0" layoutY="58.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0"
+   <Button fx:id="buildingPowerPlant" layoutX="116.0" layoutY="58.0" mnemonicParsing="false" onAction = "#buildPowerPlant" prefHeight="50.0" prefWidth="50.0"
            text="B2" style="-fx-font-size: 12;"/>
-   <Button fx:id="building3" layoutX="35.0" layoutY="132.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0"
+   <Button fx:id="buildingMine" layoutX="35.0" layoutY="132.0" mnemonicParsing="false" onAction = "#buildMine" prefHeight="50.0" prefWidth="50.0"
            text="B3" style="-fx-font-size: 12;"/>
-   <Button fx:id="building4" layoutX="116.0" layoutY="132.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0"
+   <Button fx:id="buildingFarm" layoutX="116.0" layoutY="132.0" mnemonicParsing="false" onAction = "#buildFarm" prefHeight="50.0" prefWidth="50.0"
            text="B4" style="-fx-font-size: 12;"/>
-   <Button fx:id="building5" layoutX="35.0" layoutY="200.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0"
+   <Button fx:id="buildingResearchLab" layoutX="35.0" layoutY="200.0" mnemonicParsing="false" onAction = "#buildResearchLab" prefHeight="50.0" prefWidth="50.0"
            text="B5" style="-fx-font-size: 12;"/>
-   <Button fx:id="building6" layoutX="116.0" layoutY="200.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0"
+   <Button fx:id="buildingFoundry" layoutX="116.0" layoutY="200.0" mnemonicParsing="false" onAction = "#buildFoundry" prefHeight="50.0" prefWidth="50.0"
            text="B6" style="-fx-font-size: 12;"/>
-   <Button fx:id="building7" layoutX="35.0" layoutY="274.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0"
+   <Button fx:id="buildingFactory" layoutX="35.0" layoutY="274.0" mnemonicParsing="false" onAction = "#buildFactory" prefHeight="50.0" prefWidth="50.0"
            text="B7" style="-fx-font-size: 12;"/>
-   <Button fx:id="building8" layoutX="116.0" layoutY="274.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0"
+   <Button fx:id="buildingRefinery" layoutX="116.0" layoutY="274.0" mnemonicParsing="false" onAction = "#buildRefinery" prefHeight="50.0" prefWidth="50.0"
            text="B8" style="-fx-font-size: 12;"/>
 </fx:root>

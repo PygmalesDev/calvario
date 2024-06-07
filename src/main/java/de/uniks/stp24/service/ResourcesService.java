@@ -6,6 +6,7 @@ import de.uniks.stp24.model.Building;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import org.fulib.fx.controller.Subscriber;
 
@@ -38,39 +39,35 @@ public class ResourcesService {
     }
 
     public Observable<SystemsResultDto> destroyBuilding(String gameID, Island island) {
-        Resource iron = new Resource("Iron", 0, 0);
-        Resource steel = new Resource("Steel", 0, 0);
-        Resource coal = new Resource("Coal", 0, 0);
 
-        Map<Resource, Integer> required = Map.of(
-                new Resource("Iron", 0, 0), 100,
-                new Resource("Coal", 0, 0), 50
-        );
-
-        Map<Resource, Integer> production = Map.of(
-                new Resource("Steel", 0, 0), 70
-        );
-
-        Map<Resource, Integer> consumption = Map.of(
-                new Resource("Iron", 0, 0), 30,
-                new Resource("Coal", 0, 0), 20
-        );
-
-        int capacity = 200;
-        int upgrade = 1;
-        Building building = new Building("Mine", required, production, consumption, capacity, upgrade);
         String[] buildings = new String[1];
-        buildings[0] = building.buildingID();
+        buildings[0] = "exchange";
         System.out.println(Arrays.toString(buildings));
 
         if (island.owner() != null){
-            if (island.owner().equals(tokenStorage.getUserId())){
+            if (island.owner().equals(tokenStorage.getEmpireId())){
                 return gameSystemsApiService.updateIsland(gameID, island.id_(), new SystemsDto(island.name(),
-                        island.districts(), island.buildings(),island.upgrade(), island.owner()));
+                        island.districts(), buildings,island.upgrade(), island.owner()));
             }
         }
 
         return gameSystemsApiService.updateIsland(gameID, island.id_(), new SystemsDto(island.name(),
+                island.districts(), island.buildings(),island.upgrade(), island.owner()));
+    }
+
+    public Observable<SystemsResultDto> createBuilding(String gameId, Island island, String buildingToAdd) {
+        String[] newBuildingsArray = new String[island.buildings().length + 1];
+        System.arraycopy(island.buildings(), 0, newBuildingsArray, 0, island.buildings().length);
+        newBuildingsArray[newBuildingsArray.length - 1] = buildingToAdd;
+
+        if (island.owner() != null){
+            if (island.owner().equals(tokenStorage.getEmpireId())){
+                return gameSystemsApiService.updateIsland(gameId, island.id_(), new SystemsDto(island.name(),
+                        island.districts(), newBuildingsArray,island.upgrade(), island.owner()));
+            }
+        }
+
+        return gameSystemsApiService.updateIsland(gameId, island.id_(), new SystemsDto(island.name(),
                 island.districts(), island.buildings(),island.upgrade(), island.owner()));
     }
 

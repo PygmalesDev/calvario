@@ -9,11 +9,14 @@ import de.uniks.stp24.component.menu.WarningComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.LogoutResult;
+import de.uniks.stp24.rest.GameMembersApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.BrowseGameService;
 import de.uniks.stp24.service.menu.CreateGameService;
 import de.uniks.stp24.service.menu.EditGameService;
+import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
@@ -40,10 +43,10 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class BrowseGameControllerTest extends ControllerTest {
-    @Mock
-    EventListener eventListener;
-    @Mock
+    @Spy
     GamesApiService gamesApiService;
+    @Spy
+    GameMembersApiService gameMembersApiService;
     @Spy
     TokenStorage tokenStorage;
     @Spy
@@ -59,9 +62,15 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Spy
     EditGameService editGameService;
     @Spy
+    EmpireService empireService;
+    @Spy
     ObjectMapper objectMapper;
     @Spy
     ErrorService errorService;
+    @Spy
+    LobbyService lobbyService;
+    @Spy
+    EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @InjectMocks
     LogoutComponent logoutComponent;
     @InjectMocks
@@ -75,15 +84,6 @@ public class BrowseGameControllerTest extends ControllerTest {
     Game game = new Game("11", null, "1", "Was geht", "testID2", false, 0,0, null);
 
     Provider<GameComponent> GameComponentProvider = () -> new GameComponent(bubbleComponent, browseGameService, editGameService, tokenStorage,resources);
-
-//    @Spy
-//    Provider<GameComponent> GameComponentProvider = new Provider(){
-//        @Override
-//        public GameComponent get() {
-//            final GameComponent gameComponent = new GameComponent();
-//            return new GameComponent();
-//        }
-//    };
 
     @InjectMocks
     BrowseGameController browseGameController;
@@ -320,4 +320,5 @@ public class BrowseGameControllerTest extends ControllerTest {
         // must be fixed when browsegames.fxml is available
         assertEquals(resources.getString("browse.game"), stage.getTitle());
     }
+
 }

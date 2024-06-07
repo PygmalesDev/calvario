@@ -15,7 +15,7 @@ import javax.inject.Inject;
 
 public class LobbyService {
     @Inject
-    GameMembersApiService gameMembersApiService;
+    public GameMembersApiService gameMembersApiService;
     @Inject
     Subscriber subscriber;
     @Inject

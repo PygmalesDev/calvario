@@ -238,7 +238,6 @@ BrowseGameController extends BasicController {
         this.tokenStorage.setGameId(browseGameService.getGame()._id());
         this.tokenStorage.setEmpireId(empireId);
         this.tokenStorage.setIsSpectator(false);
-        app.show("/ingame");
     }
 
     public void loadGame() {
@@ -250,9 +249,13 @@ BrowseGameController extends BasicController {
                                 for(ReadEmpireDto data : dto){
                                     if (data.user().equals(tokenStorage.getUserId())) {
                                         startGame(data._id(), false);
+                                        app.show("/ingame");
                                     }
                                 }
-                                startGame(null, true);
+                                if(tokenStorage.getEmpireId() == null) {
+                                        startGame(null, true);
+                                        app.show("/ingame");
+                                }
                             }, error -> {});
                         }, error ->{
                             bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.game.started"));

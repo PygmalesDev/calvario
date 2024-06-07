@@ -2,6 +2,7 @@ package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
@@ -26,6 +27,8 @@ public class PauseMenuComponent extends AnchorPane {
     VBox vbox;
     @Inject
     App app;
+    @Inject
+    TokenStorage tokenStorage;
 
     @Inject
     InGameService inGameService;
@@ -49,6 +52,8 @@ public class PauseMenuComponent extends AnchorPane {
     }
 
     public void quit() {
+        tokenStorage.setGameId(null);
+        tokenStorage.setGameId(null);
         app.show("/browseGames");
     }
 }

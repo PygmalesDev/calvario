@@ -5,7 +5,8 @@ import java.util.Map;
 public record Site(
     String siteID,
     Map<Resource, Integer> required,
-    int maxBuildings,
-    Building[] buildings
+    Map<Resource, Integer> production,
+    Map<Resource, Integer> consumption,
+    int cells
 ) {
 }

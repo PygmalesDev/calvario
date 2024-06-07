@@ -1,5 +1,7 @@
 package de.uniks.stp24.model;
 
+import java.util.Map;
+
 public record Island(
   String owner,
   int flagIndex,
@@ -9,6 +11,8 @@ public record Island(
   int crewCapacity,
   int resourceCapacity,
   int upgradeLevel,
-  Site[] sites
+  Map<String, Integer> sitesSlots,
+  Map<String, Integer> sites,
+  String[] buildings
 ) {
 }

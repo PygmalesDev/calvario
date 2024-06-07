@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -19,6 +20,7 @@ import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.event.OnKey;
 import javax.inject.Inject;
 
 @Title("%create.game")
@@ -84,6 +86,7 @@ public class CreateGameController extends BasicController {
 
     // class was modified! some code was refactored
     // now use subscriber
+    @OnKey(code = KeyCode.ENTER)
     public void createGame() {
         String gameName = this.createNameTextField.getText();
         String password = this.createPasswordTextField.getText();
@@ -113,6 +116,7 @@ public class CreateGameController extends BasicController {
         }
     }
 
+    @OnKey(code = KeyCode.ESCAPE)
     public void cancel(){
         app.show("/browseGames");
     }

@@ -42,15 +42,17 @@ public class IslandsService extends BasicService {
                     + " " + data.x() + " " + data.y() + " " + data.owner() );
                     Island tmp = new Island(data.owner(),
                         // todo flagIndex could be retrieved from server -> games/{game}/members/{user}
-                        1,
+                        Objects.isNull(data.owner()) ? -1 : tokenStorage.getFlagIndex(data.owner()),
                         data.x(),
                         data.y(),
                         IslandType.valueOf(data.type()),
                         data.population(),
                         data.capacity(),
                         data.upgrade().ordinal(),
-                        // todo not sure which information in data match sites in island dto
-                        null
+                        // todo find out which information in data match sites in island dto
+                        data.districtSlots(),
+                        data.districts(),
+                        data.buildings()
                       );
                     isles.add(tmp);
                 });
@@ -59,12 +61,11 @@ public class IslandsService extends BasicService {
           error -> errorService.getStatus(error));
     }
 
-
     public List<Island> getListOfIslands() {
         return Collections.unmodifiableList(this.isles);
     }
 
-    // look for flagIndex of all players with an empire
+    // look for flagIndex of all players with an empire in game
     public void retrieveMembersInfo(String gameID){
         subscriber.subscribe(lobbyService.loadPlayers(gameID),
           dto -> {
@@ -96,11 +97,10 @@ public class IslandsService extends BasicService {
         // todo read values from dto
         component.applyIcon(isleDto.type());
         // todo read values from tokenStorage -> owner = null -> no flag!
+        // for the moment let set random flag index
         int flag = randomGenerator.nextInt(0, 5);
-//        component.applyIcon(IslandType.values()[icon]);
-
         component.setFlagImage(flag);
-
+//        component.setFlagImage(isleDto.flagIndex());
         return component;
     }
 

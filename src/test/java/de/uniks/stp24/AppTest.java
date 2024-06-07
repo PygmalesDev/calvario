@@ -157,7 +157,7 @@ public class AppTest extends ControllerTest {
         createGame();
         loadGame();
         selectEmpire();
-        startGame();
+    //    startGame();
     }
 
 

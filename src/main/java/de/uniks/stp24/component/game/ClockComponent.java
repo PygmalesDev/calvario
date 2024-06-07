@@ -1,4 +1,4 @@
-package de.uniks.stp24.component;
+package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
@@ -20,6 +20,7 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
+
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -79,10 +80,10 @@ public class ClockComponent extends AnchorPane {
     @OnInit
     public void init() {
 
-        gameId = tokenStorage.getGameId();
-
         createUpdateSeasonListener();
         createUpdateSpeedListener();
+
+        gameId = tokenStorage.getGameId();
 
         PropertyChangeListener callHandleTimeChanged = this::handleTimeChanged;
         timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_COUNTDOWN, callHandleTimeChanged);
@@ -93,6 +94,7 @@ public class ClockComponent extends AnchorPane {
         PropertyChangeListener callHandleSeasonChanged = this::handleSeasonChanged;
         timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_SEASON, callHandleSeasonChanged);
     }
+
     @OnRender
     public void render() {
 
@@ -130,15 +132,15 @@ public class ClockComponent extends AnchorPane {
         countdownLabel.setText(translateCountdown(timerService.getCountdown()));
 
         subscriber.subscribe(gamesApiService.getGame(gameId),
-            result -> {
-            // Only owner of the game can change the speed
-                if (!(Objects.equals(result.owner(), tokenStorage.getUserId()))) {
-                    x1Button.setVisible(false);
-                    x2Button.setVisible(false);
-                    x3Button.setVisible(false);
-                    pauseClockButton.setVisible(false);
-                }
-            });
+                result -> {
+                    // Only owner of the game can change the speed
+                    if (!(Objects.equals(result.owner(), tokenStorage.getUserId()))) {
+                        x1Button.setVisible(false);
+                        x2Button.setVisible(false);
+                        x3Button.setVisible(false);
+                        pauseClockButton.setVisible(false);
+                    }
+                });
 
         // Dummy data for special Event
         randomEventImage.setImage(imageCache.get("assets/events/goodEvent.png"));
@@ -162,7 +164,7 @@ public class ClockComponent extends AnchorPane {
 
     public void createUpdateSeasonListener() {
         subscriber.subscribe(this.eventListener
-                .listen("games." + gameId + ".ticked", Game.class),
+                        .listen("games." + gameId + ".ticked", Game.class),
                 event -> {
                     System.out.println("Season changed");
                     Game game = event.data();
@@ -174,7 +176,7 @@ public class ClockComponent extends AnchorPane {
 
     public void createUpdateSpeedListener() {
         subscriber.subscribe(this.eventListener
-                .listen("games." + gameId + ".updated", Game.class),
+                        .listen("games." + gameId + ".updated", Game.class),
                 event -> {
                     System.out.println("Update Speed");
                     Game game = event.data();

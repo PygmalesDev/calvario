@@ -1,6 +1,6 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.ClockComponent;
+import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
@@ -36,7 +36,8 @@ public class InGameController extends BasicController {
     @FXML
     StackPane storageOverviewContainer;
 
-
+    @Inject
+    TimerService timerService;
     @Inject
     InGameService inGameService;
     @Inject
@@ -57,7 +58,6 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
-
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
@@ -65,7 +65,6 @@ public class InGameController extends BasicController {
     String gameID;
     String empireID;
 
-    TimerService timerService;
     @Param("gameid")
     String gameId;
 

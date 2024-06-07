@@ -46,4 +46,12 @@ public class InGameService {
     public int getLanguage() {
         return gameStatus.getLanguage();
     }
+
+    public void setTimerService(TimerService timerService) {
+        this.timerService = timerService;
+    }
+
+    public TimerService getTimerService() {
+        return timerService;
+    }
 }

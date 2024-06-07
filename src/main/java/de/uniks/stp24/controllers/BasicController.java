@@ -2,10 +2,12 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.utils.ResponseConstants;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -24,6 +26,9 @@ public class BasicController {
     @Inject
     @Resource
     public ResourceBundle resources;
+    @Inject
+    @Named("gameResourceBundle")
+    public ResourceBundle gameResourceBundle;
     @Inject
     ErrorService errorService;
     @Inject

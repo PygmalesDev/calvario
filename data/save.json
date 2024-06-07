@@ -1,29 +1,8 @@
 [ {
-  "name" : "Wicked Dukes",
-  "flagIndex" : 15,
-  "portraitIndex" : 2,
-  "description" : "The feared Wicked Dukes, masters of the maritime underworld, ruled with an iron fist and a thirst for gold that knew no bounds.",
-  "color" : "#F28500",
-  "colorIndex" : 11
-}, {
-  "name" : "Hungry Charlatans",
-  "flagIndex" : 0,
-  "portraitIndex" : 6,
-  "description" : "The feared Hungry Charlatans, masters of the maritime underworld, ruled with an iron fist and a thirst for gold that knew no bounds.",
-  "color" : "#40E0D0",
-  "colorIndex" : 5
-}, {
-  "name" : "Vicious Traders",
-  "flagIndex" : 2,
+  "name" : "Mischievous Adventurers of Deep Ring",
+  "flagIndex" : 11,
   "portraitIndex" : 13,
-  "description" : "The feared Vicious Traders, masters of the maritime underworld, ruled with an iron fist and a thirst for gold that knew no bounds.",
-  "color" : "#FFD700",
-  "colorIndex" : 7
-}, {
-  "name" : "Wicked Wanderers of Sunless Enclave",
-  "flagIndex" : 14,
-  "portraitIndex" : 16,
-  "description" : "With their cunning tactics and insatiable greed, the members of Wicked Wanderers strike fear into the hearts of sailors, dominating the oceans with impunity.",
-  "color" : "#FF00FF",
-  "colorIndex" : 6
+  "description" : "In the treacherous waters of the Calvario, Mischievous Adventurers as the most feared pirate alliance, hoarding riches and leaving a trail of chaos in its wake.",
+  "color" : "#36454F",
+  "colorIndex" : 10
 } ]

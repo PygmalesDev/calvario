@@ -7,6 +7,7 @@ import de.uniks.stp24.component.menu.WarningScreenComponent;
 import de.uniks.stp24.controllers.EditAccController;
 import de.uniks.stp24.model.User;
 import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.menu.EditAccService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;

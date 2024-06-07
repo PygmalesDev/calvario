@@ -2,9 +2,8 @@ package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.MemberDto;
-import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -55,7 +54,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @Resource
     ResourceBundle resource;
     @Inject
-    IslandsService islandsService;
+    ErrorService errorService;
 
     private String gameID;
     public boolean leftLobby;
@@ -80,7 +79,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
             members -> this.startJourneyButton.setDisable(!Arrays.stream(members)
                                 .map(MemberDto::ready)
                                 .reduce(Boolean::logicalAnd).orElse(true)),
-            error -> {}));
+              error -> errorService.getStatus(error)));
     }
 
     public void setReadyButton(boolean ready){
@@ -92,37 +91,12 @@ public class LobbyHostSettingsComponent extends AnchorPane {
         this.startJourneyButton.setDisable(true);
     }
 
-    /** when starting a game:
-     * initial resources (EmpireService),
-     * island information (IslandsService)
-     * must be retrieved
-     */
-
     public void startGame() {
         subscriber.subscribe(editGameService.startGame(this.gameID),
-          result -> {}
-          //Todo: do this for every member of the game
-          , error -> {});
-        // todo delete after migrate this
-        /*
-        subscriber.subscribe(editGameService.startGame(this.gameID),
           result -> {
-            this.tokenStorage.setGameId(gameID);
-            subscriber.subscribe(empireService.getEmpires(this.gameID),
-                dto -> {
-                    for(ReadEmpireDto data :dto){
-                        if (data.user().equals(tokenStorage.getUserId())) {
-                            this.tokenStorage.setEmpireId(data._id());
-                        }
-                    }
-                    System.out.println("RESOURCES READY");
-                },
-                error -> {});
-            islandsService.retrieveIslands(gameID);
             this.startJourneyButton.setDisable(true);
-            this.readyButton.setDisable(true);
             },
-          error -> this.startJourneyButton.setDisable(false));*/
+          error -> this.startJourneyButton.setDisable(false));
     }
 
     /**
@@ -133,7 +107,8 @@ public class LobbyHostSettingsComponent extends AnchorPane {
           host -> this.subscriber.subscribe(this.lobbyService.updateMember(this.gameID,
                     this.tokenStorage.getUserId(), host.ready(), host.empire()),
             result -> this.app.show("/browseGames"),
-            error -> {}));
+            error -> errorService.getStatus(error)),
+          error -> errorService.getStatus(error));
     }
 
     public void setGameID(String gameID) {
@@ -147,17 +122,15 @@ public class LobbyHostSettingsComponent extends AnchorPane {
         this.subscriber.subscribe(
                 this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
           result -> {
-                    if (result.ready()) {
-                        this.subscriber.subscribe(this.lobbyService
-                                .updateMember(this.gameID, this.tokenStorage.getUserId(), false, result.empire()));
-                        readyIconImageView.setImage(readyIconBlueImage);
-                    } else {
-                        this.subscriber.subscribe(this.lobbyService
-                                .updateMember(this.gameID, this.tokenStorage.getUserId(), true, result.empire()));
-                        readyIconImageView.setImage(readyIconGreenImage);
-                    }
+                    this.subscriber.subscribe(this.lobbyService
+                      .updateMember(this.gameID,
+                        this.tokenStorage.getUserId(),
+                        !result.ready(),
+                        result.empire()));
+                        readyIconImageView.setImage(result.ready() ? readyIconBlueImage : readyIconGreenImage);
+
                 },
-          error -> {});
+          error -> errorService.getStatus(error));
     }
 
     @OnDestroy

@@ -77,9 +77,9 @@ public class CreateGameController extends BasicController {
         this.bubbleComponent.setCaptainText(this.resources.getString("pirate.newGame"));
     }
 
-    //Spinner for incrementing map size
+    //Spinner for incrementing map size between 50 and 200
     public void initializeSpinner(){
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(100, 1000);
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(50, 200);
         valueFactory.setValue(100);
         createMapSizeSpinner.setValueFactory(valueFactory);
     }

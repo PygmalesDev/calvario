@@ -23,10 +23,8 @@ public class JoinGameService {
     }
 
     private MemberDto loadUserLobbyDto(String password, String userID) {
-        return new MemberDto(
-            false,
+        return new MemberDto(false,
                 userID,
-                null,
                 null,
                 password
         );

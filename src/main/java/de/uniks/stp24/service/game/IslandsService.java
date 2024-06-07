@@ -39,12 +39,12 @@ public class IslandsService extends BasicService {
             dto -> {
                 Arrays.stream(dto).forEach(data -> {
                     List<String> linkedIsles = new ArrayList<>(data.links().keySet());
-//                    System.out.println(linkedIsles.size() + " " + data.type()
-//                    + " " + data.x() + " " + data.y() + " " + data.owner() );
+                    System.out.println(data.type()
+                    + " " + data.x() + " " + data.y() + " " +
+                      (data.owner()!=null ? data.owner() : "" ));
                     if(data.owner()!=null) System.out.println("YIPPIE ONWER "  +
                       data.owner() + " flag " + tokenStorage.getFlagIndex(data.owner()));
                     Island tmp = new Island(data.owner(),
-                        // todo flagIndex could be retrieved from server -> games/{game}/members/{user}
                         Objects.isNull(data.owner()) ? -1 : tokenStorage.getFlagIndex(data.owner()),
                         data.x(),
                         data.y(),
@@ -70,7 +70,8 @@ public class IslandsService extends BasicService {
 
     /**
      * coordinate system on server has origin at screen center
-     * and are not too big apply a factor 10 for increase and
+     * and their range is aprox. (-100,100)
+     * apply a factor 6  for increase and
      * an offset to match our screen size
      * it is set to 2560 x 1440
      * thus the size of the pane should be considered
@@ -86,7 +87,6 @@ public class IslandsService extends BasicService {
         // todo read values from tokenStorage -> owner = null -> no flag!
         // for the moment let set random flag index
         int flag = randomGenerator.nextInt(0, 5);
-//        if (Upgrade.values()[isleDto.upgradeLevel()]!= Upgrade.unexplored) component.setFlagImage(flag);
         component.setFlagImage(isleDto.flagIndex());
         return component;
     }

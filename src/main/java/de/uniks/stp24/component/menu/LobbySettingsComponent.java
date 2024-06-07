@@ -1,6 +1,7 @@
 package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
@@ -34,6 +35,8 @@ public class LobbySettingsComponent extends AnchorPane {
     @Inject
     @Resource
     ResourceBundle resource;
+    @Inject
+    ErrorService errorService;
 
     private String gameID;
     public boolean leftLobby = false;
@@ -58,7 +61,8 @@ public class LobbySettingsComponent extends AnchorPane {
     public void leaveLobby() {
         this.leftLobby = true;
         this.subscriber.subscribe(this.lobbyService.leaveLobby(this.gameID, this.tokenStorage.getUserId()),
-                result -> this.app.show("/browseGames"));
+            result -> this.app.show("/browseGames"),
+            error -> errorService.getStatus(error));
     }
 
     public void selectEmpire() {
@@ -70,7 +74,8 @@ public class LobbySettingsComponent extends AnchorPane {
 
     public void ready() {
         this.subscriber.subscribe(
-                this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
+                this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
+          result -> {
                     if (result.ready()) {
                         this.subscriber.subscribe(this.lobbyService
                                 .updateMember(this.gameID, this.tokenStorage.getUserId(), false, result.empire()));
@@ -80,7 +85,8 @@ public class LobbySettingsComponent extends AnchorPane {
                                 .updateMember(this.gameID, this.tokenStorage.getUserId(), true, result.empire()));
                         readyIconImageView.setImage(readyIconGreenImage);
                     }
-                });
+                },
+          error -> errorService.getStatus(error));
     }
 
     @OnDestroy

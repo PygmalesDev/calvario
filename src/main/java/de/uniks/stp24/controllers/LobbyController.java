@@ -5,12 +5,10 @@ import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.UserApiService;
-import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.menu.GamesService;
-import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,6 +25,7 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -149,13 +148,12 @@ public class LobbyController extends BasicController {
                 );
 
                 this.sortMemberList();
-            });
+            },
+              this::errorMsg);
             this.createGameStartedListener();
             this.lobbyHostSettingsComponent.createCheckPlayerReadinessListener();
-        },
-          error -> this.enterGameComponent
-            .errorMessage.textProperty().set(getErrorInfoText(error))
-        );
+            },
+          this::errorMsg);
     }
 
     /**
@@ -169,8 +167,7 @@ public class LobbyController extends BasicController {
             this.lobbyMessageElement.setVisible(true);
             this.messageText.setText(resources.getString("lobby.has.been.deleted"));
           },
-          error -> this.enterGameComponent
-            .errorMessage.textProperty().set(getErrorInfoText(error)));
+          this::errorMsg);
     }
 
     /**
@@ -196,8 +193,7 @@ public class LobbyController extends BasicController {
             }
             this.sortMemberList();
         },
-          error -> this.enterGameComponent
-                .errorMessage.textProperty().set(getErrorInfoText(error))
+          this::errorMsg
           );
     }
 
@@ -224,18 +220,19 @@ public class LobbyController extends BasicController {
                                     if (data.user().equals(tokenStorage.getUserId())) {
                                         this.tokenStorage.setEmpireId(data._id());
                                         this.tokenStorage.setIsSpectator(false);
+                                        //todo remove printouts
                                         System.out.println("lobby:"
                                           + tokenStorage.getEmpireId());
                                     }
                                 }
                                 System.out.println("RESOURCES READY");
-                            }, error -> {});
+                            }, this::errorMsg);
                         } else {
                             tokenStorage.setIsSpectator(true);
                         }
                         islandsService.retrieveIslands(gameID);
-                    }, error -> {});}
-          }, error -> this.enterGameComponent.errorMessage.textProperty().set(getErrorInfoText(error)));
+                    }, this::errorMsg);}
+          }, this::errorMsg);
     }
 
     /**
@@ -268,7 +265,7 @@ public class LobbyController extends BasicController {
                     user._id(), user.avatar(), user.createdAt(), user.updatedAt()
             ), data.empire(), data.ready(), this.game, this.asHost));
         },
-          error -> {});
+          this::errorMsg);
     }
 
     /**
@@ -294,8 +291,7 @@ public class LobbyController extends BasicController {
                             memberUser.user().name().replace(" (Spectator)", ""),
                             userID, memberUser.user().avatar(), memberUser.user().createdAt(),
                             memberUser.user().updatedAt()), data.empire(), data.ready(), this.game, this.asHost);
-                }
-                else {
+                } else {
                     String suffix = " (Spectator)";
                     if (memberUser.user().name().contains("(Spectator)"))
                         suffix = "";
@@ -342,8 +338,7 @@ public class LobbyController extends BasicController {
                 this.lobbyElement.getChildren().add(this.enterGameComponent);
             }
         },
-        error -> this.enterGameComponent
-          .errorMessage.textProperty().set(getErrorInfoText(error)));
+          this::errorMsg);
     }
 
     /**
@@ -359,7 +354,7 @@ public class LobbyController extends BasicController {
         if (!this.wasKicked) this.subscriber.subscribe(
                 this.lobbyService.leaveLobby(this.gameID, this.tokenStorage.getUserId()),
                 result -> this.app.show("/browseGames"),
-                error -> {});
+                this::errorMsg);
         else
             this.app.show("/browseGames");
     }
@@ -369,5 +364,9 @@ public class LobbyController extends BasicController {
          subscriber.dispose();
         backgroundAnchorPane.setStyle("-fx-background-image: null");
         cardBackgroundVBox.setStyle("-fx-background-image: null");
+    }
+
+    private void errorMsg(@NotNull Throwable error) {
+        this.enterGameComponent.errorMessage.textProperty().set(getErrorInfoText(error));
     }
 }

@@ -2,7 +2,7 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.rest.UserApiService;
-import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.menu.SignUpService;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
@@ -75,7 +75,7 @@ public class SignUpController extends BasicController {
     UserApiService userApiService;
     @SubComponent
     @Inject
-    BubbleComponent bubbleComponent;
+    public BubbleComponent bubbleComponent;
 
     private BooleanBinding isLoginFieldEmpty;
     private BooleanBinding isPasswordFieldEmpty;

@@ -1,36 +1,60 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.menu.GamesService;
+import de.uniks.stp24.service.menu.LobbyService;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
+import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
+
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
 
+@Title("CALVARIO")
 @Controller
 public class InGameController extends BasicController {
     @FXML
     StackPane pauseMenuContainer;
+    @FXML
+    StackPane storageOverviewContainer;
+
+
+    @Inject
+    InGameService inGameService;
+    @Inject
+    GamesService gamesService;
+    @Inject
+    LobbyService lobbyService;
+    @Inject
+    EmpireService empireService;
+
     @SubComponent
     @Inject
     public PauseMenuComponent pauseMenuComponent;
     @SubComponent
     @Inject
     public SettingsComponent settingsComponent;
+    @SubComponent
     @Inject
-    InGameService inGameService;
+    public StorageOverviewComponent storageOverviewComponent;
+
+    String gameID;
+    String empireID;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
@@ -40,7 +64,15 @@ public class InGameController extends BasicController {
 
     @OnInit
     public void init() {
-        GameStatus gameStatus = inGameService.getGame();
+
+        gameID = tokenStorage.getGameId();
+        empireID = tokenStorage.getEmpireId();
+        //Todo: Outprint for Swagger - can be deleted later
+        System.out.println(this.gameID);
+        System.out.println(empireID);
+
+
+        GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_PAUSED"));
@@ -84,6 +116,9 @@ public class InGameController extends BasicController {
     public void render() {
         pauseMenuContainer.setVisible(false);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
+
+        storageOverviewContainer.setVisible(false);
+        storageOverviewContainer.getChildren().add(storageOverviewComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -113,5 +148,15 @@ public class InGameController extends BasicController {
     public void destroy() {
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
           .removePropertyChangeListener(triple.propertyName(), triple.listener()));
+        this.subscriber.dispose();
+    }
+
+    public void showStorage() {
+        storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
+    }
+
+    public void showIslandOverview() {
+
+
     }
 }

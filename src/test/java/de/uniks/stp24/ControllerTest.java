@@ -30,6 +30,7 @@ public class ControllerTest extends ApplicationTest {
     @Spy
     public ResourceBundle resources = ResourceBundle.getBundle("de/uniks/stp24/lang/main", Locale.ROOT);
 
+
     protected Stage stage;
     protected TestComponent testComponent;
 
@@ -44,13 +45,11 @@ public class ControllerTest extends ApplicationTest {
             prefService.setLocale(Locale.ENGLISH);
             this.prefService.removeRefreshToken();
         }
-
         testComponent = (TestComponent) DaggerTestComponent.builder().mainApp(app).build();
         app.setComponent(testComponent);
 
         app.start(stage);
         stage.requestFocus();
-
         stage.getScene().getStylesheets().clear();
     }
 
@@ -60,6 +59,10 @@ public class ControllerTest extends ApplicationTest {
         app.stop();
         app = null;
         stage = null;
+        testComponent = null;
+        prefService = null;
+        responseConstants = null;
+        resources = null;
     }
 
     @AfterAll

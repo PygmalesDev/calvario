@@ -2,7 +2,7 @@ package de.uniks.stp24.component.menu;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
-import de.uniks.stp24.service.EditAccService;
+import de.uniks.stp24.service.menu.EditAccService;
 import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.utils.ResponseConstants;

@@ -26,4 +26,11 @@
   "description" : "With their cunning tactics and insatiable greed, the members of Wicked Wanderers strike fear into the hearts of sailors, dominating the oceans with impunity.",
   "color" : "#FF00FF",
   "colorIndex" : 6
+=======
+  "name" : "Mischievous Adventurers of Deep Ring",
+  "flagIndex" : 11,
+  "portraitIndex" : 13,
+  "description" : "In the treacherous waters of the Calvario, Mischievous Adventurers as the most feared pirate alliance, hoarding riches and leaving a trail of chaos in its wake.",
+  "color" : "#36454F",
+  "colorIndex" : 10
 } ]

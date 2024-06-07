@@ -2,6 +2,8 @@ package de.uniks.stp24.service;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.HashMap;
+import java.util.Map;
 
 @Singleton
 public class TokenStorage {
@@ -11,7 +13,7 @@ public class TokenStorage {
     private String avatar;
     private String gameId;
     private String empireId;
-
+    private Map<String, Integer> flagsInGame = new HashMap<>();
     @Inject
     public TokenStorage() {
     }
@@ -41,4 +43,10 @@ public class TokenStorage {
 
     public String getEmpireId() {return empireId;}
     public void setEmpireId(String empireId) {this.empireId = empireId;}
+    public void saveFlag(String id, int flagIndex) {
+        this.flagsInGame.put(id,flagIndex);
+    }
+    public int getFlagIndex(String id){
+        return this.flagsInGame.getOrDefault(id,-1);
+    }
 }

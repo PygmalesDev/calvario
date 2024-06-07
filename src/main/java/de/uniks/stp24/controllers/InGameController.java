@@ -7,11 +7,12 @@ import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
-import de.uniks.stp24.service.IslandsService;
+import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -25,8 +26,7 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.annotation.param.Param;
-import org.fulib.fx.controller.Subscriber;
+
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -37,6 +37,7 @@ import java.util.*;
 public class InGameController extends BasicController {
     public Button showStorageButton;
     public Button showIslandButton;
+    public HBox storageButtonsBox;
     @FXML
     ScrollPane mapPane;
     @FXML
@@ -68,8 +69,7 @@ public class InGameController extends BasicController {
     @Inject
     IslandsService islandsService;
     List<IslandComponent> islandComponentList = new ArrayList<>();
-    @Inject
-    Subscriber subscriber;
+
     boolean pause = false;
 
 
@@ -95,7 +95,6 @@ public class InGameController extends BasicController {
         System.out.println(this.gameID);
         System.out.println(empireID);
 
-
         GameStatus gameStatus = inGameService.getGameStatus();
 
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
@@ -109,6 +108,7 @@ public class InGameController extends BasicController {
         PropertyChangeListener callHandleLanguageChanged = this::handleLanguageChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_LANGUAGE, callHandleLanguageChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
+
 
     }
 
@@ -166,20 +166,32 @@ public class InGameController extends BasicController {
         pauseMenuContainer.getChildren().remove(settingsComponent);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
     }
+
     public void pauseGame() {
         pauseMenuContainer.setVisible(pause);
     }
-
     public void resumeGame() {
         pauseMenuContainer.setVisible(pause);
     }
 
+    // created and add buttons for storage and island overview
+    // there are problems if they are contained in the fxml
+    private void createButtonsStorage() {
+        if (!(Objects.nonNull(showIslandButton)&&(Objects.nonNull(showStorageButton)))) {
+            showIslandButton = new Button();
+            showIslandButton.setPrefHeight(40.0);
+            showIslandButton.setPrefWidth(40.0);
+            showIslandButton.setOnAction(this::showIslandOverview);
+            showStorageButton = new Button();
+            showStorageButton.setPrefHeight(40.0);
+            showStorageButton.setPrefWidth(40.0);
+            showStorageButton.setOnAction(this::showStorage);
+            this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
+        }
+    }
 
     @OnRender
     public void createMap()  {
-
-        // sea should be inserted using css -> remove this line
-        this.mapGrid.setStyle("-fx-background-image: url('/de/uniks/stp24/icons/sea.png')");
 
         islandsService.getListOfIslands().forEach(
           island -> {
@@ -194,6 +206,7 @@ public class InGameController extends BasicController {
         );
 
         //todo draw connections
+        createButtonsStorage();
 
     }
 
@@ -209,12 +222,12 @@ public class InGameController extends BasicController {
         this.subscriber.dispose();
     }
 
-    @OnKey(code = KeyCode.S)
-    public void showStorage() {
+//    @OnKey(code = KeyCode.S)
+    public void showStorage(ActionEvent event) {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
-    public void showIslandOverview() {
+    public void showIslandOverview(ActionEvent event) {
 
 
     }

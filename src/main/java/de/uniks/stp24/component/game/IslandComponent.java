@@ -27,6 +27,7 @@ public class IslandComponent extends Pane {
     ImageView flagImage;
     private Island island;
     double x ,y ;
+    // todo flag images
     // images as placeholder for flags (instead color?)
     final String[] flags = {
       "847.png", "863.png", "911.png", "927.png", "959.png"
@@ -49,8 +50,14 @@ public class IslandComponent extends Pane {
     }
 
     public void setFlagImage(int flag){
-        this.flagImage
-          .setImage(imageCache.get("test/" + flags[flag]));
+        if (flag < 0) {
+          this.flagImage
+            .setImage(imageCache.get("test/959.png"));
+        }
+        else {
+            this.flagImage
+              .setImage(imageCache.get("test/" + flags[flag]));
+        }
     }
 
     public void applyInfo(Island islandInfo){

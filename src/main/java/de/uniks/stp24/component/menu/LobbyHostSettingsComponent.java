@@ -4,7 +4,7 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.IslandsService;
+import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.LobbyService;

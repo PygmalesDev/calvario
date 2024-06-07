@@ -1,34 +1,29 @@
-package de.uniks.stp24.service;
+package de.uniks.stp24.service.game;
 
-import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.service.BasicService;
+import de.uniks.stp24.service.menu.LobbyService;
 import org.fulib.fx.annotation.event.OnDestroy;
-import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
 import java.util.random.RandomGenerator;
 @Singleton
-public class IslandsService {
-    @Inject
-    App app;
-    @Inject
-    Subscriber subscriber;
+public class IslandsService extends BasicService {
+
     @Inject
     GameSystemsApiService gameSystemsService;
     @Inject
-    ErrorService errorService;
-    @Inject
-    TokenStorage tokenStorage;
+    LobbyService lobbyService;
 
     private final List<Island> isles = new ArrayList<>();
     // private final Map<String, List<String>>  = new HashMap<>();
 
-    // after development is ready remove this
+    // todo after development is ready remove this generator
     static final RandomGenerator randomGenerator = new Random(1234);
 
     @Inject
@@ -38,6 +33,7 @@ public class IslandsService {
     // and retrieve islands when game starts
     public void retrieveIslands(String gameID) {
         this.isles.clear();
+        retrieveMembersInfo(gameID);
         subscriber.subscribe(gameSystemsService.getSystems(gameID),
             dto -> {
                 Arrays.stream(dto).forEach(data -> {
@@ -45,13 +41,17 @@ public class IslandsService {
                     System.out.println(linkedIsles.size() + " " + data.type()
                     + " " + data.x() + " " + data.y() + " " + data.owner() );
                     Island tmp = new Island(data.owner(),
+                        // todo flagIndex could be retrieved from server -> games/{game}/members/{user}
                         1,
                         data.x(),
                         data.y(),
                         IslandType.valueOf(data.type()),
                         data.population(),
                         data.capacity(),
-                        data.upgrade().ordinal());
+                        data.upgrade().ordinal(),
+                        // todo not sure which information in data match sites in island dto
+                        null
+                      );
                     isles.add(tmp);
                 });
                 this.app.show("/ingame");
@@ -64,13 +64,28 @@ public class IslandsService {
         return Collections.unmodifiableList(this.isles);
     }
 
+    // look for flagIndex of all players with an empire
+    public void retrieveMembersInfo(String gameID){
+        subscriber.subscribe(lobbyService.loadPlayers(gameID),
+          dto -> {
+            Arrays.stream(dto).forEach(member -> {
+                if(member.ready() && Objects.nonNull(member.empire())) {
+                    tokenStorage.saveFlag(member.user(),member.empire().flag());
+                    //todo look if this works properly
+                    System.out.println(member.user());
+                    System.out.println(member.empire().flag());
+                }
+            });
+          },
+          error -> errorService.getStatus(error));
+    }
 
     /**
      * coordinate system on server has origin at screen center
      * and are not too big apply a factor 10 for increase and
      * an offset to match our screen size
-     * i set 2560 x 1440
-     *  thus the size of the pane should be considered
+     * it is set to 2560 x 1440
+     * thus the size of the pane should be considered
      */
     public IslandComponent createIslandPaneFromDto(Island isleDto, IslandComponent component) {
         component.applyInfo(isleDto);
@@ -80,6 +95,7 @@ public class IslandsService {
           isleDto.posY() * 6 + offsetV);
         // todo read values from dto
         component.applyIcon(isleDto.type());
+        // todo read values from tokenStorage -> owner = null -> no flag!
         int flag = randomGenerator.nextInt(0, 5);
 //        component.applyIcon(IslandType.values()[icon]);
 

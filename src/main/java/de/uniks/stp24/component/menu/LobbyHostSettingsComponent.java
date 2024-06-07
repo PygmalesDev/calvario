@@ -31,6 +31,12 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @FXML
     public Button startJourneyButton;
     @FXML
+    public Button readyButton;
+    @FXML
+    public Button selectEmpireButton;
+    @FXML
+    public Button closeLobbyButton;
+    @FXML
     ImageView readyIconImageView;
     @Inject
     Subscriber subscriber;
@@ -90,10 +96,20 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     }
 
     public void startGame() {
-        subscriber.subscribe(editGameService.startGame(this.gameID),
-                result -> {}
-            //Todo: do this for every member of the game
-        , error -> {});
+        subscriber.subscribe(empireService.getEmpires(this.gameID),
+                event ->{
+                    System.out.println(event.length);
+                    for(ReadEmpireDto data : event){
+                        System.out.println("ReadEmpireDto: " + data);
+                        System.out.println("User " + data.user());
+                        System.out.println("TokenUser " + tokenStorage.getUserId());
+                    }
+                    System.out.println("-------------------");
+                    subscriber.subscribe(editGameService.startGame(this.gameID),
+                            result -> {}
+                            , error -> {});
+                });
+
     }
 
 

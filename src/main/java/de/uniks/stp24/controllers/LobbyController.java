@@ -5,7 +5,6 @@ import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.UserApiService;
-import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.menu.GamesService;
@@ -207,29 +206,41 @@ public class LobbyController extends BasicController {
         this.subscriber.subscribe(this.eventListener
                         .listen("games." + this.gameID + ".updated", Game.class),
                 event -> {
+                    disableButtons(true);
             if(event.data().started()) {
                 this.tokenStorage.setGameId(gameID);
                     subscriber.subscribe(lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
                             memberDto -> {
+
                         if(Objects.nonNull(memberDto.empire())){
                             subscriber.subscribe(empireService.getEmpires(this.gameID), dto -> {
                                 for(ReadEmpireDto data : dto){
                                     if (data.user().equals(tokenStorage.getUserId())) {
                                         this.tokenStorage.setEmpireId(data._id());
                                         this.tokenStorage.setIsSpectator(false);
-                                        System.out.println("lobby:"
-                                         + tokenStorage.getEmpireId());
                                         this.app.show("/ingame");
 
                                     }
                                 }
                                 }, error -> {});
                         }else {
-                            tokenStorage.setIsSpectator(true);
-                            this.app.show("/ingame");
+                            subscriber.subscribe(empireService.getEmpires(this.gameID), dto -> {
+                                tokenStorage.setIsSpectator(true);
+                                this.app.show("/ingame");
+                            }, error -> {});
                         }
                         }, error -> {});}
-            }, error -> this.enterGameComponent.errorMessage.textProperty().set(getErrorInfoText(error)));
+            }, error -> disableButtons(false));
+    }
+
+    private void disableButtons(boolean disable){
+        this.lobbyHostSettingsComponent.startJourneyButton.setDisable(disable);
+        this.lobbyHostSettingsComponent.selectEmpireButton.setDisable(disable);
+        this.lobbySettingsComponent.selectEmpireButton.setDisable(disable);
+        this.lobbySettingsComponent.readyButton.setDisable(disable);
+        this.lobbyHostSettingsComponent.readyButton.setDisable(disable);
+        this.lobbySettingsComponent.leaveLobbyButton.setDisable(disable);
+        this.lobbyHostSettingsComponent.closeLobbyButton.setDisable(disable);
     }
 
     /**
@@ -271,12 +282,15 @@ public class LobbyController extends BasicController {
      * @param data member data containing their readiness state
      */
     private void replaceUserInList(String userID, MemberDto data) {
-        if (this.users.stream().anyMatch(memberUser -> !this.asHost && memberUser.user()._id().equals(this.game.owner())
+
+        this.users.forEach(memberUser ->
+        {if (!this.asHost && memberUser.user()._id().equals(this.game.owner())
                         && this.isHostReady == data.ready()
-                        && Objects.equals(data.empire(), memberUser.empire()))) {
+                        && Objects.equals(data.empire(), memberUser.empire())) {
             this.lobbyMessagePane.setVisible(true);
             this.lobbyMessageElement.setVisible(true);
-        }
+        }});
+
 
         if (data.user().equals(this.game.owner()))
             this.isHostReady = data.ready();

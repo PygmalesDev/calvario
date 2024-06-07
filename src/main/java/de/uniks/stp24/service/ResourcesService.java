@@ -10,6 +10,7 @@ import io.reactivex.rxjava3.core.Observable;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import java.util.Arrays;
 import java.util.Map;
 
 public class ResourcesService {
@@ -37,41 +38,40 @@ public class ResourcesService {
     }
 
     public Observable<SystemsResultDto> destroyBuilding(String gameID, Island island) {
-        // Define the resources with their initial counts (which can be zero for required and produced resources)
         Resource iron = new Resource("Iron", 0);
         Resource steel = new Resource("Steel", 0);
         Resource coal = new Resource("Coal", 0);
 
-        // Define the required resources with the required counts
         Map<Resource, Integer> required = Map.of(
                 new Resource("Iron", 0), 100,
                 new Resource("Coal", 0), 50
         );
 
-        // Define the production resources with the produced counts
         Map<Resource, Integer> production = Map.of(
                 new Resource("Steel", 0), 70
         );
 
-        // Define the consumption resources with the consumed counts
         Map<Resource, Integer> consumption = Map.of(
                 new Resource("Iron", 0), 30,
                 new Resource("Coal", 0), 20
         );
 
-        // Define the capacity and upgrade level
         int capacity = 200;
         int upgrade = 1;
         Building building = new Building("Mine", required, production, consumption, capacity, upgrade);
-        String[] buildings = island.buildings();
+        String[] buildings = new String[1];
+        buildings[0] = building.buildingID();
+        System.out.println(Arrays.toString(buildings));
 
-
-        if (island.owner().equals(tokenStorage.getUserId())){
-            return gameSystemsApiService.updateIsland(gameID, island.id_(), new SystemsDto(island.name(),
-                    island.districts(), island.buildings(),island.upgrade(), island.owner()));
+        if (island.owner() != null){
+            if (island.owner().equals(tokenStorage.getUserId())){
+                return gameSystemsApiService.updateIsland(gameID, island.id_(), new SystemsDto(island.name(),
+                        island.districts(), island.buildings(),island.upgrade(), island.owner()));
+            }
         }
-        return null;
 
+        return gameSystemsApiService.updateIsland(gameID, island.id_(), new SystemsDto(island.name(),
+                island.districts(), island.buildings(),island.upgrade(), island.owner()));
     }
 
     /*

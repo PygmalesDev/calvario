@@ -92,6 +92,8 @@ public class IslandComponent extends Pane {
     public void showInfo() {
         //TODO show info pane!
         this.tokenStorage.setIsland(island);
+        System.out.println(island.buildings() + " -- ");
+        System.out.println(Arrays.toString(island.buildings()) + " #");
         for (String building : island.buildings()) {
             System.out.println(building);
         }

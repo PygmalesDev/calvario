@@ -38,22 +38,22 @@ public class ResourcesService {
     }
 
     public Observable<SystemsResultDto> destroyBuilding(String gameID, Island island) {
-        Resource iron = new Resource("Iron", 0);
-        Resource steel = new Resource("Steel", 0);
-        Resource coal = new Resource("Coal", 0);
+        Resource iron = new Resource("Iron", 0, 0);
+        Resource steel = new Resource("Steel", 0, 0);
+        Resource coal = new Resource("Coal", 0, 0);
 
         Map<Resource, Integer> required = Map.of(
-                new Resource("Iron", 0), 100,
-                new Resource("Coal", 0), 50
+                new Resource("Iron", 0, 0), 100,
+                new Resource("Coal", 0, 0), 50
         );
 
         Map<Resource, Integer> production = Map.of(
-                new Resource("Steel", 0), 70
+                new Resource("Steel", 0, 0), 70
         );
 
         Map<Resource, Integer> consumption = Map.of(
-                new Resource("Iron", 0), 30,
-                new Resource("Coal", 0), 20
+                new Resource("Iron", 0, 0), 30,
+                new Resource("Coal", 0, 0), 20
         );
 
         int capacity = 200;

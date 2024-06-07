@@ -24,11 +24,11 @@ public class InGameService {
         return gameStatus.getPaused();
     }
 
-    public GameStatus getGame() {
+    public GameStatus getGameStatus() {
         return gameStatus;
     }
 
-    public void setGame(GameStatus gameStatus) {
+    public void setGameStatus(GameStatus gameStatus) {
         this.gameStatus = gameStatus;
     }
 

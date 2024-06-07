@@ -2,7 +2,13 @@ package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.MemberDto;
+import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.menu.EditGameService;
+import de.uniks.stp24.service.menu.LobbyService;
+import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.*;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
@@ -46,6 +52,8 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @Inject
     EventListener eventListener;
     @Inject
+    EmpireService empireService;
+    @Inject
     @Resource
     ResourceBundle resource;
     @Inject
@@ -88,14 +96,23 @@ public class LobbyHostSettingsComponent extends AnchorPane {
 
     public void startGame() {
         subscriber.subscribe(editGameService.startGame(this.gameID),
-          result -> {
+                result -> {
             islandsService.retrieveIslands(this.gameID);
             this.startJourneyButton.setDisable(true);
             this.readyButton.setDisable(true);
-
-            },
-          error -> this.startJourneyButton.setDisable(false));
+            //Todo: do this for every member of the game
+            this.tokenStorage.setGameId(gameID);
+            subscriber.subscribe(empireService.getEmpires(this.gameID), dto -> {
+                for(ReadEmpireDto data :dto){
+                    if (data.user().equals(tokenStorage.getUserId())) {
+                        this.tokenStorage.setEmpireId(data._id());
+                        this.app.show("/ingame");
+                    }
+                }
+            }, error -> {});
+        }, error -> {});
     }
+
 
     /**
      * Sends a blank update message to the server so the members are notified about host leaving the lobby.

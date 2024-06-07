@@ -2,6 +2,8 @@ package de.uniks.stp24;
 
 import dagger.Module;
 import dagger.Provides;
+
+import de.uniks.stp24.rest.*;
 import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.model.Game;
@@ -11,7 +13,13 @@ import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.rest.GameMembersApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.menu.CreateGameService;
+import de.uniks.stp24.service.menu.EditGameService;
+import de.uniks.stp24.service.menu.LobbyService;
+import de.uniks.stp24.service.menu.LoginService;
 import de.uniks.stp24.ws.EventListener;
+
 import org.mockito.Mockito;
 
 import javax.inject.Singleton;
@@ -70,9 +78,28 @@ public class TestModule {
 
     @Provides
     @Singleton
+    EmpireApiService empireApiService() {
+        return Mockito.mock(EmpireApiService.class);
+    }
+
+    @Provides
+    @Singleton
     TokenStorage tokenStorage(){
         return Mockito.mock(TokenStorage.class);
     }
+
+    @Provides
+    @Singleton
+    EmpireService empireService(){
+        return Mockito.mock(EmpireService.class);
+    }
+
+    @Provides
+    @Singleton
+    EditGameService editGameService(){
+        return Mockito.mock(EditGameService.class);
+    }
+
 }
 
 

@@ -2,7 +2,7 @@ package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.service.InGameService;
-import de.uniks.stp24.service.LanguageService;
+import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.service.PrefService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

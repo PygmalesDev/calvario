@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import java.awt.*;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.logging.Level;
 
 import static javafx.scene.input.KeyEvent.KEY_PRESSED;
@@ -47,7 +48,7 @@ public class App extends FulibFxApp {
                 }
             });
 
-            primaryStage.getScene().getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
+            primaryStage.getScene().getStylesheets().add(Objects.requireNonNull(App.class.getResource("style/styles.css")).toExternalForm());
             //CSSFX.start(primaryStage);
             cssFxStop = CSSFX.start(primaryStage);
 
@@ -80,7 +81,7 @@ public class App extends FulibFxApp {
 
 
     private void setAppIcon(Stage stage) {
-        final Image image = new Image(App.class.getResource("icons/gameIcon.png").toString());
+        final Image image = new Image(Objects.requireNonNull(App.class.getResource("icons/gameIcon.png")).toString());
         stage.getIcons().add(image);
     }
 
@@ -91,7 +92,7 @@ public class App extends FulibFxApp {
 
         try {
             final Taskbar taskbar = Taskbar.getTaskbar();
-            final java.awt.Image image = ImageIO.read(App.class.getResource("icons/gameIcon.png"));
+            final java.awt.Image image = ImageIO.read(Objects.requireNonNull(App.class.getResource("icons/gameIcon.png")));
             taskbar.setIconImage(image);
         } catch (Exception ignored) {
         }

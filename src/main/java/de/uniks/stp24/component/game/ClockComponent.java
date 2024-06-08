@@ -99,7 +99,7 @@ public class ClockComponent extends AnchorPane {
     @OnRender
     public void render() {
 
-        String css = Objects.requireNonNull(this.getClass().getResource("/de/uniks/stp24/clock.css")).toExternalForm();
+        String css = Objects.requireNonNull(this.getClass().getResource("/de/uniks/stp24/style/clock.css")).toExternalForm();
         this.getStylesheets().add(css);
 
         // adding spectator sign

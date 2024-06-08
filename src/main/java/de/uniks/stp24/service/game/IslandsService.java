@@ -1,7 +1,6 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.component.game.IslandComponent;
-import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
@@ -22,8 +21,8 @@ public class IslandsService extends BasicService {
     LobbyService lobbyService;
 
     private final List<Island> isles = new ArrayList<>();
+    // todo use this map for connections
     // private final Map<String, List<String>>  = new HashMap<>();
-
     // todo after development is ready remove this generator
     static final RandomGenerator randomGenerator = new Random(1234);
 
@@ -72,17 +71,14 @@ public class IslandsService extends BasicService {
      * it is set to 2560 x 1440
      * thus the size of the pane should be considered
      */
+    //todo set screen resolution, factor and offset depending on game size
     public IslandComponent createIslandPaneFromDto(Island isleDto, IslandComponent component) {
         component.applyInfo(isleDto);
         double offsetH = 1280 - component.widthProperty().getValue() * 0.5;
         double offsetV = 720 - component.heightProperty().getValue() * 0.5;
         component.setPosition(isleDto.posX() * 6 + offsetH,
           isleDto.posY() * 6 + offsetV);
-        // todo read values from dto
         component.applyIcon(isleDto.type());
-        // todo read values from tokenStorage -> owner = null -> no flag!
-        // for the moment let set random flag index
-        int flag = randomGenerator.nextInt(0, 5);
         component.setFlagImage(isleDto.flagIndex());
         return component;
     }

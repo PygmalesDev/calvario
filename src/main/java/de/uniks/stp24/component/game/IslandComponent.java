@@ -15,7 +15,6 @@ import org.fulib.fx.annotation.event.OnKey;
 
 import javax.inject.Inject;
 
-
 @Component(view = "IslandComponent.fxml")
 public class IslandComponent extends Pane {
     @Inject
@@ -42,7 +41,8 @@ public class IslandComponent extends Pane {
           .setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
     }
 
-    // todo flag images
+    // use our flag images
+    // by the moment numeration from 0 til 16
     public void setFlagImage(int flag){
         if (flag >=0) {
             this.flagImage
@@ -55,31 +55,30 @@ public class IslandComponent extends Pane {
         applyIcon(this.island.type());
     }
 
-    // set double to have only 2 decimals
+    // round double to have only 2 decimals
     public void setPosition(double x, double y) {
         this.x = Math.rint(x * 100.00) / 100.00;
         this.y = Math.rint(y * 100.00) / 100.00;
-//        return this;
     }
 
     public double getPosX() {
-//        this.x = island.posX();
         return this.x;}
     public double getPosY() {
-//          this.y = island.posY();
         return this.y;}
 
     // switch the visibility of all flags
-    @OnKey(code = KeyCode.A, shift = true)
+    @OnKey(code = KeyCode.H, shift = true)
     public void showFlag(){
         this.flagPane.setVisible(!this.flagPane.isVisible());
     }
 
-    // by the moment change visibility of flag (image)
+
     public void showInfo() {
-        //TODO show info pane!
+        //TODO by the moment used for printouts
+        // maybe it must be removed after implementation of
+        // island overview functionality is completed on InGameCtrl
         System.out.println(Upgrade.values()[island.upgradeLevel()] + " -> " + island.type() + " isle at " + x + ", " + y );
-        this.flagPane.setVisible(!this.flagPane.isVisible());
+        showFlag();
     }
 
     @OnDestroy

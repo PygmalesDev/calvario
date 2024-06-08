@@ -63,20 +63,16 @@ public class InGameController extends BasicController {
     @Inject
     public SettingsComponent settingsComponent;
     @Inject
-    TokenStorage tokenStorage;
-
-    String gameID;
-    @Inject
     IslandsService islandsService;
     List<IslandComponent> islandComponentList = new ArrayList<>();
-
-    boolean pause = false;
-
-
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
 
+    boolean pause = false;
+
+    // todo remove this variables if not needed
+    String gameID;
     String empireID;
 
 
@@ -88,7 +84,7 @@ public class InGameController extends BasicController {
 
     @OnInit
     public void init() {
-        // is this necessary?
+        // Todo: remove this if not needed
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
         //Todo: Outprint for Swagger - can be deleted later
@@ -109,7 +105,6 @@ public class InGameController extends BasicController {
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_LANGUAGE, callHandleLanguageChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
 
-
     }
 
     private void handleLanguageChanged(PropertyChangeEvent propertyChangeEvent) {
@@ -129,7 +124,6 @@ public class InGameController extends BasicController {
 
     private void handlePauseChanged(PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
-//            Boolean paused = (Boolean) propertyChangeEvent.getNewValue();
             pause = (Boolean) propertyChangeEvent.getNewValue();
             if (pause) {
                 pauseGame();
@@ -143,7 +137,6 @@ public class InGameController extends BasicController {
     public void render() {
         pauseMenuContainer.setVisible(false);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
-
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
     }
@@ -179,12 +172,12 @@ public class InGameController extends BasicController {
     private void createButtonsStorage() {
         if (!(Objects.nonNull(showIslandButton)&&(Objects.nonNull(showStorageButton)))) {
             showIslandButton = new Button();
-            showIslandButton.setPrefHeight(40.0);
-            showIslandButton.setPrefWidth(40.0);
+            showIslandButton.setPrefHeight(30);
+            showIslandButton.setPrefWidth(30);
             showIslandButton.setOnAction(this::showIslandOverview);
             showStorageButton = new Button();
-            showStorageButton.setPrefHeight(40.0);
-            showStorageButton.setPrefWidth(40.0);
+            showStorageButton.setPrefHeight(30);
+            showStorageButton.setPrefWidth(30);
             showStorageButton.setOnAction(this::showStorage);
             this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
         }
@@ -192,7 +185,6 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void createMap()  {
-
         islandsService.getListOfIslands().forEach(
           island -> {
               IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
@@ -204,10 +196,8 @@ public class InGameController extends BasicController {
               this.mapGrid.getChildren().add(tmp);
           }
         );
-
         //todo draw connections
         createButtonsStorage();
-
     }
 
     public void showCoordinates(MouseEvent mouseEvent) {
@@ -222,13 +212,13 @@ public class InGameController extends BasicController {
         this.subscriber.dispose();
     }
 
+    // assign key S to show storage
 //    @OnKey(code = KeyCode.S)
     public void showStorage(ActionEvent event) {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
     public void showIslandOverview(ActionEvent event) {
-
 
     }
 }

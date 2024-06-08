@@ -7,6 +7,6 @@ public record Site(
     Map<Resource, Integer> required,
     Map<Resource, Integer> production,
     Map<Resource, Integer> consumption,
-    int cells
+    int maxCells
 ) {
 }

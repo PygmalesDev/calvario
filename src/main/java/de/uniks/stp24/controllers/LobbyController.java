@@ -234,9 +234,6 @@ public class LobbyController extends BasicController {
                             islandsService.retrieveIslands(gameID);
                             app.show("/ingame");
                         }
-                        // todo delete next two
-//                        islandsService.retrieveIslands(gameID); // *****
-//                        app.show("/ingame"); // *****
                     }, this::errorMsg);}
           }, this::errorMsg);
     }

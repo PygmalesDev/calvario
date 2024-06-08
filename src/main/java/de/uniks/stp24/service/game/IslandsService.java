@@ -39,11 +39,7 @@ public class IslandsService extends BasicService {
             dto -> {
                 Arrays.stream(dto).forEach(data -> {
                     List<String> linkedIsles = new ArrayList<>(data.links().keySet());
-                    System.out.println(data.type()
-                    + " " + data.x() + " " + data.y() + " " +
-                      (data.owner()!=null ? data.owner() : "" ));
-                    if(data.owner()!=null) System.out.println("YIPPIE ONWER "  +
-                      data.owner() + " flag " + tokenStorage.getFlagIndex(data.owner()));
+                    System.out.println(data);
                     Island tmp = new Island(data.owner(),
                         Objects.isNull(data.owner()) ? -1 : tokenStorage.getFlagIndex(data.owner()),
                         data.x(),
@@ -61,7 +57,7 @@ public class IslandsService extends BasicService {
                 });
                 this.app.show("/ingame");
             },
-          error -> errorService.getStatus(error));
+            error -> errorService.getStatus(error));
     }
 
     public List<Island> getListOfIslands() {
@@ -70,7 +66,7 @@ public class IslandsService extends BasicService {
 
     /**
      * coordinate system on server has origin at screen center
-     * and their range is aprox. (-100,100)
+     * and their range is approx. (-100,100) ?
      * apply a factor 6  for increase and
      * an offset to match our screen size
      * it is set to 2560 x 1440

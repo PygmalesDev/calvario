@@ -692,7 +692,7 @@ ToggleButton:hover{
     -fx-background-image: url("/de/uniks/stp24/assets/logos/calvario_new.png");
     -fx-background-color: transparent;
     -fx-background-position: center;
-    -fx-background-size: 60% 100%;
+    -fx-background-size: 60% 80%;
     -fx-background-repeat: no-repeat;
 
 }

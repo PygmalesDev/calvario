@@ -33,7 +33,7 @@
                      <ToggleButton fx:id="deToggleButton" onAction="#setDe" prefHeight="60.0" prefWidth="60.0" styleClass="languageButton" text="DE" />
                   </ToggleButtonGroup>
                </HBox>
-               <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="calvarioTextLogoRegister" />
+               <AnchorPane prefHeight="261.0" prefWidth="550.0" styleClass="calvarioTextLogoRegister" />
                <VBox alignment="CENTER" prefHeight="250.0" prefWidth="500.0">
                   <HBox alignment="CENTER" prefHeight="1000.0" prefWidth="500.0" spacing="5.0">
                      <Pane>
@@ -65,7 +65,7 @@
                               <Font size="15.0" />
                            </font>
                         </TextField>
-                        <ToggleButton fx:id="showPasswordToggleButton" layoutX="322.0" layoutY="78.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="0.0" prefWidth="0.0" styleClass="eyeButton">
+                        <ToggleButton fx:id="showPasswordToggleButton" layoutX="322.0" layoutY="67.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="0.0" prefWidth="0.0" styleClass="eyeButton">
                            <graphic>
                               <ImageView pickOnBounds="true" preserveRatio="true" />
                            </graphic>

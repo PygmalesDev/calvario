@@ -31,6 +31,8 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @FXML
     public Button startJourneyButton;
     @FXML
+    public Button readyButton;
+    @FXML
     ImageView readyIconImageView;
     @Inject
     Subscriber subscriber;
@@ -66,8 +68,6 @@ public class LobbyHostSettingsComponent extends AnchorPane {
 
     @OnInit
     public void init(){
-        readyIconBlueImage = imageCache.get("icons/approveBlue.png");
-        readyIconGreenImage = imageCache.get("icons/approveGreen.png");
     }
 
     public void createCheckPlayerReadinessListener() {
@@ -81,7 +81,13 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     }
 
     public void setReadyButton(boolean ready){
-        readyIconImageView.setImage(!ready ? readyIconBlueImage : readyIconGreenImage);
+        if(ready){
+            readyButton.getStyleClass().removeAll("lobbyButtonReadyNot");
+            readyButton.getStyleClass().add("lobbyButtonReady");
+        } else {
+            readyButton.getStyleClass().removeAll("lobbyButtonReady");
+            readyButton.getStyleClass().add("lobbyButtonReadyNot");
+        }
     }
 
     @OnRender
@@ -125,19 +131,17 @@ public class LobbyHostSettingsComponent extends AnchorPane {
 
     public void ready() {
         this.subscriber.subscribe(
-                this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
-          result -> {
+                this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
                     if (result.ready()) {
                         this.subscriber.subscribe(this.lobbyService
                                 .updateMember(this.gameID, this.tokenStorage.getUserId(), false, result.empire()));
-                        readyIconImageView.setImage(readyIconBlueImage);
+                        setReadyButton(false);
                     } else {
                         this.subscriber.subscribe(this.lobbyService
                                 .updateMember(this.gameID, this.tokenStorage.getUserId(), true, result.empire()));
-                        readyIconImageView.setImage(readyIconGreenImage);
+                        setReadyButton(true);
                     }
-                },
-          error -> {});
+                });
     }
 
     @OnDestroy

@@ -235,13 +235,6 @@ public class LobbyController extends BasicController {
      * @param data member data containing their readiness state
      */
     private void replaceUserInList(String userID, MemberDto data) {
-        if (this.users.stream().anyMatch(memberUser -> !this.asHost && memberUser.user()._id().equals(this.game.owner())
-                        && this.isHostReady == data.ready()
-                        && Objects.equals(data.empire(), memberUser.empire()))) {
-            this.lobbyMessagePane.setVisible(true);
-            this.lobbyMessageElement.setVisible(true);
-        }
-
         if (data.user().equals(this.game.owner()))
             this.isHostReady = data.ready();
 

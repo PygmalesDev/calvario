@@ -22,7 +22,7 @@
 
 ## Testing
 - [ ] Tested the changes with various scenarios to ensure functionality.
-- [ ] Wrote new tests to cover the changes.
+- [ ] Wrote new (or changed old) tests to cover the changes.
 ### Tested on Operating Systems
 - [ ] Windows
 - [ ] macOS

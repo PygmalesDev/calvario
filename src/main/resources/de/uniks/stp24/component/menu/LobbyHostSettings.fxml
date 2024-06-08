@@ -14,45 +14,52 @@
    </padding>
    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="500.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-         <Button fx:id="selectEmpireButton" mnemonicParsing="false" onAction="#selectEmpire" prefHeight="80.0" prefWidth="150.0" styleClass="lobbyButtonSelectEmpire" text="%select.empire" textFill="WHITE">
-            <font>
-               <Font size="18.0" />
-            </font>
-         </Button>
-         <Button fx:id="readyButton" mnemonicParsing="false" onAction="#ready" prefHeight="80.0" prefWidth="150.0" styleClass="lobbyButtonReadyNot">
+         <Button fx:id="selectEmpireButton" mnemonicParsing="false" onAction="#selectEmpire" prefHeight="80.0" prefWidth="155.0" styleClass="lobbyButtonSelectEmpire" textFill="WHITE">
             <font>
                <Font size="18.0" />
             </font>
             <graphic>
-               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButton" text="%ready.lobby">
+               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButtonText" text="%select.empire">
                   <font>
-                     <Font size="18.0" />
+                     <Font size="14.0" />
+                  </font>
+               </Text>
+            </graphic>
+         </Button>
+         <Button fx:id="readyButton" mnemonicParsing="false" onAction="#ready" prefHeight="80.0" prefWidth="155.0" styleClass="lobbyButtonReadyNot">
+            <font>
+               <Font size="18.0" />
+            </font>
+            <graphic>
+               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButtonText" text="%ready.lobby">
+                  <font>
+                     <Font size="14.0" />
                   </font>
                </Text>
             </graphic>
          </Button>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-         <Button fx:id="closeLobbyButton" mnemonicParsing="false" onAction="#leaveLobby" prefHeight="80.0" prefWidth="150.0" styleClass="lobbyButtonLeave" textOverrun="CLIP" wrapText="true">
+         <Button fx:id="closeLobbyButton" mnemonicParsing="false" onAction="#leaveLobby" prefHeight="80.0" prefWidth="155.0" styleClass="lobbyButtonLeave" textOverrun="CLIP" wrapText="true">
             <font>
                <Font size="18.0" />
             </font>
             <graphic>
-               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButton" text="%leave">
+               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButtonText" text="%leave">
                   <font>
-                     <Font size="18.0" />
+                     <Font size="14.0" />
                   </font>
                </Text>
             </graphic>
          </Button>
-         <Button fx:id="startJourneyButton" mnemonicParsing="false" onAction="#startGame" prefHeight="80.0" prefWidth="150.0" styleClass="lobbyButtonStart">
+         <Button fx:id="startJourneyButton" mnemonicParsing="false" onAction="#startGame" prefHeight="80.0" prefWidth="155.0" styleClass="lobbyButtonStart">
             <font>
                <Font size="18.0" />
             </font>
             <graphic>
-               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButton" text="%start">
+               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButtonText" text="%start.lobby">
                   <font>
-                     <Font size="18.0" />
+                     <Font size="14.0" />
                   </font>
                </Text>
             </graphic>

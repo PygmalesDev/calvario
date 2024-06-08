@@ -268,12 +268,13 @@ ToggleButton:hover{
 }
 
 .lobbyButtonSelectEmpire{
+    -fx-font-family: "Stencil";
+    -fx-font-size: 15;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/icons/Island.png");
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-font-family: "Stencil Regular";
     -fx-padding: 0;
     -fx-border-width: 0;
     -fx-pref-width: 150px;
@@ -281,12 +282,13 @@ ToggleButton:hover{
 }
 
 .lobbyButtonReady{
+    -fx-font-family: "Stencil";
+    -fx-font-size: 15;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/icons/approveGreen.png");
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-font-family: "Stencil Regular";
     -fx-padding: 0;
     -fx-border-width: 0;
     -fx-pref-width: 150px;
@@ -294,12 +296,13 @@ ToggleButton:hover{
 }
 
 .lobbyButtonReadyNot{
+    -fx-font-family: "Stencil";
+    -fx-font-size: 15;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/icons/approveBlue.png");
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-font-family: "Stencil Regular";
     -fx-padding: 0;
     -fx-border-width: 0;
     -fx-pref-width: 150px;
@@ -309,12 +312,13 @@ ToggleButton:hover{
 
 
 .lobbyButtonLeave{
+    -fx-font-family: "Stencil";
+    -fx-font-size: 15;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/icons/leaveMan.png");
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-font-family: "Stencil Regular";
     -fx-padding: 0;
     -fx-border-width: 0;
     -fx-pref-width: 150px;
@@ -322,12 +326,13 @@ ToggleButton:hover{
 }
 
 .lobbyButtonStart{
+    -fx-font-family: "Stencil";
+    -fx-font-size: 15;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/icons/startGame.png");
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
-    -fx-font-family: "Stencil Regular";
     -fx-padding: 0;
     -fx-border-width: 0;
     -fx-pref-width: 150px;
@@ -335,9 +340,9 @@ ToggleButton:hover{
 }
 
 
-.EnteredGameButton{
-    -fx-font-family: "Stencil Regular";
-
+.EnteredGameButtonText{
+    -fx-font-family: "Stencil";
+    -fx-font-size:14;
 }
 
 

@@ -1,6 +1,7 @@
 package de.uniks.stp24;
 
 
+import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
@@ -55,6 +56,8 @@ public class AppTest extends ControllerTest {
 
     @Spy
     BubbleComponent bubbleComponent;
+    @Spy
+    ClockComponent clockComponent;
 
     final Subject<Event<Game>> subject = BehaviorSubject.create();
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
@@ -157,7 +160,7 @@ public class AppTest extends ControllerTest {
         createGame();
         loadGame();
         selectEmpire();
-    //    startGame();
+        startGame();
     }
 
 
@@ -241,8 +244,8 @@ public class AppTest extends ControllerTest {
                 new MemberDto(true, "testGameHostID", null, null)));
         clickOn("#startJourneyButton");
         WaitForAsyncUtils.waitForFxEvents();
-        Text textNode = lookup("#epic_gameplay").queryText();
-        assertEquals(textNode.getText(), "EPIC GAMEPLAY");
+
+        assertEquals("ENTER GAME", stage.getTitle());
     }
 
 }

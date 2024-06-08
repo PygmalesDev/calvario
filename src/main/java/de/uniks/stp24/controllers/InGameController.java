@@ -213,7 +213,7 @@ public class InGameController extends BasicController {
     }
 
     // assign key S to show storage
-//    @OnKey(code = KeyCode.S)
+    @OnKey(code = KeyCode.S)
     public void showStorage(ActionEvent event) {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }

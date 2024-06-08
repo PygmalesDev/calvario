@@ -1,4 +1,4 @@
-package de.uniks.stp24.service.menu;
+package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.dto.UpdateGameResultDto;
 import de.uniks.stp24.dto.UpdateSpeedDto;

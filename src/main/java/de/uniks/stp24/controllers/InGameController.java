@@ -7,7 +7,7 @@ import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
-import de.uniks.stp24.service.menu.TimerService;
+import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -21,7 +21,6 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.annotation.param.Param;
 
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
@@ -64,9 +63,6 @@ public class InGameController extends BasicController {
 
     String gameID;
     String empireID;
-
-    @Param("gameid")
-    String gameId;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 

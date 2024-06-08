@@ -1,7 +1,7 @@
 package de.uniks.stp24.service;
 
 import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.service.menu.TimerService;
+import de.uniks.stp24.service.game.TimerService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

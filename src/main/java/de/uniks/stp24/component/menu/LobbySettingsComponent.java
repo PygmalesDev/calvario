@@ -5,6 +5,7 @@ import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -20,7 +21,7 @@ import java.util.ResourceBundle;
 @Component(view = "LobbySettings.fxml")
 public class LobbySettingsComponent extends AnchorPane {
     @FXML
-    ImageView readyIconImageView;
+    public Button readyButton;
     @Inject
     Subscriber subscriber;
     @Inject
@@ -47,12 +48,16 @@ public class LobbySettingsComponent extends AnchorPane {
 
     @OnInit
     public void init(){
-        readyIconBlueImage = imageCache.get("icons/approveBlue.png");
-        readyIconGreenImage = imageCache.get("icons/approveGreen.png");
     }
 
     public void setReadyButton(boolean ready){
-        readyIconImageView.setImage(!ready ? readyIconBlueImage : readyIconGreenImage);
+        if(ready){
+            readyButton.getStyleClass().removeAll("lobbyButtonReadyNot");
+            readyButton.getStyleClass().add("lobbyButtonReady");
+        } else {
+            readyButton.getStyleClass().removeAll("lobbyButtonReady");
+            readyButton.getStyleClass().add("lobbyButtonReadyNot");
+        }
     }
 
     public void leaveLobby() {
@@ -74,11 +79,11 @@ public class LobbySettingsComponent extends AnchorPane {
                     if (result.ready()) {
                         this.subscriber.subscribe(this.lobbyService
                                 .updateMember(this.gameID, this.tokenStorage.getUserId(), false, result.empire()));
-                        readyIconImageView.setImage(readyIconBlueImage);
+                        setReadyButton(false);
                     } else {
                         this.subscriber.subscribe(this.lobbyService
                                 .updateMember(this.gameID, this.tokenStorage.getUserId(), true, result.empire()));
-                        readyIconImageView.setImage(readyIconGreenImage);
+                        setReadyButton(true);
                     }
                 });
     }

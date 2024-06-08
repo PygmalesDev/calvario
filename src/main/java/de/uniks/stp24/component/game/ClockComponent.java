@@ -4,7 +4,7 @@ import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.menu.TimerService;
+import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.scene.control.RadioButton;
@@ -80,9 +80,6 @@ public class ClockComponent extends AnchorPane {
     @OnInit
     public void init() {
 
-        createUpdateSeasonListener();
-        createUpdateSpeedListener();
-
         gameId = tokenStorage.getGameId();
 
         PropertyChangeListener callHandleTimeChanged = this::handleTimeChanged;
@@ -93,6 +90,10 @@ public class ClockComponent extends AnchorPane {
 
         PropertyChangeListener callHandleSeasonChanged = this::handleSeasonChanged;
         timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_SEASON, callHandleSeasonChanged);
+
+        createUpdateSeasonListener();
+        createUpdateSpeedListener();
+
     }
 
     @OnRender
@@ -107,8 +108,15 @@ public class ClockComponent extends AnchorPane {
         }
 
         subscriber.subscribe(gamesApiService.getGame(gameId),
-                // Set Clock and Season for the current Game
                 game -> {
+                    // Only owner of the game can change the speed
+                    if (!(Objects.equals(game.owner(), tokenStorage.getUserId()))) {
+                        x1Button.setVisible(false);
+                        x2Button.setVisible(false);
+                        x3Button.setVisible(false);
+                        pauseClockButton.setVisible(false);
+                    }
+                    // Set Clock and Season for the current Game
                     switch (game.speed()) {
                         case 0:
                             pauseClockButton.setSelected(true);
@@ -130,17 +138,6 @@ public class ClockComponent extends AnchorPane {
         timerService.start();
         seasonLabel.setText(timerService.getSeason() + "");
         countdownLabel.setText(translateCountdown(timerService.getCountdown()));
-
-        subscriber.subscribe(gamesApiService.getGame(gameId),
-                result -> {
-                    // Only owner of the game can change the speed
-                    if (!(Objects.equals(result.owner(), tokenStorage.getUserId()))) {
-                        x1Button.setVisible(false);
-                        x2Button.setVisible(false);
-                        x3Button.setVisible(false);
-                        pauseClockButton.setVisible(false);
-                    }
-                });
 
         // Dummy data for special Event
         randomEventImage.setImage(imageCache.get("assets/events/goodEvent.png"));

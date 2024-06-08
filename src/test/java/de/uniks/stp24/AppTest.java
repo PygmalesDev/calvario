@@ -146,8 +146,6 @@ public class AppTest extends ControllerTest {
         doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", game3._id(),
                 user._id(),"tesEmpire","a","#DC143C",0, 0, "uninhabitable_0")})).when(this.empireService).getEmpires(any());
 
-        doReturn(null).when(this.app).show("/ingame");
-
     }
 
     @Test

@@ -81,7 +81,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     }
 
     public void setReadyButton(boolean ready){
-        if(!ready){
+        if(ready){
             readyButton.getStyleClass().removeAll("lobbyButtonReadyNot");
             readyButton.getStyleClass().add("lobbyButtonReady");
         } else {
@@ -132,19 +132,17 @@ public class LobbyHostSettingsComponent extends AnchorPane {
 
     public void ready() {
         this.subscriber.subscribe(
-                this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
-          result -> {
+                this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
                     if (result.ready()) {
                         this.subscriber.subscribe(this.lobbyService
                                 .updateMember(this.gameID, this.tokenStorage.getUserId(), false, result.empire()));
-                        setReadyButton(true);
+                        setReadyButton(false);
                     } else {
                         this.subscriber.subscribe(this.lobbyService
                                 .updateMember(this.gameID, this.tokenStorage.getUserId(), true, result.empire()));
-                        setReadyButton(false);
+                        setReadyButton(true);
                     }
-                },
-          error -> {});
+                });
     }
 
     @OnDestroy

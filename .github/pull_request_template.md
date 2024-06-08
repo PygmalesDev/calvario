@@ -15,16 +15,16 @@
 
 ## Checklist
 - [ ] Code documentation (comments) is added or updated.
-- [ ] Code style is consistent with the project's guidelines.
+- [ ] Code style is consistent with the project's guidelines (clean code).
 - [ ] No unused code is present.
-- [ ] No errors are present.
+- [ ] No errors or bugs are present.
 - [ ] No warnings are present.
 
 ## Testing
 - [ ] Tested the changes with various scenarios to ensure functionality.
 - [ ] Wrote new tests to cover the changes.
 ### Tested on Operating Systems
-- [x] Windows
+- [ ] Windows
 - [ ] macOS
 - [ ] Linux
 

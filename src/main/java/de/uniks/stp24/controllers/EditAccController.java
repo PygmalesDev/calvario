@@ -102,6 +102,14 @@ public class EditAccController extends BasicController {
     ImageView frameImage;
 
     @FXML
+    ToggleButton editAvatarButton;
+
+    @FXML
+    Button safeAvatarButton;
+    @FXML
+    Button cancelAvatarButton;
+
+    @FXML
     Button lastBackgroundButton;
     @FXML
     Button nextBackgroundButton;
@@ -183,12 +191,7 @@ public class EditAccController extends BasicController {
 
     @OnRender
     public void render(){
-        lastBackgroundButton.setVisible(false);
-        nextBackgroundButton.setVisible(false);
-        lastFrameButton.setVisible(false);
-        nextFrameButton.setVisible(false);
-        lastPotraitButton.setVisible(false);
-        nextPotraitButton.setVisible(false);
+        avatarButtonsVisible(false);
     }
 
 
@@ -223,16 +226,6 @@ public class EditAccController extends BasicController {
             saveChangesButton.setVisible(true);
             changeUserInfoButton.setStyle("-fx-text-fill: #2B78E4");
             editIconImageView.setImage(editIconBlueImage);
-
-            /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
-            lastBackgroundButton.setVisible(true);
-            nextBackgroundButton.setVisible(true);
-            lastFrameButton.setVisible(true);
-            nextFrameButton.setVisible(true);
-            lastPotraitButton.setVisible(true);
-            nextPotraitButton.setVisible(true);
-            /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
-
         } else {
             resetEditing(tokenStorage.getName());
         }
@@ -297,16 +290,6 @@ public class EditAccController extends BasicController {
         changeUserInfoButton.setDisable(false);
         editIconImageView.setImage(editIconBlackImage);
         changeUserInfoButton.setStyle("-fx-text-fill: Black");
-
-        /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
-        lastBackgroundButton.setVisible(false);
-        nextBackgroundButton.setVisible(false);
-        lastFrameButton.setVisible(false);
-        nextFrameButton.setVisible(false);
-        lastPotraitButton.setVisible(false);
-        nextPotraitButton.setVisible(false);
-        /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
-
     }
 
     public void cancelChanges() {
@@ -389,6 +372,42 @@ public class EditAccController extends BasicController {
         }
     }
 
+    @OnRender
+    public void changeUserAvatar(){
+        if (editAvatarButton.isSelected()) {
+            avatarButtonsVisible(true);
+            editAvatarButton.setStyle("-fx-text-fill: #2B78E4");
+        } else {
+            resetAvatarEditing();
+            avatarButtonsVisible(false);
+            editAvatarButton.setStyle("-fx-text-fill: Black");
+        }
+    }
+
+    public void safeAvatarChanges(){
+
+    }
+
+    public void cancelAvatarChanges(){
+
+    }
+
+
+
+    private void resetAvatarEditing() {
+    }
+
+    public void avatarButtonsVisible(boolean visible) {
+        safeAvatarButton.setVisible(visible);
+        cancelAvatarButton.setVisible(visible);
+
+        lastBackgroundButton.setVisible(visible);
+        nextBackgroundButton.setVisible(visible);
+        lastFrameButton.setVisible(visible);
+        nextFrameButton.setVisible(visible);
+        lastPotraitButton.setVisible(visible);
+        nextPotraitButton.setVisible(visible);
+    }
 
     /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
 }

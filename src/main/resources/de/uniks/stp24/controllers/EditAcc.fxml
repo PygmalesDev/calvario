@@ -36,7 +36,7 @@
                            <children>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <VBox alignment="CENTER" layoutX="125.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="165.0" prefWidth="189.0">
+                                    <VBox alignment="CENTER" layoutX="75.0" layoutY="16.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="165.0" prefWidth="189.0">
                                        <children>
                                           <Pane prefHeight="167.0" prefWidth="192.0">
                                              <children>
@@ -47,12 +47,14 @@
                                           </Pane>
                                        </children>
                                     </VBox>
-                                    <Button fx:id="lastBackgroundButton" layoutX="80.0" layoutY="25.0" mnemonicParsing="false" onAction="#showLastBackground" />
-                                    <Button fx:id="nextBackgroundButton" layoutX="340.0" layoutY="25.0" mnemonicParsing="false" onAction="#showNextBackground" />
-                                    <Button fx:id="lastPotraitButton" layoutX="80.0" layoutY="75.0" mnemonicParsing="false" onAction="#showLastPortrait" />
-                                    <Button fx:id="nextPotraitButton" layoutX="340.0" layoutY="75.0" mnemonicParsing="false" onAction="#showNextPortrait" />
-                                    <Button fx:id="lastFrameButton" layoutX="80.0" layoutY="125.0" mnemonicParsing="false" onAction="#showLastFrame" />
-                                    <Button fx:id="nextFrameButton" layoutX="340.0" layoutY="125.0" mnemonicParsing="false" onAction="#showNextFrame" />
+                                    <Button fx:id="lastBackgroundButton" layoutX="30.0" layoutY="25.0" mnemonicParsing="false" onAction="#showLastBackground" />
+                                    <Button fx:id="nextBackgroundButton" layoutX="290.0" layoutY="25.0" mnemonicParsing="false" onAction="#showNextBackground" />
+                                    <Button fx:id="lastPotraitButton" layoutX="30.0" layoutY="75.0" mnemonicParsing="false" onAction="#showLastPortrait" />
+                                    <Button fx:id="nextPotraitButton" layoutX="290.0" layoutY="75.0" mnemonicParsing="false" onAction="#showNextPortrait" />
+                                    <Button fx:id="lastFrameButton" layoutX="30.0" layoutY="125.0" mnemonicParsing="false" onAction="#showLastFrame" />
+                                    <Button fx:id="nextFrameButton" layoutX="290.0" layoutY="125.0" mnemonicParsing="false" onAction="#showNextFrame" />
+                                    <Button fx:id="safeAvatarButton" layoutX="346.0" layoutY="38.0" mnemonicParsing="false" onAction="#safeAvatarChanges" prefHeight="25.0" prefWidth="49.0" styleClass="deleteAndSaveButton" text="safe" />
+                                    <Button fx:id="cancelAvatarButton" layoutX="346.0" layoutY="112.0" mnemonicParsing="false" onAction="#cancelAvatarChanges" styleClass="deleteAndSaveButton" text="cancel" />
                                  </children>
                               </AnchorPane>
                            </children>
@@ -102,7 +104,8 @@
                      </VBox>
                   </AnchorPane>
                   <AnchorPane prefHeight="200.0" prefWidth="300.0">
-                     <VBox fx:id="editAccVBoxRightToBlur" alignment="BOTTOM_CENTER" layoutX="-7.0" prefHeight="370.0" prefWidth="275.0" spacing="25.0" AnchorPane.bottomAnchor="160.0" AnchorPane.leftAnchor="-7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="0.0">
+                     <VBox fx:id="editAccVBoxRightToBlur" alignment="BOTTOM_CENTER" layoutX="-14.0" prefHeight="370.0" prefWidth="275.0" spacing="25.0" AnchorPane.bottomAnchor="160.0" AnchorPane.leftAnchor="-14.0" AnchorPane.rightAnchor="14.666666666666629" AnchorPane.topAnchor="0.0">
+                        <ToggleButton fx:id="editAvatarButton" mnemonicParsing="false" onAction="#changeUserAvatar" prefHeight="52.0" prefWidth="154.0" styleClass="actionButton" text="Edit Avatar" />
                         <ToggleButton fx:id="changeUserInfoButton" mnemonicParsing="false" onAction="#changeUserInfo" prefHeight="30.0" prefWidth="150.0" styleClass="actionButton" text="%edit">
                            <font>
                               <Font size="15.0" />

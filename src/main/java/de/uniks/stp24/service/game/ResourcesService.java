@@ -10,12 +10,8 @@ import java.util.Map;
 
 public class ResourcesService {
 
-    private Map<Resource, Integer> availableResources;
-    private Map<Resource, Integer> neededResources;
-
     @Inject
-    public ResourcesService(Map<Resource, Integer> availableResources) {
-        this.availableResources = availableResources;
+    public ResourcesService() {
     }
 
 
@@ -43,6 +39,7 @@ public class ResourcesService {
         return resourceList;
     }
 
+    /*
     public boolean hasEnoughResources(Map<Resource, Integer> neededResources) {
         for (Map.Entry<Resource, Integer> entry : neededResources.entrySet()) {
             Resource resource = entry.getKey();
@@ -55,14 +52,13 @@ public class ResourcesService {
         return true;
     }
 
+     */
+
     public void upgradeIsland(){
-        if(hasEnoughResources(neededResources)){
             //TODO: Sende Upgrade an den Server
-        }
     }
 
     public void setNeededResources(Map<Resource, Integer> neededResources){
-        this.neededResources = neededResources;
     }
 
 }

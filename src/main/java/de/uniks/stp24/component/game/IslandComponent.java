@@ -3,6 +3,7 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
+import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.ImageCache;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
@@ -12,11 +13,14 @@ import javafx.scene.layout.StackPane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnKey;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 
 @Component(view = "IslandComponent.fxml")
+@Singleton
 public class IslandComponent extends Pane {
     @FXML
     public ImageView rudderImage;
@@ -28,6 +32,8 @@ public class IslandComponent extends Pane {
     ImageView flagImage;
     @Inject
     ImageCache imageCache;
+    @Inject
+    Subscriber subscriber;
 
     private InGameController inGameController;
     private Island island;

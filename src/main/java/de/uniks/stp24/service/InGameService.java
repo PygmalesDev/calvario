@@ -1,16 +1,16 @@
 package de.uniks.stp24.service;
 
-import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.Island;
+import de.uniks.stp24.model.SystemUpgrades;
+import de.uniks.stp24.rest.PresetsApiService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.List;
 
 @Singleton
 public class InGameService {
@@ -19,6 +19,10 @@ public class InGameService {
     GameStatus gameStatus;
     @Inject
     GameSystemsApiService gameSystemsApiService;
+    @Inject
+    Subscriber subscriber;
+    @Inject
+    PresetsApiService presetsApiService;
 
     @Inject
     public InGameService() {
@@ -57,5 +61,9 @@ public class InGameService {
         for (Node node : stackPane.getChildren()) {
             node.setVisible(node == nodeToShow);
         }
+    }
+
+    public Observable<SystemUpgrades> loadUpgradePresets(){
+        return presetsApiService.getSystemUpgrades();
     }
 }

@@ -54,7 +54,6 @@ public class InGameController extends BasicController {
     @FXML
     StackPane storageOverviewContainer;
 
-
     @Inject
     InGameService inGameService;
     @Inject
@@ -123,6 +122,11 @@ public class InGameController extends BasicController {
         PropertyChangeListener callHandleLanguageChanged = this::handleLanguageChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_LANGUAGE, callHandleLanguageChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
+
+        this.subscriber.subscribe(inGameService.loadUpgradePresets(),
+                result -> {
+                    System.out.println("Moin");
+                });
 
     }
 

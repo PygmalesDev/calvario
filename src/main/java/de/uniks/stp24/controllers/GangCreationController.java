@@ -4,9 +4,10 @@ import de.uniks.stp24.component.menu.GangComponent;
 import de.uniks.stp24.component.menu.GangDeletionComponent;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
-import de.uniks.stp24.component.menu.GangComponent;
 import de.uniks.stp24.model.GangElement;
-import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.PopupBuilder;
+import de.uniks.stp24.service.SaveLoadService;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,9 +26,11 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.*;
+
 import static de.uniks.stp24.service.Constants.empireTemplatesEnglish;
 import static de.uniks.stp24.service.Constants.empireTemplatesGerman;
 

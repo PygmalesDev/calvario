@@ -6,17 +6,13 @@ import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.ws.EventListener;
-import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
@@ -25,14 +21,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-
 import java.util.Locale;
-import java.util.Map;
-import javax.inject.Provider;
-import java.security.Key;
 import java.util.ResourceBundle;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;

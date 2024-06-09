@@ -47,12 +47,12 @@ public class ResourcesService {
         if (island.owner() != null){
             if (island.owner().equals(tokenStorage.getEmpireId())){
                 return gameSystemsApiService.updateIsland(gameID, island.id_(), new SystemsDto(island.name(),
-                        island.districts(), buildings,island.upgrade(), island.owner()));
+                        island.sites(), buildings,island.upgrade(), island.owner()));
             }
         }
 
         return gameSystemsApiService.updateIsland(gameID, island.id_(), new SystemsDto(island.name(),
-                island.districts(), island.buildings(),island.upgrade(), island.owner()));
+                island.sites(), island.buildings(),island.upgrade(), island.owner()));
     }
 
     public Observable<SystemsResultDto> createBuilding(String gameId, Island island, String buildingToAdd) {
@@ -63,12 +63,12 @@ public class ResourcesService {
         if (island.owner() != null){
             if (island.owner().equals(tokenStorage.getEmpireId())){
                 return gameSystemsApiService.updateIsland(gameId, island.id_(), new SystemsDto(island.name(),
-                        island.districts(), newBuildingsArray,island.upgrade(), island.owner()));
+                        island.sites(), newBuildingsArray,island.upgrade(), island.owner()));
             }
         }
 
         return gameSystemsApiService.updateIsland(gameId, island.id_(), new SystemsDto(island.name(),
-                island.districts(), island.buildings(),island.upgrade(), island.owner()));
+                island.sites(), island.buildings(),island.upgrade(), island.owner()));
     }
 
     /*

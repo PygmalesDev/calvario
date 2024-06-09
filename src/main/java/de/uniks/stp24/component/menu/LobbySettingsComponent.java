@@ -1,6 +1,7 @@
 package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
@@ -20,9 +21,8 @@ import java.util.ResourceBundle;
 
 @Component(view = "LobbySettings.fxml")
 public class LobbySettingsComponent extends AnchorPane {
-    public Button readyButton;
     @FXML
-    ImageView readyIconImageView;
+    public Button readyButton;
     @Inject
     Subscriber subscriber;
     @Inject
@@ -36,6 +36,8 @@ public class LobbySettingsComponent extends AnchorPane {
     @Inject
     @Resource
     ResourceBundle resource;
+    @Inject
+    ErrorService errorService;
 
     private String gameID;
     public boolean leftLobby = false;
@@ -49,18 +51,23 @@ public class LobbySettingsComponent extends AnchorPane {
 
     @OnInit
     public void init(){
-        readyIconBlueImage = imageCache.get("icons/approveBlue.png");
-        readyIconGreenImage = imageCache.get("icons/approveGreen.png");
     }
 
     public void setReadyButton(boolean ready){
-        readyIconImageView.setImage(!ready ? readyIconBlueImage : readyIconGreenImage);
+        if(ready){
+            readyButton.getStyleClass().removeAll("lobbyButtonReadyNot");
+            readyButton.getStyleClass().add("lobbyButtonReady");
+        } else {
+            readyButton.getStyleClass().removeAll("lobbyButtonReady");
+            readyButton.getStyleClass().add("lobbyButtonReadyNot");
+        }
     }
 
     public void leaveLobby() {
         this.leftLobby = true;
         this.subscriber.subscribe(this.lobbyService.leaveLobby(this.gameID, this.tokenStorage.getUserId()),
-                result -> this.app.show("/browseGames"));
+            result -> this.app.show("/browseGames"),
+            error -> errorService.getStatus(error));
     }
 
     public void selectEmpire() {
@@ -72,17 +79,19 @@ public class LobbySettingsComponent extends AnchorPane {
 
     public void ready() {
         this.subscriber.subscribe(
-                this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
+                this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
+          result -> {
                     if (result.ready()) {
                         this.subscriber.subscribe(this.lobbyService
                                 .updateMember(this.gameID, this.tokenStorage.getUserId(), false, result.empire()));
-                        readyIconImageView.setImage(readyIconBlueImage);
+                        setReadyButton(false);
                     } else {
                         this.subscriber.subscribe(this.lobbyService
                                 .updateMember(this.gameID, this.tokenStorage.getUserId(), true, result.empire()));
-                        readyIconImageView.setImage(readyIconGreenImage);
+                        setReadyButton(true);
                     }
-                });
+                },
+          error -> errorService.getStatus(error));
     }
 
     @OnDestroy

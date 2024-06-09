@@ -1,7 +1,6 @@
 package de.uniks.stp24;
 
-import de.uniks.stp24.service.ImageCache;
-import de.uniks.stp24.service.IslandsService;
+import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.utils.ResponseConstants;
 import javafx.stage.Stage;

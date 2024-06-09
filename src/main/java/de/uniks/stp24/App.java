@@ -8,7 +8,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.fulib.fx.FulibFxApp;
-
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import java.awt.*;
@@ -59,7 +58,9 @@ public class App extends FulibFxApp {
             setTaskbarIcon();
 
             //autoRefresher().setup(Path.of("src/main/resources/de/uniks/stp24"));
-//            show("/ingame");
+            // todo remove this shortcut
+            //show("/ingame");
+
             Locale.setDefault(Locale.ENGLISH);
             // open normal load screen or autoLogin screen depending on the preferences of the user
 

@@ -17,14 +17,14 @@
         </padding>
         <TextField fx:id="passwordInputField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Enter password" styleClass="inputField" />
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancel" prefHeight="30.0" prefWidth="80.0" styleClass="smallActionButton" text="%cancel">
+            <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false" onAction="#cancel" prefHeight="30.0" prefWidth="80.0" styleClass="smallActionButton" text="%cancel">
                 <graphic>
                     <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@../../icons/leftArrow.png" />
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="joinButton" mnemonicParsing="false" onAction="#joinGame" prefHeight="30.0" prefWidth="80.0" styleClass="smallActionButton" text="%join">
+            <Button fx:id="joinButton" defaultButton="true" mnemonicParsing="false" onAction="#joinGame" prefHeight="30.0" prefWidth="80.0" styleClass="smallActionButton" text="%join">
                 <graphic>
                     <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                         <Image url="@../../icons/enter.png" />

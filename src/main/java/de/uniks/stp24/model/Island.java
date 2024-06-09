@@ -6,10 +6,11 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public record Island(
+        String owner,
         Upgrade upgrade,
         String name,
         String id_,
-        String owner,
+
         int flagIndex,
         double posX,
         double posY,

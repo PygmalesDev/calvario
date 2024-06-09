@@ -84,14 +84,8 @@ public class IslandComponent extends Pane {
 
 
     public void showInfo() {
-        //TODO show info pane!
         this.tokenStorage.setIsland(island);
-        System.out.println(tokenStorage.getGameId());
 
-
-
-        System.out.println(island.type() + " isle at " + x + ", " + y);
-        this.flagPane.setVisible(!this.flagPane.isVisible());
         //TODO by the moment used for printouts
         // maybe it must be removed after implementation of
         // island overview functionality is completed on InGameCtrl

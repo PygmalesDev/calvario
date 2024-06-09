@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
 import java.util.random.RandomGenerator;
+
 @Singleton
 public class IslandsService extends BasicService {
 
@@ -39,10 +40,11 @@ public class IslandsService extends BasicService {
                 Arrays.stream(dto).forEach(data -> {
                     List<String> linkedIsles = new ArrayList<>(data.links().keySet());
                     System.out.println(data);
-                    Island tmp = new Island(data.upgrade(),
+
+                    Island tmp = new Island(data.owner(),
+                        data.upgrade(),
                         data.name(),
                         data._id(),
-                        data.owner(),
                         Objects.isNull(data.owner()) ? -1 : tokenStorage.getFlagIndex(data.owner()),
                         data.x(),
                         data.y(),

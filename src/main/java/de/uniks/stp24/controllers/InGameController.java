@@ -178,7 +178,7 @@ public class InGameController extends BasicController {
             showStorageButton = new Button();
             showStorageButton.setPrefHeight(30);
             showStorageButton.setPrefWidth(30);
-            showStorageButton.setOnAction(this::showStorage);
+            showStorageButton.setOnAction(event -> showStorage());
             this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
         }
     }
@@ -214,7 +214,7 @@ public class InGameController extends BasicController {
 
     // assign key S to show storage
     @OnKey(code = KeyCode.S)
-    public void showStorage(ActionEvent event) {
+    public void showStorage() {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 

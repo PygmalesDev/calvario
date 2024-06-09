@@ -31,6 +31,8 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @FXML
     public Button startJourneyButton;
     @FXML
+    public Button readyButton;
+    @FXML
     ImageView readyIconImageView;
     @Inject
     Subscriber subscriber;
@@ -68,8 +70,6 @@ public class LobbyHostSettingsComponent extends AnchorPane {
 
     @OnInit
     public void init(){
-        readyIconBlueImage = imageCache.get("icons/approveBlue.png");
-        readyIconGreenImage = imageCache.get("icons/approveGreen.png");
     }
 
     public void createCheckPlayerReadinessListener() {
@@ -83,7 +83,13 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     }
 
     public void setReadyButton(boolean ready){
-        readyIconImageView.setImage(!ready ? readyIconBlueImage : readyIconGreenImage);
+        if(ready){
+            readyButton.getStyleClass().removeAll("lobbyButtonReadyNot");
+            readyButton.getStyleClass().add("lobbyButtonReady");
+        } else {
+            readyButton.getStyleClass().removeAll("lobbyButtonReady");
+            readyButton.getStyleClass().add("lobbyButtonReadyNot");
+        }
     }
 
     @OnRender
@@ -128,7 +134,6 @@ public class LobbyHostSettingsComponent extends AnchorPane {
                         !result.ready(),
                         result.empire()));
                         readyIconImageView.setImage(result.ready() ? readyIconBlueImage : readyIconGreenImage);
-
                 },
           error -> errorService.getStatus(error));
     }

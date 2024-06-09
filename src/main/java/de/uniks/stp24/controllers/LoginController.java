@@ -55,8 +55,6 @@ public class LoginController extends BasicController {
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
-    @FXML
-    Image calvarioLogoLogin;
 
     @Inject
     Subscriber subscriber;
@@ -200,6 +198,5 @@ public class LoginController extends BasicController {
         this.subscriber.dispose();
         backgroundAnchorPane.setStyle("-fx-background-image: null");
         cardBackgroundVBox.setStyle("-fx-background-image: null");
-        calvarioLogoLogin = null;
     }
 }

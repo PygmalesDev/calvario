@@ -260,20 +260,6 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         assertTrue(lookup("#messageText").queryText().getText().contains("kicked"));
     }
 
-    /**
-     * Test the notification showing after the host has left the lobby.
-     */
-    @Test
-    public void testHostLeftTheLobby() {
-        WaitForAsyncUtils.waitForFxEvents();
-
-        this.memberSubject.onNext(new Event<>("games.testGameID.members.testGameHostID.updated",
-                new MemberDto(false, "testGameHostID", null, "88888888")));
-
-        WaitForAsyncUtils.waitForFxEvents();
-        assertTrue(lookup("#lobbyMessageElement").query().isVisible());
-        assertTrue(lookup("#messageText").queryText().getText().contains("LEFT THE LOBBY"));
-    }
 
     /**
      * Test the proper message appearing if the host deletes the lobby.

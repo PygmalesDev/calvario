@@ -126,17 +126,19 @@ public class LobbyHostSettingsComponent extends AnchorPane {
 
     public void ready() {
         this.subscriber.subscribe(
-                this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
-          result -> {
-                    this.subscriber.subscribe(this.lobbyService
-                      .updateMember(this.gameID,
-                        this.tokenStorage.getUserId(),
-                        !result.ready(),
-                        result.empire()));
-                        readyIconImageView.setImage(result.ready() ? readyIconBlueImage : readyIconGreenImage);
-                },
-          error -> errorService.getStatus(error));
+          this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
+              if (result.ready()) {
+                  this.subscriber.subscribe(this.lobbyService
+                    .updateMember(this.gameID, this.tokenStorage.getUserId(), false, result.empire()));
+                  setReadyButton(false);
+              } else {
+                  this.subscriber.subscribe(this.lobbyService
+                    .updateMember(this.gameID, this.tokenStorage.getUserId(), true, result.empire()));
+                  setReadyButton(true);
+              }
+          });
     }
+
 
     @OnDestroy
     public void destroy(){

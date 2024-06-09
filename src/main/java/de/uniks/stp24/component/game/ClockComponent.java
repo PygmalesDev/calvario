@@ -20,6 +20,8 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
@@ -175,7 +177,7 @@ public class ClockComponent extends AnchorPane {
         subscriber.subscribe(this.eventListener
                         .listen("games." + gameId + ".updated", Game.class),
                 event -> {
-                    System.out.println("Update Speed");
+                    System.out.println("Update Speed zu" + event.data().speed());
                     Game game = event.data();
                     timerService.setSpeedLocal(game.speed());
                 },
@@ -192,9 +194,6 @@ public class ClockComponent extends AnchorPane {
         if (timerService.isRunning()) {
             subscriber.subscribe(timerService.setSpeed(gameId, 0));
             timerService.stop();
-        } else {
-            subscriber.subscribe(timerService.setSpeed(gameId, timerService.getSpeed()));
-            timerService.resume();
         }
     }
 
@@ -212,7 +211,8 @@ public class ClockComponent extends AnchorPane {
 
     ////////////--------------------------------Auxiliary Methods-----------------------------------------//////////////
 
-    private String translateCountdown(int countdown) {
+    @Contract(pure = true)
+    private @NotNull String translateCountdown(int countdown) {
         String suffix = (countdown % 60) < 10 ? "0" : "";
         return (countdown / 60) + ":" + suffix + (countdown % 60);
     }
@@ -228,14 +228,12 @@ public class ClockComponent extends AnchorPane {
         if (!timerService.isRunning()) {
             timerService.resume();
         }
-        if (timerService.getSpeed() != speed) {
-            subscriber.subscribe(timerService.setSpeed(gameId, speed));
-        }
+        subscriber.subscribe(timerService.setSpeed(gameId, speed));
     }
 
     ////////////--------------------------------PropertyChangeListener------------------------------------//////////////
 
-    private void handleSeasonChanged(PropertyChangeEvent propertyChangeEvent) {
+    private void handleSeasonChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             int season = (int) propertyChangeEvent.getNewValue();
             setSeasonLabelSize();
@@ -243,14 +241,14 @@ public class ClockComponent extends AnchorPane {
         }
     }
 
-    private void handleSpeedChanged(PropertyChangeEvent propertyChangeEvent) {
+    private void handleSpeedChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             int speed = (int) propertyChangeEvent.getNewValue();
             timerService.setSpeedLocal(speed);
         }
     }
 
-    private void handleTimeChanged(PropertyChangeEvent propertyChangeEvent) {
+    private void handleTimeChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             int time = (int) propertyChangeEvent.getNewValue();
             Platform.runLater(() -> countdownLabel.setText(translateCountdown(time)));

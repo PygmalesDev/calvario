@@ -7,6 +7,6 @@ public record SystemUpgrades(
         UpgradeStatus explored,
         UpgradeStatus colonized,
         UpgradeStatus upgraded,
-        Upgrade developed
+        UpgradeStatus developed
 ) {
 }

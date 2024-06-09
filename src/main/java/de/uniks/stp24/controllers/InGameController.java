@@ -125,7 +125,7 @@ public class InGameController extends BasicController {
 
         this.subscriber.subscribe(inGameService.loadUpgradePresets(),
                 result -> {
-                    System.out.println("Moin");
+                    System.out.println(result.explored().cost().get("energy"));
                 });
 
     }

@@ -9,6 +9,6 @@ import javax.inject.Singleton;
 
 @Singleton
 public interface PresetsApiService {
-    @GET("/presets/system-upgrades")
+    @GET("presets/system-upgrades")
     Observable<SystemUpgrades> getSystemUpgrades();
 }

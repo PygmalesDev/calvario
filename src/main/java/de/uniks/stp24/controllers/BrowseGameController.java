@@ -22,6 +22,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -33,6 +34,7 @@ import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -228,12 +230,13 @@ BrowseGameController extends BasicController {
         app.show("/editAcc");
     }
 
+    @OnKey(code = KeyCode.SPACE)
     public void loadGame() {
         if(browseGameService.getGame() != null) {
             app.show("/lobby", Map.of("gameid", browseGameService.getGame()._id()));
         }
     }
-
+    @OnKey(code = KeyCode.DELETE)
     public void deleteGame() {
         if (browseGameService.checkMyGame()) {
             warningComponent.setGameName();

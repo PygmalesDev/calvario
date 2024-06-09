@@ -1,6 +1,6 @@
 package de.uniks.stp24;
 
-import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.utils.ResponseConstants;
 import javafx.stage.Stage;
@@ -25,6 +25,8 @@ public class ControllerTest extends ApplicationTest {
     public App app = spy(App.class);
     @Spy
     public PrefService prefService;
+    @Spy
+    public IslandsService islandsService;
     @Spy
     public ResponseConstants responseConstants;
     @Spy

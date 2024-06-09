@@ -33,6 +33,7 @@ public interface GamesApiService {
 
     @DELETE("games/{id}")
     Observable<Game> deleteGame(@Path("id") String id);
+
 }
 
 

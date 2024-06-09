@@ -106,20 +106,9 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     public void startGame() {
         subscriber.subscribe(editGameService.startGame(this.gameID),
                 result -> {
-            islandsService.retrieveIslands(this.gameID);
-            this.startJourneyButton.setDisable(true);
-            this.readyButton.setDisable(true);
-            //Todo: do this for every member of the game
-            this.tokenStorage.setGameId(gameID);
-            subscriber.subscribe(empireService.getEmpires(this.gameID), dto -> {
-                for(ReadEmpireDto data :dto){
-                    if (data.user().equals(tokenStorage.getUserId())) {
-                        this.tokenStorage.setEmpireId(data._id());
-                        this.app.show("/ingame");
-                    }
-                }
-            }, error -> {});
-        }, error -> {});
+                    this.startJourneyButton.setDisable(true);
+                },
+                error -> this.startJourneyButton.setDisable(false));
     }
 
     /**

@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<fx:root alignment="TOP_CENTER" prefHeight="132.0" prefWidth="330.0" style="-fx-border-color: #000000;" styleClass="overview-text" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.DetailsComponent">
+<fx:root alignment="TOP_CENTER" prefHeight="132.0" prefWidth="330.0" styleClass="overview-text" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.DetailsComponent">
    <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
    <HBox alignment="CENTER" prefHeight="118.0" prefWidth="329.0">
       <VBox alignment="TOP_CENTER" prefHeight="114.0" prefWidth="139.0">
@@ -18,4 +18,5 @@
          <ListView prefHeight="200.0" prefWidth="200.0" />
       </VBox>
    </HBox>
+   <VBox prefHeight="23.0" prefWidth="330.0" />
 </fx:root>

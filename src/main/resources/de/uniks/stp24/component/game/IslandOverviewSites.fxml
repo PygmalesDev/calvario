@@ -53,7 +53,7 @@
          </VBox>
       </HBox>
       <VBox prefHeight="36.0" prefWidth="400.0" />
-      <HBox alignment="CENTER" prefHeight="132.0" prefWidth="400.0">
+      <HBox alignment="CENTER" prefHeight="157.0" prefWidth="398.0">
          <StackPane fx:id="sitesContainer" prefHeight="150.0" prefWidth="330.0" style="-fx-border-color: #000000;" />
       </HBox>
    </VBox>

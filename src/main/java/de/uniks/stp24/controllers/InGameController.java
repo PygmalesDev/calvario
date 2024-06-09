@@ -1,6 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.IslandComponent;
+import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
@@ -8,7 +9,7 @@ import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.game.IslandsService;
-import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -48,6 +49,9 @@ public class InGameController extends BasicController {
     StackPane pauseMenuContainer;
     @FXML
     StackPane storageOverviewContainer;
+
+    @Inject
+    TimerService timerService;
     @Inject
     InGameService inGameService;
     @Inject
@@ -56,6 +60,9 @@ public class InGameController extends BasicController {
     LobbyService lobbyService;
     @Inject
     EmpireService empireService;
+
+    @FXML
+    StackPane clockComponentContainer;
     @SubComponent
     @Inject
     public PauseMenuComponent pauseMenuComponent;
@@ -68,6 +75,9 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
+    @SubComponent
+    @Inject
+    public ClockComponent clockComponent;
 
     boolean pause = false;
 
@@ -139,6 +149,8 @@ public class InGameController extends BasicController {
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
+
+        clockComponentContainer.getChildren().add(clockComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)

@@ -32,14 +32,12 @@
             </HBox>
             <VBox fx:id="cardBackgroundVBox" alignment="TOP_CENTER" prefHeight="600.0" prefWidth="721.0" styleClass="cardBackground">
                <HBox alignment="TOP_RIGHT" prefHeight="60.0" prefWidth="200.0">
-                  <children>
-                     <ToggleButtonGroup prefHeight="60.0" prefWidth="70.0">
-                        <toggles>
-                           <ToggleButton fx:id="enToggleButton" onAction="#setEn" prefHeight="60.0" prefWidth="60.0" styleClass="languageButton" text="EN" />
-                           <ToggleButton fx:id="deToggleButton" onAction="#setDe" prefHeight="60.0" prefWidth="60.0" styleClass="languageButton" text="DE" />
-                        </toggles>
-                     </ToggleButtonGroup>
-                  </children>
+                  <ToggleButtonGroup prefHeight="60.0" prefWidth="70.0">
+                     <ToggleButton fx:id="enToggleButton" onAction="#setEn" prefHeight="60.0" prefWidth="60.0"
+                                   styleClass="languageButton" text="EN"/>
+                     <ToggleButton fx:id="deToggleButton" onAction="#setDe" prefHeight="60.0" prefWidth="60.0"
+                                   styleClass="languageButton" text="DE"/>
+                  </ToggleButtonGroup>
                </HBox>
                <AnchorPane prefHeight="190.0" prefWidth="550.0" styleClass="calvarioTextLogo" />
                <VBox alignment="CENTER" prefHeight="160.0" prefWidth="100.0">

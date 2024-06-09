@@ -35,13 +35,13 @@
             </Text>
          </HBox>
          <HBox alignment="CENTER" prefHeight="70.0" prefWidth="200.0" spacing="30.0">
-            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancel" prefHeight="30.0"
+            <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false" onAction="#cancel" prefHeight="30.0"
                     prefWidth="70.0" styleClass="deleteAndSaveButton" text="%cancel">
                <font>
                   <Font size="15.0"/>
                </font>
             </Button>
-            <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#logout" prefHeight="30.0"
+            <Button fx:id="logoutButton" defaultButton="true" mnemonicParsing="false" onAction="#logout" prefHeight="30.0"
                     prefWidth="70.0" styleClass="deleteAndSaveButton" text="LOGOUT">
                <font>
                   <Font size="15.0"/>

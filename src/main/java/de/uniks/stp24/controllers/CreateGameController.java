@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -19,6 +20,7 @@ import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.event.OnKey;
 import javax.inject.Inject;
 
 @Title("%create.game")
@@ -75,15 +77,16 @@ public class CreateGameController extends BasicController {
         this.bubbleComponent.setCaptainText(this.resources.getString("pirate.newGame"));
     }
 
-    //Spinner for incrementing map size
+    //Spinner for incrementing map size between 50 and 200
     public void initializeSpinner(){
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(100, 1000);
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(50, 200);
         valueFactory.setValue(100);
         createMapSizeSpinner.setValueFactory(valueFactory);
     }
 
     // class was modified! some code was refactored
     // now use subscriber
+    @OnKey(code = KeyCode.ENTER)
     public void createGame() {
         String gameName = this.createNameTextField.getText();
         String password = this.createPasswordTextField.getText();
@@ -113,6 +116,7 @@ public class CreateGameController extends BasicController {
         }
     }
 
+    @OnKey(code = KeyCode.ESCAPE)
     public void cancel(){
         app.show("/browseGames");
     }

@@ -163,6 +163,7 @@ ToggleButton:hover{
     -fx-pref-width: 25px;
     -fx-pref-height: 25px;
 }
+
 .lockButton:selected {
     -fx-background-image: url("icons/lock.png");
     -fx-background-color: WHITE;
@@ -272,6 +273,102 @@ ToggleButton:hover{
     -fx-border-width: 0;
     -fx-pref-width: 200px;
     -fx-pref-height: 100px;
+}
+
+.lobbyButtonSelectEmpire{
+    -fx-font-family: "Stencil";
+    -fx-font-size: 15;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/Island.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 80px;
+}
+
+.lobbyButtonReady{
+    -fx-font-family: "Stencil";
+    -fx-font-size: 15;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/approveGreen.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 80px;
+}
+
+.lobbyButtonReadyNot{
+    -fx-font-family: "Stencil";
+    -fx-font-size: 15;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/approveBlue.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 80px;
+}
+
+
+
+.lobbyButtonLeave{
+    -fx-font-family: "Stencil";
+    -fx-font-size: 15;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/leaveMan.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 80px;
+}
+
+.lobbyButtonStart{
+    -fx-font-family: "Stencil";
+    -fx-font-size: 15;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/startGame.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 80px;
+}
+
+
+.EnteredGameButtonText{
+    -fx-font-family: "Stencil";
+    -fx-font-size:14;
+}
+
+
+
+.buttonTextArea .scroll-pane .viewport{
+
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-focus-traversable: false;
+}
+
+.buttonTextArea:disabled {
+    -fx-opacity: 1.0;
+}
+
+.buttonTextArea{
+    -fx-background-color: transparent;
 }
 
 .woodButton{
@@ -595,6 +692,50 @@ ToggleButton:hover{
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
 }
 
+
+/*Loading, Login, Register*/
+.calvarioTextLogoLogin {
+    -fx-background-image: url("/de/uniks/stp24/assets/logos/calvario_new.png");
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+    -fx-background-size: 60% 100%;
+    -fx-background-repeat: no-repeat;
+
+}
+
+.calvarioTextLogoRegister {
+    -fx-background-image: url("/de/uniks/stp24/assets/logos/calvario_new.png");
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+    -fx-background-size: 60% 80%;
+    -fx-background-repeat: no-repeat;
+
+}
+
+
+.calvarioLogo {
+    -fx-background-image: url("/de/uniks/stp24/assets/logos/logo_new.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+.spiderbyterLogo{
+    -fx-background-image: url("/de/uniks/stp24/assets/logos/SpiderbyteLogoTransparent.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 150% 150%;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+.deadbirdsocietyLogo {
+    -fx-background-image: url("/de/uniks/stp24/assets/logos/DeadBirdsLogoTransparent.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 80% 80%;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
 /***************************************************************************************************/
 /***************************************************************************************************/
 /*********************************** Release 2 *****************************************************/
@@ -606,4 +747,10 @@ ToggleButton:hover{
     -fx-font-family: "Tempus Sans ITC Regular";
     -fx-font-weight: none;
     -fx-font-size: 10;
+}
+
+.backgroundGame{
+    -fx-background-image: url('/de/uniks/stp24/icons/sea.png');
+    -fx-background-color: "TRANSPARENT";
+    -fx-background-size: cover;
 }

@@ -49,7 +49,7 @@ public class EditGameService {
                     .doOnError(error -> editGameController.showError(errorService.getStatus(error)));
     }
 
-    public Observable<UpdateGameResultDto> startGame(String id){
+    public Observable<UpdateGameResultDto> startGame(String id) {
         return gamesApiService
           .startGame(id, new StartGameDto(true))
           .doOnError(error -> editGameController.showError(errorService.getStatus(error)));

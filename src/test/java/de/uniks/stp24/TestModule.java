@@ -2,21 +2,14 @@ package de.uniks.stp24;
 
 import dagger.Module;
 import dagger.Provides;
-
 import de.uniks.stp24.rest.*;
-import de.uniks.stp24.rest.AuthApiService;
-import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.rest.UserApiService;
-import de.uniks.stp24.rest.GameMembersApiService;
-import de.uniks.stp24.rest.GameSystemsApiService;
-import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.CreateGameService;
 import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.menu.LoginService;
 import de.uniks.stp24.ws.EventListener;
-
 import org.mockito.Mockito;
 
 import javax.inject.Singleton;

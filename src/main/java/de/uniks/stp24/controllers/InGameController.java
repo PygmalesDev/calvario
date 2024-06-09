@@ -11,14 +11,17 @@ import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
-import de.uniks.stp24.service.IslandsService;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.fulib.fx.annotation.controller.Controller;
@@ -41,6 +44,9 @@ import java.util.Objects;
 @Title("CALVARIO")
 @Controller
 public class InGameController extends BasicController {
+    public Button showStorageButton;
+    public Button showIslandButton;
+    public HBox storageButtonsBox;
     @FXML
     public StackPane overviewContainer;
     @FXML
@@ -53,7 +59,6 @@ public class InGameController extends BasicController {
     StackPane pauseMenuContainer;
     @FXML
     StackPane storageOverviewContainer;
-
     @Inject
     InGameService inGameService;
     @Inject
@@ -62,7 +67,6 @@ public class InGameController extends BasicController {
     LobbyService lobbyService;
     @Inject
     EmpireService empireService;
-
     @SubComponent
     @Inject
     public PauseMenuComponent pauseMenuComponent;
@@ -89,6 +93,8 @@ public class InGameController extends BasicController {
 
     boolean pause = false;
     List<IslandComponent> islandComponentList = new ArrayList<>();
+
+    // todo remove this variables if not needed
     String gameID;
     String empireID;
 
@@ -107,7 +113,6 @@ public class InGameController extends BasicController {
         //Todo: Outprint for Swagger - can be deleted later
         System.out.println(this.gameID);
         System.out.println(empireID);
-
 
         GameStatus gameStatus = inGameService.getGameStatus();
 
@@ -147,7 +152,6 @@ public class InGameController extends BasicController {
 
     private void handlePauseChanged(PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
-//            Boolean paused = (Boolean) propertyChangeEvent.getNewValue();
             pause = (Boolean) propertyChangeEvent.getNewValue();
             if (pause) {
                 pauseGame();
@@ -177,12 +181,11 @@ public class InGameController extends BasicController {
         pause = !pause;
         inGameService.setShowSettings(false);
         inGameService.setPaused(pause);
-        if (pause) {pauseGame();}
-        else {resumeGame();}
-    }
-    @OnKey(code = KeyCode.P)
-    public void test(){
-
+        if (pause) {
+            pauseGame();
+        } else {
+            resumeGame();
+        }
     }
 
     public void showSettings() {
@@ -194,48 +197,51 @@ public class InGameController extends BasicController {
         pauseMenuContainer.getChildren().remove(settingsComponent);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
     }
+
     public void pauseGame() {
         pauseMenuContainer.setVisible(pause);
     }
-
     public void resumeGame() {
         pauseMenuContainer.setVisible(pause);
     }
 
+    // created and add buttons for storage and island overview
+    // there are problems if they are contained in the fxml
+    private void createButtonsStorage() {
+        if (!(Objects.nonNull(showIslandButton)&&(Objects.nonNull(showStorageButton)))) {
+            showIslandButton = new Button();
+            showIslandButton.setPrefHeight(30);
+            showIslandButton.setPrefWidth(30);
+            showIslandButton.setOnAction(this::showIslandOverview);
+            showStorageButton = new Button();
+            showStorageButton.setPrefHeight(30);
+            showStorageButton.setPrefWidth(30);
+            showStorageButton.setOnAction(event -> showStorage());
+            this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
+        }
+    }
+
+    @FXML
+    private void showIslandOverview(ActionEvent actionEvent) {
+    }
 
     @OnRender
     public void createMap()  {
-
-        // sea should be inserted using css -> remove this line
-        this.mapGrid.setStyle("-fx-background-image: url('/de/uniks/stp24/icons/sea.png')");
-
         islandsService.getListOfIslands().forEach(
-          island -> {
-              IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
-                app.initAndRender(new IslandComponent())
-              );
-              tmp.setLayoutX(tmp.getPosX());
-              tmp.setLayoutY(tmp.getPosY());
-              tmp.rudderImage.setVisible(false);
-              tmp.setInGameController(this);
-              islandComponentList.add(tmp);
-              this.mapGrid.getChildren().add(tmp);
-          }
+                island -> {
+                    IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
+                            app.initAndRender(new IslandComponent())
+                    );
+                    tmp.setLayoutX(tmp.getPosX());
+                    tmp.setLayoutY(tmp.getPosY());
+                    tmp.rudderImage.setVisible(false);
+                    tmp.setInGameController(this);
+                    islandComponentList.add(tmp);
+                    this.mapGrid.getChildren().add(tmp);
+                }
         );
-
         //todo draw connections
-
-    }
-
-    public void showCoordinates(MouseEvent mouseEvent) {
-        // todo select island to show info
-    }
-
-    @OnDestroy
-    public void destroy() {
-        islandComponentList.forEach(IslandComponent::destroy);
-        this.gameListenerTriple.forEach(triple -> triple.game().listeners()
-                .removePropertyChangeListener(triple.propertyName(), triple.listener()));
+        createButtonsStorage();
     }
 
     public void showOverview(Island island ) {
@@ -248,11 +254,21 @@ public class InGameController extends BasicController {
         overviewSitesComponent.setOverviewSites(island);
     }
 
-    public void showStorage() {
-        storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
+    public void showCoordinates(MouseEvent mouseEvent) {
+        // todo select island to show info
     }
 
-    public void showIslandOverview() {
+    @OnDestroy
+    public void destroy() {
+        islandComponentList.forEach(IslandComponent::destroy);
+        this.gameListenerTriple.forEach(triple -> triple.game().listeners()
+                .removePropertyChangeListener(triple.propertyName(), triple.listener()));
+        this.subscriber.dispose();
+    }
 
+    // assign key S to show storage
+    @OnKey(code = KeyCode.S)
+    public void showStorage() {
+        storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 }

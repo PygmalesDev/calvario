@@ -1,6 +1,7 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.PresetsApiService;
@@ -17,7 +18,6 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 
 @Component(view = "IslandComponent.fxml")
 @Singleton
@@ -37,14 +37,10 @@ public class IslandComponent extends Pane {
 
     private InGameController inGameController;
     private Island island;
+
     double x, y;
     public boolean islandIsSelected = false;
 
-
-    // images as placeholder for flags (instead color?)
-    final String[] flags = {
-            "847.png", "863.png", "911.png", "927.png", "959.png"
-    };
 
     @Inject
     public IslandComponent() {
@@ -52,19 +48,20 @@ public class IslandComponent extends Pane {
             this.imageCache = new ImageCache();
         }
         this.islandImage = new ImageView();
-        this.islandImage.setImage(imageCache.get("icons/isle.jpeg"));
     }
 
-    // an icon should be used depending on island type
-    public void applyIcon(IslandType type) {
-        String pathToIcon = "icons/islands/";
-        pathToIcon += type.name() + ".png";
-        this.islandImage.setImage(imageCache.get(pathToIcon));
+    public void applyIcon(IslandType type){
+        this.islandImage
+          .setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
     }
 
-    public void setFlagImage(int flag) {
-        this.flagImage
-                .setImage(imageCache.get("test/" + flags[flag]));
+    // use our flag images
+    // by the moment numeration from 0 til 16
+    public void setFlagImage(int flag){
+        if (flag >=0) {
+            this.flagImage
+              .setImage(imageCache.get("assets/flags/flag_" + flag + ".png"));
+        }
     }
 
     public void applyInfo(Island islandInfo) {
@@ -72,11 +69,10 @@ public class IslandComponent extends Pane {
         applyIcon(this.island.type());
     }
 
-    // set double to have only 2 decimals
+    // round double to have only 2 decimals
     public void setPosition(double x, double y) {
         this.x = Math.rint(x * 100.00) / 100.00;
         this.y = Math.rint(y * 100.00) / 100.00;
-//        return this;
     }
 
     public double getPosX() {
@@ -90,17 +86,18 @@ public class IslandComponent extends Pane {
     }
 
     // switch the visibility of all flags
-    @OnKey(code = KeyCode.A, shift = true)
-    public void showFlag() {
+    @OnKey(code = KeyCode.H, shift = true)
+    public void showFlag(){
         this.flagPane.setVisible(!this.flagPane.isVisible());
     }
 
-    // by the moment change visibility of flag (image)
+
     public void showInfo() {
-        //TODO show info pane!
-        System.out.println(island.type() + " isle at " + x + ", " + y);
-        System.out.println(island.crewCapacity());
-        this.flagPane.setVisible(!this.flagPane.isVisible());
+        //TODO by the moment used for printouts
+        // maybe it must be removed after implementation of
+        // island overview functionality is completed on InGameCtrl
+        System.out.println(Upgrade.values()[island.upgradeLevel()] + " -> " + island.type() + " isle at " + x + ", " + y );
+        showFlag();
     }
 
     public void showRudder() {

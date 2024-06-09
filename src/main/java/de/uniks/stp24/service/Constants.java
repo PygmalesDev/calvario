@@ -105,7 +105,7 @@ public class Constants {
             "research_lab","building.scoutHub",
             "foundry","building.alloySmeltery",
             "factory","building.chophouse",
-            "refinery","coalQuarry"
+            "refinery","building.coalQuarry"
     );
 
 
@@ -120,7 +120,7 @@ public class Constants {
             Map.entry("agriculture", "island.lushy"),
             Map.entry("ancient_technology", "island.forlorn"),
             Map.entry("ancient_industry", "island.amazonian"),
-            Map.entry("ancient_military", "everfrozen")
+            Map.entry("ancient_military", "island.everfrozen")
     );
 
 }

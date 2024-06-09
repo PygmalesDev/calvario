@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import javax.inject.Inject;
 import java.util.Map;
 
-
 public class ResourcesService {
 
     @Inject

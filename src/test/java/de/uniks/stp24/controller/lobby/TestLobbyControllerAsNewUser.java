@@ -126,8 +126,9 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
 
         // Mock getting members readiness updates
         doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.updated"), eq(MemberDto.class));
-
         this.app.show(this.lobbyController);
+
+        doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.updated"),eq(Game.class));
     }
 
     /**

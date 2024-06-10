@@ -2,9 +2,11 @@ package de.uniks.stp24.service;
 
 import de.uniks.stp24.dto.SystemsDto;
 import de.uniks.stp24.dto.SystemsResultDto;
+import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.Building;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.model.Site;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
@@ -12,6 +14,7 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ResourcesService {
@@ -42,12 +45,15 @@ public class ResourcesService {
 
         String[] buildings = new String[1];
         buildings[0] = "exchange";
-        System.out.println(Arrays.toString(buildings));
+        Map<String, Integer> sitesValue = new HashMap<>();
+        System.out.println(gameID + " ### " + island);
+
 
         if (island.owner() != null){
             if (island.owner().equals(tokenStorage.getEmpireId())){
-                return gameSystemsApiService.updateIsland(gameID, island.id_(), new SystemsDto(island.name(),
-                        island.sites(), buildings,island.upgrade(), island.owner()));
+                System.out.println("--------------");
+                return gameSystemsApiService.updateIsland(gameID, island.id_(), new SystemsDto("",
+                        sitesValue, buildings, null, island.owner()));
             }
         }
 
@@ -59,11 +65,13 @@ public class ResourcesService {
         String[] newBuildingsArray = new String[island.buildings().length + 1];
         System.arraycopy(island.buildings(), 0, newBuildingsArray, 0, island.buildings().length);
         newBuildingsArray[newBuildingsArray.length - 1] = buildingToAdd;
+        Map<String, Integer> sitesValue = new HashMap<>();
+        System.out.println(Arrays.toString(newBuildingsArray));
 
         if (island.owner() != null){
             if (island.owner().equals(tokenStorage.getEmpireId())){
-                return gameSystemsApiService.updateIsland(gameId, island.id_(), new SystemsDto(island.name(),
-                        island.sites(), newBuildingsArray,island.upgrade(), island.owner()));
+                return gameSystemsApiService.updateIsland(gameId, island.id_(), new SystemsDto("",
+                        sitesValue, newBuildingsArray,null, island.owner()));
             }
         }
 

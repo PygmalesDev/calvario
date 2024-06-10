@@ -65,6 +65,7 @@ public class BuildingsWindowComponent extends AnchorPane {
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
             onClose();
         });
+        tokenStorage.setIsland(island);
     }
 
     public void buildMine(){

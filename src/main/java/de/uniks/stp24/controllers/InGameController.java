@@ -213,6 +213,7 @@ public class InGameController extends BasicController {
         return islandComponentList;
     }
 
+    // migrate to island service?
     private List<Line> createLines(Map<String,IslandComponent> idToComponent) {
         Map<String, List<String>> islandConnections = islandsService.getConnections();
         List<Line> linesInMap = new ArrayList<>();
@@ -226,8 +227,8 @@ public class InGameController extends BasicController {
               endX = isle2.getPosX() + 25;
               endY = isle2.getPosY() + 25;
               Line tmp = new Line(startX,startY,endX,endY);
-              //todo with css?
-              tmp.styleProperty().set("-fx-stroke: darkorange; -fx-stroke-dash-array: 5 5;");
+              //todo with css? maybe this #FF7F50
+              tmp.styleProperty().set("-fx-stroke: #FF7F50; -fx-stroke-dash-array: 5 5;");
               linesInMap.add(tmp);
           }
         });

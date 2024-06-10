@@ -2,8 +2,8 @@ package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.MemberDto;
-import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -59,6 +59,8 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @Inject
     @Resource
     ResourceBundle resource;
+    @Inject
+    ErrorService errorService;
 
     private String gameID;
     public boolean leftLobby;
@@ -72,8 +74,6 @@ public class LobbyHostSettingsComponent extends AnchorPane {
 
     @OnInit
     public void init(){
-        readyIconBlueImage = imageCache.get("icons/approveBlue.png");
-        readyIconGreenImage = imageCache.get("icons/approveGreen.png");
     }
 
     public void createCheckPlayerReadinessListener() {
@@ -83,11 +83,17 @@ public class LobbyHostSettingsComponent extends AnchorPane {
             members -> this.startJourneyButton.setDisable(!Arrays.stream(members)
                                 .map(MemberDto::ready)
                                 .reduce(Boolean::logicalAnd).orElse(true)),
-            error -> {}));
+              error -> errorService.getStatus(error)));
     }
 
     public void setReadyButton(boolean ready){
-        readyIconImageView.setImage(!ready ? readyIconBlueImage : readyIconGreenImage);
+        if(ready){
+            readyButton.getStyleClass().removeAll("lobbyButtonReadyNot");
+            readyButton.getStyleClass().add("lobbyButtonReady");
+        } else {
+            readyButton.getStyleClass().removeAll("lobbyButtonReady");
+            readyButton.getStyleClass().add("lobbyButtonReadyNot");
+        }
     }
 
     @OnRender
@@ -96,22 +102,12 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     }
 
     public void startGame() {
-        subscriber.subscribe(empireService.getEmpires(this.gameID),
-                event ->{
-                    System.out.println(event.length);
-                    for(ReadEmpireDto data : event){
-                        System.out.println("ReadEmpireDto: " + data);
-                        System.out.println("User " + data.user());
-                        System.out.println("TokenUser " + tokenStorage.getUserId());
-                    }
-                    System.out.println("-------------------");
-                    subscriber.subscribe(editGameService.startGame(this.gameID),
-                            result -> {}
-                            , error -> {});
-                });
-
+        subscriber.subscribe(editGameService.startGame(this.gameID),
+          result -> {
+            this.startJourneyButton.setDisable(true);
+            },
+          error -> this.startJourneyButton.setDisable(false));
     }
-
 
     /**
      * Sends a blank update message to the server so the members are notified about host leaving the lobby.
@@ -121,7 +117,8 @@ public class LobbyHostSettingsComponent extends AnchorPane {
             host -> this.subscriber.subscribe(this.lobbyService.updateMember(this.gameID,
                     this.tokenStorage.getUserId(), host.ready(), host.empire()),
             result -> this.app.show("/browseGames"),
-            error -> {}));
+            error -> errorService.getStatus(error)),
+          error -> errorService.getStatus(error));
     }
 
     public void setGameID(String gameID) {
@@ -133,20 +130,19 @@ public class LobbyHostSettingsComponent extends AnchorPane {
 
     public void ready() {
         this.subscriber.subscribe(
-                this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
-                result -> {
-                    if (result.ready()) {
-                        this.subscriber.subscribe(this.lobbyService
-                                .updateMember(this.gameID, this.tokenStorage.getUserId(), false, result.empire()));
-                        readyIconImageView.setImage(readyIconBlueImage);
-                    } else {
-                        this.subscriber.subscribe(this.lobbyService
-                                .updateMember(this.gameID, this.tokenStorage.getUserId(), true, result.empire()));
-                        readyIconImageView.setImage(readyIconGreenImage);
-                    }
-                },
-                error -> {});
+          this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
+              if (result.ready()) {
+                  this.subscriber.subscribe(this.lobbyService
+                    .updateMember(this.gameID, this.tokenStorage.getUserId(), false, result.empire()));
+                  setReadyButton(false);
+              } else {
+                  this.subscriber.subscribe(this.lobbyService
+                    .updateMember(this.gameID, this.tokenStorage.getUserId(), true, result.empire()));
+                  setReadyButton(true);
+              }
+          });
     }
+
 
     @OnDestroy
     public void destroy(){

@@ -59,6 +59,8 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     @Spy
     JoinGameService joinGameService;
     @Spy
+    EditGameService editGameService;
+    @Spy
     UserApiService userApiService;
     @Spy
     LobbyService lobbyService;
@@ -70,8 +72,6 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
-    @Spy
-    EditGameService editGameService;
 
     @InjectMocks
     UserComponent userComponent;
@@ -133,7 +133,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.updated"), eq(MemberDto.class));
         this.app.show(this.lobbyController);
 
-        doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.updated"), eq(Game.class));
+        doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.updated"),eq(Game.class));
     }
 
     /**
@@ -156,14 +156,15 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     }
 
     /**
-     * Tests proper game starting only after all the members have clicked the ready button.
+     * Tests proper game to be ready for start only after all the members have clicked the ready button.
      */
     @Test
     public void testStartGameAsHost() {
+
         Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
 
         doReturn(null).when(this.app).show("/ingame");
-
+        doNothing().when(this.islandsService).retrieveIslands(any());
         doReturn(Observable.just(new MemberDto(false, "testGameHostID", testEmpire, "88888888")))
                 .when(this.lobbyService).getMember(any(), any());
 
@@ -212,11 +213,10 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         assertFalse(lookup("#startJourneyButton").queryButton().isDisabled());
 
         clickOn("#startJourneyButton");
-        this.gameSubject.onNext(new Event<>("games.testGameID.updated", new Game("1", "a","testGameID","testGame","testGameHostID",
-                true, 1, 0, new GameSettings(1))));
-
-        waitForFxEvents();
-        verify(this.app, times(1)).show("/ingame");
+        this.gameSubject.onNext(new Event<>("games.testGameID.updated", new Game("1","a",
+          "testGameID","testGame", "testGameHostID", true, 1, 0 , new GameSettings(1))));
+        WaitForAsyncUtils.waitForFxEvents();
+        verify(this.app,times(1)).show("/ingame");
 
     }
 

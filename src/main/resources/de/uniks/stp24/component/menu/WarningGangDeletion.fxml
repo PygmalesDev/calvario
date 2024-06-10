@@ -29,12 +29,12 @@
             </Text>
          </HBox>
          <HBox alignment="CENTER" prefHeight="70.0" prefWidth="200.0" spacing="30.0">
-            <Button fx:id="cancelDeleteButton" mnemonicParsing="false" onAction="#cancelDelete" prefHeight="30.0" prefWidth="70.0" styleClass="deleteAndSaveButton" text="%cancel">
+            <Button fx:id="cancelDeleteButton" cancelButton="true" mnemonicParsing="false" onAction="#cancelDelete" prefHeight="30.0" prefWidth="70.0" styleClass="deleteAndSaveButton" text="%cancel">
                <font>
                   <Font size="15.0" />
                </font>
             </Button>
-            <Button fx:id="deleteGangButton" mnemonicParsing="false" onAction="#deleteGang" prefHeight="30.0" prefWidth="70.0" styleClass="deleteAndSaveButton" text="%delete">
+            <Button fx:id="deleteGangButton" defaultButton="true" mnemonicParsing="false" onAction="#deleteGang" prefHeight="30.0" prefWidth="70.0" styleClass="deleteAndSaveButton" text="%delete">
                <font>
                   <Font size="15.0" />
                </font>

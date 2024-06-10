@@ -3,6 +3,9 @@ package de.uniks.stp24;
 import dagger.Module;
 import dagger.Provides;
 
+import de.uniks.stp24.component.menu.BubbleComponent;
+import de.uniks.stp24.controllers.BrowseGameController;
+import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.*;
 import de.uniks.stp24.service.game.EmpireService;
@@ -23,6 +26,7 @@ public class TestModule {
     AuthApiService authApiService() {
         return Mockito.mock(AuthApiService.class);
     }
+
     @Provides
     @Singleton
     UserApiService userApiService() {
@@ -34,11 +38,12 @@ public class TestModule {
     GamesApiService gamesApiService() {
         return Mockito.mock(GamesApiService.class);
     }
-
+  
     @Provides
-    @Singleton
-    GameMembersApiService gameMembersApiService(){return Mockito.mock(GameMembersApiService.class);
+    GameMembersApiService gameMembersApiService(){
+        return Mockito.mock(GameMembersApiService.class);
     }
+
     @Provides
     @Singleton
     CreateGameService createGameService(){
@@ -61,7 +66,10 @@ public class TestModule {
     @Singleton
     LobbyService lobbyService(){
         return Mockito.mock(LobbyService.class);
+
     }
+    @Provides
+    GameSystemsApiService gameSystemsApiService(){ return Mockito.mock(GameSystemsApiService.class); }
 
     @Provides
     @Singleton

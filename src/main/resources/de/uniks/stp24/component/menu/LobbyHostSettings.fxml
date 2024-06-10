@@ -2,12 +2,11 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="330.0" prefWidth="500.0" type="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.menu.LobbyHostSettingsComponent">
    <padding>
@@ -15,46 +14,54 @@
    </padding>
    <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="500.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-         <Button fx:id="selectEmpireButton" mnemonicParsing="false" onAction="#selectEmpire" prefHeight="80.0" prefWidth="150.0" styleClass="woodButton">
+         <Button fx:id="selectEmpireButton" mnemonicParsing="false" onAction="#selectEmpire" prefHeight="80.0" prefWidth="155.0" styleClass="lobbyButtonSelectEmpire" textFill="WHITE">
             <font>
                <Font size="18.0" />
             </font>
             <graphic>
-               <ImageView  fitHeight="6700.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../../icons/island.png" />
-               </ImageView>
+               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButtonText" text="%select.empire">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </Text>
             </graphic>
          </Button>
-         <Button fx:id="readyButton" mnemonicParsing="false" onAction="#ready" prefHeight="80.0" prefWidth="150.0" styleClass="woodButton">
+         <Button fx:id="readyButton" mnemonicParsing="false" onAction="#ready" prefHeight="80.0" prefWidth="155.0" styleClass="lobbyButtonReady">
             <font>
                <Font size="18.0" />
             </font>
             <graphic>
-               <ImageView fx:id="readyIconImageView" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../../icons/approveBlue.png" />
-               </ImageView>
+               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButtonText" text="%ready.lobby">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </Text>
             </graphic>
          </Button>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-         <Button fx:id="closeLobbyButton" mnemonicParsing="false" onAction="#leaveLobby" prefHeight="80.0" prefWidth="150.0" styleClass="woodButton" textOverrun="CLIP" wrapText="true">
+         <Button fx:id="closeLobbyButton" mnemonicParsing="false" onAction="#leaveLobby" prefHeight="80.0" prefWidth="155.0" styleClass="lobbyButtonLeave" textOverrun="CLIP" wrapText="true">
             <font>
                <Font size="18.0" />
             </font>
             <graphic>
-               <ImageView  fitHeight="6700.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../../icons/leaveMan.png" />
-               </ImageView>
+               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButtonText" text="%leave">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </Text>
             </graphic>
          </Button>
-         <Button fx:id="startJourneyButton" mnemonicParsing="false" onAction="#startGame" prefHeight="80.0" prefWidth="150.0" styleClass="woodButton">
+         <Button fx:id="startJourneyButton" mnemonicParsing="false" onAction="#startGame" prefHeight="80.0" prefWidth="155.0" styleClass="lobbyButtonStart">
             <font>
                <Font size="18.0" />
             </font>
             <graphic>
-               <ImageView fitHeight="6700.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../../icons/startGame.png" />
-               </ImageView>
+               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButtonText" text="%start.lobby">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </Text>
             </graphic>
          </Button>
       </HBox>

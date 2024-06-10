@@ -26,7 +26,8 @@ public class AppToolsTest extends ControllerTest {
 
     @Test
     public void basicTokenStorage() {
-        tokenStorage = new TokenStorage();
+        if(tokenStorage == null) tokenStorage = new TokenStorage();
+        
         assertNull(tokenStorage.getToken());
         assertNull(tokenStorage.getUserId());
         tokenStorage.setToken("hallo");

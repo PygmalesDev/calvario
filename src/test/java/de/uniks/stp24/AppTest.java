@@ -8,6 +8,7 @@ import de.uniks.stp24.rest.AuthApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.menu.CreateGameService;
 import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -21,10 +22,8 @@ import io.reactivex.rxjava3.subjects.Subject;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
-import javafx.scene.text.Text;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -33,7 +32,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -52,6 +51,7 @@ public class AppTest extends ControllerTest {
     TokenStorage tokenStorage;
     EditGameService editGameService;
     EmpireService empireService;
+    IslandsService islandsService;
 
     @Spy
     BubbleComponent bubbleComponent;
@@ -94,6 +94,7 @@ public class AppTest extends ControllerTest {
         tokenStorage = testComponent.tokenStorage();
         empireService = testComponent.empireService();
         editGameService = testComponent.editGameService();
+        islandsService = testComponent.islandsService();
 
         doReturn(Observable.just(loginResult)).when(authApiService).login(loginDto);
         doReturn(Observable.just(loginResult)).when(authApiService).refresh(refreshDto);
@@ -146,7 +147,6 @@ public class AppTest extends ControllerTest {
         doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", game3._id(),
                 user._id(),"tesEmpire","a","#DC143C",0, 0, "uninhabitable_0")})).when(this.empireService).getEmpires(any());
 
-        doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.updated"), eq(Game.class));
     }
 
     @Test
@@ -158,7 +158,7 @@ public class AppTest extends ControllerTest {
         createGame();
         loadGame();
         selectEmpire();
-        startGame();
+        startAGame();
     }
 
 
@@ -236,16 +236,20 @@ public class AppTest extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    private void startGame() {
-//        clickOn("#readyButton");
-//        this.memberSubject.onNext(new Event<>("games.123.members.1.updated",
-//                new MemberDto(true, "testGameHostID", null, null)));
-//        clickOn("#startJourneyButton");
-//        this.gameSubject.onNext(new Event<>("games.testGameID.updated", new Game("1", "a","testGameID","testGame","testGameHostID",
-//                true, 1, 0, new GameSettings(1))));
-//        WaitForAsyncUtils.waitForFxEvents();
-//        Text textNode = lookup("#epic_gameplay").queryText();
-//        assertEquals(textNode.getText(), "EPIC GAMEPLAY");
+    private void startAGame() {
+
+
+        clickOn("#readyButton");
+        this.memberSubject.onNext(new Event<>("games.123.members.1.updated",
+                new MemberDto(true, "JustATest", null, null)));
+        assertFalse(lookup("#startJourneyButton").queryButton().isDisabled());
+        clickOn("#startJourneyButton");
+        this.subject.onNext(new Event<>("games.testGameID.updated", new Game("1", "a","testGameID","testGame","testGameHostID",
+                true, 1, 0, new GameSettings(1))));
+        WaitForAsyncUtils.waitForFxEvents();
+
+        // game screen will not be shown, but loaded
+        assertEquals("ENTER GAME",stage.getTitle() );
     }
 
 }

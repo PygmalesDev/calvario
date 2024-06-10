@@ -1,11 +1,14 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.component.game.IslandComponent;
+import de.uniks.stp24.dto.SystemDto;
+import de.uniks.stp24.dto.SystemsDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.BasicService;
 import de.uniks.stp24.service.menu.LobbyService;
+import io.reactivex.rxjava3.core.Observable;
 import javafx.application.Platform;
 import org.fulib.fx.annotation.event.OnDestroy;
 
@@ -95,17 +98,22 @@ public class IslandsService extends BasicService {
         this.subscriber.dispose();
     }
 
-    public void updateIsland() {
-        System.out.println(tokenStorage.getGameId() + " ### " + tokenStorage.getIsland().id_());
-        subscriber.subscribe(gameSystemsService.getCertainIsland(tokenStorage.getGameId(), tokenStorage.getIsland().id_()),
-                dto -> {
-                    System.out.println("+++++++++++++++  " + dto);
-                        tokenStorage.setIsland(dto);
-
-                },
-                error -> {
-                    // Handle any potential errors here
-                    System.err.println("Error occurred while getting the island: ");
-                });
+    public Island updateIsland(SystemDto result) {
+        return new Island(result.owner(),
+                result.upgrade(),
+                result.name(),
+                result._id(),
+                Objects.isNull(result.owner()) ? -1 : tokenStorage.getFlagIndex(result.owner()),
+                result.x(),
+                result.y(),
+                IslandType.valueOf(result.type()),
+                result.population(),
+                result.capacity(),
+                result.upgrade().ordinal(),
+                // todo find out which information in data match sites in island dto
+                result.districtSlots(),
+                result.districts(),
+                result.buildings()
+        );
     }
 }

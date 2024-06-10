@@ -11,6 +11,7 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import java.util.Arrays;
 
 @Component(view = "BuildingsWindow.fxml")
 public class BuildingsWindowComponent extends AnchorPane {
@@ -59,66 +60,81 @@ public class BuildingsWindowComponent extends AnchorPane {
         this.buildingToAdd = "exchange";
         this.island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
+            tokenStorage.setIsland(islandsService.updateIsland(result));
             onClose();
-        });
+        },
+                error -> System.out.println("Insufficient funds"));
     }
 
     public void buildPowerPlant(){
         this.buildingToAdd = "power_plant";
         this.island = tokenStorage.getIsland();
-        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
-            onClose();
-            islandsService.updateIsland();
-        });
 
+        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
+            tokenStorage.setIsland(islandsService.updateIsland(result));
+        },
+                error -> System.out.println("Insufficient funds"));
     }
 
     public void buildMine(){
         this.buildingToAdd = "mine";
         this.island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
+            tokenStorage.setIsland(islandsService.updateIsland(result));
             onClose();
-        });
+        },
+                error -> System.out.println("Insufficient funds"));
     }
+
 
     public void buildFarm(){
         this.buildingToAdd = "farm";
         this.island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
+            tokenStorage.setIsland(islandsService.updateIsland(result));
             onClose();
-        });
+        },
+                error -> System.out.println("Insufficient funds"));
     }
 
     public void buildResearchLab(){
         this.buildingToAdd = "research_lab";
         this.island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
+            tokenStorage.setIsland(islandsService.updateIsland(result));
             onClose();
-        });
+        },
+                error -> System.out.println("Insufficient funds"));
     }
 
     public void buildFoundry(){
         this.buildingToAdd = "foundry";
         this.island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
+            tokenStorage.setIsland(islandsService.updateIsland(result));
             onClose();
-        });
+        },
+                error -> System.out.println("Insufficient funds"));
     }
 
     public void buildFactory(){
         this.buildingToAdd = "factory";
         this.island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
+            tokenStorage.setIsland(islandsService.updateIsland(result));
             onClose();
-        });
+        },
+                error -> System.out.println("Insufficient funds"));
     }
 
     public void buildRefinery(){
         this.buildingToAdd = "refinery";
         this.island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
+            tokenStorage.setIsland(islandsService.updateIsland(result));
             onClose();
-        });
+        },
+                error -> System.out.println("Insufficient funds"));
     }
 
     public void onClose(){

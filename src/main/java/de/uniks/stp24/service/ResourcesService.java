@@ -51,7 +51,6 @@ public class ResourcesService {
 
         if (island.owner() != null){
             if (island.owner().equals(tokenStorage.getEmpireId())){
-                System.out.println("--------------");
                 return gameSystemsApiService.updateIsland(gameID, island.id_(), new SystemsDto("",
                         sitesValue, buildings, null, island.owner()));
             }
@@ -62,6 +61,7 @@ public class ResourcesService {
     }
 
     public Observable<SystemDto> createBuilding(String gameId, Island island, String buildingToAdd) {
+        System.out.println(gameId + " ### " + island);
         String[] newBuildingsArray = new String[island.buildings().length + 1];
         System.arraycopy(island.buildings(), 0, newBuildingsArray, 0, island.buildings().length);
         newBuildingsArray[newBuildingsArray.length - 1] = buildingToAdd;

@@ -78,25 +78,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
         this.island = tokenStorage.getIsland();
         System.out.println(this.island.type());
         subscriber.subscribe(resourcesService.destroyBuilding(tokenStorage.getGameId(), island), result -> {
-            Island islandNew = new Island(result.owner(),
-                    result.upgrade(),
-                    result.name(),
-                    result._id(),
-                    Objects.isNull(result.owner()) ? -1 : tokenStorage.getFlagIndex(result.owner()),
-                    result.x(),
-                    result.y(),
-                    IslandType.valueOf(result.type()),
-                    result.population(),
-                    result.capacity(),
-                    result.upgrade().ordinal(),
-                    // todo find out which information in data match sites in island dto
-                    result.districtSlots(),
-                    result.districts(),
-                    result.buildings()
-            );
-            tokenStorage.setIsland(islandNew);
+            tokenStorage.setIsland(islandsService.updateIsland(result));
             onClose();
-            //islandsService.updateIsland();
         });
     }
 

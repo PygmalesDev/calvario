@@ -5,6 +5,7 @@ import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.game.IslandsService;
@@ -18,6 +19,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Line;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
@@ -64,6 +66,7 @@ public class InGameController extends BasicController {
     @Inject
     IslandsService islandsService;
     List<IslandComponent> islandComponentList = new ArrayList<>();
+    Map<String, IslandComponent> islandComponentMap = new HashMap<>();
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
@@ -187,7 +190,8 @@ public class InGameController extends BasicController {
 
         this.mapGrid.setMinSize(islandsService.getMapWidth(),
           islandsService.getMapHeight());
-        islandsService.getListOfIslands().forEach(
+        createIslands(islandsService.getListOfIslands());
+        /*islandsService.getListOfIslands().forEach(
           island -> {
               IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
                 app.initAndRender(new IslandComponent())
@@ -195,12 +199,52 @@ public class InGameController extends BasicController {
               tmp.setLayoutX(tmp.getPosX());
               tmp.setLayoutY(tmp.getPosY());
               islandComponentList.add(tmp);
+              islandComponentMap.put(island.id(), tmp);
               this.mapGrid.getChildren().add(tmp);
           }
-        );
+        );*/
         //todo draw connections
+        createLines(islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
+        islandComponentList.forEach(isle -> this.mapGrid.getChildren().add(isle));
         createButtonsStorage();
+
     }
+
+    private List<IslandComponent> createIslands(List<Island> list){
+        list.forEach(
+          island -> {
+              IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
+                app.initAndRender(new IslandComponent())
+              );
+              tmp.setLayoutX(tmp.getPosX());
+              tmp.setLayoutY(tmp.getPosY());
+              islandComponentList.add(tmp);
+              islandComponentMap.put(island.id(), tmp);
+          }
+        );
+        return islandComponentList;
+    }
+
+    private List<Line> createLines(Map<String,IslandComponent> idToComponent) {
+        Map<String, List<String>> islandConnections = islandsService.getConnections();
+        List<Line> linesInMap = new ArrayList<>();
+        islandConnections.forEach((isle,list) -> {
+          double startX, startY, endX, endY;
+          IslandComponent isle1 = islandComponentMap.get(isle);
+          startX = isle1.getPosX() + 25;
+          startY = isle1.getPosY() + 25;
+          for (String neighbour : list) {
+              IslandComponent isle2 = islandComponentMap.get(neighbour);
+              endX = isle2.getPosX() + 25;
+              endY = isle2.getPosY() + 25;
+              Line tmp = new Line(startX,startY,endX,endY);
+              linesInMap.add(tmp);
+          }
+        });
+        System.out.println(linesInMap.size());
+        return linesInMap;
+    }
+
 
     public void showCoordinates(MouseEvent mouseEvent) {
         // todo select island to show info

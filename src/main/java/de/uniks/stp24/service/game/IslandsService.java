@@ -24,10 +24,11 @@ public class IslandsService extends BasicService {
 
     private final List<Island> isles = new ArrayList<>();
     // todo use this map for connections
-    // private final Map<String, List<String>>  = new HashMap<>();
+    static private final Map<String, List<String>> connections = new HashMap<>();
     // todo after development is ready remove this generator
     static final RandomGenerator randomGenerator = new Random(1234);
     static final DropShadow drop = new DropShadow();
+    static final int factor = 10;
     double minX,maxX,minY,maxY;
     double widthRange, heightRange;
 
@@ -46,7 +47,7 @@ public class IslandsService extends BasicService {
             dto -> {
                 Arrays.stream(dto).forEach(data -> {
                     List<String> linkedIsles = new ArrayList<>(data.links().keySet());
-                    System.out.println(data);
+                    System.out.println(data._id() + " " + data.links().size());
                     minX = Math.min(data.x(),minX);
                     minY = Math.min(data.y(),minY);
                     maxX = Math.max(data.x(),maxX);
@@ -62,15 +63,15 @@ public class IslandsService extends BasicService {
                         // todo find out which information in data match sites in island dto
                         data.districtSlots(),
                         data.districts(),
-                        data.buildings()
+                        data.buildings(),
+                        data._id()
                       );
+                    System.out.println(linkedIsles.size());
                     isles.add(tmp);
-                    widthRange = maxX-minX;
-                    heightRange = maxY-minY;
+                    connections.put(data._id(),linkedIsles);
                 });
-                System.out.print("x:" + minX + "," + maxX);
-                System.out.println(" y:" + minY + "," + maxY );
-                System.out.println(widthRange + "x" + heightRange);
+                widthRange = maxX-minX;
+                heightRange = maxY-minY;
                 this.app.show("/ingame");
             },
             error -> errorService.getStatus(error));
@@ -82,23 +83,20 @@ public class IslandsService extends BasicService {
 
     /**
      * coordinate system on server has origin at screen center
-     * and their range varies depending on game settings (size)
-     * game screen should be at least 1920
-     *
-     * an offset to match the screen size that
-     * will be calculated depending on mapRange
+     * and their range varies depending on game settings (size).
+     * an offset to match the screen size will be calculated depending on
+     * width and height
      * thus the size of the pane should be considered
-     * I think
      */
     //todo set screen resolution, factor and offset depending on game size
     public IslandComponent createIslandPaneFromDto(Island isleDto, IslandComponent component) {
         component.applyInfo(isleDto);
-        double screenOffsetH = widthRange * 5.5 - component.widthProperty().getValue() * 0.5;
-        double screenOffSetV = heightRange * 5.5 - component.widthProperty().getValue() * 0.5;
+        double screenOffsetH = widthRange * (factor + 1 ) / 2.0 - 25;
+        double screenOffSetV = heightRange * (factor + 1 ) / 2.0 - 25;
         double serverOffsetH = minX + 0.5 * widthRange;
         double serverOffsetV = minY + 0.5 * heightRange;
-        component.setPosition(9 * isleDto.posX() - serverOffsetH + screenOffsetH,
-          9 * isleDto.posY() - serverOffsetV + screenOffSetV);
+        component.setPosition(factor * isleDto.posX() - serverOffsetH + screenOffsetH,
+          factor * isleDto.posY() - serverOffsetV + screenOffSetV);
         component.applyIcon(isleDto.type());
         component.setFlagImage(isleDto.flagIndex());
         if(Objects.nonNull(isleDto.owner()) && isleDto.owner().equals(tokenStorage.getEmpireId())) {
@@ -109,12 +107,37 @@ public class IslandsService extends BasicService {
 
     // return mapRange * (factor + 1)
     public double getMapWidth() {
-        //if (this.widthRange * 6 <= 1440) this.widthRange = 1440 / 6.0;
-        return this.widthRange * 11;
+        return this.widthRange * (factor + 1);
     }
     public double getMapHeight() {
-//        if (this.heightRange * 6 <= 1440) this.heightRange = 1440 / 6.0;
-        return this.heightRange * 11;
+        return this.heightRange * (factor + 1);
+    }
+
+    public Map<String, List<String>> getConnections(){
+        Map<String, List<String>> singleConnections = new HashMap<>();
+        List<String> checked = new ArrayList<>();
+        System.out.println("***************");
+        System.out.println(connections.size());
+        System.out.println("***************");
+        connections.forEach((key,value) -> {
+            if (!checked.contains(key)) checked.add(key);
+            System.out.println(key + " connected with: ");
+            ArrayList<String> tmp = new ArrayList<>();
+            for (String s : value) {
+                if (!checked.contains(s)) {
+                    tmp.add(s);
+                    System.out.println("\t" + s);
+                }
+            }
+            singleConnections.putIfAbsent(key,tmp);
+        });
+        //System.out.println(singleConnections);
+        System.out.println("XXXXXXXXXXXXXX");
+        System.out.println("XXXXXXXXXXXXXX");
+        singleConnections.forEach((key,values) ->
+          System.out.println(values.size())
+        );
+    return singleConnections;
     }
 
     private void resetMapRange(){

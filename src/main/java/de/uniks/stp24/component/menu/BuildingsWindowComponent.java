@@ -5,13 +5,11 @@ import de.uniks.stp24.service.ResourcesService;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
-import java.util.concurrent.Flow;
 
 @Component(view = "BuildingsWindow.fxml")
 public class BuildingsWindowComponent extends AnchorPane {
@@ -62,31 +60,59 @@ public class BuildingsWindowComponent extends AnchorPane {
     }
 
     public void buildPowerPlant(){
-
+        this.buildingToAdd = "power_plant";
+        this.island = tokenStorage.getIsland();
+        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
+            onClose();
+        });
     }
 
     public void buildMine(){
-
+        this.buildingToAdd = "mine";
+        this.island = tokenStorage.getIsland();
+        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
+            onClose();
+        });
     }
 
     public void buildFarm(){
-
+        this.buildingToAdd = "farm";
+        this.island = tokenStorage.getIsland();
+        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
+            onClose();
+        });
     }
 
     public void buildResearchLab(){
-
+        this.buildingToAdd = "research_lab";
+        this.island = tokenStorage.getIsland();
+        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
+            onClose();
+        });
     }
 
     public void buildFoundry(){
-
+        this.buildingToAdd = "foundry";
+        this.island = tokenStorage.getIsland();
+        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
+            onClose();
+        });
     }
 
     public void buildFactory(){
-
+        this.buildingToAdd = "factory";
+        this.island = tokenStorage.getIsland();
+        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
+            onClose();
+        });
     }
 
     public void buildRefinery(){
-
+        this.buildingToAdd = "refinery";
+        this.island = tokenStorage.getIsland();
+        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
+            onClose();
+        });
     }
 
     public void onClose(){

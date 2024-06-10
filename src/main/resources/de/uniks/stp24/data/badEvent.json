@@ -1,0 +1,23 @@
+{
+  "id": "pestilence",
+  "effects": [
+    {
+      "variable": "population",
+      "base": 0,
+      "multiplier": 1,
+      "bonus": -20
+    },
+    {
+      "variable": "food",
+      "base": 0,
+      "multiplier": 0.5,
+      "bonus": 0
+    },
+    {
+      "variable": "energy",
+      "base": 40,
+      "multiplier": 1,
+      "bonus": 0
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<fx:root fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="75.0" prefWidth="230.0" type="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.ClockComponent">
+   <HBox alignment="TOP_CENTER" layoutX="540.0" layoutY="14.0" minHeight="90.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <VBox>
+         <ImageView fx:id="spectatorImage" fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true" />
+      </VBox>
+      <VBox alignment="TOP_RIGHT">
+         <RadioButton id="pause" fx:id="pauseClockButton" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onAction="#pauseClock" prefHeight="20.0" prefWidth="20.0" translateX="10.0">
+            <toggleGroup>
+               <ToggleGroup fx:id="speed" />
+            </toggleGroup>
+         </RadioButton>
+         <ToggleButton fx:id="flagToggle" maxHeight="47.0" maxWidth="40.0" minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#showFlags" prefHeight="40.0" prefWidth="49.0" style="-fx-background-radius: 20;" styleClass="flagToggle" translateX="-3.0" translateY="-7.0" />
+      </VBox>
+      <HBox />
+      <VBox fx:id="clockVBox" alignment="TOP_CENTER" disable="true" minHeight="75.0" minWidth="77.0" prefHeight="75.0" prefWidth="77.0" styleClass="clock">
+         <Label fx:id="seasonLabel" text="XY" translateX="1.0" translateY="5.0">
+            <font>
+               <Font size="20.0" />
+            </font>
+            <VBox.margin>
+               <Insets top="12.0" />
+            </VBox.margin>
+         </Label>
+         <Label fx:id="countdownLabel" text="X:XX" translateX="1.0" translateY="2.0">
+            <font>
+               <Font size="14.0" />
+            </font></Label>
+      </VBox>
+      <VBox prefHeight="50.0">
+         <RadioButton id="x3" mnemonicParsing="false" onAction="#x3" toggleGroup="$speed" translateX="-10.0" translateY="2.0" fx:id="x3Button" />
+         <RadioButton id="x2" mnemonicParsing="false" onAction="#x2" toggleGroup="$speed" translateX="-1.0" fx:id="x2Button" />
+         <RadioButton id="x1" mnemonicParsing="false" onAction="#x1" toggleGroup="$speed" translateX="-2.0" fx:id="x1Button" />
+         <HBox.margin>
+            <Insets right="2.0" />
+         </HBox.margin>
+      </VBox>
+      <VBox alignment="TOP_CENTER" prefWidth="60.0" spacing="3.0">
+         <HBox.margin>
+            <Insets left="2.0" />
+         </HBox.margin>
+         <ImageView id="randomEvent" fx:id="randomEventImage" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+         <Label fx:id="remainingSeasonsLabel" alignment="CENTER" prefHeight="25.0" prefWidth="25.0" text="X">
+            <font>
+               <Font size="14.0" />
+            </font></Label>
+      </VBox>
+   </HBox>
+</fx:root>

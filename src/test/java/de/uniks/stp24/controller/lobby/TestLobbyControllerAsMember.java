@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.LobbyController;
+import de.uniks.stp24.controllers.helper.JoinGameHelper;
 import de.uniks.stp24.dto.JoinGameDto;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
@@ -74,6 +75,8 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     Provider<UserComponent> userComponentProvider = ()-> new UserComponent(imageCache, resources);
 
     @InjectMocks
+    JoinGameHelper joinGameHelper;
+    @InjectMocks
     UserComponent userComponent;
     @InjectMocks
     EnterGameComponent enterGameComponent;
@@ -99,6 +102,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         this.lobbyController.enterGameComponent = this.enterGameComponent;
         this.lobbyController.userComponent = this.userComponent;
         this.lobbyController.userComponentProvider = this.userComponentProvider;
+        this.lobbyController.joinGameHelper = this.joinGameHelper;
 
         // Mock getting userID
         doReturn("testMemberUnoID").when(this.tokenStorage).getUserId();
@@ -135,7 +139,6 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.updated"), eq(MemberDto.class));
         this.app.show(this.lobbyController);
 
-        doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.updated"),eq(Game.class));
 
     }
 
@@ -300,6 +303,10 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
 
         doReturn(null).when(this.app).show("/ingame");
+
+        doAnswer(show-> {app.show("/ingame");
+            return null;
+        }).when(this.islandsService).retrieveIslands(any());
 
         doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", "testGameID",
                 "testMemberUnoID","testGame","a","a",1, 2, "a")})).when(this.empireService).getEmpires(any());

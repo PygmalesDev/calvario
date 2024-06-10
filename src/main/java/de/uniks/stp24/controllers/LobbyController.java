@@ -51,7 +51,7 @@ public class LobbyController extends BasicController {
     @Inject
     GamesService gamesService;
     @Inject
-    JoinGameHelper joinGameHelper;
+    public JoinGameHelper joinGameHelper;
     @SubComponent
     @Inject
     public EnterGameComponent enterGameComponent;

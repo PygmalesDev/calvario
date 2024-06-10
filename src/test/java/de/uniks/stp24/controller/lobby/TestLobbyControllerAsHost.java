@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.LobbyController;
+import de.uniks.stp24.controllers.helper.JoinGameHelper;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.dto.UpdateGameResultDto;
@@ -68,11 +69,14 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     GamesService gamesService;
     @Spy
     EmpireService empireService;
+
     @Spy
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
 
+    @InjectMocks
+    JoinGameHelper joinGameHelper;
     @InjectMocks
     UserComponent userComponent;
     @InjectMocks
@@ -101,6 +105,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         this.lobbyController.enterGameComponent = this.enterGameComponent;
         this.lobbyController.userComponent = this.userComponent;
         this.lobbyController.userComponentProvider = this.userComponentProvider;
+        this.lobbyController.joinGameHelper = this.joinGameHelper;
 
         // Mock getting userID
         doReturn("testGameHostID").when(this.tokenStorage).getUserId();
@@ -164,7 +169,9 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
 
         doReturn(null).when(this.app).show("/ingame");
-        doNothing().when(this.islandsService).retrieveIslands(any());
+        doAnswer(show-> {app.show("/ingame");
+            return null;
+        }).when(this.islandsService).retrieveIslands(any());
         doReturn(Observable.just(new MemberDto(false, "testGameHostID", testEmpire, "88888888")))
                 .when(this.lobbyService).getMember(any(), any());
 

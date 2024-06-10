@@ -19,6 +19,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
@@ -191,19 +192,6 @@ public class InGameController extends BasicController {
         this.mapGrid.setMinSize(islandsService.getMapWidth(),
           islandsService.getMapHeight());
         createIslands(islandsService.getListOfIslands());
-        /*islandsService.getListOfIslands().forEach(
-          island -> {
-              IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
-                app.initAndRender(new IslandComponent())
-              );
-              tmp.setLayoutX(tmp.getPosX());
-              tmp.setLayoutY(tmp.getPosY());
-              islandComponentList.add(tmp);
-              islandComponentMap.put(island.id(), tmp);
-              this.mapGrid.getChildren().add(tmp);
-          }
-        );*/
-        //todo draw connections
         createLines(islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
         islandComponentList.forEach(isle -> this.mapGrid.getChildren().add(isle));
         createButtonsStorage();
@@ -230,18 +218,19 @@ public class InGameController extends BasicController {
         List<Line> linesInMap = new ArrayList<>();
         islandConnections.forEach((isle,list) -> {
           double startX, startY, endX, endY;
-          IslandComponent isle1 = islandComponentMap.get(isle);
+          IslandComponent isle1 = idToComponent.get(isle);
           startX = isle1.getPosX() + 25;
           startY = isle1.getPosY() + 25;
           for (String neighbour : list) {
-              IslandComponent isle2 = islandComponentMap.get(neighbour);
+              IslandComponent isle2 = idToComponent.get(neighbour);
               endX = isle2.getPosX() + 25;
               endY = isle2.getPosY() + 25;
               Line tmp = new Line(startX,startY,endX,endY);
+              //todo with css?
+              tmp.styleProperty().set("-fx-stroke: darkorange; -fx-stroke-dash-array: 5 5;");
               linesInMap.add(tmp);
           }
         });
-        System.out.println(linesInMap.size());
         return linesInMap;
     }
 
@@ -253,6 +242,10 @@ public class InGameController extends BasicController {
     @OnDestroy
     public void destroy() {
         islandComponentList.forEach(IslandComponent::destroy);
+        islandComponentList.clear();
+        islandComponentMap.clear();
+        islandComponentList = null;
+        islandComponentMap = null;
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
           .removePropertyChangeListener(triple.propertyName(), triple.listener()));
         this.subscriber.dispose();

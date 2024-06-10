@@ -310,7 +310,6 @@ ToggleButton:hover{
 }
 
 
-
 .lobbyButtonLeave{
     -fx-font-family: "Stencil";
     -fx-font-size: 15;
@@ -741,5 +740,5 @@ ToggleButton:hover{
 }
 
 .ownIsland{
-    -fx-effect: dropshadow;
+    -fx-effect: dropshadow(gaussian, #7FFF00, 20, 0.5, 0, 0);
 }

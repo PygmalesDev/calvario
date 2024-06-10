@@ -14,6 +14,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
 import java.util.random.RandomGenerator;
+
+import static javafx.scene.effect.BlurType.GAUSSIAN;
+
 @Singleton
 public class IslandsService extends BasicService {
 
@@ -34,7 +37,9 @@ public class IslandsService extends BasicService {
 
     @Inject
     public IslandsService() {
-        drop.setColor(Color.LIGHTYELLOW.saturate());
+        drop.setColor(Color.CHARTREUSE);
+        drop.setBlurType(GAUSSIAN);
+
     }
 
     // this method will be used when changing from lobby to ingame
@@ -47,7 +52,6 @@ public class IslandsService extends BasicService {
             dto -> {
                 Arrays.stream(dto).forEach(data -> {
                     List<String> linkedIsles = new ArrayList<>(data.links().keySet());
-                    System.out.println(data._id() + " " + data.links().size());
                     minX = Math.min(data.x(),minX);
                     minY = Math.min(data.y(),minY);
                     maxX = Math.max(data.x(),maxX);
@@ -66,7 +70,6 @@ public class IslandsService extends BasicService {
                         data.buildings(),
                         data._id()
                       );
-                    System.out.println(linkedIsles.size());
                     isles.add(tmp);
                     connections.put(data._id(),linkedIsles);
                 });
@@ -91,8 +94,8 @@ public class IslandsService extends BasicService {
     //todo set screen resolution, factor and offset depending on game size
     public IslandComponent createIslandPaneFromDto(Island isleDto, IslandComponent component) {
         component.applyInfo(isleDto);
-        double screenOffsetH = widthRange * (factor + 1 ) / 2.0 - 25;
-        double screenOffSetV = heightRange * (factor + 1 ) / 2.0 - 25;
+        double screenOffsetH = widthRange * (factor + 2) / 2.0 - 25;
+        double screenOffSetV = heightRange * (factor + 2) / 2.0 - 25;
         double serverOffsetH = minX + 0.5 * widthRange;
         double serverOffsetV = minY + 0.5 * heightRange;
         component.setPosition(factor * isleDto.posX() - serverOffsetH + screenOffsetH,
@@ -100,43 +103,33 @@ public class IslandsService extends BasicService {
         component.applyIcon(isleDto.type());
         component.setFlagImage(isleDto.flagIndex());
         if(Objects.nonNull(isleDto.owner()) && isleDto.owner().equals(tokenStorage.getEmpireId())) {
+            //component.styleProperty().setValue("ownIsland");
             component.setEffect(drop);
         }
         return component;
     }
 
-    // return mapRange * (factor + 1)
+    // return mapRange * (factor + 2)
     public double getMapWidth() {
-        return this.widthRange * (factor + 1);
+        return this.widthRange * (factor + 2);
     }
     public double getMapHeight() {
-        return this.heightRange * (factor + 1);
+        return this.heightRange * (factor + 2);
     }
 
     public Map<String, List<String>> getConnections(){
         Map<String, List<String>> singleConnections = new HashMap<>();
         List<String> checked = new ArrayList<>();
-        System.out.println("***************");
-        System.out.println(connections.size());
-        System.out.println("***************");
         connections.forEach((key,value) -> {
             if (!checked.contains(key)) checked.add(key);
-            System.out.println(key + " connected with: ");
             ArrayList<String> tmp = new ArrayList<>();
             for (String s : value) {
                 if (!checked.contains(s)) {
                     tmp.add(s);
-                    System.out.println("\t" + s);
                 }
             }
             singleConnections.putIfAbsent(key,tmp);
         });
-        //System.out.println(singleConnections);
-        System.out.println("XXXXXXXXXXXXXX");
-        System.out.println("XXXXXXXXXXXXXX");
-        singleConnections.forEach((key,values) ->
-          System.out.println(values.size())
-        );
     return singleConnections;
     }
 

@@ -34,7 +34,10 @@ public class JoinGameHelper extends BasicController {
     public JoinGameHelper(){
     }
 
-
+    /**
+     * Go through all empires of the game and save the empireId and gameId for the user
+     * If there is no empire which belongs to the user, the user is a spectator.
+     */
     public void joinGame(String gameId){
             subscriber.subscribe(empireService.getEmpires(gameId), dto -> {
                 for(ReadEmpireDto data : dto){

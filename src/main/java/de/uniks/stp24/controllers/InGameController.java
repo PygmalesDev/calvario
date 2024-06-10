@@ -80,10 +80,9 @@ public class InGameController extends BasicController {
     public void init() {
         GameStatus gameStatus = inGameService.getGameStatus();
         //Todo: Outprint for Swagger - can be deleted later
-        System.out.println(tokenStorage.getGameId() + " game in ingame");
-        System.out.println(tokenStorage.getEmpireId() + " empire in ingame");
-        
-        PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
+        System.out.println("game in ingame: " + tokenStorage.getGameId());
+        System.out.println("empire in ingame: " + tokenStorage.getEmpireId());
+
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_PAUSED"));
@@ -209,5 +208,5 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
-    public void showIslandOverview() {    }
+    public void showIslandOverview(ActionEvent actionEvent) {    }
 }

@@ -1,6 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.menu.*;
+import de.uniks.stp24.controllers.helper.JoinGameHelper;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.model.*;
@@ -50,7 +51,7 @@ public class LobbyController extends BasicController {
     @Inject
     GamesService gamesService;
     @Inject
-    EmpireService empireService;
+    JoinGameHelper joinGameHelper;
     @SubComponent
     @Inject
     public EnterGameComponent enterGameComponent;
@@ -232,37 +233,20 @@ public class LobbyController extends BasicController {
      * change to game screen occurs in islandsService
      */
     private void createGameStartedListener(){
-        this.subscriber.subscribe(this.eventListener
-            .listen("games." + this.gameID + ".updated", Game.class),
-          event -> {
-            buttonsSetDisability(true);
-              if(event.data().started()) {
-                  this.tokenStorage.setGameId(gameID);
-                  subscriber.subscribe(lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
-                    memberDto -> {
-                        if(Objects.nonNull(memberDto.empire())){
-                            subscriber.subscribe(empireService.getEmpires(this.gameID), dto -> {
-                                for(ReadEmpireDto data : dto){
-                                    tokenStorage.saveFlag(data._id(), data.flag());
-                                    if (data.user().equals(tokenStorage.getUserId())) {
-                                        this.tokenStorage.setEmpireId(data._id());
-                                        this.tokenStorage.setIsSpectator(false);
-                                        //todo remove printouts
-                                        System.out.println("lobby:"
-                                          + tokenStorage.getEmpireId());
-                                    }
-                                }
-                                System.out.println("RESOURCES READY");
-                            islandsService.retrieveIslands(gameID);
-                            app.show("/ingame");
-                            }, this::errorMsg);
-                        } else {
-                            tokenStorage.setIsSpectator(true);
-                            islandsService.retrieveIslands(gameID);
-                            app.show("/ingame");
-                        }
-                    }, this::errorMsg);}
-          }, error -> {buttonsSetDisability(false); errorMsg();});
+        this.subscriber.subscribe(this.eventListener.listen("games." + this.gameID + ".updated", Game.class),
+             event -> {
+                buttonsSetDisability(true);
+                if(event.data().started()) {
+                    subscriber.subscribe(lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
+                        memberDto -> {
+                          this.joinGameHelper.joinGame(this.gameID);
+                        },
+                        this::errorMsg);
+                }
+            }, error -> {
+                buttonsSetDisability(false);
+                errorMsg(error);
+            });
     }
 
     /**

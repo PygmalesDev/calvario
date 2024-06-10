@@ -1,0 +1,68 @@
+package de.uniks.stp24.controllers.helper;
+
+import de.uniks.stp24.App;
+import de.uniks.stp24.controllers.BasicController;
+import de.uniks.stp24.dto.ReadEmpireDto;
+import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.menu.BrowseGameService;
+import de.uniks.stp24.service.menu.LobbyService;
+import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.controller.Subscriber;
+
+import javax.inject.Inject;
+
+public class JoinGameHelper extends BasicController {
+
+    @Inject
+    App app;
+    @Inject
+    Subscriber subscriber;
+    @Inject
+    EmpireService empireService;
+    @Inject
+    LobbyService lobbyService;
+    @Inject
+    BrowseGameService browseGameService;
+    @Inject
+    TokenStorage tokenStorage;
+    @Inject
+    IslandsService islandsService;
+
+    @Inject
+    public JoinGameHelper(){
+    }
+
+
+    public void joinGame(String gameId){
+            subscriber.subscribe(empireService.getEmpires(gameId), dto -> {
+                for(ReadEmpireDto data : dto){
+                    tokenStorage.saveFlag(data._id(), data.flag());
+                    if (data.user().equals(tokenStorage.getUserId())) {
+                        startGame(gameId, data._id(),  false);
+                    }
+                }
+                System.out.println("before spectator: " + tokenStorage.getEmpireId());
+                if(tokenStorage.getEmpireId() == null) {
+                    startGame(gameId, null, true);
+                }
+                islandsService.retrieveIslands(gameId);
+            }, error -> {});
+    }
+
+    private void startGame(String gameId,String empireId, boolean isSpectator){
+        this.tokenStorage.setGameId(gameId);
+        this.tokenStorage.setEmpireId(empireId);
+        this.tokenStorage.setIsSpectator(isSpectator);
+        // Todo: remove prints
+        System.out.println("startGame: game:  " + gameId);
+        System.out.println("startGame: empire " + empireId);
+        System.out.println("startGame: spectator " + isSpectator);
+    }
+
+    @OnDestroy
+    public void destroy(){
+        this.subscriber.dispose();
+    }
+}

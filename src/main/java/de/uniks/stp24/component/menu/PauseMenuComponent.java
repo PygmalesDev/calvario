@@ -56,7 +56,8 @@ public class PauseMenuComponent extends AnchorPane {
     @OnKey(code = KeyCode.Q)
     public void quit() {
         tokenStorage.setGameId(null);
-        tokenStorage.setGameId(null);
+        tokenStorage.setEmpireId(null);
+        tokenStorage.clearFlags();
         if(inGameService.getPaused()) app.show("/browseGames");
     }
 }

@@ -7,6 +7,7 @@ import de.uniks.stp24.component.menu.GameComponent;
 import de.uniks.stp24.component.menu.LogoutComponent;
 import de.uniks.stp24.component.menu.WarningComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
+import de.uniks.stp24.controllers.helper.JoinGameHelper;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.model.Empire;
@@ -77,6 +78,8 @@ public class TestEnterGame extends ControllerTest {
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @InjectMocks
+    JoinGameHelper joinGameHelper;
+    @InjectMocks
     LogoutComponent logoutComponent;
     @InjectMocks
     BubbleComponent bubbleComponent;
@@ -100,7 +103,8 @@ public class TestEnterGame extends ControllerTest {
         browseGameController.logoutComponent = logoutComponent;
         browseGameController.bubbleComponent = bubbleComponent;
         browseGameController.warningComponent = warningComponent;
-        lobbyService.gameMembersApiService = this.gameMembersApiService;
+        browseGameController.joinGameHelper = joinGameHelper;
+        lobbyService.gameMembersApiService = gameMembersApiService;
 
         doReturn(Observable.just(List.of(
                 game1, game2, game3
@@ -122,6 +126,9 @@ public class TestEnterGame extends ControllerTest {
 
         // Mock show ingame
         doReturn(null).when(this.app).show("/ingame");
+        doAnswer(show-> {app.show("/ingame");
+            return null;
+        }).when(this.islandsService).retrieveIslands(any());
 
         Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
 

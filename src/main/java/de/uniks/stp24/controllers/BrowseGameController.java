@@ -93,7 +93,7 @@ BrowseGameController extends BasicController {
     @Inject
     EmpireService empireService;
     @Inject
-    JoinGameHelper joinGameHelper;
+    public JoinGameHelper joinGameHelper;
     @Inject
     LobbyService lobbyService;
     @Inject

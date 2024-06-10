@@ -1,0 +1,17 @@
+{
+  "id": "black_spot",
+  "effects": [
+    {
+      "variable": "alloys",
+      "base": 0,
+      "multiplier": 1,
+      "bonus": -10
+    },
+    {
+      "variable": "fuel",
+      "base": 0,
+      "multiplier": 1,
+      "bonus": -20
+    }
+  ]
+}

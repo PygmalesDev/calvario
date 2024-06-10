@@ -1,0 +1,29 @@
+{
+  "id": "roger_feast",
+  "effects": [
+    {
+      "variable": "credits",
+      "base": 0,
+      "multiplier": 1.05,
+      "bonus": 0
+    },
+    {
+      "variable": "population",
+      "base": 0,
+      "multiplier": 1.05,
+      "bonus": 0
+    },
+    {
+      "variable": "food",
+      "base": 0,
+      "multiplier": 1.05,
+      "bonus": 0
+    },
+    {
+      "variable": "consumer_goods",
+      "base": 0,
+      "multiplier": 1.05,
+      "bonus": 0
+    }
+  ]
+}

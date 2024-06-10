@@ -1,0 +1,17 @@
+{
+  "id": "equiv_ex",
+  "effects": [
+    {
+      "variable": "alloy",
+      "base": 0,
+      "multiplier": 1,
+      "bonus": 0.5
+    },
+    {
+      "variable": "fuel",
+      "base": 0,
+      "multiplier": 1,
+      "bonus": 0.5
+    }
+  ]
+}

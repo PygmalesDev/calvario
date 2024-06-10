@@ -1,0 +1,11 @@
+{
+  "id": "grand_exp",
+  "effects": [
+    {
+      "variable": "research",
+      "base": 0,
+      "multiplier": 1,
+      "bonus": 5
+    }
+  ]
+}

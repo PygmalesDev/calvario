@@ -1,0 +1,17 @@
+{
+  "id": "reckoning",
+  "effects": [
+    {
+      "variable": "population",
+      "base": 0,
+      "multiplier": 1,
+      "bonus": 5
+    },
+    {
+      "variable": "credits",
+      "base": 0,
+      "multiplier": 1,
+      "bonus": 1
+    }
+  ]
+}

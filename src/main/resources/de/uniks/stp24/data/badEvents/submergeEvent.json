@@ -1,0 +1,11 @@
+{
+  "id": "submerge",
+  "effects": [
+    {
+      "variable": "production_unit",
+      "base": 0,
+      "multiplier": 0.5,
+      "bonus": 0
+    }
+  ]
+}

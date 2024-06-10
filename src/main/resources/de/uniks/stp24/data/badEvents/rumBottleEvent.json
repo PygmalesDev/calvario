@@ -1,0 +1,11 @@
+{
+  "id": "rum_bottle",
+  "effects": [
+    {
+      "variable": "research",
+      "base": -0.5,
+      "multiplier": 0.995,
+      "bonus": 0
+    }
+  ]
+}

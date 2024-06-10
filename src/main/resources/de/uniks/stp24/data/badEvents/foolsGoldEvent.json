@@ -1,0 +1,23 @@
+{
+  "id": "fools_gold",
+  "effects": [
+    {
+      "variable": "credits",
+      "base": 0,
+      "multiplier": 1,
+      "bonus": -20
+    },
+    {
+      "variable": "alloys",
+      "base": 0,
+      "multiplier": 1,
+      "bonus": -20
+    },
+    {
+        "variable": "fuel",
+        "base": 0,
+        "multiplier": 1,
+        "bonus": 30
+    }
+  ]
+}

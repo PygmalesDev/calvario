@@ -118,7 +118,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
      */
     public void leaveLobby() {
         this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
-          host -> this.subscriber.subscribe(this.lobbyService.updateMember(this.gameID,
+            host -> this.subscriber.subscribe(this.lobbyService.updateMember(this.gameID,
                     this.tokenStorage.getUserId(), host.ready(), host.empire()),
             result -> this.app.show("/browseGames"),
             error -> {}));
@@ -134,7 +134,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     public void ready() {
         this.subscriber.subscribe(
                 this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
-          result -> {
+                result -> {
                     if (result.ready()) {
                         this.subscriber.subscribe(this.lobbyService
                                 .updateMember(this.gameID, this.tokenStorage.getUserId(), false, result.empire()));
@@ -145,7 +145,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
                         readyIconImageView.setImage(readyIconGreenImage);
                     }
                 },
-          error -> {});
+                error -> {});
     }
 
     @OnDestroy

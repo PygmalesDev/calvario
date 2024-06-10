@@ -21,12 +21,12 @@ public class GameComponent extends HBox implements ReusableItemComponent<Game> {
     public Text game_name;
 
 
-    BrowseGameService browseGameService;
-
-    EditGameService editGameService;
     @Inject
     TokenStorage tokenStorage;
-
+    @Inject
+    BrowseGameService browseGameService;
+    @Inject
+    EditGameService editGameService;
     @Inject
     @Resource
     ResourceBundle resources;

@@ -13,6 +13,7 @@ import de.uniks.stp24.ws.EventListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -206,12 +207,11 @@ public class LobbyController extends BasicController {
         this.subscriber.subscribe(this.eventListener
                         .listen("games." + this.gameID + ".updated", Game.class),
                 event -> {
-                    disableButtons(true);
+                    buttonsSetDisability(true);
             if(event.data().started()) {
                 this.tokenStorage.setGameId(gameID);
                     subscriber.subscribe(lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
                             memberDto -> {
-
                         if(Objects.nonNull(memberDto.empire())){
                             subscriber.subscribe(empireService.getEmpires(this.gameID), dto -> {
                                 for(ReadEmpireDto data : dto){
@@ -219,7 +219,6 @@ public class LobbyController extends BasicController {
                                         this.tokenStorage.setEmpireId(data._id());
                                         this.tokenStorage.setIsSpectator(false);
                                         this.app.show("/ingame");
-
                                     }
                                 }
                                 }, error -> {});
@@ -230,17 +229,26 @@ public class LobbyController extends BasicController {
                             }, error -> {});
                         }
                         }, error -> {});}
-            }, error -> disableButtons(false));
+            }, error -> buttonsSetDisability(false));
     }
 
-    private void disableButtons(boolean disable){
-        this.lobbyHostSettingsComponent.startJourneyButton.setDisable(disable);
-        this.lobbyHostSettingsComponent.selectEmpireButton.setDisable(disable);
-        this.lobbySettingsComponent.selectEmpireButton.setDisable(disable);
-        this.lobbySettingsComponent.readyButton.setDisable(disable);
-        this.lobbyHostSettingsComponent.readyButton.setDisable(disable);
-        this.lobbySettingsComponent.leaveLobbyButton.setDisable(disable);
-        this.lobbyHostSettingsComponent.closeLobbyButton.setDisable(disable);
+    private void buttonsSetDisability(boolean disable){
+        Button[] lobbyButtons = getLobbyButtons();
+        for(Button button : lobbyButtons){
+            button.setDisable(disable);
+        }
+    }
+
+    private Button[] getLobbyButtons(){
+        return new Button[]{
+                this.lobbyHostSettingsComponent.startJourneyButton,
+                this.lobbyHostSettingsComponent.selectEmpireButton,
+                this.lobbySettingsComponent.selectEmpireButton,
+                this.lobbySettingsComponent.readyButton,
+                this.lobbyHostSettingsComponent.readyButton,
+                this.lobbySettingsComponent.leaveLobbyButton,
+                this.lobbyHostSettingsComponent.closeLobbyButton
+        };
     }
 
     /**

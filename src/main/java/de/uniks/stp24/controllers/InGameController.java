@@ -33,7 +33,6 @@ public class InGameController extends BasicController {
     @FXML
     StackPane storageOverviewContainer;
 
-
     @Inject
     InGameService inGameService;
     @Inject
@@ -53,9 +52,6 @@ public class InGameController extends BasicController {
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
 
-    String gameID;
-    String empireID;
-
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
     @Inject
@@ -64,17 +60,8 @@ public class InGameController extends BasicController {
 
     @OnInit
     public void init() {
-
-        gameID = tokenStorage.getGameId();
-        empireID = tokenStorage.getEmpireId();
-        System.out.println(empireID +
-         "game con game");
-        System.out.println(empireID +
-                "game con empire");
-        //Todo: Outprint for Swagger - can be deleted later
-        System.out.println(this.gameID);
-        System.out.println(empireID);
-
+        System.out.println(tokenStorage.getGameId() + " game in ingame");
+        System.out.println(tokenStorage.getEmpireId() + " empire in ingame");
 
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;

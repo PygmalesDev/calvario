@@ -194,10 +194,8 @@ public class GangCreationController extends BasicController {
 
     public void back() {
         GangElement gangElement = this.gangsListView.getSelectionModel().getSelectedItem();
-
         this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
             Empire empire = null;
-
             if (Objects.nonNull(gangElement)) empire = new Empire(gangElement.gang().name(), gangElement.gang().description(), gangElement.gang().color(),
                     gangElement.gang().flagIndex()%this.flagsList.size(), gangElement.gang().portraitIndex()%this.portraitsList.size(),
                     new String[]{},"uninhabitable_0");

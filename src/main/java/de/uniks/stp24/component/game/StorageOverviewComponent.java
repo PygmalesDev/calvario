@@ -77,7 +77,4 @@ public class StorageOverviewComponent extends VBox {
     void destroy(){
         this.subscriber.dispose();
     }
-
-
-
 }

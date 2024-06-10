@@ -106,7 +106,7 @@ public class ClockComponent extends AnchorPane {
 
         // adding spectator sign
         if (tokenStorage.isSpectator()) {
-            spectatorImage.setImage(imageCache.get("gameIcons/spectatorSign.png"));
+            spectatorImage.setImage(imageCache.get("icons/spectatorSign.png"));
         }
 
         subscriber.subscribe(gamesApiService.getGame(gameId),

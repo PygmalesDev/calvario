@@ -18,6 +18,7 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
+
 @Component(view = "IslandOverviewSites.fxml")
 public class OverviewSitesComponent extends AnchorPane {
 
@@ -55,7 +56,6 @@ public class OverviewSitesComponent extends AnchorPane {
     public IslandComponent islandComponent;
 
     private InGameController inGameController;
-    private Island island;
 
     @Inject
     public OverviewSitesComponent() {
@@ -73,14 +73,14 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewUpgradeComponent);
     }
 
-    public void showBuildings(){
+    public void showBuildings() {
         buildingsButton.setDisable(true);
         sitesButton.setDisable(false);
         detailsButton.setDisable(false);
         inGameService.showOnly(sitesContainer, buildingsComponent);
     }
 
-    public void showSites(){
+    public void showSites() {
         detailsButton.setDisable(false);
         sitesButton.setDisable(true);
         buildingsButton.setDisable(false);
@@ -94,23 +94,24 @@ public class OverviewSitesComponent extends AnchorPane {
         sitesContainer.getChildren().add(buildingsComponent);
     }
 
-    public void setIngameController(InGameController inGameController){
+    public void setIngameController(InGameController inGameController) {
         this.inGameController = inGameController;
     }
 
-    public void closeOverview(){
+    public void closeOverview() {
         inGameController.overviewContainer.setVisible(false);
         inGameController.selectedIsland.rudderImage.setVisible(false);
         inGameController.selectedIsland.islandIsSelected = false;
-        inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
+        if (inGameController.island.flagIndex() >= 0) {
+            inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
+        }
         inGameController.selectedIsland = null;
     }
 
-    public void setOverviewSites(Island island){
-        this.island = island;
-        island_name.setText(String.valueOf(island.type()));
-        crewCapacity.setText(island.crewCapacity() + "/20");
-        resCapacity.setText("0/" + island.resourceCapacity());
+    public void setOverviewSites() {
+        island_name.setText(String.valueOf(inGameController.island.type()));
+        crewCapacity.setText(inGameController.island.crewCapacity() + "/20");
+        resCapacity.setText("0/" + inGameController.island.resourceCapacity());
 
     }
 

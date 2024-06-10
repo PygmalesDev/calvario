@@ -90,6 +90,7 @@ public class InGameController extends BasicController {
     Subscriber subscriber;
 
     public IslandComponent selectedIsland;
+    public Island island;
 
     boolean pause = false;
     List<IslandComponent> islandComponentList = new ArrayList<>();
@@ -111,8 +112,6 @@ public class InGameController extends BasicController {
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
         //Todo: Outprint for Swagger - can be deleted later
-        System.out.println(this.gameID);
-        System.out.println(empireID);
 
         GameStatus gameStatus = inGameService.getGameStatus();
 
@@ -245,14 +244,16 @@ public class InGameController extends BasicController {
         createButtonsStorage();
     }
 
-    public void showOverview(Island island ) {
+    public void showOverview(Island island) {
+        this.island = island;
+
         overviewContainer.setVisible(true);
         overviewSitesComponent.sitesContainer.setVisible(true);
         overviewSitesComponent.buildingsButton.setDisable(true);
         inGameService.showOnly(overviewContainer, overviewSitesComponent);
         inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
 
-        overviewSitesComponent.setOverviewSites(island);
+        overviewSitesComponent.setOverviewSites();
     }
 
     public void showCoordinates(MouseEvent mouseEvent) {

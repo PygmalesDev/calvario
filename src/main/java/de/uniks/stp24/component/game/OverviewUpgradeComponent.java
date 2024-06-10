@@ -10,6 +10,7 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
+
 @Component(view = "IslandOverviewUpgrade.fxml")
 public class OverviewUpgradeComponent extends AnchorPane {
     @Inject
@@ -22,15 +23,21 @@ public class OverviewUpgradeComponent extends AnchorPane {
 
     }
 
-    public void goBack(){
+    public void goBack() {
         inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewSitesComponent);
     }
 
-    public void closeOverview(){
+    public void closeOverview() {
         inGameController.overviewContainer.setVisible(false);
+        inGameController.selectedIsland.rudderImage.setVisible(false);
+        inGameController.selectedIsland.islandIsSelected = false;
+        if (inGameController.island.flagIndex() >= 0) {
+            inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
+        }
+        inGameController.selectedIsland = null;
     }
 
-    public void setIngameController(InGameController inGameController){
+    public void setIngameController(InGameController inGameController) {
         this.inGameController = inGameController;
     }
 }

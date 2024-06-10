@@ -88,7 +88,9 @@ public class IslandComponent extends Pane {
     // switch the visibility of all flags
     @OnKey(code = KeyCode.H, shift = true)
     public void showFlag(){
-        this.flagPane.setVisible(!this.flagPane.isVisible());
+        if(island.flagIndex() >= 0){
+            this.flagPane.setVisible(!flagPane.isVisible());
+        }
     }
 
 
@@ -96,7 +98,7 @@ public class IslandComponent extends Pane {
         //TODO by the moment used for printouts
         // maybe it must be removed after implementation of
         // island overview functionality is completed on InGameCtrl
-        System.out.println(Upgrade.values()[island.upgradeLevel()] + " -> " + island.type() + " isle at " + x + ", " + y );
+        System.out.println(Upgrade.values()[island.upgradeLevel()] + " -> " + island.type() + " isle at " + x + ", " + y + " -> Owner: " + island.owner());
         showFlag();
     }
 
@@ -113,15 +115,19 @@ public class IslandComponent extends Pane {
 
     public void showIslandOverview() {
         if (inGameController.selectedIsland != null && inGameController.selectedIsland != this) {
-            inGameController.selectedIsland.rudderImage.setVisible(false);
-            inGameController.selectedIsland.islandIsSelected = false;
-            inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
+            this.rudderImage.setVisible(false);
+            this.islandIsSelected = false;
+            if(inGameController.island.flagIndex() >= 0) {
+                this.flagPane.setVisible(!this.flagPane.isVisible());
+            }
             inGameController.selectedIsland = null;
         } else if (inGameController.selectedIsland == this) {
             inGameController.overviewContainer.setVisible(false);
             this.rudderImage.setVisible(false);
             this.islandIsSelected = false;
-            this.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
+            if(inGameController.island.flagIndex() >= 0) {
+                this.flagPane.setVisible(!this.flagPane.isVisible());
+            }
             inGameController.selectedIsland = null;
             return;
         }

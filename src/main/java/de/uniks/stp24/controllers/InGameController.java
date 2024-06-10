@@ -8,7 +8,6 @@ import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.game.IslandsService;
-import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -179,12 +178,15 @@ public class InGameController extends BasicController {
             showStorageButton.setPrefHeight(30);
             showStorageButton.setPrefWidth(30);
             showStorageButton.setOnAction(event -> showStorage());
-            this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
         }
+        this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
     }
 
     @OnRender
     public void createMap()  {
+
+        this.mapGrid.setMinSize(islandsService.getMapWidth(),
+          islandsService.getMapHeight());
         islandsService.getListOfIslands().forEach(
           island -> {
               IslandComponent tmp = islandsService.createIslandPaneFromDto(island,

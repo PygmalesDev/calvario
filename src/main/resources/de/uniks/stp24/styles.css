@@ -739,3 +739,7 @@ ToggleButton:hover{
     -fx-background-color: "TRANSPARENT";
     -fx-background-size: cover;
 }
+
+.ownIsland{
+    -fx-effect: dropshadow;
+}

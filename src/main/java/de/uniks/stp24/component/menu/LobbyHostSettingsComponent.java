@@ -13,7 +13,6 @@ import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
@@ -36,8 +35,6 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     public Button selectEmpireButton;
     @FXML
     public Button closeLobbyButton;
-    @FXML
-    ImageView readyIconImageView;
     @Inject
     Subscriber subscriber;
     @Inject
@@ -123,9 +120,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
 
     public void startGame() {
         subscriber.subscribe(editGameService.startGame(this.gameID),
-          result -> {
-            this.startJourneyButton.setDisable(true);
-            },
+          result -> this.startJourneyButton.setDisable(true),
           error -> this.startJourneyButton.setDisable(false));
     }
 

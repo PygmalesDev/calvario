@@ -297,7 +297,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     }
 
     @Test
-    public void startGameAsMember(){
+    public void startGameAsPlayer(){
         WaitForAsyncUtils.waitForFxEvents();
 
         Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
@@ -323,7 +323,39 @@ public class TestLobbyControllerAsMember extends ControllerTest {
 
         assertEquals("testEmpireID", tokenStorage.getEmpireId());
         assertEquals("testGameID", tokenStorage.getGameId());
+        assertFalse(tokenStorage.isSpectator());
 
+        verify(this.app, times(1)).show("/ingame");
+    }
+
+    @Test
+    public void startGameAsSpectator(){
+        WaitForAsyncUtils.waitForFxEvents();
+
+        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
+
+        doReturn(null).when(this.app).show("/ingame");
+
+        doAnswer(show-> {app.show("/ingame");
+            return null;
+        }).when(this.islandsService).retrieveIslands(any());
+
+        doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", "testGameID",
+                "testGameHostID","testGame","a","a",1, 2, "a")})).when(this.empireService).getEmpires(any());
+
+        doReturn(Observable.just(new MemberDto(true, "testMemberUnoID", null, "88888888")))
+                .when(this.lobbyService).getMember(any(), any());
+
+        // start game
+        this.gameSubject.onNext(new Event<>("games.testGameID.updated",
+                new Game("1", "a","testGameID","testGame","testGameHostID",
+                        true, 1, 0, new GameSettings(1))));
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        assertNull(tokenStorage.getEmpireId());
+        assertEquals("testGameID", tokenStorage.getGameId());
+        assertTrue(tokenStorage.isSpectator());
 
         verify(this.app, times(1)).show("/ingame");
     }

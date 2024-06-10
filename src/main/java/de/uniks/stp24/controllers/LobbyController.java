@@ -3,7 +3,6 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.helper.JoinGameHelper;
 import de.uniks.stp24.dto.MemberDto;
-import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.game.EmpireService;
@@ -100,7 +99,7 @@ public class LobbyController extends BasicController {
 
     Game game;
 
-    private ObservableList<MemberUser> users = FXCollections.observableArrayList();
+    private final ObservableList<MemberUser> users = FXCollections.observableArrayList();
     private boolean asHost;
     private boolean wasKicked;
     private boolean isHostReady;
@@ -229,9 +228,7 @@ public class LobbyController extends BasicController {
                 buttonsSetDisability(true);
                 if(event.data().started()) {
                     subscriber.subscribe(lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
-                        memberDto -> {
-                          this.joinGameHelper.joinGame(this.gameID);
-                        },
+                        memberDto -> this.joinGameHelper.joinGame(this.gameID),
                         this::errorMsg);
                 }
             }, error -> {

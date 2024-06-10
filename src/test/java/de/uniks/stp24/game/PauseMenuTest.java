@@ -126,12 +126,17 @@ public class PauseMenuTest extends ControllerTest {
     public void testQuitting() {
         doReturn(null).when(app).show("/browseGames");
 
+        tokenStorage.setEmpireId("empireId");
+        tokenStorage.setGameId("gameId");
+
         press(KeyCode.ESCAPE);
         waitForFxEvents();
         press(KeyCode.Q);
 //        clickOn("#quitButton");
         waitForFxEvents();
 
+        assertNull(tokenStorage.getEmpireId());
+        assertNull(tokenStorage.getGameId());
         verify(app, times(1)).show("/browseGames");
     }
 

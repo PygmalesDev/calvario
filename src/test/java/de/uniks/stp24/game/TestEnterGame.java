@@ -112,15 +112,6 @@ public class TestEnterGame extends ControllerTest {
 
         Mockito.doReturn(gameSubject).when(eventListener).listen("games.*.*", Game.class);
 
-
-        app.show(browseGameController);
-    }
-
-
-    @Test
-    public void loadGameAsMember(){
-        WaitForAsyncUtils.waitForFxEvents();
-
         // Mock userId
         doReturn("testUserID").when(this.tokenStorage).getUserId();
 
@@ -129,6 +120,14 @@ public class TestEnterGame extends ControllerTest {
         doAnswer(show-> {app.show("/ingame");
             return null;
         }).when(this.islandsService).retrieveIslands(any());
+
+        app.show(browseGameController);
+    }
+
+
+    @Test
+    public void loadGameAsMember(){
+        WaitForAsyncUtils.waitForFxEvents();
 
         Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
 
@@ -144,13 +143,10 @@ public class TestEnterGame extends ControllerTest {
                 .thenReturn(Observable.just(new MemberDto(true, "testUserID", testEmpire,"88888888")));
 
 
-
-        // Try to enter first game: not a member, already started -> not possible
+        // Try to enter first game: user is not a member, game has already started -> not possible
         browseGameController.gameList.getSelectionModel().clearAndSelect(0);
         browseGameController.gameList.getFocusModel().focus(0);
         browseGameService.setGame(game1);
-
-
 
         clickOn("#load_game_b");
         WaitForAsyncUtils.waitForFxEvents();
@@ -161,7 +157,7 @@ public class TestEnterGame extends ControllerTest {
         verify(this.app, times(0)).show("/lobby", Map.of("gameid","testGame1" ));
 
 
-        // Try to enter second game: a member, already started -> show lobby
+        // Try to enter second game: user is not a member, game has not started yet -> show lobby
         browseGameController.gameList.getSelectionModel().clearAndSelect(1);
         browseGameController.gameList.getFocusModel().focus(1);
         browseGameService.setGame(game2);
@@ -177,8 +173,7 @@ public class TestEnterGame extends ControllerTest {
         verify(this.app, times(1)).show("/lobby", Map.of("gameid",gameId));
 
 
-
-        // Try to enter third game: a member, not started -> user will go to ingame
+        // Try to enter third game: user is a member, game has already started -> user will go to ingame
         browseGameController.gameList.getSelectionModel().clearAndSelect(2);
         browseGameController.gameList.getFocusModel().focus(2);
         browseGameService.setGame(game3);
@@ -191,4 +186,36 @@ public class TestEnterGame extends ControllerTest {
         assertFalse(tokenStorage.isSpectator());
         verify(this.app, times(1)).show("/ingame");
     }
+
+    @Test
+    public void rejoinGameAsSpectator() {
+        WaitForAsyncUtils.waitForFxEvents();
+
+        // Mock get all Empires of the game1
+        doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", "game1Id",
+                "testHost1","testEmpire","a","a",1, 2, "a")
+        })).when(this.empireService).getEmpires(any());
+
+        // Mock the requested member of the game (the user without an empire, not the host)
+        when(this.lobbyService.getMember(any(),any()))
+                .thenReturn(Observable.just(new MemberDto(true, "testUserID", null,"88888888")));
+
+        assertNull(tokenStorage.getGameId());
+        assertNull(tokenStorage.getEmpireId());
+
+        // Try to enter first game: user is a member, but has no empire; game has already started -> go to ingame without an empire
+        browseGameController.gameList.getSelectionModel().clearAndSelect(0);
+        browseGameController.gameList.getFocusModel().focus(0);
+        browseGameService.setGame(game1);
+
+        clickOn("#load_game_b");
+        WaitForAsyncUtils.waitForFxEvents();
+
+        assertEquals("game1Id", tokenStorage.getGameId());
+        assertNull(tokenStorage.getEmpireId());
+        assertTrue(tokenStorage.isSpectator());
+        verify(this.app, times(1)).show("/ingame");
+    }
+
+
 }

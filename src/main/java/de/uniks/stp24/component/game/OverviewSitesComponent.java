@@ -33,6 +33,10 @@ public class OverviewSitesComponent extends AnchorPane {
     public Text island_name;
     @FXML
     public Text island_inf;
+    @FXML
+    public Text crewCapacity;
+    @FXML
+    public Text resCapacity;
 
     @SubComponent
     @Inject
@@ -105,6 +109,9 @@ public class OverviewSitesComponent extends AnchorPane {
     public void setOverviewSites(Island island){
         this.island = island;
         island_name.setText(String.valueOf(island.type()));
+        crewCapacity.setText(island.crewCapacity() + "/20");
+        resCapacity.setText("0/" + island.resourceCapacity());
+
     }
 
 }

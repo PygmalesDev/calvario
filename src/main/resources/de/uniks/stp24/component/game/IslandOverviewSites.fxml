@@ -30,12 +30,12 @@
                <VBox alignment="CENTER_LEFT" prefHeight="66.0" prefWidth="126.0">
                   <HBox alignment="CENTER" styleClass="overview-text">
                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
-                     <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="0/20" />
+                     <Text fx:id="crewCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="0/20" />
                   </HBox>
                   <HBox alignment="CENTER">
                      <children>
                         <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="0/400" />
+                        <Text fx:id="resCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="0/400" />
                      </children>
                   </HBox>
                </VBox>

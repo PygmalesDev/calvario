@@ -58,14 +58,17 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     EmpireService empireService;
     @Inject
     @Resource
-    ResourceBundle resource;
+    ResourceBundle resources;
     @Inject
     ErrorService errorService;
 
     private String gameID;
+    private int maxMember;
+    private BubbleComponent bubbleComponent;
     public boolean leftLobby;
     public Image readyIconBlueImage;
     public Image readyIconGreenImage;
+
 
     @Inject
     public LobbyHostSettingsComponent() {
@@ -76,13 +79,30 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     public void init(){
     }
 
+    /**
+     * Creates an event listener that checks, if all members are ready and if there are not too many players with a
+     * selected empire.
+     */
     public void createCheckPlayerReadinessListener() {
         this.subscriber.subscribe(this.eventListener
                 .listen("games." + this.gameID + ".members.*.updated", MemberDto.class),
             result -> this.subscriber.subscribe(this.lobbyService.loadPlayers(this.gameID),
-            members -> this.startJourneyButton.setDisable(!Arrays.stream(members)
+                    members -> {
+                        boolean allReady = Arrays.stream(members)
                                 .map(MemberDto::ready)
-                                .reduce(Boolean::logicalAnd).orElse(true)),
+                                .reduce(Boolean::logicalAnd)
+                                .orElse(true);
+                        int countEmpires = (int) Arrays.stream(members)
+                                .filter(member -> member.empire() != null)
+                                .count();
+                        boolean tooManyPlayer = countEmpires > this.maxMember;
+                        if(tooManyPlayer){
+                            bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.too.many.players"));
+                        }else{
+                            bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
+                        }
+                        this.startJourneyButton.setDisable(!allReady || tooManyPlayer);
+                    },
               error -> errorService.getStatus(error)));
     }
 
@@ -124,6 +144,15 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     public void setGameID(String gameID) {
         this.gameID = gameID;
     }
+
+    public void setMaxMember(int maxMember){
+        this.maxMember = maxMember;
+    }
+
+    public void setBubbleComponent(BubbleComponent bubbleComponent){
+        this.bubbleComponent = bubbleComponent;
+    }
+
     public void selectEmpire() {
         this.app.show("/creation", Map.of("gameid", this.gameID));
     }

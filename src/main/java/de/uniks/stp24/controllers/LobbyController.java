@@ -104,6 +104,9 @@ public class LobbyController extends BasicController {
     private boolean asHost;
     private boolean wasKicked;
     private boolean isHostReady;
+    private int maxMember;
+    private Button[] lobbyButtons;
+
 
     @Inject
     public LobbyController() {
@@ -122,6 +125,10 @@ public class LobbyController extends BasicController {
             this.game = game;
             this.gameID = game._id();
             this.asHost = game.owner().equals(this.tokenStorage.getUserId());
+            // Todo: add maxMember to Game Model -> this.maxMember = game.maxMember();
+              this.maxMember = 1;
+            this.lobbyHostSettingsComponent.setMaxMember(this.maxMember);
+            this.lobbyHostSettingsComponent.setBubbleComponent(this.bubbleComponent);
 
             this.enterGameComponent.setGameID(this.gameID);
             this.lobbySettingsComponent.setGameID(this.gameID);
@@ -145,11 +152,19 @@ public class LobbyController extends BasicController {
                         }
                 });
 
-                this.lobbyHostSettingsComponent.startJourneyButton.setDisable(
-                        !Arrays.stream(dto)
-                                .map(MemberDto::ready)
-                                .reduce(Boolean::logicalAnd).orElse(true)
-                );
+                // check if game can be started
+                boolean allReady = Arrays.stream(dto)
+                        .map(MemberDto::ready)
+                        .reduce(Boolean::logicalAnd)
+                        .orElse(true);
+                int countEmpires = (int) Arrays.stream(dto)
+                        .filter(member -> member.empire() != null)
+                        .count();
+                boolean tooManyPlayer = countEmpires > this.maxMember;
+                if(tooManyPlayer){
+                    bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.too.many.players"));
+                }
+                this.lobbyHostSettingsComponent.startJourneyButton.setDisable(!allReady || tooManyPlayer);
 
                 this.sortMemberList();
             },
@@ -201,35 +216,11 @@ public class LobbyController extends BasicController {
           );
     }
 
-
-    private void buttonsSetDisability(boolean disable){
-        Button[] lobbyButtons = getLobbyButtons();
-        for(Button button : lobbyButtons){
-            button.setDisable(disable);
-        }
-    }
-
-    private Button[] getLobbyButtons(){
-        return new Button[]{
-                this.lobbyHostSettingsComponent.startJourneyButton,
-                this.lobbyHostSettingsComponent.selectEmpireButton,
-                this.lobbySettingsComponent.selectEmpireButton,
-                this.lobbySettingsComponent.readyButton,
-                this.lobbyHostSettingsComponent.readyButton,
-                this.lobbySettingsComponent.leaveLobbyButton,
-                this.lobbyHostSettingsComponent.closeLobbyButton
-        };
-    }
-
-
-
-
     /**
      * Creates an event listener that sends all members to ingame when the game is started.
      * after game is started:
-     * initial resources (EmpireService), put an entry of empire id and flag in TokenStorage
-     * island information (IslandsService)
-     * must be retrieved
+     * gameId, empireId and flags are saved in TokenStorage (in joinGameHelper)
+     * island information (IslandsService) must be retrieved (in islandsService)
      * change to game screen occurs in islandsService
      */
     private void createGameStartedListener(){
@@ -249,8 +240,26 @@ public class LobbyController extends BasicController {
             });
     }
 
+    private void buttonsSetDisability(boolean disable){
+        for(Button button : this.lobbyButtons){
+            button.setDisable(disable);
+        }
+    }
+
+    @OnRender
+    void getLobbyButtons(){
+        this.lobbyButtons =  new Button[]{
+                this.lobbyHostSettingsComponent.startJourneyButton,
+                this.lobbyHostSettingsComponent.selectEmpireButton,
+                this.lobbySettingsComponent.selectEmpireButton,
+                this.lobbySettingsComponent.readyButton,
+                this.lobbyHostSettingsComponent.readyButton,
+                this.lobbySettingsComponent.leaveLobbyButton,
+                this.lobbyHostSettingsComponent.closeLobbyButton
+        };
+    }
+
     /**
-                    
      * Loads players to the member list.
      */
     @OnRender
@@ -367,9 +376,10 @@ public class LobbyController extends BasicController {
             this.app.show("/browseGames");
     }
 
+
     @OnDestroy
     void destroy() {
-         subscriber.dispose();
+        subscriber.dispose();
         backgroundAnchorPane.setStyle("-fx-background-image: null");
         cardBackgroundVBox.setStyle("-fx-background-image: null");
     }

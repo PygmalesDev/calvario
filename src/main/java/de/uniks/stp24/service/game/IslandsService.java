@@ -6,12 +6,15 @@ import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.BasicService;
 import de.uniks.stp24.service.menu.LobbyService;
+import javafx.application.Platform;
 import org.fulib.fx.annotation.event.OnDestroy;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
 import java.util.random.RandomGenerator;
+
+import static java.lang.Thread.sleep;
 
 @Singleton
 public class IslandsService extends BasicService {
@@ -40,7 +43,6 @@ public class IslandsService extends BasicService {
                 Arrays.stream(dto).forEach(data -> {
                     List<String> linkedIsles = new ArrayList<>(data.links().keySet());
                     System.out.println(data);
-
                     Island tmp = new Island(data.owner(),
                         data.upgrade(),
                         data.name(),
@@ -91,5 +93,19 @@ public class IslandsService extends BasicService {
     @OnDestroy
     public void destroy(){
         this.subscriber.dispose();
+    }
+
+    public void updateIsland() {
+        System.out.println(tokenStorage.getGameId() + " ### " + tokenStorage.getIsland().id_());
+        subscriber.subscribe(gameSystemsService.getCertainIsland(tokenStorage.getGameId(), tokenStorage.getIsland().id_()),
+                dto -> {
+                    System.out.println("+++++++++++++++  " + dto);
+                        tokenStorage.setIsland(dto);
+
+                },
+                error -> {
+                    // Handle any potential errors here
+                    System.err.println("Error occurred while getting the island: ");
+                });
     }
 }

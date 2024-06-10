@@ -1,5 +1,6 @@
 package de.uniks.stp24.service;
 
+import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.dto.SystemsDto;
 import de.uniks.stp24.dto.SystemsResultDto;
 import de.uniks.stp24.dto.Upgrade;
@@ -41,8 +42,7 @@ public class ResourcesService {
 
     }
 
-    public Observable<SystemsResultDto> destroyBuilding(String gameID, Island island) {
-
+    public Observable<SystemDto> destroyBuilding(String gameID, Island island) {
         String[] buildings = new String[1];
         buildings[0] = "exchange";
         Map<String, Integer> sitesValue = new HashMap<>();
@@ -61,11 +61,12 @@ public class ResourcesService {
                 island.sites(), island.buildings(),island.upgrade(), island.owner()));
     }
 
-    public Observable<SystemsResultDto> createBuilding(String gameId, Island island, String buildingToAdd) {
+    public Observable<SystemDto> createBuilding(String gameId, Island island, String buildingToAdd) {
         String[] newBuildingsArray = new String[island.buildings().length + 1];
         System.arraycopy(island.buildings(), 0, newBuildingsArray, 0, island.buildings().length);
         newBuildingsArray[newBuildingsArray.length - 1] = buildingToAdd;
         Map<String, Integer> sitesValue = new HashMap<>();
+        System.out.println(Arrays.toString(island.buildings()) + "###");
         System.out.println(Arrays.toString(newBuildingsArray));
 
         if (island.owner() != null){

@@ -2,9 +2,11 @@ package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.model.Island;
+import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.ResourcesService;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.IslandsService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -22,6 +24,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 @Component(view = "BuildingProperties.fxml")
 public class BuildingPropertiesComponent extends AnchorPane {
 
@@ -45,6 +49,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     @Inject
     Subscriber subscriber;
+
+    @Inject
+    IslandsService islandsService;
 
     @SubComponent
     @Inject
@@ -71,9 +78,26 @@ public class BuildingPropertiesComponent extends AnchorPane {
         this.island = tokenStorage.getIsland();
         System.out.println(this.island.type());
         subscriber.subscribe(resourcesService.destroyBuilding(tokenStorage.getGameId(), island), result -> {
+            Island islandNew = new Island(result.owner(),
+                    result.upgrade(),
+                    result.name(),
+                    result._id(),
+                    Objects.isNull(result.owner()) ? -1 : tokenStorage.getFlagIndex(result.owner()),
+                    result.x(),
+                    result.y(),
+                    IslandType.valueOf(result.type()),
+                    result.population(),
+                    result.capacity(),
+                    result.upgrade().ordinal(),
+                    // todo find out which information in data match sites in island dto
+                    result.districtSlots(),
+                    result.districts(),
+                    result.buildings()
+            );
+            tokenStorage.setIsland(islandNew);
             onClose();
+            //islandsService.updateIsland();
         });
-        tokenStorage.setIsland(island);
     }
 
     public void onClose(){

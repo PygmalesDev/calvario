@@ -3,6 +3,7 @@ package de.uniks.stp24.component.menu;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.service.ResourcesService;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.IslandsService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
@@ -39,6 +40,9 @@ public class BuildingsWindowComponent extends AnchorPane {
     Subscriber subscriber;
 
     @Inject
+    IslandsService islandsService;
+
+    @Inject
     ResourcesService resourcesService;
 
     private Island island;
@@ -64,8 +68,9 @@ public class BuildingsWindowComponent extends AnchorPane {
         this.island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
             onClose();
+            islandsService.updateIsland();
         });
-        tokenStorage.setIsland(island);
+
     }
 
     public void buildMine(){

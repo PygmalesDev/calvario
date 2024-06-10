@@ -29,5 +29,5 @@ public interface GameSystemsApiService {
     Observable<Island> getCertainIsland(@Path("game") String gameID, @Path("id") String islandID);
 
     @PATCH("games/{game}/systems/{id}")
-    Observable<SystemsResultDto> updateIsland(@Path("game") String gameID, @Path("id") String islandID, @Body SystemsDto dto);
+    Observable<SystemDto> updateIsland(@Path("game") String gameID, @Path("id") String islandID, @Body SystemsDto dto);
 }

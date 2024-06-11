@@ -1,0 +1,22 @@
+
+
+@font-face {
+    /* Using for Event Description */
+    font-family: 'Tempus Sans';
+    src: url("/de/uniks/stp24/fonts/TempusSans.ttf");
+}
+
+@font-face {
+    /* Using for Event Name */
+    font-family: 'Gill Sans';
+    src: url("/de/uniks/stp24/fonts/GillSansUltraBold.ttf");
+}
+
+#eventVBox {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/randomEventsWindow.png");
+}
+
+#eventName {
+    -fx-font-family: 'Gill Sans';
+}

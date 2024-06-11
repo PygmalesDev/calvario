@@ -1,5 +1,6 @@
 package de.uniks.stp24.rest;
 
+import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.dto.SystemDto;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.*;
@@ -30,4 +31,7 @@ public interface GameSystemsApiService {
 
     @PATCH("games/{game}/systems/{id}")
     Observable<SystemDto> updateIsland(@Path("game") String gameID, @Path("id") String islandID, @Body SystemsDto dto);
+
+    @GET("presets/districts/{id}")
+    Observable<SiteDto> getSite(@Path("id") String siteID);
 }

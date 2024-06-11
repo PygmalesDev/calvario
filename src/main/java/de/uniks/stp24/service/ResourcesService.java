@@ -1,9 +1,6 @@
 package de.uniks.stp24.service;
 
-import de.uniks.stp24.dto.SystemDto;
-import de.uniks.stp24.dto.SystemsDto;
-import de.uniks.stp24.dto.SystemsResultDto;
-import de.uniks.stp24.dto.Upgrade;
+import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.Building;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
@@ -116,4 +113,7 @@ public class ResourcesService {
     }
 
 
+    public Observable<SiteDto> getResourcesSite(String siteType) {
+        return gameSystemsApiService.getSite(siteType);
+    }
 }

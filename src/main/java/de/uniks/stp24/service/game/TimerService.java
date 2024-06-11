@@ -28,7 +28,6 @@ public class TimerService {
     int countdown = TIME;
     int season;
     int speed;
-    boolean showFlags = false;
     private volatile boolean isRunning = false;
 
 
@@ -146,15 +145,6 @@ public class TimerService {
         resume();
 
         this.firePropertyChange(PROPERTY_COUNTDOWN, oldValue, value);
-    }
-
-
-    public void setShowFlags(boolean showFlags) {
-        this.showFlags = showFlags;
-    }
-
-    public boolean getShowFlags() {
-        return showFlags;
     }
 
     public boolean isRunning() {

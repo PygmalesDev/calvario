@@ -76,7 +76,6 @@ public class ClockComponent extends AnchorPane {
 
     @Inject
     public ClockComponent() {
-
     }
 
     @OnInit
@@ -187,7 +186,7 @@ public class ClockComponent extends AnchorPane {
     ///////////////--------------------------------------------onAction------------------------------------/////////////
 
     public void showFlags() {
-        timerService.setShowFlags(!timerService.getShowFlags());
+        // TODO: Show Flags for all Islands
     }
 
     public void pauseClock() {

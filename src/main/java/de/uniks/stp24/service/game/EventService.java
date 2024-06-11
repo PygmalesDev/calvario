@@ -11,4 +11,9 @@ public class EventService {
 
     ObjectMapper objectMapper;
 
+    @Inject
+    public EventService() {
+
+    }
+
 }

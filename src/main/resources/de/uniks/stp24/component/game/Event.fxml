@@ -7,16 +7,16 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="300.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.EventComponent">
-    <VBox id="eventVBox" alignment="TOP_CENTER" layoutX="287.0" layoutY="89.0" prefHeight="300.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <Button id="closeButton" fx:id="closeEvent" mnemonicParsing="false" onAction="#close" prefHeight="33.0" prefWidth="38.0" />
+<fx:root fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="375.0" prefWidth="325.0" type="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.EventComponent">
+    <VBox id="eventVBox" alignment="TOP_CENTER" layoutX="287.0" layoutY="89.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="275.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Button id="closeButton" fx:id="closeEvent" mnemonicParsing="false" onAction="#close" prefHeight="33.0" prefWidth="38.0" translateX="120.0" translateY="31.0" />
         <ImageView id="skullImage" fx:id="skullImage" fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
         <ImageView id="eventImage" fx:id="eventImage" fitHeight="125.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-        <Text id="eventName" fx:id="eventName" strokeType="OUTSIDE" strokeWidth="0.0" text="Event">
+        <Text id="eventName" fx:id="eventName" strokeType="OUTSIDE" strokeWidth="0.0" text="Oblivion" translateX="-10.0" translateY="-30.0">
             <font>
                 <Font size="18.0" />
             </font>
         </Text>
-        <Text id="eventDescription" fx:id="eventDescription" strokeType="OUTSIDE" strokeWidth="0.0" text="DescriptionEvent" textAlignment="CENTER" />
+        <Text id="eventDescription" fx:id="eventDescription" strokeType="OUTSIDE" strokeWidth="0.0" text="Misty fogs lay upon some islands,&#10;making them unreachable.&#10;Island owner grants&#10; an opportunity in the battles." textAlignment="CENTER" translateX="-10.0" translateY="-27.5" />
     </VBox>
-</AnchorPane>
+</fx:root>

@@ -1,22 +1,42 @@
 
 
 @font-face {
-    /* Using for Event Description */
-    font-family: 'Tempus Sans';
-    src: url("/de/uniks/stp24/fonts/TempusSans.ttf");
+    font-family: 'Blackadder ITC';
+    src: url("/de/uniks/stp24/fonts/Blackladder.ttf");
 }
 
 @font-face {
-    /* Using for Event Name */
-    font-family: 'Gill Sans';
-    src: url("/de/uniks/stp24/fonts/GillSansUltraBold.ttf");
+    font-family: 'Tempus Sans ITC';
+    src: url("/de/uniks/stp24/fonts/TempusSans.ttf");
+}
+
+#eventName {
+    -fx-font-family: 'Blackadder ITC';
+    -fx-font-size: 30;
+}
+
+#eventDescription {
+    -fx-font-family: 'Tempus Sans ITC';
+    -fx-font-size: 13;
 }
 
 #eventVBox {
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/randomEventsWindow.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: transparent;
 }
 
-#eventName {
-    -fx-font-family: 'Gill Sans';
+#closeButton {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/closeWindowButton.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: transparent;
+}
+
+#skullImage {
+    -fx-background-color: transparent;
+    /* -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/skull.png"); */
 }

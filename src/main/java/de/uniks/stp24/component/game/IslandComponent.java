@@ -77,8 +77,12 @@ public class IslandComponent extends Pane {
         //TODO by the moment used for printouts
         // maybe it must be removed after implementation of
         // island overview functionality is completed on InGameCtrl
-        System.out.println(Upgrade.values()[island.upgradeLevel()] + " -> " + island.type() + " isle at " + x + ", " + y );
-        showFlag();
+        //System.out.println(Upgrade.values()[island.upgradeLevel()] + " -> " + island.type() + " isle at " + x + ", " + y );
+        //showFlag();
+    }
+
+    public Island getIsland(){
+        return this.island;
     }
 
     @OnDestroy

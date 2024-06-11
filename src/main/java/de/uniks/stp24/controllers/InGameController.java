@@ -19,7 +19,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
@@ -208,6 +207,7 @@ public class InGameController extends BasicController {
               tmp.setLayoutY(tmp.getPosY());
               islandComponentList.add(tmp);
               islandComponentMap.put(island.id(), tmp);
+              tmp.addEventHandler(MouseEvent.MOUSE_CLICKED,this::showInfo);
           }
         );
         return islandComponentList;
@@ -236,8 +236,12 @@ public class InGameController extends BasicController {
     }
 
 
-    public void showCoordinates(MouseEvent mouseEvent) {
-        // todo select island to show info
+    public void showInfo(MouseEvent event) {
+        if (event.getSource() instanceof IslandComponent selected) {
+            System.out.println(event.getSource().toString());
+            System.out.println("found island: " + selected.getIsland().toString());
+            selected.showFlag();
+        }
     }
 
     @OnDestroy
@@ -259,6 +263,6 @@ public class InGameController extends BasicController {
     }
 
     public void showIslandOverview(ActionEvent event) {
-
+        // todo this should be equivalent to showInfo(MouseEvent) ?
     }
 }

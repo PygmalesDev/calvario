@@ -11,7 +11,7 @@
     <HBox alignment="CENTER" style="-fx-background-color: TRANSPARENT;" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
         <ScrollPane fx:id="mapPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" style="-fx-background-color: TRANSPARENT;" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
             <StackPane fx:id="zoomPane" style="-fx-background-color: TRANSPARENT;">
-                <Pane fx:id="mapGrid" onMouseClicked="#showCoordinates" styleClass="backgroundGame">
+                <Pane fx:id="mapGrid" styleClass="backgroundGame">
                 </Pane>
             </StackPane>
         </ScrollPane>

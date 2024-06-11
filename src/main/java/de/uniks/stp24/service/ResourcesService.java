@@ -66,7 +66,6 @@ public class ResourcesService {
         System.arraycopy(island.buildings(), 0, newBuildingsArray, 0, island.buildings().length);
         newBuildingsArray[newBuildingsArray.length - 1] = buildingToAdd;
         Map<String, Integer> sitesValue = new HashMap<>();
-        System.out.println(Arrays.toString(island.buildings()) + "###");
         System.out.println(Arrays.toString(newBuildingsArray));
 
         if (island.owner() != null){
@@ -80,41 +79,41 @@ public class ResourcesService {
                 island.sites(), island.buildings(),island.upgrade(), island.owner()));
     }
 
-    /*
-    Click logik:
-    1.  Ich muss ein Click auf eine Insel simulieren ***
-    2.  Nach diesem Klick, soll sich IslandOverviewSites öffnen
-            -> Click auf UPGRADES öffnet IslandOverviewUpgrades
-                -> Click auf Back zurück zu IslandOverviewSites
-                -> Click auf x zurück zum Spiel
-                -> Click auf Upgrade :  1. Fall nicht genug Resourcen > garnichts
-                                        2. Fall genug Resourcen > Leuchtet Grün und upgrade Insel
+    public Observable<SystemDto> destroySite(String gameID, Island island, String siteToDestroy) {
+        System.out.println(island.sites() + " ####################");
+        Map<String, Integer> sitesValue = new HashMap<>();
+        sitesValue.put(siteToDestroy, -1);
 
-            -> Click auf DETAILS öffnet IslandOverviewDetails (Nur untere Häflte ändert sich)
-                -> Zeig Details untere Hälfte
-                -> Click auf Sites zeigt IslandOverviewSites
-                -> Click auf UPGRADES zeigt IslandOverviewUpgrades
+        System.out.println(gameID + " ### " + island);
 
-     Simulieren einer Insel:
-     1. Sitesinfos: Namen, Capacity, Crews, Tressure, (Settled), Besonderheit
-     2. ListView Inf. for Details
-     3. Informations for Sites
-     4. Upgrade Informations
-        -> Resources
+        if (island.owner() != null){
+            if (island.owner().equals(tokenStorage.getEmpireId())){
+                return gameSystemsApiService.updateIsland(gameID, island.id_(), new SystemsDto("",
+                        sitesValue, island.buildings(), null, island.owner()));
+            }
+        }
 
-     What we need:
-     1. Test class
-     2. Controller
-     3. Services ?
+        return gameSystemsApiService.updateIsland(gameID, island.id_(), new SystemsDto(island.name(),
+                island.sites(), island.buildings(),island.upgrade(), island.owner()));
+    }
 
-     Ab wo starten ?
-     Ab Loadgame. Dabei ist egal wo drauf geclickt wird.
-     Sobald irgendwo draufgeklickt wird, werden alle Informationen der Insel dem neuen Controller und dem Service übergeben,
-     sodass damit gearbeitet werden kann.
+    public Observable<SystemDto> buildSite(String gameID, Island island, String siteToBuild) {
+        Map<String, Integer> sitesValue = new HashMap<>();
+        sitesValue.put(siteToBuild, 1);
+        System.out.println(island.sites() + " aaaaaaaaaa");
 
-     Wie soll alles enden ?
-     Endet mit Upgrade. Informationen der Insel werden erneuert.
+        System.out.println(gameID + " ### " + island);
 
-     */
+        if (island.owner() != null){
+            if (island.owner().equals(tokenStorage.getEmpireId())){
+                return gameSystemsApiService.updateIsland(gameID, island.id_(), new SystemsDto("",
+                        sitesValue, island.buildings(), null, island.owner()));
+            }
+        }
+
+        return gameSystemsApiService.updateIsland(gameID, island.id_(), new SystemsDto(island.name(),
+                island.sites(), island.buildings(),island.upgrade(), island.owner()));
+    }
+
 
 }

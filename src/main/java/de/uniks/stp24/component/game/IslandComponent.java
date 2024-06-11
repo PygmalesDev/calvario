@@ -14,6 +14,7 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnKey;
+import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -44,6 +45,10 @@ public class IslandComponent extends Pane {
             this.imageCache = new ImageCache();
         }
         this.islandImage = new ImageView();
+    }
+    @OnRender
+    public void render(){
+        this.flagPane.setVisible(true);
     }
 
     public void applyIcon(IslandType type){
@@ -90,7 +95,7 @@ public class IslandComponent extends Pane {
         // maybe it must be removed after implementation of
         // island overview functionality is completed on InGameCtrl
         System.out.println(Upgrade.values()[island.upgradeLevel()] + " -> " + island.type() + " isle at " + x + ", " + y );
-        showFlag();
+        //showFlag();
     }
 
     public Island getIsland(){

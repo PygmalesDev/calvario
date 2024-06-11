@@ -61,7 +61,6 @@ public class BuildingsWindowComponent extends AnchorPane {
         this.island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
             tokenStorage.setIsland(islandsService.updateIsland(result));
-            onClose();
         },
                 error -> System.out.println("Insufficient funds"));
     }
@@ -81,7 +80,6 @@ public class BuildingsWindowComponent extends AnchorPane {
         this.island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
             tokenStorage.setIsland(islandsService.updateIsland(result));
-            onClose();
         },
                 error -> System.out.println("Insufficient funds"));
     }
@@ -92,7 +90,6 @@ public class BuildingsWindowComponent extends AnchorPane {
         this.island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
             tokenStorage.setIsland(islandsService.updateIsland(result));
-            onClose();
         },
                 error -> System.out.println("Insufficient funds"));
     }
@@ -102,7 +99,6 @@ public class BuildingsWindowComponent extends AnchorPane {
         this.island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
             tokenStorage.setIsland(islandsService.updateIsland(result));
-            onClose();
         },
                 error -> System.out.println("Insufficient funds"));
     }
@@ -112,7 +108,6 @@ public class BuildingsWindowComponent extends AnchorPane {
         this.island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
             tokenStorage.setIsland(islandsService.updateIsland(result));
-            onClose();
         },
                 error -> System.out.println("Insufficient funds"));
     }
@@ -122,7 +117,6 @@ public class BuildingsWindowComponent extends AnchorPane {
         this.island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
             tokenStorage.setIsland(islandsService.updateIsland(result));
-            onClose();
         },
                 error -> System.out.println("Insufficient funds"));
     }
@@ -132,7 +126,6 @@ public class BuildingsWindowComponent extends AnchorPane {
         this.island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
             tokenStorage.setIsland(islandsService.updateIsland(result));
-            onClose();
         },
                 error -> System.out.println("Insufficient funds"));
     }

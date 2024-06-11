@@ -63,8 +63,6 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     public List<Island> islands = new ArrayList<>();
 
-    private Island island;
-
     @Inject
     public BuildingPropertiesComponent(){
 
@@ -75,8 +73,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
     public void destroyBuilding(){
-        this.island = tokenStorage.getIsland();
-        System.out.println(this.island.type());
+        Island island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.destroyBuilding(tokenStorage.getGameId(), island), result -> {
             tokenStorage.setIsland(islandsService.updateIsland(result));
             onClose();

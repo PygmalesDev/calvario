@@ -1,13 +1,17 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.component.game.IslandComponent;
+import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.BasicService;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import org.fulib.fx.annotation.event.OnDestroy;
 
 import javax.inject.Inject;
@@ -26,14 +30,14 @@ public class IslandsService extends BasicService {
     LobbyService lobbyService;
 
     private final List<Island> isles = new ArrayList<>();
-    // todo use this map for connections
     static private final Map<String, List<String>> connections = new HashMap<>();
-    // todo after development is ready remove this generator
-    static final RandomGenerator randomGenerator = new Random(1234);
     static final DropShadow drop = new DropShadow();
     static final int factor = 10;
     double minX,maxX,minY,maxY;
     double widthRange, heightRange;
+    private final List<IslandComponent> islandComponentList = new ArrayList<>();
+    private final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
+    private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();
 
     @Inject
     public IslandsService() {
@@ -57,7 +61,7 @@ public class IslandsService extends BasicService {
                     maxX = Math.max(data.x(),maxX);
                     maxY = Math.max(data.y(),maxY);
                     Island tmp = new Island(data.owner(),
-                        Objects.isNull(data.owner()) ? -1 : tokenStorage.getFlagIndex(data.owner()),
+                        Objects.isNull(data.owner()) ? -1 : getEmpire(data.owner()).flag(),
                         data.x(),
                         data.y(),
                         IslandType.valueOf(data.type()),
@@ -133,6 +137,42 @@ public class IslandsService extends BasicService {
     return singleConnections;
     }
 
+    public List<IslandComponent> createIslands(List<Island> list){
+        list.forEach(
+          island -> {
+              IslandComponent tmp = createIslandPaneFromDto(island,
+                app.initAndRender(new IslandComponent())
+              );
+              tmp.setLayoutX(tmp.getPosX());
+              tmp.setLayoutY(tmp.getPosY());
+              islandComponentList.add(tmp);
+              islandComponentMap.put(island.id(), tmp);
+          }
+        );
+        return Collections.unmodifiableList(islandComponentList);
+    }
+
+    public List<Line> createLines(Map<String,IslandComponent> idToComponent) {
+        Map<String, List<String>> islandConnections = getConnections();
+        List<Line> linesInMap = new ArrayList<>();
+        islandConnections.forEach((isle,list) -> {
+            double startX, startY, endX, endY;
+            IslandComponent isle1 = idToComponent.get(isle);
+            startX = isle1.getPosX() + 25;
+            startY = isle1.getPosY() + 25;
+            for (String neighbour : list) {
+                IslandComponent isle2 = idToComponent.get(neighbour);
+                endX = isle2.getPosX() + 25;
+                endY = isle2.getPosY() + 25;
+                Line tmp = new Line(startX,startY,endX,endY);
+                //todo with css? maybe this #FF7F50
+                tmp.styleProperty().set("-fx-stroke: #FF7F50; -fx-stroke-dash-array: 5 5;");
+                linesInMap.add(tmp);
+            }
+        });
+        return linesInMap;
+    }
+
     private void resetMapRange(){
         minX = 0.0;
         minY = 0.0;
@@ -140,6 +180,18 @@ public class IslandsService extends BasicService {
         maxY = 0.0;
         widthRange = 0.0;
         heightRange = 0.0;
+    }
+
+    public Map<String, IslandComponent> getComponentMap() {
+        return Collections.unmodifiableMap(this.islandComponentMap);
+    }
+
+    public void saveEmpire(String id, ReadEmpireDto empire){
+        this.empiresInGame.put(id,empire);
+    }
+
+    public ReadEmpireDto getEmpire(String id){
+        return this.empiresInGame.getOrDefault(id,null);
     }
 
     @OnDestroy

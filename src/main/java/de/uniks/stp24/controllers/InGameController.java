@@ -14,6 +14,7 @@ import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
@@ -65,8 +66,8 @@ public class InGameController extends BasicController {
     public SettingsComponent settingsComponent;
     @Inject
     IslandsService islandsService;
-    List<IslandComponent> islandComponentList = new ArrayList<>();
-    Map<String, IslandComponent> islandComponentMap = new HashMap<>();
+    List<IslandComponent> islandComponentList ;
+    Map<String, IslandComponent> islandComponentMap ;
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
@@ -190,49 +191,15 @@ public class InGameController extends BasicController {
 
         this.mapGrid.setMinSize(islandsService.getMapWidth(),
           islandsService.getMapHeight());
-        createIslands(islandsService.getListOfIslands());
-        createLines(islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
-        islandComponentList.forEach(isle -> this.mapGrid.getChildren().add(isle));
+        this.islandComponentList = islandsService.createIslands(islandsService.getListOfIslands());
+        this.islandComponentMap = islandsService.getComponentMap();
+        islandsService.createLines(this.islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
+        this.islandComponentList.forEach(isle -> {
+            isle.addEventHandler(MouseEvent.MOUSE_CLICKED,this::showInfo);
+            this.mapGrid.getChildren().add(isle);
+        });
         createButtonsStorage();
 
-    }
-
-    private List<IslandComponent> createIslands(List<Island> list){
-        list.forEach(
-          island -> {
-              IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
-                app.initAndRender(new IslandComponent())
-              );
-              tmp.setLayoutX(tmp.getPosX());
-              tmp.setLayoutY(tmp.getPosY());
-              islandComponentList.add(tmp);
-              islandComponentMap.put(island.id(), tmp);
-              tmp.addEventHandler(MouseEvent.MOUSE_CLICKED,this::showInfo);
-          }
-        );
-        return islandComponentList;
-    }
-
-    // migrate to island service?
-    private List<Line> createLines(Map<String,IslandComponent> idToComponent) {
-        Map<String, List<String>> islandConnections = islandsService.getConnections();
-        List<Line> linesInMap = new ArrayList<>();
-        islandConnections.forEach((isle,list) -> {
-          double startX, startY, endX, endY;
-          IslandComponent isle1 = idToComponent.get(isle);
-          startX = isle1.getPosX() + 25;
-          startY = isle1.getPosY() + 25;
-          for (String neighbour : list) {
-              IslandComponent isle2 = idToComponent.get(neighbour);
-              endX = isle2.getPosX() + 25;
-              endY = isle2.getPosY() + 25;
-              Line tmp = new Line(startX,startY,endX,endY);
-              //todo with css? maybe this #FF7F50
-              tmp.styleProperty().set("-fx-stroke: #FF7F50; -fx-stroke-dash-array: 5 5;");
-              linesInMap.add(tmp);
-          }
-        });
-        return linesInMap;
     }
 
 

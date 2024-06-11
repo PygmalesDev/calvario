@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -11,8 +12,10 @@
     <HBox alignment="CENTER" style="-fx-background-color: TRANSPARENT;" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
         <ScrollPane fx:id="mapPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" style="-fx-background-color: TRANSPARENT;" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
             <StackPane fx:id="zoomPane" style="-fx-background-color: TRANSPARENT;">
-                <Pane fx:id="mapGrid" styleClass="backgroundGame">
-                </Pane>
+<!--                <Group fx:id="group">-->
+                    <Pane fx:id="mapGrid" styleClass="backgroundGame">
+                    </Pane>
+<!--                </Group>-->
             </StackPane>
         </ScrollPane>
     </HBox>

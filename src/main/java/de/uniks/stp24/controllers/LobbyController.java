@@ -216,7 +216,7 @@ public class LobbyController extends BasicController {
                         if(Objects.nonNull(memberDto.empire())){
                             subscriber.subscribe(empireService.getEmpires(this.gameID), dto -> {
                                 for(ReadEmpireDto data : dto){
-                                    tokenStorage.saveFlag(data._id(), data.flag());
+                                    islandsService.saveEmpire(data._id(), data);
                                     if (data.user().equals(tokenStorage.getUserId())) {
                                         this.tokenStorage.setEmpireId(data._id());
                                         this.tokenStorage.setIsSpectator(false);

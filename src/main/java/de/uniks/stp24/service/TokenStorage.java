@@ -20,6 +20,8 @@ public class TokenStorage {
     private boolean isSpectator;
     private Map<String, Integer> flagsInGame = new HashMap<>();
     private SystemUpgrades systemPresets;
+
+    //TODO: Safe hole response u got from Server
     private Map<Resource, Integer> neededResources;
     private Map<Resource, Integer> aviableResources;
     private String[] technologies;

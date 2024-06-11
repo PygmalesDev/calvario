@@ -306,12 +306,11 @@ public class InGameController extends BasicController {
                     tokenStorage.setTechnologies(result.technologies());
                     System.out.println(tokenStorage.getAvailableResource());
                 });
-
     }
 
     private void startUpdateTask() {
         final Runnable task = this::updateAvailableResources;
-        // Schedule the task to run initially after 0 seconds, and then every 10 seconds
+        // Schedule the task to run initially after 0 seconds, and then every 5 seconds
         scheduler.scheduleAtFixedRate(task, 0, 5, TimeUnit.SECONDS);
     }
 }

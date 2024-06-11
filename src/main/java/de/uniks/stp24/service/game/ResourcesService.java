@@ -18,7 +18,7 @@ public class ResourcesService {
 
     @Inject
     public ResourcesService() {
-    }
+   }
 
 
     public ObservableList<Resource> generateResourceList(Map<String, Integer> resourceMap, ObservableList<Resource> oldResourceList){
@@ -45,7 +45,7 @@ public class ResourcesService {
         return resourceList;
     }
 
-    //TODO: YOU CANT WORK WITH "resoruces" here. Work wit <String, Integer> or List<Resource>
+    //TODO: YOU CANT WORK WITH "resoruces" here. Work with <String, Integer> or List<Resource>
     public boolean hasEnoughResources(Map<Resource, Integer> neededResources) {
         for (Map.Entry<Resource, Integer> entry : neededResources.entrySet()) {
             Resource resource = entry.getKey();
@@ -60,7 +60,6 @@ public class ResourcesService {
 
     public void upgradeIsland(){
         if(hasEnoughResources(tokenStorage.getNeededResource())){
-            updateAvailableResources();
             empireService.updateEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId(),
                     new UpdateEmpireDto(updateAvailableResources(), tokenStorage.getTechnologies(), null, null, null)); //TODO: Change later !NULL
         }

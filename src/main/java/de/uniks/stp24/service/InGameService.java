@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import org.fulib.fx.controller.Subscriber;
+import de.uniks.stp24.service.game.TimerService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -15,6 +16,8 @@ import javax.inject.Singleton;
 @Singleton
 public class InGameService {
 
+    @Inject
+    TimerService timerService;
     @Inject
     GameStatus gameStatus;
     @Inject
@@ -63,7 +66,16 @@ public class InGameService {
         }
     }
 
-    public Observable<SystemUpgrades> loadUpgradePresets(){
+    public Observable<SystemUpgrades> loadUpgradePresets() {
         return presetsApiService.getSystemUpgrades();
+
+    }
+
+    public void setTimerService(TimerService timerService) {
+        this.timerService = timerService;
+    }
+
+    public TimerService getTimerService() {
+        return timerService;
     }
 }

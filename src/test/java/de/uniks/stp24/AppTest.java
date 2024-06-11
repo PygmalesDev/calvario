@@ -1,6 +1,7 @@
 package de.uniks.stp24;
 
 
+import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
@@ -55,6 +56,8 @@ public class AppTest extends ControllerTest {
 
     @Spy
     BubbleComponent bubbleComponent;
+    @Spy
+    ClockComponent clockComponent;
 
     final Subject<Event<Game>> subject = BehaviorSubject.create();
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();

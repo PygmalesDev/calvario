@@ -8,12 +8,15 @@ import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.LobbyHostSettingsComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
+import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.ws.EventListener;
 import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.game.EmpireService;
@@ -102,6 +105,10 @@ public class InGameController extends BasicController {
     IslandsService islandsService;
     @Inject
     Subscriber subscriber;
+    @Inject
+    IslandAttributeStorage islandAttributes;
+    @Inject
+    EventListener eventListener;
 
     public IslandComponent selectedIsland;
     public Island island;
@@ -145,10 +152,12 @@ public class InGameController extends BasicController {
 
         this.subscriber.subscribe(inGameService.loadUpgradePresets(),
                 result -> {
-                    tokenStorage.setSystemPresets(result);
+                    islandAttributes.setSystemPresets(result);
                 });
 
-        startUpdateTask();
+        if(!tokenStorage.isSpectator()) {
+            createEmpireListener();
+        }
     }
 
     private void handleLanguageChanged(PropertyChangeEvent propertyChangeEvent) {
@@ -263,7 +272,6 @@ public class InGameController extends BasicController {
     }
 
     public void showOverview(Island island) {
-        updateAvailableResources();
         this.island = island;
 
         overviewContainer.setVisible(true);
@@ -294,23 +302,43 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
-    public void updateAvailableResources(){
+
+    //Updating Empire DTO
+    public void createEmpireListener() {
+        this.subscriber.subscribe(this.eventListener
+                        .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
+                event -> {
+                    islandAttributes.setEmpireDto(event.data());
+                    System.out.println(event.data());
+                },
+                error -> System.out.println("errorListener"));
+    }
+    /*
+    public void updateEmpireAttributes(){
+        this.subscriber.subscribe(this.eventListener
+                .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getGameId() + ".updated"));
+
+
+
         this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
                 result -> {
-                    Map<Resource, Integer> aviableResources = new HashMap<>();
-                    for (Map.Entry<String, Integer> entry : result.resources().entrySet()) {
-                        Resource resource = new Resource(entry.getKey(), entry.getValue(), 0); //TODO: change "changePerSeason later
-                        aviableResources.put(resource, entry.getValue());
-                    }
-                    tokenStorage.setAvailableResourcesResources(aviableResources);
-                    tokenStorage.setTechnologies(result.technologies());
-                    System.out.println(tokenStorage.getAvailableResource());
+                    islandAttributes.setEmpireDto(result);
+                    System.out.println(result.resources());
                 });
+
+
     }
 
+
+     */
+    /*
+    //TODO: Change this with event listener
     private void startUpdateTask() {
-        final Runnable task = this::updateAvailableResources;
+        final Runnable task = this::updateEmpireAttributes;
         // Schedule the task to run initially after 0 seconds, and then every 5 seconds
         scheduler.scheduleAtFixedRate(task, 0, 5, TimeUnit.SECONDS);
     }
+
+     */
+
 }

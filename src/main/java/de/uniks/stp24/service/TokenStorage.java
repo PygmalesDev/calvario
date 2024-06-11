@@ -19,11 +19,7 @@ public class TokenStorage {
     private String empireId;
     private boolean isSpectator;
     private Map<String, Integer> flagsInGame = new HashMap<>();
-    private SystemUpgrades systemPresets;
 
-    //TODO: Safe hole response u got from Server
-    private Map<Resource, Integer> neededResources;
-    private Map<Resource, Integer> aviableResources;
     private String[] technologies;
     @Inject
     public TokenStorage() {
@@ -59,35 +55,6 @@ public class TokenStorage {
 
     public void setIsSpectator(boolean isSpectator) {
         this.isSpectator = isSpectator;
-    }
-
-    public SystemUpgrades getSystemPresets(){
-        return this.systemPresets;
-    }
-    public void setSystemPresets(SystemUpgrades presets){
-        this.systemPresets = presets;
-    }
-
-    public Map<Resource, Integer> getNeededResource(){
-        return this.neededResources;
-    }
-    public void setNeededResources(Map<Resource, Integer> resources){
-        this.neededResources = resources;
-    }
-
-    public Map<Resource, Integer> getAvailableResource(){
-        return this.aviableResources;
-    }
-    public void setAvailableResourcesResources(Map<Resource, Integer> resources){
-        this.aviableResources = resources;
-    }
-
-    public String[] getTechnologies() {
-        return technologies;
-    }
-
-    public void setTechnologies(String[] tech){
-        this.technologies = tech;
     }
 
     public void saveFlag(String id, int flagIndex) {

@@ -1,7 +1,9 @@
 package de.uniks.stp24.service.game;
 
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.UpdateEmpireDto;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,9 +14,13 @@ import java.util.Map;
 
 public class ResourcesService {
     @Inject
-    TokenStorage tokenStorage;
+    IslandAttributeStorage islandAttributes;
     @Inject
     EmpireService empireService;
+    @Inject
+    TokenStorage tokenStorage;
+
+    private Map<String, Integer> neededResources;
 
     @Inject
     public ResourcesService() {
@@ -45,12 +51,12 @@ public class ResourcesService {
         return resourceList;
     }
 
-    //TODO: YOU CANT WORK WITH "resoruces" here. Work with <String, Integer> or List<Resource>
-    public boolean hasEnoughResources(Map<Resource, Integer> neededResources) {
-        for (Map.Entry<Resource, Integer> entry : neededResources.entrySet()) {
-            Resource resource = entry.getKey();
+    public boolean hasEnoughResources(Map<String, Integer> neededResources) {
+        this.neededResources = neededResources;
+        for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
+            String res = entry.getKey();
             int neededAmount = entry.getValue();
-            int availableAmount = tokenStorage.getAvailableResource().get(resource);
+            int availableAmount = islandAttributes.getAvailableResources().get(res);
             if (availableAmount < neededAmount) {
                 return false;
             }
@@ -58,29 +64,25 @@ public class ResourcesService {
         return true;
     }
 
-    public void upgradeIsland(){
-        if(hasEnoughResources(tokenStorage.getNeededResource())){
-            empireService.updateEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId(),
-                    new UpdateEmpireDto(updateAvailableResources(), tokenStorage.getTechnologies(), null, null, null)); //TODO: Change later !NULL
-        }
-    }
-
-    //TODO: YOU CANT WORK WITH "resoruces" here. Work wit <String, Integer> or List<Resource>
-    public Map<String, Integer> updateAvailableResources(){
-        Map<String,Integer> newResourceList = new HashMap<>();
-        for (Map.Entry<Resource, Integer> entry : tokenStorage.getNeededResource().entrySet()) {
-            Resource resource = entry.getKey();
+    public Map<String, Integer> updateAvailableResources(Map<String, Integer> neededResources){
+        for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
+            String res = entry.getKey();
             int neededAmount = entry.getValue();
-            int availableAmount = tokenStorage.getAvailableResource().get(resource);
+            int availableAmount = islandAttributes.getAvailableResources().get(res);
             int newAmount = availableAmount - neededAmount;
-            tokenStorage.getAvailableResource().put(resource, newAmount);
+            islandAttributes.getAvailableResources().put(res, newAmount);
         }
-
-        for (Map.Entry<Resource, Integer> entry : tokenStorage.getNeededResource().entrySet()) {
-            newResourceList.put(entry.getKey().resourceID(), entry.getValue());
-        }
-
-        return newResourceList;
+        return islandAttributes.getAvailableResources();
     }
+
+
+    public void upgradeIsland(){
+        if(hasEnoughResources(neededResources)){
+            empireService.updateEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId(),
+                    new UpdateEmpireDto(updateAvailableResources(neededResources), islandAttributes.getTech(), null, null, null));
+        }
+    }
+
+    //TODO: Do EventListener on hasEnoughResources. If true setz button Grün und Klickbar. If false setz button Rot nicht clickbar.
 
 }

@@ -75,8 +75,8 @@ public class OverviewSitesComponent extends AnchorPane {
 
     public void showUpgrades() {
         inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewUpgradeComponent);
-        tokenStorage.setNeededResources(inGameController.overviewUpgradeComponent.setNeededResources());
         inGameController.overviewUpgradeComponent.setUpgradeButton();
+        inGameController.overviewUpgradeComponent.setNeededResources();
     }
 
     public void showBuildings() {

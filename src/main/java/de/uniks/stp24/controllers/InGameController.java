@@ -8,8 +8,10 @@ import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.LobbyHostSettingsComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
+import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
+import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.game.IslandsService;
@@ -39,10 +41,10 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Title("CALVARIO")
 @Controller
@@ -107,6 +109,8 @@ public class InGameController extends BasicController {
     boolean pause = false;
     List<IslandComponent> islandComponentList = new ArrayList<>();
 
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
     // todo remove this variables if not needed
     String gameID;
     String empireID;
@@ -141,10 +145,10 @@ public class InGameController extends BasicController {
 
         this.subscriber.subscribe(inGameService.loadUpgradePresets(),
                 result -> {
-                    System.out.println(result);
                     tokenStorage.setSystemPresets(result);
                 });
 
+        startUpdateTask();
     }
 
     private void handleLanguageChanged(PropertyChangeEvent propertyChangeEvent) {
@@ -259,6 +263,7 @@ public class InGameController extends BasicController {
     }
 
     public void showOverview(Island island) {
+        updateAvailableResources();
         this.island = island;
 
         overviewContainer.setVisible(true);
@@ -268,6 +273,7 @@ public class InGameController extends BasicController {
         inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
 
         overviewSitesComponent.setOverviewSites();
+
     }
 
     public void showCoordinates(MouseEvent mouseEvent) {
@@ -286,5 +292,26 @@ public class InGameController extends BasicController {
     @OnKey(code = KeyCode.S)
     public void showStorage() {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
+    }
+
+    public void updateAvailableResources(){
+        this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
+                result -> {
+                    Map<Resource, Integer> aviableResources = new HashMap<>();
+                    for (Map.Entry<String, Integer> entry : result.resources().entrySet()) {
+                        Resource resource = new Resource(entry.getKey(), entry.getValue(), 0); //TODO: change "changePerSeason later
+                        aviableResources.put(resource, entry.getValue());
+                    }
+                    tokenStorage.setAvailableResourcesResources(aviableResources);
+                    tokenStorage.setTechnologies(result.technologies());
+                    System.out.println(tokenStorage.getAvailableResource());
+                });
+
+    }
+
+    private void startUpdateTask() {
+        final Runnable task = this::updateAvailableResources;
+        // Schedule the task to run initially after 0 seconds, and then every 10 seconds
+        scheduler.scheduleAtFixedRate(task, 0, 5, TimeUnit.SECONDS);
     }
 }

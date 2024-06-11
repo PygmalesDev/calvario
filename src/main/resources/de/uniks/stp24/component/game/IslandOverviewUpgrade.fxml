@@ -80,7 +80,7 @@
       </HBox>
    </VBox>
    <Pane fx:id="confirmUpgrade" layoutX="400.0" layoutY="509.0" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: #000000; -fx-background-radius: 30;" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="30.0">
-      <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fitHeight="60.0" fitWidth="60.0" onMouseClicked="#upgradeIsland" pickOnBounds="true" preserveRatio="true" />
    </Pane>
    <Pane layoutX="372.0" layoutY="16.0" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #ff0000;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0" />
    <Pane layoutX="6.0" layoutY="16.0" onMouseClicked="#goBack" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #acac13;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="16.0" />

@@ -50,7 +50,6 @@ public class OverviewUpgradeComponent extends AnchorPane {
     }
 
     public void setUpgradeButton(){
-        System.out.println(tokenStorage.getNeededResource());
         if(tokenStorage.getNeededResource() != null) {
             if (resourcesService.hasEnoughResources(tokenStorage.getNeededResource())) {
                 confirmUpgrade.setStyle("-fx-background-color: green;");
@@ -92,7 +91,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
                 for (Map.Entry<String, Integer> entry : tokenStorage.getSystemPresets().colonized().cost().entrySet()) {
                     Resource resource = new Resource(entry.getKey(), entry.getValue(), 0); //TODO: Change "changePerSeason" later
                     neededResources.put(resource, resource.count());
-                    tokenStorage.setNeededResource(neededResources);
+                    tokenStorage.setNeededResources(neededResources);
                     resTextList.get(i).setText(entry.getKey() + " " + entry.getValue());
                     i += 1;
                 }
@@ -101,7 +100,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
                 for (Map.Entry<String, Integer> entry : tokenStorage.getSystemPresets().upgraded().cost().entrySet()) {
                     Resource resource = new Resource(entry.getKey(), entry.getValue(), 0); //TODO: Change "changePerSeason" later
                     neededResources.put(resource, resource.count());
-                    tokenStorage.setNeededResource(neededResources);
+                    tokenStorage.setNeededResources(neededResources);
                     resTextList.get(i).setText(entry.getKey() + " " + entry.getValue());
                     i += 1;
                 }
@@ -110,12 +109,16 @@ public class OverviewUpgradeComponent extends AnchorPane {
                 for (Map.Entry<String, Integer> entry : tokenStorage.getSystemPresets().developed().cost().entrySet()) {
                     Resource resource = new Resource(entry.getKey(), entry.getValue(), 0); //TODO: Change "changePerSeason" later
                     neededResources.put(resource, resource.count());
-                    tokenStorage.setNeededResource(neededResources);
+                    tokenStorage.setNeededResources(neededResources);
                     resTextList.get(i).setText(entry.getKey() + " " + entry.getValue());
                     i += 1;
                 }
                 break;
         }
         return neededResources;
+    }
+
+    public void upgradeIsland(){
+        resourcesService.upgradeIsland();
     }
 }

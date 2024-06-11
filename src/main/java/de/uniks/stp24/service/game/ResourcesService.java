@@ -1,18 +1,20 @@
 package de.uniks.stp24.service.game;
 
+import de.uniks.stp24.dto.UpdateEmpireDto;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ResourcesService {
     @Inject
     TokenStorage tokenStorage;
-
-    Map<Resource, Integer> availableResources;
+    @Inject
+    EmpireService empireService;
 
     @Inject
     public ResourcesService() {
@@ -43,16 +45,12 @@ public class ResourcesService {
         return resourceList;
     }
 
-
+    //TODO: YOU CANT WORK WITH "resoruces" here. Work wit <String, Integer> or List<Resource>
     public boolean hasEnoughResources(Map<Resource, Integer> neededResources) {
-        //TODO: Remove later
-        availableResources = neededResources;
-        //TODO: Remove later
-
         for (Map.Entry<Resource, Integer> entry : neededResources.entrySet()) {
             Resource resource = entry.getKey();
             int neededAmount = entry.getValue();
-            int availableAmount = availableResources.getOrDefault(resource, 0);
+            int availableAmount = tokenStorage.getAvailableResource().get(resource);
             if (availableAmount < neededAmount) {
                 return false;
             }
@@ -61,8 +59,29 @@ public class ResourcesService {
     }
 
     public void upgradeIsland(){
-        //TODO: Sende Upgrade an den Server
-        hasEnoughResources(tokenStorage.getNeededResource());
+        if(hasEnoughResources(tokenStorage.getNeededResource())){
+            updateAvailableResources();
+            empireService.updateEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId(),
+                    new UpdateEmpireDto(updateAvailableResources(), tokenStorage.getTechnologies(), null, null, null)); //TODO: Change later !NULL
+        }
+    }
+
+    //TODO: YOU CANT WORK WITH "resoruces" here. Work wit <String, Integer> or List<Resource>
+    public Map<String, Integer> updateAvailableResources(){
+        Map<String,Integer> newResourceList = new HashMap<>();
+        for (Map.Entry<Resource, Integer> entry : tokenStorage.getNeededResource().entrySet()) {
+            Resource resource = entry.getKey();
+            int neededAmount = entry.getValue();
+            int availableAmount = tokenStorage.getAvailableResource().get(resource);
+            int newAmount = availableAmount - neededAmount;
+            tokenStorage.getAvailableResource().put(resource, newAmount);
+        }
+
+        for (Map.Entry<Resource, Integer> entry : tokenStorage.getNeededResource().entrySet()) {
+            newResourceList.put(entry.getKey().resourceID(), entry.getValue());
+        }
+
+        return newResourceList;
     }
 
 }

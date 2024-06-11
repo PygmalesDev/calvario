@@ -11,6 +11,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnRender;
@@ -88,5 +90,24 @@ public class SitePropertiesComponent extends AnchorPane {
         subscriber.subscribe(resourcesService.destroySite(tokenStorage.getGameId(), island, siteType), result -> {
             tokenStorage.setIsland(islandsService.updateIsland(result));
         });
+    }
+
+    public void displayCostsOfSite(){
+        
+    }
+}
+
+class CustomGridCell extends GridCell<Resource> {
+    @Override
+    protected void updateItem(Resource item, boolean empty) {
+        super.updateItem(item, empty);
+        if (empty || item == null) {
+            setText(null);
+            setGraphic(null);
+        } else {
+            setText(String.valueOf(item.count()));
+            setTextAlignment(TextAlignment.CENTER);
+
+        }
     }
 }

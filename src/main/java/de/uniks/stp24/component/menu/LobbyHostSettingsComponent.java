@@ -95,7 +95,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
                         boolean tooManyPlayer = countEmpires > this.maxMember;
                         if(tooManyPlayer){
                             bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.too.many.players"));
-                        }else{
+                        } else {
                             bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
                         }
                         this.startJourneyButton.setDisable(!allReady || tooManyPlayer);

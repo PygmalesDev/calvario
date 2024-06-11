@@ -120,58 +120,58 @@ public class LobbyController extends BasicController {
     @OnInit
     void init() {
         this.subscriber.subscribe(this.gamesService.getGame(this.gameID),
-          game -> {
-            this.game = game;
-            this.gameID = game._id();
-            this.asHost = game.owner().equals(this.tokenStorage.getUserId());
-            // Todo: add maxMember to Game Model -> this.maxMember = game.maxMember();
-              this.maxMember = 2;
-            this.lobbyHostSettingsComponent.setMaxMember(this.maxMember);
-            this.lobbyHostSettingsComponent.setBubbleComponent(this.bubbleComponent);
+                game -> {
+                    this.game = game;
+                    this.gameID = game._id();
+                    this.asHost = game.owner().equals(this.tokenStorage.getUserId());
+                    // Todo: add maxMember to Game Model -> this.maxMember = game.maxMember()
+                    this.maxMember = 2;
+                    this.lobbyHostSettingsComponent.setMaxMember(this.maxMember);
+                    this.lobbyHostSettingsComponent.setBubbleComponent(this.bubbleComponent);
 
-            this.enterGameComponent.setGameID(this.gameID);
-            this.lobbySettingsComponent.setGameID(this.gameID);
-            this.lobbyHostSettingsComponent.setGameID(this.gameID);
+                    this.enterGameComponent.setGameID(this.gameID);
+                    this.lobbySettingsComponent.setGameID(this.gameID);
+                    this.lobbyHostSettingsComponent.setGameID(this.gameID);
 
-            this.enterGameComponent.errorMessage.textProperty().addListener(((observable, oldValue, newValue) -> {
-                this.bubbleComponent.setErrorMode(true);
-                this.bubbleComponent.setCaptainText(newValue);
-            }));
-            this.gameNameField.setText(this.game.name());
-            this.createUserListListener();
-            this.createGameDeletedListener();
-            this.lobbyService.loadPlayers(this.gameID).subscribe(dto -> {
-                Arrays.stream(dto).forEach(data -> {
-                    this.addUserToList(data.user(), data);
-                    if (data.user().equals(this.game.owner()))
-                        this.isHostReady = data.ready();
-                    if (data.user().equals(this.tokenStorage.getUserId())){
-                            this.lobbySettingsComponent.setReadyButton(data.ready());
-                            this.lobbyHostSettingsComponent.setReadyButton(data.ready());
-                        }
-                });
+                    this.enterGameComponent.errorMessage.textProperty().addListener(((observable, oldValue, newValue) -> {
+                        this.bubbleComponent.setErrorMode(true);
+                        this.bubbleComponent.setCaptainText(newValue);
+                    }));
+                    this.gameNameField.setText(this.game.name());
+                    this.createUserListListener();
+                    this.createGameDeletedListener();
+                    this.lobbyService.loadPlayers(this.gameID).subscribe(dto -> {
+                                Arrays.stream(dto).forEach(data -> {
+                                    this.addUserToList(data.user(), data);
+                                    if (data.user().equals(this.game.owner()))
+                                        this.isHostReady = data.ready();
+                                    if (data.user().equals(this.tokenStorage.getUserId())) {
+                                        this.lobbySettingsComponent.setReadyButton(data.ready());
+                                        this.lobbyHostSettingsComponent.setReadyButton(data.ready());
+                                    }
+                                });
 
-                // check if game can be started
-                boolean allReady = Arrays.stream(dto)
-                        .map(MemberDto::ready)
-                        .reduce(Boolean::logicalAnd)
-                        .orElse(true);
-                int countEmpires = (int) Arrays.stream(dto)
-                        .filter(member -> member.empire() != null)
-                        .count();
-                boolean tooManyPlayer = countEmpires > this.maxMember;
-                if(tooManyPlayer){
-                    bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.too.many.players"));
-                }
-                this.lobbyHostSettingsComponent.startJourneyButton.setDisable(!allReady || tooManyPlayer);
+                                // check if game can be started
+                                boolean allReady = Arrays.stream(dto)
+                                        .map(MemberDto::ready)
+                                        .reduce(Boolean::logicalAnd)
+                                        .orElse(true);
+                                int countEmpires = (int) Arrays.stream(dto)
+                                        .filter(member -> member.empire() != null)
+                                        .count();
+                                boolean tooManyPlayer = countEmpires > this.maxMember;
+                                if (tooManyPlayer) {
+                                    bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.too.many.players"));
+                                }
+                                this.lobbyHostSettingsComponent.startJourneyButton.setDisable(!allReady || tooManyPlayer);
 
-                this.sortMemberList();
-            },
-              this::errorMsg);
-            this.createGameStartedListener();
-            this.lobbyHostSettingsComponent.createCheckPlayerReadinessListener();
-            },
-          this::errorMsg);
+                                this.sortMemberList();
+                            },
+                            this::errorMsg);
+                    this.createGameStartedListener();
+                    this.lobbyHostSettingsComponent.createCheckPlayerReadinessListener();
+                },
+                this::errorMsg);
     }
 
     /**
@@ -179,13 +179,13 @@ public class LobbyController extends BasicController {
      */
     private void createGameDeletedListener() {
         this.subscriber.subscribe(this.eventListener
-                .listen("games." + this.gameID + ".deleted", Game.class),
-          event -> {
-            this.lobbyMessagePane.setVisible(true);
-            this.lobbyMessageElement.setVisible(true);
-            this.messageText.setText(resources.getString("lobby.has.been.deleted"));
-          },
-          this::errorMsg);
+                        .listen("games." + this.gameID + ".deleted", Game.class),
+                event -> {
+                    this.lobbyMessagePane.setVisible(true);
+                    this.lobbyMessageElement.setVisible(true);
+                    this.messageText.setText(resources.getString("lobby.has.been.deleted"));
+                },
+                this::errorMsg);
     }
 
     /**
@@ -193,26 +193,26 @@ public class LobbyController extends BasicController {
      */
     private void createUserListListener() {
         this.subscriber.subscribe(this.eventListener
-                .listen("games." + this.gameID + ".members.*.*", MemberDto.class),
-          event -> {
-            String id = event.data().user();
-            switch (event.suffix()) {
-                case "created" -> {
-                    if (this.tokenStorage.getUserId().equals(id)) {
-                        this.lobbyElement.getChildren().remove(this.enterGameComponent);
-                        this.lobbyElement.getChildren().add(this.lobbySettingsComponent);
-                        this.bubbleComponent.setErrorMode(false);
-                        this.bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
+                        .listen("games." + this.gameID + ".members.*.*", MemberDto.class),
+                event -> {
+                    String id = event.data().user();
+                    switch (event.suffix()) {
+                        case "created" -> {
+                            if (this.tokenStorage.getUserId().equals(id)) {
+                                this.lobbyElement.getChildren().remove(this.enterGameComponent);
+                                this.lobbyElement.getChildren().add(this.lobbySettingsComponent);
+                                this.bubbleComponent.setErrorMode(false);
+                                this.bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
+                            }
+                            this.addUserToList(id, event.data());
+                        }
+                        case "updated" -> this.replaceUserInList(id, event.data());
+                        case "deleted" -> this.removeUserFromList(id);
                     }
-                    this.addUserToList(id, event.data());
-                }
-                case "updated" -> this.replaceUserInList(id, event.data());
-                case "deleted" -> this.removeUserFromList(id);
-            }
-            this.sortMemberList();
-        },
-          this::errorMsg
-          );
+                    this.sortMemberList();
+                },
+                this::errorMsg
+        );
     }
 
     /**
@@ -222,30 +222,30 @@ public class LobbyController extends BasicController {
      * island information (IslandsService) must be retrieved (in islandsService)
      * change to game screen occurs in islandsService
      */
-    private void createGameStartedListener(){
+    private void createGameStartedListener() {
         this.subscriber.subscribe(this.eventListener.listen("games." + this.gameID + ".updated", Game.class),
-             event -> {
-                buttonsSetDisability(true);
-                if(event.data().started()) {
-                    subscriber.subscribe(lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
-                        memberDto -> this.joinGameHelper.joinGame(this.gameID),
-                        this::errorMsg);
-                }
-            }, error -> {
-                buttonsSetDisability(false);
-                errorMsg(error);
-            });
+                event -> {
+                    buttonsSetDisability(true);
+                    if (event.data().started()) {
+                        subscriber.subscribe(lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
+                                memberDto -> this.joinGameHelper.joinGame(this.gameID),
+                                this::errorMsg);
+                    }
+                }, error -> {
+                    buttonsSetDisability(false);
+                    errorMsg(error);
+                });
     }
 
-    private void buttonsSetDisability(boolean disable){
-        for(Button button : this.lobbyButtons){
+    private void buttonsSetDisability(boolean disable) {
+        for (Button button : this.lobbyButtons) {
             button.setDisable(disable);
         }
     }
 
     @OnRender
-    void getLobbyButtons(){
-        this.lobbyButtons =  new Button[]{
+    void getLobbyButtons() {
+        this.lobbyButtons = new Button[]{
                 this.lobbyHostSettingsComponent.startJourneyButton,
                 this.lobbyHostSettingsComponent.selectEmpireButton,
                 this.lobbySettingsComponent.selectEmpireButton,
@@ -273,26 +273,28 @@ public class LobbyController extends BasicController {
      * Displays new users on the member list.
      * If a user is a host of the game, a (Host) suffix will be added to their nickname.
      * Also displays if the player is ready or not.
+     *
      * @param userID ID of the player
-     * @param data member data containing their readiness state
+     * @param data   member data containing their readiness state
      */
     private void addUserToList(String userID, MemberDto data) {
         this.subscriber.subscribe(this.userApiService.getUser(userID), user -> {
-            String suffix = "";
-            if (userID.equals(this.game.owner())) suffix += " (Host)";
-            if (Objects.isNull(data.empire())) suffix += " (Spectator)";
+                    String suffix = "";
+                    if (userID.equals(this.game.owner())) suffix += " (Host)";
+                    if (Objects.isNull(data.empire())) suffix += " (Spectator)";
 
-            this.users.add(new MemberUser(new User(user.name() + suffix,
-                    user._id(), user.avatar(), user.createdAt(), user.updatedAt()
-            ), data.empire(), data.ready(), this.game, this.asHost));
-        },
-          this::errorMsg);
+                    this.users.add(new MemberUser(new User(user.name() + suffix,
+                            user._id(), user.avatar(), user.createdAt(), user.updatedAt()
+                    ), data.empire(), data.ready(), this.game, this.asHost));
+                },
+                this::errorMsg);
     }
 
     /**
      * Updates the readiness state of the player.
+     *
      * @param userID ID of the player
-     * @param data member data containing their readiness state
+     * @param data   member data containing their readiness state
      */
     private void replaceUserInList(String userID, MemberDto data) {
         if (data.user().equals(this.game.owner()))
@@ -321,6 +323,7 @@ public class LobbyController extends BasicController {
 
     /**
      * Removes a user from the member list if they leave the lobby.
+     *
      * @param userID ID of the player
      */
     private void removeUserFromList(String userID) {
@@ -341,18 +344,18 @@ public class LobbyController extends BasicController {
      */
     private void setStartingLobbyElement() {
         this.subscriber.subscribe(this.lobbyService.loadPlayers(this.gameID), dtos -> {
-            if (this.tokenStorage.getUserId().equals(this.game.owner())) {
-                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
-                this.lobbyElement.getChildren().add(this.lobbyHostSettingsComponent);
-            } else if (Arrays.stream(dtos).map(MemberDto::user).anyMatch(id -> id.equals(this.tokenStorage.getUserId()))) {
-                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
-                this.lobbyElement.getChildren().add(this.lobbySettingsComponent);
-            } else {
-                bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.password"));
-                this.lobbyElement.getChildren().add(this.enterGameComponent);
-            }
-        },
-          this::errorMsg);
+                    if (this.tokenStorage.getUserId().equals(this.game.owner())) {
+                        bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
+                        this.lobbyElement.getChildren().add(this.lobbyHostSettingsComponent);
+                    } else if (Arrays.stream(dtos).map(MemberDto::user).anyMatch(id -> id.equals(this.tokenStorage.getUserId()))) {
+                        bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
+                        this.lobbyElement.getChildren().add(this.lobbySettingsComponent);
+                    } else {
+                        bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.password"));
+                        this.lobbyElement.getChildren().add(this.enterGameComponent);
+                    }
+                },
+                this::errorMsg);
     }
 
     /**

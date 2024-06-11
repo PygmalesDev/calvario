@@ -25,9 +25,11 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.*;
+
 import static de.uniks.stp24.service.Constants.empireTemplatesEnglish;
 import static de.uniks.stp24.service.Constants.empireTemplatesGerman;
 
@@ -92,7 +94,7 @@ public class GangCreationController extends BasicController {
     int typeIndex = 0;
 
     Random rand = new Random();
-    
+
     ArrayList<Image> flagsList = new ArrayList<>();
     ArrayList<Image> portraitsList = new ArrayList<>();
     ArrayList<String> colorsList = new ArrayList<>();
@@ -141,9 +143,9 @@ public class GangCreationController extends BasicController {
 
     @OnInit
     public void init() {
-        if(prefService.getLocale().equals(Locale.ENGLISH)){
+        if (prefService.getLocale().equals(Locale.ENGLISH)) {
             empireTemplates = empireTemplatesEnglish;
-        }else{
+        } else {
             empireTemplates = empireTemplatesGerman;
         }
 
@@ -178,15 +180,15 @@ public class GangCreationController extends BasicController {
                 Gang gang = gangComp.gang();
                 creationBox.setVisible(true);
                 gangNameText.setText(gang.name());
-                flagImageIndex = gang.flagIndex()%flagsList.size();
+                flagImageIndex = gang.flagIndex() % flagsList.size();
                 flagImage.setImage(flagsList.get(flagImageIndex));
-                portraitImageIndex = gang.portraitIndex()%portraitsList.size();
+                portraitImageIndex = gang.portraitIndex() % portraitsList.size();
                 portraitImage.setImage(portraitsList.get(portraitImageIndex));
                 gangDescriptionText.setText(gang.description());
                 createButton.setVisible(false);
                 editButton.setVisible(true);
                 showDeletePaneButton.setVisible(true);
-                colorIndex = gang.colorIndex()%colorsList.size();
+                colorIndex = gang.colorIndex() % colorsList.size();
                 colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
             }
         });
@@ -195,25 +197,26 @@ public class GangCreationController extends BasicController {
     public void back() {
         GangElement gangElement = this.gangsListView.getSelectionModel().getSelectedItem();
         this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
-            Empire empire = null;
-            if (Objects.nonNull(gangElement)) empire = new Empire(gangElement.gang().name(), gangElement.gang().description(), gangElement.gang().color(),
-                    gangElement.gang().flagIndex()%this.flagsList.size(), gangElement.gang().portraitIndex()%this.portraitsList.size(),
-                    new String[]{},"uninhabitable_0");
-            this.subscriber.subscribe(this.lobbyService.updateMember(
-                    this.gameID, result.user(), result.ready(), empire), result2 ->
-                        app.show("/lobby", Map.of("gameid", this.gameID)));
-
-        },
-          error -> {}
+                    Empire empire = null;
+                    if (Objects.nonNull(gangElement))
+                        empire = new Empire(gangElement.gang().name(), gangElement.gang().description(), gangElement.gang().color(),
+                                gangElement.gang().flagIndex() % this.flagsList.size(), gangElement.gang().portraitIndex() % this.portraitsList.size(),
+                                new String[]{}, "uninhabitable_0");
+                    this.subscriber.subscribe(this.lobbyService.updateMember(
+                            this.gameID, result.user(), result.ready(), empire), result2 ->
+                            app.show("/lobby", Map.of("gameid", this.gameID)));
+                },
+                error -> {
+                }
         );
     }
 
     public Gang getInputGang() {
         String gangName = gangNameText.getText();
         if (gangNameText.getText().isEmpty()) gangName = "Buccaneers";
-        flagImageIndex = flagImageIndex%flagsList.size();
-        portraitImageIndex = portraitImageIndex%portraitsList.size();
-        return new Gang(gangName, flagImageIndex, portraitImageIndex, gangDescriptionText.getText(), colorsList.get(colorIndex), colorIndex%colorsList.size());
+        flagImageIndex = flagImageIndex % flagsList.size();
+        portraitImageIndex = portraitImageIndex % portraitsList.size();
+        return new Gang(gangName, flagImageIndex, portraitImageIndex, gangDescriptionText.getText(), colorsList.get(colorIndex), colorIndex % colorsList.size());
     }
 
     public void edit() {

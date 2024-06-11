@@ -47,10 +47,11 @@ public class PauseMenuComponent extends AnchorPane {
     }
 
     public void resume() {
-        if(inGameService.getPaused())inGameService.setPaused(false);
+        if (inGameService.getPaused()) inGameService.setPaused(false);
     }
 
-    public void settings() {inGameService.setShowSettings(false);
+    public void settings() {
+        inGameService.setShowSettings(false);
     }
 
     @OnKey(code = KeyCode.Q)
@@ -58,6 +59,6 @@ public class PauseMenuComponent extends AnchorPane {
         tokenStorage.setGameId(null);
         tokenStorage.setEmpireId(null);
         tokenStorage.clearFlags();
-        if(inGameService.getPaused()) app.show("/browseGames");
+        if (inGameService.getPaused()) app.show("/browseGames");
     }
 }

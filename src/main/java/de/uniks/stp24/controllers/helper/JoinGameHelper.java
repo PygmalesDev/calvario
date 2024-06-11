@@ -31,30 +31,31 @@ public class JoinGameHelper extends BasicController {
     IslandsService islandsService;
 
     @Inject
-    public JoinGameHelper(){
+    public JoinGameHelper() {
     }
 
     /**
      * Go through all empires of the game and save the empireId and gameId for the user
      * If there is no empire which belongs to the user, the user is a spectator.
      */
-    public void joinGame(String gameId){
-            subscriber.subscribe(empireService.getEmpires(gameId), dto -> {
-                for(ReadEmpireDto data : dto){
-                    tokenStorage.saveFlag(data._id(), data.flag());
-                    if (data.user().equals(tokenStorage.getUserId())) {
-                        startGame(gameId, data._id(),  false);
-                    }
+    public void joinGame(String gameId) {
+        subscriber.subscribe(empireService.getEmpires(gameId), dto -> {
+            for (ReadEmpireDto data : dto) {
+                tokenStorage.saveFlag(data._id(), data.flag());
+                if (data.user().equals(tokenStorage.getUserId())) {
+                    startGame(gameId, data._id(), false);
                 }
-                System.out.println("before spectator: " + tokenStorage.getEmpireId());
-                if(tokenStorage.getEmpireId() == null) {
-                    startGame(gameId, null, true);
-                }
-                islandsService.retrieveIslands(gameId);
-            }, error -> {});
+            }
+            System.out.println("before spectator: " + tokenStorage.getEmpireId());
+            if (tokenStorage.getEmpireId() == null) {
+                startGame(gameId, null, true);
+            }
+            islandsService.retrieveIslands(gameId);
+        }, error -> {
+        });
     }
 
-    private void startGame(String gameId,String empireId, boolean isSpectator){
+    private void startGame(String gameId, String empireId, boolean isSpectator) {
         this.tokenStorage.setGameId(gameId);
         this.tokenStorage.setEmpireId(empireId);
         this.tokenStorage.setIsSpectator(isSpectator);
@@ -65,7 +66,7 @@ public class JoinGameHelper extends BasicController {
     }
 
     @OnDestroy
-    public void destroy(){
+    public void destroy() {
         this.subscriber.dispose();
     }
 }

@@ -36,6 +36,7 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.constructs.listview.ComponentListCell;
+
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Comparator;
@@ -116,7 +117,7 @@ BrowseGameController extends BasicController {
     Provider<GameComponent> gameComponentProvider = () -> new GameComponent(this.bubbleComponent, this.browseGameService, this.editGameService, this.tokenStorage, this.resources);
 
     @Inject
-    public BrowseGameController(){
+    public BrowseGameController() {
     }
 
     // the fxml has no containers (text, label) for errors;
@@ -135,7 +136,8 @@ BrowseGameController extends BasicController {
         this.searchLine.textProperty().addListener((observable, oldValue, newValue) -> {
             this.gameList.scrollTo(0);
             if (newValue.isEmpty()) sortNewGamesOnTop();
-            else this.games.sort(Comparator.comparing(game -> !game.name().toLowerCase().contains(newValue.toLowerCase())));
+            else
+                this.games.sort(Comparator.comparing(game -> !game.name().toLowerCase().contains(newValue.toLowerCase())));
         });
     }
 
@@ -157,30 +159,30 @@ BrowseGameController extends BasicController {
         browseGameService = (browseGameService == null) ? new BrowseGameService() : browseGameService;
         browseGameService.resetSelectedGame();
         subscriber.subscribe(gamesApiService.findAll(),
-          gameList -> Platform.runLater(() -> {
-                  games.setAll(gameList);
-                  editGameService.setGamesList(games);
-                  createGameService.setGamesList(games);
-                  this.sortNewGamesOnTop();
-              }),
-          error -> {
-            bubbleComponent.setErrorMode(true);
-            bubbleComponent.setCaptainText(getErrorInfoText(error));
-        }
-          );
+                gameList -> Platform.runLater(() -> {
+                    games.setAll(gameList);
+                    editGameService.setGamesList(games);
+                    createGameService.setGamesList(games);
+                    this.sortNewGamesOnTop();
+                }),
+                error -> {
+                    bubbleComponent.setErrorMode(true);
+                    bubbleComponent.setCaptainText(getErrorInfoText(error));
+                }
+        );
 
         // Listener for updating list of games if games are created, deleted or updated
         subscriber.subscribe(eventListener.listen("games.*.*", Game.class),
-            event -> Platform.runLater(() -> {
-                switch (event.suffix()) {
-                    case "created" -> games.add(event.data());
-                    case "update" -> games.replaceAll(g -> g._id().equals(event.data()._id()) ? event.data() : g);
-                    case "deleted" -> games.removeIf(g -> g._id().equals(event.data()._id()));
-                }
-                this.sortNewGamesOnTop();
-            }),
-            error -> this.textInfo.setText(getErrorInfoText(error))
-            );
+                event -> Platform.runLater(() -> {
+                    switch (event.suffix()) {
+                        case "created" -> games.add(event.data());
+                        case "update" -> games.replaceAll(g -> g._id().equals(event.data()._id()) ? event.data() : g);
+                        case "deleted" -> games.removeIf(g -> g._id().equals(event.data()._id()));
+                    }
+                    this.sortNewGamesOnTop();
+                }),
+                error -> this.textInfo.setText(getErrorInfoText(error))
+        );
         this.controlResponses = responseConstants.respGetGame;
 
     }
@@ -198,19 +200,19 @@ BrowseGameController extends BasicController {
     }
 
     @OnRender
-    public void changeDeleteButtonView(){
+    public void changeDeleteButtonView() {
         // delete Button has red text and icon when selected and the captain says something different
-        this.del_game_b.styleProperty().bind(Bindings.createStringBinding(()->{
-            if(deleteWarningIsInvisible.get()) {
+        this.del_game_b.styleProperty().bind(Bindings.createStringBinding(() -> {
+            if (deleteWarningIsInvisible.get()) {
                 this.deleteIconImageView.setImage(deleteIconBlackImage);
                 bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.which.game"));
                 return "-fx-text-fill: Black";
-            }else {
+            } else {
                 this.deleteIconImageView.setImage(deleteIconRedImage);
                 bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.whiping.off.the.map"));
                 return "-fx-text-fill: #CF2A27";
             }
-        },this.deleteWarningIsInvisible));
+        }, this.deleteWarningIsInvisible));
     }
 
     /*
@@ -227,7 +229,7 @@ BrowseGameController extends BasicController {
     }
 
     public void editGame() {
-        if(browseGameService.checkMyGame()) {
+        if (browseGameService.checkMyGame()) {
             app.show("/editgame");
         }
     }
@@ -238,14 +240,15 @@ BrowseGameController extends BasicController {
 
     @OnKey(code = KeyCode.SPACE)
     public void loadGame() {
-        if(browseGameService.getGame() != null) {
-            if(browseGameService.getGame().started()) {
+        if (browseGameService.getGame() != null) {
+            if (browseGameService.getGame().started()) {
                 subscriber.subscribe(lobbyService.getMember(browseGameService.getGame()._id(), tokenStorage.getUserId()),
-                        memberDto -> { joinGameHelper.joinGame(browseGameService.getGame()._id());
-                        }, error ->{
+                        memberDto -> {
+                            joinGameHelper.joinGame(browseGameService.getGame()._id());
+                        }, error -> {
                             bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.game.started"));
                         });
-            }else {
+            } else {
                 app.show("/lobby", Map.of("gameid", browseGameService.getGame()._id()));
             }
         }

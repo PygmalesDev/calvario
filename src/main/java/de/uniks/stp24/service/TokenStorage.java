@@ -1,5 +1,9 @@
 package de.uniks.stp24.service;
 
+import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.model.SystemUpgrades;
+import de.uniks.stp24.model.UpgradeStatus;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.HashMap;
@@ -15,6 +19,8 @@ public class TokenStorage {
     private String empireId;
     private boolean isSpectator;
     private Map<String, Integer> flagsInGame = new HashMap<>();
+    private SystemUpgrades systemPresets;
+    private Map<Resource, Integer> neededResources;
     @Inject
     public TokenStorage() {
     }
@@ -49,6 +55,20 @@ public class TokenStorage {
 
     public void setIsSpectator(boolean isSpectator) {
         this.isSpectator = isSpectator;
+    }
+
+    public SystemUpgrades getSystemPresets(){
+        return this.systemPresets;
+    }
+    public void setSystemPresets(SystemUpgrades presets){
+        this.systemPresets = presets;
+    }
+
+    public Map<Resource, Integer> getNeededResource(){
+        return this.neededResources;
+    }
+    public void setNeededResource(Map<Resource, Integer> resources){
+        this.neededResources = resources;
     }
 
     public void saveFlag(String id, int flagIndex) {

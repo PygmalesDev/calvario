@@ -1,6 +1,7 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.service.TokenStorage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -8,6 +9,10 @@ import javax.inject.Inject;
 import java.util.Map;
 
 public class ResourcesService {
+    @Inject
+    TokenStorage tokenStorage;
+
+    Map<Resource, Integer> availableResources;
 
     @Inject
     public ResourcesService() {
@@ -38,8 +43,12 @@ public class ResourcesService {
         return resourceList;
     }
 
-    /*
+
     public boolean hasEnoughResources(Map<Resource, Integer> neededResources) {
+        //TODO: Remove later
+        availableResources = neededResources;
+        //TODO: Remove later
+
         for (Map.Entry<Resource, Integer> entry : neededResources.entrySet()) {
             Resource resource = entry.getKey();
             int neededAmount = entry.getValue();
@@ -51,13 +60,9 @@ public class ResourcesService {
         return true;
     }
 
-     */
-
     public void upgradeIsland(){
-            //TODO: Sende Upgrade an den Server
-    }
-
-    public void setNeededResources(Map<Resource, Integer> neededResources){
+        //TODO: Sende Upgrade an den Server
+        hasEnoughResources(tokenStorage.getNeededResource());
     }
 
 }

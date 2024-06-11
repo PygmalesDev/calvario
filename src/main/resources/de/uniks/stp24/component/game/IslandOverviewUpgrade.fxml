@@ -13,33 +13,33 @@
       <VBox prefHeight="49.0" prefWidth="400.0" />
       <HBox alignment="CENTER" prefHeight="77.0" prefWidth="400.0">
          <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="357.0" style="-fx-border-color: #000000;">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
             <VBox prefHeight="7.0" prefWidth="358.0" />
-            <Label text="\%placeholder" />
+            <Label styleClass="overview-text" text="\%placeholder" />
          </VBox>
       </HBox>
       <VBox prefHeight="29.0" prefWidth="400.0" />
       <HBox alignment="CENTER" prefHeight="77.0" prefWidth="400.0">
          <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="357.0" style="-fx-border-color: #000000;">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
             <VBox prefHeight="7.0" prefWidth="358.0" />
-            <Label text="\%placeholder" />
+            <Label styleClass="overview-text" text="\%placeholder" />
          </VBox>
       </HBox>
       <VBox prefHeight="29.0" prefWidth="400.0" />
       <HBox alignment="CENTER" prefHeight="77.0" prefWidth="400.0">
          <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="357.0" style="-fx-border-color: #000000;">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
             <VBox prefHeight="7.0" prefWidth="358.0" />
-            <Label text="\%placeholder" />
+            <Label styleClass="overview-text" text="\%placeholder" />
          </VBox>
       </HBox>
       <VBox prefHeight="29.0" prefWidth="400.0" />
       <HBox alignment="CENTER" prefHeight="77.0" prefWidth="400.0">
          <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="357.0" style="-fx-border-color: #000000;">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
             <VBox prefHeight="7.0" prefWidth="358.0" />
-            <Label text="\%placeholder" />
+            <Label styleClass="overview-text" text="\%placeholder" />
          </VBox>
       </HBox>
       <VBox prefHeight="18.0" prefWidth="400.0" />
@@ -52,20 +52,20 @@
                   <VBox prefHeight="34.0" prefWidth="25.0" />
                   <Pane prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: #808080;" />
                   <VBox prefHeight="34.0" prefWidth="6.0" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%x" wrappingWidth="52.12811279296875" />
+                  <Text fx:id="res_1" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%x" wrappingWidth="52.12811279296875" />
                   <Pane prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: #808080;" />
                   <VBox prefHeight="34.0" prefWidth="6.0" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%x" wrappingWidth="40.12811470031738" />
+                  <Text fx:id="res_2" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%x" wrappingWidth="40.12811470031738" />
                </HBox>
                <HBox prefHeight="10.0" prefWidth="173.0" />
                <HBox alignment="CENTER_LEFT" prefHeight="37.0" prefWidth="173.0">
                   <VBox prefHeight="38.0" prefWidth="25.0" />
                   <Pane prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: #808080;" />
                   <VBox prefHeight="34.0" prefWidth="6.0" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%x" wrappingWidth="52.12811279296875" />
+                  <Text fx:id="res_3" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%x" wrappingWidth="52.12811279296875" />
                   <Pane prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: #808080;" />
                   <VBox prefHeight="34.0" prefWidth="6.0" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%x" wrappingWidth="39.32812690734863" />
+                  <Text fx:id="res_4" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%x" wrappingWidth="39.32812690734863" />
                </HBox>
                <HBox prefHeight="10.0" prefWidth="173.0" />
             </VBox>
@@ -74,15 +74,14 @@
                <HBox alignment="CENTER" prefHeight="42.0" prefWidth="70.0">
                   <Pane prefHeight="42.0" prefWidth="42.0" style="-fx-background-color: #808080;" />
                </HBox>
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="\%placeholder" />
+               <Text fx:id="report" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
             </VBox>
          </HBox>
       </HBox>
    </VBox>
-   <Pane layoutX="400.0" layoutY="509.0" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: #000000; -fx-background-radius: 30;" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="30.0">
-      <children>
-         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
-      </children></Pane>
+   <Pane fx:id="confirmUpgrade" layoutX="400.0" layoutY="509.0" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: #000000; -fx-background-radius: 30;" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="30.0">
+      <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+   </Pane>
    <Pane layoutX="372.0" layoutY="16.0" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #ff0000;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0" />
    <Pane layoutX="6.0" layoutY="16.0" onMouseClicked="#goBack" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #acac13;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="16.0" />
 </fx:root>

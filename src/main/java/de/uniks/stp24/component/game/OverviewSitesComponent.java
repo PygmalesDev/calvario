@@ -4,6 +4,8 @@ import de.uniks.stp24.controllers.BasicController;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.ResourcesService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -54,6 +56,8 @@ public class OverviewSitesComponent extends AnchorPane {
     public InGameService inGameService;
     @Inject
     public IslandComponent islandComponent;
+    @Inject
+    TokenStorage tokenStorage;
 
     private InGameController inGameController;
 
@@ -71,6 +75,8 @@ public class OverviewSitesComponent extends AnchorPane {
 
     public void showUpgrades() {
         inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewUpgradeComponent);
+        tokenStorage.setNeededResource(inGameController.overviewUpgradeComponent.setNeededResources());
+        inGameController.overviewUpgradeComponent.setUpgradeButton();
     }
 
     public void showBuildings() {
@@ -110,9 +116,8 @@ public class OverviewSitesComponent extends AnchorPane {
 
     public void setOverviewSites() {
         island_name.setText(String.valueOf(inGameController.island.type()));
-        crewCapacity.setText(inGameController.island.crewCapacity() + "/20");
+        crewCapacity.setText("0/" + inGameController.island.crewCapacity());
         resCapacity.setText("0/" + inGameController.island.resourceCapacity());
-
     }
 
 }

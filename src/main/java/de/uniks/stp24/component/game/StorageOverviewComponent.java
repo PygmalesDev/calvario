@@ -57,7 +57,6 @@ public class StorageOverviewComponent extends VBox {
     private String lastUpdate;
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, true, gameResourceBundle);
 
-
     @Inject
     public StorageOverviewComponent() {
         lastUpdate = "";

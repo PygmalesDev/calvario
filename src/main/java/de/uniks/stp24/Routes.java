@@ -55,6 +55,7 @@ public class Routes {
     @Inject
     Provider<WarningComponent> warning;
 
+
     @Route("buildingProperties")
     @Inject
     Provider<BuildingPropertiesComponent> buildingProperties;

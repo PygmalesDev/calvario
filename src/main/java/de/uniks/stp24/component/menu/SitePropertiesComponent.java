@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.menu;
 
+import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.ResourcesService;
@@ -17,12 +18,16 @@ import javafx.scene.text.TextAlignment;
 import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Provider;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.function.ToLongBiFunction;
 
 @Component(view = "SiteProperties.fxml")
@@ -32,7 +37,7 @@ public class SitePropertiesComponent extends AnchorPane {
     @FXML
     ListView<Resource> siteConsumesListView;
     @FXML
-    GridView<Map<String, Integer>> siteCostsGridView;
+    GridView<ResourceComponent> siteCostsGridView;
     @FXML
     Button buildSiteButton;
     @FXML
@@ -60,14 +65,22 @@ public class SitePropertiesComponent extends AnchorPane {
     @Inject
     IslandsService islandsService;
 
+    @Inject
+    @Named("gameResourceBundle")
+    ResourceBundle gameResourceBundle;
+
 
     @Inject
     public SitePropertiesComponent(){
 
     }
+
     private Island island;
 
     public ObservableList<Map<String, Integer>> resources;
+    public ObservableList<ResourceComponent> resourceComponents;
+
+
 
     @OnRender
     public void render(){
@@ -78,8 +91,8 @@ public class SitePropertiesComponent extends AnchorPane {
     @FXML
     public void initialize() {
         // Ensure resources list is initialized
-        if (this.resources == null) {
-            this.resources = FXCollections.observableArrayList();
+        if (this.resourceComponents == null) {
+            this.resourceComponents = FXCollections.observableArrayList();
         }
     }
 
@@ -109,13 +122,15 @@ public class SitePropertiesComponent extends AnchorPane {
     @OnRender
     public void displayCostsOfSite(){
         subscriber.subscribe(resourcesService.getResourcesSite(siteType), result -> {
-            resources.add(result.cost());
-            siteCostsGridView.setItems(resources);
             siteCostsGridView.setCellWidth(150);
-            siteCostsGridView.setCellHeight(20);
-            System.out.println(siteCostsGridView.getItems() + "lolol");
-            this.siteCostsGridView.setCellFactory(gridViewCells -> new CustomGridCell());
-            System.out.println(result.cost());
+            for (Map.Entry<String, Integer> entry : result.cost().entrySet()) {
+                Resource resource = new Resource(entry.getKey(), entry.getValue(), 0);
+                Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, false, gameResourceBundle);
+                ResourceComponent resourceComponent = resourceComponentProvider.get();
+                resourceComponent.setItem(resource);
+                resourceComponents.add(resourceComponent);
+            }
+            siteCostsGridView.setItems(resourceComponents);
         });
     }
 }

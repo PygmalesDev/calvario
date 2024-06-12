@@ -91,6 +91,7 @@ public class IslandComponent extends Pane {
     public void showInfo() {
         this.tokenStorage.setIsland(island);
 
+
         //TODO by the moment used for printouts
         // maybe it must be removed after implementation of
         // island overview functionality is completed on InGameCtrl

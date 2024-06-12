@@ -1,11 +1,13 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.App;
 import de.uniks.stp24.dto.EffectSourceDto;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.TimerService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -28,6 +30,8 @@ public class EventComponent extends AnchorPane {
     @FXML
     AnchorPane anchor;
     @FXML
+    ScrollPane descriptionScrollPane;
+    @FXML
     Text eventDescription;
     @FXML
     Text eventName;
@@ -39,6 +43,8 @@ public class EventComponent extends AnchorPane {
     @FXML
     StackPane parent;
 
+    @Inject
+    App app;
     @Inject
     EventService eventService;
     @Inject
@@ -75,6 +81,7 @@ public class EventComponent extends AnchorPane {
 
     }
 
+    // changes String to camelCase
     private @NotNull String convert(@NotNull String id) {
         String[] word = id.split("_");
         for (int i = 1; i < word.length; i++) {
@@ -87,10 +94,24 @@ public class EventComponent extends AnchorPane {
 
         String id = convert(event.id());
 
+        checkSize(id);
+
         eventImage.setImage(imageCache.get("icons/events/"+ id + "Event.png"));
         System.out.println("event." + id + ".description");
         eventName.setText(resources.getString("event." + id + ".name"));
         eventDescription.setText(resources.getString("event." + id + ".description"));
+
+    }
+
+    // reduce size of eventName if it's too long
+    private void checkSize(@NotNull String id) {
+        if (id.length() - 14 < 0) {
+            int num = id.length() % 15;
+            int size = 30 - (num / 2);
+            eventName.setStyle("-fx-font-size: " + size);
+            eventName.setTranslateY(eventName.getTranslateY() + num-3);
+            descriptionScrollPane.setTranslateY(descriptionScrollPane.getTranslateY() + num-3);
+        }
 
     }
 
@@ -101,6 +122,7 @@ public class EventComponent extends AnchorPane {
 
     public void close() {
         System.out.println("close event");
+        app.show("/browseGames");
         parent.setVisible(false);
     }
 

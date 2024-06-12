@@ -25,8 +25,10 @@ public class EventService {
     }
 
     public EffectSourceDto getEvent() {
+        // TODO: Call this Method everytime the season changed then, go thru the events and
+        // look if a event is active and if a event can be triggered (min. of Seasons)
         // TODO: Make dynamic event generation, this is only a dummy Event (To text use ids from JSON)
-        return new EffectSourceDto("abundance", new EffectDto[]{new EffectDto("gold", 100, 1, 0)});
+        return new EffectSourceDto("submerge", new EffectDto[]{new EffectDto("gold", 100, 1, 0)});
     }
 
 }

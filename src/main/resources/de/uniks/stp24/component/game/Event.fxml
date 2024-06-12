@@ -17,12 +17,12 @@
          <VBox.margin>
             <Insets bottom="20.0" />
          </VBox.margin></ImageView>
-        <Text id="eventName" fx:id="eventName" strokeType="OUTSIDE" strokeWidth="0.0" text="\%event.abdundance.name" translateX="-10.0" translateY="-48.0">
+        <Text id="eventName" fx:id="eventName" strokeType="OUTSIDE" strokeWidth="0.0" text="\%event.abdundance.name" translateX="-10.0" translateY="-48.0" VBox.vgrow="NEVER">
             <font>
                 <Font size="18.0" />
             </font>
         </Text>
-        <ScrollPane maxHeight="80.0" maxWidth="225.0" minHeight="80.0" minWidth="225.0" prefHeight="80.0" prefWidth="225.0" translateX="-5.0" translateY="-50.0">
+        <ScrollPane fx:id="descriptionScrollPane" maxHeight="80.0" maxWidth="225.0" minHeight="80.0" minWidth="225.0" prefHeight="80.0" prefWidth="225.0" translateX="-5.0" translateY="-50.0" VBox.vgrow="NEVER">
             <StackPane minWidth="212.0">
                 <Text id="eventDescription" fx:id="eventDescription" strokeType="OUTSIDE" strokeWidth="0.0" text="\%event.abdundance.description" textAlignment="CENTER" />
             </StackPane>

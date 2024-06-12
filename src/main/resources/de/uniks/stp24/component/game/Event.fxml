@@ -22,11 +22,9 @@
                 <Font size="18.0" />
             </font>
         </Text>
-        <ScrollPane maxHeight="80.0" maxWidth="225.0" minWidth="225.0" prefHeight="80.0" prefWidth="225.0"
-                    translateX="-5.0" translateY="-50.0">
+        <ScrollPane maxHeight="80.0" maxWidth="225.0" minHeight="80.0" minWidth="225.0" prefHeight="80.0" prefWidth="225.0" translateX="-5.0" translateY="-50.0">
             <StackPane minWidth="212.0">
-                <Text id="eventDescription" fx:id="eventDescription" strokeType="OUTSIDE" strokeWidth="0.0"
-                      text="\%event.abdundance.description" textAlignment="CENTER"/>
+                <Text id="eventDescription" fx:id="eventDescription" strokeType="OUTSIDE" strokeWidth="0.0" text="\%event.abdundance.description" textAlignment="CENTER" />
             </StackPane>
         </ScrollPane>
     </VBox>

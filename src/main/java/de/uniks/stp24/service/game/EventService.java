@@ -25,8 +25,8 @@ public class EventService {
     }
 
     public EffectSourceDto getEvent() {
-        // TODO: Make dynamic event generation
-        return new EffectSourceDto("grand_exp", new EffectDto[]{new EffectDto("gold", 100, 1, 0)});
+        // TODO: Make dynamic event generation, this is only a dummy Event (To text use ids from JSON)
+        return new EffectSourceDto("abundance", new EffectDto[]{new EffectDto("gold", 100, 1, 0)});
     }
 
 }

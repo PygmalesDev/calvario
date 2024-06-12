@@ -15,11 +15,11 @@
          <VBox.margin>
             <Insets bottom="20.0" />
          </VBox.margin></ImageView>
-        <Text id="eventName" fx:id="eventName" strokeType="OUTSIDE" strokeWidth="0.0" text="\%event.abdundance.name" translateX="-10.0" translateY="-47.0">
+        <Text id="eventName" fx:id="eventName" strokeType="OUTSIDE" strokeWidth="0.0" text="\%event.abdundance.name" translateX="-10.0" translateY="-48.0">
             <font>
                 <Font size="18.0" />
             </font>
         </Text>
-        <Text id="eventDescription" fx:id="eventDescription" strokeType="OUTSIDE" strokeWidth="0.0" text="\%event.abdundance.description" textAlignment="CENTER" translateX="-10.0" translateY="-47.0" />
+        <Text id="eventDescription" fx:id="eventDescription" strokeType="OUTSIDE" strokeWidth="0.0" text="\%event.abdundance.description" textAlignment="CENTER" translateX="-10.0" translateY="-50.0" />
     </VBox>
 </fx:root>

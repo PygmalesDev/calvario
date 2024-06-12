@@ -15,6 +15,7 @@ import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -74,70 +75,23 @@ public class EventComponent extends AnchorPane {
 
     }
 
-    private void setEventImages(EffectSourceDto event) {
-        eventName.setText(event.id());
-        switch (event.id()) {
-            case "abundance":
-                eventImage.setImage(imageCache.get("icons/events/abundanceEvent.png"));
-                eventDescription.setText(resources.getString("event.abundance.description"));
-                eventName.setText(resources.getString("event.abundance.name"));
-                break;
-            case "black_spot":
-                eventImage.setImage(imageCache.get("icons/events/blackSpotEvent.png"));
-                eventDescription.setText(resources.getString("event.blackSpot.description"));
-                eventName.setText(resources.getString("event.blackSpot.name"));
-                break;
-            case "crapulence":
-                eventImage.setImage(imageCache.get("icons/events/crapulenceEvent.png"));
-                eventDescription.setText(resources.getString("event.crapulence.description"));
-                eventName.setText(resources.getString("event.crapulence.name"));
-                break;
-            case "dutchman":
-                eventImage.setImage(imageCache.get("icons/events/dutchmanEvent.png"));
-                eventDescription.setText(resources.getString("event.dutchman.description"));
-                eventName.setText(resources.getString("event.dutchman.name"));
-                break;
-            case "equiv_ex":
-                eventImage.setImage(imageCache.get("icons/events/equivExEvent.png"));
-                eventDescription.setText(resources.getString("event.equivEx.description"));
-                eventName.setText(resources.getString("event.equivEx.name"));
-                break;
-            case "fools_gold":
-                eventImage.setImage(imageCache.get("icons/events/foolsGoldEvent.png"));
-                eventDescription.setText(resources.getString("event.foolsGold.description"));
-                eventName.setText(resources.getString("event.foolsGold.name"));
-                break;
-            case "grand_expedition":
-                eventImage.setImage(imageCache.get("icons/events/grandExpeditionEvent.png"));
-                eventDescription.setText(resources.getString("event.grandExpedition.description"));
-                eventName.setText(resources.getString("event.grandExpedition.name"));
-                break;
-            case "pestilence":
-                eventImage.setImage(imageCache.get("icons/events/pestilenceEvent.png"));
-                eventDescription.setText(resources.getString("event.pestilence.description"));
-                eventName.setText(resources.getString("event.pestilence.name"));
-                break;
-            case "reckoning":
-                eventImage.setImage(imageCache.get("icons/events/reckoningEvent.png"));
-                eventDescription.setText(resources.getString("event.reckoning.description"));
-                eventName.setText(resources.getString("event.reckoning.name"));
-                break;
-            case "roger_feast":
-                eventImage.setImage(imageCache.get("icons/events/rogerFeastEvent.png"));
-                eventDescription.setText(resources.getString("event.rogerFeast.description"));
-                eventName.setText(resources.getString("event.rogerFeast.name"));
-                break;
-            case "rum_bottle":
-                eventImage.setImage(imageCache.get("icons/events/rumBottleEvent.png"));
-                eventDescription.setText(resources.getString("event.rumBottle.description"));
-                eventName.setText(resources.getString("event.rumBottle.name"));
-                break;
-            case "submerge":
-                eventImage.setImage(imageCache.get("icons/events/submergeEvent.png"));
-                eventDescription.setText(resources.getString("event.submerge.description"));
-                eventName.setText(resources.getString("event.submerge.name"));
-                break;
+    private @NotNull String convert(@NotNull String id) {
+        String[] word = id.split("_");
+        for (int i = 1; i < word.length; i++) {
+            word[i] = word[i].substring(0, 1).toUpperCase() + word[i].substring(1);
         }
+        return String.join("", word);
+    }
+
+    private void setEventImages(@NotNull EffectSourceDto event) {
+
+        String id = convert(event.id());
+
+        eventImage.setImage(imageCache.get("icons/events/"+ id + "Event.png"));
+        System.out.println("event." + id + ".description");
+        eventName.setText(resources.getString("event." + id + ".name"));
+        eventDescription.setText(resources.getString("event." + id + ".description"));
+
     }
 
     @OnDestroy
@@ -148,6 +102,10 @@ public class EventComponent extends AnchorPane {
     public void close() {
         System.out.println("close event");
         parent.setVisible(false);
+    }
+
+    public void show() {
+        parent.setVisible(true);
     }
 
     public void setParent(StackPane parent) {

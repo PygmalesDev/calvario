@@ -25,7 +25,8 @@ public class EventService {
     }
 
     public EffectSourceDto getEvent() {
-        return new EffectSourceDto("black_spot", new EffectDto[]{new EffectDto("gold", 100, 1, 0)});
+        // TODO: Make dynamic event generation
+        return new EffectSourceDto("grand_exp", new EffectDto[]{new EffectDto("gold", 100, 1, 0)});
     }
 
 }

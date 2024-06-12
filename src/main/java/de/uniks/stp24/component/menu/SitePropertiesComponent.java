@@ -67,12 +67,20 @@ public class SitePropertiesComponent extends AnchorPane {
     }
     private Island island;
 
-    public ObservableList<Map<String, Integer>> resources = FXCollections.observableArrayList();
+    public ObservableList<Map<String, Integer>> resources;
 
     @OnRender
     public void render(){
-        this.siteType = "energy";
+        this.siteType = "mining";
         siteName.setText(siteType);
+    }
+
+    @FXML
+    public void initialize() {
+        // Ensure resources list is initialized
+        if (this.resources == null) {
+            this.resources = FXCollections.observableArrayList();
+        }
     }
 
     public void setSiteType(String siteType){
@@ -101,6 +109,11 @@ public class SitePropertiesComponent extends AnchorPane {
     @OnRender
     public void displayCostsOfSite(){
         subscriber.subscribe(resourcesService.getResourcesSite(siteType), result -> {
+            resources.add(result.cost());
+            siteCostsGridView.setItems(resources);
+            siteCostsGridView.setCellWidth(150);
+            siteCostsGridView.setCellHeight(20);
+            System.out.println(siteCostsGridView.getItems() + "lolol");
             this.siteCostsGridView.setCellFactory(gridViewCells -> new CustomGridCell());
             System.out.println(result.cost());
         });

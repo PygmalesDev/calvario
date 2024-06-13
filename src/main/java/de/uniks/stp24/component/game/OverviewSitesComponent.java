@@ -50,14 +50,8 @@ public class OverviewSitesComponent extends AnchorPane {
     @SubComponent
     @Inject
     public BuildingsComponent buildingsComponent;
-
-
     @Inject
     public InGameService inGameService;
-    @Inject
-    public IslandComponent islandComponent;
-    @Inject
-    TokenStorage tokenStorage;
 
     private InGameController inGameController;
 
@@ -74,6 +68,13 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showUpgrades() {
+        if(inGameController.island.upgradeLevel() == 4){
+            inGameController.overviewUpgradeComponent.upgrade_box.setVisible(false);
+            inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(true);
+        } else {
+            inGameController.overviewUpgradeComponent.upgrade_box.setVisible(true);
+            inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(false);
+        }
         inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewUpgradeComponent);
         inGameController.overviewUpgradeComponent.setUpgradeButton();
         inGameController.overviewUpgradeComponent.setNeededResources();

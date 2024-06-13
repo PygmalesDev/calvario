@@ -3,7 +3,6 @@ package de.uniks.stp24.service;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.SystemUpgrades;
-import javafx.collections.ObservableMap;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

@@ -150,13 +150,13 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         // Test if the user on top of the member list is the actual host of the game
-        User host = this.lobbyController.playerListView.getItems().get(0).user();
+        User host = this.lobbyController.playerListView.getItems().getFirst().user();
         assertEquals(3, this.lobbyController.playerListView.getItems().size());
         assertTrue(host.name().contains("gameHost"));
         assertTrue(host.name().contains("(Host)"));
 
         // Test if the correct component is shown to the host
-        Node component = this.lobbyController.lobbyElement.getChildren().get(0);
+        Node component = this.lobbyController.lobbyElement.getChildren().getFirst();
         assertEquals(LobbyHostSettingsComponent.class, component.getClass());
         assertTrue(lookup("#startJourneyButton").queryButton().isDisabled());
     }

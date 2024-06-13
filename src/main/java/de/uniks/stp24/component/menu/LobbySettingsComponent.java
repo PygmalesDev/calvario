@@ -22,7 +22,13 @@ import java.util.ResourceBundle;
 @Component(view = "LobbySettings.fxml")
 public class LobbySettingsComponent extends AnchorPane {
     @FXML
+    ImageView readyIconImageView;
+    @FXML
     public Button readyButton;
+    @FXML
+    public Button selectEmpireButton;
+    @FXML
+    public Button leaveLobbyButton;
     @Inject
     Subscriber subscriber;
     @Inject

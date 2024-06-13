@@ -6,6 +6,7 @@ import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.utils.ResponseConstants;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.controller.Subscriber;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Map;
@@ -40,13 +41,14 @@ public class BasicController {
     @Inject
     TokenStorage tokenStorage;
 
-    public Map<Integer,String> controlResponses;
+    public Map<Integer, String> controlResponses;
 
     @Inject
-    public BasicController() {}
+    public BasicController() {
+    }
 
     // check if one or more string aren't empty or blank
-    public boolean checkIt(String ... texts) {
+    public boolean checkIt(String... texts) {
         if (texts.length == 0) return false;
         boolean cond = true;
         for (String str : texts) {
@@ -60,16 +62,16 @@ public class BasicController {
     }
 
     // look for a text (info or error) in a respective dictionary
-    public String getErrorInfoText(Map<Integer,String> map, int code) {
+    public String getErrorInfoText(Map<Integer, String> map, int code) {
         if (map == null || map.isEmpty())
             return resources.getString(responseConstants.resStdText.getOrDefault(code, "no.dict"));
         return resources.getString(
-          map.getOrDefault(code, "no.entry.dict")
+                map.getOrDefault(code, "no.entry.dict")
         );
     }
 
     public String getErrorInfoText(int code) {
-        return getErrorInfoText(this.controlResponses,code);
+        return getErrorInfoText(this.controlResponses, code);
     }
 
     /*
@@ -82,7 +84,7 @@ public class BasicController {
      */
     public String getErrorInfoText(Throwable error) {
         int code = errorService.getStatus(error);
-        return getErrorInfoText(this.controlResponses,code);
+        return getErrorInfoText(this.controlResponses, code);
     }
 
 }

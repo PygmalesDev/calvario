@@ -16,7 +16,6 @@ import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
@@ -36,7 +35,9 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @FXML
     public Button readyButton;
     @FXML
-    ImageView readyIconImageView;
+    public Button selectEmpireButton;
+    @FXML
+    public Button closeLobbyButton;
     @Inject
     Subscriber subscriber;
     @Inject
@@ -57,17 +58,19 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     EmpireService empireService;
     @Inject
     @Resource
-    ResourceBundle resource;
+    ResourceBundle resources;
     @Inject
     ErrorService errorService;
 
+    private String gameID;
+    private int maxMember;
+    private BubbleComponent bubbleComponent;
     @Inject
     IslandsService islandsService;
-
-    public String gameID;
     public boolean leftLobby;
     public Image readyIconBlueImage;
     public Image readyIconGreenImage;
+
 
     @Inject
     public LobbyHostSettingsComponent() {
@@ -78,13 +81,30 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     public void init(){
     }
 
+    /**
+     * Creates an event listener that checks, if all members are ready and if there are not too many players with a
+     * selected empire.
+     */
     public void createCheckPlayerReadinessListener() {
         this.subscriber.subscribe(this.eventListener
                 .listen("games." + this.gameID + ".members.*.updated", MemberDto.class),
             result -> this.subscriber.subscribe(this.lobbyService.loadPlayers(this.gameID),
-            members -> this.startJourneyButton.setDisable(!Arrays.stream(members)
+                    members -> {
+                        boolean allReady = Arrays.stream(members)
                                 .map(MemberDto::ready)
-                                .reduce(Boolean::logicalAnd).orElse(true)),
+                                .reduce(Boolean::logicalAnd)
+                                .orElse(true);
+                        int countEmpires = (int) Arrays.stream(members)
+                                .filter(member -> member.empire() != null)
+                                .count();
+                        boolean tooManyPlayer = countEmpires > this.maxMember;
+                        if(tooManyPlayer){
+                            bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.too.many.players"));
+                        } else {
+                            bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
+                        }
+                        this.startJourneyButton.setDisable(!allReady || tooManyPlayer);
+                    },
               error -> errorService.getStatus(error)));
     }
 
@@ -105,10 +125,8 @@ public class LobbyHostSettingsComponent extends AnchorPane {
 
     public void startGame() {
         subscriber.subscribe(editGameService.startGame(this.gameID),
-                result -> {
-                    this.startJourneyButton.setDisable(true);
-                },
-                error -> this.startJourneyButton.setDisable(false));
+          result -> this.startJourneyButton.setDisable(true),
+          error -> this.startJourneyButton.setDisable(false));
     }
 
     /**
@@ -116,7 +134,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
      */
     public void leaveLobby() {
         this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
-          host -> this.subscriber.subscribe(this.lobbyService.updateMember(this.gameID,
+            host -> this.subscriber.subscribe(this.lobbyService.updateMember(this.gameID,
                     this.tokenStorage.getUserId(), host.ready(), host.empire()),
             result -> this.app.show("/browseGames"),
             error -> errorService.getStatus(error)),
@@ -126,6 +144,15 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     public void setGameID(String gameID) {
         this.gameID = gameID;
     }
+
+    public void setMaxMember(int maxMember){
+        this.maxMember = maxMember;
+    }
+
+    public void setBubbleComponent(BubbleComponent bubbleComponent){
+        this.bubbleComponent = bubbleComponent;
+    }
+
     public void selectEmpire() {
         this.app.show("/creation", Map.of("gameid", this.gameID));
     }

@@ -45,7 +45,7 @@ public class IslandsService extends BasicService {
             dto -> {
                 Arrays.stream(dto).forEach(data -> {
                     List<String> linkedIsles = new ArrayList<>(data.links().keySet());
-                    System.out.println(data);
+                    //System.out.println(data);
                     Island tmp = new Island(data.owner(),
                         data.upgrade(),
                         data.name(),

@@ -5,14 +5,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.LobbyController;
+import de.uniks.stp24.controllers.helper.JoinGameHelper;
 import de.uniks.stp24.dto.JoinGameDto;
 import de.uniks.stp24.dto.MemberDto;
+import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.AuthApiService;
 import de.uniks.stp24.rest.GameMembersApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.JoinGameService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -61,12 +64,18 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     @Spy
     GamesService gamesService;
     @Spy
+    EmpireService empireService;
+    @Spy
+    ErrorService errorService;
+    @Spy
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
 
     Provider<UserComponent> userComponentProvider = ()-> new UserComponent(imageCache, resources);
 
+    @InjectMocks
+    JoinGameHelper joinGameHelper;
     @InjectMocks
     UserComponent userComponent;
     @InjectMocks
@@ -93,6 +102,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         this.lobbyController.enterGameComponent = this.enterGameComponent;
         this.lobbyController.userComponent = this.userComponent;
         this.lobbyController.userComponentProvider = this.userComponentProvider;
+        this.lobbyController.joinGameHelper = this.joinGameHelper;
 
         // Mock getting userID
         doReturn("testMemberUnoID").when(this.tokenStorage).getUserId();
@@ -104,6 +114,9 @@ public class TestLobbyControllerAsMember extends ControllerTest {
 
         // Mock listen to game deletion
         doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.deleted"), eq(Game.class));
+
+        // Mock listen to game update
+        doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.updated"), eq(Game.class));
 
         // Mock loading lobby members
         doReturn(Observable.just(new MemberDto[]{
@@ -126,7 +139,6 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.updated"), eq(MemberDto.class));
         this.app.show(this.lobbyController);
 
-        doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.updated"),eq(Game.class));
 
     }
 
@@ -282,6 +294,70 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         clickOn("#returnButton");
 
         verify(this.app, times(1)).show("/browseGames");
+    }
+
+    @Test
+    public void startGameAsPlayer(){
+        WaitForAsyncUtils.waitForFxEvents();
+
+        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
+
+        doReturn(null).when(this.app).show("/ingame");
+
+        doAnswer(show-> {app.show("/ingame");
+            return null;
+        }).when(this.islandsService).retrieveIslands(any());
+
+        doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", "testGameID",
+                "testMemberUnoID","testGame","a","a",1, 2, "a")})).when(this.empireService).getEmpires(any());
+
+        doReturn(Observable.just(new MemberDto(true, "testMemberUnoID", testEmpire, "88888888")))
+                .when(this.lobbyService).getMember(any(), any());
+
+        // start game
+        this.gameSubject.onNext(new Event<>("games.testGameID.updated",
+                new Game("1", "a","testGameID","testGame","testGameHostID",
+                        true, 1, 0, new GameSettings(1))));
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        assertEquals("testEmpireID", tokenStorage.getEmpireId());
+        assertEquals("testGameID", tokenStorage.getGameId());
+        assertFalse(tokenStorage.isSpectator());
+
+        verify(this.app, times(1)).show("/ingame");
+    }
+
+    @Test
+    public void startGameAsSpectator(){
+        WaitForAsyncUtils.waitForFxEvents();
+
+        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
+
+        doReturn(null).when(this.app).show("/ingame");
+
+        doAnswer(show-> {app.show("/ingame");
+            return null;
+        }).when(this.islandsService).retrieveIslands(any());
+
+        doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", "testGameID",
+                "testGameHostID","testGame","a","a",1, 2, "a")})).when(this.empireService).getEmpires(any());
+
+        doReturn(Observable.just(new MemberDto(true, "testMemberUnoID", null, "88888888")))
+                .when(this.lobbyService).getMember(any(), any());
+
+        // start game
+        this.gameSubject.onNext(new Event<>("games.testGameID.updated",
+                new Game("1", "a","testGameID","testGame","testGameHostID",
+                        true, 1, 0, new GameSettings(1))));
+
+        WaitForAsyncUtils.waitForFxEvents();
+
+        assertNull(tokenStorage.getEmpireId());
+        assertEquals("testGameID", tokenStorage.getGameId());
+        assertTrue(tokenStorage.isSpectator());
+
+        verify(this.app, times(1)).show("/ingame");
     }
 }
 

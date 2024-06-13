@@ -1,6 +1,8 @@
 package de.uniks.stp24.component.menu;
 
+import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.ResourceComponent;
+import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.ResourcesService;
@@ -43,7 +45,7 @@ public class SitePropertiesComponent extends AnchorPane {
     @FXML
     ListView<Resource> siteConsumesListView;
     @FXML
-    GridView<ResourceComponent> siteCostsGridView;
+    GridView<Resource> siteCostsGridView;
     @FXML
     Button buildSiteButton;
     @FXML
@@ -67,6 +69,8 @@ public class SitePropertiesComponent extends AnchorPane {
 
     @Inject
     ResourcesService resourcesService;
+    @Inject
+    de.uniks.stp24.service.game.ResourcesService resourcesServiceGame;
 
     @Inject
     IslandsService islandsService;
@@ -74,6 +78,9 @@ public class SitePropertiesComponent extends AnchorPane {
     @Inject
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
+
+    @Inject
+    App app;
 
 
     @Inject
@@ -86,7 +93,7 @@ public class SitePropertiesComponent extends AnchorPane {
     public ObservableList<Map<String, Integer>> resources;
     public ObservableList<ResourceComponent> resourceComponents;
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, false, gameResourceBundle);
+    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, true, gameResourceBundle);
 
 
 
@@ -129,18 +136,19 @@ public class SitePropertiesComponent extends AnchorPane {
     }
     @OnRender
     public void displayCostsOfSite(){
-        subscriber.subscribe(resourcesService.getResourcesSite(siteType), result -> {
-            siteCostsGridView.setCellWidth(150);
-            for (Map.Entry<String, Integer> entry : result.cost().entrySet()) {
-                Resource resource = new Resource(entry.getKey(), entry.getValue(), 0);
-                ResourceComponent resourceComponent = resourceComponentProvider.get();
-                resourceComponent.setItem(resource);
-                resourceComponents.add(resourceComponent);
-            }
-            siteCostsGridView.setItems(resourceComponents);
-        });
+        siteCostsGridView.setCellHeight(20);
+        subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
+        siteCostsGridView.setCellFactory(gridView -> new ComponentGridCell<>(app, resourceComponentProvider));
+        }
+
+    private void resourceListGeneration(SiteDto siteDto) {
+        Map<String, Integer> resourceMap = siteDto.cost();
+        ObservableList<Resource> resourceList = resourcesServiceGame.generateResourceList(resourceMap, siteCostsGridView.getItems());
+        siteCostsGridView.setItems(resourceList);
+
     }
 }
+
 
 class ComponentGridCell<Item, Component extends Parent> extends GridCell<Item> {
     private final FulibFxApp app;
@@ -177,7 +185,6 @@ class ComponentGridCell<Item, Component extends Parent> extends GridCell<Item> {
     @Override
     protected void updateItem(Item item, boolean empty) {
         super.updateItem(item, empty);
-
         // Destroy component if the cell is emptied
         if (empty || item == null) {
             if (component != null) {
@@ -200,7 +207,7 @@ class ComponentGridCell<Item, Component extends Parent> extends GridCell<Item> {
             // Add item and list to parameters if they are not already present
             final Map<String, Object> params = new HashMap<>(extraParams);
             params.putIfAbsent("item", item);
-            params.putIfAbsent("list", getGridView().getItems());
+            params.putIfAbsent("grid", getGridView().getItems());
             setGraphic(app.initAndRender(component, params));
         }
 

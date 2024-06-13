@@ -12,25 +12,26 @@ public class EmpireService {
     EmpireApiService empireApiService;
 
     @Inject
-    public  EmpireService() {}
+    public EmpireService() {
+    }
 
-    public Observable<EmpireDto> getEmpire(String gameID, String empireID){
+    public Observable<EmpireDto> getEmpire(String gameID, String empireID) {
         return this.empireApiService.getEmpire(gameID, empireID);
     }
 
-    public Observable<ReadEmpireDto[]> getEmpires(String gameID){
+    public Observable<ReadEmpireDto[]> getEmpires(String gameID) {
         return this.empireApiService.getEmpires(gameID);
     }
 
-    public Observable<EmpireDto> updateEmpire(String gameID, String empireID, UpdateEmpireDto updateEmpireDto){
+    public Observable<EmpireDto> updateEmpire(String gameID, String empireID, UpdateEmpireDto updateEmpireDto) {
         return this.empireApiService.updateEmpire(gameID, empireID, updateEmpireDto);
     }
 
-    public Observable<List<ResourceDto>> getResources(){
+    public Observable<List<ResourceDto>> getResources() {
         return this.empireApiService.getResources();
     }
 
-    public Observable<AggregateResultDto> getResourceAggregates(String gameID, String empireID){
+    public Observable<AggregateResultDto> getResourceAggregates(String gameID, String empireID) {
         return this.empireApiService.getResourceAggregates(gameID, empireID);
     }
 }

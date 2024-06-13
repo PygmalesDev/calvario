@@ -69,7 +69,7 @@ public class StorageOverviewComponent extends VBox {
 
     @OnInit
     public void init() {
-        if(!tokenStorage.isSpectator()) {
+        if (!tokenStorage.isSpectator()) {
             createEmpireListener();
             createSeasonListener();
         }
@@ -80,14 +80,12 @@ public class StorageOverviewComponent extends VBox {
      **/
     @OnRender
     public void initStorageList() {
-        if(!tokenStorage.isSpectator()) {
+        if (!tokenStorage.isSpectator()) {
             this.resourceListView.setSelectionModel(null);
             this.subscriber.subscribe(this.empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()), empireDto -> resourceListGeneration(empireDto, null));
             this.resourceListView.setCellFactory(list -> new ComponentListCell<>(app, resourceComponentProvider));
         }
     }
-    //Todo: changePerSeason
-
 
     private void resourceListGeneration(EmpireDto empireDto, AggregateItemDto[] aggregateItems) {
         Map<String, Integer> resourceMap = empireDto.resources();
@@ -120,9 +118,9 @@ public class StorageOverviewComponent extends VBox {
                 event -> {
                     if (!lastSeasonUpdate.equals(event.data().updatedAt())) {
                         System.out.println("season changed and was not updated");
-                        subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()), empireDto -> subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()), aggregateResultDto -> {
-                            resourceListGeneration(empireDto, aggregateResultDto.items());
-                        }));
+                        subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                                empireDto -> subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                                        aggregateResultDto -> resourceListGeneration(empireDto, aggregateResultDto.items())));
                         this.lastSeasonUpdate = event.data().updatedAt();
                     }
                 },

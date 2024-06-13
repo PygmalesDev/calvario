@@ -6,6 +6,7 @@ import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -34,6 +35,8 @@ public class IslandComponent extends Pane {
     ImageCache imageCache;
     @Inject
     Subscriber subscriber;
+    @Inject
+    IslandAttributeStorage islandAttributes;
 
     private InGameController inGameController;
     private Island island;
@@ -118,7 +121,7 @@ public class IslandComponent extends Pane {
         if (inGameController.selectedIsland != null && inGameController.selectedIsland != this) {
             inGameController.selectedIsland.rudderImage.setVisible(false);
             inGameController.selectedIsland.islandIsSelected = false;
-            if(inGameController.island.flagIndex() >= 0) {
+            if(this.island.flagIndex() >= 0) {
                 this.flagPane.setVisible(!this.flagPane.isVisible());
             }
             inGameController.selectedIsland = null;
@@ -126,7 +129,7 @@ public class IslandComponent extends Pane {
             inGameController.overviewContainer.setVisible(false);
             inGameController.selectedIsland.rudderImage.setVisible(false);
             inGameController.selectedIsland.islandIsSelected = false;
-            if(inGameController.island.flagIndex() >= 0) {
+            if(this.island.flagIndex() >= 0) {
                 this.flagPane.setVisible(!this.flagPane.isVisible());
             }
             inGameController.selectedIsland = null;

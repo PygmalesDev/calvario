@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<fx:root type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <ImageView fx:id="building" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+      <Image url="@../../icons/buildings/empty_building_element.png" />
+   </ImageView>
+</fx:root>

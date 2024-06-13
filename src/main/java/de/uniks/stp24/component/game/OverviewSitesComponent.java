@@ -4,6 +4,7 @@ import de.uniks.stp24.controllers.BasicController;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.ResourcesService;
 import javafx.event.ActionEvent;
@@ -52,6 +53,8 @@ public class OverviewSitesComponent extends AnchorPane {
     public BuildingsComponent buildingsComponent;
     @Inject
     public InGameService inGameService;
+    @Inject
+    public IslandAttributeStorage islandAttributes;
 
     private InGameController inGameController;
 
@@ -68,7 +71,7 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showUpgrades() {
-        if(inGameController.island.upgradeLevel() == 4){
+        if(islandAttributes.getIsland().upgradeLevel() == 4){
             inGameController.overviewUpgradeComponent.upgrade_box.setVisible(false);
             inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(true);
         } else {
@@ -84,6 +87,8 @@ public class OverviewSitesComponent extends AnchorPane {
         buildingsButton.setDisable(true);
         sitesButton.setDisable(false);
         detailsButton.setDisable(false);
+        buildingsComponent.resetPage();
+        buildingsComponent.setGridPane();
         inGameService.showOnly(sitesContainer, buildingsComponent);
     }
 
@@ -91,7 +96,7 @@ public class OverviewSitesComponent extends AnchorPane {
         detailsButton.setDisable(false);
         sitesButton.setDisable(true);
         buildingsButton.setDisable(false);
-        sitesComponent.setSitesBox(inGameController.island);
+        sitesComponent.setSitesBox(islandAttributes.getIsland());
         inGameService.showOnly(sitesContainer, sitesComponent);
     }
 
@@ -111,7 +116,7 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameController.overviewContainer.setVisible(false);
         inGameController.selectedIsland.rudderImage.setVisible(false);
         inGameController.selectedIsland.islandIsSelected = false;
-        if (inGameController.island.flagIndex() >= 0) {
+        if (islandAttributes.getIsland().flagIndex() >= 0) {
             inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
         }
         inGameController.selectedIsland = null;
@@ -123,8 +128,10 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void setOverviewSites() {
-        island_name.setText("Crew: " + inGameController.island.type());
-        crewCapacity.setText(String.valueOf(inGameController.island.crewCapacity()));
-        resCapacity.setText("Resources: " + sitesComponent.getTotalSiteSlots(inGameController.island) + "/" + inGameController.island.resourceCapacity());
+        int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
+                islandAttributes.getIsland().buildings().length;
+        island_name.setText("Crew: " + islandAttributes.getIsland().type());
+        crewCapacity.setText(String.valueOf(islandAttributes.getIsland().crewCapacity()));
+        resCapacity.setText("Resources: " + usedSlots + "/" + islandAttributes.getIsland().resourceCapacity());
     }
 }

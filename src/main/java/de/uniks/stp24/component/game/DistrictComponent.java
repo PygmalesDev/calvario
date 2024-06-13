@@ -5,8 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
-import org.fulib.fx.constructs.listview.ReusableItemComponent;
-import org.jetbrains.annotations.NotNull;
+
 import javax.inject.Inject;
 import java.io.IOException;
 

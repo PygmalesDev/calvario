@@ -16,10 +16,6 @@ public class SitesComponent extends VBox {
 
     @FXML
     public HBox sitesBox;
-    @Inject
-    IslandAttributeStorage islandStorage;
-    @Inject
-    TokenStorage tokenStorage;
 
     @Inject
     public SitesComponent() {

@@ -111,7 +111,6 @@ public class InGameController extends BasicController {
     ResourcesService resourceService;
 
     public IslandComponent selectedIsland;
-    public Island island;
 
     boolean pause = false;
     List<IslandComponent> islandComponentList = new ArrayList<>();
@@ -158,7 +157,7 @@ public class InGameController extends BasicController {
                     islandAttributes.setEmpireDto(result);
                 });
 
-        if(!tokenStorage.isSpectator()) {
+        if (!tokenStorage.isSpectator()) {
             createEmpireListener();
         }
     }
@@ -231,6 +230,7 @@ public class InGameController extends BasicController {
     public void pauseGame() {
         pauseMenuContainer.setVisible(pause);
     }
+
     public void resumeGame() {
         pauseMenuContainer.setVisible(pause);
     }
@@ -238,7 +238,7 @@ public class InGameController extends BasicController {
     // created and add buttons for storage and island overview
     // there are problems if they are contained in the fxml
     private void createButtonsStorage() {
-        if (!(Objects.nonNull(showIslandButton)&&(Objects.nonNull(showStorageButton)))) {
+        if (!(Objects.nonNull(showIslandButton) && (Objects.nonNull(showStorageButton)))) {
             showIslandButton = new Button();
             showIslandButton.setPrefHeight(30);
             showIslandButton.setPrefWidth(30);
@@ -256,7 +256,7 @@ public class InGameController extends BasicController {
     }
 
     @OnRender
-    public void createMap()  {
+    public void createMap() {
         islandsService.getListOfIslands().forEach(
                 island -> {
                     IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
@@ -275,8 +275,9 @@ public class InGameController extends BasicController {
     }
 
     public void showOverview(Island island) {
-        this.island = island;
-
+        islandAttributes.setIsland(island);
+        overviewSitesComponent.buildingsComponent.resetPage();
+        overviewSitesComponent.buildingsComponent.setGridPane();
         overviewContainer.setVisible(true);
         overviewSitesComponent.sitesContainer.setVisible(true);
         overviewSitesComponent.buildingsButton.setDisable(true);

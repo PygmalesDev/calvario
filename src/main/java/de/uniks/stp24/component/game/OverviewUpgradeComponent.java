@@ -47,7 +47,6 @@ public class OverviewUpgradeComponent extends AnchorPane {
     }
 
     public void setUpgradeButton() {
-        islandAttributes.setIsland(inGameController.island);
         if (islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()) != null) {
             if (resourcesService.hasEnoughResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()))) {
                 confirmUpgrade.setStyle("-fx-background-color: green;");
@@ -65,7 +64,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
         inGameController.overviewContainer.setVisible(false);
         inGameController.selectedIsland.rudderImage.setVisible(false);
         inGameController.selectedIsland.islandIsSelected = false;
-        if (inGameController.island.flagIndex() >= 0) {
+        if (islandAttributes.getIsland().flagIndex() >= 0) {
             inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
         }
         inGameController.selectedIsland = null;
@@ -79,7 +78,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
         if (inGameController != null) {
             LinkedList<Text> resTextList = new LinkedList<>(Arrays.asList(res_1, res_2, res_3, res_4, report));
             int i = 0;
-            for (Map.Entry<String, Integer> entry : islandAttributes.getNeededResources(inGameController.island.upgradeLevel()).entrySet()) {
+            for (Map.Entry<String, Integer> entry : islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()).entrySet()) {
                 resTextList.get(i).setText(entry.getKey() + " " + entry.getValue());
                 i += 1;
             }

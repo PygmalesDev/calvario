@@ -91,6 +91,7 @@ public class OverviewSitesComponent extends AnchorPane {
         detailsButton.setDisable(false);
         sitesButton.setDisable(true);
         buildingsButton.setDisable(false);
+        sitesComponent.setSitesBox(inGameController.island);
         inGameService.showOnly(sitesContainer, sitesComponent);
     }
 
@@ -106,6 +107,7 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void closeOverview() {
+        resetButtons();
         inGameController.overviewContainer.setVisible(false);
         inGameController.selectedIsland.rudderImage.setVisible(false);
         inGameController.selectedIsland.islandIsSelected = false;
@@ -115,10 +117,14 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameController.selectedIsland = null;
     }
 
-    public void setOverviewSites() {
-        island_name.setText(String.valueOf(inGameController.island.type()));
-        crewCapacity.setText("0/" + inGameController.island.crewCapacity());
-        resCapacity.setText("0/" + inGameController.island.resourceCapacity());
+    public void resetButtons(){
+        detailsButton.setDisable(false);
+        sitesButton.setDisable(false);
     }
 
+    public void setOverviewSites() {
+        island_name.setText("Crew: " + inGameController.island.type());
+        crewCapacity.setText(String.valueOf(inGameController.island.crewCapacity()));
+        resCapacity.setText("Resources: " + sitesComponent.getTotalSiteSlots(inGameController.island) + "/" + inGameController.island.resourceCapacity());
+    }
 }

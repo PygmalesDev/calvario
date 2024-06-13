@@ -28,6 +28,7 @@ public class GameComponent extends HBox implements ReusableItemComponent<Game> {
 
     @Inject
     TokenStorage tokenStorage;
+
     @Inject
     @Resource
     ResourceBundle resource;

@@ -114,6 +114,7 @@ public class IslandComponent extends Pane {
     }
 
     public void showIslandOverview() {
+        inGameController.overviewSitesComponent.resetButtons();
         if (inGameController.selectedIsland != null && inGameController.selectedIsland != this) {
             inGameController.selectedIsland.rudderImage.setVisible(false);
             inGameController.selectedIsland.islandIsSelected = false;

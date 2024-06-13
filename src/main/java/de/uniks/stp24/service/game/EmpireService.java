@@ -1,9 +1,6 @@
 package de.uniks.stp24.service.game;
 
-import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.dto.ReadEmpireDto;
-import de.uniks.stp24.dto.ResourceDto;
-import de.uniks.stp24.dto.UpdateEmpireDto;
+import de.uniks.stp24.dto.*;
 import de.uniks.stp24.rest.EmpireApiService;
 import io.reactivex.rxjava3.core.Observable;
 
@@ -33,4 +30,7 @@ public class EmpireService {
         return this.empireApiService.getResources();
     }
 
+    public Observable<AggregateResultDto> getResourceAggregates(String gameID, String empireID){
+        return this.empireApiService.getResourceAggregates(gameID, empireID);
+    }
 }

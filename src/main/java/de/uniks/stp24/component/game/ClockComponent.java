@@ -165,7 +165,7 @@ public class ClockComponent extends AnchorPane {
         subscriber.subscribe(this.eventListener
                         .listen("games." + gameId + ".ticked", Game.class),
                 event -> {
-                    System.out.println("Season changed");
+                    //System.out.println("Season changed");
                     Game game = event.data();
                     timerService.setSeason(game.period());
                     timerService.reset();
@@ -177,7 +177,7 @@ public class ClockComponent extends AnchorPane {
         subscriber.subscribe(this.eventListener
                         .listen("games." + gameId + ".updated", Game.class),
                 event -> {
-                    System.out.println("Update Speed zu" + event.data().speed());
+                    //System.out.println("Update Speed zu" + event.data().speed());
                     Game game = event.data();
                     timerService.setSpeedLocal(game.speed());
                 },

@@ -56,18 +56,21 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
         if(showName){
             String name = gameResourceBundle.getString(resourceTranslation.get(resource.resourceID()));
             descriptionText.setText(name);
+            descriptionText.setVisible(true);
         }else{
             descriptionText.setVisible(false);
         }
 
         if(showCount){
             countText.setText("x" + resource.count());
+            countText.setVisible(true);
         }else{
             countText.setVisible(false);
         }
 
         if(showIcon){
             resourceIconImageView.setImage(imageCache.get("icons/Resources/" + resource.resourceID() + ".png"));
+            resourceIconImageView.setVisible(true);
         }else{
             resourceIconImageView.setVisible(false);
         }
@@ -77,8 +80,9 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
                 changePerSeasonText.setVisible(false);
             }else {
                 String sign;
-                sign = (resource.changePerSeason() > 0) ? "+" : "-";
+                sign = (resource.changePerSeason() > 0) ? "+" : "";
                 changePerSeasonText.setText(sign + resource.changePerSeason());
+                changePerSeasonText.setVisible(true);
             }
         }else{
             changePerSeasonText.setVisible(false);

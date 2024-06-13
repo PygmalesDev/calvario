@@ -23,4 +23,7 @@ public interface EmpireApiService {
 
     @GET("presets/resources")
     Observable<List<ResourceDto>> getResources();
+
+    @GET("games/{game}/empires/{empire}/aggregates/resources.periodic")
+    Observable<AggregateResultDto> getResourceAggregates(@Path("game") String game, @Path("empire") String empire);
 }

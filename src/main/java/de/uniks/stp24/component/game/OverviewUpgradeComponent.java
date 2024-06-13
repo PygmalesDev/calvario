@@ -1,8 +1,10 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.ResourcesService;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
@@ -11,6 +13,7 @@ import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -45,9 +48,10 @@ public class OverviewUpgradeComponent extends AnchorPane {
 
     }
 
-    public void setUpgradeButton(){
-        if(islandAttributes.getNeededResources(inGameController.island.upgradeLevel()) != null) {
-            if (resourcesService.hasEnoughResources(islandAttributes.getNeededResources(inGameController.island.upgradeLevel()))) {
+    public void setUpgradeButton() {
+        islandAttributes.setIsland(inGameController.island);
+        if (islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()) != null) {
+            if (resourcesService.hasEnoughResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()))) {
                 confirmUpgrade.setStyle("-fx-background-color: green;");
             } else {
                 confirmUpgrade.setStyle("-fx-background-color: black;");
@@ -73,8 +77,8 @@ public class OverviewUpgradeComponent extends AnchorPane {
         this.inGameController = inGameController;
     }
 
-    public void setNeededResources(){
-        if(inGameController != null) {
+    public void setNeededResources() {
+        if (inGameController != null) {
             LinkedList<Text> resTextList = new LinkedList<>(Arrays.asList(res_1, res_2, res_3, res_4, report));
             int i = 0;
             for (Map.Entry<String, Integer> entry : islandAttributes.getNeededResources(inGameController.island.upgradeLevel()).entrySet()) {
@@ -84,10 +88,12 @@ public class OverviewUpgradeComponent extends AnchorPane {
         }
     }
 
-    public void upgradeIsland(){
-        System.out.println(resourcesService.hasEnoughResources(islandAttributes.getNeededResources(inGameController.island.upgradeLevel())));
-        if(resourcesService.hasEnoughResources(islandAttributes.getNeededResources(inGameController.island.upgradeLevel()))) {
+    public void upgradeIsland() {
+        if (resourcesService.hasEnoughResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()))) {
             resourcesService.upgradeIsland();
+            setNeededResources();
+            inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewSitesComponent);
+            inGameController.overviewSitesComponent.showSites();
         }
     }
 }

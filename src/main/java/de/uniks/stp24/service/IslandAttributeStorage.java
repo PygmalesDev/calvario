@@ -1,7 +1,9 @@
 package de.uniks.stp24.service;
 
 import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.SystemUpgrades;
+import javafx.collections.ObservableMap;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -11,6 +13,7 @@ import java.util.Map;
 public class IslandAttributeStorage {
     private EmpireDto empireDto;
     private SystemUpgrades systemPresets;
+    private Island island;
 
 
     @Inject
@@ -42,7 +45,16 @@ public class IslandAttributeStorage {
         systemPresets = presets;
     }
 
+    public void setIsland(Island island){
+        this.island = island;
+    }
+
+    public Island getIsland(){
+        return this.island;
+    }
+
     public String[] getTech(){
         return empireDto.technologies();
     }
+
 }

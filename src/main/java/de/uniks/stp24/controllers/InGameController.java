@@ -9,6 +9,7 @@ import de.uniks.stp24.component.menu.LobbyHostSettingsComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.ws.EventListener;
 import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.GameStatus;
@@ -17,9 +18,6 @@ import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.game.IslandsService;
-import de.uniks.stp24.service.game.TimerService;
-import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -109,14 +107,14 @@ public class InGameController extends BasicController {
     IslandAttributeStorage islandAttributes;
     @Inject
     EventListener eventListener;
+    @Inject
+    ResourcesService resourceService;
 
     public IslandComponent selectedIsland;
     public Island island;
 
     boolean pause = false;
     List<IslandComponent> islandComponentList = new ArrayList<>();
-
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     // todo remove this variables if not needed
     String gameID;
@@ -153,6 +151,11 @@ public class InGameController extends BasicController {
         this.subscriber.subscribe(inGameService.loadUpgradePresets(),
                 result -> {
                     islandAttributes.setSystemPresets(result);
+                });
+
+        this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
+                result -> {
+                    islandAttributes.setEmpireDto(result);
                 });
 
         if(!tokenStorage.isSpectator()) {
@@ -303,42 +306,15 @@ public class InGameController extends BasicController {
     }
 
 
-    //Updating Empire DTO
+    //TODO: FIX BUG
     public void createEmpireListener() {
         this.subscriber.subscribe(this.eventListener
                         .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
                 event -> {
                     islandAttributes.setEmpireDto(event.data());
-                    System.out.println(event.data());
+                    System.out.println("Event -> minerals: " + islandAttributes.getAvailableResources().get("minerals") + " alloys: " + islandAttributes.getAvailableResources().get("alloys"));
+                    overviewUpgradeComponent.setUpgradeButton();
                 },
                 error -> System.out.println("errorListener"));
     }
-    /*
-    public void updateEmpireAttributes(){
-        this.subscriber.subscribe(this.eventListener
-                .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getGameId() + ".updated"));
-
-
-
-        this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
-                result -> {
-                    islandAttributes.setEmpireDto(result);
-                    System.out.println(result.resources());
-                });
-
-
-    }
-
-
-     */
-    /*
-    //TODO: Change this with event listener
-    private void startUpdateTask() {
-        final Runnable task = this::updateEmpireAttributes;
-        // Schedule the task to run initially after 0 seconds, and then every 5 seconds
-        scheduler.scheduleAtFixedRate(task, 0, 5, TimeUnit.SECONDS);
-    }
-
-     */
-
 }

@@ -70,34 +70,26 @@ public class ResourcesService {
         return true;
     }
 
-    public void updateAvailableResources(Map<String, Integer> neededResources) {
+    public Map<String, Integer> updateAvailableResources(Map<String, Integer> neededResources) {
+        Map<String, Integer> difRes = new HashMap<>();
         for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
             String res = entry.getKey();
             int neededAmount = entry.getValue();
-            int availableAmount = islandAttributes.getAvailableResources().get(res);
-            int newAmount = availableAmount - neededAmount;
-            islandAttributes.getAvailableResources().put(res, newAmount);
+            difRes.put(res, -neededAmount);
         }
-        System.out.println(" Local changes -> minerals: " + islandAttributes.getAvailableResources().get("minerals") + " alloys: " + islandAttributes.getAvailableResources().get("alloys"));
+        return difRes;
     }
 
 
     public void upgradeIsland() {
-        updateAvailableResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()));
+        Map<String, Integer> difRes = updateAvailableResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()));
 
-        empireService.updateEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId(),
-                new UpdateEmpireDto(islandAttributes.getAvailableResources(), islandAttributes.getTech(), null, null, null));
-
-        //TODO
-        this.subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+        this.subscriber.subscribe(empireService.updateEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId(),
+                new UpdateEmpireDto(difRes, islandAttributes.getTech(), null, null, null)),
                 result -> {
                     islandAttributes.setEmpireDto(result);
-                    System.out.println(" Server changes -> minerals: " + result.resources().get("minerals") + " alloys: " + result.resources().get("alloys"));
+                    System.out.println("    Server -> minerals: " + result.resources().get("minerals") + " alloys: " + result.resources().get("alloys"));
                 });
-
-    }
-
-    public void resMapListener() {
 
     }
 }

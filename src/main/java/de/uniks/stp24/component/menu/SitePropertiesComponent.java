@@ -18,14 +18,11 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
 import org.fulib.fx.FulibFxApp;
 import org.fulib.fx.annotation.controller.Component;
-import org.fulib.fx.annotation.controller.SubComponent;
-import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
@@ -36,22 +33,21 @@ import javax.inject.Provider;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.function.ToLongBiFunction;
 
 @Component(view = "SiteProperties.fxml")
 public class SitePropertiesComponent extends AnchorPane {
+    @FXML
+    GridPane siteAmountGridPane;
+    @FXML
+    ListView<Resource> siteCostsListView;
     @FXML
     ListView<Resource> siteProducesListView;
     @FXML
     ListView<Resource> siteConsumesListView;
     @FXML
-    GridView<Resource> siteCostsGridView;
-    @FXML
     Button buildSiteButton;
     @FXML
     Button destroySiteButton;
-    @FXML
-    GridView<Resource> siteAmountGridView;
     @FXML
     ImageView siteImage;
     @FXML
@@ -136,21 +132,27 @@ public class SitePropertiesComponent extends AnchorPane {
     }
     @OnRender
     public void displayCostsOfSite(){
-        siteCostsGridView.setCellHeight(20);
+        siteCostsListView.setSelectionModel(null);
         subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
-        siteCostsGridView.setCellFactory(gridView -> new ComponentGridCell<>(app, resourceComponentProvider));
-        }
+        siteCostsListView.setCellFactory(gridView -> new CustomComponentListCell<>(app, resourceComponentProvider));
+    }
+
+    public void displayAmountOfSite(){
+        int amount = 0;
+
+        System.out.println("SCHALOM" + tokenStorage.getIsland().sites().get(siteType));
+    }
 
     private void resourceListGeneration(SiteDto siteDto) {
         Map<String, Integer> resourceMap = siteDto.cost();
-        ObservableList<Resource> resourceList = resourcesServiceGame.generateResourceList(resourceMap, siteCostsGridView.getItems());
-        siteCostsGridView.setItems(resourceList);
+        ObservableList<Resource> resourceList = resourcesServiceGame.generateResourceList(resourceMap, siteCostsListView.getItems());
+        siteCostsListView.setItems(resourceList);
 
     }
 }
 
+class CustomComponentListCell<Item, Component extends Parent> extends ListCell<Item> {
 
-class ComponentGridCell<Item, Component extends Parent> extends GridCell<Item> {
     private final FulibFxApp app;
     private final Provider<? extends Component> provider;
     private final Map<String, Object> extraParams; // extra parameters to pass to the component
@@ -163,7 +165,7 @@ class ComponentGridCell<Item, Component extends Parent> extends GridCell<Item> {
      * @param app      The FulibFX app
      * @param provider The provider to create the component
      */
-    public ComponentGridCell(FulibFxApp app, Provider<? extends Component> provider) {
+    public CustomComponentListCell(FulibFxApp app, Provider<? extends Component> provider) {
         this(app, provider, Map.of());
     }
 
@@ -174,7 +176,7 @@ class ComponentGridCell<Item, Component extends Parent> extends GridCell<Item> {
      * @param provider    The provider to create the component
      * @param extraParams Extra parameters to pass to the component
      */
-    public ComponentGridCell(FulibFxApp app, Provider<? extends Component> provider, Map<String, Object> extraParams) {
+    public CustomComponentListCell(FulibFxApp app, Provider<? extends Component> provider, Map<String, Object> extraParams) {
         super();
         setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         this.app = app;
@@ -185,6 +187,8 @@ class ComponentGridCell<Item, Component extends Parent> extends GridCell<Item> {
     @Override
     protected void updateItem(Item item, boolean empty) {
         super.updateItem(item, empty);
+        setPrefHeight(5);
+        setPrefWidth(50);
         // Destroy component if the cell is emptied
         if (empty || item == null) {
             if (component != null) {
@@ -207,7 +211,7 @@ class ComponentGridCell<Item, Component extends Parent> extends GridCell<Item> {
             // Add item and list to parameters if they are not already present
             final Map<String, Object> params = new HashMap<>(extraParams);
             params.putIfAbsent("item", item);
-            params.putIfAbsent("grid", getGridView().getItems());
+            params.putIfAbsent("list", getListView().getItems());
             setGraphic(app.initAndRender(component, params));
         }
 
@@ -218,4 +222,7 @@ class ComponentGridCell<Item, Component extends Parent> extends GridCell<Item> {
         }
     }
 }
+
+
+
 

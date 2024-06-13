@@ -32,7 +32,7 @@ public class StorageOverviewComponent extends VBox {
     @FXML
     Button closeStorageOverviewButton;
     @FXML
-    ListView<Resource> resourceListView;
+    public ListView<Resource> resourceListView;
     @FXML
     Label empireNameLabel;
 
@@ -55,7 +55,7 @@ public class StorageOverviewComponent extends VBox {
     ResourceBundle gameResourceBundle;
 
     private String lastUpdate;
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, true, gameResourceBundle);
+    Provider<ResourceComponent> resourceComponentProvider = () -> new ResourceComponent(true, true, true, true, gameResourceBundle);
 
 
     @Inject
@@ -63,18 +63,56 @@ public class StorageOverviewComponent extends VBox {
         lastUpdate = "";
     }
 
+    @OnInit
+    public void init() {
+        if(!tokenStorage.isSpectator()) {
+            createEmpireListener();
+        }
+    }
 
-    public void closeStorageOverview(){
-        System.out.println("storage game:"
-                + tokenStorage.getGameId());
-        System.out.println("storage empire:"
-                +tokenStorage.getEmpireId());
+    /**
+     * Initialising the resource list
+     **/
+    @OnRender
+    public void initStorageList() {
+        if(!tokenStorage.isSpectator()) {
+            this.resourceListView.setSelectionModel(null);
+            this.subscriber.subscribe(this.empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()), this::resourceListGeneration);
+            this.resourceListView.setCellFactory(list -> new ComponentListCell<>(app, resourceComponentProvider));
+        }
+    }
+    //Todo: changePerSeason
+
+
+    private void resourceListGeneration(EmpireDto empireDto) {
+        Map<String, Integer> resourceMap = empireDto.resources();
+        ObservableList<Resource> resourceList = resourcesService.generateResourceList(resourceMap, resourceListView.getItems());
+        this.resourceListView.setItems(resourceList);
+    }
+
+
+    /**
+     * Listener for the empire: Changes of the resources will change the list in the storage overview.
+     **/
+    public void createEmpireListener() {
+        this.subscriber.subscribe(this.eventListener
+                        .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
+                event -> {
+                    if (!lastUpdate.equals(event.data().updatedAt())) {
+                        resourceListGeneration(event.data());
+                        this.lastUpdate = event.data().updatedAt();
+                    }
+                },
+                error -> System.out.println("errorListener"));
+    }
+
+    public void closeStorageOverview() {
         this.getParent().setVisible(false);
     }
 
-
     @OnDestroy
-    void destroy(){
+    void destroy() {
         this.subscriber.dispose();
     }
+
 }

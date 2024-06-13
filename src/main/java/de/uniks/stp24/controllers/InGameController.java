@@ -12,12 +12,16 @@ import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Line;
@@ -34,12 +38,16 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
 
+import static javafx.scene.input.KeyEvent.KEY_PRESSED;
+
 @Title("CALVARIO")
 @Controller
 public class InGameController extends BasicController {
     public Button showStorageButton;
     public Button showIslandButton;
     public HBox storageButtonsBox;
+    @FXML
+    Group group;
     @FXML
     ScrollPane mapPane;
     @FXML
@@ -71,12 +79,13 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
-
     boolean pause = false;
 
     // todo remove this variables if not needed
     String gameID;
     String empireID;
+    double scale = 1.0;
+    boolean zoomIn = true;
 
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
@@ -177,7 +186,7 @@ public class InGameController extends BasicController {
             showIslandButton = new Button();
             showIslandButton.setPrefHeight(30);
             showIslandButton.setPrefWidth(30);
-            showIslandButton.setOnAction(this::showIslandOverview);
+            showIslandButton.setOnAction(event -> showIslandOverview());
             showStorageButton = new Button();
             showStorageButton.setPrefHeight(30);
             showStorageButton.setPrefWidth(30);
@@ -187,18 +196,23 @@ public class InGameController extends BasicController {
     }
 
     @OnRender
-    public void createMap()  {
+    public void createMap() {
 
-        this.mapGrid.setMinSize(islandsService.getMapWidth(),
-          islandsService.getMapHeight());
+//        app.stage().setFullScreenExitHint("");
+//        app.stage().setFullScreen(true);
+//        this.mapGrid.setMinSize(islandsService.getMapWidth(), islandsService.getMapHeight());
+
+
         this.islandComponentList = islandsService.createIslands(islandsService.getListOfIslands());
         this.islandComponentMap = islandsService.getComponentMap();
         islandsService.createLines(this.islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
         this.islandComponentList.forEach(isle -> {
-            isle.addEventHandler(MouseEvent.MOUSE_CLICKED,this::showInfo);
+            isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
             this.mapGrid.getChildren().add(isle);
         });
         createButtonsStorage();
+        mapPane.setVvalue(0.5);
+        mapPane.setHvalue(0.5);
 
     }
 
@@ -214,8 +228,6 @@ public class InGameController extends BasicController {
     @OnDestroy
     public void destroy() {
         islandComponentList.forEach(IslandComponent::destroy);
-        islandComponentList.clear();
-        islandComponentMap.clear();
         islandComponentList = null;
         islandComponentMap = null;
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
@@ -229,7 +241,21 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
-    public void showIslandOverview(ActionEvent event) {
-        // todo this should be equivalent to showInfo(MouseEvent) ?
+    public void showIslandOverview() {
+        int factor;
+        System.out.println(mapPane.getPrefViewportWidth());
+        System.out.println(app.stage().getScene().getWindow().getWidth());
+        this.mapPane.setPrefViewportHeight(1000);
+        this.mapPane.setPrefViewportWidth(1000);
+        factor = zoomIn ? 1 : -1;
+        scale += 0.1 * factor;
+        if(scale < 0.2) {
+            zoomIn = true;
+        } else if (scale > 2.0) {
+            zoomIn = false;
+        }
+        group.setScaleX(scale);
+        group.setScaleY(scale);
     }
+
 }

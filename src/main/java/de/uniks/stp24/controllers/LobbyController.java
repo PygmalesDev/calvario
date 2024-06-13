@@ -227,12 +227,12 @@ public class LobbyController extends BasicController {
                                 }
                                 System.out.println("RESOURCES READY");
                             islandsService.retrieveIslands(gameID);
-                            app.show("/ingame");
+                            //app.show("/ingame");
                             }, this::errorMsg);
                         } else {
                             tokenStorage.setIsSpectator(true);
                             islandsService.retrieveIslands(gameID);
-                            app.show("/ingame");
+                            //app.show("/ingame");
                         }
                     }, this::errorMsg);}
           }, this::errorMsg);

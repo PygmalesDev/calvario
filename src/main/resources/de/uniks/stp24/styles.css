@@ -734,8 +734,8 @@ ToggleButton:hover{
 }
 
 .backgroundGame{
-    -fx-background-image: url('/de/uniks/stp24/icons/sea.png');
     -fx-background-color: "TRANSPARENT";
+    -fx-background-image: url('/de/uniks/stp24/icons/sea.png');
     -fx-background-size: cover;
 }
 

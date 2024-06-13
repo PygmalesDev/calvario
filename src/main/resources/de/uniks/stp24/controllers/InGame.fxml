@@ -11,24 +11,24 @@
 <AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.InGameController">
     <HBox alignment="CENTER" style="-fx-background-color: TRANSPARENT;" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
         <ScrollPane fx:id="mapPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" style="-fx-background-color: TRANSPARENT;" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
-            <StackPane fx:id="zoomPane" style="-fx-background-color: TRANSPARENT;">
-<!--                <Group fx:id="group">-->
+            <Group fx:id="group">
+                <StackPane fx:id="zoomPane" style="-fx-background-color: TRANSPARENT;">
                     <Pane fx:id="mapGrid" styleClass="backgroundGame">
                     </Pane>
-<!--                </Group>-->
-            </StackPane>
+                </StackPane>
+            </Group>
         </ScrollPane>
     </HBox>
     <StackPane fx:id="pauseMenuContainer" layoutX="440.0" layoutY="40.0" prefHeight="600.0" prefWidth="400.0" style=": ;" visible="false" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="440.0" AnchorPane.rightAnchor="440.0" AnchorPane.topAnchor="40.0" />
     <HBox fx:id="storageButtonsBox" alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="150.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
-<!--      <children>-->
-<!--         <Button fx:id="showStorageButton" mnemonicParsing="false" onAction="#showStorage" prefHeight="40.0" prefWidth="40.0" text="Storag" />-->
-<!--         <Button fx:id="showIslandButton" mnemonicParsing="false" onAction="#showIslandOverview" prefHeight="40.0" prefWidth="40.0" />-->
-<!--      </children>-->
-      <padding>
-         <Insets left="30.0" />
-      </padding>
-   </HBox>
-   <StackPane fx:id="storageOverviewContainer" prefHeight="500.0" prefWidth="300.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="20.0" />
+        <!--      <children>-->
+        <!--         <Button fx:id="showStorageButton" mnemonicParsing="false" onAction="#showStorage" prefHeight="40.0" prefWidth="40.0" text="Storag" />-->
+        <!--         <Button fx:id="showIslandButton" mnemonicParsing="false" onAction="#showIslandOverview" prefHeight="40.0" prefWidth="40.0" />-->
+        <!--      </children>-->
+        <padding>
+            <Insets left="30.0" />
+        </padding>
+    </HBox>
+    <StackPane fx:id="storageOverviewContainer" prefHeight="500.0" prefWidth="300.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="20.0" />
 
 </AnchorPane>

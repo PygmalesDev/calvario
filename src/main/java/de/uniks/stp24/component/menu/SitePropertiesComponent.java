@@ -135,17 +135,3 @@ public class SitePropertiesComponent extends AnchorPane {
     }
 }
 
-class CustomGridCell extends GridCell<Map<String, Integer>> {
-    @Override
-    protected void updateItem(Map<String, Integer> item, boolean empty) {
-        super.updateItem(item, empty);
-        if (empty || item == null) {
-            setText(null);
-            setGraphic(null);
-        } else {
-            setText(item.toString());
-            setTextAlignment(TextAlignment.CENTER);
-
-        }
-    }
-}

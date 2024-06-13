@@ -1,7 +1,7 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.IslandComponent;
-import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.model.GameStatus;
@@ -10,6 +10,7 @@ import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.event.ActionEvent;
@@ -62,6 +63,9 @@ public class InGameController extends BasicController {
     StackPane pauseMenuContainer;
     @FXML
     StackPane storageOverviewContainer;
+
+    @Inject
+    TimerService timerService;
     @Inject
     InGameService inGameService;
     @Inject
@@ -70,6 +74,9 @@ public class InGameController extends BasicController {
     LobbyService lobbyService;
     @Inject
     EmpireService empireService;
+
+    @FXML
+    StackPane clockComponentContainer;
     @SubComponent
     @Inject
     public PauseMenuComponent pauseMenuComponent;
@@ -79,6 +86,14 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
+    @SubComponent
+    @Inject
+    public ClockComponent clockComponent;
+
+    boolean pause = false;
+
+    // todo remove this variables if not needed
+    String gameID;
     String empireID;
 
     @SubComponent
@@ -98,13 +113,10 @@ public class InGameController extends BasicController {
 
     @Inject
     IslandsService islandsService;
-
-    String gameID;
     List<IslandComponent> islandComponentList = new ArrayList<>();
 
     @Inject
     Subscriber subscriber;
-    boolean pause = false;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
@@ -180,6 +192,8 @@ public class InGameController extends BasicController {
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
+
+        clockComponentContainer.getChildren().add(clockComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)

@@ -14,6 +14,9 @@ public interface GamesApiService {
     Observable<UpdateGameResultDto> editGame(@Path("id") String id, @Body UpdateGameDto dto);
 
     @PATCH("games/{id}")
+    Observable<UpdateGameResultDto> editSpeed(@Path("id") String id, @Body UpdateSpeedDto dto);
+
+    @PATCH("games/{id}")
     Observable<UpdateGameResultDto> startGame(@Path("id") String id, @Body StartGameDto dto);
 
     @POST("games")

@@ -145,7 +145,7 @@ ToggleButton:hover{
 }
 
 .lockButton {
-    -fx-background-image: url("icons/unlock.png");
+    -fx-background-image: url("../icons/unlock.png");
     -fx-background-color: WHITE;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
@@ -157,7 +157,7 @@ ToggleButton:hover{
 }
 
 .lockButton:selected {
-    -fx-background-image: url("icons/lock.png");
+    -fx-background-image: url("../icons/lock.png");
     -fx-background-color: WHITE;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
@@ -679,23 +679,15 @@ ToggleButton:hover{
 
 
 /*Loading, Login, Register*/
-.calvarioTextLogoLogin {
+.calvarioTextLogo{
     -fx-background-image: url("/de/uniks/stp24/assets/logos/calvario_new.png");
     -fx-background-color: transparent;
     -fx-background-position: center;
-    -fx-background-size: 60% 100%;
+    -fx-background-size: 70% 90%;
     -fx-background-repeat: no-repeat;
 
 }
 
-.calvarioTextLogoRegister {
-    -fx-background-image: url("/de/uniks/stp24/assets/logos/calvario_new.png");
-    -fx-background-color: transparent;
-    -fx-background-position: center;
-    -fx-background-size: 60% 80%;
-    -fx-background-repeat: no-repeat;
-
-}
 
 
 .calvarioLogo {

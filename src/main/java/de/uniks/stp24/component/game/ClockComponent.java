@@ -4,6 +4,7 @@ import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
@@ -26,8 +27,8 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Map;
 import java.util.Objects;
-
 
 @Component(view = "Clock.fxml")
 public class ClockComponent extends AnchorPane {
@@ -62,11 +63,14 @@ public class ClockComponent extends AnchorPane {
     String gameId;
 
     ImageCache imageCache = new ImageCache();
+    Map<String, IslandComponent> islandComponents;
 
     @Inject
     TokenStorage tokenStorage;
     @Inject
     TimerService timerService;
+    @Inject
+    IslandsService islandsService;
     @Inject
     GamesApiService gamesApiService;
     @Inject
@@ -82,6 +86,7 @@ public class ClockComponent extends AnchorPane {
     public void init() {
 
         gameId = tokenStorage.getGameId();
+        islandComponents = islandsService.getComponentMap();
 
         PropertyChangeListener callHandleTimeChanged = this::handleTimeChanged;
         timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_COUNTDOWN, callHandleTimeChanged);
@@ -186,7 +191,7 @@ public class ClockComponent extends AnchorPane {
     ///////////////--------------------------------------------onAction------------------------------------/////////////
 
     public void showFlags() {
-        // TODO: Show Flags for all Islands
+        islandComponents.forEach((id, island) -> island.flagImage.setVisible(flagToggle.isSelected()));
     }
 
     public void pauseClock() {

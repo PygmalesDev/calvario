@@ -67,13 +67,7 @@ public class InGameController extends BasicController {
     StackPane storageOverviewContainer;
 
     @Inject
-    TimerService timerService;
-    @Inject
     InGameService inGameService;
-    @Inject
-    GamesService gamesService;
-    @Inject
-    LobbyService lobbyService;
     @Inject
     EmpireService empireService;
 
@@ -92,19 +86,16 @@ public class InGameController extends BasicController {
     @Inject
     public OverviewUpgradeComponent overviewUpgradeComponent;
     @Inject
-    LobbyHostSettingsComponent lobbyHostSettingsComponent;
-    @Inject
     public StorageOverviewComponent storageOverviewComponent;
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
-
     @Inject
     IslandsService islandsService;
     @Inject
     Subscriber subscriber;
     @Inject
-    IslandAttributeStorage islandAttributes;
+    public IslandAttributeStorage islandAttributes;
     @Inject
     EventListener eventListener;
     @Inject

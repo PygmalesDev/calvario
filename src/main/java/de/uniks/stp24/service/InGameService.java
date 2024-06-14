@@ -68,7 +68,6 @@ public class InGameService {
 
     public Observable<SystemUpgrades> loadUpgradePresets() {
         return presetsApiService.getSystemUpgrades();
-
     }
 
     public void setTimerService(TimerService timerService) {

@@ -2,15 +2,18 @@ package de.uniks.stp24.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.game.ClockComponent;
-import de.uniks.stp24.component.game.StorageOverviewComponent;
+import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.model.SystemUpgrades;
+import de.uniks.stp24.model.UpgradeStatus;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ResourcesService;
@@ -78,7 +81,25 @@ public class PauseMenuTest extends ControllerTest {
     SettingsComponent settingsComponent;
 
     @InjectMocks
+    OverviewSitesComponent overviewSitesComponent;
+
+    @InjectMocks
+    OverviewUpgradeComponent overviewUpgradeComponent;
+
+    @InjectMocks
+    IslandAttributeStorage islandAttributeStorage;
+
+    @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
+
+    @InjectMocks
+    DetailsComponent detailsComponent;
+
+    @InjectMocks
+    SitesComponent sitesComponent;
+
+    @InjectMocks
+    BuildingsComponent buildingsComponent;
 
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
@@ -94,9 +115,40 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
+        this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
+        this.inGameController.overviewUpgradeComponent = this.overviewUpgradeComponent;
+        this.inGameController.islandAttributes = this.islandAttributeStorage;
+        this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
+        this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
+        this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+
         inGameService.setGameStatus(gameStatus);
         inGameService.setTimerService(timerService);
-        doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", true,1,1,null ))).when(gamesApiService).getGame(any());
+        doReturn(Observable.just(new Game("a", "a", "gameId", "gameName", "gameOwner", true, 1, 1, null))).when(gamesApiService).getGame(any());
+        SystemUpgrades systemUpgrades = new SystemUpgrades(
+                new UpgradeStatus("1", 0, null, null, 0),
+                new UpgradeStatus("1", 0, null, null, 0),
+                new UpgradeStatus("1", 0, null, null, 0),
+                new UpgradeStatus("1", 0, null, null, 0),
+                new UpgradeStatus("1", 0, null, null, 0));
+        doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
+        doReturn(Observable.just(new EmpireDto(
+                "1",
+                "1",
+                "1",
+                "1",
+                "1",
+                "1",
+                "1",
+                "1",
+                1,
+                -1,
+                "1",
+                null,
+                null,
+                null
+        ))).when(empireService).getEmpire(any(), any());
+
         this.app.show(this.inGameController);
     }
 

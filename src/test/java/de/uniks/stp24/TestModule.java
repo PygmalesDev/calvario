@@ -90,6 +90,10 @@ public class TestModule {
         return Mockito.mock(EditGameService.class);
     }
 
+    @Provides
+    @Singleton
+    PresetsApiService presetsApiService(){return Mockito.mock(PresetsApiService.class);}
+
 }
 
 

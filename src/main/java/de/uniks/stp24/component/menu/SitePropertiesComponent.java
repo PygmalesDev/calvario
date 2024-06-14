@@ -204,11 +204,11 @@ public class SitePropertiesComponent extends AnchorPane {
         siteCostsListView.setItems(resourceListPrice);
 
         Map<String, Integer> resourceMapUpkeep = siteDto.upkeep();
-        ObservableList<Resource> resourceListUpkeep = resourcesServiceGame.generateResourceList(resourceMapUpkeep, siteCostsListView.getItems());
+        ObservableList<Resource> resourceListUpkeep = resourcesServiceGame.generateResourceList(resourceMapUpkeep, siteConsumesListView.getItems());
         siteConsumesListView.setItems(resourceListUpkeep);
 
         Map<String, Integer> resourceMapProduce = siteDto.production();
-        ObservableList<Resource> resourceListProduce = resourcesServiceGame.generateResourceList(resourceMapProduce, siteConsumesListView.getItems());
+        ObservableList<Resource> resourceListProduce = resourcesServiceGame.generateResourceList(resourceMapProduce, siteProducesListView.getItems());
         siteProducesListView.setItems(resourceListProduce);
     }
 }

@@ -116,4 +116,8 @@ public class ResourcesService {
     public Observable<SiteDto> getResourcesSite(String siteType) {
         return gameSystemsApiService.getSite(siteType);
     }
+
+    public Observable<BuildingDto> getResourcesBuilding(String buildingType) {
+        return gameSystemsApiService.getBuilding(buildingType);
+    }
 }

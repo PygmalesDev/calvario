@@ -1,11 +1,8 @@
 package de.uniks.stp24.rest;
 
-import de.uniks.stp24.dto.SiteDto;
-import de.uniks.stp24.dto.SystemDto;
+import de.uniks.stp24.dto.*;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.*;
-import de.uniks.stp24.dto.SystemsDto;
-import de.uniks.stp24.dto.SystemsResultDto;
 import de.uniks.stp24.model.Island;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.Body;
@@ -34,4 +31,9 @@ public interface GameSystemsApiService {
 
     @GET("presets/districts/{id}")
     Observable<SiteDto> getSite(@Path("id") String siteID);
+
+    @GET("presets/buildings/{id}")
+    Observable<BuildingDto> getBuilding(@Path("id") String buildingID);
+
+
 }

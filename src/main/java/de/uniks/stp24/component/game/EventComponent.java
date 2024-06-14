@@ -2,7 +2,6 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.EffectSourceDto;
-import de.uniks.stp24.model.Game;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EventService;
@@ -41,7 +40,7 @@ public class EventComponent extends AnchorPane {
     @FXML
     Text eventName;
     @FXML
-    ImageView eventImage;
+    public ImageView eventImage;
     @FXML
     Button closeEvent;
 
@@ -57,8 +56,6 @@ public class EventComponent extends AnchorPane {
     @Inject
     TimerService timerService;
 
-    EffectSourceDto event;
-
     @Inject
     @Resource
     public ResourceBundle resourcesBundle;
@@ -72,6 +69,8 @@ public class EventComponent extends AnchorPane {
     @Inject
     TokenStorage tokenStorage;
 
+    String gameId;
+
     ImageCache imageCache = new ImageCache();
 
     @Inject
@@ -81,21 +80,9 @@ public class EventComponent extends AnchorPane {
 
     @OnInit
     public void init() {
-        createSeasonListener();
+
     }
 
-    private void createSeasonListener() {
-        subscriber.subscribe(eventListener
-                .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
-                game -> {
-                    // get Event if possible
-                    eventService.countEventDown();
-                    event = eventService.getEvent();
-                    if (event != null) {
-                        setEventInfos(event);
-                    }
-                });
-    }
 
     @OnRender
     public void render() {
@@ -103,9 +90,7 @@ public class EventComponent extends AnchorPane {
         String css = Objects.requireNonNull(this.getClass().getResource("/de/uniks/stp24/style/event.css")).toExternalForm();
         this.getStylesheets().add(css);
 
-        event = eventService.getEvent();
-
-        setEventInfos(event);
+        gameId = tokenStorage.getGameId();
 
     }
 
@@ -118,17 +103,16 @@ public class EventComponent extends AnchorPane {
         return String.join("", word);
     }
 
-    private void setEventInfos(@NotNull EffectSourceDto event) {
+    public void setEventInfos(@NotNull EffectSourceDto event) {
 
         String id = convert(event.id());
 
         checkSize(id);
 
-        eventImage.setImage(imageCache.get("icons/events/"+ id + "Event.png"));
+        eventImage.setImage(imageCache.get("icons/events/" + id + "Event.png"));
         System.out.println("event." + id + ".description");
         eventName.setText(resources.getString("event." + id + ".name"));
         eventDescription.setText(resources.getString("event." + id + ".description"));
-
     }
 
     // reduce size of eventName if it's too long
@@ -138,8 +122,8 @@ public class EventComponent extends AnchorPane {
             int num = id.length() % 15;
             int size = 32 - (num / 2);
             eventName.setStyle("-fx-font-size: " + size);
-            eventName.setTranslateY(eventName.getTranslateY() + num-3);
-            descriptionScrollPane.setTranslateY(descriptionScrollPane.getTranslateY() + num-3);
+            eventName.setTranslateY(eventName.getTranslateY() + num - 3);
+            descriptionScrollPane.setTranslateY(descriptionScrollPane.getTranslateY() + num - 3);
         }
 
     }
@@ -157,6 +141,7 @@ public class EventComponent extends AnchorPane {
 
     public void show() {
         container.setVisible(true);
+        shadow.setVisible(true);
         shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
     }
 

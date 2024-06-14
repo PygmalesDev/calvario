@@ -16,12 +16,9 @@ public class EventService {
     TimerService timerService;
 
     EffectSourceDto event;
-
+    private int remainingSeasons;
     private boolean eventActive = false;
     private int nextEvent;
-
-    // TODO: Remove this test variable
-    private boolean test = true;
 
     ObjectMapper objectMapper = new ObjectMapper();
     Random random = new Random();
@@ -34,16 +31,20 @@ public class EventService {
 
     @Inject
     public EventService() {
-        setNextEvent();
+        nextEvent = 2;
     }
 
     public void setEvent(EffectSourceDto event) {
         this.event = event;
     }
 
-    public EffectSourceDto getEvent() {
+    public EffectSourceDto getNewRandomEvent() {
 
-        if (test || (nextEvent == 0 && !eventActive)) {
+        System.out.println("REMAINING SEASONS: " + nextEvent);
+
+
+        if ((nextEvent <= 0 && !eventActive)) {
+            eventActive = true;
 
             int eventName = random.nextInt(0, eventNames.size());
 
@@ -54,6 +55,8 @@ public class EventService {
                 // Read the JSON file
                 JsonNode rootNode = objectMapper.readTree(jsonFile);
                 String id = rootNode.get("id").asText();
+                String eventType = rootNode.get("event_type").asText();
+                int duration = rootNode.get("duration").asInt();
 
                 // Check if the event has already been added to the eventMap
                 if (!eventMap.containsKey(id)) {
@@ -71,12 +74,13 @@ public class EventService {
                             double bonus = effect.get("bonus").asDouble();
                             effectsDto.add(new EffectDto(variable, base, multiplier, bonus));
                         }
-                        System.out.println(Arrays.toString(effectsDto.toArray(new EffectDto[0])));
-                        eventActive = true;
+
                         setNextEvent();
                         // Second parameter is an array of EffectDto
-                        EffectSourceDto event = new EffectSourceDto(id, effectsDto.toArray(new EffectDto[0]));
+                        event = new EffectSourceDto(id, eventType, duration, effectsDto.toArray(new EffectDto[0]));
+                        System.out.println(event);
                         eventMap.put(id, event);
+                        remainingSeasons = duration;
                     }
                 }
                 return eventMap.get(id);
@@ -92,16 +96,24 @@ public class EventService {
         nextEvent = random.nextInt(100, 120);
     }
 
-    public void countEventDown() {
-        nextEvent--;
+    public EffectSourceDto getEvent() {
+        return event;
     }
 
-    public void setEventActive(boolean eventActive) {
-        this.eventActive = eventActive;
+    public void countEventDown() {
+        remainingSeasons--;
+        nextEvent--;
+        if (remainingSeasons <= 0) {
+            eventActive = false;
+        }
     }
 
     public boolean getEventActive() {
         return eventActive;
+    }
+
+    public int getRemainingSeasons() {
+        return remainingSeasons;
     }
 }
 

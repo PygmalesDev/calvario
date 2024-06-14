@@ -6,6 +6,8 @@ import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
+import de.uniks.stp24.dto.EffectSourceDto;
+import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
@@ -16,6 +18,7 @@ import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
+import de.uniks.stp24.ws.EventListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -95,16 +98,50 @@ public class InGameController extends BasicController {
     public StorageOverviewComponent storageOverviewComponent;
     @SubComponent
     @Inject
-    public ClockComponent clockComponent;
+    EventComponent eventComponent;
     @SubComponent
     @Inject
-    EventComponent eventComponent;
+    public ClockComponent clockComponent;
 
     boolean pause = false;
+    private EffectSourceDto event;
+    @Inject
+    EventListener eventListener;
+
+    String lastUpdate = "";
+
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
     @Inject
     public InGameController() {
+    }
+
+    public void createUpdateSeasonListener() {
+        subscriber.subscribe(this.eventListener
+                        .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
+                event -> {
+
+                    System.out.println("LAST UPDATED: " + lastUpdate + ", UPDATED AT: " + event.data().updatedAt());
+                    if (!lastUpdate.equals(event.data().updatedAt())) {
+                        System.out.println("TICKED");
+                        eventService.countEventDown();
+
+                        this.event = eventService.getNewRandomEvent();
+                        if (this.event != null) {
+                            System.out.println("NEW EVENT");
+                            clockComponent.remainingSeasonsLabel.setVisible(true);
+                            clockComponent.randomEventImage.setVisible(true);
+                            clockComponent.remainingSeasonsLabel.setText(String.valueOf(eventService.getRemainingSeasons()));
+                            clockComponent.setRandomEventInfos(this.event);
+                            eventComponent.setEventInfos(this.event);
+                            eventComponent.show();
+                        } else {
+                            System.out.println("WHYY");
+                        }
+                        lastUpdate = event.data().updatedAt();
+                    }
+                },
+                error -> System.out.println("Error bei Season: " + error.getMessage()));
     }
 
     @OnInit
@@ -114,6 +151,7 @@ public class InGameController extends BasicController {
         System.out.println("game in ingame: " + tokenStorage.getGameId());
         System.out.println("empire in ingame: " + tokenStorage.getEmpireId());
 
+        createUpdateSeasonListener();
 
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
@@ -159,13 +197,16 @@ public class InGameController extends BasicController {
     public void render() {
         pauseMenuContainer.setVisible(false);
         eventComponent.setParent(shadow, eventContainer);
+        clockComponentContainer.getChildren().add(clockComponent);
         eventContainer.getChildren().add(eventComponent);
-        eventComponent.show();
+        eventContainer.setVisible(false);
+        shadow.setVisible(false);
+//        eventComponent.show();
 
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
-        clockComponentContainer.getChildren().add(clockComponent);
+
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -263,4 +304,5 @@ public class InGameController extends BasicController {
     }
 
     public void showIslandOverview(ActionEvent actionEvent) {    }
+
 }

@@ -1,9 +1,11 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.dto.EffectSourceDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.ws.EventListener;
@@ -40,9 +42,9 @@ public class ClockComponent extends AnchorPane {
     @FXML
     ToggleButton flagToggle;
     @FXML
-    ImageView randomEventImage;
+    public ImageView randomEventImage;
     @FXML
-    Label remainingSeasonsLabel;
+    public Label remainingSeasonsLabel;
     @FXML
     AnchorPane anchor;
     @FXML
@@ -64,7 +66,8 @@ public class ClockComponent extends AnchorPane {
 
     ImageCache imageCache = new ImageCache();
     Map<String, IslandComponent> islandComponents;
-
+    @Inject
+    EventService eventService;
     @Inject
     TokenStorage tokenStorage;
     @Inject
@@ -77,6 +80,10 @@ public class ClockComponent extends AnchorPane {
     Subscriber subscriber;
     @Inject
     EventListener eventListener;
+    private int lastUpdateSeason = -1;
+    private String lastUpdateSpeed = "";
+    @Inject
+    EventComponent eventComponent;
 
     @Inject
     public ClockComponent() {
@@ -146,8 +153,9 @@ public class ClockComponent extends AnchorPane {
         countdownLabel.setText(translateCountdown(timerService.getCountdown()));
 
         // Dummy data for special Event
-        randomEventImage.setImage(imageCache.get("assets/events/goodEvent.png"));
-        remainingSeasonsLabel.setText("3");
+
+        randomEventImage.setVisible(false);
+        remainingSeasonsLabel.setVisible(false);
     }
 
     @OnDestroy
@@ -169,10 +177,23 @@ public class ClockComponent extends AnchorPane {
         subscriber.subscribe(this.eventListener
                         .listen("games." + gameId + ".ticked", Game.class),
                 event -> {
-                    System.out.println("Season changed");
-                    Game game = event.data();
-                    timerService.setSeason(game.period());
-                    timerService.reset();
+                    System.out.println("ICH BIN HIER");
+                    if (!(lastUpdateSeason == event.data().period())) {
+                        System.out.println("Season changed");
+                        Game game = event.data();
+                        timerService.setSeason(game.period());
+                        timerService.reset();
+
+                        if (eventService.getEventActive()) {
+                            remainingSeasonsLabel.setVisible(true);
+                            randomEventImage.setVisible(true);
+                            remainingSeasonsLabel.setText(String.valueOf(eventService.getRemainingSeasons()));
+                        } else {
+                            remainingSeasonsLabel.setVisible(false);
+                            randomEventImage.setVisible(false);
+                        }
+                        lastUpdateSeason = event.data().period();
+                    }
                 },
                 error -> System.out.println("Error bei Season: " + error.getMessage()));
     }
@@ -181,9 +202,12 @@ public class ClockComponent extends AnchorPane {
         subscriber.subscribe(this.eventListener
                         .listen("games." + gameId + ".updated", Game.class),
                 event -> {
-                    System.out.println("Update Speed zu" + event.data().speed());
-                    Game game = event.data();
-                    timerService.setSpeedLocal(game.speed());
+                    if (!lastUpdateSpeed.equals(event.data().updatedAt())) {
+                        System.out.println("Update Speed zu" + event.data().speed());
+                        Game game = event.data();
+                        timerService.setSpeedLocal(game.speed());
+                        lastUpdateSpeed = event.data().updatedAt();
+                    }
                 },
                 error -> System.out.println("Error bei Speed: " + error.getMessage()));
     }
@@ -214,6 +238,15 @@ public class ClockComponent extends AnchorPane {
     }
 
     ////////////--------------------------------Auxiliary Methods-----------------------------------------//////////////
+
+    public void setRandomEventInfos(@NotNull EffectSourceDto effect) {
+        if (Objects.equals(effect.eventType(), "bad")) {
+            randomEventImage.setImage(imageCache.get("assets/events/badEvent.png"));
+        } else {
+            randomEventImage.setImage(imageCache.get("assets/events/goodEvent.png"));
+        }
+        remainingSeasonsLabel.setText(String.valueOf(effect.duration()));
+    }
 
     @Contract(pure = true)
     private @NotNull String translateCountdown(int countdown) {

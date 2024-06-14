@@ -22,8 +22,8 @@
                 <Font size="18.0" />
             </font>
         </Text>
-        <ScrollPane fx:id="descriptionScrollPane" maxHeight="93.0" maxWidth="270.0" minHeight="93.0" minWidth="270.0" prefHeight="93.0" prefWidth="270.0" translateX="-10.0" translateY="-54.0" VBox.vgrow="NEVER">
-            <StackPane minWidth="263.0">
+        <ScrollPane fx:id="descriptionScrollPane" maxHeight="90.0" maxWidth="270.0" minHeight="90.0" minWidth="270.0" prefHeight="90.0" prefWidth="270.0" translateX="-10.0" translateY="-54.0" vbarPolicy="NEVER" VBox.vgrow="NEVER">
+            <StackPane minWidth="265.0">
                 <Text id="eventDescription" fx:id="eventDescription" strokeType="OUTSIDE" strokeWidth="0.0" text="\%event.abundance.description" textAlignment="CENTER" />
             </StackPane>
         </ScrollPane>

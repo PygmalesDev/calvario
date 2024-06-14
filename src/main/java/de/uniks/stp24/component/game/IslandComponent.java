@@ -1,5 +1,8 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.component.menu.SitePropertiesComponent;
+import de.uniks.stp24.controllers.GangCreationController;
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
@@ -12,6 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
@@ -39,6 +43,8 @@ public class IslandComponent extends Pane {
     private Island island;
     double x ,y ;
 
+    InGameController inGameController;
+
     @Inject
     public IslandComponent(){
         if(this.imageCache == null) {
@@ -46,6 +52,7 @@ public class IslandComponent extends Pane {
         }
         this.islandImage = new ImageView();
     }
+
     @OnRender
     public void render(){
         this.flagPane.setVisible(true);
@@ -91,7 +98,6 @@ public class IslandComponent extends Pane {
     public void showInfo() {
         this.tokenStorage.setIsland(island);
         System.out.println("Island ID: " + tokenStorage.getIsland().id_());
-
 
         //TODO by the moment used for printouts
         // maybe it must be removed after implementation of

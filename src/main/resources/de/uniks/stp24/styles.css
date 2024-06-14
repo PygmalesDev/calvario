@@ -716,3 +716,12 @@ ToggleButton:hover{
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
 }
+
+/*Avatar Image Layout*/
+.avatarImageLayout{
+}
+
+.avatarImageLayoutPortrait .pane{
+    -fx-background-position: center;
+    -fx-background-size: 50% 50%;
+}

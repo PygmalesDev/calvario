@@ -9,6 +9,7 @@ import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.TimerService;
@@ -69,6 +70,8 @@ public class InGameController extends BasicController {
     LobbyService lobbyService;
     @Inject
     EmpireService empireService;
+
+    PopupBuilder popUp = new PopupBuilder();
 
 
     @SubComponent
@@ -230,7 +233,7 @@ public class InGameController extends BasicController {
         createButtonsStorage();
     }
 
-    public void showCoordinates(MouseEvent mouseEvent) {
+    public void showCoordinates() {
         // todo select island to show info
     }
 

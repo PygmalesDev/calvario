@@ -3,8 +3,10 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.EffectSourceDto;
 import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.TimerService;
+import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -17,6 +19,7 @@ import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
@@ -58,6 +61,12 @@ public class EventComponent extends AnchorPane {
     @Inject
     @Named("gameResourceBundle")
     public ResourceBundle resources;
+    @Inject
+    EventListener eventListener;
+    @Inject
+    Subscriber subscriber;
+    @Inject
+    TokenStorage tokenStorage;
 
     ImageCache imageCache = new ImageCache();
 
@@ -69,7 +78,22 @@ public class EventComponent extends AnchorPane {
     @OnInit
     public void init() {
 
+//        createSeasonListener();
+
     }
+
+//    private void createSeasonListener() {
+//        subscriber.subscribe(eventListener
+//                .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
+//                game -> {
+//                    // get Event if possible
+//                    event = eventService.getEvent();
+//                    if (event != null) {
+//                        setEventImages(event);
+//                    }
+//                });
+//    }
+
 
     @OnRender
     public void render() {
@@ -77,7 +101,9 @@ public class EventComponent extends AnchorPane {
         String css = Objects.requireNonNull(this.getClass().getResource("/de/uniks/stp24/style/event.css")).toExternalForm();
         this.getStylesheets().add(css);
 
-        setEventImages(eventService.getEvent());
+        event = eventService.getEvent();
+
+        setEventImages(event);
 
     }
 
@@ -122,7 +148,6 @@ public class EventComponent extends AnchorPane {
 
     public void close() {
         System.out.println("close event");
-        app.show("/browseGames");
         parent.setVisible(false);
     }
 

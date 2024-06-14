@@ -3,11 +3,11 @@ package de.uniks.stp24.service;
 
 import java.nio.file.Path;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class Constants {
     // Folder
     public static final String DATA_FOLDER_NAME = "data";
+    public static final String EVENT_FOLDER_NAME = "src/main/resources/de/uniks/stp24/data/";
     public static final Path DATA_FOLDER = Path.of(DATA_FOLDER_NAME);
 
     // Description and names for Empires

@@ -42,7 +42,7 @@ public class BuildingsComponent extends VBox {
             prev.setVisible(false);
         }
 
-        if(islandAttributes.getIsland().buildings().size() < (currentPage + 1) * pageCapacity){
+        if (islandAttributes.getIsland().buildings().size() < (currentPage + 1) * pageCapacity) {
             next.setVisible(false);
         } else {
             next.setVisible(true);
@@ -55,7 +55,7 @@ public class BuildingsComponent extends VBox {
             Building building = new Building(this, islandAttributes.getIsland().buildings().get(i));
             buildings.add(building, col, row);
 
-            if((i + 1) % 8 == 0) {
+            if ((i + 1) % 8 == 0) {
                 break;
             }
 
@@ -69,23 +69,18 @@ public class BuildingsComponent extends VBox {
             }
         }
 
-        if (!isGridPaneFull()) {
+        if (!isGridPaneFull(currentPage)) {
             buildings.add(new Building(this, "empty"), col, row);
         } else {
             next.setVisible(true);
         }
     }
 
-    public boolean isGridPaneFull() {
+    public boolean isGridPaneFull(int pageToCheck) {
         if (!islandAttributes.getIsland().buildings().isEmpty()) {
-
-            if(islandAttributes.getIsland().buildings().size() < pageCapacity){
-                return false;
-            }
-
-            if(islandAttributes.getIsland().buildings().size() / pageCapacity - 1 == currentPage){
-                return true;
-            }
+            int size = islandAttributes.getIsland().buildings().size();
+            int indexToCheck = (pageToCheck + 1) * 8 - 1;
+            return indexToCheck < size;
         }
         return false;
     }
@@ -102,13 +97,15 @@ public class BuildingsComponent extends VBox {
     }
 
     public void goNextSite() {
-        int amountPages = islandAttributes.getIsland().buildings().size() / 2 + 1;
-        if (isGridPaneFull() && pageCapacity * (currentPage + 1)  == islandAttributes.getIsland().buildings().size()) {
+        int size = islandAttributes.getIsland().buildings().size();
+        if (isGridPaneFull(currentPage + 1) || (!isGridPaneFull(currentPage + 1) && size % 8 != 0)) {
+            currentPage = currentPage + 1;
+            setGridPane();
+        } else if(!isGridPaneFull(currentPage + 1) && size % 8 == 0){
+            currentPage = currentPage + 1;
             buildings.getChildren().clear();
             buildings.add(new Building(this, "empty"), 0, 0);
-            return;
+            prev.setVisible(true);
         }
-        currentPage = currentPage + 1;
-        setGridPane();
     }
 }

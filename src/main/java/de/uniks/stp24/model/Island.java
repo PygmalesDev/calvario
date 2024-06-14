@@ -1,5 +1,6 @@
 package de.uniks.stp24.model;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public record Island(
@@ -13,6 +14,6 @@ public record Island(
   int upgradeLevel,
   Map<String, Integer> sitesSlots,
   Map<String, Integer> sites,
-  String[] buildings
+  ArrayList<String> buildings
 ) {
 }

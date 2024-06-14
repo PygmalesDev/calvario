@@ -1,5 +1,6 @@
 package de.uniks.stp24.dto;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public record SystemDto(
@@ -12,7 +13,7 @@ public record SystemDto(
   Map<String, Integer> districtSlots,
   Map<String, Integer> districts,
   int capacity,
-  String[] buildings,
+  ArrayList<String> buildings,
   Upgrade upgrade,
   int population,
   Map<String,Integer> links,

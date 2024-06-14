@@ -24,6 +24,19 @@ public class IslandAttributeStorage {
         empireDto = empire;
     }
 
+    public void setSystemPresets(SystemUpgrades presets) {
+        systemPresets = presets;
+    }
+
+    public void setIsland(Island island){
+        this.island = island;
+    }
+
+    //TODO: Just for Testing buildings page
+    public void addNewBuilding(){
+        island.buildings().add(String.valueOf(island.buildings().size()));
+    }
+
     public Map<String, Integer> getNeededResources(int key) {
         switch(key){
             case 2:
@@ -38,14 +51,6 @@ public class IslandAttributeStorage {
 
     public Map<String, Integer> getAvailableResources() {
         return empireDto.resources();
-    }
-
-    public void setSystemPresets(SystemUpgrades presets) {
-        systemPresets = presets;
-    }
-
-    public void setIsland(Island island){
-        this.island = island;
     }
 
     public Island getIsland(){

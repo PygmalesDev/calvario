@@ -20,11 +20,11 @@ public class BuildingsComponent extends VBox {
     public Pane next;
     @FXML
     public GridPane buildings;
-
     @Inject
     public IslandAttributeStorage islandAttributes;
 
     private int currentPage = 0;
+    private int pageCapacity = 8;
 
     @Inject
     public BuildingsComponent() {
@@ -32,34 +32,44 @@ public class BuildingsComponent extends VBox {
 
     //Call set grid pane if buildings changes
     public void setGridPane() {
+        int page = currentPage + 1;
+        System.out.println("Set page: " + page);
         buildings.getChildren().clear();
 
-        if(currentPage > 0){
+        if (currentPage > 0) {
             prev.setVisible(true);
         } else {
             prev.setVisible(false);
         }
 
+        if(islandAttributes.getIsland().buildings().size() < (currentPage + 1) * pageCapacity){
+            next.setVisible(false);
+        } else {
+            next.setVisible(true);
+        }
+
         int row = 0;
         int col = 0;
 
-        for (int i = currentPage * 8; i < islandAttributes.getIsland().buildings().length; i++) {
-            if((i + 1) % 8 != 0) {
-                Building building = new Building(this, islandAttributes.getIsland().buildings()[i]);
-                buildings.add(building, col, row);
+        for (int i = currentPage * pageCapacity; i < islandAttributes.getIsland().buildings().size(); i++) {
+            Building building = new Building(this, islandAttributes.getIsland().buildings().get(i));
+            buildings.add(building, col, row);
 
-                col++;
-                if (col >= 4) {
-                    col = 0;
-                    row++;
-                    if (row >= 2) {
-                        break;
-                    }
+            if((i + 1) % 8 == 0) {
+                break;
+            }
+
+            col++;
+            if (col >= 4) {
+                col = 0;
+                row++;
+                if (row >= 2) {
+                    break;
                 }
             }
         }
 
-        if(!isGridPaneFull()){
+        if (!isGridPaneFull()) {
             buildings.add(new Building(this, "empty"), col, row);
         } else {
             next.setVisible(true);
@@ -67,13 +77,20 @@ public class BuildingsComponent extends VBox {
     }
 
     public boolean isGridPaneFull() {
-        if(islandAttributes.getIsland().buildings().length > 0) {
-            return islandAttributes.getIsland().buildings().length % 8 == 0;
+        if (!islandAttributes.getIsland().buildings().isEmpty()) {
+
+            if(islandAttributes.getIsland().buildings().size() < pageCapacity){
+                return false;
+            }
+
+            if(islandAttributes.getIsland().buildings().size() / pageCapacity - 1 == currentPage){
+                return true;
+            }
         }
         return false;
     }
 
-    public void resetPage(){
+    public void resetPage() {
         prev.setVisible(false);
         next.setVisible(false);
         this.currentPage = 0;
@@ -85,12 +102,13 @@ public class BuildingsComponent extends VBox {
     }
 
     public void goNextSite() {
-        currentPage = currentPage + 1;
-        if(isGridPaneFull() && (currentPage - 1) * 8 == islandAttributes.getIsland().buildings().length){
+        int amountPages = islandAttributes.getIsland().buildings().size() / 2 + 1;
+        if (isGridPaneFull() && pageCapacity * (currentPage + 1)  == islandAttributes.getIsland().buildings().size()) {
             buildings.getChildren().clear();
-            buildings.add(new Building(this,"empty"), 0, 0);
+            buildings.add(new Building(this, "empty"), 0, 0);
             return;
         }
+        currentPage = currentPage + 1;
         setGridPane();
     }
 }

@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.service.IslandAttributeStorage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
@@ -32,7 +33,16 @@ public class Building extends VBox {
         this.buildingsComponent = buildingsComponent;
 
         building.setOnMouseClicked(event -> {
-            System.out.println("Building " + buildingName + " was clicked!");
+
+            //TODO: Need to be modified for game
+            System.out.println("Building clicked: " + buildingName);
+            if(buildingName.equals("empty")) {
+                //TODO: Logic for editing new Building son page(gridpane)
+                buildingsComponent.islandAttributes.addNewBuilding();
+                int size = buildingsComponent.islandAttributes.getIsland().buildings().size();
+                buildingsComponent.islandAttributes.getIsland().buildings().set(size - 1, String.valueOf(size));
+                buildingsComponent.setGridPane();
+            }
         });
     }
 

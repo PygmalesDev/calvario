@@ -87,7 +87,6 @@ public class OverviewSitesComponent extends AnchorPane {
         buildingsButton.setDisable(true);
         sitesButton.setDisable(false);
         detailsButton.setDisable(false);
-        buildingsComponent.resetPage();
         buildingsComponent.setGridPane();
         inGameService.showOnly(sitesContainer, buildingsComponent);
     }
@@ -129,7 +128,7 @@ public class OverviewSitesComponent extends AnchorPane {
 
     public void setOverviewSites() {
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
-                islandAttributes.getIsland().buildings().length;
+                islandAttributes.getIsland().buildings().size();
         island_name.setText("Crew: " + islandAttributes.getIsland().type());
         crewCapacity.setText(String.valueOf(islandAttributes.getIsland().crewCapacity()));
         resCapacity.setText("Resources: " + usedSlots + "/" + islandAttributes.getIsland().resourceCapacity());

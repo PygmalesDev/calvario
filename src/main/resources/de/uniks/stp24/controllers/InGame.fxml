@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.Pane?>
 <AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.InGameController">
     <HBox alignment="CENTER" layoutX="500.0" layoutY="302.0" style="-fx-background-color: TRANSPARENT;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <ScrollPane fx:id="mapPane" hbarPolicy="NEVER" pannable="true" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: TRANSPARENT;" vbarPolicy="NEVER" HBox.hgrow="ALWAYS">
@@ -17,7 +17,6 @@
         </ScrollPane>
     </HBox>
     <StackPane fx:id="clockComponentContainer" prefHeight="115.0" prefWidth="200.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="5.0" />
-    <StackPane fx:id="pauseMenuContainer" layoutX="440.0" layoutY="40.0" prefHeight="600.0" prefWidth="400.0" style=": ;" visible="false" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="440.0" AnchorPane.rightAnchor="440.0" AnchorPane.topAnchor="40.0" />
     <HBox fx:id="storageButtonsBox" alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="150.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
 <!--      <children>-->
 <!--         <Button fx:id="showStorageButton" mnemonicParsing="false" onAction="#showStorage" prefHeight="40.0" prefWidth="40.0" text="Storag" />-->
@@ -28,4 +27,7 @@
       </padding>
    </HBox>
    <StackPane fx:id="storageOverviewContainer" prefHeight="500.0" prefWidth="300.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="20.0" />
+   <Pane fx:id="shadow" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+   <StackPane id="eventContainer" fx:id="eventContainer" layoutX="450.0" layoutY="50.0" style=": ;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+    <StackPane fx:id="pauseMenuContainer" layoutX="440.0" layoutY="40.0" prefHeight="600.0" prefWidth="400.0" style=": ;" visible="false" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="440.0" AnchorPane.rightAnchor="440.0" AnchorPane.topAnchor="40.0" />
 </AnchorPane>

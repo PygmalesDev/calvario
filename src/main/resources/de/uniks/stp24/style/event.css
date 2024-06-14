@@ -12,12 +12,14 @@
 
 #eventName {
     -fx-font-family: 'Blackadder ITC';
-    -fx-font-size: 30;
+    -fx-font-size: 35;
+    -fx-opacity: 1;
 }
 
 #eventDescription {
     -fx-font-family: 'Tempus Sans ITC';
-    -fx-font-size: 13;
+    -fx-font-size: 15;
+    -fx-opacity: 1;
 }
 
 #eventVBox {
@@ -26,6 +28,7 @@
     -fx-background-size: cover;
     -fx-background-repeat: no-repeat;
     -fx-border-color: transparent;
+    -fx-opacity: 1;
 }
 
 #closeButton {
@@ -34,19 +37,22 @@
     -fx-background-size: cover;
     -fx-background-repeat: no-repeat;
     -fx-border-color: transparent;
+    -fx-opacity: 1;
 }
 
 .scroll-pane {
     -fx-background-color: transparent;
+    -fx-opacity: 1;
 }
 
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
+    -fx-opacity: 1;
 }
 
 .scroll-pane .scroll-bar:horizontal {
     -fx-opacity: 0;
-    -fx-background-color: transparent
+    -fx-background-color: transparent;
 }
 
 .scroll-pane .scroll-bar:vertical {
@@ -62,6 +68,7 @@
 .scroll-bar .decrement-button {
     -fx-background-color: transparent;
     -fx-padding: 0;
+    -fx-opacity: 1;
 }
 
 .scroll-bar .increment-arrow,
@@ -69,8 +76,12 @@
     -fx-background-color: transparent;
     -fx-padding: 0;
     -fx-shape: "";
+    -fx-opacity: 1;
+
 }
 
 .scroll-pane .corner {
     -fx-background-color: transparent;
+    -fx-opacity: 1;
+
 }

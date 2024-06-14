@@ -39,6 +39,11 @@ import java.util.*;
 @Title("CALVARIO")
 @Controller
 public class InGameController extends BasicController {
+
+    @FXML
+    Pane shadow;
+    @FXML
+    StackPane eventContainer;
     @FXML
     Button showStorageButton;
     @FXML
@@ -83,6 +88,8 @@ public class InGameController extends BasicController {
     @Inject
     IslandsService islandsService;
     List<IslandComponent> islandComponentList = new ArrayList<>();
+    Map<String, IslandComponent> islandComponentMap ;
+
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
@@ -151,10 +158,11 @@ public class InGameController extends BasicController {
     @OnRender
     public void render() {
         pauseMenuContainer.setVisible(false);
-        //TODO: Reset
-        eventComponent.setParent(pauseMenuContainer);
-        // TODO: Reset to pauseMenuComponent
-        pauseMenuContainer.getChildren().add(eventComponent);
+        eventComponent.setParent(shadow, eventContainer);
+        eventContainer.getChildren().add(eventComponent);
+        eventComponent.show();
+
+        pauseMenuContainer.getChildren().add(pauseMenuComponent);
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
         clockComponentContainer.getChildren().add(clockComponent);
@@ -208,20 +216,33 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void createMap() {
-        islandsService.getListOfIslands().forEach(
-                island -> {
-                    IslandComponent tmp = islandsService.createIslandPaneFromDto(island,
-                            app.initAndRender(new IslandComponent())
-                    );
-                    tmp.setLayoutX(tmp.getPosX());
-                    tmp.setLayoutY(tmp.getPosY());
-                    islandComponentList.add(tmp);
-                    this.mapGrid.getChildren().add(tmp);
-                }
-        );
-        //todo draw connections
+
+//        app.stage().setFullScreenExitHint("");
+//        app.stage().setFullScreen(true);
+//        this.mapGrid.setMinSize(islandsService.getMapWidth(), islandsService.getMapHeight());
+
+
+        this.islandComponentList = islandsService.createIslands(islandsService.getListOfIslands());
+        this.islandComponentMap = islandsService.getComponentMap();
+        islandsService.createLines(this.islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
+        this.islandComponentList.forEach(isle -> {
+            isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
+            this.mapGrid.getChildren().add(isle);
+        });
         createButtonsStorage();
+        mapPane.setVvalue(0.5);
+        mapPane.setHvalue(0.5);
+
     }
+
+    public void showInfo(MouseEvent event) {
+        if (event.getSource() instanceof IslandComponent selected) {
+            System.out.println(event.getSource().toString());
+            System.out.println("found island: " + selected.getIsland().toString());
+            selected.showFlag();
+        }
+    }
+
 
     public void showCoordinates() {
         // todo select island to show info

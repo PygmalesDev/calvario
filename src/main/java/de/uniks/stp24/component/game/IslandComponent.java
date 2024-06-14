@@ -81,6 +81,10 @@ public class IslandComponent extends Pane {
         showFlag();
     }
 
+    public Island getIsland(){
+        return this.island;
+    }
+
     @OnDestroy
     public void destroy(){
         flagImage = null;

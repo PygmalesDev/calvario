@@ -2,6 +2,7 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.EffectSourceDto;
+import de.uniks.stp24.model.Game;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EventService;
@@ -12,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
@@ -44,7 +46,9 @@ public class EventComponent extends AnchorPane {
     Button closeEvent;
 
     @FXML
-    StackPane parent;
+    Pane shadow;
+    @FXML
+    StackPane container;
 
     @Inject
     App app;
@@ -77,23 +81,21 @@ public class EventComponent extends AnchorPane {
 
     @OnInit
     public void init() {
-
-//        createSeasonListener();
-
+        createSeasonListener();
     }
 
-//    private void createSeasonListener() {
-//        subscriber.subscribe(eventListener
-//                .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
-//                game -> {
-//                    // get Event if possible
-//                    event = eventService.getEvent();
-//                    if (event != null) {
-//                        setEventImages(event);
-//                    }
-//                });
-//    }
-
+    private void createSeasonListener() {
+        subscriber.subscribe(eventListener
+                .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
+                game -> {
+                    // get Event if possible
+                    eventService.countEventDown();
+                    event = eventService.getEvent();
+                    if (event != null) {
+                        setEventInfos(event);
+                    }
+                });
+    }
 
     @OnRender
     public void render() {
@@ -103,7 +105,7 @@ public class EventComponent extends AnchorPane {
 
         event = eventService.getEvent();
 
-        setEventImages(event);
+        setEventInfos(event);
 
     }
 
@@ -116,7 +118,7 @@ public class EventComponent extends AnchorPane {
         return String.join("", word);
     }
 
-    private void setEventImages(@NotNull EffectSourceDto event) {
+    private void setEventInfos(@NotNull EffectSourceDto event) {
 
         String id = convert(event.id());
 
@@ -131,9 +133,10 @@ public class EventComponent extends AnchorPane {
 
     // reduce size of eventName if it's too long
     private void checkSize(@NotNull String id) {
-        if (id.length() - 14 < 0) {
+        if (id.length() - 15 > 0) {
+            System.out.println("Länge: " + id.length());
             int num = id.length() % 15;
-            int size = 30 - (num / 2);
+            int size = 32 - (num / 2);
             eventName.setStyle("-fx-font-size: " + size);
             eventName.setTranslateY(eventName.getTranslateY() + num-3);
             descriptionScrollPane.setTranslateY(descriptionScrollPane.getTranslateY() + num-3);
@@ -148,14 +151,17 @@ public class EventComponent extends AnchorPane {
 
     public void close() {
         System.out.println("close event");
-        parent.setVisible(false);
+        container.setVisible(false);
+        shadow.setVisible(false);
     }
 
     public void show() {
-        parent.setVisible(true);
+        container.setVisible(true);
+        shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
     }
 
-    public void setParent(StackPane parent) {
-        this.parent = parent;
+    public void setParent(Pane shadow, StackPane container) {
+        this.shadow = shadow;
+        this.container = container;
     }
 }

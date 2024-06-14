@@ -65,7 +65,7 @@ public class TimerService {
                 if (countdown > 0) {
                     setCountdown(countdown - 1);
                 }
-                // if countdown == 0 -> Wait for Server response to call reset() Method
+                // if countdown <= 0 -> Wait for Server response to call reset() Method
             }
         };
         timer.scheduleAtFixedRate(timerTask, 0, 1000 / speed);
@@ -135,17 +135,25 @@ public class TimerService {
     }
 
     public void setSpeedLocal(int value) {
-        int oldValue;
-        if (value == this.speed || value == 0) {
-            return;
+        if (value == 0) {
+            stop();
+        } else {
+            if (!isRunning) {
+                resume();
+            }
+            int oldValue;
+            if (value == this.speed) {
+                return;
+            }
+            oldValue = this.speed;
+            this.speed = value;
+
+            stop();
+            resume();
+
+            this.firePropertyChange(PROPERTY_COUNTDOWN, oldValue, value);
+
         }
-        oldValue = this.speed;
-        this.speed = value;
-
-        stop();
-        resume();
-
-        this.firePropertyChange(PROPERTY_COUNTDOWN, oldValue, value);
     }
 
 

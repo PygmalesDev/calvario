@@ -59,8 +59,9 @@ public class AppTest extends ControllerTest {
     @Spy
     ClockComponent clockComponent;
 
-    final Subject<Event<Game>> subject = BehaviorSubject.create();
+    final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
+
 
     @BeforeEach
     public void setUp() {
@@ -246,7 +247,7 @@ public class AppTest extends ControllerTest {
                 new MemberDto(true, "JustATest", null, null)));
         assertFalse(lookup("#startJourneyButton").queryButton().isDisabled());
         clickOn("#startJourneyButton");
-        this.subject.onNext(new Event<>("games.testGameID.updated", new Game("1", "a","testGameID","testGame","testGameHostID",
+        this.gameSubject.onNext(new Event<>("games.testGameID.updated", new Game("1", "a","testGameID","testGame","testGameHostID",
                 true, 1, 0, new GameSettings(1))));
         WaitForAsyncUtils.waitForFxEvents();
 

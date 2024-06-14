@@ -94,12 +94,6 @@ public class InGameController extends BasicController {
     EventComponent eventComponent;
 
     boolean pause = false;
-
-    // todo remove this variables if not needed
-    String gameID;
-    String empireID;
-
-
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
     @Inject
@@ -108,14 +102,10 @@ public class InGameController extends BasicController {
 
     @OnInit
     public void init() {
-        // Todo: remove this if not needed
-        gameID = tokenStorage.getGameId();
-        empireID = tokenStorage.getEmpireId();
-        //Todo: Outprint for Swagger - can be deleted later
-        System.out.println(this.gameID);
-        System.out.println(empireID);
-
         GameStatus gameStatus = inGameService.getGameStatus();
+        //Todo: Outprint for Swagger - can be deleted later
+        System.out.println("game in ingame: " + tokenStorage.getGameId());
+        System.out.println("empire in ingame: " + tokenStorage.getEmpireId());
 
 
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
@@ -251,7 +241,5 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
-    public void showIslandOverview(ActionEvent event) {
-
-    }
+    public void showIslandOverview(ActionEvent actionEvent) {    }
 }

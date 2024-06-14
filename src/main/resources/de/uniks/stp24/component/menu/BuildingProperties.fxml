@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="250.0" styleClass="backgroundLightYellow" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.menu.BuildingPropertiesComponent">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="280.0" styleClass="backgroundLightYellow" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.menu.BuildingPropertiesComponent">
    <children>
       <ImageView fx:id="buildingImage" fitHeight="70.0" fitWidth="70.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
       </ImageView>
@@ -25,9 +25,9 @@
          <font>
             <Font size="6.0" />
          </font></Button>
-      <ListView fx:id="buildingConsumesListView" layoutX="7.0" layoutY="126.0" prefHeight="58.0" prefWidth="120.0" AnchorPane.leftAnchor="3.0" />
+      <ListView fx:id="buildingConsumesListView" layoutX="7.0" layoutY="126.0" prefHeight="58.0" prefWidth="130.0" AnchorPane.leftAnchor="3.0" />
       <Text layoutX="7.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Consumes:" />
-      <ListView fx:id="buildingProducesListView" layoutX="127.0" layoutY="138.0" prefHeight="28.0" prefWidth="120.0" AnchorPane.rightAnchor="3.0" />
-      <Text layoutX="127.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Produces:" />
+      <ListView fx:id="buildingProducesListView" layoutX="127.0" layoutY="138.0" prefHeight="28.0" prefWidth="130.0" AnchorPane.rightAnchor="3.0" />
+      <Text layoutX="146.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Produces:" />
    </children>
 </fx:root>

@@ -114,7 +114,6 @@ public class BuildingPropertiesComponent extends AnchorPane {
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), this::resourceListGeneration);
         buildingProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         buildingConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
-
     }
 
     private void resourceListGeneration(BuildingDto buildingDto) {

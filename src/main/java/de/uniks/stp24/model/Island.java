@@ -13,6 +13,7 @@ public record Island(
   int upgradeLevel,
   Map<String, Integer> sitesSlots,
   Map<String, Integer> sites,
-  String[] buildings
+  String[] buildings,
+  String id
 ) {
 }

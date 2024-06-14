@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
@@ -122,6 +123,9 @@ public class EditAccController extends BasicController {
     @FXML
     Button nextPotraitButton;
 
+    @FXML
+    Label imageCodeLabel;
+
     @Param("gameid")
     String gameID;
 
@@ -132,13 +136,16 @@ public class EditAccController extends BasicController {
     ArrayList<Image> framesList = new ArrayList<>();
     ArrayList<Image> portraitsList = new ArrayList<>();
 
+    Map<String, Integer> avatarMap;
+
+
     //TODO add correct paths and correct variable names
     String resourcesPaths = "/de/uniks/stp24/assets/avatar/";
     String backgroundFolderPath = "backgrounds/background_";
     String frameFolderPath = "frames/frame_";
     String portraitsFolderPath = "portraits/portrait_";
 
-    int imagesCount = 2;
+    int imagesCount = 9;
     int backgroundImageIndex = 0;
     int frameImageIndex = 0;
     int portraitImageIndex = 0;
@@ -204,7 +211,8 @@ public class EditAccController extends BasicController {
         // this.avatarImage.setImage(imageCache.get(Objects.nonNull(tokenStorage.getAvatar()) ? tokenStorage.getAvatar() : "test/911.png"));
 
         /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
-        setImageCode(1,1,1);
+        avatarMap = tokenStorage.getAvatarMap();
+        setImageCode(avatarMap.get("backgroundIndex"),avatarMap.get("portraitIndex"), avatarMap.get("frameIndex"));
         /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
     }
 
@@ -323,52 +331,90 @@ public class EditAccController extends BasicController {
     }
 
     /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
-    private void setImageCode(int backgroundIndex, int potraitImageIndex, int frameImageIndex) {
+    private void setImageCode(int backgroundIndex, int potraitIndex, int frameIndex) {
+        backgroundImageIndex = backgroundIndex;
+        portraitImageIndex = potraitIndex;
+        frameImageIndex = frameIndex;
+
         backgroundImage.setImage(backgroundsList.get(backgroundIndex));
-        portraitImage.setImage(portraitsList.get(potraitImageIndex));
-        frameImage.setImage(framesList.get(frameImageIndex));
+        portraitImage.setImage(portraitsList.get(potraitIndex));
+
+        System.out.println(frameImage.getLayoutX());
+        System.out.println(frameImage.getLayoutY());
+
+
+        System.out.println(backgroundIndex + potraitIndex + frameIndex);
+        switch (frameIndex){
+            case 0:
+                frameImage.setLayoutX(-27);
+                frameImage.setLayoutY(-29);
+                frameImage.setImage(framesList.get(frameImageIndex));
+                break;
+            case 1:
+                frameImage.setLayoutX(-28);
+                frameImage.setLayoutY(-25);
+                frameImage.setImage(framesList.get(frameImageIndex));
+                break;
+            default:
+                frameImage.setLayoutX(-21);
+                frameImage.setLayoutY(-31);
+                frameImage.setImage(framesList.get(frameImageIndex));
+        }
+
+        imageCodeLabel.setText(getImageCode());
+
+        avatarMap.put("backgroundIndex", backgroundIndex);
+        avatarMap.put("portraitIndex", potraitIndex);
+        avatarMap.put("frameIndex", frameIndex);
     }
 
+    public String getImageCode(){
+        String bachkroundIndexString = String.valueOf(backgroundImageIndex);
+        String potraitIndex = String.valueOf(portraitImageIndex);
+        String frameIndexString = String.valueOf(frameImageIndex);
 
+        return bachkroundIndexString + potraitIndex + frameIndexString;
+    }
 
     public void showLastBackground() {
-        backgroundImageIndex = backgroundImageIndex - 1 >= 0 ? backgroundImageIndex - 1 : backgroundsList.size() - 1;
-        backgroundImage.setImage(backgroundsList.get(backgroundImageIndex));
+        if(Objects.nonNull(lastBackgroundButton)){
+            backgroundImageIndex = backgroundImageIndex - 1 >= 0 ? backgroundImageIndex - 1 : backgroundsList.size() - 1;
+            setImageCode(backgroundImageIndex,portraitImageIndex,frameImageIndex);
+        }
     }
 
     public void showLastPortrait() {
-        if(Objects.nonNull(lastBackgroundButton)){
+        if(Objects.nonNull(lastPotraitButton)){
             portraitImageIndex = portraitImageIndex - 1 >= 0 ? portraitImageIndex - 1 : portraitsList.size() - 1;
-            portraitImage.setImage(portraitsList.get(portraitImageIndex));
+            setImageCode(backgroundImageIndex,portraitImageIndex,frameImageIndex);
         }
     }
 
     public void showLastFrame() {
         if(Objects.nonNull(lastFrameButton)){
             frameImageIndex = frameImageIndex - 1 >= 0 ? frameImageIndex - 1 : framesList.size() - 1;
-            frameImage.setImage(framesList.get(frameImageIndex));
+            setImageCode(backgroundImageIndex,portraitImageIndex,frameImageIndex);
         }
     }
 
     public void showNextBackground() {
         if(Objects.nonNull(nextBackgroundButton)){
             backgroundImageIndex = backgroundImageIndex + 1 < backgroundsList.size() ? backgroundImageIndex + 1 : 0;
-            backgroundImage.setImage(backgroundsList.get(backgroundImageIndex));
+            setImageCode(backgroundImageIndex,portraitImageIndex,frameImageIndex);
         }
     }
 
     public void showNextPortrait() {
         if(Objects.nonNull(nextPotraitButton)){
             portraitImageIndex = portraitImageIndex + 1 < portraitsList.size() ? portraitImageIndex + 1 : 0;
-            portraitImage.setImage(portraitsList.get(portraitImageIndex));
+            setImageCode(backgroundImageIndex,portraitImageIndex,frameImageIndex);
         }
     }
 
     public void showNextFrame() {
         if(Objects.nonNull(nextFrameButton)){
             frameImageIndex = frameImageIndex + 1 < framesList.size() ? frameImageIndex + 1 : 0;
-            frameImage.setImage(framesList.get(frameImageIndex));
-
+            setImageCode(backgroundImageIndex,portraitImageIndex,frameImageIndex);
         }
     }
 
@@ -385,14 +431,30 @@ public class EditAccController extends BasicController {
     }
 
     public void safeAvatarChanges(){
+        System.out.println(getImageCode());
 
+        subscriber.subscribe(editAccService.changeAvatar(avatarMap),
+                result -> {
+                    resetEditing(usernameInput.getText());
+                    avatarButtonsVisible(false);
+
+                }
+                , error -> {
+                    this.bubbleComponent.setErrorMode(true);
+                    this.bubbleComponent.setCaptainText(getErrorInfoText(error));
+                });
+
+
+        avatarButtonsVisible(false);
+        editAvatarButton.setStyle("-fx-text-fill: Black");
     }
 
     public void cancelAvatarChanges(){
+        avatarButtonsVisible(false);
+        editAvatarButton.setStyle("-fx-text-fill: Black");
 
+        System.out.println(tokenStorage.getUserId());
     }
-
-
 
     private void resetAvatarEditing() {
     }
@@ -407,6 +469,7 @@ public class EditAccController extends BasicController {
         nextFrameButton.setVisible(visible);
         lastPotraitButton.setVisible(visible);
         nextPotraitButton.setVisible(visible);
+        imageCodeLabel.setVisible(visible);
     }
 
     /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/

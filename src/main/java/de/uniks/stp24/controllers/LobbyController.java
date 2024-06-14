@@ -222,7 +222,7 @@ public class LobbyController extends BasicController {
             if (Objects.isNull(data.empire())) suffix += " (Spectator)";
 
             this.users.add(new MemberUser(new User(user.name() + suffix,
-                    user._id(), user.avatar(), user.createdAt(), user.updatedAt()
+                    user._id(), user.avatar(), user.createdAt(), user.updatedAt(), user._public()
             ), data.empire(), data.ready(), this.game, this.asHost));
         },
           error -> {});
@@ -250,7 +250,7 @@ public class LobbyController extends BasicController {
                     return new MemberUser(new User(
                             memberUser.user().name().replace(" (Spectator)", ""),
                             userID, memberUser.user().avatar(), memberUser.user().createdAt(),
-                            memberUser.user().updatedAt()), data.empire(), data.ready(), this.game, this.asHost);
+                            memberUser.user().updatedAt(),memberUser.user()._public()), data.empire(), data.ready(), this.game, this.asHost);
                 }
                 else {
                     String suffix = " (Spectator)";
@@ -258,7 +258,7 @@ public class LobbyController extends BasicController {
                         suffix = "";
                     return new MemberUser(new User(
                             memberUser.user().name() + suffix, userID, memberUser.user().avatar(),
-                            memberUser.user().createdAt(), memberUser.user().updatedAt()),
+                            memberUser.user().createdAt(), memberUser.user().updatedAt(),memberUser.user()._public()),
                             null, data.ready(), this.game, this.asHost);
                 }
             } else

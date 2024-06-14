@@ -2,6 +2,7 @@ package de.uniks.stp24.service;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Map;
 
 @Singleton
 public class TokenStorage {
@@ -9,6 +10,7 @@ public class TokenStorage {
     private String userId;
     private String name;
     private String avatar;
+    private Map<String,Integer> avatarMap;
 
     @Inject
     public TokenStorage() {
@@ -37,4 +39,10 @@ public class TokenStorage {
     public String getAvatar() {return avatar;}
 
     public void setAvatar(String avatar) {this.avatar = avatar;}
+
+    public void setAvatarMap(Map<String,Integer> avatarMap) {this.avatarMap = avatarMap;}
+
+    public Map<String,Integer> getAvatarMap() {
+        return this.avatarMap;
+    }
 }

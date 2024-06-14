@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
@@ -55,6 +56,11 @@
                                     <Button fx:id="nextFrameButton" layoutX="290.0" layoutY="125.0" mnemonicParsing="false" onAction="#showNextFrame" />
                                     <Button fx:id="safeAvatarButton" layoutX="346.0" layoutY="38.0" mnemonicParsing="false" onAction="#safeAvatarChanges" prefHeight="25.0" prefWidth="49.0" styleClass="deleteAndSaveButton" text="safe" />
                                     <Button fx:id="cancelAvatarButton" layoutX="346.0" layoutY="112.0" mnemonicParsing="false" onAction="#cancelAvatarChanges" styleClass="deleteAndSaveButton" text="cancel" />
+                                    <Label fx:id="imageCodeLabel" layoutX="261.0" layoutY="165.0" prefHeight="25.0" prefWidth="130.0" styleClass="deleteAndSaveButton" text="            Label " textAlignment="CENTER">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </Label>
                                  </children>
                               </AnchorPane>
                            </children>

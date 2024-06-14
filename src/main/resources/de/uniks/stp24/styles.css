@@ -733,12 +733,17 @@ ToggleButton:hover{
     -fx-font-size: 10;
 }
 
-.backgroundGame{
+.backgroundGame {
     -fx-background-color: "TRANSPARENT";
     -fx-background-image: url('/de/uniks/stp24/icons/sea.png');
-    -fx-background-size: cover;
+    -fx-background-size: cover, auto;
 }
-
 .ownIsland{
     -fx-effect: dropshadow(gaussian, #7FFF00, 20, 0.5, 0, 0);
+}
+
+.connection{
+    -fx-stroke: #FF7F50;
+    -fx-stroke-dash-array: 5 5;
+    -fx-stroke-width: 2;
 }

@@ -1,7 +1,6 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.component.game.IslandComponent;
-import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
@@ -9,15 +8,14 @@ import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.BasicService;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
-import java.util.random.RandomGenerator;
 
 import static javafx.scene.effect.BlurType.GAUSSIAN;
 
@@ -25,7 +23,7 @@ import static javafx.scene.effect.BlurType.GAUSSIAN;
 public class IslandsService extends BasicService {
 
     @Inject
-    GameSystemsApiService gameSystemsService;
+    public GameSystemsApiService gameSystemsService;
     @Inject
     LobbyService lobbyService;
 
@@ -41,9 +39,10 @@ public class IslandsService extends BasicService {
 
     @Inject
     public IslandsService() {
-        drop.setColor(Color.CHARTREUSE);
+        drop.setColor((Color.CHARTREUSE).brighter());
         drop.setBlurType(GAUSSIAN);
-
+        drop.setRadius(15);
+        if (subscriber==null) subscriber = new Subscriber();
     }
 
     // this method will be used when changing from lobby to ingame
@@ -79,13 +78,9 @@ public class IslandsService extends BasicService {
                 });
                 widthRange = maxX-minX;
                 heightRange = maxY-minY;
-                this.app.show("/ingame");
+                this.app.show("/ingame"); // for test failing this.app == null
             },
             error -> errorService.getStatus(error));
-    }
-
-    public List<Island> getListOfIslands() {
-        return Collections.unmodifiableList(this.isles);
     }
 
     /**
@@ -107,7 +102,6 @@ public class IslandsService extends BasicService {
         component.applyIcon(isleDto.type());
         component.setFlagImage(isleDto.flagIndex());
         if(Objects.nonNull(isleDto.owner()) && isleDto.owner().equals(tokenStorage.getEmpireId())) {
-            //component.styleProperty().setValue("ownIsland");
             component.setEffect(drop);
         }
         return component;
@@ -115,12 +109,11 @@ public class IslandsService extends BasicService {
 
     // return mapRange * (factor + 2)
     public double getMapWidth() {
-        return this.widthRange * (factor + 2);
+        return this.widthRange * (factor + 3);
     }
     public double getMapHeight() {
-        return this.heightRange * (factor + 2);
+        return this.heightRange * (factor + 3);
     }
-
     public Map<String, List<String>> getConnections(){
         Map<String, List<String>> singleConnections = new HashMap<>();
         List<String> checked = new ArrayList<>();
@@ -141,8 +134,7 @@ public class IslandsService extends BasicService {
         list.forEach(
           island -> {
               IslandComponent tmp = createIslandPaneFromDto(island,
-                app.initAndRender(new IslandComponent())
-              );
+                app.initAndRender(new IslandComponent()));
               tmp.setLayoutX(tmp.getPosX());
               tmp.setLayoutY(tmp.getPosY());
               islandComponentList.add(tmp);
@@ -166,7 +158,8 @@ public class IslandsService extends BasicService {
                 endY = isle2.getPosY() + 25;
                 Line tmp = new Line(startX,startY,endX,endY);
                 //todo with css? maybe this #FF7F50
-                tmp.styleProperty().set("-fx-stroke: #FF7F50; -fx-stroke-dash-array: 5 5;");
+                tmp.styleProperty().set(" -fx-stroke: #FFFFFF; -fx-stroke-dash-array: 5 5; -fx-stroke-width: 2;");
+//                tmp.setStyle();
                 linesInMap.add(tmp);
             }
         });
@@ -182,16 +175,20 @@ public class IslandsService extends BasicService {
         heightRange = 0.0;
     }
 
+    public List<Island> getListOfIslands() {
+        return Collections.unmodifiableList(this.isles);
+    }
+
     public Map<String, IslandComponent> getComponentMap() {
         return Collections.unmodifiableMap(this.islandComponentMap);
     }
 
-    public void saveEmpire(String id, ReadEmpireDto empire){
-        this.empiresInGame.put(id,empire);
-    }
-
     public ReadEmpireDto getEmpire(String id){
         return this.empiresInGame.getOrDefault(id,null);
+    }
+
+    public void saveEmpire(String id, ReadEmpireDto empire){
+        this.empiresInGame.put(id,empire);
     }
 
     @OnDestroy

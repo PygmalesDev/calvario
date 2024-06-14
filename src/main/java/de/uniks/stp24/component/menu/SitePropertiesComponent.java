@@ -143,6 +143,7 @@ public class SitePropertiesComponent extends AnchorPane {
         subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
         siteConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
+        siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
     }
 
     public void displayAmountOfSite(){
@@ -205,6 +206,10 @@ public class SitePropertiesComponent extends AnchorPane {
         Map<String, Integer> resourceMapUpkeep = siteDto.upkeep();
         ObservableList<Resource> resourceListUpkeep = resourcesServiceGame.generateResourceList(resourceMapUpkeep, siteCostsListView.getItems());
         siteConsumesListView.setItems(resourceListUpkeep);
+
+        Map<String, Integer> resourceMapProduce = siteDto.production();
+        ObservableList<Resource> resourceListProduce = resourcesServiceGame.generateResourceList(resourceMapProduce, siteConsumesListView.getItems());
+        siteProducesListView.setItems(resourceListProduce);
     }
 }
 

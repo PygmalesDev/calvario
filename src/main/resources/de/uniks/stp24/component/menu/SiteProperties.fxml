@@ -10,36 +10,36 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="200.0" styleClass="backgroundLightYellow" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.menu.SitePropertiesComponent">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="250.0" styleClass="backgroundLightYellow" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.menu.SitePropertiesComponent">
    <children>
-      <Text fx:id="siteName" layoutX="69.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SiteName" AnchorPane.bottomAnchor="265.98046875" AnchorPane.leftAnchor="69.0" AnchorPane.rightAnchor="45.47265625" AnchorPane.topAnchor="57.41796875">
+      <Text fx:id="siteName" layoutX="88.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SiteName" AnchorPane.bottomAnchor="267.0" AnchorPane.leftAnchor="88.0" AnchorPane.rightAnchor="76.47265625" AnchorPane.topAnchor="53.0">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Button fx:id="closeWindowButton" layoutX="176.0" layoutY="163.0" mnemonicParsing="false" onAction="#onClose" prefHeight="25.0" prefWidth="24.0" style="-fx-font-size: 6;" text="Close">
+      <Button fx:id="closeWindowButton" layoutX="224.0" layoutY="163.0" mnemonicParsing="false" onAction="#onClose" prefHeight="25.0" prefWidth="24.0" style="-fx-font-size: 6;" text="Close">
          <font>
             <Font size="6.0" />
          </font>
       </Button>
-      <ImageView fx:id="siteImage" fitHeight="50.0" fitWidth="50.0" layoutX="75.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" />
-      <Button fx:id="destroySiteButton" layoutX="52.0" layoutY="163.0" mnemonicParsing="false" onAction="#destroySite" prefHeight="25.0" prefWidth="24.0" style="-fx-font-size: 6;" text="destroy">
+      <ImageView fx:id="siteImage" fitHeight="50.0" fitWidth="50.0" layoutX="99.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="destroySiteButton" layoutX="75.0" layoutY="163.0" mnemonicParsing="false" onAction="#destroySite" prefHeight="25.0" prefWidth="24.0" style="-fx-font-size: 6;" text="destroy">
          <font>
             <Font size="6.0" />
          </font>
       </Button>
-      <Button fx:id="buildSiteButton" layoutX="15.0" layoutY="163.0" mnemonicParsing="false" onAction="#buildSite" prefHeight="25.0" prefWidth="24.0" style="-fx-font-size: 6;" text="build">
+      <Button fx:id="buildSiteButton" layoutX="46.0" layoutY="163.0" mnemonicParsing="false" onAction="#buildSite" prefHeight="25.0" prefWidth="24.0" style="-fx-font-size: 6;" text="build">
          <font>
             <Font size="6.0" />
          </font>
       </Button>
-      <Text layoutX="112.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 12;" text="Build" />
-      <Text layoutX="25.0" layoutY="257.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 12;" text="Consumes" />
-      <Text layoutX="124.0" layoutY="257.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 12;" text="Produces" />
-      <ListView fx:id="siteConsumesListView" layoutX="7.0" layoutY="261.0" prefHeight="80.0" prefWidth="90.0" />
-      <ListView fx:id="siteProducesListView" layoutX="103.0" layoutY="261.0" prefHeight="80.0" prefWidth="90.0" />
-      <ListView fx:id="siteCostsListView" layoutX="22.0" layoutY="193.0" prefHeight="50.0" prefWidth="154.0" />
-      <GridPane fx:id="siteAmountGridPane" layoutX="14.0" layoutY="83.0" prefHeight="70.0" prefWidth="170.0">
+      <Text layoutX="112.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 12;" text="Build for:" />
+      <Text layoutX="43.0" layoutY="257.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 12;" text="Consumes" />
+      <Text layoutX="164.0" layoutY="257.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 12;" text="Produces" />
+      <ListView fx:id="siteConsumesListView" layoutX="12.0" layoutY="261.0" prefHeight="80.0" prefWidth="115.0" />
+      <ListView fx:id="siteProducesListView" layoutX="131.0" layoutY="261.0" prefHeight="80.0" prefWidth="115.0" />
+      <ListView fx:id="siteCostsListView" layoutX="47.0" layoutY="193.0" prefHeight="50.0" prefWidth="154.0" />
+      <GridPane fx:id="siteAmountGridPane" layoutX="38.0" layoutY="84.0" prefHeight="70.0" prefWidth="170.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />

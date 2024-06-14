@@ -8,7 +8,6 @@ import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
@@ -23,6 +22,10 @@ import java.util.ResourceBundle;
 public class LobbySettingsComponent extends AnchorPane {
     @FXML
     public Button readyButton;
+    @FXML
+    public Button selectEmpireButton;
+    @FXML
+    public Button leaveLobbyButton;
     @Inject
     Subscriber subscriber;
     @Inject

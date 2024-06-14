@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.LobbyController;
+import de.uniks.stp24.controllers.helper.JoinGameHelper;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.dto.UpdateGameResultDto;
@@ -68,11 +69,14 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     GamesService gamesService;
     @Spy
     EmpireService empireService;
+
     @Spy
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
 
+    @InjectMocks
+    JoinGameHelper joinGameHelper;
     @InjectMocks
     UserComponent userComponent;
     @InjectMocks
@@ -86,13 +90,13 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     @InjectMocks
     BubbleComponent bubbleComponent;
 
-    Provider<UserComponent> userComponentProvider = ()-> new UserComponent(imageCache, resources);
+    Provider<UserComponent> userComponentProvider = () -> new UserComponent(imageCache, resources);
 
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
 
     @Override
-    public void start(Stage stage) throws Exception{
+    public void start(Stage stage) throws Exception {
         super.start(stage);
 
         this.lobbyController.bubbleComponent = this.bubbleComponent;
@@ -101,12 +105,14 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         this.lobbyController.enterGameComponent = this.enterGameComponent;
         this.lobbyController.userComponent = this.userComponent;
         this.lobbyController.userComponentProvider = this.userComponentProvider;
+        this.lobbyController.joinGameHelper = this.joinGameHelper;
+
 
         // Mock getting userID
         doReturn("testGameHostID").when(this.tokenStorage).getUserId();
 
         // Mock getting game
-        doReturn(Observable.just(new Game("1", "a","testGameID","testGame","testGameHostID",
+        doReturn(Observable.just(new Game("1", "a", "testGameID", "testGame", "testGameHostID",
                 false, 1, 0, new GameSettings(1))))
                 .when(this.gamesService).getGame(any());
 
@@ -133,7 +139,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.updated"), eq(MemberDto.class));
         this.app.show(this.lobbyController);
 
-        doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.updated"),eq(Game.class));
+        doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.updated"), eq(Game.class));
     }
 
     /**
@@ -144,13 +150,13 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         // Test if the user on top of the member list is the actual host of the game
-        User host = this.lobbyController.playerListView.getItems().get(0).user();
+        User host = this.lobbyController.playerListView.getItems().getFirst().user();
         assertEquals(3, this.lobbyController.playerListView.getItems().size());
         assertTrue(host.name().contains("gameHost"));
         assertTrue(host.name().contains("(Host)"));
 
         // Test if the correct component is shown to the host
-        Node component = this.lobbyController.lobbyElement.getChildren().get(0);
+        Node component = this.lobbyController.lobbyElement.getChildren().getFirst();
         assertEquals(LobbyHostSettingsComponent.class, component.getClass());
         assertTrue(lookup("#startJourneyButton").queryButton().isDisabled());
     }
@@ -161,15 +167,18 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     @Test
     public void testStartGameAsHost() {
 
-        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
+        Empire testEmpire = new Empire("testEmpire", "a", "a", 1, 1, new String[]{"1"}, "a");
+
         doReturn(null).when(this.app).show("/ingame");
-        doNothing().when(this.islandsService).retrieveIslands(any());
+        doAnswer(show -> {
+            app.show("/ingame");
+            return null;
+        }).when(this.islandsService).retrieveIslands(any());
         doReturn(Observable.just(new MemberDto(false, "testGameHostID", testEmpire, "88888888")))
                 .when(this.lobbyService).getMember(any(), any());
 
         doReturn(Observable.just(new MemberDto(false, "testGameHostID", null, "88888888")))
                 .when(this.lobbyService).updateMember(anyString(), anyString(), anyBoolean(), any());
-
 
         when(this.lobbyService.loadPlayers(any()))
                 .thenReturn(Observable.just(new MemberDto[]{
@@ -185,12 +194,12 @@ public class TestLobbyControllerAsHost extends ControllerTest {
                         new MemberDto(true, "testMemberUnoID", null, "88888888"),
                         new MemberDto(true, "testMemberDosID", null, "88888888")}));
 
-        doReturn(Observable.just(new UpdateGameResultDto("1", "a","testGameID","testGame","testGameHostID",
-                        true, 1, 0, new GameSettings(1)))).when(this.editGameService).startGame(any());
+        doReturn(Observable.just(new UpdateGameResultDto("1", "a", "testGameID", "testGame", "testGameHostID",
+                true, 1, 0, new GameSettings(1)))).when(this.editGameService).startGame(any());
 
 
-        doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", "testGameID",
-                "testGameHostID","testGame","a","a",1, 2, "a")})).when(this.empireService).getEmpires(any());
+        doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1", "a", "testEmpireID", "testGameID",
+                "testGameHostID", "testGame", "a", "a", 1, 2, "a")})).when(this.empireService).getEmpires(any());
 
 
         WaitForAsyncUtils.waitForFxEvents();
@@ -213,10 +222,10 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         assertFalse(lookup("#startJourneyButton").queryButton().isDisabled());
 
         clickOn("#startJourneyButton");
-        this.gameSubject.onNext(new Event<>("games.testGameID.updated", new Game("1","a",
-          "testGameID","testGame", "testGameHostID", true, 1, 0 , new GameSettings(1))));
+        this.gameSubject.onNext(new Event<>("games.testGameID.updated", new Game("1", "a",
+                "testGameID", "testGame", "testGameHostID", true, 1, 0, new GameSettings(1))));
         WaitForAsyncUtils.waitForFxEvents();
-        verify(this.app,times(1)).show("/ingame");
+        verify(this.app, times(1)).show("/ingame");
 
     }
 
@@ -251,5 +260,61 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         clickOn("#selectEmpireButton");
 
         verify(this.app, times(1)).show(eq("/creation"), any());
+    }
+
+    @Test
+    public void testTooManyPlayers() {
+        //Todo: works at the moment for maxMember = 2!
+        // If the number of maxMember is changed in LobbyController this test will fail. It is more like a template of
+        // how a test for this could look like. The test needs to be adapted after the server communication for maxMember
+        // is implemented.
+        Empire testEmpire = new Empire("testEmpire", "a", "a", 1, 1, new String[]{"1"}, "a");
+
+        when(this.lobbyService.loadPlayers(any()))
+                .thenReturn(Observable.just(new MemberDto[]{
+                        new MemberDto(true, "testGameHostID", testEmpire, "88888888"),
+                        new MemberDto(false, "testMemberUnoID", null, "88888888"),
+                        new MemberDto(false, "testMemberDosID", null, "88888888")}))
+                .thenReturn(Observable.just(new MemberDto[]{
+                        new MemberDto(true, "testGameHostID", testEmpire, "88888888"),
+                        new MemberDto(true, "testMemberUnoID", testEmpire, "88888888"),
+                        new MemberDto(false, "testMemberDosID", null, "88888888")}))
+                .thenReturn(Observable.just(new MemberDto[]{
+                        new MemberDto(true, "testGameHostID", testEmpire, "88888888"),
+                        new MemberDto(true, "testMemberUnoID", testEmpire, "88888888"),
+                        new MemberDto(true, "testMemberDosID", null, "88888888")}))
+                .thenReturn(Observable.just(new MemberDto[]{
+                        new MemberDto(true, "testGameHostID", testEmpire, "88888888"),
+                        new MemberDto(true, "testMemberUnoID", testEmpire, "88888888"),
+                        new MemberDto(true, "testMemberDosID", testEmpire, "88888888")}))
+                .thenReturn(Observable.just(new MemberDto[]{
+                        new MemberDto(true, "testGameHostID", null, "88888888"),
+                        new MemberDto(true, "testMemberUnoID", testEmpire, "88888888"),
+                        new MemberDto(true, "testMemberDosID", testEmpire, "88888888")}));
+
+        WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(lookup("#startJourneyButton").queryButton().isDisabled());
+        this.memberSubject.onNext(new Event<>("games.testGameID.members.testGameHostID.updated",
+                new MemberDto(true, "testGameHostID", testEmpire, "88888888")));
+        assertTrue(lookup("#startJourneyButton").queryButton().isDisabled());
+        this.memberSubject.onNext(new Event<>("games.testGameID.members.testMemberUnoID.updated",
+                new MemberDto(true, "testMemberUnoID", testEmpire, "88888888")));
+        assertTrue(lookup("#startJourneyButton").queryButton().isDisabled());
+        this.memberSubject.onNext(new Event<>("games.testGameID.members.testMemberDosID.updated",
+                new MemberDto(true, "testMemberDosID", null, "88888888")));
+        WaitForAsyncUtils.waitForFxEvents();
+
+        assertFalse(lookup("#startJourneyButton").queryButton().isDisabled());
+
+        this.memberSubject.onNext(new Event<>("games.testGameID.members.testMemberDosID.updated",
+                new MemberDto(true, "testMemberDosID", testEmpire, "88888888")));
+        WaitForAsyncUtils.waitForFxEvents();
+
+        assertTrue(lookup("#startJourneyButton").queryButton().isDisabled());
+
+        this.memberSubject.onNext(new Event<>("games.testGameID.members.testGameHostID.updated",
+                new MemberDto(true, "testGameHostID", null, "88888888")));
+        WaitForAsyncUtils.waitForFxEvents();
+        assertFalse(lookup("#startJourneyButton").queryButton().isDisabled());
     }
 }

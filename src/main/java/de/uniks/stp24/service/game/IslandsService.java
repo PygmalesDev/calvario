@@ -38,7 +38,7 @@ public class IslandsService extends BasicService {
             dto -> {
                 Arrays.stream(dto).forEach(data -> {
                     List<String> linkedIsles = new ArrayList<>(data.links().keySet());
-                    System.out.println(data);
+                    //System.out.println(data);
                     Island tmp = new Island(data.owner(),
                         Objects.isNull(data.owner()) ? -1 : tokenStorage.getFlagIndex(data.owner()),
                         data.x(),

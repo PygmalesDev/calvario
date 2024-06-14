@@ -31,8 +31,10 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
@@ -124,7 +126,7 @@ public class PauseMenuTest extends ControllerTest {
 
         inGameService.setGameStatus(gameStatus);
         inGameService.setTimerService(timerService);
-        doReturn(Observable.just(new Game("a", "a", "gameId", "gameName", "gameOwner", true, 1, 1, null))).when(gamesApiService).getGame(any());
+        //doReturn(Observable.just(new Game("a", "a", "gameId", "gameName", "gameOwner", true, 1, 1, null))).when(gamesApiService).getGame(any());
         SystemUpgrades systemUpgrades = new SystemUpgrades(
                 new UpgradeStatus("1", 0, null, null, 0),
                 new UpgradeStatus("1", 0, null, null, 0),
@@ -132,6 +134,8 @@ public class PauseMenuTest extends ControllerTest {
                 new UpgradeStatus("1", 0, null, null, 0),
                 new UpgradeStatus("1", 0, null, null, 0));
         doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
+
+        /*
         doReturn(Observable.just(new EmpireDto(
                 "1",
                 "1",
@@ -149,6 +153,10 @@ public class PauseMenuTest extends ControllerTest {
                 null
         ))).when(empireService).getEmpire(any(), any());
 
+         */
+
+        doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());
+        doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", true,1,1,null ))).when(gamesApiService).getGame(any());
         this.app.show(this.inGameController);
     }
 
@@ -196,12 +204,17 @@ public class PauseMenuTest extends ControllerTest {
     public void testQuitting() {
         doReturn(null).when(app).show("/browseGames");
 
+        tokenStorage.setEmpireId("empireId");
+        tokenStorage.setGameId("gameId");
+
         press(KeyCode.ESCAPE);
         waitForFxEvents();
         press(KeyCode.Q);
 //        clickOn("#quitButton");
         waitForFxEvents();
 
+        assertNull(tokenStorage.getEmpireId());
+        assertNull(tokenStorage.getGameId());
         verify(app, times(1)).show("/browseGames");
     }
 

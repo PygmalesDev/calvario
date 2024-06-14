@@ -52,35 +52,39 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
     //Todo: resourceID in translations, imagePaths, constants
 
     @Override
-    public void setItem(@NotNull Resource resource){
-        if(showName){
+    public void setItem(@NotNull Resource resource) {
+        if (showName) {
             String name = gameResourceBundle.getString(resourceTranslation.get(resource.resourceID()));
             descriptionText.setText(name);
-        }else{
+            descriptionText.setVisible(true);
+        } else {
             descriptionText.setVisible(false);
         }
 
-        if(showCount){
+        if (showCount) {
             countText.setText("x" + resource.count());
-        }else{
+            countText.setVisible(true);
+        } else {
             countText.setVisible(false);
         }
 
-        if(showIcon){
+        if (showIcon) {
             resourceIconImageView.setImage(imageCache.get("icons/Resources/" + resource.resourceID() + ".png"));
-        }else{
+            resourceIconImageView.setVisible(true);
+        } else {
             resourceIconImageView.setVisible(false);
         }
 
-        if(showChangePerSeason){
-            if(resource.changePerSeason() == 0){
+        if (showChangePerSeason) {
+            if (resource.changePerSeason() == 0) {
                 changePerSeasonText.setVisible(false);
-            }else {
+            } else {
                 String sign;
-                sign = (resource.changePerSeason() > 0) ? "+" : "-";
+                sign = (resource.changePerSeason() > 0) ? "+" : "";
                 changePerSeasonText.setText(sign + resource.changePerSeason());
+                changePerSeasonText.setVisible(true);
             }
-        }else{
+        } else {
             changePerSeasonText.setVisible(false);
         }
     }

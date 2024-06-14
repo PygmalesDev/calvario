@@ -1,26 +1,18 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.game.IslandComponent;
-import de.uniks.stp24.component.game.OverviewSitesComponent;
-import de.uniks.stp24.component.game.OverviewUpgradeComponent;
-import de.uniks.stp24.component.game.ClockComponent;
-import de.uniks.stp24.component.game.StorageOverviewComponent;
-import de.uniks.stp24.component.menu.LobbyHostSettingsComponent;
+import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.service.game.*;
-import de.uniks.stp24.ws.EventListener;
-import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
-import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
-import de.uniks.stp24.service.menu.GamesService;
-import de.uniks.stp24.service.menu.LobbyService;
+import de.uniks.stp24.service.game.ResourcesService;
+import de.uniks.stp24.ws.EventListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -42,10 +34,10 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 @Title("CALVARIO")
 @Controller
@@ -64,7 +56,7 @@ public class InGameController extends BasicController {
     @FXML
     StackPane pauseMenuContainer;
     @FXML
-    StackPane storageOverviewContainer;
+    public StackPane storageOverviewContainer;
 
     @Inject
     InGameService inGameService;
@@ -85,6 +77,7 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public OverviewUpgradeComponent overviewUpgradeComponent;
+    @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
     @SubComponent
@@ -125,6 +118,9 @@ public class InGameController extends BasicController {
         //Todo: Outprint for Swagger - can be deleted later
 
         GameStatus gameStatus = inGameService.getGameStatus();
+        //Todo: Outprint for Swagger - can be deleted later
+        System.out.println("game in ingame: " + tokenStorage.getGameId());
+        System.out.println("empire in ingame: " + tokenStorage.getEmpireId());
 
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
@@ -237,6 +233,7 @@ public class InGameController extends BasicController {
             showStorageButton = new Button();
             showStorageButton.setPrefHeight(30);
             showStorageButton.setPrefWidth(30);
+            showStorageButton.setId("showStorageButton");
             showStorageButton.setOnAction(event -> showStorage());
             this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
         }
@@ -294,11 +291,11 @@ public class InGameController extends BasicController {
     // assign key S to show storage
     @OnKey(code = KeyCode.S)
     public void showStorage() {
-        storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
+        if (!tokenStorage.isSpectator()) {
+            storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
+        }
     }
 
-
-    //TODO: FIX BUG
     public void createEmpireListener() {
         this.subscriber.subscribe(this.eventListener
                         .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),

@@ -1,5 +1,7 @@
 {
   "id": "dutchman",
+  "event_type": "bad",
+  "duration": 25,
   "effects": [
     {
       "variable": "fuel",

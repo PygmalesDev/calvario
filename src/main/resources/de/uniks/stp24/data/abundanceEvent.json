@@ -1,5 +1,7 @@
 {
   "id": "abundance",
+  "event_type": "good",
+  "duration": 25,
   "effects": [
     {
       "variable": "minerals",

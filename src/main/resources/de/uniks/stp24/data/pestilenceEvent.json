@@ -1,5 +1,7 @@
 {
   "id": "pestilence",
+  "event_type": "bad",
+  "duration": 15,
   "effects": [
     {
       "variable": "population",

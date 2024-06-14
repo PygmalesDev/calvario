@@ -1,5 +1,7 @@
 {
   "id": "equiv_ex",
+  "event_type": "good",
+  "duration": 5,
   "effects": [
     {
       "variable": "alloy",

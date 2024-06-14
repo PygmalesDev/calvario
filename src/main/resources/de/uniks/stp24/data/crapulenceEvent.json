@@ -1,5 +1,7 @@
 {
   "id": "crapulence",
+  "event_type": "good",
+  "duration": 20,
   "effects": [
     {
       "variable": "food",

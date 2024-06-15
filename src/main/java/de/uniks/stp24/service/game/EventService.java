@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.dto.EffectDto;
 import de.uniks.stp24.dto.EffectSourceDto;
+import de.uniks.stp24.dto.EffectSourceParentDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.service.Constants;
@@ -26,7 +27,7 @@ public class EventService {
     Subscriber subscriber;
     @Inject
     TokenStorage tokenStorage;
-    EffectSourceDto event;
+    EffectSourceParentDto event;
     private int remainingSeasons;
     private boolean eventActive = false;
     private int nextEvent;
@@ -38,7 +39,7 @@ public class EventService {
             "grandExp", "reckoning", "rogerFeast", /* Bad Events */ "blackSpot", "dutchman", "foolsGold", "pestilence",
             "rumBottle", "submerge"));
 
-    Map<String, EffectSourceDto> eventMap = new HashMap<>();
+    Map<String, EffectSourceParentDto> eventMap = new HashMap<>();
 
 
     @Inject
@@ -46,11 +47,11 @@ public class EventService {
         nextEvent = 2;
     }
 
-    public void setEvent(EffectSourceDto event) {
+    public void setEvent(EffectSourceParentDto event) {
         this.event = event;
     }
 
-    public EffectSourceDto getNewRandomEvent() {
+    public EffectSourceParentDto getNewRandomEvent() {
 
         System.out.println("REMAINING SEASONS: " + nextEvent);
 
@@ -74,7 +75,7 @@ public class EventService {
         nextEvent = random.nextInt(100, 120);
     }
 
-    public EffectSourceDto getEvent() {
+    public EffectSourceParentDto getEvent() {
         return event;
     }
 
@@ -97,7 +98,7 @@ public class EventService {
     // Parameter eventName is index for List<String> eventNames
     // Method reads the JSONs in folder .data and creates an EffectSourceDto
     // if the event has not been added to the eventMap
-    private @Nullable EffectSourceDto readEvent(int eventName) {
+    private @Nullable EffectSourceParentDto readEvent(int eventName) {
 
         try {
             File jsonFile = new File(Constants.EVENT_FOLDER_NAME + eventNames.get(eventName) + "Event.json");
@@ -127,7 +128,9 @@ public class EventService {
                     }
 
                     // Last parameter is an array of EffectDto
-                    eventMap.put(id, new EffectSourceDto(id, eventType, duration, effectsDto.toArray(new EffectDto[0])));
+                    EffectDto[] effectArrayDtos = new EffectDto[effectsDto.size()];
+                    effectArrayDtos = effectsDto.toArray(effectArrayDtos);
+                    eventMap.put(id, new EffectSourceParentDto(new EffectSourceDto[]{new EffectSourceDto(id, eventType, duration, effectArrayDtos)}));
                     remainingSeasons = duration;
                 }
             }

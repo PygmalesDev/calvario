@@ -1,6 +1,6 @@
 package de.uniks.stp24.component.game;
 
-import de.uniks.stp24.dto.EffectSourceDto;
+import de.uniks.stp24.dto.EffectSourceParentDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.ImageCache;
@@ -236,14 +236,14 @@ public class ClockComponent extends AnchorPane {
 
     ////////////--------------------------------Auxiliary Methods-----------------------------------------//////////////
 
-    public void setRandomEventInfos(@NotNull EffectSourceDto effect) {
+    public void setRandomEventInfos(@NotNull EffectSourceParentDto effect) {
         effect = eventService.getEvent();
-        if (Objects.equals(effect.eventType(), "bad")) {
+        if (Objects.equals(effect.effects()[0].eventType(), "bad")) {
             randomEventImage.setImage(imageCache.get("assets/events/badEvent.png"));
         } else {
             randomEventImage.setImage(imageCache.get("assets/events/goodEvent.png"));
         }
-        remainingSeasonsLabel.setText(String.valueOf(effect.duration()));
+        remainingSeasonsLabel.setText(String.valueOf(effect.effects()[0].duration()));
     }
 
     @Contract(pure = true)

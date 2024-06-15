@@ -6,7 +6,7 @@ import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
-import de.uniks.stp24.dto.EffectSourceDto;
+import de.uniks.stp24.dto.EffectSourceParentDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
@@ -104,7 +104,7 @@ public class InGameController extends BasicController {
     public ClockComponent clockComponent;
 
     boolean pause = false;
-    private EffectSourceDto event;
+    private EffectSourceParentDto event;
     @Inject
     EventListener eventListener;
 

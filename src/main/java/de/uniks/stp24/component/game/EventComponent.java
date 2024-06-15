@@ -1,7 +1,7 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.dto.EffectSourceDto;
+import de.uniks.stp24.dto.EffectSourceParentDto;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EventService;
@@ -105,9 +105,9 @@ public class EventComponent extends AnchorPane {
         return String.join("", word);
     }
 
-    public void setRandomEventInfos(@NotNull EffectSourceDto event) {
+    public void setRandomEventInfos(@NotNull EffectSourceParentDto event) {
 
-        String id = convert(event.id());
+        String id = convert(event.effects()[0].id());
 
         checkSize(id);
 

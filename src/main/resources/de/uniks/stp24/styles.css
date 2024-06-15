@@ -738,12 +738,19 @@ ToggleButton:hover{
     -fx-background-image: url('/de/uniks/stp24/icons/sea.png');
     -fx-background-size: cover, auto;
 }
+
+/*********************************** for map in game *****************************************************/
+
 .ownIsland{
-    -fx-effect: dropshadow(gaussian, #7FFF00, 20, 0.5, 0, 0);
+    -fx-effect: dropshadow(gaussian, #7FFF00, 2, 0.88, 0, 0);
+}
+
+.developedIsland{
+    -fx-effect: dropshadow(gaussian, #AFAFAF, 2, 0.88, 0, 0);
 }
 
 .connection{
-    -fx-stroke: #FF7F50;
-    -fx-stroke-dash-array: 5 5;
-    -fx-stroke-width: 2;
+    -fx-stroke: #FFFFFF;
+    -fx-stroke-dash-array: 0.5 8;
+    -fx-stroke-width: 3;
 }

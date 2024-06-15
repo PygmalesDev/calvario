@@ -11,7 +11,6 @@ import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -19,7 +18,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
@@ -86,6 +84,7 @@ public class InGameController extends BasicController {
 
     @Inject
     public InGameController() {
+
     }
 
     @OnInit
@@ -192,14 +191,18 @@ public class InGameController extends BasicController {
     @OnRender
     public void createMap() {
         this.islandComponentList = islandsService.createIslands(islandsService.getListOfIslands());
+        System.out.println("create map 1");
         this.islandComponentMap = islandsService.getComponentMap();
+        System.out.println("create map 2");
         islandsService.createLines(this.islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
+        System.out.println("create map 3");
         this.islandComponentList.forEach(isle -> {
             isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
             isle.setScaleX(1.25);
             isle.setScaleY(1.25);
             this.mapGrid.getChildren().add(isle);
         });
+        System.out.println("create map 4");
         createButtonsStorage();
         mapScrollPane.setVvalue(0.5);
         mapScrollPane.setHvalue(0.5);
@@ -255,6 +258,7 @@ public class InGameController extends BasicController {
         islandComponentList.forEach(IslandComponent::destroy);
         islandComponentList = null;
         islandComponentMap = null;
+        islandsService.removeEmpires();
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
           .removePropertyChangeListener(triple.propertyName(), triple.listener()));
         this.subscriber.dispose();

@@ -7,7 +7,6 @@ import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.BasicService;
 import de.uniks.stp24.service.menu.LobbyService;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -17,8 +16,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
 
-import static javafx.scene.effect.BlurType.GAUSSIAN;
-
 @Singleton
 public class IslandsService extends BasicService {
 
@@ -27,21 +24,17 @@ public class IslandsService extends BasicService {
     @Inject
     LobbyService lobbyService;
 
-    private final List<Island> isles = new ArrayList<>();
-    static private final Map<String, List<String>> connections = new HashMap<>();
-    static final DropShadow drop = new DropShadow();
     static final int factor = 10;
     double minX,maxX,minY,maxY;
     double widthRange, heightRange;
+    private final List<Island> isles = new ArrayList<>();
     private final List<IslandComponent> islandComponentList = new ArrayList<>();
     private final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
     private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();
+    private final Map<String, List<String>> connections = new HashMap<>();
 
     @Inject
     public IslandsService() {
-        drop.setColor((Color.CHARTREUSE).brighter());
-        drop.setBlurType(GAUSSIAN);
-        drop.setRadius(15);
         if (subscriber==null) subscriber = new Subscriber();
     }
 
@@ -49,8 +42,7 @@ public class IslandsService extends BasicService {
     // and retrieve islands when game starts
     // todo remove printouts
     public void retrieveIslands(String gameID) {
-        this.isles.clear();
-        resetMapRange();
+        resetVariables();
         subscriber.subscribe(gameSystemsService.getSystems(gameID),
             dto -> {
                 Arrays.stream(dto).forEach(data -> {
@@ -101,9 +93,11 @@ public class IslandsService extends BasicService {
           factor * isleDto.posY() - serverOffsetV + screenOffSetV);
         component.applyIcon(isleDto.type());
         component.setFlagImage(isleDto.flagIndex());
-        if(Objects.nonNull(isleDto.owner()) && isleDto.owner().equals(tokenStorage.getEmpireId())) {
-            component.setEffect(drop);
+        if(Objects.nonNull(isleDto.owner())) {
+            Color colorWeb = Color.web(getEmpire(isleDto.owner()).color()).brighter();
+          component.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb)+ ", 2, 0.88, 0, 0);");
         }
+
         return component;
     }
 
@@ -157,16 +151,14 @@ public class IslandsService extends BasicService {
                 endX = isle2.getPosX() + 25;
                 endY = isle2.getPosY() + 25;
                 Line tmp = new Line(startX,startY,endX,endY);
-                //todo with css? maybe this #FF7F50
-                tmp.styleProperty().set(" -fx-stroke: #FFFFFF; -fx-stroke-dash-array: 5 5; -fx-stroke-width: 2;");
-//                tmp.setStyle();
+                tmp.getStyleClass().add("connection");
                 linesInMap.add(tmp);
             }
         });
         return linesInMap;
     }
 
-    private void resetMapRange(){
+    private void resetVariables(){
         minX = 0.0;
         minY = 0.0;
         maxX = 0.0;
@@ -191,8 +183,23 @@ public class IslandsService extends BasicService {
         this.empiresInGame.put(id,empire);
     }
 
+    private String colorToRGB(Color color) {
+        return "rgb(" + (int) (color.getRed() * 255) + "," +
+          (int) (color.getGreen() * 255) + "," +
+          (int) (color.getBlue() * 255) + ")" ;
+    }
+
+    public void removeEmpires() {
+        this.isles.clear();
+        this.islandComponentList.clear();
+        this.islandComponentMap.clear();
+        this.empiresInGame.clear();
+        this.connections.clear();
+    }
+
     @OnDestroy
     public void destroy(){
         this.subscriber.dispose();
     }
+
 }

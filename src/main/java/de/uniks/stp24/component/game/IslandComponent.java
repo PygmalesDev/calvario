@@ -14,6 +14,7 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnKey;
 
 import javax.inject.Inject;
+import java.util.Objects;
 
 @Component(view = "IslandComponent.fxml")
 public class IslandComponent extends Pane {

@@ -7,10 +7,12 @@ import de.uniks.stp24.rest.GamesApiService;
 import io.reactivex.rxjava3.core.Observable;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.beans.PropertyChangeSupport;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@Singleton
 public class TimerService {
 
     protected PropertyChangeSupport listeners;

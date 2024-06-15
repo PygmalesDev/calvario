@@ -56,6 +56,8 @@ public class EventComponent extends AnchorPane {
     @Inject
     TimerService timerService;
 
+    ClockComponent clockComponent;
+
     @Inject
     @Resource
     public ResourceBundle resourcesBundle;
@@ -103,7 +105,7 @@ public class EventComponent extends AnchorPane {
         return String.join("", word);
     }
 
-    public void setEventInfos(@NotNull EffectSourceDto event) {
+    public void setRandomEventInfos(@NotNull EffectSourceDto event) {
 
         String id = convert(event.id());
 
@@ -137,9 +139,12 @@ public class EventComponent extends AnchorPane {
         System.out.println("close event");
         container.setVisible(false);
         shadow.setVisible(false);
+
     }
 
     public void show() {
+//        clockComponent.setRandomEventVisible(true);
+//        clockComponent.setRandomEventInfos(eventService.getEvent());
         container.setVisible(true);
         shadow.setVisible(true);
         shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
@@ -149,4 +154,9 @@ public class EventComponent extends AnchorPane {
         this.shadow = shadow;
         this.container = container;
     }
+
+    public void setClockComponent(ClockComponent clockComponent) {
+        this.clockComponent = clockComponent;
+    }
+
 }

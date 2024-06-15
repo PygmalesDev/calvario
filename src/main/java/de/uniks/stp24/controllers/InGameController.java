@@ -121,7 +121,6 @@ public class InGameController extends BasicController {
                         .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
                 event -> {
 
-                    System.out.println("LAST UPDATED: " + lastUpdate + ", UPDATED AT: " + event.data().updatedAt());
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         System.out.println("TICKED");
                         eventService.countEventDown();
@@ -129,14 +128,10 @@ public class InGameController extends BasicController {
                         this.event = eventService.getNewRandomEvent();
                         if (this.event != null) {
                             System.out.println("NEW EVENT");
-                            clockComponent.remainingSeasonsLabel.setVisible(true);
-                            clockComponent.randomEventImage.setVisible(true);
-                            clockComponent.remainingSeasonsLabel.setText(String.valueOf(eventService.getRemainingSeasons()));
-                            clockComponent.setRandomEventInfos(this.event);
-                            eventComponent.setEventInfos(this.event);
+//                            clockComponent.setRandomEventVisible(true);
+//                            clockComponent.setRandomEventInfos(this.event);
+                            eventComponent.setRandomEventInfos(this.event);
                             eventComponent.show();
-                        } else {
-                            System.out.println("WHYY");
                         }
                         lastUpdate = event.data().updatedAt();
                     }
@@ -206,6 +201,8 @@ public class InGameController extends BasicController {
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
+
+        eventComponent.setClockComponent(clockComponent);
 
     }
 

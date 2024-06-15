@@ -153,9 +153,6 @@ public class ClockComponent extends AnchorPane {
         countdownLabel.setText(translateCountdown(timerService.getCountdown()));
 
         // Dummy data for special Event
-
-        randomEventImage.setVisible(false);
-        remainingSeasonsLabel.setVisible(false);
     }
 
     @OnDestroy
@@ -240,6 +237,7 @@ public class ClockComponent extends AnchorPane {
     ////////////--------------------------------Auxiliary Methods-----------------------------------------//////////////
 
     public void setRandomEventInfos(@NotNull EffectSourceDto effect) {
+        effect = eventService.getEvent();
         if (Objects.equals(effect.eventType(), "bad")) {
             randomEventImage.setImage(imageCache.get("assets/events/badEvent.png"));
         } else {

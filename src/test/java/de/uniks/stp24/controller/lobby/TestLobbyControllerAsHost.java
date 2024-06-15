@@ -163,7 +163,6 @@ public class TestLobbyControllerAsHost extends ControllerTest {
 
         Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
         doReturn(null).when(this.app).show("/ingame");
-        doNothing().when(this.islandsService).retrieveIslands(any());
         doReturn(Observable.just(new MemberDto(false, "testGameHostID", testEmpire, "88888888")))
                 .when(this.lobbyService).getMember(any(), any());
 
@@ -192,6 +191,9 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", "testGameID",
                 "testGameHostID","testGame","a","a",1, 2, "a")})).when(this.empireService).getEmpires(any());
 
+        doAnswer(show-> {app.show("/ingame");
+            return null;
+        }).when(this.islandsService).retrieveIslands(any());
 
         WaitForAsyncUtils.waitForFxEvents();
         assertTrue(lookup("#startJourneyButton").queryButton().isDisabled());

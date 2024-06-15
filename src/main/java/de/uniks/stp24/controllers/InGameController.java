@@ -40,7 +40,7 @@ public class InGameController extends BasicController {
     public Button showIslandButton;
     public HBox storageButtonsBox;
     @FXML
-    Group group;
+    public Group group;
     @FXML
     public ScrollPane mapScrollPane;
     @FXML
@@ -191,23 +191,21 @@ public class InGameController extends BasicController {
     @OnRender
     public void createMap() {
         this.islandComponentList = islandsService.createIslands(islandsService.getListOfIslands());
-        System.out.println("create map 1");
         this.islandComponentMap = islandsService.getComponentMap();
-        System.out.println("create map 2");
+        mapGrid.setMinSize(islandsService.getMapWidth(), islandsService.getMapHeight());
         islandsService.createLines(this.islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
-        System.out.println("create map 3");
         this.islandComponentList.forEach(isle -> {
             isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
             isle.setScaleX(1.25);
             isle.setScaleY(1.25);
             this.mapGrid.getChildren().add(isle);
         });
-        System.out.println("create map 4");
         createButtonsStorage();
         mapScrollPane.setVvalue(0.5);
         mapScrollPane.setHvalue(0.5);
 
         // zoom function working but not perfect!
+        // it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
         mapGrid.setOnScroll(event -> {
             if (event.isShiftDown() && (event.getDeltaY() > 0 || event.getDeltaX() > 0 )) {
                 scale += 0.1;
@@ -224,6 +222,8 @@ public class InGameController extends BasicController {
 
     }
 
+    // TODO this could be equivalent to showIslandOverview
+    // remove prints
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
             System.out.println(event.getSource().toString());
@@ -258,7 +258,7 @@ public class InGameController extends BasicController {
         islandComponentList.forEach(IslandComponent::destroy);
         islandComponentList = null;
         islandComponentMap = null;
-        islandsService.removeEmpires();
+        islandsService.removeDataForMap();
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
           .removePropertyChangeListener(triple.propertyName(), triple.listener()));
         this.subscriber.dispose();

@@ -97,11 +97,10 @@ public class IslandsService extends BasicService {
             Color colorWeb = Color.web(getEmpire(isleDto.owner()).color()).brighter();
           component.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb)+ ", 2, 0.88, 0, 0);");
         }
-
         return component;
     }
 
-    // return mapRange * (factor + 2)
+    // return mapRange * (factor + 3)
     public double getMapWidth() {
         return this.widthRange * (factor + 3);
     }
@@ -189,7 +188,7 @@ public class IslandsService extends BasicService {
           (int) (color.getBlue() * 255) + ")" ;
     }
 
-    public void removeEmpires() {
+    public void removeDataForMap() {
         this.isles.clear();
         this.islandComponentList.clear();
         this.islandComponentMap.clear();

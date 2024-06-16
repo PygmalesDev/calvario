@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
@@ -78,6 +79,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     public List<Island> islands = new ArrayList<>();
 
+    Map<String, String> buildingsMap;
+
     String buildingType;
 
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, true, gameResourceBundle);
@@ -85,6 +88,15 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     @OnInit
     public void init(){
+        buildingsMap = new HashMap<>();
+        buildingsMap.put("refinery", "de/uniks/stp24/icons/buildings/alloy_smeltery.png");
+        buildingsMap.put("factory", "de/uniks/stp24/icons/buildings/theurgy_hall.png");
+        buildingsMap.put("foundry", "de/uniks/stp24/icons/buildings/chophouse.png");
+        buildingsMap.put("research_lab", "de/uniks/stp24/icons/buildings/resonating_delves.png");
+        buildingsMap.put("farm", "de/uniks/stp24/icons/buildings/farmside.png");
+        buildingsMap.put("mine", "de/uniks/stp24/icons/buildings/coal_querry.png");
+        buildingsMap.put("power_plant", "de/uniks/stp24/icons/buildings/scout_hub.png");
+        buildingsMap.put("exchange", "de/uniks/stp24/icons/buildings/seaside_hut.png");
         String buildingMine = "mine";
         setBuildingType(buildingMine);
     }
@@ -111,6 +123,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
     @OnRender
     public void displayInfoBuilding(){
+        Image imageBuilding = new Image(buildingsMap.get(buildingType));
+        buildingImage.setImage(imageBuilding);
+        buildingName.setText(buildingType.toUpperCase());
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), this::resourceListGeneration);
         buildingProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         buildingConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));

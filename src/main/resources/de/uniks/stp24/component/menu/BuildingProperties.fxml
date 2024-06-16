@@ -9,9 +9,9 @@
 
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="280.0" styleClass="backgroundLightYellow" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.menu.BuildingPropertiesComponent">
    <children>
-      <ImageView fx:id="buildingImage" fitHeight="70.0" fitWidth="70.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
+      <ImageView fx:id="buildingImage" fitHeight="80.0" fitWidth="80.0" layoutX="36.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="36.0" AnchorPane.topAnchor="17.0">
       </ImageView>
-      <Text fx:id="buildingName" layoutX="106.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 12;" text="Building_Name" AnchorPane.rightAnchor="14.013671875" AnchorPane.topAnchor="41.05078125">
+      <Text fx:id="buildingName" layoutX="130.0" layoutY="56.1865234375" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 15;" text="Building_Name" AnchorPane.rightAnchor="50.01708984375" AnchorPane.topAnchor="40.0">
          <font>
             <Font size="6.0" />
          </font>

@@ -3,20 +3,25 @@ package de.uniks.stp24.game;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.ClockComponent;
+import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
-import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
+import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.model.Building;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.service.game.TimerService;
+import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.input.KeyCode;
@@ -29,6 +34,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -39,16 +45,26 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class PauseMenuTest extends ControllerTest {
-
-
     @Spy
     GamesApiService gamesApiService;
+
+    @Spy
+    GameSystemsApiService gameSystemsApiService;
+
+    @Spy
+    TokenStorage tokenStorage;
+
+    @Spy
+    PopupBuilder popupBuilder;
 
     @Spy
     GameStatus gameStatus;
 
     @Spy
     InGameService inGameService;
+
+    @Spy
+    LobbyService lobbyService;
 
     @Spy
     TimerService timerService;
@@ -63,13 +79,12 @@ public class PauseMenuTest extends ControllerTest {
     ResourcesService resourcesService;
 
     @Spy
-    TokenStorage tokenStorage;
-    @Spy
     ObjectMapper objectMapper;
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @Spy
     EmpireService empireService;
+
 
     @InjectMocks
     ClockComponent clockComponent;
@@ -82,6 +97,17 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
+    @InjectMocks
+    BuildingPropertiesComponent buildingPropertiesComponent;
+
+    @InjectMocks
+    SitePropertiesComponent sitePropertiesComponent;
+
+    @InjectMocks
+    BuildingsWindowComponent buildingsWindowComponent;
+
+
+
 
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
@@ -97,10 +123,18 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
+        this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
+        this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
+        this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         inGameService.setGameStatus(gameStatus);
         inGameService.setTimerService(timerService);
+        Map<Resource, Integer> required = new HashMap<>();
+        Map<Resource, Integer> production = new HashMap<>();
+        Map<Resource, Integer> consumption = new HashMap<>();
         doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());
         doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", true,1,1,null ))).when(gamesApiService).getGame(any());
+        doReturn(Observable.just(new Building("a",required,production, consumption, 1, 1))).when(gameSystemsApiService).getBuilding(any());
+
         this.app.show(this.inGameController);
     }
 

@@ -7,7 +7,7 @@ import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.model.Resource;
-import de.uniks.stp24.service.ResourcesService;
+import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import javafx.collections.ObservableList;
@@ -59,15 +59,10 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @Inject
     IslandsService islandsService;
 
-    @Inject
-    de.uniks.stp24.service.game.ResourcesService resourcesServiceGame;
 
     @Inject
     App app;
 
-    @SubComponent
-    @Inject
-    public LobbyHostSettingsComponent lobbyHostSettingsComponent;
 
     @Inject
     @Named("gameResourceBundle")
@@ -133,11 +128,11 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     private void resourceListGeneration(BuildingDto buildingDto) {
         Map<String, Integer> resourceMapUpkeep = buildingDto.upkeep();
-        ObservableList<Resource> resourceListUpkeep = resourcesServiceGame.generateResourceList(resourceMapUpkeep, buildingConsumesListView.getItems());
+        ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, buildingConsumesListView.getItems());
         buildingConsumesListView.setItems(resourceListUpkeep);
 
         Map<String, Integer> resourceMapProduce = buildingDto.production();
-        ObservableList<Resource> resourceListProduce = resourcesServiceGame.generateResourceList(resourceMapProduce, buildingProducesListView.getItems());
+        ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, buildingProducesListView.getItems());
         buildingProducesListView.setItems(resourceListProduce);
     }
 

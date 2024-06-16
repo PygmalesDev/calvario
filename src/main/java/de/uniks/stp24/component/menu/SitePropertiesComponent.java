@@ -5,7 +5,7 @@ import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
-import de.uniks.stp24.service.ResourcesService;
+import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import javafx.collections.FXCollections;
@@ -21,10 +21,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import org.controlsfx.control.GridView;
 import org.fulib.fx.FulibFxApp;
 import org.fulib.fx.annotation.controller.Component;
-import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
@@ -35,8 +33,6 @@ import javax.inject.Provider;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
-
-import static java.lang.Thread.sleep;
 
 @Component(view = "SiteProperties.fxml")
 public class SitePropertiesComponent extends AnchorPane {

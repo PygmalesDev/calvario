@@ -1,7 +1,7 @@
 package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.model.Island;
-import de.uniks.stp24.service.ResourcesService;
+import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import javafx.fxml.FXML;

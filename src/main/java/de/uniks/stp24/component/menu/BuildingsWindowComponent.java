@@ -6,8 +6,11 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -50,10 +53,54 @@ public class BuildingsWindowComponent extends AnchorPane {
 
     private String buildingToAdd;
 
+    Image image;
+
+    ImageView imageView;
+
+    private Button[] buttons;
+
+    private static final String[] IMAGE_PATHS = {
+            "de/uniks/stp24/icons/buildings/alloy_smeltery.png",
+            "de/uniks/stp24/icons/buildings/theurgy_hall.png",
+            "de/uniks/stp24/icons/buildings/chophouse.png",
+            "de/uniks/stp24/icons/buildings/resonating_delves.png",
+            "de/uniks/stp24/icons/buildings/farmside.png",
+            "de/uniks/stp24/icons/buildings/coal_querry.png",
+            "de/uniks/stp24/icons/buildings/scout_hub.png",
+            "de/uniks/stp24/icons/buildings/seaside_hut.png",
+    };
+
+
 
     @Inject
     public BuildingsWindowComponent(){
 
+    }
+
+    @FXML
+    public void initialize() {
+        buttons = new Button[]{
+                buildingRefinery,
+                buildingFactory,
+                buildingFoundry,
+                buildingResearchLab,
+                buildingFarm,
+                buildingMine,
+                buildingPowerPlant,
+                buildingExchange
+        };
+    }
+
+    @OnRender
+    public void setImages() {
+        for (int i = 0; i < buttons.length; i++) {
+            Image image = new Image(IMAGE_PATHS[i]);
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(60);
+            imageView.setFitHeight(60);
+            buttons[i].setGraphic(imageView);
+            buttons[i].getStyleClass().clear();
+        }
     }
 
     public void buildExchange(){

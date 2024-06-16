@@ -27,7 +27,6 @@ public class EventService {
     private int remainingSeasons;
     EffectSourceParentDto event = null;
     private int nextEvent;
-    private boolean eventActive = false;
     ObjectMapper objectMapper = new ObjectMapper();
     Random random = new Random(1000);
 
@@ -63,7 +62,6 @@ public class EventService {
         }
         oldValue = this.event;
         this.event = event;
-        System.out.println("Event wurde geändert");
         this.firePropertyChange(PROPERTY_EVENT, oldValue, event);
     }
 
@@ -72,11 +70,10 @@ public class EventService {
 
         System.out.println("UNTIL NEXT EVENT: " + nextEvent);
 
-        if ((nextEvent <= 0 && !eventActive)) {
+        if (nextEvent <= 0) {
 
             System.out.println("NEW EVENT");
 
-            eventActive = true;
             int eventName = random.nextInt(0, eventNames.size());
             EffectSourceParentDto tmp = readEvent(eventName);
             setNextEvent();
@@ -108,7 +105,6 @@ public class EventService {
         setEvent(getNewRandomEvent());
          if (remainingSeasons <= 0) {
             System.out.println("Remaining finish: " + remainingSeasons);
-            eventActive = false;
         } else {
             setRemainingSeasons(remainingSeasons--);
         }
@@ -116,10 +112,6 @@ public class EventService {
 
     public int getNextEventTimer() {
         return nextEvent;
-    }
-
-    public boolean getEventActive() {
-        return eventActive;
     }
 
     public int getRemainingSeasons() {

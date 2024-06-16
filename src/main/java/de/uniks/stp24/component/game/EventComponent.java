@@ -2,6 +2,7 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.EffectSourceParentDto;
+import de.uniks.stp24.model.Game;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EventService;
@@ -25,6 +26,8 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -74,6 +77,7 @@ public class EventComponent extends AnchorPane {
     String gameId;
 
     ImageCache imageCache = new ImageCache();
+    private String lastUpdate = "";
 
     @Inject
     public EventComponent() {
@@ -83,6 +87,45 @@ public class EventComponent extends AnchorPane {
     @OnInit
     public void init() {
 
+        PropertyChangeListener callHandleEventChanged = this::handleEventChanged;
+        eventService.listeners().addPropertyChangeListener(EventService.PROPERTY_EVENT, callHandleEventChanged);
+
+        createUpdateSeasonsListener();
+
+    }
+
+
+    public void createUpdateSeasonsListener() {
+        subscriber.subscribe(this.eventListener
+                        .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
+                event -> {
+                    if (!Objects.equals(lastUpdate, event.data().updatedAt())) {
+                        lastUpdate = event.data().updatedAt();
+
+                        eventService.setNextEventTimer(eventService.getNextEventTimer()-1);
+//                        eventService.setEvent(eventService.getNewRandomEvent());
+
+                        if (eventService.getEvent() != null) {
+
+                            subscriber.subscribe(eventService.sendEffect(),
+                                    result -> System.out.println("Effect gesendet: " + result),
+                                    error -> System.out.println("Error beim Senden von Effect: " + error));
+
+                            System.out.println("Event: " + eventService.getEvent().effects()[0].id() + " in EventComponent");
+                            setRandomEventInfos(eventService.getEvent());
+                            show();
+                        }
+                    }
+                },
+                error -> System.out.println("Error bei Season: " + error.getMessage()));
+    }
+
+
+    private void handleEventChanged(PropertyChangeEvent propertyChangeEvent) {
+        if (Objects.nonNull(eventService.getEvent())) {
+            setRandomEventInfos(eventService.getEvent());
+            show();
+        }
     }
 
 
@@ -143,8 +186,6 @@ public class EventComponent extends AnchorPane {
     }
 
     public void show() {
-//        clockComponent.setRandomEventVisible(true);
-//        clockComponent.setRandomEventInfos(eventService.getEvent());
         container.setVisible(true);
         shadow.setVisible(true);
         shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");

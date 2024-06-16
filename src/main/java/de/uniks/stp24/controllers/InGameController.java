@@ -7,7 +7,6 @@ import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.dto.EffectSourceParentDto;
-import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
@@ -98,17 +97,15 @@ public class InGameController extends BasicController {
     public StorageOverviewComponent storageOverviewComponent;
     @SubComponent
     @Inject
-    EventComponent eventComponent;
+    public ClockComponent clockComponent;
     @SubComponent
     @Inject
-    public ClockComponent clockComponent;
+    EventComponent eventComponent;
 
     boolean pause = false;
-    private EffectSourceParentDto event;
     @Inject
     EventListener eventListener;
 
-    String lastUpdate = "";
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
@@ -116,28 +113,6 @@ public class InGameController extends BasicController {
     public InGameController() {
     }
 
-    public void createUpdateSeasonListener() {
-        subscriber.subscribe(this.eventListener
-                        .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
-                event -> {
-
-                    if (!lastUpdate.equals(event.data().updatedAt())) {
-                        System.out.println("TICKED");
-                        eventService.countEventDown();
-
-                        this.event = eventService.getNewRandomEvent();
-                        if (this.event != null) {
-                            System.out.println("NEW EVENT");
-//                            clockComponent.setRandomEventVisible(true);
-//                            clockComponent.setRandomEventInfos(this.event);
-                            eventComponent.setRandomEventInfos(this.event);
-                            eventComponent.show();
-                        }
-                        lastUpdate = event.data().updatedAt();
-                    }
-                },
-                error -> System.out.println("Error bei Season: " + error.getMessage()));
-    }
 
     @OnInit
     public void init() {
@@ -145,8 +120,6 @@ public class InGameController extends BasicController {
         //Todo: Outprint for Swagger - can be deleted later
         System.out.println("game in ingame: " + tokenStorage.getGameId());
         System.out.println("empire in ingame: " + tokenStorage.getEmpireId());
-
-        createUpdateSeasonListener();
 
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
@@ -196,7 +169,6 @@ public class InGameController extends BasicController {
         eventContainer.getChildren().add(eventComponent);
         eventContainer.setVisible(false);
         shadow.setVisible(false);
-//        eventComponent.show();
 
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
         storageOverviewContainer.setVisible(false);

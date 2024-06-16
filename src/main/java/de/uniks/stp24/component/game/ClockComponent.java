@@ -1,6 +1,5 @@
 package de.uniks.stp24.component.game;
 
-import de.uniks.stp24.dto.EffectSourceParentDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.ImageCache;
@@ -104,6 +103,9 @@ public class ClockComponent extends AnchorPane {
         PropertyChangeListener callHandleSeasonChanged = this::handleSeasonChanged;
         timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_SEASON, callHandleSeasonChanged);
 
+        PropertyChangeListener callHandleRemainingSeasons = this::handleRemainingSeasonChanged;
+        eventService.listeners().addPropertyChangeListener(EventService.PROPERTY_REMAININGSEASONS, callHandleRemainingSeasons);
+
         createUpdateSeasonListener();
         createUpdateSpeedListener();
 
@@ -157,6 +159,8 @@ public class ClockComponent extends AnchorPane {
 
     @OnDestroy
     public void destroy() {
+        eventService.listeners().removePropertyChangeListener(EventService.PROPERTY_EVENT, this::handleEventChanged);
+        eventService.listeners().removePropertyChangeListener(EventService.PROPERTY_REMAININGSEASONS, this::handleRemainingSeasonChanged);
         timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_COUNTDOWN, this::handleTimeChanged);
         timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_SPEED, this::handleSpeedChanged);
         timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_SEASON, this::handleSeasonChanged);
@@ -174,21 +178,14 @@ public class ClockComponent extends AnchorPane {
         subscriber.subscribe(this.eventListener
                         .listen("games." + gameId + ".ticked", Game.class),
                 event -> {
-                    System.out.println("ICH BIN HIER");
                     if (!(lastUpdateSeason == event.data().period())) {
-                        System.out.println("Season changed");
                         Game game = event.data();
                         timerService.setSeason(game.period());
                         timerService.reset();
 
-                        if (eventService.getEventActive()) {
-                            remainingSeasonsLabel.setVisible(true);
-                            randomEventImage.setVisible(true);
-                            remainingSeasonsLabel.setText(String.valueOf(eventService.getRemainingSeasons()));
-                        } else {
-                            remainingSeasonsLabel.setVisible(false);
-                            randomEventImage.setVisible(false);
-                        }
+                        // TODO: Set in Listener
+                        remainingSeasonsLabel.setText(String.valueOf(eventService.getRemainingSeasons()));
+
                         lastUpdateSeason = event.data().period();
                     }
                 },
@@ -200,7 +197,6 @@ public class ClockComponent extends AnchorPane {
                         .listen("games." + gameId + ".updated", Game.class),
                 event -> {
                     if (!lastUpdateSpeed.equals(event.data().updatedAt())) {
-                        System.out.println("Update Speed zu" + event.data().speed());
                         Game game = event.data();
                         timerService.setSpeedLocal(game.speed());
                         lastUpdateSpeed = event.data().updatedAt();
@@ -217,7 +213,10 @@ public class ClockComponent extends AnchorPane {
 
     public void pauseClock() {
         if (timerService.isRunning()) {
-            subscriber.subscribe(timerService.setSpeed(gameId, 0));
+            subscriber.subscribe(timerService.setSpeed(gameId, 0),
+                    result -> {
+                    },
+                    error -> System.out.println("Error beim Pausieren der Uhr: " + error));
             timerService.stop();
         }
     }
@@ -236,16 +235,6 @@ public class ClockComponent extends AnchorPane {
 
     ////////////--------------------------------Auxiliary Methods-----------------------------------------//////////////
 
-    public void setRandomEventInfos(@NotNull EffectSourceParentDto effect) {
-        effect = eventService.getEvent();
-        if (Objects.equals(effect.effects()[0].eventType(), "bad")) {
-            randomEventImage.setImage(imageCache.get("assets/events/badEvent.png"));
-        } else {
-            randomEventImage.setImage(imageCache.get("assets/events/goodEvent.png"));
-        }
-        remainingSeasonsLabel.setText(String.valueOf(effect.effects()[0].duration()));
-    }
-
     @Contract(pure = true)
     private @NotNull String translateCountdown(int countdown) {
         String suffix = (countdown % 60) < 10 ? "0" : "";
@@ -263,10 +252,36 @@ public class ClockComponent extends AnchorPane {
         if (!timerService.isRunning()) {
             timerService.resume();
         }
-        subscriber.subscribe(timerService.setSpeed(gameId, speed));
+        subscriber.subscribe(timerService.setSpeed(gameId, speed),
+                result -> {
+                },
+                error -> System.out.println("Error beim Ändern der Geschwindigkeit: " + error));
     }
 
     ////////////--------------------------------PropertyChangeListener------------------------------------//////////////
+
+    private void handleEventChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
+
+        if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
+            randomEventImage.setVisible(true);
+            remainingSeasonsLabel.setVisible(true);
+            if (Objects.equals(eventService.getEvent().effects()[0].eventType(), "bad")) {
+                randomEventImage.setImage(imageCache.get("assets/events/badEvent.png"));
+            } else {
+                randomEventImage.setImage(imageCache.get("assets/events/goodEvent.png"));
+            }
+        } else {
+            randomEventImage.setVisible(false);
+            remainingSeasonsLabel.setVisible(false);
+        }
+    }
+
+    private void handleRemainingSeasonChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
+        if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
+            int remainingSeasons = (int) propertyChangeEvent.getNewValue();
+            remainingSeasonsLabel.setText(String.valueOf(remainingSeasons));
+        }
+    }
 
     private void handleSeasonChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {

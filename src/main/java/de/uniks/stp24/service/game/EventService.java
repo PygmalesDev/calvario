@@ -14,26 +14,34 @@ import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Inject;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.util.*;
 
 public class EventService {
 
+    protected PropertyChangeSupport listeners;
+    public static final String PROPERTY_REMAININGSEASONS = "remainingSeasons";
+    public static final String PROPERTY_EVENT = "event";
+    public static final String PROPERTY_NEXTEVENT = "nextEvent";
+    private int remainingSeasons;
+    EffectSourceParentDto event = null;
+    private int nextEvent;
+    private boolean eventActive = false;
+    ObjectMapper objectMapper = new ObjectMapper();
+    Random random = new Random(1000);
+
+
     @Inject
     TimerService timerService;
+
     @Inject
     EmpireApiService empireApiService;
     @Inject
     Subscriber subscriber;
     @Inject
     TokenStorage tokenStorage;
-    EffectSourceParentDto event;
-    private int remainingSeasons;
-    private boolean eventActive = false;
-    private int nextEvent;
 
-    ObjectMapper objectMapper = new ObjectMapper();
-    Random random = new Random(1000);
 
     ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",
             "grandExp", "reckoning", "rogerFeast", /* Bad Events */ "blackSpot", "dutchman", "foolsGold", "pestilence",
@@ -45,46 +53,69 @@ public class EventService {
     @Inject
     public EventService() {
         nextEvent = 2;
+        this.listeners = new PropertyChangeSupport(this);
     }
 
     public void setEvent(EffectSourceParentDto event) {
+        EffectSourceParentDto oldValue;
+        if (event == this.event) {
+            return;
+        }
+        oldValue = this.event;
         this.event = event;
+        System.out.println("Event wurde geändert");
+        this.firePropertyChange(PROPERTY_EVENT, oldValue, event);
     }
 
+    // Gets random a new event
     public EffectSourceParentDto getNewRandomEvent() {
 
-        System.out.println("REMAINING SEASONS: " + nextEvent);
+        System.out.println("UNTIL NEXT EVENT: " + nextEvent);
 
         if ((nextEvent <= 0 && !eventActive)) {
+
+            System.out.println("NEW EVENT");
+
             eventActive = true;
             int eventName = random.nextInt(0, eventNames.size());
-            event = readEvent(eventName);
-            System.out.println(event);
-
-            subscriber.subscribe(sendEffect(),
-                    result -> System.out.println("Effect gesendet: " + result),
-                    error -> System.out.println("Error beim Senden von Effect: " + error));
+            EffectSourceParentDto tmp = readEvent(eventName);
             setNextEvent();
-            return event;
+            return tmp;
         }
         // if no event can occur
         return null;
     }
 
     public void setNextEvent() {
-        nextEvent = random.nextInt(100, 120);
+        nextEvent = random.nextInt(1, 50);
     }
 
     public EffectSourceParentDto getEvent() {
         return event;
     }
 
-    public void countEventDown() {
-        remainingSeasons--;
-        nextEvent--;
-        if (remainingSeasons <= 0) {
-            eventActive = false;
+    // Counts down the time until the next event
+    public void setNextEventTimer(int nextEvent) {
+
+        if (nextEvent == this.nextEvent) {
+            return;
         }
+        final int oldValue = this.nextEvent;
+        this.nextEvent = nextEvent;
+        this.firePropertyChange(PROPERTY_NEXTEVENT, oldValue, nextEvent);
+
+        // Sets Event (Either null or an event if possible)
+        setEvent(getNewRandomEvent());
+         if (remainingSeasons <= 0) {
+            System.out.println("Remaining finish: " + remainingSeasons);
+            eventActive = false;
+        } else {
+            setRemainingSeasons(remainingSeasons--);
+        }
+    }
+
+    public int getNextEventTimer() {
+        return nextEvent;
     }
 
     public boolean getEventActive() {
@@ -93,6 +124,30 @@ public class EventService {
 
     public int getRemainingSeasons() {
         return remainingSeasons;
+    }
+
+    // Sets Seasons how long event last
+    public void setRemainingSeasons(int remainingSeasons) {
+        int oldValue;
+        if (remainingSeasons == this.remainingSeasons) {
+            return;
+        }
+        oldValue = this.remainingSeasons;
+        this.remainingSeasons = remainingSeasons;
+        this.firePropertyChange(PROPERTY_REMAININGSEASONS, oldValue, remainingSeasons);
+    }
+
+    public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+        if (this.listeners != null) {
+            this.listeners.firePropertyChange(propertyName, oldValue, newValue);
+        }
+    }
+
+    public PropertyChangeSupport listeners() {
+        if (this.listeners == null) {
+            this.listeners = new PropertyChangeSupport(this);
+        }
+        return this.listeners;
     }
 
     // Parameter eventName is index for List<String> eventNames
@@ -131,7 +186,7 @@ public class EventService {
                     EffectDto[] effectArrayDtos = new EffectDto[effectsDto.size()];
                     effectArrayDtos = effectsDto.toArray(effectArrayDtos);
                     eventMap.put(id, new EffectSourceParentDto(new EffectSourceDto[]{new EffectSourceDto(id, eventType, duration, effectArrayDtos)}));
-                    remainingSeasons = duration;
+                    setRemainingSeasons(duration);
                 }
             }
             return eventMap.get(id);

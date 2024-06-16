@@ -67,8 +67,6 @@ public class SitePropertiesComponent extends AnchorPane {
 
     @Inject
     ResourcesService resourcesService;
-    @Inject
-    de.uniks.stp24.service.game.ResourcesService resourcesServiceGame;
 
     @Inject
     IslandsService islandsService;
@@ -196,15 +194,15 @@ public class SitePropertiesComponent extends AnchorPane {
 
     private void resourceListGeneration(SiteDto siteDto) {
         Map<String, Integer> resourceMapPrice = siteDto.cost();
-        ObservableList<Resource> resourceListPrice = resourcesServiceGame.generateResourceList(resourceMapPrice, siteCostsListView.getItems());
+        ObservableList<Resource> resourceListPrice = resourcesService.generateResourceList(resourceMapPrice, siteCostsListView.getItems());
         siteCostsListView.setItems(resourceListPrice);
 
         Map<String, Integer> resourceMapUpkeep = siteDto.upkeep();
-        ObservableList<Resource> resourceListUpkeep = resourcesServiceGame.generateResourceList(resourceMapUpkeep, siteConsumesListView.getItems());
+        ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, siteConsumesListView.getItems());
         siteConsumesListView.setItems(resourceListUpkeep);
 
         Map<String, Integer> resourceMapProduce = siteDto.production();
-        ObservableList<Resource> resourceListProduce = resourcesServiceGame.generateResourceList(resourceMapProduce, siteProducesListView.getItems());
+        ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, siteProducesListView.getItems());
         siteProducesListView.setItems(resourceListProduce);
     }
 }

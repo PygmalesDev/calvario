@@ -7,7 +7,9 @@ import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.Building;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
@@ -128,12 +130,14 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         inGameService.setGameStatus(gameStatus);
         inGameService.setTimerService(timerService);
-        Map<Resource, Integer> required = new HashMap<>();
-        Map<Resource, Integer> production = new HashMap<>();
-        Map<Resource, Integer> consumption = new HashMap<>();
+        Map<String , Integer> chance = new HashMap<>();
+        Map<String , Integer> required = new HashMap<>();
+        Map<String, Integer> production = new HashMap<>();
+        Map<String, Integer> consumption = new HashMap<>();
         doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());
         doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", true,1,1,null ))).when(gamesApiService).getGame(any());
-        doReturn(Observable.just(new Building("a",required,production, consumption, 1, 1))).when(gameSystemsApiService).getBuilding(any());
+        doReturn(Observable.just(new BuildingDto("a",required,production, consumption))).when(resourcesService).getResourcesBuilding(any());
+        doReturn(Observable.just(new SiteDto("a",chance, required,production, consumption))).when(resourcesService).getResourcesSite(any());
 
         this.app.show(this.inGameController);
     }

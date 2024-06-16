@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
-import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
+import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
@@ -30,6 +32,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -45,6 +48,9 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 public class TestStorageOverview extends ControllerTest {
     @Spy
     GamesApiService gamesApiService;
+
+    @Spy
+    GameSystemsApiService gameSystemsApiService;
     @Spy
     GameStatus gameStatus;
     @Spy
@@ -78,6 +84,15 @@ public class TestStorageOverview extends ControllerTest {
     ClockComponent clockComponent;
 
     @InjectMocks
+    BuildingPropertiesComponent buildingPropertiesComponent;
+
+    @InjectMocks
+    SitePropertiesComponent sitePropertiesComponent;
+
+    @InjectMocks
+    BuildingsWindowComponent buildingsWindowComponent;
+
+    @InjectMocks
     InGameController inGameController;
 
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
@@ -93,12 +108,21 @@ public class TestStorageOverview extends ControllerTest {
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
+        this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
+        this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
+        this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameService.setGameStatus(gameStatus);
+        Map<String , Integer> chance = new HashMap<>();
+        Map<String , Integer> required = new HashMap<>();
+        Map<String, Integer> production = new HashMap<>();
+        Map<String, Integer> consumption = new HashMap<>();
 
         // Mock TokenStorage
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
+        doReturn(Observable.just(new BuildingDto("a",required,production, consumption))).when(resourcesService).getResourcesBuilding(any());
+        doReturn(Observable.just(new SiteDto("a",chance, required,production, consumption))).when(resourcesService).getResourcesSite(any());
 
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
 
@@ -151,7 +175,7 @@ public class TestStorageOverview extends ControllerTest {
                         null)));
         waitForFxEvents();
 
-        assertEquals(2, storageOverviewComponent.resourceListView.getItems().size());
+        assertEquals(1, storageOverviewComponent.resourceListView.getItems().size());
 
         empireDtoSubject.onNext(new Event<>("games.testGameID.empires.testEmpireID.updated",
                 new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
@@ -159,7 +183,7 @@ public class TestStorageOverview extends ControllerTest {
                         null)));
         waitForFxEvents();
 
-        assertEquals(2, storageOverviewComponent.resourceListView.getItems().size());
+        assertEquals(1, storageOverviewComponent.resourceListView.getItems().size());
     }
 
 

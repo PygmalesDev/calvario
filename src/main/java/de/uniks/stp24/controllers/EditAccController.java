@@ -124,6 +124,16 @@ public class EditAccController extends BasicController {
     Button nextPotraitButton;
 
     @FXML
+    Button randomizeAvatar;
+
+    @FXML
+    ToggleButton lockBackgroundButton;
+    @FXML
+    ToggleButton lockPortraitButton;
+    @FXML
+    ToggleButton lockFrameButton;
+
+    @FXML
     Label imageCodeLabel;
 
     @Param("gameid")
@@ -149,6 +159,11 @@ public class EditAccController extends BasicController {
     int backgroundImageIndex = 0;
     int frameImageIndex = 0;
     int portraitImageIndex = 0;
+
+    boolean lockBackground = false;
+    boolean lockPortrait = false;
+    boolean lockFrame = false;
+
 
     PopupBuilder popup = new PopupBuilder();
     /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
@@ -338,33 +353,14 @@ public class EditAccController extends BasicController {
         portraitImageIndex = potraitIndex;
         frameImageIndex = frameIndex;
 
-        backgroundImage.setImage(backgroundsList.get(backgroundIndex));
-        portraitImage.setImage(portraitsList.get(potraitIndex));
+        backgroundImage.setImage(backgroundsList.get(backgroundImageIndex));
+        portraitImage.setImage(portraitsList.get(portraitImageIndex));
         frameImage.setImage(framesList.get(frameImageIndex));
 
-
-//        System.out.println(frameImage.getLayoutX());
-//        System.out.println(frameImage.getLayoutY());
-
-
-        System.out.println(backgroundIndex + potraitIndex + frameIndex);
-//        switch (frameIndex){
-//            case 0:
-//                frameImage.setLayoutX(-27);
-//                frameImage.setLayoutY(-29);
-//                frameImage.setImage(framesList.get(frameImageIndex));
-//                break;
-//            case 1:
-//                frameImage.setLayoutX(-28);
-//                frameImage.setLayoutY(-25);
-//                frameImage.setImage(framesList.get(frameImageIndex));
-//                break;
-//            default:
-//                frameImage.setLayoutX(-21);
-//                frameImage.setLayoutY(-31);
-//                frameImage.setImage(framesList.get(frameImageIndex));
-//        }
-
+        System.out.print(backgroundIndex + ": ");
+        System.out.print(potraitIndex + ": ");
+        System.out.print(frameIndex + ": ");
+        System.out.println();
         imageCodeLabel.setText(getImageCode());
 
         avatarMap.put("backgroundIndex", backgroundIndex);
@@ -474,7 +470,56 @@ public class EditAccController extends BasicController {
         lastPotraitButton.setVisible(visible);
         nextPotraitButton.setVisible(visible);
         imageCodeLabel.setVisible(visible);
+
+        randomizeAvatar.setVisible(visible);
+
+        lockBackgroundButton.setVisible(visible);
+        lockPortraitButton.setVisible(visible);
+        lockFrameButton.setVisible(visible);
     }
 
+
+    public ArrayList<Image> getBackgroundsList() {
+        return backgroundsList;
+    }
+
+    public ArrayList<Image> getFramesList() {
+        return framesList;
+    }
+
+    public ArrayList<Image> getPortraitsList() {
+        return portraitsList;
+    }
+
+    public void randomize() {
+        if (!lockBackground) {
+            this.backgroundImageIndex = rand.nextInt(0, backgroundsList.size());
+            backgroundImage.setImage(backgroundsList.get(backgroundImageIndex));
+        }
+
+        if (!lockPortrait) {
+            portraitImageIndex = rand.nextInt(0, portraitsList.size());
+            portraitImage.setImage(portraitsList.get(portraitImageIndex));
+        }
+
+        if (!lockFrame) {
+            frameImageIndex = rand.nextInt(0, framesList.size());
+            frameImage.setImage(framesList.get(frameImageIndex));
+        }
+
+        imageCodeLabel.setText(getImageCode());
+    }
+
+    public void lockBackground() {
+        lockBackground = !lockBackground;
+    }
+
+    public void lockPortrait() {
+        lockPortrait = !lockPortrait;
+    }
+
+    public void lockFrame() {
+        lockFrame = !lockFrame;
+    }
     /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
 }

@@ -9,5 +9,6 @@ public record LoginResult(
         Map<String, Integer> _public,
         String accessToken,
         String refreshToken
+
 ) {
 }

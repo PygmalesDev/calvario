@@ -84,7 +84,7 @@ public class EventService {
     }
 
     public void setNextEvent() {
-        nextEvent = random.nextInt(1, 50);
+        nextEvent = random.nextInt(1, 25);
     }
 
     public EffectSourceParentDto getEvent() {
@@ -105,8 +105,14 @@ public class EventService {
         setEvent(getNewRandomEvent());
          if (remainingSeasons <= 0) {
             System.out.println("Remaining finish: " + remainingSeasons);
+
+            // If event is done reset it in Server
+             subscriber.subscribe(sendEffect(),
+                     result -> System.out.println("Effect sollte null sein oder: " + result),
+                     error -> System.out.println("Error beim Senden von Effect: " + error));
         } else {
-            setRemainingSeasons(remainingSeasons--);
+            setRemainingSeasons(getRemainingSeasons()-1);
+            System.out.println("Remaining the event: " + remainingSeasons);
         }
     }
 
@@ -124,8 +130,11 @@ public class EventService {
         if (remainingSeasons == this.remainingSeasons) {
             return;
         }
+
+
         oldValue = this.remainingSeasons;
         this.remainingSeasons = remainingSeasons;
+        System.out.println("Remaining seasons of event changed from " + this.remainingSeasons + "to " + remainingSeasons);
         this.firePropertyChange(PROPERTY_REMAININGSEASONS, oldValue, remainingSeasons);
     }
 
@@ -178,9 +187,9 @@ public class EventService {
                     EffectDto[] effectArrayDtos = new EffectDto[effectsDto.size()];
                     effectArrayDtos = effectsDto.toArray(effectArrayDtos);
                     eventMap.put(id, new EffectSourceParentDto(new EffectSourceDto[]{new EffectSourceDto(id, eventType, duration, effectArrayDtos)}));
-                    setRemainingSeasons(duration);
                 }
             }
+            setRemainingSeasons(duration);
             return eventMap.get(id);
         } catch (Exception e) {
             e.printStackTrace();

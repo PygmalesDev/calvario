@@ -106,6 +106,9 @@ public class ClockComponent extends AnchorPane {
         PropertyChangeListener callHandleRemainingSeasons = this::handleRemainingSeasonChanged;
         eventService.listeners().addPropertyChangeListener(EventService.PROPERTY_REMAININGSEASONS, callHandleRemainingSeasons);
 
+        PropertyChangeListener callHandleEventChanged = this::handleEventChanged;
+        eventService.listeners().addPropertyChangeListener(EventService.PROPERTY_EVENT, callHandleEventChanged);
+
         createUpdateSeasonListener();
         createUpdateSpeedListener();
 
@@ -182,10 +185,6 @@ public class ClockComponent extends AnchorPane {
                         Game game = event.data();
                         timerService.setSeason(game.period());
                         timerService.reset();
-
-                        // TODO: Set in Listener
-                        remainingSeasonsLabel.setText(String.valueOf(eventService.getRemainingSeasons()));
-
                         lastUpdateSeason = event.data().period();
                     }
                 },
@@ -265,6 +264,7 @@ public class ClockComponent extends AnchorPane {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             randomEventImage.setVisible(true);
             remainingSeasonsLabel.setVisible(true);
+
             if (Objects.equals(eventService.getEvent().effects()[0].eventType(), "bad")) {
                 randomEventImage.setImage(imageCache.get("assets/events/badEvent.png"));
             } else {
@@ -279,7 +279,7 @@ public class ClockComponent extends AnchorPane {
     private void handleRemainingSeasonChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             int remainingSeasons = (int) propertyChangeEvent.getNewValue();
-            remainingSeasonsLabel.setText(String.valueOf(remainingSeasons));
+            Platform.runLater(() -> remainingSeasonsLabel.setText(String.valueOf(remainingSeasons)));
         }
     }
 

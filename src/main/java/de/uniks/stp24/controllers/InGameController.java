@@ -1,6 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.IslandComponent;
+import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
@@ -8,6 +9,7 @@ import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -51,6 +53,9 @@ public class InGameController extends BasicController {
     StackPane pauseMenuContainer;
     @FXML
     StackPane storageOverviewContainer;
+
+    @Inject
+    TimerService timerService;
     @Inject
     InGameService inGameService;
     @Inject
@@ -59,6 +64,9 @@ public class InGameController extends BasicController {
     LobbyService lobbyService;
     @Inject
     EmpireService empireService;
+
+    @FXML
+    StackPane clockComponentContainer;
     @SubComponent
     @Inject
     public PauseMenuComponent pauseMenuComponent;
@@ -72,15 +80,16 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
-    boolean pause = false;
+    @SubComponent
+    @Inject
+    public ClockComponent clockComponent;
 
+    boolean pause = false;
+    double scale = 1.0;
+    private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
     // todo remove this variables if not needed
     String gameID;
     String empireID;
-    double scale = 1.0;
-
-
-    private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
     @Inject
     public InGameController() {
@@ -89,14 +98,10 @@ public class InGameController extends BasicController {
 
     @OnInit
     public void init() {
-        // Todo: remove this if not needed
-        gameID = tokenStorage.getGameId();
-        empireID = tokenStorage.getEmpireId();
-        //Todo: Outprint for Swagger - can be deleted later
-        System.out.println(this.gameID);
-        System.out.println(empireID);
-
         GameStatus gameStatus = inGameService.getGameStatus();
+        //Todo: Outprint for Swagger - can be deleted later
+        System.out.println("game in ingame: " + tokenStorage.getGameId());
+        System.out.println("empire in ingame: " + tokenStorage.getEmpireId());
 
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
@@ -144,6 +149,7 @@ public class InGameController extends BasicController {
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
+        clockComponentContainer.getChildren().add(clockComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -172,9 +178,10 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setVisible(pause);
     }
 
-    // created and add buttons for storage and island overview
-    // there are problems if they are contained in the fxml
-    private void createButtonsStorage() {
+    /** created and add buttons for storage and island overview
+    * there are problems if they are contained in the fxml
+    */
+     private void createButtonsStorage() {
         if (!(Objects.nonNull(showIslandButton)&&(Objects.nonNull(showStorageButton)))) {
             showIslandButton = new Button();
             showIslandButton.setPrefHeight(30);
@@ -204,8 +211,9 @@ public class InGameController extends BasicController {
         mapScrollPane.setVvalue(0.5);
         mapScrollPane.setHvalue(0.5);
 
-        // zoom function working but not perfect!
-        // it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
+        /** zoom function working but not perfect!
+        * it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
+        */
         mapGrid.setOnScroll(event -> {
             if (event.isShiftDown() && (event.getDeltaY() > 0 || event.getDeltaX() > 0 )) {
                 scale += 0.1;
@@ -219,7 +227,6 @@ public class InGameController extends BasicController {
             group.setScaleX(scale);
             group.setScaleY(scale);
         });
-
     }
 
     // TODO this could be equivalent to showIslandOverview

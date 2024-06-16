@@ -38,19 +38,15 @@ public class IslandsService extends BasicService {
         if (subscriber==null) subscriber = new Subscriber();
     }
 
-    // this method will be used when changing from lobby to ingame
-    // and retrieve islands when game starts
-    // todo remove printouts
+    /** this method will be used when changing from lobby to ingame
+    * and retrieve island information when starting or rejoining a game
+    */
     public void retrieveIslands(String gameID) {
         resetVariables();
         subscriber.subscribe(gameSystemsService.getSystems(gameID),
             dto -> {
                 Arrays.stream(dto).forEach(data -> {
                     List<String> linkedIsles = new ArrayList<>(data.links().keySet());
-                    minX = Math.min(data.x(),minX);
-                    minY = Math.min(data.y(),minY);
-                    maxX = Math.max(data.x(),maxX);
-                    maxY = Math.max(data.y(),maxY);
                     Island tmp = new Island(data.owner(),
                         Objects.isNull(data.owner()) ? -1 : getEmpire(data.owner()).flag(),
                         data.x(),
@@ -59,7 +55,6 @@ public class IslandsService extends BasicService {
                         data.population(),
                         data.capacity(),
                         data.upgrade().ordinal(),
-                        // todo find out which information in data match sites in island dto
                         data.districtSlots(),
                         data.districts(),
                         data.buildings(),
@@ -70,19 +65,21 @@ public class IslandsService extends BasicService {
                 });
                 widthRange = maxX-minX;
                 heightRange = maxY-minY;
-                this.app.show("/ingame"); // for test failing this.app == null
+                this.app.show("/ingame");
             },
             error -> errorService.getStatus(error));
     }
 
     /**
-     * coordinate system on server has origin at screen center
+     * coordinate system on server has origin near to screen center
      * and their range varies depending on game settings (size).
      * an offset to match the screen size will be calculated depending on
-     * width and height
-     * thus the size of the pane should be considered
+     * width and height thus the size of the pane should be considered.
+     * IMPORTANT:
+     * due the dropshadow-effect the component size will grow!
+     * this means that if effect's radius (now 2.0) is large
+     * an island component can be clicked just by clicking near (or far) from it
      */
-    //todo set screen resolution, factor and offset depending on game size
     public IslandComponent createIslandPaneFromDto(Island isleDto, IslandComponent component) {
         component.applyInfo(isleDto);
         double screenOffsetH = widthRange * (factor + 2) / 2.0 - 25;
@@ -95,7 +92,7 @@ public class IslandsService extends BasicService {
         component.setFlagImage(isleDto.flagIndex());
         if(Objects.nonNull(isleDto.owner())) {
             Color colorWeb = Color.web(getEmpire(isleDto.owner()).color()).brighter();
-          component.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb)+ ", 2, 0.88, 0, 0);");
+          component.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb)+ ", 2.0, 0.88, 0, 0);");
         }
         return component;
     }
@@ -123,6 +120,10 @@ public class IslandsService extends BasicService {
     return singleConnections;
     }
 
+    /**
+     * create subcomponents to be added to the map
+     * put information in a map to access them easily
+     */
     public List<IslandComponent> createIslands(List<Island> list){
         list.forEach(
           island -> {
@@ -137,6 +138,7 @@ public class IslandsService extends BasicService {
         return Collections.unmodifiableList(islandComponentList);
     }
 
+    /** lines (as object) between islands */
     public List<Line> createLines(Map<String,IslandComponent> idToComponent) {
         Map<String, List<String>> islandConnections = getConnections();
         List<Line> linesInMap = new ArrayList<>();
@@ -182,6 +184,7 @@ public class IslandsService extends BasicService {
         this.empiresInGame.put(id,empire);
     }
 
+    /** after color was modified using .brighter() compute it to a string */
     private String colorToRGB(Color color) {
         return "rgb(" + (int) (color.getRed() * 255) + "," +
           (int) (color.getGreen() * 255) + "," +

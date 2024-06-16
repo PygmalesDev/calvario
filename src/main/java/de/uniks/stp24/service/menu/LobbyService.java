@@ -14,7 +14,7 @@ import javax.inject.Inject;
 
 public class LobbyService extends BasicController {
     @Inject
-    GameMembersApiService gameMembersApiService;
+    public GameMembersApiService gameMembersApiService;
     @Inject
     UserApiService userApiService;
     @Inject

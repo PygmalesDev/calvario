@@ -46,7 +46,6 @@ public class TokenStorage {
     public void setEmpireId(String empireId) {this.empireId = empireId;}
 
     public boolean isSpectator(){return this.isSpectator;}
-
     public void setIsSpectator(boolean isSpectator) {
         this.isSpectator = isSpectator;
     }

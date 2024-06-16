@@ -1,6 +1,7 @@
 package de.uniks.stp24.service;
 
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.service.game.TimerService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -8,6 +9,8 @@ import javax.inject.Singleton;
 @Singleton
 public class InGameService {
 
+    @Inject
+    TimerService timerService;
     @Inject
     GameStatus gameStatus;
 
@@ -42,5 +45,13 @@ public class InGameService {
 
     public int getLanguage() {
         return gameStatus.getLanguage();
+    }
+
+    public void setTimerService(TimerService timerService) {
+        this.timerService = timerService;
+    }
+
+    public TimerService getTimerService() {
+        return timerService;
     }
 }

@@ -23,6 +23,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.FulibFxApp;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
@@ -83,6 +84,8 @@ public class SitePropertiesComponent extends AnchorPane {
     public SitePropertiesComponent(){
 
     }
+    Map<String, String> sitesMap;
+
 
     private Island island;
 
@@ -91,11 +94,27 @@ public class SitePropertiesComponent extends AnchorPane {
 
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, true, gameResourceBundle);
 
-
+    @OnInit
+    public void init(){
+        sitesMap = new HashMap<>();
+        sitesMap.put("city", "de/uniks/stp24/icons/sites/village_site.png");
+        sitesMap.put("energy", "de/uniks/stp24/icons/sites/thaumaturgy_site.png");
+        sitesMap.put("mining", "de/uniks/stp24/icons/sites/mining_site.png");
+        sitesMap.put("agriculture", "de/uniks/stp24/icons/sites/harvesting_site.png");
+        sitesMap.put("industry", "de/uniks/stp24/icons/sites/coalmine_site.png");
+        sitesMap.put("research_site", "de/uniks/stp24/icons/sites/epoch_site.png");
+        sitesMap.put("ancient_foundry", "de/uniks/stp24/icons/sites/expedition_site.png");
+        sitesMap.put("ancient_factory", "de/uniks/stp24/icons/sites/merchant_site.png");
+        sitesMap.put("ancient_refinery", "de/uniks/stp24/icons/sites/production_site.png");
+    }
     @OnRender
     public void render(){
         this.siteType = "mining";
         siteName.setText(siteType);
+        Image imageSite = new Image(sitesMap.get(siteType));
+        siteImage.getStyleClass().clear();
+        siteImage.setImage(imageSite);
+
     }
 
     @FXML

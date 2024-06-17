@@ -219,39 +219,6 @@ public class LobbyController extends BasicController {
      * island information (IslandsService) must be retrieved (in islandsService)
      * change to game screen occurs in islandsService
      */
-//<<<<<<< HEAD
-//    private void createGameStartedListener(){
-//        this.subscriber.subscribe(this.eventListener
-//            .listen("games." + this.gameID + ".updated", Game.class),
-//          event -> {
-//              if(event.data().started()) {
-//                  this.tokenStorage.setGameId(gameID);
-//                  subscriber.subscribe(lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
-//                    memberDto -> {
-//                        if(Objects.nonNull(memberDto.empire())){
-//                            subscriber.subscribe(empireService.getEmpires(this.gameID), dto -> {
-//                                for(ReadEmpireDto data : dto){
-//                                    islandsService.saveEmpire(data._id(), data);
-//                                    if (data.user().equals(tokenStorage.getUserId())) {
-//                                        this.tokenStorage.setEmpireId(data._id());
-//                                        this.tokenStorage.setIsSpectator(false);
-//                                        //todo remove printouts
-//                                        System.out.println("lobby:"
-//                                          + tokenStorage.getEmpireId());
-//                                    }
-//                                }
-//                                System.out.println("RESOURCES READY");
-//                            islandsService.retrieveIslands(gameID);
-//                            //app.show("/ingame");
-//                            }, this::errorMsg);
-//                        } else {
-//                            tokenStorage.setIsSpectator(true);
-//                            islandsService.retrieveIslands(gameID);
-//                            //app.show("/ingame");
-//                        }
-//                    }, this::errorMsg);}
-//          }, this::errorMsg);
-//=======
     private void createGameStartedListener() {
         this.subscriber.subscribe(this.eventListener.listen("games." + this.gameID + ".updated", Game.class),
                 event -> {
@@ -284,7 +251,6 @@ public class LobbyController extends BasicController {
                 this.lobbySettingsComponent.leaveLobbyButton,
                 this.lobbyHostSettingsComponent.closeLobbyButton
         };
-//>>>>>>> main
     }
 
     /**

@@ -83,7 +83,7 @@ public class IslandsServiceTest extends ControllerTest {
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.islandsService.app = this.app;
         inGameService.setGameStatus(gameStatus);
-        islandsService.gameSystemsService = gameSystemsApiService;
+        islandsService.gameSystemsService = this.gameSystemsApiService;
 
         inGameController.mapScrollPane = new ScrollPane();
         inGameController.group = new Group();
@@ -95,7 +95,6 @@ public class IslandsServiceTest extends ControllerTest {
         inGameController.mapScrollPane.setContent(inGameController.group);
 
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
-        this.app.show(this.inGameController);
         doReturn(null).when(this.app).show("/ingame");
         islandsService.saveEmpire("empire",new ReadEmpireDto("a","b","empire","game1","user1","name",
           "description","#FFDDEE",2,3,"home"));
@@ -138,6 +137,7 @@ public class IslandsServiceTest extends ControllerTest {
         Mockito.doCallRealMethod().when(islandsService)
           .createLines(any());
 
+        app.show(inGameController);
     }
 
     @Test

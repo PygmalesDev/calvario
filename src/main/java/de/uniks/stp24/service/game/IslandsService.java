@@ -47,6 +47,10 @@ public class IslandsService extends BasicService {
             dto -> {
                 Arrays.stream(dto).forEach(data -> {
                     List<String> linkedIsles = new ArrayList<>(data.links().keySet());
+                    minX = Math.min(data.x(),minX);
+                    minY = Math.min(data.y(),minY);
+                    maxX = Math.max(data.x(),maxX);
+                    maxY = Math.max(data.y(),maxY);
                     Island tmp = new Island(data.owner(),
                         Objects.isNull(data.owner()) ? -1 : getEmpire(data.owner()).flag(),
                         data.x(),
@@ -104,7 +108,7 @@ public class IslandsService extends BasicService {
     public double getMapHeight() {
         return this.heightRange * (factor + 3);
     }
-    public Map<String, List<String>> getConnections(){
+    public Map<String, List<String>> getConnections() {
         Map<String, List<String>> singleConnections = new HashMap<>();
         List<String> checked = new ArrayList<>();
         connections.forEach((key,value) -> {
@@ -124,11 +128,14 @@ public class IslandsService extends BasicService {
      * create subcomponents to be added to the map
      * put information in a map to access them easily
      */
-    public List<IslandComponent> createIslands(List<Island> list){
+    public List<IslandComponent> createIslands(List<Island> list) {
         list.forEach(
           island -> {
+//              IslandComponent tmp1 = new IslandComponent();
               IslandComponent tmp = createIslandPaneFromDto(island,
-                app.initAndRender(new IslandComponent()));
+                app.initAndRender(new IslandComponent())); // isn't working anymore?!
+//                tmp1);
+
               tmp.setLayoutX(tmp.getPosX());
               tmp.setLayoutY(tmp.getPosY());
               islandComponentList.add(tmp);
@@ -159,7 +166,7 @@ public class IslandsService extends BasicService {
         return linesInMap;
     }
 
-    private void resetVariables(){
+    private void resetVariables() {
         minX = 0.0;
         minY = 0.0;
         maxX = 0.0;
@@ -168,7 +175,7 @@ public class IslandsService extends BasicService {
         heightRange = 0.0;
     }
 
-    public List<Island> getListOfIslands() {
+    public List<Island> getListOfIslands() { System.out.println("list of isles " + isles.size());
         return Collections.unmodifiableList(this.isles);
     }
 
@@ -193,6 +200,7 @@ public class IslandsService extends BasicService {
 
     public void removeDataForMap() {
         this.isles.clear();
+        this.islandComponentList.forEach(IslandComponent::destroy);
         this.islandComponentList.clear();
         this.islandComponentMap.clear();
         this.empiresInGame.clear();

@@ -159,7 +159,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         assertTrue(member.name().contains("(Spectator)"));
 
         // Test if the correct component is shown to the member
-        Node component = this.lobbyController.lobbyElement.getChildren().get(0);
+        Node component = this.lobbyController.lobbyElement.getChildren().getFirst();
         assertEquals(LobbySettingsComponent.class, component.getClass());
     }
 

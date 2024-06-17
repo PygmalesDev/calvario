@@ -99,7 +99,7 @@ public class InGameController extends BasicController {
     public ClockComponent clockComponent;
     @SubComponent
     @Inject
-    EventComponent eventComponent;
+    public EventComponent eventComponent;
 
     boolean pause = false;
     @Inject

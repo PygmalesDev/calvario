@@ -3,6 +3,7 @@ package de.uniks.stp24.game;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.ClockComponent;
+import de.uniks.stp24.component.game.EventComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
@@ -13,6 +14,7 @@ import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.service.game.TimerService;
@@ -41,6 +43,9 @@ public class PauseMenuTest extends ControllerTest {
 
     @Spy
     GamesApiService gamesApiService;
+
+    @Spy
+    EventService eventService;
 
     @Spy
     GameStatus gameStatus;
@@ -73,6 +78,9 @@ public class PauseMenuTest extends ControllerTest {
     ClockComponent clockComponent;
 
     @InjectMocks
+    EventComponent eventComponent;
+
+    @InjectMocks
     PauseMenuComponent pauseMenuComponent;
 
     @InjectMocks
@@ -95,6 +103,8 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
+        this.inGameController.eventComponent = this.eventComponent;
+        inGameService.setEventService(eventService);
         inGameService.setGameStatus(gameStatus);
         inGameService.setTimerService(timerService);
         doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", true,1,1,null ))).when(gamesApiService).getGame(any());

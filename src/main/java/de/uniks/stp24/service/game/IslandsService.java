@@ -20,7 +20,7 @@ public class IslandsService extends BasicService {
     @Inject
     LobbyService lobbyService;
 
-    private final List<Island> isles = new ArrayList<>();
+    public List<Island> isles = new ArrayList<>();
     // todo use this map for connections
     // private final Map<String, List<String>>  = new HashMap<>();
     // todo after development is ready remove this generator

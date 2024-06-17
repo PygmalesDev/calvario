@@ -59,5 +59,5 @@
    </VBox>
    <Pane layoutX="360.0" layoutY="18.0" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #ff0000;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0" />
    <Pane layoutX="151.2" prefHeight="77.0" prefWidth="99.0" style="-fx-background-color: #0088ff;" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="0.0" />
-   <Pane layoutX="287.0" layoutY="-6.0" onMouseClicked="#showUpgrades" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #00FF00;" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="270.0" />
+   <Pane fx:id="upgradeButton" layoutX="287.0" layoutY="-6.0" onMouseClicked="#showUpgrades" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #00FF00;" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="270.0" />
 </fx:root>

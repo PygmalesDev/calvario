@@ -271,9 +271,7 @@ public class InGameController extends BasicController {
         overviewSitesComponent.buildingsButton.setDisable(true);
         inGameService.showOnly(overviewContainer, overviewSitesComponent);
         inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
-
         overviewSitesComponent.setOverviewSites();
-
     }
 
     public void showCoordinates(MouseEvent mouseEvent) {
@@ -305,5 +303,17 @@ public class InGameController extends BasicController {
                     overviewUpgradeComponent.setUpgradeButton();
                 },
                 error -> System.out.println("errorListener"));
+    }
+
+    public void settingForOwnedIslands(){
+
+    }
+
+    public void settingsForEnemiesIsland(){
+
+    }
+
+    public void settingsForUnoccupiedIslands(){
+
     }
 }

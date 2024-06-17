@@ -10,9 +10,9 @@ import java.util.Map;
 
 @Singleton
 public class IslandAttributeStorage {
-    private EmpireDto empireDto;
-    private SystemUpgrades systemPresets;
-    private Island island;
+    public EmpireDto empireDto;
+    public SystemUpgrades systemPresets;
+    public Island island;
 
 
     @Inject

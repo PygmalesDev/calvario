@@ -129,7 +129,7 @@ public class OverviewSitesComponent extends AnchorPane {
     public void setOverviewSites() {
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
                 islandAttributes.getIsland().buildings().size();
-        island_name.setText("Crew: " + islandAttributes.getIsland().type());
+        island_name.setText(String.valueOf(islandAttributes.getIsland().type()));
         crewCapacity.setText(String.valueOf(islandAttributes.getIsland().crewCapacity()));
         resCapacity.setText("Resources: " + usedSlots + "/" + islandAttributes.getIsland().resourceCapacity());
     }

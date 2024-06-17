@@ -20,11 +20,11 @@ import java.util.Objects;
 
 public class ResourcesService {
     @Inject
-    IslandAttributeStorage islandAttributes;
+    public IslandAttributeStorage islandAttributes;
     @Inject
-    EmpireService empireService;
+    public EmpireService empireService;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
     Subscriber subscriber;
 
@@ -56,6 +56,8 @@ public class ResourcesService {
 
     public boolean hasEnoughResources(Map<String, Integer> neededResources) {
         this.neededResources = neededResources;
+        System.out.println(islandAttributes.getAvailableResources());
+        System.out.println(neededResources);
         for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
             String res = entry.getKey();
             int neededAmount = entry.getValue();

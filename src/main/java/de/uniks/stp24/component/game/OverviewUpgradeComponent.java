@@ -37,7 +37,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
     @Inject
     ResourcesService resourcesService;
     @Inject
-    IslandAttributeStorage islandAttributes;
+    public IslandAttributeStorage islandAttributes;
 
     private InGameController inGameController;
 

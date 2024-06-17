@@ -41,18 +41,15 @@ public class JoinGameHelper extends BasicController {
     public void joinGame(String gameId) {
         subscriber.subscribe(empireService.getEmpires(gameId), dto -> {
             for (ReadEmpireDto data : dto) {
-                tokenStorage.saveFlag(data._id(), data.flag());
+                islandsService.saveEmpire(data._id(), data);
                 if (data.user().equals(tokenStorage.getUserId())) {
                     startGame(gameId, data._id(), false);
-                    islandsService.retrieveIslands(gameId);
                 }
             }
-            System.out.println("before spectator: " + tokenStorage.getEmpireId());
-            islandsService.retrieveIslands(gameId);
-            app.show("/ingame");
             if (tokenStorage.getEmpireId() == null) {
                 startGame(gameId, null, true);
             }
+            islandsService.retrieveIslands(gameId);
         }, error -> {
         });
     }

@@ -15,7 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 @Component(view = "StorageOverview.fxml")
-public class StorageOverviewComponent extends VBox {
+public class StorageOverviewComponent extends AnchorPane {
     @FXML
     Button closeStorageOverviewButton;
     @FXML
@@ -82,7 +82,10 @@ public class StorageOverviewComponent extends VBox {
     public void initStorageList() {
         if (!tokenStorage.isSpectator()) {
             this.resourceListView.setSelectionModel(null);
-            this.subscriber.subscribe(this.empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()), empireDto -> resourceListGeneration(empireDto, null));
+            this.subscriber.subscribe(this.empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()), empireDto -> {
+                resourceListGeneration(empireDto, null);
+                this.empireNameLabel.setText(empireDto.name());
+            });
             this.resourceListView.setCellFactory(list -> new ComponentListCell<>(app, resourceComponentProvider));
         }
     }

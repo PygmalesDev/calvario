@@ -37,7 +37,7 @@ import java.util.*;
 @Controller
 public class InGameController extends BasicController {
     public Button showStorageButton;
-    public Button showIslandButton;
+    public Button showEmpireOverviewButton;
     public HBox storageButtonsBox;
     @FXML
     ScrollPane mapPane;
@@ -172,17 +172,19 @@ public class InGameController extends BasicController {
     // created and add buttons for storage and island overview
     // there are problems if they are contained in the fxml
     private void createButtonsStorage() {
-        if (!(Objects.nonNull(showIslandButton)&&(Objects.nonNull(showStorageButton)))) {
-            showIslandButton = new Button();
-            showIslandButton.setPrefHeight(30);
-            showIslandButton.setPrefWidth(30);
-            showIslandButton.setOnAction(this::showIslandOverview);
+        if (!(Objects.nonNull(showEmpireOverviewButton)&&(Objects.nonNull(showStorageButton)))) {
+            showEmpireOverviewButton = new Button();
+            showEmpireOverviewButton.setPrefHeight(30);
+            showEmpireOverviewButton.setPrefWidth(30);
+            showEmpireOverviewButton.setOnAction(this::showIslandOverview);
+            showEmpireOverviewButton.getStyleClass().add("empireOverviewButton");
             showStorageButton = new Button();
             showStorageButton.setPrefHeight(30);
             showStorageButton.setPrefWidth(30);
             showStorageButton.setId("showStorageButton");
+            showStorageButton.getStyleClass().add("storageButton");
             showStorageButton.setOnAction(event -> showStorage());
-            this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
+            this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton);
         }
     }
 

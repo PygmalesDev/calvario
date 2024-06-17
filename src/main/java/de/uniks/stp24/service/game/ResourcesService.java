@@ -26,7 +26,7 @@ public class ResourcesService {
     @Inject
     public TokenStorage tokenStorage;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
 
     private Map<String, Integer> neededResources;
 

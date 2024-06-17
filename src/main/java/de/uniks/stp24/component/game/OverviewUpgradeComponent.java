@@ -1,8 +1,11 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.CreateSystemsDto;
+import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.ResourcesService;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
@@ -10,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -32,12 +36,26 @@ public class OverviewUpgradeComponent extends AnchorPane {
     public Pane confirmUpgrade;
     @FXML
     public HBox upgrade_box;
+    @FXML
+    public Pane checkExplored;
+    @FXML
+    public Pane checkColonized;
+    @FXML
+    public Pane checkUpgraded;
+    @FXML
+    public Pane checkDeveloped;
     @Inject
     InGameService inGameService;
     @Inject
     ResourcesService resourcesService;
     @Inject
     public IslandAttributeStorage islandAttributes;
+    @Inject
+    TokenStorage tokenStorage;
+    @Inject
+    Subscriber subscriber;
+
+    GameSystemsApiService gameSystemsService;
 
     private InGameController inGameController;
 
@@ -89,8 +107,14 @@ public class OverviewUpgradeComponent extends AnchorPane {
         if (resourcesService.hasEnoughResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()))) {
             resourcesService.upgradeIsland();
             setNeededResources();
-            inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewSitesComponent);
-            inGameController.overviewSitesComponent.showSites();
+            /*
+            this.subscriber.subscribe(gameSystemsService.updateIsland(tokenStorage.getGameId(), tokenStorage.getEmpireId(),
+                    new CreateSystemsDto(
+
+            )));
+
+             */
+            inGameController.showOverview(islandAttributes.getIsland());
         }
     }
 }

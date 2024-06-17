@@ -94,6 +94,7 @@ public class TestIslandOverview extends ControllerTest {
     @InjectMocks
     InGameController inGameController;
 
+
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
 
     Map<String, Integer> siteSlots = Map.of("test1", 3, "test2", 3, "test3", 4, "test4", 4);
@@ -104,13 +105,15 @@ public class TestIslandOverview extends ControllerTest {
     List<Island> islands = new ArrayList<>();
 
     Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
-    Map<String, Integer> upkeep = Map.of("testRes1", 3,"testRes2", 8);
+    Map<String, Integer> upkeep = Map.of("energy", 3,"fuel", 8);
+    Map<String, Integer> resAfterUpgrade = Map.of("energy", 0, "fuel", 0);
+
 
     UpgradeStatus unexplored = new UpgradeStatus("unexplored", 1, cost, upkeep, 1);
-    UpgradeStatus explored = new UpgradeStatus("unexplored", 1, cost, upkeep, 1);
-    UpgradeStatus colonized = new UpgradeStatus("unexplored", 1, cost, upkeep, 1);
-    UpgradeStatus upgraded = new UpgradeStatus("unexplored", 1, cost, upkeep, 1);
-    UpgradeStatus developed = new UpgradeStatus("unexplored", 1, cost, upkeep, 1);
+    UpgradeStatus explored = new UpgradeStatus("explored", 1, cost, upkeep, 1);
+    UpgradeStatus colonized = new UpgradeStatus("colonized", 1, cost, upkeep, 1);
+    UpgradeStatus upgraded = new UpgradeStatus("upgraded", 1, cost, upkeep, 1);
+    UpgradeStatus developed = new UpgradeStatus("developed", 1, cost, upkeep, 1);
 
     EmpireDto empireDto = new EmpireDto(
             null,
@@ -126,6 +129,23 @@ public class TestIslandOverview extends ControllerTest {
             null,
             null,
             cost,
+            null
+    );
+
+    EmpireDto empreDtoAfterUpgrade = new EmpireDto(
+            null,
+            null,
+            "testEmpireID",
+            "testGameID",
+            "testUserID",
+            null,
+            null,
+            null,
+            1,
+            1,
+            null,
+            null,
+            resAfterUpgrade,
             null
     );
 
@@ -176,7 +196,7 @@ public class TestIslandOverview extends ControllerTest {
                 myTestIsland,
                 20,
                 25,
-                3,
+                2,
                 sites,
                 siteSlots,
                 buildings
@@ -193,6 +213,7 @@ public class TestIslandOverview extends ControllerTest {
         this.resourcesService.tokenStorage = tokenStorage;
         this.resourcesService.empireService = empireService;
         this.inGameController.selectedIsland.rudderImage = new ImageView();
+        this.resourcesService.subscriber = subscriber;
 
         this.inGameController.storageButtonsBox = new HBox();
         this.islandsService.isles = islands;
@@ -202,6 +223,7 @@ public class TestIslandOverview extends ControllerTest {
 
     @Test
     public void testOwnedIsland() {
+        doReturn(Observable.just(empreDtoAfterUpgrade)).when(empireService).updateEmpire(any(), any(), any());
         //Open island overview of owned Island
         waitForFxEvents();
         Platform.runLater(() -> {
@@ -215,11 +237,15 @@ public class TestIslandOverview extends ControllerTest {
         waitForFxEvents();
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributeStorage.getIsland()) +
                 islandAttributeStorage.getIsland().buildings().size();
-        assertEquals(this.inGameController.overviewSitesComponent.resCapacity.getText(), "Resources: " + usedSlots + "/" + testIsland1.resourceCapacity());
+        assertEquals(this.inGameController.overviewSitesComponent.resCapacity.getText(), "Resources: " + usedSlots + "/" + islandAttributeStorage.getIsland().resourceCapacity());
         waitForFxEvents();
-        assertEquals(this.inGameController.overviewSitesComponent.island_name.getText(), testIsland1.type().name());
+        assertEquals(this.inGameController.overviewSitesComponent.island_name.getText(), islandAttributeStorage.getIsland().type().name());
         waitForFxEvents();
         assertFalse(this.inGameController.overviewSitesComponent.inputIslandName.isDisable());
+        waitForFxEvents();
+        assertFalse(this.inGameController.overviewSitesComponent.inputIslandName.isDisable());
+        waitForFxEvents();
+        assertEquals(this.inGameController.overviewSitesComponent.island_inf.getText(), "Lvl: " + islandAttributeStorage.getIsland().upgradeLevel());
 
         //TODO: Flag Index
 
@@ -336,6 +362,11 @@ public class TestIslandOverview extends ControllerTest {
         Node upgradeButton = lookup("#upgradeButton").query();
         clickOn(upgradeButton);
         waitForFxEvents();
+        //Check if UpgradeButton has right Color
+        //Check if level is shown right
+        //Check if costs are updated correctly
+
+        sleep(15000);
         //TODO: Island not updated yet. Implement test if its done.
 
     }

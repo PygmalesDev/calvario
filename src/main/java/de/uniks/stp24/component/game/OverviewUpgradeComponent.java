@@ -2,6 +2,11 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.CreateSystemsDto;
+import de.uniks.stp24.dto.UpdateSystemDto;
+import de.uniks.stp24.dto.Upgrade;
+import de.uniks.stp24.model.Island;
+import de.uniks.stp24.model.IslandType;
+import de.uniks.stp24.model.SystemUpgrades;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -16,9 +21,12 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Objects;
 
 @Component(view = "IslandOverviewUpgrade.fxml")
 public class OverviewUpgradeComponent extends AnchorPane {
@@ -55,7 +63,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
     @Inject
     Subscriber subscriber;
 
-    GameSystemsApiService gameSystemsService;
+    public GameSystemsApiService gameSystemsService;
 
     private InGameController inGameController;
 
@@ -107,13 +115,43 @@ public class OverviewUpgradeComponent extends AnchorPane {
         if (resourcesService.hasEnoughResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()))) {
             resourcesService.upgradeIsland();
             setNeededResources();
-            /*
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String updatedAt = LocalDateTime.now().format(formatter);
+            Island tmp1 = islandAttributes.getIsland();
+            String upgradeStatus = switch (tmp1.upgradeLevel()) {
+                case 0 -> islandAttributes.systemPresets.explored().id();
+                case 1 -> islandAttributes.systemPresets.colonized().id();
+                case 2 -> islandAttributes.systemPresets.upgraded().id();
+                case 3 -> islandAttributes.systemPresets.developed().id();
+                default -> null;
+            };
+
+
             this.subscriber.subscribe(gameSystemsService.updateIsland(tokenStorage.getGameId(), tokenStorage.getEmpireId(),
-                    new CreateSystemsDto(
+                    new UpdateSystemDto(
+                            null,
+                            tmp1.sites(),
+                            tmp1.buildings(),
+                            upgradeStatus,
+                            tokenStorage.getEmpireId())), result -> {
 
-            )));
-
-             */
+                Island tmp2 = new Island(
+                        result._id(),
+                        result.owner(),
+                        Objects.isNull(result.owner()) ? -1 : tokenStorage.getFlagIndex(result.owner()),
+                        result.x(),
+                        result.y(),
+                        IslandType.valueOf(String.valueOf(result.type())),
+                        result.population(),
+                        result.capacity(),
+                        Upgrade.valueOf(result.upgrade()).ordinal(),
+                        result.districtSlots(),
+                        result.districts(),
+                        result.buildings()
+                );
+                inGameController.selectedIsland.island = tmp2;
+                islandAttributes.setIsland(tmp2);
+            });
             inGameController.showOverview(islandAttributes.getIsland());
         }
     }

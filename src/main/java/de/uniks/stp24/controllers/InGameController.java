@@ -263,8 +263,6 @@ public class InGameController extends BasicController {
 
     public void showOverview(Island island) {
         islandAttributes.setIsland(island);
-        System.out.println(tokenStorage.getEmpireId());
-        System.out.println(islandAttributes.getIsland().owner());
         if(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId())){
             overviewSitesComponent.inputIslandName.setDisable(true);
         } else {

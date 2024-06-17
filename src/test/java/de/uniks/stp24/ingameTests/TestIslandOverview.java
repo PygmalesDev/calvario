@@ -6,8 +6,11 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.CreateSystemsDto;
 import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.*;
+import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -69,6 +72,8 @@ public class TestIslandOverview extends ControllerTest {
     @Spy
     EmpireService empireService;
     @Spy
+    GameSystemsApiService gameSystemsApiService;
+    @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
 
     @InjectMocks
@@ -105,7 +110,7 @@ public class TestIslandOverview extends ControllerTest {
     List<Island> islands = new ArrayList<>();
 
     Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
-    Map<String, Integer> upkeep = Map.of("energy", 3,"fuel", 8);
+    Map<String, Integer> upkeep = Map.of("energy", 3, "fuel", 8);
     Map<String, Integer> resAfterUpgrade = Map.of("energy", 0, "fuel", 0);
 
 
@@ -152,6 +157,7 @@ public class TestIslandOverview extends ControllerTest {
     SystemUpgrades systemUpgrades = new SystemUpgrades(unexplored, explored, colonized, upgraded, developed);
 
     Island testIsland1;
+    CreateSystemsDto updatedSystem;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -189,6 +195,7 @@ public class TestIslandOverview extends ControllerTest {
         buildings.add("testBuildings3");
 
         testIsland1 = new Island(
+                "1",
                 "testEmpireID",
                 tokenStorage.getFlagIndex("testUserID"),
                 50,
@@ -203,6 +210,26 @@ public class TestIslandOverview extends ControllerTest {
         );
 
         this.islandAttributeStorage.setIsland(testIsland1);
+
+        updatedSystem = new CreateSystemsDto(
+                null,
+                null,
+                testIsland1._id(),
+                tokenStorage.getGameId(),
+                testIsland1.type(),
+                null,
+                siteSlots,
+                sites,
+                testIsland1.resourceCapacity(),
+                buildings,
+                Upgrade.values()[testIsland1.upgradeLevel() + 1].name(),
+                testIsland1.crewCapacity(),
+                null,
+                (int) testIsland1.posX(),
+                (int) testIsland1.posY(),
+                tokenStorage.getEmpireId()
+        );
+
         this.islandAttributeStorage.systemPresets = systemUpgrades;
         this.islandAttributeStorage.empireDto = empireDto;
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
@@ -214,6 +241,7 @@ public class TestIslandOverview extends ControllerTest {
         this.resourcesService.empireService = empireService;
         this.inGameController.selectedIsland.rudderImage = new ImageView();
         this.resourcesService.subscriber = subscriber;
+        this.inGameController.overviewUpgradeComponent.gameSystemsService = gameSystemsApiService;
 
         this.inGameController.storageButtonsBox = new HBox();
         this.islandsService.isles = islands;
@@ -224,6 +252,7 @@ public class TestIslandOverview extends ControllerTest {
     @Test
     public void testOwnedIsland() {
         doReturn(Observable.just(empreDtoAfterUpgrade)).when(empireService).updateEmpire(any(), any(), any());
+        doReturn(Observable.just(updatedSystem)).when(gameSystemsApiService).updateIsland(any(), any(), any());
         //Open island overview of owned Island
         waitForFxEvents();
         Platform.runLater(() -> {
@@ -365,6 +394,7 @@ public class TestIslandOverview extends ControllerTest {
         //Check if UpgradeButton has right Color
         //Check if level is shown right
         //Check if costs are updated correctly
+        //TODO: OverviewSites lvl is not updated
 
         sleep(15000);
         //TODO: Island not updated yet. Implement test if its done.
@@ -372,12 +402,12 @@ public class TestIslandOverview extends ControllerTest {
     }
 
     @Test
-    public void selectUpgradeWithNoResources(){
+    public void selectUpgradeWithNoResources() {
 
     }
 
     @Test
-    public void closeUpgrade(){
+    public void closeUpgrade() {
         waitForFxEvents();
         Platform.runLater(() -> {
             inGameController.showOverview(testIsland1);
@@ -393,7 +423,7 @@ public class TestIslandOverview extends ControllerTest {
     }
 
     @Test
-    public void closeOverview(){
+    public void closeOverview() {
         waitForFxEvents();
         Platform.runLater(() -> {
             inGameController.showOverview(testIsland1);
@@ -406,7 +436,7 @@ public class TestIslandOverview extends ControllerTest {
     }
 
     @Test
-    public void goBackFromUpgrades(){
+    public void goBackFromUpgrades() {
         waitForFxEvents();
         Platform.runLater(() -> {
             inGameController.showOverview(testIsland1);

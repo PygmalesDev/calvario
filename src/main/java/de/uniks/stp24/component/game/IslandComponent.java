@@ -39,7 +39,7 @@ public class IslandComponent extends Pane {
     IslandAttributeStorage islandAttributes;
 
     private InGameController inGameController;
-    private Island island;
+    public Island island;
 
     double x, y;
     public boolean islandIsSelected = false;

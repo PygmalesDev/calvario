@@ -21,6 +21,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import org.fulib.fx.FulibFxApp;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnInit;
@@ -110,7 +111,7 @@ public class SitePropertiesComponent extends AnchorPane {
     @OnRender
     public void render(){
         this.siteType = "mining";
-        siteName.setText(siteType);
+        siteName.setText(capitalizeFirstLetter(siteType));
         Image imageSite = new Image(sitesMap.get(siteType));
         siteImage.getStyleClass().clear();
         siteImage.setImage(imageSite);
@@ -223,6 +224,13 @@ public class SitePropertiesComponent extends AnchorPane {
         Map<String, Integer> resourceMapProduce = siteDto.production();
         ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, siteProducesListView.getItems());
         siteProducesListView.setItems(resourceListProduce);
+    }
+
+    private String capitalizeFirstLetter(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
 }
 

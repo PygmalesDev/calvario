@@ -12,7 +12,7 @@
 
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="280.0" styleClass="backgroundLightYellow" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.menu.SitePropertiesComponent">
    <children>
-      <Text fx:id="siteName" layoutX="103.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SiteName" AnchorPane.bottomAnchor="267.0" AnchorPane.leftAnchor="103.0" AnchorPane.rightAnchor="91.47265625" AnchorPane.topAnchor="53.0">
+      <Text fx:id="siteName" layoutX="104.0" layoutY="74.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SiteName" AnchorPane.bottomAnchor="270.98046875" AnchorPane.leftAnchor="104.0" AnchorPane.rightAnchor="90.47265625" AnchorPane.topAnchor="52.41796875">
          <font>
             <Font size="20.0" />
          </font>
@@ -22,7 +22,7 @@
             <Font size="6.0" />
          </font>
       </Button>
-      <ImageView fx:id="siteImage" fitHeight="50.0" fitWidth="50.0" layoutX="121.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="siteImage" fitHeight="50.0" fitWidth="50.0" layoutX="115.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="115.0" AnchorPane.rightAnchor="115.0" />
       <Button fx:id="destroySiteButton" layoutX="99.0" layoutY="162.0" mnemonicParsing="false" onAction="#destroySite" prefHeight="25.0" prefWidth="24.0" style="-fx-font-size: 6;" text="destroy">
          <font>
             <Font size="6.0" />
@@ -56,6 +56,6 @@
             <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <Button fx:id="activateGridButton" layoutX="1.0" layoutY="2.0" mnemonicParsing="false" onAction="#displayAmountOfSite" text="Button" />
+      <Button fx:id="activateGridButton" layoutX="1.0" layoutY="2.0" mnemonicParsing="false" onAction="#displayAmountOfSite" text="Show Slots" style="-fx-font-size: 10;" />
    </children>
 </fx:root>

@@ -115,7 +115,6 @@ public class InGameController extends BasicController {
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
-        //Todo: Outprint for Swagger - can be deleted later
 
         GameStatus gameStatus = inGameService.getGameStatus();
         //Todo: Outprint for Swagger - can be deleted later
@@ -264,6 +263,13 @@ public class InGameController extends BasicController {
 
     public void showOverview(Island island) {
         islandAttributes.setIsland(island);
+        System.out.println(tokenStorage.getEmpireId());
+        System.out.println(islandAttributes.getIsland().owner());
+        if(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId())){
+            overviewSitesComponent.inputIslandName.setDisable(true);
+        } else {
+            overviewSitesComponent.inputIslandName.setDisable(false);
+        }
         overviewSitesComponent.buildingsComponent.resetPage();
         overviewSitesComponent.buildingsComponent.setGridPane();
         overviewContainer.setVisible(true);

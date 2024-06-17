@@ -21,7 +21,7 @@
       <VBox prefHeight="36.0" prefWidth="400.0" />
       <HBox alignment="CENTER" prefHeight="136.0" prefWidth="400.0">
          <VBox alignment="TOP_CENTER" prefHeight="122.0" prefWidth="330.0" style="-fx-border-color: #000000;">
-            <TextField alignment="CENTER" promptText="Uncharted" styleClass="overview-text" />
+            <TextField fx:id="inputIslandName" alignment="CENTER" promptText="Uncharted" styleClass="overview-text" />
             <HBox prefHeight="13.0" prefWidth="328.0">
                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="Capacity" textAlignment="CENTER" wrappingWidth="127.947265625" />
                <Text fx:id="island_name" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="island_name" wrappingWidth="104.947265625" />

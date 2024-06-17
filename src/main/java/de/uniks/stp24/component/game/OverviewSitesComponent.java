@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -41,6 +42,8 @@ public class OverviewSitesComponent extends AnchorPane {
     public Text crewCapacity;
     @FXML
     public Text resCapacity;
+    @FXML
+    public TextField inputIslandName;
 
     @SubComponent
     @Inject

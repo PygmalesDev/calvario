@@ -157,6 +157,7 @@ public class TestBuildingProperties extends ControllerTest {
         clickOn("#destroyButton");
 
         verify(this.resourcesService, times(1)).destroyBuilding(any(), any());
+        verify(this.islandsService, times(1)).updateIsland(any());
 
 
 

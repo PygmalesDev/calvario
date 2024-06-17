@@ -6,11 +6,11 @@ import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.BuildingDto;
-import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.dto.SiteDto;
+import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.model.Island;
+import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
@@ -38,8 +38,9 @@ import java.util.ResourceBundle;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 
@@ -140,11 +141,39 @@ public class TestSiteProperties extends ControllerTest {
         this.app.show(this.inGameController);
 
         buildingPropertiesComponent.setVisible(false);
-        sitePropertiesComponent.setVisible(false);
+        buildingsWindowComponent.setVisible(false);
     }
 
     @Test
     public void buildSite(){
-        
+        waitForFxEvents();
+        Island island = new Island("testOwner", Upgrade.explored, "", "testID", 1, 500.0, 500.0,
+                IslandType.mining, 20, 20, 1, siteSlots, sites, buildings);
+        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
+                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
+                "testOwner"))).when(resourcesService).buildSite(any(), any(),any());
+        doReturn(new Island(island.owner(), island.upgrade(), island.name(), island.id_(), island.flagIndex(),
+                island.posX(), island.posY(), island.type(), island.crewCapacity(), island.resourceCapacity(), island.upgradeLevel(), island.sitesSlots(),
+                island.sites(), island.buildings())).when(islandsService).updateIsland(any());
+        clickOn("#buildSiteButton");
+
+        verify(this.resourcesService, times(1)).buildSite(any(), any(), any());
+    }
+    @Test
+    public void destroySite(){
+        waitForFxEvents();
+        sites.put("mining", 1);
+        Island island = new Island("testOwner", Upgrade.explored, "", "testID", 1, 500.0, 500.0,
+                IslandType.mining, 20, 20, 1, siteSlots, sites, buildings);
+        doReturn(island).when(this.tokenStorage).getIsland();
+        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
+                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
+                "testOwner"))).when(resourcesService).destroySite(any(), any(),any());
+        doReturn(new Island(island.owner(), island.upgrade(), island.name(), island.id_(), island.flagIndex(),
+                island.posX(), island.posY(), island.type(), island.crewCapacity(), island.resourceCapacity(), island.upgradeLevel(), island.sitesSlots(),
+                island.sites(), island.buildings())).when(islandsService).updateIsland(any());
+        clickOn("#destroySiteButton");
+        waitForFxEvents();
+        verify(this.resourcesService, times(1)).destroySite(any(), any(), any());
     }
 }

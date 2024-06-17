@@ -9,7 +9,7 @@ import java.util.List;
 
 public class EmpireService {
     @Inject
-    EmpireApiService empireApiService;
+    public EmpireApiService empireApiService;
 
     @Inject
     public EmpireService() {

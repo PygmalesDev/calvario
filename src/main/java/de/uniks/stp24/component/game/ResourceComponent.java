@@ -49,8 +49,6 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
         this.gameResourceBundle = gameResourceBundle;
     }
 
-    //Todo: resourceID in translations, imagePaths, constants
-
     @Override
     public void setItem(@NotNull Resource resource) {
         if (showName) {

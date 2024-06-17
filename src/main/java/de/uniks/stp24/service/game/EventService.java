@@ -17,8 +17,11 @@ import javax.inject.Inject;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class EventService {
+    private static final Logger LOGGER = Logger.getLogger(EventService.class.getName());
 
     protected PropertyChangeSupport listeners;
     public static final String PROPERTY_REMAININGSEASONS = "remainingSeasons";
@@ -152,8 +155,8 @@ public class EventService {
     }
 
     // Parameter eventName is index for List<String> eventNames
-    // Method reads the JSONs in folder .data and creates an EffectSourceDto
-    // if the event has not been added to the eventMap
+    // Method reads the JSONs in folder .data and creates an EffectSourceParentDto
+    // if the event has not been added to the eventMap yet
     private @Nullable EffectSourceParentDto readEvent(int eventName) {
 
         try {
@@ -192,13 +195,15 @@ public class EventService {
             setRemainingSeasons(duration);
             return eventMap.get(id);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An exception occurred", e);
         }
         // if no event can occur
         return null;
     }
 
     public Observable<EmpireDto> sendEffect() {
-        return empireApiService.setEffect(tokenStorage.getGameId(), tokenStorage.getEmpireId(), event);
+        // If event is null, send an empty event
+        return empireApiService.setEffect(tokenStorage.getGameId(), tokenStorage.getEmpireId(),
+                Objects.requireNonNullElseGet(event, () -> new EffectSourceParentDto(null)));
     }
 }

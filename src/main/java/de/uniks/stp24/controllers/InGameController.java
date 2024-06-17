@@ -6,7 +6,6 @@ import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
-import de.uniks.stp24.dto.EffectSourceParentDto;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.service.InGameService;
@@ -263,6 +262,7 @@ public class InGameController extends BasicController {
         islandComponentList.forEach(IslandComponent::destroy);
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
                 .removePropertyChangeListener(triple.propertyName(), triple.listener()));
+        clockComponentContainer.getChildren().clear();
         this.subscriber.dispose();
     }
 

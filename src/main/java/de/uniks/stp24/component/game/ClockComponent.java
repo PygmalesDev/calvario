@@ -125,7 +125,7 @@ public class ClockComponent extends AnchorPane {
             spectatorImage.setImage(imageCache.get("icons/spectatorSign.png"));
         }
 
-        subscriber.subscribe(gamesApiService.getGame(gameId),
+        subscriber.subscribe(gamesApiService.getGame(tokenStorage.getGameId()),
                 game -> {
                     // Only owner of the game can change the speed
                     if (!(Objects.equals(game.owner(), tokenStorage.getUserId()))) {
@@ -151,7 +151,8 @@ public class ClockComponent extends AnchorPane {
                     }
                     timerService.setSpeedLocal(game.speed());
                     timerService.setSeason(game.period());
-                });
+                    setSeasonLabelSize();
+                }, System.out::println);
 
         timerService.start();
         seasonLabel.setText(timerService.getSeason() + "");
@@ -244,6 +245,9 @@ public class ClockComponent extends AnchorPane {
     private void setSeasonLabelSize() {
         if (timerService.getSeason() > 999) {
             seasonLabel.setStyle("-fx-font-size: 15px;");
+            countdownLabel.setStyle("-fx-font-size: 13px");
+            seasonLabel.setTranslateY(seasonLabel.getTranslateY() + 3);
+            countdownLabel.setTranslateY(countdownLabel.getTranslateY() + 3);
         }
     }
 

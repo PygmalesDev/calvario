@@ -147,7 +147,7 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         // Test if the correct component is shown to the user
-        Node component = this.lobbyController.lobbyElement.getChildren().get(0);
+        Node component = this.lobbyController.lobbyElement.getChildren().getFirst();
         assertEquals(EnterGameComponent.class, component.getClass());
 
         // Test if the new user is not a member of the lobby

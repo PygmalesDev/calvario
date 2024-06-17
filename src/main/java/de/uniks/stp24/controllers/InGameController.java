@@ -143,6 +143,16 @@ public class InGameController extends BasicController {
                     islandAttributes.setEmpireDto(result);
                 });
 
+        this.subscriber.subscribe(inGameService.loadBuildingPresets(),
+                result -> {
+                    islandAttributes.setBuildingPresets(result);
+                });
+
+        this.subscriber.subscribe(inGameService.loadDistrictPresets(),
+                result -> {
+                    islandAttributes.setDistrictPresets(result);
+                });
+
         if (!tokenStorage.isSpectator()) {
             createEmpireListener();
         }

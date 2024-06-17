@@ -28,6 +28,7 @@ import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
@@ -253,6 +254,7 @@ public class TestIslandOverview extends ControllerTest {
     public void testOwnedIsland() {
         doReturn(Observable.just(empreDtoAfterUpgrade)).when(empireService).updateEmpire(any(), any(), any());
         doReturn(Observable.just(updatedSystem)).when(gameSystemsApiService).updateIsland(any(), any(), any());
+
         //Open island overview of owned Island
         waitForFxEvents();
         Platform.runLater(() -> {
@@ -275,8 +277,6 @@ public class TestIslandOverview extends ControllerTest {
         assertFalse(this.inGameController.overviewSitesComponent.inputIslandName.isDisable());
         waitForFxEvents();
         assertEquals(this.inGameController.overviewSitesComponent.island_inf.getText(), "Lvl: " + islandAttributeStorage.getIsland().upgradeLevel());
-
-        //TODO: Flag Index
 
         //Test function of buttons
         //"Buildings" selected
@@ -335,9 +335,6 @@ public class TestIslandOverview extends ControllerTest {
         assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), 8);
         waitForFxEvents();
 
-
-        //TODO: Max buildings not implemented yet. If it is implemented finish Test here.
-
         //"Details" selected
         clickOn(this.inGameController.overviewSitesComponent.detailsButton);
         assertTrue(this.inGameController.overviewSitesComponent.detailsButton.isDisable());
@@ -391,14 +388,31 @@ public class TestIslandOverview extends ControllerTest {
         Node upgradeButton = lookup("#upgradeButton").query();
         clickOn(upgradeButton);
         waitForFxEvents();
-        //Check if UpgradeButton has right Color
-        //Check if level is shown right
-        //Check if costs are updated correctly
-        //TODO: OverviewSites lvl is not updated
+        Node checkExplored = lookup("#checkExplored").query();
+        Node checkColonized = lookup("#checkColonized").query();
+        Node checkUpgraded = lookup("#checkUpgraded").query();
+        Node checkDeveloped = lookup("#checkDeveloped").query();
 
-        sleep(15000);
-        //TODO: Island not updated yet. Implement test if its done.
+        assertTrue(checkExplored.isVisible());
+        assertTrue(checkColonized.isVisible());
+        assertFalse(checkUpgraded.isVisible());
+        assertFalse(checkDeveloped.isVisible());
 
+        Node confirmButton = lookup("#confirmUpgrade").query();
+        assertTrue(confirmButton.getStyle().contains("-fx-background-color: green;"));
+        clickOn(confirmButton);
+        waitForFxEvents();
+        Text inf = lookup("#island_inf").queryText();
+        assertEquals(inf.getText(), "Lvl: " + Upgrade.values()[testIsland1.upgradeLevel() + 1].ordinal());
+        clickOn(upgradeButton);
+        assertTrue(confirmButton.getStyle().contains("-fx-background-color: black;"));
+
+        assertTrue(checkExplored.isVisible());
+        assertTrue(checkColonized.isVisible());
+        assertTrue(checkUpgraded.isVisible());
+        assertFalse(checkDeveloped.isVisible());
+
+        waitForFxEvents();
     }
 
     @Test

@@ -81,7 +81,7 @@
          <VBox prefHeight="92.0" prefWidth="66.0">
             <VBox prefHeight="34.0" prefWidth="79.0" />
             <Pane fx:id="confirmUpgrade" prefHeight="92.0" prefWidth="103.0" style="-fx-background-color: #000000; -fx-background-radius: 30;">
-               <ImageView fitHeight="92.0" fitWidth="84.0" onMouseClicked="#upgradeIsland" pickOnBounds="true" preserveRatio="true" />
+               <ImageView fitHeight="69.0" fitWidth="66.0" onMouseClicked="#upgradeIsland" pickOnBounds="true" preserveRatio="true" />
             </Pane>
             <VBox prefHeight="34.0" prefWidth="79.0" />
          </VBox>

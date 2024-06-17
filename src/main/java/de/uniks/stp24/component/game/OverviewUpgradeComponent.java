@@ -115,8 +115,6 @@ public class OverviewUpgradeComponent extends AnchorPane {
         if (resourcesService.hasEnoughResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()))) {
             resourcesService.upgradeIsland();
             setNeededResources();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            String updatedAt = LocalDateTime.now().format(formatter);
             Island tmp1 = islandAttributes.getIsland();
             String upgradeStatus = switch (tmp1.upgradeLevel()) {
                 case 0 -> islandAttributes.systemPresets.explored().id();
@@ -151,8 +149,8 @@ public class OverviewUpgradeComponent extends AnchorPane {
                 );
                 inGameController.selectedIsland.island = tmp2;
                 islandAttributes.setIsland(tmp2);
+                inGameController.showOverview(islandAttributes.getIsland());
             });
-            inGameController.showOverview(islandAttributes.getIsland());
         }
     }
 }

@@ -96,21 +96,21 @@ public class OverviewSitesComponent extends AnchorPane {
                 inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
                 break;
             case 2:
-                inGameController.overviewUpgradeComponent.checkExplored.setVisible(false);
+                inGameController.overviewUpgradeComponent.checkExplored.setVisible(true);
                 inGameController.overviewUpgradeComponent.checkColonized.setVisible(true);
                 inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(false);
                 inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
                 break;
             case 3:
-                inGameController.overviewUpgradeComponent.checkExplored.setVisible(false);
-                inGameController.overviewUpgradeComponent.checkColonized.setVisible(false);
+                inGameController.overviewUpgradeComponent.checkExplored.setVisible(true);
+                inGameController.overviewUpgradeComponent.checkColonized.setVisible(true);
                 inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(true);
                 inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
                 break;
             case 4:
-                inGameController.overviewUpgradeComponent.checkExplored.setVisible(false);
-                inGameController.overviewUpgradeComponent.checkColonized.setVisible(false);
-                inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(false);
+                inGameController.overviewUpgradeComponent.checkExplored.setVisible(true);
+                inGameController.overviewUpgradeComponent.checkColonized.setVisible(true);
+                inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(true);
                 inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(true);
                 break;
         }
@@ -165,6 +165,7 @@ public class OverviewSitesComponent extends AnchorPane {
         island_name.setText(String.valueOf(islandAttributes.getIsland().type()));
         crewCapacity.setText(String.valueOf(islandAttributes.getIsland().crewCapacity()));
         resCapacity.setText("Resources: " + usedSlots + "/" + islandAttributes.getIsland().resourceCapacity());
+        System.out.println("Sites component: " + islandAttributes.getIsland().upgradeLevel());
         island_inf.setText("Lvl: " + islandAttributes.getIsland().upgradeLevel());
     }
 }

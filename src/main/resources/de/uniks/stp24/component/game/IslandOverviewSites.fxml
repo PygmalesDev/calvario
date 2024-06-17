@@ -33,10 +33,9 @@
                      <Text fx:id="crewCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="0/20" />
                   </HBox>
                   <HBox alignment="CENTER">
-                     <children>
-                        <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
-                        <Text fx:id="resCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="0/400" />
-                     </children>
+                     <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true"/>
+                     <Text fx:id="resCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text"
+                           text="0/400"/>
                   </HBox>
                </VBox>
                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">

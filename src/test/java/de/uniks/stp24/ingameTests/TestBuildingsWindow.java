@@ -9,8 +9,6 @@ import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.Island;
-import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
@@ -39,10 +37,11 @@ import java.util.ResourceBundle;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
-public class TestBuildingProperties extends ControllerTest {
+public class TestBuildingsWindow extends ControllerTest {
     @Spy
     GamesApiService gamesApiService;
 
@@ -92,6 +91,11 @@ public class TestBuildingProperties extends ControllerTest {
 
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
 
+    Map<String, Integer> siteSlots = new HashMap<>();
+    Map<String, Integer> sites = new HashMap<>();
+    Map<String, Integer> links = new HashMap<>();
+    String[] buildings = new String[]{"mine", "exchange", "farm"};
+
 
     @Override
     public void start(Stage stage) throws Exception{
@@ -133,32 +137,116 @@ public class TestBuildingProperties extends ControllerTest {
 
         this.app.show(this.inGameController);
 
+        buildingPropertiesComponent.setVisible(false);
+        sitePropertiesComponent.setVisible(false);
+    }
+
+    @Test
+    public void buyExchange(){
+        waitForFxEvents();
+
+        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
+                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
+                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        clickOn("#buildingExchange");
+
+        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
 
     }
 
     @Test
-    public void deleteBuilding(){
+    public void buyPowerPlant(){
         waitForFxEvents();
 
-        Map<String, Integer> siteSlots = new HashMap<>();
-        Map<String, Integer> sites = new HashMap<>();
-        Map<String, Integer> links = new HashMap<>();
-        String[] buildings = new String[]{"mine", "exchange", "farm"};
-        Island island = new Island("testOwner", Upgrade.explored, "", "testID", 1, 500.0, 500.0,
-                IslandType.mining, 20, 20, 1, siteSlots, sites, buildings);
         doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
                 "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
-                "testOwner"))).when(resourcesService).destroyBuilding(any(), any());
-        doReturn(new Island(island.owner(), island.upgrade(), island.name(), island.id_(), island.flagIndex(),
-                island.posX(), island.posY(), island.type(), island.crewCapacity(), island.resourceCapacity(), island.upgradeLevel(), island.sitesSlots(),
-                island.sites(), island.buildings())).when(islandsService).updateIsland(any());
-        buildingsWindowComponent.setVisible(false);
-        sitePropertiesComponent.setVisible(false);
-        clickOn("#destroyButton");
+                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        clickOn("#buildingPowerPlant");
 
-        verify(this.resourcesService, times(1)).destroyBuilding(any(), any());
-
-
+        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
 
     }
+
+    @Test
+    public void buyMine(){
+        waitForFxEvents();
+
+        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
+                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
+                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        clickOn("#buildingMine");
+
+        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
+
+    }
+
+    @Test
+    public void buyFarm(){
+        waitForFxEvents();
+
+        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
+                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
+                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        clickOn("#buildingFarm");
+
+        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
+
+    }
+
+    @Test
+    public void buyResearchLab(){
+        waitForFxEvents();
+
+        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
+                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
+                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        clickOn("#buildingResearchLab");
+
+        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
+
+    }
+
+    @Test
+    public void buyFoundry(){
+        waitForFxEvents();
+
+        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
+                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
+                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        clickOn("#buildingFoundry");
+
+        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
+
+    }
+
+    @Test
+    public void buyFactory(){
+        waitForFxEvents();
+
+        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
+                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
+                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        clickOn("#buildingFactory");
+
+        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
+
+    }
+
+    @Test
+    public void buyRefinery(){
+        waitForFxEvents();
+
+        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
+                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
+                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        clickOn("#buildingRefinery");
+
+        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
+
+    }
+
+
+
+
+
 }

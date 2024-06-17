@@ -169,7 +169,7 @@ public class TestIslandOverview extends ControllerTest {
         buildings.add("testBuildings3");
 
         testIsland1 = new Island(
-                "testUserID",
+                "testEmpireID",
                 tokenStorage.getFlagIndex("testUserID"),
                 50,
                 50,
@@ -219,6 +219,7 @@ public class TestIslandOverview extends ControllerTest {
         waitForFxEvents();
         assertEquals(this.inGameController.overviewSitesComponent.island_name.getText(), testIsland1.type().name());
         waitForFxEvents();
+        assertFalse(this.inGameController.overviewSitesComponent.inputIslandName.isDisable());
 
         //TODO: Flag Index
 
@@ -334,7 +335,7 @@ public class TestIslandOverview extends ControllerTest {
         //"Upgrades" selected. Enough Resources
         Node upgradeButton = lookup("#upgradeButton").query();
         clickOn(upgradeButton);
-        sleep(15000);
+        waitForFxEvents();
         //TODO: Island not updated yet. Implement test if its done.
 
     }

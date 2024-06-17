@@ -14,20 +14,22 @@ import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Singleton
 public class EventService {
     private static final Logger LOGGER = Logger.getLogger(EventService.class.getName());
 
     protected PropertyChangeSupport listeners;
     public static final String PROPERTY_REMAININGSEASONS = "remainingSeasons";
     public static final String PROPERTY_EVENT = "event";
-    public static final String PROPERTY_NEXTEVENT = "nextEvent";
-    private int remainingSeasons;
+//    public static final String PROPERTY_NEXTEVENT = "nextEvent";
+    private volatile int remainingSeasons;
     EffectSourceParentDto event = null;
     private int nextEvent;
     ObjectMapper objectMapper = new ObjectMapper();
@@ -87,7 +89,7 @@ public class EventService {
     }
 
     public void setNextEvent() {
-        nextEvent = random.nextInt(1, 25);
+        nextEvent = random.nextInt(100, 120);
     }
 
     public EffectSourceParentDto getEvent() {
@@ -100,19 +102,18 @@ public class EventService {
         if (nextEvent == this.nextEvent) {
             return;
         }
-        final int oldValue = this.nextEvent;
+//        final int oldValue = this.nextEvent;
         this.nextEvent = nextEvent;
-        this.firePropertyChange(PROPERTY_NEXTEVENT, oldValue, nextEvent);
+//        this.firePropertyChange(PROPERTY_NEXTEVENT, oldValue, nextEvent);
 
         // Sets Event (Either null or an event if possible)
         setEvent(getNewRandomEvent());
          if (remainingSeasons <= 0) {
-            System.out.println("Remaining finish: " + remainingSeasons);
-
+            setEvent(null);
             // If event is done reset it in Server
              subscriber.subscribe(sendEffect(),
                      result -> System.out.println("Effect sollte null sein oder: " + result),
-                     error -> System.out.println("Error beim Senden von Effect: " + error));
+                     error -> System.out.println("Error beim wegmachen von Effect: " + error));
         } else {
             setRemainingSeasons(getRemainingSeasons()-1);
             System.out.println("Remaining the event: " + remainingSeasons);
@@ -129,15 +130,11 @@ public class EventService {
 
     // Sets Seasons how long event last
     public void setRemainingSeasons(int remainingSeasons) {
-        int oldValue;
         if (remainingSeasons == this.remainingSeasons) {
             return;
         }
-
-
-        oldValue = this.remainingSeasons;
+        final int oldValue = this.remainingSeasons;
         this.remainingSeasons = remainingSeasons;
-        System.out.println("Remaining seasons of event changed from " + this.remainingSeasons + "to " + remainingSeasons);
         this.firePropertyChange(PROPERTY_REMAININGSEASONS, oldValue, remainingSeasons);
     }
 
@@ -154,9 +151,9 @@ public class EventService {
         return this.listeners;
     }
 
-    // Parameter eventName is index for List<String> eventNames
-    // Method reads the JSONs in folder .data and creates an EffectSourceParentDto
-    // if the event has not been added to the eventMap yet
+    /* Parameter eventName is index for List<String> eventNames
+     * Method reads the JSONs in folder .data and creates an EffectSourceParentDto
+    /* if the event has not been added to the eventMap yet */
     private @Nullable EffectSourceParentDto readEvent(int eventName) {
 
         try {
@@ -189,7 +186,8 @@ public class EventService {
                     // Last parameter is an array of EffectDto
                     EffectDto[] effectArrayDtos = new EffectDto[effectsDto.size()];
                     effectArrayDtos = effectsDto.toArray(effectArrayDtos);
-                    eventMap.put(id, new EffectSourceParentDto(new EffectSourceDto[]{new EffectSourceDto(id, eventType, duration, effectArrayDtos)}));
+                    eventMap.put(id, new EffectSourceParentDto(new EffectSourceDto[]
+                            {new EffectSourceDto(id, eventType, duration, effectArrayDtos)}));
                 }
             }
             setRemainingSeasons(duration);

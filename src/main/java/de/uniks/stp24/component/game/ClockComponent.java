@@ -151,14 +151,16 @@ public class ClockComponent extends AnchorPane {
                     }
                     timerService.setSpeedLocal(game.speed());
                     timerService.setSeason(game.period());
-                    setSeasonLabelSize();
                 }, System.out::println);
+
+        setSeasonLabelSize();
 
         timerService.start();
         seasonLabel.setText(timerService.getSeason() + "");
         countdownLabel.setText(translateCountdown(timerService.getCountdown()));
 
         // Dummy data for special Event
+        remainingSeasonsLabel.setVisible(false);
     }
 
     @OnDestroy
@@ -261,7 +263,7 @@ public class ClockComponent extends AnchorPane {
                 error -> System.out.println("Error beim Ändern der Geschwindigkeit: " + error));
     }
 
-    ////////////--------------------------------PropertyChangeListener------------------------------------//////////////
+    ////////////--------------------------------PropertyChangeListener--------------------------------------////////////
 
     private void handleEventChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
 
@@ -274,16 +276,26 @@ public class ClockComponent extends AnchorPane {
             } else {
                 randomEventImage.setImage(imageCache.get("assets/events/goodEvent.png"));
             }
-        } else {
-            randomEventImage.setVisible(false);
-            remainingSeasonsLabel.setVisible(false);
         }
     }
 
     private void handleRemainingSeasonChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
+            System.out.println("fired property change for remainingSeasons");
             int remainingSeasons = (int) propertyChangeEvent.getNewValue();
-            Platform.runLater(() -> remainingSeasonsLabel.setText(String.valueOf(remainingSeasons)));
+            if (remainingSeasons == 0) {
+
+                // Delete event on Server
+                eventService.setEvent(null);
+                subscriber.subscribe(eventService.sendEffect(),
+                        result -> System.out.println("Effect ist abgelaufen " + result),
+                        error -> System.out.println("Error beim wegmachen von Effect: " + error));
+
+                randomEventImage.setVisible(false);
+                remainingSeasonsLabel.setVisible(false);
+            } else {
+                Platform.runLater(() -> remainingSeasonsLabel.setText(String.valueOf(remainingSeasons)));
+            }
         }
     }
 

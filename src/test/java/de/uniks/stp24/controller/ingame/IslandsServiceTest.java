@@ -2,6 +2,7 @@ package de.uniks.stp24.controller.ingame;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
@@ -10,12 +11,15 @@ import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.dto.Upgrade;
+import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.ResourcesService;
+import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
@@ -46,6 +50,8 @@ public class IslandsServiceTest extends ControllerTest {
     PauseMenuComponent pauseMenuComponent;
     @InjectMocks
     SettingsComponent settingsComponent;
+    @InjectMocks
+    ClockComponent clockComponent;
 
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
@@ -53,6 +59,11 @@ public class IslandsServiceTest extends ControllerTest {
     TokenStorage tokenStorage;
     @Spy
     ObjectMapper objectMapper;
+    @Spy
+    TimerService timerService;
+    @Spy
+    GamesApiService gameApiService;
+
 
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
@@ -81,6 +92,10 @@ public class IslandsServiceTest extends ControllerTest {
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
+        this.inGameController.clockComponent = this.clockComponent;
+        this.clockComponent.timerService = this.timerService;
+        this.clockComponent.subscriber = this.subscriber;
+        this.clockComponent.gamesApiService = this.gameApiService;
         this.islandsService.app = this.app;
         inGameService.setGameStatus(gameStatus);
         islandsService.gameSystemsService = this.gameSystemsApiService;
@@ -95,6 +110,9 @@ public class IslandsServiceTest extends ControllerTest {
         inGameController.mapScrollPane.setContent(inGameController.group);
 
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
+        doReturn(Observable
+          .just(new Game("a", null, "game1Id", "testGame1",
+            "testHost1", true, 1,10, null))).when(gameApiService).getGame(any());
         doReturn(null).when(this.app).show("/ingame");
         islandsService.saveEmpire("empire",new ReadEmpireDto("a","b","empire","game1","user1","name",
           "description","#FFDDEE",2,3,"home"));

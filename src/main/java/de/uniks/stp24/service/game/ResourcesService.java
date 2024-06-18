@@ -130,7 +130,7 @@ public class ResourcesService {
                 String resourceID = entry.getKey();
                 int count = entry.getValue();
                 int changeProSeason = 0;
-                if(oldResourceList != null && !oldResourceList.isEmpty()) {
+                if(oldResourceList != null && !oldResourceList.isEmpty() && i < oldResourceList.size()) {
                     changeProSeason = oldResourceList.get(i).changePerSeason();//Todo: getProSeason(name, count);
                 }
                 Resource resource = new Resource(resourceID, count, changeProSeason);

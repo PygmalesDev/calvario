@@ -7,37 +7,31 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0"
-         prefWidth="280.0" styleClass="backgroundLightYellow" type="javafx.scene.layout.AnchorPane"
-         xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-         fx:controller="de.uniks.stp24.component.menu.BuildingPropertiesComponent">
-   <ImageView fx:id="buildingImage" fitHeight="80.0" fitWidth="80.0" layoutX="36.0" layoutY="17.0" pickOnBounds="true"
-              preserveRatio="true" AnchorPane.leftAnchor="36.0" AnchorPane.topAnchor="17.0">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="280.0" styleClass="backgroundLightYellow" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.menu.BuildingPropertiesComponent">
+   <ImageView fx:id="buildingImage" fitHeight="80.0" fitWidth="80.0" layoutX="36.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="36.0" AnchorPane.topAnchor="17.0">
    </ImageView>
-   <Text fx:id="buildingName" layoutX="130.0" layoutY="56.1865234375" strokeType="OUTSIDE" strokeWidth="0.0"
-         style="-fx-font-size: 15;" text="Building_Name" AnchorPane.rightAnchor="50.01708984375"
-         AnchorPane.topAnchor="40.0">
+   <Text fx:id="buildingName" layoutX="130.0" layoutY="56.1865234375" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 15;" text="Building_Name" AnchorPane.rightAnchor="50.01708984375" AnchorPane.topAnchor="40.0">
       <font>
-         <Font size="6.0"/>
+         <Font size="6.0" />
       </font>
    </Text>
-   <Button fx:id="destroyButton" layoutX="223.0" layoutY="173.0" mnemonicParsing="false" onAction="#destroyBuilding"
-           prefHeight="25.0" prefWidth="25.0" style="-fx-font-size: 12;" text="Destroy"
-           AnchorPane.bottomAnchor="1.4000000000000057" AnchorPane.rightAnchor="1.4000000000000057">
+   <Button fx:id="destroyButton" layoutX="223.0" layoutY="173.0" mnemonicParsing="false" onAction="#destroyBuilding" prefHeight="25.0" prefWidth="25.0" style="-fx-font-size: 12;" text="Destroy" AnchorPane.bottomAnchor="1.4000000000000057" AnchorPane.rightAnchor="1.4000000000000057">
       <font>
-         <Font size="6.0"/>
+         <Font size="6.0" />
       </font>
    </Button>
-   <Button fx:id="closeButton" layoutX="173.0" layoutY="88.0" mnemonicParsing="false" onAction="#onClose"
-           prefHeight="25.0" prefWidth="25.0" style="-fx-font-size: 6;" text="Close" AnchorPane.rightAnchor="2.0">
+   <Button fx:id="closeButton" layoutX="173.0" layoutY="88.0" mnemonicParsing="false" onAction="#onClose" prefHeight="25.0" prefWidth="25.0" style="-fx-font-size: 6;" text="Close" AnchorPane.rightAnchor="2.0">
       <font>
-         <Font size="6.0"/>
+         <Font size="6.0" />
       </font>
    </Button>
-   <ListView fx:id="buildingConsumesListView" layoutX="7.0" layoutY="126.0" prefHeight="58.0" prefWidth="130.0"
-             AnchorPane.leftAnchor="3.0"/>
-   <Text layoutX="7.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Consumes:"/>
-   <ListView fx:id="buildingProducesListView" layoutX="127.0" layoutY="138.0" prefHeight="28.0" prefWidth="130.0"
-             AnchorPane.rightAnchor="3.0"/>
-   <Text layoutX="146.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Produces:"/>
+   <ListView fx:id="buildingConsumesListView" layoutX="7.0" layoutY="126.0" prefHeight="58.0" prefWidth="130.0" AnchorPane.leftAnchor="3.0" />
+   <Text layoutX="7.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Consumes:" />
+   <ListView fx:id="buildingProducesListView" layoutX="127.0" layoutY="138.0" prefHeight="28.0" prefWidth="130.0" AnchorPane.rightAnchor="3.0" />
+   <Text layoutX="146.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Produces:" />
+   <Button fx:id="buyButton" layoutX="217.0" layoutY="174.0" mnemonicParsing="false" onAction="#buyBuilding" prefHeight="25.0" prefWidth="25.0" style="-fx-font-size: 6;" text="buy" textFill="#13b91b">
+      <font>
+         <Font size="6.0" />
+      </font>
+   </Button>
 </fx:root>

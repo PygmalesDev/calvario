@@ -1,15 +1,13 @@
 package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.model.Island;
-import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.model.Resource;
-import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.game.ResourcesService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -17,12 +15,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import net.bytebuddy.description.ByteCodeElement;
-import org.controlsfx.control.GridView;
 import org.fulib.fx.annotation.controller.Component;
-import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
@@ -30,12 +24,13 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import javax.inject.Singleton;
 import java.util.*;
 
 @Component(view = "BuildingProperties.fxml")
 public class BuildingPropertiesComponent extends AnchorPane {
 
+    @FXML
+    Button buyButton;
     @FXML
     ListView<Resource> buildingProducesListView;
     @FXML
@@ -72,8 +67,6 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @Inject
     TokenStorage tokenStorage;
 
-    public List<Island> islands = new ArrayList<>();
-
     Map<String, String> buildingsMap;
 
     String buildingType;
@@ -92,8 +85,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
         buildingsMap.put("mine", "de/uniks/stp24/icons/buildings/coal_querry.png");
         buildingsMap.put("power_plant", "de/uniks/stp24/icons/buildings/scout_hub.png");
         buildingsMap.put("exchange", "de/uniks/stp24/icons/buildings/seaside_hut.png");
-        String buildingMine = "mine";
-        setBuildingType(buildingMine);
+
     }
 
     @Inject
@@ -101,12 +93,10 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     }
 
-    public void setIsland(Island island){
-
-    }
 
     public void setBuildingType(String buildingType){
         this.buildingType = buildingType;
+        displayInfoBuilding();
     }
 
     public void destroyBuilding(){
@@ -116,7 +106,23 @@ public class BuildingPropertiesComponent extends AnchorPane {
             onClose();
         });
     }
-    @OnRender
+
+    public void buyBuilding(){
+        Island island = tokenStorage.getIsland();
+        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingType), result -> {
+                    tokenStorage.setIsland(islandsService.updateIsland(result));
+                },
+                error -> System.out.println("Insufficient funds"));
+    }
+
+    public void disableBuyButton(){
+        buyButton.setDisable(true);
+    }
+
+    public void enableBuyButton(){
+        buyButton.setDisable(false);
+    }
+
     public void displayInfoBuilding(){
         Image imageBuilding = new Image(buildingsMap.get(buildingType));
         buildingImage.setImage(imageBuilding);

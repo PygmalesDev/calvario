@@ -1,9 +1,11 @@
 package de.uniks.stp24.component.menu;
 
+import de.uniks.stp24.controllers.GangCreationController;
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Island;
-import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.game.ResourcesService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -14,7 +16,6 @@ import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
-import java.util.Arrays;
 
 @Component(view = "BuildingsWindow.fxml")
 public class BuildingsWindowComponent extends AnchorPane {
@@ -53,11 +54,9 @@ public class BuildingsWindowComponent extends AnchorPane {
 
     private String buildingToAdd;
 
-    Image image;
-
-    ImageView imageView;
-
     private Button[] buttons;
+
+    InGameController inGameController;
 
     private static final String[] IMAGE_PATHS = {
             "de/uniks/stp24/icons/buildings/alloy_smeltery.png",
@@ -91,6 +90,10 @@ public class BuildingsWindowComponent extends AnchorPane {
         };
     }
 
+    public void setInGameController(InGameController inGameController){
+        this.inGameController = inGameController;
+    }
+
     @OnRender
     public void setImages() {
         for (int i = 0; i < buttons.length; i++) {
@@ -105,76 +108,43 @@ public class BuildingsWindowComponent extends AnchorPane {
 
     public void buildExchange(){
         this.buildingToAdd = "exchange";
-        this.island = tokenStorage.getIsland();
-        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
-            tokenStorage.setIsland(islandsService.updateIsland(result));
-        },
-                error -> System.out.println("Insufficient funds"));
+        inGameController.showBuildingInformation(buildingToAdd);
     }
 
     public void buildPowerPlant(){
         this.buildingToAdd = "power_plant";
-        this.island = tokenStorage.getIsland();
-
-        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
-            tokenStorage.setIsland(islandsService.updateIsland(result));
-        },
-                error -> System.out.println("Insufficient funds"));
+        inGameController.showBuildingInformation(buildingToAdd);
     }
 
     public void buildMine(){
         this.buildingToAdd = "mine";
-        this.island = tokenStorage.getIsland();
-        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
-            tokenStorage.setIsland(islandsService.updateIsland(result));
-        },
-                error -> System.out.println("Insufficient funds"));
+        inGameController.showBuildingInformation(buildingToAdd);
     }
 
 
     public void buildFarm(){
         this.buildingToAdd = "farm";
-        this.island = tokenStorage.getIsland();
-        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
-            tokenStorage.setIsland(islandsService.updateIsland(result));
-        },
-                error -> System.out.println("Insufficient funds"));
+        inGameController.showBuildingInformation(buildingToAdd);
     }
 
     public void buildResearchLab(){
         this.buildingToAdd = "research_lab";
-        this.island = tokenStorage.getIsland();
-        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
-            tokenStorage.setIsland(islandsService.updateIsland(result));
-        },
-                error -> System.out.println("Insufficient funds"));
+        inGameController.showBuildingInformation(buildingToAdd);
     }
 
     public void buildFoundry(){
         this.buildingToAdd = "foundry";
-        this.island = tokenStorage.getIsland();
-        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
-            tokenStorage.setIsland(islandsService.updateIsland(result));
-        },
-                error -> System.out.println("Insufficient funds"));
+        inGameController.showBuildingInformation(buildingToAdd);
     }
 
     public void buildFactory(){
         this.buildingToAdd = "factory";
-        this.island = tokenStorage.getIsland();
-        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
-            tokenStorage.setIsland(islandsService.updateIsland(result));
-        },
-                error -> System.out.println("Insufficient funds"));
+        inGameController.showBuildingInformation(buildingToAdd);
     }
 
     public void buildRefinery(){
         this.buildingToAdd = "refinery";
-        this.island = tokenStorage.getIsland();
-        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingToAdd), result -> {
-            tokenStorage.setIsland(islandsService.updateIsland(result));
-        },
-                error -> System.out.println("Insufficient funds"));
+        inGameController.showBuildingInformation(buildingToAdd);
     }
 
     public void onClose(){

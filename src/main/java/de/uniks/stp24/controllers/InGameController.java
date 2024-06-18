@@ -132,7 +132,7 @@ public class InGameController extends BasicController {
 
     @OnInit
     public void init() {
-
+        buildingsWindowComponent.setInGameController(this);
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
         //Todo: Outprint for Swagger - can be deleted later
@@ -185,7 +185,6 @@ public class InGameController extends BasicController {
         //buildingProperties.setVisible(true);
         //buildingProperties.getChildren().add(buildingPropertiesComponent);
         popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
-        popupBuildingProperties.showPopup(buildingProperties, buildingPropertiesComponent);
         popupSiteProperties.showPopup(siteProperties, sitePropertiesComponent);
 
         pauseMenuContainer.setMouseTransparent(true);
@@ -283,5 +282,15 @@ public class InGameController extends BasicController {
 
     public void showOverview() {
 
+    }
+
+    public void showBuildingInformation(String buildingToAdd) {
+        buildingPropertiesComponent.setBuildingType(buildingToAdd);
+        popupBuildingProperties.showPopup(buildingProperties, buildingPropertiesComponent);
+        if (tokenStorage.getIsland() == null){
+            buildingPropertiesComponent.disableBuyButton();
+        } else {
+            buildingPropertiesComponent.enableBuyButton();
+        }
     }
 }

@@ -43,7 +43,6 @@ public class IslandComponent extends Pane {
     private Island island;
     double x ,y ;
 
-    InGameController inGameController;
 
     @Inject
     public IslandComponent(){
@@ -57,6 +56,7 @@ public class IslandComponent extends Pane {
     public void render(){
         this.flagPane.setVisible(true);
     }
+
 
     public void applyIcon(IslandType type){
         this.islandImage
@@ -98,6 +98,9 @@ public class IslandComponent extends Pane {
     public void showInfo() {
         this.tokenStorage.setIsland(island);
         System.out.println("Island ID: " + tokenStorage.getIsland().id_());
+
+
+
 
         //TODO by the moment used for printouts
         // maybe it must be removed after implementation of

@@ -7,4 +7,7 @@ import retrofit2.http.*;
 public interface GameSystemsApiService {
     @GET("games/{game}/systems")
     Observable<SystemDto[]> getSystems(@Path("game") String gameID);
+
+    @GET("games/{game}/systems/{id})")
+    Observable<SystemDto[]> getSystems(@Path("game") String gameID, @Path("id") String empireID);
 }

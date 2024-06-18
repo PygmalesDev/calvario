@@ -99,6 +99,7 @@ public class InGameController extends BasicController {
     @OnInit
     public void init() {
         GameStatus gameStatus = inGameService.getGameStatus();
+        this.empireID = tokenStorage.getEmpireId();
         //Todo: Outprint for Swagger - can be deleted later
         System.out.println("game in ingame: " + tokenStorage.getGameId());
         System.out.println("empire in ingame: " + tokenStorage.getEmpireId());
@@ -227,6 +228,8 @@ public class InGameController extends BasicController {
             group.setScaleX(scale);
             group.setScaleY(scale);
         });
+        islandsService.mapSites();
+
     }
 
     // TODO this could be equivalent to showIslandOverview
@@ -236,6 +239,9 @@ public class InGameController extends BasicController {
             System.out.println(event.getSource().toString());
             System.out.println("found island: " + selected.getIsland().toString());
             selected.showFlag();
+            if (Objects.nonNull((selected.getIsland()).owner())) {
+                islandsService.getAllNumberOfSites((selected.getIsland()).owner());
+            }
         }
     }
 
@@ -245,6 +251,7 @@ public class InGameController extends BasicController {
     }
 
     public void showIslandOverview() {
+        islandsService.getAllNumberOfSites(this.empireID);
     }
 
     @OnKey(code = KeyCode.SPACE)

@@ -23,10 +23,6 @@ public class EmpireService {
         return this.empireApiService.getEmpires(gameID);
     }
 
-    public Observable<EmpireDto> updateEmpire(String gameID, String empireID, UpdateEmpireDto updateEmpireDto) {
-        return this.empireApiService.updateEmpire(gameID, empireID, updateEmpireDto);
-    }
-
     public Observable<List<ResourceDto>> getResources() {
         return this.empireApiService.getResources();
     }

@@ -41,7 +41,7 @@
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
          </padding>
-         <Label styleClass="storageText" text="Storage">
+         <Label styleClass="storageText" text="%storage">
             <VBox.margin>
                <Insets bottom="15.0"/>
             </VBox.margin>
@@ -54,13 +54,13 @@
                <Insets left="50.0"/>
             </VBox.margin>
             <HBox alignment="CENTER_LEFT" prefWidth="210.0">
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Overall">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="%overall">
                   <HBox.margin>
                      <Insets left="55.0"/>
                   </HBox.margin>
                </Text>
             </HBox>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Pro Season"/>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="%proSeason"/>
          </HBox>
          <ListView fx:id="resourceListView" focusTraversable="false" prefHeight="300.0" prefWidth="220.0"
                    style="-fx-background-color: transparent;" styleClass="resourceList">

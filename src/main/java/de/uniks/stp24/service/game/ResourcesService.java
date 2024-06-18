@@ -29,13 +29,7 @@ public class ResourcesService {
 
     /**
      * Updates the ObservableList which shows the count and change per season of a resource
-     *
-     * @param resourceMap:     map with new count of resources
-     * @param oldResourceList: list with count and change per season before update
-     * @param aggregateItems:  change per season for all resources; is null if there is no season change
-     * @return updated ObservableList
      */
-
     public ObservableList<Resource> generateResourceList(Map<String, Integer> resourceMap, ObservableList<Resource> oldResourceList, AggregateItemDto[] aggregateItems) {
         currentResources = resourceMap;
         int i = 0;

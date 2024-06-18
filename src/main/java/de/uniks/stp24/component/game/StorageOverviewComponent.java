@@ -51,8 +51,8 @@ public class StorageOverviewComponent extends AnchorPane {
     EventListener eventListener;
     @Inject
     TokenStorage tokenStorage;
-
     @Inject
+    @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 

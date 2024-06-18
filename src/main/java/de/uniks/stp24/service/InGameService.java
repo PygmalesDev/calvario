@@ -40,9 +40,11 @@ public class InGameService {
     public Observable<SystemUpgrades> loadUpgradePresets() {
         return presetsApiService.getSystemUpgrades();
     }
+
     public Observable<ArrayList<BuildingPresets>> loadBuildingPresets() {
         return presetsApiService.getBuildingPresets();
     }
+
     public Observable<ArrayList<DistrictPresets>> loadDistrictPresets() {
         return presetsApiService.getDistrictPresets();
     }

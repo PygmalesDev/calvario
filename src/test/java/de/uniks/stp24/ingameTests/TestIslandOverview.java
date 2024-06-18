@@ -25,7 +25,9 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -104,7 +106,7 @@ public class TestIslandOverview extends ControllerTest {
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
 
     Map<String, Integer> siteSlots = Map.of("test1", 3, "test2", 3, "test3", 4, "test4", 4);
-    Map<String, Integer> sites = Map.of("test1", 4, "test2", 3, "test3", 4, "test4", 4);
+    Map<String, Integer> sites = Map.of("test1", 2, "test2", 3, "test3", 4, "test4", 4);
 
     IslandType myTestIsland = IslandType.valueOf("uninhabitable_0");
     ArrayList<String> buildings = new ArrayList();
@@ -113,6 +115,11 @@ public class TestIslandOverview extends ControllerTest {
     Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
     Map<String, Integer> upkeep = Map.of("energy", 3, "fuel", 8);
     Map<String, Integer> resAfterUpgrade = Map.of("energy", 0, "fuel", 0);
+
+    Map<String, Integer> productionBuilding = Map.of("energy", 10, "fuel", 13);
+    Map<String, Integer> productionSites = Map.of("energy", 13, "fuel", 12);
+    Map<String, Integer> consumptionBuilding = Map.of("energy", 5, "fuel", 6);
+    Map<String, Integer> consumptionSites = Map.of("energy", 20, "fuel", 19);
 
 
     UpgradeStatus unexplored = new UpgradeStatus("unexplored", 1, cost, upkeep, 1);
@@ -138,7 +145,7 @@ public class TestIslandOverview extends ControllerTest {
             null
     );
 
-    EmpireDto empreDtoAfterUpgrade = new EmpireDto(
+    EmpireDto empireDtoAfterUpgrade = new EmpireDto(
             null,
             null,
             "testEmpireID",
@@ -155,7 +162,62 @@ public class TestIslandOverview extends ControllerTest {
             null
     );
 
+    BuildingPresets buildingPreset1 = new BuildingPresets(
+            "testBuilding1",
+            null,
+            consumptionBuilding,
+            productionBuilding
+    );
+
+    BuildingPresets buildingPreset2 = new BuildingPresets(
+            "testBuilding2",
+            null,
+            consumptionBuilding,
+            productionBuilding
+    );
+
+    BuildingPresets buildingPreset3 = new BuildingPresets(
+            "testBuilding3",
+            null,
+            consumptionBuilding,
+            productionBuilding
+    );
+
+    DistrictPresets districtPresets1 = new DistrictPresets(
+            "test1",
+            null,
+            null,
+            consumptionSites,
+            productionSites
+    );
+
+    DistrictPresets districtPresets2 = new DistrictPresets(
+            "test2",
+            null,
+            null,
+            consumptionSites,
+            productionSites
+    );
+
+    DistrictPresets districtPresets3 = new DistrictPresets(
+            "test3",
+            null,
+            null,
+            consumptionSites,
+            productionSites
+    );
+
+    DistrictPresets districtPresets4 = new DistrictPresets(
+            "test4",
+            null,
+            null,
+            consumptionSites,
+            productionSites
+    );
+
     SystemUpgrades systemUpgrades = new SystemUpgrades(unexplored, explored, colonized, upgraded, developed);
+    ArrayList<BuildingPresets> buildingPresets = new ArrayList<>();
+    ArrayList<DistrictPresets> districtPresets = new ArrayList<>();
 
     Island testIsland1;
     CreateSystemsDto updatedSystem;
@@ -179,8 +241,15 @@ public class TestIslandOverview extends ControllerTest {
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
-
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
+
+        buildingPresets.add(buildingPreset1);
+        buildingPresets.add(buildingPreset2);
+        buildingPresets.add(buildingPreset3);
+        districtPresets.add(districtPresets1);
+        districtPresets.add(districtPresets2);
+        districtPresets.add(districtPresets3);
+        districtPresets.add(districtPresets4);
 
         // Mock getEmpire
         doReturn(Observable.just(new EmpireDto("a", "a", "testEmpireID", "testGameID", "testUserID", "testEmpire",
@@ -190,10 +259,12 @@ public class TestIslandOverview extends ControllerTest {
         doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", true, 1, 1, null))).when(gamesApiService).getGame(any());
         doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
         doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
+        doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
+        doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
 
         buildings.add("testBuilding1");
         buildings.add("testBuilding2");
-        buildings.add("testBuildings3");
+        buildings.add("testBuilding3");
 
         testIsland1 = new Island(
                 "1",
@@ -205,8 +276,8 @@ public class TestIslandOverview extends ControllerTest {
                 20,
                 25,
                 2,
-                sites,
                 siteSlots,
+                sites,
                 buildings
         );
 
@@ -252,7 +323,7 @@ public class TestIslandOverview extends ControllerTest {
 
     @Test
     public void testOwnedIsland() {
-        doReturn(Observable.just(empreDtoAfterUpgrade)).when(empireService).updateEmpire(any(), any(), any());
+        doReturn(Observable.just(empireDtoAfterUpgrade)).when(empireService).updateEmpire(any(), any(), any());
         doReturn(Observable.just(updatedSystem)).when(gameSystemsApiService).updateIsland(any(), any(), any());
 
         //Open island overview of owned Island
@@ -276,7 +347,8 @@ public class TestIslandOverview extends ControllerTest {
         waitForFxEvents();
         assertFalse(this.inGameController.overviewSitesComponent.inputIslandName.isDisable());
         waitForFxEvents();
-        assertEquals(this.inGameController.overviewSitesComponent.island_inf.getText(), "Lvl: " + islandAttributeStorage.getIsland().upgradeLevel());
+        assertEquals(this.inGameController.overviewSitesComponent.island_inf.getText(), "Lvl: " + Upgrade.values()[testIsland1.upgradeLevel()].ordinal());
+
 
         //Test function of buttons
         //"Buildings" selected
@@ -342,11 +414,34 @@ public class TestIslandOverview extends ControllerTest {
         assertFalse(this.inGameController.overviewSitesComponent.buildingsButton.isDisable());
         waitForFxEvents();
 
-        /*
+        Node prodNode = lookup("#sumProduction").query();
+        Node consNode = lookup("#sumConsumption").query();
 
-        TODO: Consumption is not implemented yet. If it is implemented finish Test here
+        if (prodNode instanceof ListView<?> && consNode instanceof ListView<?>) {
+            @SuppressWarnings("unchecked")
+            ListView<String> prodList = (ListView<String>) prodNode;
+            @SuppressWarnings("unchecked")
+            ListView<String> consList = (ListView<String>) consNode;
 
-         */
+            ObservableList<String> prodItems = prodList.getItems();
+            ObservableList<String> consItems = consList.getItems();
+
+            for (String item : prodItems) {
+                if(item.contains("fuel")){
+                    assertTrue(item.contains("195"));
+                } else if(item.contains("energy")){
+                    assertTrue(item.contains("199"));
+                }
+            }
+
+            for (String item : consItems) {
+                if(item.contains("fuel")){
+                    assertTrue(item.contains("265"));
+                } else if(item.contains("energy")){
+                    assertTrue(item.contains("275"));
+                }
+            }
+        }
 
         //"Sites" selected
         clickOn(this.inGameController.overviewSitesComponent.sitesButton);
@@ -376,7 +471,7 @@ public class TestIslandOverview extends ControllerTest {
 
         for (Text name : sitesName) {
             Text capacity = new Text();
-            capacity.setText(siteSlots.get(name.getText()) + "/" + sites.get(name.getText()));
+            capacity.setText(sites.get(name.getText()) + "/" + siteSlots.get(name.getText()));
 
             if (!sitesInf.contains(capacity.getText())) {
                 fail("Overview does not contain the right site information");

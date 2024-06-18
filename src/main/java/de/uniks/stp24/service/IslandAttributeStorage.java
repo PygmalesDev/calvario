@@ -77,7 +77,6 @@ public class IslandAttributeStorage {
 
     public Map<String, Integer> getBuildingsProduction() {
         Map<String, Integer> buildingsProduction = new HashMap<>();
-
         for(String building: island.buildings()){
             int counter = 0;
             for(String tmp: island.buildings()){
@@ -88,12 +87,11 @@ public class IslandAttributeStorage {
             for (BuildingPresets preset : buildings) {
                 if(preset.id().equals(building)) {
                     for (Map.Entry<String, Integer> entry : preset.production().entrySet()) {
-                        buildingsProduction.put(entry.getKey(), entry.getValue() * counter);
+                        buildingsProduction.merge(entry.getKey(), entry.getValue() * counter, Integer::sum);
                     }
                 }
             }
         }
-        System.out.println("Building prod.: " + buildingsProduction);
         return buildingsProduction;
     }
 
@@ -103,12 +101,11 @@ public class IslandAttributeStorage {
             for (DistrictPresets preset : districts) {
                 if(preset.id().equals(entry.getKey())) {
                     for (Map.Entry<String, Integer> site : preset.production().entrySet()) {
-                        sitesProduction.put(site.getKey(), site.getValue() * entry.getValue());
+                        sitesProduction.merge(site.getKey(), site.getValue() * entry.getValue(), Integer::sum);
                     }
                 }
             }
         }
-        System.out.println("Sites prod.: " + sitesProduction);
         return sitesProduction;
     }
 
@@ -125,12 +122,11 @@ public class IslandAttributeStorage {
             for (BuildingPresets preset : buildings) {
                 if(preset.id().equals(building)) {
                     for (Map.Entry<String, Integer> entry : preset.upkeep().entrySet()) {
-                        buildingsConsumption.put(entry.getKey(), entry.getValue() * counter);
+                        buildingsConsumption.merge(entry.getKey(), entry.getValue() * counter, Integer::sum);
                     }
                 }
             }
         }
-        System.out.println("Buildings consump.: " + buildingsConsumption);
         return buildingsConsumption;
     }
 
@@ -140,12 +136,11 @@ public class IslandAttributeStorage {
             for (DistrictPresets preset : districts) {
                 if(preset.id().equals(entry.getKey())) {
                     for (Map.Entry<String, Integer> site : preset.upkeep().entrySet()) {
-                        sitesConsumption.put(site.getKey(), site.getValue() * entry.getValue());
+                        sitesConsumption.merge(site.getKey(), site.getValue() * entry.getValue(), Integer::sum);
                     }
                 }
             }
         }
-        System.out.println("Sites consump.: " + sitesConsumption);
         return sitesConsumption;
     }
 
@@ -162,7 +157,6 @@ public class IslandAttributeStorage {
                 mergedMap.put(key, value);
             }
         }
-
         return mergedMap;
     }
 
@@ -179,7 +173,6 @@ public class IslandAttributeStorage {
                 mergedMap.put(key, value);
             }
         }
-
         return mergedMap;
     }
 }

@@ -37,8 +37,6 @@ public class DetailsComponent extends VBox {
 
     public void setSumProduction(Map<String, Integer> totalProduction){
         ObservableList<String> items = sumProduction.getItems();
-
-        // Lösche alle vorhandenen Einträge in der ListView
         items.clear();
 
         for (Map.Entry<String, Integer> entry : totalProduction.entrySet()) {
@@ -52,8 +50,6 @@ public class DetailsComponent extends VBox {
 
     public void setSumConsumption(Map<String, Integer> totalConsumption){
         ObservableList<String> items = sumConsumption.getItems();
-
-        // Lösche alle vorhandenen Einträge in der ListView
         items.clear();
 
         for (Map.Entry<String, Integer> entry : totalConsumption.entrySet()) {

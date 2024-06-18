@@ -167,6 +167,7 @@ public class TestStorageOverview extends ControllerTest {
         assertEquals(2, storageOverviewComponent.resourceListView.getItems().size());
         assertEquals(3,storageOverviewComponent.resourceListView.getItems().getFirst().count());
         assertEquals(2,storageOverviewComponent.resourceListView.getItems().getLast().count());
+        assertEquals(2,resourcesService.getResourceCount("population"));
 
         empireDtoSubject.onNext(new Event<>("games.testGameID.empires.testEmpireID.updated",
                 new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
@@ -178,6 +179,7 @@ public class TestStorageOverview extends ControllerTest {
         assertEquals(2, storageOverviewComponent.resourceListView.getItems().size());
         assertEquals(4,storageOverviewComponent.resourceListView.getItems().getFirst().count());
         assertEquals(4,storageOverviewComponent.resourceListView.getItems().getLast().count());
+        assertEquals(4,resourcesService.getResourceCount("population"));
 
         empireDtoSubject.onNext(new Event<>("games.testGameID.empires.testEmpireID.updated",
                 new EmpireDto("a","b","testEmpireID", "testGameID","testUserID","testEmpire",
@@ -189,6 +191,7 @@ public class TestStorageOverview extends ControllerTest {
         assertEquals(2, storageOverviewComponent.resourceListView.getItems().size());
         assertEquals(5,storageOverviewComponent.resourceListView.getItems().getFirst().count());
         assertEquals(4,storageOverviewComponent.resourceListView.getItems().getLast().count());
+        assertEquals(4,resourcesService.getResourceCount("population"));
     }
 
 

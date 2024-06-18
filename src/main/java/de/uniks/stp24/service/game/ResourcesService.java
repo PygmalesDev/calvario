@@ -6,15 +6,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class ResourcesService {
 
+    private Map<String, Integer> currentResources = new HashMap<>();
+
     @Inject
     public ResourcesService() {}
 
     public ObservableList<Resource> generateResourceList(Map<String, Integer> resourceMap, ObservableList<Resource> oldResourceList, AggregateItemDto[] aggregateItems){
+        currentResources = resourceMap;
         int i = 0;
         ObservableList<Resource> resourceList = FXCollections.observableArrayList();
         for(Map.Entry<String, Integer> entry : resourceMap.entrySet()){
@@ -32,6 +36,10 @@ public class ResourcesService {
             i++;
         }
         return resourceList;
+    }
+
+    public int getResourceCount(String resourceId){
+        return currentResources.get(resourceId);
     }
 
 }

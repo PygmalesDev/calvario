@@ -16,7 +16,7 @@ import javax.inject.Singleton;
 public interface GameSystemsApiService {
 
     @GET("games/{game}/systems/{id}")
-    Observable<Island> getCertainIsland(@Path("game") String gameID, @Path("id") String ownerID);
+    Observable<SystemDto> getCertainIsland(@Path("game") String gameID, @Path("id") String islandID);
 
     @PATCH("games/{game}/systems/{id}")
     Observable<CreateSystemsDto> updateIsland(@Path("game") String gameID, @Path("id") String ownerID, @Body UpdateSystemDto dto);

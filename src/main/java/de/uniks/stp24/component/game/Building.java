@@ -1,6 +1,7 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.VBox;
@@ -9,17 +10,20 @@ import org.fulib.fx.annotation.controller.Component;
 import javax.inject.Inject;
 import javafx.scene.image.ImageView;
 import java.io.IOException;
+import java.util.Objects;
 
 @Component(view = "buildingElement.fxml")
 public class Building extends VBox {
     @FXML
     private ImageView building;
+    private TokenStorage tokenStorage;
+    private IslandAttributeStorage islandAttributeStorage;
 
     private String buildingName;
     private BuildingsComponent buildingsComponent;
 
     @Inject
-    public Building(BuildingsComponent buildingsComponent, String buildingName){
+    public Building(BuildingsComponent buildingsComponent, String buildingName, TokenStorage tokenStorage, IslandAttributeStorage islandAttributeStorage){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("buildingElement.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -31,12 +35,14 @@ public class Building extends VBox {
         }
         this.buildingName = buildingName;
         this.buildingsComponent = buildingsComponent;
+        this.tokenStorage = tokenStorage;
+        this.islandAttributeStorage = islandAttributeStorage;
 
         building.setOnMouseClicked(event -> {
 
             //TODO: Need to be modified for game
             System.out.println("Building clicked: " + buildingName);
-            if(buildingName.equals("empty")) {
+            if(buildingName.equals("empty") && Objects.equals(tokenStorage.getEmpireId(), islandAttributeStorage.getIsland().owner())) {
                 //TODO: Logic for editing new Building son page(gridpane)
                 buildingsComponent.islandAttributes.addNewBuilding();
                 int size = buildingsComponent.islandAttributes.getIsland().buildings().size();

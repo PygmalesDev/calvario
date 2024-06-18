@@ -7,6 +7,7 @@ import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
+import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.game.EmpireService;
@@ -86,13 +87,15 @@ public class InGameController extends BasicController {
     @Inject
     IslandsService islandsService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
     public IslandAttributeStorage islandAttributes;
     @Inject
     EventListener eventListener;
     @Inject
     ResourcesService resourceService;
+    @Inject
+    public GameSystemsApiService gameSystemsApiService;
 
     public IslandComponent selectedIsland;
 
@@ -274,15 +277,8 @@ public class InGameController extends BasicController {
     public void showOverview(Island island) {
         islandAttributes.setIsland(island);
         if(island.owner() == null){
-
-        } else if(island.owner().equals(tokenStorage.getEmpireId())){
-            showOverviewOwnedIslands();
-        } else{
-
+            return;
         }
-    }
-
-    public void showOverviewOwnedIslands(){
         if(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId())){
             overviewSitesComponent.inputIslandName.setDisable(true);
         } else {
@@ -296,13 +292,6 @@ public class InGameController extends BasicController {
         inGameService.showOnly(overviewContainer, overviewSitesComponent);
         inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
         overviewSitesComponent.setOverviewSites();
-    }
-
-    public void settingsForEnemiesIsland(){
-
-    }
-
-    public void settingsForUnoccupiedIslands(){
 
     }
 

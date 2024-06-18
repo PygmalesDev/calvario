@@ -13,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
@@ -22,6 +23,7 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
+import java.util.Objects;
 
 @Component(view = "IslandOverviewSites.fxml")
 public class OverviewSitesComponent extends AnchorPane {
@@ -44,6 +46,8 @@ public class OverviewSitesComponent extends AnchorPane {
     public Text resCapacity;
     @FXML
     public TextField inputIslandName;
+    @FXML
+    public Pane upgradeButton;
 
     @SubComponent
     @Inject
@@ -164,6 +168,9 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void setOverviewSites() {
+        if(inGameController.tokenStorage.isSpectator() || !Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId())){
+            upgradeButton.setVisible(false);
+        }
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
                 islandAttributes.getIsland().buildings().size();
         island_name.setText(String.valueOf(islandAttributes.getIsland().type()));

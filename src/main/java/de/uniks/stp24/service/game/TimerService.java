@@ -45,7 +45,6 @@ public class TimerService {
                     // After changing the speed,
                     // the local countdown till next season will be updated
                     setSpeedLocal(updateGameResultDto.speed());
-                    System.out.println("Speed changed to: " + updateGameResultDto.speed());
                 });
     }
 

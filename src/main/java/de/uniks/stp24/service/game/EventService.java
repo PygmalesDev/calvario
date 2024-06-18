@@ -56,7 +56,7 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
 
     @Inject
     public EventService() {
-        nextEvent = 1;
+        setNextEvent();
         this.listeners = new PropertyChangeSupport(this);
     }
 
@@ -73,11 +73,7 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
     // Gets random a new event
     public EffectSourceParentDto getNewRandomEvent() {
 
-        System.out.println("UNTIL NEXT EVENT: " + nextEvent);
-
         if (nextEvent <= 0) {
-
-            System.out.println("NEW EVENT");
 
             int eventName = random.nextInt(0, eventNames.size());
             EffectSourceParentDto tmp = readEvent(eventName);
@@ -111,11 +107,10 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
             setEvent(null);
             // If event is done reset it in Server
              subscriber.subscribe(sendEffect(),
-                     result -> System.out.println("Effect sollte null sein oder: " + result),
-                     error -> System.out.println("Error beim wegmachen von Effect: " + error));
+                     result -> {},
+                     error -> {});
         } else {
             setRemainingSeasons(getRemainingSeasons()-1);
-            System.out.println("Remaining the event: " + remainingSeasons);
         }
     }
 

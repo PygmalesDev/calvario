@@ -1,7 +1,7 @@
 {
   "id": "grand_exp",
   "event_type": "good",
-  "duration": 20,
+  "duration": 21,
   "effects": [
     {
       "variable": "research",

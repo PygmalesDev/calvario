@@ -1,7 +1,7 @@
 {
   "id": "black_spot",
   "event_type": "bad",
-  "duration": 10,
+  "duration": 11,
   "effects": [
     {
       "variable": "alloys",

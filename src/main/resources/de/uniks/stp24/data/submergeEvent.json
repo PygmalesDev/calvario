@@ -1,7 +1,7 @@
 {
   "id": "submerge",
   "event_type": "bad",
-  "duration": 20,
+  "duration": 21,
   "effects": [
     {
       "variable": "production_unit",

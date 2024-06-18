@@ -215,8 +215,7 @@ public class ClockComponent extends AnchorPane {
     public void pauseClock() {
         if (timerService.isRunning()) {
             subscriber.subscribe(timerService.setSpeed(gameId, 0),
-                    result -> {
-                    },
+                    result -> {},
                     error -> System.out.println("Error beim Pausieren der Uhr: " + error));
             timerService.stop();
         }
@@ -257,8 +256,7 @@ public class ClockComponent extends AnchorPane {
             timerService.resume();
         }
         subscriber.subscribe(timerService.setSpeed(gameId, speed),
-                result -> {
-                },
+                result -> {},
                 error -> System.out.println("Error beim Ändern der Geschwindigkeit: " + error));
     }
 
@@ -280,15 +278,15 @@ public class ClockComponent extends AnchorPane {
 
     private void handleRemainingSeasonChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
-            System.out.println("fired property change for remainingSeasons");
             int remainingSeasons = (int) propertyChangeEvent.getNewValue();
             if (remainingSeasons == 0) {
 
                 // Delete event on Server
                 eventService.setEvent(null);
                 subscriber.subscribe(eventService.sendEffect(),
-                        result -> System.out.println("Effect ist abgelaufen " + result),
-                        error -> System.out.println("Error beim wegmachen von Effect: " + error));
+                        result -> {},
+                        error -> {}
+                );
 
                 randomEventImage.setVisible(false);
                 remainingSeasonsLabel.setVisible(false);

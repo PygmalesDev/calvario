@@ -106,10 +106,9 @@ public class EventComponent extends AnchorPane {
                         if (eventService.getEvent() != null) {
 
                             subscriber.subscribe(eventService.sendEffect(),
-                                    result -> System.out.println("Effect gesendet: " + result),
+                                    result -> {},
                                     error -> System.out.println("Error beim Senden von Effect: " + error));
 
-                            System.out.println("Event: " + eventService.getEvent().effects()[0].id() + " in EventComponent");
                             setRandomEventInfos(eventService.getEvent());
                             show();
                         }
@@ -154,7 +153,6 @@ public class EventComponent extends AnchorPane {
         checkSize(id);
 
         eventImage.setImage(imageCache.get("icons/events/" + id + "Event.png"));
-        System.out.println("event." + id + ".description");
         eventName.setText(resources.getString("event." + id + ".name"));
         eventDescription.setText(resources.getString("event." + id + ".description"));
     }
@@ -162,7 +160,6 @@ public class EventComponent extends AnchorPane {
     // reduce size of eventName if it's too long
     private void checkSize(@NotNull String id) {
         if (id.length() - 15 > 0) {
-            System.out.println("Länge: " + id.length());
             int num = id.length() % 15;
             int size = 32 - (num / 2);
             eventName.setStyle("-fx-font-size: " + size);
@@ -178,7 +175,6 @@ public class EventComponent extends AnchorPane {
     }
 
     public void close() {
-        System.out.println("close event");
         container.setVisible(false);
         shadow.setVisible(false);
 

@@ -1,7 +1,7 @@
 {
   "id": "fools_gold",
   "event_type": "bad",
-  "duration": 15,
+  "duration": 16,
   "effects": [
     {
       "variable": "credits",

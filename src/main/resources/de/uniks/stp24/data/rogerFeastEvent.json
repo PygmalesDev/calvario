@@ -1,7 +1,7 @@
 {
   "id": "roger_feast",
   "event_type": "good",
-  "duration": 30,
+  "duration": 31,
   "effects": [
     {
       "variable": "credits",

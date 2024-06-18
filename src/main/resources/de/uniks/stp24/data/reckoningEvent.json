@@ -1,7 +1,7 @@
 {
   "id": "reckoning",
   "event_type": "good",
-  "duration": 10,
+  "duration": 11,
   "effects": [
     {
       "variable": "population",

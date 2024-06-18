@@ -28,7 +28,7 @@ public class EventService {
     protected PropertyChangeSupport listeners;
     public static final String PROPERTY_REMAININGSEASONS = "remainingSeasons";
     public static final String PROPERTY_EVENT = "event";
-//    public static final String PROPERTY_NEXTEVENT = "nextEvent";
+    public static final String PROPERTY_NEXTEVENT = "nextEvent";
     private volatile int remainingSeasons;
     EffectSourceParentDto event = null;
     private int nextEvent;
@@ -47,7 +47,7 @@ public class EventService {
     TokenStorage tokenStorage;
 
 
-    ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",
+ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",
             "grandExp", "reckoning", "rogerFeast", /* Bad Events */ "blackSpot", "dutchman", "foolsGold", "pestilence",
             "rumBottle", "submerge"));
 
@@ -56,7 +56,7 @@ public class EventService {
 
     @Inject
     public EventService() {
-        nextEvent = 2;
+        nextEvent = 1;
         this.listeners = new PropertyChangeSupport(this);
     }
 
@@ -102,11 +102,10 @@ public class EventService {
         if (nextEvent == this.nextEvent) {
             return;
         }
-//        final int oldValue = this.nextEvent;
+        final int oldValue = this.nextEvent;
         this.nextEvent = nextEvent;
-//        this.firePropertyChange(PROPERTY_NEXTEVENT, oldValue, nextEvent);
+        this.firePropertyChange(PROPERTY_NEXTEVENT, oldValue, nextEvent);
 
-        // Sets Event (Either null or an event if possible)
         setEvent(getNewRandomEvent());
          if (remainingSeasons <= 0) {
             setEvent(null);
@@ -183,7 +182,7 @@ public class EventService {
                         effectsDto.add(new EffectDto(variable, base, multiplier, bonus));
                     }
 
-                    // Last parameter is an array of EffectDto
+                    // Convert an ArrayList into an Array
                     EffectDto[] effectArrayDtos = new EffectDto[effectsDto.size()];
                     effectArrayDtos = effectsDto.toArray(effectArrayDtos);
                     eventMap.put(id, new EffectSourceParentDto(new EffectSourceDto[]
@@ -200,8 +199,8 @@ public class EventService {
     }
 
     public Observable<EmpireDto> sendEffect() {
-        // If event is null, send an empty event
+        // If event is not null, sends the event, else sends an empty Array
         return empireApiService.setEffect(tokenStorage.getGameId(), tokenStorage.getEmpireId(),
-                Objects.requireNonNullElseGet(event, () -> new EffectSourceParentDto(null)));
+                Objects.requireNonNullElseGet(event, () -> new EffectSourceParentDto(new EffectSourceDto[]{})));
     }
 }

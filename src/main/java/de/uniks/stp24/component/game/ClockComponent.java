@@ -92,7 +92,6 @@ public class ClockComponent extends AnchorPane {
     public void init() {
 
         gameId = tokenStorage.getGameId();
-        islandComponents = islandsService.getComponentMap();
 
         PropertyChangeListener callHandleTimeChanged = this::handleTimeChanged;
         timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_COUNTDOWN, callHandleTimeChanged);
@@ -210,7 +209,7 @@ public class ClockComponent extends AnchorPane {
     ///////////////--------------------------------------------onAction------------------------------------/////////////
 
     public void showFlags() {
-        islandComponents.forEach((id, island) -> island.flagImage.setVisible(flagToggle.isSelected()));
+        islandsService.setFlag(flagToggle.isSelected());
     }
 
     public void pauseClock() {

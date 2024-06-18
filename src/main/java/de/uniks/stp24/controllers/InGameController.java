@@ -248,7 +248,7 @@ public class InGameController extends BasicController {
         if (event.getSource() instanceof IslandComponent selected) {
             System.out.println(event.getSource().toString());
             System.out.println("found island: " + selected.getIsland().toString());
-            selected.showFlag();
+            selected.showFlag(true);
         }
     }
 

@@ -6,12 +6,10 @@ import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.service.ImageCache;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
-import org.fulib.fx.annotation.event.OnKey;
 
 import javax.inject.Inject;
 
@@ -35,6 +33,7 @@ public class IslandComponent extends Pane {
         }
         this.islandImage = new ImageView();
     }
+
 
     public void applyIcon(IslandType type){
         this.islandImage
@@ -67,9 +66,9 @@ public class IslandComponent extends Pane {
         return this.y;}
 
     // switch the visibility of all flags
-    @OnKey(code = KeyCode.H, shift = true)
-    public void showFlag(){
-        this.flagPane.setVisible(!this.flagPane.isVisible());
+//    @OnKey(code = KeyCode.H, shift = true)
+    public void showFlag(boolean selected) {
+        this.flagPane.setVisible(selected);
     }
 
 
@@ -78,7 +77,7 @@ public class IslandComponent extends Pane {
         // maybe it must be removed after implementation of
         // island overview functionality is completed on InGameCtrl
         System.out.println(Upgrade.values()[island.upgradeLevel()] + " -> " + island.type() + " isle at " + x + ", " + y );
-        showFlag();
+        showFlag(true);
     }
 
     public Island getIsland(){

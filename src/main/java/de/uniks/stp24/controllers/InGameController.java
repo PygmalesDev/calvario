@@ -273,6 +273,16 @@ public class InGameController extends BasicController {
 
     public void showOverview(Island island) {
         islandAttributes.setIsland(island);
+        if(island.owner() == null){
+
+        } else if(island.owner().equals(tokenStorage.getEmpireId())){
+            showOverviewOwnedIslands();
+        } else{
+
+        }
+    }
+
+    public void showOverviewOwnedIslands(){
         if(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId())){
             overviewSitesComponent.inputIslandName.setDisable(true);
         } else {
@@ -286,6 +296,14 @@ public class InGameController extends BasicController {
         inGameService.showOnly(overviewContainer, overviewSitesComponent);
         inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
         overviewSitesComponent.setOverviewSites();
+    }
+
+    public void settingsForEnemiesIsland(){
+
+    }
+
+    public void settingsForUnoccupiedIslands(){
+
     }
 
     public void showCoordinates(MouseEvent mouseEvent) {
@@ -317,17 +335,5 @@ public class InGameController extends BasicController {
                     overviewUpgradeComponent.setUpgradeButton();
                 },
                 error -> System.out.println("errorListener"));
-    }
-
-    public void settingForOwnedIslands(){
-
-    }
-
-    public void settingsForEnemiesIsland(){
-
-    }
-
-    public void settingsForUnoccupiedIslands(){
-
     }
 }

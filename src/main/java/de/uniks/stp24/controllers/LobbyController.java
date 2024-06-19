@@ -371,14 +371,14 @@ public class LobbyController extends BasicController {
     }
 
 
+    private void errorMsg(@NotNull Throwable error) {
+        this.enterGameComponent.errorMessage.textProperty().set(getErrorInfoText(error));
+    }
+
     @OnDestroy
     void destroy() {
         subscriber.dispose();
         backgroundAnchorPane.setStyle("-fx-background-image: null");
         cardBackgroundVBox.setStyle("-fx-background-image: null");
-    }
-
-    private void errorMsg(@NotNull Throwable error) {
-        this.enterGameComponent.errorMessage.textProperty().set(getErrorInfoText(error));
     }
 }

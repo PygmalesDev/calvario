@@ -21,6 +21,7 @@ import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
+import java.util.Objects;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
@@ -50,6 +51,7 @@ public class IslandComponent extends Pane {
             this.imageCache = new ImageCache();
         }
         this.islandImage = new ImageView();
+        this.flagImage = new ImageView();
     }
 
     @OnRender
@@ -65,14 +67,14 @@ public class IslandComponent extends Pane {
 
     // use our flag images
     // by the moment numeration from 0 til 16
-    public void setFlagImage(int flag){
-        if (flag >=0) {
+    public void setFlagImage(int flag) {
+        if (flag >= 0) {
             this.flagImage
               .setImage(imageCache.get("assets/flags/flag_" + flag + ".png"));
         }
     }
 
-    public void applyInfo(Island islandInfo){
+    public void applyInfo(Island islandInfo) {
         this.island = islandInfo;
         applyIcon(this.island.type());
     }
@@ -114,7 +116,7 @@ public class IslandComponent extends Pane {
     }
 
     @OnDestroy
-    public void destroy(){
+    public void destroy() {
         flagImage = null;
         islandImage = null;
     }

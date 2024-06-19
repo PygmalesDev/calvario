@@ -1,42 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+
 <AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.InGameController">
-   <Text layoutX="339.0" layoutY="369.0" onMouseClicked="#showOverview" strokeType="OUTSIDE" strokeWidth="0.0" text="EPIC GAMEPLAY" textAlignment="CENTER" wrappingWidth="602.26171875">
-      <font>
-         <Font size="72.0" />
-      </font>
-   </Text>
-   <ScrollPane fx:id="mapPane" hbarPolicy="NEVER" pannable="true" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: TRANSPARENT;" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS">
-      <StackPane fx:id="zoomPane" style="-fx-background-color: TRANSPARENT;">
-         <Pane fx:id="mapGrid" onMouseClicked="#showCoordinates" prefHeight="1440.0" prefWidth="2560.0" styleClass="backgroundGame">
-         </Pane>
-      </StackPane>
-   </ScrollPane>
+   <ScrollPane fx:id="mapScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" style="-fx-background-color: TRANSPARENT;" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS">
+            <Group fx:id="group" onMouseClicked="#resetZoomMouse">
+                <StackPane fx:id="zoomPane" style="-fx-background-color: TRANSPARENT;">
+                    <Pane fx:id="mapGrid" styleClass="backgroundGame">
+                    </Pane>
+                </StackPane>
+            </Group>
+        </ScrollPane>
    <StackPane fx:id="clockComponentContainer" prefHeight="115.0" prefWidth="200.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="5.0" />
    <StackPane fx:id="pauseMenuContainer" layoutX="440.0" layoutY="40.0" prefHeight="600.0" prefWidth="400.0" style=": ;" visible="false" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="440.0" AnchorPane.rightAnchor="440.0" AnchorPane.topAnchor="40.0" />
    <StackPane fx:id="overviewContainer" prefHeight="600.0" prefWidth="400.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="850.0" AnchorPane.topAnchor="40.0" />
    <StackPane fx:id="buildingsWindow" layoutX="650.0" layoutY="40.0" prefHeight="350.0" prefWidth="200.0" AnchorPane.bottomAnchor="290.0" AnchorPane.leftAnchor="650.0" AnchorPane.rightAnchor="430.0" AnchorPane.topAnchor="40.0" />
    <StackPane fx:id="buildingProperties" layoutX="650.0" layoutY="450.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="650.0" AnchorPane.rightAnchor="430.0" AnchorPane.topAnchor="440.0" />
    <StackPane fx:id="siteProperties" layoutX="650.0" layoutY="290.0" prefHeight="350.0" prefWidth="200.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="650.0" AnchorPane.rightAnchor="430.0" AnchorPane.topAnchor="290.0" />
-   <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="150.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
-      <children>
-         <Button fx:id="showStorageButton" mnemonicParsing="false" onAction="#showStorage" prefHeight="40.0" prefWidth="40.0" text="Storag" />
-         <Button fx:id="showIslandButton" mnemonicParsing="false" onAction="#showIslandOverview" prefHeight="40.0" prefWidth="40.0" />
-      </children>
-      <padding>
-         <Insets left="30.0" />
-      </padding>
-   </HBox>
+    <HBox fx:id="storageButtonsBox" alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="150.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+        <padding>
+            <Insets left="30.0" />
+        </padding>
+        <Button fx:id="showStorageButton" mnemonicParsing="false" onAction="#showStorage" prefHeight="40.0" prefWidth="40.0" text="Storag" />
+        <Button fx:id="showIslandButton" mnemonicParsing="false" onAction="#showIslandOverview" prefHeight="40.0" prefWidth="40.0" />
+    </HBox>
    <StackPane fx:id="storageOverviewContainer" prefHeight="500.0" prefWidth="300.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="20.0" />
 </AnchorPane>

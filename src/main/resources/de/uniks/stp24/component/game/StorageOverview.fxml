@@ -16,14 +16,12 @@
    <VBox focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="500.0" styleClass="storageOverviewBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <HBox alignment="CENTER" prefHeight="200.0" prefWidth="400.0">
          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="139.0" prefWidth="500.0">
-            <TextFlow fx:id="textFlow" cacheShape="false" centerShape="false" layoutX="102.0" layoutY="80.0" maxHeight="-Infinity" prefHeight="46.0" scaleShape="false" textAlignment="CENTER" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="102.0" AnchorPane.rightAnchor="149.0" AnchorPane.topAnchor="80.0">
-               <children>
-                  <Text fx:id="empireNameLabel" fill="#fffdfd" strokeMiterLimit="0.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="empireName" text="Evil Buccaneers" textAlignment="CENTER" textOrigin="CENTER">
-                     <font>
-                        <Font size="1.0" />
-                     </font>
-                  </Text>
-               </children>
+            <TextFlow cacheShape="false" layoutX="102.0" layoutY="80.0" maxHeight="-Infinity" prefHeight="46.0" textAlignment="CENTER" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="102.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="90.0">
+               <Text fx:id="empireNameLabel" fill="#fffdfd" strokeMiterLimit="0.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="empireName" text="Evil Buccaneers" textAlignment="CENTER" textOrigin="CENTER" wrappingWidth="185.8294677734375">
+                  <font>
+                     <Font size="1.0" />
+                  </font>
+               </Text>
             </TextFlow>
             <Button fx:id="closeStorageOverviewButton" layoutX="125.33333969116211" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#closeStorageOverview" prefHeight="30.0" prefWidth="30.0" styleClass="closeButton" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="50.0" />
          </AnchorPane>
@@ -58,7 +56,7 @@
          </HBox>
          <ListView fx:id="resourceListView" focusTraversable="false" prefHeight="300.0" prefWidth="220.0" style="-fx-background-color: transparent;" styleClass="resourceList">
             <VBox.margin>
-               <Insets left="90.0" />
+               <Insets left="85.0" />
             </VBox.margin>
          </ListView>
       </VBox>

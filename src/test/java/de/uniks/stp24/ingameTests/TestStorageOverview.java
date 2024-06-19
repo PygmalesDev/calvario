@@ -131,6 +131,9 @@ public class TestStorageOverview extends ControllerTest {
         // Mock season listener
         doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.ticked"), eq(Game.class));
 
+        doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
+
+
         this.app.show(this.inGameController);
     }
 

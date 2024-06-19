@@ -16,8 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.text.TextFlow;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -88,7 +86,8 @@ public class StorageOverviewComponent extends AnchorPane {
                     empireDto -> {
                         subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                                 aggregateResultDto -> resourceListGeneration(empireDto, aggregateResultDto.items()));
-                        this.empireNameLabel.setText(empireDto.name());
+                        String[] empireNameList = empireDto.name().split("\\s+");
+                        this.empireNameLabel.setText(empireNameList[0] + " " + empireNameList[1]);
                     });
             this.resourceListView.setCellFactory(list -> new ComponentListCell<>(app, resourceComponentProvider));
         }

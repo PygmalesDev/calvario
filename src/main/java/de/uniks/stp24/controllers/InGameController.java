@@ -87,9 +87,6 @@ public class InGameController extends BasicController {
     boolean pause = false;
     double scale = 1.0;
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
-    // todo remove this variables if not needed
-    String gameID;
-    String empireID;
 
     @Inject
     public InGameController() {
@@ -186,7 +183,7 @@ public class InGameController extends BasicController {
             showEmpireOverviewButton = new Button();
             showEmpireOverviewButton.setPrefHeight(30);
             showEmpireOverviewButton.setPrefWidth(30);
-            showEmpireOverviewButton.setOnAction(this::showIslandOverview);
+            showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
             showEmpireOverviewButton.getStyleClass().add("empireOverviewButton");
             showStorageButton = new Button();
             showStorageButton.setPrefHeight(30);
@@ -195,7 +192,7 @@ public class InGameController extends BasicController {
             showStorageButton.getStyleClass().add("storageButton");
             showStorageButton.setOnAction(event -> showStorage());
         }
-        this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
+        this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton);
     }
 
     @OnRender
@@ -214,8 +211,8 @@ public class InGameController extends BasicController {
         mapScrollPane.setVvalue(0.5);
         mapScrollPane.setHvalue(0.5);
 
-        /** zoom function working but not perfect!
-        * it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
+        /* zoom function working but not perfect!
+         it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
         */
         mapGrid.setOnScroll(event -> {
             if (event.isShiftDown() && (event.getDeltaY() > 0 || event.getDeltaX() > 0 )) {
@@ -247,7 +244,7 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
-    public void showIslandOverview() {
+    public void showEmpireOverview() {
     }
 
     @OnKey(code = KeyCode.SPACE)

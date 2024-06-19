@@ -1,4 +1,4 @@
-package de.uniks.stp24.controller.ingame;
+package de.uniks.stp24.ingameTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
@@ -8,6 +8,7 @@ import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.dto.Upgrade;
@@ -18,6 +19,7 @@ import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.LanguageService;
@@ -63,6 +65,8 @@ public class IslandsServiceTest extends ControllerTest {
     TimerService timerService;
     @Spy
     GamesApiService gameApiService;
+    @Spy
+    EmpireService empireService;
 
 
     @Spy
@@ -154,6 +158,11 @@ public class IslandsServiceTest extends ControllerTest {
         Mockito.doCallRealMethod().when(islandsService).getEmpire(any());
         Mockito.doCallRealMethod().when(islandsService)
           .createLines(any());
+
+        // Mock getEmpire
+        doReturn(Observable.just(new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
+                "a","a",1, 2, "a", new String[]{"1"}, new LinkedHashMap<>() {{put("energy", 5);put("population", 4);}},
+                null))).when(this.empireService).getEmpire(any(),any());
 
         app.show(inGameController);
     }

@@ -14,7 +14,7 @@ public class TokenStorage {
     private String gameId;
     private String empireId;
     private boolean isSpectator;
-    private Map<String, Integer> flagsInGame = new HashMap<>();
+
     @Inject
     public TokenStorage() {
     }
@@ -50,15 +50,4 @@ public class TokenStorage {
         this.isSpectator = isSpectator;
     }
 
-    public void saveFlag(String id, int flagIndex) {
-        //System.out.println("new entry: " + id + " " + flagIndex);
-        this.flagsInGame.put(id,flagIndex);
-    }
-    public int getFlagIndex(String id){
-        return this.flagsInGame.getOrDefault(id,-1);
-    }
-
-    public void clearFlags(){
-        this.flagsInGame.clear();
-    }
 }

@@ -66,11 +66,11 @@ public class ClockComponent extends AnchorPane {
     @Inject
     TokenStorage tokenStorage;
     @Inject
-    TimerService timerService;
+    public TimerService timerService;
     @Inject
-    GamesApiService gamesApiService;
+    public GamesApiService gamesApiService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
     EventListener eventListener;
 

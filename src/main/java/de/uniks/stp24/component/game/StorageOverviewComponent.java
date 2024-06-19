@@ -85,10 +85,14 @@ public class StorageOverviewComponent extends AnchorPane {
             this.subscriber.subscribe(this.empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                     empireDto -> {
                         subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
-                                aggregateResultDto -> resourceListGeneration(empireDto, aggregateResultDto.items()));
+                                aggregateResultDto -> {
+                                    resourceListGeneration(empireDto, aggregateResultDto.items());
+                                },
+                                error -> System.out.println("ErrorAggregateSubscriber"));
                         String[] empireNameList = empireDto.name().split("\\s+");
                         this.empireNameLabel.setText(empireNameList[0] + " " + empireNameList[1]);
-                    });
+                    },
+                    error -> System.out.println("ErrorEmpireSubscriber"));
             this.resourceListView.setCellFactory(list -> new ComponentListCell<>(app, resourceComponentProvider));
         }
     }
@@ -113,7 +117,7 @@ public class StorageOverviewComponent extends AnchorPane {
                         this.lastUpdate = event.data().updatedAt();
                     }
                 },
-                error -> System.out.println("errorListener"));
+                error -> System.out.println("errorEmpireListener"));
     }
 
     /**
@@ -124,14 +128,17 @@ public class StorageOverviewComponent extends AnchorPane {
                         .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
                 event -> {
                     if (!lastSeasonUpdate.equals(event.data().updatedAt())) {
-                        System.out.println("season changed and was not updated");
                         subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                                 empireDto -> subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
-                                        aggregateResultDto -> resourceListGeneration(empireDto, aggregateResultDto.items())));
+                                        aggregateResultDto -> {
+                                            resourceListGeneration(empireDto, aggregateResultDto.items());
+                                        },
+                                        error -> System.out.println("ErrorAggregateSubscriber")),
+                                error -> System.out.println("ErrorEmpireSubscriber"));
                         this.lastSeasonUpdate = event.data().updatedAt();
                     }
                 },
-                error -> System.out.println("errorListener"));
+                error -> System.out.println("errorSeasonListener in storageComponent"));
     }
 
     public void closeStorageOverview() {

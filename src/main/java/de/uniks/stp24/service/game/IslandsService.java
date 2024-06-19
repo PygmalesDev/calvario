@@ -2,6 +2,7 @@ package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.dto.ReadEmpireDto;
+import de.uniks.stp24.dto.ShortSystemDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
@@ -25,28 +26,42 @@ public class IslandsService extends BasicService {
     @Inject
     LobbyService lobbyService;
 
+    String gameID;
+
     static final int factor = 10;
     double minX,maxX,minY,maxY;
     double widthRange, heightRange;
+    private final List<ShortSystemDto> devIsles = new ArrayList<>();
     private final List<Island> isles = new ArrayList<>();
     private final List<IslandComponent> islandComponentList = new ArrayList<>();
     private final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
     private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();
     private final Map<String, List<String>> connections = new HashMap<>();
-    private final Map<String, SiteService> siteManager = new HashMap<>();
+    private final Map<String, InfrastructureService> siteManager = new HashMap<>();
     private final List<String> siteIDs = Arrays.asList("city", "energy", "mining", "agriculture",
       "industry", "research_site", "ancient_foundry", "ancient_factory", "ancient_refinery");
+    private final List<String> buildingIDs = Arrays.asList("exchange", "power_plant", "mine", "farm",
+      "research_lab", "foundry", "factory", "refinery");
+
     @Inject
     public IslandsService() {
         if (subscriber==null) subscriber = new Subscriber();
     }
+
+    /**
+     * the empires in game are at start known:
+     * there are players with empires (and maybe spectators)
+     * use an extra manager for handle systems without owner
+     * after colonizing (or something else where the owner changes)
+     * data in management should be refreshed
+     */
     @OnInit
     public void createEmpireServices() {
         empiresInGame.keySet().forEach(id -> {
-            siteManager.put(id,new SiteService());
+            siteManager.put(id,new InfrastructureService());
             siteManager.get(id).setEmpireID(id);
         });
-        siteManager.put("noBody",new SiteService());
+        siteManager.put("noBody",new InfrastructureService());
         siteManager.get("noBody").setEmpireID("noBody");
     }
 
@@ -56,6 +71,7 @@ public class IslandsService extends BasicService {
     public void retrieveIslands(String gameID) {
         resetVariables();
         createEmpireServices();
+        this.gameID = gameID;
         subscriber.subscribe(gameSystemsService.getSystems(gameID),
             dto -> {
                 Arrays.stream(dto).forEach(data -> {
@@ -83,6 +99,7 @@ public class IslandsService extends BasicService {
                 widthRange = maxX-minX;
                 heightRange = maxY-minY;
                 this.app.show("/ingame");
+                refreshListOfColonizedSystems();
             },
             error -> errorService.getStatus(error));
     }
@@ -186,54 +203,72 @@ public class IslandsService extends BasicService {
         heightRange = 0.0;
     }
 
-    /** this method is not working at all
+    /** method should retrieve frequently updated information
      */
-    /*
-    public void getNewListOfSystem(String gameID) {
-        System.out.println("hallo");
-        List<Island> newIsles = new ArrayList<>();
-        subscriber.subscribe(gameSystemsService.getSystems(gameID),
+    public void refreshListOfColonizedSystems() {
+        devIsles.clear();
+        subscriber.subscribe(gameSystemsService.getSystems(this.gameID),
           dto -> {
-              System.out.println("answer -> " + dto.length);
               Arrays.stream(dto).forEach(data -> {
-
-                  System.out.println(data.districts());
+                    if(Objects.nonNull(data.owner())) {
+                       ShortSystemDto tmp = new ShortSystemDto(data.owner(),
+                         data._id(),
+                         data.type(),
+                         data.name(),
+                         data.districtSlots(),
+                         data.districts(),
+                         data.capacity(),
+                         data.buildings(),
+                         data.upgrade(),
+                         data.population()
+                       );
+                        devIsles.add(tmp);
+                    }
               });
-              },
+              System.out.println("number of colonized islands " + devIsles.size());
+              mapSitesBuildings();
+          },
           error -> {});
-
     }
-    */
 
-    // retrieve the actual system data
-    public void mapSites() {
-        for (Island isle : this.isles) {
-            String owner = Objects.nonNull(isle.owner()) ? isle.owner() : "noBody";
-            isle.sites().forEach((k,v) -> {
-//                System.out.println(owner + " " + k + " " + v);
-                siteManager.get(owner).putOrUpdateInfo(k,v);});
+    /** after refresh list remap site and buildings (?)
+     * building's information is in an array
+     * */
+    public void mapSitesBuildings() {
+        siteManager.forEach((id,manager) -> manager.resetMap());
+        for (ShortSystemDto dto : this.devIsles) {
+            dto.districts().forEach((k,v) -> {
+                siteManager.get(dto.owner()).putOrUpdateSiteInfo(k,v);});
+            Arrays.stream(dto.buildings())
+              .forEach(building -> siteManager.get(dto.owner()).putOrUpdateBuildingInfo(building));
         }
     }
 
-    public List<Integer> getAllNumberOfSites(String empireID) {
-        List<Integer> listOfCapacities = new ArrayList<>();
-        if (empiresInGame.containsKey(empireID)) {
-            for (String siteID : siteIDs) {
-                listOfCapacities.add(getNumberOfSites(empireID,siteID));
+    public int getCapacityOfOneSystem(String id) {
+        for (ShortSystemDto dto : devIsles) {
+            if (dto._id().equals(id)) {
+                return siteManager.get(dto.owner()).getTotalCapacity(dto.districts());
             }
         }
-        System.out.println("site capacities for " + empireID);
-        for(int i = 0 ; i < listOfCapacities.size() ; i++ ) {
-            System.out.println(siteIDs.get(i) + " -> " + listOfCapacities.get(i));
-        }
-        System.out.println((siteManager.get(empireID).getTotalCapacity()));
-        return listOfCapacities;
+        return 0;
+    }
+
+    public int getAllNumberOfSites(String empireID) {
+        return siteManager.get(empireID).getTotalSiteCapacity();
     }
 
     public int getNumberOfSites(String empireID, String siteID) {
         int total = 0;
         if (empiresInGame.containsKey(empireID)) {
-            total = siteManager.get(empireID).getCapacities(siteID);
+            total = siteManager.get(empireID).getSiteCapacities(siteID);
+        }
+        return total;
+    }
+
+    public int getNumberOfBuildings(String empireID, String buildingID) {
+        int total = 0;
+        if (empiresInGame.containsKey(empireID)) {
+            total = siteManager.get(empireID).getBuildingCapacities(buildingID);
         }
         return total;
     }
@@ -262,13 +297,13 @@ public class IslandsService extends BasicService {
     }
 
     public void removeDataForMap() {
+        this.devIsles.clear();
         this.isles.clear();
         this.islandComponentList.forEach(IslandComponent::destroy);
         this.islandComponentList.clear();
         this.islandComponentMap.clear();
         this.empiresInGame.clear();
         this.connections.clear();
-        this.siteManager.keySet().forEach(siteManager::remove);
         this.siteManager.clear();
     }
 

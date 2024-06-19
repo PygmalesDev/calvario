@@ -100,6 +100,7 @@ public class InGameController extends BasicController {
     public void init() {
         GameStatus gameStatus = inGameService.getGameStatus();
         this.empireID = tokenStorage.getEmpireId();
+        this.gameID = tokenStorage.getGameId();
         //Todo: Outprint for Swagger - can be deleted later
         System.out.println("game in ingame: " + tokenStorage.getGameId());
         System.out.println("empire in ingame: " + tokenStorage.getEmpireId());
@@ -228,7 +229,6 @@ public class InGameController extends BasicController {
             group.setScaleX(scale);
             group.setScaleY(scale);
         });
-        islandsService.mapSites();
 
     }
 
@@ -236,10 +236,11 @@ public class InGameController extends BasicController {
     // remove prints
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
-            System.out.println(event.getSource().toString());
-            System.out.println("found island: " + selected.getIsland().toString());
-            selected.showFlag();
+            System.out.print("found island: " + selected.getIsland().id() + " with capacity: ");
+            System.out.println(islandsService.getCapacityOfOneSystem(selected.getIsland().id()));
+//            selected.showFlag();
             if (Objects.nonNull((selected.getIsland()).owner())) {
+                System.out.print("empire hat capacity: ");
                 islandsService.getAllNumberOfSites((selected.getIsland()).owner());
             }
         }

@@ -9,5 +9,5 @@ public interface GameSystemsApiService {
     Observable<SystemDto[]> getSystems(@Path("game") String gameID);
 
     @GET("games/{game}/systems/{id})")
-    Observable<SystemDto[]> getSystems(@Path("game") String gameID, @Path("id") String empireID);
+    Observable<SystemDto> getOneSystem(@Path("game") String gameID, @Path("id") String systemID);
 }

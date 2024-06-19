@@ -17,13 +17,12 @@ public class Building extends VBox {
     @FXML
     private ImageView building;
     private TokenStorage tokenStorage;
-    private IslandAttributeStorage islandAttributeStorage;
-
     private String buildingName;
     private BuildingsComponent buildingsComponent;
+    private IslandAttributeStorage islandAttributes;
 
     @Inject
-    public Building(BuildingsComponent buildingsComponent, String buildingName, TokenStorage tokenStorage, IslandAttributeStorage islandAttributeStorage){
+    public Building(BuildingsComponent buildingsComponent, String buildingName, TokenStorage tokenStorage, IslandAttributeStorage islandAttributes){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("buildingElement.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -36,13 +35,13 @@ public class Building extends VBox {
         this.buildingName = buildingName;
         this.buildingsComponent = buildingsComponent;
         this.tokenStorage = tokenStorage;
-        this.islandAttributeStorage = islandAttributeStorage;
+        this.islandAttributes = islandAttributes;
 
         building.setOnMouseClicked(event -> {
 
             //TODO: Need to be modified for game
             System.out.println("Building clicked: " + buildingName);
-            if(buildingName.equals("empty") && Objects.equals(tokenStorage.getEmpireId(), islandAttributeStorage.getIsland().owner())) {
+            if(buildingName.equals("empty") && Objects.equals(tokenStorage.getEmpireId(), islandAttributes.getIsland().owner())) {
                 //TODO: Logic for editing new Building son page(gridpane)
                 buildingsComponent.islandAttributes.addNewBuilding();
                 int size = buildingsComponent.islandAttributes.getIsland().buildings().size();

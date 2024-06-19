@@ -220,6 +220,8 @@ public class TestIslandOverview extends ControllerTest {
     ArrayList<DistrictPresets> districtPresets = new ArrayList<>();
 
     Island testIsland1;
+    Island testIsland2;
+    Island testIsland3;
     CreateSystemsDto updatedSystem;
 
     @Override
@@ -281,6 +283,36 @@ public class TestIslandOverview extends ControllerTest {
                 buildings
         );
 
+        testIsland2 = new Island(
+                "1",
+                null,
+                tokenStorage.getFlagIndex("testUserID"),
+                50,
+                50,
+                myTestIsland,
+                20,
+                25,
+                2,
+                siteSlots,
+                sites,
+                buildings
+        );
+
+        testIsland3 = new Island(
+                "1",
+                "2",
+                tokenStorage.getFlagIndex("testUserID"),
+                50,
+                50,
+                myTestIsland,
+                20,
+                25,
+                2,
+                siteSlots,
+                sites,
+                buildings
+        );
+
         this.islandAttributeStorage.setIsland(testIsland1);
 
         updatedSystem = new CreateSystemsDto(
@@ -314,6 +346,7 @@ public class TestIslandOverview extends ControllerTest {
         this.inGameController.selectedIsland.rudderImage = new ImageView();
         this.resourcesService.subscriber = subscriber;
         this.inGameController.overviewUpgradeComponent.gameSystemsService = gameSystemsApiService;
+        this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
 
         this.inGameController.storageButtonsBox = new HBox();
         this.islandsService.isles = islands;
@@ -511,11 +544,6 @@ public class TestIslandOverview extends ControllerTest {
     }
 
     @Test
-    public void selectUpgradeWithNoResources() {
-
-    }
-
-    @Test
     public void closeUpgrade() {
         waitForFxEvents();
         Platform.runLater(() -> {
@@ -558,6 +586,41 @@ public class TestIslandOverview extends ControllerTest {
         clickOn(backButton);
         waitForFxEvents();
         assertTrue(inGameController.overviewContainer.isVisible());
+    }
+
+    @Test
+    public void testUnownedIsland(){
+        waitForFxEvents();
+        Platform.runLater(() -> {
+            inGameController.showOverview(testIsland2);
+            waitForFxEvents();
+        });
+        waitForFxEvents();
+        assertFalse(this.inGameController.overviewContainer.isVisible());
+    }
+
+    @Test
+    public void testEnemiesIsland(){
+        waitForFxEvents();
+        Platform.runLater(() -> {
+            inGameController.showOverview(testIsland3);
+            waitForFxEvents();
+        });
+        waitForFxEvents();
+        assertTrue(this.inGameController.overviewContainer.isVisible());
+        Node upgradeButton = lookup("#upgradeButton").query();
+        assertFalse(upgradeButton.isVisible());
+
+        Node prev = lookup("#prev").query();
+        Node next = lookup("#next").query();
+
+        ArrayList<Node> buildingNodes = new ArrayList<>();
+        buildingNodes.addAll(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
+
+        int oldValue = this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size();
+        clickOn(buildingNodes.getLast());
+        assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), oldValue);
+        assertTrue(!prev.isVisible() && !next.isVisible());
     }
 
 

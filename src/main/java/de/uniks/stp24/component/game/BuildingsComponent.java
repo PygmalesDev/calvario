@@ -26,7 +26,7 @@ public class BuildingsComponent extends VBox {
     @Inject
     TokenStorage tokenStorage;
     @Inject
-    IslandAttributeStorage islandAttributeStorage;
+    public IslandAttributeStorage islandAttributeStorage;
 
     private int currentPage = 0;
     private int pageCapacity = 8;
@@ -57,7 +57,7 @@ public class BuildingsComponent extends VBox {
         int col = 0;
 
         for (int i = currentPage * pageCapacity; i < islandAttributes.getIsland().buildings().size(); i++) {
-            Building building = new Building(this, islandAttributes.getIsland().buildings().get(i), tokenStorage, islandAttributeStorage);
+            Building building = new Building(this, islandAttributes.getIsland().buildings().get(i), tokenStorage, islandAttributes);
             buildings.add(building, col, row);
 
             if ((i + 1) % 8 == 0) {
@@ -75,7 +75,7 @@ public class BuildingsComponent extends VBox {
         }
 
         if (!isGridPaneFull(currentPage)) {
-            buildings.add(new Building(this, "empty", tokenStorage, islandAttributeStorage), col, row);
+            buildings.add(new Building(this, "empty", tokenStorage, islandAttributes), col, row);
         } else {
             next.setVisible(true);
         }
@@ -109,7 +109,7 @@ public class BuildingsComponent extends VBox {
         } else if(!isGridPaneFull(currentPage + 1) && size % 8 == 0){
             currentPage = currentPage + 1;
             buildings.getChildren().clear();
-            buildings.add(new Building(this, "empty", tokenStorage, islandAttributeStorage), 0, 0);
+            buildings.add(new Building(this, "empty", tokenStorage, islandAttributes), 0, 0);
             prev.setVisible(true);
         }
     }

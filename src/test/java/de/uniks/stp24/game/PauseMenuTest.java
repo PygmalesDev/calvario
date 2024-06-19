@@ -7,10 +7,7 @@ import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.model.Game;
-import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.SystemUpgrades;
-import de.uniks.stp24.model.UpgradeStatus;
+import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -30,6 +27,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -110,6 +108,9 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     InGameController inGameController;
 
+    ArrayList<BuildingPresets> buildingPresets = new ArrayList<>();
+    ArrayList<DistrictPresets> districtPresets = new ArrayList<>();
+
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
@@ -134,6 +135,8 @@ public class PauseMenuTest extends ControllerTest {
                 new UpgradeStatus("1", 0, null, null, 0),
                 new UpgradeStatus("1", 0, null, null, 0));
         doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
+        doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
+        doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
 
         /*
         doReturn(Observable.just(new EmpireDto(

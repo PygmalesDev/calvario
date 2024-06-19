@@ -1,9 +1,5 @@
 package de.uniks.stp24.service;
 
-import de.uniks.stp24.model.Resource;
-import de.uniks.stp24.model.SystemUpgrades;
-import de.uniks.stp24.model.UpgradeStatus;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.HashMap;
@@ -18,7 +14,7 @@ public class TokenStorage {
     private String gameId;
     private String empireId;
     private boolean isSpectator;
-    private Map<String, Integer> flagsInGame = new HashMap<>();
+    private final Map<String, Integer> flagsInGame = new HashMap<>();
 
     private String[] technologies;
     @Inject

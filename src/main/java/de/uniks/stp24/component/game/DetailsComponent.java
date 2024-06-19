@@ -13,7 +13,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import java.util.Map;
 
-@Component(view = "details.fxml")
+@Component(view = "Details.fxml")
 public class DetailsComponent extends VBox {
     @FXML
     public ListView sumProduction;
@@ -36,7 +36,7 @@ public class DetailsComponent extends VBox {
     }
 
     public void setSumProduction(Map<String, Integer> totalProduction){
-        ObservableList<String> items = sumProduction.getItems();
+        ObservableList items = sumProduction.getItems();
         items.clear();
 
         for (Map.Entry<String, Integer> entry : totalProduction.entrySet()) {
@@ -49,7 +49,7 @@ public class DetailsComponent extends VBox {
     }
 
     public void setSumConsumption(Map<String, Integer> totalConsumption){
-        ObservableList<String> items = sumConsumption.getItems();
+        ObservableList items = sumConsumption.getItems();
         items.clear();
 
         for (Map.Entry<String, Integer> entry : totalConsumption.entrySet()) {

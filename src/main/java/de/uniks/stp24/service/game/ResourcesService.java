@@ -1,16 +1,12 @@
 package de.uniks.stp24.service.game;
 
-import de.uniks.stp24.dto.UpdateEmpireDto;
-import de.uniks.stp24.model.Island;
 import de.uniks.stp24.dto.AggregateItemDto;
+import de.uniks.stp24.dto.UpdateEmpireDto;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.collections.FXCollections;
-import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -27,8 +23,6 @@ public class ResourcesService {
     public TokenStorage tokenStorage;
     @Inject
     public Subscriber subscriber;
-
-    private Map<String, Integer> neededResources;
 
     @Inject
     public ResourcesService() {
@@ -55,7 +49,6 @@ public class ResourcesService {
     }
 
     public boolean hasEnoughResources(Map<String, Integer> neededResources) {
-        this.neededResources = neededResources;
         System.out.println(islandAttributes.getAvailableResources());
         System.out.println(neededResources);
         for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {

@@ -9,10 +9,8 @@ import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
 
-@Component(view = "buildings.fxml")
+@Component(view = "Buildings.fxml")
 public class BuildingsComponent extends VBox {
 
     @FXML
@@ -29,7 +27,6 @@ public class BuildingsComponent extends VBox {
     public IslandAttributeStorage islandAttributeStorage;
 
     private int currentPage = 0;
-    private int pageCapacity = 8;
 
     @Inject
     public BuildingsComponent() {
@@ -41,17 +38,10 @@ public class BuildingsComponent extends VBox {
         System.out.println("Set page: " + page);
         buildings.getChildren().clear();
 
-        if (currentPage > 0) {
-            prev.setVisible(true);
-        } else {
-            prev.setVisible(false);
-        }
+        prev.setVisible(currentPage > 0);
 
-        if (islandAttributes.getIsland().buildings().size() < (currentPage + 1) * pageCapacity) {
-            next.setVisible(false);
-        } else {
-            next.setVisible(true);
-        }
+        int pageCapacity = 8;
+        next.setVisible(islandAttributes.getIsland().buildings().size() >= (currentPage + 1) * pageCapacity);
 
         int row = 0;
         int col = 0;

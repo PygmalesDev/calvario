@@ -1,12 +1,10 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.CreateSystemsDto;
 import de.uniks.stp24.dto.UpdateSystemDto;
 import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
-import de.uniks.stp24.model.SystemUpgrades;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -21,8 +19,6 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
@@ -52,6 +48,10 @@ public class OverviewUpgradeComponent extends AnchorPane {
     public Pane checkUpgraded;
     @FXML
     public Pane checkDeveloped;
+    @FXML
+    public Pane closeButton;
+    @FXML
+    public Pane backButton;
     @Inject
     InGameService inGameService;
     @Inject

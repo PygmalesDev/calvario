@@ -7,9 +7,12 @@ import de.uniks.stp24.component.menu.WarningComponent;
 import de.uniks.stp24.controllers.helper.JoinGameHelper;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.game.EmpireService;
-import de.uniks.stp24.service.menu.*;
+import de.uniks.stp24.service.menu.BrowseGameService;
+import de.uniks.stp24.service.menu.CreateGameService;
+import de.uniks.stp24.service.menu.EditGameService;
+import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -24,17 +27,17 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
-import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.event.OnKey;
+import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 
 import javax.inject.Inject;
@@ -112,7 +115,6 @@ BrowseGameController extends BasicController {
     @Inject
     CreateGameService createGameService;
     PopupBuilder popup = new PopupBuilder();
-    PopupBuilder popupLogout = new PopupBuilder();
 
     Provider<GameComponent> gameComponentProvider = () -> new GameComponent(this.bubbleComponent, this.browseGameService, this.editGameService, this.tokenStorage, this.resources);
 

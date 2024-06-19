@@ -4,19 +4,17 @@ import de.uniks.stp24.model.BuildingPresets;
 import de.uniks.stp24.model.DistrictPresets;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.SystemUpgrades;
+import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.PresetsApiService;
+import de.uniks.stp24.service.game.TimerService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
-import de.uniks.stp24.rest.GameSystemsApiService;
 import org.fulib.fx.controller.Subscriber;
-import de.uniks.stp24.service.game.TimerService;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @Singleton
 public class InGameService {

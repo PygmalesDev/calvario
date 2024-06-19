@@ -1,8 +1,6 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.model.Island;
-import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -11,7 +9,7 @@ import org.fulib.fx.annotation.controller.Component;
 import javax.inject.Inject;
 import java.util.Map;
 
-@Component(view = "sites.fxml")
+@Component(view = "Sites.fxml")
 public class SitesComponent extends VBox {
 
     @FXML

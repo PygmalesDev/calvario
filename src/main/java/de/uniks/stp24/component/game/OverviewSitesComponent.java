@@ -1,15 +1,9 @@
 package de.uniks.stp24.component.game;
 
-import de.uniks.stp24.controllers.BasicController;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.model.Island;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.ResourcesService;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -18,9 +12,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.SubComponent;
-import org.fulib.fx.annotation.event.OnDestroy;
-import org.fulib.fx.annotation.event.OnInit;
-import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 import java.util.Objects;

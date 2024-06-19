@@ -279,11 +279,7 @@ public class InGameController extends BasicController {
         if(island.owner() == null){
             return;
         }
-        if(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId())){
-            overviewSitesComponent.inputIslandName.setDisable(true);
-        } else {
-            overviewSitesComponent.inputIslandName.setDisable(false);
-        }
+        overviewSitesComponent.inputIslandName.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId()));
         overviewSitesComponent.buildingsComponent.resetPage();
         overviewSitesComponent.buildingsComponent.setGridPane();
         overviewContainer.setVisible(true);

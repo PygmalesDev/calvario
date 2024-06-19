@@ -13,9 +13,11 @@ import de.uniks.stp24.ws.EventListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -36,7 +38,7 @@ public class StorageOverviewComponent extends AnchorPane {
     @FXML
     public ListView<Resource> resourceListView;
     @FXML
-    Label empireNameLabel;
+    Text empireNameLabel;
 
 
     @Inject
@@ -82,13 +84,16 @@ public class StorageOverviewComponent extends AnchorPane {
     public void initStorageList() {
         if (!tokenStorage.isSpectator()) {
             this.resourceListView.setSelectionModel(null);
-            this.subscriber.subscribe(this.empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()), empireDto -> {
-                resourceListGeneration(empireDto, null);
-                this.empireNameLabel.setText(empireDto.name());
-            });
+            this.subscriber.subscribe(this.empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                    empireDto -> {
+                        subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                                aggregateResultDto -> resourceListGeneration(empireDto, aggregateResultDto.items()));
+                        this.empireNameLabel.setText(empireDto.name());
+                    });
             this.resourceListView.setCellFactory(list -> new ComponentListCell<>(app, resourceComponentProvider));
         }
     }
+
 
     private void resourceListGeneration(EmpireDto empireDto, AggregateItemDto[] aggregateItems) {
         Map<String, Integer> resourceMap = empireDto.resources();

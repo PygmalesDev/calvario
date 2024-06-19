@@ -1,7 +1,11 @@
 .empireName{
     -fx-font-family: "Javanese Text";
-    -fx-font-size: 30;
+    -fx-font-size: 20;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
 }
+
 
 .storageText{
     -fx-font-family: "Blackadder ITC";

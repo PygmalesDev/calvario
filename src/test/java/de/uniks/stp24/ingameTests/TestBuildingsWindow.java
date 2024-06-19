@@ -21,6 +21,7 @@ import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -121,7 +123,7 @@ public class TestBuildingsWindow extends ControllerTest {
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
-        doReturn(Observable.just(new BuildingDto("a",required,production, consumption))).when(resourcesService).getResourcesBuilding(any());
+
         doReturn(Observable.just(new SiteDto("a",chance, required,production, consumption))).when(resourcesService).getResourcesSite(any());
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
 
@@ -137,111 +139,118 @@ public class TestBuildingsWindow extends ControllerTest {
 
         this.app.show(this.inGameController);
 
-        buildingPropertiesComponent.setVisible(false);
         sitePropertiesComponent.setVisible(false);
     }
 
     @Test
     public void buyExchange(){
+        Map<String , Integer> required = new HashMap<>();
+        Map<String, Integer> production = new HashMap<>();
+        Map<String, Integer> consumption = new HashMap<>();
+        doReturn(Observable.just(new BuildingDto("a",required,production, consumption))).when(resourcesService).getResourcesBuilding(any());
         waitForFxEvents();
-
-        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
-                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
-                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        press(KeyCode.I);
+        waitForFxEvents();
         clickOn("#buildingExchange");
-
-        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
+        waitForFxEvents();
+        assertTrue(buildingPropertiesComponent.isVisible());
 
     }
 
     @Test
     public void buyPowerPlant(){
+        Map<String , Integer> required = new HashMap<>();
+        Map<String, Integer> production = new HashMap<>();
+        Map<String, Integer> consumption = new HashMap<>();
+        doReturn(Observable.just(new BuildingDto("a",required,production, consumption))).when(resourcesService).getResourcesBuilding(any());
         waitForFxEvents();
-
-        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
-                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
-                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        press(KeyCode.I);
+        waitForFxEvents();
         clickOn("#buildingPowerPlant");
-
-        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
+        waitForFxEvents();
+        assertTrue(buildingPropertiesComponent.isVisible());
 
     }
 
     @Test
     public void buyMine(){
+        Map<String , Integer> required = new HashMap<>();
+        Map<String, Integer> production = new HashMap<>();
+        Map<String, Integer> consumption = new HashMap<>();
+        doReturn(Observable.just(new BuildingDto("a",required,production, consumption))).when(resourcesService).getResourcesBuilding(any());
         waitForFxEvents();
-
-        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
-                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
-                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        press(KeyCode.I);
+        waitForFxEvents();
         clickOn("#buildingMine");
-
-        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
+        waitForFxEvents();
+        assertTrue(buildingPropertiesComponent.isVisible());
 
     }
 
     @Test
     public void buyFarm(){
+        Map<String , Integer> required = new HashMap<>();
+        Map<String, Integer> production = new HashMap<>();
+        Map<String, Integer> consumption = new HashMap<>();
+        doReturn(Observable.just(new BuildingDto("a",required,production, consumption))).when(resourcesService).getResourcesBuilding(any());
         waitForFxEvents();
-
-        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
-                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
-                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        press(KeyCode.I);
+        waitForFxEvents();
         clickOn("#buildingFarm");
-
-        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
+        waitForFxEvents();
+        assertTrue(buildingPropertiesComponent.isVisible());
 
     }
 
     @Test
     public void buyResearchLab(){
+        Map<String , Integer> required = new HashMap<>();
+        Map<String, Integer> production = new HashMap<>();
+        Map<String, Integer> consumption = new HashMap<>();
+        doReturn(Observable.just(new BuildingDto("a",required,production, consumption))).when(resourcesService).getResourcesBuilding(any());
         waitForFxEvents();
-
-        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
-                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
-                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        press(KeyCode.I);
+        waitForFxEvents();
         clickOn("#buildingResearchLab");
-
-        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
+        waitForFxEvents();
+        assertTrue(buildingPropertiesComponent.isVisible());
 
     }
 
     @Test
     public void buyFoundry(){
+        Map<String , Integer> required = new HashMap<>();
+        Map<String, Integer> production = new HashMap<>();
+        Map<String, Integer> consumption = new HashMap<>();
+        doReturn(Observable.just(new BuildingDto("a",required,production, consumption))).when(resourcesService).getResourcesBuilding(any());
         waitForFxEvents();
-
-        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
-                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
-                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        press(KeyCode.I);
+        waitForFxEvents();
         clickOn("#buildingFoundry");
-
-        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
+        waitForFxEvents();
+        assertTrue(buildingPropertiesComponent.isVisible());
 
     }
 
     @Test
     public void buyFactory(){
         waitForFxEvents();
-
-        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
-                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
-                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        press(KeyCode.I);
+        waitForFxEvents();
         clickOn("#buildingFactory");
-
-        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
+        waitForFxEvents();
+        assertTrue(buildingPropertiesComponent.isVisible());
 
     }
 
     @Test
     public void buyRefinery(){
         waitForFxEvents();
-
-        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
-                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
-                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        press(KeyCode.I);
+        waitForFxEvents();
         clickOn("#buildingRefinery");
-
-        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
+        waitForFxEvents();
+        assertTrue(buildingPropertiesComponent.isVisible());
 
     }
 

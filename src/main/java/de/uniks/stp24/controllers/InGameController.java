@@ -184,8 +184,9 @@ public class InGameController extends BasicController {
     public void render() {
         //buildingProperties.setVisible(true);
         //buildingProperties.getChildren().add(buildingPropertiesComponent);
-        popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
-        popupSiteProperties.showPopup(siteProperties, sitePropertiesComponent);
+        buildingProperties.setMouseTransparent(true);
+        buildingsWindow.setMouseTransparent(true);
+        siteProperties.setMouseTransparent(true);
 
         pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
@@ -203,6 +204,15 @@ public class InGameController extends BasicController {
         inGameService.setPaused(pause);
         if (pause) {pauseGame();}
         else {resumeGame();}
+    }
+
+    @OnKey(code = KeyCode.I)
+    public void showIslandOverviewWindows(){
+        buildingProperties.setMouseTransparent(false);
+        buildingsWindow.setMouseTransparent(false);
+        siteProperties.setMouseTransparent(false);
+        popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
+        popupSiteProperties.showPopup(siteProperties, sitePropertiesComponent);
     }
 
     public void showSettings() {
@@ -287,10 +297,5 @@ public class InGameController extends BasicController {
     public void showBuildingInformation(String buildingToAdd) {
         buildingPropertiesComponent.setBuildingType(buildingToAdd);
         popupBuildingProperties.showPopup(buildingProperties, buildingPropertiesComponent);
-        if (tokenStorage.getIsland() == null){
-            buildingPropertiesComponent.disableBuyButton();
-        } else {
-            buildingPropertiesComponent.enableBuyButton();
-        }
     }
 }

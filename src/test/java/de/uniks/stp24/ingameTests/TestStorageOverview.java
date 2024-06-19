@@ -121,7 +121,6 @@ public class TestStorageOverview extends ControllerTest {
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
-        doReturn(Observable.just(new BuildingDto("a",required,production, consumption))).when(resourcesService).getResourcesBuilding(any());
         doReturn(Observable.just(new SiteDto("a",chance, required,production, consumption))).when(resourcesService).getResourcesSite(any());
 
         doReturn(gameStatus).when(this.inGameService).getGameStatus();

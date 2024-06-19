@@ -23,6 +23,7 @@ import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -132,6 +133,7 @@ public class TestBuildingProperties extends ControllerTest {
 
 
         this.app.show(this.inGameController);
+        sitePropertiesComponent.setVisible(false);
 
 
     }
@@ -139,7 +141,8 @@ public class TestBuildingProperties extends ControllerTest {
     @Test
     public void deleteBuilding(){
         waitForFxEvents();
-
+        press(KeyCode.I);
+        waitForFxEvents();
         Map<String, Integer> siteSlots = new HashMap<>();
         Map<String, Integer> sites = new HashMap<>();
         Map<String, Integer> links = new HashMap<>();
@@ -152,14 +155,40 @@ public class TestBuildingProperties extends ControllerTest {
         doReturn(new Island(island.owner(), island.upgrade(), island.name(), island.id_(), island.flagIndex(),
                 island.posX(), island.posY(), island.type(), island.crewCapacity(), island.resourceCapacity(), island.upgradeLevel(), island.sitesSlots(),
                 island.sites(), island.buildings())).when(islandsService).updateIsland(any());
-        buildingsWindowComponent.setVisible(false);
-        sitePropertiesComponent.setVisible(false);
+        waitForFxEvents();
+        clickOn("#buildingFarm");
+        waitForFxEvents();
         clickOn("#destroyButton");
 
         verify(this.resourcesService, times(1)).destroyBuilding(any(), any());
         verify(this.islandsService, times(1)).updateIsland(any());
 
+    }
 
+    @Test
+    public void buyBuilding(){
+        waitForFxEvents();
+        press(KeyCode.I);
+        waitForFxEvents();
+        Map<String, Integer> siteSlots = new HashMap<>();
+        Map<String, Integer> sites = new HashMap<>();
+        Map<String, Integer> links = new HashMap<>();
+        String[] buildings = new String[]{"mine", "exchange", "farm"};
+        Island island = new Island("testOwner", Upgrade.explored, "", "testID", 1, 500.0, 500.0,
+                IslandType.mining, 20, 20, 1, siteSlots, sites, buildings);
+        doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
+                "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
+                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+        doReturn(new Island(island.owner(), island.upgrade(), island.name(), island.id_(), island.flagIndex(),
+                island.posX(), island.posY(), island.type(), island.crewCapacity(), island.resourceCapacity(), island.upgradeLevel(), island.sitesSlots(),
+                island.sites(), island.buildings())).when(islandsService).updateIsland(any());
+        waitForFxEvents();
+        clickOn("#buildingFarm");
+        waitForFxEvents();
+        clickOn("#buyButton");
+
+        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
+        verify(this.islandsService, times(1)).updateIsland(any());
 
     }
 }

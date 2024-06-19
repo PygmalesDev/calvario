@@ -47,7 +47,7 @@ import java.util.*;
 @Controller
 public class InGameController extends BasicController {
     public Button showStorageButton;
-    public Button showIslandButton;
+    public Button showEmpireOverviewButton;
     public HBox storageButtonsBox;
     @FXML
     public Group group;
@@ -111,12 +111,11 @@ public class InGameController extends BasicController {
 
     boolean pause = false;
     double scale = 1.0;
+    private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
     // todo remove this variables if not needed
     String gameID;
     String empireID;
-
-    private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
     @Inject
     public InGameController() {
@@ -243,23 +242,24 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setVisible(pause);
     }
 
-    /**
-     * created and add buttons for storage and island overview
-     * there are problems if they are contained in the fxml
-     */
+    /** created and add buttons for storage and island overview
+    * there are problems if they are contained in the fxml
+    */
     private void createButtonsStorage() {
-        if (!(Objects.nonNull(showIslandButton) && (Objects.nonNull(showStorageButton)))) {
-            showIslandButton = new Button();
-            showIslandButton.setPrefHeight(30);
-            showIslandButton.setPrefWidth(30);
-            showIslandButton.setOnAction(event -> showIslandOverview());
+        if (!(Objects.nonNull(showEmpireOverviewButton)&&(Objects.nonNull(showStorageButton)))) {
+            showEmpireOverviewButton = new Button();
+            showEmpireOverviewButton.setPrefHeight(30);
+            showEmpireOverviewButton.setPrefWidth(30);
+            showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
+            showEmpireOverviewButton.getStyleClass().add("empireOverviewButton");
             showStorageButton = new Button();
             showStorageButton.setPrefHeight(30);
             showStorageButton.setPrefWidth(30);
             showStorageButton.setId("showStorageButton");
+            showStorageButton.getStyleClass().add("storageButton");
             showStorageButton.setOnAction(event -> showStorage());
         }
-        this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
+        this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton);
     }
 
     @OnRender
@@ -282,9 +282,9 @@ public class InGameController extends BasicController {
         mapScrollPane.setVvalue(0.5);
         mapScrollPane.setHvalue(0.5);
 
-        /** zoom function working but not perfect!
-         * it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
-         */
+        /* zoom function working but not perfect!
+         it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
+        */
         mapGrid.setOnScroll(event -> {
             if (event.isShiftDown() && (event.getDeltaY() > 0 || event.getDeltaX() > 0)) {
                 scale += 0.1;
@@ -332,12 +332,10 @@ public class InGameController extends BasicController {
     // assign key S to show storage
     @OnKey(code = KeyCode.S)
     public void showStorage() {
-        if (!tokenStorage.isSpectator()) {
-            storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
-        }
+        storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
-    public void showIslandOverview() {
+    public void showEmpireOverview() {
     }
 
     @OnKey(code = KeyCode.SPACE)

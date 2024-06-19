@@ -1,4 +1,4 @@
-package de.uniks.stp24.controller.ingame;
+package de.uniks.stp24.ingameTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
@@ -6,6 +6,10 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.*;
+import de.uniks.stp24.model.Game;
+import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.dto.SystemDto;
@@ -76,6 +80,10 @@ public class IslandsServiceTest extends ControllerTest {
     @Spy
     GamesApiService gameApiService;
     @Spy
+    EmpireService empireService;
+
+
+    @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
     @Spy
     GameStatus gameStatus;
@@ -91,8 +99,6 @@ public class IslandsServiceTest extends ControllerTest {
     ResourcesService resourcesService;
     @Spy
     GameSystemsApiService gameSystemsApiService;
-    @Spy
-    EmpireService empireService;
 
     Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
     Map<String, Integer> upkeep = Map.of("energy", 3, "fuel", 8);
@@ -174,9 +180,6 @@ public class IslandsServiceTest extends ControllerTest {
         doReturn(compMap).when(islandsService).getComponentMap();
         doReturn(compList).when(islandsService).createIslands(any());
 
-        doReturn(Observable.just(new EmpireDto("a", "a", "testEmpireID", "testGameID", "testUserID", "testEmpire",
-                "a", "a", 1, 2, "a", new String[]{"1"}, cost,
-                null))).when(this.empireService).getEmpire(any(), any());
         doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
         doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
         doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
@@ -188,6 +191,13 @@ public class IslandsServiceTest extends ControllerTest {
         Mockito.doCallRealMethod().when(islandsService).getEmpire(any());
         Mockito.doCallRealMethod().when(islandsService)
           .createLines(any());
+
+        // Mock getEmpire
+        doReturn(Observable.just(new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
+                "a","a",1, 2, "a", new String[]{"1"}, new LinkedHashMap<>() {{put("energy", 5);put("population", 4);}},
+                null))).when(this.empireService).getEmpire(any(),any());
+        doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
+
 
         app.show(inGameController);
     }

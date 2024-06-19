@@ -10,10 +10,12 @@ import javafx.collections.ObservableList;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@Singleton
 public class ResourcesService {
     @Inject
     public IslandAttributeStorage islandAttributes;
@@ -24,21 +26,34 @@ public class ResourcesService {
     @Inject
     public Subscriber subscriber;
 
+    /**
+     * storage for actual resources
+     */
+    private Map<String, Integer> currentResources = new HashMap<>();
+
     @Inject
     public ResourcesService() {
     }
 
-    public ObservableList<Resource> generateResourceList(Map<String, Integer> resourceMap, ObservableList<Resource> oldResourceList, AggregateItemDto[] aggregateItems){
+    public int getResourceCount(String resourceId) {
+        return currentResources.get(resourceId);
+    }
+
+    /**
+     * Updates the ObservableList which shows the count and change per season of a resource
+     */
+    public ObservableList<Resource> generateResourceList(Map<String, Integer> resourceMap, ObservableList<Resource> oldResourceList, AggregateItemDto[] aggregateItems) {
+        currentResources = resourceMap;
         int i = 0;
         ObservableList<Resource> resourceList = FXCollections.observableArrayList();
-        for(Map.Entry<String, Integer> entry : resourceMap.entrySet()){
+        for (Map.Entry<String, Integer> entry : resourceMap.entrySet()) {
             String resourceID = entry.getKey();
             int count = entry.getValue();
             int changeProSeason = 0;
-            if(!oldResourceList.isEmpty()) {
+            if (!oldResourceList.isEmpty()) {
                 changeProSeason = oldResourceList.get(i).changePerSeason();
             }
-            if(Objects.nonNull(aggregateItems)){
+            if (Objects.nonNull(aggregateItems)) {
                 changeProSeason = aggregateItems[i].subtotal();
             }
             Resource resource = new Resource(resourceID, count, changeProSeason);

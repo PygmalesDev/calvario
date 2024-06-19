@@ -9,7 +9,7 @@ import java.util.List;
 
 public class EmpireService {
     @Inject
-    EmpireApiService empireApiService;
+    public EmpireApiService empireApiService;
 
     @Inject
     public EmpireService() {
@@ -18,13 +18,11 @@ public class EmpireService {
     public Observable<EmpireDto> getEmpire(String gameID, String empireID) {
         return this.empireApiService.getEmpire(gameID, empireID);
     }
-
-    public Observable<ReadEmpireDto[]> getEmpires(String gameID) {
-        return this.empireApiService.getEmpires(gameID);
-    }
-
     public Observable<EmpireDto> updateEmpire(String gameID, String empireID, UpdateEmpireDto updateEmpireDto) {
         return this.empireApiService.updateEmpire(gameID, empireID, updateEmpireDto);
+    }
+    public Observable<ReadEmpireDto[]> getEmpires(String gameID) {
+        return this.empireApiService.getEmpires(gameID);
     }
 
     public Observable<List<ResourceDto>> getResources() {

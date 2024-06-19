@@ -269,9 +269,8 @@ public class TestIslandOverview extends ControllerTest {
         buildings.add("testBuilding3");
 
         testIsland1 = new Island(
-                "1",
                 "testEmpireID",
-                tokenStorage.getFlagIndex("testUserID"),
+                1,
                 50,
                 50,
                 myTestIsland,
@@ -280,13 +279,13 @@ public class TestIslandOverview extends ControllerTest {
                 2,
                 siteSlots,
                 sites,
-                buildings
+                buildings,
+                "1"
         );
 
         testIsland2 = new Island(
-                "1",
                 null,
-                tokenStorage.getFlagIndex("testUserID"),
+                2,
                 50,
                 50,
                 myTestIsland,
@@ -295,13 +294,13 @@ public class TestIslandOverview extends ControllerTest {
                 2,
                 siteSlots,
                 sites,
-                buildings
+                buildings,
+                "1"
         );
 
         testIsland3 = new Island(
-                "1",
                 "2",
-                tokenStorage.getFlagIndex("testUserID"),
+                2,
                 50,
                 50,
                 myTestIsland,
@@ -310,7 +309,8 @@ public class TestIslandOverview extends ControllerTest {
                 2,
                 siteSlots,
                 sites,
-                buildings
+                buildings,
+                "1"
         );
 
         this.islandAttributeStorage.setIsland(testIsland1);
@@ -318,7 +318,7 @@ public class TestIslandOverview extends ControllerTest {
         updatedSystem = new CreateSystemsDto(
                 null,
                 null,
-                testIsland1._id(),
+                testIsland1.id(),
                 tokenStorage.getGameId(),
                 testIsland1.type(),
                 null,

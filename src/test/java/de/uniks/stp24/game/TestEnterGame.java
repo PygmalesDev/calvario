@@ -21,7 +21,6 @@ import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.BrowseGameService;
-import de.uniks.stp24.service.menu.CreateGameService;
 import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.Event;

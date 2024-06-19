@@ -9,6 +9,7 @@ import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
@@ -62,6 +63,8 @@ public class OverviewUpgradeComponent extends AnchorPane {
     TokenStorage tokenStorage;
     @Inject
     Subscriber subscriber;
+    @Inject
+    IslandsService islandsService;
 
     public GameSystemsApiService gameSystemsService;
 
@@ -134,9 +137,8 @@ public class OverviewUpgradeComponent extends AnchorPane {
                             tokenStorage.getEmpireId())), result -> {
 
                 Island tmp2 = new Island(
-                        result._id(),
                         result.owner(),
-                        Objects.isNull(result.owner()) ? -1 : tokenStorage.getFlagIndex(result.owner()),
+                        Objects.isNull(result.owner()) ? -1 : islandsService.getEmpire(result._id()).flag(),
                         result.x(),
                         result.y(),
                         IslandType.valueOf(String.valueOf(result.type())),
@@ -145,7 +147,8 @@ public class OverviewUpgradeComponent extends AnchorPane {
                         Upgrade.valueOf(result.upgrade()).ordinal(),
                         result.districtSlots(),
                         result.districts(),
-                        result.buildings()
+                        result.buildings(),
+                        result._id()
                 );
                 inGameController.selectedIsland.island = tmp2;
                 islandAttributes.setIsland(tmp2);

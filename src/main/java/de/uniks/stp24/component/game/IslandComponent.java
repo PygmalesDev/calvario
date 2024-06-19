@@ -47,17 +47,18 @@ public class IslandComponent extends Pane {
             this.imageCache = new ImageCache();
         }
         this.islandImage = new ImageView();
+        this.flagImage = new ImageView();
     }
 
-    public void applyIcon(IslandType type){
+    public void applyIcon(IslandType type) {
         this.islandImage
           .setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
     }
 
     // use our flag images
     // by the moment numeration from 0 til 16
-    public void setFlagImage(int flag){
-        if (flag >=0) {
+    public void setFlagImage(int flag) {
+        if (flag >= 0) {
             this.flagImage
               .setImage(imageCache.get("assets/flags/flag_" + flag + ".png"));
         }
@@ -92,6 +93,9 @@ public class IslandComponent extends Pane {
         }
     }
 
+    public Island getIsland() {
+        return this.island;
+    }
 
     public void showInfo() {
         System.out.println(Upgrade.values()[island.upgradeLevel()] + " -> " + island.type() + " isle at " + x + ", " + y + " -> Owner: " + island.owner());
@@ -145,6 +149,5 @@ public class IslandComponent extends Pane {
         flagImage = null;
         islandImage = null;
     }
-
 
 }

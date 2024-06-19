@@ -88,8 +88,6 @@ public class TestEnterGame extends ControllerTest {
     @InjectMocks
     BrowseGameController browseGameController;
 
-    Game game = new Game("11", null, "1", "Was geht", "testID2", false, 0,0, null);
-
     Provider<GameComponent> GameComponentProvider = () -> new GameComponent(bubbleComponent, browseGameService, editGameService, tokenStorage,resources);
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
     Game game1 = new Game("a", null, "game1Id", "testGame1", "testHost1", true, 1,10, null);

@@ -102,7 +102,6 @@ public class LobbyController extends BasicController {
     private final ObservableList<MemberUser> users = FXCollections.observableArrayList();
     private boolean asHost;
     private boolean wasKicked;
-    private boolean isHostReady;
     public int maxMember;
     private Button[] lobbyButtons;
 
@@ -140,11 +139,9 @@ public class LobbyController extends BasicController {
                     this.gameNameField.setText(this.game.name());
                     this.createUserListListener();
                     this.createGameDeletedListener();
-                    this.lobbyService.loadPlayers(this.gameID).subscribe(dto -> {
+                    this.subscriber.subscribe(lobbyService.loadPlayers(this.gameID), dto -> {
                                 Arrays.stream(dto).forEach(data -> {
                                     this.addUserToList(data.user(), data);
-                                    if (data.user().equals(this.game.owner()))
-                                        this.isHostReady = data.ready();
                                     if (data.user().equals(this.tokenStorage.getUserId())) {
                                         this.lobbySettingsComponent.setReadyButton(data.ready());
                                         this.lobbyHostSettingsComponent.setReadyButton(data.ready());
@@ -297,9 +294,6 @@ public class LobbyController extends BasicController {
      * @param data   member data containing their readiness state
      */
     private void replaceUserInList(String userID, MemberDto data) {
-        if (data.user().equals(this.game.owner()))
-            this.isHostReady = data.ready();
-
         this.users.replaceAll(memberUser -> {
             if (memberUser.user()._id().equals(userID)) {
                 if (Objects.nonNull(data.empire())) {

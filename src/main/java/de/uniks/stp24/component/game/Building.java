@@ -32,7 +32,6 @@ public class Building extends VBox {
         building.setOnMouseClicked(event -> {
 
             //TODO: Need to be modified for game
-            System.out.println("Building clicked: " + buildingName);
             if(buildingName.equals("empty") && Objects.equals(tokenStorage.getEmpireId(), islandAttributes.getIsland().owner())) {
                 //TODO: Logic for editing new Building son page(gridpane)
                 buildingsComponent.islandAttributes.addNewBuilding();

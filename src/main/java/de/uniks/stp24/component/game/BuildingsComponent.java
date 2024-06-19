@@ -35,7 +35,6 @@ public class BuildingsComponent extends VBox {
     //Call set grid pane if buildings changes
     public void setGridPane() {
         int page = currentPage + 1;
-        System.out.println("Set page: " + page);
         buildings.getChildren().clear();
 
         prev.setVisible(currentPage > 0);

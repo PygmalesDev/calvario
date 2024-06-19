@@ -167,7 +167,6 @@ public class OverviewSitesComponent extends AnchorPane {
         island_name.setText(String.valueOf(islandAttributes.getIsland().type()));
         crewCapacity.setText(String.valueOf(islandAttributes.getIsland().crewCapacity()));
         resCapacity.setText("Resources: " + usedSlots + "/" + islandAttributes.getIsland().resourceCapacity());
-        System.out.println("Sites component: " + islandAttributes.getIsland().upgradeLevel());
         island_inf.setText("Lvl: " + islandAttributes.getIsland().upgradeLevel());
     }
 }

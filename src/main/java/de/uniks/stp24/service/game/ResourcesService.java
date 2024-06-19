@@ -49,8 +49,6 @@ public class ResourcesService {
     }
 
     public boolean hasEnoughResources(Map<String, Integer> neededResources) {
-        System.out.println(islandAttributes.getAvailableResources());
-        System.out.println(neededResources);
         for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
             String res = entry.getKey();
             int neededAmount = entry.getValue();
@@ -80,7 +78,6 @@ public class ResourcesService {
                 new UpdateEmpireDto(difRes, islandAttributes.getTech(), null, null, null)),
                 result -> {
                     islandAttributes.setEmpireDto(result);
-                    System.out.println("    Server -> minerals: " + result.resources().get("minerals") + " alloys: " + result.resources().get("alloys"));
                 });
 
     }

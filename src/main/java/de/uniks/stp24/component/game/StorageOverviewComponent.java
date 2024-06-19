@@ -117,7 +117,6 @@ public class StorageOverviewComponent extends VBox {
                         .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
                 event -> {
                     if (!lastSeasonUpdate.equals(event.data().updatedAt())) {
-                        System.out.println("season changed and was not updated");
                         subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                                 empireDto -> subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                                         aggregateResultDto -> resourceListGeneration(empireDto, aggregateResultDto.items())));

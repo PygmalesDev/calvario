@@ -133,7 +133,7 @@ public class TestBuildingProperties extends ControllerTest {
 
 
         this.app.show(this.inGameController);
-        sitePropertiesComponent.setVisible(false);
+
 
 
     }
@@ -142,6 +142,7 @@ public class TestBuildingProperties extends ControllerTest {
     public void deleteBuilding(){
         waitForFxEvents();
         press(KeyCode.I);
+        sitePropertiesComponent.setVisible(false);
         waitForFxEvents();
         Map<String, Integer> siteSlots = new HashMap<>();
         Map<String, Integer> sites = new HashMap<>();
@@ -169,6 +170,7 @@ public class TestBuildingProperties extends ControllerTest {
     public void buyBuilding(){
         waitForFxEvents();
         press(KeyCode.I);
+        sitePropertiesComponent.setVisible(false);
         waitForFxEvents();
         Map<String, Integer> siteSlots = new HashMap<>();
         Map<String, Integer> sites = new HashMap<>();

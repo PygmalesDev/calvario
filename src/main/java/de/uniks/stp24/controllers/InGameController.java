@@ -16,6 +16,7 @@ import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -258,7 +259,7 @@ public class InGameController extends BasicController {
             showStorageButton.setId("showStorageButton");
             showStorageButton.setOnAction(event -> showStorage());
         }
-        //this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
+        this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
     }
 
     @OnRender
@@ -268,14 +269,16 @@ public class InGameController extends BasicController {
         mapGrid.setMinSize(islandsService.getMapWidth(), islandsService.getMapHeight());
         islandsService.createLines(this.islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
         this.islandComponentList.forEach(isle -> {
+            isle.setInGameController(this);
             isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
             isle.setScaleX(1.25);
             isle.setScaleY(1.25);
             this.mapGrid.getChildren().add(isle);
         });
-        //TODO: FIX HERE
-        createButtonsStorage();
-        //TODO: FIX HERE
+        Platform.runLater(() -> {
+            storageButtonsBox.getChildren().clear();
+            createButtonsStorage();
+        });
         mapScrollPane.setVvalue(0.5);
         mapScrollPane.setHvalue(0.5);
 
@@ -301,9 +304,7 @@ public class InGameController extends BasicController {
     // remove prints
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
-            System.out.println(event.getSource().toString());
-            System.out.println("found island: " + selected.getIsland().toString());
-            selected.showFlag();
+            //selected.showFlag();
         }
     }
 

@@ -8,6 +8,7 @@ import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.CreateSystemsDto;
 import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GameSystemsApiService;
@@ -31,6 +32,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
@@ -142,6 +144,20 @@ public class TestIslandOverview extends ControllerTest {
             null,
             null,
             cost,
+            null
+    );
+
+    ReadEmpireDto readEmpireDto = new ReadEmpireDto(
+            null,
+            null,
+            "testEmpireID",
+            "testGameID",
+            "testUserID",
+            null,
+            null,
+            null,
+            1,
+            1,
             null
     );
 
@@ -347,6 +363,7 @@ public class TestIslandOverview extends ControllerTest {
         this.resourcesService.subscriber = subscriber;
         this.inGameController.overviewUpgradeComponent.gameSystemsService = gameSystemsApiService;
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
+        this.inGameController.selectedIsland.flagPane = new StackPane();
 
         this.inGameController.storageButtonsBox = new HBox();
         this.islandsService.isles = islands;
@@ -358,6 +375,7 @@ public class TestIslandOverview extends ControllerTest {
     public void testOwnedIsland() {
         doReturn(Observable.just(empireDtoAfterUpgrade)).when(empireService).updateEmpire(any(), any(), any());
         doReturn(Observable.just(updatedSystem)).when(gameSystemsApiService).updateIsland(any(), any(), any());
+        doReturn(readEmpireDto).when(islandsService).getEmpire(any());
 
         //Open island overview of owned Island
         waitForFxEvents();
@@ -460,17 +478,17 @@ public class TestIslandOverview extends ControllerTest {
             ObservableList<String> consItems = consList.getItems();
 
             for (String item : prodItems) {
-                if(item.contains("fuel")){
+                if (item.contains("fuel")) {
                     assertTrue(item.contains("195"));
-                } else if(item.contains("energy")){
+                } else if (item.contains("energy")) {
                     assertTrue(item.contains("199"));
                 }
             }
 
             for (String item : consItems) {
-                if(item.contains("fuel")){
+                if (item.contains("fuel")) {
                     assertTrue(item.contains("265"));
-                } else if(item.contains("energy")){
+                } else if (item.contains("energy")) {
                     assertTrue(item.contains("275"));
                 }
             }
@@ -589,7 +607,7 @@ public class TestIslandOverview extends ControllerTest {
     }
 
     @Test
-    public void testUnownedIsland(){
+    public void testUnownedIsland() {
         waitForFxEvents();
         Platform.runLater(() -> {
             inGameController.showOverview(testIsland2);
@@ -600,7 +618,7 @@ public class TestIslandOverview extends ControllerTest {
     }
 
     @Test
-    public void testEnemiesIsland(){
+    public void testEnemiesIsland() {
         waitForFxEvents();
         Platform.runLater(() -> {
             inGameController.showOverview(testIsland3);

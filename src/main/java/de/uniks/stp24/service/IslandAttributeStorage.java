@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+//Class can be used for getting Information of certain islands
 @Singleton
 public class IslandAttributeStorage {
     public EmpireDto empireDto;

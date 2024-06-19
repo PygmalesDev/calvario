@@ -109,6 +109,7 @@ public class IslandComponent extends Pane {
         }
     }
 
+    //Logic for showing rudder if other island is already selected
     public void showIslandOverview() {
         inGameController.overviewSitesComponent.resetButtons();
         if (inGameController.selectedIsland != null && inGameController.selectedIsland != this) {

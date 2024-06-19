@@ -19,9 +19,11 @@ import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import org.fulib.fx.annotation.controller.Controller;
@@ -36,6 +38,7 @@ import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
+
 
 @Title("CALVARIO")
 @Controller
@@ -52,11 +55,13 @@ public class InGameController extends BasicController {
     @FXML
     HBox storageButtonsBox;
     @FXML
-    ScrollPane mapPane;
+    public Group group;
     @FXML
-    Pane mapGrid;
+    public ScrollPane mapScrollPane;
     @FXML
-    StackPane zoomPane;
+    public Pane mapGrid;
+    @FXML
+    public StackPane zoomPane;
     @FXML
     StackPane pauseMenuContainer;
     @FXML
@@ -88,9 +93,9 @@ public class InGameController extends BasicController {
     public SettingsComponent settingsComponent;
     @Inject
     IslandsService islandsService;
-    List<IslandComponent> islandComponentList = new ArrayList<>();
-    Map<String, IslandComponent> islandComponentMap ;
 
+    List<IslandComponent> islandComponentList ;
+    Map<String, IslandComponent> islandComponentMap ;
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
@@ -105,11 +110,16 @@ public class InGameController extends BasicController {
     @Inject
     EventListener eventListener;
 
-
+    double scale = 1.0;
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
+  
+    // todo remove this variables if not needed
+    String gameID;
+    String empireID;
 
     @Inject
     public InGameController() {
+
     }
 
 
@@ -173,8 +183,7 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
 
-        eventComponent.setClockComponent(clockComponent);
-
+        clockComponentContainer.getChildren().add(clockComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -207,71 +216,98 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setVisible(pause);
     }
 
-    // created and add buttons for storage and island overview
-    // there are problems if they are contained in the fxml
+    /** created and add buttons for storage and island overview
+    * there are problems if they are contained in the fxml
+    */
     private void createButtonsStorage() {
         if (!(Objects.nonNull(showIslandButton) && (Objects.nonNull(showStorageButton)))) {
             showIslandButton = new Button();
             showIslandButton.setPrefHeight(30);
             showIslandButton.setPrefWidth(30);
-            showIslandButton.setOnAction(this::showIslandOverview);
+            showIslandButton.setOnAction(event -> showIslandOverview());
             showStorageButton = new Button();
             showStorageButton.setPrefHeight(30);
             showStorageButton.setPrefWidth(30);
             showStorageButton.setOnAction(event -> showStorage());
-            this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
         }
+        this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
     }
 
     @OnRender
     public void createMap() {
 
-//        app.stage().setFullScreenExitHint("");
-//        app.stage().setFullScreen(true);
-//        this.mapGrid.setMinSize(islandsService.getMapWidth(), islandsService.getMapHeight());
-
-
         this.islandComponentList = islandsService.createIslands(islandsService.getListOfIslands());
         this.islandComponentMap = islandsService.getComponentMap();
+        mapGrid.setMinSize(islandsService.getMapWidth(), islandsService.getMapHeight());
         islandsService.createLines(this.islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
         this.islandComponentList.forEach(isle -> {
             isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
+            isle.setScaleX(1.25);
+            isle.setScaleY(1.25);
             this.mapGrid.getChildren().add(isle);
         });
         createButtonsStorage();
-        mapPane.setVvalue(0.5);
-        mapPane.setHvalue(0.5);
+        mapScrollPane.setVvalue(0.5);
+        mapScrollPane.setHvalue(0.5);
 
+        /** zoom function working but not perfect!
+        * it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
+        */
+        mapGrid.setOnScroll(event -> {
+            if (event.isShiftDown() && (event.getDeltaY() > 0 || event.getDeltaX() > 0 )) {
+                scale += 0.1;
+                scale = Math.min(scale,1.45);
+                event.consume();
+            } else if (event.isShiftDown() && (event.getDeltaY() < 0 || event.getDeltaX() <0)){
+                scale -= 0.1;
+                scale = Math.max(scale,0.85);
+                event.consume();
+            }
+            group.setScaleX(scale);
+            group.setScaleY(scale);
+        });
     }
 
+    // TODO this could be equivalent to showIslandOverview
+    // remove prints
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
             System.out.println(event.getSource().toString());
             System.out.println("found island: " + selected.getIsland().toString());
-            selected.showFlag(true);
+            selected.showFlag();
         }
     }
 
-
-    public void showCoordinates() {
-        // todo select island to show info
-    }
-
-    @OnDestroy
-    public void destroy() {
-        islandComponentList.forEach(IslandComponent::destroy);
-        this.gameListenerTriple.forEach(triple -> triple.game().listeners()
-                .removePropertyChangeListener(triple.propertyName(), triple.listener()));
-        clockComponentContainer.getChildren().clear();
-        this.subscriber.dispose();
-    }
-
-    // assign key S to show storage
     @OnKey(code = KeyCode.S)
     public void showStorage() {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
-    public void showIslandOverview(ActionEvent actionEvent) {    }
+    public void showIslandOverview() {
+    }
 
+    @OnKey(code = KeyCode.SPACE)
+    public void resetZoom() {
+        scale = 1.0;
+        group.setScaleX(scale);
+        group.setScaleY(scale);
+    }
+
+    public void resetZoomMouse(MouseEvent event) {
+        if (event.getButton() == MouseButton.MIDDLE) {
+            resetZoom();
+        }
+    }
+
+    @OnDestroy
+    public void destroy() {
+        islandComponentList.forEach(IslandComponent::destroy);
+        islandComponentList = null;
+        islandComponentMap = null;
+        islandsService.removeDataForMap();
+        this.gameListenerTriple.forEach(triple -> triple.game().listeners()
+                .removePropertyChangeListener(triple.propertyName(), triple.listener()));
+        clockComponentContainer.getChildren().clear();
+        this.subscriber.dispose();
+    }
 }

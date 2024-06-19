@@ -58,7 +58,6 @@ public class PauseMenuComponent extends AnchorPane {
     public void quit() {
         tokenStorage.setGameId(null);
         tokenStorage.setEmpireId(null);
-        tokenStorage.clearFlags();
         if (inGameService.getPaused()) app.show("/browseGames");
     }
 }

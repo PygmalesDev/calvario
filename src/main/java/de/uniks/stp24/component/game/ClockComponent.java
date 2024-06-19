@@ -70,13 +70,13 @@ public class ClockComponent extends AnchorPane {
     @Inject
     TokenStorage tokenStorage;
     @Inject
-    TimerService timerService;
+    public TimerService timerService;
     @Inject
     IslandsService islandsService;
     @Inject
     GamesApiService gamesApiService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
     EventListener eventListener;
     private int lastUpdateSeason = -1;

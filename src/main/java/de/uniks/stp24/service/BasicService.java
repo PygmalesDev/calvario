@@ -8,7 +8,7 @@ import javax.inject.Singleton;
 @Singleton
 public class BasicService {
     @Inject
-    protected App app;
+    public App app;
     @Inject
     protected TokenStorage tokenStorage;
     @Inject

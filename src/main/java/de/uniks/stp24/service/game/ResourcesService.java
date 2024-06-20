@@ -158,7 +158,7 @@ public class ResourcesService {
             String resourceID = entry.getKey();
             int count = entry.getValue();
             int changeProSeason = 0;
-            if (!oldResourceList.isEmpty()) {
+            if (!oldResourceList.isEmpty() && oldResourceList.size() >= 2) {
                 changeProSeason = oldResourceList.get(i).changePerSeason();
             }
             if (Objects.nonNull(aggregateItems)) {

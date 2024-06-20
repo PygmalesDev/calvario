@@ -16,6 +16,7 @@ import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import java.util.Map;
 
 @Component(view = "BuildingsWindow.fxml")
 public class BuildingsWindowComponent extends AnchorPane {
@@ -57,6 +58,8 @@ public class BuildingsWindowComponent extends AnchorPane {
     private Button[] buttons;
 
     InGameController inGameController;
+
+
 
     private static final String[] IMAGE_PATHS = {
             "de/uniks/stp24/icons/buildings/alloy_smeltery.png",

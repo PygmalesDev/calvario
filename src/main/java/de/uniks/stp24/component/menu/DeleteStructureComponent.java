@@ -1,7 +1,10 @@
 package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.BuildingDto;
+import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.TokenStorage;
@@ -23,10 +26,12 @@ import org.controlsfx.control.GridView;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +75,8 @@ public class DeleteStructureComponent extends VBox{
     private final Map<String, String> buildings = new HashMap<>();
     @Inject
     TokenStorage tokenStorage;
+    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, true, gameResourceBundle);
+
 
     String structureType;
 
@@ -109,6 +116,7 @@ public class DeleteStructureComponent extends VBox{
 
     }
 
+
     public void setWarningText(){
         warningText.setText("Are you sure you want to delete " + capitalizeFirstLetter(structureType) + "?");
     }
@@ -116,6 +124,7 @@ public class DeleteStructureComponent extends VBox{
     public void setStructureType(String structureType){
         this.structureType = structureType;
         setWarningText();
+        displayStructureInfo();
         if (sites.containsKey(structureType)) {
             // Set the image for sites
             deleteStructureImageView.setImage(new Image(sites.get(structureType)));
@@ -123,6 +132,36 @@ public class DeleteStructureComponent extends VBox{
             // Set the image for buildings
             deleteStructureImageView.setImage(new Image(buildings.get(structureType)));
         }
+    }
+
+    private void displayStructureInfo() {
+        if (buildings.containsKey(structureType)){
+            subscriber.subscribe(resourcesService.getResourcesBuilding(structureType), this::resourceListGenerationBuilding);
+        }
+        if (sites.containsKey(structureType)){
+            subscriber.subscribe(resourcesService.getResourcesSite(structureType), this::resourceListGenerationSite);
+        }
+        
+        deleteStructureListView.setCellFactory(list -> new ComponentListCell<>(app, resourceComponentProvider));
+    }
+
+    private void resourceListGenerationBuilding(BuildingDto structureDto) {
+        Map<String, Integer> resourceMapCost = structureDto.cost();
+        Map<String, Integer> halvedResourceMapCost = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : resourceMapCost.entrySet()) {
+            halvedResourceMapCost.put(entry.getKey(), entry.getValue() / 2);
+        }
+        ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(halvedResourceMapCost, deleteStructureListView.getItems(), null);
+        deleteStructureListView.setItems(resourceListCost);
+    }
+    private void resourceListGenerationSite(SiteDto structureDto) {
+        Map<String, Integer> resourceMapCost = structureDto.cost();
+        Map<String, Integer> halvedResourceMapCost = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : resourceMapCost.entrySet()) {
+            halvedResourceMapCost.put(entry.getKey(), entry.getValue() / 2);
+        }
+        ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(halvedResourceMapCost, deleteStructureListView.getItems(), null);
+        deleteStructureListView.setItems(resourceListCost);
     }
 
     public void onCancel(){

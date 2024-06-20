@@ -3,7 +3,6 @@ package de.uniks.stp24.component.menu;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
@@ -72,6 +71,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     String buildingType;
     InGameController inGameController;
+    Map<String, Integer> priceOfBuilding;
 
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, true, gameResourceBundle);
 
@@ -102,30 +102,44 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     public void setBuildingType(String buildingType){
         this.buildingType = buildingType;
+        disableButtons();
         displayInfoBuilding();
     }
 
+    public void disableButtons(){
+        buyButton.setDisable(true);
+        destroyButton.setDisable(true);
+        subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
+            priceOfBuilding = result.cost();
+            if (resourcesService.hasEnoughResources(priceOfBuilding)) {
+                buyButton.setDisable(false);
+            }
+        });
+        if (tokenStorage.getIsland().buildings().contains(buildingType)){
+            destroyButton.setDisable(false);
+        }
+
+    }
+
     public void destroyBuilding(){
+        disableButtons();
         inGameController.handleDeleteStructure(buildingType);
     }
 
     public void buyBuilding(){
         Island island = tokenStorage.getIsland();
+
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingType), result -> {
                     tokenStorage.setIsland(islandsService.updateIsland(result));
                 },
                 error -> System.out.println("Insufficient funds"));
+
+        disableButtons();
     }
 
-    public void disableBuyButton(){
-        buyButton.setDisable(true);
-    }
-
-    public void enableBuyButton(){
-        buyButton.setDisable(false);
-    }
 
     public void displayInfoBuilding(){
+        disableButtons();
         Image imageBuilding = new Image(buildingsMap.get(buildingType));
         buildingImage.setImage(imageBuilding);
         buildingName.setText(buildingType.toUpperCase());

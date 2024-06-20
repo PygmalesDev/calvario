@@ -446,6 +446,7 @@ public class InGameController extends BasicController {
     }
 
     public void handleAfterStructureDelete() {
+        deleteStructureWarningContainer.setMouseTransparent(true);
         popupDeleteStructure.removeBlur();
         popupBuildingProperties.removeBlur();
         }

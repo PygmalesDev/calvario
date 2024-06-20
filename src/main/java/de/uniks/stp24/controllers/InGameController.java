@@ -250,7 +250,7 @@ public class InGameController extends BasicController {
             showEmpireOverviewButton = new Button();
             showEmpireOverviewButton.setPrefHeight(30);
             showEmpireOverviewButton.setPrefWidth(30);
-            showEmpireOverviewButton.setOnAction(event -> showOverview());
+            showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
             showEmpireOverviewButton.getStyleClass().add("empireOverviewButton");
             showStorageButton = new Button();
             showStorageButton.setPrefHeight(30);
@@ -260,6 +260,10 @@ public class InGameController extends BasicController {
             showStorageButton.setOnAction(event -> showStorage());
         }
         this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton);
+    }
+
+    private void showEmpireOverview() {
+        System.out.println("button clicked");
     }
 
     @OnRender
@@ -309,7 +313,7 @@ public class InGameController extends BasicController {
             System.out.println(islandsService.getCapacityOfOneSystem(selected.getIsland().id()));
             if (Objects.nonNull((selected.getIsland()).owner())) {
                 System.out.print("empire hat capacity: " +
-                islandsService.getAllNumberOfSites((selected.getIsland()).owner()));
+                islandsService.getAllNumberOfSites((selected.getIsland()).owner()) + "\n");
             }
         }
     }

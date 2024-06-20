@@ -32,7 +32,6 @@ public class IslandsService extends BasicService {
     double minX,maxX,minY,maxY;
     double widthRange, heightRange;
     private final List<ShortSystemDto> devIsles = new ArrayList<>();
-    // someone changed this to public?! why?! there is a method to get this
     public List<Island> isles = new ArrayList<>();
     private final List<IslandComponent> islandComponentList = new ArrayList<>();
     private final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
@@ -240,7 +239,7 @@ public class IslandsService extends BasicService {
         for (ShortSystemDto dto : this.devIsles) {
             dto.districts().forEach((k,v) -> {
                 siteManager.get(dto.owner()).putOrUpdateSiteInfo(k,v);});
-            Arrays.stream(dto.buildings())
+            dto.buildings()
               .forEach(building -> siteManager.get(dto.owner()).putOrUpdateBuildingInfo(building));
         }
     }

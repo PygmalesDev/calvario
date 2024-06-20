@@ -138,6 +138,7 @@ public class SitePropertiesComponent extends AnchorPane {
         siteImage.setImage(imageSite);
         displayCostsOfSite();
         displayAmountOfSite();
+
     }
 
     public void onClose(){
@@ -153,6 +154,8 @@ public class SitePropertiesComponent extends AnchorPane {
             displayAmountOfSite();
             inGameController.updateSiteCapacities();
         });
+
+
     }
 
     public void destroySite(){
@@ -172,6 +175,12 @@ public class SitePropertiesComponent extends AnchorPane {
     public void displayAmountOfSite(){
         buildSiteButton.setDisable(false);
         destroySiteButton.setDisable(false);
+        subscriber.subscribe(resourcesService.getResourcesSite(siteType), result -> {
+            Map<String, Integer> costSite = result.cost();
+            if (!resourcesService.hasEnoughResources(costSite)){
+                buildSiteButton.setDisable(true);
+            }
+        });
 
         if (tokenStorage.getIsland().sites().get(siteType) != null){
              amountSite = tokenStorage.getIsland().sites().get(siteType);

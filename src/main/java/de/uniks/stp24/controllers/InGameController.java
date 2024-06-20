@@ -381,7 +381,7 @@ public class InGameController extends BasicController {
                 islandComponent.updateIsland(tokenStorage.getIsland());
             }
             if (islandAttributes.getIsland() == null){
-                islandAttributes.setIsland(selectedIsland.getIsland());
+                islandAttributes.setIsland(selected.getIsland());
             }
 
             System.out.println(event.getSource().toString());

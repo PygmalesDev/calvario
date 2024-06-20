@@ -6,6 +6,7 @@ import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.ResourcesService;
@@ -66,6 +67,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     @Inject
     TokenStorage tokenStorage;
+
+    @Inject
+    IslandAttributeStorage islandAttributeStorage;
 
     Map<String, String> buildingsMap;
 
@@ -131,6 +135,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
         subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingType), result -> {
                     tokenStorage.setIsland(islandsService.updateIsland(result));
+                    islandAttributeStorage.setIsland(islandsService.updateIsland(result));
                 },
                 error -> System.out.println("Insufficient funds"));
 

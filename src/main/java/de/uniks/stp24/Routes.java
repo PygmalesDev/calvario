@@ -60,8 +60,6 @@ public class Routes {
     @Inject
     Provider<BuildingPropertiesComponent> buildingProperties;
 
-
-    
     @Route("ingame")
     @Inject
     Provider<InGameController> game;

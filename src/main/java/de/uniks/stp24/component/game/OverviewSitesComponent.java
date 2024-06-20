@@ -12,6 +12,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.SubComponent;
+import org.fulib.fx.annotation.event.OnInit;
 
 import javax.inject.Inject;
 import java.util.Objects;
@@ -59,6 +60,12 @@ public class OverviewSitesComponent extends AnchorPane {
     @Inject
     public OverviewSitesComponent() {
 
+    }
+
+    @OnInit
+    public void init(){
+        buildingsComponent.setInGameController(inGameController);
+        sitesComponent.setInGameController(inGameController);
     }
 
     public void showDetails() {
@@ -130,6 +137,9 @@ public class OverviewSitesComponent extends AnchorPane {
         sitesComponent.setSitesBox(islandAttributes.getIsland());
         inGameService.showOnly(sitesContainer, sitesComponent);
     }
+
+
+
 
     public void setContainer() {
         sitesContainer.setVisible(false);

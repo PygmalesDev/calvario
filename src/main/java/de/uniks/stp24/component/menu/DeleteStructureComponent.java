@@ -131,23 +131,25 @@ public class DeleteStructureComponent extends VBox{
 
     public void delete(){
         Island island = tokenStorage.getIsland();
-        if (sites.containsKey(structureType)) {
-            // Handle deletion for sites
-            if (tokenStorage.getIsland().sites().get(structureType) != 0) {
-                subscriber.subscribe(resourcesService.destroySite(tokenStorage.getGameId(), island, structureType), result -> {
+        if (tokenStorage.getIsland() != null){
+            if (sites.containsKey(structureType)) {
+                // Handle deletion for sites
+                if (tokenStorage.getIsland().sites().get(structureType) != 0) {
+                    subscriber.subscribe(resourcesService.destroySite(tokenStorage.getGameId(), island, structureType), result -> {
+                        tokenStorage.setIsland(islandsService.updateIsland(result));
+                        inGameController.updateAmountSitesGrid();
+                        onCancel();
+                    });
+                }
+            } else if (buildings.containsKey(structureType)) {
+                // Handle deletion for buildings
+                subscriber.subscribe(resourcesService.destroyBuilding(tokenStorage.getGameId(), island, structureType), result -> {
                     tokenStorage.setIsland(islandsService.updateIsland(result));
-                    inGameController.updateAmountSitesGrid();
                     onCancel();
                 });
+            } else {
+                throw new IllegalArgumentException("Unknown structure type: " + structureType);
             }
-        } else if (buildings.containsKey(structureType)) {
-            // Handle deletion for buildings
-            subscriber.subscribe(resourcesService.destroyBuilding(tokenStorage.getGameId(), island, structureType), result -> {
-                tokenStorage.setIsland(islandsService.updateIsland(result));
-                onCancel();
-            });
-        } else {
-            throw new IllegalArgumentException("Unknown structure type: " + structureType);
         }
 
     }

@@ -2,6 +2,7 @@ package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.ResourceComponent;
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
@@ -93,6 +94,8 @@ public class SitePropertiesComponent extends AnchorPane {
     public ObservableList<Map<String, Integer>> resources;
     public ObservableList<ResourceComponent> resourceComponents;
 
+    InGameController inGameController;
+
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, true, gameResourceBundle);
 
     @OnInit
@@ -126,6 +129,11 @@ public class SitePropertiesComponent extends AnchorPane {
         }
     }
 
+    public void setInGameController(InGameController inGameController){
+        this.inGameController = inGameController;
+    }
+
+
     public void setSiteType(String siteType){
         this.siteType = siteType;
     }
@@ -143,13 +151,7 @@ public class SitePropertiesComponent extends AnchorPane {
     }
 
     public void destroySite(){
-        if (tokenStorage.getIsland().sites().get(siteType) != 0){
-            island = tokenStorage.getIsland();
-            subscriber.subscribe(resourcesService.destroySite(tokenStorage.getGameId(), island, siteType), result -> {
-                tokenStorage.setIsland(islandsService.updateIsland(result));
-                displayAmountOfSite();
-            });
-        }
+        inGameController.handleDeleteStructure(siteType);
     }
     @OnRender
     public void displayCostsOfSite(){

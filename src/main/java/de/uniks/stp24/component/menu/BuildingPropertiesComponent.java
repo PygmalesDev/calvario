@@ -2,6 +2,7 @@ package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.ResourceComponent;
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
@@ -18,7 +19,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnInit;
-import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -70,6 +70,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     Map<String, String> buildingsMap;
 
     String buildingType;
+    InGameController inGameController;
 
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, true, gameResourceBundle);
 
@@ -93,6 +94,10 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     }
 
+    public void setInGameController(InGameController inGameController){
+        this.inGameController = inGameController;
+    }
+
 
     public void setBuildingType(String buildingType){
         this.buildingType = buildingType;
@@ -100,11 +105,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
     public void destroyBuilding(){
-        Island island = tokenStorage.getIsland();
-        subscriber.subscribe(resourcesService.destroyBuilding(tokenStorage.getGameId(), island, buildingType), result -> {
-            tokenStorage.setIsland(islandsService.updateIsland(result));
-            onClose();
-        });
+        inGameController.handleDeleteStructure(buildingType);
     }
 
     public void buyBuilding(){

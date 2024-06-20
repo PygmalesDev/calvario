@@ -18,7 +18,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -37,7 +36,6 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.net.URL;
 import java.util.*;
 
 
@@ -55,6 +53,8 @@ public class InGameController extends BasicController {
     public Pane mapGrid;
     @FXML
     public StackPane zoomPane;
+    @FXML
+    StackPane deleteStructureWarningContainer;
     @FXML
     StackPane siteProperties;
     @FXML
@@ -90,9 +90,14 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
+
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
+
+    @SubComponent
+    @Inject
+    public DeleteStructureComponent deleteStructureComponent;
 
     boolean pause = false;
 
@@ -134,6 +139,8 @@ public class InGameController extends BasicController {
 
     PopupBuilder popupSiteProperties= new PopupBuilder();
 
+    PopupBuilder popupDeleteStructure = new PopupBuilder();
+
     @Inject
     public InGameController() {
 
@@ -142,6 +149,9 @@ public class InGameController extends BasicController {
     @OnInit
     public void init() {
         buildingsWindowComponent.setInGameController(this);
+        buildingPropertiesComponent.setInGameController(this);
+        sitePropertiesComponent.setInGameController(this);
+        deleteStructureComponent.setInGameController(this);
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
         //Todo: Outprint for Swagger - can be deleted later
@@ -197,6 +207,7 @@ public class InGameController extends BasicController {
         buildingProperties.setMouseTransparent(true);
         buildingsWindow.setMouseTransparent(true);
         siteProperties.setMouseTransparent(true);
+        deleteStructureWarningContainer.setMouseTransparent(true);
 
         pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
@@ -256,7 +267,7 @@ public class InGameController extends BasicController {
             showStorageButton.setId("showStorageButton");
             showStorageButton.setOnAction(event -> showStorage());
         }
-        this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
+        //this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
     }
 
     @OnRender
@@ -346,4 +357,13 @@ public class InGameController extends BasicController {
         popupBuildingProperties.showPopup(buildingProperties, buildingPropertiesComponent);
     }
 
+    public void handleDeleteStructure(String buildingType) {
+        deleteStructureWarningContainer.setMouseTransparent(false);
+        popupDeleteStructure.showPopup(deleteStructureWarningContainer,deleteStructureComponent);
+        deleteStructureComponent.setStructureType(buildingType);
+    }
+
+    public void updateAmountSitesGrid() {
+        sitePropertiesComponent.displayAmountOfSite();
+    }
 }

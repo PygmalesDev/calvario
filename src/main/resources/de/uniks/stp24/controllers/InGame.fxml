@@ -18,6 +18,7 @@
                 </StackPane>
             </Group>
         </ScrollPane>
+   <StackPane fx:id="deleteStructureWarningContainer" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="250.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="900.0" AnchorPane.topAnchor="250.0" />
    <StackPane fx:id="clockComponentContainer" prefHeight="115.0" prefWidth="200.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="5.0" />
    <StackPane fx:id="pauseMenuContainer" layoutX="440.0" layoutY="40.0" prefHeight="600.0" prefWidth="400.0" style=": ;" visible="false" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="440.0" AnchorPane.rightAnchor="440.0" AnchorPane.topAnchor="40.0" />
    <StackPane fx:id="overviewContainer" prefHeight="600.0" prefWidth="400.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="850.0" AnchorPane.topAnchor="40.0" />

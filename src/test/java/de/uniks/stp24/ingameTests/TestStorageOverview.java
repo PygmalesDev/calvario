@@ -3,6 +3,7 @@ package de.uniks.stp24.ingameTests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.ClockComponent;
+import de.uniks.stp24.component.game.EventComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
@@ -17,6 +18,7 @@ import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.LanguageService;
@@ -71,6 +73,8 @@ public class TestStorageOverview extends ControllerTest {
     @Spy
     EmpireService empireService;
     @Spy
+    EventService eventService;
+    @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
 
     @InjectMocks
@@ -81,6 +85,8 @@ public class TestStorageOverview extends ControllerTest {
     StorageOverviewComponent storageOverviewComponent;
     @InjectMocks
     ClockComponent clockComponent;
+    @InjectMocks
+    EventComponent eventComponent;
 
     @InjectMocks
     InGameController inGameController;
@@ -108,6 +114,9 @@ public class TestStorageOverview extends ControllerTest {
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
+        this.inGameController.eventComponent = this.eventComponent;
+        this.inGameController.eventService = this.eventService;
+        this.clockComponent.eventService = this.eventService;
         this.empireService.empireApiService = this.empireApiService;
         this.inGameService.setGameStatus(gameStatus);
 

@@ -63,8 +63,6 @@ public class EventComponent extends AnchorPane {
 
     @Inject
     @Resource
-    public ResourceBundle resourcesBundle;
-    @Inject
     @Named("gameResourceBundle")
     public ResourceBundle resources;
     @Inject
@@ -177,7 +175,6 @@ public class EventComponent extends AnchorPane {
     public void close() {
         container.setVisible(false);
         shadow.setVisible(false);
-
     }
 
     public void show() {

@@ -82,6 +82,7 @@ public class ClockComponent extends AnchorPane {
 
     private int lastUpdateSeason = -1;
     private String lastUpdateSpeed = "";
+    private boolean updateSeasonLabel = false;
 
     @Inject
     public EventComponent eventComponent;
@@ -253,7 +254,8 @@ public class ClockComponent extends AnchorPane {
 
     // Set size of seasonLabel in case of long season number
     private void setSeasonLabelSize() {
-        if (timerService.getSeason() > 999) {
+        if (timerService.getSeason() > 999 && !updateSeasonLabel) {
+            updateSeasonLabel = true;
             seasonLabel.setStyle("-fx-font-size: 15px;");
             countdownLabel.setStyle("-fx-font-size: 13px");
             seasonLabel.setTranslateY(seasonLabel.getTranslateY() + 3);

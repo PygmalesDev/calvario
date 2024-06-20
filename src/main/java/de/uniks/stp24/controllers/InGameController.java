@@ -42,9 +42,9 @@ import java.util.*;
 @Controller
 public class InGameController extends BasicController {
 
-    public Button showStorageButton;
-    public Button showEmpireOverviewButton;
-    public HBox storageButtonsBox;
+//    public Button showStorageButton;
+//    public Button showEmpireOverviewButton;
+//    public HBox storageButtonsBox;
 
     @FXML
     Pane shadow;
@@ -53,7 +53,7 @@ public class InGameController extends BasicController {
     @FXML
     Button showStorageButton;
     @FXML
-    Button showIslandButton;
+    Button showEmpireOverviewButton;
     @FXML
     HBox storageButtonsBox;
 
@@ -73,7 +73,7 @@ public class InGameController extends BasicController {
     StackPane clockComponentContainer;
 
     @Inject
-    EventService eventService;
+    public EventService eventService;
     @Inject
     TimerService timerService;
     @Inject
@@ -112,9 +112,6 @@ public class InGameController extends BasicController {
     EventListener eventListener;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
-    // todo remove this variables if not needed
-    String gameID;
-    String empireID;
 
     @Inject
     public InGameController() {
@@ -252,7 +249,7 @@ public class InGameController extends BasicController {
         mapScrollPane.setVvalue(0.5);
         mapScrollPane.setHvalue(0.5);
 
-        /**
+        /*
          * zoom function working but not perfect!
          * it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
          */

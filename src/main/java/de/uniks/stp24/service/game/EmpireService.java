@@ -18,7 +18,9 @@ public class EmpireService {
     public Observable<EmpireDto> getEmpire(String gameID, String empireID) {
         return this.empireApiService.getEmpire(gameID, empireID);
     }
-
+    public Observable<EmpireDto> updateEmpire(String gameID, String empireID, UpdateEmpireDto updateEmpireDto) {
+        return this.empireApiService.updateEmpire(gameID, empireID, updateEmpireDto);
+    }
     public Observable<ReadEmpireDto[]> getEmpires(String gameID) {
         return this.empireApiService.getEmpires(gameID);
     }

@@ -6,6 +6,7 @@ import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.EventComponent;
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
+import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -13,9 +14,15 @@ import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
+import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.dto.ReadEmpireDto;
+import de.uniks.stp24.dto.SystemDto;
+import de.uniks.stp24.dto.Upgrade;
+import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.EmpireService;
@@ -55,9 +62,22 @@ public class IslandsServiceTest extends ControllerTest {
     EventComponent eventComponent;
     @InjectMocks
     ClockComponent clockComponent;
-
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
+    @InjectMocks
+    IslandAttributeStorage islandAttributeStorage;
+    @InjectMocks
+    OverviewSitesComponent overviewSitesComponent;
+    @InjectMocks
+    SitesComponent sitesComponent;
+    @InjectMocks
+    DetailsComponent detailsComponent;
+    @InjectMocks
+    BuildingsComponent buildingsComponent;
+    @InjectMocks
+    OverviewUpgradeComponent overviewUpgradeComponent;
+
+
     @Spy
     TokenStorage tokenStorage;
     @Spy
@@ -93,6 +113,18 @@ public class IslandsServiceTest extends ControllerTest {
     @Spy
     GameSystemsApiService gameSystemsApiService;
 
+    Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
+    Map<String, Integer> upkeep = Map.of("energy", 3, "fuel", 8);
+    UpgradeStatus unexplored = new UpgradeStatus("unexplored", 1, cost, upkeep, 1);
+    UpgradeStatus explored = new UpgradeStatus("explored", 1, cost, upkeep, 1);
+    UpgradeStatus colonized = new UpgradeStatus("colonized", 1, cost, upkeep, 1);
+    UpgradeStatus upgraded = new UpgradeStatus("upgraded", 1, cost, upkeep, 1);
+    UpgradeStatus developed = new UpgradeStatus("developed", 1, cost, upkeep, 1);
+
+    SystemUpgrades systemUpgrades = new SystemUpgrades(unexplored, explored, colonized, upgraded, developed);
+    ArrayList<BuildingPresets> buildingPresets = new ArrayList<>();
+    ArrayList<DistrictPresets> districtPresets = new ArrayList<>();
+
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
@@ -108,8 +140,15 @@ public class IslandsServiceTest extends ControllerTest {
         this.clockComponent.islandsService = this.islandsService;
         this.clockComponent.eventComponent = this.eventComponent;
         this.islandsService.app = this.app;
+        this.islandAttributeStorage.systemPresets = systemUpgrades;
         inGameService.setGameStatus(gameStatus);
         islandsService.gameSystemsService = this.gameSystemsApiService;
+        this.inGameController.islandAttributes = this.islandAttributeStorage;
+        this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
+        this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
+        this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
+        this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+        this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
 
         inGameController.mapScrollPane = new ScrollPane();
         inGameController.group = new Group();
@@ -128,7 +167,7 @@ public class IslandsServiceTest extends ControllerTest {
         islandsService.saveEmpire("empire",new ReadEmpireDto("a","b","empire","game1","user1","name",
                 "description","#FFDDEE",2,3,"home"));
         SystemDto[] systems = new SystemDto[3];
-        String[] buildings = {"power_plant","mine","farm","research_lab","foundry","factory","refinery"};
+        ArrayList<String> buildings = new ArrayList<>(Arrays.asList("power_plant", "mine", "farm", "research_lab", "foundry", "factory", "refinery"));
         systems[0] = new SystemDto("a","b","system1","game1","agriculture",
                 "name",null,null,25,null, Upgrade.unexplored,0,
                 Map.of("home",22),1.46,-20.88,null);
@@ -157,6 +196,10 @@ public class IslandsServiceTest extends ControllerTest {
         doReturn(Observable.just(systems)).when(gameSystemsApiService).getSystems(any());
         doReturn(compMap).when(islandsService).getComponentMap();
         doReturn(compList).when(islandsService).createIslands(any());
+
+        doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
+        doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
+        doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
 
         Mockito.doCallRealMethod().when(islandsService).retrieveIslands(any());
         Mockito.doCallRealMethod().when(islandsService).getListOfIslands();

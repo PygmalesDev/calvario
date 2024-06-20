@@ -28,7 +28,7 @@ public class IslandsService extends BasicService {
     static final int factor = 10;
     double minX, maxX, minY, maxY;
     double widthRange, heightRange;
-    private final List<Island> isles = new ArrayList<>();
+    public List<Island> isles = new ArrayList<>();
     private final List<IslandComponent> islandComponentList = new ArrayList<>();
     private final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
     private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();

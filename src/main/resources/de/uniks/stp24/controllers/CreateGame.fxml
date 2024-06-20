@@ -46,28 +46,24 @@
                   </padding></Spinner>
                <HBox alignment="CENTER">
                   <VBox>
-                     <Button fx:id="createGameConfirmButton" mnemonicParsing="false" onAction="#createGame"
-                             prefHeight="45.0" prefWidth="250.0" styleClass="actionButton" text="%confirm">
+                     <Button fx:id="createGameConfirmButton" mnemonicParsing="false" onAction="#createGame" prefHeight="45.0" prefWidth="250.0" styleClass="actionButton" text="%confirm">
                         <graphic>
-                           <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true"
-                                      preserveRatio="true">
-                              <Image url="@../icons/confirm.png"/>
+                           <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                              <Image url="@../icons/confirm.png" />
                            </ImageView>
                         </graphic>
                      </Button>
-                     <Button fx:id="createGameCancelButton" mnemonicParsing="false" onAction="#cancel"
-                             prefHeight="45.0" prefWidth="250.0" styleClass="actionButton" text="%cancel">
+                     <Button fx:id="createGameCancelButton" mnemonicParsing="false" onAction="#cancel" prefHeight="45.0" prefWidth="250.0" styleClass="actionButton" text="%cancel">
                         <graphic>
-                           <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true"
-                                      preserveRatio="true">
-                              <Image url="@../icons/cross.png"/>
+                           <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                              <Image url="@../icons/cross.png" />
                            </ImageView>
                         </graphic>
                      </Button>
                   </VBox>
                   <Pane fx:id="captainContainer" prefHeight="0.0" prefWidth="0.0">
                      <HBox.margin>
-                        <Insets bottom="200.0"/>
+                        <Insets bottom="200.0" />
                      </HBox.margin>
                   </Pane>
                </HBox>

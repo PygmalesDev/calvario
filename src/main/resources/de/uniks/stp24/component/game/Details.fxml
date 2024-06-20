@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<fx:root alignment="TOP_CENTER" prefHeight="132.0" prefWidth="330.0" styleClass="overview-text" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.DetailsComponent">
+   <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="Details" />
+   <HBox alignment="CENTER" prefHeight="118.0" prefWidth="329.0">
+      <VBox alignment="TOP_CENTER" prefHeight="114.0" prefWidth="139.0">
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="Production" />
+         <ListView fx:id="sumProduction" prefHeight="200.0" prefWidth="200.0" />
+      </VBox>
+      <VBox prefHeight="114.0" prefWidth="20.0" />
+      <VBox alignment="TOP_CENTER" prefHeight="114.0" prefWidth="139.0">
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="Consumption" />
+         <ListView fx:id="sumConsumption" prefHeight="200.0" prefWidth="200.0" />
+      </VBox>
+   </HBox>
+   <VBox prefHeight="23.0" prefWidth="330.0" />
+</fx:root>

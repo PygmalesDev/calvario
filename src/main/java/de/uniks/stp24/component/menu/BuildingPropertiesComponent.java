@@ -31,6 +31,8 @@ import java.util.*;
 public class BuildingPropertiesComponent extends AnchorPane {
 
     @FXML
+    ListView<Resource> buildingCostsListView;
+    @FXML
     Button buyButton;
     @FXML
     ListView<Resource> buildingProducesListView;
@@ -106,8 +108,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     public void setBuildingType(String buildingType){
         this.buildingType = buildingType;
-        disableButtons();
         displayInfoBuilding();
+        disableButtons();
     }
 
     public void disableButtons(){
@@ -137,20 +139,22 @@ public class BuildingPropertiesComponent extends AnchorPane {
                     tokenStorage.setIsland(islandsService.updateIsland(result));
                     islandAttributeStorage.setIsland(islandsService.updateIsland(result));
                 },
-                error -> System.out.println("Insufficient funds"));
+                error -> buyButton.setDisable(true));
 
         disableButtons();
     }
 
 
     public void displayInfoBuilding(){
-        disableButtons();
+
         Image imageBuilding = new Image(buildingsMap.get(buildingType));
         buildingImage.setImage(imageBuilding);
         buildingName.setText(buildingType.toUpperCase());
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), this::resourceListGeneration);
+        buildingCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         buildingProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         buildingConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
+        disableButtons();
     }
 
     private void resourceListGeneration(BuildingDto buildingDto) {
@@ -161,6 +165,10 @@ public class BuildingPropertiesComponent extends AnchorPane {
         Map<String, Integer> resourceMapProduce = buildingDto.production();
         ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, buildingProducesListView.getItems(), null);
         buildingProducesListView.setItems(resourceListProduce);
+
+        Map<String, Integer> resourceMapCost = buildingDto.cost();
+        ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(resourceMapCost, buildingCostsListView.getItems(), null);
+        buildingCostsListView.setItems(resourceListCost);
     }
 
     public void onClose(){

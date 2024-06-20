@@ -174,7 +174,6 @@ public class SitePropertiesComponent extends AnchorPane {
         destroySiteButton.setDisable(false);
 
         if (tokenStorage.getIsland().sites().get(siteType) != null){
-            System.out.println(amountSite + " Menge sites");
              amountSite = tokenStorage.getIsland().sites().get(siteType);
         }
         if (tokenStorage.getIsland().sitesSlots().get(siteType) != null){

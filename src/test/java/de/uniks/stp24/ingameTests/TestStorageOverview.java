@@ -17,6 +17,7 @@ import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ResourcesService;
@@ -37,6 +38,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -87,7 +89,18 @@ public class TestStorageOverview extends ControllerTest {
     StorageOverviewComponent storageOverviewComponent;
     @InjectMocks
     ClockComponent clockComponent;
-
+    @InjectMocks
+    OverviewSitesComponent overviewSitesComponent;
+    @InjectMocks
+    OverviewUpgradeComponent overviewUpgradeComponent;
+    @InjectMocks
+    IslandAttributeStorage islandAttributeStorage;
+    @InjectMocks
+    DetailsComponent detailsComponent;
+    @InjectMocks
+    SitesComponent sitesComponent;
+    @InjectMocks
+    BuildingsComponent buildingsComponent;
     @InjectMocks
     BuildingPropertiesComponent buildingPropertiesComponent;
 
@@ -115,6 +128,9 @@ public class TestStorageOverview extends ControllerTest {
         put("energy", 5);
         put("population", 4);
     }};
+
+    ArrayList<BuildingPresets> buildingPresets = new ArrayList<>();
+    ArrayList<DistrictPresets> districtPresets = new ArrayList<>();
 
     @Override
     public void start(Stage stage) throws Exception{
@@ -156,6 +172,15 @@ public class TestStorageOverview extends ControllerTest {
 
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
 
+        SystemUpgrades systemUpgrades = new SystemUpgrades(
+                new UpgradeStatus("1", 0, null, null, 0),
+                new UpgradeStatus("1", 0, null, null, 0),
+                new UpgradeStatus("1", 0, null, null, 0),
+                new UpgradeStatus("1", 0, null, null, 0),
+                new UpgradeStatus("1", 0, null, null, 0));
+        doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
+        doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
+        doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
 
         this.app.show(this.inGameController);
     }

@@ -17,7 +17,9 @@ public class TokenStorage {
     private String gameId;
     private String empireId;
     private boolean isSpectator;
-    private Map<String, Integer> flagsInGame = new HashMap<>();
+    private final Map<String, Integer> flagsInGame = new HashMap<>();
+
+    private String[] technologies;
     @Inject
     public TokenStorage() {
     }

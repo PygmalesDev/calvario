@@ -24,10 +24,12 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+@Singleton
 @Component(view = "LobbyHostSettings.fxml")
 public class LobbyHostSettingsComponent extends AnchorPane {
     @FXML

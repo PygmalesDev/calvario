@@ -34,7 +34,7 @@ public class IslandsService extends BasicService {
     static final int factor = 10;
     double minX,maxX,minY,maxY;
     double widthRange, heightRange;
-    private final List<Island> isles = new ArrayList<>();
+    public List<Island> isles = new ArrayList<>();
     private final List<IslandComponent> islandComponentList = new ArrayList<>();
     private final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
     private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();
@@ -46,41 +46,40 @@ public class IslandsService extends BasicService {
     }
 
     /** this method will be used when changing from lobby to ingame
-    * and retrieve island information when starting or rejoining a game
-    */
+     * and retrieve island information when starting or rejoining a game
+     */
     public void retrieveIslands(String gameID) {
         resetVariables();
         subscriber.subscribe(gameSystemsService.getSystems(gameID),
-            dto -> {
-                Arrays.stream(dto).forEach(data -> {
-                    List<String> linkedIsles = new ArrayList<>(data.links().keySet());
-                    minX = Math.min(data.x(),minX);
-                    minY = Math.min(data.y(),minY);
-                    maxX = Math.max(data.x(),maxX);
-                    maxY = Math.max(data.y(),maxY);
-                    Island tmp = new Island(data.owner(),
-                        data.upgrade(),
-                        data.name(),
-                        data._id(),
-                        Objects.isNull(data.owner()) ? -1 : tokenStorage.getFlagIndex(data.owner()),
-                        data.x(),
-                        data.y(),
-                        IslandType.valueOf(data.type()),
-                        data.population(),
-                        data.capacity(),
-                        data.upgrade().ordinal(),
-                        data.districtSlots(),
-                        data.districts(),
-                        data.buildings()
-                      );
-                    isles.add(tmp);
-                    connections.put(data._id(),linkedIsles);
-                });
-                widthRange = maxX-minX;
-                heightRange = maxY-minY;
-                this.app.show("/ingame");
-            },
-            error -> errorService.getStatus(error));
+                dto -> {
+                    Arrays.stream(dto).forEach(data -> {
+                        List<String> linkedIsles = new ArrayList<>(data.links().keySet());
+                        minX = Math.min(data.x(),minX);
+                        minY = Math.min(data.y(),minY);
+                        maxX = Math.max(data.x(),maxX);
+                        maxY = Math.max(data.y(),maxY);
+                        Island tmp = new Island(data.owner(),
+                                Objects.isNull(data.owner()) ? -1 : getEmpire(data.owner()).flag(),
+                                data.x(),
+                                data.y(),
+                                IslandType.valueOf(data.type()),
+                                data.population(),
+                                data.capacity(),
+                                data.upgrade().ordinal(),
+                                data.districtSlots(),
+                                data.districts(),
+                                data.buildings(),
+                                data._id(),
+                                data.upgrade().toString()
+                        );
+                        isles.add(tmp);
+                        connections.put(data._id(),linkedIsles);
+                    });
+                    widthRange = maxX-minX;
+                    heightRange = maxY-minY;
+                    this.app.show("/ingame");
+                },
+                error -> errorService.getStatus(error));
     }
 
     /**
@@ -100,12 +99,12 @@ public class IslandsService extends BasicService {
         double serverOffsetH = minX + 0.5 * widthRange;
         double serverOffsetV = minY + 0.5 * heightRange;
         component.setPosition(factor * isleDto.posX() - serverOffsetH + screenOffsetH,
-          factor * isleDto.posY() - serverOffsetV + screenOffSetV);
+                factor * isleDto.posY() - serverOffsetV + screenOffSetV);
         component.applyIcon(isleDto.type());
         component.setFlagImage(isleDto.flagIndex());
         if(Objects.nonNull(isleDto.owner())) {
             Color colorWeb = Color.web(getEmpire(isleDto.owner()).color()).brighter();
-          component.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb)+ ", 2.0, 0.88, 0, 0);");
+            component.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb)+ ", 2.0, 0.88, 0, 0);");
         }
         return component;
     }
@@ -130,7 +129,7 @@ public class IslandsService extends BasicService {
             }
             singleConnections.putIfAbsent(key,tmp);
         });
-    return singleConnections;
+        return singleConnections;
     }
 
     /**
@@ -139,17 +138,17 @@ public class IslandsService extends BasicService {
      */
     public List<IslandComponent> createIslands(List<Island> list) {
         list.forEach(
-          island -> {
+                island -> {
 //              IslandComponent tmp1 = new IslandComponent();
-              IslandComponent tmp = createIslandPaneFromDto(island,
-                app.initAndRender(new IslandComponent())); // isn't working anymore?!
+                    IslandComponent tmp = createIslandPaneFromDto(island,
+                            app.initAndRender(new IslandComponent())); // isn't working anymore?!
 //                tmp1);
 
-              tmp.setLayoutX(tmp.getPosX());
-              tmp.setLayoutY(tmp.getPosY());
-              islandComponentList.add(tmp);
-              islandComponentMap.put(island.id_(), tmp);
-          }
+                    tmp.setLayoutX(tmp.getPosX());
+                    tmp.setLayoutY(tmp.getPosY());
+                    islandComponentList.add(tmp);
+                    islandComponentMap.put(island.id(), tmp);
+                }
         );
         return Collections.unmodifiableList(islandComponentList);
     }
@@ -203,8 +202,8 @@ public class IslandsService extends BasicService {
     /** after color was modified using .brighter() compute it to a string */
     private String colorToRGB(Color color) {
         return "rgb(" + (int) (color.getRed() * 255) + "," +
-          (int) (color.getGreen() * 255) + "," +
-          (int) (color.getBlue() * 255) + ")" ;
+                (int) (color.getGreen() * 255) + "," +
+                (int) (color.getBlue() * 255) + ")" ;
     }
 
     public void removeDataForMap() {
@@ -223,20 +222,18 @@ public class IslandsService extends BasicService {
 
     public Island updateIsland(SystemDto result) {
         return new Island(result.owner(),
-                result.upgrade(),
-                result.name(),
-                result._id(),
-                Objects.isNull(result.owner()) ? -1 : tokenStorage.getFlagIndex(result.owner()),
+                Objects.isNull(result.owner()) ? -1 : getEmpire(result.owner()).flag(),
                 result.x(),
                 result.y(),
                 IslandType.valueOf(result.type()),
                 result.population(),
                 result.capacity(),
                 result.upgrade().ordinal(),
-                // todo find out which information in data match sites in island dto
                 result.districtSlots(),
                 result.districts(),
-                result.buildings()
+                result.buildings(),
+                result._id(),
+                result.upgrade().toString()
         );
     }
 }

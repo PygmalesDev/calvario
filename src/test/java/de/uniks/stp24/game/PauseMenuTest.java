@@ -22,7 +22,6 @@ import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ResourcesService;
-import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
@@ -42,7 +41,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
@@ -99,6 +99,15 @@ public class PauseMenuTest extends ControllerTest {
     SettingsComponent settingsComponent;
 
     @InjectMocks
+    OverviewSitesComponent overviewSitesComponent;
+
+    @InjectMocks
+    OverviewUpgradeComponent overviewUpgradeComponent;
+
+    @InjectMocks
+    IslandAttributeStorage islandAttributeStorage;
+
+    @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
     @InjectMocks
     BuildingPropertiesComponent buildingPropertiesComponent;
@@ -112,12 +121,24 @@ public class PauseMenuTest extends ControllerTest {
 
 
 
+    @InjectMocks
+    DetailsComponent detailsComponent;
+
+    @InjectMocks
+    SitesComponent sitesComponent;
+
+    @InjectMocks
+    BuildingsComponent buildingsComponent;
+
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
 
 
     @InjectMocks
     InGameController inGameController;
+
+    ArrayList<BuildingPresets> buildingPresets = new ArrayList<>();
+    ArrayList<DistrictPresets> districtPresets = new ArrayList<>();
 
     @Override
     public void start(Stage stage) throws Exception {

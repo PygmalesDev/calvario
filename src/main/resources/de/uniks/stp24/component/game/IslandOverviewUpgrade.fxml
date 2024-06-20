@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.OverviewUpgradeComponent">
+   <VBox layoutX="21.0" layoutY="44.0" prefHeight="556.0" prefWidth="362.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0">
+      <VBox prefHeight="49.0" prefWidth="400.0" />
+      <HBox alignment="CENTER" prefHeight="77.0" prefWidth="400.0">
+         <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="357.0" style="-fx-border-color: #000000;">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
+            <VBox prefHeight="7.0" prefWidth="358.0" />
+            <Label styleClass="overview-text" text="\%placeholder" />
+         </VBox>
+      </HBox>
+      <VBox prefHeight="29.0" prefWidth="400.0" />
+      <HBox alignment="CENTER" prefHeight="77.0" prefWidth="400.0">
+         <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="357.0" style="-fx-border-color: #000000;">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
+            <VBox prefHeight="7.0" prefWidth="358.0" />
+            <Label styleClass="overview-text" text="\%placeholder" />
+         </VBox>
+      </HBox>
+      <VBox prefHeight="29.0" prefWidth="400.0" />
+      <HBox alignment="CENTER" prefHeight="77.0" prefWidth="400.0">
+         <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="357.0" style="-fx-border-color: #000000;">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
+            <VBox prefHeight="7.0" prefWidth="358.0" />
+            <Label styleClass="overview-text" text="\%placeholder" />
+         </VBox>
+      </HBox>
+      <VBox prefHeight="29.0" prefWidth="400.0" />
+      <HBox alignment="CENTER" prefHeight="77.0" prefWidth="400.0">
+         <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="357.0" style="-fx-border-color: #000000;">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
+            <VBox prefHeight="7.0" prefWidth="358.0" />
+            <Label styleClass="overview-text" text="\%placeholder" />
+         </VBox>
+      </HBox>
+      <VBox prefHeight="18.0" prefWidth="400.0" />
+      <HBox fx:id="upgrade_box" prefHeight="92.0" prefWidth="400.0">
+         <VBox prefHeight="106.0" prefWidth="26.0" />
+         <HBox prefHeight="106.0" prefWidth="270.0" style="-fx-border-color: #000000;">
+            <VBox prefHeight="92.0" prefWidth="214.0">
+               <HBox prefHeight="10.0" prefWidth="173.0" />
+               <HBox alignment="CENTER_LEFT" prefHeight="37.0" prefWidth="173.0">
+                  <VBox prefHeight="34.0" prefWidth="25.0" />
+                  <Pane prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: #808080;" />
+                  <VBox prefHeight="34.0" prefWidth="6.0" />
+                  <Text fx:id="res_1" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%x" wrappingWidth="52.12811279296875" />
+                  <Pane prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: #808080;" />
+                  <VBox prefHeight="34.0" prefWidth="6.0" />
+                  <Text fx:id="res_2" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%x" wrappingWidth="40.12811470031738" />
+               </HBox>
+               <HBox prefHeight="10.0" prefWidth="173.0" />
+               <HBox alignment="CENTER_LEFT" prefHeight="37.0" prefWidth="173.0">
+                  <VBox prefHeight="38.0" prefWidth="25.0" />
+                  <Pane prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: #808080;" />
+                  <VBox prefHeight="34.0" prefWidth="6.0" />
+                  <Text fx:id="res_3" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%x" wrappingWidth="52.12811279296875" />
+                  <Pane prefHeight="35.0" prefWidth="35.0" style="-fx-background-color: #808080;" />
+                  <VBox prefHeight="34.0" prefWidth="6.0" />
+                  <Text fx:id="res_4" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%x" wrappingWidth="39.32812690734863" />
+               </HBox>
+               <HBox prefHeight="10.0" prefWidth="173.0" />
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefHeight="92.0" prefWidth="83.0">
+               <HBox prefHeight="4.0" prefWidth="98.0" />
+               <HBox alignment="CENTER" prefHeight="42.0" prefWidth="70.0">
+                  <Pane prefHeight="42.0" prefWidth="42.0" style="-fx-background-color: #808080;" />
+               </HBox>
+               <Text fx:id="report" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
+            </VBox>
+         </HBox>
+         <VBox prefHeight="92.0" prefWidth="6.0" />
+         <VBox prefHeight="92.0" prefWidth="66.0">
+            <VBox prefHeight="34.0" prefWidth="79.0" />
+            <Pane fx:id="confirmUpgrade" prefHeight="92.0" prefWidth="103.0" style="-fx-background-color: #000000; -fx-background-radius: 30;">
+               <ImageView fitHeight="69.0" fitWidth="66.0" onMouseClicked="#upgradeIsland" pickOnBounds="true" preserveRatio="true" />
+            </Pane>
+            <VBox prefHeight="34.0" prefWidth="79.0" />
+         </VBox>
+      </HBox>
+   </VBox>
+   <Pane fx:id="closeButton" layoutX="372.0" layoutY="16.0" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #ff0000;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0" />
+   <Pane fx:id="backButton" layoutX="6.0" layoutY="16.0" onMouseClicked="#goBack" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #acac13;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="16.0" />
+   <Pane fx:id="checkColonized" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #acac13;" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="193.0" />
+   <Pane fx:id="checkUpgraded" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #acac13;" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="300.0" />
+   <Pane fx:id="checkDeveloped" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #acac13;" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="407.0" />
+   <Pane fx:id="checkExplored" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #acac13;" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="87.0" />
+</fx:root>

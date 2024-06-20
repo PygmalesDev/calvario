@@ -1,7 +1,6 @@
 package de.uniks.stp24.service;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.DaggerTestComponent;
 import de.uniks.stp24.model.LoginResult;
 import de.uniks.stp24.dto.*;
 import javafx.stage.Stage;

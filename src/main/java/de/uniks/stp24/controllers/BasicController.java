@@ -39,7 +39,7 @@ public class BasicController {
     @Inject
     ImageCache imageCache;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
 
     public Map<Integer, String> controlResponses;
 

@@ -20,6 +20,7 @@ public class IslandAttributeStorage {
     public Island island;
     public ArrayList<BuildingPresets> buildings;
     public ArrayList<DistrictPresets> districts;
+    public Map<String, String> UpgradeEffects = new HashMap<>();
 
 
     @Inject

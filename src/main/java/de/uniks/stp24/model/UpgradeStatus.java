@@ -4,9 +4,9 @@ import java.util.Map;
 
 public record UpgradeStatus(
         String id,
-        int pop_growth,
+        float pop_growth,
         Map<String, Integer> cost,
         Map<String, Integer> upkeep,
-        int capacity_multiplier
+        float capacity_multiplier
 ) {
 }

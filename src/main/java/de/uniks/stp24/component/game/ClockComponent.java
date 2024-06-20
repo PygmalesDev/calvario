@@ -79,8 +79,10 @@ public class ClockComponent extends AnchorPane {
     public Subscriber subscriber;
     @Inject
     public EventListener eventListener;
+
     private int lastUpdateSeason = -1;
     private String lastUpdateSpeed = "";
+
     @Inject
     public EventComponent eventComponent;
 
@@ -150,7 +152,9 @@ public class ClockComponent extends AnchorPane {
                     }
                     timerService.setSpeedLocal(game.speed());
                     timerService.setSeason(game.period());
-                }, System.out::println);
+                },
+                error -> System.out.println("Error on getting game: " + error)
+        );
 
         setSeasonLabelSize();
 
@@ -189,7 +193,8 @@ public class ClockComponent extends AnchorPane {
                         lastUpdateSeason = event.data().period();
                     }
                 },
-                error -> System.out.println("Error on Season: " + error.getMessage()));
+                error -> System.out.println("Error on Season: " + error.getMessage())
+        );
     }
 
     public void createUpdateSpeedListener() {
@@ -202,7 +207,8 @@ public class ClockComponent extends AnchorPane {
                         lastUpdateSpeed = event.data().updatedAt();
                     }
                 },
-                error -> System.out.println("Error on speed: " + error.getMessage()));
+                error -> System.out.println("Error on speed: " + error.getMessage())
+        );
     }
 
     ///////////////--------------------------------------------onAction------------------------------------/////////////
@@ -221,7 +227,8 @@ public class ClockComponent extends AnchorPane {
         if (timerService.isRunning()) {
             subscriber.subscribe(timerService.setSpeed(gameId, 0),
                     result -> {},
-                    error -> System.out.println("Error on pause: " + error));
+                    error -> System.out.println("Error on pause: " + error)
+            );
             timerService.stop();
         }
     }
@@ -262,7 +269,8 @@ public class ClockComponent extends AnchorPane {
         }
         subscriber.subscribe(timerService.setSpeed(gameId, speed),
                 result -> {},
-                error -> System.out.println("Error when changing speed: " + error));
+                error -> System.out.println("Error when changing speed: " + error)
+        );
     }
 
     ////////////--------------------------------PropertyChangeListener--------------------------------------////////////

@@ -38,12 +38,14 @@ public class TimerService {
 
     }
 
+    /**
+     * After changing the speed,
+     * the local countdown till next season will be updated
+     */
     public Observable<UpdateGameResultDto> setSpeed(String gamesid, int speed) {
         return gamesApiService
                 .editSpeed(gamesid, new UpdateSpeedDto(speed))
                 .doOnNext(updateGameResultDto -> {
-                    // After changing the speed,
-                    // the local countdown till next season will be updated
                     setSpeedLocal(updateGameResultDto.speed());
                 });
     }

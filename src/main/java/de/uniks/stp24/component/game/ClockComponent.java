@@ -66,7 +66,7 @@ public class ClockComponent extends AnchorPane {
 
     ImageCache imageCache = new ImageCache();
     @Inject
-    EventService eventService;
+    public EventService eventService;
     @Inject
     TokenStorage tokenStorage;
     @Inject
@@ -78,11 +78,11 @@ public class ClockComponent extends AnchorPane {
     @Inject
     public Subscriber subscriber;
     @Inject
-    EventListener eventListener;
+    public EventListener eventListener;
     private int lastUpdateSeason = -1;
     private String lastUpdateSpeed = "";
     @Inject
-    EventComponent eventComponent;
+    public EventComponent eventComponent;
 
     @Inject
     public ClockComponent() {

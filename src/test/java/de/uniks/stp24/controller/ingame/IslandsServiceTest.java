@@ -3,6 +3,7 @@ package de.uniks.stp24.controller.ingame;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.ClockComponent;
+import de.uniks.stp24.component.game.EventComponent;
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
@@ -18,6 +19,7 @@ import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.LanguageService;
@@ -51,6 +53,8 @@ public class IslandsServiceTest extends ControllerTest {
     @InjectMocks
     SettingsComponent settingsComponent;
     @InjectMocks
+    EventComponent eventComponent;
+    @InjectMocks
     ClockComponent clockComponent;
 
     @InjectMocks
@@ -74,6 +78,8 @@ public class IslandsServiceTest extends ControllerTest {
     @Spy
     InGameService inGameService;
     @Spy
+    EventService eventService;
+    @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @Spy
     Subscriber subscriber = spy(Subscriber.class);
@@ -93,9 +99,13 @@ public class IslandsServiceTest extends ControllerTest {
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
+        this.inGameController.eventComponent = eventComponent;
         this.clockComponent.timerService = this.timerService;
+        this.clockComponent.eventService = this.eventService;
         this.clockComponent.subscriber = this.subscriber;
         this.clockComponent.gamesApiService = this.gameApiService;
+        this.clockComponent.islandsService = this.islandsService;
+        this.clockComponent.eventComponent = this.eventComponent;
         this.islandsService.app = this.app;
         inGameService.setGameStatus(gameStatus);
         islandsService.gameSystemsService = this.gameSystemsApiService;
@@ -111,23 +121,23 @@ public class IslandsServiceTest extends ControllerTest {
 
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
         doReturn(Observable
-          .just(new Game("a", null, "game1Id", "testGame1",
-            "testHost1", true, 1,10, null))).when(gameApiService).getGame(any());
+                .just(new Game("a", null, "game1Id", "testGame1",
+                        "testHost1", true, 1,10, null))).when(gameApiService).getGame(any());
         doReturn(null).when(this.app).show("/ingame");
         islandsService.saveEmpire("empire",new ReadEmpireDto("a","b","empire","game1","user1","name",
-          "description","#FFDDEE",2,3,"home"));
+                "description","#FFDDEE",2,3,"home"));
         SystemDto[] systems = new SystemDto[3];
         String[] buildings = {"power_plant","mine","farm","research_lab","foundry","factory","refinery"};
         systems[0] = new SystemDto("a","b","system1","game1","agriculture",
-          "name",null,null,25,null, Upgrade.unexplored,0,
-          Map.of("home",22),1.46,-20.88,null);
+                "name",null,null,25,null, Upgrade.unexplored,0,
+                Map.of("home",22),1.46,-20.88,null);
         systems[1] = new SystemDto("a","b","system2","game1","energy",
-          "name",null,null,16,null, Upgrade.unexplored,0,
-          Map.of("home",18),-7.83,-11.04,null);
+                "name",null,null,16,null, Upgrade.unexplored,0,
+                Map.of("home",18),-7.83,-11.04,null);
         systems[2] = new SystemDto("a","b","home","game1","uninhabitable_0", "name",
-          Map.of("city",3, "industry", 3, "mining",3, "energy",3, "agriculture",3),
-          Map.of("city",3, "industry", 3, "mining",3, "energy",3, "agriculture",3), 22,
-          buildings,Upgrade.developed,25,Map.of("system1",22,"system2",18),-5.23,4.23,"empire"
+                Map.of("city",3, "industry", 3, "mining",3, "energy",3, "agriculture",3),
+                Map.of("city",3, "industry", 3, "mining",3, "energy",3, "agriculture",3), 22,
+                buildings,Upgrade.developed,25,Map.of("system1",22,"system2",18),-5.23,4.23,"empire"
         );
 
         IslandComponent comp0 = new IslandComponent();
@@ -140,8 +150,8 @@ public class IslandsServiceTest extends ControllerTest {
         comp2.setLayoutX(systems[2].x());
         comp2.setLayoutY(systems[2].y());
         Map<String, IslandComponent> compMap = Map.of("system1", comp0,
-          "system2", comp1,
-          "home" , comp2);
+                "system2", comp1,
+                "home" , comp2);
         List<IslandComponent> compList = Arrays.asList(comp0,comp1,comp2);
         doReturn(Observable.just(systems)).when(gameSystemsApiService).getSystems(any());
         doReturn(compMap).when(islandsService).getComponentMap();
@@ -153,7 +163,7 @@ public class IslandsServiceTest extends ControllerTest {
         Mockito.doCallRealMethod().when(islandsService).getMapHeight();
         Mockito.doCallRealMethod().when(islandsService).getEmpire(any());
         Mockito.doCallRealMethod().when(islandsService)
-          .createLines(any());
+                .createLines(any());
 
         app.show(inGameController);
     }

@@ -205,8 +205,11 @@ public class InGameController extends BasicController {
             pause = (Boolean) propertyChangeEvent.getNewValue();
             if (pause) {
                 pauseGame();
+                shadow.setVisible(true);
+                shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
             } else {
                 resumeGame();
+                shadow.setVisible(false);
             }
         }
     }

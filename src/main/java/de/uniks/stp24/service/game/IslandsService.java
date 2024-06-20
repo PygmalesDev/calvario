@@ -32,7 +32,8 @@ public class IslandsService extends BasicService {
     double minX,maxX,minY,maxY;
     double widthRange, heightRange;
     private final List<ShortSystemDto> devIsles = new ArrayList<>();
-    private final List<Island> isles = new ArrayList<>();
+    // someone changed this to public?! why?! there is a method to get this
+    public List<Island> isles = new ArrayList<>();
     private final List<IslandComponent> islandComponentList = new ArrayList<>();
     private final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
     private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();
@@ -66,8 +67,8 @@ public class IslandsService extends BasicService {
     }
 
     /** this method will be used when changing from lobby to ingame
-    * and retrieve island information when starting or rejoining a game
-    */
+     * and retrieve island information when starting or rejoining a game
+     */
     public void retrieveIslands(String gameID) {
         resetVariables();
         createEmpireServices();
@@ -121,12 +122,12 @@ public class IslandsService extends BasicService {
         double serverOffsetH = minX + 0.5 * widthRange;
         double serverOffsetV = minY + 0.5 * heightRange;
         component.setPosition(factor * isleDto.posX() - serverOffsetH + screenOffsetH,
-          factor * isleDto.posY() - serverOffsetV + screenOffSetV);
+                factor * isleDto.posY() - serverOffsetV + screenOffSetV);
         component.applyIcon(isleDto.type());
         component.setFlagImage(isleDto.flagIndex());
         if(Objects.nonNull(isleDto.owner())) {
             Color colorWeb = Color.web(getEmpire(isleDto.owner()).color()).brighter();
-          component.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb)+ ", 2.0, 0.88, 0, 0);");
+            component.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb)+ ", 2.0, 0.88, 0, 0);");
         }
         return component;
     }
@@ -152,7 +153,7 @@ public class IslandsService extends BasicService {
             }
             singleConnections.putIfAbsent(key,tmp);
         });
-    return singleConnections;
+        return singleConnections;
     }
 
     /**
@@ -292,8 +293,8 @@ public class IslandsService extends BasicService {
     /** after color was modified using .brighter() compute it to a string */
     private String colorToRGB(Color color) {
         return "rgb(" + (int) (color.getRed() * 255) + "," +
-          (int) (color.getGreen() * 255) + "," +
-          (int) (color.getBlue() * 255) + ")" ;
+                (int) (color.getGreen() * 255) + "," +
+                (int) (color.getBlue() * 255) + ")" ;
     }
 
     public void removeDataForMap() {

@@ -2,8 +2,7 @@ package de.uniks.stp24.ingameTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.game.ClockComponent;
-import de.uniks.stp24.component.game.StorageOverviewComponent;
+import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -13,8 +12,10 @@ import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.rest.EmpireApiService;
+import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ResourcesService;
@@ -34,6 +35,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -81,7 +83,18 @@ public class TestStorageOverview extends ControllerTest {
     StorageOverviewComponent storageOverviewComponent;
     @InjectMocks
     ClockComponent clockComponent;
-
+    @InjectMocks
+    OverviewSitesComponent overviewSitesComponent;
+    @InjectMocks
+    OverviewUpgradeComponent overviewUpgradeComponent;
+    @InjectMocks
+    IslandAttributeStorage islandAttributeStorage;
+    @InjectMocks
+    DetailsComponent detailsComponent;
+    @InjectMocks
+    SitesComponent sitesComponent;
+    @InjectMocks
+    BuildingsComponent buildingsComponent;
     @InjectMocks
     InGameController inGameController;
 
@@ -101,6 +114,9 @@ public class TestStorageOverview extends ControllerTest {
         put("population", 4);
     }};
 
+    ArrayList<BuildingPresets> buildingPresets = new ArrayList<>();
+    ArrayList<DistrictPresets> districtPresets = new ArrayList<>();
+
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
@@ -110,6 +126,13 @@ public class TestStorageOverview extends ControllerTest {
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.empireService.empireApiService = this.empireApiService;
         this.inGameService.setGameStatus(gameStatus);
+        this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
+        this.inGameController.overviewUpgradeComponent = this.overviewUpgradeComponent;
+        this.inGameController.islandAttributes = this.islandAttributeStorage;
+        this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
+        this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
+        this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+
 
         // Mock TokenStorage
         doReturn("testUserID").when(this.tokenStorage).getUserId();
@@ -133,8 +156,20 @@ public class TestStorageOverview extends ControllerTest {
 
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
 
+        SystemUpgrades systemUpgrades = new SystemUpgrades(
+                new UpgradeStatus("1", 0, null, null, 0),
+                new UpgradeStatus("1", 0, null, null, 0),
+                new UpgradeStatus("1", 0, null, null, 0),
+                new UpgradeStatus("1", 0, null, null, 0),
+                new UpgradeStatus("1", 0, null, null, 0));
+        doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
+        doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
+        doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
 
         this.app.show(this.inGameController);
+        storageOverviewComponent.getStylesheets().clear();
+        clockComponent.getStylesheets().clear();
+
     }
 
     @Test

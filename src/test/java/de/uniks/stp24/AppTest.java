@@ -248,6 +248,7 @@ public class AppTest extends ControllerTest {
         this.memberSubject.onNext(new Event<>("games.123.members.1.updated",
                 new MemberDto(true, "JustATest", null, null)));
         assertFalse(lookup("#startJourneyButton").queryButton().isDisabled());
+
         clickOn("#startJourneyButton");
         this.gameSubject.onNext(new Event<>("games.testGameID.updated", new Game("1", "a","testGameID","testGame","testGameHostID",
                 true, 1, 0, new GameSettings(1))));

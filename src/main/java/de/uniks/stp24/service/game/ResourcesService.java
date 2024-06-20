@@ -1,9 +1,13 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.dto.AggregateItemDto;
+import de.uniks.stp24.dto.UpdateEmpireDto;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.TokenStorage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -13,6 +17,14 @@ import java.util.Objects;
 
 @Singleton
 public class ResourcesService {
+    @Inject
+    public IslandAttributeStorage islandAttributes;
+    @Inject
+    public EmpireService empireService;
+    @Inject
+    public TokenStorage tokenStorage;
+    @Inject
+    public Subscriber subscriber;
 
     /**
      * storage for actual resources
@@ -51,4 +63,37 @@ public class ResourcesService {
         return resourceList;
     }
 
+    public boolean hasEnoughResources(Map<String, Integer> neededResources) {
+        for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
+            String res = entry.getKey();
+            int neededAmount = entry.getValue();
+            int availableAmount = islandAttributes.getAvailableResources().get(res);
+            if (availableAmount < neededAmount) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Map<String, Integer> updateAvailableResources(Map<String, Integer> neededResources) {
+        Map<String, Integer> difRes = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
+            String res = entry.getKey();
+            int neededAmount = entry.getValue();
+            difRes.put(res, -neededAmount);
+        }
+        return difRes;
+    }
+
+
+    public void upgradeIsland() {
+        Map<String, Integer> difRes = updateAvailableResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()));
+
+        this.subscriber.subscribe(empireService.updateEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId(),
+                new UpdateEmpireDto(difRes, islandAttributes.getTech(), null, null, null)),
+                result -> {
+                    islandAttributes.setEmpireDto(result);
+                });
+
+    }
 }

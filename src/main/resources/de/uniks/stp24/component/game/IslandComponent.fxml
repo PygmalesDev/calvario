@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<fx:root onKeyPressed="#showFlag" type="Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.IslandComponent">
+<fx:root onMouseEntered="#showRudder" onMouseExited="#unshowRudder" onMouseMoved="#showRudder" type="Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.IslandComponent">
    <ImageView fx:id="islandImage" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+   <ImageView fx:id="rudderImage" fitHeight="42.0" fitWidth="42.0" layoutX="4.0" layoutY="4.0" onMouseClicked="#showIslandOverview" pickOnBounds="true" preserveRatio="true" visible="false">
+      <Image url="@../../icons/islands/selection_wheel.png" />
+   </ImageView>
    <StackPane fx:id="flagPane" layoutX="9.0" layoutY="-16.0" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: Transparent;" visible="false">
       <ImageView fx:id="flagImage" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" />
    </StackPane>

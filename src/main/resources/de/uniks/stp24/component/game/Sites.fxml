@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<fx:root alignment="TOP_CENTER" prefHeight="184.0" prefWidth="374.0" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.SitesComponent">
+   <HBox alignment="CENTER" prefHeight="41.0" prefWidth="374.0">
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="Sites" />
+   </HBox>
+   <HBox fx:id="sitesBox" alignment="CENTER" prefHeight="50.0" prefWidth="372.0" />
+</fx:root>

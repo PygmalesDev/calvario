@@ -3,8 +3,9 @@ package de.uniks.stp24.service.game;
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.ReadEmpireDto;
-import de.uniks.stp24.dto.UpdateSystemDto;
+import de.uniks.stp24.dto.UpdateBuildingDto;
 import de.uniks.stp24.dto.Upgrade;
+import de.uniks.stp24.dto.UpgradeSystemDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
@@ -211,19 +212,27 @@ public class IslandsService extends BasicService {
         this.connections.clear();
     }
 
-    public void updateIsland(IslandAttributeStorage islandAttributes, String upgradeStatus, InGameController inGameController, ArrayList<String> buildings, Map<String, Integer> sites){
-        this.subscriber.subscribe(gameSystemsService.updateIsland(tokenStorage.getGameId(), islandAttributes.getIsland().id(),
-                new UpdateSystemDto(
-                        "",
-                        sites,
-                        buildings,
-                        upgradeStatus,
-                        tokenStorage.getEmpireId()
+    public void updateIslandBuildings(IslandAttributeStorage islandAttributes, InGameController inGameController, ArrayList<String> buildings){
+        this.subscriber.subscribe(gameSystemsService.updateBuildings(tokenStorage.getGameId(), islandAttributes.getIsland().id(),
+                new UpdateBuildingDto(
+                        buildings
                         )), result -> {
+
+            islandAttributes.getIsland().buildings().clear();
+            islandAttributes.getIsland().buildings().addAll(result.buildings());
+            inGameController.selectedIsland.island = islandAttributes.getIsland();
+        });
+    }
+
+    public void upgradeSystem(IslandAttributeStorage islandAttributes, String upgradeStatus, InGameController inGameController){
+        this.subscriber.subscribe(gameSystemsService.upgradeSystem(tokenStorage.getGameId(), islandAttributes.getIsland().id(),
+                new UpgradeSystemDto(
+                        upgradeStatus
+                )), result -> {
 
             Island tmp = new Island(
                     result.owner(),
-                    Objects.isNull(result.owner()) ? -1 : getEmpire(result._id()).flag(),
+                    Objects.isNull(result.owner()) ? -1 :getEmpire(result._id()).flag(),
                     result.x(),
                     result.y(),
                     IslandType.valueOf(String.valueOf(result.type())),
@@ -238,6 +247,7 @@ public class IslandsService extends BasicService {
             inGameController.selectedIsland.island = tmp;
             islandAttributes.setIsland(tmp);
             inGameController.showOverview(islandAttributes.getIsland());
+
         });
     }
 

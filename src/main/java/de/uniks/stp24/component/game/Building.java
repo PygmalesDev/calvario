@@ -37,10 +37,7 @@ public class Building extends VBox {
             if(buildingName.equals("buildNewBuilding") && Objects.equals(tokenStorage.getEmpireId(), islandAttributes.getIsland().owner()) && islandAttributes.getUsedSlots() < islandAttributes.getIsland().resourceCapacity()) {
                 buildingsComponent.islandAttributes.addNewBuilding();
                 buildingsComponent.setGridPane();
-                inGameController.islandsService.updateIsland(islandAttributes, Upgrade.values()[islandAttributes.getIsland().upgradeLevel()].name(), inGameController, islandAttributes.getIsland().buildings(), islandAttributes.getIsland().sites());
-
-                //Increase res capacity in a dynamic way
-                //this.inGameController.overviewSitesComponent.setOverviewSites();
+                inGameController.islandsService.updateIslandBuildings(islandAttributes, inGameController, islandAttributes.getIsland().buildings());
             }
         });
     }

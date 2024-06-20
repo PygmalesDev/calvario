@@ -136,7 +136,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
                 case 3 -> islandAttributes.systemPresets.developed().id();
                 default -> null;
             };
-            islandsService.updateIsland(islandAttributes, upgradeStatus, inGameController, islandAttributes.getIsland().buildings(), islandAttributes.getIsland().sites());
+            islandsService.upgradeSystem(islandAttributes, upgradeStatus, inGameController);
         }
     }
 

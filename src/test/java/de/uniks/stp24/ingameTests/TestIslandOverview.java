@@ -6,10 +6,7 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.CreateSystemsDto;
-import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.dto.ReadEmpireDto;
-import de.uniks.stp24.dto.Upgrade;
+import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
@@ -239,6 +236,7 @@ public class TestIslandOverview extends ControllerTest {
     Island testIsland2;
     Island testIsland3;
     CreateSystemsDto updatedSystem;
+    CreateSystemsDto updatedBuildings;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -283,6 +281,9 @@ public class TestIslandOverview extends ControllerTest {
         buildings.add("testBuilding1");
         buildings.add("testBuilding2");
         buildings.add("testBuilding3");
+        buildings.add("testBuilding4");
+        buildings.add("testBuilding5");
+        buildings.add("testBuilding6");
 
         testIsland1 = new Island(
                 "testEmpireID",
@@ -350,6 +351,28 @@ public class TestIslandOverview extends ControllerTest {
                 tokenStorage.getEmpireId()
         );
 
+        ArrayList<String> buildings1 = new ArrayList<>(buildings);
+        buildings1.add("testBuilding3");
+
+        updatedBuildings = new CreateSystemsDto(
+                null,
+                null,
+                testIsland1.id(),
+                tokenStorage.getGameId(),
+                testIsland1.type(),
+                null,
+                siteSlots,
+                sites,
+                testIsland1.resourceCapacity(),
+                buildings1,
+                Upgrade.values()[testIsland1.upgradeLevel() + 1].name(),
+                testIsland1.crewCapacity(),
+                null,
+                (int) testIsland1.posX(),
+                (int) testIsland1.posY(),
+                tokenStorage.getEmpireId()
+        );
+
         this.islandAttributeStorage.systemPresets = systemUpgrades;
         this.islandAttributeStorage.empireDto = empireDto;
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
@@ -367,6 +390,8 @@ public class TestIslandOverview extends ControllerTest {
 
         this.inGameController.storageButtonsBox = new HBox();
         this.islandsService.isles = islands;
+        this.islandsService.tokenStorage = new TokenStorage();
+        this.islandsService.gameSystemsService = gameSystemsApiService;
 
         this.app.show(this.inGameController);
     }
@@ -374,7 +399,8 @@ public class TestIslandOverview extends ControllerTest {
     @Test
     public void testOwnedIsland() {
         doReturn(Observable.just(empireDtoAfterUpgrade)).when(empireService).updateEmpire(any(), any(), any());
-        doReturn(Observable.just(updatedSystem)).when(gameSystemsApiService).updateIsland(any(), any(), any());
+        doReturn(Observable.just(updatedSystem)).when(gameSystemsApiService).upgradeSystem(any(), any(), any());
+        doReturn(Observable.just(updatedBuildings)).when(gameSystemsApiService).updateBuildings(any(), any(), any());
         doReturn(readEmpireDto).when(islandsService).getEmpire(any());
 
         //Open island overview of owned Island
@@ -390,15 +416,15 @@ public class TestIslandOverview extends ControllerTest {
         waitForFxEvents();
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributeStorage.getIsland()) +
                 islandAttributeStorage.getIsland().buildings().size();
-        assertEquals(this.inGameController.overviewSitesComponent.resCapacity.getText(), "Resources: " + usedSlots + "/" + islandAttributeStorage.getIsland().resourceCapacity());
+        assertEquals(this.inGameController.overviewSitesComponent.resCapacity.getText(), usedSlots + "/" + islandAttributeStorage.getIsland().resourceCapacity());
         waitForFxEvents();
-        assertEquals(this.inGameController.overviewSitesComponent.island_name.getText(), islandAttributeStorage.getIsland().type().name());
-        waitForFxEvents();
-        assertFalse(this.inGameController.overviewSitesComponent.inputIslandName.isDisable());
+        assertEquals(this.inGameController.overviewSitesComponent.island_name.getText(), "Plundered Island(Colony)");
         waitForFxEvents();
         assertFalse(this.inGameController.overviewSitesComponent.inputIslandName.isDisable());
         waitForFxEvents();
-        assertEquals(this.inGameController.overviewSitesComponent.island_inf.getText(), "Lvl: " + Upgrade.values()[testIsland1.upgradeLevel()].ordinal());
+        assertFalse(this.inGameController.overviewSitesComponent.inputIslandName.isDisable());
+        waitForFxEvents();
+        assertEquals(this.inGameController.overviewSitesComponent.island_inf.getText(), "+100.0% more crew mates");
 
 
         //Test function of buttons
@@ -428,31 +454,12 @@ public class TestIslandOverview extends ControllerTest {
         buildingNodes.clear();
         buildingNodes.addAll(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
         clickOn(buildingNodes.getLast());
-        assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), buildingNodes.size() + 1);
-        assertTrue(!prev.isVisible() && !next.isVisible());
-
-        buildingNodes.clear();
-        buildingNodes.addAll(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
-        clickOn(buildingNodes.getLast());
-        assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), buildingNodes.size() + 1);
-        assertTrue(!prev.isVisible() && !next.isVisible());
-
-        buildingNodes.clear();
-        buildingNodes.addAll(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
-        clickOn(buildingNodes.getLast());
-        assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), buildingNodes.size() + 1);
-        assertTrue(!prev.isVisible() && !next.isVisible());
-
-        buildingNodes.clear();
-        buildingNodes.addAll(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
-        clickOn(buildingNodes.getLast());
         assertTrue(!prev.isVisible() && next.isVisible());
-        waitForFxEvents();
 
         clickOn(next);
         buildingNodes.clear();
         assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), 1);
-        assertTrue(prev.isVisible() && next.isVisible());
+        assertTrue(prev.isVisible() && !next.isVisible());
         waitForFxEvents();
         clickOn(prev);
         assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), 8);
@@ -479,17 +486,17 @@ public class TestIslandOverview extends ControllerTest {
 
             for (String item : prodItems) {
                 if (item.contains("fuel")) {
-                    assertTrue(item.contains("195"));
+                    assertTrue(item.contains("234"));
                 } else if (item.contains("energy")) {
-                    assertTrue(item.contains("199"));
+                    assertTrue(item.contains("229"));
                 }
             }
 
             for (String item : consItems) {
                 if (item.contains("fuel")) {
-                    assertTrue(item.contains("265"));
+                    assertTrue(item.contains("283"));
                 } else if (item.contains("energy")) {
-                    assertTrue(item.contains("275"));
+                    assertTrue(item.contains("290"));
                 }
             }
         }
@@ -549,7 +556,7 @@ public class TestIslandOverview extends ControllerTest {
         clickOn(confirmButton);
         waitForFxEvents();
         Text inf = lookup("#island_inf").queryText();
-        assertEquals(inf.getText(), "Lvl: " + Upgrade.values()[testIsland1.upgradeLevel() + 1].ordinal());
+        assertEquals(inf.getText(), "+100.0% more crew mates");
         clickOn(upgradeButton);
         assertTrue(confirmButton.getStyle().contains("-fx-background-color: black;"));
 

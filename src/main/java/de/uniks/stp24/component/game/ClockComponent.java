@@ -89,6 +89,7 @@ public class ClockComponent extends AnchorPane {
 
     @Inject
     public ClockComponent() {
+
     }
 
     @OnInit
@@ -168,6 +169,9 @@ public class ClockComponent extends AnchorPane {
 
     @OnDestroy
     public void destroy() {
+
+        System.out.println("Hier wird das Spiel beendet");
+
         timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_COUNTDOWN, this::handleTimeChanged);
         timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_SPEED, this::handleSpeedChanged);
         timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_SEASON, this::handleSeasonChanged);

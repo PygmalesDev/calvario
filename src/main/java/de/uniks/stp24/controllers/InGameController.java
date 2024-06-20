@@ -205,8 +205,6 @@ public class InGameController extends BasicController {
             pause = (Boolean) propertyChangeEvent.getNewValue();
             if (pause) {
                 pauseGame();
-                shadow.setVisible(true);
-                shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
             } else {
                 resumeGame();
                 shadow.setVisible(false);
@@ -224,6 +222,7 @@ public class InGameController extends BasicController {
         eventContainer.getChildren().add(eventComponent);
         eventContainer.setVisible(false);
         shadow.setVisible(false);
+        eventComponent.setClockComponent(clockComponent);
 
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
 
@@ -233,8 +232,6 @@ public class InGameController extends BasicController {
         overviewContainer.getChildren().add(overviewUpgradeComponent);
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
-
-        eventComponent.setClockComponent(clockComponent);
 
     }
 
@@ -262,10 +259,13 @@ public class InGameController extends BasicController {
 
     public void pauseGame() {
         pauseMenuContainer.setVisible(pause);
+        shadow.setVisible(true);
+        shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
     }
 
     public void resumeGame() {
         pauseMenuContainer.setVisible(pause);
+        shadow.setVisible(false);
     }
 
     /**

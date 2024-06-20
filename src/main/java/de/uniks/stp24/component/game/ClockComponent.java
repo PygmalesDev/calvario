@@ -167,8 +167,6 @@ public class ClockComponent extends AnchorPane {
 
     @OnDestroy
     public void destroy() {
-        eventService.listeners().removePropertyChangeListener(EventService.PROPERTY_EVENT, this::handleEventChanged);
-        eventService.listeners().removePropertyChangeListener(EventService.PROPERTY_REMAININGSEASONS, this::handleRemainingSeasonChanged);
         timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_COUNTDOWN, this::handleTimeChanged);
         timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_SPEED, this::handleSpeedChanged);
         timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_SEASON, this::handleSeasonChanged);

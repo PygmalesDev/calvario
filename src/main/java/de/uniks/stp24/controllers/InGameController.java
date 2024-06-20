@@ -42,6 +42,10 @@ import java.util.*;
 @Controller
 public class InGameController extends BasicController {
 
+    public Button showStorageButton;
+    public Button showEmpireOverviewButton;
+    public HBox storageButtonsBox;
+
     @FXML
     Pane shadow;
     @FXML
@@ -52,6 +56,7 @@ public class InGameController extends BasicController {
     Button showIslandButton;
     @FXML
     HBox storageButtonsBox;
+
     @FXML
     public Group group;
     @FXML
@@ -63,7 +68,7 @@ public class InGameController extends BasicController {
     @FXML
     StackPane pauseMenuContainer;
     @FXML
-    StackPane storageOverviewContainer;
+    public StackPane storageOverviewContainer;
     @FXML
     StackPane clockComponentContainer;
 
@@ -107,6 +112,9 @@ public class InGameController extends BasicController {
     EventListener eventListener;
 
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
+    // todo remove this variables if not needed
+    String gameID;
+    String empireID;
 
     @Inject
     public InGameController() {
@@ -208,20 +216,24 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setVisible(pause);
     }
 
-
-    // create and add buttons for storage and island overview
+    /** created and add buttons for storage and island overview
+    * there are problems if they are contained in the fxml
+    */
     private void createButtonsStorage() {
-        if (!(Objects.nonNull(showIslandButton) && (Objects.nonNull(showStorageButton)))) {
-            showIslandButton = new Button();
-            showIslandButton.setPrefHeight(30);
-            showIslandButton.setPrefWidth(30);
-            showIslandButton.setOnAction(event -> showIslandOverview());
+        if (!(Objects.nonNull(showEmpireOverviewButton)&&(Objects.nonNull(showStorageButton)))) {
+            showEmpireOverviewButton = new Button();
+            showEmpireOverviewButton.setPrefHeight(30);
+            showEmpireOverviewButton.setPrefWidth(30);
+            showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
+            showEmpireOverviewButton.getStyleClass().add("empireOverviewButton");
             showStorageButton = new Button();
             showStorageButton.setPrefHeight(30);
             showStorageButton.setPrefWidth(30);
+            showStorageButton.setId("showStorageButton");
+            showStorageButton.getStyleClass().add("storageButton");
             showStorageButton.setOnAction(event -> showStorage());
         }
-        this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
+        this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton);
     }
 
     @OnRender
@@ -270,7 +282,7 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
-    public void showIslandOverview() {
+    public void showEmpireOverview() {
     }
 
     @OnKey(code = KeyCode.SPACE)

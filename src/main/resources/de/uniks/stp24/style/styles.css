@@ -719,12 +719,6 @@ ToggleButton:hover{
 /***************************************************************************************************/
 /***************************************************************************************************/
 
-.resourceText{
-    -fx-font-family: "Tempus Sans ITC Regular";
-    -fx-font-weight: none;
-    -fx-font-size: 10;
-}
-
 .backgroundGame {
     -fx-background-color: "TRANSPARENT";
     -fx-background-image: url('/de/uniks/stp24/icons/sea.png');

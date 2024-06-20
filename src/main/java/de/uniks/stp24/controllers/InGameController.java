@@ -105,10 +105,6 @@ public class InGameController extends BasicController {
 
     @SubComponent
     @Inject
-    public Building building;
-
-    @SubComponent
-    @Inject
     public ClockComponent clockComponent;
 
     @SubComponent
@@ -151,9 +147,7 @@ public class InGameController extends BasicController {
     @Inject
     public SitePropertiesComponent sitePropertiesComponent;
 
-    @SubComponent
-    @Inject
-    public IslandComponent islandComponent;
+
 
     PopupBuilder popupBuildingProperties = new PopupBuilder();
     PopupBuilder popupBuildingWindow = new PopupBuilder();
@@ -377,8 +371,6 @@ public class InGameController extends BasicController {
         if (event.getSource() instanceof IslandComponent selected) {
             if (tokenStorage.getIsland() == null){
                 tokenStorage.setIsland(selected.getIsland());
-            } else {
-                islandComponent.updateIsland(tokenStorage.getIsland());
             }
             if (islandAttributes.getIsland() == null){
                 islandAttributes.setIsland(selected.getIsland());

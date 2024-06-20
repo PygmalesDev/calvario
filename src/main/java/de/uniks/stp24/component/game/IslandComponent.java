@@ -1,7 +1,6 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.service.ImageCache;
@@ -29,8 +28,6 @@ public class IslandComponent extends Pane {
     public StackPane flagPane;
     @FXML
     ImageView flagImage;
-    private Island island;
-    double x, y;
     @Inject
     ImageCache imageCache;
     @Inject
@@ -38,8 +35,8 @@ public class IslandComponent extends Pane {
 
     private InGameController inGameController;
     public Island island;
-
     double x, y;
+
     public boolean islandIsSelected = false;
 
     private boolean keyCodeH = false;

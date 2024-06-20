@@ -205,6 +205,8 @@ public class InGameController extends BasicController {
             pause = (Boolean) propertyChangeEvent.getNewValue();
             if (pause) {
                 pauseGame();
+                shadow.setVisible(true);
+                shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
             } else {
                 resumeGame();
                 shadow.setVisible(false);
@@ -259,8 +261,6 @@ public class InGameController extends BasicController {
 
     public void pauseGame() {
         pauseMenuContainer.setVisible(pause);
-        shadow.setVisible(true);
-        shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
     }
 
     public void resumeGame() {
@@ -392,6 +392,7 @@ public class InGameController extends BasicController {
                     System.out.println("Event -> minerals: " + islandAttributes.getAvailableResources().get("minerals") + " alloys: " + islandAttributes.getAvailableResources().get("alloys"));
                     overviewUpgradeComponent.setUpgradeButton();
                 },
-                error -> System.out.println("errorListener"));
+                error -> System.out.println("errorListener")
+        );
     }
 }

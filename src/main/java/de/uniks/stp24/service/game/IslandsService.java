@@ -1,11 +1,15 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.component.game.IslandComponent;
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.ReadEmpireDto;
+import de.uniks.stp24.dto.UpdateSystemDto;
+import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.BasicService;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -205,6 +209,36 @@ public class IslandsService extends BasicService {
         this.islandComponentMap.clear();
         this.empiresInGame.clear();
         this.connections.clear();
+    }
+
+    public void updateIsland(IslandAttributeStorage islandAttributes, String upgradeStatus, InGameController inGameController, ArrayList<String> buildings, Map<String, Integer> sites){
+        this.subscriber.subscribe(gameSystemsService.updateIsland(tokenStorage.getGameId(), islandAttributes.getIsland().id(),
+                new UpdateSystemDto(
+                        "",
+                        sites,
+                        buildings,
+                        upgradeStatus,
+                        tokenStorage.getEmpireId()
+                        )), result -> {
+
+            Island tmp = new Island(
+                    result.owner(),
+                    Objects.isNull(result.owner()) ? -1 : getEmpire(result._id()).flag(),
+                    result.x(),
+                    result.y(),
+                    IslandType.valueOf(String.valueOf(result.type())),
+                    result.population(),
+                    result.capacity(),
+                    Upgrade.valueOf(result.upgrade()).ordinal(),
+                    result.districtSlots(),
+                    result.districts(),
+                    result.buildings(),
+                    result._id()
+            );
+            inGameController.selectedIsland.island = tmp;
+            islandAttributes.setIsland(tmp);
+            inGameController.showOverview(islandAttributes.getIsland());
+        });
     }
 
     @OnDestroy

@@ -65,7 +65,7 @@ public class BuildingsComponent extends VBox {
         }
 
         if (!isGridPaneFull(currentPage)) {
-            buildings.add(new Building(this, "empty", tokenStorage, islandAttributes, inGameController), col, row);
+            buildings.add(new Building(this, "buildNewBuilding", tokenStorage, islandAttributes, inGameController), col, row);
         } else {
             next.setVisible(true);
         }
@@ -99,7 +99,7 @@ public class BuildingsComponent extends VBox {
         } else if(!isGridPaneFull(currentPage + 1) && size % 8 == 0){
             currentPage = currentPage + 1;
             buildings.getChildren().clear();
-            buildings.add(new Building(this, "empty", tokenStorage, islandAttributes, inGameController), 0, 0);
+            buildings.add(new Building(this, "buildNewBuilding", tokenStorage, islandAttributes, inGameController), 0, 0);
             prev.setVisible(true);
         }
     }

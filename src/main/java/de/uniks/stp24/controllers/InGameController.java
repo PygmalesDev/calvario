@@ -93,7 +93,7 @@ public class InGameController extends BasicController {
     public ClockComponent clockComponent;
 
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
     public Subscriber subscriber;
     @Inject

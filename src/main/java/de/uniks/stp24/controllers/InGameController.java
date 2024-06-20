@@ -240,8 +240,8 @@ public class InGameController extends BasicController {
             System.out.println(islandsService.getCapacityOfOneSystem(selected.getIsland().id()));
 //            selected.showFlag();
             if (Objects.nonNull((selected.getIsland()).owner())) {
-                System.out.print("empire hat capacity: ");
-                islandsService.getAllNumberOfSites((selected.getIsland()).owner());
+                System.out.print("empire hat capacity: " +
+                islandsService.getAllNumberOfSites((selected.getIsland()).owner()));
             }
         }
     }

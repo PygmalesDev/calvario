@@ -101,7 +101,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     public void destroyBuilding(){
         Island island = tokenStorage.getIsland();
-        subscriber.subscribe(resourcesService.destroyBuilding(tokenStorage.getGameId(), island), result -> {
+        subscriber.subscribe(resourcesService.destroyBuilding(tokenStorage.getGameId(), island, buildingType), result -> {
             tokenStorage.setIsland(islandsService.updateIsland(result));
             onClose();
         });

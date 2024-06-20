@@ -14,9 +14,7 @@ import javafx.collections.ObservableList;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ResourcesService {
     @Inject
@@ -39,9 +37,25 @@ public class ResourcesService {
 
     }
 
-    public Observable<SystemDto> destroyBuilding(String gameID, Island island) {
-        String[] buildings = new String[1];
-        buildings[0] = "exchange";
+    public Observable<SystemDto> destroyBuilding(String gameID, Island island, String buildingToDestroy) {
+        String[] buildings = island.buildings();
+        // Convert array to arraylist
+        List<String> buildingList = new ArrayList<>(Arrays.asList(buildings));
+
+        // Look in list for building to delete
+        Iterator<String> iterator = buildingList.iterator();
+        while (iterator.hasNext()) {
+            String building = iterator.next();
+            if (building.equals(buildingToDestroy)) {
+                iterator.remove();
+                break;
+            }
+        }
+
+        // convert back to String array
+        buildings = buildingList.toArray(new String[0]);
+        System.out.println(Arrays.toString(buildings) + " Gebäude");
+
         Map<String, Integer> sitesValue = new HashMap<>();
         System.out.println(gameID + " ### " + island);
 
@@ -57,6 +71,7 @@ public class ResourcesService {
                 island.sites(), island.buildings(),island.upgrade(), island.owner()));
     }
 
+    // Uses update island api-service to change the value of a system and add a building
     public Observable<SystemDto> createBuilding(String gameId, Island island, String buildingToAdd) {
         System.out.println(gameId + " ### " + island);
         String[] newBuildingsArray = new String[island.buildings().length + 1];
@@ -76,6 +91,7 @@ public class ResourcesService {
                 island.sites(), island.buildings(),island.upgrade(), island.owner()));
     }
 
+    // Uses update island api-service to change the value of a system and delete a site
     public Observable<SystemDto> destroySite(String gameID, Island island, String siteToDestroy) {
         System.out.println(island.sites() + " ####################");
         Map<String, Integer> sitesValue = new HashMap<>();
@@ -94,6 +110,7 @@ public class ResourcesService {
                 island.sites(), island.buildings(),island.upgrade(), island.owner()));
     }
 
+    // Uses update island api-service to change the value of a system and add a site
     public Observable<SystemDto> buildSite(String gameID, Island island, String siteToBuild) {
         Map<String, Integer> sitesValue = new HashMap<>();
         sitesValue.put(siteToBuild, 1);

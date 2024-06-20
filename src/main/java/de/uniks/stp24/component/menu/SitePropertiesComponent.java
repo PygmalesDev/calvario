@@ -161,6 +161,8 @@ public class SitePropertiesComponent extends AnchorPane {
     }
 
     public void displayAmountOfSite(){
+        buildSiteButton.setDisable(false);
+        destroySiteButton.setDisable(false);
         int amountSite = 0;
         int amountSiteSlots = 0;
         if (tokenStorage.getIsland().sites().get(siteType) != null){
@@ -168,6 +170,13 @@ public class SitePropertiesComponent extends AnchorPane {
         }
         if (tokenStorage.getIsland().sitesSlots().get(siteType) != null){
             amountSiteSlots= tokenStorage.getIsland().sitesSlots().get(siteType);
+        }
+        if (amountSiteSlots == amountSite){
+            buildSiteButton.setDisable(true);
+        }
+
+        if (amountSite == 0){
+            destroySiteButton.setDisable(true);
         }
 
         int count = 0;

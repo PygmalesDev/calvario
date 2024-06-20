@@ -13,10 +13,12 @@ import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -254,7 +256,7 @@ public class InGameController extends BasicController {
             showStorageButton.setId("showStorageButton");
             showStorageButton.setOnAction(event -> showStorage());
         }
-        //this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
+        this.storageButtonsBox.getChildren().addAll(showStorageButton, showIslandButton);
     }
 
     @OnRender
@@ -269,7 +271,8 @@ public class InGameController extends BasicController {
             isle.setScaleY(1.25);
             this.mapGrid.getChildren().add(isle);
         });
-        createButtonsStorage();
+        Platform.runLater(this::createButtonsStorage);
+
         mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
             zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight());
         });
@@ -298,6 +301,7 @@ public class InGameController extends BasicController {
     // remove prints
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
+            tokenStorage.setIsland(selected.getIsland());
             System.out.println(event.getSource().toString());
             System.out.println("found island: " + selected.getIsland().toString());
             selected.showFlag();

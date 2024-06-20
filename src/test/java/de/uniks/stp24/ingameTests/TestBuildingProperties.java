@@ -152,7 +152,7 @@ public class TestBuildingProperties extends ControllerTest {
                 IslandType.mining, 20, 20, 1, siteSlots, sites, buildings);
         doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
                 "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
-                "testOwner"))).when(resourcesService).destroyBuilding(any(), any());
+                "testOwner"))).when(resourcesService).destroyBuilding(any(), any(),any());
         doReturn(new Island(island.owner(), island.upgrade(), island.name(), island.id_(), island.flagIndex(),
                 island.posX(), island.posY(), island.type(), island.crewCapacity(), island.resourceCapacity(), island.upgradeLevel(), island.sitesSlots(),
                 island.sites(), island.buildings())).when(islandsService).updateIsland(any());
@@ -161,7 +161,7 @@ public class TestBuildingProperties extends ControllerTest {
         waitForFxEvents();
         clickOn("#destroyButton");
 
-        verify(this.resourcesService, times(1)).destroyBuilding(any(), any());
+        verify(this.resourcesService, times(1)).destroyBuilding(any(), any(),any());
         verify(this.islandsService, times(1)).updateIsland(any());
 
     }

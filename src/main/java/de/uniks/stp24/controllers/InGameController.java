@@ -10,14 +10,15 @@ import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.game.EventService;
+import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
-import de.uniks.stp24.service.game.IslandsService;
-import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
+import de.uniks.stp24.service.game.ResourcesService;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -35,6 +36,7 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
+import org.jetbrains.annotations.NotNull;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -42,13 +44,21 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
 
-
 @Title("CALVARIO")
 @Controller
 public class InGameController extends BasicController {
-    public Button showStorageButton;
-    public Button showEmpireOverviewButton;
+
+    @FXML
+    Pane shadow;
+    @FXML
+    StackPane eventContainer;
+    @FXML
+    Button showStorageButton;
+    @FXML
+    Button showEmpireOverviewButton;
+    @FXML
     public HBox storageButtonsBox;
+
     @FXML
     public Group group;
     @FXML
@@ -69,9 +79,21 @@ public class InGameController extends BasicController {
     StackPane clockComponentContainer;
 
     @Inject
+    public EventService eventService;
+    @Inject
+    TimerService timerService;
+    @Inject
     InGameService inGameService;
     @Inject
+    GamesService gamesService;
+    @Inject
+    LobbyService lobbyService;
+    @Inject
     EmpireService empireService;
+    @Inject
+    IslandsService islandsService;
+    @Inject
+    ResourcesService resourceService;
 
     @SubComponent
     @Inject
@@ -91,29 +113,30 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
-
+    @SubComponent
     @Inject
-    IslandsService islandsService;
+    public EventComponent eventComponent;
+
+    List<IslandComponent> islandComponentList;
+    Map<String, IslandComponent> islandComponentMap;
+
     @Inject
     public Subscriber subscriber;
     @Inject
     public IslandAttributeStorage islandAttributes;
     @Inject
     EventListener eventListener;
-    @Inject
-    ResourcesService resourceService;
+
     @Inject
     public GameSystemsApiService gameSystemsApiService;
 
     public IslandComponent selectedIsland;
-    List<IslandComponent> islandComponentList = new ArrayList<>();
-    Map<String, IslandComponent> islandComponentMap;
 
     boolean pause = false;
     double scale = 1.0;
+
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
 
-    // todo remove this variables if not needed
     String gameID;
     String empireID;
 
@@ -122,6 +145,7 @@ public class InGameController extends BasicController {
 
     }
 
+
     @OnInit
     public void init() {
 
@@ -129,6 +153,7 @@ public class InGameController extends BasicController {
         empireID = tokenStorage.getEmpireId();
 
         GameStatus gameStatus = inGameService.getGameStatus();
+
         //Todo: Outprint for Swagger - can be deleted later
         System.out.println("game in ingame: " + tokenStorage.getGameId());
         System.out.println("empire in ingame: " + tokenStorage.getEmpireId());
@@ -146,35 +171,25 @@ public class InGameController extends BasicController {
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
 
         this.subscriber.subscribe(inGameService.loadUpgradePresets(),
-                result -> {
-                    islandAttributes.setSystemPresets(result);
-                });
+                result -> islandAttributes.setSystemPresets(result));
 
         this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
-                result -> {
-                    islandAttributes.setEmpireDto(result);
-                });
+                result -> islandAttributes.setEmpireDto(result));
 
         this.subscriber.subscribe(inGameService.loadBuildingPresets(),
-                result -> {
-                    islandAttributes.setBuildingPresets(result);
-                });
+                result -> islandAttributes.setBuildingPresets(result));
 
         this.subscriber.subscribe(inGameService.loadDistrictPresets(),
-                result -> {
-                    islandAttributes.setDistrictPresets(result);
-                });
+                result -> islandAttributes.setDistrictPresets(result));
 
-        if (!tokenStorage.isSpectator()) {
-            createEmpireListener();
-        }
+        if (!tokenStorage.isSpectator()) createEmpireListener();
     }
 
-    private void handleLanguageChanged(PropertyChangeEvent propertyChangeEvent) {
+    private void handleLanguageChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
         Locale newLang = propertyChangeEvent.getNewValue().equals(0) ? Locale.GERMAN : Locale.ENGLISH;
     }
 
-    private void handleShowSettings(PropertyChangeEvent propertyChangeEvent) {
+    private void handleShowSettings(@NotNull PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             Boolean settings = (Boolean) propertyChangeEvent.getNewValue();
             if (settings) {
@@ -185,13 +200,16 @@ public class InGameController extends BasicController {
         }
     }
 
-    private void handlePauseChanged(PropertyChangeEvent propertyChangeEvent) {
+    private void handlePauseChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             pause = (Boolean) propertyChangeEvent.getNewValue();
             if (pause) {
                 pauseGame();
+                shadow.setVisible(true);
+                shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
             } else {
                 resumeGame();
+                shadow.setVisible(false);
             }
         }
     }
@@ -201,6 +219,13 @@ public class InGameController extends BasicController {
         overviewSitesComponent.setIngameController(this);
         overviewUpgradeComponent.setIngameController(this);
         pauseMenuContainer.setVisible(false);
+        eventComponent.setParent(shadow, eventContainer);
+        clockComponentContainer.getChildren().add(clockComponent);
+        eventContainer.getChildren().add(eventComponent);
+        eventContainer.setVisible(false);
+        shadow.setVisible(false);
+        eventComponent.setClockComponent(clockComponent);
+
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
 
         overviewContainer.setVisible(false);
@@ -209,7 +234,7 @@ public class InGameController extends BasicController {
         overviewContainer.getChildren().add(overviewUpgradeComponent);
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
-        clockComponentContainer.getChildren().add(clockComponent);
+
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -240,13 +265,15 @@ public class InGameController extends BasicController {
 
     public void resumeGame() {
         pauseMenuContainer.setVisible(pause);
+        shadow.setVisible(false);
     }
 
-    /** created and add buttons for storage and island overview
-    * there are problems if they are contained in the fxml
-    */
+    /**
+     * created and add buttons for storage and island overview
+     * there are problems if they are contained in the fxml
+     */
     private void createButtonsStorage() {
-        if (!(Objects.nonNull(showEmpireOverviewButton)&&(Objects.nonNull(showStorageButton)))) {
+        if (!(Objects.nonNull(showEmpireOverviewButton) && (Objects.nonNull(showStorageButton)))) {
             showEmpireOverviewButton = new Button();
             showEmpireOverviewButton.setPrefHeight(30);
             showEmpireOverviewButton.setPrefWidth(30);
@@ -286,9 +313,10 @@ public class InGameController extends BasicController {
         mapScrollPane.setVvalue(0.5);
         mapScrollPane.setHvalue(0.5);
 
-        /* zoom function working but not perfect!
-         it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
-        */
+        /*
+         * zoom function working but not perfect!
+         * it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
+         */
         mapGrid.setOnScroll(event -> {
             if (event.isShiftDown() && (event.getDeltaY() > 0 || event.getDeltaX() > 0)) {
                 scale += 0.1;
@@ -296,7 +324,7 @@ public class InGameController extends BasicController {
                 event.consume();
             } else if (event.isShiftDown() && (event.getDeltaY() < 0 || event.getDeltaX() < 0)) {
                 scale -= 0.1;
-                scale = Math.max(scale, 0.85);
+                scale = Math.max(scale, 0.75);
                 event.consume();
             }
             group.setScaleX(scale);
@@ -305,9 +333,7 @@ public class InGameController extends BasicController {
 
     }
 
-    // TODO this could be equivalent to showIslandOverview
-    // remove prints
-    public void showInfo(MouseEvent event) {
+    public void showInfo(@NotNull MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
             System.out.print("found island: " + selected.getIsland().id() + " with capacity: ");
             System.out.println(islandsService.getCapacityOfOneSystem(selected.getIsland().id()));
@@ -334,7 +360,6 @@ public class InGameController extends BasicController {
         overviewSitesComponent.setOverviewSites();
     }
 
-    // assign key S to show storage
     @OnKey(code = KeyCode.S)
     public void showStorage() {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
@@ -347,7 +372,7 @@ public class InGameController extends BasicController {
         group.setScaleY(scale);
     }
 
-    public void resetZoomMouse(MouseEvent event) {
+    public void resetZoomMouse(@NotNull MouseEvent event) {
         if (event.getButton() == MouseButton.MIDDLE) {
             resetZoom();
         }
@@ -361,7 +386,8 @@ public class InGameController extends BasicController {
                     System.out.println("Event -> minerals: " + islandAttributes.getAvailableResources().get("minerals") + " alloys: " + islandAttributes.getAvailableResources().get("alloys"));
                     overviewUpgradeComponent.setUpgradeButton();
                 },
-                error -> System.out.println("errorListener"));
+                error -> System.out.println("errorListener")
+        );
     }
   
     @OnDestroy
@@ -372,6 +398,7 @@ public class InGameController extends BasicController {
         islandsService.removeDataForMap();
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
                 .removePropertyChangeListener(triple.propertyName(), triple.listener()));
+        clockComponentContainer.getChildren().clear();
         this.subscriber.dispose();
     }
   

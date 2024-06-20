@@ -7,10 +7,12 @@ import de.uniks.stp24.rest.GamesApiService;
 import io.reactivex.rxjava3.core.Observable;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.beans.PropertyChangeSupport;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@Singleton
 public class TimerService {
 
     protected PropertyChangeSupport listeners;
@@ -28,7 +30,6 @@ public class TimerService {
     int countdown = TIME;
     int season;
     int speed;
-    boolean showFlags = false;
     private volatile boolean isRunning = false;
 
 
@@ -37,14 +38,15 @@ public class TimerService {
 
     }
 
+    /**
+     * After changing the speed,
+     * the local countdown till next season will be updated
+     */
     public Observable<UpdateGameResultDto> setSpeed(String gamesid, int speed) {
         return gamesApiService
                 .editSpeed(gamesid, new UpdateSpeedDto(speed))
                 .doOnNext(updateGameResultDto -> {
-                    // After changing the speed,
-                    // the local countdown till next season will be updated
                     setSpeedLocal(updateGameResultDto.speed());
-                    System.out.println("Speed changed to: " + updateGameResultDto.speed());
                 });
     }
 
@@ -154,15 +156,6 @@ public class TimerService {
             this.firePropertyChange(PROPERTY_COUNTDOWN, oldValue, value);
 
         }
-    }
-
-
-    public void setShowFlags(boolean showFlags) {
-        this.showFlags = showFlags;
-    }
-
-    public boolean getShowFlags() {
-        return showFlags;
     }
 
     public boolean isRunning() {

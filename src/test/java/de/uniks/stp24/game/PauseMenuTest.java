@@ -2,6 +2,9 @@ package de.uniks.stp24.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.game.ClockComponent;
+import de.uniks.stp24.component.game.EventComponent;
+import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
@@ -14,6 +17,7 @@ import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.LanguageService;
@@ -46,6 +50,9 @@ public class PauseMenuTest extends ControllerTest {
     GamesApiService gamesApiService;
 
     @Spy
+    EventService eventService;
+
+    @Spy
     GameStatus gameStatus;
 
     @Spy
@@ -74,6 +81,9 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     ClockComponent clockComponent;
+
+    @InjectMocks
+    EventComponent eventComponent;
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
@@ -119,6 +129,8 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
+        this.inGameController.eventComponent = this.eventComponent;
+        inGameService.setEventService(eventService);
         this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
         this.inGameController.overviewUpgradeComponent = this.overviewUpgradeComponent;
         this.inGameController.islandAttributes = this.islandAttributeStorage;

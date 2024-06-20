@@ -1,0 +1,25 @@
+{
+  "id": "fools_gold",
+  "event_type": "bad",
+  "duration": 16,
+  "effects": [
+    {
+      "variable": "credits",
+      "base": 0,
+      "multiplier": 1,
+      "bonus": -20
+    },
+    {
+      "variable": "alloys",
+      "base": 0,
+      "multiplier": 1,
+      "bonus": -20
+    },
+    {
+        "variable": "fuel",
+        "base": 0,
+        "multiplier": 1,
+        "bonus": 30
+    }
+  ]
+}

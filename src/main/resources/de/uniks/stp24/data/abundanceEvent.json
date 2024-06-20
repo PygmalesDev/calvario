@@ -1,5 +1,7 @@
 {
-  "id": "abdundance",
+  "id": "abundance",
+  "event_type": "good",
+  "duration": 26,
   "effects": [
     {
       "variable": "minerals",
@@ -10,8 +12,8 @@
     {
       "variable": "alloys",
       "base": 0,
-      "multiplier": 0,
-      "bonus": 5
+      "multiplier": 1,
+      "bonus": 15
     }
   ]
 }

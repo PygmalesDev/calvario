@@ -17,6 +17,7 @@ import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.LanguageService;
@@ -31,7 +32,6 @@ import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -42,7 +42,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,6 +61,8 @@ public class TestIslandOverview extends ControllerTest {
     InGameService inGameService;
     @Spy
     TimerService timerService;
+    @Spy
+    EventService eventService;
     @Spy
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
@@ -101,6 +102,8 @@ public class TestIslandOverview extends ControllerTest {
     SitesComponent sitesComponent;
     @InjectMocks
     BuildingsComponent buildingsComponent;
+    @InjectMocks
+    EventComponent eventComponent;
     @InjectMocks
     InGameController inGameController;
 
@@ -246,6 +249,9 @@ public class TestIslandOverview extends ControllerTest {
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
+        this.inGameController.eventComponent = this.eventComponent;
+        this.inGameController.eventService = this.eventService;
+        this.clockComponent.eventService = this.eventService;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameService.setGameStatus(gameStatus);
         this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
@@ -254,6 +260,8 @@ public class TestIslandOverview extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+
+
 
         // Mock TokenStorage
         doReturn("testUserID").when(this.tokenStorage).getUserId();
@@ -369,8 +377,19 @@ public class TestIslandOverview extends ControllerTest {
         this.islandsService.isles = islands;
 
         this.app.show(this.inGameController);
-        storageOverviewComponent.getStylesheets().clear();
-        clockComponent.getStylesheets().clear();
+
+        this.storageOverviewComponent.getStylesheets().clear();
+        this.clockComponent.getStylesheets().clear();
+        this.pauseMenuComponent.getStylesheets().clear();
+        this.settingsComponent.getStylesheets().clear();
+        this.clockComponent.getStylesheets().clear();
+        this.eventComponent.getStylesheets().clear();
+        this.storageOverviewComponent.getStylesheets().clear();
+        this.overviewSitesComponent.getStylesheets().clear();
+        this.overviewUpgradeComponent.getStylesheets().clear();
+        this.buildingsComponent.getStylesheets().clear();
+        this.sitesComponent.getStylesheets().clear();
+        this.detailsComponent.getStylesheets().clear();
     }
 
     @Test
@@ -414,8 +433,7 @@ public class TestIslandOverview extends ControllerTest {
         Node next = lookup("#next").query();
 
         //-> Check functions buildings
-        ArrayList<Node> buildingNodes = new ArrayList<>();
-        buildingNodes.addAll(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
+        ArrayList<Node> buildingNodes = new ArrayList<>(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
 
         for (int i = 0; i < buildingNodes.size() - 2; i++) {
             clickOn(buildingNodes.get(i));

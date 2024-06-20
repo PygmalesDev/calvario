@@ -1,0 +1,31 @@
+{
+  "id": "roger_feast",
+  "event_type": "good",
+  "duration": 31,
+  "effects": [
+    {
+      "variable": "credits",
+      "base": 0,
+      "multiplier": 1.05,
+      "bonus": 0
+    },
+    {
+      "variable": "population",
+      "base": 0,
+      "multiplier": 1.05,
+      "bonus": 0
+    },
+    {
+      "variable": "food",
+      "base": 0,
+      "multiplier": 1.05,
+      "bonus": 0
+    },
+    {
+      "variable": "consumer_goods",
+      "base": 0,
+      "multiplier": 1.05,
+      "bonus": 0
+    }
+  ]
+}

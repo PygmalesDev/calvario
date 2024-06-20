@@ -13,6 +13,7 @@ import javafx.scene.shape.Line;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.controller.Subscriber;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -29,7 +30,7 @@ public class IslandsService extends BasicService {
     String gameID;
 
     static final int factor = 10;
-    double minX,maxX,minY,maxY;
+    double minX, maxX, minY, maxY;
     double widthRange, heightRange;
     private final List<ShortSystemDto> devIsles = new ArrayList<>();
     public List<Island> isles = new ArrayList<>();
@@ -45,7 +46,7 @@ public class IslandsService extends BasicService {
 
     @Inject
     public IslandsService() {
-        if (subscriber==null) subscriber = new Subscriber();
+        if (subscriber == null) subscriber = new Subscriber();
     }
 
     /**
@@ -65,7 +66,13 @@ public class IslandsService extends BasicService {
         siteManager.get("noBody").setEmpireID("noBody");
     }
 
-    /** this method will be used when changing from lobby to ingame
+   
+    public void setFlag(boolean selected) {
+        islandComponentMap.forEach((id, comp) -> comp.showFlag(selected));
+    }
+
+    /**
+     * this method will be used when changing from lobby to ingame
      * and retrieve island information when starting or rejoining a game
      */
     public void retrieveIslands(String gameID) {
@@ -114,7 +121,7 @@ public class IslandsService extends BasicService {
      * this means that if effect's radius (now 2.0) is large
      * an island component can be clicked just by clicking near (or far) from it
      */
-    public IslandComponent createIslandPaneFromDto(Island isleDto, IslandComponent component) {
+    public IslandComponent createIslandPaneFromDto(Island isleDto, @NotNull IslandComponent component) {
         component.applyInfo(isleDto);
         double screenOffsetH = widthRange * (factor + 2) / 2.0 - 25;
         double screenOffSetV = heightRange * (factor + 2) / 2.0 - 25;
@@ -124,9 +131,9 @@ public class IslandsService extends BasicService {
                 factor * isleDto.posY() - serverOffsetV + screenOffSetV);
         component.applyIcon(isleDto.type());
         component.setFlagImage(isleDto.flagIndex());
-        if(Objects.nonNull(isleDto.owner())) {
+        if (Objects.nonNull(isleDto.owner())) {
             Color colorWeb = Color.web(getEmpire(isleDto.owner()).color()).brighter();
-            component.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb)+ ", 2.0, 0.88, 0, 0);");
+            component.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb) + ", 2.0, 0.88, 0, 0);");
         }
         return component;
     }
@@ -135,6 +142,7 @@ public class IslandsService extends BasicService {
     public double getMapWidth() {
         return this.widthRange * (factor + 3);
     }
+
     public double getMapHeight() {
         return this.heightRange * (factor + 3);
     }
@@ -142,7 +150,7 @@ public class IslandsService extends BasicService {
     public Map<String, List<String>> getConnections() {
         Map<String, List<String>> singleConnections = new HashMap<>();
         List<String> checked = new ArrayList<>();
-        connections.forEach((key,value) -> {
+        connections.forEach((key, value) -> {
             if (!checked.contains(key)) checked.add(key);
             ArrayList<String> tmp = new ArrayList<>();
             for (String s : value) {
@@ -150,7 +158,7 @@ public class IslandsService extends BasicService {
                     tmp.add(s);
                 }
             }
-            singleConnections.putIfAbsent(key,tmp);
+            singleConnections.putIfAbsent(key, tmp);
         });
         return singleConnections;
     }
@@ -159,7 +167,7 @@ public class IslandsService extends BasicService {
      * create subcomponents to be added to the map
      * put information in a map to access them easily
      */
-    public List<IslandComponent> createIslands(List<Island> list) {
+    public List<IslandComponent> createIslands(@NotNull List<Island> list) {
         list.forEach(
           island -> {
               IslandComponent tmp = createIslandPaneFromDto(island,
@@ -173,11 +181,13 @@ public class IslandsService extends BasicService {
         return Collections.unmodifiableList(islandComponentList);
     }
 
-    /** lines (as object) between islands */
-    public List<Line> createLines(Map<String,IslandComponent> idToComponent) {
+    /**
+     * lines (as object) between islands
+     */
+    public List<Line> createLines(Map<String, IslandComponent> idToComponent) {
         Map<String, List<String>> islandConnections = getConnections();
         List<Line> linesInMap = new ArrayList<>();
-        islandConnections.forEach((isle,list) -> {
+        islandConnections.forEach((isle, list) -> {
             double startX, startY, endX, endY;
             IslandComponent isle1 = idToComponent.get(isle);
             startX = isle1.getPosX() + 25;
@@ -186,7 +196,7 @@ public class IslandsService extends BasicService {
                 IslandComponent isle2 = idToComponent.get(neighbour);
                 endX = isle2.getPosX() + 25;
                 endY = isle2.getPosY() + 25;
-                Line tmp = new Line(startX,startY,endX,endY);
+                Line tmp = new Line(startX, startY, endX, endY);
                 tmp.getStyleClass().add("connection");
                 linesInMap.add(tmp);
             }
@@ -274,6 +284,7 @@ public class IslandsService extends BasicService {
     }
 
     public List<Island> getListOfIslands() {
+
         return Collections.unmodifiableList(this.isles);
     }
 
@@ -281,19 +292,21 @@ public class IslandsService extends BasicService {
         return Collections.unmodifiableMap(this.islandComponentMap);
     }
 
-    public ReadEmpireDto getEmpire(String id){
-        return this.empiresInGame.getOrDefault(id,null);
+    public ReadEmpireDto getEmpire(String id) {
+        return this.empiresInGame.getOrDefault(id, null);
     }
 
     public void saveEmpire(String id, ReadEmpireDto empire) {
-        this.empiresInGame.put(id,empire);
+        this.empiresInGame.put(id, empire);
     }
 
-    /** after color was modified using .brighter() compute it to a string */
-    private String colorToRGB(Color color) {
+    /**
+     * after color was modified using .brighter() compute it to a string
+     */
+    private @NotNull String colorToRGB(Color color) {
         return "rgb(" + (int) (color.getRed() * 255) + "," +
                 (int) (color.getGreen() * 255) + "," +
-                (int) (color.getBlue() * 255) + ")" ;
+                (int) (color.getBlue() * 255) + ")";
     }
 
     public void removeDataForMap() {

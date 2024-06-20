@@ -352,12 +352,20 @@ public class InGameController extends BasicController {
     }
 
     public void handleDeleteStructure(String buildingType) {
+        deleteStructureWarningContainer.toFront();
         deleteStructureWarningContainer.setMouseTransparent(false);
         popupDeleteStructure.showPopup(deleteStructureWarningContainer,deleteStructureComponent);
+        popupDeleteStructure.setBlur(buildingProperties, buildingsWindow);
+        popupBuildingProperties.setBlur(mapScrollPane, siteProperties);
         deleteStructureComponent.setStructureType(buildingType);
     }
 
     public void updateAmountSitesGrid() {
         sitePropertiesComponent.displayAmountOfSite();
+    }
+
+    public void handleAfterStructureDelete() {
+        popupDeleteStructure.removeBlur();
+        popupBuildingProperties.removeBlur();
     }
 }

@@ -126,6 +126,7 @@ public class DeleteStructureComponent extends VBox{
     }
 
     public void onCancel(){
+        inGameController.handleAfterStructureDelete();
         setVisible(false);
     }
 

@@ -28,6 +28,7 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.controlsfx.control.GridView;
 
@@ -35,8 +36,6 @@ import java.util.*;
 
 @Component(view = "EmpireOverview.fxml")
 public class EmpireOverviewComponent extends StackPane {
-    @FXML
-    public StackPane stackPane;
     @FXML
     Button closeEmpireOverviewButton;
     @FXML
@@ -66,6 +65,11 @@ public class EmpireOverviewComponent extends StackPane {
     @Inject
     IslandsService islandsService;
 
+    @Inject
+    @org.fulib.fx.annotation.controller.Resource
+    @Named("gameResourceBundle")
+    ResourceBundle gameResourceBundle;
+
     private InGameController inGameController;
 
     ObservableList<Island> islandObservableList;
@@ -78,7 +82,9 @@ public class EmpireOverviewComponent extends StackPane {
     Map<IslandType, Image> imageMap = new HashMap<>();
 
 
+
     private String lastUpdate;
+    private String lastSeasonUpdate;
     private String gameID;
     private String empireID;
 
@@ -95,20 +101,22 @@ public class EmpireOverviewComponent extends StackPane {
     String portraitsFolderPath = "portraits/captain_";
     String islandButtonsFolderPath = "buttons/IslandButton/";
 
-
-
-    public void closeEmpireOverview(ActionEvent event) {
-        stackPane.setVisible(false);
-
+    @Inject
+    public EmpireOverviewComponent() {
+        lastUpdate = "";
+        lastSeasonUpdate = "";
     }
+
 
     @OnInit
     public void initEmpireList() {
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
         this.subscriber.subscribe(this.empireService.getEmpire(gameID, empireID), this::empireTraits);
+    }
 
-
+    public void closeEmpireOverview() {
+        this.getParent().setVisible(false);
     }
 
 

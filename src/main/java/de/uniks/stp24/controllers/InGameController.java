@@ -76,6 +76,9 @@ public class InGameController extends BasicController {
     @FXML
     public StackPane storageOverviewContainer;
     @FXML
+    public StackPane empireOverviewContainer;
+
+    @FXML
     StackPane clockComponentContainer;
 
     @Inject
@@ -110,6 +113,9 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
+    @SubComponent
+    @Inject
+    public EmpireOverviewComponent empireOverviewComponent;
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
@@ -235,6 +241,9 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
 
+        empireOverviewComponent.setVisible(false);
+        empireOverviewContainer.getChildren().add(empireOverviewComponent);
+
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -356,7 +365,9 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
+    @OnKey(code = KeyCode.E)
     public void showEmpireOverview() {
+//        empireOverviewContainer.setVisible(!empireOverviewContainer.isVisible());
     }
 
     @OnKey(code = KeyCode.SPACE)

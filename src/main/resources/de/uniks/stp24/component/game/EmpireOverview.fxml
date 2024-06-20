@@ -10,7 +10,7 @@
 <?import javafx.scene.text.TextFlow?>
 <?import org.controlsfx.control.GridView?>
 
-<fx:root fx:id="stackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="425.0" prefWidth="340.0" styleClass="empireOverviewBackground" type="StackPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.EmpireOverViewComponent">
+<fx:root fx:id="stackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="425.0" prefWidth="340.0" styleClass="empireOverviewBackground" type="StackPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.EmpireOverviewComponent">
     <children>
         <AnchorPane prefHeight="200.0" prefWidth="200.0">
             <children>

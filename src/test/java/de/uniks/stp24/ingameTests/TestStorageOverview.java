@@ -178,9 +178,15 @@ public class TestStorageOverview extends ControllerTest {
         doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
         doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
 
+        this.app.show(this.inGameController);
+
         storageOverviewComponent.getStylesheets().clear();
         clockComponent.getStylesheets().clear();
-        this.app.show(this.inGameController);
+        eventComponent.getStylesheets().clear();
+        pauseMenuComponent.getStylesheets().clear();
+        settingsComponent.getStylesheets().clear();
+        overviewSitesComponent.getStylesheets().clear();
+        overviewUpgradeComponent.getStylesheets().clear();
 
     }
 

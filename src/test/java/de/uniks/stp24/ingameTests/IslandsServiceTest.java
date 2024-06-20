@@ -1,4 +1,4 @@
-package de.uniks.stp24.controller.ingame;
+package de.uniks.stp24.ingameTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
@@ -217,6 +217,15 @@ public class IslandsServiceTest extends ControllerTest {
 
 
         app.show(inGameController);
+
+        eventComponent.getStylesheets().clear();
+        clockComponent.getStylesheets().clear();
+        overviewSitesComponent.getStylesheets().clear();
+        storageOverviewComponent.getStylesheets().clear();
+        buildingsComponent.getStylesheets().clear();
+        detailsComponent.getStylesheets().clear();
+        overviewUpgradeComponent.getStylesheets().clear();
+        sitesComponent.getStylesheets().clear();
     }
 
     @Test

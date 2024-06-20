@@ -1,6 +1,5 @@
 package de.uniks.stp24.component.game;
 
-import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.service.ImageCache;
@@ -24,32 +23,33 @@ public class IslandComponent extends Pane {
     @FXML
     ImageView flagImage;
     private Island island;
-    double x ,y ;
+    double x, y;
 
     @Inject
-    public IslandComponent(){
-        if(this.imageCache == null) {
+    public IslandComponent() {
+        if (this.imageCache == null) {
             this.imageCache = new ImageCache();
         }
         this.islandImage = new ImageView();
+        this.flagImage = new ImageView();
     }
 
 
-    public void applyIcon(IslandType type){
+    public void applyIcon(IslandType type) {
         this.islandImage
                 .setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
     }
 
     // use our flag images
     // by the moment numeration from 0 til 16
-    public void setFlagImage(int flag){
-        if (flag >=0) {
+    public void setFlagImage(int flag) {
+        if (flag >= 0) {
             this.flagImage
                     .setImage(imageCache.get("assets/flags/flag_" + flag + ".png"));
         }
     }
 
-    public void applyInfo(Island islandInfo){
+    public void applyInfo(Island islandInfo) {
         this.island = islandInfo;
         applyIcon(this.island.type());
     }
@@ -61,31 +61,24 @@ public class IslandComponent extends Pane {
     }
 
     public double getPosX() {
-        return this.x;}
+        return this.x;
+    }
+
     public double getPosY() {
-        return this.y;}
+        return this.y;
+    }
 
     // switch the visibility of all flags
-//    @OnKey(code = KeyCode.H, shift = true)
     public void showFlag(boolean selected) {
         this.flagPane.setVisible(selected);
     }
 
-
-    public void showInfo() {
-        //TODO by the moment used for printouts
-        // maybe it must be removed after implementation of
-        // island overview functionality is completed on InGameCtrl
-        System.out.println(Upgrade.values()[island.upgradeLevel()] + " -> " + island.type() + " isle at " + x + ", " + y );
-        showFlag(true);
-    }
-
-    public Island getIsland(){
+    public Island getIsland() {
         return this.island;
     }
 
     @OnDestroy
-    public void destroy(){
+    public void destroy() {
         flagImage = null;
         islandImage = null;
     }

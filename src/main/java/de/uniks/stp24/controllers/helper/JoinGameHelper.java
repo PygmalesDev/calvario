@@ -58,10 +58,6 @@ public class JoinGameHelper extends BasicController {
         this.tokenStorage.setGameId(gameId);
         this.tokenStorage.setEmpireId(empireId);
         this.tokenStorage.setIsSpectator(isSpectator);
-        // Todo: remove prints
-        System.out.println("startGame: game:  " + gameId);
-        System.out.println("startGame: empire " + empireId);
-        System.out.println("startGame: spectator " + isSpectator);
     }
 
     @OnDestroy

@@ -30,7 +30,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Map;
 import java.util.Objects;
 
 @Component(view = "Clock.fxml")
@@ -66,19 +65,18 @@ public class ClockComponent extends AnchorPane {
     String gameId;
 
     ImageCache imageCache = new ImageCache();
-    Map<String, IslandComponent> islandComponents;
     @Inject
     EventService eventService;
     @Inject
     TokenStorage tokenStorage;
     @Inject
-    TimerService timerService;
+    public TimerService timerService;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
-    GamesApiService gamesApiService;
+    public GamesApiService gamesApiService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
     EventListener eventListener;
     private int lastUpdateSeason = -1;
@@ -160,7 +158,6 @@ public class ClockComponent extends AnchorPane {
         seasonLabel.setText(timerService.getSeason() + "");
         countdownLabel.setText(translateCountdown(timerService.getCountdown()));
 
-        // Dummy data for special Event
         remainingSeasonsLabel.setVisible(false);
     }
 
@@ -192,7 +189,7 @@ public class ClockComponent extends AnchorPane {
                         lastUpdateSeason = event.data().period();
                     }
                 },
-                error -> System.out.println("Error bei Season: " + error.getMessage()));
+                error -> System.out.println("Error on Season: " + error.getMessage()));
     }
 
     public void createUpdateSpeedListener() {
@@ -205,7 +202,7 @@ public class ClockComponent extends AnchorPane {
                         lastUpdateSpeed = event.data().updatedAt();
                     }
                 },
-                error -> System.out.println("Error bei Speed: " + error.getMessage()));
+                error -> System.out.println("Error on speed: " + error.getMessage()));
     }
 
     ///////////////--------------------------------------------onAction------------------------------------/////////////
@@ -224,7 +221,7 @@ public class ClockComponent extends AnchorPane {
         if (timerService.isRunning()) {
             subscriber.subscribe(timerService.setSpeed(gameId, 0),
                     result -> {},
-                    error -> System.out.println("Error beim Pausieren der Uhr: " + error));
+                    error -> System.out.println("Error on pause: " + error));
             timerService.stop();
         }
     }
@@ -265,7 +262,7 @@ public class ClockComponent extends AnchorPane {
         }
         subscriber.subscribe(timerService.setSpeed(gameId, speed),
                 result -> {},
-                error -> System.out.println("Error beim Ändern der Geschwindigkeit: " + error));
+                error -> System.out.println("Error when changing speed: " + error));
     }
 
     ////////////--------------------------------PropertyChangeListener--------------------------------------////////////

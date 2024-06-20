@@ -54,6 +54,12 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
     Map<String, EffectSourceParentDto> eventMap = new HashMap<>();
 
 
+    /**
+     * setNextEvent() in Constructor is for the first time an event can occur.
+     * For the beginning it is set to 100-120. For less time until the first event,
+     * please do something like this: setNextEvent(5)
+     * if you want to set it to 5 seasons until the first event happens.
+     */
     @Inject
     public EventService() {
         setNextEvent();

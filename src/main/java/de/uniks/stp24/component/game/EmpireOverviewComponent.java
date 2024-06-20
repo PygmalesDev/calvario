@@ -51,7 +51,6 @@ public class EmpireOverviewComponent extends StackPane {
     @FXML
     GridView<IslandComponent> islandGridView;
 
-
     @Inject
     App app;
     @Inject
@@ -80,8 +79,6 @@ public class EmpireOverviewComponent extends StackPane {
     List<Image> gridViewImages = new ArrayList<>();
 
     Map<IslandType, Image> imageMap = new HashMap<>();
-
-
 
     private String lastUpdate;
     private String lastSeasonUpdate;
@@ -119,7 +116,6 @@ public class EmpireOverviewComponent extends StackPane {
         this.getParent().setVisible(false);
     }
 
-
     private void empireTraits(EmpireDto empireDto) {
         this.potrait = empireDto.portrait();
         this.flag = empireDto.flag();
@@ -145,10 +141,7 @@ public class EmpireOverviewComponent extends StackPane {
 
         potraitContainer.setImage(imageCache.get(resourcesPaths + portraitsFolderPath + this.potrait + ".png"));
         colourContainer.setStyle("-fx-background-color: " + this.colour);
-
-
     }
-
 
     public void IslandImageMapper() {
         imageMap.put(IslandType.regular, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_regular.png"));
@@ -162,55 +155,10 @@ public class EmpireOverviewComponent extends StackPane {
         imageMap.put(IslandType.ancient_military, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_ancient_military.png"));
         imageMap.put(IslandType.ancient_industry, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_ancient_industry.png"));
         imageMap.put(IslandType.ancient_technology, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_ancient_technology.png"));
-
-    }
-
-
-    private List<Image> imageType(List<Island> empireIslands){
-        List<Image> islandimages = new ArrayList<>();
-
-        for (Island empireIsland : empireIslands) {
-            switch (empireIsland.type()) {
-                case regular -> {
-                    islandimages.add(imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_regular.png"));
-                }
-                case energy -> {
-                    islandimages.add(imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_energy.png"));
-                }
-                case agriculture -> {
-                    islandimages.add(imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_agriculture.png"));
-                }
-                case mining -> {
-                    islandimages.add(imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_mining.png"));
-                }
-                case uninhabitable_0 -> {
-                    islandimages.add(imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_uninhabitable_0.png"));
-                }
-                case uninhabitable_1 -> {
-                    islandimages.add(imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_uninhabitable_1.png"));
-                }
-                case uninhabitable_2 -> {
-                    islandimages.add(imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_uninhabitable_2.png"));
-                }
-                case uninhabitable_3 -> {
-                    islandimages.add(imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_uninhabitable_3.png"));
-                }
-                case ancient_military -> {
-                    islandimages.add(imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_ancient_military.png"));
-                }
-                case ancient_industry -> {
-                    islandimages.add(imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_ancient_industry.png"));
-                }
-                case ancient_technology -> {
-                    islandimages.add(imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_ancient_technology.png"));
-                }
-            }
-        }
-        return islandimages;
     }
 
     public void filterIslands() {
-        if(!islandsService.getListOfIslands().isEmpty()){
+        if (!islandsService.getListOfIslands().isEmpty()) {
             System.out.println(islandsService.getListOfIslands().size());
             islandList = islandsService.getListOfIslands();
             System.out.println(islandList.size());
@@ -221,7 +169,7 @@ public class EmpireOverviewComponent extends StackPane {
             islandComponent.applyInfo(island);
             islandComponent.setInGameController(inGameController);
 //            islandComponent.setIsOnMap(false);
-            if(Objects.nonNull(island.owner()) && island.owner().equals(empireID)){
+            if (Objects.nonNull(island.owner()) && island.owner().equals(empireID)) {
                 empireIslands.add(islandComponent);
             }
             islandComponentList.add(islandComponent);
@@ -263,23 +211,23 @@ public class EmpireOverviewComponent extends StackPane {
                 imageView.setPreserveRatio(true);
                 setGraphic(imageView);
 
-                islandGridView.setOnMouseClicked(event -> {
-                    islandGridView.getId();
-                    IslandComponent clicked = getItem();
-                    clicked.showIslandOverview();
-
-                    ImageView rudder = new ImageView(imageCache.get(resourcesPaths + rudderPath));
-                    rudder.setFitWidth(40);
-                    rudder.setFitHeight(40);
-                    rudder.setPreserveRatio(true);
-                    setGraphic(rudder);
-                });
+//                islandGridView.setOnMouseClicked(event -> {
+//                    islandGridView.getId();
+//                    IslandComponent clicked = getItem();
+//                    clicked.showIslandOverview();
+//
+//                    ImageView rudder = new ImageView(imageCache.get(resourcesPaths + rudderPath));
+//                    rudder.setFitWidth(40);
+//                    rudder.setFitHeight(40);
+//                    rudder.setPreserveRatio(true);
+//                    setGraphic(rudder);
+//                });
             }
         }
 
     }
+
     public void setInGameController(InGameController ingameController) {
         this.inGameController = ingameController;
     }
-
 }

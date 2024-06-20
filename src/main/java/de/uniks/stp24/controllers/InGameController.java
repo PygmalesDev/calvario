@@ -241,7 +241,7 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
 
-        empireOverviewComponent.setVisible(false);
+        empireOverviewContainer.setVisible(false);
         empireOverviewContainer.getChildren().add(empireOverviewComponent);
 
     }
@@ -367,7 +367,7 @@ public class InGameController extends BasicController {
 
     @OnKey(code = KeyCode.E)
     public void showEmpireOverview() {
-//        empireOverviewContainer.setVisible(!empireOverviewContainer.isVisible());
+        empireOverviewContainer.setVisible(!empireOverviewContainer.isVisible());
     }
 
     @OnKey(code = KeyCode.SPACE)

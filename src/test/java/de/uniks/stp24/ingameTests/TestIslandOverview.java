@@ -263,6 +263,17 @@ public class TestIslandOverview extends ControllerTest {
         this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
 
+        this.pauseMenuComponent.getStylesheets().clear();
+        this.settingsComponent.getStylesheets().clear();
+        this.clockComponent.getStylesheets().clear();
+        this.eventComponent.getStylesheets().clear();
+        this.storageOverviewComponent.getStylesheets().clear();
+        this.overviewSitesComponent.getStylesheets().clear();
+        this.overviewUpgradeComponent.getStylesheets().clear();
+        this.buildingsComponent.getStylesheets().clear();
+        this.sitesComponent.getStylesheets().clear();
+        this.detailsComponent.getStylesheets().clear();
+
         // Mock TokenStorage
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();

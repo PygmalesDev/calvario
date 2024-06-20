@@ -29,6 +29,7 @@ public class AppServicesTest extends ApplicationTest {
         super.start(stage);
         app.start(stage);
         stage.requestFocus();
+        stage.getScene().getStylesheets().clear();
     }
     @Test
     public void imageCacheTest() {

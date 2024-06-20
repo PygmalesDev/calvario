@@ -19,7 +19,7 @@ provides some useful methods
 */
 public class BasicController {
     @Inject
-    App app;
+    public App app;
     @Inject
     PrefService prefService;
     @Inject

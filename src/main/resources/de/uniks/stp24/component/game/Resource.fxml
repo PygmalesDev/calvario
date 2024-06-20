@@ -13,7 +13,7 @@
          <Insets left="5.0" />
       </HBox.margin>
       <ImageView fx:id="resourceIconImageView" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
-         <Image url="@../../icons/Resources/fuel.png" />
+         <Image url="@../../icons/resources/fuel.png" />
       </ImageView>
       <Text fx:id="countText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="resourceText" text="x200">
          <HBox.margin>

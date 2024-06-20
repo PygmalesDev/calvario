@@ -11,6 +11,7 @@ import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
 import javafx.fxml.FXML;
@@ -20,6 +21,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
+import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.Contract;
@@ -70,13 +72,13 @@ public class ClockComponent extends AnchorPane {
     @Inject
     TokenStorage tokenStorage;
     @Inject
-    public TimerService timerService;
+    TimerService timerService;
     @Inject
     IslandsService islandsService;
     @Inject
     GamesApiService gamesApiService;
     @Inject
-    public Subscriber subscriber;
+    Subscriber subscriber;
     @Inject
     EventListener eventListener;
     private int lastUpdateSeason = -1;
@@ -210,6 +212,12 @@ public class ClockComponent extends AnchorPane {
 
     public void showFlags() {
         islandsService.setFlag(flagToggle.isSelected());
+    }
+
+    @OnKey(code = KeyCode.H, shift = true)
+    public void setSelected() {
+        flagToggle.setSelected(!flagToggle.isSelected());
+        showFlags();
     }
 
     public void pauseClock() {

@@ -96,8 +96,6 @@ public class InGameController extends BasicController {
     @OnInit
     public void init() {
         GameStatus gameStatus = inGameService.getGameStatus();
-        this.empireID = tokenStorage.getEmpireId();
-        this.gameID = tokenStorage.getGameId();
         //Todo: Outprint for Swagger - can be deleted later
         System.out.println("game in ingame: " + tokenStorage.getGameId());
         System.out.println("empire in ingame: " + tokenStorage.getEmpireId());
@@ -252,8 +250,8 @@ public class InGameController extends BasicController {
     }
 
     // temporary invoke method by clicking this button 
-    public void showIslandOverview() {
-        islandsService.getAllNumberOfSites(this.empireID);
+    public void showEmpireOverview() {
+        islandsService.getAllNumberOfSites(tokenStorage.getEmpireId());
     }
 
     @OnKey(code = KeyCode.SPACE)

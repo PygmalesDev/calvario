@@ -6,8 +6,8 @@
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
-    -fx-pref-width: 40px;
-    -fx-pref-height: 40px;
+    -fx-pref-width: 35px;
+    -fx-pref-height: 35px;
 }
 
 .closeButton {

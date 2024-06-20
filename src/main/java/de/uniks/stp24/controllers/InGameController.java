@@ -15,15 +15,11 @@ import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.game.EmpireService;
-import de.uniks.stp24.service.menu.GamesService;
-import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import de.uniks.stp24.service.PopupBuilder;
-import de.uniks.stp24.service.game.TimerService;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -185,24 +181,16 @@ public class InGameController extends BasicController {
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
 
         this.subscriber.subscribe(inGameService.loadUpgradePresets(),
-                result -> {
-                    islandAttributes.setSystemPresets(result);
-                });
+                result -> islandAttributes.setSystemPresets(result));
 
         this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
-                result -> {
-                    islandAttributes.setEmpireDto(result);
-                });
+                result -> islandAttributes.setEmpireDto(result));
 
         this.subscriber.subscribe(inGameService.loadBuildingPresets(),
-                result -> {
-                    islandAttributes.setBuildingPresets(result);
-                });
+                result -> islandAttributes.setBuildingPresets(result));
 
         this.subscriber.subscribe(inGameService.loadDistrictPresets(),
-                result -> {
-                    islandAttributes.setDistrictPresets(result);
-                });
+                result -> islandAttributes.setDistrictPresets(result));
 
         if (!tokenStorage.isSpectator()) {
             createEmpireListener();
@@ -275,9 +263,9 @@ public class InGameController extends BasicController {
     public void showIslandOverviewWindows(){
         buildingProperties.setMouseTransparent(false);
         buildingsWindow.setMouseTransparent(false);
-        siteProperties.setMouseTransparent(false);
+        //siteProperties.setMouseTransparent(false);
         popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
-        popupSiteProperties.showPopup(siteProperties, sitePropertiesComponent);
+        //popupSiteProperties.showPopup(siteProperties, sitePropertiesComponent);
     }
 
     public void showSettings() {
@@ -338,9 +326,7 @@ public class InGameController extends BasicController {
         });
         Platform.runLater(this::createButtonsStorage);
 
-        mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
-            zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight());
-        });
+        mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight()));
         mapScrollPane.setVvalue(0.5);
         mapScrollPane.setHvalue(0.5);
 

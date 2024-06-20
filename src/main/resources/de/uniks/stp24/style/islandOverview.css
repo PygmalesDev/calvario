@@ -1,0 +1,17 @@
+.headerText{
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 30;
+}
+
+
+
+/* Buildings Window */
+.buildingsOverviewBackground{
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/site_building_build_overview_window.png");
+    -fx-background-size: 100% 100%;
+}
+
+.buildingButton{
+    -fx-pref-width:40px;
+    -fx-pref-height: 40px;
+}

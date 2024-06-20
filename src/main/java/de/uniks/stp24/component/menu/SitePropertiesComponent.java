@@ -182,7 +182,6 @@ public class SitePropertiesComponent extends AnchorPane {
         }
 
         int count = 0;
-        System.out.println("ccccc " + tokenStorage.getIsland().sites().get(siteType));
 
         // Clear the existing children in the GridPane
         siteAmountGridPane.getChildren().clear();
@@ -224,16 +223,17 @@ public class SitePropertiesComponent extends AnchorPane {
     }
 
     private void resourceListGeneration(SiteDto siteDto) {
+
         Map<String, Integer> resourceMapPrice = siteDto.cost();
-        ObservableList<Resource> resourceListPrice = resourcesService.generateResourceList(resourceMapPrice, siteCostsListView.getItems());
+        ObservableList<Resource> resourceListPrice = resourcesService.generateResourceList(resourceMapPrice, siteCostsListView.getItems(),null);
         siteCostsListView.setItems(resourceListPrice);
 
         Map<String, Integer> resourceMapUpkeep = siteDto.upkeep();
-        ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, siteConsumesListView.getItems());
+        ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, siteConsumesListView.getItems(), null);
         siteConsumesListView.setItems(resourceListUpkeep);
 
         Map<String, Integer> resourceMapProduce = siteDto.production();
-        ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, siteProducesListView.getItems());
+        ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, siteProducesListView.getItems(), null);
         siteProducesListView.setItems(resourceListProduce);
     }
 

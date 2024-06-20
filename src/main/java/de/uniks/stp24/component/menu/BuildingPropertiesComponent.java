@@ -3,6 +3,7 @@ package de.uniks.stp24.component.menu;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
@@ -135,11 +136,11 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     private void resourceListGeneration(BuildingDto buildingDto) {
         Map<String, Integer> resourceMapUpkeep = buildingDto.upkeep();
-        ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, buildingConsumesListView.getItems());
+        ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, buildingConsumesListView.getItems(), null);
         buildingConsumesListView.setItems(resourceListUpkeep);
 
         Map<String, Integer> resourceMapProduce = buildingDto.production();
-        ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, buildingProducesListView.getItems());
+        ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, buildingProducesListView.getItems(), null);
         buildingProducesListView.setItems(resourceListProduce);
     }
 

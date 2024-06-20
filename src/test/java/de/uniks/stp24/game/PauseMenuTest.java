@@ -7,6 +7,7 @@ import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.AggregateResultDto;
 import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.SiteDto;
@@ -136,6 +137,7 @@ public class PauseMenuTest extends ControllerTest {
         Map<String, Integer> consumption = new HashMap<>();
         doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());
         doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", true,1,1,null ))).when(gamesApiService).getGame(any());
+        doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
         doReturn(Observable.just(new SiteDto("a",chance, required,production, consumption))).when(resourcesService).getResourcesSite(any());
 
         this.app.show(this.inGameController);

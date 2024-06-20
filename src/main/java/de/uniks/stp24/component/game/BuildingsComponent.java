@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
@@ -27,6 +28,7 @@ public class BuildingsComponent extends VBox {
     public IslandAttributeStorage islandAttributeStorage;
 
     private int currentPage = 0;
+    private InGameController inGameController;
 
     @Inject
     public BuildingsComponent() {
@@ -45,7 +47,7 @@ public class BuildingsComponent extends VBox {
         int col = 0;
 
         for (int i = currentPage * pageCapacity; i < islandAttributes.getIsland().buildings().size(); i++) {
-            Building building = new Building(this, islandAttributes.getIsland().buildings().get(i), tokenStorage, islandAttributes);
+            Building building = new Building(this, islandAttributes.getIsland().buildings().get(i), tokenStorage, islandAttributes, inGameController);
             buildings.add(building, col, row);
 
             if ((i + 1) % 8 == 0) {
@@ -63,7 +65,7 @@ public class BuildingsComponent extends VBox {
         }
 
         if (!isGridPaneFull(currentPage)) {
-            buildings.add(new Building(this, "empty", tokenStorage, islandAttributes), col, row);
+            buildings.add(new Building(this, "empty", tokenStorage, islandAttributes, inGameController), col, row);
         } else {
             next.setVisible(true);
         }
@@ -97,8 +99,12 @@ public class BuildingsComponent extends VBox {
         } else if(!isGridPaneFull(currentPage + 1) && size % 8 == 0){
             currentPage = currentPage + 1;
             buildings.getChildren().clear();
-            buildings.add(new Building(this, "empty", tokenStorage, islandAttributes), 0, 0);
+            buildings.add(new Building(this, "empty", tokenStorage, islandAttributes, inGameController), 0, 0);
             prev.setVisible(true);
         }
+    }
+
+    public void setIngameController(InGameController inGameController) {
+        this.inGameController = inGameController;
     }
 }

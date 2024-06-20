@@ -12,34 +12,33 @@
    <VBox layoutX="21.0" layoutY="44.0" prefHeight="556.0" prefWidth="362.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0">
       <VBox prefHeight="49.0" prefWidth="400.0" />
       <HBox alignment="CENTER" prefHeight="77.0" prefWidth="400.0">
-         <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="357.0" style="-fx-border-color: #000000;">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
+         <VBox alignment="TOP_CENTER" prefHeight="61.0" prefWidth="358.0" style="-fx-border-color: #000000;">
+            <Text fx:id="levelOne" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
             <VBox prefHeight="7.0" prefWidth="358.0" />
-            <Label styleClass="overview-text" text="\%placeholder" />
          </VBox>
       </HBox>
       <VBox prefHeight="29.0" prefWidth="400.0" />
       <HBox alignment="CENTER" prefHeight="77.0" prefWidth="400.0">
          <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="357.0" style="-fx-border-color: #000000;">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
+            <Text fx:id="levelTwo" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
             <VBox prefHeight="7.0" prefWidth="358.0" />
-            <Label styleClass="overview-text" text="\%placeholder" />
+            <Label fx:id="levelTwoText" styleClass="overview-text" text="\%placeholder" />
          </VBox>
       </HBox>
       <VBox prefHeight="29.0" prefWidth="400.0" />
       <HBox alignment="CENTER" prefHeight="77.0" prefWidth="400.0">
          <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="357.0" style="-fx-border-color: #000000;">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
+            <Text fx:id="levelThree" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
             <VBox prefHeight="7.0" prefWidth="358.0" />
-            <Label styleClass="overview-text" text="\%placeholder" />
+            <Label fx:id="levelThreeText" styleClass="overview-text" text="\%placeholder" />
          </VBox>
       </HBox>
       <VBox prefHeight="29.0" prefWidth="400.0" />
       <HBox alignment="CENTER" prefHeight="77.0" prefWidth="400.0">
          <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="357.0" style="-fx-border-color: #000000;">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
+            <Text fx:id="levelFour" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
             <VBox prefHeight="7.0" prefWidth="358.0" />
-            <Label styleClass="overview-text" text="\%placeholder" />
+            <Label fx:id="levelFourText" styleClass="overview-text" text="\%placeholder" />
          </VBox>
       </HBox>
       <VBox prefHeight="18.0" prefWidth="400.0" />

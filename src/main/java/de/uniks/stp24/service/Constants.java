@@ -123,4 +123,11 @@ public class Constants {
             Map.entry("ancient_military", "island.everfrozen")
     );
 
+    public static final Map<String, String> upgradeTranslation = Map.ofEntries(
+            Map.entry("explored", "update.explored"),
+            Map.entry("colonized", "update.colonized"),
+            Map.entry("upgraded", "update.upgraded"),
+            Map.entry("developed", "update.developed")
+    );
+
 }

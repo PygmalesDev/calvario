@@ -12,6 +12,7 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -53,6 +54,20 @@ public class OverviewUpgradeComponent extends AnchorPane {
     public Pane closeButton;
     @FXML
     public Pane backButton;
+    @FXML
+    public Text levelOne;
+    @FXML
+    public Text levelTwo;
+    @FXML
+    public Label levelTwoText;
+    @FXML
+    public Text levelThree;
+    @FXML
+    public Label levelThreeText;
+    @FXML
+    public Text levelFour;
+    @FXML
+    public Label levelFourText;
     @Inject
     InGameService inGameService;
     @Inject
@@ -127,7 +142,6 @@ public class OverviewUpgradeComponent extends AnchorPane {
                 default -> null;
             };
 
-
             this.subscriber.subscribe(gameSystemsService.updateIsland(tokenStorage.getGameId(), tokenStorage.getEmpireId(),
                     new UpdateSystemDto(
                             null,
@@ -155,5 +169,15 @@ public class OverviewUpgradeComponent extends AnchorPane {
                 inGameController.showOverview(islandAttributes.getIsland());
             });
         }
+    }
+
+    public void setUpgradeInf() {
+        levelOne.setText(islandAttributes.getUpgradeTranslation(1));
+        levelTwo.setText(islandAttributes.getUpgradeTranslation(2));
+        levelThree.setText(islandAttributes.getUpgradeTranslation(3));
+        levelFour.setText(islandAttributes.getUpgradeTranslation(4));
+        levelTwoText.setText(islandAttributes.upgradeEffects.get(2));
+        levelThreeText.setText(islandAttributes.upgradeEffects.get(3));
+        levelFourText.setText(islandAttributes.upgradeEffects.get(3));
     }
 }

@@ -32,7 +32,6 @@ import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -43,7 +42,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -596,7 +594,7 @@ public class TestIslandOverview extends ControllerTest {
         Node closeButton = lookup("#closeButton").query();
         clickOn(closeButton);
         waitForFxEvents();
-        assertTrue(inGameController.overviewContainer.isVisible());
+        assertFalse(inGameController.overviewContainer.isVisible());
     }
 
     @Test
@@ -609,7 +607,7 @@ public class TestIslandOverview extends ControllerTest {
         Node closeButton = lookup("#closeButton").query();
         clickOn(closeButton);
         waitForFxEvents();
-        assertTrue(inGameController.overviewContainer.isVisible());
+        assertFalse(inGameController.overviewContainer.isVisible());
     }
 
     @Test

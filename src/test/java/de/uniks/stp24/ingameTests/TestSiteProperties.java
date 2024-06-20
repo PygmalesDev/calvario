@@ -2,17 +2,16 @@ package de.uniks.stp24.ingameTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.game.ClockComponent;
-import de.uniks.stp24.component.game.StorageOverviewComponent;
+import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
-import de.uniks.stp24.model.Game;
-import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.Island;
-import de.uniks.stp24.model.IslandType;
+import de.uniks.stp24.model.*;
+import de.uniks.stp24.model.Building;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ResourcesService;
@@ -23,6 +22,7 @@ import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -31,10 +31,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -47,6 +44,10 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 public class TestSiteProperties extends ControllerTest {
     @Spy
     GamesApiService gamesApiService;
+
+    @Spy
+    PresetsApiService presetsApiService;
+
 
     @Spy
     GameStatus gameStatus;
@@ -62,6 +63,9 @@ public class TestSiteProperties extends ControllerTest {
     ResourcesService resourcesService;
     @Spy
     TokenStorage tokenStorage;
+
+    @Spy
+    IslandAttributeStorage islandAttributeStorage;
     @Spy
     ObjectMapper objectMapper;
     @Spy
@@ -90,14 +94,38 @@ public class TestSiteProperties extends ControllerTest {
     BuildingsWindowComponent buildingsWindowComponent;
 
     @InjectMocks
+    DeleteStructureComponent deleteStructureComponent;
+
+    @InjectMocks
+    OverviewSitesComponent overviewSitesComponent;
+
+    @InjectMocks
+    OverviewUpgradeComponent overviewUpgradeComponent;
+
+    @InjectMocks
     InGameController inGameController;
+
+    @InjectMocks
+    BuildingsComponent buildingsComponent;
+
+    @InjectMocks
+    SitesComponent sitesComponent;
+
+    @InjectMocks
+    DetailsComponent detailsComponent;
+
+
+
 
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
 
     Map<String, Integer> siteSlots = new HashMap<>();
     Map<String, Integer> sites = new HashMap<>();
+
+    Map<String, String> sitesPath = new HashMap<>();
+
     Map<String, Integer> links = new HashMap<>();
-    String[] buildings = new String[]{"mine", "exchange", "farm"};
+    ArrayList<String> buildings = new ArrayList<>();
 
 
     @Override
@@ -110,6 +138,13 @@ public class TestSiteProperties extends ControllerTest {
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
+        this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
+        this.inGameController.overviewUpgradeComponent = this.overviewUpgradeComponent;
+        this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
+        this.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
+        this.overviewSitesComponent.sitesComponent = this.sitesComponent;
+        this.overviewSitesComponent.detailsComponent = this.detailsComponent;
+        this.deleteStructureComponent.sites = this.sitesPath;
         this.inGameService.setGameStatus(gameStatus);
         Map<String , Integer> chance = new HashMap<>();
         Map<String , Integer> required = new HashMap<>();
@@ -119,11 +154,16 @@ public class TestSiteProperties extends ControllerTest {
         Map<String, Integer> resources1 = Map.of("energy",3);
         Map<String, Integer> resources2 = Map.of("energy",3, "population", 4);
         Map<String, Integer> resources3 = Map.of("energy",5, "population", 6);
+        Island island = new Island("testOwner", 1, 500.0, 500.0, IslandType.mining,
+                20, 20, 1, siteSlots, sites, buildings, "testID", "explored");
+
+        UpgradeStatus upgradeStatus = new UpgradeStatus("test", 20, production, consumption, 20);
 
         // Mock TokenStorage
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
+        doReturn(island).when(this.tokenStorage).getIsland();
         doReturn(Observable.just(new SiteDto("a",chance, required,production, consumption))).when(resourcesService).getResourcesSite(any());
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
 
@@ -133,12 +173,19 @@ public class TestSiteProperties extends ControllerTest {
                 null))).when(this.empireService).getEmpire(any(),any());
 
         doReturn(Observable.just(new Game("a","a","testGameID", "gameName", "gameOwner", true,1,1,null ))).when(gamesApiService).getGame(any());
+        doReturn(Observable.just(new SystemUpgrades(upgradeStatus,upgradeStatus, upgradeStatus, upgradeStatus, upgradeStatus ))).when(inGameService).loadUpgradePresets();
+        doReturn(Observable.just(new ArrayList<BuildingPresets>())).when(inGameService).loadBuildingPresets();
+        doReturn(Observable.just(new ArrayList<DistrictPresets>())).when(inGameService).loadDistrictPresets();
 
         doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
-
+        buildings.add("mine");
 
         this.app.show(this.inGameController);
-
+        waitForFxEvents();
+        Platform.runLater(() -> {
+            inGameController.showSiteOverview();
+            waitForFxEvents();
+        });
         buildingPropertiesComponent.setVisible(false);
         buildingsWindowComponent.setVisible(false);
     }
@@ -146,14 +193,15 @@ public class TestSiteProperties extends ControllerTest {
     @Test
     public void buildSite(){
         waitForFxEvents();
-        Island island = new Island("testOwner", Upgrade.explored, "", "testID", 1, 500.0, 500.0,
-                IslandType.mining, 20, 20, 1, siteSlots, sites, buildings);
+        sitePropertiesComponent.setVisible(true);
+        Island island = new Island("testOwner", 1, 500.0, 500.0, IslandType.mining,
+                20, 20, 1, siteSlots, sites, buildings, "testID", "explored");
         doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
                 "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
                 "testOwner"))).when(resourcesService).buildSite(any(), any(),any());
-        doReturn(new Island(island.owner(), island.upgrade(), island.name(), island.id_(), island.flagIndex(),
-                island.posX(), island.posY(), island.type(), island.crewCapacity(), island.resourceCapacity(), island.upgradeLevel(), island.sitesSlots(),
-                island.sites(), island.buildings())).when(islandsService).updateIsland(any());
+        doReturn(new Island(island.owner(),1, island.posX(), island.posY(), island.type(), island.crewCapacity(),
+                island.resourceCapacity(), island.upgradeLevel(), island.sitesSlots(),
+                island.sites(), island.buildings(), island.id(), "explored")).when(islandsService).updateIsland(any());
         clickOn("#buildSiteButton");
 
         verify(this.resourcesService, times(1)).buildSite(any(), any(), any());
@@ -162,16 +210,18 @@ public class TestSiteProperties extends ControllerTest {
     public void destroySite(){
         waitForFxEvents();
         sites.put("mining", 1);
-        Island island = new Island("testOwner", Upgrade.explored, "", "testID", 1, 500.0, 500.0,
-                IslandType.mining, 20, 20, 1, siteSlots, sites, buildings);
+        Island island = new Island("testOwner", 1, 500.0, 500.0, IslandType.mining,
+                20, 20, 1, siteSlots, sites, buildings, "testID", "explored");
         doReturn(island).when(this.tokenStorage).getIsland();
         doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
                 "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
                 "testOwner"))).when(resourcesService).destroySite(any(), any(),any());
-        doReturn(new Island(island.owner(), island.upgrade(), island.name(), island.id_(), island.flagIndex(),
-                island.posX(), island.posY(), island.type(), island.crewCapacity(), island.resourceCapacity(), island.upgradeLevel(), island.sitesSlots(),
-                island.sites(), island.buildings())).when(islandsService).updateIsland(any());
+        doReturn(new Island(island.owner(),1, island.posX(), island.posY(), island.type(), island.crewCapacity(),
+                island.resourceCapacity(), island.upgradeLevel(), island.sitesSlots(),
+                island.sites(), island.buildings(), island.id(), "explored")).when(islandsService).updateIsland(any());
         clickOn("#destroySiteButton");
+        waitForFxEvents();
+        clickOn("#confirmButton");
         waitForFxEvents();
         verify(this.resourcesService, times(1)).destroySite(any(), any(), any());
     }

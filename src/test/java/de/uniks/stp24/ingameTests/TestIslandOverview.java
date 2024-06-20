@@ -369,6 +369,8 @@ public class TestIslandOverview extends ControllerTest {
         this.islandsService.isles = islands;
 
         this.app.show(this.inGameController);
+        storageOverviewComponent.getStylesheets().clear();
+        clockComponent.getStylesheets().clear();
     }
 
     @Test
@@ -390,15 +392,15 @@ public class TestIslandOverview extends ControllerTest {
         waitForFxEvents();
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributeStorage.getIsland()) +
                 islandAttributeStorage.getIsland().buildings().size();
-        assertEquals(this.inGameController.overviewSitesComponent.resCapacity.getText(), "Resources: " + usedSlots + "/" + islandAttributeStorage.getIsland().resourceCapacity());
+        assertEquals(this.inGameController.overviewSitesComponent.resCapacity.getText(),  usedSlots + "/" + islandAttributeStorage.getIsland().resourceCapacity());
         waitForFxEvents();
-        assertEquals(this.inGameController.overviewSitesComponent.island_name.getText(), islandAttributeStorage.getIsland().type().name());
-        waitForFxEvents();
-        assertFalse(this.inGameController.overviewSitesComponent.inputIslandName.isDisable());
+        assertEquals("Plundered Island(Colony)",this.inGameController.overviewSitesComponent.island_name.getText());
         waitForFxEvents();
         assertFalse(this.inGameController.overviewSitesComponent.inputIslandName.isDisable());
         waitForFxEvents();
-        assertEquals(this.inGameController.overviewSitesComponent.island_inf.getText(), "Lvl: " + Upgrade.values()[testIsland1.upgradeLevel()].ordinal());
+        assertFalse(this.inGameController.overviewSitesComponent.inputIslandName.isDisable());
+        waitForFxEvents();
+        assertEquals("+100.0% more crew mates",this.inGameController.overviewSitesComponent.island_inf.getText());
 
 
         //Test function of buttons
@@ -549,7 +551,7 @@ public class TestIslandOverview extends ControllerTest {
         clickOn(confirmButton);
         waitForFxEvents();
         Text inf = lookup("#island_inf").queryText();
-        assertEquals(inf.getText(), "Lvl: " + Upgrade.values()[testIsland1.upgradeLevel() + 1].ordinal());
+        assertEquals("+100.0% more crew mates",inf.getText());
         clickOn(upgradeButton);
         assertTrue(confirmButton.getStyle().contains("-fx-background-color: black;"));
 

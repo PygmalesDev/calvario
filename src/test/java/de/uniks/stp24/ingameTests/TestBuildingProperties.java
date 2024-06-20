@@ -32,10 +32,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -93,6 +90,8 @@ public class TestBuildingProperties extends ControllerTest {
 
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
 
+    ArrayList<String> buildings = new ArrayList<>();
+
 
     @Override
     public void start(Stage stage) throws Exception{
@@ -130,7 +129,7 @@ public class TestBuildingProperties extends ControllerTest {
         doReturn(Observable.just(new Game("a","a","testGameID", "gameName", "gameOwner", true,1,1,null ))).when(gamesApiService).getGame(any());
 
         doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
-
+        buildings.add("mine");
 
         this.app.show(this.inGameController);
 
@@ -147,15 +146,14 @@ public class TestBuildingProperties extends ControllerTest {
         Map<String, Integer> siteSlots = new HashMap<>();
         Map<String, Integer> sites = new HashMap<>();
         Map<String, Integer> links = new HashMap<>();
-        String[] buildings = new String[]{"mine", "exchange", "farm"};
-        Island island = new Island("testOwner", Upgrade.explored, "", "testID", 1, 500.0, 500.0,
-                IslandType.mining, 20, 20, 1, siteSlots, sites, buildings);
+        Island island = new Island("testOwner", 1, 500.0, 500.0, IslandType.mining,
+                20, 20, 1, siteSlots, sites, buildings, "testID", "explored");
         doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
                 "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
                 "testOwner"))).when(resourcesService).destroyBuilding(any(), any(),any());
-        doReturn(new Island(island.owner(), island.upgrade(), island.name(), island.id_(), island.flagIndex(),
-                island.posX(), island.posY(), island.type(), island.crewCapacity(), island.resourceCapacity(), island.upgradeLevel(), island.sitesSlots(),
-                island.sites(), island.buildings())).when(islandsService).updateIsland(any());
+        doReturn(new Island(island.owner(),1, island.posX(), island.posY(), island.type(), island.crewCapacity(),
+                island.resourceCapacity(), island.upgradeLevel(), island.sitesSlots(),
+                island.sites(), island.buildings(), island.id(), "explored")).when(islandsService).updateIsland(any());
         waitForFxEvents();
         clickOn("#buildingFarm");
         waitForFxEvents();
@@ -175,15 +173,14 @@ public class TestBuildingProperties extends ControllerTest {
         Map<String, Integer> siteSlots = new HashMap<>();
         Map<String, Integer> sites = new HashMap<>();
         Map<String, Integer> links = new HashMap<>();
-        String[] buildings = new String[]{"mine", "exchange", "farm"};
-        Island island = new Island("testOwner", Upgrade.explored, "", "testID", 1, 500.0, 500.0,
-                IslandType.mining, 20, 20, 1, siteSlots, sites, buildings);
+        Island island = new Island("testOwner", 1, 500.0, 500.0, IslandType.mining,
+                20, 20, 1, siteSlots, sites, buildings, "testID", "explored");
         doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
                 "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
                 "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
-        doReturn(new Island(island.owner(), island.upgrade(), island.name(), island.id_(), island.flagIndex(),
-                island.posX(), island.posY(), island.type(), island.crewCapacity(), island.resourceCapacity(), island.upgradeLevel(), island.sitesSlots(),
-                island.sites(), island.buildings())).when(islandsService).updateIsland(any());
+        doReturn(new Island(island.owner(),1, island.posX(), island.posY(), island.type(), island.crewCapacity(),
+                island.resourceCapacity(), island.upgradeLevel(), island.sitesSlots(),
+                island.sites(), island.buildings(), island.id(), "explored")).when(islandsService).updateIsland(any());
         waitForFxEvents();
         clickOn("#buildingFarm");
         waitForFxEvents();

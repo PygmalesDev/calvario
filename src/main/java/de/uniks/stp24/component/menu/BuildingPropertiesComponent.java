@@ -127,7 +127,6 @@ public class BuildingPropertiesComponent extends AnchorPane {
         if (tokenStorage.getIsland().buildings().contains(buildingType)){
             destroyButton.setDisable(false);
         }
-
     }
 
     public void destroyBuilding(){
@@ -137,19 +136,21 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     public void buyBuilding(){
         Island island = tokenStorage.getIsland();
-
-        subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingType), result -> {
-                    tokenStorage.setIsland(islandsService.updateIsland(result));
-                    islandAttributeStorage.setIsland(islandsService.updateIsland(result));
-                },
-                error -> buyButton.setDisable(true));
-
-        disableButtons();
+        subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
+            priceOfBuilding = result.cost();
+            if (resourcesService.hasEnoughResources(priceOfBuilding)) {
+                subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingType), result2 -> {
+                            tokenStorage.setIsland(islandsService.updateIsland(result2));
+                            islandAttributeStorage.setIsland(islandsService.updateIsland(result2));
+                        },
+                        error -> buyButton.setDisable(true));
+            } else {
+                buyButton.setDisable(true);
+            }
+        });
     }
 
-
     public void displayInfoBuilding(){
-
         Image imageBuilding = new Image(buildingsMap.get(buildingType));
         buildingImage.setImage(imageBuilding);
         buildingName.setText(gameResourceBundle.getString(buildingTranslation.get(buildingType)));

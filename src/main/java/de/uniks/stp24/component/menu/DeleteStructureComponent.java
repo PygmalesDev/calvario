@@ -72,8 +72,8 @@ public class DeleteStructureComponent extends VBox{
 
     public ObservableList<String> items = FXCollections.observableArrayList();
 
-    private final Map<String, String> sites = new HashMap<>();
-    private final Map<String, String> buildings = new HashMap<>();
+    public Map<String, String> sites = new HashMap<>();
+    public final Map<String, String> buildings = new HashMap<>();
     @Inject
     TokenStorage tokenStorage;
 

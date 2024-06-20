@@ -105,6 +105,10 @@ public class InGameController extends BasicController {
 
     @SubComponent
     @Inject
+    public Building building;
+
+    @SubComponent
+    @Inject
     public ClockComponent clockComponent;
 
     @SubComponent
@@ -147,6 +151,10 @@ public class InGameController extends BasicController {
     @Inject
     public SitePropertiesComponent sitePropertiesComponent;
 
+    @SubComponent
+    @Inject
+    public IslandComponent islandComponent;
+
     PopupBuilder popupBuildingProperties = new PopupBuilder();
     PopupBuilder popupBuildingWindow = new PopupBuilder();
 
@@ -161,10 +169,14 @@ public class InGameController extends BasicController {
 
     @OnInit
     public void init() {
+        overviewSitesComponent.setIngameController(this);
+        overviewUpgradeComponent.setIngameController(this);
         buildingsWindowComponent.setInGameController(this);
         buildingPropertiesComponent.setInGameController(this);
         sitePropertiesComponent.setInGameController(this);
         deleteStructureComponent.setInGameController(this);
+        //building.setInGameController(this);
+
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
         //Todo: Outprint for Swagger - can be deleted later
@@ -237,8 +249,7 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void render() {
-        overviewSitesComponent.setIngameController(this);
-        overviewUpgradeComponent.setIngameController(this);
+
         //buildingProperties.setVisible(true);
         //buildingProperties.getChildren().add(buildingPropertiesComponent);
         buildingProperties.setMouseTransparent(true);
@@ -274,10 +285,7 @@ public class InGameController extends BasicController {
     @OnKey(code = KeyCode.I)
     public void showIslandOverviewWindows(){
         buildingProperties.setMouseTransparent(false);
-        buildingsWindow.setMouseTransparent(false);
-        siteProperties.setMouseTransparent(false);
-        popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
-        popupSiteProperties.showPopup(siteProperties, sitePropertiesComponent);
+
     }
 
     public void showSettings() {
@@ -367,7 +375,15 @@ public class InGameController extends BasicController {
     // remove prints
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
-            tokenStorage.setIsland(selected.getIsland());
+            if (tokenStorage.getIsland() == null){
+                tokenStorage.setIsland(selectedIsland.getIsland());
+            } else {
+                islandComponent.updateIsland(tokenStorage.getIsland());
+            }
+            if (islandAttributes.getIsland() == null){
+                islandAttributes.setIsland(selectedIsland.getIsland());
+            }
+
             System.out.println(event.getSource().toString());
             System.out.println("found island: " + selected.getIsland().toString());
             selected.showFlag();
@@ -375,7 +391,10 @@ public class InGameController extends BasicController {
     }
 
     public void showOverview(Island island) {
-        islandAttributes.setIsland(island);
+        if (islandAttributes.getIsland() == null){
+            islandAttributes.setIsland(island);
+        }
+
         if (island.owner() == null) {
             return;
         }
@@ -447,8 +466,14 @@ public class InGameController extends BasicController {
 
     public void handleAfterStructureDelete() {
         deleteStructureWarningContainer.setMouseTransparent(true);
+
+        buildingsWindow.setMouseTransparent(false);
         popupDeleteStructure.removeBlur();
         popupBuildingProperties.removeBlur();
+        if (!siteProperties.isVisible()){
+            siteProperties.setMouseTransparent(true);
+        }
+        buildingsWindow.toFront();
         }
     public void createEmpireListener() {
         this.subscriber.subscribe(this.eventListener
@@ -459,5 +484,29 @@ public class InGameController extends BasicController {
                     overviewUpgradeComponent.setUpgradeButton();
                 },
                 error -> System.out.println("errorListener"));
+    }
+
+    public void showBuildingWindow() {
+        siteProperties.setVisible(false);
+        buildingsWindow.setMouseTransparent(false);
+        popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
+        buildingProperties.setMouseTransparent(false);
+
+    }
+
+    public void showSiteOverview() {
+        siteProperties.setMouseTransparent(false);
+        buildingsWindow.setVisible(false);
+        buildingProperties.setVisible(false);
+        popupSiteProperties.showPopup(siteProperties, sitePropertiesComponent);
+
+    }
+
+    public void setSiteType(String siteType) {
+        sitePropertiesComponent.setSiteType(siteType);
+    }
+
+    public void updateSiteCapacities(){
+        overviewSitesComponent.showSites();
     }
 }

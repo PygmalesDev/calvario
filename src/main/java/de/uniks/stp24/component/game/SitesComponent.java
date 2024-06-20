@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Island;
 import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
@@ -15,6 +16,8 @@ public class SitesComponent extends VBox {
     @FXML
     public HBox sitesBox;
 
+    InGameController inGameController;
+
     @Inject
     public SitesComponent() {
 
@@ -22,11 +25,13 @@ public class SitesComponent extends VBox {
 
     public void setSitesBox(Island island) {
         sitesBox.getChildren().clear();
+        System.out.println(island);
         for (Map.Entry<String, Integer> entry : island.sites().entrySet()) {
-            DistrictComponent districtComponent = new DistrictComponent(entry.getKey(), entry.getValue() + "/" + island.sitesSlots().get(entry.getKey()));
+            DistrictComponent districtComponent = new DistrictComponent(entry.getKey(), entry.getValue() + "/" + island.sitesSlots().get(entry.getKey()), inGameController);
             sitesBox.getChildren().add(districtComponent);
         }
     }
+
 
     public int getTotalSiteSlots(Island island){
         int totalSiteSlots = 0;
@@ -34,5 +39,9 @@ public class SitesComponent extends VBox {
             totalSiteSlots = totalSiteSlots + entry.getValue();
         }
         return totalSiteSlots;
+    }
+
+    public void setInGameController(InGameController inGameController){
+        this.inGameController = inGameController;
     }
 }

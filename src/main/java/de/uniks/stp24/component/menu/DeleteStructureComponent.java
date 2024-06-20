@@ -7,6 +7,7 @@ import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.ResourcesService;
@@ -75,6 +76,10 @@ public class DeleteStructureComponent extends VBox{
     private final Map<String, String> buildings = new HashMap<>();
     @Inject
     TokenStorage tokenStorage;
+
+    @Inject
+    IslandAttributeStorage islandAttributeStorage;
+
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, true, gameResourceBundle);
 
 
@@ -177,7 +182,9 @@ public class DeleteStructureComponent extends VBox{
                 if (tokenStorage.getIsland().sites().get(structureType) != 0) {
                     subscriber.subscribe(resourcesService.destroySite(tokenStorage.getGameId(), island, structureType), result -> {
                         tokenStorage.setIsland(islandsService.updateIsland(result));
+                        islandAttributeStorage.setIsland(islandsService.updateIsland(result));
                         inGameController.updateAmountSitesGrid();
+                        inGameController.updateSiteCapacities();
                         onCancel();
                     });
                 }
@@ -185,6 +192,7 @@ public class DeleteStructureComponent extends VBox{
                 // Handle deletion for buildings
                 subscriber.subscribe(resourcesService.destroyBuilding(tokenStorage.getGameId(), island, structureType), result -> {
                     tokenStorage.setIsland(islandsService.updateIsland(result));
+                    islandAttributeStorage.setIsland(islandsService.updateIsland(result));
                     onCancel();
                 });
             } else {

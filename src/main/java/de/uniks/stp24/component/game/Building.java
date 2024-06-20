@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
@@ -17,8 +18,10 @@ public class Building extends VBox {
     @FXML
     private ImageView building;
 
-    @Inject
-    public Building(BuildingsComponent buildingsComponent, String buildingName, TokenStorage tokenStorage, IslandAttributeStorage islandAttributes){
+    private String buildingType;
+
+
+    public Building(BuildingsComponent buildingsComponent, String buildingName, TokenStorage tokenStorage, IslandAttributeStorage islandAttributes, InGameController inGameController){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BuildingElement.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -30,7 +33,7 @@ public class Building extends VBox {
         }
 
         building.setOnMouseClicked(event -> {
-
+            inGameController.showBuildingWindow();
             //TODO: Need to be modified for game
             if(buildingName.equals("empty") && Objects.equals(tokenStorage.getEmpireId(), islandAttributes.getIsland().owner())) {
                 //TODO: Logic for editing new Building son page(gridpane)
@@ -40,6 +43,19 @@ public class Building extends VBox {
                 buildingsComponent.setGridPane();
             }
         });
+    }
+
+    @Inject
+    public Building(){
+
+    }
+//    public void setInGameController(InGameController inGameController){
+//        this.inGameController = inGameController;
+//    }
+
+
+    public void setBuildingType(String buildingType){
+        this.buildingType = buildingType;
     }
 
 }

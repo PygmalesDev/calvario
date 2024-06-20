@@ -63,12 +63,7 @@ public class ResourcesService {
                 break;
             }
         }
-
-        System.out.println(buildings + " Gebäude");
-
         Map<String, Integer> sitesValue = new HashMap<>();
-        System.out.println(gameID + " ### " + island);
-
 
         if (island.owner() != null){
             if (island.owner().equals(tokenStorage.getEmpireId())){
@@ -83,7 +78,6 @@ public class ResourcesService {
 
     // Uses update island api-service to change the value of a system and add a building
     public Observable<SystemDto> createBuilding(String gameId, Island island, String buildingToAdd) {
-        System.out.println(gameId + " ### " + island);
         ArrayList<String> newBuildingsArray = island.buildings();
         newBuildingsArray.add(buildingToAdd);
         Map<String, Integer> sitesValue = new HashMap<>();
@@ -101,11 +95,9 @@ public class ResourcesService {
 
     // Uses update island api-service to change the value of a system and delete a site
     public Observable<SystemDto> destroySite(String gameID, Island island, String siteToDestroy) {
-        System.out.println(island.sites() + " ####################");
         Map<String, Integer> sitesValue = new HashMap<>();
         sitesValue.put(siteToDestroy, -1);
 
-        System.out.println(gameID + " ### " + island);
 
         if (island.owner() != null){
             if (island.owner().equals(tokenStorage.getEmpireId())){
@@ -122,9 +114,6 @@ public class ResourcesService {
     public Observable<SystemDto> buildSite(String gameID, Island island, String siteToBuild) {
         Map<String, Integer> sitesValue = new HashMap<>();
         sitesValue.put(siteToBuild, 1);
-        System.out.println(island.sites() + " aaaaaaaaaa");
-
-        System.out.println(gameID + " ### " + island);
 
         if (island.owner() != null){
             if (island.owner().equals(tokenStorage.getEmpireId())){

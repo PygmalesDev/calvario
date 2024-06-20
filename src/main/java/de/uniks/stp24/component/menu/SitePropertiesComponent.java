@@ -6,6 +6,7 @@ import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
@@ -66,6 +67,9 @@ public class SitePropertiesComponent extends AnchorPane {
     TokenStorage tokenStorage;
 
     @Inject
+    IslandAttributeStorage islandAttributeStorage;
+
+    @Inject
     Subscriber subscriber;
 
     @Inject
@@ -88,7 +92,8 @@ public class SitePropertiesComponent extends AnchorPane {
     }
     Map<String, String> sitesMap;
 
-
+    private int amountSite = 0;
+    private int amountSiteSlots = 0;
     private Island island;
 
     public ObservableList<Map<String, Integer>> resources;
@@ -111,15 +116,6 @@ public class SitePropertiesComponent extends AnchorPane {
         sitesMap.put("ancient_factory", "de/uniks/stp24/icons/sites/merchant_site.png");
         sitesMap.put("ancient_refinery", "de/uniks/stp24/icons/sites/production_site.png");
     }
-    @OnRender
-    public void render(){
-        this.siteType = "mining";
-        siteName.setText(capitalizeFirstLetter(siteType));
-        Image imageSite = new Image(sitesMap.get(siteType));
-        siteImage.getStyleClass().clear();
-        siteImage.setImage(imageSite);
-
-    }
 
     @FXML
     public void initialize() {
@@ -136,6 +132,12 @@ public class SitePropertiesComponent extends AnchorPane {
 
     public void setSiteType(String siteType){
         this.siteType = siteType;
+        siteName.setText(capitalizeFirstLetter(siteType));
+        Image imageSite = new Image(sitesMap.get(siteType));
+        siteImage.getStyleClass().clear();
+        siteImage.setImage(imageSite);
+        displayCostsOfSite();
+        displayAmountOfSite();
     }
 
     public void onClose(){
@@ -146,17 +148,22 @@ public class SitePropertiesComponent extends AnchorPane {
         island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.buildSite(tokenStorage.getGameId(), island, siteType), result -> {
             tokenStorage.setIsland(islandsService.updateIsland(result));
+            islandAttributeStorage.setIsland(islandsService.updateIsland(result));
+
             displayAmountOfSite();
+            inGameController.updateSiteCapacities();
         });
     }
 
     public void destroySite(){
         inGameController.handleDeleteStructure(siteType);
+
     }
-    @OnRender
+
     public void displayCostsOfSite(){
         siteCostsListView.setSelectionModel(null);
         subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
+        inGameController.updateSiteCapacities();
         siteConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
@@ -165,9 +172,9 @@ public class SitePropertiesComponent extends AnchorPane {
     public void displayAmountOfSite(){
         buildSiteButton.setDisable(false);
         destroySiteButton.setDisable(false);
-        int amountSite = 0;
-        int amountSiteSlots = 0;
+
         if (tokenStorage.getIsland().sites().get(siteType) != null){
+            System.out.println(amountSite + " Menge sites");
              amountSite = tokenStorage.getIsland().sites().get(siteType);
         }
         if (tokenStorage.getIsland().sitesSlots().get(siteType) != null){

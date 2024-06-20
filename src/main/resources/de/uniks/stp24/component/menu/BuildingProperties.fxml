@@ -10,7 +10,7 @@
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="280.0" styleClass="backgroundLightYellow" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.menu.BuildingPropertiesComponent">
    <ImageView fx:id="buildingImage" fitHeight="80.0" fitWidth="80.0" layoutX="36.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="36.0" AnchorPane.topAnchor="17.0">
    </ImageView>
-   <Text fx:id="buildingName" layoutX="130.0" layoutY="56.1865234375" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 15;" text="Building_Name" AnchorPane.rightAnchor="50.01708984375" AnchorPane.topAnchor="40.0">
+   <Text fx:id="buildingName" layoutX="172.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 15;" text="Building_Name" AnchorPane.rightAnchor="8.01708984375" AnchorPane.topAnchor="3.8134765625">
       <font>
          <Font size="6.0" />
       </font>
@@ -34,4 +34,6 @@
          <Font size="6.0" />
       </font>
    </Button>
+   <ListView fx:id="buildingCostsListView" layoutX="123.0" layoutY="37.0" prefHeight="58.0" prefWidth="130.0" />
+   <Text layoutX="122.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Costs:" />
 </fx:root>

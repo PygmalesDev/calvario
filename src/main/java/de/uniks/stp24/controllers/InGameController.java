@@ -272,7 +272,12 @@ public class InGameController extends BasicController {
 
     @OnKey(code = KeyCode.I)
     public void showIslandOverviewWindows(){
+        //buildingProperties.setMouseTransparent(false);
         buildingProperties.setMouseTransparent(false);
+        buildingsWindow.setMouseTransparent(false);
+        //siteProperties.setMouseTransparent(false);
+        popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
+        //popupSiteProperties.showPopup(siteProperties, sitePropertiesComponent);
 
     }
 

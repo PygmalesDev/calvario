@@ -15,3 +15,27 @@
     -fx-pref-width:40px;
     -fx-pref-height: 40px;
 }
+
+/* Buildings Details */
+.buildingDetailsBackground{
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/background_BuildingDetails.png");
+    -fx-background-size: 100% 100%;
+}
+
+.tableHeadingText{
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-background-color: "TRANSPARENT";
+    -fx-font-weight: none;
+    -fx-font-size: 12;
+}
+
+.buildingName{
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 18;
+}
+
+.resourceList .list-cell {
+    -fx-background-color: transparent;
+    -fx-font-size: 10;
+    -fx-cell-size: 5;
+}

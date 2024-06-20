@@ -27,6 +27,8 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.*;
 
+import static de.uniks.stp24.service.Constants.buildingTranslation;
+
 @Component(view = "BuildingProperties.fxml")
 public class BuildingPropertiesComponent extends AnchorPane {
 
@@ -63,6 +65,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
 
     @Inject
+    @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
@@ -79,7 +82,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     InGameController inGameController;
     Map<String, Integer> priceOfBuilding;
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, true, gameResourceBundle);
+    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
 
 
     @OnInit
@@ -149,7 +152,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
         Image imageBuilding = new Image(buildingsMap.get(buildingType));
         buildingImage.setImage(imageBuilding);
-        buildingName.setText(buildingType.toUpperCase());
+        buildingName.setText(gameResourceBundle.getString(buildingTranslation.get(buildingType)));
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), this::resourceListGeneration);
         buildingCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         buildingProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));

@@ -136,7 +136,7 @@ public class TestStorageOverview extends ControllerTest {
 
     ArrayList<BuildingPresets> buildingPresets = new ArrayList<>();
     ArrayList<DistrictPresets> districtPresets = new ArrayList<>();
-/*
+
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
@@ -311,7 +311,5 @@ public class TestStorageOverview extends ControllerTest {
         assertEquals(4,storageOverviewComponent.resourceListView.getItems().getLast().count());
         assertEquals(2,storageOverviewComponent.resourceListView.getItems().getLast().changePerSeason());
     }
-
-
- */
+    
 }

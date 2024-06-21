@@ -7,6 +7,7 @@ import de.uniks.stp24.component.game.EventComponent;
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -21,7 +22,6 @@ import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -30,7 +30,6 @@ import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.LanguageService;
-import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.Group;
@@ -79,7 +78,13 @@ public class IslandsServiceTest extends ControllerTest {
     @InjectMocks
     OverviewUpgradeComponent overviewUpgradeComponent;
     @InjectMocks
-    EmpireOverviewComponent empireOverviewComponent;
+    BuildingPropertiesComponent buildingPropertiesComponent;
+    @InjectMocks
+    SitePropertiesComponent sitePropertiesComponent;
+    @InjectMocks
+    BuildingsWindowComponent buildingsWindowComponent;
+    @InjectMocks
+    DeleteStructureComponent deleteStructureComponent;
 
 
     @Spy
@@ -92,8 +97,7 @@ public class IslandsServiceTest extends ControllerTest {
     GamesApiService gameApiService;
     @Spy
     EmpireService empireService;
-    @Spy
-    ImageCache imageCache;
+
 
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
@@ -133,13 +137,15 @@ public class IslandsServiceTest extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
-        this.clockComponent.tokenStorage = tokenStorage;
-        this.eventComponent.tokenStorage = tokenStorage;
+        this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
+        this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
+        this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = eventComponent;
+        this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.clockComponent.timerService = this.timerService;
         this.clockComponent.eventService = this.eventService;
         this.clockComponent.subscriber = this.subscriber;
@@ -156,7 +162,6 @@ public class IslandsServiceTest extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
-        this.inGameController.empireOverviewComponent =this.empireOverviewComponent;
 
         inGameController.mapScrollPane = new ScrollPane();
         inGameController.group = new Group();
@@ -219,27 +224,23 @@ public class IslandsServiceTest extends ControllerTest {
 
         // Mock getEmpire
         doReturn(Observable.just(new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
-                "a","black",1, 2, "a", new String[]{"1"}, new LinkedHashMap<>() {{put("energy", 5);put("population", 4);}},
+                "a","a",1, 2, "a", new String[]{"1"}, new LinkedHashMap<>() {{put("energy", 5);put("population", 4);}},
                 null))).when(this.empireService).getEmpire(any(),any());
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
 
-        Game game = new Game("a", null, "game1Id", "testGame1", "testHost1", true, 1,10, null);
-
-//        doReturn(Observable.just(new Event<>("games.game1Id.ticked", game))).when(this.eventListener).listen(eq("games.game1Id.ticked"),eq(Game.class));
-//        doReturn(Observable.just(new Event<>("games.game1Id.updated", game))).when(this.eventListener).listen(eq("games.game1Id.updated"),eq(Game.class));
-
 
         app.show(inGameController);
-
         eventComponent.getStylesheets().clear();
-        clockComponent.getStylesheets().clear();
-        overviewSitesComponent.getStylesheets().clear();
         storageOverviewComponent.getStylesheets().clear();
-        buildingsComponent.getStylesheets().clear();
-        detailsComponent.getStylesheets().clear();
+        clockComponent.getStylesheets().clear();
+        pauseMenuComponent.getStylesheets().clear();
+        settingsComponent.getStylesheets().clear();
+        overviewSitesComponent.getStylesheets().clear();
         overviewUpgradeComponent.getStylesheets().clear();
-        sitesComponent.getStylesheets().clear();
-        empireOverviewComponent.getStylesheets().clear();
+        sitePropertiesComponent.getStylesheets().clear();
+        buildingsWindowComponent.getStylesheets().clear();
+        buildingPropertiesComponent.getStylesheets().clear();
+        deleteStructureComponent.getStylesheets().clear();
     }
 
     @Test
@@ -266,4 +267,5 @@ public class IslandsServiceTest extends ControllerTest {
         assertNotEquals(0,islandsService.getMapHeight());
 
     }
+    
 }

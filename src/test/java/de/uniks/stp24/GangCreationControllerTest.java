@@ -11,6 +11,7 @@
  import de.uniks.stp24.service.SaveLoadService;
  import de.uniks.stp24.service.TokenStorage;
  import de.uniks.stp24.service.menu.LobbyService;
+ import javafx.application.Platform;
  import javafx.collections.FXCollections;
  import javafx.collections.ObservableList;
  import javafx.scene.control.TextArea;
@@ -139,7 +140,9 @@
 
          clickOn("#gangNameText");
          waitForFxEvents();
-         ((TextField) lookup("#gangNameText").query()).setText("");
+         Platform.runLater(() -> {((TextField) lookup("#gangNameText").query()).clear();});
+
+         waitForFxEvents();
          write("Ashkanian");
          waitForFxEvents();
 

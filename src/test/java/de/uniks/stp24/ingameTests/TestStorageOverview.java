@@ -6,18 +6,16 @@ import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.EventComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.game.*;
-import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
+import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.dto.AggregateResultDto;
 import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.model.Game;
-import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.rest.EmpireApiService;
+import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.*;
+import de.uniks.stp24.rest.EmpireApiService;
+import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -39,6 +37,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -55,6 +54,9 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 public class TestStorageOverview extends ControllerTest {
     @Spy
     GamesApiService gamesApiService;
+
+    @Spy
+    GameSystemsApiService gameSystemsApiService;
     @Spy
     EmpireApiService empireApiService;
     @Spy
@@ -81,8 +83,6 @@ public class TestStorageOverview extends ControllerTest {
     EventService eventService;
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
-    @Spy
-    ImageCache imageCache;
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
@@ -108,9 +108,15 @@ public class TestStorageOverview extends ControllerTest {
     @InjectMocks
     BuildingsComponent buildingsComponent;
     @InjectMocks
-    InGameController inGameController;
+    BuildingPropertiesComponent buildingPropertiesComponent;
     @InjectMocks
-    EmpireOverviewComponent empireOverviewComponent;
+    SitePropertiesComponent sitePropertiesComponent;
+    @InjectMocks
+    BuildingsWindowComponent buildingsWindowComponent;
+    @InjectMocks
+    DeleteStructureComponent deleteStructureComponent;
+    @InjectMocks
+    InGameController inGameController;
 
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
@@ -134,8 +140,9 @@ public class TestStorageOverview extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
-        this.clockComponent.tokenStorage = tokenStorage;
-        this.eventComponent.tokenStorage = tokenStorage;
+        this.clockComponent.timerService = this.timerService;
+        this.clockComponent.subscriber = this.subscriber;
+        this.islandsService.app = this.app;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
@@ -146,13 +153,23 @@ public class TestStorageOverview extends ControllerTest {
         this.empireService.empireApiService = this.empireApiService;
         this.inGameService.setGameStatus(gameStatus);
         this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
-        this.inGameController.overviewUpgradeComponent = this.overviewUpgradeComponent;
+        this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
+        this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
+        this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
+        this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
+        this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
+        this.empireService.empireApiService = this.empireApiService;
+        islandsService.gameSystemsService = this.gameSystemsApiService;
         this.inGameController.islandAttributes = this.islandAttributeStorage;
-        this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
+        this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
-        this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
-
+        this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
+        this.inGameService.setGameStatus(gameStatus);
+        Map<String , Integer> chance = new HashMap<>();
+        Map<String , Integer> required = new HashMap<>();
+        Map<String, Integer> production = new HashMap<>();
+        Map<String, Integer> consumption = new HashMap<>();
 
         // Mock TokenStorage
         doReturn("testUserID").when(this.tokenStorage).getUserId();
@@ -163,7 +180,7 @@ public class TestStorageOverview extends ControllerTest {
 
         // Mock getEmpire
         doReturn(Observable.just(new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
-                "a","black",1, 2, "a", new String[]{"1"}, resources1 ,
+                "a","a",1, 2, "a", new String[]{"1"}, resources1 ,
                 null))).when(this.empireService).getEmpire(any(),any());
 
         doReturn(Observable.just(new Game("a","a","testGameID", "gameName", "gameOwner", true,1,1,null ))).when(gamesApiService).getGame(any());
@@ -186,23 +203,18 @@ public class TestStorageOverview extends ControllerTest {
         doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
         doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
 
-        Game game = new Game("a", "a", "testGameID", "gameName", "gameOwner", true, 1, 1, null);
-
-//        doReturn(Observable.just(new Event<>("games.testGameID.ticked", game))).when(this.eventListener).listen(eq("games.testGameID.ticked"),eq(Game.class));
-        doReturn(Observable.just(new Event<>("games.testGameID.updated", game))).when(this.eventListener).listen(eq("games.testGameID.updated"),eq(Game.class));
-
-
         this.app.show(this.inGameController);
-
+        eventComponent.getStylesheets().clear();
         storageOverviewComponent.getStylesheets().clear();
         clockComponent.getStylesheets().clear();
-        eventComponent.getStylesheets().clear();
         pauseMenuComponent.getStylesheets().clear();
         settingsComponent.getStylesheets().clear();
         overviewSitesComponent.getStylesheets().clear();
         overviewUpgradeComponent.getStylesheets().clear();
-        empireOverviewComponent.getStylesheets().clear();
-
+        sitePropertiesComponent.getStylesheets().clear();
+        buildingsWindowComponent.getStylesheets().clear();
+        buildingPropertiesComponent.getStylesheets().clear();
+        deleteStructureComponent.getStylesheets().clear();
     }
 
     @Test
@@ -242,7 +254,7 @@ public class TestStorageOverview extends ControllerTest {
 
         empireDtoSubject.onNext(new Event<>("games.testGameID.empires.testEmpireID.updated",
                 new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
-                        "a","black",1, 2, "a", new String[]{"1"}, resources2 ,
+                        "a","a",1, 2, "a", new String[]{"1"}, resources2 ,
                         null)));
         waitForFxEvents();
 
@@ -254,7 +266,7 @@ public class TestStorageOverview extends ControllerTest {
 
         empireDtoSubject.onNext(new Event<>("games.testGameID.empires.testEmpireID.updated",
                 new EmpireDto("a","b","testEmpireID", "testGameID","testUserID","testEmpire",
-                        "a","black",1, 2, "a", new String[]{"1"}, resources3 ,
+                        "a","a",1, 2, "a", new String[]{"1"}, resources3 ,
                         null)));
         waitForFxEvents();
 
@@ -276,7 +288,7 @@ public class TestStorageOverview extends ControllerTest {
         // Mock getEmpire (second time)
         when(this.empireService.getEmpire(any(),any()))
                 .thenReturn(Observable.just(new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
-                        "a","black",1, 2, "a", new String[]{"1"}, resources2 ,
+                        "a","a",1, 2, "a", new String[]{"1"}, resources2 ,
                         null)));
 
         // Mock get aggregates

@@ -2,26 +2,27 @@ package de.uniks.stp24.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.game.ClockComponent;
-import de.uniks.stp24.component.game.EventComponent;
-import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateResultDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.*;
+import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.LanguageService;
+import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.input.KeyCode;
@@ -33,10 +34,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -45,11 +43,20 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class PauseMenuTest extends ControllerTest {
-
-
     @Spy
     GamesApiService gamesApiService;
 
+    @Spy
+    GameSystemsApiService gameSystemsApiService;
+
+    @Spy
+    PresetsApiService presetsApiService;
+
+    @Spy
+    TokenStorage tokenStorage;
+
+    @Spy
+    PopupBuilder popupBuilder;
     @Spy
     EventService eventService;
 
@@ -58,6 +65,9 @@ public class PauseMenuTest extends ControllerTest {
 
     @Spy
     InGameService inGameService;
+
+    @Spy
+    LobbyService lobbyService;
 
     @Spy
     TimerService timerService;
@@ -72,16 +82,12 @@ public class PauseMenuTest extends ControllerTest {
     ResourcesService resourcesService;
 
     @Spy
-    ImageCache imageCache;
-
-    @Spy
-    TokenStorage tokenStorage;
-    @Spy
     ObjectMapper objectMapper;
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @Spy
     EmpireService empireService;
+
 
     @InjectMocks
     ClockComponent clockComponent;
@@ -106,6 +112,17 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
+    @InjectMocks
+    BuildingPropertiesComponent buildingPropertiesComponent;
+
+    @InjectMocks
+    SitePropertiesComponent sitePropertiesComponent;
+
+    @InjectMocks
+    BuildingsWindowComponent buildingsWindowComponent;
+
+
+
 
     @InjectMocks
     DetailsComponent detailsComponent;
@@ -117,7 +134,9 @@ public class PauseMenuTest extends ControllerTest {
     BuildingsComponent buildingsComponent;
 
     @InjectMocks
-    EmpireOverviewComponent empireOverviewComponent;
+    DeleteStructureComponent deleteStructureComponent;
+
+
 
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
@@ -144,44 +163,31 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
-        this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
+
+        this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
+        this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
+        this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
+        this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
+
+        this.inGameService.presetsApiService = this.presetsApiService;
+
 
         inGameService.setGameStatus(gameStatus);
         inGameService.setTimerService(timerService);
-        //doReturn(Observable.just(new Game("a", "a", "gameId", "gameName", "gameOwner", true, 1, 1, null))).when(gamesApiService).getGame(any());
-        SystemUpgrades systemUpgrades = new SystemUpgrades(
-                new UpgradeStatus("1", 0, null, null, 0),
-                new UpgradeStatus("1", 0, null, null, 0),
-                new UpgradeStatus("1", 0, null, null, 0),
-                new UpgradeStatus("1", 0, null, null, 0),
-                new UpgradeStatus("1", 0, null, null, 0));
-        doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
-        doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
-        doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
-
-        /*
-        doReturn(Observable.just(new EmpireDto(
-                "1",
-                "1",
-                "1",
-                "1",
-                "1",
-                "1",
-                "1",
-                "1",
-                1,
-                -1,
-                "1",
-                null,
-                null,
-                null
-        ))).when(empireService).getEmpire(any(), any());
-
-         */
+        Map<String , Integer> chance = new HashMap<>();
+        Map<String , Integer> required = new HashMap<>();
+        Map<String, Integer> production = new HashMap<>();
+        Map<String, Integer> consumption = new HashMap<>();
+        UpgradeStatus upgradeStatus = new UpgradeStatus("test", 20, production, consumption, 20);
 
         doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());
         doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", true,1,1,null ))).when(gamesApiService).getGame(any());
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
+
+        doReturn(Observable.just(new SystemUpgrades(upgradeStatus,upgradeStatus, upgradeStatus, upgradeStatus, upgradeStatus ))).when(inGameService).loadUpgradePresets();
+        doReturn(Observable.just(new ArrayList<BuildingPresets>())).when(inGameService).loadBuildingPresets();
+        doReturn(Observable.just(new ArrayList<DistrictPresets>())).when(inGameService).loadDistrictPresets();
+
         this.app.show(this.inGameController);
     }
 

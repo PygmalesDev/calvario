@@ -557,7 +557,7 @@ ToggleButton:hover{
 /********************** Overview sites ********************************************************/
 
 .overview-text {
-    -fx-font-size: 13;
+    -fx-font-size: 12;
     -fx-font-weight: normal
 }
 
@@ -736,19 +736,11 @@ ToggleButton:hover{
 
 .backgroundGame {
     -fx-background-color: "TRANSPARENT";
-    -fx-background-image: url('/de/uniks/stp24/icons/sea.png');
+    -fx-background-image: url('/de/uniks/stp24/icons/sea_seamless.png');
     -fx-background-size: cover, auto;
 }
 
 /*********************************** for map in game *****************************************************/
-
-.ownIsland{
-    -fx-effect: dropshadow(gaussian, #7FFF00, 2, 0.88, 0, 0);
-}
-
-.developedIsland{
-    -fx-effect: dropshadow(gaussian, #AFAFAF, 2, 0.88, 0, 0);
-}
 
 .connection{
     -fx-stroke: #FFFFFF;

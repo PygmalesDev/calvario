@@ -15,6 +15,7 @@ public record Island(
   Map<String, Integer> sitesSlots,
   Map<String, Integer> sites,
   ArrayList<String> buildings,
-  String id
+  String id,
+  String upgrade
 ) {
 }

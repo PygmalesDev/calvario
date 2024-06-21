@@ -1,5 +1,7 @@
 package de.uniks.stp24.service;
 
+import de.uniks.stp24.model.Island;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -9,6 +11,7 @@ public class TokenStorage {
     private String userId;
     private String name;
     private String avatar;
+    private Island island;
     private String gameId;
     private String empireId;
     private boolean isSpectator;
@@ -47,4 +50,12 @@ public class TokenStorage {
     public void setIsSpectator(boolean isSpectator) {
         this.isSpectator = isSpectator;
     }
+
+    public Island getIsland () {
+        return this.island;
+    }
+    public void setIsland (Island island){
+        this.island = island;
+    }
+
 }

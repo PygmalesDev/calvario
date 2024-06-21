@@ -133,7 +133,7 @@ public class IslandsServiceTest extends ControllerTest {
     SystemUpgrades systemUpgrades = new SystemUpgrades(unexplored, explored, colonized, upgraded, developed);
     ArrayList<BuildingPresets> buildingPresets = new ArrayList<>();
     ArrayList<DistrictPresets> districtPresets = new ArrayList<>();
-/*
+
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
@@ -267,6 +267,5 @@ public class IslandsServiceTest extends ControllerTest {
         assertNotEquals(0,islandsService.getMapHeight());
 
     }
-
- */
+    
 }

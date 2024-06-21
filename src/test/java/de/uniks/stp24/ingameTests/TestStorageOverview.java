@@ -311,5 +311,5 @@ public class TestStorageOverview extends ControllerTest {
         assertEquals(4,storageOverviewComponent.resourceListView.getItems().getLast().count());
         assertEquals(2,storageOverviewComponent.resourceListView.getItems().getLast().changePerSeason());
     }
-    
+
 }

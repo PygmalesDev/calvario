@@ -14,19 +14,14 @@ import de.uniks.stp24.service.game.ResourcesService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import org.controlsfx.control.GridCell;
-import org.controlsfx.control.GridView;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnInit;
-import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
 
@@ -83,7 +78,7 @@ public class DeleteStructureComponent extends VBox{
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, true, gameResourceBundle);
 
 
-    String structureType;
+    private String structureType;
 
     @Inject
     public DeleteStructureComponent(){
@@ -126,8 +121,8 @@ public class DeleteStructureComponent extends VBox{
         warningText.setText("Are you sure you want to delete " + capitalizeFirstLetter(structureType) + "?");
     }
 
-    public void setStructureType(String structureType){
-        this.structureType = structureType;
+    public void handleDeleteStructure(String structureType){
+        setStructureType(structureType);
         setWarningText();
         displayStructureInfo();
         if (sites.containsKey(structureType)) {
@@ -137,6 +132,10 @@ public class DeleteStructureComponent extends VBox{
             // Set the image for buildings
             deleteStructureImageView.setImage(new Image(buildings.get(structureType)));
         }
+    }
+
+    public void setStructureType(String structureType){
+        this.structureType = structureType;
     }
 
     private void displayStructureInfo() {

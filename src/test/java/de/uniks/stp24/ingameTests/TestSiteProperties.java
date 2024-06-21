@@ -13,6 +13,7 @@ import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.LanguageService;
@@ -52,6 +53,9 @@ public class TestSiteProperties extends ControllerTest {
     GameStatus gameStatus;
     @Spy
     InGameService inGameService;
+
+    @Spy
+    EventService eventService;
     @Spy
     TimerService timerService;
     @Spy
@@ -113,6 +117,9 @@ public class TestSiteProperties extends ControllerTest {
     @InjectMocks
     DetailsComponent detailsComponent;
 
+    @InjectMocks
+    EventComponent eventComponent;
+
 
 
 
@@ -147,11 +154,14 @@ public class TestSiteProperties extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
+        this.inGameController.eventComponent= this.eventComponent;
         this.inGameService.setGameStatus(gameStatus);
         Map<String , Integer> chance = new HashMap<>();
         Map<String , Integer> required = new HashMap<>();
         Map<String, Integer> production = new HashMap<>();
         Map<String, Integer> consumption = new HashMap<>();
+        deleteStructureComponent.setStructureType("mining");
+
 
         Map<String, Integer> resources1 = Map.of("energy",3);
         Map<String, Integer> resources2 = Map.of("energy",3, "population", 4);
@@ -165,7 +175,7 @@ public class TestSiteProperties extends ControllerTest {
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
-        doReturn(island).when(this.tokenStorage).getIsland();
+
         doReturn(Observable.just(new SiteDto("a",chance, required,production, consumption))).when(resourcesService).getResourcesSite(any());
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
 
@@ -219,6 +229,10 @@ public class TestSiteProperties extends ControllerTest {
     }
     @Test
     public void destroySite(){
+        Platform.runLater(() -> {
+            inGameController.handleDeleteStructure("mining");
+            waitForFxEvents();
+        });
         waitForFxEvents();
         sites.put("mining", 1);
         Island island = new Island("testOwner", 1, 500.0, 500.0, IslandType.mining,
@@ -230,8 +244,7 @@ public class TestSiteProperties extends ControllerTest {
         doReturn(new Island(island.owner(),1, island.posX(), island.posY(), island.type(), island.crewCapacity(),
                 island.resourceCapacity(), island.upgradeLevel(), island.sitesSlots(),
                 island.sites(), island.buildings(), island.id(), "explored")).when(islandsService).updateIsland(any());
-        clickOn("#destroySiteButton");
-        waitForFxEvents();
+        
         clickOn("#confirmButton");
         waitForFxEvents();
         verify(this.resourcesService, times(1)).destroySite(any(), any(), any());

@@ -20,10 +20,8 @@ import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
-import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
-import de.uniks.stp24.service.game.ResourcesService;
 import javafx.application.Platform;
 import de.uniks.stp24.service.PopupBuilder;
 import javafx.fxml.FXML;
@@ -484,7 +482,7 @@ public class InGameController extends BasicController {
         popupDeleteStructure.showPopup(deleteStructureWarningContainer,deleteStructureComponent);
         popupDeleteStructure.setBlur(buildingProperties, buildingsWindow);
         popupBuildingProperties.setBlur(mapScrollPane, siteProperties);
-        deleteStructureComponent.setStructureType(buildingType);
+        deleteStructureComponent.handleDeleteStructure(buildingType);
     }
 
     public void updateAmountSitesGrid() {

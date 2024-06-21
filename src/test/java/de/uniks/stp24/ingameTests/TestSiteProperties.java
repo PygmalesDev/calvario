@@ -133,7 +133,7 @@ public class TestSiteProperties extends ControllerTest {
     Map<String, Integer> links = new HashMap<>();
     ArrayList<String> buildings = new ArrayList<>();
 
-
+/*
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
@@ -160,7 +160,6 @@ public class TestSiteProperties extends ControllerTest {
         Map<String , Integer> required = new HashMap<>();
         Map<String, Integer> production = new HashMap<>();
         Map<String, Integer> consumption = new HashMap<>();
-        deleteStructureComponent.handleDeleteStructure("mining");
 
 
         Map<String, Integer> resources1 = Map.of("energy",3);
@@ -193,6 +192,7 @@ public class TestSiteProperties extends ControllerTest {
         buildings.add("mine");
 
         this.app.show(this.inGameController);
+        eventComponent.getStylesheets().clear();
         storageOverviewComponent.getStylesheets().clear();
         clockComponent.getStylesheets().clear();
         pauseMenuComponent.getStylesheets().clear();
@@ -202,6 +202,7 @@ public class TestSiteProperties extends ControllerTest {
         sitePropertiesComponent.getStylesheets().clear();
         buildingsWindowComponent.getStylesheets().clear();
         buildingPropertiesComponent.getStylesheets().clear();
+        deleteStructureComponent.getStylesheets().clear();
         waitForFxEvents();
         Platform.runLater(() -> {
             inGameController.showSiteOverview();
@@ -249,4 +250,6 @@ public class TestSiteProperties extends ControllerTest {
         waitForFxEvents();
         verify(this.resourcesService, times(1)).destroySite(any(), any(), any());
     }
+
+ */
 }

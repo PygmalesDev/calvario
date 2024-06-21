@@ -246,6 +246,8 @@ public class TestIslandOverview extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
+        this.eventComponent.tokenStorage = this.tokenStorage;
+        this.clockComponent.tokenStorage = this.tokenStorage;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
@@ -282,11 +284,17 @@ public class TestIslandOverview extends ControllerTest {
                 "a", "a", 1, 2, "a", new String[]{"1"}, cost,
                 null))).when(this.empireService).getEmpire(any(), any());
 
-        doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", true, 1, 1, null))).when(gamesApiService).getGame(any());
+        Game game = new Game("a", "a", "testGameID", "gameName", "gameOwner", true, 1, 1, null);
+        doReturn(Observable.just(game)).when(gamesApiService).getGame(any());
         doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
         doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
         doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
         doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
+
+
+        doReturn(Observable.just(new Event<>("games.testGameID.ticked",game))).when(this.eventListener).listen(eq("games.testGameID.ticked"), eq(Game.class));
+        doReturn(Observable.just(new Event<>("games.testGameID.updated",game))).when(this.eventListener).listen(eq("games.testGameID.updated"), eq(Game.class));
+
 
         buildings.add("testBuilding1");
         buildings.add("testBuilding2");

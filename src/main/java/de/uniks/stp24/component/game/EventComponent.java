@@ -70,7 +70,7 @@ public class EventComponent extends AnchorPane {
     @Inject
     Subscriber subscriber;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
 
     String gameId;
 

@@ -21,6 +21,7 @@ import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -76,6 +77,8 @@ public class IslandsServiceTest extends ControllerTest {
     BuildingsComponent buildingsComponent;
     @InjectMocks
     OverviewUpgradeComponent overviewUpgradeComponent;
+    @InjectMocks
+    EmpireOverviewComponent empireOverviewComponent;
 
 
     @Spy
@@ -88,7 +91,8 @@ public class IslandsServiceTest extends ControllerTest {
     GamesApiService gameApiService;
     @Spy
     EmpireService empireService;
-
+    @Spy
+    ImageCache imageCache;
 
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
@@ -149,6 +153,7 @@ public class IslandsServiceTest extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
+        this.inGameController.empireOverviewComponent =this.empireOverviewComponent;
 
         inGameController.mapScrollPane = new ScrollPane();
         inGameController.group = new Group();
@@ -211,7 +216,7 @@ public class IslandsServiceTest extends ControllerTest {
 
         // Mock getEmpire
         doReturn(Observable.just(new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
-                "a","a",1, 2, "a", new String[]{"1"}, new LinkedHashMap<>() {{put("energy", 5);put("population", 4);}},
+                "a","black",1, 2, "a", new String[]{"1"}, new LinkedHashMap<>() {{put("energy", 5);put("population", 4);}},
                 null))).when(this.empireService).getEmpire(any(),any());
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
 
@@ -226,6 +231,7 @@ public class IslandsServiceTest extends ControllerTest {
         detailsComponent.getStylesheets().clear();
         overviewUpgradeComponent.getStylesheets().clear();
         sitesComponent.getStylesheets().clear();
+        empireOverviewComponent.getStylesheets().clear();
     }
 
     @Test

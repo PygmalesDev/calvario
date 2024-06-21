@@ -39,7 +39,7 @@
 }
 
 .payload {
-    -fx-hgap: 3x;
+    -fx-hgap: 3px;
     -fx-padding: 6px;
 
     -fx-background-color: #2969c0;

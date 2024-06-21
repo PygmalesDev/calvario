@@ -13,6 +13,7 @@ import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -81,6 +82,8 @@ public class TestIslandOverview extends ControllerTest {
     GameSystemsApiService gameSystemsApiService;
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
+    @Spy
+    ImageCache imageCache;
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
@@ -106,6 +109,8 @@ public class TestIslandOverview extends ControllerTest {
     EventComponent eventComponent;
     @InjectMocks
     InGameController inGameController;
+    @InjectMocks
+    EmpireOverviewComponent empireOverviewComponent;
 
 
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
@@ -260,7 +265,7 @@ public class TestIslandOverview extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
-
+        this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
 
 
         // Mock TokenStorage
@@ -279,7 +284,7 @@ public class TestIslandOverview extends ControllerTest {
 
         // Mock getEmpire
         doReturn(Observable.just(new EmpireDto("a", "a", "testEmpireID", "testGameID", "testUserID", "testEmpire",
-                "a", "a", 1, 2, "a", new String[]{"1"}, cost,
+                "a", "black", 1, 2, "a", new String[]{"1"}, cost,
                 null))).when(this.empireService).getEmpire(any(), any());
 
         doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", true, 1, 1, null))).when(gamesApiService).getGame(any());
@@ -390,6 +395,7 @@ public class TestIslandOverview extends ControllerTest {
         this.buildingsComponent.getStylesheets().clear();
         this.sitesComponent.getStylesheets().clear();
         this.detailsComponent.getStylesheets().clear();
+        this.empireOverviewComponent.getStylesheets().clear();
     }
 
     @Test

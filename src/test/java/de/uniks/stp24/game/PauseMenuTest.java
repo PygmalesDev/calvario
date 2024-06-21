@@ -13,6 +13,7 @@ import de.uniks.stp24.dto.AggregateResultDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -71,6 +72,9 @@ public class PauseMenuTest extends ControllerTest {
     ResourcesService resourcesService;
 
     @Spy
+    ImageCache imageCache;
+
+    @Spy
     TokenStorage tokenStorage;
     @Spy
     ObjectMapper objectMapper;
@@ -112,6 +116,9 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     BuildingsComponent buildingsComponent;
 
+    @InjectMocks
+    EmpireOverviewComponent empireOverviewComponent;
+
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
 
@@ -137,6 +144,7 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+        this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
 
         inGameService.setGameStatus(gameStatus);
         inGameService.setTimerService(timerService);

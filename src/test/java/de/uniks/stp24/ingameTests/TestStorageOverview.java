@@ -17,6 +17,7 @@ import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -80,6 +81,8 @@ public class TestStorageOverview extends ControllerTest {
     EventService eventService;
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
+    @Spy
+    ImageCache imageCache;
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
@@ -106,6 +109,8 @@ public class TestStorageOverview extends ControllerTest {
     BuildingsComponent buildingsComponent;
     @InjectMocks
     InGameController inGameController;
+    @InjectMocks
+    EmpireOverviewComponent empireOverviewComponent;
 
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
@@ -144,6 +149,7 @@ public class TestStorageOverview extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+        this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
 
 
         // Mock TokenStorage
@@ -155,7 +161,7 @@ public class TestStorageOverview extends ControllerTest {
 
         // Mock getEmpire
         doReturn(Observable.just(new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
-                "a","a",1, 2, "a", new String[]{"1"}, resources1 ,
+                "a","black",1, 2, "a", new String[]{"1"}, resources1 ,
                 null))).when(this.empireService).getEmpire(any(),any());
 
         doReturn(Observable.just(new Game("a","a","testGameID", "gameName", "gameOwner", true,1,1,null ))).when(gamesApiService).getGame(any());
@@ -187,6 +193,7 @@ public class TestStorageOverview extends ControllerTest {
         settingsComponent.getStylesheets().clear();
         overviewSitesComponent.getStylesheets().clear();
         overviewUpgradeComponent.getStylesheets().clear();
+        empireOverviewComponent.getStylesheets().clear();
 
     }
 
@@ -227,7 +234,7 @@ public class TestStorageOverview extends ControllerTest {
 
         empireDtoSubject.onNext(new Event<>("games.testGameID.empires.testEmpireID.updated",
                 new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
-                        "a","a",1, 2, "a", new String[]{"1"}, resources2 ,
+                        "a","black",1, 2, "a", new String[]{"1"}, resources2 ,
                         null)));
         waitForFxEvents();
 
@@ -239,7 +246,7 @@ public class TestStorageOverview extends ControllerTest {
 
         empireDtoSubject.onNext(new Event<>("games.testGameID.empires.testEmpireID.updated",
                 new EmpireDto("a","b","testEmpireID", "testGameID","testUserID","testEmpire",
-                        "a","a",1, 2, "a", new String[]{"1"}, resources3 ,
+                        "a","black",1, 2, "a", new String[]{"1"}, resources3 ,
                         null)));
         waitForFxEvents();
 
@@ -261,7 +268,7 @@ public class TestStorageOverview extends ControllerTest {
         // Mock getEmpire (second time)
         when(this.empireService.getEmpire(any(),any()))
                 .thenReturn(Observable.just(new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
-                        "a","a",1, 2, "a", new String[]{"1"}, resources2 ,
+                        "a","black",1, 2, "a", new String[]{"1"}, resources2 ,
                         null)));
 
         // Mock get aggregates

@@ -31,7 +31,7 @@ public class InGameService {
     @Inject
     Subscriber subscriber;
     @Inject
-    PresetsApiService presetsApiService;
+    public PresetsApiService presetsApiService;
 
     @Inject
     public InGameService() {

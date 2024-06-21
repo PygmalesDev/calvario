@@ -2,9 +2,11 @@ package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.MemberDto;
+import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.ImageCache;
@@ -65,6 +67,8 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     private String gameID;
     private int maxMember;
     private BubbleComponent bubbleComponent;
+    @Inject
+    IslandsService islandsService;
     public boolean leftLobby;
     public Image readyIconBlueImage;
     public Image readyIconGreenImage;

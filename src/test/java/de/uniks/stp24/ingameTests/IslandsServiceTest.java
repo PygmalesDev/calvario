@@ -7,6 +7,7 @@ import de.uniks.stp24.component.game.EventComponent;
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -76,6 +77,14 @@ public class IslandsServiceTest extends ControllerTest {
     BuildingsComponent buildingsComponent;
     @InjectMocks
     OverviewUpgradeComponent overviewUpgradeComponent;
+    @InjectMocks
+    BuildingPropertiesComponent buildingPropertiesComponent;
+    @InjectMocks
+    SitePropertiesComponent sitePropertiesComponent;
+    @InjectMocks
+    BuildingsWindowComponent buildingsWindowComponent;
+    @InjectMocks
+    DeleteStructureComponent deleteStructureComponent;
 
 
     @Spy
@@ -128,11 +137,15 @@ public class IslandsServiceTest extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
+        this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
+        this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
+        this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = eventComponent;
+        this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.clockComponent.timerService = this.timerService;
         this.clockComponent.eventService = this.eventService;
         this.clockComponent.subscriber = this.subscriber;
@@ -217,15 +230,17 @@ public class IslandsServiceTest extends ControllerTest {
 
 
         app.show(inGameController);
-
         eventComponent.getStylesheets().clear();
-        clockComponent.getStylesheets().clear();
-        overviewSitesComponent.getStylesheets().clear();
         storageOverviewComponent.getStylesheets().clear();
-        buildingsComponent.getStylesheets().clear();
-        detailsComponent.getStylesheets().clear();
+        clockComponent.getStylesheets().clear();
+        pauseMenuComponent.getStylesheets().clear();
+        settingsComponent.getStylesheets().clear();
+        overviewSitesComponent.getStylesheets().clear();
         overviewUpgradeComponent.getStylesheets().clear();
-        sitesComponent.getStylesheets().clear();
+        sitePropertiesComponent.getStylesheets().clear();
+        buildingsWindowComponent.getStylesheets().clear();
+        buildingPropertiesComponent.getStylesheets().clear();
+        deleteStructureComponent.getStylesheets().clear();
     }
 
     @Test
@@ -252,4 +267,5 @@ public class IslandsServiceTest extends ControllerTest {
         assertNotEquals(0,islandsService.getMapHeight());
 
     }
+    
 }

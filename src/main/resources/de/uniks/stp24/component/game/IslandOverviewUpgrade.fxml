@@ -86,7 +86,7 @@
          </VBox>
       </HBox>
    </VBox>
-   <Pane fx:id="closeButton" layoutX="372.0" layoutY="16.0" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #ff0000;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0" />
+   <Pane fx:id="close" layoutX="372.0" layoutY="16.0" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #ff0000;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0" />
    <Pane fx:id="backButton" layoutX="6.0" layoutY="16.0" onMouseClicked="#goBack" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: #acac13;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="16.0" />
    <Pane fx:id="checkColonized" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #acac13;" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="193.0" />
    <Pane fx:id="checkUpgraded" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #acac13;" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="300.0" />

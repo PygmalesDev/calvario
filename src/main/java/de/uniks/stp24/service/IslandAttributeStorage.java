@@ -80,7 +80,7 @@ public class IslandAttributeStorage {
 
     //TODO: Just for Testing buildings page
     public void addNewBuilding() {
-        island.buildings().add(String.valueOf(island.buildings().size()));
+        island.buildings().add("mine");
     }
 
     public Map<String, Integer> getNeededResources(int key) {

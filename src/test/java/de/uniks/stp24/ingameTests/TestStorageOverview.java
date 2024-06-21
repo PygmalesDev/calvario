@@ -134,6 +134,8 @@ public class TestStorageOverview extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
+        this.clockComponent.tokenStorage = tokenStorage;
+        this.eventComponent.tokenStorage = tokenStorage;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
@@ -183,6 +185,12 @@ public class TestStorageOverview extends ControllerTest {
         doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
         doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
         doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
+
+        Game game = new Game("a", "a", "testGameID", "gameName", "gameOwner", true, 1, 1, null);
+
+        doReturn(Observable.just(new Event<>("games.testGameID.ticked", game))).when(this.eventListener).listen(eq("games.testGameID.ticked"),eq(Game.class));
+        doReturn(Observable.just(new Event<>("games.testGameID.updated", game))).when(this.eventListener).listen(eq("games.testGameID.updated"),eq(Game.class));
+
 
         this.app.show(this.inGameController);
 

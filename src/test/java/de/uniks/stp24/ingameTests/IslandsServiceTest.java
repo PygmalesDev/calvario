@@ -30,6 +30,7 @@ import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.LanguageService;
+import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.Group;
@@ -132,6 +133,8 @@ public class IslandsServiceTest extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
+        this.clockComponent.tokenStorage = tokenStorage;
+        this.eventComponent.tokenStorage = tokenStorage;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
@@ -219,6 +222,11 @@ public class IslandsServiceTest extends ControllerTest {
                 "a","black",1, 2, "a", new String[]{"1"}, new LinkedHashMap<>() {{put("energy", 5);put("population", 4);}},
                 null))).when(this.empireService).getEmpire(any(),any());
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
+
+        Game game = new Game("a", "a", "testGameID", "gameName", "gameOwner", true, 1, 1, null);
+
+        doReturn(Observable.just(new Event<>("games.testGameID.ticked", game))).when(this.eventListener).listen(eq("games.testGameID.ticked"),eq(Game.class));
+        doReturn(Observable.just(new Event<>("games.testGameID.updated", game))).when(this.eventListener).listen(eq("games.testGameID.updated"),eq(Game.class));
 
 
         app.show(inGameController);

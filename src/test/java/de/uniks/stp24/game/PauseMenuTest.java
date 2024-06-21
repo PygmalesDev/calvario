@@ -14,6 +14,7 @@ import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
@@ -52,10 +53,14 @@ public class PauseMenuTest extends ControllerTest {
     GameSystemsApiService gameSystemsApiService;
 
     @Spy
+    PresetsApiService presetsApiService;
+
+    @Spy
     TokenStorage tokenStorage;
 
     @Spy
     PopupBuilder popupBuilder;
+    @Spy
     EventService eventService;
 
     @Spy
@@ -131,6 +136,11 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     BuildingsComponent buildingsComponent;
 
+    @InjectMocks
+    DeleteStructureComponent deleteStructureComponent;
+
+
+
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
 
@@ -160,16 +170,26 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
+        this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
+
+        this.inGameService.presetsApiService = this.presetsApiService;
+
+
         inGameService.setGameStatus(gameStatus);
         inGameService.setTimerService(timerService);
         Map<String , Integer> chance = new HashMap<>();
         Map<String , Integer> required = new HashMap<>();
         Map<String, Integer> production = new HashMap<>();
         Map<String, Integer> consumption = new HashMap<>();
+        UpgradeStatus upgradeStatus = new UpgradeStatus("test", 20, production, consumption, 20);
+
         doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());
         doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", true,1,1,null ))).when(gamesApiService).getGame(any());
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
-        doReturn(Observable.just(new SiteDto("a",chance, required,production, consumption))).when(resourcesService).getResourcesSite(any());
+
+        doReturn(Observable.just(new SystemUpgrades(upgradeStatus,upgradeStatus, upgradeStatus, upgradeStatus, upgradeStatus ))).when(inGameService).loadUpgradePresets();
+        doReturn(Observable.just(new ArrayList<BuildingPresets>())).when(inGameService).loadBuildingPresets();
+        doReturn(Observable.just(new ArrayList<DistrictPresets>())).when(inGameService).loadDistrictPresets();
 
         this.app.show(this.inGameController);
     }

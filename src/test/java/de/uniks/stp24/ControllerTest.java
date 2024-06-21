@@ -58,7 +58,7 @@ public class ControllerTest extends ApplicationTest {
     @Override
     public void stop() throws Exception {
         super.stop();
-        app.stop();
+        app.cleanUp();
         app = null;
         stage = null;
         testComponent = null;

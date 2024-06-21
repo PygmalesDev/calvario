@@ -66,12 +66,16 @@ public class App extends FulibFxApp {
         }
     }
 
-       @Override
-    public void stop() {
+    public void cleanUp(){
         super.stop();
         cssFxStop.run();
         autoRefresher().close();
-        //this.component = null;
+    }
+
+    @Override
+    public void stop() {
+        cleanUp();
+        System.exit(0);
     }
 
 

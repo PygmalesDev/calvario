@@ -1,8 +1,7 @@
 package de.uniks.stp24;
 
 
-import de.uniks.stp24.component.game.ResourceComponent;
-import de.uniks.stp24.component.game.StorageOverviewComponent;
+import de.uniks.stp24.component.game.BuildingPropertiesComponent;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.*;
 import org.fulib.fx.annotation.Route;

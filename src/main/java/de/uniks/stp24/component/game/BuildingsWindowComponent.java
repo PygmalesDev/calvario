@@ -1,4 +1,4 @@
-package de.uniks.stp24.component.menu;
+package de.uniks.stp24.component.game;
 
 
 import de.uniks.stp24.controllers.InGameController;

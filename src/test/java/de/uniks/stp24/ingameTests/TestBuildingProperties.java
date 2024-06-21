@@ -2,17 +2,15 @@ package de.uniks.stp24.ingameTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.game.ClockComponent;
-import de.uniks.stp24.component.game.StorageOverviewComponent;
+import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
-import de.uniks.stp24.model.Game;
-import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.Island;
-import de.uniks.stp24.model.IslandType;
+import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ResourcesService;
@@ -43,7 +41,8 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 public class TestBuildingProperties extends ControllerTest {
     @Spy
     GamesApiService gamesApiService;
-
+    @Spy
+    PresetsApiService presetsApiService;
     @Spy
     GameStatus gameStatus;
     @Spy
@@ -75,15 +74,26 @@ public class TestBuildingProperties extends ControllerTest {
     StorageOverviewComponent storageOverviewComponent;
     @InjectMocks
     ClockComponent clockComponent;
-
+    @InjectMocks
+    OverviewSitesComponent overviewSitesComponent;
+    @InjectMocks
+    OverviewUpgradeComponent overviewUpgradeComponent;
+    @InjectMocks
+    IslandAttributeStorage islandAttributeStorage;
+    @InjectMocks
+    DetailsComponent detailsComponent;
+    @InjectMocks
+    SitesComponent sitesComponent;
+    @InjectMocks
+    BuildingsComponent buildingsComponent;
     @InjectMocks
     BuildingPropertiesComponent buildingPropertiesComponent;
-
     @InjectMocks
     SitePropertiesComponent sitePropertiesComponent;
-
     @InjectMocks
     BuildingsWindowComponent buildingsWindowComponent;
+    @InjectMocks
+    DeleteStructureComponent deleteStructureComponent;
 
     @InjectMocks
     InGameController inGameController;
@@ -96,14 +106,25 @@ public class TestBuildingProperties extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
+        this.clockComponent.timerService = this.timerService;
+        this.clockComponent.subscriber = this.subscriber;
+        this.islandsService.app = this.app;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
+        this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
+        this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
+        this.inGameController.islandAttributes = this.islandAttributeStorage;
+        this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
+        this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
+        this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+        this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
         this.inGameService.setGameStatus(gameStatus);
+        this.inGameService.presetsApiService = this.presetsApiService;
         Map<String , Integer> chance = new HashMap<>();
         Map<String , Integer> required = new HashMap<>();
         Map<String, Integer> production = new HashMap<>();
@@ -130,6 +151,11 @@ public class TestBuildingProperties extends ControllerTest {
 
         doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
         buildings.add("mine");
+
+        //Todo: Maybe not the smartest solution
+        doReturn(Observable.just(new SystemUpgrades(null, null, null, null, null))).when(presetsApiService).getSystemUpgrades();
+        doReturn(Observable.just(new DistrictPresets(null, null, null, null, null))).when(presetsApiService).getDistrictPresets();
+        doReturn(Observable.just(new BuildingPresets(null, null, null, null))).when(presetsApiService).getBuildingPresets();
 
         this.app.show(this.inGameController);
 

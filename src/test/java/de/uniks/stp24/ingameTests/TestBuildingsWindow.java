@@ -2,8 +2,7 @@ package de.uniks.stp24.ingameTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.game.ClockComponent;
-import de.uniks.stp24.component.game.StorageOverviewComponent;
+import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
@@ -39,7 +38,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
@@ -78,6 +76,10 @@ public class TestBuildingsWindow extends ControllerTest {
     StorageOverviewComponent storageOverviewComponent;
     @InjectMocks
     ClockComponent clockComponent;
+    @InjectMocks
+    OverviewSitesComponent overviewSitesComponent;
+    @InjectMocks
+    OverviewUpgradeComponent overviewUpgradeComponent;
 
     @InjectMocks
     BuildingPropertiesComponent buildingPropertiesComponent;
@@ -105,6 +107,8 @@ public class TestBuildingsWindow extends ControllerTest {
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
+        this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
+        this.inGameController.overviewUpgradeComponent = this.overviewUpgradeComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
@@ -138,7 +142,15 @@ public class TestBuildingsWindow extends ControllerTest {
 
 
         this.app.show(this.inGameController);
-
+        storageOverviewComponent.getStylesheets().clear();
+        clockComponent.getStylesheets().clear();
+        pauseMenuComponent.getStylesheets().clear();
+        settingsComponent.getStylesheets().clear();
+        overviewSitesComponent.getStylesheets().clear();
+        overviewUpgradeComponent.getStylesheets().clear();
+        sitePropertiesComponent.getStylesheets().clear();
+        buildingsWindowComponent.getStylesheets().clear();
+        buildingPropertiesComponent.getStylesheets().clear();
         sitePropertiesComponent.setVisible(false);
     }
 

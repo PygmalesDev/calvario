@@ -3,6 +3,7 @@ package de.uniks.stp24.ingameTests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -69,6 +70,14 @@ public class IslandsServiceTest extends ControllerTest {
     BuildingsComponent buildingsComponent;
     @InjectMocks
     OverviewUpgradeComponent overviewUpgradeComponent;
+    @InjectMocks
+    BuildingPropertiesComponent buildingPropertiesComponent;
+    @InjectMocks
+    SitePropertiesComponent sitePropertiesComponent;
+    @InjectMocks
+    BuildingsWindowComponent buildingsWindowComponent;
+    @InjectMocks
+    DeleteStructureComponent deleteStructureComponent;
 
 
     @Spy
@@ -115,10 +124,14 @@ public class IslandsServiceTest extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
+        this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
+        this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
+        this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
+        this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.clockComponent.timerService = this.timerService;
         this.clockComponent.subscriber = this.subscriber;
         this.clockComponent.gamesApiService = this.gameApiService;
@@ -200,6 +213,15 @@ public class IslandsServiceTest extends ControllerTest {
 
 
         app.show(inGameController);
+        storageOverviewComponent.getStylesheets().clear();
+        clockComponent.getStylesheets().clear();
+        pauseMenuComponent.getStylesheets().clear();
+        settingsComponent.getStylesheets().clear();
+        overviewSitesComponent.getStylesheets().clear();
+        overviewUpgradeComponent.getStylesheets().clear();
+        sitePropertiesComponent.getStylesheets().clear();
+        buildingsWindowComponent.getStylesheets().clear();
+        buildingPropertiesComponent.getStylesheets().clear();
     }
 
     @Test

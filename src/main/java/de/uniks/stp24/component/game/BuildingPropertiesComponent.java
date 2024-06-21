@@ -1,7 +1,7 @@
-package de.uniks.stp24.component.menu;
+package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.component.game.ResourceComponent;
+import de.uniks.stp24.component.game.CustomComponentListCell;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.model.Island;

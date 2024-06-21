@@ -1,9 +1,6 @@
 package de.uniks.stp24.component.game;
 
-import de.uniks.stp24.component.menu.SitePropertiesComponent;
-import de.uniks.stp24.controllers.GangCreationController;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.service.ImageCache;
@@ -16,14 +13,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
-import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
-import java.util.Objects;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 import javax.inject.Singleton;
 

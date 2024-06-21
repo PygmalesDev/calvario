@@ -7,7 +7,6 @@ import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
-import de.uniks.stp24.model.Building;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.InGameService;
@@ -131,20 +130,23 @@ public class TestSiteProperties extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
+        this.clockComponent.timerService = this.timerService;
+        this.clockComponent.subscriber = this.subscriber;
+        this.islandsService.app = this.app;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
+        this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
-        this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
-        this.inGameController.overviewUpgradeComponent = this.overviewUpgradeComponent;
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
-        this.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
-        this.overviewSitesComponent.sitesComponent = this.sitesComponent;
-        this.overviewSitesComponent.detailsComponent = this.detailsComponent;
-        this.deleteStructureComponent.sites = this.sitesPath;
+        this.inGameController.islandAttributes = this.islandAttributeStorage;
+        this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
+        this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
+        this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+        this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
         this.inGameService.setGameStatus(gameStatus);
         Map<String , Integer> chance = new HashMap<>();
         Map<String , Integer> required = new HashMap<>();
@@ -181,6 +183,15 @@ public class TestSiteProperties extends ControllerTest {
         buildings.add("mine");
 
         this.app.show(this.inGameController);
+        storageOverviewComponent.getStylesheets().clear();
+        clockComponent.getStylesheets().clear();
+        pauseMenuComponent.getStylesheets().clear();
+        settingsComponent.getStylesheets().clear();
+        overviewSitesComponent.getStylesheets().clear();
+        overviewUpgradeComponent.getStylesheets().clear();
+        sitePropertiesComponent.getStylesheets().clear();
+        buildingsWindowComponent.getStylesheets().clear();
+        buildingPropertiesComponent.getStylesheets().clear();
         waitForFxEvents();
         Platform.runLater(() -> {
             inGameController.showSiteOverview();

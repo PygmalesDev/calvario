@@ -103,6 +103,12 @@ public class TestIslandOverview extends ControllerTest {
     BuildingsComponent buildingsComponent;
     @InjectMocks
     InGameController inGameController;
+    @InjectMocks
+    BuildingPropertiesComponent buildingPropertiesComponent;
+    @InjectMocks
+    SitePropertiesComponent sitePropertiesComponent;
+    @InjectMocks
+    BuildingsWindowComponent buildingsWindowComponent;
 
 
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
@@ -243,6 +249,9 @@ public class TestIslandOverview extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
+        this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
+        this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
+        this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
@@ -373,6 +382,15 @@ public class TestIslandOverview extends ControllerTest {
         this.islandsService.isles = islands;
 
         this.app.show(this.inGameController);
+        storageOverviewComponent.getStylesheets().clear();
+        clockComponent.getStylesheets().clear();
+        pauseMenuComponent.getStylesheets().clear();
+        settingsComponent.getStylesheets().clear();
+        overviewSitesComponent.getStylesheets().clear();
+        overviewUpgradeComponent.getStylesheets().clear();
+        sitePropertiesComponent.getStylesheets().clear();
+        buildingsWindowComponent.getStylesheets().clear();
+        buildingPropertiesComponent.getStylesheets().clear();
     }
 
     @Test

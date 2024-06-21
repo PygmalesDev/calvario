@@ -1,7 +1,6 @@
-package de.uniks.stp24.component.menu;
+package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.Island;
@@ -23,11 +22,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import org.fulib.fx.FulibFxApp;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnInit;
-import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 
@@ -37,6 +34,8 @@ import javax.inject.Provider;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+
+import static de.uniks.stp24.service.Constants.siteTranslation;
 
 @Component(view = "SiteProperties.fxml")
 public class SitePropertiesComponent extends AnchorPane {
@@ -79,11 +78,11 @@ public class SitePropertiesComponent extends AnchorPane {
     IslandsService islandsService;
 
     @Inject
-    @Named("gameResourceBundle")
-    ResourceBundle gameResourceBundle;
+    App app;
 
     @Inject
-    App app;
+    @Named("gameResourceBundle")
+    ResourceBundle gameResourceBundle;
 
 
     @Inject
@@ -101,7 +100,7 @@ public class SitePropertiesComponent extends AnchorPane {
 
     InGameController inGameController;
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, true, gameResourceBundle);
+    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
 
     @OnInit
     public void init(){
@@ -132,7 +131,7 @@ public class SitePropertiesComponent extends AnchorPane {
 
     public void setSiteType(String siteType){
         this.siteType = siteType;
-        siteName.setText(capitalizeFirstLetter(siteType));
+        siteName.setText(gameResourceBundle.getString(siteTranslation.get(siteType)));
         Image imageSite = new Image(sitesMap.get(siteType));
         siteImage.getStyleClass().clear();
         siteImage.setImage(imageSite);
@@ -183,7 +182,7 @@ public class SitePropertiesComponent extends AnchorPane {
         });
 
         if (tokenStorage.getIsland().sites().get(siteType) != null){
-             amountSite = tokenStorage.getIsland().sites().get(siteType);
+            amountSite = tokenStorage.getIsland().sites().get(siteType);
         }
         if (tokenStorage.getIsland().sitesSlots().get(siteType) != null){
             amountSiteSlots= tokenStorage.getIsland().sitesSlots().get(siteType);
@@ -211,11 +210,11 @@ public class SitePropertiesComponent extends AnchorPane {
                 // Create an ImageView for each cell
                 ImageView imageViewEmpty = new ImageView(emptySlot);
                 ImageView imageViewFilled = new ImageView(filledSlot);
-                imageViewEmpty.setFitWidth(30);
-                imageViewEmpty.setFitHeight(12);
+                imageViewEmpty.setFitWidth(20);
+                imageViewEmpty.setFitHeight(20);
 
-                imageViewFilled.setFitWidth(30);
-                imageViewFilled.setFitHeight(12);
+                imageViewFilled.setFitWidth(20);
+                imageViewFilled.setFitHeight(20);
 
                 // Add the ImageView to the GridPane
                 if (count < amountSite){
@@ -331,7 +330,3 @@ class CustomComponentListCell<Item, Component extends Parent> extends ListCell<I
         }
     }
 }
-
-
-
-

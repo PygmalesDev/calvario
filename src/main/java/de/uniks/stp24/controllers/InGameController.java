@@ -187,18 +187,21 @@ public class InGameController extends BasicController {
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
 
         this.subscriber.subscribe(inGameService.loadUpgradePresets(),
-                result -> islandAttributes.setSystemPresets(result));
-
-        this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
-                result -> islandAttributes.setEmpireDto(result));
+                result -> islandAttributes.setSystemPresets(result),
+                error-> System.out.println("error in getEmpire in inGame"));
 
         this.subscriber.subscribe(inGameService.loadBuildingPresets(),
-                result -> islandAttributes.setBuildingPresets(result));
+                result -> islandAttributes.setBuildingPresets(result),
+                error-> System.out.println("error in getEmpire in inGame"));
 
         this.subscriber.subscribe(inGameService.loadDistrictPresets(),
-                result -> islandAttributes.setDistrictPresets(result));
+                result -> islandAttributes.setDistrictPresets(result),
+                error-> System.out.println("error in getEmpire in inGame"));
 
         if (!tokenStorage.isSpectator()) {
+            this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
+                    result -> islandAttributes.setEmpireDto(result),
+                    error-> System.out.println("error in getEmpire in inGame"));
             createEmpireListener();
         }
     }
@@ -294,8 +297,8 @@ public class InGameController extends BasicController {
     }
 
     /** created and add buttons for storage and island overview
-    * there are problems if they are contained in the fxml
-    */
+     * there are problems if they are contained in the fxml
+     */
 
     private void createButtonsStorage() {
         if (!(Objects.nonNull(showEmpireOverviewButton)&&(Objects.nonNull(showStorageButton)))) {
@@ -457,7 +460,7 @@ public class InGameController extends BasicController {
             siteProperties.setMouseTransparent(true);
         }
         buildingsWindow.toFront();
-        }
+    }
     public void createEmpireListener() {
         this.subscriber.subscribe(this.eventListener
                         .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
@@ -476,6 +479,7 @@ public class InGameController extends BasicController {
         buildingProperties.setMouseTransparent(false);
 
     }
+
 
     public void showSiteOverview() {
         siteProperties.setMouseTransparent(false);

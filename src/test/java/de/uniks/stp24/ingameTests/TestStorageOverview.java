@@ -7,7 +7,6 @@ import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.dto.AggregateResultDto;
-import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.*;
@@ -101,13 +100,12 @@ public class TestStorageOverview extends ControllerTest {
     BuildingsComponent buildingsComponent;
     @InjectMocks
     BuildingPropertiesComponent buildingPropertiesComponent;
-
     @InjectMocks
     SitePropertiesComponent sitePropertiesComponent;
-
     @InjectMocks
     BuildingsWindowComponent buildingsWindowComponent;
-
+    @InjectMocks
+    DeleteStructureComponent deleteStructureComponent;
     @InjectMocks
     InGameController inGameController;
 
@@ -133,14 +131,25 @@ public class TestStorageOverview extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
+        this.clockComponent.timerService = this.timerService;
+        this.clockComponent.subscriber = this.subscriber;
+        this.islandsService.app = this.app;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
+        this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
+        this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.empireService.empireApiService = this.empireApiService;
+        islandsService.gameSystemsService = this.gameSystemsApiService;
+        this.inGameController.islandAttributes = this.islandAttributeStorage;
+        this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
+        this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
+        this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+        this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
         this.inGameService.setGameStatus(gameStatus);
         Map<String , Integer> chance = new HashMap<>();
         Map<String , Integer> required = new HashMap<>();
@@ -151,7 +160,6 @@ public class TestStorageOverview extends ControllerTest {
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
-        doReturn(Observable.just(new SiteDto("a",chance, required,production, consumption))).when(resourcesService).getResourcesSite(any());
 
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
 
@@ -181,6 +189,15 @@ public class TestStorageOverview extends ControllerTest {
         doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
 
         this.app.show(this.inGameController);
+        storageOverviewComponent.getStylesheets().clear();
+        clockComponent.getStylesheets().clear();
+        pauseMenuComponent.getStylesheets().clear();
+        settingsComponent.getStylesheets().clear();
+        overviewSitesComponent.getStylesheets().clear();
+        overviewUpgradeComponent.getStylesheets().clear();
+        sitePropertiesComponent.getStylesheets().clear();
+        buildingsWindowComponent.getStylesheets().clear();
+        buildingPropertiesComponent.getStylesheets().clear();
     }
 
     @Test

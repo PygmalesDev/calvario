@@ -33,6 +33,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import static de.uniks.stp24.service.Constants.buildingTranslation;
+import static de.uniks.stp24.service.Constants.siteTranslation;
+
 @Component(view = "DeleteStructureWarning.fxml")
 public class DeleteStructureComponent extends VBox{
     @FXML
@@ -62,6 +65,7 @@ public class DeleteStructureComponent extends VBox{
 
 
     @Inject
+    @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
@@ -75,10 +79,10 @@ public class DeleteStructureComponent extends VBox{
     @Inject
     IslandAttributeStorage islandAttributeStorage;
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, true, true, true, gameResourceBundle);
+    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
 
 
-    private String structureType;
+    String structureType;
 
     @Inject
     public DeleteStructureComponent(){
@@ -118,11 +122,15 @@ public class DeleteStructureComponent extends VBox{
 
 
     public void setWarningText(){
-        warningText.setText("Are you sure you want to delete " + capitalizeFirstLetter(structureType) + "?");
+        if(buildings.containsKey(structureType)){
+            warningText.setText(gameResourceBundle.getString("sure.you.want.delete") + gameResourceBundle.getString( buildingTranslation.get(structureType)) + "?");
+        }else{
+            warningText.setText(gameResourceBundle.getString("sure.you.want.delete") + gameResourceBundle.getString( siteTranslation.get(structureType)) + "?");
+        }
     }
 
     public void handleDeleteStructure(String structureType){
-        setStructureType(structureType);
+        this.structureType = structureType;
         setWarningText();
         displayStructureInfo();
         if (sites.containsKey(structureType)) {
@@ -134,10 +142,6 @@ public class DeleteStructureComponent extends VBox{
         }
     }
 
-    public void setStructureType(String structureType){
-        this.structureType = structureType;
-    }
-
     private void displayStructureInfo() {
         if (buildings.containsKey(structureType)){
             subscriber.subscribe(resourcesService.getResourcesBuilding(structureType), this::resourceListGenerationBuilding);
@@ -145,7 +149,7 @@ public class DeleteStructureComponent extends VBox{
         if (sites.containsKey(structureType)){
             subscriber.subscribe(resourcesService.getResourcesSite(structureType), this::resourceListGenerationSite);
         }
-        
+
         deleteStructureListView.setCellFactory(list -> new ComponentListCell<>(app, resourceComponentProvider));
     }
 
@@ -208,5 +212,3 @@ public class DeleteStructureComponent extends VBox{
         return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
 }
-
-

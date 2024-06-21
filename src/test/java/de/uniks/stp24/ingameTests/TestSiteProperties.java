@@ -160,7 +160,7 @@ public class TestSiteProperties extends ControllerTest {
         Map<String , Integer> required = new HashMap<>();
         Map<String, Integer> production = new HashMap<>();
         Map<String, Integer> consumption = new HashMap<>();
-        deleteStructureComponent.setStructureType("mining");
+        deleteStructureComponent.handleDeleteStructure("mining");
 
 
         Map<String, Integer> resources1 = Map.of("energy",3);

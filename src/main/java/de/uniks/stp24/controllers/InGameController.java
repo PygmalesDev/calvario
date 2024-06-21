@@ -193,7 +193,6 @@ public class InGameController extends BasicController {
         buildingPropertiesComponent.setInGameController(this);
         sitePropertiesComponent.setInGameController(this);
         deleteStructureComponent.setInGameController(this);
-        //building.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
@@ -337,20 +336,22 @@ public class InGameController extends BasicController {
      */
 
     private void createButtonsStorage() {
-        if (!(Objects.nonNull(showEmpireOverviewButton) && (Objects.nonNull(showStorageButton)))) {
-            showEmpireOverviewButton = new Button();
-            showEmpireOverviewButton.setPrefHeight(30);
-            showEmpireOverviewButton.setPrefWidth(30);
-            showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
-            showEmpireOverviewButton.getStyleClass().add("empireOverviewButton");
-            showStorageButton = new Button();
-            showStorageButton.setPrefHeight(30);
-            showStorageButton.setPrefWidth(30);
-            showStorageButton.setId("showStorageButton");
-            showStorageButton.getStyleClass().add("storageButton");
-            showStorageButton.setOnAction(event -> showStorage());
+        if (!tokenStorage.isSpectator()){
+            if (!(Objects.nonNull(showEmpireOverviewButton) && (Objects.nonNull(showStorageButton)))) {
+                showEmpireOverviewButton = new Button();
+                showEmpireOverviewButton.setPrefHeight(30);
+                showEmpireOverviewButton.setPrefWidth(30);
+                showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
+                showEmpireOverviewButton.getStyleClass().add("empireOverviewButton");
+                showStorageButton = new Button();
+                showStorageButton.setPrefHeight(30);
+                showStorageButton.setPrefWidth(30);
+                showStorageButton.setId("showStorageButton");
+                showStorageButton.getStyleClass().add("storageButton");
+                showStorageButton.setOnAction(event -> showStorage());
+            }
+            this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton);
         }
-        this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton);
     }
 
     private void showEmpireOverview() {

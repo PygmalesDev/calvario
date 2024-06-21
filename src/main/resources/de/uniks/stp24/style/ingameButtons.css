@@ -22,6 +22,30 @@
     -fx-pref-height: 45px;
 }
 
+.acceptButton{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/accept_button.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 35px;
+    -fx-pref-height: 35px;
+}
+
+.declineButton{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/decline_button.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 35px;
+    -fx-pref-height: 35px;
+}
+
 .buildButton{
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/build_button.png");

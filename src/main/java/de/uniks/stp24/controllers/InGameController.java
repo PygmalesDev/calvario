@@ -64,8 +64,6 @@ public class InGameController extends BasicController {
     @FXML
     public StackPane overviewContainer;
     @FXML
-    ScrollPane mapPane;
-    @FXML
     public ScrollPane mapScrollPane;
     @FXML
     public Pane mapGrid;
@@ -204,12 +202,14 @@ public class InGameController extends BasicController {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             pause = (Boolean) propertyChangeEvent.getNewValue();
             if (pause) {
-                pauseGame();
                 shadow.setVisible(true);
                 shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
+                pauseGame();
             } else {
+                if (!eventContainer.isVisible()) {
+                    shadow.setVisible(false);
+                }
                 resumeGame();
-                shadow.setVisible(false);
             }
         }
     }
@@ -243,6 +243,8 @@ public class InGameController extends BasicController {
         inGameService.setShowSettings(false);
         inGameService.setPaused(pause);
         if (pause) {
+            shadow.setVisible(true);
+            shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
             pauseGame();
         } else {
             resumeGame();
@@ -265,7 +267,6 @@ public class InGameController extends BasicController {
 
     public void resumeGame() {
         pauseMenuContainer.setVisible(pause);
-        shadow.setVisible(false);
     }
 
     /**
@@ -386,7 +387,7 @@ public class InGameController extends BasicController {
                     System.out.println("Event -> minerals: " + islandAttributes.getAvailableResources().get("minerals") + " alloys: " + islandAttributes.getAvailableResources().get("alloys"));
                     overviewUpgradeComponent.setUpgradeButton();
                 },
-                error -> System.out.println("errorListener")
+                error -> System.out.println("errorListener: " + error)
         );
     }
   

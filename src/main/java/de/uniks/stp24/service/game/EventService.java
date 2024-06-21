@@ -30,9 +30,11 @@ public class EventService {
     public static final String PROPERTY_EVENT = "event";
     public static final String PROPERTY_NEXTEVENT = "nextEvent";
     private volatile int remainingSeasons;
-    EffectSourceParentDto event = null;
+    EffectSourceParentDto event;
     private int nextEvent;
     ObjectMapper objectMapper = new ObjectMapper();
+
+    // with seed, so every Player has the same events at the same time
     Random random = new Random(1000);
 
 
@@ -57,12 +59,12 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
     /**
      * setNextEvent() in Constructor is for the first time an event can occur.
      * For the beginning it is set to 100-120. For less time until the first event,
-     * please do something like this: setNextEvent(5)
+     * please do something like this: nextEvent = 5
      * if you want to set it to 5 seasons until the first event happens.
      */
     @Inject
     public EventService() {
-        setNextEvent();
+        nextEvent = 1;
         this.listeners = new PropertyChangeSupport(this);
     }
 
@@ -197,6 +199,23 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
         }
         // if no event can occur
         return null;
+    }
+
+    /**
+     * Looks for the eventType of the event. If it is not from our interface,
+     * it will return "unknown", else it will return "good" or "bad".
+     */
+    public String searchEvent(String eventName) {
+        for (String event : eventNames) {
+            if (event.equals(eventName)) {
+                if (eventNames.indexOf(event) > 5) {
+                    return "bad";
+                } else {
+                    return "good";
+                }
+            }
+        }
+        return "unknown";
     }
 
     public Observable<EmpireDto> sendEffect() {

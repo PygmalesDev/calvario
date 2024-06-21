@@ -88,42 +88,12 @@ public class EventComponent extends AnchorPane {
         PropertyChangeListener callHandleEventChanged = this::handleEventChanged;
         eventService.listeners().addPropertyChangeListener(EventService.PROPERTY_EVENT, callHandleEventChanged);
 
+        PropertyChangeListener callHandleShowEventChanged = this::handleShowEventChanged;
+        timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_SHOWEVENT, callHandleShowEventChanged);
+
         createUpdateSeasonsListener();
 
     }
-
-
-    public void createUpdateSeasonsListener() {
-        subscriber.subscribe(this.eventListener
-                        .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
-                event -> {
-                    if (!Objects.equals(lastUpdate, event.data().updatedAt())) {
-
-                        eventService.setNextEventTimer(eventService.getNextEventTimer()-1);
-
-                        if (eventService.getEvent() != null) {
-
-                            subscriber.subscribe(eventService.sendEffect(),
-                                    result -> {},
-                                    error -> System.out.println("Error beim Senden von Effect: " + error));
-
-                            setRandomEventInfos(eventService.getEvent());
-                            show();
-                        }
-                        lastUpdate = event.data().updatedAt();
-                    }
-                },
-                error -> System.out.println("Error bei Season: " + error.getMessage()));
-    }
-
-
-    private void handleEventChanged(PropertyChangeEvent propertyChangeEvent) {
-        if (Objects.nonNull(eventService.getEvent())) {
-            setRandomEventInfos(eventService.getEvent());
-            show();
-        }
-    }
-
 
     @OnRender
     public void render() {
@@ -132,7 +102,49 @@ public class EventComponent extends AnchorPane {
         this.getStylesheets().add(css);
 
         gameId = tokenStorage.getGameId();
+    }
 
+    @OnDestroy
+    public void destroy() {
+        eventService.listeners().removePropertyChangeListener(EventService.PROPERTY_EVENT, this::handleEventChanged);
+        timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_SHOWEVENT, this::handleShowEventChanged);
+    }
+
+    public void createUpdateSeasonsListener() {
+        subscriber.subscribe(this.eventListener
+                        .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
+                event -> {
+                    if (!Objects.equals(lastUpdate, event.data().updatedAt())) {
+                        eventService.setNextEventTimer(eventService.getNextEventTimer() - 1);
+                        if (eventService.getEvent() != null) {
+                            subscriber.subscribe(eventService.sendEffect(),
+                                    result -> {
+                                    },
+                                    error -> System.out.println("Error beim Senden von Effect: " + error)
+                            );
+                            setRandomEventInfos(eventService.getEvent());
+                            show();
+                        }
+                        lastUpdate = event.data().updatedAt();
+                    }
+                },
+                error -> System.out.println("Error bei Season: " + error.getMessage())
+        );
+    }
+
+    private void handleEventChanged(PropertyChangeEvent propertyChangeEvent) {
+        if (Objects.nonNull(eventService.getEvent())) {
+            setRandomEventInfos(eventService.getEvent());
+            show();
+        }
+    }
+
+    private void handleShowEventChanged(PropertyChangeEvent propertyChangeEvent) {
+        if (timerService.getShowEvent()) {
+            show();
+        } else {
+            close();
+        }
     }
 
     // changes String to camelCase
@@ -167,14 +179,10 @@ public class EventComponent extends AnchorPane {
 
     }
 
-    @OnDestroy
-    public void destroy() {
-
-    }
-
     public void close() {
         container.setVisible(false);
         shadow.setVisible(false);
+        timerService.setShowEvent(false);
     }
 
     public void show() {

@@ -10,7 +10,7 @@ public class BasicService {
     @Inject
     public App app;
     @Inject
-    protected TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
     protected Subscriber subscriber;
     @Inject

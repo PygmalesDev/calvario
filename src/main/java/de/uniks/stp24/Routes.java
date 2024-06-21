@@ -1,10 +1,8 @@
 package de.uniks.stp24;
 
 
-import de.uniks.stp24.component.menu.GangDeletionComponent;
-import de.uniks.stp24.component.menu.LogoutComponent;
-import de.uniks.stp24.component.menu.WarningComponent;
-import de.uniks.stp24.component.menu.WarningScreenComponent;
+import de.uniks.stp24.component.game.BuildingPropertiesComponent;
+import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.*;
 import org.fulib.fx.annotation.Route;
 
@@ -55,7 +53,12 @@ public class Routes {
     @Route("warning")
     @Inject
     Provider<WarningComponent> warning;
-    
+
+
+    @Route("buildingProperties")
+    @Inject
+    Provider<BuildingPropertiesComponent> buildingProperties;
+
     @Route("ingame")
     @Inject
     Provider<InGameController> game;

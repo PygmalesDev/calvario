@@ -65,10 +65,10 @@ public class PopupBuilder {
         if (screenOneToBlur != null) {
             screenOneToBlur.setEffect(null);
             screenOneToBlur.setMouseTransparent(false);
-            if (screenTwoToBlur != null) {
-                screenTwoToBlur.setEffect(null);
-                screenTwoToBlur.setMouseTransparent(false);
-            }
+        }
+        if (screenTwoToBlur != null) {
+            screenTwoToBlur.setEffect(null);
+            screenTwoToBlur.setMouseTransparent(false);
         }
     }
 }

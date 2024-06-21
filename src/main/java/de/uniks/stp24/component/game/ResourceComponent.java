@@ -67,7 +67,7 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
         }
 
         if (showIcon) {
-            resourceIconImageView.setImage(imageCache.get("icons/Resources/" + resource.resourceID() + ".png"));
+            resourceIconImageView.setImage(imageCache.get("icons/resources/" + resource.resourceID() + ".png"));
             resourceIconImageView.setVisible(true);
         } else {
             resourceIconImageView.setVisible(false);

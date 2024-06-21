@@ -5,6 +5,7 @@ import de.uniks.stp24.controllers.helper.JoinGameHelper;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.UserApiService;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.menu.LobbyService;

@@ -177,7 +177,6 @@ public class OverviewSitesComponent extends AnchorPane {
             upgradeButton.setVisible(false);
         }
 
-
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
                 islandAttributes.getIsland().buildings().size();
         islandAttributes.setUsedSlots(usedSlots);

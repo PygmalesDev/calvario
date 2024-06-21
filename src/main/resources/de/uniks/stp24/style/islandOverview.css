@@ -3,8 +3,6 @@
     -fx-font-size: 30;
 }
 
-
-
 /* Buildings Window */
 .buildingsOverviewBackground{
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/site_building_build_overview_window.png");
@@ -63,5 +61,40 @@
 
 .islandOverviewUpgradesButton{
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/upgrades_button.png");
+    -fx-background-size: 100% 100%;
+}
+
+.islandUpgradeBackground{
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/island_upgrades.png");
+    -fx-background-size: 100% 100%;
+}
+
+.goBackUpgrade{
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/arrow_left.png");
+    -fx-background-size: 100% 100%;
+}
+
+.goBackBuilding{
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/arrow_left.png");
+    -fx-background-size: 100% 100%;
+}
+
+.goNextBuilding{
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/arrow_right.png");
+    -fx-background-size: 100% 100%;
+}
+
+.checkUpgrade{
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/accept_button.png");
+    -fx-background-size: 100% 100%;
+}
+
+.overviewButtons{
+    -fx-font-weight: none;
+    -fx-font-size: 8;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/button_element.png");
     -fx-background-size: 100% 100%;
 }

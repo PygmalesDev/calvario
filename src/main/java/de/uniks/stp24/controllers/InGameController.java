@@ -143,6 +143,7 @@ public class InGameController extends BasicController {
 
         this.subscriber.subscribe(inGameService.loadUpgradePresets(),
                 result -> {
+                    System.out.println(result);
                     islandAttributes.setSystemPresets(result);
                 });
 

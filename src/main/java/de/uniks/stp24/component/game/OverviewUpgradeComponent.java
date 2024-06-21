@@ -17,19 +17,10 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Component(view = "IslandOverviewUpgrade.fxml")
 public class OverviewUpgradeComponent extends AnchorPane {
-    @FXML
-    public Text report;
-    @FXML
-    public Text res_4;
-    @FXML
-    public Text res_3;
     @FXML
     public Text res_2;
     @FXML
@@ -47,8 +38,6 @@ public class OverviewUpgradeComponent extends AnchorPane {
     @FXML
     public Pane checkDeveloped;
     @FXML
-    public Pane closeButton;
-    @FXML
     public Pane backButton;
     @FXML
     public Text levelOne;
@@ -64,6 +53,10 @@ public class OverviewUpgradeComponent extends AnchorPane {
     public Text levelFour;
     @FXML
     public Label levelFourText;
+    @FXML
+    public Pane res1;
+    @FXML
+    public Pane res2;
     @Inject
     InGameService inGameService;
     @Inject
@@ -89,9 +82,11 @@ public class OverviewUpgradeComponent extends AnchorPane {
     public void setUpgradeButton() {
         if (islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()) != null) {
             if (resourcesService.hasEnoughResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()))) {
-                confirmUpgrade.setStyle("-fx-background-color: green;");
+                confirmUpgrade.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/buttons/upgrade_button_on.png'); " +
+                        "-fx-background-size: cover;");
             } else {
-                confirmUpgrade.setStyle("-fx-background-color: black;");
+                confirmUpgrade.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/buttons/upgrade_button_off.png'); " +
+                        "-fx-background-size: cover;");
             }
         }
     }
@@ -116,10 +111,28 @@ public class OverviewUpgradeComponent extends AnchorPane {
 
     public void setNeededResources() {
         if (inGameController != null) {
-            LinkedList<Text> resTextList = new LinkedList<>(Arrays.asList(res_1, res_2, res_3, res_4, report));
+            LinkedList<Text> resTextList = new LinkedList<>(Arrays.asList(res_1, res_2));
+            ArrayList<Pane> resPic = new ArrayList<>(Arrays.asList(res1, res2));
             int i = 0;
             for (Map.Entry<String, Integer> entry : islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()).entrySet()) {
-                resTextList.get(i).setText(entry.getKey() + " " + entry.getValue());
+                resTextList.get(i).setText(String.valueOf(entry.getValue()));
+                String sourceImage = "";
+                switch(entry.getKey()){
+                    case "minerals": 
+                        sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/Resources/minerals.png'); "; 
+                        break; 
+                    case "energy":
+                        sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/Resources/energy.png'); ";
+                        break; 
+                    case "alloys":
+                        sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/Resources/alloys.png'); ";
+                        break; 
+                    case "fuel":
+                        sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/Resources/fuel.png'); ";
+                        break; 
+                }
+                resPic.get(i).setStyle(sourceImage +
+                        "-fx-background-size: cover;");
                 i += 1;
             }
         }

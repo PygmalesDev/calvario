@@ -27,13 +27,13 @@
             <HBox alignment="CENTER_LEFT" prefHeight="18.0" prefWidth="330.0">
                <children>
                   <VBox prefHeight="33.0" prefWidth="55.0" />
-                  <TextField fx:id="inputIslandName" alignment="CENTER" prefHeight="2.0" prefWidth="186.0" promptText="Unnamed" styleClass="overview-text" />
+                  <TextField fx:id="inputIslandName" alignment="CENTER" prefHeight="2.0" prefWidth="186.0" promptText="Unnamed" style="-fx-background-color: transparent;" styleClass="tableHeadingText" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="16.0" prefWidth="330.0">
                <VBox prefHeight="17.0" prefWidth="39.0" />
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="Capacity" wrappingWidth="64.947265625" />
-               <Text fx:id="island_name" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="island_name" wrappingWidth="164.947265625">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Capacity" wrappingWidth="64.947265625" />
+               <Text fx:id="island_name" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="island_name" wrappingWidth="164.947265625">
                   <font>
                      <Font size="11.0" />
                   </font></Text>
@@ -48,7 +48,7 @@
                            <Image url="@../../icons/islands/crewmates_icon.png" />
                         </image></ImageView>
                      <VBox prefHeight="20.0" prefWidth="5.0" />
-                     <Text fx:id="crewCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="0/20">
+                     <Text fx:id="crewCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="0/20">
                         <font>
                            <Font size="11.0" />
                         </font></Text>
@@ -60,26 +60,26 @@
                            <Image url="@../../icons/islands/capacity_icon.png" />
                         </image></ImageView>
                      <VBox prefHeight="20.0" prefWidth="5.0" />
-                     <Text fx:id="resCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="0/400">
+                     <Text fx:id="resCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="0/400">
                         <font>
                            <Font size="11.0" />
                         </font></Text>
                   </HBox>
                </VBox>
                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
-                  <Text fx:id="island_inf" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="island_inf">
+                  <Text fx:id="island_inf" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="island_inf">
                      <font>
                         <Font size="11.0" />
                      </font></Text>
                </VBox>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="44.0" prefWidth="329.0">
-               <VBox prefHeight="44.0" prefWidth="67.0" />
-               <Button fx:id="detailsButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showDetails" prefHeight="25.0" prefWidth="40.0" styleClass="overview-text" text="DETAILS" />
+               <VBox prefHeight="44.0" prefWidth="42.0" />
+               <Button fx:id="detailsButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showDetails" prefHeight="25.0" prefWidth="55.0" styleClass="overviewButtons" text="DETAILS" />
                <VBox prefHeight="44.0" prefWidth="21.0" />
-               <Button fx:id="sitesButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showSites" prefHeight="25.0" prefWidth="40.0" styleClass="overview-text" text="SITES" />
+               <Button fx:id="sitesButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showSites" prefHeight="25.0" prefWidth="55.0" styleClass="overviewButtons" text="SITES" />
                <VBox prefHeight="44.0" prefWidth="21.0" />
-               <Button fx:id="buildingsButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showBuildings" prefHeight="25.0" prefWidth="40.0" styleClass="overview-text" text="BUILDINGS" />
+               <Button fx:id="buildingsButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showBuildings" prefHeight="25.0" prefWidth="55.0" styleClass="overviewButtons" text="BUILDINGS" />
             </HBox>
          </VBox>
       </HBox>

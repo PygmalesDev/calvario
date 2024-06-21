@@ -1,6 +1,7 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
@@ -19,7 +20,9 @@ public class Building extends VBox {
     private ImageView building;
     InGameController inGameController;
 
-    @Inject
+    private String buildingType;
+
+
     public Building(BuildingsComponent buildingsComponent, String buildingName, TokenStorage tokenStorage, IslandAttributeStorage islandAttributes, InGameController inGameController){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BuildingElement.fxml"));
         fxmlLoader.setRoot(this);
@@ -33,19 +36,26 @@ public class Building extends VBox {
         this.inGameController = inGameController;
 
         building.setOnMouseClicked(event -> {
-            System.out.println(buildingsComponent.islandAttributes.getIsland().buildings().size());
-            System.out.println(islandAttributes.getIsland().resourceCapacity());
-            //TODO: Need to be modified for game
-            if(buildingName.equals("empty") && Objects.equals(tokenStorage.getEmpireId(), islandAttributes.getIsland().owner()) && islandAttributes.getUsedSlots() < islandAttributes.getIsland().resourceCapacity()) {
-                //TODO: Logic for editing new Building son page(gridpane)
+        	inGameController.showBuildingWindow();
+            if(buildingName.equals("buildNewBuilding") && Objects.equals(tokenStorage.getEmpireId(), islandAttributes.getIsland().owner()) && islandAttributes.getUsedSlots() < islandAttributes.getIsland().resourceCapacity()) {
                 buildingsComponent.islandAttributes.addNewBuilding();
-                int size = buildingsComponent.islandAttributes.getIsland().buildings().size();
-                buildingsComponent.islandAttributes.getIsland().buildings().set(size - 1, String.valueOf(size));
                 buildingsComponent.setGridPane();
-                //Increase res capacity in a dynamic way
-                this.inGameController.overviewSitesComponent.setOverviewSites();
+                inGameController.islandsService.updateIslandBuildings(islandAttributes, inGameController, islandAttributes.getIsland().buildings());
             }
         });
+    }
+
+    @Inject
+    public Building(){
+
+    }
+//    public void setInGameController(InGameController inGameController){
+//        this.inGameController = inGameController;
+//    }
+
+
+    public void setBuildingType(String buildingType){
+        this.buildingType = buildingType;
     }
 
 }

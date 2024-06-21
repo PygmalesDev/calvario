@@ -60,9 +60,9 @@
             </VBox.margin>
          </ListView>
       </VBox>
-      <stylesheets>
-         <URL value="@../../style/storageOverview.css" />
-         <URL value="@../../style/ingameButtons.css" />
-      </stylesheets>
    </VBox>
+   <stylesheets>
+      <URL value="@../../style/storageOverview.css" />
+      <URL value="@../../style/ingameButtons.css" />
+   </stylesheets>
 </fx:root>

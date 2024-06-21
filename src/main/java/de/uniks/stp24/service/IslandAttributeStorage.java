@@ -1,16 +1,22 @@
 package de.uniks.stp24.service;
 
 import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.BuildingPresets;
 import de.uniks.stp24.model.DistrictPresets;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.SystemUpgrades;
+import org.fulib.fx.annotation.controller.Resource;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
+
+import static de.uniks.stp24.service.Constants.islandTranslation;
 
 //Class can be used for getting Information of certain islands
 @Singleton
@@ -20,7 +26,13 @@ public class IslandAttributeStorage {
     public Island island;
     public ArrayList<BuildingPresets> buildings;
     public ArrayList<DistrictPresets> districts;
-    public Map<String, String> UpgradeEffects = new HashMap<>();
+    public Map<Integer, String> upgradeEffects = new HashMap<>();
+
+    @Inject
+    @Resource
+    @Named("gameResourceBundle")
+    ResourceBundle gameResourceBundle;
+    private int usedSlots;
 
 
     @Inject
@@ -34,6 +46,32 @@ public class IslandAttributeStorage {
 
     public void setSystemPresets(SystemUpgrades presets) {
         systemPresets = presets;
+
+        String effectsColonized = "+" + systemPresets.colonized().pop_growth() * 100 + "% more crew mates";
+        String effectsUpgraded = "+" + systemPresets.upgraded().pop_growth() * 100 + "% more crew mates";
+        String effectsDeveloped = "+" + systemPresets.developed().pop_growth() * 100 + "% more crew mates";
+
+        String effectsColonizedCap;
+        String effectsUpgradedCap;
+        String effectsDevelopedCap;
+
+        if(systemPresets.colonized().capacity_multiplier() != 1.0) {
+            effectsColonizedCap = "+" + (systemPresets.colonized().capacity_multiplier() - 1) * 100 + "% more capacity";
+            effectsColonized = effectsColonized + "\n" + effectsColonizedCap;
+        }
+        if(systemPresets.upgraded().capacity_multiplier() != 1.0){
+            effectsUpgradedCap = "+" + (systemPresets.upgraded().capacity_multiplier() - 1) * 100 + "% more capacity";
+            effectsUpgraded = effectsUpgraded + "\n" + effectsUpgradedCap;
+        }
+        if(systemPresets.developed().capacity_multiplier() != 1.0){
+            effectsDevelopedCap = "+" + (systemPresets.developed().capacity_multiplier() - 1) * 100 + "% more capacity";
+            effectsDeveloped = effectsDeveloped + "\n" + effectsDevelopedCap;
+        }
+
+        upgradeEffects.put(1, null);
+        upgradeEffects.put(2, effectsColonized);
+        upgradeEffects.put(3, effectsUpgraded);
+        upgradeEffects.put(4, effectsDeveloped);
     }
 
     public void setIsland(Island island) {
@@ -173,6 +211,23 @@ public class IslandAttributeStorage {
             }
         }
         return mergedMap;
+    }
+
+    public String getIslandNameTranslated(){
+        return gameResourceBundle.getString(islandTranslation.get(island.type().name()));
+    }
+
+    public String getUpgradeTranslation(int lvl){
+        String upgradeLvl = String.valueOf(Upgrade.values()[lvl]);
+        return gameResourceBundle.getString(Constants.upgradeTranslation.get(upgradeLvl));
+    }
+
+    public void setUsedSlots(int slots){
+        this.usedSlots = slots;
+    }
+
+    public int getUsedSlots(){
+        return usedSlots;
     }
 }
 

@@ -28,9 +28,9 @@ public class BuildingsComponent extends VBox {
     public IslandAttributeStorage islandAttributeStorage;
 
     private int currentPage = 0;
+    private InGameController inGameController;
 
     private String buildingType;
-    InGameController inGameController;
 
     @Inject
     public BuildingsComponent() {

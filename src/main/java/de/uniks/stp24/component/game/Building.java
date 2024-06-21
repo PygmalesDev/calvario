@@ -17,6 +17,7 @@ import java.util.Objects;
 public class Building extends VBox {
     @FXML
     private ImageView building;
+    InGameController inGameController;
 
     private String buildingType;
 
@@ -31,16 +32,19 @@ public class Building extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        this.inGameController = inGameController;
 
         building.setOnMouseClicked(event -> {
             inGameController.showBuildingWindow();
             //TODO: Need to be modified for game
-            if(buildingName.equals("empty") && Objects.equals(tokenStorage.getEmpireId(), islandAttributes.getIsland().owner())) {
+            if(buildingName.equals("empty") && Objects.equals(tokenStorage.getEmpireId(), islandAttributes.getIsland().owner()) && islandAttributes.getUsedSlots() < islandAttributes.getIsland().resourceCapacity()) {
                 //TODO: Logic for editing new Building son page(gridpane)
                 buildingsComponent.islandAttributes.addNewBuilding();
                 int size = buildingsComponent.islandAttributes.getIsland().buildings().size();
                 buildingsComponent.islandAttributes.getIsland().buildings().set(size - 1, String.valueOf(size));
                 buildingsComponent.setGridPane();
+                //Increase res capacity in a dynamic way
+                this.inGameController.overviewSitesComponent.setOverviewSites();
             }
         });
     }

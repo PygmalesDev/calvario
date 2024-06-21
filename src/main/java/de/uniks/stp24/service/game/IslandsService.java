@@ -4,6 +4,7 @@ import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.dto.SystemsDto;
+import de.uniks.stp24.dto.ShortSystemDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
@@ -14,7 +15,9 @@ import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.controller.Subscriber;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -31,25 +34,58 @@ public class IslandsService extends BasicService {
     @Inject
     LobbyService lobbyService;
 
+    String gameID;
+
     static final int factor = 10;
-    double minX,maxX,minY,maxY;
+    double minX, maxX, minY, maxY;
     double widthRange, heightRange;
+    private final List<ShortSystemDto> devIsles = new ArrayList<>();
     public List<Island> isles = new ArrayList<>();
     private final List<IslandComponent> islandComponentList = new ArrayList<>();
     private final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
     private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();
     private final Map<String, List<String>> connections = new HashMap<>();
+    private final Map<String, InfrastructureService> siteManager = new HashMap<>();
+    private final List<String> siteIDs = Arrays.asList("city", "energy", "mining", "agriculture",
+      "industry", "research_site", "ancient_foundry", "ancient_factory", "ancient_refinery");
+    private final List<String> buildingIDs = Arrays.asList("exchange", "power_plant", "mine", "farm",
+      "research_lab", "foundry", "factory", "refinery");
 
     @Inject
     public IslandsService() {
-        if (subscriber==null) subscriber = new Subscriber();
+        if (subscriber == null) subscriber = new Subscriber();
     }
 
-    /** this method will be used when changing from lobby to ingame
+    /**
+     * the empires in game are at start known:
+     * there are players with empires (and maybe spectators)
+     * use an extra manager for handle systems without owner
+     * after colonizing (or something else where the owner changes)
+     * data in management should be refreshed
+     */
+    @OnInit
+    public void createEmpireServices() {
+        empiresInGame.keySet().forEach(id -> {
+            siteManager.put(id,new InfrastructureService());
+            siteManager.get(id).setEmpireID(id);
+        });
+        siteManager.put("noBody",new InfrastructureService());
+        siteManager.get("noBody").setEmpireID("noBody");
+    }
+
+   
+    public void setFlag(boolean selected) {
+        islandComponentMap.forEach((id, comp) -> comp.showFlag(selected));
+    }
+
+    /**
+     * this method will be used when changing from lobby to ingame
      * and retrieve island information when starting or rejoining a game
      */
     public void retrieveIslands(String gameID) {
         resetVariables();
+        createEmpireServices();
+        this.gameID = gameID;
         subscriber.subscribe(gameSystemsService.getSystems(gameID),
                 dto -> {
                     Arrays.stream(dto).forEach(data -> {
@@ -92,7 +128,7 @@ public class IslandsService extends BasicService {
      * this means that if effect's radius (now 2.0) is large
      * an island component can be clicked just by clicking near (or far) from it
      */
-    public IslandComponent createIslandPaneFromDto(Island isleDto, IslandComponent component) {
+    public IslandComponent createIslandPaneFromDto(Island isleDto, @NotNull IslandComponent component) {
         component.applyInfo(isleDto);
         double screenOffsetH = widthRange * (factor + 2) / 2.0 - 25;
         double screenOffSetV = heightRange * (factor + 2) / 2.0 - 25;
@@ -102,9 +138,9 @@ public class IslandsService extends BasicService {
                 factor * isleDto.posY() - serverOffsetV + screenOffSetV);
         component.applyIcon(isleDto.type());
         component.setFlagImage(isleDto.flagIndex());
-        if(Objects.nonNull(isleDto.owner())) {
+        if (Objects.nonNull(isleDto.owner())) {
             Color colorWeb = Color.web(getEmpire(isleDto.owner()).color()).brighter();
-            component.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb)+ ", 2.0, 0.88, 0, 0);");
+            component.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb) + ", 2.0, 0.88, 0, 0);");
         }
         return component;
     }
@@ -113,13 +149,15 @@ public class IslandsService extends BasicService {
     public double getMapWidth() {
         return this.widthRange * (factor + 3);
     }
+
     public double getMapHeight() {
         return this.heightRange * (factor + 3);
     }
+
     public Map<String, List<String>> getConnections() {
         Map<String, List<String>> singleConnections = new HashMap<>();
         List<String> checked = new ArrayList<>();
-        connections.forEach((key,value) -> {
+        connections.forEach((key, value) -> {
             if (!checked.contains(key)) checked.add(key);
             ArrayList<String> tmp = new ArrayList<>();
             for (String s : value) {
@@ -127,7 +165,7 @@ public class IslandsService extends BasicService {
                     tmp.add(s);
                 }
             }
-            singleConnections.putIfAbsent(key,tmp);
+            singleConnections.putIfAbsent(key, tmp);
         });
         return singleConnections;
     }
@@ -136,28 +174,27 @@ public class IslandsService extends BasicService {
      * create subcomponents to be added to the map
      * put information in a map to access them easily
      */
-    public List<IslandComponent> createIslands(List<Island> list) {
+    public List<IslandComponent> createIslands(@NotNull List<Island> list) {
         list.forEach(
-                island -> {
-//              IslandComponent tmp1 = new IslandComponent();
-                    IslandComponent tmp = createIslandPaneFromDto(island,
-                            app.initAndRender(new IslandComponent())); // isn't working anymore?!
-//                tmp1);
-
-                    tmp.setLayoutX(tmp.getPosX());
-                    tmp.setLayoutY(tmp.getPosY());
-                    islandComponentList.add(tmp);
-                    islandComponentMap.put(island.id(), tmp);
-                }
+          island -> {
+              IslandComponent tmp = createIslandPaneFromDto(island,
+                app.initAndRender(new IslandComponent()));
+              tmp.setLayoutX(tmp.getPosX());
+              tmp.setLayoutY(tmp.getPosY());
+              islandComponentList.add(tmp);
+              islandComponentMap.put(island.id(), tmp);
+          }
         );
         return Collections.unmodifiableList(islandComponentList);
     }
 
-    /** lines (as object) between islands */
-    public List<Line> createLines(Map<String,IslandComponent> idToComponent) {
+    /**
+     * lines (as object) between islands
+     */
+    public List<Line> createLines(Map<String, IslandComponent> idToComponent) {
         Map<String, List<String>> islandConnections = getConnections();
         List<Line> linesInMap = new ArrayList<>();
-        islandConnections.forEach((isle,list) -> {
+        islandConnections.forEach((isle, list) -> {
             double startX, startY, endX, endY;
             IslandComponent isle1 = idToComponent.get(isle);
             startX = isle1.getPosX() + 25;
@@ -166,7 +203,7 @@ public class IslandsService extends BasicService {
                 IslandComponent isle2 = idToComponent.get(neighbour);
                 endX = isle2.getPosX() + 25;
                 endY = isle2.getPosY() + 25;
-                Line tmp = new Line(startX,startY,endX,endY);
+                Line tmp = new Line(startX, startY, endX, endY);
                 tmp.getStyleClass().add("connection");
                 linesInMap.add(tmp);
             }
@@ -183,7 +220,78 @@ public class IslandsService extends BasicService {
         heightRange = 0.0;
     }
 
-    public List<Island> getListOfIslands() { System.out.println("list of isles " + isles.size());
+    /** method should retrieve frequently updated information
+     */
+    public void refreshListOfColonizedSystems() {
+        devIsles.clear();
+        subscriber.subscribe(gameSystemsService.getSystems(this.gameID),
+          dto -> {
+              Arrays.stream(dto).forEach(data -> {
+                    if(Objects.nonNull(data.owner())) {
+                       ShortSystemDto tmp = new ShortSystemDto(data.owner(),
+                         data._id(),
+                         data.type(),
+                         data.name(),
+                         data.districtSlots(),
+                         data.districts(),
+                         data.capacity(),
+                         data.buildings(),
+                         data.upgrade(),
+                         data.population()
+                       );
+                        devIsles.add(tmp);
+                    }
+              });
+              System.out.println("number of colonized islands " + devIsles.size());
+              mapSitesBuildings();
+          },
+          error -> {});
+    }
+
+    /** after refresh list remap site and buildings (?)
+     * building's information is in an array
+     * */
+    public void mapSitesBuildings() {
+        siteManager.forEach((id,manager) -> manager.resetMap());
+        for (ShortSystemDto dto : this.devIsles) {
+            dto.districts().forEach((k,v) -> {
+                siteManager.get(dto.owner()).putOrUpdateSiteInfo(k,v);});
+            dto.buildings()
+              .forEach(building -> siteManager.get(dto.owner()).putOrUpdateBuildingInfo(building));
+        }
+    }
+
+    public int getCapacityOfOneSystem(String id) {
+        for (ShortSystemDto dto : devIsles) {
+            if (dto._id().equals(id)) {
+                return siteManager.get(dto.owner()).getTotalCapacity(dto.districts());
+            }
+        }
+        return 0;
+    }
+
+    public int getAllNumberOfSites(String empireID) {
+        return siteManager.get(empireID).getTotalSiteCapacity();
+    }
+
+    public int getNumberOfSites(String empireID, String siteID) {
+        int total = 0;
+        if (empiresInGame.containsKey(empireID)) {
+            total = siteManager.get(empireID).getSiteCapacities(siteID);
+        }
+        return total;
+    }
+
+    public int getNumberOfBuildings(String empireID, String buildingID) {
+        int total = 0;
+        if (empiresInGame.containsKey(empireID)) {
+            total = siteManager.get(empireID).getBuildingCapacities(buildingID);
+        }
+        return total;
+    }
+
+    public List<Island> getListOfIslands() {
+
         return Collections.unmodifiableList(this.isles);
     }
 
@@ -191,32 +299,36 @@ public class IslandsService extends BasicService {
         return Collections.unmodifiableMap(this.islandComponentMap);
     }
 
-    public ReadEmpireDto getEmpire(String id){
-        return this.empiresInGame.getOrDefault(id,null);
+    public ReadEmpireDto getEmpire(String id) {
+        return this.empiresInGame.getOrDefault(id, null);
     }
 
-    public void saveEmpire(String id, ReadEmpireDto empire){
-        this.empiresInGame.put(id,empire);
+    public void saveEmpire(String id, ReadEmpireDto empire) {
+        this.empiresInGame.put(id, empire);
     }
 
-    /** after color was modified using .brighter() compute it to a string */
-    private String colorToRGB(Color color) {
+    /**
+     * after color was modified using .brighter() compute it to a string
+     */
+    private @NotNull String colorToRGB(Color color) {
         return "rgb(" + (int) (color.getRed() * 255) + "," +
                 (int) (color.getGreen() * 255) + "," +
-                (int) (color.getBlue() * 255) + ")" ;
+                (int) (color.getBlue() * 255) + ")";
     }
 
     public void removeDataForMap() {
+        this.devIsles.clear();
         this.isles.clear();
         this.islandComponentList.forEach(IslandComponent::destroy);
         this.islandComponentList.clear();
         this.islandComponentMap.clear();
         this.empiresInGame.clear();
         this.connections.clear();
+        this.siteManager.clear();
     }
 
     @OnDestroy
-    public void destroy(){
+    public void destroy() {
         this.subscriber.dispose();
     }
 

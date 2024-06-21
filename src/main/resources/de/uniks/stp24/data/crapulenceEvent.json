@@ -1,0 +1,19 @@
+{
+  "id": "crapulence",
+  "event_type": "good",
+  "duration": 21,
+  "effects": [
+    {
+      "variable": "food",
+      "base": 0,
+      "multiplier": 0.1,
+      "bonus": 0
+    },
+    {
+      "variable": "consumer_goods",
+      "base": 25,
+      "multiplier": 1,
+      "bonus": 0
+    }
+  ]
+}

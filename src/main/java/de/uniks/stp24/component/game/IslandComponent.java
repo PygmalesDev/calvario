@@ -47,6 +47,7 @@ public class IslandComponent extends Pane {
     private InGameController inGameController;
 
     double x, y;
+
     public boolean islandIsSelected = false;
 
     private boolean keyCodeH = false;
@@ -69,7 +70,7 @@ public class IslandComponent extends Pane {
 
     public void applyIcon(IslandType type){
         this.islandImage
-          .setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
+                .setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
     }
 
     // use our flag images
@@ -77,7 +78,7 @@ public class IslandComponent extends Pane {
     public void setFlagImage(int flag) {
         if (flag >= 0) {
             this.flagImage
-              .setImage(imageCache.get("assets/flags/flag_" + flag + ".png"));
+                    .setImage(imageCache.get("assets/flags/flag_" + flag + ".png"));
         }
     }
 
@@ -94,16 +95,18 @@ public class IslandComponent extends Pane {
     }
 
     public double getPosX() {
-//        this.x = island.posX();
         return this.x;
     }
 
     public double getPosY() {
-//          this.y = island.posY();
         return this.y;
     }
 
     // switch the visibility of all flags
+    public void showFlag(boolean selected) {
+        this.flagPane.setVisible(selected);
+    }
+
     public void showFlag(){
         if(island.flagIndex() >= 0 && !keyCodeH){
             this.flagPane.setVisible(!flagPane.isVisible());

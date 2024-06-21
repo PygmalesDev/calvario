@@ -10,6 +10,9 @@ public class TokenStorage {
     private String userId;
     private String name;
     private String avatar;
+    private String gameId;
+    private String empireId;
+    private boolean isSpectator;
     private Map<String,Integer> avatarMap;
 
     @Inject
@@ -19,7 +22,6 @@ public class TokenStorage {
     public String getToken() {
         return token;
     }
-
     public void setToken(String token) {
         this.token = token;
     }
@@ -27,22 +29,30 @@ public class TokenStorage {
     public String getUserId() {
         return userId;
     }
-
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
     public String getName() {return name;}
-
     public void setName(String name) {this.name = name;}
 
     public String getAvatar() {return avatar;}
-
     public void setAvatar(String avatar) {this.avatar = avatar;}
 
     public void setAvatarMap(Map<String,Integer> avatarMap) {this.avatarMap = avatarMap;}
 
     public Map<String,Integer> getAvatarMap() {
         return this.avatarMap;
+    }
+
+    public String getGameId() {return gameId;}
+    public void setGameId(String gameId) {this.gameId = gameId;}
+
+    public String getEmpireId() {return empireId;}
+    public void setEmpireId(String empireId) {this.empireId = empireId;}
+
+    public boolean isSpectator(){return this.isSpectator;}
+    public void setIsSpectator(boolean isSpectator) {
+        this.isSpectator = isSpectator;
     }
 }

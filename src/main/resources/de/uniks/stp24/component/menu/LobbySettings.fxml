@@ -18,7 +18,7 @@
             <Font size="18.0" />
          </font>
          <graphic>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButton" text="%select.empire" />
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButtonText" text="%select.empire" />
          </graphic>
       </Button>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
@@ -27,7 +27,7 @@
                <Font size="18.0" />
             </font>
             <graphic>
-               <Text id="EnteredGameButton" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButton" text="%leave" />
+               <Text id="EnteredGameButton" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButtonText" text="%leave" />
             </graphic>
          </Button>
          <Button fx:id="readyButton" mnemonicParsing="false" onAction="#ready" prefHeight="50.0" prefWidth="150.0" styleClass="lobbyButtonReadyNot">
@@ -35,7 +35,7 @@
                <Font size="18.0" />
             </font>
             <graphic>
-               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButton" text="%ready.lobby" />
+               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="EnteredGameButtonText" text="%ready.lobby" />
             </graphic>
          </Button>
       </HBox>

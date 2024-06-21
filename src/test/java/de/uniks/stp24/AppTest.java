@@ -1,15 +1,19 @@
 package de.uniks.stp24;
 
 
+import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.AuthApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.UserApiService;
-import de.uniks.stp24.service.CreateGameService;
-import de.uniks.stp24.service.LobbyService;
-import de.uniks.stp24.service.LoginService;
+import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.menu.CreateGameService;
+import de.uniks.stp24.service.menu.EditGameService;
+import de.uniks.stp24.service.menu.LobbyService;
+import de.uniks.stp24.service.menu.LoginService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
@@ -19,10 +23,8 @@ import io.reactivex.rxjava3.subjects.Subject;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
-import javafx.scene.text.Text;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -31,7 +33,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -40,20 +42,26 @@ import static org.testfx.api.FxAssert.verifyThat;
 
 public class AppTest extends ControllerTest {
 
-    private LoginService loginService;
-    private AuthApiService authApiService;
-    private GamesApiService gamesApiService;
-    private CreateGameService createGameService;
-    private EventListener eventListener;
-    private LobbyService lobbyService;
-    private UserApiService userApiService;
-    private TokenStorage tokenStorage;
+    LoginService loginService;
+    AuthApiService authApiService;
+    GamesApiService gamesApiService;
+    CreateGameService createGameService;
+    EventListener eventListener;
+    LobbyService lobbyService;
+    UserApiService userApiService;
+    TokenStorage tokenStorage;
+    EditGameService editGameService;
+    EmpireService empireService;
+    IslandsService islandsService;
 
     @Spy
     BubbleComponent bubbleComponent;
+    @Spy
+    ClockComponent clockComponent;
 
-    final Subject<Event<Game>> subject = BehaviorSubject.create();
+    final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
+
 
     @BeforeEach
     public void setUp() {
@@ -75,8 +83,10 @@ public class AppTest extends ControllerTest {
         MemberDto[] memberDtos = new MemberDto[1];
         memberDtos[0] = memberDto;
 
+
         userApiService = testComponent.userApiService();
         doReturn(Observable.just(signUpResult)).when(userApiService).signup(any());
+
 
         authApiService = testComponent.authApiService();
         loginService = testComponent.loginService();
@@ -85,6 +95,9 @@ public class AppTest extends ControllerTest {
         eventListener = testComponent.eventListener();
         lobbyService = testComponent.lobbyService();
         tokenStorage = testComponent.tokenStorage();
+        empireService = testComponent.empireService();
+        editGameService = testComponent.editGameService();
+        islandsService = testComponent.islandsService();
 
         doReturn(Observable.just(loginResult)).when(authApiService).login(loginDto);
         doReturn(Observable.just(loginResult)).when(authApiService).refresh(refreshDto);
@@ -129,6 +142,16 @@ public class AppTest extends ControllerTest {
 
         doReturn("1").when(tokenStorage).getUserId();
         doReturn(Observable.just(new MemberDto(false, user._id(), new Empire("Buccaneers", "", "#DC143C", 0, 0, new String[]{},"uninhabitable_0"), null))).when(lobbyService).updateMember(game3._id(),user._id(), false, null);
+        doReturn(Observable.just(new MemberDto(true, user._id(), new Empire("Buccaneers", "", "#DC143C", 0, 0, new String[]{},"uninhabitable_0"), null))).when(lobbyService).updateMember(game3._id(),user._id(), true, null);
+        doReturn(Observable.just(new UpdateGameResultDto("2024-05-28T14:55:25.688Z", null,game3._id(),"testGame", user._id(),
+                true, 0, 0, null))).when(this.editGameService).startGame(any());
+
+
+        doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", game3._id(),
+                user._id(),"tesEmpire","a","#DC143C",0, 0, "uninhabitable_0")})).when(this.empireService).getEmpires(any());
+
+        doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
+
     }
 
     @Test
@@ -140,7 +163,7 @@ public class AppTest extends ControllerTest {
         createGame();
         loadGame();
         selectEmpire();
-        startGame();
+        startAGame();
     }
 
 
@@ -218,15 +241,21 @@ public class AppTest extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
-    private void startGame() {
+    private void startAGame() {
+
+
         clickOn("#readyButton");
         this.memberSubject.onNext(new Event<>("games.123.members.1.updated",
                 new MemberDto(true, "JustATest", null, null)));
+        assertFalse(lookup("#startJourneyButton").queryButton().isDisabled());
 
         clickOn("#startJourneyButton");
+        this.gameSubject.onNext(new Event<>("games.testGameID.updated", new Game("1", "a","testGameID","testGame","testGameHostID",
+                true, 1, 0, new GameSettings(1))));
         WaitForAsyncUtils.waitForFxEvents();
-        Text textNode = lookup("#epic_gameplay").queryText();
-        assertEquals(textNode.getText(), "EPIC GAMEPLAY");
+
+        // game screen will not be shown, but loaded
+        assertEquals("ENTER GAME",stage.getTitle() );
     }
 
 }

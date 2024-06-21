@@ -2,15 +2,18 @@ package de.uniks.stp24.component.menu;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
-import de.uniks.stp24.service.BrowseGameService;
+import de.uniks.stp24.service.menu.BrowseGameService;
+import de.uniks.stp24.service.ErrorService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
@@ -60,13 +63,15 @@ public class WarningComponent extends VBox {
         this.changeableView = view;
     }
 
+
     public void deleteGame() {
-        this.subscriber.subscribe(browseGameService.deleteGame(),
-          result -> {
-            changeableView.setVisible(false);
-            browseGameService.handleGameSelection(null);
+        this.subscriber
+          .subscribe(browseGameService.deleteGame(),
+            result -> {
+                changeableView.setVisible(false);
+                browseGameService.handleGameSelection(null);
             });
-          setVisible(false);
+        setVisible(false);
     }
 
     @OnDestroy
@@ -75,9 +80,9 @@ public class WarningComponent extends VBox {
             this.subscriber.dispose();
         }
     }
-
+    @OnKey(code = KeyCode.ESCAPE)
     public void onCancel() {
-        this.getParent().setVisible(false);
+        if(this.getParent() != null) this.getParent().setVisible(false);
     }
 
 }

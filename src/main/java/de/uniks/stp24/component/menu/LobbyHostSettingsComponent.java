@@ -3,14 +3,17 @@ package de.uniks.stp24.component.menu;
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.ErrorService;
+import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.menu.EditGameService;
+import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.ImageCache;
-import de.uniks.stp24.service.LobbyService;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.*;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
@@ -19,10 +22,12 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+@Singleton
 @Component(view = "LobbyHostSettings.fxml")
 public class LobbyHostSettingsComponent extends AnchorPane {
     @FXML
@@ -30,7 +35,9 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @FXML
     public Button readyButton;
     @FXML
-    ImageView readyIconImageView;
+    public Button selectEmpireButton;
+    @FXML
+    public Button closeLobbyButton;
     @Inject
     Subscriber subscriber;
     @Inject
@@ -44,15 +51,24 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @Inject
     GamesApiService gamesApiService;
     @Inject
+    EditGameService editGameService;
+    @Inject
     EventListener eventListener;
     @Inject
+    EmpireService empireService;
+    @Inject
     @Resource
-    ResourceBundle resource;
+    ResourceBundle resources;
+    @Inject
+    ErrorService errorService;
 
     private String gameID;
+    private int maxMember;
+    private BubbleComponent bubbleComponent;
     public boolean leftLobby;
     public Image readyIconBlueImage;
     public Image readyIconGreenImage;
+
 
     @Inject
     public LobbyHostSettingsComponent() {
@@ -63,18 +79,35 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     public void init(){
     }
 
+    /**
+     * Creates an event listener that checks, if all members are ready and if there are not too many players with a
+     * selected empire.
+     */
     public void createCheckPlayerReadinessListener() {
         this.subscriber.subscribe(this.eventListener
                 .listen("games." + this.gameID + ".members.*.updated", MemberDto.class),
             result -> this.subscriber.subscribe(this.lobbyService.loadPlayers(this.gameID),
-            members -> this.startJourneyButton.setDisable(!Arrays.stream(members)
+                    members -> {
+                        boolean allReady = Arrays.stream(members)
                                 .map(MemberDto::ready)
-                                .reduce(Boolean::logicalAnd).orElse(true)),
-            error -> {}));
+                                .reduce(Boolean::logicalAnd)
+                                .orElse(true);
+                        int countEmpires = (int) Arrays.stream(members)
+                                .filter(member -> member.empire() != null)
+                                .count();
+                        boolean tooManyPlayer = countEmpires > this.maxMember;
+                        if(tooManyPlayer){
+                            bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.too.many.players"));
+                        } else {
+                            bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
+                        }
+                        this.startJourneyButton.setDisable(!allReady || tooManyPlayer);
+                    },
+              error -> errorService.getStatus(error)));
     }
 
     public void setReadyButton(boolean ready){
-        if(!ready){
+        if(ready){
             readyButton.getStyleClass().removeAll("lobbyButtonReadyNot");
             readyButton.getStyleClass().add("lobbyButtonReady");
         } else {
@@ -89,7 +122,9 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     }
 
     public void startGame() {
-        this.app.show("/ingame");
+        subscriber.subscribe(editGameService.startGame(this.gameID),
+          result -> this.startJourneyButton.setDisable(true),
+          error -> this.startJourneyButton.setDisable(false));
     }
 
     /**
@@ -97,35 +132,44 @@ public class LobbyHostSettingsComponent extends AnchorPane {
      */
     public void leaveLobby() {
         this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
-          host -> this.subscriber.subscribe(this.lobbyService.updateMember(this.gameID,
+            host -> this.subscriber.subscribe(this.lobbyService.updateMember(this.gameID,
                     this.tokenStorage.getUserId(), host.ready(), host.empire()),
             result -> this.app.show("/browseGames"),
-            error -> {}));
+            error -> errorService.getStatus(error)),
+          error -> errorService.getStatus(error));
     }
 
     public void setGameID(String gameID) {
         this.gameID = gameID;
     }
+
+    public void setMaxMember(int maxMember){
+        this.maxMember = maxMember;
+    }
+
+    public void setBubbleComponent(BubbleComponent bubbleComponent){
+        this.bubbleComponent = bubbleComponent;
+    }
+
     public void selectEmpire() {
         this.app.show("/creation", Map.of("gameid", this.gameID));
     }
 
     public void ready() {
         this.subscriber.subscribe(
-                this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
-          result -> {
-                    if (result.ready()) {
-                        this.subscriber.subscribe(this.lobbyService
-                                .updateMember(this.gameID, this.tokenStorage.getUserId(), false, result.empire()));
-                        setReadyButton(true);
-                    } else {
-                        this.subscriber.subscribe(this.lobbyService
-                                .updateMember(this.gameID, this.tokenStorage.getUserId(), true, result.empire()));
-                        setReadyButton(false);
-                    }
-                },
-          error -> {});
+          this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
+              if (result.ready()) {
+                  this.subscriber.subscribe(this.lobbyService
+                    .updateMember(this.gameID, this.tokenStorage.getUserId(), false, result.empire()));
+                  setReadyButton(false);
+              } else {
+                  this.subscriber.subscribe(this.lobbyService
+                    .updateMember(this.gameID, this.tokenStorage.getUserId(), true, result.empire()));
+                  setReadyButton(true);
+              }
+          });
     }
+
 
     @OnDestroy
     public void destroy(){

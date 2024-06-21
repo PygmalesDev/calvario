@@ -1,0 +1,13 @@
+{
+  "id": "grand_exp",
+  "event_type": "good",
+  "duration": 21,
+  "effects": [
+    {
+      "variable": "research",
+      "base": 0,
+      "multiplier": 1,
+      "bonus": 5
+    }
+  ]
+}

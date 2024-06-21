@@ -13,6 +13,9 @@ import de.uniks.stp24.rest.GameMembersApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.menu.GamesService;
+import de.uniks.stp24.service.menu.JoinGameService;
+import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
@@ -123,8 +126,9 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
 
         // Mock getting members readiness updates
         doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.updated"), eq(MemberDto.class));
-
         this.app.show(this.lobbyController);
+
+        doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.updated"),eq(Game.class));
     }
 
     /**
@@ -143,7 +147,7 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         // Test if the correct component is shown to the user
-        Node component = this.lobbyController.lobbyElement.getChildren().get(0);
+        Node component = this.lobbyController.lobbyElement.getChildren().getFirst();
         assertEquals(EnterGameComponent.class, component.getClass());
 
         // Test if the new user is not a member of the lobby

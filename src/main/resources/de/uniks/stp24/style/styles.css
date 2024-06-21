@@ -1,0 +1,766 @@
+/*++++++++++++++++++++++++++++++++++******************************************************/
+/********* General ***********************************************************************/
+@font-face {
+    font-family: 'PT Serif';
+    src: url("/de/uniks/stp24/assets/fonts/PTSerif-Bold.ttf");
+}
+
+
+Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+}
+
+.borderedText {
+    -fx-pref-height: 100;
+    -fx-background-size: 100% 100%;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/fields/textField.png");
+}
+
+.gameName {
+    -fx-font-size: 30;
+}
+
+.capitals {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+}
+
+.gameName {
+
+}
+
+
+/*********************************************************************************************/
+/********* Backgrounds ***********************************************************************/
+
+.background{
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/background.png");
+    -fx-background-size: cover;
+}
+
+.cardBackground{
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/card.png");
+    -fx-background-size: 100% 100%;
+}
+
+.transparentBackground {
+    -fx-background-color: #BF900080;
+    -fx-border-color: #000000;
+    -fx-border-width: 2;
+}
+
+.backgroundLightYellowWithShadow {
+    -fx-background-color: #FFD966;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 0, 0, 10, 5);
+    -fx-border-color: #000000;
+    -fx-border-width: 2;
+}
+
+.backgroundLightYellow{
+    -fx-background-color: #FFD966;
+    -fx-border-color: #000000;
+    -fx-border-width: 1;
+}
+
+.menuLogic {
+    -fx-background-color: #999999;
+    -fx-border-color: #000000
+}
+
+.image-view-wrapper{
+    -fx-border-color: black;
+    -fx-border-style: solid;
+    -fx-border-width: 2;
+}
+
+/*
+.island-overview{
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/island-overview.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}
+*/
+
+/************************************************************************************/
+/***************** Buttons *********************************************************/
+Button:hover{
+    -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.5),15,0,0,0);
+    -fx-cursor: hand;
+}
+
+ToggleButton:hover{
+    -fx-effect: dropshadow(gaussian,rgba(0,0,0,0.5),15,0,0,0);
+    -fx-cursor: hand;
+}
+
+
+.languageButton:selected {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-background-color: #BF9000;
+    -fx-text-fill: WHITE;
+}
+
+.languageButton {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-background-color: #FFD966;
+    -fx-text-fill: BLACK;
+}
+
+.deleteAndSaveButton{
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-text-fill: White;
+    -fx-background-color: Black;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.75), 2, 0, 7, 7);
+    -fx-pref-width: 180px;
+    -fx-pref-height: 35px;
+}
+
+
+
+.upButton {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/up.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 25px;
+    -fx-pref-height: 25px;
+}
+
+.downButton {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/down.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 25px;
+    -fx-pref-height: 25px;
+}
+
+.lockButton {
+    -fx-background-image: url("../icons/unlock.png");
+    -fx-background-color: WHITE;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 25px;
+    -fx-pref-height: 25px;
+}
+
+.lockButton:selected {
+    -fx-background-image: url("../icons/lock.png");
+    -fx-background-color: WHITE;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 25px;
+    -fx-pref-height: 25px;
+}
+
+.actionButton{
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 22;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 300px;
+    -fx-pref-height: 75px;
+}
+
+
+.smallActionButton{
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-alignment: center;
+    -fx-padding: 0 0 0 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 230px;
+    -fx-pref-height: 75px;
+}
+
+.eyeButton{
+    -fx-background-image: url("/de/uniks/stp24/icons/eye.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 25px;
+    -fx-pref-height: 25px;
+}
+
+.rememberMe {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 1;
+    -fx-border-color: BLACK;
+    -fx-pref-width: 310px;
+    -fx-pref-height: 50px;
+}
+
+.rememberMe .box {
+    -fx-background-color: #FFD966;
+    -fx-border-color: #000000;
+    -fx-border-radius: 0;
+}
+
+.rememberMe:selected .mark {
+    -fx-background-color: #bf9000;
+    -fx-border-color: #5d5454;
+}
+
+.backButton{
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 22;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/backButton.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 75px;
+}
+
+.licensesButton{
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/licensesButton.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 100px;
+}
+
+.lobbyButtonSelectEmpire{
+    -fx-font-family: "Stencil";
+    -fx-font-size: 15;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/Island.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 80px;
+}
+
+.lobbyButtonReady{
+    -fx-font-family: "Stencil";
+    -fx-font-size: 15;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/approveGreen.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 80px;
+}
+
+.lobbyButtonReadyNot{
+    -fx-font-family: "Stencil";
+    -fx-font-size: 15;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/approveBlue.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 80px;
+}
+
+
+.lobbyButtonLeave{
+    -fx-font-family: "Stencil";
+    -fx-font-size: 15;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/leaveMan.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 80px;
+}
+
+.lobbyButtonStart{
+    -fx-font-family: "Stencil";
+    -fx-font-size: 15;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/startGame.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 80px;
+}
+
+
+.EnteredGameButtonText{
+    -fx-font-family: "Stencil";
+    -fx-font-size:14;
+}
+
+
+
+.buttonTextArea .scroll-pane .viewport{
+
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-focus-traversable: false;
+}
+
+.buttonTextArea:disabled {
+    -fx-opacity: 1.0;
+}
+
+.buttonTextArea{
+    -fx-background-color: transparent;
+}
+
+.woodButton{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/woodButton.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 80px;
+}
+
+.captainPane {
+    -fx-background-image: url("/de/uniks/stp24/assets/fields/chat_bubble.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: left;
+}
+
+.captainText {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-focus-traversable: false;
+}
+
+.captainText:disabled {
+    -fx-opacity: 1;
+}
+
+.captainText .scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.backgroundTextArea {
+    -fx-font-size: 14;
+    -fx-font-family: "PT Serif";
+
+}
+
+.backgroundTextArea .content{
+    -fx-background-color: #FFD966;
+    -fx-cursor: default;
+}
+
+.backgroundTextArea .scroll-bar:vertical{
+    -fx-background-color: #FFD966;
+}
+
+.captainText .scroll-pane .content{
+    -fx-background-color: transparent;
+}
+
+.inputField {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 22;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/fields/textField.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 400px;
+    -fx-pref-height: 65px;
+}
+
+.searchField {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 22;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/fields/textField.png");
+    -fx-background-size: 100% 100%;
+    -fx-pref-width: 320px;
+    -fx-pref-height: 80px;
+    -fx-prompt-text-fill: #df0202;
+    -fx-prompt-text-size: 12;
+    -fx-text-fill: #df0202;
+}
+
+.kickUserButton{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/super_small_red_cross.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-pref-width: 15px;
+    -fx-pref-height: 15px;
+    -fx-min-height: 15;
+    -fx-min-width: 15;
+}
+
+/**********************************************************************************************************************************/
+/************************* Lists **************************************************************************************************/
+
+.listBrowseGame, .listEnterGame{
+    -fx-background-color: transparent;
+}
+
+.listBrowseGame .list-cell{
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-pref-width: 100;
+    -fx-pref-height: 50;
+}
+
+.userComponentText{
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 10;
+    -fx-font-weight: bold;
+}
+
+.listEnterGame .list-cell{
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-pref-width: 180;
+    -fx-pref-height: 70;
+}
+
+.listBrowseGame .scroll-bar:vertical,
+.listEnterGame .scroll-bar:vertical{
+    -fx-background-color: transparent;
+    -fx-border-width: 1;
+}
+
+.listBrowseGame .virtual-flow .scroll-bar:vertical .thumb {
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/listViewThumb.png");
+}
+
+.listEnterGame .virtual-flow .scroll-bar:vertical .thumb,
+.backgroundTextArea .scroll-bar:vertical .thumb {
+    -fx-background-color: black;
+}
+
+.listBrowseGame .scroll-bar:vertical .increment-button .increment-arrow, .listBrowseGame .scroll-bar .decrement-button .decrement-arrow,
+.listEnterGame .scroll-bar .increment-button .increment-arrow, .listEnterGame .scroll-bar .decrement-button .decrement-arrow,
+.backgroundTextArea .scroll-bar:vertical .increment-button .increment-arrow, .backgroundTextArea .decrement-button .decrement-arrow
+{
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+}
+
+.listHeader{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/fields/listCapital.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 0;
+}
+
+
+.backgroundList{
+    -fx-background-image: url("/de/uniks/stp24/assets/lists/backgroundListView.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.backgroundSettingList{
+    -fx-background-image: url("/de/uniks/stp24/assets/lists/backgroundSettingScreen.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+/**********************************************************************************************/
+/********************** Overview sites ********************************************************/
+
+.overview-text {
+    -fx-font-size: 13;
+    -fx-font-weight: normal
+}
+
+/**********************************************************************************************/
+/********************** Spinner ********************************************************/
+.spinner{
+    -fx-padding: 5 50 5 90;
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 22;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/fields/textField.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-border-width: 0;
+    -fx-pref-width: 400px;
+    -fx-pref-height: 80px;
+}
+
+.spinner .text-field{
+    -fx-font-family: "PT Serif";
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+    -fx-font-size: 20px;
+    -fx-border-radius: 10;
+}
+
+.spinner .increment-arrow,
+.spinner .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+    -fx-pref-height: 5;
+    -fx-pref-width: 5;
+}
+
+.spinner .increment-arrow-button{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/up.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.spinner .decrement-arrow-button{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/down.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+
+
+
+.textFieldGame{
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 22;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/fields/textField.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 400px;
+    -fx-pref-height: 80px;
+}
+
+
+
+/**********************************************************************************************/
+/********************** Empire Screen ********************************************************/
+
+.listIslands .scroll-bar:vertical{
+    -fx-background-color: transparent;
+    -fx-border-width: 1;
+}
+
+.listIslands .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color: #030303;
+}
+
+.listIslands .scroll-bar:vertical .increment-button .increment-arrow, .listIslands .scroll-bar .decrement-button .decrement-arrow
+{
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+}
+
+.listIslands .scroll-bar:horizontal .increment-arrow,
+.listIslands .scroll-bar:horizontal .decrement-arrow,
+.listIslands .scroll-bar:horizontal .increment-button,
+.listIslands .scroll-bar:horizontal .decrement-button {
+    -fx-padding:0;
+}
+
+.gangNameLabel {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+}
+
+.semiTransparent{
+    -fx-background-color: rgba(191, 144, 0, 0.7);
+}
+
+.textFieldGang {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 32;
+    -fx-font-weight: bold;
+}
+
+.textDeleteGang {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 24;
+}
+
+.bigButton {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-background-color: #FFD966;
+}
+
+.normalButton {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-background-color: #FFD966;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+
+
+/*Loading, Login, Register*/
+.calvarioTextLogo{
+    -fx-background-image: url("/de/uniks/stp24/assets/logos/calvario_new.png");
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+    -fx-background-size: 70% 90%;
+    -fx-background-repeat: no-repeat;
+
+}
+
+
+
+.calvarioLogo {
+    -fx-background-image: url("/de/uniks/stp24/assets/logos/logo_new.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+.spiderbyterLogo{
+    -fx-background-image: url("/de/uniks/stp24/assets/logos/SpiderbyteLogoTransparent.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 150% 150%;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+.deadbirdsocietyLogo {
+    -fx-background-image: url("/de/uniks/stp24/assets/logos/DeadBirdsLogoTransparent.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 80% 80%;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+/*Avatar Image Layout*/
+.avatarImageLayout{
+}
+
+.avatarImageLayoutPortrait .pane{
+    -fx-background-position: center;
+    -fx-background-size: 50% 50%;
+}
+/***************************************************************************************************/
+/***************************************************************************************************/
+/*********************************** Release 2 *****************************************************/
+/***************************************************************************************************/
+/***************************************************************************************************/
+/***************************************************************************************************/
+
+.backgroundGame {
+    -fx-background-color: "TRANSPARENT";
+    -fx-background-image: url('/de/uniks/stp24/icons/sea.png');
+    -fx-background-size: cover, auto;
+}
+
+/*********************************** for map in game *****************************************************/
+
+.ownIsland{
+    -fx-effect: dropshadow(gaussian, #7FFF00, 2, 0.88, 0, 0);
+}
+
+.developedIsland{
+    -fx-effect: dropshadow(gaussian, #AFAFAF, 2, 0.88, 0, 0);
+}
+
+.connection{
+    -fx-stroke: #FFFFFF;
+    -fx-stroke-dash-array: 0.5 8;
+    -fx-stroke-width: 3;
+}

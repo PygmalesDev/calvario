@@ -1,6 +1,6 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.service.LoginService;
+import de.uniks.stp24.service.menu.LoginService;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;

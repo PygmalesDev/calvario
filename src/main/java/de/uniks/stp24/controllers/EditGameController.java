@@ -3,13 +3,14 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.model.GameSettings;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.BrowseGameService;
-import de.uniks.stp24.service.EditGameService;
+import de.uniks.stp24.service.menu.BrowseGameService;
+import de.uniks.stp24.service.menu.EditGameService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -20,6 +21,7 @@ import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.event.OnKey;
 import javax.inject.Inject;
 
 @Title("%edit.game")
@@ -87,7 +89,7 @@ public class EditGameController extends BasicController {
 
 // class was modified! some code was refactored
 // now use subscriber
-
+    @OnKey(code = KeyCode.ENTER)
     public void editGame() {
         this.bubbleComponent.setErrorMode(false);
         GameSettings settings = new GameSettings(this.editMapSizeSpinner.getValue());
@@ -114,6 +116,8 @@ public class EditGameController extends BasicController {
             this.bubbleComponent.setCaptainText(getErrorInfoText(!pwdMatch ? -2 : -1));
         }
     }
+
+    @OnKey(code = KeyCode.ESCAPE)
     public void cancel(){
         browseGameService.resetSelectedGame();
         app.show("/browseGames");

@@ -1,13 +1,13 @@
 package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.service.ErrorService;
+import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.ImageCache;
-import de.uniks.stp24.service.LobbyService;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
@@ -22,6 +22,10 @@ import java.util.ResourceBundle;
 public class LobbySettingsComponent extends AnchorPane {
     @FXML
     public Button readyButton;
+    @FXML
+    public Button selectEmpireButton;
+    @FXML
+    public Button leaveLobbyButton;
     @Inject
     Subscriber subscriber;
     @Inject
@@ -35,6 +39,8 @@ public class LobbySettingsComponent extends AnchorPane {
     @Inject
     @Resource
     ResourceBundle resource;
+    @Inject
+    ErrorService errorService;
 
     private String gameID;
     public boolean leftLobby = false;
@@ -51,7 +57,7 @@ public class LobbySettingsComponent extends AnchorPane {
     }
 
     public void setReadyButton(boolean ready){
-        if(!ready){
+        if(ready){
             readyButton.getStyleClass().removeAll("lobbyButtonReadyNot");
             readyButton.getStyleClass().add("lobbyButtonReady");
         } else {
@@ -63,7 +69,8 @@ public class LobbySettingsComponent extends AnchorPane {
     public void leaveLobby() {
         this.leftLobby = true;
         this.subscriber.subscribe(this.lobbyService.leaveLobby(this.gameID, this.tokenStorage.getUserId()),
-                result -> this.app.show("/browseGames"));
+            result -> this.app.show("/browseGames"),
+            error -> errorService.getStatus(error));
     }
 
     public void selectEmpire() {
@@ -75,17 +82,19 @@ public class LobbySettingsComponent extends AnchorPane {
 
     public void ready() {
         this.subscriber.subscribe(
-                this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
+                this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
+          result -> {
                     if (result.ready()) {
                         this.subscriber.subscribe(this.lobbyService
                                 .updateMember(this.gameID, this.tokenStorage.getUserId(), false, result.empire()));
-                        setReadyButton(true);
+                        setReadyButton(false);
                     } else {
                         this.subscriber.subscribe(this.lobbyService
                                 .updateMember(this.gameID, this.tokenStorage.getUserId(), true, result.empire()));
-                        setReadyButton(false);
+                        setReadyButton(true);
                     }
-                });
+                },
+          error -> errorService.getStatus(error));
     }
 
     @OnDestroy

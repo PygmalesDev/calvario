@@ -1,19 +1,16 @@
 package de.uniks.stp24.component.menu;
 
-import de.uniks.stp24.controllers.GangCreationController;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.model.GangElement;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
-import java.io.InputStream;
-import java.util.ArrayList;
+import java.awt.*;
 
 @Component(view = "Gang.fxml")
 public class GangComponent extends Pane implements ReusableItemComponent<GangElement> {
@@ -39,8 +36,7 @@ public class GangComponent extends Pane implements ReusableItemComponent<GangEle
         Gang gang = gangElement.gang();
 
         java.awt.Color color = java.awt.Color.decode(gang.color());
-        //System.out.println(color.getRed() + color.decode("#FFCCEE").getGreen() + color.getBlue());
-        if (color.getRed() + color.decode("#FFCCEE").getGreen() + color.getBlue() <= 500)
+        if (color.getRed() + Color.decode("#FFCCEE").getGreen() + color.getBlue() <= 500)
             gangNameTextComponent.setStyle("-fx-text-fill: white;");
 
         gangNameTextComponent.setText(gang.name());

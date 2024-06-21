@@ -1,6 +1,6 @@
 package de.uniks.stp24;
 
-import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.utils.ResponseConstants;
 import javafx.stage.Stage;
@@ -26,9 +26,12 @@ public class ControllerTest extends ApplicationTest {
     @Spy
     public PrefService prefService;
     @Spy
+    public IslandsService islandsService;
+    @Spy
     public ResponseConstants responseConstants;
     @Spy
     public ResourceBundle resources = ResourceBundle.getBundle("de/uniks/stp24/lang/main", Locale.ROOT);
+
 
     protected Stage stage;
     protected TestComponent testComponent;

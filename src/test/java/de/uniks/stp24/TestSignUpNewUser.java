@@ -3,7 +3,7 @@ package de.uniks.stp24;
 import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.controllers.SignUpController;
 import de.uniks.stp24.dto.SignUpResultDto;
-import de.uniks.stp24.service.SignUpService;
+import de.uniks.stp24.service.menu.SignUpService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;

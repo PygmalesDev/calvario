@@ -2,12 +2,16 @@ package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.service.InGameService;
+import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.event.OnKey;
+
 import javax.inject.Inject;
 import java.util.ResourceBundle;
 
@@ -26,13 +30,15 @@ public class PauseMenuComponent extends AnchorPane {
     VBox vbox;
     @Inject
     App app;
+    @Inject
+    TokenStorage tokenStorage;
 
     @Inject
     InGameService inGameService;
 
     @Inject
     @Resource
-    ResourceBundle resource;
+    public ResourceBundle resources;
 
 
     @Inject
@@ -41,14 +47,17 @@ public class PauseMenuComponent extends AnchorPane {
     }
 
     public void resume() {
-        inGameService.setPaused(false);
+        if (inGameService.getPaused()) inGameService.setPaused(false);
     }
 
     public void settings() {
         inGameService.setShowSettings(false);
     }
 
+    @OnKey(code = KeyCode.Q)
     public void quit() {
-        app.show("/browseGames");
+        tokenStorage.setGameId(null);
+        tokenStorage.setEmpireId(null);
+        if (inGameService.getPaused()) app.show("/browseGames");
     }
 }

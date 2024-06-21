@@ -62,7 +62,7 @@
                                     <Button fx:id="nextPotraitButton" layoutX="290.0" layoutY="75.0" mnemonicParsing="false" onAction="#showNextPortrait" />
                                     <Button fx:id="lastFrameButton" layoutX="30.0" layoutY="125.0" mnemonicParsing="false" onAction="#showLastFrame" />
                                     <Button fx:id="nextFrameButton" layoutX="290.0" layoutY="125.0" mnemonicParsing="false" onAction="#showNextFrame" />
-                                    <Button fx:id="safeAvatarButton" layoutX="386.0" layoutY="38.0" mnemonicParsing="false" onAction="#safeAvatarChanges" prefHeight="25.0" prefWidth="49.0" text="safe" />
+                                    <Button fx:id="safeAvatarButton" layoutX="369.0" layoutY="38.0" mnemonicParsing="false" onAction="#safeAvatarChanges" prefHeight="25.0" prefWidth="66.0" text="save" />
                                     <Button fx:id="cancelAvatarButton" layoutX="386.0" layoutY="112.0" mnemonicParsing="false" onAction="#cancelAvatarChanges" text="cancel" />
                                     <Label fx:id="imageCodeLabel" layoutX="261.0" layoutY="165.0" prefHeight="25.0" prefWidth="130.0" styleClass="deleteAndSaveButton" text="            Label " textAlignment="CENTER">
                                        <font>

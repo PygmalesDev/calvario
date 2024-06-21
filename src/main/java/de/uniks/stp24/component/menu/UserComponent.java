@@ -50,13 +50,9 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     @FXML
     ImageView frameImage;
 
-
-
-
     ArrayList<Image> backgroundsList = new ArrayList<>();
     ArrayList<Image> portraitsList = new ArrayList<>();
     ArrayList<Image> framesList = new ArrayList<>();
-    /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
 
     @Inject
     public UserComponent(ImageCache imageCache, ResourceBundle resource) {

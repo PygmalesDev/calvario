@@ -160,10 +160,18 @@ public class EditAccController extends BasicController {
     int frameImageIndex = 0;
     int portraitImageIndex = 0;
 
+
+    int beforeBackgroundImageIndex = 0;
+    int beforeFrameImageIndex = 0;
+    int beforePortraitImageIndex = 0;
+
+
+
     boolean lockBackground = false;
     boolean lockPortrait = false;
     boolean lockFrame = false;
 
+    Map<String, Integer> currentAvatarMap = new HashMap<>();
 
     PopupBuilder popup = new PopupBuilder();
     /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
@@ -418,13 +426,16 @@ public class EditAccController extends BasicController {
         }
     }
 
-    @OnRender
     public void changeUserAvatar() {
+
         if (editAvatarButton.isSelected()) {
+            beforeBackgroundImageIndex = backgroundImageIndex;
+            beforePortraitImageIndex = portraitImageIndex;
+            beforeFrameImageIndex = frameImageIndex;
             avatarButtonsVisible(true);
             editAvatarButton.setStyle("-fx-text-fill: #2B78E4");
         } else {
-            resetAvatarEditing();
+            cancelAvatarChanges();
             avatarButtonsVisible(false);
             editAvatarButton.setStyle("-fx-text-fill: Black");
         }
@@ -435,6 +446,9 @@ public class EditAccController extends BasicController {
 
         subscriber.subscribe(editAccService.changeAvatar(avatarMap),
                 result -> {
+                    beforeBackgroundImageIndex = backgroundImageIndex;
+                    beforePortraitImageIndex = portraitImageIndex;
+                    beforeFrameImageIndex = frameImageIndex;
                     resetEditing(usernameInput.getText());
                     avatarButtonsVisible(false);
 
@@ -450,6 +464,11 @@ public class EditAccController extends BasicController {
     }
 
     public void cancelAvatarChanges() {
+        System.out.println(beforeBackgroundImageIndex);
+        backgroundImageIndex = beforeBackgroundImageIndex;
+        frameImageIndex = beforeFrameImageIndex;
+        portraitImageIndex = beforePortraitImageIndex;
+        setImageCode(backgroundImageIndex, portraitImageIndex, frameImageIndex);
         avatarButtonsVisible(false);
         editAvatarButton.setStyle("-fx-text-fill: Black");
 

@@ -23,5 +23,5 @@ public interface GameSystemsApiService {
 
     @GET("games/{game}/systems")
     Observable<SystemDto[]> getSystems(@Path("game") String gameID);
-
+  
 }

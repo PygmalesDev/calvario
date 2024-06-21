@@ -298,6 +298,10 @@ public class InGameController extends BasicController {
         this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton);
     }
 
+    private void showEmpireOverview() {
+        System.out.println("button clicked");
+    }
+
     @OnRender
     public void createMap() {
         this.islandComponentList = islandsService.createIslands(islandsService.getListOfIslands());
@@ -335,11 +339,17 @@ public class InGameController extends BasicController {
             group.setScaleX(scale);
             group.setScaleY(scale);
         });
+
     }
 
     public void showInfo(@NotNull MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
-            selected.showFlag(true);
+            System.out.print("found island: " + selected.getIsland().id() + " with capacity: ");
+            System.out.println(islandsService.getCapacityOfOneSystem(selected.getIsland().id()));
+            if (Objects.nonNull((selected.getIsland()).owner())) {
+                System.out.print("empire hat capacity: " +
+                islandsService.getAllNumberOfSites((selected.getIsland()).owner()) + "\n");
+            }
         }
     }
 
@@ -357,7 +367,6 @@ public class InGameController extends BasicController {
         inGameService.showOnly(overviewContainer, overviewSitesComponent);
         inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
         overviewSitesComponent.setOverviewSites();
-
     }
 
     @OnKey(code = KeyCode.S)
@@ -383,18 +392,6 @@ public class InGameController extends BasicController {
         }
     }
 
-    @OnDestroy
-    public void destroy() {
-        islandComponentList.forEach(IslandComponent::destroy);
-        islandComponentList = null;
-        islandComponentMap = null;
-        islandsService.removeDataForMap();
-        this.gameListenerTriple.forEach(triple -> triple.game().listeners()
-                .removePropertyChangeListener(triple.propertyName(), triple.listener()));
-        clockComponentContainer.getChildren().clear();
-        this.subscriber.dispose();
-    }
-
     public void createEmpireListener() {
         this.subscriber.subscribe(this.eventListener
                         .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
@@ -406,4 +403,17 @@ public class InGameController extends BasicController {
                 error -> System.out.println("errorListener")
         );
     }
+  
+    @OnDestroy
+    public void destroy() {
+        islandComponentList.forEach(IslandComponent::destroy);
+        islandComponentList = null;
+        islandComponentMap = null;
+        islandsService.removeDataForMap();
+        this.gameListenerTriple.forEach(triple -> triple.game().listeners()
+                .removePropertyChangeListener(triple.propertyName(), triple.listener()));
+        clockComponentContainer.getChildren().clear();
+        this.subscriber.dispose();
+    }
+  
 }

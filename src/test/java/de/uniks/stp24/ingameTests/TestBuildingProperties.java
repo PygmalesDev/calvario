@@ -130,6 +130,12 @@ public class TestBuildingProperties extends ControllerTest {
         Map<String, Integer> production = new HashMap<>();
         Map<String, Integer> consumption = new HashMap<>();
 
+        Map<String, Integer> siteSlots = new HashMap<>();
+        Map<String, Integer> sites = new HashMap<>();
+
+        Island island = new Island("testOwner", 1, 500.0, 500.0, IslandType.mining,
+                20, 20, 1, siteSlots, sites, buildings, "testID", "explored");
+
         Map<String, Integer> resources1 = Map.of("energy",3);
         Map<String, Integer> resources2 = Map.of("energy",3, "population", 4);
         Map<String, Integer> resources3 = Map.of("energy",5, "population", 6);
@@ -138,6 +144,7 @@ public class TestBuildingProperties extends ControllerTest {
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
+        doReturn(island).when(this.tokenStorage).getIsland();
         doReturn(Observable.just(new BuildingDto("a",required,production, consumption))).when(resourcesService).getResourcesBuilding(any());
         doReturn(Observable.just(new SiteDto("a",chance, required,production, consumption))).when(resourcesService).getResourcesSite(any());
         doReturn(gameStatus).when(this.inGameService).getGameStatus();

@@ -223,10 +223,10 @@ public class IslandsServiceTest extends ControllerTest {
                 null))).when(this.empireService).getEmpire(any(),any());
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
 
-        Game game = new Game("a", "a", "testGameID", "gameName", "gameOwner", true, 1, 1, null);
+        Game game = new Game("a", null, "game1Id", "testGame1", "testHost1", true, 1,10, null);
 
-        doReturn(Observable.just(new Event<>("games.testGameID.ticked", game))).when(this.eventListener).listen(eq("games.testGameID.ticked"),eq(Game.class));
-        doReturn(Observable.just(new Event<>("games.testGameID.updated", game))).when(this.eventListener).listen(eq("games.testGameID.updated"),eq(Game.class));
+//        doReturn(Observable.just(new Event<>("games.game1Id.ticked", game))).when(this.eventListener).listen(eq("games.game1Id.ticked"),eq(Game.class));
+//        doReturn(Observable.just(new Event<>("games.game1Id.updated", game))).when(this.eventListener).listen(eq("games.game1Id.updated"),eq(Game.class));
 
 
         app.show(inGameController);

@@ -188,7 +188,7 @@ public class TestStorageOverview extends ControllerTest {
 
         Game game = new Game("a", "a", "testGameID", "gameName", "gameOwner", true, 1, 1, null);
 
-        doReturn(Observable.just(new Event<>("games.testGameID.ticked", game))).when(this.eventListener).listen(eq("games.testGameID.ticked"),eq(Game.class));
+//        doReturn(Observable.just(new Event<>("games.testGameID.ticked", game))).when(this.eventListener).listen(eq("games.testGameID.ticked"),eq(Game.class));
         doReturn(Observable.just(new Event<>("games.testGameID.updated", game))).when(this.eventListener).listen(eq("games.testGameID.updated"),eq(Game.class));
 
 

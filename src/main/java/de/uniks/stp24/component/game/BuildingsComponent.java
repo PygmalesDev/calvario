@@ -4,6 +4,7 @@ import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -12,7 +13,7 @@ import org.fulib.fx.annotation.controller.Component;
 import javax.inject.Inject;
 
 @Component(view = "Buildings.fxml")
-public class BuildingsComponent extends VBox {
+public class BuildingsComponent extends AnchorPane {
 
     @FXML
     public Pane prev;
@@ -101,6 +102,7 @@ public class BuildingsComponent extends VBox {
             buildings.getChildren().clear();
             buildings.add(new Building(this, "buildNewBuilding", tokenStorage, islandAttributes, inGameController), 0, 0);
             prev.setVisible(true);
+            next.setVisible(false);
         }
     }
 

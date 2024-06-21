@@ -578,7 +578,7 @@ public class TestIslandOverview extends ControllerTest {
         Node upgradeButton = lookup("#upgradeButton").query();
         clickOn(upgradeButton);
         waitForFxEvents();
-        Node closeButton = lookup("#closeButton").query();
+        Node closeButton = lookup("#close").query();
         clickOn(closeButton);
         waitForFxEvents();
         assertFalse(inGameController.overviewContainer.isVisible());

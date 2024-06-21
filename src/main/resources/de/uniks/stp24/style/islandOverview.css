@@ -1,0 +1,67 @@
+.headerText{
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 30;
+}
+
+
+
+/* Buildings Window */
+.buildingsOverviewBackground{
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/site_building_build_overview_window.png");
+    -fx-background-size: 100% 100%;
+}
+
+.buildingButton{
+    -fx-pref-width:40px;
+    -fx-pref-height: 40px;
+}
+
+/* Buildings Details */
+.buildingDetailsBackground{
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/building_component.png");
+    -fx-background-size: 100% 100%;
+}
+
+.tableHeadingText{
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-background-color: "TRANSPARENT";
+    -fx-font-weight: none;
+    -fx-font-size: 12;
+}
+
+.buildingName{
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 18;
+}
+
+.resourceList .list-cell {
+    -fx-background-color: transparent;
+    -fx-font-size: 10;
+    -fx-cell-size: 5;
+}
+
+.resourceList .scroll-bar{
+    -fx-background-color: transparent;
+}
+
+/* side details */
+.siteOverviewBackground{
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/production_site_overview_window.png");
+    -fx-background-size: 100% 100%;
+}
+
+.islandOverviewBackGround{
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/island-overview.png");
+    -fx-background-size: 100% 100%;
+
+}
+
+.islandOverviewCloseButton{
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/close_window_button.png");
+    -fx-background-size: 100% 100%;
+}
+
+.islandOverviewUpgradesButton{
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/upgrades_button.png");
+    -fx-background-size: 100% 100%;
+}

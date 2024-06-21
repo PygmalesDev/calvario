@@ -298,10 +298,6 @@ public class InGameController extends BasicController {
         this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton);
     }
 
-    private void showEmpireOverview() {
-        System.out.println("button clicked");
-    }
-
     @OnRender
     public void createMap() {
         this.islandComponentList = islandsService.createIslands(islandsService.getListOfIslands());

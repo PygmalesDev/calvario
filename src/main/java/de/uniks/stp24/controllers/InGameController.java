@@ -264,9 +264,6 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void render() {
-
-        //buildingProperties.setVisible(true);
-        //buildingProperties.getChildren().add(buildingPropertiesComponent);
         buildingProperties.setMouseTransparent(true);
         buildingsWindow.setMouseTransparent(true);
         siteProperties.setMouseTransparent(true);

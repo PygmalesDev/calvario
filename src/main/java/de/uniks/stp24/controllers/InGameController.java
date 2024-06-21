@@ -104,9 +104,10 @@ public class InGameController extends BasicController {
     @Inject
     EmpireService empireService;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
     ResourcesService resourceService;
+
 
     @SubComponent
     @Inject

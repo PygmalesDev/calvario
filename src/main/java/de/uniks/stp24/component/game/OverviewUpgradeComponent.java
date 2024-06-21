@@ -1,11 +1,6 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.SystemsDto;
-import de.uniks.stp24.dto.UpdateSystemDto;
-import de.uniks.stp24.dto.Upgrade;
-import de.uniks.stp24.model.Island;
-import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -25,7 +20,6 @@ import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Objects;
 
 @Component(view = "IslandOverviewUpgrade.fxml")
 public class OverviewUpgradeComponent extends AnchorPane {
@@ -134,43 +128,14 @@ public class OverviewUpgradeComponent extends AnchorPane {
         if (resourcesService.hasEnoughResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()))) {
             resourcesService.upgradeIsland();
             setNeededResources();
-            Island tmp1 = islandAttributes.getIsland();
-            String upgradeStatus = switch (tmp1.upgradeLevel()) {
+            String upgradeStatus = switch (islandAttributes.getIsland().upgradeLevel()) {
                 case 0 -> islandAttributes.systemPresets.explored().id();
                 case 1 -> islandAttributes.systemPresets.colonized().id();
                 case 2 -> islandAttributes.systemPresets.upgraded().id();
                 case 3 -> islandAttributes.systemPresets.developed().id();
                 default -> null;
             };
-
-            this.subscriber.subscribe(gameSystemsService.updateIsland(tokenStorage.getGameId(), tokenStorage.getEmpireId(),
-                    new SystemsDto(
-                            null,
-                            tmp1.sites(),
-                            tmp1.buildings(),
-                            upgradeStatus,
-                            tokenStorage.getEmpireId())), result -> {
-
-                Island tmp2 = new Island(
-                        result.owner(),
-                        Objects.isNull(result.owner()) ? -1 : islandsService.getEmpire(result._id()).flag(),
-                        result.x(),
-                        result.y(),
-                        IslandType.valueOf(String.valueOf(result.type())),
-                        result.population(),
-                        result.capacity(),
-                        result.upgrade().ordinal(),
-                        result.districtSlots(),
-                        result.districts(),
-                        result.buildings(),
-                        result._id(),
-                        result.upgrade().toString()
-
-                );
-                inGameController.selectedIsland.island = tmp2;
-                islandAttributes.setIsland(tmp2);
-                inGameController.showOverview(islandAttributes.getIsland());
-            });
+            islandsService.upgradeSystem(islandAttributes, upgradeStatus, inGameController);
         }
     }
 

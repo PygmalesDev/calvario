@@ -44,10 +44,24 @@
     -fx-background-color: transparent;
 }
 
-
-
 /* side details */
 .siteOverviewBackground{
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/production_site_overview_window.png");
+    -fx-background-size: 100% 100%;
+}
+
+.islandOverviewBackGround{
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/island-overview.png");
+    -fx-background-size: 100% 100%;
+
+}
+
+.islandOverviewCloseButton{
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/close_window_button.png");
+    -fx-background-size: 100% 100%;
+}
+
+.islandOverviewUpgradesButton{
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/upgrades_button.png");
     -fx-background-size: 100% 100%;
 }

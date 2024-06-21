@@ -3,6 +3,7 @@ package de.uniks.stp24.service;
 import de.uniks.stp24.model.BuildingPresets;
 import de.uniks.stp24.model.DistrictPresets;
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.model.SystemUpgrades;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.PresetsApiService;
@@ -24,11 +25,13 @@ public class InGameService {
     @Inject
     GameStatus gameStatus;
     @Inject
+    EventService eventService;
+    @Inject
     GameSystemsApiService gameSystemsApiService;
     @Inject
     Subscriber subscriber;
     @Inject
-    PresetsApiService presetsApiService;
+    public PresetsApiService presetsApiService;
 
     @Inject
     public InGameService() {
@@ -84,6 +87,8 @@ public class InGameService {
     public void setTimerService(TimerService timerService) {
         this.timerService = timerService;
     }
+
+    public void setEventService(EventService eventService) {this.eventService = eventService;}
 
     public TimerService getTimerService() {
         return timerService;

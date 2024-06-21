@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="60.0" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-   <VBox alignment="CENTER" layoutX="15.0" layoutY="5.0" prefHeight="69.0" prefWidth="30.0" styleClass="overview-text">
-      <VBox alignment="CENTER" prefHeight="30.0" prefWidth="30.0" style="-fx-border-color: #000000;">
-         <Text fx:id="districtName" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%site" />
+   <VBox alignment="CENTER" layoutX="15.0" layoutY="5.0" prefHeight="69.0" prefWidth="50.0" styleClass="overview-text" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+      <VBox alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #000000;">
+         <ImageView fx:id="siteImage" fitHeight="58.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true" />
       </VBox>
       <Text fx:id="districtCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="x/x" />
    </VBox>

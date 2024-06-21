@@ -48,7 +48,6 @@ public class App extends FulibFxApp {
             });
 
             primaryStage.getScene().getStylesheets().add(Objects.requireNonNull(App.class.getResource("style/styles.css")).toExternalForm());
-            //CSSFX.start(primaryStage);
             cssFxStop = CSSFX.start(primaryStage);
 
             primaryStage.setWidth(1280);
@@ -58,12 +57,7 @@ public class App extends FulibFxApp {
             setAppIcon(primaryStage);
             setTaskbarIcon();
 
-            //autoRefresher().setup(Path.of("src/main/resources/de/uniks/stp24"));
-            // todo remove this shortcut
-            //show("/ingame");
-
             Locale.setDefault(Locale.ENGLISH);
-            // open normal load screen or autoLogin screen depending on the preferences of the user
 
             show("/load");
 
@@ -72,12 +66,16 @@ public class App extends FulibFxApp {
         }
     }
 
-       @Override
-    public void stop() {
+    public void cleanUp(){
         super.stop();
         cssFxStop.run();
         autoRefresher().close();
-        //this.component = null;
+    }
+
+    @Override
+    public void stop() {
+        cleanUp();
+        System.exit(0);
     }
 
 

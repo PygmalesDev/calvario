@@ -1,9 +1,9 @@
 package de.uniks.stp24.service;
 
+import de.uniks.stp24.model.Island;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.HashMap;
-import java.util.Map;
 
 @Singleton
 public class TokenStorage {
@@ -11,12 +11,11 @@ public class TokenStorage {
     private String userId;
     private String name;
     private String avatar;
+    private Island island;
     private String gameId;
     private String empireId;
     private boolean isSpectator;
-    private final Map<String, Integer> flagsInGame = new HashMap<>();
 
-    private String[] technologies;
     @Inject
     public TokenStorage() {
     }
@@ -50,6 +49,13 @@ public class TokenStorage {
     public boolean isSpectator(){return this.isSpectator;}
     public void setIsSpectator(boolean isSpectator) {
         this.isSpectator = isSpectator;
+    }
+
+    public Island getIsland () {
+        return this.island;
+    }
+    public void setIsland (Island island){
+        this.island = island;
     }
 
 }

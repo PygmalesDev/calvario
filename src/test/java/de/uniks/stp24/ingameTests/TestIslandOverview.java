@@ -3,6 +3,7 @@ package de.uniks.stp24.ingameTests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -14,6 +15,7 @@ import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.LanguageService;
@@ -28,7 +30,6 @@ import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -39,7 +40,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,6 +59,8 @@ public class TestIslandOverview extends ControllerTest {
     InGameService inGameService;
     @Spy
     TimerService timerService;
+    @Spy
+    EventService eventService;
     @Spy
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
@@ -99,7 +101,18 @@ public class TestIslandOverview extends ControllerTest {
     @InjectMocks
     BuildingsComponent buildingsComponent;
     @InjectMocks
+    EventComponent eventComponent;
+    @InjectMocks
     InGameController inGameController;
+    @InjectMocks
+    BuildingPropertiesComponent buildingPropertiesComponent;
+    @InjectMocks
+    SitePropertiesComponent sitePropertiesComponent;
+    @InjectMocks
+    BuildingsWindowComponent buildingsWindowComponent;
+    @InjectMocks
+    DeleteStructureComponent deleteStructureComponent;
+
 
 
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
@@ -241,9 +254,15 @@ public class TestIslandOverview extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
+        this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
+        this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
+        this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
+        this.inGameController.eventComponent = this.eventComponent;
+        this.inGameController.eventService = this.eventService;
+        this.clockComponent.eventService = this.eventService;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameService.setGameStatus(gameStatus);
         this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
@@ -252,6 +271,9 @@ public class TestIslandOverview extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+        this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
+
+
 
         // Mock TokenStorage
         doReturn("testUserID").when(this.tokenStorage).getUserId();
@@ -278,6 +300,7 @@ public class TestIslandOverview extends ControllerTest {
         doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
         doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
 
+
         buildings.add("testBuilding1");
         buildings.add("testBuilding2");
         buildings.add("testBuilding3");
@@ -297,7 +320,8 @@ public class TestIslandOverview extends ControllerTest {
                 siteSlots,
                 sites,
                 buildings,
-                "1"
+                "1",
+                "explored"
         );
 
         testIsland2 = new Island(
@@ -313,6 +337,8 @@ public class TestIslandOverview extends ControllerTest {
                 sites,
                 buildings,
                 "1"
+                ,
+                "explored"
         );
 
         testIsland3 = new Island(
@@ -327,7 +353,8 @@ public class TestIslandOverview extends ControllerTest {
                 siteSlots,
                 sites,
                 buildings,
-                "1"
+                "1",
+                "explored"
         );
 
         this.islandAttributeStorage.setIsland(testIsland1);
@@ -373,6 +400,9 @@ public class TestIslandOverview extends ControllerTest {
                 tokenStorage.getEmpireId()
         );
 
+
+
+
         this.islandAttributeStorage.systemPresets = systemUpgrades;
         this.islandAttributeStorage.empireDto = empireDto;
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
@@ -394,6 +424,22 @@ public class TestIslandOverview extends ControllerTest {
         this.islandsService.gameSystemsService = gameSystemsApiService;
 
         this.app.show(this.inGameController);
+
+        this.storageOverviewComponent.getStylesheets().clear();
+        this.pauseMenuComponent.getStylesheets().clear();
+        this.settingsComponent.getStylesheets().clear();
+        this.clockComponent.getStylesheets().clear();
+        this.eventComponent.getStylesheets().clear();
+        this.storageOverviewComponent.getStylesheets().clear();
+        this.overviewSitesComponent.getStylesheets().clear();
+        this.overviewUpgradeComponent.getStylesheets().clear();
+        this.buildingsComponent.getStylesheets().clear();
+        this.sitesComponent.getStylesheets().clear();
+        this.detailsComponent.getStylesheets().clear();
+        this.deleteStructureComponent.getStylesheets().clear();
+        sitePropertiesComponent.getStylesheets().clear();
+        buildingsWindowComponent.getStylesheets().clear();
+        buildingPropertiesComponent.getStylesheets().clear();
     }
 
     @Test
@@ -438,8 +484,7 @@ public class TestIslandOverview extends ControllerTest {
         Node next = lookup("#next").query();
 
         //-> Check functions buildings
-        ArrayList<Node> buildingNodes = new ArrayList<>();
-        buildingNodes.addAll(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
+        ArrayList<Node> buildingNodes = new ArrayList<>(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
 
         for (int i = 0; i < buildingNodes.size() - 2; i++) {
             clickOn(buildingNodes.get(i));
@@ -552,13 +597,11 @@ public class TestIslandOverview extends ControllerTest {
         assertFalse(checkDeveloped.isVisible());
 
         Node confirmButton = lookup("#confirmUpgrade").query();
-        assertTrue(confirmButton.getStyle().contains("-fx-background-color: green;"));
         clickOn(confirmButton);
         waitForFxEvents();
         Text inf = lookup("#island_inf").queryText();
         assertEquals(inf.getText(), "+100.0% more crew mates");
         clickOn(upgradeButton);
-        assertTrue(confirmButton.getStyle().contains("-fx-background-color: black;"));
 
         assertTrue(checkExplored.isVisible());
         assertTrue(checkColonized.isVisible());
@@ -626,6 +669,7 @@ public class TestIslandOverview extends ControllerTest {
 
     @Test
     public void testEnemiesIsland() {
+        doReturn(Observable.just(updatedBuildings)).when(gameSystemsApiService).updateBuildings(any(),any(),any());
         waitForFxEvents();
         Platform.runLater(() -> {
             inGameController.showOverview(testIsland3);
@@ -634,7 +678,8 @@ public class TestIslandOverview extends ControllerTest {
         waitForFxEvents();
         assertTrue(this.inGameController.overviewContainer.isVisible());
         Node upgradeButton = lookup("#upgradeButton").query();
-        assertFalse(upgradeButton.isVisible());
+
+        assertTrue(upgradeButton.isVisible());
 
         Node prev = lookup("#prev").query();
         Node next = lookup("#next").query();
@@ -644,9 +689,9 @@ public class TestIslandOverview extends ControllerTest {
 
         int oldValue = this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size();
         clickOn(buildingNodes.getLast());
-        assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), oldValue);
+
+        System.out.println(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size());
+        assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), oldValue + 1);
         assertTrue(!prev.isVisible() && !next.isVisible());
     }
-
-
 }

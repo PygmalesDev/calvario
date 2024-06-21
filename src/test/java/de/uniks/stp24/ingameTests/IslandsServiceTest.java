@@ -2,7 +2,12 @@ package de.uniks.stp24.ingameTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.game.ClockComponent;
+import de.uniks.stp24.component.game.EventComponent;
+import de.uniks.stp24.component.game.IslandComponent;
+import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -20,6 +25,7 @@ import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TimerService;
@@ -54,6 +60,8 @@ public class IslandsServiceTest extends ControllerTest {
     @InjectMocks
     SettingsComponent settingsComponent;
     @InjectMocks
+    EventComponent eventComponent;
+    @InjectMocks
     ClockComponent clockComponent;
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
@@ -69,6 +77,14 @@ public class IslandsServiceTest extends ControllerTest {
     BuildingsComponent buildingsComponent;
     @InjectMocks
     OverviewUpgradeComponent overviewUpgradeComponent;
+    @InjectMocks
+    BuildingPropertiesComponent buildingPropertiesComponent;
+    @InjectMocks
+    SitePropertiesComponent sitePropertiesComponent;
+    @InjectMocks
+    BuildingsWindowComponent buildingsWindowComponent;
+    @InjectMocks
+    DeleteStructureComponent deleteStructureComponent;
 
 
     @Spy
@@ -85,16 +101,22 @@ public class IslandsServiceTest extends ControllerTest {
 
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
+
     @Spy
     GameStatus gameStatus;
+
     @Spy
     InGameService inGameService;
+    @Spy
+    EventService eventService;
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @Spy
     Subscriber subscriber = spy(Subscriber.class);
+
     @Spy
     LanguageService languageService;
+
     @Spy
     ResourcesService resourcesService;
     @Spy
@@ -115,13 +137,21 @@ public class IslandsServiceTest extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
+        this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
+        this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
+        this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
+        this.inGameController.eventComponent = eventComponent;
+        this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.clockComponent.timerService = this.timerService;
+        this.clockComponent.eventService = this.eventService;
         this.clockComponent.subscriber = this.subscriber;
         this.clockComponent.gamesApiService = this.gameApiService;
+        this.clockComponent.islandsService = this.islandsService;
+        this.clockComponent.eventComponent = this.eventComponent;
         this.islandsService.app = this.app;
         this.islandAttributeStorage.systemPresets = systemUpgrades;
         inGameService.setGameStatus(gameStatus);
@@ -144,23 +174,23 @@ public class IslandsServiceTest extends ControllerTest {
 
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
         doReturn(Observable
-          .just(new Game("a", null, "game1Id", "testGame1",
-            "testHost1", true, 1,10, null))).when(gameApiService).getGame(any());
+                .just(new Game("a", null, "game1Id", "testGame1",
+                        "testHost1", true, 1,10, null))).when(gameApiService).getGame(any());
         doReturn(null).when(this.app).show("/ingame");
         islandsService.saveEmpire("empire",new ReadEmpireDto("a","b","empire","game1","user1","name",
-          "description","#FFDDEE",2,3,"home"));
+                "description","#FFDDEE",2,3,"home"));
         SystemDto[] systems = new SystemDto[3];
         ArrayList<String> buildings = new ArrayList<>(Arrays.asList("power_plant", "mine", "farm", "research_lab", "foundry", "factory", "refinery"));
         systems[0] = new SystemDto("a","b","system1","game1","agriculture",
-          "name",null,null,25,null, Upgrade.unexplored,0,
-          Map.of("home",22),1.46,-20.88,null);
+                "name",null,null,25,null, Upgrade.unexplored,0,
+                Map.of("home",22),1.46,-20.88,null);
         systems[1] = new SystemDto("a","b","system2","game1","energy",
-          "name",null,null,16,null, Upgrade.unexplored,0,
-          Map.of("home",18),-7.83,-11.04,null);
+                "name",null,null,16,null, Upgrade.unexplored,0,
+                Map.of("home",18),-7.83,-11.04,null);
         systems[2] = new SystemDto("a","b","home","game1","uninhabitable_0", "name",
-          Map.of("city",3, "industry", 3, "mining",3, "energy",3, "agriculture",3),
-          Map.of("city",3, "industry", 3, "mining",3, "energy",3, "agriculture",3), 22,
-          buildings,Upgrade.developed,25,Map.of("system1",22,"system2",18),-5.23,4.23,"empire"
+                Map.of("city",3, "industry", 3, "mining",3, "energy",3, "agriculture",3),
+                Map.of("city",3, "industry", 3, "mining",3, "energy",3, "agriculture",3), 22,
+                buildings,Upgrade.developed,25,Map.of("system1",22,"system2",18),-5.23,4.23,"empire"
         );
 
         IslandComponent comp0 = new IslandComponent();
@@ -173,8 +203,8 @@ public class IslandsServiceTest extends ControllerTest {
         comp2.setLayoutX(systems[2].x());
         comp2.setLayoutY(systems[2].y());
         Map<String, IslandComponent> compMap = Map.of("system1", comp0,
-          "system2", comp1,
-          "home" , comp2);
+                "system2", comp1,
+                "home" , comp2);
         List<IslandComponent> compList = Arrays.asList(comp0,comp1,comp2);
         doReturn(Observable.just(systems)).when(gameSystemsApiService).getSystems(any());
         doReturn(compMap).when(islandsService).getComponentMap();
@@ -190,7 +220,7 @@ public class IslandsServiceTest extends ControllerTest {
         Mockito.doCallRealMethod().when(islandsService).getMapHeight();
         Mockito.doCallRealMethod().when(islandsService).getEmpire(any());
         Mockito.doCallRealMethod().when(islandsService)
-          .createLines(any());
+                .createLines(any());
 
         // Mock getEmpire
         doReturn(Observable.just(new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
@@ -200,6 +230,17 @@ public class IslandsServiceTest extends ControllerTest {
 
 
         app.show(inGameController);
+        eventComponent.getStylesheets().clear();
+        storageOverviewComponent.getStylesheets().clear();
+        clockComponent.getStylesheets().clear();
+        pauseMenuComponent.getStylesheets().clear();
+        settingsComponent.getStylesheets().clear();
+        overviewSitesComponent.getStylesheets().clear();
+        overviewUpgradeComponent.getStylesheets().clear();
+        sitePropertiesComponent.getStylesheets().clear();
+        buildingsWindowComponent.getStylesheets().clear();
+        buildingPropertiesComponent.getStylesheets().clear();
+        deleteStructureComponent.getStylesheets().clear();
     }
 
     @Test
@@ -226,4 +267,5 @@ public class IslandsServiceTest extends ControllerTest {
         assertNotEquals(0,islandsService.getMapHeight());
 
     }
+    
 }

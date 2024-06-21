@@ -1,10 +1,10 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
@@ -12,10 +12,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnKey;
+import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
+import java.util.ResourceBundle;
 import javax.inject.Singleton;
 
 @Component(view = "IslandComponent.fxml")
@@ -30,17 +33,25 @@ public class IslandComponent extends Pane {
     @FXML
     ImageView flagImage;
     @Inject
+    TokenStorage tokenStorage;
+
+    @Inject
+    @Resource
+    ResourceBundle resource;
+    public Island island;
+ 
     ImageCache imageCache;
     @Inject
     IslandAttributeStorage islandAttributes;
 
     private InGameController inGameController;
-    public Island island;
 
     double x, y;
+
     public boolean islandIsSelected = false;
 
     private boolean keyCodeH = false;
+
 
     @Inject
     public IslandComponent() {
@@ -51,9 +62,15 @@ public class IslandComponent extends Pane {
         this.flagImage = new ImageView();
     }
 
-    public void applyIcon(IslandType type) {
+    @OnRender
+    public void render(){
+        this.flagPane.setVisible(true);
+    }
+
+
+    public void applyIcon(IslandType type){
         this.islandImage
-          .setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
+                .setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
     }
 
     // use our flag images
@@ -61,11 +78,12 @@ public class IslandComponent extends Pane {
     public void setFlagImage(int flag) {
         if (flag >= 0) {
             this.flagImage
-              .setImage(imageCache.get("assets/flags/flag_" + flag + ".png"));
+                    .setImage(imageCache.get("assets/flags/flag_" + flag + ".png"));
         }
     }
 
     public void applyInfo(Island islandInfo) {
+        System.out.println("INFO APPLIED");
         this.island = islandInfo;
         applyIcon(this.island.type());
     }
@@ -77,16 +95,18 @@ public class IslandComponent extends Pane {
     }
 
     public double getPosX() {
-//        this.x = island.posX();
         return this.x;
     }
 
     public double getPosY() {
-//          this.y = island.posY();
         return this.y;
     }
 
     // switch the visibility of all flags
+    public void showFlag(boolean selected) {
+        this.flagPane.setVisible(selected);
+    }
+
     public void showFlag(){
         if(island.flagIndex() >= 0 && !keyCodeH){
             this.flagPane.setVisible(!flagPane.isVisible());
@@ -101,13 +121,18 @@ public class IslandComponent extends Pane {
         keyCodeH = !keyCodeH;
     }
 
-    public Island getIsland() {
+
+    public Island getIsland(){
         return this.island;
     }
 
     public void showRudder() {
         rudderImage.setVisible(true);
 
+    }
+
+    public void updateIsland(Island island){
+        this.island = island;
     }
 
     public void unshowRudder() {
@@ -140,6 +165,7 @@ public class IslandComponent extends Pane {
         islandIsSelected = true;
         if(this.island.owner() != null) {
             inGameController.showOverview(this.island);
+            System.out.println(island.sites() + "WAWAWAWAW");
             showFlag();
         } else {
             inGameController.overviewContainer.setVisible(false);
@@ -157,4 +183,9 @@ public class IslandComponent extends Pane {
         islandImage = null;
     }
 
+
+    public IslandComponent setTokenStorage(TokenStorage tokenStorage) {
+        this.tokenStorage = tokenStorage;
+        return this;
+    }
 }

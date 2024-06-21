@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
+import org.fulib.fx.annotation.event.OnInit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -70,6 +71,12 @@ public class OverviewSitesComponent extends AnchorPane {
     @Inject
     public OverviewSitesComponent() {
 
+    }
+
+    @OnInit
+    public void init(){
+        buildingsComponent.setInGameController(inGameController);
+        sitesComponent.setInGameController(inGameController);
     }
 
     public void showDetails() {
@@ -128,7 +135,7 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showBuildings() {
-        buildingsComponent.setIngameController(inGameController);
+        buildingsComponent.setInGameController(inGameController);
         buildingsButton.setDisable(true);
         sitesButton.setDisable(false);
         detailsButton.setDisable(false);
@@ -144,6 +151,9 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameService.showOnly(sitesContainer, sitesComponent);
     }
 
+
+
+
     public void setContainer() {
         sitesContainer.setVisible(false);
         sitesContainer.getChildren().add(sitesComponent);
@@ -157,6 +167,9 @@ public class OverviewSitesComponent extends AnchorPane {
 
     public void closeOverview() {
         resetButtons();
+        inGameController.buildingsWindowComponent.setVisible(false);
+        inGameController.sitePropertiesComponent.setVisible(false);
+        inGameController.buildingPropertiesComponent.setVisible(false);
         inGameController.overviewContainer.setVisible(false);
         inGameController.selectedIsland.rudderImage.setVisible(false);
         inGameController.selectedIsland.islandIsSelected = false;

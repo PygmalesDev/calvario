@@ -1,0 +1,19 @@
+{
+  "id": "black_spot",
+  "event_type": "bad",
+  "duration": 11,
+  "effects": [
+    {
+      "variable": "alloys",
+      "base": 0,
+      "multiplier": 1,
+      "bonus": -10
+    },
+    {
+      "variable": "fuel",
+      "base": 0,
+      "multiplier": 1,
+      "bonus": -20
+    }
+  ]
+}

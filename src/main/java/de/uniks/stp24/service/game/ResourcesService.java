@@ -1,8 +1,16 @@
 package de.uniks.stp24.service.game;
 
+import de.uniks.stp24.dto.BuildingDto;
+import de.uniks.stp24.dto.SiteDto;
+import de.uniks.stp24.dto.SystemDto;
+import de.uniks.stp24.dto.SystemsDto;
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.dto.UpdateEmpireDto;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.service.TokenStorage;
+import io.reactivex.rxjava3.core.Observable;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.collections.FXCollections;
@@ -14,9 +22,12 @@ import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.*;
 
 @Singleton
 public class ResourcesService {
+ 	@Inject
+    GameSystemsApiService gameSystemsApiService;
     @Inject
     public IslandAttributeStorage islandAttributes;
     @Inject
@@ -39,6 +50,92 @@ public class ResourcesService {
         return currentResources.get(resourceId);
     }
 
+    public Observable<SystemDto> destroyBuilding(String gameID, Island island, String buildingToDestroy) {
+        ArrayList<String> buildings = island.buildings();
+
+
+        // Look in list for building to delete
+        Iterator<String> iterator = buildings.iterator();
+        while (iterator.hasNext()) {
+            String building = iterator.next();
+            if (building.equals(buildingToDestroy)) {
+                iterator.remove();
+                break;
+            }
+        }
+        Map<String, Integer> sitesValue = new HashMap<>();
+
+        if (island.owner() != null){
+            if (island.owner().equals(tokenStorage.getEmpireId())){
+                return gameSystemsApiService.updateIsland(gameID, island.id(), new SystemsDto("",
+                        sitesValue, buildings, null, island.owner()));
+            }
+        }
+
+        return gameSystemsApiService.updateIsland(gameID, island.id(), new SystemsDto("",
+                island.sites(), island.buildings(),island.upgrade(), island.owner()));
+    }
+
+    // Uses update island api-service to change the value of a system and add a building
+    public Observable<SystemDto> createBuilding(String gameId, Island island, String buildingToAdd) {
+        ArrayList<String> newBuildingsArray = island.buildings();
+        newBuildingsArray.add(buildingToAdd);
+        Map<String, Integer> sitesValue = new HashMap<>();
+
+        if (island.owner() != null){
+            if (island.owner().equals(tokenStorage.getEmpireId())){
+                return gameSystemsApiService.updateIsland(gameId, island.id(), new SystemsDto("",
+                        sitesValue, newBuildingsArray,null, island.owner()));
+            }
+        }
+
+        return gameSystemsApiService.updateIsland(gameId, island.id(), new SystemsDto("",
+                island.sites(), island.buildings(),island.upgrade(), island.owner()));
+    }
+
+    // Uses update island api-service to change the value of a system and delete a site
+    public Observable<SystemDto> destroySite(String gameID, Island island, String siteToDestroy) {
+        Map<String, Integer> sitesValue = new HashMap<>();
+        sitesValue.put(siteToDestroy, -1);
+
+
+        if (island.owner() != null){
+            if (island.owner().equals(tokenStorage.getEmpireId())){
+                return gameSystemsApiService.updateIsland(gameID, island.id(), new SystemsDto("",
+                        sitesValue, island.buildings(), null, island.owner()));
+            }
+        }
+
+        return gameSystemsApiService.updateIsland(gameID, island.id(), new SystemsDto("",
+                island.sites(), island.buildings(),island.upgrade(), island.owner()));
+    }
+
+    // Uses update island api-service to change the value of a system and add a site
+    public Observable<SystemDto> buildSite(String gameID, Island island, String siteToBuild) {
+        Map<String, Integer> sitesValue = new HashMap<>();
+        sitesValue.put(siteToBuild, 1);
+
+        if (island.owner() != null){
+            if (island.owner().equals(tokenStorage.getEmpireId())){
+                return gameSystemsApiService.updateIsland(gameID, island.id(), new SystemsDto("",
+                        sitesValue, island.buildings(), null, island.owner()));
+            }
+        }
+
+        return gameSystemsApiService.updateIsland(gameID, island.id(), new SystemsDto("",
+                island.sites(), island.buildings(),island.upgrade(), island.owner()));
+    }
+
+
+    public Observable<SiteDto> getResourcesSite(String siteType) {
+        return gameSystemsApiService.getSite(siteType);
+    }
+
+    public Observable<BuildingDto> getResourcesBuilding(String buildingType) {
+        return gameSystemsApiService.getBuilding(buildingType);
+    }
+
+
     /**
      * Updates the ObservableList which shows the count and change per season of a resource
      */
@@ -50,7 +147,7 @@ public class ResourcesService {
             String resourceID = entry.getKey();
             int count = entry.getValue();
             int changeProSeason = 0;
-            if (!oldResourceList.isEmpty()) {
+            if (!oldResourceList.isEmpty() && oldResourceList.size() >= 2) {
                 changeProSeason = oldResourceList.get(i).changePerSeason();
             }
             if (Objects.nonNull(aggregateItems)) {

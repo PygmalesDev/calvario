@@ -31,6 +31,8 @@ public class BuildingsComponent extends AnchorPane {
     private int currentPage = 0;
     private InGameController inGameController;
 
+    private String buildingType;
+
     @Inject
     public BuildingsComponent() {
     }
@@ -106,7 +108,12 @@ public class BuildingsComponent extends AnchorPane {
         }
     }
 
-    public void setIngameController(InGameController inGameController) {
+    public void setInGameController(InGameController inGameController){
         this.inGameController = inGameController;
+    }
+
+
+    public void setBuildingType(String buildingType){
+        this.buildingType = buildingType;
     }
 }

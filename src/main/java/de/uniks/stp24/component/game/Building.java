@@ -20,7 +20,9 @@ public class Building extends VBox {
     private ImageView building;
     InGameController inGameController;
 
-    @Inject
+    private String buildingType;
+
+
     public Building(BuildingsComponent buildingsComponent, String buildingName, TokenStorage tokenStorage, IslandAttributeStorage islandAttributes, InGameController inGameController){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BuildingElement.fxml"));
         fxmlLoader.setRoot(this);
@@ -34,12 +36,26 @@ public class Building extends VBox {
         this.inGameController = inGameController;
 
         building.setOnMouseClicked(event -> {
+        	inGameController.showBuildingWindow();
             if(buildingName.equals("buildNewBuilding") && Objects.equals(tokenStorage.getEmpireId(), islandAttributes.getIsland().owner()) && islandAttributes.getUsedSlots() < islandAttributes.getIsland().resourceCapacity()) {
                 buildingsComponent.islandAttributes.addNewBuilding();
                 buildingsComponent.setGridPane();
                 inGameController.islandsService.updateIslandBuildings(islandAttributes, inGameController, islandAttributes.getIsland().buildings());
             }
         });
+    }
+
+    @Inject
+    public Building(){
+
+    }
+//    public void setInGameController(InGameController inGameController){
+//        this.inGameController = inGameController;
+//    }
+
+
+    public void setBuildingType(String buildingType){
+        this.buildingType = buildingType;
     }
 
 }

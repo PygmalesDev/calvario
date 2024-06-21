@@ -4,9 +4,10 @@ import de.uniks.stp24.component.menu.GangComponent;
 import de.uniks.stp24.component.menu.GangDeletionComponent;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
-import de.uniks.stp24.component.menu.GangComponent;
 import de.uniks.stp24.model.GangElement;
-import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.PopupBuilder;
+import de.uniks.stp24.service.SaveLoadService;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -270,7 +271,6 @@ public class GangCreationController extends BasicController {
             popup.showPopup(deletePane, gangDeletionComponent);
             popup.setBlur(gangsListView, creationBox);
         }
-
     }
 
     public void create() {

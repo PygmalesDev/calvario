@@ -3,6 +3,7 @@ package de.uniks.stp24.ingameTests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -112,6 +113,9 @@ public class TestIslandOverview extends ControllerTest {
     SitePropertiesComponent sitePropertiesComponent;
     @InjectMocks
     BuildingsWindowComponent buildingsWindowComponent;
+    @InjectMocks
+    DeleteStructureComponent deleteStructureComponent;
+
 
 
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
@@ -269,6 +273,7 @@ public class TestIslandOverview extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+        this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
 
 
 

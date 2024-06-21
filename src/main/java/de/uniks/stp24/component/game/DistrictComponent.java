@@ -49,7 +49,6 @@ public class DistrictComponent extends AnchorPane {
         sitesMap.put("ancient_foundry", "de/uniks/stp24/icons/sites/expedition_site.png");
         sitesMap.put("ancient_factory", "de/uniks/stp24/icons/sites/merchant_site.png");
         sitesMap.put("ancient_refinery", "de/uniks/stp24/icons/sites/production_site.png");
-
         Image image = new Image(sitesMap.get(name));
         siteImage.setImage(image);
         districtCapacity.setText(capacity);

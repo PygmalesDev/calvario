@@ -18,8 +18,7 @@
       <HBox alignment="CENTER_LEFT" prefHeight="133.0" prefWidth="400.0">
          <VBox prefHeight="134.0" prefWidth="46.0" />
          <VBox alignment="CENTER" prefHeight="134.0" prefWidth="292.0">
-            <Pane prefHeight="200.0" prefWidth="200.0" styleClass="islandOverviewImage"
-                  stylesheets="@../../style/islandOverview.css"/>
+            <Pane prefHeight="200.0" prefWidth="200.0" styleClass="islandOverviewImage" stylesheets="@../../style/islandOverview.css" />
          </VBox>
       </HBox>
       <VBox prefHeight="25.0" prefWidth="400.0" />
@@ -34,7 +33,7 @@
                <VBox prefHeight="17.0" prefWidth="39.0" />
                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="%capacity" wrappingWidth="56.947265625" />
                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                  <Image url="@../../assets/buttons/bandit_medalion.png"/>
+                  <Image url="@../../assets/buttons/bandit_medalion.png" />
                </ImageView>
                <Text fx:id="island_name" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="island_name" wrappingWidth="158.947265625">
                   <font>
@@ -76,11 +75,11 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="44.0" prefWidth="329.0">
                <VBox prefHeight="44.0" prefWidth="42.0" />
-               <Button fx:id="detailsButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showDetails" prefHeight="25.0" prefWidth="55.0" styleClass="overviewButtons" text="%details" />
+               <Button fx:id="detailsButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showDetails" prefHeight="25.0" prefWidth="55.0" styleClass="overviewButtons" text="%DETAILS" />
                <VBox prefHeight="44.0" prefWidth="21.0" />
-               <Button fx:id="sitesButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showSites" prefHeight="25.0" prefWidth="55.0" styleClass="overviewButtons" text="%sites" />
+               <Button fx:id="sitesButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showSites" prefHeight="25.0" prefWidth="55.0" styleClass="overviewButtons" text="%SITES" />
                <VBox prefHeight="44.0" prefWidth="21.0" />
-               <Button fx:id="buildingsButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showBuildings" prefHeight="25.0" prefWidth="55.0" styleClass="overviewButtons" text="%buildings" />
+               <Button fx:id="buildingsButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showBuildings" prefHeight="25.0" prefWidth="55.0" styleClass="overviewButtons" text="%BUILDINGS" />
             </HBox>
          </VBox>
       </HBox>

@@ -4,6 +4,7 @@ import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -16,9 +17,9 @@ import javax.inject.Inject;
 public class BuildingsComponent extends AnchorPane {
 
     @FXML
-    public Pane prev;
+    public Button prev;
     @FXML
-    public Pane next;
+    public Button next;
     @FXML
     public GridPane buildings;
     @Inject

@@ -88,8 +88,8 @@ public class OverviewSitesComponent extends AnchorPane {
         sitesButton.setDisable(false);
         buildingsButton.setDisable(false);
 
+        detailsComponent.setResLists();
         detailsComponent.setSumProduction(islandAttributes.mergeProduction());
-        detailsComponent.setSumConsumption(islandAttributes.mergeConsumption());
 
         inGameService.showOnly(sitesContainer, detailsComponent);
     }

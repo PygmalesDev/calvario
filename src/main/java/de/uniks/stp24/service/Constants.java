@@ -85,6 +85,18 @@ public class Constants {
             "consumer_goods","resource.rum"
     );
 
+    public static final Map<String, String> resourceImagePath = Map.of(
+            "credits", "-fx-background-image: url('/de/uniks/stp24/icons/resources/credits.png');",
+            "minerals", "-fx-background-image: url('/de/uniks/stp24/icons/resources/minerals.png');",
+            "population", "-fx-background-image: url('/de/uniks/stp24/icons/resources/population.png');",
+            "energy", "-fx-background-image: url('/de/uniks/stp24/icons/resources/energy.png');",
+            "food", "-fx-background-image: url('/de/uniks/stp24/icons/resources/food.png');",
+            "fuel","-fx-background-image: url('/de/uniks/stp24/icons/resources/fuel.png');",
+            "research", "-fx-background-image: url('/de/uniks/stp24/icons/resources/research.png');",
+            "alloys", "-fx-background-image: url('/de/uniks/stp24/icons/resources/alloys.png');",
+            "consumer_goods","-fx-background-image: url('/de/uniks/stp24/icons/resources/consumer_goods.png');"
+    );
+
     public static final Map<String, String> siteTranslation = Map.of(
             "city", "site.village",
             "energy", "site.thaumaturgy",

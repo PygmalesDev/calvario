@@ -121,16 +121,16 @@ public class OverviewUpgradeComponent extends AnchorPane {
                 String sourceImage = "";
                 switch(entry.getKey()){
                     case "minerals": 
-                        sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/Resources/minerals.png'); "; 
+                        sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/resources/minerals.png'); ";
                         break; 
                     case "energy":
-                        sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/Resources/energy.png'); ";
+                        sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/resources/energy.png'); ";
                         break; 
                     case "alloys":
-                        sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/Resources/alloys.png'); ";
+                        sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/resources/alloys.png'); ";
                         break; 
                     case "fuel":
-                        sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/Resources/fuel.png'); ";
+                        sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/resources/fuel.png'); ";
                         break; 
                 }
                 resPic.get(i).setStyle(sourceImage +

@@ -25,7 +25,9 @@ public class SitesComponent extends VBox {
 
     public void setSitesBox(Island island) {
         sitesBox.getChildren().clear();
-        System.out.println(island);
+        VBox vBox = new VBox();
+        vBox.setPrefWidth(10);
+        sitesBox.getChildren().add(vBox);
         for (Map.Entry<String, Integer> entry : island.sites().entrySet()) {
             DistrictComponent districtComponent = new DistrictComponent(entry.getKey(), entry.getValue() + "/" + island.sitesSlots().get(entry.getKey()), inGameController);
             sitesBox.getChildren().add(districtComponent);

@@ -3,9 +3,10 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.controllers.InGameController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnInit;
@@ -16,11 +17,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component(view = "DistrictComponent.fxml")
-public class DistrictComponent extends AnchorPane {
+public class DistrictComponent extends VBox {
     @FXML
     public Text districtCapacity;
     @FXML
-    ImageView siteImage;
+    Button siteImage;
     Map<String, String> sitesMap;
 
 
@@ -46,14 +47,16 @@ public class DistrictComponent extends AnchorPane {
         sitesMap.put("ancient_foundry", "de/uniks/stp24/icons/sites/expedition_site.png");
         sitesMap.put("ancient_factory", "de/uniks/stp24/icons/sites/merchant_site.png");
         sitesMap.put("ancient_refinery", "de/uniks/stp24/icons/sites/production_site.png");
-        Image image;
+        String imagePath;
         if (sitesMap.get(name) == null){
-            image = new Image("de/uniks/stp24/icons/sites/production_site.png");
+            imagePath = "de/uniks/stp24/icons/sites/production_site.png";
         } else {
-            image = new Image(sitesMap.get(name));
+            imagePath = sitesMap.get(name);
         }
 
-        siteImage.setImage(image);
+        siteImage.setStyle("-fx-background-image: url('/" + imagePath + "'); " +
+                "-fx-background-size: 100% 100%;" + "-fx-background-color: transparent;" + "-fx-background-repeat: no-repeat;");
+
         districtCapacity.setText(capacity);
 
         siteImage.setOnMouseClicked(event -> {

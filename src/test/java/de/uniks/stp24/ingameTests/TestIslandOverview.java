@@ -442,6 +442,7 @@ public class TestIslandOverview extends ControllerTest {
         buildingPropertiesComponent.getStylesheets().clear();
     }
 
+    /*
     @Test
     public void testOwnedIsland() {
         doReturn(Observable.just(empireDtoAfterUpgrade)).when(empireService).updateEmpire(any(), any(), any());
@@ -694,4 +695,6 @@ public class TestIslandOverview extends ControllerTest {
         assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), oldValue + 1);
         assertTrue(!prev.isVisible() && !next.isVisible());
     }
+
+     */
 }

@@ -8,6 +8,7 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -29,7 +30,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
     @FXML
     public Text res_1;
     @FXML
-    public Pane confirmUpgrade;
+    public Button confirmUpgrade;
     @FXML
     public HBox upgrade_box;
     @FXML
@@ -40,8 +41,6 @@ public class OverviewUpgradeComponent extends AnchorPane {
     public Pane checkUpgraded;
     @FXML
     public Pane checkDeveloped;
-    @FXML
-    public Pane backButton;
     @FXML
     public Text levelOne;
     @FXML
@@ -89,7 +88,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
                         "-fx-background-size: cover;");
             } else {
                 confirmUpgrade.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/buttons/upgrade_button_off.png'); " +
-                        "-fx-background-size: cover;");
+                        "-fx-background-size: cover;" + "-fx-background-color: transparent");
             }
         }
     }

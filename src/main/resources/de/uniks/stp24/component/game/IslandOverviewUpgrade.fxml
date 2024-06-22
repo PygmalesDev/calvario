@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -14,7 +14,7 @@
       <HBox alignment="CENTER_LEFT" prefHeight="77.0" prefWidth="400.0">
          <VBox prefHeight="77.0" prefWidth="34.0" />
          <VBox alignment="CENTER" prefHeight="77.0" prefWidth="314.0">
-            <Text fx:id="levelOne" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="Settlement" />
+            <Text fx:id="levelOne" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="headerTextUpgrade" text="Settlement" />
             <VBox prefHeight="7.0" prefWidth="358.0" />
          </VBox>
       </HBox>
@@ -22,27 +22,27 @@
       <HBox alignment="CENTER_LEFT" prefHeight="77.0" prefWidth="400.0">
          <VBox prefHeight="77.0" prefWidth="16.0" />
          <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="357.0">
-            <Text fx:id="levelTwo" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
+            <Text fx:id="levelTwo" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="headerTextUpgrade" text="\%placeholder" textAlignment="CENTER" wrappingWidth="122.3291015625" />
             <VBox prefHeight="2.0" prefWidth="358.0" />
-            <Label fx:id="levelTwoText" styleClass="overview-text" text="\%placeholder" />
+            <Label fx:id="levelTwoText" styleClass="tableHeadingText" text="\%placeholder" />
          </VBox>
       </HBox>
       <VBox prefHeight="21.0" prefWidth="400.0" />
       <HBox alignment="CENTER_LEFT" prefHeight="77.0" prefWidth="400.0">
          <VBox prefHeight="77.0" prefWidth="16.0" />
          <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="357.0">
-            <Text fx:id="levelThree" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
+            <Text fx:id="levelThree" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="headerTextUpgrade" text="\%placeholder" textAlignment="CENTER" wrappingWidth="122.3291015625" />
             <VBox prefHeight="2.0" prefWidth="358.0" />
-            <Label fx:id="levelThreeText" styleClass="overview-text" text="\%placeholder" />
+            <Label fx:id="levelThreeText" styleClass="tableHeadingText" text="\%placeholder" />
          </VBox>
       </HBox>
       <VBox prefHeight="26.0" prefWidth="400.0" />
       <HBox alignment="CENTER_LEFT" prefHeight="77.0" prefWidth="400.0">
          <VBox prefHeight="77.0" prefWidth="16.0" />
          <VBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="357.0">
-            <Text fx:id="levelFour" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%placeholder" />
+            <Text fx:id="levelFour" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="headerTextUpgrade" text="\%placeholder" textAlignment="CENTER" wrappingWidth="101.94091796875" />
             <VBox prefHeight="2.0" prefWidth="358.0" />
-            <Label fx:id="levelFourText" styleClass="overview-text" text="\%placeholder" />
+            <Label fx:id="levelFourText" styleClass="tableHeadingText" text="\%placeholder" />
          </VBox>
       </HBox>
       <VBox prefHeight="18.0" prefWidth="400.0" />
@@ -50,9 +50,13 @@
          <VBox prefHeight="92.0" prefWidth="34.0" />
          <HBox prefHeight="92.0" prefWidth="226.0">
             <VBox alignment="TOP_CENTER" prefHeight="92.0" prefWidth="217.0">
-               <HBox prefHeight="10.0" prefWidth="173.0" />
+               <HBox alignment="CENTER_LEFT" prefHeight="27.0" prefWidth="217.0">
+                  <children>
+                     <VBox prefHeight="27.0" prefWidth="95.0" />
+                     <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="headerTextUpgrade" text="Costs" />
+                  </children></HBox>
                <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="250.0">
-                  <VBox prefHeight="30.0" prefWidth="47.0" />
+                  <VBox prefHeight="30.0" prefWidth="53.0" />
                   <Pane fx:id="res1" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #808080;" />
                   <VBox prefHeight="34.0" prefWidth="6.0" />
                   <Text fx:id="res_1" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="0" wrappingWidth="42.528076171875" />
@@ -64,15 +68,23 @@
             </VBox>
          </HBox>
          <VBox prefHeight="92.0" prefWidth="66.0">
-            <Pane fx:id="confirmUpgrade" prefHeight="62.0" prefWidth="66.0" style="-fx-background-color: #000000; -fx-background-radius: 30;">
-               <ImageView fitHeight="69.0" fitWidth="72.0" layoutX="-6.0" onMouseClicked="#upgradeIsland" pickOnBounds="true" preserveRatio="true" />
+            <Pane onMouseExited="#upgradeIsland" prefHeight="62.0" prefWidth="66.0">
+               <children>
+                  <Button fx:id="confirmUpgrade" layoutY="1.0" mnemonicParsing="false" onMouseClicked="#upgradeIsland" prefHeight="62.0" prefWidth="66.0" style="-fx-background-color: transparent;" />
+               </children>
             </Pane>
          </VBox>
       </HBox>
       <VBox prefHeight="34.0" prefWidth="30.0" />
    </VBox>
-   <Pane fx:id="close" layoutX="372.0" layoutY="16.0" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="40.0" styleClass="islandOverviewCloseButton" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="20.0" />
-   <Pane fx:id="backButton" layoutX="6.0" layoutY="16.0" onMouseClicked="#goBack" prefHeight="40.0" prefWidth="40.0" styleClass="goBackUpgrade" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0" />
+   <Pane layoutX="372.0" layoutY="16.0" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="40.0" styleClass="islandOverviewCloseButton" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="20.0">
+      <children>
+         <Button fx:id="close" mnemonicParsing="false" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent;" styleClass="islandOverviewCloseButton" />
+      </children></Pane>
+   <Pane layoutX="6.0" layoutY="16.0" onMouseClicked="#goBack" prefHeight="40.0" prefWidth="40.0" styleClass="goBackUpgrade" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0">
+      <children>
+         <Button fx:id="backButton" mnemonicParsing="false" onMouseClicked="#goBack" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent;" styleClass="goBackUpgrade" />
+      </children></Pane>
    <Pane fx:id="checkColonized" prefHeight="30.0" prefWidth="30.0" styleClass="checkUpgrade" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="190.0" />
    <Pane fx:id="checkUpgraded" prefHeight="30.0" prefWidth="30.0" styleClass="checkUpgrade" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="286.0" />
    <Pane fx:id="checkDeveloped" prefHeight="30.0" prefWidth="30.0" styleClass="checkUpgrade" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="387.0" />

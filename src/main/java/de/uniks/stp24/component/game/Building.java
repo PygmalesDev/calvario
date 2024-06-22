@@ -6,6 +6,7 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
@@ -17,7 +18,7 @@ import java.util.Objects;
 @Component(view = "BuildingElement.fxml")
 public class Building extends VBox {
     @FXML
-    private ImageView building;
+    private Button building;
     InGameController inGameController;
 
     private String buildingType;

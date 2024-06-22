@@ -8,7 +8,9 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -46,7 +48,9 @@ public class OverviewSitesComponent extends AnchorPane {
     @FXML
     public TextField inputIslandName;
     @FXML
-    public Pane upgradeButton;
+    public Button upgradeButton;
+    @FXML
+    public Pane islandFlag;
 
     @SubComponent
     @Inject
@@ -185,6 +189,8 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void setOverviewSites() {
+        islandFlag.setStyle("-fx-background-image: url('" + inGameController.flagsPath.get(islandAttributes.getIsland().flagIndex()) +"');" +
+                "-fx-background-size: 100% 100%;" + "-fx-background-repeat: no-repeat;");
         showBuildings();
         if(inGameController.tokenStorage.isSpectator() || !Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId())){
             upgradeButton.setVisible(false);

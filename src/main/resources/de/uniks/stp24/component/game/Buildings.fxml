@@ -12,8 +12,8 @@
 <fx:root type="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.BuildingsComponent">
    <children>
       <javafx.scene.layout.VBox alignment="TOP_CENTER" prefHeight="184.0" prefWidth="374.0">
-          <HBox alignment="BOTTOM_CENTER" prefHeight="38.0" prefWidth="374.0">
-              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="Buildings" />
+          <HBox alignment="BOTTOM_CENTER" prefHeight="42.0" prefWidth="374.0" stylesheets="@../../style/islandOverview.css">
+              <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="headerTextBuildings" text="Buildings" />
           </HBox>
           <HBox alignment="CENTER_LEFT" prefHeight="97.0" prefWidth="374.0">
               <VBox alignment="CENTER" prefHeight="97.0" prefWidth="82.0" />
@@ -42,7 +42,7 @@
               <VBox alignment="CENTER" prefHeight="128.0" prefWidth="26.0" />
           </HBox>
       </javafx.scene.layout.VBox>
-         <Pane fx:id="prev" layoutX="42.0" layoutY="-18.0" onMouseClicked="#goPrevSite" prefHeight="36.0" prefWidth="19.0" style="-fx-background-color: #acac13;" visible="false" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="64.0" />
-         <Pane fx:id="next" layoutX="382.0" layoutY="74.0" onMouseClicked="#goNextSite" prefHeight="36.0" prefWidth="18.0" style="-fx-background-color: #acac13;" visible="false" AnchorPane.bottomAnchor="80.0" AnchorPane.rightAnchor="62.0" AnchorPane.topAnchor="64.0" />
+         <Pane fx:id="prev" layoutX="42.0" layoutY="-18.0" onMouseClicked="#goPrevSite" prefHeight="36.0" prefWidth="19.0" visible="false" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="64.0" />
+         <Pane fx:id="next" layoutX="382.0" layoutY="74.0" onMouseClicked="#goNextSite" prefHeight="36.0" prefWidth="18.0" visible="false" AnchorPane.bottomAnchor="80.0" AnchorPane.rightAnchor="62.0" AnchorPane.topAnchor="64.0" />
    </children>
 </fx:root>

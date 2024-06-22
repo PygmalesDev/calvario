@@ -7,9 +7,8 @@
 
 <fx:root alignment="CENTER" prefHeight="54.0" prefWidth="40.0" styleClass="overview-text" type="VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <Pane prefHeight="40.0" prefWidth="40.0">
-      <children>
-         <Button fx:id="siteElement" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent;" />
-      </children>
+      <Button fx:id="siteElement" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0"
+              style="-fx-background-color: transparent;"/>
    </Pane>
    <Text fx:id="districtCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="x/x" />
 </fx:root>

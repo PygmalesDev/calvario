@@ -1,13 +1,11 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
 
@@ -20,8 +18,6 @@ public class Building extends VBox {
     @FXML
     private Button building;
     InGameController inGameController;
-
-    private String buildingType;
 
 
     public Building(BuildingsComponent buildingsComponent, String buildingName, TokenStorage tokenStorage, IslandAttributeStorage islandAttributes, InGameController inGameController){
@@ -36,11 +32,7 @@ public class Building extends VBox {
         }
         this.inGameController = inGameController;
 
-        if(inGameController.tokenStorage.isSpectator() || !Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId())){
-            building.setDisable(true);
-        } else {
-            building.setDisable(false);
-        }
+        building.setDisable(inGameController.tokenStorage.isSpectator() || !Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
 
         building.setOnMouseClicked(event -> {
         	inGameController.showBuildingWindow();
@@ -55,14 +47,6 @@ public class Building extends VBox {
     @Inject
     public Building(){
 
-    }
-//    public void setInGameController(InGameController inGameController){
-//        this.inGameController = inGameController;
-//    }
-
-
-    public void setBuildingType(String buildingType){
-        this.buildingType = buildingType;
     }
 
 }

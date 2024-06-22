@@ -7,7 +7,6 @@ import de.uniks.stp24.dto.UpdateBuildingDto;
 import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.dto.UpgradeSystemDto;
 import de.uniks.stp24.dto.SystemDto;
-import de.uniks.stp24.dto.SystemsDto;
 import de.uniks.stp24.dto.ShortSystemDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
@@ -15,8 +14,6 @@ import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.BasicService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.menu.LobbyService;
-import io.reactivex.rxjava3.core.Observable;
-import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -27,9 +24,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
-import java.util.random.RandomGenerator;
-
-import static java.lang.Thread.sleep;
 
 @Singleton
 public class IslandsService extends BasicService {
@@ -51,10 +45,6 @@ public class IslandsService extends BasicService {
     private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();
     private final Map<String, List<String>> connections = new HashMap<>();
     private final Map<String, InfrastructureService> siteManager = new HashMap<>();
-    private final List<String> siteIDs = Arrays.asList("city", "energy", "mining", "agriculture",
-      "industry", "research_site", "ancient_foundry", "ancient_factory", "ancient_refinery");
-    private final List<String> buildingIDs = Arrays.asList("exchange", "power_plant", "mine", "farm",
-      "research_lab", "foundry", "factory", "refinery");
 
     @Inject
     public IslandsService() {
@@ -258,8 +248,7 @@ public class IslandsService extends BasicService {
     public void mapSitesBuildings() {
         siteManager.forEach((id,manager) -> manager.resetMap());
         for (ShortSystemDto dto : this.devIsles) {
-            dto.districts().forEach((k,v) -> {
-                siteManager.get(dto.owner()).putOrUpdateSiteInfo(k,v);});
+            dto.districts().forEach((k,v) -> siteManager.get(dto.owner()).putOrUpdateSiteInfo(k,v));
             dto.buildings()
               .forEach(building -> siteManager.get(dto.owner()).putOrUpdateBuildingInfo(building));
         }
@@ -362,7 +351,7 @@ public class IslandsService extends BasicService {
                     result.districts(),
                     result.buildings(),
                     result._id(),
-                    result.upgrade().toString()
+                    result.upgrade()
             );
             inGameController.selectedIsland.island = tmp;
             islandAttributes.setIsland(tmp);

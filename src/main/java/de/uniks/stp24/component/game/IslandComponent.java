@@ -130,9 +130,6 @@ public class IslandComponent extends Pane {
 
     }
 
-    public void updateIsland(Island island){
-        this.island = island;
-    }
 
     public void unshowRudder() {
         if (!islandIsSelected) {

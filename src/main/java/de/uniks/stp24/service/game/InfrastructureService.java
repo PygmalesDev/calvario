@@ -1,8 +1,6 @@
 package de.uniks.stp24.service.game;
 
-import de.uniks.stp24.dto.ShortSystemDto;
 import de.uniks.stp24.service.BasicService;
-
 import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,10 +17,6 @@ public class InfrastructureService extends BasicService {
 
     public void setEmpireID(String id) {
         this.empireID = id;
-    }
-
-    public String getEmpireID() {
-        return this.empireID;
     }
 
     public void resetMap() {
@@ -60,14 +54,6 @@ public class InfrastructureService extends BasicService {
 
     public int getBuildingCapacities(String buildingID) {
         return getCapacities(buildingCapacities,buildingID);
-    }
-
-    public int getTotalBuildingCapacity() {
-        return getTotalCapacity(buildingCapacities);
-    }
-
-    public int getCapacityOfSystem(ShortSystemDto dto) {
-        return getTotalCapacity(dto.districts());
     }
 
     private int getCapacities(Map<String, Integer> map, String id) {

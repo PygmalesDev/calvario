@@ -9,7 +9,7 @@
 
 <fx:root prefHeight="248.0" prefWidth="332.0" stylesheets="@../../style/islandOverview.css" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.DetailsComponent">
 <VBox alignment="CENTER_RIGHT" prefHeight="209.0" prefWidth="332.0" style="-fx-background-color: transparent;" stylesheets="@../../style/islandOverview.css">
-      <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="Details" wrappingWidth="217.7578125" />
+      <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="%details" wrappingWidth="217.7578125" />
    <HBox alignment="CENTER_LEFT" prefHeight="126.0" prefWidth="333.0" styleClass="tableHeadingText">
          <VBox prefHeight="126.0" prefWidth="98.0" />
       <VBox prefHeight="82.0" prefWidth="201.0">

@@ -4,18 +4,16 @@ import de.uniks.stp24.controllers.InGameController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
-import org.fulib.fx.annotation.event.OnInit;
 
 import javax.inject.Inject;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import static de.uniks.stp24.service.Constants.sitesIconPathsMap;
 
 @Component(view = "DistrictComponent.fxml")
 public class DistrictComponent extends VBox {
@@ -38,16 +36,7 @@ public class DistrictComponent extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        sitesMap = new HashMap<>();
-        sitesMap.put("city", "de/uniks/stp24/icons/sites/village_site.png");
-        sitesMap.put("energy", "de/uniks/stp24/icons/sites/thaumaturgy_site.png");
-        sitesMap.put("mining", "de/uniks/stp24/icons/sites/mining_site.png");
-        sitesMap.put("agriculture", "de/uniks/stp24/icons/sites/harvesting_site.png");
-        sitesMap.put("industry", "de/uniks/stp24/icons/sites/coalmine_site.png");
-        sitesMap.put("research_site", "de/uniks/stp24/icons/sites/epoch_site.png");
-        sitesMap.put("ancient_foundry", "de/uniks/stp24/icons/sites/expedition_site.png");
-        sitesMap.put("ancient_factory", "de/uniks/stp24/icons/sites/merchant_site.png");
-        sitesMap.put("ancient_refinery", "de/uniks/stp24/icons/sites/production_site.png");
+        sitesMap = sitesIconPathsMap;
         String imagePath;
         if (sitesMap.get(name) == null){
             imagePath = "de/uniks/stp24/icons/sites/production_site.png";
@@ -55,11 +44,7 @@ public class DistrictComponent extends VBox {
             imagePath = sitesMap.get(name);
         }
 
-        if(inGameController.tokenStorage.isSpectator() || !Objects.equals(inGameController.islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId())) {
-            siteElement.setDisable(true);
-        } else {
-            siteElement.setDisable(false);
-        }
+        siteElement.setDisable(inGameController.tokenStorage.isSpectator() || !Objects.equals(inGameController.islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
 
         siteElement.setStyle("-fx-background-image: url('/" + imagePath + "'); " +
                 "-fx-background-size: 100% 100%;" + "-fx-background-color: transparent;" + "-fx-background-repeat: no-repeat;");

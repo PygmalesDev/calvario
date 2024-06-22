@@ -142,4 +142,28 @@ public class Constants {
             Map.entry("developed", "update.developed")
     );
 
+
+    public static final Map<String, String> sitesIconPathsMap = Map.ofEntries(
+            Map.entry("city", "de/uniks/stp24/icons/sites/village_site.png"),
+            Map.entry("energy", "de/uniks/stp24/icons/sites/thaumaturgy_site.png"),
+            Map.entry("mining", "de/uniks/stp24/icons/sites/mining_site.png"),
+            Map.entry("agriculture", "de/uniks/stp24/icons/sites/harvesting_site.png"),
+            Map.entry("industry", "de/uniks/stp24/icons/sites/coalmine_site.png"),
+            Map.entry("research_site", "de/uniks/stp24/icons/sites/epoch_site.png"),
+            Map.entry("ancient_foundry", "de/uniks/stp24/icons/sites/expedition_site.png"),
+            Map.entry("ancient_factory", "de/uniks/stp24/icons/sites/merchant_site.png"),
+            Map.entry("ancient_refinery", "de/uniks/stp24/icons/sites/production_site.png")
+    );
+
+    public static final Map<String, String> buildingsIconPathsMap = Map.ofEntries(
+            Map.entry("refinery", "de/uniks/stp24/icons/buildings/alloy_smeltery.png"),
+            Map.entry("factory", "de/uniks/stp24/icons/buildings/theurgy_hall.png"),
+            Map.entry("foundry", "de/uniks/stp24/icons/buildings/chophouse.png"),
+            Map.entry("research_lab", "de/uniks/stp24/icons/buildings/resonating_delves.png"),
+            Map.entry("farm", "de/uniks/stp24/icons/buildings/farmside.png"),
+            Map.entry("mine", "de/uniks/stp24/icons/buildings/coal_querry.png"),
+            Map.entry("power_plant", "de/uniks/stp24/icons/buildings/scout_hub.png"),
+            Map.entry("exchange", "de/uniks/stp24/icons/buildings/seaside_hut.png")
+    );
+
 }

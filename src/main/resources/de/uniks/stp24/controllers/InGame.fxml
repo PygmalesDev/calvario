@@ -8,39 +8,34 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.Pane?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.InGameController">
-   <ScrollPane fx:id="mapScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" style="-fx-background-color: TRANSPARENT;" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS">
-            <Group fx:id="group" onMouseClicked="#resetZoomMouse">
-                <StackPane fx:id="zoomPane" style="-fx-background-color: TRANSPARENT;">
-                    <Pane fx:id="mapGrid" styleClass="backgroundGame">
-                    </Pane>
-                </StackPane>
-            </Group>
-        </ScrollPane>
-   <StackPane fx:id="deleteStructureWarningContainer" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="250.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="250.0" />
-   <StackPane fx:id="clockComponentContainer" prefHeight="115.0" prefWidth="200.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="5.0" />
-   <StackPane fx:id="pauseMenuContainer" layoutX="440.0" layoutY="40.0" prefHeight="600.0" prefWidth="400.0" style=": ;" visible="false" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="440.0" AnchorPane.rightAnchor="440.0" AnchorPane.topAnchor="40.0" />
-   <StackPane fx:id="overviewContainer" prefHeight="600.0" prefWidth="400.0" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="40.0" />
-   <StackPane fx:id="buildingsWindow" layoutX="650.0" layoutY="40.0" prefHeight="350.0" prefWidth="200.0" AnchorPane.bottomAnchor="290.0" AnchorPane.rightAnchor="430.0" AnchorPane.topAnchor="40.0" />
-   <StackPane fx:id="buildingProperties" layoutX="650.0" layoutY="450.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="430.0" AnchorPane.topAnchor="440.0" />
-   <StackPane fx:id="siteProperties" layoutX="650.0" layoutY="290.0" prefHeight="350.0" prefWidth="200.0" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="430.0" AnchorPane.topAnchor="290.0" />
-   <Pane fx:id="shadow" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-   <StackPane id="eventContainer" fx:id="eventContainer" layoutX="450.0" layoutY="50.0" style=": ;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-    <HBox fx:id="storageButtonsBox" alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="150.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
-      <padding>
-         <Insets left="30.0" />
-      </padding>
-   </HBox>
-   <StackPane fx:id="storageOverviewContainer" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="70.0" />
-    <StackPane fx:id="empireOverviewContainer" layoutX="31.0" layoutY="57.0" prefHeight="495.0" prefWidth="283.0" />
-    <StackPane fx:id="overviewContainer" prefHeight="600.0" prefWidth="400.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="850.0" AnchorPane.rightAnchor="29.600000000000023" AnchorPane.topAnchor="40.0" />
+    <ScrollPane fx:id="mapScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" style="-fx-background-color: TRANSPARENT;" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS">
+        <Group fx:id="group" onMouseClicked="#resetZoomMouse">
+            <StackPane fx:id="zoomPane" style="-fx-background-color: TRANSPARENT;">
+                <Pane fx:id="mapGrid" styleClass="backgroundGame">
+                </Pane>
+            </StackPane>
+        </Group>
+    </ScrollPane>
+    <StackPane fx:id="deleteStructureWarningContainer" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="250.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="250.0" />
+    <StackPane fx:id="clockComponentContainer" prefHeight="115.0" prefWidth="200.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="5.0" />
+    <StackPane fx:id="pauseMenuContainer" layoutX="440.0" layoutY="40.0" prefHeight="600.0" prefWidth="400.0" style=": ;" visible="false" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="440.0" AnchorPane.rightAnchor="440.0" AnchorPane.topAnchor="40.0" />
+    <StackPane fx:id="overviewContainer" prefHeight="600.0" prefWidth="400.0" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="40.0" />
+    <StackPane fx:id="buildingsWindow" layoutX="650.0" layoutY="40.0" prefHeight="350.0" prefWidth="200.0" AnchorPane.bottomAnchor="290.0" AnchorPane.rightAnchor="430.0" AnchorPane.topAnchor="40.0" />
+    <StackPane fx:id="buildingProperties" layoutX="650.0" layoutY="450.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="430.0" AnchorPane.topAnchor="440.0" />
+    <StackPane fx:id="siteProperties" layoutX="650.0" layoutY="290.0" prefHeight="350.0" prefWidth="200.0" AnchorPane.bottomAnchor="40.0" AnchorPane.rightAnchor="430.0" AnchorPane.topAnchor="290.0" />
     <Pane fx:id="shadow" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
     <StackPane id="eventContainer" fx:id="eventContainer" layoutX="450.0" layoutY="50.0" style=": ;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-    <StackPane fx:id="pauseMenuContainer" layoutX="440.0" layoutY="40.0" prefHeight="600.0" prefWidth="400.0" style=": ;" visible="false" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="440.0" AnchorPane.rightAnchor="440.0" AnchorPane.topAnchor="40.0" />
+    <HBox fx:id="storageButtonsBox" alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="150.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+        <padding>
+            <Insets left="30.0" />
+        </padding>
+    </HBox>
+    <StackPane fx:id="storageOverviewContainer" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="70.0" />
+    <StackPane fx:id="empireOverviewContainer" layoutX="31.0" layoutY="57.0" prefHeight="495.0" prefWidth="283.0" />
     <stylesheets>
-      <URL value="@../style/styles.css" />
-      <URL value="@../style/ingameButtons.css" />
-   </stylesheets>
+        <URL value="@../style/styles.css" />
+        <URL value="@../style/ingameButtons.css" />
+    </stylesheets>
 </AnchorPane>

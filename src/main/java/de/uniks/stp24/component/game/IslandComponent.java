@@ -83,7 +83,6 @@ public class IslandComponent extends Pane {
     }
 
     public void applyInfo(Island islandInfo) {
-        System.out.println("INFO APPLIED");
         this.island = islandInfo;
         applyIcon(this.island.type());
     }
@@ -164,8 +163,6 @@ public class IslandComponent extends Pane {
 
         islandIsSelected = true;
         if(this.island.owner() != null) {
-            inGameController.showOverview(this.island);
-            System.out.println(island.sites() + "WAWAWAWAW");
             showFlag();
         } else {
             inGameController.overviewContainer.setVisible(false);

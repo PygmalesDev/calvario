@@ -94,7 +94,7 @@ public class DetailsComponent extends AnchorPane {
             resInf.get(i).setText("×" + entry.getValue());
             i ++;
         }
-        title.setText("Details(Production)");
+        title.setText("     Total Production");
     }
 
     public void setSumConsumption(Map<String, Integer> totalConsumption){
@@ -105,7 +105,7 @@ public class DetailsComponent extends AnchorPane {
             resInf.get(i).setText("×" + entry.getValue());
             i++;
         }
-        title.setText("Details(Consumption)");
+        title.setText("  Total Consumption");
     }
 
     public void setResLists(){
@@ -153,7 +153,7 @@ public class DetailsComponent extends AnchorPane {
     public void showProduction(){
         showProduction.setVisible(false);
         showConsumption.setVisible(true);
-        setSumConsumption(islandAttributes.mergeProduction());
+        setSumProduction(islandAttributes.mergeProduction());
 
     }
 }

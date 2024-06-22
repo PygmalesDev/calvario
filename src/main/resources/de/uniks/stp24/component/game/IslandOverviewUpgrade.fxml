@@ -45,12 +45,12 @@
             <Label fx:id="levelFourText" styleClass="tableHeadingText" text="\%placeholder" />
          </VBox>
       </HBox>
-      <VBox prefHeight="18.0" prefWidth="400.0" />
+      <VBox prefHeight="14.0" prefWidth="400.0" />
       <HBox fx:id="upgrade_box" prefHeight="92.0" prefWidth="400.0">
          <VBox prefHeight="92.0" prefWidth="34.0" />
          <HBox prefHeight="92.0" prefWidth="226.0">
             <VBox alignment="TOP_CENTER" prefHeight="92.0" prefWidth="217.0">
-               <HBox alignment="CENTER_LEFT" prefHeight="27.0" prefWidth="217.0">
+               <HBox alignment="CENTER_LEFT" prefHeight="11.0" prefWidth="218.0">
                   <children>
                      <VBox prefHeight="27.0" prefWidth="95.0" />
                      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="headerTextUpgrade" text="Costs" />

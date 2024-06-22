@@ -415,15 +415,14 @@ public class InGameController extends BasicController {
             if (islandAttributes.getIsland() == null) {
                 islandAttributes.setIsland(selected.getIsland());
             }
-
-            System.out.println(event.getSource().toString());
-            System.out.println("found island: " + selected.getIsland().toString());
+            islandAttributes.setIsland(selected.getIsland());
             selected.showFlag();
             if (Objects.nonNull((selected.getIsland()).owner())) {
                 System.out.print("empire hat capacity: " +
                         islandsService.getAllNumberOfSites((selected.getIsland()).owner()) + "\n");
             }
         }
+        showOverview(islandAttributes.getIsland());
     }
 
     public void showOverview(Island island) {
@@ -442,7 +441,6 @@ public class InGameController extends BasicController {
         overviewSitesComponent.buildingsButton.setDisable(true);
         inGameService.showOnly(overviewContainer, overviewSitesComponent);
         inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
-        System.out.println(island.type());
         overviewSitesComponent.setOverviewSites();
     }
 

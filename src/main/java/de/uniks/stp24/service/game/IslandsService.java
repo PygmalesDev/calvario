@@ -247,7 +247,6 @@ public class IslandsService extends BasicService {
                         devIsles.add(tmp);
                     }
               });
-              System.out.println("number of colonized islands " + devIsles.size());
               mapSitesBuildings();
           },
           error -> {});

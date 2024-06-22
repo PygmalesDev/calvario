@@ -36,6 +36,12 @@ public class Building extends VBox {
         }
         this.inGameController = inGameController;
 
+        if(inGameController.tokenStorage.isSpectator() || !Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId())){
+            building.setDisable(true);
+        } else {
+            building.setDisable(false);
+        }
+
         building.setOnMouseClicked(event -> {
         	inGameController.showBuildingWindow();
             if(buildingName.equals("buildNewBuilding") && Objects.equals(tokenStorage.getEmpireId(), islandAttributes.getIsland().owner()) && islandAttributes.getUsedSlots() < islandAttributes.getIsland().resourceCapacity()) {

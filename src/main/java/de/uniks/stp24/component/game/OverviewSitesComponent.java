@@ -99,9 +99,11 @@ public class OverviewSitesComponent extends AnchorPane {
         if(islandAttributes.getIsland().upgradeLevel() == 4){
             inGameController.overviewUpgradeComponent.upgrade_box.setVisible(false);
             inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(true);
+            inGameController.overviewUpgradeComponent.confirmUpgrade.setDisable(true);
         } else {
             inGameController.overviewUpgradeComponent.upgrade_box.setVisible(true);
             inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(false);
+            inGameController.overviewUpgradeComponent.confirmUpgrade.setDisable(false);
         }
         inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewUpgradeComponent);
         inGameController.overviewUpgradeComponent.setUpgradeButton();
@@ -155,9 +157,6 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameService.showOnly(sitesContainer, sitesComponent);
     }
 
-
-
-
     public void setContainer() {
         sitesContainer.setVisible(false);
         sitesContainer.getChildren().add(sitesComponent);
@@ -192,8 +191,10 @@ public class OverviewSitesComponent extends AnchorPane {
         islandFlag.setStyle("-fx-background-image: url('" + inGameController.flagsPath.get(islandAttributes.getIsland().flagIndex()) +"');" +
                 "-fx-background-size: 100% 100%;" + "-fx-background-repeat: no-repeat;");
         showBuildings();
-        if(inGameController.tokenStorage.isSpectator() || !Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId())){
-            upgradeButton.setVisible(false);
+        if(!Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId())){
+            upgradeButton.setDisable(true);
+        } else {
+            upgradeButton.setDisable(false);
         }
 
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +

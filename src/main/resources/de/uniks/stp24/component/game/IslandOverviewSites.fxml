@@ -14,13 +14,16 @@
 
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" styleClass="islandOverviewBackground" stylesheets="@../../style/islandOverview.css" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.OverviewSitesComponent">
    <VBox layoutX="136.0" layoutY="16.0" prefHeight="584.0" prefWidth="380.0" styleClass="island-overview" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0">
-      <VBox prefHeight="52.0" prefWidth="400.0" />
-      <HBox alignment="CENTER" prefHeight="133.0" prefWidth="400.0">
-         <VBox alignment="CENTER" prefHeight="134.0" prefWidth="330.0" style="-fx-border-color: #000000;">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%image" />
+      <VBox prefHeight="43.0" prefWidth="400.0" />
+      <HBox alignment="CENTER_LEFT" prefHeight="133.0" prefWidth="400.0">
+         <VBox prefHeight="134.0" prefWidth="46.0" />
+         <VBox alignment="CENTER" prefHeight="134.0" prefWidth="292.0">
+            <children>
+               <Pane prefHeight="200.0" prefWidth="200.0" styleClass="islandOverviewImage" stylesheets="@../../style/islandOverview.css" />
+            </children>
          </VBox>
       </HBox>
-      <VBox prefHeight="18.0" prefWidth="400.0" />
+      <VBox prefHeight="25.0" prefWidth="400.0" />
       <HBox alignment="CENTER_LEFT" prefHeight="136.0" prefWidth="398.0">
          <VBox prefHeight="136.0" prefWidth="42.0" />
          <VBox alignment="TOP_CENTER" prefHeight="122.0" prefWidth="330.0">
@@ -93,7 +96,7 @@
       <Button fx:id="closeButton" mnemonicParsing="false" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="42.0" style="-fx-background-color: transparent;" styleClass="islandOverviewCloseButton" />
    </Pane>
    <Pane fx:id="islandFlag" layoutX="151.2" layoutY="5.0" prefHeight="91.0" prefWidth="110.0" AnchorPane.leftAnchor="145.0" AnchorPane.rightAnchor="145.0" AnchorPane.topAnchor="5.0" />
-   <Pane layoutX="287.0" layoutY="-6.0" onMouseClicked="#showUpgrades" prefHeight="25.0" prefWidth="30.0" AnchorPane.leftAnchor="278.0" AnchorPane.topAnchor="280.0">
+   <Pane layoutX="287.0" layoutY="-6.0" prefHeight="25.0" prefWidth="30.0" AnchorPane.leftAnchor="278.0" AnchorPane.topAnchor="280.0">
       <Button fx:id="upgradeButton" layoutY="-1.0" mnemonicParsing="false" onMouseClicked="#showUpgrades" prefHeight="32.0" prefWidth="30.0" style="-fx-background-color: transparent;" styleClass="islandOverviewUpgradesButton" />
    </Pane>
 </fx:root>

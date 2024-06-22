@@ -15,13 +15,14 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Component(view = "DistrictComponent.fxml")
 public class DistrictComponent extends VBox {
     @FXML
     public Text districtCapacity;
     @FXML
-    Button siteImage;
+    Button siteElement;
     Map<String, String> sitesMap;
 
 
@@ -54,12 +55,18 @@ public class DistrictComponent extends VBox {
             imagePath = sitesMap.get(name);
         }
 
-        siteImage.setStyle("-fx-background-image: url('/" + imagePath + "'); " +
+        if(inGameController.tokenStorage.isSpectator() || !Objects.equals(inGameController.islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId())) {
+            siteElement.setDisable(true);
+        } else {
+            siteElement.setDisable(false);
+        }
+
+        siteElement.setStyle("-fx-background-image: url('/" + imagePath + "'); " +
                 "-fx-background-size: 100% 100%;" + "-fx-background-color: transparent;" + "-fx-background-repeat: no-repeat;");
 
         districtCapacity.setText(capacity);
 
-        siteImage.setOnMouseClicked(event -> {
+        siteElement.setOnMouseClicked(event -> {
             inGameController.showSiteOverview();
             inGameController.setSiteType(name);
         });

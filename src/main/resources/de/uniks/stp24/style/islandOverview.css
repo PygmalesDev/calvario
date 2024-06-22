@@ -127,3 +127,8 @@
     -fx-background-color: transparent;
 }
 
+.islandOverviewImage{
+    -fx-background-image: url("/de/uniks/stp24/icons/island.images/regular_image.png");
+    -fx-background-size: cover;
+}
+

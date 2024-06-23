@@ -6,19 +6,19 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.ResourcesService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import static de.uniks.stp24.service.Constants.resourceImagePath;
 
@@ -77,6 +77,10 @@ public class DetailsComponent extends AnchorPane {
     TokenStorage tokenStorage;
     @Inject
     Subscriber subscriber;
+    @Inject
+    @Resource
+    @Named("gameResourceBundle")
+    ResourceBundle gameResourceBundle;
 
     List<Pane> resImages = new ArrayList<>();
     List<Text> resInf = new ArrayList<>();
@@ -94,7 +98,7 @@ public class DetailsComponent extends AnchorPane {
             resInf.get(i).setText("×" + entry.getValue());
             i ++;
         }
-        title.setText("     Total Production");
+        title.setText("     " + gameResourceBundle.getString("total.production"));
     }
 
     public void setSumConsumption(Map<String, Integer> totalConsumption){
@@ -105,7 +109,7 @@ public class DetailsComponent extends AnchorPane {
             resInf.get(i).setText("×" + entry.getValue());
             i++;
         }
-        title.setText("  Total Consumption");
+        title.setText("  " + gameResourceBundle.getString("total.consumption"));
     }
 
     public void setResLists(){

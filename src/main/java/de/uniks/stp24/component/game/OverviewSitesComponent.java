@@ -1,16 +1,12 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.Upgrade;
-import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -23,8 +19,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
-import static de.uniks.stp24.service.Constants.*;
 
 @Component(view = "IslandOverviewSites.fxml")
 public class OverviewSitesComponent extends AnchorPane {
@@ -193,11 +187,7 @@ public class OverviewSitesComponent extends AnchorPane {
         islandFlag.setStyle("-fx-background-image: url('" + inGameController.flagsPath.get(islandAttributes.getIsland().flagIndex()) +"');" +
                 "-fx-background-size: 100% 100%;" + "-fx-background-repeat: no-repeat;");
         showBuildings();
-        if(!Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId())){
-            upgradeButton.setDisable(true);
-        } else {
-            upgradeButton.setDisable(false);
-        }
+        upgradeButton.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
 
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
                 islandAttributes.getIsland().buildings().size();

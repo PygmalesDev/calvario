@@ -28,7 +28,6 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -209,10 +208,6 @@ public class InGameController extends BasicController {
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_SETTINGS, callHandleShowSettings);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_SETTINGS"));
 
-        PropertyChangeListener callHandleLanguageChanged = this::handleLanguageChanged;
-        gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_LANGUAGE, callHandleLanguageChanged);
-        this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
-
         this.subscriber.subscribe(inGameService.loadUpgradePresets(),
                 result -> islandAttributes.setSystemPresets(result),
                 error -> System.out.println("error in getEmpire in inGame"));
@@ -235,10 +230,6 @@ public class InGameController extends BasicController {
         for (int i = 0; i <= 16; i++) {
             this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
         }
-    }
-
-    private void handleLanguageChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
-        Locale newLang = propertyChangeEvent.getNewValue().equals(0) ? Locale.GERMAN : Locale.ENGLISH;
     }
 
     private void handleShowSettings(@NotNull PropertyChangeEvent propertyChangeEvent) {
@@ -308,13 +299,9 @@ public class InGameController extends BasicController {
 
     @OnKey(code = KeyCode.I)
     public void showIslandOverviewWindows() {
-        //buildingProperties.setMouseTransparent(false);
         buildingProperties.setMouseTransparent(false);
         buildingsWindow.setMouseTransparent(false);
-        //siteProperties.setMouseTransparent(false);
         popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
-        //popupSiteProperties.showPopup(siteProperties, sitePropertiesComponent);
-
     }
 
     public void showSettings() {

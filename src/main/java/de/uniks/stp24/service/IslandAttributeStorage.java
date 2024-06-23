@@ -47,24 +47,24 @@ public class IslandAttributeStorage {
     public void setSystemPresets(SystemUpgrades presets) {
         systemPresets = presets;
 
-        String effectsColonized = "+" + systemPresets.colonized().pop_growth() * 100 + "% more crew mates";
-        String effectsUpgraded = "+" + systemPresets.upgraded().pop_growth() * 100 + "% more crew mates";
-        String effectsDeveloped = "+" + systemPresets.developed().pop_growth() * 100 + "% more crew mates";
+        String effectsColonized = "+" + systemPresets.colonized().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
+        String effectsUpgraded = "+" + systemPresets.upgraded().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
+        String effectsDeveloped = "+" + systemPresets.developed().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
 
         String effectsColonizedCap;
         String effectsUpgradedCap;
         String effectsDevelopedCap;
 
         if(systemPresets.colonized().capacity_multiplier() != 1.0) {
-            effectsColonizedCap = "+" + (systemPresets.colonized().capacity_multiplier() - 1) * 100 + "% more capacity";
+            effectsColonizedCap = "+" + (systemPresets.colonized().capacity_multiplier() - 1) * 100 + "% " + gameResourceBundle.getString("more.capacity");
             effectsColonized = effectsColonized + "\n" + effectsColonizedCap;
         }
         if(systemPresets.upgraded().capacity_multiplier() != 1.0){
-            effectsUpgradedCap = "+" + (systemPresets.upgraded().capacity_multiplier() - 1) * 100 + "% more capacity";
+            effectsUpgradedCap = "+" + (systemPresets.upgraded().capacity_multiplier() - 1) * 100 + "% " + gameResourceBundle.getString("more.capacity");
             effectsUpgraded = effectsUpgraded + "\n" + effectsUpgradedCap;
         }
         if(systemPresets.developed().capacity_multiplier() != 1.0){
-            effectsDevelopedCap = "+" + (systemPresets.developed().capacity_multiplier() - 1) * 100 + "% more capacity";
+            effectsDevelopedCap = "+" + (systemPresets.developed().capacity_multiplier() - 1) * 100 + "% " + gameResourceBundle.getString("more.capacity");
             effectsDeveloped = effectsDeveloped + "\n" + effectsDevelopedCap;
         }
 

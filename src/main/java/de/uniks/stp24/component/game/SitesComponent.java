@@ -6,15 +6,23 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 @Component(view = "Sites.fxml")
 public class SitesComponent extends VBox {
 
     @FXML
     public HBox sitesBox;
+
+    @Inject
+    @Resource
+    @Named("gameResourceBundle")
+    ResourceBundle gameResourceBundle;
 
     InGameController inGameController;
 

@@ -15,9 +15,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
@@ -71,6 +73,10 @@ public class OverviewUpgradeComponent extends AnchorPane {
     Subscriber subscriber;
     @Inject
     IslandsService islandsService;
+    @Inject
+    @Resource
+    @Named("gameResourceBundle")
+    ResourceBundle gameResourceBundle;
 
     public GameSystemsApiService gameSystemsService;
 
@@ -118,21 +124,13 @@ public class OverviewUpgradeComponent extends AnchorPane {
             int i = 0;
             for (Map.Entry<String, Integer> entry : islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()).entrySet()) {
                 resTextList.get(i).setText(String.valueOf(entry.getValue()));
-                String sourceImage = "";
-                switch (entry.getKey()) {
-                    case "minerals":
-                        sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/resources/minerals.png'); ";
-                        break;
-                    case "energy":
-                        sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/resources/energy.png'); ";
-                        break;
-                    case "alloys":
-                        sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/resources/alloys.png'); ";
-                        break;
-                    case "fuel":
-                        sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/resources/fuel.png'); ";
-                        break;
-                }
+                String sourceImage = switch (entry.getKey()) {
+                    case "minerals" -> "-fx-background-image: url('/de/uniks/stp24/icons/resources/minerals.png'); ";
+                    case "energy" -> "-fx-background-image: url('/de/uniks/stp24/icons/resources/energy.png'); ";
+                    case "alloys" -> "-fx-background-image: url('/de/uniks/stp24/icons/resources/alloys.png'); ";
+                    case "fuel" -> "-fx-background-image: url('/de/uniks/stp24/icons/resources/fuel.png'); ";
+                    default -> "";
+                };
                 resPic.get(i).setStyle(sourceImage +
                         "-fx-background-size: cover;");
                 i += 1;

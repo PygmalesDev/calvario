@@ -1,26 +1,18 @@
 package de.uniks.stp24.service.game;
 
-import de.uniks.stp24.dto.BuildingDto;
-import de.uniks.stp24.dto.SiteDto;
-import de.uniks.stp24.dto.SystemDto;
-import de.uniks.stp24.dto.SystemsDto;
+import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.Island;
-import de.uniks.stp24.dto.AggregateItemDto;
-import de.uniks.stp24.dto.UpdateEmpireDto;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
-import de.uniks.stp24.service.IslandAttributeStorage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.*;
 
 @Singleton

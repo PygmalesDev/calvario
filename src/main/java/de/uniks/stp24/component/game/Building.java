@@ -20,7 +20,9 @@ import java.util.Objects;
 @Component(view = "BuildingElement.fxml")
 public class Building extends VBox {
     @FXML
-    private Button building;
+    Button building;
+    @Inject
+    IslandAttributeStorage islandAttributeStorage;
     InGameController inGameController;
 
     private ImageView imageView;
@@ -30,7 +32,6 @@ public class Building extends VBox {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BuildingElement.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
-        System.out.println(buildingName + " BUIULDINGNAME");
 
         try {
             fxmlLoader.load();
@@ -76,9 +77,7 @@ public class Building extends VBox {
             } else {
                 inGameController.showBuildingWindow();
                 if(buildingName.equals("buildNewBuilding") && Objects.equals(tokenStorage.getEmpireId(), islandAttributes.getIsland().owner()) && islandAttributes.getUsedSlots() < islandAttributes.getIsland().resourceCapacity()) {
-                    //buildingsComponent.islandAttributes.addNewBuilding();
                     buildingsComponent.setGridPane();
-                    //inGameController.islandsService.updateIslandBuildings(islandAttributes, inGameController, islandAttributes.getIsland().buildings());
                 }
             }
 

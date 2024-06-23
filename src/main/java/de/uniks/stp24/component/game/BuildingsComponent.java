@@ -5,7 +5,6 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import org.fulib.fx.annotation.controller.Component;
@@ -75,6 +74,7 @@ public class BuildingsComponent extends AnchorPane {
         if (!isGridPaneFull(currentPage)) {
             buildings.add(new Building(this, "buildNewBuilding", tokenStorage, islandAttributes, inGameController), col, row);
         } else {
+            next.setMouseTransparent(false);
             next.toFront();
             next.setVisible(true);
         }

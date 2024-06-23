@@ -11,7 +11,6 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.ResourcesService;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -65,8 +64,6 @@ public class DeleteStructureComponent extends VBox{
     @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
-
-    public ObservableList<String> items = FXCollections.observableArrayList();
 
     public Map<String, String> sites = sitesIconPathsMap;
     public final Map<String, String> buildings = buildingsIconPathsMap;

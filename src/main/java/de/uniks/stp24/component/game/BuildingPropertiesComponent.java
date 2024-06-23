@@ -126,7 +126,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
     public void buyBuilding(){
-        Island island = tokenStorage.getIsland();
+        Island island = islandAttributeStorage.getIsland();
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
             priceOfBuilding = result.cost();
             if (resourcesService.hasEnoughResources(priceOfBuilding)) {

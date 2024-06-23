@@ -292,8 +292,10 @@ public class InGameController extends BasicController {
         inGameService.setShowSettings(false);
         inGameService.setPaused(pause);
         if (pause) {
+            pauseMenuContainer.setMouseTransparent(false);
             pauseGame();
         } else {
+            pauseMenuContainer.setMouseTransparent(true);
             resumeGame();
         }
     }

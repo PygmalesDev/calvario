@@ -14,7 +14,6 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
@@ -38,7 +37,7 @@ public class IslandsService extends BasicService {
     private final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
     private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();
     private final Map<String, List<String>> connections = new HashMap<>();
-    private final Map<String, InfrastructureService> siteManager = new HashMap<>();
+    public final Map<String, InfrastructureService> siteManager = new HashMap<>();
     private final List<String> siteIDs = Arrays.asList("city", "energy", "mining", "agriculture",
       "industry", "research_site", "ancient_foundry", "ancient_factory", "ancient_refinery");
     private final List<String> buildingIDs = Arrays.asList("exchange", "power_plant", "mine", "farm",
@@ -64,6 +63,10 @@ public class IslandsService extends BasicService {
         });
         siteManager.put("noBody",new InfrastructureService());
         siteManager.get("noBody").setEmpireID("noBody");
+    }
+
+    public int getSiteManagerSize() {
+        return siteManager.size();
     }
 
    
@@ -235,7 +238,6 @@ public class IslandsService extends BasicService {
                         devIsles.add(tmp);
                     }
               });
-              System.out.println("number of colonized islands " + devIsles.size());
               mapSitesBuildings();
           },
           error -> {});
@@ -246,10 +248,11 @@ public class IslandsService extends BasicService {
      * */
     public void mapSitesBuildings() {
         siteManager.forEach((id,manager) -> manager.resetMap());
+        devIsles.forEach(System.out::println);
         for (ShortSystemDto dto : this.devIsles) {
-            dto.districts().forEach((k,v) -> {
+            if (Objects.nonNull(dto.districts())) dto.districts().forEach((k,v) -> {
                 siteManager.get(dto.owner()).putOrUpdateSiteInfo(k,v);});
-            dto.buildings()
+            if (Objects.nonNull(dto.buildings())) dto.buildings()
               .forEach(building -> siteManager.get(dto.owner()).putOrUpdateBuildingInfo(building));
         }
     }
@@ -284,7 +287,6 @@ public class IslandsService extends BasicService {
     }
 
     public List<Island> getListOfIslands() {
-
         return Collections.unmodifiableList(this.isles);
     }
 

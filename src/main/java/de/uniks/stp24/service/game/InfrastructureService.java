@@ -45,8 +45,7 @@ public class InfrastructureService extends BasicService {
     }
 
     public int getTotalSiteCapacity() {
-        return getTotalCapacity(siteCapacities);
-    }
+        return getTotalCapacity(siteCapacities);    }
 
     // ---------- buildings ---------- //
 

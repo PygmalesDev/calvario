@@ -512,17 +512,17 @@ public class EditAccController extends BasicController {
     public void randomize() {
         if (!lockBackground) {
             this.backgroundImageIndex = rand.nextInt(0, backgroundsList.size());
-            backgroundImage.setImage(backgroundsList.get(backgroundImageIndex));
+            setImageCode(this.backgroundImageIndex, this.backgroundImageIndex, this.frameImageIndex);
         }
 
         if (!lockPortrait) {
-            portraitImageIndex = rand.nextInt(0, portraitsList.size());
-            portraitImage.setImage(portraitsList.get(portraitImageIndex));
+            this.portraitImageIndex = rand.nextInt(0, portraitsList.size());
+            setImageCode(this.backgroundImageIndex, this.backgroundImageIndex, this.frameImageIndex);
         }
 
         if (!lockFrame) {
-            frameImageIndex = rand.nextInt(0, framesList.size());
-            frameImage.setImage(framesList.get(frameImageIndex));
+            this.frameImageIndex = rand.nextInt(0, framesList.size());
+            setImageCode(this.backgroundImageIndex, this.backgroundImageIndex, this.frameImageIndex);
         }
 
         imageCodeLabel.setText(getImageCode());

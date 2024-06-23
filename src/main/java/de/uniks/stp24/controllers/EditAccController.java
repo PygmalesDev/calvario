@@ -73,45 +73,18 @@ public class EditAccController extends BasicController {
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
-    @Inject
-    EditAccService editAccService;
-    @Inject
-    ObjectMapper objectMapper;
-    @Inject
-    PopupBuilder popupBuilder;
-    @SubComponent
-    @Inject
-    BubbleComponent bubbleComponent;
-
-    /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
-    @Inject
-    SaveLoadService saveLoadService;
-    @Inject
-    LobbyService lobbyService;
-
-    @Inject
-    public Provider<GangComponent> avatarComponentProvider;
-
-    private final ObservableList<GangElement> avatarElements = FXCollections.observableArrayList();
-
-    @Inject
-    ImageCache imageCache;
-
     @FXML
     ImageView backgroundImage;
     @FXML
     ImageView portraitImage;
     @FXML
     ImageView frameImage;
-
     @FXML
     ToggleButton editAvatarButton;
-
     @FXML
     Button safeAvatarButton;
     @FXML
     Button cancelAvatarButton;
-
     @FXML
     Button lastBackgroundButton;
     @FXML
@@ -124,34 +97,40 @@ public class EditAccController extends BasicController {
     Button lastPotraitButton;
     @FXML
     Button nextPotraitButton;
-
     @FXML
     Button randomizeAvatar;
-
     @FXML
     ToggleButton lockBackgroundButton;
     @FXML
     ToggleButton lockPortraitButton;
     @FXML
     ToggleButton lockFrameButton;
-
     @FXML
     Label imageCodeLabel;
 
-    @Param("gameid")
-    String gameID;
+    @Inject
+    EditAccService editAccService;
+    @Inject
+    ObjectMapper objectMapper;
+    @Inject
+    PopupBuilder popupBuilder;
+    @Inject
+    ImageCache imageCache;
 
+    @SubComponent
+    @Inject
+    BubbleComponent bubbleComponent;
+
+    PopupBuilder popup = new PopupBuilder();
     Random rand = new Random();
 
-    Map<String, String[]> empireTemplates;
     ArrayList<Image> backgroundsList = new ArrayList<>();
     ArrayList<Image> framesList = new ArrayList<>();
     ArrayList<Image> portraitsList = new ArrayList<>();
 
+    Map<String, String[]> empireTemplates;
     Map<String, Integer> avatarMap;
 
-
-    //TODO add correct paths and correct variable names
     String resourcesPaths = "/de/uniks/stp24/assets/avatar/";
     String backgroundFolderPath = "backgrounds/background_";
     String frameFolderPath = "frames/frame_";
@@ -161,22 +140,12 @@ public class EditAccController extends BasicController {
     int backgroundImageIndex = 0;
     int frameImageIndex = 0;
     int portraitImageIndex = 0;
-
-
     int beforeBackgroundImageIndex = 0;
     int beforeFrameImageIndex = 0;
     int beforePortraitImageIndex = 0;
-
-
-
     boolean lockBackground = false;
     boolean lockPortrait = false;
     boolean lockFrame = false;
-
-    Map<String, Integer> currentAvatarMap = new HashMap<>();
-
-    PopupBuilder popup = new PopupBuilder();
-    /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
 
     @Inject
     public WarningScreenComponent warningScreen;
@@ -191,13 +160,9 @@ public class EditAccController extends BasicController {
     public EditAccController() {
     }
 
-    @OnRender
-    public void addSpeechBubble() {
-        captainContainer.getChildren().add(bubbleComponent);
-        bubbleComponent
-                .setCaptainText(resources.getString("pirate.editAcc.go.into.hiding"));
-    }
-
+    /**
+     * Initializes the controller, loading necessary resources.
+     */
     @OnInit
     public void init() {
         editIconBlueImage = imageCache.get("icons/editBlue.png");
@@ -206,7 +171,6 @@ public class EditAccController extends BasicController {
         deleteIconBlackImage = imageCache.get("icons/deleteBlack.png");
         this.controlResponses = responseConstants.respEditAcc;
 
-        /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
         if (prefService.getLocale().equals(Locale.ENGLISH)) {
             empireTemplates = empireTemplatesEnglish;
         } else {
@@ -218,36 +182,51 @@ public class EditAccController extends BasicController {
             this.framesList.add(this.imageCache.get(resourcesPaths + frameFolderPath + i + ".png"));
             this.portraitsList.add(this.imageCache.get(resourcesPaths + portraitsFolderPath + i + ".png"));
         }
-        /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
     }
 
+    /**
+     * Called on render to add speech bubble to the captain container.
+     */
+    @OnRender
+    public void addSpeechBubble() {
+        captainContainer.getChildren().add(bubbleComponent);
+        bubbleComponent
+                .setCaptainText(resources.getString("pirate.editAcc.go.into.hiding"));
+    }
+
+    /**
+     * Called on render to hide avatar buttons initially.
+     */
     @OnRender
     public void render() {
         avatarButtonsVisible(false);
     }
 
-
+    /**
+     * Called on render to apply user inputs to the form.
+     */
     @OnRender
     public void applyInputs() {
         if (Objects.nonNull(tokenStorage.getName()))
             this.usernameInput.setText(tokenStorage.getName());
         this.errorLabelEditAcc.setText("");
 
-        // this.avatarImage.setImage(imageCache.get(Objects.nonNull(tokenStorage.getAvatar()) ? tokenStorage.getAvatar() : "test/911.png"));
-
-        /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
         avatarMap = tokenStorage.getAvatarMap();
         setImageCode(avatarMap.get("backgroundIndex"), avatarMap.get("portraitIndex"), avatarMap.get("frameIndex"));
-        /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
     }
 
-
+    /**
+     * Creates bindings for UI controls.
+     */
     @OnRender
     public void createBindings() {
         this.editAccIsNotSelected = this.changeUserInfoButton.selectedProperty().not();
         this.warningIsInvisible = this.warningScreenContainer.visibleProperty().not();
     }
 
+    /**
+     * Handles changes to user information.
+     */
     @OnRender
     public void changeUserInfo() {
         // If the changeUserButton is selected, username and password can be edited
@@ -263,6 +242,9 @@ public class EditAccController extends BasicController {
         }
     }
 
+    /**
+     * Disables certain buttons based on conditions.
+     */
     @OnRender
     public void disableButtons() {
         this.deleteUserButton.disableProperty()
@@ -273,6 +255,9 @@ public class EditAccController extends BasicController {
                         this.editAccIsNotSelected));
     }
 
+    /**
+     * Changes the appearance of the delete button based on conditions.
+     */
     @OnRender
     public void changeDeleteButtonView() {
         // delete Button has red text and icon when selected
@@ -289,6 +274,9 @@ public class EditAccController extends BasicController {
         }, this.warningIsInvisible));
     }
 
+    /**
+     * Saves changes to user information.
+     */
     public void saveChanges() {
         // save changed name and/or password of the user and reset the edit account screen afterward
         if (checkIt(usernameInput.getText(), passwordInput.getText())) {
@@ -311,6 +299,9 @@ public class EditAccController extends BasicController {
         }
     }
 
+    /**
+     * reset user information.
+     */
     public void resetEditing(String username) {
         // Reset inputs and changeUserInfoButton
         usernameInput.setText(username);
@@ -324,6 +315,9 @@ public class EditAccController extends BasicController {
         changeUserInfoButton.setStyle("-fx-text-fill: Black");
     }
 
+    /**
+     * Cancel Changes to user information.
+     */
     public void cancelChanges() {
         // Reset inputs and changeUserInfoButton
         this.bubbleComponent.setErrorMode(false);
@@ -332,6 +326,9 @@ public class EditAccController extends BasicController {
         resetEditing(tokenStorage.getName());
     }
 
+    /**
+     * Opens waring screen for user deletion.
+     */
     public void deleteUser() {
         // warning screen opens
         popup.showPopup(warningScreenContainer, warningScreen);
@@ -339,10 +336,16 @@ public class EditAccController extends BasicController {
         warningScreen.setWarning(resources.getString("warning.deleteAccount") + tokenStorage.getName() + ".");
     }
 
+    /**
+     * Brings User back to Browse GameScreen.
+     */
     public void goBack() {
         app.show("/browseGames");
     }
 
+    /**
+     * Clears resources after Controller is destroyed.
+     */
     @OnDestroy
     public void destroy() {
         this.subscriber.dispose();
@@ -357,7 +360,9 @@ public class EditAccController extends BasicController {
         framesList = null;
     }
 
-    /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
+    /**
+     * Sets components of avatar image with help indexes of the three components
+     */
     private void setImageCode(int backgroundIndex, int potraitIndex, int frameIndex) {
         backgroundImageIndex = backgroundIndex;
         portraitImageIndex = potraitIndex;
@@ -367,10 +372,6 @@ public class EditAccController extends BasicController {
         portraitImage.setImage(portraitsList.get(portraitImageIndex));
         frameImage.setImage(framesList.get(frameImageIndex));
 
-        System.out.print(backgroundIndex + ": ");
-        System.out.print(potraitIndex + ": ");
-        System.out.print(frameIndex + ": ");
-        System.out.println();
         imageCodeLabel.setText(getImageCode());
 
         avatarMap.put("backgroundIndex", backgroundIndex);
@@ -378,6 +379,9 @@ public class EditAccController extends BasicController {
         avatarMap.put("frameIndex", frameIndex);
     }
 
+    /**
+     * Generates imageCode. So indices of the image components of the avatarImage.
+     */
     public String getImageCode() {
         String bachkroundIndexString = String.valueOf(backgroundImageIndex);
         String potraitIndex = String.valueOf(portraitImageIndex);
@@ -386,20 +390,21 @@ public class EditAccController extends BasicController {
         return bachkroundIndexString + potraitIndex + frameIndexString;
     }
 
+    /**
+     * Illustrates previous avatarComponent.
+     */
     public void showLastBackground() {
         if (Objects.nonNull(lastBackgroundButton)) {
             backgroundImageIndex = backgroundImageIndex - 1 >= 0 ? backgroundImageIndex - 1 : backgroundsList.size() - 1;
             setImageCode(backgroundImageIndex, portraitImageIndex, frameImageIndex);
         }
     }
-
     public void showLastPortrait() {
         if (Objects.nonNull(lastPotraitButton)) {
             portraitImageIndex = portraitImageIndex - 1 >= 0 ? portraitImageIndex - 1 : portraitsList.size() - 1;
             setImageCode(backgroundImageIndex, portraitImageIndex, frameImageIndex);
         }
     }
-
     public void showLastFrame() {
         if (Objects.nonNull(lastFrameButton)) {
             frameImageIndex = frameImageIndex - 1 >= 0 ? frameImageIndex - 1 : framesList.size() - 1;
@@ -407,20 +412,21 @@ public class EditAccController extends BasicController {
         }
     }
 
+    /**
+     * Illustrates next avatarComponent.
+     */
     public void showNextBackground() {
         if (Objects.nonNull(nextBackgroundButton)) {
             backgroundImageIndex = backgroundImageIndex + 1 < backgroundsList.size() ? backgroundImageIndex + 1 : 0;
             setImageCode(backgroundImageIndex, portraitImageIndex, frameImageIndex);
         }
     }
-
     public void showNextPortrait() {
         if (Objects.nonNull(nextPotraitButton)) {
             portraitImageIndex = portraitImageIndex + 1 < portraitsList.size() ? portraitImageIndex + 1 : 0;
             setImageCode(backgroundImageIndex, portraitImageIndex, frameImageIndex);
         }
     }
-
     public void showNextFrame() {
         if (Objects.nonNull(nextFrameButton)) {
             frameImageIndex = frameImageIndex + 1 < framesList.size() ? frameImageIndex + 1 : 0;
@@ -428,8 +434,10 @@ public class EditAccController extends BasicController {
         }
     }
 
+    /**
+     * Enables user to edit avatarImage.
+     */
     public void changeUserAvatar() {
-
         if (editAvatarButton.isSelected()) {
             beforeBackgroundImageIndex = backgroundImageIndex;
             beforePortraitImageIndex = portraitImageIndex;
@@ -443,9 +451,10 @@ public class EditAccController extends BasicController {
         }
     }
 
+    /**
+     * Saves avatar of the user.
+     */
     public void safeAvatarChanges() {
-        System.out.println(getImageCode());
-
         subscriber.subscribe(editAccService.changeAvatar(avatarMap),
                 result -> {
                     beforeBackgroundImageIndex = backgroundImageIndex;
@@ -459,27 +468,25 @@ public class EditAccController extends BasicController {
                     this.bubbleComponent.setErrorMode(true);
                     this.bubbleComponent.setCaptainText(getErrorInfoText(error));
                 });
-
-
         avatarButtonsVisible(false);
         editAvatarButton.setStyle("-fx-text-fill: Black");
     }
 
+    /**
+     * Cancel changes made while editing the avatar.
+     */
     public void cancelAvatarChanges() {
-        System.out.println(beforeBackgroundImageIndex);
         backgroundImageIndex = beforeBackgroundImageIndex;
         frameImageIndex = beforeFrameImageIndex;
         portraitImageIndex = beforePortraitImageIndex;
         setImageCode(backgroundImageIndex, portraitImageIndex, frameImageIndex);
         avatarButtonsVisible(false);
         editAvatarButton.setStyle("-fx-text-fill: Black");
-
-        System.out.println(tokenStorage.getUserId());
     }
 
-    private void resetAvatarEditing() {
-    }
-
+    /**
+     * Sets visibility of the avatarButtons for editing.
+     */
     public void avatarButtonsVisible(boolean visible) {
         safeAvatarButton.setVisible(visible);
         cancelAvatarButton.setVisible(visible);
@@ -499,19 +506,9 @@ public class EditAccController extends BasicController {
         lockFrameButton.setVisible(visible);
     }
 
-
-    public ArrayList<Image> getBackgroundsList() {
-        return backgroundsList;
-    }
-
-    public ArrayList<Image> getFramesList() {
-        return framesList;
-    }
-
-    public ArrayList<Image> getPortraitsList() {
-        return portraitsList;
-    }
-
+    /**
+     * Randomize the indices of the avatarComponents in order to generate a random avatar image.
+     */
     public void randomize() {
         if (!lockBackground) {
             this.backgroundImageIndex = rand.nextInt(0, backgroundsList.size());
@@ -531,16 +528,16 @@ public class EditAccController extends BasicController {
         imageCodeLabel.setText(getImageCode());
     }
 
+    /**
+     * Opens and closes the lock for generating a avatarImageComponent.
+     */
     public void lockBackground() {
         lockBackground = !lockBackground;
     }
-
     public void lockPortrait() {
         lockPortrait = !lockPortrait;
     }
-
     public void lockFrame() {
         lockFrame = !lockFrame;
     }
-    /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
 }

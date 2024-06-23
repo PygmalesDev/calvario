@@ -55,12 +55,12 @@
                               <Font size="15.0" />
                            </font>
                         </PasswordField>
-                        <TextField fx:id="showPasswordText" alignment="CENTER" layoutX="9.0" layoutY="73.0" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%password" styleClass="inputField">
+                        <TextField fx:id="showPasswordText" alignment="CENTER" layoutX="9.0" layoutY="56.0" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%password" styleClass="inputField">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </TextField>
-                        <TextField fx:id="showRepeatPasswordText" alignment="CENTER" layoutX="9.0" layoutY="120.0" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%repeat.password" styleClass="inputField">
+                        <TextField fx:id="showRepeatPasswordText" alignment="CENTER" layoutX="9.0" layoutY="109.0" managed="false" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" prefWidth="300.0" promptText="%repeat.password" styleClass="inputField">
                            <font>
                               <Font size="15.0" />
                            </font>

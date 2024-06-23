@@ -155,6 +155,7 @@ public class InGameController extends BasicController {
 
     String gameID;
     String empireID;
+    String lastUpdate;
     double scale = 1.0;
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
     public ArrayList<String> flagsPath = new ArrayList<>();
@@ -180,7 +181,7 @@ public class InGameController extends BasicController {
 
     @Inject
     public InGameController() {
-
+        lastUpdate = "";
     }
 
 
@@ -291,8 +292,10 @@ public class InGameController extends BasicController {
         inGameService.setShowSettings(false);
         inGameService.setPaused(pause);
         if (pause) {
+            pauseMenuContainer.setMouseTransparent(false);
             pauseGame();
         } else {
+            pauseMenuContainer.setMouseTransparent(true);
             resumeGame();
         }
     }
@@ -448,6 +451,8 @@ public class InGameController extends BasicController {
     }
 
     public void showBuildingInformation(String buildingToAdd) {
+        siteProperties.setVisible(false);
+        siteProperties.setMouseTransparent(true);
         buildingPropertiesComponent.setBuildingType(buildingToAdd);
         popupBuildingProperties.showPopup(buildingProperties, buildingPropertiesComponent);
     }
@@ -481,9 +486,12 @@ public class InGameController extends BasicController {
         this.subscriber.subscribe(this.eventListener
                         .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
                 event -> {
-                    islandAttributes.setEmpireDto(event.data());
-                    System.out.println("Event -> minerals: " + islandAttributes.getAvailableResources().get("minerals") + " alloys: " + islandAttributes.getAvailableResources().get("alloys"));
-                    overviewUpgradeComponent.setUpgradeButton();
+                    if (!lastUpdate.equals(event.data().updatedAt())) {
+                        islandAttributes.setEmpireDto(event.data());
+                        System.out.println("Event -> minerals: " + islandAttributes.getAvailableResources().get("minerals") + " alloys: " + islandAttributes.getAvailableResources().get("alloys"));
+                        overviewUpgradeComponent.setUpgradeButton();
+                        this.lastUpdate = event.data().updatedAt();
+                    }
                 },
                 error -> System.out.println("errorListener")
         );
@@ -512,5 +520,12 @@ public class InGameController extends BasicController {
 
     public void updateSiteCapacities() {
         overviewSitesComponent.showSites();
+    }
+
+    public void setSitePropertiesInvisible() {
+        sitePropertiesComponent.setVisible(false);
+        buildingProperties.setMouseTransparent(false);
+        overviewSitesComponent.buildingsComponent.resetPage();
+        overviewSitesComponent.buildingsComponent.setGridPane();
     }
 }

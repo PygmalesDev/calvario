@@ -78,11 +78,6 @@ public class IslandAttributeStorage {
         this.island = island;
     }
 
-    //TODO: Just for Testing buildings page
-    public void addNewBuilding() {
-        island.buildings().add("mine");
-    }
-
     public Map<String, Integer> getNeededResources(int key) {
         return switch (key) {
             case 2 -> systemPresets.colonized().cost();

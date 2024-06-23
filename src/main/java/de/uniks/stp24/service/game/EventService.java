@@ -66,7 +66,7 @@ public class EventService {
      */
     @Inject
     public EventService() {
-        nextEvent = 1;
+        setNextEvent();
         this.listeners = new PropertyChangeSupport(this);
     }
 

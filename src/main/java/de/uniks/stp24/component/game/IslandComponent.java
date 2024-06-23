@@ -125,7 +125,7 @@ public class IslandComponent extends Pane {
     //Logic for showing rudder if other island is already selected
     public void showUnshowRudder() {
         if (islandIsSelected) {
-            inGameController.overviewSitesComponent.closeOverview();
+            reset();
             islandIsSelected = false;
         } else {
             if (island.owner() != null) {
@@ -161,5 +161,20 @@ public class IslandComponent extends Pane {
     public IslandComponent setTokenStorage(TokenStorage tokenStorage) {
         this.tokenStorage = tokenStorage;
         return this;
+    }
+
+    public void reset(){
+        inGameController.overviewSitesComponent.resetButtons();
+        inGameController.buildingsWindowComponent.setVisible(false);
+        inGameController.sitePropertiesComponent.setVisible(false);
+        inGameController.buildingPropertiesComponent.setVisible(false);
+        inGameController.overviewContainer.setVisible(false);
+        inGameController.selectedIsland.islandIsSelected = false;
+
+        if(!inGameController.islandsService.keyCodeFlag) {
+            inGameController.selectedIsland.rudderImage.setVisible(false);
+        }
+
+        inGameController.selectedIsland = null;
     }
 }

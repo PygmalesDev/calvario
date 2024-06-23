@@ -41,8 +41,6 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     final ResourceBundle resource;
     private final ImageCache imageCache;
     private MemberUser member;
-
-    /*---------------------------------------- AVATAR EDITING---------------------------------------------------------*/
     @FXML
     ImageView backgroundImage;
     @FXML
@@ -90,7 +88,6 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
             framesList.add(this.imageCache.get(resourcesPaths + frameFolderPath + i + ".png"));
             portraitsList.add(this.imageCache.get(resourcesPaths + portraitsFolderPath + i + ".png"));
         }
-
         setImageCode(avatarMap.get("backgroundIndex"), avatarMap.get("portraitIndex"), avatarMap.get("frameIndex"));
     }
 

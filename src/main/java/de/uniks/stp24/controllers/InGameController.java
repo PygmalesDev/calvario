@@ -58,7 +58,7 @@ public class InGameController extends BasicController {
     @FXML
     StackPane eventContainer;
     @FXML
-    Button showStorageButton;
+    public Button showStorageButton;
     @FXML
     Button showEmpireOverviewButton;
     @FXML
@@ -157,6 +157,9 @@ public class InGameController extends BasicController {
     String empireID;
     double scale = 1.0;
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
+    public ArrayList<String> flagsPath = new ArrayList<>();
+    String resourcesPaths = "/de/uniks/stp24/assets/";
+    String flagsFolderPath = "flags/flag_";
 
     @SubComponent
     @Inject
@@ -170,13 +173,9 @@ public class InGameController extends BasicController {
     @Inject
     public SitePropertiesComponent sitePropertiesComponent;
 
-
-
     PopupBuilder popupBuildingProperties = new PopupBuilder();
     PopupBuilder popupBuildingWindow = new PopupBuilder();
-
-    PopupBuilder popupSiteProperties= new PopupBuilder();
-
+    PopupBuilder popupSiteProperties = new PopupBuilder();
     PopupBuilder popupDeleteStructure = new PopupBuilder();
 
     @Inject
@@ -209,32 +208,28 @@ public class InGameController extends BasicController {
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_SETTINGS, callHandleShowSettings);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_SETTINGS"));
 
-        PropertyChangeListener callHandleLanguageChanged = this::handleLanguageChanged;
-        gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_LANGUAGE, callHandleLanguageChanged);
-        this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandleLanguageChanged, "PROPERTY_LANGUAGE"));
-
         this.subscriber.subscribe(inGameService.loadUpgradePresets(),
                 result -> islandAttributes.setSystemPresets(result),
-                error-> System.out.println("error in getEmpire in inGame"));
+                error -> System.out.println("error in getEmpire in inGame"));
 
         this.subscriber.subscribe(inGameService.loadBuildingPresets(),
                 result -> islandAttributes.setBuildingPresets(result),
-                error-> System.out.println("error in getEmpire in inGame"));
+                error -> System.out.println("error in getEmpire in inGame"));
 
         this.subscriber.subscribe(inGameService.loadDistrictPresets(),
                 result -> islandAttributes.setDistrictPresets(result),
-                error-> System.out.println("error in getEmpire in inGame"));
+                error -> System.out.println("error in getEmpire in inGame"));
 
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
                     result -> islandAttributes.setEmpireDto(result),
-                    error-> System.out.println("error in getEmpire in inGame"));
+                    error -> System.out.println("error in getEmpire in inGame"));
             createEmpireListener();
         }
-    }
 
-    private void handleLanguageChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
-        Locale newLang = propertyChangeEvent.getNewValue().equals(0) ? Locale.GERMAN : Locale.ENGLISH;
+        for (int i = 0; i <= 16; i++) {
+            this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
+        }
     }
 
     private void handleShowSettings(@NotNull PropertyChangeEvent propertyChangeEvent) {
@@ -272,6 +267,7 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
         eventComponent.setParent(shadow, eventContainer);
+        clockComponent.setToggle(true);
         clockComponentContainer.getChildren().add(clockComponent);
         eventContainer.getChildren().add(eventComponent);
         eventContainer.setVisible(false);
@@ -302,14 +298,10 @@ public class InGameController extends BasicController {
     }
 
     @OnKey(code = KeyCode.I)
-    public void showIslandOverviewWindows(){
-        //buildingProperties.setMouseTransparent(false);
+    public void showIslandOverviewWindows() {
         buildingProperties.setMouseTransparent(false);
         buildingsWindow.setMouseTransparent(false);
-        //siteProperties.setMouseTransparent(false);
         popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
-        //popupSiteProperties.showPopup(siteProperties, sitePropertiesComponent);
-
     }
 
     public void showSettings() {
@@ -331,12 +323,13 @@ public class InGameController extends BasicController {
         shadow.setVisible(false);
     }
 
-    /** created and add buttons for storage and island overview
+    /**
+     * created and add buttons for storage and island overview
      * there are problems if they are contained in the fxml
      */
 
     private void createButtonsStorage() {
-        if (!tokenStorage.isSpectator()){
+        if (!tokenStorage.isSpectator()) {
             if (!(Objects.nonNull(showEmpireOverviewButton) && (Objects.nonNull(showStorageButton)))) {
                 showEmpireOverviewButton = new Button();
                 showEmpireOverviewButton.setPrefHeight(30);
@@ -364,8 +357,6 @@ public class InGameController extends BasicController {
         this.islandComponentMap = islandsService.getComponentMap();
         mapGrid.setMinSize(islandsService.getMapWidth(), islandsService.getMapHeight());
         islandsService.createLines(this.islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
-
-
 
 
         this.islandComponentList.forEach(isle -> {
@@ -401,36 +392,21 @@ public class InGameController extends BasicController {
 
     }
 
-
-    // TODO this could be equivalent to showIslandOverview
-    // remove prints
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
-            if (tokenStorage.getIsland() == null){
+            if (tokenStorage.getIsland() == null) {
                 tokenStorage.setIsland(selected.getIsland());
             }
-            if (islandAttributes.getIsland() == null){
-                islandAttributes.setIsland(selected.getIsland());
-            }
-
-            System.out.println(event.getSource().toString());
-            System.out.println("found island: " + selected.getIsland().toString());
-            selected.showFlag();
-            if (Objects.nonNull((selected.getIsland()).owner())) {
-                System.out.print("empire hat capacity: " +
-                islandsService.getAllNumberOfSites((selected.getIsland()).owner()) + "\n");
+            islandAttributes.setIsland(selected.getIsland());
+            selectedIsland = selected;
+            if (selected.getIsland().owner() != null) {
+                showOverview();
+                selected.showUnshowRudder();
             }
         }
     }
 
-    public void showOverview(Island island) {
-        if (islandAttributes.getIsland() == null){
-            islandAttributes.setIsland(island);
-        }
-
-        if (island.owner() == null) {
-            return;
-        }
+    public void showOverview() {
         overviewSitesComponent.inputIslandName.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId()));
         overviewSitesComponent.buildingsComponent.resetPage();
         overviewSitesComponent.buildingsComponent.setGridPane();
@@ -470,6 +446,7 @@ public class InGameController extends BasicController {
                 .removePropertyChangeListener(triple.propertyName(), triple.listener()));
         this.subscriber.dispose();
     }
+
     public void showBuildingInformation(String buildingToAdd) {
         buildingPropertiesComponent.setBuildingType(buildingToAdd);
         popupBuildingProperties.showPopup(buildingProperties, buildingPropertiesComponent);
@@ -478,7 +455,7 @@ public class InGameController extends BasicController {
     public void handleDeleteStructure(String buildingType) {
         deleteStructureWarningContainer.toFront();
         deleteStructureWarningContainer.setMouseTransparent(false);
-        popupDeleteStructure.showPopup(deleteStructureWarningContainer,deleteStructureComponent);
+        popupDeleteStructure.showPopup(deleteStructureWarningContainer, deleteStructureComponent);
         popupDeleteStructure.setBlur(buildingProperties, buildingsWindow);
         popupBuildingProperties.setBlur(mapScrollPane, siteProperties);
         deleteStructureComponent.handleDeleteStructure(buildingType);
@@ -494,11 +471,12 @@ public class InGameController extends BasicController {
         buildingsWindow.setMouseTransparent(false);
         popupDeleteStructure.removeBlur();
         popupBuildingProperties.removeBlur();
-        if (!siteProperties.isVisible()){
+        if (!siteProperties.isVisible()) {
             siteProperties.setMouseTransparent(true);
         }
         buildingsWindow.toFront();
     }
+
     public void createEmpireListener() {
         this.subscriber.subscribe(this.eventListener
                         .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
@@ -532,7 +510,7 @@ public class InGameController extends BasicController {
         sitePropertiesComponent.setSiteType(siteType);
     }
 
-    public void updateSiteCapacities(){
+    public void updateSiteCapacities() {
         overviewSitesComponent.showSites();
     }
 }

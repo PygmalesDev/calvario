@@ -12,28 +12,30 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" styleClass="islandOverviewBackGround" stylesheets="@../../style/islandOverview.css" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.OverviewSitesComponent">
-   <VBox layoutX="136.0" layoutY="16.0" prefHeight="584.0" prefWidth="380.0" styleClass="island-overview" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0">
-      <VBox prefHeight="52.0" prefWidth="400.0" />
-      <HBox alignment="CENTER" prefHeight="133.0" prefWidth="400.0">
-         <VBox alignment="CENTER" prefHeight="134.0" prefWidth="330.0" style="-fx-border-color: #000000;">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="\%image" />
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" styleClass="islandOverviewBackground" stylesheets="@../../style/islandOverview.css" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.OverviewSitesComponent">
+   <VBox layoutX="136.0" layoutY="16.0" prefHeight="584.0" prefWidth="380.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0">
+      <VBox prefHeight="43.0" prefWidth="400.0" />
+      <HBox alignment="CENTER_LEFT" prefHeight="133.0" prefWidth="400.0">
+         <VBox prefHeight="134.0" prefWidth="46.0" />
+         <VBox alignment="CENTER" prefHeight="134.0" prefWidth="292.0">
+            <Pane prefHeight="200.0" prefWidth="200.0" styleClass="islandOverviewImage" stylesheets="@../../style/islandOverview.css" />
          </VBox>
       </HBox>
-      <VBox prefHeight="18.0" prefWidth="400.0" />
+      <VBox prefHeight="25.0" prefWidth="400.0" />
       <HBox alignment="CENTER_LEFT" prefHeight="136.0" prefWidth="398.0">
          <VBox prefHeight="136.0" prefWidth="42.0" />
          <VBox alignment="TOP_CENTER" prefHeight="122.0" prefWidth="330.0">
             <HBox alignment="CENTER_LEFT" prefHeight="18.0" prefWidth="330.0">
-               <children>
-                  <VBox prefHeight="33.0" prefWidth="55.0" />
-                  <TextField fx:id="inputIslandName" alignment="CENTER" prefHeight="2.0" prefWidth="186.0" promptText="Unnamed" styleClass="overview-text" />
-               </children>
+               <VBox prefHeight="33.0" prefWidth="55.0" />
+               <TextField fx:id="inputIslandName" alignment="CENTER" prefHeight="2.0" prefWidth="186.0" style="-fx-background-color: transparent;" styleClass="tableHeadingText" text="%uncharted.island" />
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="16.0" prefWidth="330.0">
                <VBox prefHeight="17.0" prefWidth="39.0" />
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="Capacity" wrappingWidth="64.947265625" />
-               <Text fx:id="island_name" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="island_name" wrappingWidth="164.947265625">
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="%capacity" wrappingWidth="56.947265625" />
+               <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                  <Image url="@../../assets/buttons/bandit_medalion.png" />
+               </ImageView>
+               <Text fx:id="island_name" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="island_name" wrappingWidth="158.947265625">
                   <font>
                      <Font size="11.0" />
                   </font></Text>
@@ -44,11 +46,10 @@
                   <HBox alignment="CENTER_LEFT" prefHeight="20.0" prefWidth="126.0" styleClass="overview-text">
                      <VBox prefHeight="45.0" prefWidth="29.0" />
                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                           <Image url="@../../icons/islands/crewmates_icon.png" />
-                        </image></ImageView>
+                        <Image url="@../../icons/islands/crewmates_icon.png" />
+                     </ImageView>
                      <VBox prefHeight="20.0" prefWidth="5.0" />
-                     <Text fx:id="crewCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="0/20">
+                     <Text fx:id="crewCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="0/20">
                         <font>
                            <Font size="11.0" />
                         </font></Text>
@@ -56,30 +57,29 @@
                   <HBox alignment="CENTER_LEFT" prefHeight="18.0" prefWidth="126.0">
                      <VBox prefHeight="45.0" prefWidth="29.0" />
                      <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
-                        <image>
-                           <Image url="@../../icons/islands/capacity_icon.png" />
-                        </image></ImageView>
+                        <Image url="@../../icons/islands/capacity_icon.png" />
+                     </ImageView>
                      <VBox prefHeight="20.0" prefWidth="5.0" />
-                     <Text fx:id="resCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="0/400">
+                     <Text fx:id="resCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="0/400">
                         <font>
                            <Font size="11.0" />
                         </font></Text>
                   </HBox>
                </VBox>
                <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
-                  <Text fx:id="island_inf" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="overview-text" text="island_inf">
+                  <Text fx:id="island_inf" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="island_inf">
                      <font>
                         <Font size="11.0" />
                      </font></Text>
                </VBox>
             </HBox>
             <HBox alignment="CENTER_LEFT" prefHeight="44.0" prefWidth="329.0">
-               <VBox prefHeight="44.0" prefWidth="67.0" />
-               <Button fx:id="detailsButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showDetails" prefHeight="25.0" prefWidth="40.0" styleClass="overview-text" text="DETAILS" />
+               <VBox prefHeight="44.0" prefWidth="42.0" />
+               <Button fx:id="detailsButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showDetails" prefHeight="25.0" prefWidth="55.0" styleClass="overviewButtons" text="%DETAILS" />
                <VBox prefHeight="44.0" prefWidth="21.0" />
-               <Button fx:id="sitesButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showSites" prefHeight="25.0" prefWidth="40.0" styleClass="overview-text" text="SITES" />
+               <Button fx:id="sitesButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showSites" prefHeight="25.0" prefWidth="55.0" styleClass="overviewButtons" text="%SITES" />
                <VBox prefHeight="44.0" prefWidth="21.0" />
-               <Button fx:id="buildingsButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showBuildings" prefHeight="25.0" prefWidth="40.0" styleClass="overview-text" text="BUILDINGS" />
+               <Button fx:id="buildingsButton" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showBuildings" prefHeight="25.0" prefWidth="55.0" styleClass="overviewButtons" text="%BUILDINGS" />
             </HBox>
          </VBox>
       </HBox>
@@ -88,7 +88,11 @@
          <StackPane fx:id="sitesContainer" prefHeight="150.0" prefWidth="312.0" />
       </HBox>
    </VBox>
-   <Pane fx:id="closeButton" layoutX="360.0" layoutY="18.0" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="40.0" styleClass="islandOverviewCloseButton" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0" />
-   <Pane layoutX="151.2" prefHeight="77.0" prefWidth="99.0" style="-fx-background-color: #0088ff;" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="0.0" />
-   <Pane fx:id="upgradeButton" layoutX="287.0" layoutY="-6.0" onMouseClicked="#showUpgrades" prefHeight="30.0" prefWidth="30.0" styleClass="islandOverviewUpgradesButton" AnchorPane.leftAnchor="278.0" AnchorPane.topAnchor="280.0" />
+   <Pane layoutX="360.0" layoutY="18.0" prefHeight="40.0" prefWidth="40.0" styleClass="islandOverviewCloseButton" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+      <Button fx:id="closeButton" mnemonicParsing="false" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="42.0" style="-fx-background-color: transparent;" styleClass="islandOverviewCloseButton" />
+   </Pane>
+   <Pane fx:id="islandFlag" layoutX="151.2" layoutY="5.0" prefHeight="91.0" prefWidth="110.0" AnchorPane.leftAnchor="145.0" AnchorPane.rightAnchor="145.0" AnchorPane.topAnchor="5.0" />
+   <Pane layoutX="287.0" layoutY="-6.0" prefHeight="25.0" prefWidth="30.0" AnchorPane.leftAnchor="278.0" AnchorPane.topAnchor="280.0">
+      <Button fx:id="upgradeButton" layoutY="-1.0" mnemonicParsing="false" onMouseClicked="#showUpgrades" prefHeight="32.0" prefWidth="30.0" style="-fx-background-color: transparent;" styleClass="islandOverviewUpgradesButton" />
+   </Pane>
 </fx:root>

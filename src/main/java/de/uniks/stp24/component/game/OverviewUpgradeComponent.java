@@ -8,33 +8,31 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.*;
 
 @Component(view = "IslandOverviewUpgrade.fxml")
 public class OverviewUpgradeComponent extends AnchorPane {
-    @FXML
-    public Text report;
-    @FXML
-    public Text res_4;
-    @FXML
-    public Text res_3;
     @FXML
     public Text res_2;
     @FXML
     public Text res_1;
     @FXML
-    public Pane confirmUpgrade;
+    public Button confirmUpgrade;
     @FXML
     public HBox upgrade_box;
     @FXML
@@ -45,10 +43,6 @@ public class OverviewUpgradeComponent extends AnchorPane {
     public Pane checkUpgraded;
     @FXML
     public Pane checkDeveloped;
-    @FXML
-    public Pane closeButton;
-    @FXML
-    public Pane backButton;
     @FXML
     public Text levelOne;
     @FXML
@@ -63,6 +57,10 @@ public class OverviewUpgradeComponent extends AnchorPane {
     public Text levelFour;
     @FXML
     public Label levelFourText;
+    @FXML
+    public Pane res1;
+    @FXML
+    public Pane res2;
     @Inject
     InGameService inGameService;
     @Inject
@@ -75,6 +73,10 @@ public class OverviewUpgradeComponent extends AnchorPane {
     Subscriber subscriber;
     @Inject
     IslandsService islandsService;
+    @Inject
+    @Resource
+    @Named("gameResourceBundle")
+    ResourceBundle gameResourceBundle;
 
     public GameSystemsApiService gameSystemsService;
 
@@ -88,9 +90,11 @@ public class OverviewUpgradeComponent extends AnchorPane {
     public void setUpgradeButton() {
         if (islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()) != null) {
             if (resourcesService.hasEnoughResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()))) {
-                confirmUpgrade.setStyle("-fx-background-color: green;");
+                confirmUpgrade.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/buttons/upgrade_button_on.png'); " +
+                        "-fx-background-size: cover;" + "-fx-background-color: transparent");
             } else {
-                confirmUpgrade.setStyle("-fx-background-color: black;");
+                confirmUpgrade.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/buttons/upgrade_button_off.png'); " +
+                        "-fx-background-size: cover;" + "-fx-background-color: transparent");
             }
         }
     }
@@ -103,7 +107,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
         inGameController.overviewContainer.setVisible(false);
         inGameController.selectedIsland.rudderImage.setVisible(false);
         inGameController.selectedIsland.islandIsSelected = false;
-        if (islandAttributes.getIsland().flagIndex() >= 0) {
+        if(!islandsService.keyCodeFlag) {
             inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
         }
         inGameController.selectedIsland = null;
@@ -115,10 +119,20 @@ public class OverviewUpgradeComponent extends AnchorPane {
 
     public void setNeededResources() {
         if (inGameController != null) {
-            LinkedList<Text> resTextList = new LinkedList<>(Arrays.asList(res_1, res_2, res_3, res_4, report));
+            LinkedList<Text> resTextList = new LinkedList<>(Arrays.asList(res_1, res_2));
+            ArrayList<Pane> resPic = new ArrayList<>(Arrays.asList(res1, res2));
             int i = 0;
             for (Map.Entry<String, Integer> entry : islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()).entrySet()) {
-                resTextList.get(i).setText(entry.getKey() + " " + entry.getValue());
+                resTextList.get(i).setText(String.valueOf(entry.getValue()));
+                String sourceImage = switch (entry.getKey()) {
+                    case "minerals" -> "-fx-background-image: url('/de/uniks/stp24/icons/resources/minerals.png'); ";
+                    case "energy" -> "-fx-background-image: url('/de/uniks/stp24/icons/resources/energy.png'); ";
+                    case "alloys" -> "-fx-background-image: url('/de/uniks/stp24/icons/resources/alloys.png'); ";
+                    case "fuel" -> "-fx-background-image: url('/de/uniks/stp24/icons/resources/fuel.png'); ";
+                    default -> "";
+                };
+                resPic.get(i).setStyle(sourceImage +
+                        "-fx-background-size: cover;");
                 i += 1;
             }
         }
@@ -146,6 +160,6 @@ public class OverviewUpgradeComponent extends AnchorPane {
         levelFour.setText(islandAttributes.getUpgradeTranslation(4));
         levelTwoText.setText(islandAttributes.upgradeEffects.get(2));
         levelThreeText.setText(islandAttributes.upgradeEffects.get(3));
-        levelFourText.setText(islandAttributes.upgradeEffects.get(3));
+        levelFourText.setText(islandAttributes.upgradeEffects.get(4));
     }
 }

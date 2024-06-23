@@ -245,11 +245,8 @@ BrowseGameController extends BasicController {
         if (browseGameService.getGame() != null) {
             if (browseGameService.getGame().started()) {
                 subscriber.subscribe(lobbyService.getMember(browseGameService.getGame()._id(), tokenStorage.getUserId()),
-                        memberDto -> {
-                            joinGameHelper.joinGame(browseGameService.getGame()._id());
-                        }, error -> {
-                            bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.game.started"));
-                        });
+                        memberDto -> joinGameHelper.joinGame(browseGameService.getGame()._id()),
+                        error -> bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.game.started")));
             } else {
                 app.show("/lobby", Map.of("gameid", browseGameService.getGame()._id()));
             }

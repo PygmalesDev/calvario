@@ -56,30 +56,44 @@ public class Building extends VBox {
             imageView.setFitWidth(40); // Set the width to fit the button
             imageView.setFitHeight(40); // Set the height to fit the button
             building.setGraphic(imageView);
+        } else {
+            Image image = new Image("de/uniks/stp24/icons/buildings/empty_building_element.png");
+            imageView = new ImageView(image);
+            imageView.setFitWidth(40); // Set the width to fit the button
+            imageView.setFitHeight(40); // Set the height to fit the button
+            building.setGraphic(imageView);
         }
+
+
         building.setOnMouseClicked(event -> {
-            if (imageView != null && imageView.getImage() != null){
+            String imageUrl = imageView.getImage().getUrl();
+            String relevantPart = extractRelevantPath(imageUrl);
+            if (imageView != null && imageView.getImage() != null && !relevantPart.equals("/de/uniks/stp24/icons/buildings/empty_building_element.png")){
                 inGameController.buildingsWindowComponent.setVisible(false);
-                inGameController.sitePropertiesComponent.setVisible(false);
-                inGameController.sitePropertiesComponent.onClose();
+                inGameController.setSitePropertiesInvisible();
                 inGameController.showBuildingInformation(buildingName);
 
-                inGameController.islandsService.updateIslandBuildings(islandAttributes, inGameController, islandAttributes.getIsland().buildings());
-
             } else {
-                System.out.println("HEEHHEHE");
                 inGameController.showBuildingWindow();
                 if(buildingName.equals("buildNewBuilding") && Objects.equals(tokenStorage.getEmpireId(), islandAttributes.getIsland().owner()) && islandAttributes.getUsedSlots() < islandAttributes.getIsland().resourceCapacity()) {
-                    buildingsComponent.islandAttributes.addNewBuilding();
+                    //buildingsComponent.islandAttributes.addNewBuilding();
                     buildingsComponent.setGridPane();
-                    inGameController.islandsService.updateIslandBuildings(islandAttributes, inGameController, islandAttributes.getIsland().buildings());
+                    //inGameController.islandsService.updateIslandBuildings(islandAttributes, inGameController, islandAttributes.getIsland().buildings());
                 }
             }
 
         });
 
 
+    }
 
+    private String extractRelevantPath(String imageUrl) {
+        int index = imageUrl.indexOf("/de/uniks/stp24/");
+        if (index != -1) {
+            return imageUrl.substring(index);
+        } else {
+            return imageUrl; // Return the whole URL if the relevant part is not found
+        }
     }
 
     @Inject

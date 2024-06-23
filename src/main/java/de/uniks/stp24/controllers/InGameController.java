@@ -519,4 +519,11 @@ public class InGameController extends BasicController {
     public void updateSiteCapacities() {
         overviewSitesComponent.showSites();
     }
+
+    public void setSitePropertiesInvisible() {
+        sitePropertiesComponent.setVisible(false);
+        buildingProperties.setMouseTransparent(false);
+        overviewSitesComponent.buildingsComponent.resetPage();
+        overviewSitesComponent.buildingsComponent.setGridPane();
+    }
 }

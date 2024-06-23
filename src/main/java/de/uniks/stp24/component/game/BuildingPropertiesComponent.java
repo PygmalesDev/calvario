@@ -133,6 +133,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
                 subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingType), result2 -> {
                             tokenStorage.setIsland(islandsService.updateIsland(result2));
                             islandAttributeStorage.setIsland(islandsService.updateIsland(result2));
+                            inGameController.islandsService.updateIslandBuildings(islandAttributeStorage, inGameController, islandAttributeStorage.getIsland().buildings());
+                            inGameController.setSitePropertiesInvisible();
+
                         },
                         error -> buyButton.setDisable(true));
             } else {

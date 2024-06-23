@@ -165,6 +165,8 @@ public class DeleteStructureComponent extends VBox{
                 subscriber.subscribe(resourcesService.destroyBuilding(tokenStorage.getGameId(), island, structureType), result -> {
                     tokenStorage.setIsland(islandsService.updateIsland(result));
                     islandAttributeStorage.setIsland(islandsService.updateIsland(result));
+                    inGameController.islandsService.updateIslandBuildings(islandAttributeStorage, inGameController, islandAttributeStorage.getIsland().buildings());
+                    inGameController.setSitePropertiesInvisible();
                     onCancel();
                 });
             } else {

@@ -363,7 +363,7 @@ public class IslandsService extends BasicService {
 
             Island tmp = new Island(
                     result.owner(),
-                    Objects.isNull(result.owner()) ? -1 :getEmpire(result._id()).flag(),
+                    islandAttributes.getIsland().flagIndex(),
                     result.x(),
                     result.y(),
                     IslandType.valueOf(String.valueOf(result.type())),

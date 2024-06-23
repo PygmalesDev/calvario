@@ -142,7 +142,6 @@ public class IslandComponent extends Pane {
             }
         }
 
-        System.out.println(inGameController.islandsService.keyCodeFlag);
         if (!inGameController.islandsService.keyCodeFlag) {
             this.flagPane.setVisible(!this.flagPane.isVisible());
         }

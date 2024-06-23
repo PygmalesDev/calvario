@@ -85,7 +85,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
         if (islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()) != null) {
             if (resourcesService.hasEnoughResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()))) {
                 confirmUpgrade.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/buttons/upgrade_button_on.png'); " +
-                        "-fx-background-size: cover;");
+                        "-fx-background-size: cover;" + "-fx-background-color: transparent");
             } else {
                 confirmUpgrade.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/buttons/upgrade_button_off.png'); " +
                         "-fx-background-size: cover;" + "-fx-background-color: transparent");
@@ -162,6 +162,6 @@ public class OverviewUpgradeComponent extends AnchorPane {
         levelFour.setText(islandAttributes.getUpgradeTranslation(4));
         levelTwoText.setText(islandAttributes.upgradeEffects.get(2));
         levelThreeText.setText(islandAttributes.upgradeEffects.get(3));
-        levelFourText.setText(islandAttributes.upgradeEffects.get(3));
+        levelFourText.setText(islandAttributes.upgradeEffects.get(4));
     }
 }

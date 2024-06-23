@@ -3,7 +3,15 @@
     -fx-font-size: 30;
 }
 
+.headerTextUpgrade{
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 20;
+}
 
+.headerTextBuildings{
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 22;
+}
 
 /* Buildings Window */
 .buildingsOverviewBackground{
@@ -50,10 +58,14 @@
     -fx-background-size: 100% 100%;
 }
 
-.islandOverviewBackGround{
+.islandOverviewBackground{
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/island-overview.png");
     -fx-background-size: 100% 100%;
+}
 
+.buildNewBuilding{
+    -fx-background-image: url("/de/uniks/stp24/icons/buildings/empty_building_element.png");
+    -fx-background-size: 100% 100%;
 }
 
 .islandOverviewCloseButton{
@@ -63,9 +75,43 @@
 
 .islandOverviewUpgradesButton{
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/upgrades_button.png");
+    -fx-background-size: 100% 80%;
+    -fx-background-repeat: no-repeat;
+}
+
+.islandUpgradeBackground{
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/island_upgrades.png");
     -fx-background-size: 100% 100%;
 }
 
+.goBackUpgrade{
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/arrow_left.png");
+    -fx-background-size: 100% 100%;
+}
+
+.goBackBuilding{
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/arrow_left.png");
+    -fx-background-size: 100% 100%;
+}
+
+.goNextBuilding{
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/arrow_right.png");
+    -fx-background-size: 100% 100%;
+}
+
+.checkUpgrade{
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/accept_button.png");
+    -fx-background-size: 100% 100%;
+}
+
+.overviewButtons{
+    -fx-font-size: 8;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/button_element.png");
+    -fx-background-size: 100% 100%;
+}
 /* warning screen*/
 .deletionWindowBackground{
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/deletion_window.png");
@@ -78,5 +124,10 @@
 
 .resourceList .scroll-bar{
     -fx-background-color: transparent;
+}
+
+.islandOverviewImage{
+    -fx-background-image: url("/de/uniks/stp24/icons/island.images/regular_image.png");
+    -fx-background-size: cover;
 }
 

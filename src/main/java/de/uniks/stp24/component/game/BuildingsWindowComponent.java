@@ -2,7 +2,6 @@ package de.uniks.stp24.component.game;
 
 
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.model.Island;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.ResourcesService;
@@ -58,15 +57,11 @@ public class BuildingsWindowComponent extends AnchorPane {
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
-    private Island island;
-
     private String buildingToAdd;
 
     private Button[] buttons;
 
     InGameController inGameController;
-
-
 
     private static final String[] IMAGE_PATHS = {
             "de/uniks/stp24/icons/buildings/alloy_smeltery.png",

@@ -1,7 +1,6 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.component.game.CustomComponentListCell;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.model.Island;
@@ -28,6 +27,7 @@ import javax.inject.Provider;
 import java.util.*;
 
 import static de.uniks.stp24.service.Constants.buildingTranslation;
+import static de.uniks.stp24.service.Constants.buildingsIconPathsMap;
 
 @Component(view = "BuildingProperties.fxml")
 public class BuildingPropertiesComponent extends AnchorPane {
@@ -87,16 +87,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     @OnInit
     public void init(){
-        buildingsMap = new HashMap<>();
-        buildingsMap.put("refinery", "de/uniks/stp24/icons/buildings/alloy_smeltery.png");
-        buildingsMap.put("factory", "de/uniks/stp24/icons/buildings/theurgy_hall.png");
-        buildingsMap.put("foundry", "de/uniks/stp24/icons/buildings/chophouse.png");
-        buildingsMap.put("research_lab", "de/uniks/stp24/icons/buildings/resonating_delves.png");
-        buildingsMap.put("farm", "de/uniks/stp24/icons/buildings/farmside.png");
-        buildingsMap.put("mine", "de/uniks/stp24/icons/buildings/coal_querry.png");
-        buildingsMap.put("power_plant", "de/uniks/stp24/icons/buildings/scout_hub.png");
-        buildingsMap.put("exchange", "de/uniks/stp24/icons/buildings/seaside_hut.png");
-
+        buildingsMap = buildingsIconPathsMap;
     }
 
     @Inject

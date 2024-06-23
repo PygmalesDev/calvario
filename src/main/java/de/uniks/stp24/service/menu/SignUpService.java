@@ -24,11 +24,6 @@ public class SignUpService {
                 username, this.generateRandomAvatar(), password));
     }
 
-    // Checks for the existence of an account with the same username
-    // TODO: Implement!
-    private boolean checkForAccountExistence(String username) {
-        return true;
-    }
 
     // Creates a random avatar for new user account
     // TODO: Implement!

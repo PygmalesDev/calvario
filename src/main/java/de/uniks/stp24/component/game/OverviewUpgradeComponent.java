@@ -101,7 +101,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
         inGameController.overviewContainer.setVisible(false);
         inGameController.selectedIsland.rudderImage.setVisible(false);
         inGameController.selectedIsland.islandIsSelected = false;
-        if (islandAttributes.getIsland().flagIndex() >= 0) {
+        if(!islandsService.keyCodeFlag) {
             inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
         }
         inGameController.selectedIsland = null;
@@ -119,19 +119,19 @@ public class OverviewUpgradeComponent extends AnchorPane {
             for (Map.Entry<String, Integer> entry : islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()).entrySet()) {
                 resTextList.get(i).setText(String.valueOf(entry.getValue()));
                 String sourceImage = "";
-                switch(entry.getKey()){
-                    case "minerals": 
+                switch (entry.getKey()) {
+                    case "minerals":
                         sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/resources/minerals.png'); ";
-                        break; 
+                        break;
                     case "energy":
                         sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/resources/energy.png'); ";
-                        break; 
+                        break;
                     case "alloys":
                         sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/resources/alloys.png'); ";
-                        break; 
+                        break;
                     case "fuel":
                         sourceImage = "-fx-background-image: url('/de/uniks/stp24/icons/resources/fuel.png'); ";
-                        break; 
+                        break;
                 }
                 resPic.get(i).setStyle(sourceImage +
                         "-fx-background-size: cover;");

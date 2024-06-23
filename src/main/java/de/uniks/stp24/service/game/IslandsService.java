@@ -39,6 +39,8 @@ public class IslandsService extends BasicService {
     @Inject
     LobbyService lobbyService;
 
+    public boolean keyCodeFlag = true;
+
     String gameID;
 
     static final int factor = 10;
@@ -47,7 +49,7 @@ public class IslandsService extends BasicService {
     private final List<ShortSystemDto> devIsles = new ArrayList<>();
     public List<Island> isles = new ArrayList<>();
     private final List<IslandComponent> islandComponentList = new ArrayList<>();
-    private final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
+    public final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
     private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();
     private final Map<String, List<String>> connections = new HashMap<>();
     private final Map<String, InfrastructureService> siteManager = new HashMap<>();
@@ -80,7 +82,17 @@ public class IslandsService extends BasicService {
 
    
     public void setFlag(boolean selected) {
-        islandComponentMap.forEach((id, comp) -> comp.showFlag(selected));
+        islandComponentMap.forEach((id, comp) -> {
+            if(selected) {
+                comp.showFlag(true);
+            }
+            if(!selected){
+                if(!comp.islandIsSelected){
+                    comp.showFlag(false);
+                    keyCodeFlag = false;
+                }
+            }
+        });
     }
 
     /**
@@ -366,7 +378,7 @@ public class IslandsService extends BasicService {
             );
             inGameController.selectedIsland.island = tmp;
             islandAttributes.setIsland(tmp);
-            inGameController.showOverview(islandAttributes.getIsland());
+            inGameController.showOverview();
 
         });
     }

@@ -276,6 +276,7 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
         eventComponent.setParent(shadow, eventContainer);
+        clockComponent.setToggle(true);
         clockComponentContainer.getChildren().add(clockComponent);
         eventContainer.getChildren().add(eventComponent);
         eventContainer.setVisible(false);
@@ -404,35 +405,21 @@ public class InGameController extends BasicController {
 
     }
 
-
-    // TODO this could be equivalent to showIslandOverview
-    // remove prints
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
             if (tokenStorage.getIsland() == null) {
                 tokenStorage.setIsland(selected.getIsland());
             }
-            if (islandAttributes.getIsland() == null) {
-                islandAttributes.setIsland(selected.getIsland());
-            }
             islandAttributes.setIsland(selected.getIsland());
-            selected.showFlag();
-            if (Objects.nonNull((selected.getIsland()).owner())) {
-                System.out.print("empire hat capacity: " +
-                        islandsService.getAllNumberOfSites((selected.getIsland()).owner()) + "\n");
+            selectedIsland = selected;
+            if (selected.getIsland().owner() != null) {
+                showOverview();
+                selected.showUnshowRudder();
             }
         }
-        showOverview(islandAttributes.getIsland());
     }
 
-    public void showOverview(Island island) {
-        if (islandAttributes.getIsland() == null) {
-            islandAttributes.setIsland(island);
-        }
-
-        if (island.owner() == null) {
-            return;
-        }
+    public void showOverview() {
         overviewSitesComponent.inputIslandName.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId()));
         overviewSitesComponent.buildingsComponent.resetPage();
         overviewSitesComponent.buildingsComponent.setGridPane();

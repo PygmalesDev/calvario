@@ -222,6 +222,7 @@ public class ClockComponent extends AnchorPane {
     @OnKey(code = KeyCode.H, shift = true)
     public void setSelected() {
         flagToggle.setSelected(!flagToggle.isSelected());
+        islandsService.keyCodeFlag = !islandsService.keyCodeFlag;
     }
 
     public void pauseClock() {

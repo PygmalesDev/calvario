@@ -58,7 +58,7 @@ public class InGameController extends BasicController {
     @FXML
     StackPane eventContainer;
     @FXML
-    Button showStorageButton;
+    public Button showStorageButton;
     @FXML
     Button showEmpireOverviewButton;
     @FXML

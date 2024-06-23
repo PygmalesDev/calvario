@@ -104,9 +104,7 @@ public class IslandComponent extends Pane {
         if (island.flagIndex() >= 0 && !islandIsSelected) {
             this.flagPane.setVisible(!flagPane.isVisible());
         }
-        inGameController.islandsService.keyCodeFlag = !inGameController.islandsService.keyCodeFlag;
     }
-
 
     public Island getIsland() {
         return this.island;
@@ -141,7 +139,7 @@ public class IslandComponent extends Pane {
                 islandIsSelected = true;
             }
         }
-
+        
         if (!inGameController.islandsService.keyCodeFlag) {
             this.flagPane.setVisible(!this.flagPane.isVisible());
         }

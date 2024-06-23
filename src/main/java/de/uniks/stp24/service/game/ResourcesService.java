@@ -12,7 +12,6 @@ import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
 import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.TokenStorage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.fulib.fx.controller.Subscriber;

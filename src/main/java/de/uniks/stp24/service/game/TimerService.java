@@ -45,9 +45,7 @@ public class TimerService {
     public Observable<UpdateGameResultDto> setSpeed(String gamesid, int speed) {
         return gamesApiService
                 .editSpeed(gamesid, new UpdateSpeedDto(speed))
-                .doOnNext(updateGameResultDto -> {
-                    setSpeedLocal(updateGameResultDto.speed());
-                });
+                .doOnNext(updateGameResultDto -> setSpeedLocal(updateGameResultDto.speed()));
     }
 
     public void start() {
@@ -130,10 +128,6 @@ public class TimerService {
             this.listeners = new PropertyChangeSupport(this);
         }
         return this.listeners;
-    }
-
-    public int getSpeed() {
-        return speed;
     }
 
     public void setSpeedLocal(int value) {

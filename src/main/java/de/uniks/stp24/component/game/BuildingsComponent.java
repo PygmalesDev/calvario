@@ -4,21 +4,23 @@ import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ResourceBundle;
 
 @Component(view = "Buildings.fxml")
 public class BuildingsComponent extends AnchorPane {
 
     @FXML
-    public Pane prev;
+    public Button prev;
     @FXML
-    public Pane next;
+    public Button next;
     @FXML
     public GridPane buildings;
     @Inject
@@ -27,11 +29,13 @@ public class BuildingsComponent extends AnchorPane {
     TokenStorage tokenStorage;
     @Inject
     public IslandAttributeStorage islandAttributeStorage;
+    @Inject
+    @Resource
+    @Named("gameResourceBundle")
+    ResourceBundle gameResourceBundle;
 
     private int currentPage = 0;
     private InGameController inGameController;
-
-    private String buildingType;
 
     @Inject
     public BuildingsComponent() {
@@ -113,7 +117,4 @@ public class BuildingsComponent extends AnchorPane {
     }
 
 
-    public void setBuildingType(String buildingType){
-        this.buildingType = buildingType;
-    }
 }

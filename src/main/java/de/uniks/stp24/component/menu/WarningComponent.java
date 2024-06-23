@@ -3,7 +3,6 @@ package de.uniks.stp24.component.menu;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
 import de.uniks.stp24.service.menu.BrowseGameService;
-import de.uniks.stp24.service.ErrorService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;

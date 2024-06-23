@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
 
@@ -19,9 +20,10 @@ import java.util.Objects;
 @Component(view = "BuildingElement.fxml")
 public class Building extends VBox {
     @FXML
-    private ImageView building;
+    private Button building;
     InGameController inGameController;
 
+    private ImageView imageView;
 
 
     public Building(BuildingsComponent buildingsComponent, String buildingName, TokenStorage tokenStorage, IslandAttributeStorage islandAttributes, InGameController inGameController){
@@ -36,6 +38,8 @@ public class Building extends VBox {
             throw new RuntimeException(e);
         }
 
+        building.setDisable(inGameController.tokenStorage.isSpectator() || !Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
+        building.getStyleClass().clear();
         this.inGameController = inGameController;
         Map<String, String> buildingsMap = new HashMap<>();
         buildingsMap.put("refinery", "de/uniks/stp24/icons/buildings/alloy_smeltery.png");
@@ -48,12 +52,13 @@ public class Building extends VBox {
         buildingsMap.put("exchange", "de/uniks/stp24/icons/buildings/seaside_hut.png");
         if (buildingsMap.get(buildingName) != null){
             Image image = new Image(buildingsMap.get(buildingName));
-            building.setImage(image);
+            imageView = new ImageView(image);
+            imageView.setFitWidth(40); // Set the width to fit the button
+            imageView.setFitHeight(40); // Set the height to fit the button
+            building.setGraphic(imageView);
         }
         building.setOnMouseClicked(event -> {
-            String imageUrl = building.getImage().getUrl();
-            String trimmedImageUrl = imageUrl.substring(imageUrl.indexOf("de/uniks/stp24/icons/buildings"));
-            if (buildingsMap.containsValue(trimmedImageUrl)){
+            if (imageView != null && imageView.getImage() != null){
                 inGameController.buildingsWindowComponent.setVisible(false);
                 inGameController.sitePropertiesComponent.setVisible(false);
                 inGameController.sitePropertiesComponent.onClose();

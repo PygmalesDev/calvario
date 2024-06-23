@@ -85,6 +85,18 @@ public class Constants {
             "consumer_goods","resource.rum"
     );
 
+    public static final Map<String, String> resourceImagePath = Map.of(
+            "credits", "-fx-background-image: url('/de/uniks/stp24/icons/resources/credits.png');",
+            "minerals", "-fx-background-image: url('/de/uniks/stp24/icons/resources/minerals.png');",
+            "population", "-fx-background-image: url('/de/uniks/stp24/icons/resources/population.png');",
+            "energy", "-fx-background-image: url('/de/uniks/stp24/icons/resources/energy.png');",
+            "food", "-fx-background-image: url('/de/uniks/stp24/icons/resources/food.png');",
+            "fuel","-fx-background-image: url('/de/uniks/stp24/icons/resources/fuel.png');",
+            "research", "-fx-background-image: url('/de/uniks/stp24/icons/resources/research.png');",
+            "alloys", "-fx-background-image: url('/de/uniks/stp24/icons/resources/alloys.png');",
+            "consumer_goods","-fx-background-image: url('/de/uniks/stp24/icons/resources/consumer_goods.png');"
+    );
+
     public static final Map<String, String> siteTranslation = Map.of(
             "city", "site.village",
             "energy", "site.thaumaturgy",
@@ -128,6 +140,30 @@ public class Constants {
             Map.entry("colonized", "update.colonized"),
             Map.entry("upgraded", "update.upgraded"),
             Map.entry("developed", "update.developed")
+    );
+
+
+    public static final Map<String, String> sitesIconPathsMap = Map.ofEntries(
+            Map.entry("city", "de/uniks/stp24/icons/sites/village_site.png"),
+            Map.entry("energy", "de/uniks/stp24/icons/sites/thaumaturgy_site.png"),
+            Map.entry("mining", "de/uniks/stp24/icons/sites/mining_site.png"),
+            Map.entry("agriculture", "de/uniks/stp24/icons/sites/harvesting_site.png"),
+            Map.entry("industry", "de/uniks/stp24/icons/sites/coalmine_site.png"),
+            Map.entry("research_site", "de/uniks/stp24/icons/sites/epoch_site.png"),
+            Map.entry("ancient_foundry", "de/uniks/stp24/icons/sites/expedition_site.png"),
+            Map.entry("ancient_factory", "de/uniks/stp24/icons/sites/merchant_site.png"),
+            Map.entry("ancient_refinery", "de/uniks/stp24/icons/sites/production_site.png")
+    );
+
+    public static final Map<String, String> buildingsIconPathsMap = Map.ofEntries(
+            Map.entry("refinery", "de/uniks/stp24/icons/buildings/alloy_smeltery.png"),
+            Map.entry("factory", "de/uniks/stp24/icons/buildings/theurgy_hall.png"),
+            Map.entry("foundry", "de/uniks/stp24/icons/buildings/chophouse.png"),
+            Map.entry("research_lab", "de/uniks/stp24/icons/buildings/resonating_delves.png"),
+            Map.entry("farm", "de/uniks/stp24/icons/buildings/farmside.png"),
+            Map.entry("mine", "de/uniks/stp24/icons/buildings/coal_querry.png"),
+            Map.entry("power_plant", "de/uniks/stp24/icons/buildings/scout_hub.png"),
+            Map.entry("exchange", "de/uniks/stp24/icons/buildings/seaside_hut.png")
     );
 
 }

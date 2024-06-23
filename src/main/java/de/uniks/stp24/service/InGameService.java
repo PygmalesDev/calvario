@@ -74,10 +74,6 @@ public class InGameService {
         gameStatus.setLanguage(lang);
     }
 
-    public int getLanguage() {
-        return gameStatus.getLanguage();
-    }
-
     public void showOnly(StackPane stackPane, Node nodeToShow) {
         for (Node node : stackPane.getChildren()) {
             node.setVisible(node == nodeToShow);

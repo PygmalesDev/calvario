@@ -1,197 +1,43 @@
 package de.uniks.stp24.ingameTests;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.game.ClockComponent;
-import de.uniks.stp24.component.game.EventComponent;
 import de.uniks.stp24.component.game.IslandComponent;
-import de.uniks.stp24.component.game.StorageOverviewComponent;
-import de.uniks.stp24.component.game.*;
-import de.uniks.stp24.component.menu.DeleteStructureComponent;
-import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
-import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.*;
-import de.uniks.stp24.model.Game;
-import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
-import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.dto.Upgrade;
-import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GameSystemsApiService;
-import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.InGameService;
-import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.*;
-import de.uniks.stp24.service.menu.LanguageService;
-import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.application.Platform;
-import javafx.scene.Group;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import javafx.scene.shape.Line;
-
 import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class IslandsServiceTest extends ControllerTest {
-    @InjectMocks
-    InGameController inGameController;
-    @InjectMocks
-    PauseMenuComponent pauseMenuComponent;
-    @InjectMocks
-    SettingsComponent settingsComponent;
-    @InjectMocks
-    EventComponent eventComponent;
-    @InjectMocks
-    ClockComponent clockComponent;
-    @InjectMocks
-    StorageOverviewComponent storageOverviewComponent;
-    @InjectMocks
-    IslandAttributeStorage islandAttributeStorage;
-    @InjectMocks
-    OverviewSitesComponent overviewSitesComponent;
-    @InjectMocks
-    SitesComponent sitesComponent;
-    @InjectMocks
-    DetailsComponent detailsComponent;
-    @InjectMocks
-    BuildingsComponent buildingsComponent;
-    @InjectMocks
-    OverviewUpgradeComponent overviewUpgradeComponent;
-    @InjectMocks
-    BuildingPropertiesComponent buildingPropertiesComponent;
-    @InjectMocks
-    SitePropertiesComponent sitePropertiesComponent;
-    @InjectMocks
-    BuildingsWindowComponent buildingsWindowComponent;
-    @InjectMocks
-    DeleteStructureComponent deleteStructureComponent;
-
-
-    @Spy
-    TokenStorage tokenStorage;
-    @Spy
-    ObjectMapper objectMapper;
-    @Spy
-    TimerService timerService;
-    @Spy
-    GamesApiService gameApiService;
-    @Spy
-    EmpireService empireService;
-    @Spy
-    InfrastructureService infrastructureService;
-
-
-    @Spy
-    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
-
-    @Spy
-    GameStatus gameStatus;
-
-    @Spy
-    InGameService inGameService;
-    @Spy
-    EventService eventService;
-    @Spy
-    EventListener eventListener = new EventListener(tokenStorage, objectMapper);
-    @Spy
-    Subscriber subscriber = spy(Subscriber.class);
-
-    @Spy
-    LanguageService languageService;
-
-    @Spy
-    ResourcesService resourcesService;
     @Spy
     GameSystemsApiService gameSystemsApiService;
     @Spy
     IslandComponent islandComponent = spy(IslandComponent.class);
 
-    Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
-    Map<String, Integer> upkeep = Map.of("energy", 3, "fuel", 8);
-    UpgradeStatus unexplored = new UpgradeStatus("unexplored", 1, cost, upkeep, 1);
-    UpgradeStatus explored = new UpgradeStatus("explored", 1, cost, upkeep, 1);
-    UpgradeStatus colonized = new UpgradeStatus("colonized", 1, cost, upkeep, 1);
-    UpgradeStatus upgraded = new UpgradeStatus("upgraded", 1, cost, upkeep, 1);
-    UpgradeStatus developed = new UpgradeStatus("developed", 1, cost, upkeep, 1);
-
-    SystemUpgrades systemUpgrades = new SystemUpgrades(unexplored, explored, colonized, upgraded, developed);
-    ArrayList<BuildingPresets> buildingPresets = new ArrayList<>();
-    ArrayList<DistrictPresets> districtPresets = new ArrayList<>();
     SystemDto[] systems = new SystemDto[3];
     List<IslandComponent> testIsleComps;
-    Button[] buttons = new Button[3] ;
-    Line[] linesR = new Line[2] ;
     Island island1;
-    Map<String,InfrastructureService> testMapInfra = new HashMap<>();
-
 
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
-        this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
-        this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
-        this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
-        this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
-        this.inGameController.settingsComponent = this.settingsComponent;
-        this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
-        this.inGameController.clockComponent = this.clockComponent;
-        this.inGameController.eventComponent = eventComponent;
-        this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
-        this.clockComponent.timerService = this.timerService;
-        this.clockComponent.eventService = this.eventService;
-        this.clockComponent.subscriber = this.subscriber;
-        this.clockComponent.gamesApiService = this.gameApiService;
-        this.clockComponent.islandsService = this.islandsService;
-        this.clockComponent.eventComponent = this.eventComponent;
         this.islandsService.app = this.app;
-        this.islandAttributeStorage.systemPresets = systemUpgrades;
-        inGameService.setGameStatus(gameStatus);
         islandsService.gameSystemsService = this.gameSystemsApiService;
-        this.inGameController.islandAttributes = this.islandAttributeStorage;
-        this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
-        this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
-        this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
-        this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
-        this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
-
-        inGameController.mapScrollPane = new ScrollPane();
-        inGameController.group = new Group();
-        inGameController.zoomPane = new StackPane();
-        inGameController.mapGrid = new Pane();
-
-        inGameController.zoomPane.getChildren().add(inGameController.mapGrid);
-        inGameController.group.getChildren().add(inGameController.zoomPane);
-        inGameController.mapScrollPane.setContent(inGameController.group);
-
-        doReturn(gameStatus).when(this.inGameService).getGameStatus();
-        doReturn(Observable
-                .just(new Game("a", null, "game1Id", "testGame1",
-                        "testHost1", true, 1,10, null))).when(gameApiService).getGame(any());
         doReturn(null).when(this.app).show("/ingame");
         islandsService.saveEmpire("empire",new ReadEmpireDto("a","b","empire","game1","user1","name",
                 "description","#FFDDEE",2,3,"home"));
-//        SystemDto[] systems = new SystemDto[3];
         ArrayList<String> buildings = new ArrayList<>(Arrays.asList("power_plant", "mine", "farm", "research_lab", "foundry", "factory", "refinery"));
         systems[0] = new SystemDto("a","b","system1","game1","agriculture",
                 "name",null,null,25,null, Upgrade.unexplored,0,
@@ -206,63 +52,7 @@ public class IslandsServiceTest extends ControllerTest {
                 Map.of("city",2, "industry", 2, "mining",3, "energy",4, "agriculture",6), 22,
                 buildings,Upgrade.developed,25,Map.of("system1",22,"system2",18),-5.23,4.23,"empire"
         );
-
-        IslandComponent comp0 = app.initAndRender(new IslandComponent());
-        IslandComponent comp1 = new IslandComponent();
-        IslandComponent comp2 = new IslandComponent();
-        Map<String, IslandComponent> compMap = Map.of("system1", comp0,
-                "system2", comp1,
-                "home" , comp2);
-        List<IslandComponent> compList = Arrays.asList(comp0,comp1,comp2);
         doReturn(Observable.just(systems)).when(gameSystemsApiService).getSystems(any());
-        doReturn(compMap).when(islandsService).getComponentMap();
-//        doReturn(compList).when(islandsService).createIslands(any());
-
-        doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
-        doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
-        doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
-
-        Mockito.doCallRealMethod().when(islandsService).retrieveIslands(any());
-        Mockito.doCallRealMethod().when(islandsService).getListOfIslands();
-        Mockito.doCallRealMethod().when(islandsService).getMapWidth();
-        Mockito.doCallRealMethod().when(islandsService).getMapHeight();
-        Mockito.doCallRealMethod().when(islandsService).getEmpire(any());
-        Mockito.doCallRealMethod().when(islandsService).createIslands(any());
-        Mockito.doCallRealMethod().when(islandsService).createIslandPaneFromDto(any(),any());
-        doCallRealMethod().when(islandComponent).setPosition(anyDouble(),anyDouble());
-
-
-        // Mock getEmpire
-        doReturn(Observable.just(new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
-                "a","a",1, 2, "a", new String[]{"1"}, new HashMap<>() {{put("energy", 5);put("population", 4);}},
-                null))).when(this.empireService).getEmpire(any(),any());
-        doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
-
-        app.show(inGameController);
-        eventComponent.getStylesheets().clear();
-        storageOverviewComponent.getStylesheets().clear();
-        clockComponent.getStylesheets().clear();
-        pauseMenuComponent.getStylesheets().clear();
-        settingsComponent.getStylesheets().clear();
-        overviewSitesComponent.getStylesheets().clear();
-        overviewUpgradeComponent.getStylesheets().clear();
-        sitesComponent.getStylesheets().clear();
-
-        island1 = new Island(
-          "testEmpireID",
-          1,
-          50,
-          50,
-          IslandType. valueOf("uninhabitable_0"),
-          20,
-          25,
-          2,
-          Map.of("energy", 3, "agriculture" , 6),
-          Map.of("energy", 3, "agriculture" , 6),
-          buildings,
-          "1",
-          "developed"
-        );
 
     }
 
@@ -272,17 +62,12 @@ public class IslandsServiceTest extends ControllerTest {
         islandsService.retrieveIslands("game1");
         gameSystemsApiService.getSystems("game1");
 
-        sleep(1000);
-
         List<Island> testIsles = islandsService.getListOfIslands();
+
+        sleep(100);
 
         testIsleComps = islandsService.createIslands(testIsles);
         Map<String,IslandComponent> testIsleMap = islandsService.getComponentMap();
-
-
-
-        sleep(1000);
-
         assertEquals(3,testIsles.size());
         assertEquals(3,testIsleComps.size());
         assertEquals(3,testIsleMap.size());
@@ -292,96 +77,12 @@ public class IslandsServiceTest extends ControllerTest {
         assertNotEquals(0,islandsService.getMapWidth());
         assertNotEquals(0,islandsService.getMapHeight());
         assertEquals(2,islandsService.getSiteManagerSize());
-
-
-
-
-        Platform.runLater(() -> {
-            createIcons();
-            createLines();
-            waitForFxEvents();
-            inGameController.mapGrid.setMinSize(1000,600);
-            inGameController.mapGrid.getChildren().addAll(linesR[0],linesR[1]);
-            inGameController.mapGrid.getChildren().add(buttons[0]);
-            inGameController.mapGrid.getChildren().add(buttons[1]);
-            inGameController.mapGrid.getChildren().add(buttons[2]);
-            waitForFxEvents();
-        });
-//        System.out.println(testIsleComps.getLast().getIsland());
-        sleep(5000);
-        Platform.runLater(() -> {
-            waitForFxEvents();
-            clickOn("#comp2");
-            waitForFxEvents();
-
-        });
-
-
-
-        assertTrue(inGameController.storageOverviewComponent.isVisible());
-//        sleep(2000);
-        Platform.runLater(() -> {
-            waitForFxEvents();
-            inGameController.showStorage();
-            waitForFxEvents();
-        });
-
-        //assertEquals(37,islandsService.getAllNumberOfSites("empire"));
-        //assertEquals(17,islandsService.getCapacityOfOneSystem("home"));
-        //assertEquals(9,islandsService.getNumberOfSites("empire","energy"));
-
-        System.out.println(islandsService.getAllNumberOfSites("empire"));
-        System.out.println(islandsService.getCapacityOfOneSystem("home"));
-        System.out.println(islandsService.getNumberOfSites("empire","energy"));
-
-        sleep(2000);
+        assertEquals(37,islandsService.getAllNumberOfSites("empire"));
+        assertEquals(17,islandsService.getCapacityOfOneSystem("home"));
+        assertEquals(9,islandsService.getNumberOfSites("empire","energy"));
 
     }
 
-    public void createIcons(){
-        buttons[0] = new Button();
-        buttons[0].setLayoutX(200);
-        buttons[0].setLayoutY(200);
-        buttons[0].setPrefWidth(50);
-        buttons[0].setPrefHeight(50);
-        buttons[0].setId("comp0");
-        buttons[0].setStyle("-fx-background-image: url('/de/uniks/stp24/icons/islands/uninhabitable_0.png')");
 
-        buttons[1] = new Button();
-        buttons[1].setLayoutX(400);
-        buttons[1].setLayoutY(200);
-        buttons[1].setPrefWidth(50);
-        buttons[1].setPrefHeight(50);
-        buttons[1].setId("comp1");
-        buttons[1].setStyle("-fx-background-image: url('/de/uniks/stp24/icons/islands/uninhabitable_0.png')");
-
-        buttons[2] = new Button();
-        buttons[2].setLayoutX(200);
-        buttons[2].setLayoutY(400);
-        buttons[2].setPrefWidth(50);
-        buttons[2].setPrefHeight(50);
-        buttons[2].setId("comp2");
-        buttons[2].setStyle("-fx-background-image: url('/de/uniks/stp24/icons/islands/uninhabitable_0.png')");
-
-        buttons[0].setOnAction(event -> System.out.println("food"));
-        buttons[1].setOnAction(event -> System.out.println("food"));
-        buttons[2].setOnAction(event -> inGameController.showStorage());
-    }
-
-    public void createLines(){
-        linesR[0] = new Line(buttons[0].getLayoutX()+25,
-          buttons[0].getLayoutY()+25,
-          buttons[2].getLayoutX()+25,
-          buttons[2].getLayoutY()+25
-          ) ;
-        linesR[0].setStrokeWidth(2);
-        linesR[1] = new Line(buttons[1].getLayoutX()+25,
-          buttons[1].getLayoutY()+25,
-          buttons[2].getLayoutX()+25,
-          buttons[2].getLayoutY()+25
-        ) ;
-        linesR[1].setStrokeWidth(2);
-
-    }
 
 }

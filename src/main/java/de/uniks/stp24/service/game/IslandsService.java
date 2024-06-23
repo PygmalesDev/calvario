@@ -46,10 +46,6 @@ public class IslandsService extends BasicService {
     private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();
     private final Map<String, List<String>> connections = new HashMap<>();
     public final Map<String, InfrastructureService> siteManager = new HashMap<>();
-    private final List<String> siteIDs = Arrays.asList("city", "energy", "mining", "agriculture",
-      "industry", "research_site", "ancient_foundry", "ancient_factory", "ancient_refinery");
-    private final List<String> buildingIDs = Arrays.asList("exchange", "power_plant", "mine", "farm",
-      "research_lab", "foundry", "factory", "refinery");
 
     @Inject
     public IslandsService() {
@@ -128,6 +124,7 @@ public class IslandsService extends BasicService {
                     widthRange = maxX-minX;
                     heightRange = maxY-minY;
                     this.app.show("/ingame");
+                    refreshListOfColonizedSystems();
                 },
                 error -> errorService.getStatus(error));
     }
@@ -266,11 +263,14 @@ public class IslandsService extends BasicService {
      * */
     public void mapSitesBuildings() {
         siteManager.forEach((id,manager) -> manager.resetMap());
-        devIsles.forEach(System.out::println);
         for (ShortSystemDto dto : this.devIsles) {
-            dto.districts().forEach((k,v) -> siteManager.get(dto.owner()).putOrUpdateSiteInfo(k,v));
-            dto.buildings()
-              .forEach(building -> siteManager.get(dto.owner()).putOrUpdateBuildingInfo(building));
+            if (Objects.nonNull(dto.districts())) {
+                dto.districts().forEach((k, v) -> siteManager.get(dto.owner()).putOrUpdateSiteInfo(k, v));
+            }
+            if (Objects.nonNull(dto.buildings())){
+                dto.buildings()
+                  .forEach(building -> siteManager.get(dto.owner()).putOrUpdateBuildingInfo(building));
+            }
         }
     }
 
@@ -344,7 +344,6 @@ public class IslandsService extends BasicService {
                 new UpdateBuildingDto(
                         buildings
                         )), result -> {
-
             islandAttributes.getIsland().buildings().clear();
             islandAttributes.getIsland().buildings().addAll(result.buildings());
             inGameController.selectedIsland.island = islandAttributes.getIsland();
@@ -356,7 +355,6 @@ public class IslandsService extends BasicService {
                 new UpgradeSystemDto(
                         upgradeStatus
                 )), result -> {
-
             Island tmp = new Island(
                     result.owner(),
                     islandAttributes.getIsland().flagIndex(),

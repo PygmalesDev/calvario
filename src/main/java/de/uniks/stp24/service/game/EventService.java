@@ -40,6 +40,8 @@ public class EventService {
 
     @Inject
     TimerService timerService;
+    @Inject
+    IslandsService islandsService;
 
     @Inject
     EmpireApiService empireApiService;
@@ -49,7 +51,7 @@ public class EventService {
     TokenStorage tokenStorage;
 
 
-ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",
+    ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",
             "grandExp", "reckoning", "rogerFeast", /* Bad Events */ "blackSpot", "dutchman", "foolsGold", "pestilence",
             "rumBottle", "submerge"));
 
@@ -111,14 +113,16 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
         this.firePropertyChange(PROPERTY_NEXTEVENT, oldValue, nextEvent);
 
         setEvent(getNewRandomEvent());
-         if (remainingSeasons <= 0) {
+        if (remainingSeasons <= 0) {
             setEvent(null);
             // If event is done reset it in Server
-             subscriber.subscribe(sendEffect(),
-                     result -> {},
-                     error -> {});
+            subscriber.subscribe(sendEffect(),
+                    result -> {
+                    },
+                    error -> {
+                    });
         } else {
-            setRemainingSeasons(getRemainingSeasons()-1);
+            setRemainingSeasons(getRemainingSeasons() - 1);
         }
     }
 
@@ -182,6 +186,45 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
                         double base = effect.get("base").asDouble();
                         double multiplier = effect.get("multiplier").asDouble();
                         double bonus = effect.get("bonus").asDouble();
+
+                        String condType = effect.get("condType").asText();
+                        String condID = effect.get("condID").asText();
+                        String effected = effect.get("effected").asText();
+
+                        if (condType != null) {
+
+                            int mult = 0;
+
+                            System.out.println("here");
+                            switch (condType) {
+                                case "site":
+                                    mult = islandsService.getNumberOfSites(tokenStorage.getEmpireId(), condID);
+                                    break;
+                                case "building":
+                                    mult = islandsService.getNumberOfBuildings(tokenStorage.getEmpireId(), condID);
+                                    break;
+                                case "system":
+//                                    mult = islandsService.getNumberOfSystems(tokenStorage.getEmpireId(), condID);
+                                    break;
+                                case "resource":
+//                                    mult = islandsService.getNumberOfResources(tokenStorage.getEmpireId(), condID);
+                                    break;
+                            }
+
+                            switch (effected) {
+                                case "base":
+                                    base *= mult;
+                                    break;
+                                case "multiplier":
+                                    multiplier += (multiplier % 1) * mult;
+                                    break;
+                                case "bonus":
+                                    bonus *= mult;
+                                    break;
+                            }
+
+                        }
+
                         effectsDto.add(new EffectDto(variable, base, multiplier, bonus));
                     }
 

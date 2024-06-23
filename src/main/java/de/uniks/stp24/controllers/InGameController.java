@@ -182,7 +182,6 @@ public class InGameController extends BasicController {
 
     }
 
-
     @OnInit
     public void init() {
         overviewSitesComponent.setIngameController(this);
@@ -269,7 +268,7 @@ public class InGameController extends BasicController {
         siteProperties.setMouseTransparent(true);
         deleteStructureWarningContainer.setMouseTransparent(true);
 
-        pauseMenuContainer.setMouseTransparent(true);
+        pauseMenuContainer.setMouseTransparent(false);
         pauseMenuContainer.setVisible(false);
         eventComponent.setParent(shadow, eventContainer);
         clockComponentContainer.getChildren().add(clockComponent);
@@ -278,8 +277,6 @@ public class InGameController extends BasicController {
         shadow.setVisible(false);
         eventComponent.setClockComponent(clockComponent);
 
-        pauseMenuContainer.getChildren().add(pauseMenuComponent);
-
         overviewContainer.setVisible(false);
         overviewSitesComponent.setContainer();
         overviewContainer.getChildren().add(overviewSitesComponent);
@@ -287,6 +284,8 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
 
+        pauseMenuContainer.getChildren().clear();
+        pauseMenuContainer.getChildren().add(pauseMenuComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -305,13 +304,9 @@ public class InGameController extends BasicController {
 
     @OnKey(code = KeyCode.I)
     public void showIslandOverviewWindows(){
-        //buildingProperties.setMouseTransparent(false);
         buildingProperties.setMouseTransparent(false);
         buildingsWindow.setMouseTransparent(false);
-        //siteProperties.setMouseTransparent(false);
         popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
-        //popupSiteProperties.showPopup(siteProperties, sitePropertiesComponent);
-
     }
 
     public void showSettings() {
@@ -366,9 +361,6 @@ public class InGameController extends BasicController {
         mapGrid.setMinSize(islandsService.getMapWidth(), islandsService.getMapHeight());
         islandsService.createLines(this.islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
 
-
-
-
         this.islandComponentList.forEach(isle -> {
             isle.setInGameController(this);
             isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
@@ -399,7 +391,6 @@ public class InGameController extends BasicController {
             group.setScaleX(scale);
             group.setScaleY(scale);
         });
-
     }
 
 
@@ -517,7 +508,6 @@ public class InGameController extends BasicController {
         buildingsWindow.setMouseTransparent(false);
         popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
         buildingProperties.setMouseTransparent(false);
-
     }
 
 
@@ -526,7 +516,6 @@ public class InGameController extends BasicController {
         buildingsWindow.setVisible(false);
         buildingProperties.setVisible(false);
         popupSiteProperties.showPopup(siteProperties, sitePropertiesComponent);
-
     }
 
     public void setSiteType(String siteType) {

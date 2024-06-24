@@ -74,7 +74,7 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
         this.usernameText.setText(member.user().name());
         this.readyText.setText(resource.getString(member.ready() ? "ready" : "not.ready"));
 
-        if(Objects.nonNull(tokenStorage.getAvatarMap())){
+        if(Objects.nonNull(this.member.user()._public())){
             initializeAvatarImage(this.member.user()._public());
         } else {
             this.backgroundImage.setImage(this.imageCache.get(Objects.nonNull(this.member.user().avatar())

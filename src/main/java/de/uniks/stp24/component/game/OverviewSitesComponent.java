@@ -1,8 +1,6 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.Upgrade;
-import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import javafx.fxml.FXML;
@@ -21,8 +19,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Objects;
 import java.util.ResourceBundle;
-
-import static de.uniks.stp24.service.Constants.*;
 
 @Component(view = "IslandOverviewSites.fxml")
 public class OverviewSitesComponent extends AnchorPane {
@@ -46,7 +42,9 @@ public class OverviewSitesComponent extends AnchorPane {
     @FXML
     public TextField inputIslandName;
     @FXML
-    public Pane upgradeButton;
+    public Button upgradeButton;
+    @FXML
+    public Pane islandFlag;
 
     @SubComponent
     @Inject
@@ -84,8 +82,8 @@ public class OverviewSitesComponent extends AnchorPane {
         sitesButton.setDisable(false);
         buildingsButton.setDisable(false);
 
+        detailsComponent.setResLists();
         detailsComponent.setSumProduction(islandAttributes.mergeProduction());
-        detailsComponent.setSumConsumption(islandAttributes.mergeConsumption());
 
         inGameService.showOnly(sitesContainer, detailsComponent);
     }
@@ -95,9 +93,11 @@ public class OverviewSitesComponent extends AnchorPane {
         if(islandAttributes.getIsland().upgradeLevel() == 4){
             inGameController.overviewUpgradeComponent.upgrade_box.setVisible(false);
             inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(true);
+            inGameController.overviewUpgradeComponent.confirmUpgrade.setDisable(true);
         } else {
             inGameController.overviewUpgradeComponent.upgrade_box.setVisible(true);
             inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(false);
+            inGameController.overviewUpgradeComponent.confirmUpgrade.setDisable(false);
         }
         inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewUpgradeComponent);
         inGameController.overviewUpgradeComponent.setUpgradeButton();
@@ -151,9 +151,6 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameService.showOnly(sitesContainer, sitesComponent);
     }
 
-
-
-
     public void setContainer() {
         sitesContainer.setVisible(false);
         sitesContainer.getChildren().add(sitesComponent);
@@ -171,11 +168,13 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameController.sitePropertiesComponent.setVisible(false);
         inGameController.buildingPropertiesComponent.setVisible(false);
         inGameController.overviewContainer.setVisible(false);
-        inGameController.selectedIsland.rudderImage.setVisible(false);
         inGameController.selectedIsland.islandIsSelected = false;
-        if (islandAttributes.getIsland().flagIndex() >= 0) {
+
+        if(!inGameController.islandsService.keyCodeFlag) {
             inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
+            inGameController.selectedIsland.rudderImage.setVisible(false);
         }
+
         inGameController.selectedIsland = null;
     }
 
@@ -185,11 +184,10 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void setOverviewSites() {
+        islandFlag.setStyle("-fx-background-image: url('" + inGameController.flagsPath.get(islandAttributes.getIsland().flagIndex()) +"');" +
+                "-fx-background-size: 100% 100%;" + "-fx-background-repeat: no-repeat;");
         showBuildings();
-        if(inGameController.tokenStorage.isSpectator() || !Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId())){
-            upgradeButton.setVisible(false);
-        }
-
+        upgradeButton.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
 
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
                 islandAttributes.getIsland().buildings().size();

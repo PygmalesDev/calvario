@@ -6,15 +6,23 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 @Component(view = "Sites.fxml")
 public class SitesComponent extends VBox {
 
     @FXML
     public HBox sitesBox;
+
+    @Inject
+    @Resource
+    @Named("gameResourceBundle")
+    ResourceBundle gameResourceBundle;
 
     InGameController inGameController;
 
@@ -25,7 +33,9 @@ public class SitesComponent extends VBox {
 
     public void setSitesBox(Island island) {
         sitesBox.getChildren().clear();
-        System.out.println(island);
+        VBox vBox = new VBox();
+        vBox.setPrefWidth(10);
+        sitesBox.getChildren().add(vBox);
         for (Map.Entry<String, Integer> entry : island.sites().entrySet()) {
             DistrictComponent districtComponent = new DistrictComponent(entry.getKey(), entry.getValue() + "/" + island.sitesSlots().get(entry.getKey()), inGameController);
             sitesBox.getChildren().add(districtComponent);

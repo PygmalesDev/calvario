@@ -4,13 +4,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
 import javax.inject.Inject;
 import static java.lang.Math.ceil;
-import static javafx.scene.paint.Color.BLACK;
 
 @Component(view = "CaptainBubble.fxml")
 public class BubbleComponent extends Pane {
@@ -20,10 +18,6 @@ public class BubbleComponent extends Pane {
     ImageView captainLogo;
     @FXML
     Pane backgroundBubble;
-    Text childText;
-    boolean errorStatus;
-
-    String lastText = "";
 
     @Inject
     public BubbleComponent() {
@@ -75,15 +69,6 @@ public class BubbleComponent extends Pane {
         else {
             captainText.setStyle("-fx-text-fill: BLACK");
         }
-    }
-
-    public boolean getErrorMode() {
-        return this.errorStatus;
-    }
-
-    public void addChildren(Text child) {
-        child.setFill(BLACK);
-        childText = child;
     }
 
     @OnDestroy

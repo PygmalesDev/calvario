@@ -27,9 +27,7 @@ public class EditAccService {
     public Observable<User> changeUserInfo(String newUsername, String newPassword){
         return userApiService
                 .edit(tokenStorage.getUserId(), new UpdateUserDto(newUsername, tokenStorage.getAvatar(), newPassword))
-                .doOnNext(editResult ->{
-                    tokenStorage.setName(editResult.name());
-                });
+                .doOnNext(editResult -> tokenStorage.setName(editResult.name()));
     }
 
     public Observable<User> deleteUser(){

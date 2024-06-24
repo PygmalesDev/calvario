@@ -35,12 +35,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import static de.uniks.stp24.service.Constants.siteTranslation;
+import static de.uniks.stp24.service.Constants.*;
 
 @Component(view = "SiteProperties.fxml")
 public class SitePropertiesComponent extends AnchorPane {
-    @FXML
-    Button activateGridButton;
     @FXML
     GridPane siteAmountGridPane;
     @FXML
@@ -84,36 +82,27 @@ public class SitePropertiesComponent extends AnchorPane {
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
+    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
 
     @Inject
     public SitePropertiesComponent(){
-
     }
     Map<String, String> sitesMap;
 
     private int amountSite = 0;
     private int amountSiteSlots = 0;
-    private Island island;
 
     public ObservableList<Map<String, Integer>> resources;
     public ObservableList<ResourceComponent> resourceComponents;
 
     InGameController inGameController;
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
+
 
     @OnInit
     public void init(){
-        sitesMap = new HashMap<>();
-        sitesMap.put("city", "de/uniks/stp24/icons/sites/village_site.png");
-        sitesMap.put("energy", "de/uniks/stp24/icons/sites/thaumaturgy_site.png");
-        sitesMap.put("mining", "de/uniks/stp24/icons/sites/mining_site.png");
-        sitesMap.put("agriculture", "de/uniks/stp24/icons/sites/harvesting_site.png");
-        sitesMap.put("industry", "de/uniks/stp24/icons/sites/coalmine_site.png");
-        sitesMap.put("research_site", "de/uniks/stp24/icons/sites/epoch_site.png");
-        sitesMap.put("ancient_foundry", "de/uniks/stp24/icons/sites/expedition_site.png");
-        sitesMap.put("ancient_factory", "de/uniks/stp24/icons/sites/merchant_site.png");
-        sitesMap.put("ancient_refinery", "de/uniks/stp24/icons/sites/production_site.png");
+        System.out.println(gameResourceBundle != null);
+        sitesMap = sitesIconPathsMap;
     }
 
     @FXML
@@ -145,7 +134,7 @@ public class SitePropertiesComponent extends AnchorPane {
     }
 
     public void buildSite(){
-        island = tokenStorage.getIsland();
+        Island island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.buildSite(tokenStorage.getGameId(), island, siteType), result -> {
             tokenStorage.setIsland(islandsService.updateIsland(result));
             islandAttributeStorage.setIsland(islandsService.updateIsland(result));
@@ -251,12 +240,6 @@ public class SitePropertiesComponent extends AnchorPane {
         siteProducesListView.setItems(resourceListProduce);
     }
 
-    private String capitalizeFirstLetter(String input) {
-        if (input == null || input.isEmpty()) {
-            return input;
-        }
-        return input.substring(0, 1).toUpperCase() + input.substring(1);
-    }
 }
 
 class CustomComponentListCell<Item, Component extends Parent> extends ListCell<Item> {

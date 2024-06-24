@@ -11,7 +11,6 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.ResourcesService;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -21,7 +20,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
-import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
 
@@ -29,12 +27,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import static de.uniks.stp24.service.Constants.buildingTranslation;
-import static de.uniks.stp24.service.Constants.siteTranslation;
+import static de.uniks.stp24.service.Constants.*;
 
 @Component(view = "DeleteStructureWarning.fxml")
 public class DeleteStructureComponent extends VBox{
@@ -69,10 +65,8 @@ public class DeleteStructureComponent extends VBox{
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
-    public ObservableList<String> items = FXCollections.observableArrayList();
-
-    public Map<String, String> sites = new HashMap<>();
-    public final Map<String, String> buildings = new HashMap<>();
+    public Map<String, String> sites = sitesIconPathsMap;
+    public final Map<String, String> buildings = buildingsIconPathsMap;
     @Inject
     TokenStorage tokenStorage;
 
@@ -86,29 +80,6 @@ public class DeleteStructureComponent extends VBox{
 
     @Inject
     public DeleteStructureComponent(){
-
-    }
-
-    @OnInit
-    public void init(){
-        sites.put("city", "de/uniks/stp24/icons/sites/village_site.png");
-        sites.put("energy", "de/uniks/stp24/icons/sites/thaumaturgy_site.png");
-        sites.put("mining", "de/uniks/stp24/icons/sites/mining_site.png");
-        sites.put("agriculture", "de/uniks/stp24/icons/sites/harvesting_site.png");
-        sites.put("industry", "de/uniks/stp24/icons/sites/coalmine_site.png");
-        sites.put("research_site", "de/uniks/stp24/icons/sites/epoch_site.png");
-        sites.put("ancient_foundry", "de/uniks/stp24/icons/sites/expedition_site.png");
-        sites.put("ancient_factory", "de/uniks/stp24/icons/sites/merchant_site.png");
-        sites.put("ancient_refinery", "de/uniks/stp24/icons/sites/production_site.png");
-
-        buildings.put("refinery", "de/uniks/stp24/icons/buildings/alloy_smeltery.png");
-        buildings.put("factory", "de/uniks/stp24/icons/buildings/theurgy_hall.png");
-        buildings.put("foundry", "de/uniks/stp24/icons/buildings/chophouse.png");
-        buildings.put("research_lab", "de/uniks/stp24/icons/buildings/resonating_delves.png");
-        buildings.put("farm", "de/uniks/stp24/icons/buildings/farmside.png");
-        buildings.put("mine", "de/uniks/stp24/icons/buildings/coal_querry.png");
-        buildings.put("power_plant", "de/uniks/stp24/icons/buildings/scout_hub.png");
-        buildings.put("exchange", "de/uniks/stp24/icons/buildings/seaside_hut.png");
     }
 
     public void setInGameController(InGameController inGameController){
@@ -116,16 +87,11 @@ public class DeleteStructureComponent extends VBox{
     }
 
 
-    public void setElements(List<Resource> elements){
-
-    }
-
-
     public void setWarningText(){
         if(buildings.containsKey(structureType)){
-            warningText.setText(gameResourceBundle.getString("sure.you.want.delete") + gameResourceBundle.getString( buildingTranslation.get(structureType)) + "?");
+            warningText.setText(gameResourceBundle.getString("sure.you.want.delete") + " " + gameResourceBundle.getString( buildingTranslation.get(structureType)) + "?");
         }else{
-            warningText.setText(gameResourceBundle.getString("sure.you.want.delete") + gameResourceBundle.getString( siteTranslation.get(structureType)) + "?");
+            warningText.setText(gameResourceBundle.getString("sure.you.want.delete") + " " + gameResourceBundle.getString( siteTranslation.get(structureType)) + "?");
         }
     }
 
@@ -196,6 +162,8 @@ public class DeleteStructureComponent extends VBox{
                 subscriber.subscribe(resourcesService.destroyBuilding(tokenStorage.getGameId(), island, structureType), result -> {
                     tokenStorage.setIsland(islandsService.updateIsland(result));
                     islandAttributeStorage.setIsland(islandsService.updateIsland(result));
+                    inGameController.islandsService.updateIslandBuildings(islandAttributeStorage, inGameController, islandAttributeStorage.getIsland().buildings());
+                    inGameController.setSitePropertiesInvisible();
                     onCancel();
                 });
             } else {
@@ -203,12 +171,5 @@ public class DeleteStructureComponent extends VBox{
             }
         }
 
-    }
-
-    private String capitalizeFirstLetter(String input) {
-        if (input == null || input.isEmpty()) {
-            return input;
-        }
-        return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
 }

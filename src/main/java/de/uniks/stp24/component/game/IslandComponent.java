@@ -18,6 +18,7 @@ import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import javax.inject.Singleton;
 
@@ -39,7 +40,7 @@ public class IslandComponent extends Pane {
     @Resource
     ResourceBundle resource;
     public Island island;
- 
+
     ImageCache imageCache;
     @Inject
     IslandAttributeStorage islandAttributes;
@@ -50,9 +51,6 @@ public class IslandComponent extends Pane {
 
     public boolean islandIsSelected = false;
 
-    private boolean keyCodeH = false;
-
-
     @Inject
     public IslandComponent() {
         if (this.imageCache == null) {
@@ -62,13 +60,7 @@ public class IslandComponent extends Pane {
         this.flagImage = new ImageView();
     }
 
-    @OnRender
-    public void render(){
-        this.flagPane.setVisible(true);
-    }
-
-
-    public void applyIcon(IslandType type){
+    public void applyIcon(IslandType type) {
         this.islandImage
                 .setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
     }
@@ -83,7 +75,6 @@ public class IslandComponent extends Pane {
     }
 
     public void applyInfo(Island islandInfo) {
-        System.out.println("INFO APPLIED");
         this.island = islandInfo;
         applyIcon(this.island.type());
     }
@@ -105,34 +96,22 @@ public class IslandComponent extends Pane {
     // switch the visibility of all flags
     public void showFlag(boolean selected) {
         this.flagPane.setVisible(selected);
-    }
-
-    public void showFlag(){
-        if(island.flagIndex() >= 0 && !keyCodeH){
-            this.flagPane.setVisible(!flagPane.isVisible());
-        }
+        inGameController.islandsService.keyCodeFlag = selected;
     }
 
     @OnKey(code = KeyCode.H, shift = true)
-    public void showFlagH(){
-        if(island.flagIndex() >= 0){
+    public void showFlagH() {
+        if (island.flagIndex() >= 0 && !islandIsSelected) {
             this.flagPane.setVisible(!flagPane.isVisible());
         }
-        keyCodeH = !keyCodeH;
     }
 
-
-    public Island getIsland(){
+    public Island getIsland() {
         return this.island;
     }
 
     public void showRudder() {
         rudderImage.setVisible(true);
-
-    }
-
-    public void updateIsland(Island island){
-        this.island = island;
     }
 
     public void unshowRudder() {
@@ -142,35 +121,28 @@ public class IslandComponent extends Pane {
     }
 
     //Logic for showing rudder if other island is already selected
-    public void showIslandOverview() {
-        inGameController.overviewSitesComponent.resetButtons();
-        if (inGameController.selectedIsland != null && inGameController.selectedIsland != this) {
-            inGameController.selectedIsland.rudderImage.setVisible(false);
-            if(!inGameController.selectedIsland.rudderImage.isVisible() && !keyCodeH){
-                inGameController.selectedIsland.flagPane.setVisible(false);
-            }
-            inGameController.selectedIsland.islandIsSelected = false;
-            inGameController.selectedIsland = null;
-        } else if (inGameController.selectedIsland == this) {
-            inGameController.overviewContainer.setVisible(false);
-            inGameController.selectedIsland.rudderImage.setVisible(false);
-            if(!inGameController.selectedIsland.rudderImage.isVisible() && !keyCodeH){
-                inGameController.selectedIsland.flagPane.setVisible(false);
-            }
-            inGameController.selectedIsland.islandIsSelected = false;
-            inGameController.selectedIsland = null;
-            return;
-        }
-
-        islandIsSelected = true;
-        if(this.island.owner() != null) {
-            inGameController.showOverview(this.island);
-            System.out.println(island.sites() + "WAWAWAWAW");
-            showFlag();
+    public void showUnshowRudder() {
+        if (islandIsSelected) {
+            reset();
+            islandIsSelected = false;
         } else {
-            inGameController.overviewContainer.setVisible(false);
+            if (island.owner() != null) {
+                inGameController.islandsService.islandComponentMap.forEach((id, comp) -> {
+                    if (comp.islandIsSelected) {
+                        comp.rudderImage.setVisible(false);
+                        if (!inGameController.islandsService.keyCodeFlag) {
+                            comp.flagPane.setVisible(!comp.flagPane.isVisible());
+                        }
+                        comp.islandIsSelected = false;
+                    }
+                });
+                islandIsSelected = true;
+            }
         }
-        inGameController.selectedIsland = this;
+        
+        if (!inGameController.islandsService.keyCodeFlag) {
+            this.flagPane.setVisible(!this.flagPane.isVisible());
+        }
     }
 
     public void setInGameController(InGameController inGameController) {
@@ -187,5 +159,20 @@ public class IslandComponent extends Pane {
     public IslandComponent setTokenStorage(TokenStorage tokenStorage) {
         this.tokenStorage = tokenStorage;
         return this;
+    }
+
+    public void reset(){
+        inGameController.overviewSitesComponent.resetButtons();
+        inGameController.buildingsWindowComponent.setVisible(false);
+        inGameController.sitePropertiesComponent.setVisible(false);
+        inGameController.buildingPropertiesComponent.setVisible(false);
+        inGameController.overviewContainer.setVisible(false);
+        inGameController.selectedIsland.islandIsSelected = false;
+
+        if(!inGameController.islandsService.keyCodeFlag) {
+            inGameController.selectedIsland.rudderImage.setVisible(false);
+        }
+
+        inGameController.selectedIsland = null;
     }
 }

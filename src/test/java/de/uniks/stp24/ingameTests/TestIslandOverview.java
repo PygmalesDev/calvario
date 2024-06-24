@@ -250,7 +250,7 @@ public class TestIslandOverview extends ControllerTest {
     Island testIsland3;
     CreateSystemsDto updatedSystem;
     CreateSystemsDto updatedBuildings;
-/*
+
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
@@ -442,6 +442,7 @@ public class TestIslandOverview extends ControllerTest {
         buildingPropertiesComponent.getStylesheets().clear();
     }
 
+    /*
     @Test
     public void testOwnedIsland() {
         doReturn(Observable.just(empireDtoAfterUpgrade)).when(empireService).updateEmpire(any(), any(), any());
@@ -597,13 +598,11 @@ public class TestIslandOverview extends ControllerTest {
         assertFalse(checkDeveloped.isVisible());
 
         Node confirmButton = lookup("#confirmUpgrade").query();
-        assertTrue(confirmButton.getStyle().contains("-fx-background-color: green;"));
         clickOn(confirmButton);
         waitForFxEvents();
         Text inf = lookup("#island_inf").queryText();
         assertEquals(inf.getText(), "+100.0% more crew mates");
         clickOn(upgradeButton);
-        assertTrue(confirmButton.getStyle().contains("-fx-background-color: black;"));
 
         assertTrue(checkExplored.isVisible());
         assertTrue(checkColonized.isVisible());
@@ -697,5 +696,5 @@ public class TestIslandOverview extends ControllerTest {
         assertTrue(!prev.isVisible() && !next.isVisible());
     }
 
-*/
+     */
 }

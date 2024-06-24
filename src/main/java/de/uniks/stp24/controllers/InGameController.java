@@ -525,7 +525,6 @@ public class InGameController extends BasicController {
     public void setSitePropertiesInvisible() {
         sitePropertiesComponent.setVisible(false);
         buildingProperties.setMouseTransparent(false);
-        overviewSitesComponent.buildingsComponent.resetPage();
         overviewSitesComponent.buildingsComponent.setGridPane();
     }
 }

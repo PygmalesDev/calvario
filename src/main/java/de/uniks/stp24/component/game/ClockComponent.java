@@ -116,7 +116,6 @@ public class ClockComponent extends AnchorPane {
         createUpdateSpeedListener();
 
         timerService.resume();
-
     }
 
     @OnRender
@@ -223,7 +222,7 @@ public class ClockComponent extends AnchorPane {
     @OnKey(code = KeyCode.H, shift = true)
     public void setSelected() {
         flagToggle.setSelected(!flagToggle.isSelected());
-        showFlags();
+        islandsService.keyCodeFlag = !islandsService.keyCodeFlag;
     }
 
     public void pauseClock() {
@@ -341,5 +340,9 @@ public class ClockComponent extends AnchorPane {
             int time = (int) propertyChangeEvent.getNewValue();
             Platform.runLater(() -> countdownLabel.setText(translateCountdown(time)));
         }
+    }
+
+    public void setToggle(boolean visibility) {
+        this.flagToggle.setSelected(visibility);
     }
 }

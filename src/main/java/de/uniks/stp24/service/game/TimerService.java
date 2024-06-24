@@ -59,9 +59,9 @@ public class TimerService {
      * the local countdown till next season will be updated
      */
     public Observable<UpdateGameResultDto> setSpeed(String gamesid, int speed) {
-        return gamesApiService.editSpeed(gamesid, new UpdateSpeedDto(speed)).doOnNext(updateGameResultDto ->
-            setSpeedLocal(updateGameResultDto.speed())
-        );
+        return gamesApiService
+                .editSpeed(gamesid, new UpdateSpeedDto(speed))
+                .doOnNext(updateGameResultDto -> setSpeedLocal(updateGameResultDto.speed()));
     }
 
     public void start() {
@@ -144,10 +144,6 @@ public class TimerService {
             this.listeners = new PropertyChangeSupport(this);
         }
         return this.listeners;
-    }
-
-    public int getSpeed() {
-        return speed;
     }
 
     public void setSpeedLocal(int value) {

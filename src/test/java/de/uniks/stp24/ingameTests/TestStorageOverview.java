@@ -117,6 +117,8 @@ public class TestStorageOverview extends ControllerTest {
     DeleteStructureComponent deleteStructureComponent;
     @InjectMocks
     InGameController inGameController;
+    @InjectMocks
+    EmpireOverviewComponent empireOverviewComponent;
 
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
@@ -143,6 +145,7 @@ public class TestStorageOverview extends ControllerTest {
         this.clockComponent.timerService = this.timerService;
         this.clockComponent.subscriber = this.subscriber;
         this.islandsService.app = this.app;
+        this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;

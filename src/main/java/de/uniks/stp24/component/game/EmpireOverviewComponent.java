@@ -109,7 +109,7 @@ public class EmpireOverviewComponent extends StackPane {
     public void initEmpireList() {
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
-        this.subscriber.subscribe(this.empireService.getEmpire(gameID, empireID), this::empireTraits);
+        this.subscriber.subscribe(this.empireService.getEmpire(gameID, empireID), this::empireTraits,Error -> System.out.println(Error));
     }
 
     public void closeEmpireOverview() {
@@ -214,7 +214,6 @@ public class EmpireOverviewComponent extends StackPane {
                 islandGridView.setOnMouseClicked(event -> {
                     islandGridView.getId();
                     IslandComponent clicked = getItem();
-                    clicked.showIslandOverview();
 
                     ImageView rudder = new ImageView(imageCache.get(resourcesPaths + rudderPath));
                     rudder.setFitWidth(40);

@@ -522,21 +522,25 @@ public class EditAccController extends BasicController {
 
     /**
      * Randomize the indices of the avatarComponents in order to generate a random avatar image.
-     * */
+     */
     public void randomize() {
+        int randomBackgroundIndex = backgroundImageIndex;
+        int randomPotraitIndex = portraitImageIndex;
+        int randomFrameIndex = frameImageIndex;
+
         if (!lockBackground) {
-            this.backgroundImageIndex = rand.nextInt(0, backgroundsList.size());
-            setImageCode(this.backgroundImageIndex, this.backgroundImageIndex, this.frameImageIndex);}
+            randomBackgroundIndex = rand.nextInt(0, backgroundsList.size());
+        }
 
         if (!lockPortrait) {
-            this.portraitImageIndex = rand.nextInt(0, portraitsList.size());
-            setImageCode(this.backgroundImageIndex, this.backgroundImageIndex, this.frameImageIndex);
+            randomPotraitIndex = rand.nextInt(0, portraitsList.size());
         }
 
         if (!lockFrame) {
-            this.frameImageIndex = rand.nextInt(0, framesList.size());
-            setImageCode(this.backgroundImageIndex, this.backgroundImageIndex, this.frameImageIndex);
+            randomFrameIndex = rand.nextInt(0, framesList.size());
         }
+
+        setImageCode(randomBackgroundIndex, randomPotraitIndex, randomFrameIndex);
 
         imageCodeLabel.setText(getImageCode());
     }

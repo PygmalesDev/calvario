@@ -23,6 +23,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
@@ -114,8 +117,9 @@ public class TestEditAcc extends ControllerTest {
 
     @Test
     void changeAccount() {
+        Map<String,Integer> _public = new HashMap<>();
         // Title: Confirming edited account
-        doReturn(Observable.just(new User("Calvario", "a","b","c","d"))).when(editAccService).changeUserInfo(any(),any());
+        doReturn(Observable.just(new User("Calvario", "a","b","c","d",_public))).when(editAccService).changeUserInfo(any(),any());
 
         final TextField username = lookup("#usernameInput").query();
         final TextField password = lookup("#passwordInput").query();
@@ -179,11 +183,16 @@ public class TestEditAcc extends ControllerTest {
 
     @Test
     void deleteAccountTest(){
+        Map<String,Integer> _public = new HashMap<>();
+        _public.put("backgroundIndex", 1);
+        _public.put("portraitIndex", 1);
+        _public.put("frameIndex", 1);
+
         // Title: Confirm after clicking delete account button
         doAnswer(show -> { tokenStorage.setName(null);
             tokenStorage.setAvatar(null);
             prefService.removeRefreshToken();
-            return Observable.just(new User("1", "a","b","c","d"));
+            return Observable.just(new User("1", "a","b","c","d",_public));
         }).when(this.editAccService).deleteUser();
 
         // Start:

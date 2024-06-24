@@ -33,6 +33,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import javax.inject.Provider;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -95,8 +96,14 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
 
+
     @Override
     public void start(Stage stage) throws Exception {
+        Map<String,Integer> _public = new HashMap<>();
+        _public.put("backgroundIndex", 1);
+        _public.put("portraitIndex", 1);
+        _public.put("frameIndex", 1);
+
         super.start(stage);
 
         this.lobbyController.bubbleComponent = this.bubbleComponent;
@@ -128,9 +135,9 @@ public class TestLobbyControllerAsHost extends ControllerTest {
 
         // Mock getting user
         when(this.userApiService.getUser(any()))
-                .thenReturn(Observable.just(new User("gameHost", "testGameHostID", null, "1", "1")))
-                .thenReturn(Observable.just(new User("testMemberUno", "testMemberUnoID", null, "1", "1")))
-                .thenReturn(Observable.just(new User("testMemberDos", "testMemberDosID", null, "1", "1")));
+                .thenReturn(Observable.just(new User("gameHost", "testGameHostID", null, "1", "1",_public)))
+                .thenReturn(Observable.just(new User("testMemberUno", "testMemberUnoID", null, "1", "1",_public)))
+                .thenReturn(Observable.just(new User("testMemberDos", "testMemberDosID", null, "1", "1",_public)));
 
         // Mock getting members updates
         doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.*"), eq(MemberDto.class));

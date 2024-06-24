@@ -104,4 +104,5 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
         portraitImage.setImage(portraitsList.get(potraitIndex));
         frameImage.setImage(framesList.get(frameIndex));
     }
+
 }

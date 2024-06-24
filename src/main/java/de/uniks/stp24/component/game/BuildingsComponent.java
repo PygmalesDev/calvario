@@ -4,20 +4,23 @@ import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ResourceBundle;
 
 @Component(view = "Buildings.fxml")
-public class BuildingsComponent extends VBox {
+public class BuildingsComponent extends AnchorPane {
 
     @FXML
-    public Pane prev;
+    public Button prev;
     @FXML
-    public Pane next;
+    public Button next;
     @FXML
     public GridPane buildings;
     @Inject
@@ -26,6 +29,10 @@ public class BuildingsComponent extends VBox {
     TokenStorage tokenStorage;
     @Inject
     public IslandAttributeStorage islandAttributeStorage;
+    @Inject
+    @Resource
+    @Named("gameResourceBundle")
+    ResourceBundle gameResourceBundle;
 
     private int currentPage = 0;
     private InGameController inGameController;
@@ -65,8 +72,10 @@ public class BuildingsComponent extends VBox {
         }
 
         if (!isGridPaneFull(currentPage)) {
-            buildings.add(new Building(this, "empty", tokenStorage, islandAttributes, inGameController), col, row);
+            buildings.add(new Building(this, "buildNewBuilding", tokenStorage, islandAttributes, inGameController), col, row);
         } else {
+            next.setMouseTransparent(false);
+            next.toFront();
             next.setVisible(true);
         }
     }
@@ -99,12 +108,15 @@ public class BuildingsComponent extends VBox {
         } else if(!isGridPaneFull(currentPage + 1) && size % 8 == 0){
             currentPage = currentPage + 1;
             buildings.getChildren().clear();
-            buildings.add(new Building(this, "empty", tokenStorage, islandAttributes, inGameController), 0, 0);
+            buildings.add(new Building(this, "buildNewBuilding", tokenStorage, islandAttributes, inGameController), 0, 0);
             prev.setVisible(true);
+            next.setVisible(false);
         }
     }
 
-    public void setIngameController(InGameController inGameController) {
+    public void setInGameController(InGameController inGameController){
         this.inGameController = inGameController;
     }
+
+
 }

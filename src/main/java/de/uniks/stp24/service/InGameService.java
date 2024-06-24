@@ -31,7 +31,7 @@ public class InGameService {
     @Inject
     Subscriber subscriber;
     @Inject
-    PresetsApiService presetsApiService;
+    public PresetsApiService presetsApiService;
 
     @Inject
     public InGameService() {
@@ -72,10 +72,6 @@ public class InGameService {
 
     public void setLanguage(int lang) {
         gameStatus.setLanguage(lang);
-    }
-
-    public int getLanguage() {
-        return gameStatus.getLanguage();
     }
 
     public void showOnly(StackPane stackPane, Node nodeToShow) {

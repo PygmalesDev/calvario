@@ -1,9 +1,6 @@
 package de.uniks.stp24.rest;
 
-import de.uniks.stp24.dto.CreateSystemsDto;
-import de.uniks.stp24.dto.SystemDto;
-import de.uniks.stp24.dto.UpdateSystemDto;
-import de.uniks.stp24.model.Island;
+import de.uniks.stp24.dto.*;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -14,14 +11,22 @@ import javax.inject.Singleton;
 
 @Singleton
 public interface GameSystemsApiService {
-
-    @GET("games/{game}/systems/{id}")
-    Observable<SystemDto> getCertainIsland(@Path("game") String gameID, @Path("id") String islandID);
+    @PATCH("games/{game}/systems/{id}")
+    Observable<CreateSystemsDto> updateBuildings(@Path("game") String gameID, @Path("id") String ownerID, @Body UpdateBuildingDto dto);
 
     @PATCH("games/{game}/systems/{id}")
-    Observable<CreateSystemsDto> updateIsland(@Path("game") String gameID, @Path("id") String ownerID, @Body UpdateSystemDto dto);
+    Observable<CreateSystemsDto> upgradeSystem(@Path("game") String gameID, @Path("id") String ownerID, @Body UpgradeSystemDto dto);
 
     @GET("games/{game}/systems")
     Observable<SystemDto[]> getSystems(@Path("game") String gameID);
-  
+
+    @PATCH("games/{game}/systems/{id}")
+    Observable<SystemDto> updateIsland(@Path("game") String gameID, @Path("id") String islandID, @Body SystemsDto dto);
+
+    @GET("presets/districts/{id}")
+    Observable<SiteDto> getSite(@Path("id") String siteID);
+
+    @GET("presets/buildings/{id}")
+    Observable<BuildingDto> getBuilding(@Path("id") String buildingID);
+
 }

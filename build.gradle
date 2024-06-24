@@ -33,6 +33,10 @@ dependencies {
     // for data-url in image cache -> to correctly load avatars from server
     implementation group: "com.github.robtimus", name: "data-url", version: 2.0
 
+    //ControlsFX
+    // https://mvnrepository.com/artifact/org.controlsfx/controlsfx
+    implementation group: 'org.controlsfx', name: 'controlsfx', version: '11.2.1'
+
     // REST
 
     implementation group: "com.squareup.retrofit2", name: "retrofit", version: retrofitVersion

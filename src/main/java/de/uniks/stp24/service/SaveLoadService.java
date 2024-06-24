@@ -2,7 +2,6 @@ package de.uniks.stp24.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import de.uniks.stp24.model.Gang;
-import de.uniks.stp24.model.GangElement;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

@@ -1,12 +1,18 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.component.game.IslandComponent;
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.ReadEmpireDto;
+import de.uniks.stp24.dto.UpdateBuildingDto;
+import de.uniks.stp24.dto.Upgrade;
+import de.uniks.stp24.dto.UpgradeSystemDto;
+import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.dto.ShortSystemDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.BasicService;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -14,7 +20,6 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
@@ -27,6 +32,8 @@ public class IslandsService extends BasicService {
     @Inject
     LobbyService lobbyService;
 
+    public boolean keyCodeFlag = true;
+
     String gameID;
 
     static final int factor = 10;
@@ -35,14 +42,10 @@ public class IslandsService extends BasicService {
     private final List<ShortSystemDto> devIsles = new ArrayList<>();
     public List<Island> isles = new ArrayList<>();
     private final List<IslandComponent> islandComponentList = new ArrayList<>();
-    private final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
+    public final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
     private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();
     private final Map<String, List<String>> connections = new HashMap<>();
-    private final Map<String, InfrastructureService> siteManager = new HashMap<>();
-    private final List<String> siteIDs = Arrays.asList("city", "energy", "mining", "agriculture",
-      "industry", "research_site", "ancient_foundry", "ancient_factory", "ancient_refinery");
-    private final List<String> buildingIDs = Arrays.asList("exchange", "power_plant", "mine", "farm",
-      "research_lab", "foundry", "factory", "refinery");
+    public final Map<String, InfrastructureService> siteManager = new HashMap<>();
 
     @Inject
     public IslandsService() {
@@ -66,9 +69,23 @@ public class IslandsService extends BasicService {
         siteManager.get("noBody").setEmpireID("noBody");
     }
 
+    public int getSiteManagerSize() {
+        return siteManager.size();
+    }
+
    
     public void setFlag(boolean selected) {
-        islandComponentMap.forEach((id, comp) -> comp.showFlag(selected));
+        islandComponentMap.forEach((id, comp) -> {
+            if(selected) {
+                comp.showFlag(true);
+            }
+            if(!selected){
+                if(!comp.islandIsSelected){
+                    comp.showFlag(false);
+                    keyCodeFlag = false;
+                }
+            }
+        });
     }
 
     /**
@@ -80,35 +97,36 @@ public class IslandsService extends BasicService {
         createEmpireServices();
         this.gameID = gameID;
         subscriber.subscribe(gameSystemsService.getSystems(gameID),
-            dto -> {
-                Arrays.stream(dto).forEach(data -> {
-                    List<String> linkedIsles = new ArrayList<>(data.links().keySet());
-                    minX = Math.min(data.x(),minX);
-                    minY = Math.min(data.y(),minY);
-                    maxX = Math.max(data.x(),maxX);
-                    maxY = Math.max(data.y(),maxY);
-                    Island tmp = new Island(data.owner(),
-                        Objects.isNull(data.owner()) ? -1 : getEmpire(data.owner()).flag(),
-                        data.x(),
-                        data.y(),
-                        IslandType.valueOf(data.type()),
-                        data.population(),
-                        data.capacity(),
-                        data.upgrade().ordinal(),
-                        data.districtSlots(),
-                        data.districts(),
-                        data.buildings(),
-                        data._id()
-                      );
-                    isles.add(tmp);
-                    connections.put(data._id(),linkedIsles);
-                });
-                widthRange = maxX-minX;
-                heightRange = maxY-minY;
-                this.app.show("/ingame");
-                refreshListOfColonizedSystems();
-            },
-            error -> errorService.getStatus(error));
+                dto -> {
+                    Arrays.stream(dto).forEach(data -> {
+                        List<String> linkedIsles = new ArrayList<>(data.links().keySet());
+                        minX = Math.min(data.x(),minX);
+                        minY = Math.min(data.y(),minY);
+                        maxX = Math.max(data.x(),maxX);
+                        maxY = Math.max(data.y(),maxY);
+                        Island tmp = new Island(data.owner(),
+                                Objects.isNull(data.owner()) ? -1 : getEmpire(data.owner()).flag(),
+                                data.x(),
+                                data.y(),
+                                IslandType.valueOf(data.type()),
+                                data.population(),
+                                data.capacity(),
+                                data.upgrade().ordinal(),
+                                data.districtSlots(),
+                                data.districts(),
+                                data.buildings(),
+                                data._id(),
+                                data.upgrade().toString()
+                        );
+                        isles.add(tmp);
+                        connections.put(data._id(),linkedIsles);
+                    });
+                    widthRange = maxX-minX;
+                    heightRange = maxY-minY;
+                    this.app.show("/ingame");
+                    refreshListOfColonizedSystems();
+                },
+                error -> errorService.getStatus(error));
     }
 
     /**
@@ -235,7 +253,6 @@ public class IslandsService extends BasicService {
                         devIsles.add(tmp);
                     }
               });
-              System.out.println("number of colonized islands " + devIsles.size());
               mapSitesBuildings();
           },
           error -> {});
@@ -247,10 +264,13 @@ public class IslandsService extends BasicService {
     public void mapSitesBuildings() {
         siteManager.forEach((id,manager) -> manager.resetMap());
         for (ShortSystemDto dto : this.devIsles) {
-            dto.districts().forEach((k,v) -> {
-                siteManager.get(dto.owner()).putOrUpdateSiteInfo(k,v);});
-            dto.buildings()
-              .forEach(building -> siteManager.get(dto.owner()).putOrUpdateBuildingInfo(building));
+            if (Objects.nonNull(dto.districts())) {
+                dto.districts().forEach((k, v) -> siteManager.get(dto.owner()).putOrUpdateSiteInfo(k, v));
+            }
+            if (Objects.nonNull(dto.buildings())){
+                dto.buildings()
+                  .forEach(building -> siteManager.get(dto.owner()).putOrUpdateBuildingInfo(building));
+            }
         }
     }
 
@@ -284,7 +304,6 @@ public class IslandsService extends BasicService {
     }
 
     public List<Island> getListOfIslands() {
-
         return Collections.unmodifiableList(this.isles);
     }
 
@@ -320,9 +339,63 @@ public class IslandsService extends BasicService {
         this.siteManager.clear();
     }
 
+    public void updateIslandBuildings(IslandAttributeStorage islandAttributes, InGameController inGameController, ArrayList<String> buildings){
+        this.subscriber.subscribe(gameSystemsService.updateBuildings(tokenStorage.getGameId(), islandAttributes.getIsland().id(),
+                new UpdateBuildingDto(
+                        buildings
+                        )), result -> {
+            islandAttributes.getIsland().buildings().clear();
+            islandAttributes.getIsland().buildings().addAll(result.buildings());
+            inGameController.selectedIsland.island = islandAttributes.getIsland();
+        });
+    }
+
+    public void upgradeSystem(IslandAttributeStorage islandAttributes, String upgradeStatus, InGameController inGameController){
+        this.subscriber.subscribe(gameSystemsService.upgradeSystem(tokenStorage.getGameId(), islandAttributes.getIsland().id(),
+                new UpgradeSystemDto(
+                        upgradeStatus
+                )), result -> {
+            Island tmp = new Island(
+                    result.owner(),
+                    islandAttributes.getIsland().flagIndex(),
+                    result.x(),
+                    result.y(),
+                    IslandType.valueOf(String.valueOf(result.type())),
+                    result.population(),
+                    result.capacity(),
+                    Upgrade.valueOf(result.upgrade()).ordinal(),
+                    result.districtSlots(),
+                    result.districts(),
+                    result.buildings(),
+                    result._id(),
+                    result.upgrade()
+            );
+            inGameController.selectedIsland.island = tmp;
+            islandAttributes.setIsland(tmp);
+            inGameController.showOverview();
+
+        });
+    }
+
     @OnDestroy
     public void destroy() {
         this.subscriber.dispose();
     }
 
+    public Island updateIsland(SystemDto result) {
+        return new Island(result.owner(),
+                Objects.isNull(result.owner()) ? -1 : getEmpire(result.owner()).flag(),
+                result.x(),
+                result.y(),
+                IslandType.valueOf(result.type()),
+                result.population(),
+                result.capacity(),
+                result.upgrade().ordinal(),
+                result.districtSlots(),
+                result.districts(),
+                result.buildings(),
+                result._id(),
+                result.upgrade().toString()
+        );
+    }
 }

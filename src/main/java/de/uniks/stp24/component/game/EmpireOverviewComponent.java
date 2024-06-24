@@ -211,17 +211,17 @@ public class EmpireOverviewComponent extends StackPane {
                 imageView.setPreserveRatio(true);
                 setGraphic(imageView);
 
-//                islandGridView.setOnMouseClicked(event -> {
-//                    islandGridView.getId();
-//                    IslandComponent clicked = getItem();
-//                    clicked.showIslandOverview();
-//
-//                    ImageView rudder = new ImageView(imageCache.get(resourcesPaths + rudderPath));
-//                    rudder.setFitWidth(40);
-//                    rudder.setFitHeight(40);
-//                    rudder.setPreserveRatio(true);
-//                    setGraphic(rudder);
-//                });
+                islandGridView.setOnMouseClicked(event -> {
+                    islandGridView.getId();
+                    IslandComponent clicked = getItem();
+                    clicked.showIslandOverview();
+
+                    ImageView rudder = new ImageView(imageCache.get(resourcesPaths + rudderPath));
+                    rudder.setFitWidth(40);
+                    rudder.setFitHeight(40);
+                    rudder.setPreserveRatio(true);
+                    setGraphic(rudder);
+                });
             }
         }
 
@@ -229,5 +229,10 @@ public class EmpireOverviewComponent extends StackPane {
 
     public void setInGameController(InGameController ingameController) {
         this.inGameController = ingameController;
+        if (Objects.nonNull(ingameController)) {
+            System.out.println("inGameController ist nicht null");
+        } else {
+            System.out.println("inGameController null");
+        }
     }
 }

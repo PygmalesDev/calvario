@@ -7,6 +7,7 @@ import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.utils.ResponseConstants;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -22,7 +23,11 @@ import java.util.ResourceBundle;
 @Component(view = "WarningScreen.fxml")
 public class WarningScreenComponent extends VBox {
     @FXML
-    Text warningText;
+    public Button deleteAccButton;
+    @FXML
+    public Button cancelDeleteButton;
+    @FXML
+    public Text warningText;
     @FXML
     VBox warningContainer;
     @Inject

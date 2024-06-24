@@ -147,6 +147,8 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         this.app.show(this.lobbyController);
 
         doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.updated"), eq(Game.class));
+
+        doReturn(null).when(imageCache).get(any());
     }
 
     /**

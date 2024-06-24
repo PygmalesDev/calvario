@@ -130,7 +130,7 @@ public class EditAccController extends BasicController {
     ArrayList<Image> portraitsList = new ArrayList<>();
 
     Map<String, String[]> empireTemplates;
-    Map<String, Integer> avatarMap;
+    public Map<String, Integer> avatarMap;
 
     String resourcesPaths = "/de/uniks/stp24/assets/avatar/";
     String backgroundFolderPath = "backgrounds/background_";
@@ -557,4 +557,5 @@ public class EditAccController extends BasicController {
     public void lockFrame() {
         lockFrame = !lockFrame;
     }
+
 }

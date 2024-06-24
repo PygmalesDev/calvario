@@ -15,6 +15,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -56,6 +57,14 @@ public class TestEditAcc extends ControllerTest {
 
     @Override
     public void start(Stage stage) throws Exception{
+        this.editAccController.avatarMap = new HashMap<>();
+
+        this.editAccController.avatarMap.put("backgroundIndex", 1);
+        this.editAccController.avatarMap.put("portraitIndex", 1);
+        this.editAccController.avatarMap.put("frameIndex", 1);
+
+        this.warningScreenComponent.warningText = new Text("waring");
+
         this.editAccController.warningScreen = this.warningScreenComponent;
         super.start(stage);
         app.show(editAccController);

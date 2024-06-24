@@ -149,6 +149,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         this.app.show(this.lobbyController);
 
 
+        doReturn(null).when(imageCache).get(any());
     }
 
     /**

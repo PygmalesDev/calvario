@@ -32,6 +32,7 @@ import org.fulib.fx.annotation.param.Param;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.*;
+import java.util.function.ToDoubleBiFunction;
 
 import static de.uniks.stp24.service.Constants.empireTemplatesEnglish;
 import static de.uniks.stp24.service.Constants.empireTemplatesGerman;
@@ -204,15 +205,23 @@ public class EditAccController extends BasicController {
 
     /**
      * Called on render to apply user inputs to the form.
+     * Moreover, there is a distinction between users with modern and old avatar.
      */
     @OnRender
     public void applyInputs() {
         if (Objects.nonNull(tokenStorage.getName()))
             this.usernameInput.setText(tokenStorage.getName());
+        if(!Objects.nonNull(tokenStorage.getAvatarMap())) {
+            this.backgroundImage.setImage(imageCache.get(
+                    Objects.nonNull(tokenStorage.getAvatar()) ? tokenStorage.getAvatar() : "test/911.png" ));
+            this.backgroundImage.setFitWidth(100);
+            this.backgroundImage.setLayoutX(100);
+        } else {
+            avatarMap = tokenStorage.getAvatarMap();
+            setImageCode(avatarMap.get("backgroundIndex"), avatarMap.get("portraitIndex"), avatarMap.get("frameIndex"));
+        }
         this.errorLabelEditAcc.setText("");
 
-        avatarMap = tokenStorage.getAvatarMap();
-        setImageCode(avatarMap.get("backgroundIndex"), avatarMap.get("portraitIndex"), avatarMap.get("frameIndex"));
     }
 
     /**
@@ -439,11 +448,16 @@ public class EditAccController extends BasicController {
      */
     public void changeUserAvatar() {
         if (editAvatarButton.isSelected()) {
-            beforeBackgroundImageIndex = backgroundImageIndex;
-            beforePortraitImageIndex = portraitImageIndex;
-            beforeFrameImageIndex = frameImageIndex;
-            avatarButtonsVisible(true);
-            editAvatarButton.setStyle("-fx-text-fill: #2B78E4");
+            if(Objects.nonNull(tokenStorage.getAvatarMap())){
+                beforeBackgroundImageIndex = backgroundImageIndex;
+                beforePortraitImageIndex = portraitImageIndex;
+                beforeFrameImageIndex = frameImageIndex;
+                avatarButtonsVisible(true);
+                editAvatarButton.setStyle("-fx-text-fill: #2B78E4");
+            } else {
+                //TODO add captain text with Ashkan
+                editAvatarButton.setDisable(true);
+            }
         } else {
             cancelAvatarChanges();
             avatarButtonsVisible(false);
@@ -508,12 +522,11 @@ public class EditAccController extends BasicController {
 
     /**
      * Randomize the indices of the avatarComponents in order to generate a random avatar image.
-     */
+     * */
     public void randomize() {
         if (!lockBackground) {
             this.backgroundImageIndex = rand.nextInt(0, backgroundsList.size());
-            setImageCode(this.backgroundImageIndex, this.backgroundImageIndex, this.frameImageIndex);
-        }
+            setImageCode(this.backgroundImageIndex, this.backgroundImageIndex, this.frameImageIndex);}
 
         if (!lockPortrait) {
             this.portraitImageIndex = rand.nextInt(0, portraitsList.size());

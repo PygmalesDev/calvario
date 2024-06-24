@@ -88,6 +88,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @OnInit
     public void init(){
         buildingsMap = buildingsIconPathsMap;
+
+
     }
 
     @Inject
@@ -104,6 +106,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
         this.buildingType = buildingType;
         displayInfoBuilding();
         disableButtons();
+        startResourceMonitoring();
     }
 
     public void disableButtons(){
@@ -123,6 +126,23 @@ public class BuildingPropertiesComponent extends AnchorPane {
     public void destroyBuilding(){
         disableButtons();
         inGameController.handleDeleteStructure(buildingType);
+    }
+    public void updateButtonStates(){
+        subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
+            priceOfBuilding = result.cost();
+            buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding));
+        });
+        destroyButton.setDisable(!tokenStorage.getIsland().buildings().contains(buildingType));
+    }
+
+    public void startResourceMonitoring() {
+        Timer timer = new Timer(true);
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                updateButtonStates();
+            }
+        }, 0, 1000); 
     }
 
     public void buyBuilding(){

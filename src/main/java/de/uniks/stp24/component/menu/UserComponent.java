@@ -74,10 +74,17 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
         this.usernameText.setText(member.user().name());
         this.readyText.setText(resource.getString(member.ready() ? "ready" : "not.ready"));
 
-        initializeAvatarImage(this.member.user()._public());
+        if(Objects.nonNull(tokenStorage.getAvatarMap())){
+            initializeAvatarImage(this.member.user()._public());
+        } else {
+            this.backgroundImage.setImage(this.imageCache.get(Objects.nonNull(this.member.user().avatar())
+                    ? this.member.user().avatar()
+                    : "test/911.png" ));
+            this.backgroundImage.setFitWidth(40);
+        }
     }
 
-    public void initializeAvatarImage(Map<String, Integer> avatarMap){
+    public String initializeAvatarImage(Map<String, Integer> avatarMap){
         String resourcesPaths = "/de/uniks/stp24/assets/avatar/";
         String backgroundFolderPath = "backgrounds/background_";
         String frameFolderPath = "frames/frame_";
@@ -89,6 +96,7 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
             portraitsList.add(this.imageCache.get(resourcesPaths + portraitsFolderPath + i + ".png"));
         }
         setImageCode(avatarMap.get("backgroundIndex"), avatarMap.get("portraitIndex"), avatarMap.get("frameIndex"));
+        return "/de/uniks/stp24/assets/avatar/";
     }
 
     private void setImageCode(int backgroundIndex, int potraitIndex, int frameIndex) {

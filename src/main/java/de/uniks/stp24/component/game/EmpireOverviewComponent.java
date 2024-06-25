@@ -214,6 +214,7 @@ public class EmpireOverviewComponent extends StackPane {
                 islandGridView.setOnMouseClicked(event -> {
                     islandGridView.getId();
                     IslandComponent clicked = getItem();
+                    clicked.showRudder();
 
                     ImageView rudder = new ImageView(imageCache.get(resourcesPaths + rudderPath));
                     rudder.setFitWidth(40);

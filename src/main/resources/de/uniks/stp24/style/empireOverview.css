@@ -21,7 +21,7 @@
 .empireOverviewTextBlack {
     -fx-font-family: "Tempus Sans ITC";
     -fx-fill: black;
-    -fx-font-size: 9;
+    -fx-font-size: 10;
 }
 
 .closeWindowButton{

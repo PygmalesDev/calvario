@@ -188,14 +188,11 @@ public class EmpireOverviewComponent extends StackPane {
 
     public void fillGrid() {
         islandGridView.getItems().addAll(empireIslands);
-
         islandGridView.setCellFactory(grid -> new IslandCell());
     }
 
     public class IslandCell extends GridCell<IslandComponent> {
         ImageCache imageCache = new ImageCache();
-
-
         @Override
         protected void updateItem(IslandComponent item, boolean empty) {
             String resourcesPaths = "/de/uniks/stp24/assets/";
@@ -214,13 +211,9 @@ public class EmpireOverviewComponent extends StackPane {
                 islandGridView.setOnMouseClicked(event -> {
                     islandGridView.getId();
                     IslandComponent clicked = getItem();
-                    clicked.showRudder();
-
-                    ImageView rudder = new ImageView(imageCache.get(resourcesPaths + rudderPath));
-                    rudder.setFitWidth(40);
-                    rudder.setFitHeight(40);
-                    rudder.setPreserveRatio(true);
-                    setGraphic(rudder);
+                    inGameController.selectedIsland = clicked;
+                    inGameController.islandAttributes.setIsland(clicked.getIsland());
+                    clicked.inGameController.showOverview();
                 });
             }
         }

@@ -303,7 +303,6 @@ public class ClockComponent extends AnchorPane {
             int remainingSeasons = (int) propertyChangeEvent.getNewValue();
             if (remainingSeasons <= 0) {
 
-                System.out.println("Event is done");
                 // Delete event on Server
                 eventService.setEvent(null);
                 subscriber.subscribe(eventService.sendEffect(),

@@ -350,7 +350,6 @@ public class InGameController extends BasicController {
     }
 
     private void showEmpireOverview() {
-        System.out.println("button clicked");
     }
 
     @OnRender
@@ -484,7 +483,6 @@ public class InGameController extends BasicController {
                 event -> {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         islandAttributes.setEmpireDto(event.data());
-                        System.out.println("Event -> minerals: " + islandAttributes.getAvailableResources().get("minerals") + " alloys: " + islandAttributes.getAvailableResources().get("alloys"));
                         overviewUpgradeComponent.setUpgradeButton();
                         this.lastUpdate = event.data().updatedAt();
                     }

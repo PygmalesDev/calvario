@@ -9,7 +9,6 @@ import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
@@ -457,7 +456,6 @@ public class InGameController extends BasicController {
     }
 
     public void handleDeleteStructure(String buildingType) {
-        deleteStructureWarningContainer.toFront();
         deleteStructureWarningContainer.setMouseTransparent(false);
         popupDeleteStructure.showPopup(deleteStructureWarningContainer, deleteStructureComponent);
         popupDeleteStructure.setBlur(buildingProperties, buildingsWindow);
@@ -478,7 +476,6 @@ public class InGameController extends BasicController {
         if (!siteProperties.isVisible()) {
             siteProperties.setMouseTransparent(true);
         }
-        buildingsWindow.toFront();
     }
 
     public void createEmpireListener() {

@@ -17,7 +17,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
 import org.fulib.fx.annotation.controller.Component;
@@ -166,11 +165,10 @@ public class EmpireOverviewComponent extends StackPane {
 
     public class IslandCell extends GridCell<IslandComponent> {
         ImageCache imageCache = new ImageCache();
+        int clickCounter = 0;
+
         @Override
         protected void updateItem(IslandComponent item, boolean empty) {
-            String resourcesPaths = "/de/uniks/stp24/assets/";
-            String rudderPath = "buttons/other/selection_wheel_icon.png";
-
             super.updateItem(item, empty);
             if (empty || item == null) {
                 setGraphic(null);
@@ -186,7 +184,12 @@ public class EmpireOverviewComponent extends StackPane {
                     IslandComponent clicked = getItem();
                     inGameController.selectedIsland = clicked;
                     inGameController.islandAttributes.setIsland(clicked.getIsland());
-                    clicked.inGameController.showOverview();
+                    if (clickCounter%2 == 0) {
+                        clicked.inGameController.showOverview();
+                    }else {
+                        inGameController.overviewSitesComponent.closeOverview();
+                    }
+                    clickCounter++;
                 });
             }
         }

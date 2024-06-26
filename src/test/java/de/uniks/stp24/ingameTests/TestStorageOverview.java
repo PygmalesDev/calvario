@@ -6,6 +6,7 @@ import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.EventComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateItemDto;
@@ -118,6 +119,9 @@ public class TestStorageOverview extends ControllerTest {
     @InjectMocks
     InGameController inGameController;
 
+    @InjectMocks
+    JobsOverviewComponent jobsOverviewComponent;
+
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
 
@@ -149,6 +153,7 @@ public class TestStorageOverview extends ControllerTest {
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.eventComponent = this.eventComponent;
         this.inGameController.eventService = this.eventService;
+        this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
         this.clockComponent.eventService = this.eventService;
         this.empireService.empireApiService = this.empireApiService;
         this.inGameService.setGameStatus(gameStatus);
@@ -221,29 +226,29 @@ public class TestStorageOverview extends ControllerTest {
     public void openStorage(){
         waitForFxEvents();
         // Storage is closed
-        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
+        assertFalse(this.inGameController.storageOverviewComponent.isVisible());
         // Open storage
-        clickOn("#showStorageButton");
+        clickOn("#storageOverviewButton");
         waitForFxEvents();
-        assertTrue(this.inGameController.storageOverviewContainer.isVisible());
+        assertTrue(this.inGameController.storageOverviewComponent.isVisible());
         // Close storage with Button in Ingame
-        clickOn("#showStorageButton");
+        clickOn("#storageOverviewButton");
         waitForFxEvents();
-        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
+        assertFalse(this.inGameController.storageOverviewComponent.isVisible());
         // Open again
-        clickOn("#showStorageButton");
+        clickOn("#storageOverviewButton");
         waitForFxEvents();
-        assertTrue(this.inGameController.storageOverviewContainer.isVisible());
+        assertTrue(this.inGameController.storageOverviewComponent.isVisible());
         // Close storage with button in StorageOverviewComponent
         clickOn("#closeStorageOverviewButton");
         waitForFxEvents();
-        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
+        assertFalse(this.inGameController.storageOverviewComponent.isVisible());
     }
 
     @Test
     public void updateResourcesWithEmpireUpdate(){
         waitForFxEvents();
-        clickOn("#showStorageButton");
+        clickOn("#storageOverviewButton");
         waitForFxEvents();
 
         // resourceList: 3 energy, 2 population

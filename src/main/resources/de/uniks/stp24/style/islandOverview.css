@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Baskerville';
+    src: url("/de/uniks/stp24/fonts/Baskerville.ttf");
+}
+
 .headerText{
     -fx-font-family: "Blackadder ITC";
     -fx-font-size: 30;
@@ -75,8 +80,10 @@
 
 .islandOverviewUpgradesButton{
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/upgrades_button.png");
-    -fx-background-size: 100% 80%;
+    -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
+    -fx-pref-height: 20;
+    -fx-pref-width: 20;
 }
 
 .islandUpgradeBackground{
@@ -105,12 +112,16 @@
 }
 
 .overviewButtons{
-    -fx-font-size: 8;
-    -fx-font-weight: bold;
+    -fx-font-size: 10;
+    -fx-font-family: "Baskerville";
     -fx-text-fill: white;
+    -fx-font-weight: bold;
 
+    -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/button_element.png");
     -fx-background-size: 100% 100%;
+    -fx-pref-width: 70;
+    -fx-pref-height: 25;
 }
 /* warning screen*/
 .deletionWindowBackground{
@@ -130,4 +141,3 @@
     -fx-background-image: url("/de/uniks/stp24/icons/island.images/regular_image.png");
     -fx-background-size: cover;
 }
-

@@ -142,7 +142,7 @@ public class StorageOverviewComponent extends AnchorPane {
     }
 
     public void closeStorageOverview() {
-        this.getParent().setVisible(false);
+        this.setVisible(false);
     }
 
     @OnDestroy

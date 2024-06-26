@@ -1,6 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.dto.EmpireDto;
@@ -9,7 +10,7 @@ import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.Island;
+
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
@@ -22,11 +23,10 @@ import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
-import javafx.application.Platform;
 import de.uniks.stp24.service.PopupBuilder;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -58,11 +58,7 @@ public class InGameController extends BasicController {
     @FXML
     StackPane eventContainer;
     @FXML
-    public Button showStorageButton;
-    @FXML
-    Button showEmpireOverviewButton;
-    @FXML
-    public HBox storageButtonsBox;
+    public HBox contextMenuButtons;
 
     @FXML
     public Group group;
@@ -87,7 +83,7 @@ public class InGameController extends BasicController {
     @FXML
     StackPane pauseMenuContainer;
     @FXML
-    public StackPane storageOverviewContainer;
+    public StackPane contextMenuContainer;
     @FXML
     StackPane clockComponentContainer;
 
@@ -108,7 +104,9 @@ public class InGameController extends BasicController {
     @Inject
     ResourcesService resourceService;
 
-
+    @SubComponent
+    @Inject
+    public JobsOverviewComponent jobsOverviewComponent;
     @SubComponent
     @Inject
     public PauseMenuComponent pauseMenuComponent;
@@ -196,9 +194,6 @@ public class InGameController extends BasicController {
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
-        //Todo: Outprint for Swagger - can be deleted later
-        System.out.println(this.gameID);
-        System.out.println(empireID);
 
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
@@ -281,9 +276,14 @@ public class InGameController extends BasicController {
         overviewSitesComponent.setContainer();
         overviewContainer.getChildren().add(overviewSitesComponent);
         overviewContainer.getChildren().add(overviewUpgradeComponent);
-        storageOverviewContainer.setVisible(false);
-        storageOverviewContainer.getChildren().add(storageOverviewComponent);
 
+        contextMenuContainer.setPickOnBounds(false);
+        contextMenuContainer.getChildren().addAll(
+                storageOverviewComponent,
+                jobsOverviewComponent);
+        contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
+
+        this.createContextMenuButtons();
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -307,6 +307,24 @@ public class InGameController extends BasicController {
         popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
     }
 
+    @OnKey(code = KeyCode.J)
+    public void showJobsOverview() {
+        this.toggleContextMenuVisibility(this.jobsOverviewComponent);
+        this.jobsOverviewComponent.setVisible(!this.jobsOverviewComponent.isVisible());
+    }
+
+    @OnKey(code = KeyCode.S)
+    public void showStorageOverview() {
+        this.toggleContextMenuVisibility(this.storageOverviewComponent);
+        this.storageOverviewComponent.setVisible(!this.storageOverviewComponent.isVisible());
+    }
+
+    private void toggleContextMenuVisibility(Node node) {
+        this.contextMenuContainer.getChildren().stream()
+                .filter(child -> !child.equals(node))
+                .forEach(child -> child.setVisible(false));
+    }
+
     public void showSettings() {
         pauseMenuContainer.getChildren().remove(pauseMenuComponent);
         pauseMenuContainer.getChildren().add(settingsComponent);
@@ -327,31 +345,15 @@ public class InGameController extends BasicController {
     }
 
     /**
-     * created and add buttons for storage and island overview
-     * there are problems if they are contained in the fxml
+     * Please read the {@link ContextMenuButton ContextMenuButton} documentation to add additional context menu nodes.
      */
-
-    private void createButtonsStorage() {
-        if (!tokenStorage.isSpectator()) {
-            if (!(Objects.nonNull(showEmpireOverviewButton) && (Objects.nonNull(showStorageButton)))) {
-                showEmpireOverviewButton = new Button();
-                showEmpireOverviewButton.setPrefHeight(30);
-                showEmpireOverviewButton.setPrefWidth(30);
-                showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
-                showEmpireOverviewButton.getStyleClass().add("empireOverviewButton");
-                showStorageButton = new Button();
-                showStorageButton.setPrefHeight(30);
-                showStorageButton.setPrefWidth(30);
-                showStorageButton.setId("showStorageButton");
-                showStorageButton.getStyleClass().add("storageButton");
-                showStorageButton.setOnAction(event -> showStorage());
-            }
-            this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton);
-        }
-    }
-
-    private void showEmpireOverview() {
-        System.out.println("button clicked");
+    private void createContextMenuButtons() {
+        if (!tokenStorage.isSpectator())
+            this.contextMenuButtons.getChildren().addAll(
+                    new ContextMenuButton("storageOverview", this.storageOverviewComponent),
+                    new ContextMenuButton("empireOverview", null),
+                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent)
+            );
     }
 
     @OnRender
@@ -369,7 +371,6 @@ public class InGameController extends BasicController {
             isle.setScaleY(1.25);
             this.mapGrid.getChildren().add(isle);
         });
-        Platform.runLater(this::createButtonsStorage);
 
         mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight()));
         mapScrollPane.setVvalue(0.5);
@@ -419,11 +420,6 @@ public class InGameController extends BasicController {
         inGameService.showOnly(overviewContainer, overviewSitesComponent);
         inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
         overviewSitesComponent.setOverviewSites();
-    }
-
-    @OnKey(code = KeyCode.S)
-    public void showStorage() {
-        storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
     @OnKey(code = KeyCode.SPACE)

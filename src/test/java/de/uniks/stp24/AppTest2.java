@@ -2,6 +2,7 @@ package de.uniks.stp24;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
@@ -74,6 +75,8 @@ public class AppTest2 extends ControllerTest {
     BuildingsWindowComponent buildingsWindowComponent;
     @InjectMocks
     DeleteStructureComponent deleteStructureComponent;
+    @InjectMocks
+    JobsOverviewComponent jobsOverviewComponent;
 
 
     @Spy
@@ -145,6 +148,7 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = eventComponent;
+        this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.clockComponent.timerService = this.timerService;
         this.clockComponent.eventService = this.eventService;
@@ -281,9 +285,6 @@ public class AppTest2 extends ControllerTest {
         assertNotEquals(0,islandsService.getMapHeight());
         assertEquals(2,islandsService.getSiteManagerSize());
 
-
-
-
         Platform.runLater(() -> {
             createIcons();
             createLines();
@@ -295,30 +296,16 @@ public class AppTest2 extends ControllerTest {
             inGameController.mapGrid.getChildren().add(buttons[2]);
             waitForFxEvents();
         });
-        sleep(1000);
-        Platform.runLater(() -> {
-            waitForFxEvents();
-            clickOn("#showStorageButton");
-            waitForFxEvents();
 
-            sleep(500);
+        waitForFxEvents();
+        clickOn("#storageOverviewButton");
+        waitForFxEvents();
 
-        });
         assertTrue(inGameController.storageOverviewComponent.isVisible());
-        sleep(500);
-        Platform.runLater(() -> {
-            waitForFxEvents();
-            clickOn("#showStorageButton");
-            waitForFxEvents();
 
-            sleep(500);
-
-        });
-
-
-
-
-        sleep(2000);
+        waitForFxEvents();
+        clickOn("#storageOverviewButton");
+        waitForFxEvents();
 
         assertEquals(37,islandsService.getAllNumberOfSites("empire"));
         assertEquals(17,islandsService.getCapacityOfOneSystem("home"));
@@ -357,7 +344,7 @@ public class AppTest2 extends ControllerTest {
 
         buttons[0].setOnAction(event -> System.out.println("food"));
         buttons[1].setOnAction(event -> System.out.println("food"));
-        buttons[2].setOnAction(event -> inGameController.showStorage());
+        buttons[2].setOnAction(event -> inGameController.showStorageOverview());
     }
 
     public void createLines(){

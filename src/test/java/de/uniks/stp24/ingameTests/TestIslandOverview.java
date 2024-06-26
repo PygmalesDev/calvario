@@ -418,7 +418,7 @@ public class TestIslandOverview extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.selectedIsland.flagPane = new StackPane();
 
-        this.inGameController.storageButtonsBox = new HBox();
+        this.inGameController.contextMenuButtons = new HBox();
         this.islandsService.isles = islands;
         this.islandsService.tokenStorage = new TokenStorage();
         this.islandsService.gameSystemsService = gameSystemsApiService;

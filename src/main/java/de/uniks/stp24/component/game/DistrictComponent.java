@@ -4,9 +4,11 @@ import de.uniks.stp24.controllers.InGameController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -22,7 +24,6 @@ public class DistrictComponent extends VBox {
     @FXML
     Button siteElement;
     Map<String, String> sitesMap;
-
 
 
     @Inject
@@ -56,5 +57,4 @@ public class DistrictComponent extends VBox {
             inGameController.setSiteType(name);
         });
     }
-
 }

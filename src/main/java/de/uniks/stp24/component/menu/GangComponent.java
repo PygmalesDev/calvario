@@ -10,17 +10,12 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
-import java.awt.*;
 
 @Component(view = "Gang.fxml")
 public class GangComponent extends Pane implements ReusableItemComponent<GangElement> {
 
     @FXML
-    Pane gangColor;
-    @FXML
     Pane pane;
-    @FXML
-    ImageView flagImage;
     @FXML
     ImageView portraitImage;
     @FXML
@@ -34,15 +29,9 @@ public class GangComponent extends Pane implements ReusableItemComponent<GangEle
     @Override
     public void setItem(@NotNull GangElement gangElement) {
         Gang gang = gangElement.gang();
-
-        java.awt.Color color = java.awt.Color.decode(gang.color());
-        if (color.getRed() + Color.decode("#FFCCEE").getGreen() + color.getBlue() <= 500)
-            gangNameTextComponent.setStyle("-fx-text-fill: white;");
-
+        gangNameTextComponent.setStyle("-fx-text-fill: black;");
         gangNameTextComponent.setText(gang.name());
         pane.setStyle("-fx-background-color: " + gang.color());
-        gangColor.setStyle("-fx-background-color: " + gang.color());
-        flagImage.setImage(gangElement.flag());
         portraitImage.setImage(gangElement.portrait());
     }
 }

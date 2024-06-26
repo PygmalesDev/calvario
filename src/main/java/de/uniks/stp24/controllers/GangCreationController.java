@@ -1,10 +1,15 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.component.menu.GangComponent;
 import de.uniks.stp24.component.menu.GangDeletionComponent;
+import de.uniks.stp24.component.menu.TraitComponent;
+import de.uniks.stp24.dto.EffectDto;
+import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.model.GangElement;
+import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.SaveLoadService;
@@ -12,11 +17,13 @@ import de.uniks.stp24.service.menu.LobbyService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
@@ -37,20 +44,17 @@ import static de.uniks.stp24.service.Constants.empireTemplatesGerman;
 @Title("%create.island")
 @Controller
 public class GangCreationController extends BasicController {
+    @Param("gameid")
+    String gameID;
+
     @Inject
     SaveLoadService saveLoadService;
+    @Inject
+    PresetsApiService presetsApiService;
     @Inject
     LobbyService lobbyService;
     @Inject
     PopupBuilder popupBuilder;
-    @SubComponent
-    @Inject
-    public GangDeletionComponent gangDeletionComponent;
-    @Inject
-    public Provider<GangComponent> gangComponentProvider;
-
-    private final ObservableList<GangElement> gangElements = FXCollections.observableArrayList();
-
     @Inject
     ImageCache imageCache;
 
@@ -58,10 +62,24 @@ public class GangCreationController extends BasicController {
     @Resource
     ResourceBundle resource;
 
+    @SubComponent
+    @Inject
+    public GangDeletionComponent gangDeletionComponent;
+
+    @Inject
+    public Provider<GangComponent> gangComponentProvider;
+    private final ObservableList<GangElement> gangElements = FXCollections.observableArrayList();
+
+    @Inject
+    public Provider<TraitComponent> traitComponentProvider = () -> new TraitComponent(this);
+    private final ObservableList<Trait> allTraits = FXCollections.observableArrayList();
+    private final ObservableList<Trait> choosenTraits = FXCollections.observableArrayList();
+    private final ObservableList<Trait> choosenAndConfirmedTraits = FXCollections.observableArrayList();
+
     @FXML
     ListView<GangElement> gangsListView;
     @FXML
-    VBox creationBox;
+    Pane creationBox;
     @FXML
     ImageView flagImage;
     @FXML
@@ -84,6 +102,51 @@ public class GangCreationController extends BasicController {
     Button lastColorButton;
     @FXML
     Pane colorField;
+    @FXML
+    Button backButton;
+    @FXML
+    Button showCreationButton;
+    @FXML
+    Button lastFlagButton;
+    @FXML
+    Button lastPortraitButton;
+    @FXML
+    Button nextPortraitButton;
+    @FXML
+    Button randomizeButton;
+    @FXML
+    Button nextFlagButton;
+    @FXML
+    ToggleButton lockNameButton;
+    @FXML
+    ToggleButton lockDescriptionButton;
+    @FXML
+    ToggleButton lockFlagButton;
+    @FXML
+    ToggleButton lockPortraitButton;
+    @FXML
+    ToggleButton lockColorButton;
+    @FXML
+    Button selectButton;
+    @FXML
+    Button confirmButton;
+    @FXML
+    Button chooseTraitsButton;
+    @FXML
+    ToggleButton lockTraitsButton;
+    @FXML
+    Button traitsConfirmButton;
+    @FXML
+    Button traitsReturnButton;
+    @FXML
+    Text traitsLimitText;
+    @FXML
+    ListView<Trait> allTraitsListView;
+    @FXML
+    ListView<Trait> selectedTraitsListView;
+    @FXML
+    AnchorPane traitsBox;
+    ArrayList<Node> editNodes = new ArrayList<>();
 
     boolean lockFlag = false;
     boolean lockPortrait = false;
@@ -106,36 +169,9 @@ public class GangCreationController extends BasicController {
     int flagImageIndex = 0;
     int portraitImageIndex = 0;
     int colorIndex = 0;
+
     Map<String, String[]> empireTemplates;
     PopupBuilder popup = new PopupBuilder();
-    // unused FX IDs (declared here to remove warnings from fxml file)
-    @FXML
-    Button backButton;
-    @FXML
-    Button showCreationButton;
-    @FXML
-    Button lastFlagButton;
-    @FXML
-    Button lastPortraitButton;
-    @FXML
-    Button nextPortraitButton;
-    @FXML
-    Button randomizeButton;
-    @FXML
-    Button nextFlagButton;
-    @FXML
-    ToggleButton lockNameButton;
-    @FXML
-    ToggleButton lockDescriptionButton;
-    @Param("gameid")
-    String gameID;
-    @FXML
-    ToggleButton lockFlagButton;
-    @FXML
-    ToggleButton lockPortraitButton;
-    @FXML
-    ToggleButton lockColorButton;
-
 
     @Inject
     public GangCreationController() {
@@ -162,17 +198,43 @@ public class GangCreationController extends BasicController {
             this.portraitsList.add(this.imageCache.get(resourcesPaths + portraitsFolderPath + i + ".png"));
         }
 
-        this.saveLoadService.loadGangs().forEach(gang ->
-                this.gangElements.add(createGangElement(gang)));
+        this.saveLoadService.loadGangs().forEach(gang -> this.gangElements.add(createGangElement(gang)));
+        this.subscriber.subscribe(presetsApiService.getTraitsPreset(), allTraits::addAll,
+        error -> System.out.println("error with loading presets"));
 
+        System.out.println(allTraits);
     }
 
     @OnRender
     public void render() {
+        // group editor buttons, to make them (in)visible all at once
+        editNodes.clear();
+        Collections.addAll(editNodes,
+                nextColorButton,
+                lastColorButton,
+                nextPortraitButton,
+                lastPortraitButton,
+                nextFlagButton,
+                lastFlagButton,
+                lockColorButton,
+                lockPortraitButton,
+                lockFlagButton,
+                lockDescriptionButton,
+                lockNameButton,
+                randomizeButton,
+                lockTraitsButton);
+
         creationBox.setVisible(false);
         deletePane.setVisible(false);
         editButton.setVisible(false);
         showDeletePaneButton.setVisible(false);
+
+        this.selectedTraitsListView.setItems(this.choosenTraits);
+        this.selectedTraitsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.traitComponentProvider));
+        this.allTraitsListView.setItems(this.allTraits);
+        System.out.println(allTraitsListView);
+        this.allTraitsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.traitComponentProvider));
+
         this.gangsListView.setItems(this.gangElements);
         this.gangsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.gangComponentProvider));
         gangsListView.setOnMouseClicked(event -> {
@@ -191,28 +253,25 @@ public class GangCreationController extends BasicController {
                 showDeletePaneButton.setVisible(true);
                 colorIndex = gang.colorIndex() % colorsList.size();
                 colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
+
+                changeEditNodes(false);
             }
         });
     }
 
-    public void back() {
-        GangElement gangElement = this.gangsListView.getSelectionModel().getSelectedItem();
-        this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
-                    Empire empire = null;
-                    if (Objects.nonNull(gangElement))
-                        empire = new Empire(gangElement.gang().name(), gangElement.gang().description(), gangElement.gang().color(),
-                                gangElement.gang().flagIndex() % this.flagsList.size(), gangElement.gang().portraitIndex() % this.portraitsList.size(),
-                                new String[]{}, "uninhabitable_0");
-                    this.subscriber.subscribe(this.lobbyService.updateMember(
-                            this.gameID, result.user(), result.ready(), empire), result2 ->
-                            app.show("/lobby", Map.of("gameid", this.gameID)));
-                },
-                error -> {
-                }
-        );
+    private void changeEditNodes(Boolean show) {
+        editNodes.forEach(node -> node.setVisible(show));
+
+        gangNameText.setEditable(show);
+        gangDescriptionText.setEditable(show);
+        chooseTraitsButton.setDisable(!show);
     }
 
-    public Gang getInputGang() {
+    public void back() {
+        patchEmpire(null);
+    }
+
+    private Gang getInputGang() {
         String gangName = gangNameText.getText();
         if (gangNameText.getText().isEmpty()) gangName = "Buccaneers";
         flagImageIndex = flagImageIndex % flagsList.size();
@@ -221,6 +280,31 @@ public class GangCreationController extends BasicController {
     }
 
     public void edit() {
+       changeEditNodes(true);
+       confirmButton.setVisible(true);
+    }
+
+    public void select() {
+        GangElement gangElement = this.gangsListView.getSelectionModel().getSelectedItem();
+        Empire empire = null;
+        if (Objects.nonNull(gangElement))
+            empire = new Empire(gangElement.gang().name(), gangElement.gang().description(), gangElement.gang().color(),
+                    gangElement.gang().flagIndex() % this.flagsList.size(), gangElement.gang().portraitIndex() % this.portraitsList.size(),
+                    new String[]{}, "uninhabitable_0");
+        patchEmpire(empire);
+    }
+
+    private void patchEmpire(Empire empire) {
+        this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result ->
+                        this.subscriber.subscribe(this.lobbyService.updateMember(
+                this.gameID, result.user(), result.ready(), empire), result2 ->
+                app.show("/lobby", Map.of("gameid", this.gameID))),
+                error -> {
+                }
+        );
+    }
+
+    public void confirm() {
         int index = gangsListView.getSelectionModel().getSelectedIndex();
         gangElements.remove(index);
 
@@ -232,6 +316,7 @@ public class GangCreationController extends BasicController {
         saveLoadService.saveGang(gangs);
 
         showCreationPane();
+        confirmButton.setVisible(false);
     }
 
     public void delete() {
@@ -239,6 +324,7 @@ public class GangCreationController extends BasicController {
         gangElements.remove(index);
         saveLoadService.saveGang(createGangsObservableList());
         resetCreationPane();
+        showCreationPane();
     }
 
     private GangElement createGangElement(Gang gang) {
@@ -262,6 +348,7 @@ public class GangCreationController extends BasicController {
         createButton.setVisible(true);
         editButton.setVisible(false);
         showDeletePaneButton.setVisible(false);
+        changeEditNodes(true);
     }
 
     public void showDeletePane() {
@@ -294,6 +381,10 @@ public class GangCreationController extends BasicController {
         editButton.setVisible(false);
         showDeletePaneButton.setVisible(false);
         createButton.setVisible(true);
+    }
+
+    public void chooseTraits() {
+        traitsBox.setVisible(true);
     }
 
     public void showLastFlag() {
@@ -388,6 +479,29 @@ public class GangCreationController extends BasicController {
 
     public void lockColor() {
         lockColor = !lockColor;
+    }
+
+    public void lockTraits() {
+    }
+
+    public void traitsConfirm() {
+    }
+
+    public void traitsReturn() {
+        traitsBox.setVisible(false);
+    }
+
+    public void addTrait(Trait trait) {
+        System.out.println(trait);
+        System.out.println(allTraits);
+        allTraits.removeIf(element -> element.id().equals(trait.id()));
+        System.out.println(allTraits);
+        choosenTraits.add(trait);
+    }
+
+    public void deleteTrait(Trait trait) {
+        allTraits.add(trait);
+        choosenTraits.remove(trait);
     }
 
     @OnDestroy

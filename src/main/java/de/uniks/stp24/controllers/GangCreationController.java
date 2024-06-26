@@ -1,10 +1,8 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.component.menu.GangComponent;
 import de.uniks.stp24.component.menu.GangDeletionComponent;
 import de.uniks.stp24.component.menu.TraitComponent;
-import de.uniks.stp24.dto.EffectDto;
 import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
@@ -70,11 +68,12 @@ public class GangCreationController extends BasicController {
     public Provider<GangComponent> gangComponentProvider;
     private final ObservableList<GangElement> gangElements = FXCollections.observableArrayList();
 
-    @Inject
-    public Provider<TraitComponent> traitComponentProvider = () -> new TraitComponent(this);
+    public Provider<TraitComponent> traitComponentProviderAll = () -> new TraitComponent(this, true, false);
+    public Provider<TraitComponent> traitComponentProviderChoosen= () -> new TraitComponent(this, false, true);
+    public Provider<TraitComponent> traitComponentProviderConfirmed= () -> new TraitComponent(this, false, false);
     private final ObservableList<Trait> allTraits = FXCollections.observableArrayList();
     private final ObservableList<Trait> choosenTraits = FXCollections.observableArrayList();
-    private final ObservableList<Trait> choosenAndConfirmedTraits = FXCollections.observableArrayList();
+    private final ObservableList<Trait> confirmedTraits = FXCollections.observableArrayList();
 
     @FXML
     ListView<GangElement> gangsListView;
@@ -145,13 +144,17 @@ public class GangCreationController extends BasicController {
     @FXML
     ListView<Trait> selectedTraitsListView;
     @FXML
+    ListView<Trait> confirmedTraitsListView;
+    @FXML
     AnchorPane traitsBox;
     ArrayList<Node> editNodes = new ArrayList<>();
+    Random random;
 
     boolean lockFlag = false;
     boolean lockPortrait = false;
     boolean lockName = false;
     boolean lockDescription = false;
+    Boolean lockTraits = false;
     boolean lockColor = false;
     int descriptionIndex = 0;
     int nameIndex = 0;
@@ -170,6 +173,10 @@ public class GangCreationController extends BasicController {
     int portraitImageIndex = 0;
     int colorIndex = 0;
 
+    int traitsCost = 0;
+    int traitsLimit = 5;
+    private Trait[] traitsPreset;
+
     Map<String, String[]> empireTemplates;
     PopupBuilder popup = new PopupBuilder();
 
@@ -180,6 +187,8 @@ public class GangCreationController extends BasicController {
 
     @OnInit
     public void init() {
+        random = new Random();
+
         if (prefService.getLocale().equals(Locale.ENGLISH)) {
             empireTemplates = empireTemplatesEnglish;
         } else {
@@ -199,10 +208,13 @@ public class GangCreationController extends BasicController {
         }
 
         this.saveLoadService.loadGangs().forEach(gang -> this.gangElements.add(createGangElement(gang)));
-        this.subscriber.subscribe(presetsApiService.getTraitsPreset(), allTraits::addAll,
-        error -> System.out.println("error with loading presets"));
 
-        System.out.println(allTraits);
+        this.subscriber.subscribe(presetsApiService.getTraitsPreset(),
+                result -> {
+                    traitsPreset = result;
+                    allTraits.setAll(traitsPreset);
+                },
+        error -> System.out.println("error with loading presets"));
     }
 
     @OnRender
@@ -230,38 +242,49 @@ public class GangCreationController extends BasicController {
         showDeletePaneButton.setVisible(false);
 
         this.selectedTraitsListView.setItems(this.choosenTraits);
-        this.selectedTraitsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.traitComponentProvider));
+        this.selectedTraitsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.traitComponentProviderChoosen));
         this.allTraitsListView.setItems(this.allTraits);
-        System.out.println(allTraitsListView);
-        this.allTraitsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.traitComponentProvider));
+        this.allTraitsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.traitComponentProviderAll));
+        this.confirmedTraitsListView.setItems(this.confirmedTraits);
+        this.confirmedTraitsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.traitComponentProviderConfirmed));
 
         this.gangsListView.setItems(this.gangElements);
         this.gangsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.gangComponentProvider));
         gangsListView.setOnMouseClicked(event -> {
             GangElement gangComp = gangsListView.getSelectionModel().getSelectedItem();
             if (gangComp != null) {
-                Gang gang = gangComp.gang();
                 creationBox.setVisible(true);
+
+                Gang gang = gangComp.gang();
                 gangNameText.setText(gang.name());
                 flagImageIndex = gang.flagIndex() % flagsList.size();
                 flagImage.setImage(flagsList.get(flagImageIndex));
                 portraitImageIndex = gang.portraitIndex() % portraitsList.size();
                 portraitImage.setImage(portraitsList.get(portraitImageIndex));
                 gangDescriptionText.setText(gang.description());
+
+                confirmedTraits.clear();
+                confirmedTraits.setAll(gang.traits());
+
                 createButton.setVisible(false);
+                confirmButton.setVisible(false);
                 editButton.setVisible(true);
                 showDeletePaneButton.setVisible(true);
+                selectButton.setVisible(true);
                 colorIndex = gang.colorIndex() % colorsList.size();
                 colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
-
                 changeEditNodes(false);
+                traitsBox.setVisible(false);
             }
         });
     }
 
+    private void updateTraitLimitText() {
+        traitsLimitText.setText(traitsCost + "/" + traitsLimit);
+    }
+
     private void changeEditNodes(Boolean show) {
         editNodes.forEach(node -> node.setVisible(show));
-
         gangNameText.setEditable(show);
         gangDescriptionText.setEditable(show);
         chooseTraitsButton.setDisable(!show);
@@ -276,21 +299,26 @@ public class GangCreationController extends BasicController {
         if (gangNameText.getText().isEmpty()) gangName = "Buccaneers";
         flagImageIndex = flagImageIndex % flagsList.size();
         portraitImageIndex = portraitImageIndex % portraitsList.size();
-        return new Gang(gangName, flagImageIndex, portraitImageIndex, gangDescriptionText.getText(), colorsList.get(colorIndex), colorIndex % colorsList.size());
+        ArrayList<Trait> gangsTraits = new ArrayList<>(confirmedTraits);
+        return new Gang(gangName, flagImageIndex, portraitImageIndex, gangDescriptionText.getText(), colorsList.get(colorIndex), colorIndex % colorsList.size(), gangsTraits);
     }
 
     public void edit() {
        changeEditNodes(true);
        confirmButton.setVisible(true);
+       selectButton.setVisible(false);
     }
 
     public void select() {
         GangElement gangElement = this.gangsListView.getSelectionModel().getSelectedItem();
         Empire empire = null;
+
+        ArrayList<Trait> gangsTraits = new ArrayList<>(confirmedTraits);
+
         if (Objects.nonNull(gangElement))
             empire = new Empire(gangElement.gang().name(), gangElement.gang().description(), gangElement.gang().color(),
                     gangElement.gang().flagIndex() % this.flagsList.size(), gangElement.gang().portraitIndex() % this.portraitsList.size(),
-                    new String[]{}, "uninhabitable_0");
+                    gangsTraits, "uninhabitable_0");
         patchEmpire(empire);
     }
 
@@ -311,19 +339,21 @@ public class GangCreationController extends BasicController {
         Gang gang = getInputGang();
         gangElements.add(index, createGangElement(gang));
 
+        gangsListView.getSelectionModel().select(index);
+
         ObservableList<Gang> gangs = FXCollections.observableArrayList();
         gangElements.forEach(gangElement -> gangs.add(gangElement.gang()));
         saveLoadService.saveGang(gangs);
 
-        showCreationPane();
+        changeEditNodes(false);
         confirmButton.setVisible(false);
+        selectButton.setVisible(true);
     }
 
     public void delete() {
         int index = gangsListView.getSelectionModel().getSelectedIndex();
         gangElements.remove(index);
         saveLoadService.saveGang(createGangsObservableList());
-        resetCreationPane();
         showCreationPane();
     }
 
@@ -343,8 +373,8 @@ public class GangCreationController extends BasicController {
     }
 
     public void showCreationPane() {
-        creationBox.setVisible(true);
         resetCreationPane();
+        creationBox.setVisible(true);
         createButton.setVisible(true);
         editButton.setVisible(false);
         showDeletePaneButton.setVisible(false);
@@ -381,10 +411,7 @@ public class GangCreationController extends BasicController {
         editButton.setVisible(false);
         showDeletePaneButton.setVisible(false);
         createButton.setVisible(true);
-    }
-
-    public void chooseTraits() {
-        traitsBox.setVisible(true);
+        confirmedTraits.clear();
     }
 
     public void showLastFlag() {
@@ -459,6 +486,23 @@ public class GangCreationController extends BasicController {
             colorIndex = rand.nextInt(0, colorsList.size());
             colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
         }
+
+        if (!lockTraits) {
+            resetTraitsLists();
+            traitsCost = 0;
+            Trait randomTrait;
+
+            while (!allTraits.isEmpty() && traitsCost < traitsLimit && choosenTraits.size() < 5) {
+                randomTrait = allTraits.get(random.nextInt(allTraits.size()));
+                if (canAddTrait(randomTrait)) {
+                    addTraitToEmpire(randomTrait);
+                }
+            }
+
+            if (!traitsBox.isVisible()) {
+                traitsConfirm();
+            }
+        }
     }
 
     public void lockFlag() {
@@ -482,26 +526,79 @@ public class GangCreationController extends BasicController {
     }
 
     public void lockTraits() {
+        lockTraits = !lockTraits;
+    }
+
+    public void chooseTraits() {
+        creationBox.setVisible(true);
+        resetTraitsLists();
+        choosenTraits.setAll(confirmedTraits);
+        allTraits.removeAll(choosenTraits);
+        choosenTraits.forEach(trait -> traitsCost+=trait.cost());
+        updateTraitLimitText();
+        traitsBox.setVisible(true);
     }
 
     public void traitsConfirm() {
+        confirmedTraits.clear();
+        confirmedTraits.addAll(choosenTraits);
+        traitsReturn();
     }
 
     public void traitsReturn() {
+        resetTraitsLists();
         traitsBox.setVisible(false);
     }
 
     public void addTrait(Trait trait) {
-        System.out.println(trait);
-        System.out.println(allTraits);
-        allTraits.removeIf(element -> element.id().equals(trait.id()));
-        System.out.println(allTraits);
+        if (canAddTrait(trait)) {
+            addTraitToEmpire(trait);
+        } else {
+            // TODO remove and make captain say it
+            System.out.println("cannot");
+        }
+    }
+
+    private void addTraitToEmpire(Trait trait) {
+        allTraits.remove(trait);
         choosenTraits.add(trait);
+        traitsCost += trait.cost();
+        updateTraitLimitText();
     }
 
     public void deleteTrait(Trait trait) {
-        allTraits.add(trait);
-        choosenTraits.remove(trait);
+        if (traitsCost - trait.cost() <= traitsLimit) {
+            allTraits.add(trait);
+            choosenTraits.remove(trait);
+            traitsCost -= trait.cost();
+            updateTraitLimitText();
+        } else {
+            // TODO remove and make captain say it
+            System.out.println("over limit");
+        }
+    }
+
+    public boolean canAddTrait(Trait trait) {
+        if (traitsCost + trait.cost() <= traitsLimit && choosenTraits.size() < 5) {
+            for (Trait chosen : choosenTraits) {
+                if (Objects.nonNull(chosen.conflicts())) {
+                    for (String conflict : chosen.conflicts()) {
+                        if (conflict.equals(trait.id())) {
+                            return false;
+                        }
+                    }
+                }
+            }
+           return true;
+        }
+        return false;
+    }
+
+    public void resetTraitsLists() {
+        choosenTraits.clear();
+        allTraits.clear();
+        allTraits.addAll(traitsPreset);
+        traitsCost = 0;
     }
 
     @OnDestroy

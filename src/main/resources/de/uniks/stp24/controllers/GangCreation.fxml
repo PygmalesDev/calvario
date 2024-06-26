@@ -90,16 +90,16 @@
                                  </font>
                               </TextField>
                               <ToggleButton fx:id="lockNameButton" layoutX="506.0" layoutY="14.0" mnemonicParsing="false" onAction="#lockName" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
-                              <TextArea fx:id="gangDescriptionText" layoutX="165.0" layoutY="103.0" prefHeight="138.0" prefWidth="367.0" promptText="%enter.description" wrapText="true">
+                              <TextArea fx:id="gangDescriptionText" layoutX="165.0" layoutY="96.0" prefHeight="139.0" prefWidth="367.0" promptText="%enter.description" wrapText="true">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
                               </TextArea>
-                              <ToggleButton fx:id="lockDescriptionButton" layoutX="506.0" layoutY="103.0" mnemonicParsing="false" onAction="#lockDescription" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
-                              <Button fx:id="chooseTraitsButton" layoutX="275.0" layoutY="251.0" mnemonicParsing="false" onAction="#chooseTraits" prefWidth="128.0" text="traits" />
-                              <ToggleButton fx:id="lockTraitsButton" layoutX="417.0" layoutY="251.0" mnemonicParsing="false" onAction="#lockTraits" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+                              <ToggleButton fx:id="lockDescriptionButton" layoutX="509.0" layoutY="96.0" mnemonicParsing="false" onAction="#lockDescription" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+                              <Button fx:id="chooseTraitsButton" layoutX="275.0" layoutY="239.0" mnemonicParsing="false" onAction="#chooseTraits" prefHeight="16.0" prefWidth="128.0" text="traits" />
+                              <ToggleButton fx:id="lockTraitsButton" layoutX="415.0" layoutY="239.0" mnemonicParsing="false" onAction="#lockTraits" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
                               <Button fx:id="randomizeButton" layoutX="486.0" layoutY="298.0" mnemonicParsing="false" onAction="#randomize" prefHeight="35.0" prefWidth="35.0" styleClass="normalButton" text="r" />
-                              <ListView layoutX="273.0" layoutY="287.0" prefHeight="93.0" prefWidth="169.0" />
+                              <ListView fx:id="confirmedTraitsListView" layoutX="277.0" layoutY="270.0" prefHeight="110.0" prefWidth="161.0" />
                            </children>
                         </Pane>
                         <ListView fx:id="gangsListView" prefHeight="225.0" prefWidth="550.0" />

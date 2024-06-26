@@ -20,26 +20,45 @@ public class TraitComponent extends HBox implements ReusableItemComponent<Trait>
     Button unChooseTraitButton;
     @FXML
     Label traitName;
+    @FXML
+    Label costText;
     Trait trait;
 
     GangCreationController gangCreationController;
 
+    Boolean showChoose;
+    Boolean showRemove;
+
     @Inject
-    public TraitComponent(GangCreationController gangCreationController) {
-        this.gangCreationController =gangCreationController;
+    public TraitComponent(GangCreationController gangCreationController, Boolean showChoose, Boolean showRemove) {
+        this.gangCreationController = gangCreationController;
+        this.showChoose = showChoose;
+        this.showRemove = showRemove;
     }
 
     @Override
     public void setItem(@NotNull Trait trait) {
         this.trait = trait;
         traitName.setText(this.trait.id());
+        costText.setText(String.valueOf(trait.cost()));
+        setButtonsVisibility(showChoose, showRemove);
     }
 
     public void chooseTrait() {
-        gangCreationController.addTrait(trait);
+        this.gangCreationController.addTrait(trait);
     }
 
     public void unChooseTrait() {
-        gangCreationController.deleteTrait(trait);
+        this.gangCreationController.deleteTrait(trait);
+    }
+
+    public void setButtonsVisibility(boolean showChoose, boolean showRemove) {
+        chooseTraitButton.setVisible(showChoose);
+        unChooseTraitButton.setVisible(showRemove);
+    }
+
+    public void showDetails() {
+        // TODO change
+        System.out.println(trait.id());
     }
 }

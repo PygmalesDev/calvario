@@ -20,7 +20,7 @@
                         <AnchorPane fx:id="colourContainer" layoutX="5.0" layoutY="4.0" prefHeight="74.0" prefWidth="76.0" styleClass="payload" />
                         <AnchorPane prefHeight="84.0" prefWidth="86.0">
                             <children>
-                                <ImageView fx:id="potraitContainer" fitHeight="66.0" fitWidth="86.0" layoutX="8.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" styleClass="c" />
+                                <ImageView fx:id="portraitContainer" fitHeight="66.0" fitWidth="86.0" layoutX="8.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true" styleClass="c" />
                             </children>
                         </AnchorPane>
                     </children>

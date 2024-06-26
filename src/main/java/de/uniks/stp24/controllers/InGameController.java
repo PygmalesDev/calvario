@@ -328,7 +328,20 @@ public class InGameController extends BasicController {
     }
 
     public void pauseGame() {
+        closeComponents();
         pauseMenuContainer.setVisible(pause);
+    }
+
+    public void closeComponents() {
+        if(empireOverviewComponent.isVisible()){
+            empireOverviewComponent.closeEmpireOverview();
+        }
+        if (storageOverviewContainer.isVisible()) {
+            storageOverviewComponent.closeStorageOverview();
+        }
+        if (overviewContainer.isVisible()) {
+            overviewSitesComponent.closeOverview();
+        }
     }
 
     public void resumeGame() {

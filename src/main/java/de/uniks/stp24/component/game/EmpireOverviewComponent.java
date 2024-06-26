@@ -32,7 +32,7 @@ public class EmpireOverviewComponent extends StackPane {
     @FXML
     Button closeEmpireOverviewButton;
     @FXML
-    ImageView potraitContainer;
+    ImageView portraitContainer;
     @FXML
     ImageView flagContainer;
     @FXML
@@ -66,7 +66,7 @@ public class EmpireOverviewComponent extends StackPane {
 
     private InGameController inGameController;
     private String gameID, empireID;
-    int potrait, flag;
+    int portrait, flag;
     String colour, empireName, empireDescription;
 
     List<Island> islandList = new ArrayList<>();
@@ -103,7 +103,7 @@ public class EmpireOverviewComponent extends StackPane {
     }
 
     private void empireTraits(EmpireDto empireDto) {
-        this.potrait = empireDto.portrait();
+        this.portrait = empireDto.portrait();
         this.flag = empireDto.flag();
         this.colour = empireDto.color();
         this.empireName = empireDto.name();
@@ -121,7 +121,7 @@ public class EmpireOverviewComponent extends StackPane {
         empireDescriptionContainer.setText(this.empireDescription);
         empireDescriptionContainer.getStyleClass().add("empireOverviewTextBlack");
 
-        potraitContainer.setImage(imageCache.get(resourcesPaths + portraitsFolderPath + this.potrait + ".png"));
+        portraitContainer.setImage(imageCache.get(resourcesPaths + portraitsFolderPath + this.portrait + ".png"));
         colourContainer.setStyle("-fx-background-color: " + this.colour);
     }
 
@@ -132,9 +132,7 @@ public class EmpireOverviewComponent extends StackPane {
 
     public void filterIslandsAndFillGrid() {
         if (!islandsService.getListOfIslands().isEmpty()) {
-            System.out.println(islandsService.getListOfIslands().size());
             islandList = islandsService.getListOfIslands();
-            System.out.println(islandList.size());
         }
 
         for (Island island : islandList) {
@@ -146,8 +144,6 @@ public class EmpireOverviewComponent extends StackPane {
             }
             islandComponentList.add(islandComponent);
         }
-        System.out.println("empireIslands size: " + empireIslands.size());
-
         islandImageMapper();
 
 

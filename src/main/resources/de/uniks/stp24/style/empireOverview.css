@@ -21,7 +21,7 @@
 .empireOverviewTextBlack {
     -fx-font-family: "Tempus Sans ITC";
     -fx-fill: black;
-    -fx-font-size: 10;
+    -fx-font-size: 13;
 }
 
 .closeWindowButton{
@@ -63,6 +63,21 @@
 }
 
 .empireOverviewSc .scroll-bar:vertical{
-    -fx-background-color: transparent;
     -fx-border-width: 10;
+}
+
+.textTransparent{
+    -fx-background-color: transparent;
+}
+
+descriptionSc .scroll-pane{
+    -fx-background-color:transparent;
+}
+
+descriptionSc .scroll-pane > .viewport {
+  -fx-background-color: transparent;
+}
+
+descriptionSc .scroll-pane .viewport {
+    -fx-background-color: transparent;
 }

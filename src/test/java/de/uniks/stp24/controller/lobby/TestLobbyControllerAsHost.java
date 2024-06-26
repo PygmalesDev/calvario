@@ -167,7 +167,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     @Test
     public void testStartGameAsHost() {
 
-        Empire testEmpire = new Empire("testEmpire", "a", "a", 1, 1, new String[]{"1"}, "a");
+        Empire testEmpire = new Empire("testEmpire", "a", "a", 1, 1, null, "a");
 
         doReturn(null).when(this.app).show("/ingame");
 
@@ -270,7 +270,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         // If the number of maxMember is changed in LobbyController this test will fail. It is more like a template of
         // how a test for this could look like. The test needs to be adapted after the server communication for maxMember
         // is implemented.
-        Empire testEmpire = new Empire("testEmpire", "a", "a", 1, 1, new String[]{"1"}, "a");
+        Empire testEmpire = new Empire("testEmpire", "a", "a", 1, 1, null, "a");
 
         when(this.lobbyService.loadPlayers(any()))
                 .thenReturn(Observable.just(new MemberDto[]{

@@ -126,7 +126,7 @@ public class TestEnterGame extends ControllerTest {
     public void loadGameAsMember(){
         WaitForAsyncUtils.waitForFxEvents();
 
-        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
+        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, null, "a");
 
         // Mock get all Empires of the game
         doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", "testGameID",

@@ -264,7 +264,7 @@ public class GangCreationController extends BasicController {
                 gangDescriptionText.setText(gang.description());
 
                 confirmedTraits.clear();
-                confirmedTraits.setAll(gang.traits());
+                if (Objects.nonNull(gang.traits())) confirmedTraits.setAll(gang.traits());
 
                 createButton.setVisible(false);
                 confirmButton.setVisible(false);

@@ -141,8 +141,8 @@ public class AppTest extends ControllerTest {
         }).when(userApiService).getUser(any());
 
         doReturn("1").when(tokenStorage).getUserId();
-        doReturn(Observable.just(new MemberDto(false, user._id(), new Empire("Buccaneers", "", "#DC143C", 0, 0, new String[]{},"uninhabitable_0"), null))).when(lobbyService).updateMember(game3._id(),user._id(), false, null);
-        doReturn(Observable.just(new MemberDto(true, user._id(), new Empire("Buccaneers", "", "#DC143C", 0, 0, new String[]{},"uninhabitable_0"), null))).when(lobbyService).updateMember(game3._id(),user._id(), true, null);
+        doReturn(Observable.just(new MemberDto(false, user._id(), new Empire("Buccaneers", "", "#DC143C", 0, 0, null,"uninhabitable_0"), null))).when(lobbyService).updateMember(game3._id(),user._id(), false, null);
+        doReturn(Observable.just(new MemberDto(true, user._id(), new Empire("Buccaneers", "", "#DC143C", 0, 0, null,"uninhabitable_0"), null))).when(lobbyService).updateMember(game3._id(),user._id(), true, null);
         doReturn(Observable.just(new UpdateGameResultDto("2024-05-28T14:55:25.688Z", null,game3._id(),"testGame", user._id(),
                 true, 0, 0, null))).when(this.editGameService).startGame(any());
 

@@ -3,14 +3,18 @@
  import com.fasterxml.jackson.databind.ObjectMapper;
  import de.uniks.stp24.component.menu.GangComponent;
  import de.uniks.stp24.component.menu.GangDeletionComponent;
+ import de.uniks.stp24.component.menu.TraitComponent;
  import de.uniks.stp24.controllers.GangCreationController;
  import de.uniks.stp24.model.Gang;
  import de.uniks.stp24.model.GangElement;
+ import de.uniks.stp24.model.Trait;
  import de.uniks.stp24.rest.GameMembersApiService;
+ import de.uniks.stp24.rest.PresetsApiService;
  import de.uniks.stp24.service.ImageCache;
  import de.uniks.stp24.service.SaveLoadService;
  import de.uniks.stp24.service.TokenStorage;
  import de.uniks.stp24.service.menu.LobbyService;
+ import io.reactivex.rxjava3.core.Observable;
  import javafx.application.Platform;
  import javafx.collections.FXCollections;
  import javafx.collections.ObservableList;
@@ -55,8 +59,11 @@
      @Spy
      LobbyService lobbyService;
 
+     @Mock
+     PresetsApiService presetsApiService;
+
      ObservableList<Gang> gangs = FXCollections.observableArrayList();
-     Gang gang = new Gang("Test Gang", 0, 0, "", "#000000", 0);
+     Gang gang = new Gang("Test Gang", 0, 0, "", "#000000", 0, null);
      ListView<GangElement> gangsListView;
 
      @Mock
@@ -75,13 +82,21 @@
      @InjectMocks
      GangDeletionComponent gangDeletionComponent;
 
+     @Spy
+     Provider<GangComponent> traitComponentProvider = new Provider(){
+         @Override
+         public TraitComponent get() {
+             return new TraitComponent(gangCreationController, false, false);
+         }
+     };
+
      @Override
      public void start(Stage stage) throws Exception{
          super.start(stage);
          this.gangCreationController.gangDeletionComponent = this.gangDeletionComponent;
          gangs.add(gang);
          doReturn(gangs).when(saveLoadService).loadGangs();
-
+         doReturn(Observable.just(new Trait[]{})).when(presetsApiService).getTraitsPreset();
          app.show(this.gangCreationController);
      }
 
@@ -138,15 +153,19 @@
          clickOn("Test Gang");
          waitForFxEvents();
 
+         clickOn("#editButton");
+         waitForFxEvents();
+
          clickOn("#gangNameText");
          waitForFxEvents();
+
          Platform.runLater(() -> {((TextField) lookup("#gangNameText").query()).clear();});
 
          waitForFxEvents();
          write("Ashkanian");
          waitForFxEvents();
 
-         clickOn("#editButton");
+         clickOn("#confirmButton");
          waitForFxEvents();
 
          GangElement selectedGang;
@@ -155,6 +174,9 @@
          assertTrue(selectedGang.gang().description().isEmpty());
 
          clickOn("Ashkanian");
+         waitForFxEvents();
+
+         clickOn("#editButton");
          waitForFxEvents();
 
          String gangDescription = "Ruled by King Ashkan";
@@ -176,7 +198,7 @@
          clickOn("#nextColorButton");
          waitForFxEvents();
 
-         clickOn("#editButton");
+         clickOn("#confirmButton");
          waitForFxEvents();
 
          selectedGang = gangsListView.getItems().get(0);
@@ -187,6 +209,9 @@
          assertEquals(1, selectedGang.gang().colorIndex());
 
          clickOn("Ashkanian");
+         waitForFxEvents();
+
+         clickOn("#editButton");
          waitForFxEvents();
 
          clickOn("#lastFlagButton");
@@ -213,7 +238,7 @@
          assertEquals(1, selectedGang.gang().portraitIndex());
          assertEquals(1, selectedGang.gang().colorIndex());
 
-         clickOn("#editButton");
+         clickOn("#confirmButton");
          waitForFxEvents();
 
          // after edit
@@ -288,12 +313,21 @@
          clickOn("#showCreationButton");
          waitForFxEvents();
 
+         clickOn("#gangNameText");
+         waitForFxEvents();
+
+         Platform.runLater(() -> {((TextField) lookup("#gangNameText").query()).clear();});
+
+         waitForFxEvents();
+         write("Ashkanian");
+         waitForFxEvents();
+
          clickOn("#createButton");
          waitForFxEvents();
 
          int gangNums = gangsListView.getItems().size();
 
-         clickOn("Buccaneers");
+         clickOn("Ashkanian");
          waitForFxEvents();
 
          clickOn("#showDeletePaneButton");

@@ -170,8 +170,8 @@ public class EmpireOverviewComponent extends StackPane {
                 setGraphic(null);
             } else {
                 ImageView imageView = new ImageView(imageMap.get(item.island.type()));
-                imageView.setFitWidth(40);
-                imageView.setFitHeight(40);
+                imageView.setFitWidth(50);
+                imageView.setFitHeight(50);
                 imageView.setPreserveRatio(true);
                 setGraphic(imageView);
 

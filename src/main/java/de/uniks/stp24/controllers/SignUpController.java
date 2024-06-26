@@ -259,7 +259,9 @@ public class SignUpController extends BasicController {
     }
 
     public void setLanguage(Locale locale) {
+        String repeatPassword = this.repeatPasswordField.getText();
         resources = languageService.setLocale(locale);
         app.refresh();
+        this.repeatPasswordField.setText(repeatPassword);
     }
 }

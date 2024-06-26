@@ -32,7 +32,7 @@
                                  <children>
                                     <ImageView fx:id="portraitImage" fitHeight="100.0" fitWidth="100.0" layoutX="30.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../assets/Flags/flag_0.png" />
+                                          <Image url="@../assets/flags/flag_0.png" />
                                        </image>
                                     </ImageView>
                                     <Button fx:id="lastPortraitButton" layoutY="80.0" mnemonicParsing="false" onAction="#showLastPortrait" prefWidth="30.0" styleClass="downButton">
@@ -68,7 +68,7 @@
                                  <children>
                                     <ImageView fx:id="flagImage" fitHeight="100.0" fitWidth="100.0" layoutX="32.0" layoutY="17.0" pickOnBounds="true">
                                        <image>
-                                          <Image url="@../assets/Flags/flag_0.png" />
+                                          <Image url="@../assets/flags/flag_0.png" />
                                        </image>
                                     </ImageView>
                                     <Button fx:id="lastFlagButton" layoutY="80.0" mnemonicParsing="false" onAction="#showLastFlag" prefWidth="30.0" styleClass="downButton">

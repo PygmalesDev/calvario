@@ -10,28 +10,22 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.ws.EventListener;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import javafx.util.Callback;
 import org.controlsfx.control.GridCell;
+import org.controlsfx.control.GridView;
 import org.fulib.fx.annotation.controller.Component;
-import javafx.scene.image.ImageView;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.controlsfx.control.GridView;
-
 import java.util.*;
 
 @Component(view = "EmpireOverview.fxml")
@@ -43,9 +37,9 @@ public class EmpireOverviewComponent extends StackPane {
     @FXML
     ImageView flagContainer;
     @FXML
-    TextFlow empireNameContainer;
+    Text empireNameContainer;
     @FXML
-    TextFlow empireDescriptionContainer;
+    Text empireDescriptionContainer;
     @FXML
     AnchorPane colourContainer;
     @FXML
@@ -63,6 +57,8 @@ public class EmpireOverviewComponent extends StackPane {
     EmpireService empireService;
     @Inject
     IslandsService islandsService;
+    @Inject
+    ImageCache imageCache;
 
     @Inject
     @org.fulib.fx.annotation.controller.Resource
@@ -70,8 +66,9 @@ public class EmpireOverviewComponent extends StackPane {
     ResourceBundle gameResourceBundle;
 
     private InGameController inGameController;
-
-    ObservableList<Island> islandObservableList;
+    private String gameID, empireID;
+    int potrait, flag;
+    String colour, empireName, empireDescription;
 
     List<Island> islandList = new ArrayList<>();
     List<IslandComponent> islandComponentList = new ArrayList<>();
@@ -80,19 +77,6 @@ public class EmpireOverviewComponent extends StackPane {
 
     Map<IslandType, Image> imageMap = new HashMap<>();
 
-    private String lastUpdate;
-    private String lastSeasonUpdate;
-    private String gameID;
-    private String empireID;
-
-    int potrait;
-    int flag;
-    String colour;
-    String empireName;
-    String empireDescription;
-    @Inject
-    ImageCache imageCache;
-
     String resourcesPaths = "/de/uniks/stp24/assets/";
     String flagsFolderPath = "flags/flag_";
     String portraitsFolderPath = "portraits/captain_";
@@ -100,16 +84,19 @@ public class EmpireOverviewComponent extends StackPane {
 
     @Inject
     public EmpireOverviewComponent() {
-        lastUpdate = "";
-        lastSeasonUpdate = "";
     }
 
+    public void setInGameController(InGameController ingameController) {
+        this.inGameController = ingameController;
+    }
 
     @OnInit
     public void initEmpireList() {
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
-        this.subscriber.subscribe(this.empireService.getEmpire(gameID, empireID), this::empireTraits,Error -> System.out.println(Error));
+        this.subscriber.subscribe(this.empireService.getEmpire(gameID, empireID),
+                this::empireTraits,
+                error -> System.out.println(error));
     }
 
     public void closeEmpireOverview() {
@@ -123,41 +110,28 @@ public class EmpireOverviewComponent extends StackPane {
         this.empireName = empireDto.name();
         this.empireDescription = empireDto.description();
         addTraits();
-        filterIslands();
+        filterIslandsAndFillGrid();
     }
 
     private void addTraits() {
         flagContainer.setImage(imageCache.get(resourcesPaths + flagsFolderPath + this.flag + ".png"));
 
-        empireNameContainer.getChildren().clear();
-        Text empireNameText = new Text(this.empireName);
-        empireNameText.getStyleClass().add("empireOverviewTextWhite");
-        empireNameContainer.getChildren().add(empireNameText);
+        empireNameContainer.setText(this.empireName);
+        this.empireNameContainer.getStyleClass().add("empireOverviewTextWhite");
 
-        empireDescriptionContainer.getChildren().clear();
-        Text empireDescriptionText = new Text(this.empireDescription);
-        empireDescriptionText.getStyleClass().add("empireOverviewTextBlack");
-        empireDescriptionContainer.getChildren().add(empireDescriptionText);
+        empireDescriptionContainer.setText(this.empireDescription);
+        empireDescriptionContainer.getStyleClass().add("empireOverviewTextBlack");
 
         potraitContainer.setImage(imageCache.get(resourcesPaths + portraitsFolderPath + this.potrait + ".png"));
         colourContainer.setStyle("-fx-background-color: " + this.colour);
     }
 
-    public void IslandImageMapper() {
-        imageMap.put(IslandType.regular, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_regular.png"));
-        imageMap.put(IslandType.energy, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_energy.png"));
-        imageMap.put(IslandType.agriculture, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_agriculture.png"));
-        imageMap.put(IslandType.mining, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_mining.png"));
-        imageMap.put(IslandType.uninhabitable_0, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_uninhabitable_0.png"));
-        imageMap.put(IslandType.uninhabitable_1, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_uninhabitable_1.png"));
-        imageMap.put(IslandType.uninhabitable_2, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_uninhabitable_2.png"));
-        imageMap.put(IslandType.uninhabitable_3, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_uninhabitable_3.png"));
-        imageMap.put(IslandType.ancient_military, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_ancient_military.png"));
-        imageMap.put(IslandType.ancient_industry, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_ancient_industry.png"));
-        imageMap.put(IslandType.ancient_technology, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_ancient_technology.png"));
+    public void islandImageMapper() {
+        Arrays.stream(IslandType.values()).forEach(type ->
+                imageMap.put(type, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_" + type.name().toLowerCase() + ".png")));
     }
 
-    public void filterIslands() {
+    public void filterIslandsAndFillGrid() {
         if (!islandsService.getListOfIslands().isEmpty()) {
             System.out.println(islandsService.getListOfIslands().size());
             islandList = islandsService.getListOfIslands();
@@ -168,7 +142,6 @@ public class EmpireOverviewComponent extends StackPane {
             IslandComponent islandComponent = new IslandComponent();
             islandComponent.applyInfo(island);
             islandComponent.setInGameController(inGameController);
-//            islandComponent.setIsOnMap(false);
             if (Objects.nonNull(island.owner()) && island.owner().equals(empireID)) {
                 empireIslands.add(islandComponent);
             }
@@ -176,7 +149,7 @@ public class EmpireOverviewComponent extends StackPane {
         }
         System.out.println("empireIslands size: " + empireIslands.size());
 
-        IslandImageMapper();
+        islandImageMapper();
 
 
         for (Island island : islandList) {
@@ -218,14 +191,5 @@ public class EmpireOverviewComponent extends StackPane {
             }
         }
 
-    }
-
-    public void setInGameController(InGameController ingameController) {
-        this.inGameController = ingameController;
-        if (Objects.nonNull(ingameController)) {
-            System.out.println("inGameController ist nicht null");
-        } else {
-            System.out.println("inGameController null");
-        }
     }
 }

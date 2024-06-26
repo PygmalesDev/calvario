@@ -310,7 +310,7 @@ public class InGameController extends BasicController {
         }
     }
 
-    @OnKey(code = KeyCode.I)
+    @OnKey(code = KeyCode.I,alt = true)
     public void showIslandOverviewWindows() {
         buildingProperties.setMouseTransparent(false);
         buildingsWindow.setMouseTransparent(false);
@@ -440,7 +440,7 @@ public class InGameController extends BasicController {
         overviewSitesComponent.setOverviewSites();
     }
 
-    @OnKey(code = KeyCode.S)
+    @OnKey(code = KeyCode.S,alt = true)
     public void showStorage() {
         if(empireOverviewComponent.isVisible()) {
             empireOverviewComponent.closeEmpireOverview();
@@ -448,7 +448,7 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
-    @OnKey(code = KeyCode.E)
+    @OnKey(code = KeyCode.E, alt = true)
     public void showEmpireOverview() {
         if(storageOverviewComponent.isVisible()){
             storageOverviewComponent.closeStorageOverview();

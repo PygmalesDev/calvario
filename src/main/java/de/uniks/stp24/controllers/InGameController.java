@@ -442,11 +442,17 @@ public class InGameController extends BasicController {
 
     @OnKey(code = KeyCode.S)
     public void showStorage() {
+        if(empireOverviewComponent.isVisible()) {
+            empireOverviewComponent.closeEmpireOverview();
+        }
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
     @OnKey(code = KeyCode.E)
     public void showEmpireOverview() {
+        if(storageOverviewComponent.isVisible()){
+            storageOverviewComponent.closeStorageOverview();
+        }
         empireOverviewContainer.setVisible(!empireOverviewContainer.isVisible());
     }
 

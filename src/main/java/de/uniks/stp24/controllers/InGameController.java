@@ -59,7 +59,9 @@ public class InGameController extends BasicController {
     @FXML
     public Button showStorageButton;
     @FXML
-    Button showEmpireOverviewButton;
+    public Button showEmpireOverviewButton;
+    @FXML
+    public Button showTechnologiesButton;
     @FXML
     public HBox storageButtonsBox;
 
@@ -67,6 +69,8 @@ public class InGameController extends BasicController {
     public Group group;
     @FXML
     public StackPane overviewContainer;
+    @FXML
+    public StackPane technologiesContainer;
     @FXML
     public ScrollPane mapScrollPane;
     @FXML
@@ -344,9 +348,18 @@ public class InGameController extends BasicController {
                 showStorageButton.setId("showStorageButton");
                 showStorageButton.getStyleClass().add("storageButton");
                 showStorageButton.setOnAction(event -> showStorage());
+                showTechnologiesButton = new Button();
+                showTechnologiesButton.setPrefHeight(30);
+                showTechnologiesButton.setPrefWidth(30);
+                showTechnologiesButton.setId("showTechnologiesButton");
+                showTechnologiesButton.setOnAction(event -> showTechnologies());
             }
-            this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton);
+            this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton, showTechnologiesButton);
         }
+    }
+
+    private void showTechnologies() {
+        technologiesContainer.setVisible(true);
     }
 
     private void showEmpireOverview() {

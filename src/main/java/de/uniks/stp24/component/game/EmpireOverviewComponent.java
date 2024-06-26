@@ -20,6 +20,7 @@ import javafx.scene.text.Text;
 import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.controller.Subscriber;
 
@@ -85,23 +86,35 @@ public class EmpireOverviewComponent extends StackPane {
     public EmpireOverviewComponent() {
     }
 
+    /**
+     * Sets the InGameController for this component.
+     */
     public void setInGameController(InGameController ingameController) {
         this.inGameController = ingameController;
     }
 
+    /**
+     * Initializes the list of empires and subscribes to updates from the EmpireService.
+     */
     @OnInit
     public void initEmpireList() {
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
         this.subscriber.subscribe(this.empireService.getEmpire(gameID, empireID),
                 this::empireTraits,
-                error -> System.out.println(error));
+                error -> System.out.println("error"));
     }
 
+    /**
+     * Closes the empire overview by hiding the parent component.
+     */
     public void closeEmpireOverview() {
         this.getParent().setVisible(false);
     }
 
+    /**
+     * Updates the traits of the empire based on the provided EmpireDto.
+     */
     private void empireTraits(EmpireDto empireDto) {
         this.portrait = empireDto.portrait();
         this.flag = empireDto.flag();
@@ -112,11 +125,14 @@ public class EmpireOverviewComponent extends StackPane {
         filterIslandsAndFillGrid();
     }
 
+    /**
+     * Adds the traits of the empire to the UI components.
+     */
     private void addTraits() {
         flagContainer.setImage(imageCache.get(resourcesPaths + flagsFolderPath + this.flag + ".png"));
 
         empireNameContainer.setText(this.empireName);
-        this.empireNameContainer.getStyleClass().add("empireOverviewTextWhite");
+        empireNameContainer.getStyleClass().add("empireOverviewTextWhite");
 
         empireDescriptionContainer.setText(this.empireDescription);
         empireDescriptionContainer.getStyleClass().add("empireOverviewTextBlack");
@@ -125,11 +141,17 @@ public class EmpireOverviewComponent extends StackPane {
         colourContainer.setStyle("-fx-background-color: " + this.colour);
     }
 
+    /**
+     * Maps the images for the islands based on their types.
+     */
     public void islandImageMapper() {
         Arrays.stream(IslandType.values()).forEach(type ->
                 imageMap.put(type, imageCache.get(resourcesPaths + islandButtonsFolderPath + "button_" + type.name().toLowerCase() + ".png")));
     }
 
+    /**
+     * Filters the islands owned by the empire and fills the grid with island components.
+     */
     public void filterIslandsAndFillGrid() {
         if (!islandsService.getListOfIslands().isEmpty()) {
             islandList = islandsService.getListOfIslands();
@@ -144,9 +166,8 @@ public class EmpireOverviewComponent extends StackPane {
             }
             islandComponentList.add(islandComponent);
         }
+
         islandImageMapper();
-
-
         for (Island island : islandList) {
             gridViewImages.add(imageMap.get(island.type()));
         }
@@ -154,11 +175,17 @@ public class EmpireOverviewComponent extends StackPane {
         fillGrid();
     }
 
+    /**
+     * Fills the grid with the island components of the empire.
+     */
     public void fillGrid() {
         islandGridView.getItems().addAll(empireIslands);
         islandGridView.setCellFactory(grid -> new IslandCell());
     }
 
+    /**
+     * The IslandCell class represents a custom cell in the GridView for displaying islands.
+     */
     public class IslandCell extends GridCell<IslandComponent> {
         ImageCache imageCache = new ImageCache();
         int clickCounter = 0;
@@ -180,15 +207,23 @@ public class EmpireOverviewComponent extends StackPane {
                     IslandComponent clicked = getItem();
                     inGameController.selectedIsland = clicked;
                     inGameController.islandAttributes.setIsland(clicked.getIsland());
-                    if (clickCounter%2 == 0) {
+                    if (clickCounter % 2 == 0) {
                         clicked.inGameController.showOverview();
-                    }else {
+                    } else {
                         inGameController.overviewSitesComponent.closeOverview();
                     }
                     clickCounter++;
                 });
             }
         }
+    }
+
+    /**
+     * Cleans up resources when the component is destroyed.
+     */
+    @OnDestroy
+    void destroy() {
+        this.subscriber.dispose();
 
     }
 }

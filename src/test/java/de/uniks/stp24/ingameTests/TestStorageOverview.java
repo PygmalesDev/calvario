@@ -183,7 +183,7 @@ public class TestStorageOverview extends ControllerTest {
                 "a","a",1, 2, "a", new String[]{"1"}, resources1 ,
                 null))).when(this.empireService).getEmpire(any(),any());
 
-        doReturn(Observable.just(new Game("a","a","testGameID", "gameName", "gameOwner", true,1,1,null ))).when(gamesApiService).getGame(any());
+        doReturn(Observable.just(new Game("a","a","testGameID", "gameName", "gameOwner", 2,true,1,1,null ))).when(gamesApiService).getGame(any());
 
         // Mock empire listener
         doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
@@ -302,7 +302,7 @@ public class TestStorageOverview extends ControllerTest {
 
         // Season change: energy +1, population +2
         gameSubject.onNext(new Event<>("games.testGameID.ticked",
-                new Game("a","b","testGameID","testGame", "testUserID",
+                new Game("a","b","testGameID","testGame", "testUserID", 2,
                         true, 2, 1, null)));
         waitForFxEvents();
 

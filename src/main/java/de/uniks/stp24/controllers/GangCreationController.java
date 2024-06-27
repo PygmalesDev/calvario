@@ -9,6 +9,7 @@ import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.model.GangElement;
+import de.uniks.stp24.rest.GameMembersApiService;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PopupBuilder;
@@ -23,6 +24,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.Resource;
@@ -33,6 +35,7 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -51,6 +54,8 @@ public class GangCreationController extends BasicController {
     SaveLoadService saveLoadService;
     @Inject
     PresetsApiService presetsApiService;
+    @Inject
+    GameMembersApiService gameMembersApiService;
     @Inject
     LobbyService lobbyService;
     @Inject
@@ -81,6 +86,10 @@ public class GangCreationController extends BasicController {
     private final ObservableList<Trait> choosenTraits = FXCollections.observableArrayList();
     private final ObservableList<Trait> confirmedTraits = FXCollections.observableArrayList();
 
+    @FXML
+    ImageView spectatorImage;
+    @FXML
+    VBox spectatorBox;
     @FXML
     Pane captainContainer;
     @FXML
@@ -246,6 +255,36 @@ public class GangCreationController extends BasicController {
     @OnRender
     public void render() {
         buttonsPane.setPickOnBounds(false);
+        traitsBox.setVisible(false);
+
+        subscriber.subscribe(gameMembersApiService.getMember(gameID, tokenStorage.getUserId()),
+                result -> {
+                    Empire playerEmpire = result.empire();
+                    if (Objects.nonNull(playerEmpire)) {
+                        ArrayList<Trait> playerTraits = new ArrayList<>();
+                        for (String traitName : playerEmpire.traits()) {
+                            for (Trait trait : allTraits) {
+                                if (trait.id().equals(traitName))
+                                    playerTraits.add(trait);
+                            }
+                        }
+                        Gang playerGang = new Gang(playerEmpire.name(),
+                                playerEmpire.flag(),
+                                playerEmpire.portrait(),
+                                playerEmpire.description(),
+                                playerEmpire.color(),
+                                colorsList.indexOf(playerEmpire.color()),
+                                playerTraits);
+                        applyInputs(playerGang);
+                        spectatorBox.setVisible(false);
+
+                        selectGangElement(playerGang);
+                    } else {
+                        spectatorBox.setVisible(true);
+                        spectatorImage.setImage(imageCache.get("icons/spectatorSign.png"));
+                    }
+                },
+                error -> System.out.println("Error while handling player data"));
 
         // group editor buttons, to make them (in)visible all at once
         editNodes.clear();
@@ -262,7 +301,8 @@ public class GangCreationController extends BasicController {
                 lockDescriptionButton,
                 lockNameButton,
                 randomizeButton,
-                lockTraitsButton);
+                lockTraitsButton,
+                createButton);
 
         creationBox.setVisible(false);
         deletePane.setVisible(false);
@@ -284,15 +324,7 @@ public class GangCreationController extends BasicController {
                 creationBox.setVisible(true);
 
                 Gang gang = gangComp.gang();
-                gangNameText.setText(gang.name());
-                flagImageIndex = gang.flagIndex() % flagsList.size();
-                flagImage.setImage(flagsList.get(flagImageIndex));
-                portraitImageIndex = gang.portraitIndex() % portraitsList.size();
-                portraitImage.setImage(portraitsList.get(portraitImageIndex));
-                gangDescriptionText.setText(gang.description());
-
-                confirmedTraits.clear();
-                if (Objects.nonNull(gang.traits())) confirmedTraits.setAll(gang.traits());
+                applyInputs(gang);
 
                 createButton.setVisible(false);
                 confirmButton.setVisible(false);
@@ -305,6 +337,56 @@ public class GangCreationController extends BasicController {
                 traitsBox.setVisible(false);
             }
         });
+    }
+
+    private void selectGangElement(Gang playerGang) {
+        GangElement sameGangElement = null;
+        for (GangElement gangElement : gangElements) {
+            if (areGangsEquals(playerGang, gangElement.gang())) {
+                sameGangElement = gangElement;
+                break;
+            }
+        }
+        if (Objects.isNull(sameGangElement)) {
+            sameGangElement = createGangElement(playerGang);
+            gangElements.add(sameGangElement);
+            saveLoadService.saveGang(createGangsObservableList());
+        }
+        this.gangsListView.getSelectionModel().select(sameGangElement);
+        this.selectButton.setVisible(true);
+    }
+
+    private static boolean areGangsEquals(Gang gang1, Gang gang2) {
+        ArrayList<String> traits1 = new ArrayList<>();
+        ArrayList<String> traits2 = new ArrayList<>();
+
+        for (Trait trait : gang1.traits()) {
+            traits1.add(trait.id());
+        }
+
+        for (Trait trait : gang2.traits()) {
+            traits2.add(trait.id());
+        }
+
+        return gang1.name().equals(gang2.name())
+                && gang1.flagIndex() == gang2.flagIndex()
+                && gang1.portraitIndex() == gang2.portraitIndex()
+                && gang1.description().equals(gang2.description())
+                && gang1.color().equals(gang2.color())
+                && traits1.equals(traits2);
+    }
+
+    private void applyInputs(Gang gang) {
+        showCreationPane(false);
+        gangNameText.setText(gang.name());
+        flagImageIndex = gang.flagIndex() % flagsList.size();
+        flagImage.setImage(flagsList.get(flagImageIndex));
+        portraitImageIndex = gang.portraitIndex() % portraitsList.size();
+        portraitImage.setImage(portraitsList.get(portraitImageIndex));
+        gangDescriptionText.setText(gang.description());
+
+        confirmedTraits.clear();
+        if (Objects.nonNull(gang.traits())) confirmedTraits.setAll(gang.traits());
     }
 
     private void updateTraitLimitText() {
@@ -372,9 +454,7 @@ public class GangCreationController extends BasicController {
 
         gangsListView.getSelectionModel().select(index);
 
-        ObservableList<Gang> gangs = FXCollections.observableArrayList();
-        gangElements.forEach(gangElement -> gangs.add(gangElement.gang()));
-        saveLoadService.saveGang(gangs);
+        saveLoadService.saveGang(createGangsObservableList());
 
         changeEditNodes(false);
         confirmButton.setVisible(false);
@@ -385,7 +465,9 @@ public class GangCreationController extends BasicController {
         int index = gangsListView.getSelectionModel().getSelectedIndex();
         gangElements.remove(index);
         saveLoadService.saveGang(createGangsObservableList());
-        showCreationPane();
+        showCreationPane(true);
+        confirmButton.setVisible(false);
+        selectButton.setVisible(false);
     }
 
     private GangElement createGangElement(Gang gang) {
@@ -403,13 +485,17 @@ public class GangCreationController extends BasicController {
         creationBox.setEffect(null);
     }
 
-    public void showCreationPane() {
+    public void showCreationPane(boolean edit) {
         resetCreationPane();
+        spectatorBox.setVisible(false);
         creationBox.setVisible(true);
-        createButton.setVisible(true);
         editButton.setVisible(false);
         showDeletePaneButton.setVisible(false);
-        changeEditNodes(true);
+        changeEditNodes(edit);
+    }
+
+    public void showCreationPane() {
+       showCreationPane(true);
     }
 
     public void showDeletePane() {
@@ -647,7 +733,6 @@ public class GangCreationController extends BasicController {
         for (EffectDto effect : trait.effects()) {
             String variable = effect.variable();
             String type = "";
-            System.out.println(effect);
             if (effect.bonus() != 0.00) {
                 if (effect.bonus() > 0){
                     type = "+";

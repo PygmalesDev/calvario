@@ -30,12 +30,12 @@ public class TimerService {
     @Inject
     GameStatus gameStatus;
     @Inject
-    GamesApiService gamesApiService;
+    public GamesApiService gamesApiService;
     @Inject
     public Subscriber subscriber;
 
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
 
     public Game game;
 
@@ -77,7 +77,6 @@ public class TimerService {
     }
 
     public void start() {
-
         subscriber.subscribe(gamesApiService.getGame(tokenStorage.getGameId()),
                 gameResult -> game = gameResult,
                 error -> System.out.println("Error: " + error.getMessage())

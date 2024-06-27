@@ -62,6 +62,9 @@ public class InGameController extends BasicController {
     public HBox contextMenuButtons;
 
     @FXML
+    public StackPane contextMenuContainer;
+
+    @FXML
     public Group group;
     @FXML
     public StackPane overviewContainer;

@@ -170,6 +170,9 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
         this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
+        this.timerService.tokenStorage = this.tokenStorage;
+        this.timerService.subscriber = this.subscriber;
+        this.timerService.gamesApiService = this.gameApiService;
 
         inGameController.mapScrollPane = new ScrollPane();
         inGameController.group = new Group();

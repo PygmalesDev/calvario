@@ -9,7 +9,6 @@ import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
@@ -360,8 +359,9 @@ public class InGameController extends BasicController {
                 showEmpireOverviewButton = new Button();
                 showEmpireOverviewButton.setPrefHeight(30);
                 showEmpireOverviewButton.setPrefWidth(30);
-                showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
+                showEmpireOverviewButton.setId("showEmpireOverviewButton");
                 showEmpireOverviewButton.getStyleClass().add("empireOverviewButton");
+                showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
                 showStorageButton = new Button();
                 showStorageButton.setPrefHeight(30);
                 showStorageButton.setPrefWidth(30);

@@ -125,10 +125,12 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
-
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
+    @SubComponent
+    @Inject
+    public TechnologiesComponent technologiesComponent;
 
     @SubComponent
     @Inject
@@ -286,6 +288,10 @@ public class InGameController extends BasicController {
 
         pauseMenuContainer.getChildren().clear();
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
+
+        technologiesComponent.setContainer(technologiesContainer);
+        technologiesContainer.setVisible(false);
+        technologiesContainer.getChildren().add(technologiesComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -338,19 +344,19 @@ public class InGameController extends BasicController {
         if (!tokenStorage.isSpectator()) {
             if (!(Objects.nonNull(showEmpireOverviewButton) && (Objects.nonNull(showStorageButton)))) {
                 showEmpireOverviewButton = new Button();
-                showEmpireOverviewButton.setPrefHeight(30);
-                showEmpireOverviewButton.setPrefWidth(30);
+                showEmpireOverviewButton.setMinHeight(48);
+                showEmpireOverviewButton.setMinWidth(47);
                 showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
                 showEmpireOverviewButton.getStyleClass().add("empireOverviewButton");
                 showStorageButton = new Button();
-                showStorageButton.setPrefHeight(30);
-                showStorageButton.setPrefWidth(30);
+                showStorageButton.setMinHeight(48);
+                showStorageButton.setMinWidth(47);
                 showStorageButton.setId("showStorageButton");
                 showStorageButton.getStyleClass().add("storageButton");
                 showStorageButton.setOnAction(event -> showStorage());
                 showTechnologiesButton = new Button();
-                showTechnologiesButton.setPrefHeight(30);
-                showTechnologiesButton.setPrefWidth(30);
+                showTechnologiesButton.setMinHeight(48);
+                showTechnologiesButton.setMinWidth(47);
                 showTechnologiesButton.setId("showTechnologiesButton");
                 showTechnologiesButton.setOnAction(event -> showTechnologies());
             }

@@ -75,7 +75,6 @@ public class BuildingsComponent extends AnchorPane {
             buildings.add(new Building(this, "buildNewBuilding", tokenStorage, islandAttributes, inGameController), col, row);
         } else {
             next.setMouseTransparent(false);
-            next.toFront();
             next.setVisible(true);
         }
     }

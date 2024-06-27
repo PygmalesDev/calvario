@@ -10,7 +10,6 @@ import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.model.GameStatus;
-
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
@@ -23,10 +22,12 @@ import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
+import javafx.application.Platform;
 import de.uniks.stp24.service.PopupBuilder;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -83,7 +84,7 @@ public class InGameController extends BasicController {
     @FXML
     StackPane pauseMenuContainer;
     @FXML
-    public StackPane contextMenuContainer;
+    public StackPane storageOverviewContainer;
     @FXML
     StackPane clockComponentContainer;
 
@@ -194,6 +195,9 @@ public class InGameController extends BasicController {
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
+        //Todo: Outprint for Swagger - can be deleted later
+        System.out.println(this.gameID);
+        System.out.println(empireID);
 
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
@@ -243,12 +247,14 @@ public class InGameController extends BasicController {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             pause = (Boolean) propertyChangeEvent.getNewValue();
             if (pause) {
-                pauseGame();
                 shadow.setVisible(true);
                 shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
+                pauseGame();
             } else {
+                if (!eventContainer.isVisible()) {
+                    shadow.setVisible(false);
+                }
                 resumeGame();
-                shadow.setVisible(false);
             }
         }
     }
@@ -260,7 +266,7 @@ public class InGameController extends BasicController {
         siteProperties.setMouseTransparent(true);
         deleteStructureWarningContainer.setMouseTransparent(true);
 
-        pauseMenuContainer.setMouseTransparent(true);
+        pauseMenuContainer.setMouseTransparent(false);
         pauseMenuContainer.setVisible(false);
         eventComponent.setParent(shadow, eventContainer);
         clockComponent.setToggle(true);
@@ -269,8 +275,6 @@ public class InGameController extends BasicController {
         eventContainer.setVisible(false);
         shadow.setVisible(false);
         eventComponent.setClockComponent(clockComponent);
-
-        pauseMenuContainer.getChildren().add(pauseMenuComponent);
 
         overviewContainer.setVisible(false);
         overviewSitesComponent.setContainer();
@@ -284,6 +288,9 @@ public class InGameController extends BasicController {
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
 
         this.createContextMenuButtons();
+
+        pauseMenuContainer.getChildren().clear();
+        pauseMenuContainer.getChildren().add(pauseMenuComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -292,6 +299,8 @@ public class InGameController extends BasicController {
         inGameService.setShowSettings(false);
         inGameService.setPaused(pause);
         if (pause) {
+            shadow.setVisible(true);
+            shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
             pauseMenuContainer.setMouseTransparent(false);
             pauseGame();
         } else {
@@ -341,7 +350,6 @@ public class InGameController extends BasicController {
 
     public void resumeGame() {
         pauseMenuContainer.setVisible(pause);
-        shadow.setVisible(false);
     }
 
     /**
@@ -454,7 +462,6 @@ public class InGameController extends BasicController {
     }
 
     public void handleDeleteStructure(String buildingType) {
-        deleteStructureWarningContainer.toFront();
         deleteStructureWarningContainer.setMouseTransparent(false);
         popupDeleteStructure.showPopup(deleteStructureWarningContainer, deleteStructureComponent);
         popupDeleteStructure.setBlur(buildingProperties, buildingsWindow);
@@ -475,7 +482,6 @@ public class InGameController extends BasicController {
         if (!siteProperties.isVisible()) {
             siteProperties.setMouseTransparent(true);
         }
-        buildingsWindow.toFront();
     }
 
     public void createEmpireListener() {
@@ -484,12 +490,11 @@ public class InGameController extends BasicController {
                 event -> {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         islandAttributes.setEmpireDto(event.data());
-                        System.out.println("Event -> minerals: " + islandAttributes.getAvailableResources().get("minerals") + " alloys: " + islandAttributes.getAvailableResources().get("alloys"));
                         overviewUpgradeComponent.setUpgradeButton();
                         this.lastUpdate = event.data().updatedAt();
                     }
                 },
-                error -> System.out.println("errorListener")
+                error -> System.out.println("errorListener: " + error)
         );
     }
 
@@ -498,7 +503,6 @@ public class InGameController extends BasicController {
         buildingsWindow.setMouseTransparent(false);
         popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
         buildingProperties.setMouseTransparent(false);
-
     }
 
 
@@ -507,7 +511,6 @@ public class InGameController extends BasicController {
         buildingsWindow.setVisible(false);
         buildingProperties.setVisible(false);
         popupSiteProperties.showPopup(siteProperties, sitePropertiesComponent);
-
     }
 
     public void setSiteType(String siteType) {

@@ -17,9 +17,9 @@
       </Text>
       <Button fx:id="closeButton" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#close" styleClass="closeButton" translateX="370.0" translateY="-43.0" />
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="75.0" translateY="230.0">
-         <Button fx:id="crewRelationsButton" minHeight="40.0" minWidth="100.0" mnemonicParsing="false" onAction="#crewRelations" text="\%technologie.crew.relations" />
-         <Button fx:id="shipbuildingButton" minHeight="40.0" minWidth="100.0" mnemonicParsing="false" onAction="#shipbuilding" text="\%technologie.shipbuilding" />
-         <Button fx:id="marineSienceButton" minHeight="40.0" minWidth="100.0" mnemonicParsing="false" onAction="#marineSience" text="\%technologie.marine.sience" />
+         <Button fx:id="crewRelationsButton" minHeight="40.0" minWidth="100.0" mnemonicParsing="false" onAction="#crewRelations" text="\%technologie.society" />
+         <Button fx:id="shipbuildingButton" minHeight="40.0" minWidth="100.0" mnemonicParsing="false" onAction="#shipbuilding" text="\%technologie.physics" />
+         <Button fx:id="marineSienceButton" minHeight="40.0" minWidth="100.0" mnemonicParsing="false" onAction="#marineSience" text="\%technologie.engineering" />
       </HBox>
    </VBox>
    <stylesheets>

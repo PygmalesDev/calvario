@@ -5,12 +5,15 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ResourceBundle;
 
 @Component(view = "Technologies.fxml")
 public class TechnologiesComponent extends AnchorPane {
@@ -27,6 +30,11 @@ public class TechnologiesComponent extends AnchorPane {
     private Pane parent;
     @Inject
     Subscriber subscriber;
+
+    @Inject
+    @Resource
+    @Named("gameResourceBundle")
+    public ResourceBundle resources;
 
     @Inject
     public TechnologiesComponent() {

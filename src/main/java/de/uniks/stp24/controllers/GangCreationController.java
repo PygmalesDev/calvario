@@ -1,5 +1,6 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.component.menu.GangComponent;
 import de.uniks.stp24.component.menu.GangDeletionComponent;
 import de.uniks.stp24.component.menu.TraitComponent;
@@ -64,6 +65,10 @@ public class GangCreationController extends BasicController {
     @Inject
     public GangDeletionComponent gangDeletionComponent;
 
+    @SubComponent
+    @Inject
+    public BubbleComponent bubbleComponent;
+
     @Inject
     public Provider<GangComponent> gangComponentProvider;
     private final ObservableList<GangElement> gangElements = FXCollections.observableArrayList();
@@ -75,6 +80,10 @@ public class GangCreationController extends BasicController {
     private final ObservableList<Trait> choosenTraits = FXCollections.observableArrayList();
     private final ObservableList<Trait> confirmedTraits = FXCollections.observableArrayList();
 
+    @FXML
+    Pane captainContainer;
+    @FXML
+    Pane buttonsPane;
     @FXML
     ListView<GangElement> gangsListView;
     @FXML
@@ -218,7 +227,17 @@ public class GangCreationController extends BasicController {
     }
 
     @OnRender
+    public void addSpeechBubble() {
+        captainContainer.getChildren().add(bubbleComponent);
+        bubbleComponent.setCaptainText("Yo wie geht's");
+        captainContainer.setMouseTransparent(true);
+        bubbleComponent.setMouseTransparent(true);
+    }
+
+    @OnRender
     public void render() {
+        buttonsPane.setPickOnBounds(false);
+
         // group editor buttons, to make them (in)visible all at once
         editNodes.clear();
         Collections.addAll(editNodes,
@@ -317,8 +336,6 @@ public class GangCreationController extends BasicController {
         for (Trait chosen : confirmedTraits) {
             gangsTraits.add(chosen.id());
         }
-
-        System.out.println(gangsTraits);
 
         if (Objects.nonNull(gangElement))
             empire = new Empire(gangElement.gang().name(), gangElement.gang().description(), gangElement.gang().color(),
@@ -545,12 +562,14 @@ public class GangCreationController extends BasicController {
     }
 
     public void traitsConfirm() {
+        bubbleComponent.setCaptainText("yo");
         confirmedTraits.clear();
         confirmedTraits.addAll(choosenTraits);
         traitsReturn();
     }
 
     public void traitsReturn() {
+        bubbleComponent.setCaptainText("yo");
         resetTraitsLists();
         traitsBox.setVisible(false);
     }
@@ -558,13 +577,11 @@ public class GangCreationController extends BasicController {
     public void addTrait(Trait trait) {
         if (canAddTrait(trait)) {
             addTraitToEmpire(trait);
-        } else {
-            // TODO remove and make captain say it
-            System.out.println("cannot");
         }
     }
 
     private void addTraitToEmpire(Trait trait) {
+        bubbleComponent.setCaptainText("yo");
         allTraits.remove(trait);
         choosenTraits.add(trait);
         traitsCost += trait.cost();
@@ -572,14 +589,14 @@ public class GangCreationController extends BasicController {
     }
 
     public void deleteTrait(Trait trait) {
+        bubbleComponent.setCaptainText("yo");
         if (traitsCost - trait.cost() <= traitsLimit) {
             allTraits.add(trait);
             choosenTraits.remove(trait);
             traitsCost -= trait.cost();
             updateTraitLimitText();
         } else {
-            // TODO remove and make captain say it
-            System.out.println("over limit");
+            bubbleComponent.setCaptainText("over limit");
         }
     }
 
@@ -589,12 +606,18 @@ public class GangCreationController extends BasicController {
                 if (Objects.nonNull(chosen.conflicts())) {
                     for (String conflict : chosen.conflicts()) {
                         if (conflict.equals(trait.id())) {
+                            bubbleComponent.setCaptainText("conflict: " + chosen.id() + "+" + trait.id());
                             return false;
                         }
                     }
                 }
             }
            return true;
+        }
+        if (traitsCost + trait.cost() > traitsLimit) {
+            bubbleComponent.setCaptainText("over limit");
+        } else if (choosenTraits.size() >= 5) {
+            bubbleComponent.setCaptainText("too many");
         }
         return false;
     }

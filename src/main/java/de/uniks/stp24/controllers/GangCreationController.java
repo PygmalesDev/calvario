@@ -277,7 +277,6 @@ public class GangCreationController extends BasicController {
                                 playerTraits);
                         applyInputs(playerGang);
                         spectatorBox.setVisible(false);
-
                         selectGangElement(playerGang);
                     } else {
                         spectatorBox.setVisible(true);
@@ -331,8 +330,6 @@ public class GangCreationController extends BasicController {
                 editButton.setVisible(true);
                 showDeletePaneButton.setVisible(true);
                 selectButton.setVisible(true);
-                colorIndex = gang.colorIndex() % colorsList.size();
-                colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
                 changeEditNodes(false);
                 traitsBox.setVisible(false);
             }
@@ -360,12 +357,16 @@ public class GangCreationController extends BasicController {
         ArrayList<String> traits1 = new ArrayList<>();
         ArrayList<String> traits2 = new ArrayList<>();
 
-        for (Trait trait : gang1.traits()) {
-            traits1.add(trait.id());
+        if (Objects.nonNull(gang1.traits())) {
+            for (Trait trait : gang1.traits()) {
+                traits1.add(trait.id());
+            }
         }
 
-        for (Trait trait : gang2.traits()) {
-            traits2.add(trait.id());
+        if (Objects.nonNull(gang2.traits())) {
+            for (Trait trait : gang2.traits()) {
+                traits2.add(trait.id());
+            }
         }
 
         return gang1.name().equals(gang2.name())
@@ -384,7 +385,8 @@ public class GangCreationController extends BasicController {
         portraitImageIndex = gang.portraitIndex() % portraitsList.size();
         portraitImage.setImage(portraitsList.get(portraitImageIndex));
         gangDescriptionText.setText(gang.description());
-
+        colorIndex = gang.colorIndex() % colorsList.size();
+        colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
         confirmedTraits.clear();
         if (Objects.nonNull(gang.traits())) confirmedTraits.setAll(gang.traits());
     }

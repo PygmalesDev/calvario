@@ -234,6 +234,7 @@ public class GangCreationController extends BasicController {
             this.portraitsList.add(this.imageCache.get(resourcesPaths + portraitsFolderPath + i + ".png"));
         }
 
+        this.saveLoadService.setUserId(tokenStorage.getUserId());
         this.saveLoadService.loadGangs().forEach(gang -> this.gangElements.add(createGangElement(gang)));
 
         this.subscriber.subscribe(presetsApiService.getTraitsPreset(),

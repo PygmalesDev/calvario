@@ -21,6 +21,10 @@ public class SaveLoadService {
 
     }
 
+    public void setUserId(String userId) {
+        fileName = Constants.DATA_FOLDER_NAME + "/" + userId + "save.json";
+    }
+
     public void saveGang(ObservableList<Gang> gang) {
         this.objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
         try {

@@ -22,6 +22,8 @@ public class TraitComponent extends HBox implements ReusableItemComponent<Trait>
     Label traitName;
     @FXML
     Label costText;
+
+
     Trait trait;
 
     GangCreationController gangCreationController;
@@ -58,7 +60,11 @@ public class TraitComponent extends HBox implements ReusableItemComponent<Trait>
     }
 
     public void showDetails() {
-        // TODO change
-        System.out.println(trait.id());
+        gangCreationController.showTraitDetails(trait);
+
+    }
+
+    public void unShowDetails() {
+        gangCreationController.unShowTraitDetails();
     }
 }

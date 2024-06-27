@@ -4,6 +4,7 @@ import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.component.menu.GangComponent;
 import de.uniks.stp24.component.menu.GangDeletionComponent;
 import de.uniks.stp24.component.menu.TraitComponent;
+import de.uniks.stp24.dto.EffectDto;
 import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
@@ -83,6 +84,8 @@ public class GangCreationController extends BasicController {
     @FXML
     Pane captainContainer;
     @FXML
+    Pane traitInfoPane;
+    @FXML
     Pane buttonsPane;
     @FXML
     ListView<GangElement> gangsListView;
@@ -156,6 +159,12 @@ public class GangCreationController extends BasicController {
     ListView<Trait> confirmedTraitsListView;
     @FXML
     AnchorPane traitsBox;
+    @FXML
+    Label traitInfoName;
+    @FXML
+    Label traitInfoEffects;
+    @FXML
+    Label traitInfoConflicts;
     ArrayList<Node> editNodes = new ArrayList<>();
     Random random;
 
@@ -380,7 +389,7 @@ public class GangCreationController extends BasicController {
     }
 
     private GangElement createGangElement(Gang gang) {
-        return new GangElement(gang, this.flagsList.get(gang.flagIndex()), this.portraitsList.get(gang.portraitIndex()));
+        return new GangElement(gang, this.flagsList.get(gang.flagIndex() % flagsList.size()), this.portraitsList.get(gang.portraitIndex() % portraitsList.size()));
     }
 
     private ObservableList<Gang> createGangsObservableList() {
@@ -627,6 +636,41 @@ public class GangCreationController extends BasicController {
         allTraits.clear();
         allTraits.addAll(traitsPreset);
         traitsCost = 0;
+    }
+
+    public void showTraitDetails(Trait trait) {
+        traitInfoPane.setVisible(true);
+
+        traitInfoName.setText(trait.id());
+
+        String effectsText = "effects\n";
+        for (EffectDto effect : trait.effects()) {
+            String variable = effect.variable();
+            String type = "";
+            System.out.println(effect);
+            if (effect.bonus() != 0.00) {
+                if (effect.bonus() > 0){
+                    type = "+";
+                }
+                type += effect.bonus() + " ";
+            } else if (effect.multiplier() != 0.00) {
+                type = "*" + effect.multiplier() + " ";
+            }
+            effectsText += type + variable + "\n";
+        }
+        traitInfoEffects.setText(effectsText);
+
+        String conflictsText = "conflicts\n";
+        if (Objects.nonNull(trait.conflicts())) {
+            for (String conflict : trait.conflicts()) {
+                conflictsText += conflict + "\n";
+            }
+        }
+        traitInfoConflicts.setText(conflictsText);
+    }
+
+    public void unShowTraitDetails() {
+        traitInfoPane.setVisible(false);
     }
 
     @OnDestroy

@@ -18,6 +18,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.constructs.listview.ComponentListCell;
@@ -34,6 +35,10 @@ import static de.uniks.stp24.service.Constants.*;
 
 @Component(view = "DeleteStructureWarning.fxml")
 public class DeleteStructureComponent extends VBox{
+    @FXML
+    Text questionMark;
+    @FXML
+    Text deleteText;
     @FXML
     ListView<Resource> deleteStructureListView;
     @FXML
@@ -88,10 +93,13 @@ public class DeleteStructureComponent extends VBox{
 
 
     public void setWarningText(){
+        warningText.setFill(Color.GREEN);
         if(buildings.containsKey(structureType)){
-            warningText.setText(gameResourceBundle.getString("sure.you.want.delete") + " " + gameResourceBundle.getString( buildingTranslation.get(structureType)) + "?");
+            deleteText.setText(gameResourceBundle.getString("sure.you.want.delete") + " ");
+            warningText.setText(gameResourceBundle.getString( buildingTranslation.get(structureType)));
         }else{
-            warningText.setText(gameResourceBundle.getString("sure.you.want.delete") + " " + gameResourceBundle.getString( siteTranslation.get(structureType)) + "?");
+            deleteText.setText(gameResourceBundle.getString("sure.you.want.delete") + " ");
+            warningText.setText(gameResourceBundle.getString( siteTranslation.get(structureType)));
         }
     }
 

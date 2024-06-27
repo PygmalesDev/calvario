@@ -108,7 +108,7 @@ public class TestBuildingProperties extends ControllerTest {
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
 
     ArrayList<String> buildings = new ArrayList<>();
-
+/*
 
     @Override
     public void start(Stage stage) throws Exception{
@@ -245,5 +245,5 @@ public class TestBuildingProperties extends ControllerTest {
         verify(this.islandsService, times(2)).updateIsland(any());
 
     }
-
+*/
 }

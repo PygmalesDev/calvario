@@ -23,14 +23,9 @@
                </ImageView>
             </HBox>
             <HBox alignment="CENTER" prefHeight="30.0" prefWidth="450.0">
-               <Text fx:id="warningText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="...">
-                  <font>
-                     <Font size="15.0" />
-                  </font>
-                  <HBox.margin>
-                     <Insets bottom="10.0" right="20.0" />
-                  </HBox.margin>
-               </Text>
+               <Text fx:id="deleteText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Are you sure you want to delete " />
+               <Text fx:id="warningText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" />
+               <Text fx:id="questionMark" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="?" />
             </HBox>
          </VBox>
          <HBox prefHeight="125.0" prefWidth="200.0">

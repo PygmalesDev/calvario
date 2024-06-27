@@ -91,7 +91,6 @@ public class DeleteStructureComponent extends VBox{
         this.inGameController = inGameController;
     }
 
-
     public void setWarningText(){
         warningText.setFill(Color.GREEN);
         if(buildings.containsKey(structureType)){
@@ -103,6 +102,7 @@ public class DeleteStructureComponent extends VBox{
         }
     }
 
+    //This method is called from inGameController and handles displaying the information in the popup
     public void handleDeleteStructure(String structureType){
         this.structureType = structureType;
         setWarningText();
@@ -116,6 +116,8 @@ public class DeleteStructureComponent extends VBox{
         }
     }
 
+    //Checks if structure is a building or a site and calls method resourceListGeneration for calculating resources
+    //that will be returned when deleting a structure
     private void displayStructureInfo() {
         if (buildings.containsKey(structureType)){
             subscriber.subscribe(resourcesService.getResourcesBuilding(structureType), this::resourceListGenerationBuilding);
@@ -151,6 +153,8 @@ public class DeleteStructureComponent extends VBox{
         setVisible(false);
     }
 
+    //Differs between building and site
+    //Calls delete function in resourcesService
     public void delete(){
         Island island = tokenStorage.getIsland();
         if (tokenStorage.getIsland() != null){

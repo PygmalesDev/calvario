@@ -99,6 +99,7 @@ public class BuildingsWindowComponent extends AnchorPane {
         this.inGameController = inGameController;
     }
 
+    //Takes buttons in order and sets image for each button
     @OnRender
     public void setImages() {
         for (int i = 0; i < buttons.length; i++) {
@@ -110,7 +111,7 @@ public class BuildingsWindowComponent extends AnchorPane {
             buttons[i].getStyleClass().clear();
         }
     }
-
+    //The following are onAction methods from buttons
     public void buildExchange(){
         this.buildingToAdd = "exchange";
         inGameController.showBuildingInformation(buildingToAdd);

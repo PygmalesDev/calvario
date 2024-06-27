@@ -109,6 +109,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
         startResourceMonitoring();
     }
 
+    //Checks if buy and destroy building has to be deactivated
     public void disableButtons(){
         buyButton.setDisable(true);
         destroyButton.setDisable(true);
@@ -127,6 +128,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
         disableButtons();
         inGameController.handleDeleteStructure(buildingType);
     }
+
+    //Gets called every second by a timer
     public void updateButtonStates(){
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
             priceOfBuilding = result.cost();
@@ -135,6 +138,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
         destroyButton.setDisable(!tokenStorage.getIsland().buildings().contains(buildingType));
     }
 
+    //Timer for calling updateButtonStates every second
     public void startResourceMonitoring() {
         Timer timer = new Timer(true);
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -145,6 +149,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
         }, 0, 1000); 
     }
 
+    //First subscribe gets the price of building
+    //Second subscribe will only be reached if hasEnoughResources returns true with priceOfBuilding
     public void buyBuilding(){
         Island island = islandAttributeStorage.getIsland();
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
@@ -165,6 +171,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
         });
     }
 
+    //Gets resources of the building and shows them in three listviews
     public void displayInfoBuilding(){
         Image imageBuilding = new Image(buildingsMap.get(buildingType));
         buildingImage.setImage(imageBuilding);
@@ -176,6 +183,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
         disableButtons();
     }
 
+    //Sets upkeep, production and cost of buildings in listviews
     private void resourceListGeneration(BuildingDto buildingDto) {
         Map<String, Integer> resourceMapUpkeep = buildingDto.upkeep();
         ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, buildingConsumesListView.getItems(), null);

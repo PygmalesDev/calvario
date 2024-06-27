@@ -2,15 +2,20 @@ package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.dto.UpdateGameResultDto;
 import de.uniks.stp24.dto.UpdateSpeedDto;
+import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.beans.PropertyChangeSupport;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Flow;
 
 @Singleton
 public class TimerService {
@@ -26,6 +31,13 @@ public class TimerService {
     GameStatus gameStatus;
     @Inject
     GamesApiService gamesApiService;
+    @Inject
+    public Subscriber subscriber;
+
+    @Inject
+    TokenStorage tokenStorage;
+
+    public Game game;
 
     Timer timer = new Timer();
     final int TIME = 60;
@@ -66,6 +78,11 @@ public class TimerService {
 
     public void start() {
 
+        subscriber.subscribe(gamesApiService.getGame(tokenStorage.getGameId()),
+                gameResult -> game = gameResult,
+                error -> System.out.println("Error: " + error.getMessage())
+        );
+
         if (speed == 0) {
             return;
         }
@@ -80,6 +97,14 @@ public class TimerService {
                 }
                 if (countdown > 0) {
                     setCountdown(countdown - 1);
+                } else if (Objects.equals(game.owner(), tokenStorage.getUserId())) {
+                    subscriber.subscribe(gamesApiService.updateSeason(tokenStorage.getGameId(), new UpdateSpeedDto(speed), true),
+                            gameResult -> {
+                                setSeason(gameResult.period());
+                                reset();
+                            },
+                            error -> System.out.println("Error: " + error.getMessage())
+                    );
                 }
                 // if countdown <= 0 -> Wait for Server response to call reset() Method
             }
@@ -170,5 +195,4 @@ public class TimerService {
     public boolean isRunning() {
         return isRunning;
     }
-
 }

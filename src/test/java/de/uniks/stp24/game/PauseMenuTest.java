@@ -3,6 +3,8 @@ package de.uniks.stp24.game;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
+import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
@@ -121,7 +123,11 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     BuildingsWindowComponent buildingsWindowComponent;
 
+    @InjectMocks
+    JobsOverviewComponent jobsOverviewComponent;
 
+    @InjectMocks
+    IslandOverviewJobsComponent islandOverviewJobsComponent;
 
 
     @InjectMocks
@@ -163,6 +169,8 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+        this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
+        this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
 
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;

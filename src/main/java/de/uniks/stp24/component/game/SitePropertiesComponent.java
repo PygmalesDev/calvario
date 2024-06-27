@@ -138,7 +138,8 @@ public class SitePropertiesComponent extends AnchorPane {
         subscriber.subscribe(resourcesService.buildSite(tokenStorage.getGameId(), island, siteType), result -> {
             tokenStorage.setIsland(islandsService.updateIsland(result));
             islandAttributeStorage.setIsland(islandsService.updateIsland(result));
-
+            inGameController.islandsService.updateIslandBuildings(islandAttributeStorage, inGameController, islandAttributeStorage.getIsland().buildings());
+            inGameController.updateResCapacity();
             displayAmountOfSite();
             inGameController.updateSiteCapacities();
         });

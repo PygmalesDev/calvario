@@ -522,4 +522,8 @@ public class InGameController extends BasicController {
         buildingProperties.setMouseTransparent(false);
         overviewSitesComponent.buildingsComponent.setGridPane();
     }
+
+    public void updateResCapacity() {
+        overviewSitesComponent.updateResCapacity();
+    }
 }

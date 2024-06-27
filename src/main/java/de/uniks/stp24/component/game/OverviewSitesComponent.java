@@ -183,19 +183,25 @@ public class OverviewSitesComponent extends AnchorPane {
         sitesButton.setDisable(false);
     }
 
+    public void updateResCapacity(){
+        int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
+                islandAttributes.getIsland().buildings().size();
+        islandAttributes.setUsedSlots(usedSlots);
+
+        resCapacity.setText(usedSlots + "/" + islandAttributes.getIsland().resourceCapacity());
+    }
+
     public void setOverviewSites() {
         islandFlag.setStyle("-fx-background-image: url('" + inGameController.flagsPath.get(islandAttributes.getIsland().flagIndex()) +"');" +
                 "-fx-background-size: 100% 100%;" + "-fx-background-repeat: no-repeat;");
         showBuildings();
         upgradeButton.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
 
-        int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
-                islandAttributes.getIsland().buildings().size();
-        islandAttributes.setUsedSlots(usedSlots);
+        updateResCapacity();
 
         island_name.setText(islandAttributes.getIslandNameTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");
         crewCapacity.setText(String.valueOf(islandAttributes.getIsland().crewCapacity()));
-        resCapacity.setText(usedSlots + "/" + islandAttributes.getIsland().resourceCapacity());
+
 
         switch(islandAttributes.getIsland().upgradeLevel()){
             case 1:

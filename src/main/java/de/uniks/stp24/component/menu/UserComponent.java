@@ -48,6 +48,8 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     @FXML
     ImageView frameImage;
 
+    Map<String, Integer> avatarMap = new HashMap<>();
+
     ArrayList<Image> backgroundsList = new ArrayList<>();
     ArrayList<Image> portraitsList = new ArrayList<>();
     ArrayList<Image> framesList = new ArrayList<>();
@@ -67,24 +69,26 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     @Override
     public void setItem(@NotNull MemberUser member) {
         this.member = member;
-        this.kickButton.setId("kick"+member.user()._id());
+        this.kickButton.setId("kick" + member.user()._id());
         if (member.user()._id().equals(member.game().owner()) || !member.asHost())
             this.userHBox.getChildren().remove(this.kickButton);
 
         this.usernameText.setText(member.user().name());
         this.readyText.setText(resource.getString(member.ready() ? "ready" : "not.ready"));
 
-        if(Objects.nonNull(this.member.user()._public())){
-            initializeAvatarImage(this.member.user()._public());
+        if (Objects.isNull(this.member.user()._public())) {
+            avatarMap.put("backgroundIndex", 0);
+            avatarMap.put("portraitIndex", 8);
+            avatarMap.put("frameIndex", 8);
+            tokenStorage.setAvatarMap(avatarMap);
+            initializeAvatarImage(avatarMap);
         } else {
-            this.backgroundImage.setImage(this.imageCache.get(Objects.nonNull(this.member.user().avatar())
-                    ? this.member.user().avatar()
-                    : "test/911.png" ));
-            this.backgroundImage.setFitWidth(40);
+            initializeAvatarImage(this.member.user()._public());
+
         }
     }
 
-    public String initializeAvatarImage(Map<String, Integer> avatarMap){
+    public String initializeAvatarImage(Map<String, Integer> avatarMap) {
         String resourcesPaths = "/de/uniks/stp24/assets/avatar/";
         String backgroundFolderPath = "backgrounds/background_";
         String frameFolderPath = "frames/frame_";

@@ -211,15 +211,15 @@ public class EditAccController extends BasicController {
     public void applyInputs() {
         if (Objects.nonNull(tokenStorage.getName()))
             this.usernameInput.setText(tokenStorage.getName());
-        if(!Objects.nonNull(tokenStorage.getAvatarMap())) {
-            this.backgroundImage.setImage(imageCache.get(
-                    Objects.nonNull(tokenStorage.getAvatar()) ? tokenStorage.getAvatar() : "test/911.png" ));
-            this.backgroundImage.setFitWidth(100);
-            this.backgroundImage.setLayoutX(100);
-        } else {
-            avatarMap = tokenStorage.getAvatarMap();
-            setImageCode(avatarMap.get("backgroundIndex"), avatarMap.get("portraitIndex"), avatarMap.get("frameIndex"));
+        avatarMap = tokenStorage.getAvatarMap();
+        if(Objects.isNull(tokenStorage.getAvatarMap())) {
+            avatarMap = new HashMap<>();
+            avatarMap.put("backgroundIndex", 0);
+            avatarMap.put("portraitIndex", 8);
+            avatarMap.put("frameIndex", 8);
+            tokenStorage.setAvatarMap(avatarMap);
         }
+        setImageCode(avatarMap.get("backgroundIndex"), avatarMap.get("portraitIndex"), avatarMap.get("frameIndex"));
         this.errorLabelEditAcc.setText("");
 
     }
@@ -448,16 +448,11 @@ public class EditAccController extends BasicController {
      */
     public void changeUserAvatar() {
         if (editAvatarButton.isSelected()) {
-            if(Objects.nonNull(tokenStorage.getAvatarMap())){
                 beforeBackgroundImageIndex = backgroundImageIndex;
                 beforePortraitImageIndex = portraitImageIndex;
                 beforeFrameImageIndex = frameImageIndex;
                 avatarButtonsVisible(true);
                 editAvatarButton.setStyle("-fx-text-fill: #2B78E4");
-            } else {
-                //TODO add captain text with Ashkan
-                editAvatarButton.setDisable(true);
-            }
         } else {
             cancelAvatarChanges();
             avatarButtonsVisible(false);

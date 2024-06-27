@@ -164,7 +164,7 @@ public class SitePropertiesComponent extends AnchorPane {
         siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
     }
-    
+
     //Uses a GridPane to display a graphic view of how many sites of each type you have
     public void displayAmountOfSite(){
         buildSiteButton.setDisable(false);

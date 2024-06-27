@@ -133,7 +133,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
     public void updateButtonStates(){
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
             priceOfBuilding = result.cost();
-            buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding));
+            buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding) ||
+                    islandAttributeStorage.getUsedSlots() >= islandAttributeStorage.getIsland().resourceCapacity());
         });
         destroyButton.setDisable(!tokenStorage.getIsland().buildings().contains(buildingType));
     }
@@ -155,7 +156,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
         Island island = islandAttributeStorage.getIsland();
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
             priceOfBuilding = result.cost();
-            if (resourcesService.hasEnoughResources(priceOfBuilding)) {
+            if (resourcesService.hasEnoughResources(priceOfBuilding) && islandAttributeStorage.getUsedSlots() < islandAttributeStorage.getIsland().resourceCapacity()) {
                 subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingType), result2 -> {
                             tokenStorage.setIsland(islandsService.updateIsland(result2));
                             islandAttributeStorage.setIsland(islandsService.updateIsland(result2));

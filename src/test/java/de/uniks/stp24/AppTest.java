@@ -5,9 +5,7 @@ import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
-import de.uniks.stp24.rest.AuthApiService;
-import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.rest.UserApiService;
+import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.menu.CreateGameService;
@@ -45,6 +43,8 @@ public class AppTest extends ControllerTest {
     LoginService loginService;
     AuthApiService authApiService;
     GamesApiService gamesApiService;
+    GameMembersApiService gameMembersApiService;
+    PresetsApiService presetsApiService;
     CreateGameService createGameService;
     EventListener eventListener;
     LobbyService lobbyService;
@@ -91,6 +91,8 @@ public class AppTest extends ControllerTest {
         authApiService = testComponent.authApiService();
         loginService = testComponent.loginService();
         gamesApiService = testComponent.gamesApiService();
+        gameMembersApiService = testComponent.gameMemberApiService();
+        presetsApiService = testComponent.presetsApiService();
         createGameService = testComponent.createGameService();
         eventListener = testComponent.eventListener();
         lobbyService = testComponent.lobbyService();
@@ -152,6 +154,7 @@ public class AppTest extends ControllerTest {
 
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
 
+        doReturn(Observable.just(new Trait[]{})).when(presetsApiService).getTraitsPreset();
     }
 
     @Test
@@ -242,8 +245,6 @@ public class AppTest extends ControllerTest {
     }
 
     private void startAGame() {
-
-
         clickOn("#readyButton");
         this.memberSubject.onNext(new Event<>("games.123.members.1.updated",
                 new MemberDto(true, "JustATest", null, null)));

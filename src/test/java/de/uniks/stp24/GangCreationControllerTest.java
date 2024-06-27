@@ -1,14 +1,15 @@
  package de.uniks.stp24;
 
  import com.fasterxml.jackson.databind.ObjectMapper;
+ import de.uniks.stp24.component.menu.BubbleComponent;
  import de.uniks.stp24.component.menu.GangComponent;
  import de.uniks.stp24.component.menu.GangDeletionComponent;
  import de.uniks.stp24.component.menu.TraitComponent;
  import de.uniks.stp24.controllers.GangCreationController;
+ import de.uniks.stp24.dto.MemberDto;
  import de.uniks.stp24.model.Gang;
  import de.uniks.stp24.model.GangElement;
  import de.uniks.stp24.model.Trait;
- import de.uniks.stp24.rest.GameMembersApiService;
  import de.uniks.stp24.rest.PresetsApiService;
  import de.uniks.stp24.service.ImageCache;
  import de.uniks.stp24.service.SaveLoadService;
@@ -45,6 +46,9 @@
      ObjectMapper objectMapper;
 
      @Spy
+     BubbleComponent bubbleComponent;
+
+     @Spy
      ImageCache imageCache;
 
      @Spy
@@ -53,10 +57,7 @@
      @Spy
      Subscriber subscriber;
 
-     @Spy
-     GameMembersApiService gameMembersApiService;
-
-     @Spy
+     @Mock
      LobbyService lobbyService;
 
      @Mock
@@ -97,6 +98,7 @@
          gangs.add(gang);
          doReturn(gangs).when(saveLoadService).loadGangs();
          doReturn(Observable.just(new Trait[]{})).when(presetsApiService).getTraitsPreset();
+         doReturn(Observable.just(new MemberDto(false, "", null, ""))).when(lobbyService).getMember(any(), any());
          app.show(this.gangCreationController);
      }
 

@@ -9,7 +9,6 @@ import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.model.GangElement;
-import de.uniks.stp24.rest.GameMembersApiService;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PopupBuilder;
@@ -35,7 +34,6 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
-import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -54,8 +52,6 @@ public class GangCreationController extends BasicController {
     SaveLoadService saveLoadService;
     @Inject
     PresetsApiService presetsApiService;
-    @Inject
-    GameMembersApiService gameMembersApiService;
     @Inject
     LobbyService lobbyService;
     @Inject
@@ -258,7 +254,7 @@ public class GangCreationController extends BasicController {
         buttonsPane.setPickOnBounds(false);
         traitsBox.setVisible(false);
 
-        subscriber.subscribe(gameMembersApiService.getMember(gameID, tokenStorage.getUserId()),
+        subscriber.subscribe(lobbyService.getMember(gameID, tokenStorage.getUserId()),
                 result -> {
                     Empire playerEmpire = result.empire();
                     if (Objects.nonNull(playerEmpire)) {
@@ -352,6 +348,8 @@ public class GangCreationController extends BasicController {
         }
         this.gangsListView.getSelectionModel().select(sameGangElement);
         this.selectButton.setVisible(true);
+        this.editButton.setVisible(true);
+        this.showDeletePaneButton.setVisible(true);
     }
 
     private static boolean areGangsEquals(Gang gang1, Gang gang2) {

@@ -313,7 +313,12 @@ public class GangCreationController extends BasicController {
         GangElement gangElement = this.gangsListView.getSelectionModel().getSelectedItem();
         Empire empire = null;
 
-        ArrayList<Trait> gangsTraits = new ArrayList<>(confirmedTraits);
+        ArrayList<String> gangsTraits = new ArrayList<>();
+        for (Trait chosen : confirmedTraits) {
+            gangsTraits.add(chosen.id());
+        }
+
+        System.out.println(gangsTraits);
 
         if (Objects.nonNull(gangElement))
             empire = new Empire(gangElement.gang().name(), gangElement.gang().description(), gangElement.gang().color(),

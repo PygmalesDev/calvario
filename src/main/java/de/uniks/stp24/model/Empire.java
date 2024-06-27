@@ -8,7 +8,7 @@ public record Empire(
         String color,
         int flag,
         int portrait,
-        ArrayList<Trait> traits,
+        ArrayList<String> traits,
         String homeSystem
 
 ) {

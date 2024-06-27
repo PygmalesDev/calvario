@@ -31,8 +31,8 @@
          <VBox prefHeight="136.0" prefWidth="42.0" />
          <VBox alignment="TOP_CENTER" prefHeight="122.0" prefWidth="330.0">
             <HBox alignment="CENTER_LEFT" prefHeight="18.0" prefWidth="330.0">
-               <VBox prefHeight="33.0" prefWidth="55.0" />
-               <TextField fx:id="inputIslandName" alignment="CENTER" prefHeight="2.0" prefWidth="186.0" style="-fx-background-color: transparent;" styleClass="tableHeadingText" text="%uncharted.island" />
+               <VBox prefHeight="25.0" prefWidth="31.0" />
+               <TextField fx:id="inputIslandName" alignment="CENTER" prefHeight="25.0" prefWidth="177.0" style="-fx-background-color: transparent;" styleClass="headerTextBuildings" text="%uncharted.island" />
                <Button fx:id="islandNameButton" mnemonicParsing="false" style="-fx-background-color: transparent;" text=":)">
                   <effect>
                      <DropShadow height="1.0" offsetX="3.0" offsetY="3.0" radius="0.0" spread="1.0" width="0.0">
@@ -53,6 +53,9 @@
                   <font>
                      <Font size="11.0" />
                   </font></Text>
+               <VBox.margin>
+                  <Insets top="-11.0" />
+               </VBox.margin>
             </HBox>
             <HBox prefHeight="50.0" prefWidth="330.0">
                <VBox alignment="CENTER_LEFT" prefHeight="33.0" prefWidth="100.0">
@@ -127,14 +130,23 @@
                   </padding>
                </GridPane>
                <VBox.margin>
-                  <Insets top="20.0" />
+                  <Insets top="12.0" />
                </VBox.margin>
             </HBox>
+            <HBox.margin>
+               <Insets top="16.0" />
+            </HBox.margin>
          </VBox>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </HBox>
       <VBox prefHeight="17.0" prefWidth="400.0" />
       <HBox prefHeight="115.0" prefWidth="400.0">
-         <StackPane fx:id="sitesContainer" prefHeight="150.0" prefWidth="312.0" />
+         <StackPane fx:id="sitesContainer" prefHeight="150.0" prefWidth="312.0">
+            <HBox.margin>
+               <Insets top="20.0" />
+            </HBox.margin></StackPane>
       </HBox>
    </VBox>
    <Pane layoutX="360.0" layoutY="18.0" prefHeight="40.0" prefWidth="40.0" styleClass="islandOverviewCloseButton" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">

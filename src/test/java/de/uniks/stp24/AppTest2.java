@@ -2,6 +2,7 @@ package de.uniks.stp24;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
@@ -77,6 +78,8 @@ public class AppTest2 extends ControllerTest {
     DeleteStructureComponent deleteStructureComponent;
     @InjectMocks
     JobsOverviewComponent jobsOverviewComponent;
+    @InjectMocks
+    IslandOverviewJobsComponent islandOverviewJobsComponent;
 
 
     @Spy
@@ -166,6 +169,7 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
+        this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
 
         inGameController.mapScrollPane = new ScrollPane();
         inGameController.group = new Group();
@@ -208,7 +212,6 @@ public class AppTest2 extends ControllerTest {
         List<IslandComponent> compList = Arrays.asList(comp0,comp1,comp2);
         doReturn(Observable.just(systems)).when(gameSystemsApiService).getSystems(any());
         doReturn(compMap).when(islandsService).getComponentMap();
-//        doReturn(compList).when(islandsService).createIslands(any());
 
         doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
         doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
@@ -369,23 +372,23 @@ public class AppTest2 extends ControllerTest {
     public void openStorage(){
         waitForFxEvents();
         // Storage is closed
-        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
+        assertFalse(this.inGameController.storageOverviewComponent.isVisible());
         // Open storage
-        clickOn("#showStorageButton");
+        clickOn("#storageOverviewButton");
         waitForFxEvents();
-        assertTrue(this.inGameController.storageOverviewContainer.isVisible());
+        assertTrue(this.inGameController.storageOverviewComponent.isVisible());
         // Close storage with Button in Ingame
-        clickOn("#showStorageButton");
+        clickOn("#storageOverviewButton");
         waitForFxEvents();
-        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
+        assertFalse(this.inGameController.storageOverviewComponent.isVisible());
         // Open again
-        clickOn("#showStorageButton");
+        clickOn("#storageOverviewButton");
         waitForFxEvents();
-        assertTrue(this.inGameController.storageOverviewContainer.isVisible());
+        assertTrue(this.inGameController.storageOverviewComponent.isVisible());
         // Close storage with button in StorageOverviewComponent
         clickOn("#closeStorageOverviewButton");
         waitForFxEvents();
-        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
+        assertFalse(this.inGameController.storageOverviewComponent.isVisible());
     }
 
 }

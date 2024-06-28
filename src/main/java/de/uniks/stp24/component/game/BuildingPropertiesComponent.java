@@ -4,10 +4,12 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.model.Island;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -49,6 +51,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
     Text buildingName;
     @FXML
     ImageView buildingImage;
+
+    @Inject
+    JobsService jobsService;
 
     @Inject
     ResourcesService resourcesService;
@@ -130,14 +135,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
             priceOfBuilding = result.cost();
             if (resourcesService.hasEnoughResources(priceOfBuilding)) {
-                subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingType), result2 -> {
-                            tokenStorage.setIsland(islandsService.updateIsland(result2));
-                            islandAttributeStorage.setIsland(islandsService.updateIsland(result2));
-                            inGameController.islandsService.updateIslandBuildings(islandAttributeStorage, inGameController, islandAttributeStorage.getIsland().buildings());
-                            inGameController.setSitePropertiesInvisible();
-
-                        },
-                        error -> buyButton.setDisable(true));
+                this.subscriber.subscribe(this.jobsService.beginJob(
+                        Jobs.createBuildingJob(this.tokenStorage.getIsland().id(), this.buildingType)));
             } else {
                 buyButton.setDisable(true);
             }

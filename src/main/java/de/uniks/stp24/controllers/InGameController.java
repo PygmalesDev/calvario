@@ -14,13 +14,9 @@ import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.game.EventService;
-import de.uniks.stp24.service.game.IslandsService;
-import de.uniks.stp24.service.game.TimerService;
-import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
-import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import de.uniks.stp24.service.PopupBuilder;
@@ -107,6 +103,8 @@ public class InGameController extends BasicController {
     public IslandsService islandsService;
     @Inject
     ResourcesService resourceService;
+    @Inject
+    JobsService jobsService;
 
     @SubComponent
     @Inject
@@ -233,6 +231,13 @@ public class InGameController extends BasicController {
         for (int i = 0; i <= 16; i++) {
             this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
         }
+
+        // Connect jobService with controllers that require job information
+        this.jobsOverviewComponent.setJobsService(this.jobsService);
+
+        // Load jobs for the player's empire and initialize job listener.
+        this.jobsService.loadEmpireJobs();
+        this.jobsService.initializeJobsListener();
     }
 
     private void handleShowSettings(@NotNull PropertyChangeEvent propertyChangeEvent) {
@@ -294,6 +299,10 @@ public class InGameController extends BasicController {
 
         pauseMenuContainer.getChildren().clear();
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
+
+        // Connect observable lists from jobService with the controllers that require job information
+        this.jobsOverviewComponent.setJobsObservableList(this.jobsService.getJobsObservableList());
+        this.overviewSitesComponent.jobsComponent.setJobsObservableList(this.jobsService.getJobsObservableList());
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -411,6 +420,7 @@ public class InGameController extends BasicController {
         if (event.getSource() instanceof IslandComponent selected) {
             if (tokenStorage.getIsland() == null) {
                 tokenStorage.setIsland(selected.getIsland());
+                this.overviewSitesComponent.jobsComponent.setJobProgressPane();
             }
             islandAttributes.setIsland(selected.getIsland());
             selectedIsland = selected;

@@ -2,6 +2,7 @@ package de.uniks.stp24.model;
 
 import javax.inject.Inject;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A supermodel for creating jobs and controlling their status. <br>
@@ -141,6 +142,8 @@ public class Jobs {
 
         @Override
         public boolean equals(Object obj) {
+            if (Objects.isNull(this._id))
+                return false;
             if (obj instanceof Job)
                 return this._id.equals(((Job) obj).getJobID());
             return false;

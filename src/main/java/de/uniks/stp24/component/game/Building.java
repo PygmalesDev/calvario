@@ -67,10 +67,6 @@ public class Building extends VBox {
             building.setGraphic(imageView);
         }
 
-        building.setOnMouseEntered(event -> showExplanation());
-        building.setOnMouseExited(event -> unshowExplanation());
-
-
         building.setOnMouseClicked(event -> {
             String imageUrl = imageView.getImage().getUrl();
             String relevantPart = extractRelevantPath(imageUrl);
@@ -85,10 +81,7 @@ public class Building extends VBox {
                     buildingsComponent.setGridPane();
                 }
             }
-
         });
-
-
     }
 
     private String extractRelevantPath(String imageUrl) {
@@ -98,22 +91,6 @@ public class Building extends VBox {
         } else {
             return imageUrl; // Return the whole URL if the relevant part is not found
         }
-    }
-
-    public void showExplanation(){
-        inGameController.app.stage().getScene().setOnMouseMoved(event -> {
-            double mouseX = event.getSceneX();
-            double mouseY = event.getSceneY();
-            System.out.println("Mouse Coordinates: X=" + mouseX + ", Y=" + mouseY);
-        });
-    }
-
-    public void unshowExplanation(){
-        inGameController.app.stage().getScene().setOnMouseMoved(event -> {
-            double mouseX = event.getSceneX();
-            double mouseY = event.getSceneY();
-            System.out.println("Mouse Coordinates: X=" + mouseX + ", Y=" + mouseY);
-        });
     }
 
     @Inject

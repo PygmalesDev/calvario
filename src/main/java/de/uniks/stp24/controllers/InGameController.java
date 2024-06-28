@@ -14,13 +14,9 @@ import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.game.EventService;
-import de.uniks.stp24.service.game.IslandsService;
-import de.uniks.stp24.service.game.TimerService;
-import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
-import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import de.uniks.stp24.service.PopupBuilder;
@@ -108,6 +104,8 @@ public class InGameController extends BasicController {
     public IslandsService islandsService;
     @Inject
     ResourcesService resourceService;
+    @Inject
+    ExplanationService explanationService;
 
 
     @SubComponent
@@ -131,13 +129,21 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
-
     @SubComponent
     @Inject
     public DeleteStructureComponent deleteStructureComponent;
     @SubComponent
     @Inject
     public EventComponent eventComponent;
+    @SubComponent
+    @Inject
+    public BuildingPropertiesComponent buildingPropertiesComponent;
+    @SubComponent
+    @Inject
+    public BuildingsWindowComponent buildingsWindowComponent;
+    @SubComponent
+    @Inject
+    public SitePropertiesComponent sitePropertiesComponent;
 
     List<IslandComponent> islandComponentList;
     Map<String, IslandComponent> islandComponentMap;
@@ -148,6 +154,10 @@ public class InGameController extends BasicController {
     public IslandAttributeStorage islandAttributes;
     @Inject
     EventListener eventListener;
+    @Inject
+    public InGameController() {
+        lastUpdate = "";
+    }
 
     @Inject
     public GameSystemsApiService gameSystemsApiService;
@@ -164,29 +174,10 @@ public class InGameController extends BasicController {
     public ArrayList<String> flagsPath = new ArrayList<>();
     String resourcesPaths = "/de/uniks/stp24/assets/";
     String flagsFolderPath = "flags/flag_";
-
-    @SubComponent
-    @Inject
-    public BuildingPropertiesComponent buildingPropertiesComponent;
-
-    @SubComponent
-    @Inject
-    public BuildingsWindowComponent buildingsWindowComponent;
-
-    @SubComponent
-    @Inject
-    public SitePropertiesComponent sitePropertiesComponent;
-
     PopupBuilder popupBuildingProperties = new PopupBuilder();
     PopupBuilder popupBuildingWindow = new PopupBuilder();
     PopupBuilder popupSiteProperties = new PopupBuilder();
     PopupBuilder popupDeleteStructure = new PopupBuilder();
-
-    @Inject
-    public InGameController() {
-        lastUpdate = "";
-    }
-
 
     @OnInit
     public void init() {
@@ -288,6 +279,7 @@ public class InGameController extends BasicController {
 
         explanationContainer.setVisible(false);
         explanationContainer.getChildren().add(variableExplanationComponent);
+        explanationService.setInGameController(this);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -532,16 +524,15 @@ public class InGameController extends BasicController {
         overviewSitesComponent.buildingsComponent.setGridPane();
     }
 
-    public void showExplanation(boolean right, boolean left, boolean up, boolean down, int x, int y){
+    public void showExplanation(int x, int y){
         explanationContainer.setLayoutX(x);
         explanationContainer.setLayoutY(y);
         explanationContainer.setVisible(true);
     }
 
-    public void unshowExplanation(){
+    public void unShowExplanation(){
         explanationContainer.setLayoutX(0);
         explanationContainer.setLayoutY(0);
         explanationContainer.setVisible(false);
     }
-
 }

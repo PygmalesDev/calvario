@@ -130,7 +130,8 @@ public class InGameController extends BasicController {
     public ClockComponent clockComponent;
     @SubComponent
     @Inject
-    public TechnologiesComponent technologiesComponent;
+    public TechnologieOverviewComponent technologiesComponent;
+
 
     @SubComponent
     @Inject
@@ -283,6 +284,7 @@ public class InGameController extends BasicController {
         overviewSitesComponent.setContainer();
         overviewContainer.getChildren().add(overviewSitesComponent);
         overviewContainer.getChildren().add(overviewUpgradeComponent);
+
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
 
@@ -359,13 +361,16 @@ public class InGameController extends BasicController {
                 showTechnologiesButton.setMinWidth(47);
                 showTechnologiesButton.setId("showTechnologiesButton");
                 showTechnologiesButton.setOnAction(event -> showTechnologies());
+                showTechnologiesButton.getStyleClass().add("technologiesButton");
             }
             this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton, showTechnologiesButton);
         }
     }
 
     private void showTechnologies() {
-        technologiesContainer.setVisible(true);
+        technologiesContainer.setVisible(!technologiesContainer.isVisible());
+        technologiesContainer.getChildren().getFirst().setVisible(false);
+        technologiesContainer.getChildren().getLast().setVisible(true);
     }
 
     private void showEmpireOverview() {

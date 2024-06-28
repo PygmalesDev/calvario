@@ -32,6 +32,7 @@
                <TextField fx:id="editNameTextField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="%name" styleClass="textFieldGame" />
                <PasswordField fx:id="editPasswordTextField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="%password" styleClass="textFieldGame" />
                <PasswordField fx:id="editRepeatPasswordTextField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="%password" styleClass="textFieldGame" />
+               <TextField fx:id="maxMembersTextField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Max. members" styleClass="textFieldGame" />
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%map.size">
                   <font>
                      <Font size="17.0" />
@@ -50,30 +51,26 @@
                <HBox alignment="CENTER">
                   <VBox alignment="CENTER">
                      <HBox.margin>
-                        <Insets/>
+                        <Insets />
                      </HBox.margin>
-                     <Button fx:id="editGameConfirmButton" mnemonicParsing="false" onAction="#editGame"
-                             prefHeight="45.0" prefWidth="250.0" styleClass="actionButton" text="%confirm">
+                     <Button fx:id="editGameConfirmButton" mnemonicParsing="false" onAction="#editGame" prefHeight="45.0" prefWidth="250.0" styleClass="actionButton" text="%confirm">
                         <graphic>
-                           <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true"
-                                      preserveRatio="true">
-                              <Image url="@../icons/confirm.png"/>
+                           <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                              <Image url="@../icons/confirm.png" />
                            </ImageView>
                         </graphic>
                      </Button>
-                     <Button fx:id="editGameCancelButton" mnemonicParsing="false" onAction="#cancel"
-                             prefHeight="45.0" prefWidth="250.0" styleClass="actionButton" text="%cancel">
+                     <Button fx:id="editGameCancelButton" mnemonicParsing="false" onAction="#cancel" prefHeight="45.0" prefWidth="250.0" styleClass="actionButton" text="%cancel">
                         <graphic>
-                           <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true"
-                                      preserveRatio="true">
-                              <Image url="@../icons/cross.png"/>
+                           <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                              <Image url="@../icons/cross.png" />
                            </ImageView>
                         </graphic>
                      </Button>
                   </VBox>
                   <Pane fx:id="captainContainer" prefHeight="0.0" prefWidth="0.0">
                      <HBox.margin>
-                        <Insets bottom="200.0"/>
+                        <Insets bottom="200.0" />
                      </HBox.margin>
                   </Pane>
                </HBox>

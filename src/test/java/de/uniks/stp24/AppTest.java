@@ -69,15 +69,15 @@ public class AppTest extends ControllerTest {
         LoginResult loginResult = new LoginResult("1", "JustATest", null, "a", "r");
         LoginDto loginDto = new LoginDto("JustATest", "testpassword");
         RefreshDto refreshDto = new RefreshDto("r");
-        Game game1 = new Game("2024-05-28T12:55:25.688Z", null, "1", "Was geht", "1", false, 0,0, null);
-        Game game2 = new Game("2024-05-28T13:55:25.688Z", null, "2", "rapapa", "testID", false, 0,0, null);
-        Game game3 = new Game("2024-05-28T14:55:25.688Z", null, "123", "AwesomeLobby123", "1", false, 0, 0, null);
+        Game game1 = new Game("2024-05-28T12:55:25.688Z", null, "1", "Was geht", "1", 2,false, 0,0, null);
+        Game game2 = new Game("2024-05-28T13:55:25.688Z", null, "2", "rapapa", "testID", 2,false, 0,0, null);
+        Game game3 = new Game("2024-05-28T14:55:25.688Z", null, "123", "AwesomeLobby123", "1", 2,false, 0, 0, null);
 
         User user = new User("JustATest", "1", null, null, null);
 
         GameSettings gameSettings = new GameSettings(100);
         CreateGameResultDto createGameResultDto = new CreateGameResultDto("2024-05-28T14:55:25.688Z",null,game3._id(), "AwesomeLobby123","1", false,1, 1, gameSettings);
-        CreateGameDto createGameDto = new CreateGameDto("AwesomeLobby123", false, 1, gameSettings, "123");
+        CreateGameDto createGameDto = new CreateGameDto("AwesomeLobby123",2, false, 1, gameSettings, "123");
 
         MemberDto memberDto = new MemberDto(false, user._id(), null, null);
         MemberDto[] memberDtos = new MemberDto[1];
@@ -109,9 +109,9 @@ public class AppTest extends ControllerTest {
                 game1, game2
         ))).when(gamesApiService).findAll();
 
-        doReturn(Observable.just(createGameResultDto)).when(createGameService).createGame(any(), any(), any());
+        doReturn(Observable.just(createGameResultDto)).when(createGameService).createGame(any(), any(), any(), eq(2));
 
-        Event<Game> gameEvent = new Event<>("games." + game3._id() + ".created", new Game("2024-05-28T14:55:25.688Z", null, game3._id(), createGameDto.name(), "1", false, 0,0, null));
+        Event<Game> gameEvent = new Event<>("games." + game3._id() + ".created", new Game("2024-05-28T14:55:25.688Z", null, game3._id(), createGameDto.name(), "1", 2,false, 0,0, null));
         doReturn(Observable.empty()).doReturn(Observable.just(gameEvent)).when(eventListener).listen(eq("games.*.*"), eq(Game.class));
 
         doReturn(Observable.just(game3)).when(gamesApiService).getGame(game3._id());
@@ -219,6 +219,8 @@ public class AppTest extends ControllerTest {
         write("123");
         clickOn("#createRepeatPasswordTextField");
         write("123");
+        clickOn("#maxMembersTextField");
+        write("2");
         clickOn("#createMapSizeSpinner");
         clickOn("#createGameConfirmButton");
         WaitForAsyncUtils.waitForFxEvents();
@@ -251,7 +253,7 @@ public class AppTest extends ControllerTest {
 
         clickOn("#startJourneyButton");
         this.gameSubject.onNext(new Event<>("games.testGameID.updated", new Game("1", "a","testGameID","testGame","testGameHostID",
-                true, 1, 0, new GameSettings(1))));
+                2, true, 1, 0, new GameSettings(1))));
         WaitForAsyncUtils.waitForFxEvents();
 
         // game screen will not be shown, but loaded

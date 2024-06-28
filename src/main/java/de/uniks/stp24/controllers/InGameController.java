@@ -52,7 +52,8 @@ import java.util.*;
 @Title("CALVARIO")
 @Controller
 public class InGameController extends BasicController {
-
+    @FXML
+    StackPane explanationContainer;
     @FXML
     Pane shadow;
     @FXML
@@ -124,7 +125,9 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
-
+    @SubComponent
+    @Inject
+    public VariableExplanationComponent variableExplanationComponent;
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
@@ -274,7 +277,6 @@ public class InGameController extends BasicController {
         eventContainer.setVisible(false);
         shadow.setVisible(false);
         eventComponent.setClockComponent(clockComponent);
-
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
 
         overviewContainer.setVisible(false);
@@ -284,6 +286,8 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
 
+        explanationContainer.setVisible(false);
+        explanationContainer.getChildren().add(variableExplanationComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -505,7 +509,6 @@ public class InGameController extends BasicController {
 
     }
 
-
     public void showSiteOverview() {
         siteProperties.setMouseTransparent(false);
         buildingsWindow.setVisible(false);
@@ -528,4 +531,17 @@ public class InGameController extends BasicController {
         overviewSitesComponent.buildingsComponent.resetPage();
         overviewSitesComponent.buildingsComponent.setGridPane();
     }
+
+    public void showExplanation(boolean right, boolean left, boolean up, boolean down, int x, int y){
+        explanationContainer.setLayoutX(x);
+        explanationContainer.setLayoutY(y);
+        explanationContainer.setVisible(true);
+    }
+
+    public void unshowExplanation(){
+        explanationContainer.setLayoutX(0);
+        explanationContainer.setLayoutY(0);
+        explanationContainer.setVisible(false);
+    }
+
 }

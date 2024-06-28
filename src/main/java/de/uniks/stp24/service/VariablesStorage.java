@@ -1,6 +1,6 @@
 package de.uniks.stp24.service;
 
-public record VariablesStorage() {
+public class VariablesStorage {
     /*
 
     Speichere Variableninformationen hier.

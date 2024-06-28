@@ -118,5 +118,4 @@ public class BuildingsComponent extends AnchorPane {
         this.inGameController = inGameController;
     }
 
-
 }

@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -23,6 +24,7 @@ public class Building extends VBox {
     Button building;
     @Inject
     IslandAttributeStorage islandAttributeStorage;
+
     InGameController inGameController;
 
     private ImageView imageView;
@@ -65,6 +67,9 @@ public class Building extends VBox {
             building.setGraphic(imageView);
         }
 
+        building.setOnMouseEntered(event -> showExplanation());
+        building.setOnMouseExited(event -> unshowExplanation());
+
 
         building.setOnMouseClicked(event -> {
             String imageUrl = imageView.getImage().getUrl();
@@ -93,6 +98,22 @@ public class Building extends VBox {
         } else {
             return imageUrl; // Return the whole URL if the relevant part is not found
         }
+    }
+
+    public void showExplanation(){
+        inGameController.app.stage().getScene().setOnMouseMoved(event -> {
+            double mouseX = event.getSceneX();
+            double mouseY = event.getSceneY();
+            System.out.println("Mouse Coordinates: X=" + mouseX + ", Y=" + mouseY);
+        });
+    }
+
+    public void unshowExplanation(){
+        inGameController.app.stage().getScene().setOnMouseMoved(event -> {
+            double mouseX = event.getSceneX();
+            double mouseY = event.getSceneY();
+            System.out.println("Mouse Coordinates: X=" + mouseX + ", Y=" + mouseY);
+        });
     }
 
     @Inject

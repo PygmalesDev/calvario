@@ -7,6 +7,7 @@ import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
@@ -63,6 +64,9 @@ public class DeleteStructureComponent extends VBox{
 
     @Inject
     App app;
+
+    @Inject
+    ErrorService errorService;
 
 
     @Inject
@@ -169,7 +173,8 @@ public class DeleteStructureComponent extends VBox{
                         inGameController.updateAmountSitesGrid();
                         inGameController.updateSiteCapacities();
                         onCancel();
-                    });
+                    },
+                            error -> errorService.getStatus(error));
                 }
             } else if (buildings.containsKey(structureType)) {
                 // Handle deletion for buildings
@@ -180,7 +185,8 @@ public class DeleteStructureComponent extends VBox{
                     inGameController.updateResCapacity();
                     inGameController.setSitePropertiesInvisible();
                     onCancel();
-                });
+                },
+            error -> errorService.getStatus(error));
             } else {
                 throw new IllegalArgumentException("Unknown structure type: " + structureType);
             }

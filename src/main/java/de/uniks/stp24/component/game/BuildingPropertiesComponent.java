@@ -181,7 +181,6 @@ public class BuildingPropertiesComponent extends AnchorPane {
         buildingCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         buildingProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         buildingConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
-        disableButtons();
     }
 
     //Sets upkeep, production and cost of buildings in listviews

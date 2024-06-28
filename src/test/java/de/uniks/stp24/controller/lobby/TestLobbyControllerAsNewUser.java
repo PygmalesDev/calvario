@@ -100,7 +100,7 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
         doReturn("testNewUserID").when(this.tokenStorage).getUserId();
 
         // Mock getting game
-        doReturn(Observable.just(new Game("1", "a","testGameID","testGame","testGameHostID",
+        doReturn(Observable.just(new Game("1", "a","testGameID","testGame","testGameHostID", 2,
                 false, 1, 0, new GameSettings(1))))
                 .when(this.gamesService).getGame(any());
 

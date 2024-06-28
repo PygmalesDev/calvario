@@ -178,7 +178,7 @@ public class AppTest2 extends ControllerTest {
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
         doReturn(Observable
                 .just(new Game("a", null, "game1Id", "testGame1",
-                        "testHost1", true, 1,10, null))).when(gameApiService).getGame(any());
+                        "testHost1", 2, true, 1,10, null))).when(gameApiService).getGame(any());
         doReturn(null).when(this.app).show("/ingame");
         islandsService.saveEmpire("empire",new ReadEmpireDto("a","b","empire","game1","user1","name",
                 "description","#FFDDEE",2,3,"home"));
@@ -331,6 +331,8 @@ public class AppTest2 extends ControllerTest {
 
         sleep(2000);
 
+        openStorage();
+
     }
 
     public void createIcons(){
@@ -377,6 +379,29 @@ public class AppTest2 extends ControllerTest {
         ) ;
         linesR[1].setStrokeWidth(2);
 
+    }
+
+
+    public void openStorage(){
+        waitForFxEvents();
+        // Storage is closed
+        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
+        // Open storage
+        clickOn("#showStorageButton");
+        waitForFxEvents();
+        assertTrue(this.inGameController.storageOverviewContainer.isVisible());
+        // Close storage with Button in Ingame
+        clickOn("#showStorageButton");
+        waitForFxEvents();
+        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
+        // Open again
+        clickOn("#showStorageButton");
+        waitForFxEvents();
+        assertTrue(this.inGameController.storageOverviewContainer.isVisible());
+        // Close storage with button in StorageOverviewComponent
+        clickOn("#closeStorageOverviewButton");
+        waitForFxEvents();
+        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
     }
 
 }

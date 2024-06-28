@@ -215,6 +215,7 @@ public class ClockComponent extends AnchorPane {
 
     ///////////////--------------------------------------------onAction------------------------------------/////////////
 
+
     public void showFlags() {
         islandsService.setFlag(flagToggle.isSelected());
     }

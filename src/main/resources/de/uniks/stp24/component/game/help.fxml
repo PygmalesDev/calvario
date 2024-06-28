@@ -1,55 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<fx:root prefHeight="670.0" prefWidth="481.0" style="-fx-background-color: #D2B48C;" type="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.HelpComponent">
+<fx:root prefHeight="391.0" prefWidth="355.0" style="-fx-background-color: #D2B48C;" type="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.HelpComponent">
    <children>
-      <javafx.scene.layout.VBox alignment="TOP_CENTER" layoutX="41.0" layoutY="35.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0">
-         <HBox alignment="TOP_CENTER" prefHeight="79.0" prefWidth="400.0">
-            <children>
-               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Help">
-                  <font>
-                     <Font size="34.0" />
-                  </font>
-               </Text>
-            </children>
-         </HBox>
-         <AnchorPane prefHeight="462.0" prefWidth="394.0" style="-fx-background-color: #D2B48C;">
-            <children>
-               <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Shortcuts:">
-                  <font>
-                     <Font size="14.0" />
-                  </font>
-               </Text>
-               <Text layoutX="19.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Shift + H" />
-               <Text layoutX="20.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Shift + S" />
-               <Text layoutX="20.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Shift + F" />
-               <Text layoutX="175.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Show home island" />
-               <Text layoutX="175.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Show storage" />
-               <Text layoutX="175.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Show flags on all occupied islands" />
-               <Text layoutX="14.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Technology Tags:">
-                  <font>
-                     <Font size="14.0" />
-                  </font>
-               </Text>
-               <ListView fx:id="technologyTagsListView" layoutX="3.0" layoutY="170.0" prefHeight="234.0" prefWidth="392.0" />
-            </children>
-         </AnchorPane>
-         <HBox alignment="CENTER" prefHeight="200.0" prefWidth="400.0">
-            <children>
-               <Button fx:id="backButton" mnemonicParsing="false" onAction="#back" prefHeight="100.0" prefWidth="300.0" style="-fx-border-color: BLACK; -fx-background-color: GREY;" text="BACK" textFill="WHITE">
-                  <font>
-                     <Font size="36.0" />
-                  </font>
-               </Button>
-            </children>
-         </HBox>
-      </javafx.scene.layout.VBox>
+      <Text layoutX="7.0" layoutY="48.107421875" strokeType="OUTSIDE" strokeWidth="0.0" text="Shortcuts:" AnchorPane.leftAnchor="18.4">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <Text layoutX="16.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Shift + H" AnchorPane.leftAnchor="18.4" />
+      <Text layoutX="18.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Shift + S" AnchorPane.leftAnchor="18.0" />
+      <Text layoutX="17.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Shift + F" AnchorPane.leftAnchor="17.0" />
+      <Text layoutX="252.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Show home island" AnchorPane.rightAnchor="18.0" />
+      <Text layoutX="268.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Show storage" AnchorPane.rightAnchor="18.0" />
+      <Text layoutX="178.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Show flags on all occupied islands" AnchorPane.rightAnchor="18.0" />
+      <Text layoutX="14.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Technology Tags:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+      <ListView fx:id="technologyTagsListView" layoutX="7.0" layoutY="165.0" prefHeight="220.0" prefWidth="342.0" AnchorPane.leftAnchor="6.941601562500011" AnchorPane.rightAnchor="7.1416015625" />
+      <Button fx:id="backButton" layoutX="-3.0" layoutY="-4.0" mnemonicParsing="false" onAction="#back" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: BLACK; -fx-background-color: GREY;" styleClass="tableHeadingText" text="BACK" textFill="WHITE" AnchorPane.leftAnchor="0.0">
+         <font>
+            <Font size="6.0" />
+         </font>
+      </Button>
+      <Button fx:id="closeButton" layoutX="323.0" layoutY="-4.0" mnemonicParsing="false" onAction="#close" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: BLACK; -fx-background-color: GREY;" styleClass="tableHeadingText" text="CLOSE" textFill="WHITE" AnchorPane.rightAnchor="0.0">
+         <font>
+            <Font size="5.0" />
+         </font>
+      </Button>
+      <Text layoutX="156.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="helpText" text="Help" AnchorPane.leftAnchor="156.0" AnchorPane.rightAnchor="157.095703125">
+         <font>
+            <Font size="34.0" />
+         </font>
+      </Text>
    </children>
+   <stylesheets>
+      <URL value="@../../style/helpWindow.css" />
+      <URL value="@../../style/ingameButtons.css" />
+   </stylesheets>
 </fx:root>

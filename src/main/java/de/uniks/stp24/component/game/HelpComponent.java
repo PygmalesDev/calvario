@@ -13,7 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import org.fulib.fx.annotation.controller.Component;
@@ -24,6 +23,8 @@ import java.util.Map;
 @Component(view = "help.fxml")
 public class HelpComponent extends AnchorPane {
 
+    @FXML
+    Button closeButton;
     @FXML
     Button backButton;
     @FXML
@@ -38,6 +39,10 @@ public class HelpComponent extends AnchorPane {
     public void back(){
         setVisible(false);
         inGameController.pauseGame();
+    }
+
+    public void close(){
+        setVisible(false);
     }
 
     public void setInGameController(InGameController inGameController) {
@@ -63,16 +68,16 @@ public class HelpComponent extends AnchorPane {
 }
 
 class TechnologyListCell extends ListCell<Technology> {
-    private HBox content;
-    private ImageView imageView;
-    private Text text;
+    private final HBox content;
+    private final ImageView imageView;
+    private final Text text;
 
     public TechnologyListCell() {
         super();
         imageView = new ImageView();
         text = new Text();
         content = new HBox(imageView, text);
-        content.setSpacing(40);
+        content.setSpacing(100);
     }
 
     @Override

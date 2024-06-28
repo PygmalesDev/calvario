@@ -34,7 +34,7 @@
       </padding>
    </HBox>
    <StackPane fx:id="storageOverviewContainer" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="70.0" />
-   <StackPane fx:id="helpWindowContainer" layoutX="450.0" layoutY="50.0" prefHeight="600.0" prefWidth="400.0" style=": ;" visible="false" AnchorPane.bottomAnchor="250.39999999999998" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="250.4" />
+   <StackPane fx:id="helpWindowContainer" layoutX="450.0" layoutY="150.0" prefHeight="400.0" prefWidth="355.0" style=": ;" visible="false" />
    <stylesheets>
       <URL value="@../style/styles.css" />
       <URL value="@../style/ingameButtons.css" />

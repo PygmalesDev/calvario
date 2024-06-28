@@ -25,7 +25,9 @@
             <Font size="14.0" />
          </font>
       </Text>
-      <ListView fx:id="technologyTagsListView" layoutX="7.0" layoutY="165.0" prefHeight="220.0" prefWidth="342.0" AnchorPane.leftAnchor="6.941601562500011" AnchorPane.rightAnchor="7.1416015625" />
+      <ListView fx:id="technologyTagsListView" layoutX="7.0" layoutY="165.0" prefHeight="220.0" prefWidth="342.0"
+                AnchorPane.leftAnchor="6.941601562500011" AnchorPane.rightAnchor="7.1416015625"
+                style="-fx-background-color: transparent;" styleClass="technologyList" />
       <Button fx:id="backButton" layoutX="-3.0" layoutY="-4.0" mnemonicParsing="false" onAction="#back" prefHeight="20.0" prefWidth="20.0" style="-fx-border-color: BLACK; -fx-background-color: GREY;" styleClass="tableHeadingText" text="BACK" textFill="WHITE" AnchorPane.leftAnchor="0.0">
          <font>
             <Font size="6.0" />

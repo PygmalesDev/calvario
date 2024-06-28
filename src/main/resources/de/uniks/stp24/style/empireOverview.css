@@ -13,12 +13,12 @@
 }
 
 
-.empireOverviewTextWhite {
+.empireOverviewTextWhite{
     -fx-font-family: "PT Serif";
     -fx-fill: white;
 }
 
-.empireOverviewTextBlack {
+.empireOverviewTextBlack{
     -fx-font-family: "Tempus Sans ITC";
     -fx-fill: black;
     -fx-font-size: 13;
@@ -38,7 +38,7 @@
     -fx-background-repeat: no-repeat;
 }
 
-.payload {
+.payload{
     -fx-hgap: 3px;
     -fx-padding: 6px;
 
@@ -51,7 +51,7 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 4, 0, 0, 0);
 }
 
-.empirePortraitImage {
+.empirePortraitImage{
     width: 15px;
     height: 15px;
 }
@@ -74,10 +74,10 @@ descriptionSc .scroll-pane{
     -fx-background-color:transparent;
 }
 
-descriptionSc .scroll-pane > .viewport {
+descriptionSc .scroll-pane > .viewport{
   -fx-background-color: transparent;
 }
 
-descriptionSc .scroll-pane .viewport {
+descriptionSc .scroll-pane .viewport{
     -fx-background-color: transparent;
 }

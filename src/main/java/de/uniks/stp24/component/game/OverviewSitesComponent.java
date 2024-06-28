@@ -105,6 +105,10 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameController.overviewUpgradeComponent.setUpgradeInf();
     }
 
+    /*
+    Set upgrade overview of island with inf. of current island level.
+     */
+
     public void setLevelCheckBox(){
         switch(islandAttributes.getIsland().upgradeLevel()){
             case 1:
@@ -182,6 +186,10 @@ public class OverviewSitesComponent extends AnchorPane {
         detailsButton.setDisable(false);
         sitesButton.setDisable(false);
     }
+
+    /*
+    Set overview sites with inf.
+     */
 
     public void setOverviewSites() {
         islandFlag.setStyle("-fx-background-image: url('" + inGameController.flagsPath.get(islandAttributes.getIsland().flagIndex()) +"');" +

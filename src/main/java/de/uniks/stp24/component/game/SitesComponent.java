@@ -31,6 +31,10 @@ public class SitesComponent extends VBox {
 
     }
 
+    /*
+    The methods below showing sites dependent on amount of sites on island.
+     */
+
     public void setSitesBox(Island island) {
         sitesBox.getChildren().clear();
         VBox vBox = new VBox();

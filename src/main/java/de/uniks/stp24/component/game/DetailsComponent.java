@@ -90,6 +90,11 @@ public class DetailsComponent extends AnchorPane {
 
     }
 
+    /*
+    The methods below are needed to set a HBOX for showing
+    total consumption and total production of current selected island.
+     */
+
     public void setSumProduction(Map<String, Integer> totalProduction){
         int i = 0;
         for (Map.Entry<String, Integer> entry : totalProduction.entrySet()) {

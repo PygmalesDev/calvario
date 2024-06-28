@@ -40,6 +40,10 @@ public class IslandAttributeStorage {
 
     }
 
+    /*
+    Methods for saving and getting certain inf. about selected island
+     */
+
     public void setEmpireDto(EmpireDto empire) {
         empireDto = empire;
     }

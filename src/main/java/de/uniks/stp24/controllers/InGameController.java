@@ -524,6 +524,10 @@ public class InGameController extends BasicController {
         overviewSitesComponent.buildingsComponent.setGridPane();
     }
 
+    /*
+    Methods below showing explanation overview if mouse hovers above a chosen element.
+     */
+
     public void showExplanation(int x, int y){
         explanationContainer.setLayoutX(x);
         explanationContainer.setLayoutY(y);

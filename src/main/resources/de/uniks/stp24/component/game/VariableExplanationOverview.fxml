@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="362.0" prefWidth="347.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox layoutX="124.0" layoutY="89.0" prefHeight="320.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="326.0">
+               <children>
+                  <Text fx:id="entity_name" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
+               </children>
+            </HBox>
+            <VBox prefHeight="135.0" prefWidth="326.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="326.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Production" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="326.0">
+                     <children>
+                        <Text fx:id="entityProduction_base" strokeType="OUTSIDE" strokeWidth="0.0" text="Base:" />
+                     </children>
+                  </HBox>
+                  <HBox fx:id="entityProduction_value1" alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="326.0">
+                     <children>
+                        <Text fx:id="entity_value1" strokeType="OUTSIDE" strokeWidth="0.0" text="xx" />
+                     </children>
+                  </HBox>
+                  <HBox fx:id="entityProduction_value2" alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="326.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="xx" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="326.0">
+                     <children>
+                        <Text fx:id="entityProduction_total" strokeType="OUTSIDE" strokeWidth="0.0" text="Total:" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox prefHeight="135.0" prefWidth="326.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="326.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Upkeep:" />
+                     </children>
+                  </HBox>
+                  <HBox fx:id="entityUpkeep_base" alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="326.0">
+                     <children>
+                        <Text fx:id="entity_upkeep_base" strokeType="OUTSIDE" strokeWidth="0.0" text="Base:" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="326.0">
+                     <children>
+                        <Text fx:id="entityUpkeep_value" strokeType="OUTSIDE" strokeWidth="0.0" text="xx" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="326.0">
+                     <children>
+                        <Text fx:id="entityUpkeep_total" strokeType="OUTSIDE" strokeWidth="0.0" text="Total:" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <HBox fx:id="entity_des" alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="326.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

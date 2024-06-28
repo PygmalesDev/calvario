@@ -166,4 +166,15 @@ public class Constants {
             Map.entry("exchange", "de/uniks/stp24/icons/buildings/seaside_hut.png")
     );
 
+    public static final String[] imagePaths = {
+            "de/uniks/stp24/icons/buildings/alloy_smeltery.png",
+            "de/uniks/stp24/icons/buildings/theurgy_hall.png",
+            "de/uniks/stp24/icons/buildings/chophouse.png",
+            "de/uniks/stp24/icons/buildings/resonating_delves.png",
+            "de/uniks/stp24/icons/buildings/farmside.png",
+            "de/uniks/stp24/icons/buildings/coal_querry.png",
+            "de/uniks/stp24/icons/buildings/scout_hub.png",
+            "de/uniks/stp24/icons/buildings/seaside_hut.png",
+    };
+
 }

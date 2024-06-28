@@ -32,6 +32,7 @@
                <TextField fx:id="createNameTextField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="%name" styleClass="textFieldGame" />
                <PasswordField fx:id="createPasswordTextField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="%password" styleClass="textFieldGame" />
                <PasswordField fx:id="createRepeatPasswordTextField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="%password" styleClass="textFieldGame" />
+               <TextField fx:id="maxMembersTextField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Max. members" styleClass="textFieldGame" />
                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%map.size">
                   <font>
                      <Font size="17.0" />

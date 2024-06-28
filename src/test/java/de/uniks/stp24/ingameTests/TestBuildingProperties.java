@@ -82,7 +82,7 @@ public class TestBuildingProperties extends ControllerTest {
     OverviewSitesComponent overviewSitesComponent;
     @InjectMocks
     OverviewUpgradeComponent overviewUpgradeComponent;
-    @InjectMocks
+    @Spy
     IslandAttributeStorage islandAttributeStorage;
     @InjectMocks
     DetailsComponent detailsComponent;
@@ -108,8 +108,8 @@ public class TestBuildingProperties extends ControllerTest {
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
 
     ArrayList<String> buildings = new ArrayList<>();
-
 /*
+
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
@@ -147,11 +147,12 @@ public class TestBuildingProperties extends ControllerTest {
         Map<String, Integer> resources1 = Map.of("energy",3);
         Map<String, Integer> resources2 = Map.of("energy",3, "population", 4);
         Map<String, Integer> resources3 = Map.of("energy",5, "population", 6);
-
+        buildings.add("mine");
         // Mock TokenStorage
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
+        doReturn(island).when(this.islandAttributeStorage).getIsland();
         doReturn(island).when(this.tokenStorage).getIsland();
         doReturn(Observable.just(new BuildingDto("a",required,production, consumption))).when(resourcesService).getResourcesBuilding(any());
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
@@ -164,7 +165,7 @@ public class TestBuildingProperties extends ControllerTest {
         doReturn(Observable.just(new Game("a","a","testGameID", "gameName", "gameOwner", true,1,1,null ))).when(gamesApiService).getGame(any());
 
         doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
-        buildings.add("mine");
+
 
         //Todo: Maybe not the smartest solution
         doReturn(Observable.just(new SystemUpgrades(null, null, null, null, null))).when(presetsApiService).getSystemUpgrades();
@@ -200,16 +201,20 @@ public class TestBuildingProperties extends ControllerTest {
                 20, 20, 1, siteSlots, sites, buildings, "testID", "explored");
         doReturn(Observable.just(new SystemDto("", "", "testID2", "testGame", "testType",
                 "", siteSlots, sites, 20, buildings, Upgrade.explored, 20, links, 500.0, 500.0,
-                "testOwner"))).when(resourcesService).createBuilding(any(), any(),any());
+                "testOwner"))).when(resourcesService).destroyBuilding(any(), any(),any());
         doReturn(new Island(island.owner(),1, island.posX(), island.posY(), island.type(), island.crewCapacity(),
                 island.resourceCapacity(), island.upgradeLevel(), island.sitesSlots(),
                 island.sites(), island.buildings(), island.id(), "explored")).when(islandsService).updateIsland(any());
+        doNothing().when(islandsService).updateIslandBuildings(any(), any(), any());
         waitForFxEvents();
-        clickOn("#buildingFarm");
+        clickOn("#buildingMine");
         waitForFxEvents();
         clickOn("#destroyButton");
+        waitForFxEvents();
+        clickOn("#confirmButton");
+        waitForFxEvents();
 
-        verify(this.resourcesService, times(1)).createBuilding(any(), any(),any());
+        verify(this.resourcesService, times(1)).destroyBuilding(any(), any(),any());
         verify(this.islandsService, times(2)).updateIsland(any());
 
     }
@@ -240,6 +245,5 @@ public class TestBuildingProperties extends ControllerTest {
         verify(this.islandsService, times(2)).updateIsland(any());
 
     }
-
- */
+*/
 }

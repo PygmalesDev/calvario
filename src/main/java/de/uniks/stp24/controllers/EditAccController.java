@@ -148,6 +148,7 @@ public class EditAccController extends BasicController {
     boolean lockPortrait = false;
     boolean lockFrame = false;
 
+    @SubComponent
     @Inject
     public WarningScreenComponent warningScreen;
     private BooleanBinding editAccIsNotSelected;
@@ -211,17 +212,22 @@ public class EditAccController extends BasicController {
     public void applyInputs() {
         if (Objects.nonNull(tokenStorage.getName()))
             this.usernameInput.setText(tokenStorage.getName());
+
         avatarMap = tokenStorage.getAvatarMap();
-        if(Objects.isNull(tokenStorage.getAvatarMap())) {
+        //TODO Remove Print
+        System.out.println("no avatar!!!!!" + avatarMap);
+        if(Objects.isNull(tokenStorage.getAvatarMap()) || tokenStorage.getAvatarMap().isEmpty() ) {
+            System.out.println("no avatar");
             avatarMap = new HashMap<>();
             avatarMap.put("backgroundIndex", 0);
             avatarMap.put("portraitIndex", 8);
             avatarMap.put("frameIndex", 8);
             tokenStorage.setAvatarMap(avatarMap);
         }
+        //TODO Remove Print
+        System.out.println("test   "+ avatarMap);
         setImageCode(avatarMap.get("backgroundIndex"), avatarMap.get("portraitIndex"), avatarMap.get("frameIndex"));
         this.errorLabelEditAcc.setText("");
-
     }
 
     /**

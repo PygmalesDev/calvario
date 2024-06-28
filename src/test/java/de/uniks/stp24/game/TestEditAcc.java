@@ -55,19 +55,27 @@ public class TestEditAcc extends ControllerTest {
     @InjectMocks
     WarningScreenComponent warningScreenComponent;
 
+    Map<String,Integer>  avatarMap2 = new HashMap<>();
+
     @Override
     public void start(Stage stage) throws Exception{
         this.editAccController.avatarMap = new HashMap<>();
+        doReturn(null).when(this.imageCache).get(any());
 
         this.editAccController.avatarMap.put("backgroundIndex", 1);
         this.editAccController.avatarMap.put("portraitIndex", 1);
         this.editAccController.avatarMap.put("frameIndex", 1);
+
+        avatarMap2.put("backgroundIndex", 1);
+        avatarMap2.put("portraitIndex", 1);
+        avatarMap2.put("frameIndex", 1);
 
         this.warningScreenComponent.warningText = new Text("waring");
 
         this.editAccController.warningScreen = this.warningScreenComponent;
         super.start(stage);
         app.show(editAccController);
+
     }
 
     @Test
@@ -171,8 +179,8 @@ public class TestEditAcc extends ControllerTest {
 
         //Action:
         //She clicks cancel because she changed her mind.
-        Button cancelDeleteButton = lookup("#cancelDeleteButton").queryButton();
         Button deleteUserButton = lookup("#deleteUserButton").queryButton();
+        Button cancelDeleteButton = lookup("#cancelDeleteButton").queryButton();
         assertTrue(cancelDeleteButton.isVisible());
         assertFalse(cancelDeleteButton.isDisabled());
         assertEquals(BoxBlur.class, editAccVBoxLeftToBlur.getEffect().getClass());
@@ -192,16 +200,11 @@ public class TestEditAcc extends ControllerTest {
 
     @Test
     void deleteAccountTest(){
-        Map<String,Integer> _public = new HashMap<>();
-        _public.put("backgroundIndex", 1);
-        _public.put("portraitIndex", 1);
-        _public.put("frameIndex", 1);
-
         // Title: Confirm after clicking delete account button
         doAnswer(show -> { tokenStorage.setName(null);
             tokenStorage.setAvatar(null);
             prefService.removeRefreshToken();
-            return Observable.just(new User("1", "a","b","c","d",_public));
+            return Observable.just(new User("1", "a","b","c","d",avatarMap2));
         }).when(this.editAccService).deleteUser();
 
         // Start:

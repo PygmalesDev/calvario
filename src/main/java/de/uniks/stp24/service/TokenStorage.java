@@ -42,7 +42,8 @@ public class TokenStorage {
     public String getAvatar() {return avatar;}
     public void setAvatar(String avatar) {this.avatar = avatar;}
 
-    public void setAvatarMap(Map<String,Integer> avatarMap) {this.avatarMap = avatarMap;}
+    public void setAvatarMap(Map<String,Integer> avatarMap) {
+        System.out.println("token storage map" + avatarMap);this.avatarMap = avatarMap;}
 
     public Map<String,Integer> getAvatarMap() {
         return this.avatarMap;

@@ -1,6 +1,11 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.model.Technology;
+import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.game.TechnologyService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -17,15 +22,16 @@ import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 import java.util.ResourceBundle;
 
-@Component(view = "TechnologieCategory.fxml")
-public class TechnologieCategoryComponent extends AnchorPane {
+@Component(view = "TechnologyCategory.fxml")
+public class TechnologyCategoryComponent extends AnchorPane {
 
     @FXML
-    public ListView unlockedListView;
+    public ListView<Technology> unlockedListView;
     @FXML
-    public ListView researchListView;
+    public ListView<Technology> researchListView;
     @FXML
     public Button closeButton;
     @FXML
@@ -35,6 +41,15 @@ public class TechnologieCategoryComponent extends AnchorPane {
     @FXML
     public VBox technologieCategoryBox;
     String technologieCategoryName;
+
+    @Inject
+    TechnologyService technologyService;
+
+    Provider<TechnologyCategorySubComponent> researchComponentProvider = TechnologyCategorySubComponent::new;
+    Provider<TechnologyCategorySubComponent> unlockedComponentProvider = TechnologyCategorySubComponent::new;
+
+    ObservableList<TechnologyExtended> unlockedTechnologies = FXCollections.observableArrayList();
+    ObservableList<TechnologyExtended> researchTechnologies = FXCollections.observableArrayList();
 
     private Pane parent;
 
@@ -46,7 +61,7 @@ public class TechnologieCategoryComponent extends AnchorPane {
     ImageCache imageCache = new ImageCache();
 
     @Inject
-    public TechnologieCategoryComponent() {
+    public TechnologyCategoryComponent() {
     }
 
     @OnInit
@@ -56,10 +71,7 @@ public class TechnologieCategoryComponent extends AnchorPane {
 
     @OnRender
     public void render() {
-        System.out.println("render");
-        if (technologieCategoryName != null) {
-            technologyImage.setImage(imageCache.get("assets/technologies/" + technologieCategoryName + ".png"));
-        }
+
     }
 
     @OnDestroy
@@ -75,7 +87,8 @@ public class TechnologieCategoryComponent extends AnchorPane {
         parent.getChildren().getFirst().setVisible(false);
         parent.getChildren().getLast().setVisible(true);
     }
-    public TechnologieCategoryComponent setCategory(String category) {
+
+    public TechnologyCategoryComponent setCategory(String category) {
         this.technologieCategoryName = category;
         return this;
     }

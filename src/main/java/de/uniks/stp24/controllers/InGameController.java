@@ -130,7 +130,7 @@ public class InGameController extends BasicController {
     public ClockComponent clockComponent;
     @SubComponent
     @Inject
-    public TechnologieOverviewComponent technologiesComponent;
+    public TechnologyOverviewComponent technologiesComponent;
 
 
     @SubComponent

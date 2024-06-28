@@ -18,8 +18,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ResourceBundle;
 
-@Component(view = "TechnologieOverview.fxml")
-public class TechnologieOverviewComponent extends AnchorPane {
+@Component(view = "TechnologyOverview.fxml")
+public class TechnologyOverviewComponent extends AnchorPane {
 
     @FXML
     VBox technologieOverviewBox;
@@ -40,7 +40,7 @@ public class TechnologieOverviewComponent extends AnchorPane {
 
     @Inject
     @SubComponent
-    TechnologieCategoryComponent technologieCategoryComponent;
+    TechnologyCategoryComponent technologyCategoryComponent;
 
     @Inject
     @Resource
@@ -48,8 +48,7 @@ public class TechnologieOverviewComponent extends AnchorPane {
     public ResourceBundle resources;
 
     @Inject
-    public TechnologieOverviewComponent() {
-
+    public TechnologyOverviewComponent() {
 
     }
 
@@ -75,34 +74,34 @@ public class TechnologieOverviewComponent extends AnchorPane {
     }
 
     public void shipbuilding() {
-        show(technologieCategoryComponent.setCategory("shipbuilding"));
+        show(technologyCategoryComponent.setCategory("shipbuilding"));
     }
 
     public void crewRelations() {
-        show(technologieCategoryComponent.setCategory("crew_relations"));
+        show(technologyCategoryComponent.setCategory("crew_relations"));
     }
 
     public void marineSience() {
-        show(technologieCategoryComponent.setCategory("marine_science"));
+        show(technologyCategoryComponent.setCategory("marine_science"));
     }
 
     public void setContainer(@NotNull Pane parent) {
         this.parent = parent;
-        parent.getChildren().add(technologieCategoryComponent);
-        technologieCategoryComponent.setContainer(parent);
-        technologieCategoryComponent.setVisible(false);
+        parent.getChildren().add(technologyCategoryComponent);
+        technologyCategoryComponent.setContainer(parent);
+        technologyCategoryComponent.setVisible(false);
     }
 
-    public void show(@NotNull TechnologieCategoryComponent technologieCategory) {
+    public void show(@NotNull TechnologyCategoryComponent technologieCategory) {
         technologieCategory.technologieCategoryBox.setVisible(true);
         setCategoryInfos(technologieCategory);
         parent.getChildren().getFirst().setVisible(true);
         parent.getChildren().getLast().setVisible(false);
     }
 
-    public void setCategoryInfos(TechnologieCategoryComponent technologieCategory) {
-        technologieCategory.technologyImage.setImage(technologieCategory.imageCache.get("assets/technologies/" + technologieCategory.technologieCategoryName + ".png"));
-        String temp = technologieCategory.technologieCategoryName.replace("_", ".");
-        technologieCategory.technologyNameText.setText(resources.getString("technologies." + temp));
+    public void setCategoryInfos(@NotNull TechnologyCategoryComponent technologieCategory) {
+        technologieCategory.technologyImage.setImage(technologieCategory.imageCache.get("assets/technologies/categories/" + technologieCategory.technologieCategoryName + ".png"));
+        String technologyKey = technologieCategory.technologieCategoryName.replace("_", ".");
+        technologieCategory.technologyNameText.setText(resources.getString("technologies." + technologyKey));
     }
 }

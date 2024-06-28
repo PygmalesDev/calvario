@@ -328,6 +328,8 @@ public class AppTest2 extends ControllerTest {
 
         sleep(2000);
 
+        openStorage();
+
     }
 
     public void createIcons(){
@@ -374,6 +376,29 @@ public class AppTest2 extends ControllerTest {
         ) ;
         linesR[1].setStrokeWidth(2);
 
+    }
+
+
+    public void openStorage(){
+        waitForFxEvents();
+        // Storage is closed
+        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
+        // Open storage
+        clickOn("#showStorageButton");
+        waitForFxEvents();
+        assertTrue(this.inGameController.storageOverviewContainer.isVisible());
+        // Close storage with Button in Ingame
+        clickOn("#showStorageButton");
+        waitForFxEvents();
+        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
+        // Open again
+        clickOn("#showStorageButton");
+        waitForFxEvents();
+        assertTrue(this.inGameController.storageOverviewContainer.isVisible());
+        // Close storage with button in StorageOverviewComponent
+        clickOn("#closeStorageOverviewButton");
+        waitForFxEvents();
+        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
     }
 
 }

@@ -2,14 +2,24 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Technology;
+import de.uniks.stp24.service.Constants;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.util.Callback;
 import org.fulib.fx.annotation.controller.Component;
 
 import javax.inject.Inject;
+import java.util.Map;
 
 @Component(view = "help.fxml")
 public class HelpComponent extends AnchorPane {
@@ -35,6 +45,45 @@ public class HelpComponent extends AnchorPane {
     }
 
     public void displayTechnologies() {
+        ObservableList<Technology> technologies = FXCollections.observableArrayList();
 
+        for (Map.Entry<String, String> icon : Constants.technologyIconMap.entrySet()) {
+            Technology technology = new Technology(icon.getValue(), icon.getKey());
+            technologies.add(technology);
+        }
+
+        technologyTagsListView.setItems(technologies);
+        technologyTagsListView.setCellFactory(new Callback<ListView<Technology>, ListCell<Technology>>() {
+            @Override
+            public ListCell<Technology> call(ListView<Technology> listView) {
+                return new TechnologyListCell();
+            }
+        });
+    }
+}
+
+class TechnologyListCell extends ListCell<Technology> {
+    private HBox content;
+    private ImageView imageView;
+    private Text text;
+
+    public TechnologyListCell() {
+        super();
+        imageView = new ImageView();
+        text = new Text();
+        content = new HBox(imageView, text);
+        content.setSpacing(40);
+    }
+
+    @Override
+    protected void updateItem(Technology technology, boolean empty) {
+        super.updateItem(technology, empty);
+        if (technology != null && !empty) {
+            imageView.setImage(new Image(technology.imageID()));
+            text.setText(technology.description());
+            setGraphic(content);
+        } else {
+            setGraphic(null);
+        }
     }
 }

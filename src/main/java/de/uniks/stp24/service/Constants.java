@@ -166,4 +166,16 @@ public class Constants {
             Map.entry("exchange", "de/uniks/stp24/icons/buildings/seaside_hut.png")
     );
 
+    public static final Map<String, String> technologyIconMap = Map.ofEntries(
+            Map.entry(),
+            Map.entry(),
+            Map.entry(),
+            Map.entry(),
+            Map.entry(),
+            Map.entry(),
+            Map.entry(),
+            Map.entry(),
+            Map.entry("ancient_refinery", "de/uniks/stp24/icons/sites/production_site.png")
+    );
+
 }

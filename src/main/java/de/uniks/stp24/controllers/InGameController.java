@@ -1,29 +1,20 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.component.game.ClockComponent;
-import de.uniks.stp24.component.game.IslandComponent;
-import de.uniks.stp24.component.game.StorageOverviewComponent;
-import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.game.EventService;
-import de.uniks.stp24.service.game.IslandsService;
-import de.uniks.stp24.service.game.TimerService;
-import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.PopupBuilder;
+import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
-import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
-import de.uniks.stp24.service.PopupBuilder;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -41,18 +32,23 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
-import org.jetbrains.annotations.NotNull;
 import org.fulib.fx.controller.Subscriber;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Title("CALVARIO")
 @Controller
 public class InGameController extends BasicController {
 
+    @FXML
+    StackPane helpWindowContainer;
     @FXML
     Pane shadow;
     @FXML
@@ -112,9 +108,7 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public PauseMenuComponent pauseMenuComponent;
-    @SubComponent
-    @Inject
-    public SettingsComponent settingsComponent;
+
     @SubComponent
     @Inject
     public OverviewSitesComponent overviewSitesComponent;
@@ -174,10 +168,16 @@ public class InGameController extends BasicController {
     @Inject
     public SitePropertiesComponent sitePropertiesComponent;
 
+    @SubComponent
+    @Inject
+    public HelpComponent helpComponent;
+
     PopupBuilder popupBuildingProperties = new PopupBuilder();
     PopupBuilder popupBuildingWindow = new PopupBuilder();
     PopupBuilder popupSiteProperties = new PopupBuilder();
     PopupBuilder popupDeleteStructure = new PopupBuilder();
+
+    PopupBuilder popupHelpWindow = new PopupBuilder();
 
     @Inject
     public InGameController() {
@@ -193,6 +193,8 @@ public class InGameController extends BasicController {
         buildingPropertiesComponent.setInGameController(this);
         sitePropertiesComponent.setInGameController(this);
         deleteStructureComponent.setInGameController(this);
+        pauseMenuComponent.setInGameController(this);
+        helpComponent.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
@@ -204,10 +206,6 @@ public class InGameController extends BasicController {
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_PAUSED"));
-
-        PropertyChangeListener callHandleShowSettings = this::handleShowSettings;
-        gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_SETTINGS, callHandleShowSettings);
-        this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_SETTINGS"));
 
         this.subscriber.subscribe(inGameService.loadUpgradePresets(),
                 result -> islandAttributes.setSystemPresets(result),
@@ -233,17 +231,6 @@ public class InGameController extends BasicController {
         }
     }
 
-    private void handleShowSettings(@NotNull PropertyChangeEvent propertyChangeEvent) {
-        if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
-            Boolean settings = (Boolean) propertyChangeEvent.getNewValue();
-            if (settings) {
-                showSettings();
-            } else {
-                unShowSettings();
-            }
-        }
-    }
-
     private void handlePauseChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             pause = (Boolean) propertyChangeEvent.getNewValue();
@@ -264,6 +251,7 @@ public class InGameController extends BasicController {
         buildingsWindow.setMouseTransparent(true);
         siteProperties.setMouseTransparent(true);
         deleteStructureWarningContainer.setMouseTransparent(true);
+        helpWindowContainer.setMouseTransparent(true);
 
         pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
@@ -289,7 +277,6 @@ public class InGameController extends BasicController {
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
         pause = !pause;
-        inGameService.setShowSettings(false);
         inGameService.setPaused(pause);
         if (pause) {
             pauseMenuContainer.setMouseTransparent(false);
@@ -307,18 +294,9 @@ public class InGameController extends BasicController {
         popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
     }
 
-    public void showSettings() {
-        pauseMenuContainer.getChildren().remove(pauseMenuComponent);
-        pauseMenuContainer.getChildren().add(settingsComponent);
-    }
-
-    public void unShowSettings() {
-        pauseMenuContainer.getChildren().remove(settingsComponent);
-        pauseMenuContainer.getChildren().add(pauseMenuComponent);
-    }
-
     public void pauseGame() {
         pauseMenuContainer.setVisible(pause);
+        pauseMenuContainer.setMouseTransparent(false);
     }
 
     public void resumeGame() {
@@ -527,5 +505,14 @@ public class InGameController extends BasicController {
         buildingProperties.setMouseTransparent(false);
         overviewSitesComponent.buildingsComponent.resetPage();
         overviewSitesComponent.buildingsComponent.setGridPane();
+    }
+
+    public void showHelp() {
+        popupHelpWindow.showPopup(helpWindowContainer,helpComponent);
+        helpWindowContainer.setMouseTransparent(false);
+        helpWindowContainer.toFront();
+        pauseMenuContainer.setVisible(false);
+        pauseMenuContainer.setMouseTransparent(true);
+        helpComponent.displayTechnologies();
     }
 }

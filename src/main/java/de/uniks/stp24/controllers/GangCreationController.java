@@ -244,7 +244,7 @@ public class GangCreationController extends BasicController {
     @OnRender
     public void addSpeechBubble() {
         captainContainer.getChildren().add(bubbleComponent);
-        bubbleComponent.setCaptainText("Yo wie geht's");
+        bubbleComponent.setCaptainText(resource.getString("pirate.empireScreen.intro"));
         captainContainer.setMouseTransparent(true);
         bubbleComponent.setMouseTransparent(true);
     }
@@ -610,11 +610,20 @@ public class GangCreationController extends BasicController {
             traitsCost = 0;
             Trait randomTrait;
 
-            while (!allTraits.isEmpty() && traitsCost < traitsLimit && choosenTraits.size() < 5) {
+            /*
+            allTraits can still have traits with none of them being choosable, if we choose a Trait that has conflict
+            with all other Traits or if the score goes overlimit if choose other trait
+             */
+            ArrayList<Trait> possibleTraits = new ArrayList<>();
+            for (Trait trait : allTraits) {
+                possibleTraits.add(trait);
+            }
+            while (!possibleTraits.isEmpty() && traitsCost < traitsLimit && choosenTraits.size() < 5) {
                 randomTrait = allTraits.get(random.nextInt(allTraits.size()));
                 if (canAddTrait(randomTrait)) {
                     addTraitToEmpire(randomTrait);
                 }
+                possibleTraits.remove(randomTrait);
             }
 
             if (!traitsBox.isVisible()) {
@@ -655,19 +664,32 @@ public class GangCreationController extends BasicController {
         choosenTraits.forEach(trait -> traitsCost+=trait.cost());
         updateTraitLimitText();
         traitsBox.setVisible(true);
+        setButtonsDisable(true);
+    }
+
+    private void setButtonsDisable(boolean disable) {
+        confirmButton.setDisable(disable);
+        createButton.setDisable(disable);
+        selectButton.setDisable(disable);
+        editButton.setDisable(disable);
+        showDeletePaneButton.setDisable(disable);
+        showCreationButton.setDisable(disable);
+        backButton.setDisable(disable);
     }
 
     public void traitsConfirm() {
-        bubbleComponent.setCaptainText("yo");
+        bubbleComponent.setCaptainText(resource.getString("pirate.empireScreen.intro"));
         confirmedTraits.clear();
         confirmedTraits.addAll(choosenTraits);
         traitsReturn();
+        setButtonsDisable(false);
     }
 
     public void traitsReturn() {
-        bubbleComponent.setCaptainText("yo");
+        bubbleComponent.setCaptainText(resource.getString("pirate.empireScreen.intro"));
         resetTraitsLists();
         traitsBox.setVisible(false);
+        setButtonsDisable(false);
     }
 
     public void addTrait(Trait trait) {
@@ -677,7 +699,7 @@ public class GangCreationController extends BasicController {
     }
 
     private void addTraitToEmpire(Trait trait) {
-        bubbleComponent.setCaptainText("yo");
+        bubbleComponent.setCaptainText(resource.getString("pirate.empireScreen.intro"));
         allTraits.remove(trait);
         choosenTraits.add(trait);
         traitsCost += trait.cost();
@@ -685,14 +707,14 @@ public class GangCreationController extends BasicController {
     }
 
     public void deleteTrait(Trait trait) {
-        bubbleComponent.setCaptainText("yo");
+        bubbleComponent.setCaptainText(resource.getString("pirate.empireScreen.intro"));
         if (traitsCost - trait.cost() <= traitsLimit) {
             allTraits.add(trait);
             choosenTraits.remove(trait);
             traitsCost -= trait.cost();
             updateTraitLimitText();
         } else {
-            bubbleComponent.setCaptainText("over limit");
+            bubbleComponent.setCaptainText(resource.getString("pirate.empireScreen.scoreOverLimit"));
         }
     }
 
@@ -702,7 +724,7 @@ public class GangCreationController extends BasicController {
                 if (Objects.nonNull(chosen.conflicts())) {
                     for (String conflict : chosen.conflicts()) {
                         if (conflict.equals(trait.id())) {
-                            bubbleComponent.setCaptainText("conflict: " + chosen.id() + "+" + trait.id());
+                            bubbleComponent.setCaptainText(resource.getString("pirate.empireScreen.conflict").replace("{conflict1}", '"' + chosen.id() + '"').replace("{conflict2}", '"' + trait.id() + '"'));
                             return false;
                         }
                     }
@@ -711,9 +733,9 @@ public class GangCreationController extends BasicController {
            return true;
         }
         if (traitsCost + trait.cost() > traitsLimit) {
-            bubbleComponent.setCaptainText("over limit");
+            bubbleComponent.setCaptainText(resource.getString("pirate.empireScreen.scoreOverLimit"));
         } else if (choosenTraits.size() >= 5) {
-            bubbleComponent.setCaptainText("too many");
+            bubbleComponent.setCaptainText(resource.getString("pirate.empireScreen.countOverLimit"));
         }
         return false;
     }
@@ -731,18 +753,20 @@ public class GangCreationController extends BasicController {
         traitInfoName.setText(trait.id());
 
         String effectsText = "effects\n";
-        for (EffectDto effect : trait.effects()) {
-            String variable = effect.variable();
-            String type = "";
-            if (effect.bonus() != 0.00) {
-                if (effect.bonus() > 0){
-                    type = "+";
+        if (Objects.nonNull(trait.effects())) {
+            for (EffectDto effect : trait.effects()) {
+                String variable = effect.variable();
+                String type = "";
+                if (effect.bonus() != 0.00) {
+                    if (effect.bonus() > 0) {
+                        type = "+";
+                    }
+                    type += effect.bonus() + " ";
+                } else if (effect.multiplier() != 0.00) {
+                    type = "*" + effect.multiplier() + " ";
                 }
-                type += effect.bonus() + " ";
-            } else if (effect.multiplier() != 0.00) {
-                type = "*" + effect.multiplier() + " ";
+                effectsText += type + variable + "\n";
             }
-            effectsText += type + variable + "\n";
         }
         traitInfoEffects.setText(effectsText);
 

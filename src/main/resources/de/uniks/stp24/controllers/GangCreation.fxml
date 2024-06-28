@@ -177,6 +177,9 @@
                      </children>
                   </VBox>
                </children>
+               <HBox.margin>
+                  <Insets bottom="200.0" />
+               </HBox.margin>
             </AnchorPane>
          </children>
       </HBox>

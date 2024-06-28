@@ -66,6 +66,9 @@
      ObservableList<Gang> gangs = FXCollections.observableArrayList();
      Gang gang = new Gang("Test Gang", 0, 0, "", "#000000", 0, null);
      ListView<GangElement> gangsListView;
+     ListView<Trait> allTraitsListView;
+     ListView<Trait> confirmedTraitsListView;
+     ListView<Trait> selectedTraitsListView;
 
      @Mock
      SaveLoadService saveLoadService;
@@ -84,12 +87,17 @@
      GangDeletionComponent gangDeletionComponent;
 
      @Spy
-     Provider<GangComponent> traitComponentProvider = new Provider(){
+     Provider<TraitComponent> traitComponentProvider = new Provider(){
          @Override
          public TraitComponent get() {
-             return new TraitComponent(gangCreationController, false, false);
+             return new TraitComponent(gangCreationController, true, true);
          }
      };
+
+     Trait aTrait;
+     Trait bTrait;
+     Trait cTrait;
+     Trait dTrait;
 
      @Override
      public void start(Stage stage) throws Exception{
@@ -97,14 +105,23 @@
          this.gangCreationController.gangDeletionComponent = this.gangDeletionComponent;
          gangs.add(gang);
          doReturn(gangs).when(saveLoadService).loadGangs();
-         doReturn(Observable.just(new Trait[]{})).when(presetsApiService).getTraitsPreset();
+         aTrait = new Trait("A", null, 5, null);
+         String[] conflictsOfB = {"C"};
+         bTrait = new Trait("B", null, 1, conflictsOfB);
+         String[] conflictsOfC = {"B"};
+         cTrait = new Trait("C", null, 1, conflictsOfC);
+         dTrait = new Trait("D", null, 3, null);
+         doReturn(Observable.just(new Trait[]{aTrait, bTrait, cTrait, dTrait})).when(presetsApiService).getTraitsPreset();
          doReturn(Observable.just(new MemberDto(false, "", null, ""))).when(lobbyService).getMember(any(), any());
          app.show(this.gangCreationController);
      }
 
      @BeforeEach
-     public void initListView() {
+     public void initListViews() {
          gangsListView = lookup("#gangsListView").query();
+         allTraitsListView = lookup("#allTraitsListView").query();
+         confirmedTraitsListView = lookup("#confirmedTraitsListView").query();
+         selectedTraitsListView = lookup("#selectedTraitsListView").query();
      }
 
      @Test
@@ -341,8 +358,81 @@
          assertEquals(gangNums - 1, gangsListView.getItems().size());
      }
 
+     @Test
+     public void testTraitsRandom() {
+         clickOn("#showCreationButton");
+         waitForFxEvents();
+         clickOn("#chooseTraitsButton");
+         waitForFxEvents();
+         clickOn("#randomizeButton");
+         waitForFxEvents();
+         clickOn("#traitsConfirmButton");
+         waitForFxEvents();
+         ObservableList<Trait> confirmedTraits = confirmedTraitsListView.getItems();
+         if (confirmedTraits.contains(aTrait)) {
+             assertEquals(1, confirmedTraits.size());
+             // A and D together are over limit
+             assertFalse(confirmedTraits.contains(dTrait));
+         } else if (confirmedTraits.contains(bTrait)) {
+             // B and C have conflict
+             assertFalse(confirmedTraits.contains(cTrait));
+         } else if (confirmedTraits.contains(cTrait)) {
+             // B and C have conflict
+             assertFalse(confirmedTraits.contains(bTrait));
+         } else if (confirmedTraits.contains(dTrait)) {
+             // A and D together are over limit
+             assertFalse(confirmedTraits.contains(aTrait));
+         }
+     }
+
+     @Test
+     public void testTraits() {
+         TextArea captainText = (TextArea) lookup("#captainText").query();
+
+         clickOn("#showCreationButton");
+         waitForFxEvents();
+
+         clickOn("#chooseTraitsButton");
+         waitForFxEvents();
+
+         clickOn("#chooseTraitButton");
+         waitForFxEvents();
+         ObservableList<Trait> selectedTraits = selectedTraitsListView.getItems();
+         assertTrue(selectedTraits.contains(dTrait));
+
+         clickOn("#chooseTraitButton");
+         waitForFxEvents();
+         selectedTraits = selectedTraitsListView.getItems();
+         assertTrue(selectedTraits.contains(dTrait) && selectedTraits.contains(cTrait));
+
+         clickOn("#chooseTraitButton");
+         waitForFxEvents();
+         assertEquals(resources.getString("pirate.empireScreen.conflict").replace("{conflict1}", '"' + cTrait.id() + '"').replace("{conflict2}", '"' + bTrait.id() + '"')
+                 , captainText.getText());
+         selectedTraits = selectedTraitsListView.getItems();
+         assertFalse(selectedTraits.contains(bTrait));
+
+
+         Platform.runLater(() -> {
+             allTraitsListView.getItems().remove(1);
+         });
+         waitForFxEvents();
+         clickOn("#chooseTraitButton");
+         waitForFxEvents();
+         captainText = (TextArea) lookup("#captainText").query();
+         assertEquals(resources.getString("pirate.empireScreen.scoreOverLimit").replace("{conflict1}", '"' + cTrait.id() + '"').replace("{conflict2}", '"' + bTrait.id() + '"')
+                 , captainText.getText());
+         selectedTraits = selectedTraitsListView.getItems();
+         assertFalse(selectedTraits.contains(aTrait));
+
+         clickOn("#traitsConfirmButton");
+         waitForFxEvents();
+         ObservableList<Trait> confirmedTraits = confirmedTraitsListView.getItems();
+         assertTrue(confirmedTraits.contains(cTrait) && confirmedTraits.contains(dTrait));
+     }
+
 //     @Test
-//     public void goingBackToLobbyNoGang() {
+//     public void testGoingBackToLobbyNoGang() {
 //         doReturn(null).when(this.app).show(eq("/lobby"), any());
 //         doReturn(Observable.just(new MemberDto(false,"1", null, "1"))).when(lobbyService).getMember(any(), any());
 //         doReturn(Observable.just(new MemberDto(false, "1", null, "1"))).when(lobbyService).updateMember(null, "1", false, null);

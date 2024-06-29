@@ -45,7 +45,7 @@ public class IslandComponent extends Pane {
     @Inject
     IslandAttributeStorage islandAttributes;
 
-    private InGameController inGameController;
+    public InGameController inGameController;
 
     double x, y;
 

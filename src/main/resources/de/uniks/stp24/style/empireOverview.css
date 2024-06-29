@@ -70,22 +70,22 @@
     -fx-background-color: transparent;
 }
 
-.scroll-pane {
+.scroll-pane{
     -fx-background-color: transparent;
     -fx-opacity: 1;
 }
 
-.scroll-pane > .viewport {
+.scroll-pane > .viewport{
     -fx-background-color: transparent;
     -fx-opacity: 1;
 }
 
-.scroll-pane .scroll-bar:horizontal {
+.scroll-pane .scroll-bar:horizontal{
     -fx-opacity: 0;
     -fx-background-color: transparent;
 }
 
-.scroll-pane .scroll-bar:vertical {
+.scroll-pane .scroll-bar:vertical{
     -fx-opacity: 0;
     -fx-background-color: transparent;
 }
@@ -95,14 +95,14 @@
 }
 
 .scroll-bar .increment-button,
-.scroll-bar .decrement-button {
+.scroll-bar .decrement-button{
     -fx-background-color: transparent;
     -fx-padding: 0;
     -fx-opacity: 1;
 }
 
 .scroll-bar .increment-arrow,
-.scroll-bar .decrement-arrow {
+.scroll-bar .decrement-arrow{
     -fx-background-color: transparent;
     -fx-padding: 0;
     -fx-shape: "";
@@ -110,8 +110,7 @@
 
 }
 
-.scroll-pane .corner {
+.scroll-pane .corner{
     -fx-background-color: transparent;
     -fx-opacity: 1;
-
 }

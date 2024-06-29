@@ -43,9 +43,9 @@ public class EditGameService {
     //Editing an existing game, which is yours.
     // class was modified! some code was deleted
     // error handle occurs now in controller
-    public Observable<UpdateGameResultDto> editGame(String name, GameSettings settings, String password){
+    public Observable<UpdateGameResultDto> editGame(String name, GameSettings settings, String password, int maxMembers){
             return gamesApiService
-                    .editGame(this.game._id(), new UpdateGameDto(name,false,1, settings, password))
+                    .editGame(this.game._id(), new UpdateGameDto(name, maxMembers,false,1, settings, password))
                     .doOnError(error -> editGameController.showError(errorService.getStatus(error)));
     }
 

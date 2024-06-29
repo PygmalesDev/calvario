@@ -47,7 +47,6 @@ import java.util.Objects;
 @Title("CALVARIO")
 @Controller
 public class InGameController extends BasicController {
-
     @FXML
     Pane shadow;
     @FXML
@@ -56,6 +55,8 @@ public class InGameController extends BasicController {
     public Button showStorageButton;
     @FXML
     Button showEmpireOverviewButton;
+    @FXML
+    public Button showMarketButton;
     @FXML
     public HBox storageButtonsBox;
 
@@ -85,6 +86,8 @@ public class InGameController extends BasicController {
     public StackPane storageOverviewContainer;
     @FXML
     public StackPane empireOverviewContainer;
+    @FXML
+    public StackPane marketOverviewContainer;
 
     @FXML
     StackPane clockComponentContainer;
@@ -122,13 +125,15 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
-
     @SubComponent
     @Inject
     public EmpireOverviewComponent empireOverviewComponent;
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
+    @SubComponent
+    @Inject
+    public MarketComponent marketOverviewComponent;
 
     @SubComponent
     @Inject
@@ -289,6 +294,9 @@ public class InGameController extends BasicController {
         empireOverviewContainer.setVisible(false);
         empireOverviewContainer.getChildren().add(empireOverviewComponent);
 
+        marketOverviewContainer.setVisible(false);
+        marketOverviewContainer.getChildren().add(marketOverviewComponent);
+
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -365,7 +373,15 @@ public class InGameController extends BasicController {
                 showStorageButton.getStyleClass().add("storageButton");
                 showStorageButton.setOnAction(event -> showStorage());
             }
-            this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton);
+            if (!Objects.nonNull(showMarketButton)){
+                showMarketButton = new Button();
+                showMarketButton.setPrefHeight(30);
+                showMarketButton.setPrefWidth(30);
+                showMarketButton.setId("showMarketButton");
+                showMarketButton.getStyleClass().add("marketButton");
+                showMarketButton.setOnAction(event -> showMarket());
+            }
+            this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton, showMarketButton);
         }
     }
 
@@ -450,6 +466,14 @@ public class InGameController extends BasicController {
             storageOverviewComponent.closeStorageOverview();
         }
         empireOverviewContainer.setVisible(!empireOverviewContainer.isVisible());
+    }
+
+    @OnKey(code = KeyCode.M, alt = true)
+    public void showMarket() {
+        if(marketOverviewComponent.isVisible()){
+            marketOverviewComponent.closeMarketOverview();
+        }
+        marketOverviewContainer.setVisible(!marketOverviewContainer.isVisible());
     }
 
     @OnKey(code = KeyCode.SPACE)

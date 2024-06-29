@@ -14,6 +14,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Callback;
 import org.fulib.fx.annotation.controller.Component;
 
@@ -30,6 +32,7 @@ public class HelpComponent extends AnchorPane {
     @FXML
     ListView<Technology> technologyTagsListView;
     private InGameController inGameController;
+
 
     @Inject
     public HelpComponent(){
@@ -76,8 +79,10 @@ class TechnologyListCell extends ListCell<Technology> {
         super();
         imageView = new ImageView();
         text = new Text();
+        text.getStyleClass().add("technologyText");
+
         content = new HBox(imageView, text);
-        content.setSpacing(100);
+        content.setSpacing(50);
     }
 
     @Override
@@ -91,4 +96,6 @@ class TechnologyListCell extends ListCell<Technology> {
             setGraphic(null);
         }
     }
+
+
 }

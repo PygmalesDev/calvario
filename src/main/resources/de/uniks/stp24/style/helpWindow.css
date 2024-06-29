@@ -22,6 +22,27 @@
     -fx-cell-size: 5;
 }
 
+.technologyList .scroll-bar:vertical{
+    -fx-background-color: transparent;
+    -fx-border-width: 1;
+}
+
+.technologyList .virtual-flow .scroll-bar:vertical .thumb {
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+    -fx-background-size: auto;
+    -fx-background-repeat: no-repeat;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/scroller.png");
+}
+
+
+.technologyList .scroll-bar:vertical .increment-button .increment-arrow, .listBrowseGame .scroll-bar .decrement-button .decrement-arrow,
+.backgroundTextArea .scroll-bar:vertical .increment-button .increment-arrow .backgroundTextArea .decrement-button .decrement-arrow,
+{
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+}
+
 .technologyText{
     -fx-font-family: "Tempus Sans ITC";
     -fx-background-color: "TRANSPARENT";

@@ -17,6 +17,7 @@ import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
@@ -513,8 +514,10 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setVisible(false);
         pauseMenuContainer.setMouseTransparent(true);
         helpComponent.displayTechnologies();
+
     }
     public void updateResCapacity() {
         overviewSitesComponent.updateResCapacity();
     }
+
 }

@@ -17,136 +17,35 @@ public class Jobs {
     /**
      * A model for a started job.
      */
-    public static class Job {
-        private String createdAt;
-        private String updatedAt;
-        private String _id;
-        private int progress;
-        private int total;
-        private String game;
-        private String empire;
-        private String system;
-        private int priority;
-        private String type;
-        private String building;
-        private String district;
-        private String technology;
-        private Map<String, Integer> cost;
-        private JobResult result;
-
-        @Inject
-        public Job() {
-            this.setPriority(0);
-        }
-
-        public String getCreatedAt() {
-            return this.createdAt;
-        }
-
-        public String getUpdatedAt() {
-            return this.updatedAt;
-        }
-
-        public String getJobID() {
-            return this._id;
-        }
-
-        public Job setBuilding(String building) {
-            this.building = building;
-            return this;
-        }
-
-        public String getBuilding() {
-            return building;
-        }
-
-        public int getProgress() {
-            return this.progress;
-        }
-
-        public int getTotal() {
-            return this.total;
-        }
-
-        public String getGame() {
-            return this.game;
-        }
-
-        public Job setGame(String game) {
-            this.game = game;
-            return this;
-        }
-
-        public String getEmpire() {
-            return this.empire;
-        }
-
-        public Job setEmpire(String empire) {
-            this.empire = empire;
-            return this;
-        }
-
-        public String getSystem() {
-            return system;
-        }
-
-        public Job setSystem(String system) {
-            this.system = system;
-            return this;
-        }
-
-        public int getPriority() {
-            return priority;
-        }
-
-        public Job setPriority(int priority) {
-            this.priority = priority;
-            return this;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public Job setType(String type) {
-            this.type = type;
-            return this;
-        }
-
-        public String getDistrict() {
-            return district;
-        }
-
-        public Job setDistrict(String district) {
-            this.district = district;
-            return this;
-        }
-
-        public String getTechnology() {
-            return technology;
-        }
-
-        public Job setTechnology(String technology) {
-            this.technology = technology;
-            return this;
-        }
-
-        public Map<String, Integer> getCost() {
-            return cost;
-        }
-
-
-        public JobResult getResult() {
-            return result;
-        }
-
+    public record Job(
+             String createdAt,
+             String updatedAt,
+             String _id,
+             int progress,
+             int total,
+             String game,
+             String empire,
+             String system,
+             int priority,
+             String type,
+             String building,
+             String district,
+             String technology,
+             Map<String, Integer> cost,
+             JobResult result) {
         @Override
         public boolean equals(Object obj) {
-            if (Objects.isNull(this._id))
-                return false;
             if (obj instanceof Job)
-                return this._id.equals(((Job) obj).getJobID());
+                return this._id.equals(((Job) obj)._id());
             return false;
+        }
+        @Override
+        public String toString() {
+            return "---------------------- THE JOB ----------------------\n" +
+                    "id: " + this._id + "\n" +
+                    "created at: " + this.createdAt + "\tupdated at: " + this.updatedAt + "\n" +
+                    "job type: " + this.type + "\tjob goal: " + this.building + "\n" +
+                    "initial time: " + this.total + "\tcurrent progress: " + this.progress + "\n";
         }
     }
 

@@ -4,6 +4,9 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -41,18 +44,16 @@ public class IslandOverviewJobsComponent extends AnchorPane {
     @Inject
     Provider<IslandOverviewJobProgressComponent> progressPaneProvider;
 
-    private ObservableList<Job> jobsList;
-    private ObservableList<Job> relatedJobs;
-    private ListChangeListener<Job> relatedJobsListener = c -> {};
-
-
     @Inject
     IslandOverviewJobsComponent() {
     }
 
     @OnRender
     public void setJobProgressPane() {
-        this.jobProgressListView.setItems(relatedJobs);
+        this.jobProgressListView.itemsProperty().addListener((observable, oldValue, newValue) -> {
+            this.jobProgressListView.setVisible(newValue.size() != 0);
+            this.noJobText.setVisible(newValue.size() == 0);
+        });
         this.jobProgressListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.progressPaneProvider));
     }
 
@@ -63,18 +64,7 @@ public class IslandOverviewJobsComponent extends AnchorPane {
     }
 
     public void setJobsObservableList(ObservableList<Job> observer) {
-        this.jobsList = observer;
-
-    }
-
-    public void setRelatedJobsObserver() {
-        this.jobsList.removeListener(this.relatedJobsListener);
-
-        this.relatedJobs.clear();
-        this.relatedJobsListener = c -> this.relatedJobs.addAll(c.getList().stream()
-                    .filter(job -> job.getSystem().equals(this.tokenStorage.getIsland().id()))
-                    .toList());
-
-        this.jobsList.addListener(this.relatedJobsListener);
+        System.out.println(observer.size());
+        this.jobProgressListView.setItems(observer);
     }
 }

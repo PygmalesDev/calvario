@@ -103,8 +103,9 @@ public class InGameController extends BasicController {
     public IslandsService islandsService;
     @Inject
     ResourcesService resourceService;
+
     @Inject
-    JobsService jobsService;
+    JobsService jobsService = new JobsService();
 
     @SubComponent
     @Inject
@@ -301,8 +302,7 @@ public class InGameController extends BasicController {
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
 
         // Connect observable lists from jobService with the controllers that require job information
-        this.jobsOverviewComponent.setJobsObservableList(this.jobsService.getJobsObservableList());
-        this.overviewSitesComponent.jobsComponent.setJobsObservableList(this.jobsService.getJobsObservableList());
+        this.jobsOverviewComponent.setJobsObservableList(this.jobsService.getObservableJobCollection());
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -418,10 +418,9 @@ public class InGameController extends BasicController {
 
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
-            if (tokenStorage.getIsland() == null) {
                 tokenStorage.setIsland(selected.getIsland());
-                this.overviewSitesComponent.jobsComponent.setJobProgressPane();
-            }
+                this.overviewSitesComponent.jobsComponent.setJobsObservableList(
+                        this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
             islandAttributes.setIsland(selected.getIsland());
             selectedIsland = selected;
             if (selected.getIsland().owner() != null) {
@@ -461,6 +460,7 @@ public class InGameController extends BasicController {
         islandComponentList.forEach(IslandComponent::destroy);
         islandComponentList = null;
         islandComponentMap = null;
+        jobsService = null;
         islandsService.removeDataForMap();
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
                 .removePropertyChangeListener(triple.propertyName(), triple.listener()));

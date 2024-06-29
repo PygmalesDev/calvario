@@ -141,3 +141,11 @@
     -fx-background-image: url("/de/uniks/stp24/icons/island.images/regular_image.png");
     -fx-background-size: cover;
 }
+
+.jobProgressListView {
+    -fx-background-color: transparent;
+}
+
+.jobProgressListView .list-cell {
+    -fx-background-color: transparent;
+}

@@ -23,28 +23,26 @@ public class JobsService {
     @Inject
     EventListener eventListener;
 
-    Map<String, ObservableList<Job>> jobs = new HashMap<>();
+    Map<String, ObservableList<Job>> jobCollections = new HashMap<>();
 
     @Inject
     public JobsService() {
-        this.jobs.put("building", FXCollections.observableArrayList());
-        this.jobs.put("district", FXCollections.observableArrayList());
-        this.jobs.put("upgrade", FXCollections.observableArrayList());
-        this.jobs.put("technology", FXCollections.observableArrayList());
-        this.jobs.put("collection", FXCollections.observableArrayList());
     }
 
     /**
-     * Load jobs started by the player's empire upon entering the game.
+     * Load jobCollections started by the player's empire upon entering the game.
      */
     public void loadEmpireJobs() {
+        this.jobCollections.put("building", FXCollections.observableArrayList());
+        this.jobCollections.put("district", FXCollections.observableArrayList());
+        this.jobCollections.put("upgrade", FXCollections.observableArrayList());
+        this.jobCollections.put("technology", FXCollections.observableArrayList());
+        this.jobCollections.put("collection", FXCollections.observableArrayList());
+
         this.subscriber.subscribe(this.jobsApiService.getEmpireJobs(
                         this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()),
-                jobList -> jobList.forEach(job -> {
-                    this.jobs.get(job.getType()).add(job);
-                    this.jobs.get("collection").add(job);
-                }),
-                error -> System.out.println("Failed loading jobs")
+                jobList -> jobList.forEach(this::addJobToGroups),
+                error -> System.out.println("Failed loading jobCollections")
         );
     }
 
@@ -52,32 +50,53 @@ public class JobsService {
      * Create a listener on job updates.
      */
     public void initializeJobsListener() {
-        this.subscriber.subscribe(this.eventListener.listen(
-                String.format("games.%s.empires.%s.jobs.*.*", this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()),
-                Job.class), result -> {
-                    System.out.println("Job update came!");
-                    Job job = result.data();
-                    switch (result.suffix()) {
-                        case "created" -> {
-                            System.out.println("Created job: " + job.getType());
-                            this.jobs.get(job.getType()).add(job);
-                            this.jobs.get("collection").add(job);
-                        }
-                        case "updated" -> {
-                            System.out.println("Updating: " + job.getType());
+        this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.empires.%s.jobs.*.*",
+                this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), Job.class), result -> {
+            Job job = result.data();
+            switch (result.suffix()) {
+                case "created" -> this.addJobToGroups(job);
+                case "updated" -> this.updateJobInGroups(job);
+                case "deleted" -> this.deleteJobFromGroups(job);
+            }}, error -> System.out.println(error.getMessage()));
+    }
 
-                            this.jobs.get(job.getType()).replaceAll(other -> other.equals(job) ? job : other);
-                            this.jobs.get("collection").replaceAll(other -> other.equals(job) ? job : other);
-                        }
-                        case "deleted" -> {
-                            System.out.println("Deletion: " + job.getType());
-                            System.out.println("Is job empty? " + Objects.isNull(job));
-                            System.out.println("Is job id empty? " + Objects.isNull(job.getJobID()));
-                            this.jobs.get(job.getType()).removeIf(other -> other.getJobID().equals(job.getJobID()));
-                            this.jobs.get("collection").removeIf(other -> other.getJobID().equals(job.getJobID()));
-                        }
-                    }}, error ->
-                System.out.println(error.getMessage()));
+    public void addJobToGroups(Job job) {
+        this.jobCollections.get(job.type()).add(job);
+        this.jobCollections.get("collection").add(job);
+
+        if (!job.system().isEmpty()) {
+            if (!this.jobCollections.containsKey(job.system())) {
+                System.out.println("Creating new System collection: " + job.system());
+                this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
+            }
+            else {
+                System.out.println("System collection exists, adding to it");
+                this.jobCollections.get(job.system()).add(job);
+            }
+        }
+    }
+
+    public void updateJobInGroups(Job job) {
+        this.jobCollections.get(job.type()).replaceAll(other -> other.equals(job) ? job : other);
+        this.jobCollections.get("collection").replaceAll(other -> other.equals(job) ? job : other);
+
+        if (!job.system().isEmpty()) {
+            if (!this.jobCollections.containsKey(job.system()))
+                this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
+            else
+                this.jobCollections.get(job.system()).replaceAll(other -> other.equals(job) ? job : other);
+        }
+    }
+
+    public void deleteJobFromGroups(Job job) {
+        this.jobCollections.get(job.type()).removeIf(other -> other._id().equals(job._id()));
+        this.jobCollections.get("collection").removeIf(other -> other._id().equals(job._id()));
+
+        if (!job.system().isEmpty()) {
+            if (this.jobCollections.containsKey(job.system())) {
+                this.jobCollections.get(job.system()).removeIf(other -> other._id().equals(job._id()));
+            }
+        }
     }
 
     /**
@@ -110,7 +129,7 @@ public class JobsService {
      * @return {@link Job Job} class containing the result of stopping the job.
      */
     public Observable<Job> stopJob(Job job) {
-        return this.stopJob(job.getJobID());
+        return this.stopJob(job._id());
     }
 
     public Observable<Job> setJobPriority(String jobID, int priority) {
@@ -120,15 +139,24 @@ public class JobsService {
 
     /**
      * Returns an {@link ObservableList ObservableList}<{@link Job Job}> of a specific job type
-     * that will be dynamically updated upon starting, editing or deleting jobs.
+     * that will be dynamically updated upon starting, editing or deleting jobCollections.
      * @param jobType - type of the job
      * @return
      */
-    public ObservableList<Job> getJobsObservableList(String jobType) {
-        return this.jobs.get(jobType);
+    public ObservableList<Job> getJobObservableListOfType(String jobType) {
+        return this.jobCollections.get(jobType);
     }
 
-    public ObservableList<Job> getJobsObservableList() {
-        return this.getJobsObservableList("collection");
+    public ObservableList<Job> getObservableListForSystem(String systemID) {
+        System.out.println("getting system jobs for " + systemID);
+        if (!this.jobCollections.containsKey(systemID)) {
+            System.out.println("no system jobs exist, creating new list");
+            this.jobCollections.put(systemID, FXCollections.observableArrayList());
+        }
+        return this.jobCollections.get(systemID);
+    }
+
+    public ObservableList<Job> getObservableJobCollection() {
+        return this.getJobObservableListOfType("collection");
     }
 }

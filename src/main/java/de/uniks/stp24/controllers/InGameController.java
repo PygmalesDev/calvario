@@ -470,9 +470,6 @@ public class InGameController extends BasicController {
 
     @OnKey(code = KeyCode.M, alt = true)
     public void showMarket() {
-        if(marketOverviewComponent.isVisible()){
-            marketOverviewComponent.closeMarketOverview();
-        }
         marketOverviewContainer.setVisible(!marketOverviewContainer.isVisible());
     }
 

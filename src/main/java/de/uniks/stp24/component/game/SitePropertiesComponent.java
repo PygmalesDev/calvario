@@ -153,9 +153,9 @@ public class SitePropertiesComponent extends AnchorPane {
         siteCostsListView.setSelectionModel(null);
         subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
         inGameController.updateSiteCapacities();
-        siteConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "siteProperties"));
-        siteCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "siteProperties"));
-        siteProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "siteProperties"));
+        siteConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview"));
+        siteCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview"));
+        siteProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview"));
     }
 
     public void displayAmountOfSite(){

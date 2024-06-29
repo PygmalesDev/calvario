@@ -51,8 +51,8 @@
          <HBox prefHeight="92.0" prefWidth="226.0">
             <VBox alignment="TOP_CENTER" prefHeight="92.0" prefWidth="217.0">
                <HBox alignment="CENTER_LEFT" prefHeight="11.0" prefWidth="218.0">
-                  <VBox prefHeight="27.0" prefWidth="95.0"/>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="headerTextUpgrade" text="%costs"/>
+                  <VBox prefHeight="27.0" prefWidth="95.0" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="headerTextUpgrade" text="%costs" />
                </HBox>
                <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="250.0">
                   <VBox prefHeight="30.0" prefWidth="53.0" />
@@ -67,23 +67,18 @@
             </VBox>
          </HBox>
          <VBox prefHeight="92.0" prefWidth="66.0">
-            <Pane onMouseExited="#upgradeIsland" prefHeight="62.0" prefWidth="66.0">
-               <Button fx:id="confirmUpgrade" layoutY="1.0" mnemonicParsing="false" onMouseClicked="#upgradeIsland"
-                       prefHeight="62.0" prefWidth="66.0" style="-fx-background-color: transparent;"/>
+            <Pane prefHeight="62.0" prefWidth="66.0">
+               <Button fx:id="confirmUpgrade" layoutY="1.0" mnemonicParsing="false" onMouseClicked="#upgradeIsland" prefHeight="62.0" prefWidth="66.0" style="-fx-background-color: transparent;" />
             </Pane>
          </VBox>
       </HBox>
       <VBox prefHeight="34.0" prefWidth="30.0" />
    </VBox>
-   <Pane layoutX="372.0" layoutY="16.0" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="40.0"
-         styleClass="islandOverviewCloseButton" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="20.0">
-      <Button fx:id="close" mnemonicParsing="false" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="40.0"
-              style="-fx-background-color: transparent;" styleClass="islandOverviewCloseButton"/>
+   <Pane layoutX="372.0" layoutY="16.0" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="40.0" styleClass="islandOverviewCloseButton" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="20.0">
+      <Button fx:id="close" mnemonicParsing="false" onMouseClicked="#closeOverview" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent;" styleClass="islandOverviewCloseButton" />
    </Pane>
-   <Pane layoutX="6.0" layoutY="16.0" onMouseClicked="#goBack" prefHeight="40.0" prefWidth="40.0"
-         styleClass="goBackUpgrade" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0">
-      <Button fx:id="backButton" mnemonicParsing="false" onMouseClicked="#goBack" prefHeight="40.0" prefWidth="40.0"
-              style="-fx-background-color: transparent;" styleClass="goBackUpgrade"/>
+   <Pane layoutX="6.0" layoutY="16.0" onMouseClicked="#goBack" prefHeight="40.0" prefWidth="40.0" styleClass="goBackUpgrade" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="20.0">
+      <Button fx:id="backButton" mnemonicParsing="false" onMouseClicked="#goBack" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent;" styleClass="goBackUpgrade" />
    </Pane>
    <Pane fx:id="checkColonized" prefHeight="30.0" prefWidth="30.0" styleClass="checkUpgrade" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="190.0" />
    <Pane fx:id="checkUpgraded" prefHeight="30.0" prefWidth="30.0" styleClass="checkUpgrade" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="286.0" />

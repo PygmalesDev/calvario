@@ -149,9 +149,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
         buildingName.setText(gameResourceBundle.getString(buildingTranslation.get(buildingType)));
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), this::resourceListGeneration);
 
-        buildingCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "buildingProperties"));
-        buildingProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "buildingProperties"));
-        buildingConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "buildingProperties"));
+        buildingCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview"));
+        buildingProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview"));
+        buildingConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview"));
         disableButtons();
     }
 

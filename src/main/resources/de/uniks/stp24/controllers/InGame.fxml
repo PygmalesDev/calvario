@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.StackPane?>
 
 <AnchorPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.InGameController">
-   <StackPane fx:id="explanationContainer" prefHeight="362.0" prefWidth="304.0" AnchorPane.leftAnchor="0.0" />
    <ScrollPane fx:id="mapScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" style="-fx-background-color: TRANSPARENT;" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS">
             <Group fx:id="group" onMouseClicked="#resetZoomMouse">
                 <StackPane fx:id="zoomPane" style="-fx-background-color: TRANSPARENT;">
@@ -35,6 +34,7 @@
       </padding>
    </HBox>
    <StackPane fx:id="storageOverviewContainer" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="70.0" />
+   <StackPane fx:id="explanationContainer" prefHeight="362.0" prefWidth="304.0" />
    <stylesheets>
       <URL value="@../style/styles.css" />
       <URL value="@../style/ingameButtons.css" />

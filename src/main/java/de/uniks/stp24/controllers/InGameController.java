@@ -49,7 +49,7 @@ import java.util.*;
 @Controller
 public class InGameController extends BasicController {
     @FXML
-    StackPane explanationContainer;
+    public StackPane explanationContainer;
     @FXML
     Pane shadow;
     @FXML
@@ -528,7 +528,7 @@ public class InGameController extends BasicController {
     Methods below showing explanation overview if mouse hovers above a chosen element.
      */
 
-    public void showExplanation(int x, int y){
+    public void showExplanation(double x, double y){
         explanationContainer.setLayoutX(x);
         explanationContainer.setLayoutY(y);
         explanationContainer.setVisible(true);

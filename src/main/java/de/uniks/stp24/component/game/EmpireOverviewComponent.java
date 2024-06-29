@@ -188,7 +188,6 @@ public class EmpireOverviewComponent extends StackPane {
      * The IslandCell class represents a custom cell in the GridView for displaying islands.
      */
     public class IslandCell extends GridCell<IslandComponent> {
-        ImageCache imageCache = new ImageCache();
         int clickCounter = 0;
 
         @Override

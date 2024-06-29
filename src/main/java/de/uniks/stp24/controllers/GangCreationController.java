@@ -619,7 +619,7 @@ public class GangCreationController extends BasicController {
                 possibleTraits.add(trait);
             }
             while (!possibleTraits.isEmpty() && traitsCost < traitsLimit && choosenTraits.size() < 5) {
-                randomTrait = allTraits.get(random.nextInt(allTraits.size()));
+                randomTrait = possibleTraits.get(random.nextInt(possibleTraits.size()));
                 if (canAddTrait(randomTrait)) {
                     addTraitToEmpire(randomTrait);
                 }

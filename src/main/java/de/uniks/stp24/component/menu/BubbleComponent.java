@@ -1,9 +1,11 @@
 package de.uniks.stp24.component.menu;
 
+import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
@@ -19,6 +21,10 @@ public class BubbleComponent extends Pane {
     @FXML
     Pane backgroundBubble;
 
+    double w, h;
+
+    ScaleTransition scaleTransition;
+
     @Inject
     public BubbleComponent() {
 
@@ -26,6 +32,7 @@ public class BubbleComponent extends Pane {
 
     @OnRender
     public void init() {
+        scaleTransition = new ScaleTransition(Duration.seconds(0.5), captainLogo);
     }
 
     public void setCaptainText(String text) {
@@ -69,6 +76,20 @@ public class BubbleComponent extends Pane {
         else {
             captainText.setStyle("-fx-text-fill: BLACK");
         }
+    }
+
+    public void scaleUp() {
+        scaleTransition.stop();
+        scaleTransition.setToX(1.3);
+        scaleTransition.setToY(1.3);
+        scaleTransition.play();
+    }
+
+    public void scaleDown() {
+        scaleTransition.stop();
+        scaleTransition.setToX(1);
+        scaleTransition.setToY(1);
+        scaleTransition.play();
     }
 
     @OnDestroy

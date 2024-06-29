@@ -102,6 +102,9 @@ public class PauseMenuTest extends ControllerTest {
     SettingsComponent settingsComponent;
 
     @InjectMocks
+    EmpireOverviewComponent empireOverviewComponent;
+
+    @InjectMocks
     OverviewSitesComponent overviewSitesComponent;
 
     @InjectMocks
@@ -153,6 +156,7 @@ public class PauseMenuTest extends ControllerTest {
         super.start(stage);
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
+        this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = this.eventComponent;

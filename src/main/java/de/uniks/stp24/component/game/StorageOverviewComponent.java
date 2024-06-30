@@ -17,6 +17,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
@@ -56,6 +57,11 @@ public class StorageOverviewComponent extends AnchorPane {
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
+    @SubComponent
+    @Inject
+    public MarketComponent marketOverviewComponent;
+
+
     private String lastUpdate;
     private String lastSeasonUpdate;
     Provider<ResourceComponent> resourceComponentProvider = () -> new ResourceComponent(true, true, true, true, gameResourceBundle);
@@ -72,6 +78,7 @@ public class StorageOverviewComponent extends AnchorPane {
         if (!tokenStorage.isSpectator()) {
             createEmpireListener();
             createSeasonListener();
+            marketOverviewComponent.setStorageOverviewController(this);
         }
     }
 

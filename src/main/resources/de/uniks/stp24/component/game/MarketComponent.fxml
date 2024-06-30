@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Text?>
+<?import org.controlsfx.control.GridView?>
 
 
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="400.0" styleClass="marketBackground" stylesheets="@../../style/market.css" type="StackPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.MarketComponent">
@@ -11,7 +15,34 @@
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
             <Button fx:id="closeMarketOverviewButton" layoutX="324.0" layoutY="14.0" mnemonicParsing="false" onAction="#closeMarketOverview" prefHeight="49.0" prefWidth="51.0" styleClass="closeWindowButton" />
-            <Text layoutX="137.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="marketTitle" text="Market" wrappingWidth="186.13670349121094" />
+            <Text layoutX="137.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="marketTitle" text="Market" wrappingWidth="186.13670349121094" />
+            <GridView layoutX="74.0" layoutY="100.0" prefHeight="38.0" prefWidth="243.0" style="-fx-background-color: brown;" />
+            <Label layoutX="186.0" layoutY="158.0" text="Label" />
+            <AnchorPane layoutX="132.0" layoutY="158.0" prefHeight="17.0" prefWidth="51.0" style="-fx-background-color: black;">
+               <children>
+                  <ImageView fitHeight="16.0" fitWidth="34.0" layoutX="5.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </AnchorPane>
+            <Button layoutX="133.0" layoutY="227.0" mnemonicParsing="false" text="Button" />
+            <Button layoutX="204.0" layoutY="227.0" mnemonicParsing="false" text="Button" />
+            <Button layoutX="269.0" layoutY="188.0" mnemonicParsing="false" text="Button" />
+            <AnchorPane layoutX="138.0" layoutY="188.0" prefHeight="25.0" prefWidth="28.0" style="-fx-background-color: gold;" />
+            <Button layoutX="214.0" layoutY="145.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="24.0" text="Button" />
+            <Button layoutX="214.0" layoutY="162.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="9.0" text="Button" />
+            <Label layoutX="182.0" layoutY="192.0" text="Label" />
+            <ListView layoutX="84.0" layoutY="347.0" prefHeight="105.0" prefWidth="223.0" style="-fx-background-color: brown;" />
+            <Label layoutX="152.0" layoutY="64.0" prefHeight="38.0" prefWidth="45.0" text="Label" />
+            <Label layoutX="243.0" layoutY="64.0" prefHeight="38.0" prefWidth="52.0" text="Label" />
+            <AnchorPane layoutX="124.0" layoutY="70.0" prefHeight="25.0" prefWidth="34.0" style="-fx-background-color: gold;">
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="210.0" layoutY="70.0" prefHeight="25.0" prefWidth="28.0" style="-fx-background-color: black;">
+               <children>
+                  <ImageView fitHeight="25.0" fitWidth="34.0" layoutX="-3.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>

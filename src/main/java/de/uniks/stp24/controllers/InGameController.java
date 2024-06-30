@@ -514,7 +514,6 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setVisible(false);
         pauseMenuContainer.setMouseTransparent(true);
         helpComponent.displayTechnologies();
-
     }
     public void updateResCapacity() {
         overviewSitesComponent.updateResCapacity();

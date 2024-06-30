@@ -5,7 +5,6 @@ import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateResultDto;
 import de.uniks.stp24.dto.EmpireDto;
@@ -99,9 +98,6 @@ public class PauseMenuTest extends ControllerTest {
     PauseMenuComponent pauseMenuComponent;
 
     @InjectMocks
-    SettingsComponent settingsComponent;
-
-    @InjectMocks
     OverviewSitesComponent overviewSitesComponent;
 
     @InjectMocks
@@ -152,7 +148,6 @@ public class PauseMenuTest extends ControllerTest {
     public void start(Stage stage) throws Exception {
         super.start(stage);
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
-        this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = this.eventComponent;

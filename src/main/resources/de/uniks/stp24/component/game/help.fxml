@@ -10,7 +10,7 @@
 
 <fx:root maxHeight="391.0" maxWidth="355.0" prefHeight="391.0" prefWidth="355.0" styleClass="helpWindowBackground" type="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.HelpComponent">
    <children>
-      <Text layoutX="68.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Shortcuts:" AnchorPane.leftAnchor="68.0">
+      <Text layoutX="68.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Shortcuts:" AnchorPane.leftAnchor="68.0">
          <font>
             <Font size="14.0" />
          </font>

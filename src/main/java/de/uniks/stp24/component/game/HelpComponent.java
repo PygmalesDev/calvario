@@ -14,11 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import javafx.stage.Window;
-import javafx.util.Callback;
 import org.fulib.fx.annotation.controller.Component;
-import org.fulib.fx.annotation.event.OnInit;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -31,8 +27,10 @@ public class HelpComponent extends AnchorPane {
     @FXML
     Button backButton;
     @FXML
-    ListView<Technology> technologyTagsListView;
+    public ListView<Technology> technologyTagsListView;
     private InGameController inGameController;
+
+    public ObservableList<Technology> technologies = FXCollections.observableArrayList();
 
 
     @Inject
@@ -54,7 +52,7 @@ public class HelpComponent extends AnchorPane {
     }
 
     public void displayTechnologies() {
-        ObservableList<Technology> technologies = FXCollections.observableArrayList();
+
 
         for (Map.Entry<String, String> icon : Constants.technologyIconMap.entrySet()) {
             Technology technology = new Technology(icon.getValue(), icon.getKey());
@@ -62,12 +60,7 @@ public class HelpComponent extends AnchorPane {
         }
 
         technologyTagsListView.setItems(technologies);
-        technologyTagsListView.setCellFactory(new Callback<ListView<Technology>, ListCell<Technology>>() {
-            @Override
-            public ListCell<Technology> call(ListView<Technology> listView) {
-                return new TechnologyListCell();
-            }
-        });
+        technologyTagsListView.setCellFactory(listView -> new TechnologyListCell());
     }
 }
 

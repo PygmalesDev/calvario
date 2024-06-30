@@ -17,7 +17,6 @@ import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
@@ -65,8 +64,6 @@ public class InGameController extends BasicController {
     public Group group;
     @FXML
     public StackPane overviewContainer;
-    @FXML
-    ScrollPane mapPane;
     @FXML
     public ScrollPane mapScrollPane;
     @FXML
@@ -288,16 +285,21 @@ public class InGameController extends BasicController {
         }
     }
 
-    @OnKey(code = KeyCode.I)
-    public void showIslandOverviewWindows() {
-        buildingProperties.setMouseTransparent(false);
-        buildingsWindow.setMouseTransparent(false);
-        popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
-    }
-
     public void pauseGame() {
         pauseMenuContainer.setVisible(pause);
         pauseMenuContainer.setMouseTransparent(false);
+    }
+
+    public void pauseGameFromHelp() {
+        pause = true;
+        inGameService.setPaused(true);
+        if (pause) {
+            pauseMenuContainer.setMouseTransparent(false);
+            pauseGame();
+        } else {
+            pauseMenuContainer.setMouseTransparent(true);
+            resumeGame();
+        }
     }
 
     public void resumeGame() {
@@ -400,7 +402,10 @@ public class InGameController extends BasicController {
         overviewSitesComponent.setOverviewSites();
     }
 
-    @OnKey(code = KeyCode.S)
+    @OnKey(code = KeyCode.H, alt = true)
+    public void showHelpOnKey(){showHelp();}
+
+    @OnKey(code = KeyCode.S, alt = true)
     public void showStorage() {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }

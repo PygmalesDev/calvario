@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Callback;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnInit;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class HelpComponent extends AnchorPane {
 
     public void back(){
         setVisible(false);
-        inGameController.pauseGame();
+        inGameController.pauseGameFromHelp();
     }
 
     public void close(){

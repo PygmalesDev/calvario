@@ -1,5 +1,6 @@
-package de.uniks.stp24.component.game;
+package de.uniks.stp24.component.game.technology;
 
+import de.uniks.stp24.service.game.TechnologyService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
@@ -37,6 +38,8 @@ public class TechnologyOverviewComponent extends AnchorPane {
     private Pane parent;
     @Inject
     Subscriber subscriber;
+    @Inject
+    TechnologyService technologyService;
 
     @Inject
     @SubComponent
@@ -66,6 +69,10 @@ public class TechnologyOverviewComponent extends AnchorPane {
     public void destroy() {
         if (subscriber != null) {
             subscriber.dispose();
+        }
+
+        if (technologyService.subscriber != null) {
+            technologyService.subscriber.dispose();
         }
     }
 

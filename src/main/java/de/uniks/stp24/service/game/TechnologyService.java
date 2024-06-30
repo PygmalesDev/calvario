@@ -20,7 +20,7 @@ public class TechnologyService {
     @Inject
     EmpireApiService empireApiService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
 
     @Inject
     TokenStorage tokenStorage;
@@ -30,11 +30,15 @@ public class TechnologyService {
     List<TechnologyExtended> researchTechnologiesList = new ArrayList<>();
     List<TechnologyExtended> unlockedTechnologiesList = new ArrayList<>();
 
+    @Inject
+    public TechnologyService() {
+    }
+
     public List<TechnologyExtended> getUnlockedTechnologies() {
         subscriber.subscribe(empireApiService.getEmpiresDtos(tokenStorage.getGameId()),
                 empireDtos -> {
                     for (EmpireDto empireDto : empireDtos) {
-                        if (empireDto.user().equals(tokenStorage.getUserId()) && empireDto.technologies().length > 0) {
+                        if (empireDto.user().equals(tokenStorage.getUserId()) && empireDto.technologies() != null) {
                             unlockedTechnologies.addAll(List.of(empireDto.technologies()));
                         }
                     }
@@ -48,20 +52,23 @@ public class TechnologyService {
                         if (unlockedTechnologies.contains(technology.id())) {
                             unlockedTechnologiesList.add(technology);
                         } else {
+                            System.out.println(technology);
+                            System.out.println("Nicht freigeschaltet");
                             researchTechnologiesList.add(technology);
                         }
                     }
                 },
                 Throwable::printStackTrace
         );
-
-        return Observable.fromIterable(unlockedTechnologiesList).toList().blockingGet();
+        return unlockedTechnologiesList;
     }
 
-    public Observable<TechnologyExtended> getResearchTechnologies() {
+    public List<TechnologyExtended> getResearchTechnologies() {
         getUnlockedTechnologies();
-        return Observable.fromIterable(researchTechnologiesList);
+        return researchTechnologiesList;
     }
+
+
 
     public Observable<TechnologyExtended> getTechnologies() {
         return presetsApiService.getTechnologies().flatMap(Observable::fromIterable);

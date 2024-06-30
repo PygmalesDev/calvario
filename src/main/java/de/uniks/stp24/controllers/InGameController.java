@@ -1,6 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.dto.EmpireDto;

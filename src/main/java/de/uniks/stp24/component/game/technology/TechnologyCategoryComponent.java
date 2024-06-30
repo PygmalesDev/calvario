@@ -1,6 +1,6 @@
-package de.uniks.stp24.component.game;
+package de.uniks.stp24.component.game.technology;
 
-import de.uniks.stp24.model.Technology;
+import de.uniks.stp24.App;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.TechnologyService;
@@ -16,9 +16,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.constructs.listview.ComponentListCell;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -29,9 +32,9 @@ import java.util.ResourceBundle;
 public class TechnologyCategoryComponent extends AnchorPane {
 
     @FXML
-    public ListView<Technology> unlockedListView;
+    public ListView<TechnologyExtended> unlockedListView;
     @FXML
-    public ListView<Technology> researchListView;
+    public ListView<TechnologyExtended> researchListView;
     @FXML
     public Button closeButton;
     @FXML
@@ -41,12 +44,16 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @FXML
     public VBox technologieCategoryBox;
     String technologieCategoryName;
+    @Inject
+    App app;
 
     @Inject
     TechnologyService technologyService;
 
-    Provider<TechnologyCategorySubComponent> researchComponentProvider = TechnologyCategorySubComponent::new;
-    Provider<TechnologyCategorySubComponent> unlockedComponentProvider = TechnologyCategorySubComponent::new;
+    @Inject
+    Provider<TechnologyCategorySubComponent> researchComponentProvider;
+    @Inject
+    Provider<TechnologyCategorySubComponent> unlockedComponentProvider;
 
     ObservableList<TechnologyExtended> unlockedTechnologies = FXCollections.observableArrayList();
     ObservableList<TechnologyExtended> researchTechnologies = FXCollections.observableArrayList();
@@ -57,6 +64,9 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @Resource
     @Named("gameResourceBundle")
     public ResourceBundle resources;
+
+    @Inject
+    Subscriber subscriber;
 
     ImageCache imageCache = new ImageCache();
 
@@ -71,7 +81,15 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     @OnRender
     public void render() {
+        unlockedTechnologies = FXCollections.observableArrayList(technologyService.getUnlockedTechnologies());
+        researchTechnologies = FXCollections.observableArrayList(technologyService.getResearchTechnologies());
 
+        System.out.println("research: " + researchTechnologies);
+
+        unlockedListView.setItems(unlockedTechnologies);
+        researchListView.setItems(researchTechnologies);
+        unlockedListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.unlockedComponentProvider));
+        researchListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.researchComponentProvider));
     }
 
     @OnDestroy

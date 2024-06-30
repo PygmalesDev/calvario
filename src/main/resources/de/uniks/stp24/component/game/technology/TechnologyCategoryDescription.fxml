@@ -4,7 +4,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.TechnologyCategoryDescriptionSubComponent">
+<HBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.technology.TechnologyCategoryDescriptionSubComponent">
    <ImageView fx:id="resourceImage" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
    <Label fx:id="descriptionLabel" text="Label" />
 </HBox>

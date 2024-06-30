@@ -9,38 +9,36 @@
 <?import javafx.scene.text.Text?>
 
 <fx:root maxHeight="391.0" maxWidth="355.0" prefHeight="391.0" prefWidth="355.0" styleClass="helpWindowBackground" type="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.HelpComponent">
-   <children>
-      <Text layoutX="68.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Shortcuts:" AnchorPane.leftAnchor="68.0">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Text>
-      <Text layoutX="68.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Technology Tags:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Text>
-      <ListView fx:id="technologyTagsListView" layoutX="55.0" layoutY="196.0" prefHeight="117.0" prefWidth="189.0" style="-fx-background-color: transparent;" styleClass="technologyList" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="111.0" />
-      <Button fx:id="backButton" layoutX="7.0" layoutY="16.0" mnemonicParsing="false" onAction="#back" prefHeight="20.0" prefWidth="20.0" styleClass="leftTriangleButton" textFill="WHITE" AnchorPane.leftAnchor="7.0">
-         <font>
-            <Font size="6.0" />
-         </font>
-      </Button>
-      <Button fx:id="closeButton" layoutX="270.0" layoutY="11.0" mnemonicParsing="false" onAction="#close" prefHeight="20.0" prefWidth="20.0" styleClass="closeButton" textFill="WHITE" AnchorPane.rightAnchor="40.0">
-         <font>
-            <Font size="5.0" />
-         </font>
-      </Button>
-      <Text fill="WHITE" layoutX="129.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="helpText" text="Help" AnchorPane.leftAnchor="129.0" AnchorPane.rightAnchor="184.095703125">
-         <font>
-            <Font size="34.0" />
-         </font>
-      </Text>
-      <TextArea layoutX="49.0" layoutY="100.0" prefHeight="72.0" prefWidth="201.0" styleClass="technologyText" text="Shift + H          Show home island&#10;Alt + S              Show storage&#10;Shift + F           Show flags on &#10;                        occupied islands&#10;Alt + h             help window" />
-   </children>
    <stylesheets>
       <URL value="@../../style/helpWindow.css" />
       <URL value="@../../style/ingameButtons.css" />
       <URL value="@../../style/styles.css" />
    </stylesheets>
+   <Text layoutX="68.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Shortcuts:" AnchorPane.leftAnchor="68.0">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </Text>
+   <Text layoutX="68.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Technology Tags:">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </Text>
+   <ListView fx:id="technologyTagsListView" layoutX="55.0" layoutY="196.0" prefHeight="117.0" prefWidth="189.0" style="-fx-background-color: transparent;" styleClass="technologyList" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="111.0" />
+   <Button fx:id="backButton" layoutX="7.0" layoutY="16.0" mnemonicParsing="false" onAction="#back" prefHeight="20.0" prefWidth="20.0" styleClass="leftTriangleButton" textFill="WHITE" AnchorPane.leftAnchor="7.0">
+      <font>
+         <Font size="6.0" />
+      </font>
+   </Button>
+   <Button fx:id="closeButton" layoutX="270.0" layoutY="11.0" mnemonicParsing="false" onAction="#close" prefHeight="20.0" prefWidth="20.0" styleClass="closeButton" textFill="WHITE" AnchorPane.rightAnchor="40.0">
+      <font>
+         <Font size="5.0" />
+      </font>
+   </Button>
+   <Text fill="WHITE" layoutX="129.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="helpText" text="Help" AnchorPane.leftAnchor="129.0" AnchorPane.rightAnchor="184.095703125">
+      <font>
+         <Font size="34.0" />
+      </font>
+   </Text>
+   <TextArea layoutX="49.0" layoutY="100.0" prefHeight="72.0" prefWidth="201.0" styleClass="technologyText" text="Shift + H          Show home island&#10;Alt + S              Show storage&#10;Shift + F           Show flags on &#10;                        occupied islands&#10;Alt + h             help window&#10;Alt + e             Empire overview" />
 </fx:root>

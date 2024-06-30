@@ -33,6 +33,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.inject.Inject;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -131,6 +132,11 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     DeleteStructureComponent deleteStructureComponent;
+    @InjectMocks
+    EmpireOverviewComponent empireOverviewComponent;
+
+    @InjectMocks
+    HelpComponent helpComponent;
 
 
 
@@ -158,6 +164,8 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+        this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
+        this.inGameController.helpComponent = this.helpComponent;
 
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;

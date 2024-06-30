@@ -83,6 +83,9 @@ public class InGameController extends BasicController {
     @FXML
     public StackPane storageOverviewContainer;
     @FXML
+    public StackPane empireOverviewContainer;
+
+    @FXML
     StackPane clockComponentContainer;
 
     @Inject
@@ -116,6 +119,10 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
+
+    @SubComponent
+    @Inject
+    public EmpireOverviewComponent empireOverviewComponent;
 
     @SubComponent
     @Inject
@@ -191,6 +198,7 @@ public class InGameController extends BasicController {
         buildingPropertiesComponent.setInGameController(this);
         sitePropertiesComponent.setInGameController(this);
         deleteStructureComponent.setInGameController(this);
+        empireOverviewComponent.setInGameController(this);
         pauseMenuComponent.setInGameController(this);
         helpComponent.setInGameController(this);
 
@@ -270,6 +278,9 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
 
+        empireOverviewContainer.setVisible(false);
+        empireOverviewContainer.getChildren().add(empireOverviewComponent);
+
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -286,6 +297,7 @@ public class InGameController extends BasicController {
     }
 
     public void pauseGame() {
+        closeComponents();
         pauseMenuContainer.setVisible(pause);
         pauseMenuContainer.setMouseTransparent(false);
     }
@@ -299,6 +311,18 @@ public class InGameController extends BasicController {
         } else {
             pauseMenuContainer.setMouseTransparent(true);
             resumeGame();
+        }
+    }
+
+    public void closeComponents() {
+        if(empireOverviewComponent.isVisible()){
+            empireOverviewComponent.closeEmpireOverview();
+        }
+        if (storageOverviewContainer.isVisible()) {
+            storageOverviewComponent.closeStorageOverview();
+        }
+        if (overviewContainer.isVisible()) {
+            overviewSitesComponent.closeOverview();
         }
     }
 
@@ -318,8 +342,9 @@ public class InGameController extends BasicController {
                 showEmpireOverviewButton = new Button();
                 showEmpireOverviewButton.setPrefHeight(30);
                 showEmpireOverviewButton.setPrefWidth(30);
-                showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
+                showEmpireOverviewButton.setId("showEmpireOverviewButton");
                 showEmpireOverviewButton.getStyleClass().add("empireOverviewButton");
+                showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
                 showStorageButton = new Button();
                 showStorageButton.setPrefHeight(30);
                 showStorageButton.setPrefWidth(30);
@@ -329,10 +354,6 @@ public class InGameController extends BasicController {
             }
             this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton);
         }
-    }
-
-    private void showEmpireOverview() {
-        System.out.println("button clicked");
     }
 
     @OnRender
@@ -401,13 +422,23 @@ public class InGameController extends BasicController {
         inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
         overviewSitesComponent.setOverviewSites();
     }
+    @OnKey(code = KeyCode.S,alt = true)
 
+    public void showStorage() {
+        if(empireOverviewComponent.isVisible()) {
+            empireOverviewComponent.closeEmpireOverview();
+        }
+        storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
+    }
     @OnKey(code = KeyCode.H, alt = true)
     public void showHelpOnKey(){showHelp();}
 
-    @OnKey(code = KeyCode.S, alt = true)
-    public void showStorage() {
-        storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
+    @OnKey(code = KeyCode.E, alt = true)
+    public void showEmpireOverview() {
+        if(storageOverviewComponent.isVisible()){
+            storageOverviewComponent.closeStorageOverview();
+        }
+        empireOverviewContainer.setVisible(!empireOverviewContainer.isVisible());
     }
 
     @OnKey(code = KeyCode.SPACE)

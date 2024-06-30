@@ -71,6 +71,10 @@ public class AppTest2 extends ControllerTest {
     BuildingsWindowComponent buildingsWindowComponent;
     @InjectMocks
     DeleteStructureComponent deleteStructureComponent;
+    @InjectMocks
+    EmpireOverviewComponent empireOverviewComponent;
+    @InjectMocks
+    HelpComponent helpComponent;
 
 
     @Spy
@@ -137,6 +141,7 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
+        this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
@@ -158,7 +163,8 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
-
+        this.inGameController.helpComponent = this.helpComponent;
+        
         inGameController.mapScrollPane = new ScrollPane();
         inGameController.group = new Group();
         inGameController.zoomPane = new StackPane();

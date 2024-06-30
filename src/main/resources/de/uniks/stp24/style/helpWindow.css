@@ -35,7 +35,6 @@
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/scroller.png");
 }
 
-
 .technologyList .scroll-bar:vertical .increment-button .increment-arrow, .listBrowseGame .scroll-bar .decrement-button .decrement-arrow,
 .backgroundTextArea .scroll-bar:vertical .increment-button .increment-arrow .backgroundTextArea .decrement-button .decrement-arrow,
 {
@@ -47,6 +46,7 @@
     -fx-font-family: "Tempus Sans ITC";
     -fx-background-color: "TRANSPARENT";
     -fx-font-weight: none;
+    -fx-text-fill: black;
     -fx-font-size: 12;
 }
 

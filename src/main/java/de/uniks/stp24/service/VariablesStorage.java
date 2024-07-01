@@ -1,5 +1,8 @@
 package de.uniks.stp24.service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class VariablesStorage {
     /*
 
@@ -9,4 +12,14 @@ public class VariablesStorage {
     um die Variablen Kompoennete einzustellen.
 
      */
+
+    private Map<String, Integer> variablesPresets = new HashMap<>();
+
+    public void setVariablesPresets(){
+
+    }
+
+    public Map<String, Integer> getVariablesPresets(){
+        return variablesPresets;
+    }
 }

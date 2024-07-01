@@ -8,9 +8,11 @@ import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.*;
+import de.uniks.stp24.dto.ExplainedVariableDTO;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
+import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -158,9 +160,10 @@ public class InGameController extends BasicController {
     public InGameController() {
         lastUpdate = "";
     }
-
     @Inject
     public GameSystemsApiService gameSystemsApiService;
+    @Inject
+    GameLogicApiService gameLogicApiService;
 
     public IslandComponent selectedIsland;
 
@@ -215,12 +218,18 @@ public class InGameController extends BasicController {
                 result -> islandAttributes.setDistrictPresets(result),
                 error -> System.out.println("error in getEmpire in inGame"));
 
+        this.subscriber.subscribe(inGameService.getVariablesPresets()),
+                result -> {
+
+                });
+
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
                     result -> islandAttributes.setEmpireDto(result),
                     error -> System.out.println("error in getEmpire in inGame"));
             createEmpireListener();
         }
+
 
         for (int i = 0; i <= 16; i++) {
             this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
@@ -532,6 +541,12 @@ public class InGameController extends BasicController {
         explanationContainer.setLayoutX(x);
         explanationContainer.setLayoutY(y);
         explanationContainer.setVisible(true);
+
+        this.subscriber.subscribe(gameLogicApiService.getVariablesExplanations(gameID, empireID),
+                result -> {
+                    System.out.println(result);
+                });
+
     }
 
     public void unShowExplanation(){

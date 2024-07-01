@@ -16,6 +16,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ArrayList;
+import java.util.Map;
 
 @Singleton
 public class InGameService {
@@ -40,6 +41,10 @@ public class InGameService {
 
     public Observable<SystemUpgrades> loadUpgradePresets() {
         return presetsApiService.getSystemUpgrades();
+    }
+
+    public Observable<Map<String, Integer>> getVariablesPresets() {
+        return presetsApiService.getVariablesPresets();
     }
 
     public Observable<ArrayList<BuildingPresets>> loadBuildingPresets() {
@@ -89,4 +94,5 @@ public class InGameService {
     public TimerService getTimerService() {
         return timerService;
     }
+
 }

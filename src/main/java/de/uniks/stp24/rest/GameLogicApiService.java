@@ -6,10 +6,12 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 import javax.inject.Singleton;
+import java.util.ArrayList;
 
 @Singleton
 public interface GameLogicApiService {
 
     @GET("games/{game}/empires/{empire}/variables")
-    Observable<ExplainedVariableDTO[]> getVariablesExplanations(@Path("game") String gameID, @Path("empire") String empireID);
+    Observable<ArrayList<ExplainedVariableDTO>> getVariablesExplanations(@Path("empire") String empireID, ArrayList<String> variables);
+
 }

@@ -1,16 +1,42 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.AggregateItemDto;
+import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.ResourcesService;
+import de.uniks.stp24.ws.EventListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnInit;
+import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.constructs.listview.ComponentListCell;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Provider;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 @Component(view = "MarketComponent.fxml")
 public class MarketComponent extends StackPane {
@@ -35,49 +61,92 @@ public class MarketComponent extends StackPane {
     @FXML
     Button decrementNumberOfGoods;
     @FXML
-    Label gemmyAlloysImage;
-    @FXML
-    Label rumImage;
-    @FXML
-    Label sparklingGeodeImage;
-    @FXML
-    Label gunPowderImage;
-    @FXML
-    Label coalImage;
-    @FXML
-    Label provisionImage;
-    @FXML
-    Label gemmyAlloysNumber;
-    @FXML
-    Label rumNumber;
-    @FXML
-    Label sparklingGeodeNumber;
-    @FXML
-    Label gunPowderNumber;
-    @FXML
-    Label coalNumber;
-    @FXML
-    Label provisionNumber;
+    public ListView<Map.Entry<String, Integer>> resourcesListView;
 
+    @Inject
+    App app;
+    @Inject
+    Subscriber subscriber;
+    @Inject
+    ResourcesService resourcesService;
+    @Inject
+    EmpireService empireService;
+    @Inject
+    EventListener eventListener;
+    @Inject
+    TokenStorage tokenStorage;
+    @Inject
+    @org.fulib.fx.annotation.controller.Resource
+    @Named("gameResourceBundle")
+    ResourceBundle gameResourceBundle;
 
-    private StorageOverviewComponent storageOverviewComponent;
+    private InGameController inGameController;
+    private String lastUpdate;
+    private String lastSeasonUpdate;
+    Provider<MarketResourceComponent> marketResourceComponentProvider = () -> new MarketResourceComponent(true,true,true, gameResourceBundle);
+    ObservableList<Resource> resourceList;
 
     @Inject
     public MarketComponent() {
-
+        lastUpdate = "";
+        lastSeasonUpdate = "";
     }
 
     @OnInit
     public void init() {
     }
 
-    public void setStorageOverviewController(StorageOverviewComponent storageOverviewComponent) {
-        this.storageOverviewComponent = storageOverviewComponent;
+    @OnRender
+    public void render() {
+        setRessourceAmount();
+    }
+
+    private void setRessourceAmount() {
+
+    }
+
+
+    public void setInGameController(InGameController ingameController) {
+        this.inGameController = ingameController;
     }
 
     public void closeMarketOverview() {
         this.getParent().setVisible(false);
     }
 
+    public void filterResourceMap(){
 
+    }
+
+    public void listMarketResources(Map<String, Integer> resourceMap) {
+        resourcesListView.getItems().addAll(resourceMap.entrySet());
+        resourcesListView.setCellFactory(list -> new ResourceCell());
+    }
+
+    public class ResourceCell extends ListCell<Map.Entry<String, Integer>> {
+        private VBox vBox = new VBox();
+        private ImageView imageView = new ImageView();
+        private Text text = new Text();
+        ImageCache imageCache = new ImageCache();
+
+        public ResourceCell() {
+            super();
+            vBox.getChildren().addAll(imageView, text);
+        }
+
+        @Override
+        protected void updateItem(Map.Entry<String, Integer> item, boolean empty) {
+            super.updateItem(item, empty);
+
+            if (empty || item == null) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                imageView.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + item.getKey() + ".png"));
+//                imageView.getStyleClass().add()
+                text.setText(String.valueOf(item.getValue()));
+                setGraphic(vBox);
+            }
+        }
+    }
 }

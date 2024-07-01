@@ -41,22 +41,7 @@
                   <ImageView fitHeight="25.0" fitWidth="34.0" layoutX="-3.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="74.0" layoutY="100.0" prefHeight="49.0" prefWidth="252.0" style="-fx-background-color: brown;">
-               <children>
-                  <AnchorPane fx:id="gemmyAlloysImage" layoutY="2.0" prefHeight="27.0" prefWidth="34.0" style="-fx-background-color: gold;" AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="213.0" AnchorPane.topAnchor="5.0" />
-                  <AnchorPane fx:id="rumImage" layoutX="50.0" layoutY="5.0" prefHeight="27.0" prefWidth="34.0" style="-fx-background-color: gold;" />
-                  <AnchorPane fx:id="sparklingGeodeImage" layoutX="92.0" layoutY="5.0" prefHeight="27.0" prefWidth="34.0" style="-fx-background-color: gold;" />
-                  <AnchorPane fx:id="gunPowderImage" layoutX="136.0" layoutY="6.0" prefHeight="27.0" prefWidth="34.0" style="-fx-background-color: gold;" />
-                  <AnchorPane fx:id="coalImage" layoutX="178.0" layoutY="5.0" prefHeight="27.0" prefWidth="34.0" style="-fx-background-color: gold;" />
-                  <AnchorPane fx:id="provisionImage" layoutX="218.0" layoutY="5.0" prefHeight="27.0" prefWidth="34.0" style="-fx-background-color: gold;" />
-                  <Label fx:id="gemmyAlloysNumber" layoutX="8.0" layoutY="26.0" text="Label" />
-                  <Label fx:id="rumNumber" layoutX="53.0" layoutY="26.0" text="Label" />
-                  <Label fx:id="sparklingGeodeNumber" layoutX="95.0" layoutY="30.0" text="Label" />
-                  <Label fx:id="gunPowderNumber" layoutX="139.0" layoutY="26.0" text="Label" />
-                  <Label fx:id="coalNumber" layoutX="181.0" layoutY="30.0" text="Label" />
-                  <Label fx:id="provisionNumber" layoutX="224.0" layoutY="30.0" text="Label" />
-               </children>
-            </AnchorPane>
+            <ListView fx:id="resourcesListView" layoutX="74.0" layoutY="100.0" orientation="HORIZONTAL" prefHeight="71.0" prefWidth="243.0" style="-fx-background-color: brown;" />
          </children>
       </AnchorPane>
    </children>

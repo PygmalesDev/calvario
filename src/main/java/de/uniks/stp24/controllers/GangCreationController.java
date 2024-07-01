@@ -104,7 +104,6 @@ public class GangCreationController extends BasicController {
     @FXML
     Button createButton;
     @FXML
-            // todo check if i should add public
     Button editButton;
     @FXML
     Button cancelChangesButton;

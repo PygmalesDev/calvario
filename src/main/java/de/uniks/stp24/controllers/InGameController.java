@@ -392,6 +392,9 @@ public class InGameController extends BasicController {
         mapGrid.setMinSize(islandsService.getMapWidth(), islandsService.getMapHeight());
         islandsService.createLines(this.islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
 
+        group.setScaleX(0.65);
+        group.setScaleY(0.65);
+
         this.islandComponentList.forEach(isle -> {
             isle.setInGameController(this);
             isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
@@ -411,11 +414,11 @@ public class InGameController extends BasicController {
         mapGrid.setOnScroll(event -> {
             if (event.isShiftDown() && (event.getDeltaY() > 0 || event.getDeltaX() > 0)) {
                 scale += 0.1;
-                scale = Math.min(scale, 1.45);
+                scale = Math.min(scale, 3);
                 event.consume();
             } else if (event.isShiftDown() && (event.getDeltaY() < 0 || event.getDeltaX() < 0)) {
                 scale -= 0.1;
-                scale = Math.max(scale, 0.75);
+                scale = Math.max(scale, 0.35);
                 event.consume();
             }
             group.setScaleX(scale);
@@ -452,7 +455,7 @@ public class InGameController extends BasicController {
 
     @OnKey(code = KeyCode.SPACE)
     public void resetZoom() {
-        scale = 1.0;
+        scale = 0.65;
         group.setScaleX(scale);
         group.setScaleY(scale);
     }

@@ -9,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.awt.*;
+import java.util.ArrayList;
 
 @Singleton
 public class ExplanationService {
@@ -17,23 +18,17 @@ public class ExplanationService {
     boolean entered = false;
 
     private InGameController inGameController;
-    /*
-
-    Erstelle eine Methode mit einem Eventlistener oder Interupt, der alle paar
-    Sekunden neue Variablen information in Variable Storage speichert
-
-    oder
-
-    rufe die Methode jedesmal auf, wenn die Maus über ein building district oder upgrade drüber hovert.
-
-     */
+    public ArrayList<String> allVariables = new ArrayList<>();
 
     @Inject
     public ExplanationService() {
 
     }
 
-    public CustomComponentListCell<Resource, ResourceComponent> addMouseHoverListener(CustomComponentListCell<Resource, ResourceComponent> cell, String component) {
+    /*
+    Methods below is made for explanation of resources.
+     */
+    public CustomComponentListCell<Resource, ResourceComponent> addMouseHoverListener(CustomComponentListCell<Resource, ResourceComponent> cell, String component, String listType) {
 
         cell.setOnMouseMoved(event -> {
             if (!cell.isEmpty() && cell.getItem() != null) {
@@ -44,7 +39,32 @@ public class ExplanationService {
                 setRootCoordinates(x, y, cell.getWidth(), cell.getHeight(), component);
                 entered = mouseX < cell.getWidth() * 2/3 && mouseX >= 4 && mouseY > 4 && mouseY <= cell.getHeight() - 4;
                 if(entered) {
-                    inGameController.showExplanation(this.x, this.y);
+                    String variable = "";
+                    switch(listType){
+                        case "building.costs":
+                            variable = "buildings." + inGameController.selectedBuilding + ".cost." + cell.getItem().resourceID();
+                            break;
+                        case "building.production":
+                            variable = "buildings." + inGameController.selectedBuilding + ".production." + cell.getItem().resourceID();
+                            break;
+                        case "building.consumption":
+                            variable = "buildings." + inGameController.selectedBuilding + ".upkeep." + cell.getItem().resourceID();
+                            break;
+                        case "site.costs":
+                            variable = "districts." + inGameController.selectedSites + ".cost." + cell.getItem().resourceID();
+                            break;
+                        case "site.consumption":
+                            variable = "districts." + inGameController.selectedSites + ".upkeep." + cell.getItem().resourceID();
+                            break;
+                        case "site.production":
+                            variable = "districts." + inGameController.selectedSites + ".production." + cell.getItem().resourceID();
+                            break;
+                        case "upgrade.costs":
+                            break;
+                        case "upgrade.production":
+                            break;
+                    }
+                    inGameController.showExplanation(this.x, this.y, variable);
                 } else {
                     inGameController.unShowExplanation();
                 }

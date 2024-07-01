@@ -100,7 +100,7 @@ public class DetailsComponent extends AnchorPane {
         for (Map.Entry<String, Integer> entry : totalProduction.entrySet()) {
             String imageStyle = resourceImagePath.get(entry.getKey());
             resImages.get(i).setStyle(imageStyle + "-fx-background-size: cover;");
-            resInf.get(i).setText("×" + entry.getValue());
+            resInf.get(i).setText("+" + entry.getValue());
             i ++;
         }
         title.setText("     " + gameResourceBundle.getString("total.production"));
@@ -111,7 +111,7 @@ public class DetailsComponent extends AnchorPane {
         for (Map.Entry<String, Integer> entry : totalConsumption.entrySet()) {
             String imageStyle = resourceImagePath.get(entry.getKey());
             resImages.get(i).setStyle(imageStyle + "-fx-background-size: cover;");
-            resInf.get(i).setText("×" + entry.getValue());
+            resInf.get(i).setText("-" + entry.getValue());
             i++;
         }
         title.setText("  " + gameResourceBundle.getString("total.consumption"));

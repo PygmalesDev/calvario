@@ -11,7 +11,7 @@ import java.util.ArrayList;
 @Singleton
 public interface GameLogicApiService {
 
-    @GET("games/{game}/empires/{empire}/variables")
-    Observable<ArrayList<ExplainedVariableDTO>> getVariablesExplanations(@Path("empire") String empireID, ArrayList<String> variables);
+    @GET("games/{game}/empires/{empire}/variables/{variable}")
+    Observable<ExplainedVariableDTO> getVariablesExplanations(@Path("empire") String empireID, @Path("variable") String variable);
 
 }

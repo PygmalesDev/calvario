@@ -17,3 +17,48 @@
     -fx-fill: white;
     -fx-font-size: 38;
 }
+
+/*Buttons*/
+
+alloysButton{
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/alloys.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}
+
+consumerGoodButton{
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/consumer_goods.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}
+
+energyButton{
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/energy.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}
+
+foodButton{
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/food.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}
+
+fuelButton{
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/fuel.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}
+
+mineralButton{
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/minerals.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}
+

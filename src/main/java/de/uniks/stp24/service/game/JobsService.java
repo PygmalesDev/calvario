@@ -11,8 +11,11 @@ import org.fulib.fx.controller.Subscriber;
 
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.*;
+import java.util.function.Consumer;
 
+@Singleton
 public class JobsService {
     @Inject
     JobsApiService jobsApiService;
@@ -28,6 +31,10 @@ public class JobsService {
     Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobProgressFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobTypeFunctions = new HashMap<>();
+    Map<String, ArrayList<Consumer<String>>> loadTypeFunctions = new HashMap<>();
+    ArrayList<Runnable> loadCommonFunctions = new ArrayList<>();
+    ArrayList<Runnable> finishCommonFunctions = new ArrayList<>();
+    ArrayList<Runnable> startCommonFunctions = new ArrayList<>();
 
     @Inject
     public JobsService() {
@@ -45,7 +52,19 @@ public class JobsService {
 
         this.subscriber.subscribe(this.jobsApiService.getEmpireJobs(
                         this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()),
-                jobList -> jobList.forEach(this::addJobToGroups),
+                jobList -> {
+                    jobList.forEach(this::addJobToGroups);
+                    System.out.println("size of job collection " + this.jobCollections.get("collection").size());
+                    System.out.println("amount of job load finishers " + this.loadTypeFunctions.size());
+
+                    this.loadCommonFunctions.forEach(Runnable::run);
+                    this.jobCollections.get("collection").forEach(job -> {
+                        if (this.loadTypeFunctions.containsKey(job.type())) {
+                            System.out.println("Loading finished, initializing load finisher for " + job.type());
+                            this.loadTypeFunctions.get(job.type()).forEach(func -> func.accept(job._id()));
+                        }
+                    });
+                },
                 error -> System.out.println("Failed loading jobCollections")
         );
     }
@@ -76,6 +95,8 @@ public class JobsService {
                 this.jobCollections.get(job.system()).add(job);
             }
         }
+
+        this.startCommonFunctions.forEach(Runnable::run);
     }
 
     public void updateJobInGroups(Job job) {
@@ -87,6 +108,10 @@ public class JobsService {
                 this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
             else
                 this.jobCollections.get(job.system()).replaceAll(other -> other.equals(job) ? job : other);
+        }
+
+        if (this.jobTypeFunctions.containsKey(job.type())) {
+            this.jobTypeFunctions.get(job.type()).forEach(Runnable::run);
         }
 
         if (this.jobProgressFunctions.containsKey(job._id())) {
@@ -107,11 +132,17 @@ public class JobsService {
         if (this.jobCompletionFunctions.containsKey(job._id())) {
             this.jobCompletionFunctions.get(job._id()).forEach(Runnable::run);
         }
+
+        this.finishCommonFunctions.forEach(Runnable::run);
     }
 
     public void deleteJobFromGroups(String jobID) {
         this.jobCollections.forEach((key, list) -> list.removeIf(job -> job._id().equals(jobID)));
         this.jobCompletionFunctions.remove(jobID);
+    }
+
+    public void onJobCommonStart(Runnable func) {
+        this.startCommonFunctions.add(func);
     }
 
     /**
@@ -140,15 +171,39 @@ public class JobsService {
     }
 
     public void onJobTypeProgress(String jobType, Runnable func) {
-        if (!this.jobProgressFunctions.containsKey(jobType))
-            this.jobProgressFunctions.put(jobType, new ArrayList<>());
-        this.jobProgressFunctions.get(jobType).add(func);
+        if (!this.jobTypeFunctions.containsKey(jobType))
+            this.jobTypeFunctions.put(jobType, new ArrayList<>());
+        this.jobTypeFunctions.get(jobType).add(func);
+    }
+
+    public boolean hasJobTypeProgress(String jobType) {
+        if (this.jobTypeFunctions.containsKey(jobType))
+            return this.jobTypeFunctions.get(jobType).size() > 0;
+        return false;
+    }
+
+    public void stopOnJobTypeProgress(String jobType) {
+        this.jobTypeFunctions.remove(jobType);
     }
 
     public void onJobDeletion(String jobID, Runnable func) {
         if (!this.jobDeletionFunctions.containsKey(jobID))
             this.jobDeletionFunctions.put(jobID, new ArrayList<>());
         this.jobDeletionFunctions.get(jobID).add(func);
+    }
+
+    public void onJobCommonFinish(Runnable func) {
+        this.finishCommonFunctions.add(func);
+    }
+
+    public void onJobsLoadingFinished(String jobType, Consumer<String> func) {
+        if (!this.loadTypeFunctions.containsKey(jobType))
+            this.loadTypeFunctions.put(jobType, new ArrayList<>());
+        this.loadTypeFunctions.get(jobType).add(func);
+    }
+
+    public void onJobsLoadingFinished(Runnable func) {
+        this.loadCommonFunctions.add(func);
     }
 
     /**
@@ -208,5 +263,17 @@ public class JobsService {
 
     public ObservableList<Job> getObservableJobCollection() {
         return this.getJobObservableListOfType("collection");
+    }
+
+    public void dispose() {
+        this.jobCollections.clear();
+        this.jobTypeFunctions.clear();
+        this.jobCompletionFunctions.clear();
+        this.jobProgressFunctions.clear();
+        this.jobDeletionFunctions.clear();
+        this.loadTypeFunctions.clear();
+        this.loadCommonFunctions.clear();
+        this.finishCommonFunctions.clear();
+        this.subscriber.dispose();
     }
 }

@@ -79,6 +79,10 @@ public class SitePropertiesComponent extends AnchorPane {
     Subscriber subscriber;
 
     @Inject
+    JobsService jobsService;
+
+
+    @Inject
     ResourcesService resourcesService;
 
     @Inject
@@ -104,8 +108,6 @@ public class SitePropertiesComponent extends AnchorPane {
     public SitePropertiesComponent(){
     }
     Map<String, String> sitesMap;
-
-    JobsService jobsService;
 
     private int amountSite = 0;
     private int amountSiteSlots = 0;
@@ -157,13 +159,14 @@ public class SitePropertiesComponent extends AnchorPane {
                     .findFirst().orElse(null);
             this.showJobsPane();
             if (Objects.nonNull(job)) {
-                this.siteJobProgress.setCurrentProgress(job);
-                if (!this.jobsService.hasOnProgress(job._id())) {
-                    this.jobsService.onJobProgress(job._id(), () -> this.siteJobProgress.incrementProgress());
-                }
+                this.siteJobProgress.setJobProgress(job);
+                if (!this.jobsService.hasJobTypeProgress(job.type()))
+                    this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
             }
-        } else
+        } else {
             this.hideJobsPane();
+            this.jobsService.stopOnJobTypeProgress("district");
+        }
 
 
     }
@@ -176,9 +179,8 @@ public class SitePropertiesComponent extends AnchorPane {
         this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createDistrictJob(
                 this.tokenStorage.getIsland().id(), this.siteType)), job ->  {
             this.showJobsPane();
-            this.siteJobProgress.setInitialProgress(job);
+            this.siteJobProgress.setJobProgress(job);
 
-            this.jobsService.onJobProgress(job._id(), () -> this.siteJobProgress.incrementProgress());
             this.jobsService.onJobDeletion(job._id(), this::hideJobsPane);
             this.jobsService.onJobCompletion(job._id(), () -> {
                 this.updateIslandSites();
@@ -187,12 +189,20 @@ public class SitePropertiesComponent extends AnchorPane {
         });
     }
 
+    @OnInit
     public void setSitesJobUpdates() {
-        this.jobsService.getJobObservableListOfType("district").forEach(job -> {
-            this.jobsService.onJobDeletion(job._id(), this::hideJobsPane);
-            this.jobsService.onJobCompletion(job._id(), this::hideJobsPane);
+        this.jobsService.onJobsLoadingFinished("district", (jobID) -> {
+            this.jobsService.onJobDeletion(jobID, this::hideJobsPane);
+            this.jobsService.onJobCompletion(jobID, () -> {
+                this.updateIslandSites();
+                this.hideJobsPane();
+            });
         });
+
+        this.jobsService.onJobsLoadingFinished(() ->
+                this.siteJobs = this.jobsService.getJobObservableListOfType("district"));
     }
+
 
     public void showJobsPane() {
         this.jobPane.setVisible(true);
@@ -221,7 +231,6 @@ public class SitePropertiesComponent extends AnchorPane {
     //and calls method in DeleteStructureComponent
     public void destroySite(){
         inGameController.handleDeleteStructure(siteType);
-
     }
 
     //Gets resources of site and displays them in listviews
@@ -313,14 +322,6 @@ public class SitePropertiesComponent extends AnchorPane {
         Map<String, Integer> resourceMapProduce = siteDto.production();
         ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, siteProducesListView.getItems(), null);
         siteProducesListView.setItems(resourceListProduce);
-    }
-
-    public void setJobService(JobsService jobsService) {
-        this.jobsService = jobsService;
-    }
-
-    public void setSiteJobs(ObservableList<Job> jobsList) {
-        this.siteJobs = jobsList;
     }
 
 }

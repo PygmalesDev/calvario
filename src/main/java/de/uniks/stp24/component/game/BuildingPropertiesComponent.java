@@ -21,6 +21,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnInit;
+import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -52,7 +53,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @FXML
     ImageView buildingImage;
 
-    private JobsService jobsService;
+    @Inject
+    JobsService jobsService;
 
     @Inject
     ResourcesService resourcesService;
@@ -176,9 +178,10 @@ public class BuildingPropertiesComponent extends AnchorPane {
         });
     }
 
+    @OnInit
     public void setBuildingsJobUpdates() {
-        this.jobsService.getJobObservableListOfType("building").forEach(job ->
-                this.jobsService.onJobCompletion(job._id(), this::updateIslandBuildings));
+        this.jobsService.onJobsLoadingFinished("building",
+                (jobID) -> this.jobsService.onJobCompletion(jobID, this::updateIslandBuildings));
     }
 
 
@@ -206,10 +209,6 @@ public class BuildingPropertiesComponent extends AnchorPane {
         Map<String, Integer> resourceMapCost = buildingDto.cost();
         ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(resourceMapCost, buildingCostsListView.getItems(), null);
         buildingCostsListView.setItems(resourceListCost);
-    }
-
-    public void setJobsService(JobsService jobsService) {
-        this.jobsService = jobsService;
     }
 
     public void onClose(){

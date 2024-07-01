@@ -100,7 +100,7 @@ public class InGameController extends BasicController {
     ResourcesService resourceService;
 
     @Inject
-    JobsService jobsService = new JobsService();
+    JobsService jobsService;
 
     @SubComponent
     @Inject
@@ -228,19 +228,6 @@ public class InGameController extends BasicController {
         for (int i = 0; i <= 16; i++) {
             this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
         }
-
-        // Load jobs for the player's empire and initialize job listener.
-        this.jobsService.loadEmpireJobs();
-        this.jobsService.initializeJobsListener();
-
-        // Connect jobService with controllers that require job information
-        this.jobsOverviewComponent.setJobsService(this.jobsService);
-        this.sitePropertiesComponent.setJobService(this.jobsService);
-        this.overviewSitesComponent.jobsComponent.setJobsService(this.jobsService);
-        this.buildingPropertiesComponent.setJobsService(this.jobsService);
-
-        this.buildingPropertiesComponent.setBuildingsJobUpdates();
-        this.sitePropertiesComponent.setSitesJobUpdates();
     }
 
     private void handleShowSettings(@NotNull PropertyChangeEvent propertyChangeEvent) {
@@ -304,9 +291,9 @@ public class InGameController extends BasicController {
 
         this.createContextMenuButtons();
 
-        // Connect observable lists from jobService with the controllers that require job information
-        this.jobsOverviewComponent.setJobsObservableList(this.jobsService.getObservableJobCollection());
-        this.sitePropertiesComponent.setSiteJobs(this.jobsService.getJobObservableListOfType("district"));
+        //Generate job stopping conditions for the already running jobs
+        this.jobsService.loadEmpireJobs();
+        this.jobsService.initializeJobsListener();
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -471,11 +458,11 @@ public class InGameController extends BasicController {
         islandComponentList.forEach(IslandComponent::destroy);
         islandComponentList = null;
         islandComponentMap = null;
-        this.jobsService = null;
         islandsService.removeDataForMap();
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
                 .removePropertyChangeListener(triple.propertyName(), triple.listener()));
         this.subscriber.dispose();
+        this.jobsService.dispose();
     }
 
     public void showBuildingInformation(String buildingToAdd) {

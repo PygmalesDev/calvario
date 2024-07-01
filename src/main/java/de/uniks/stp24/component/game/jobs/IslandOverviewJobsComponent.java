@@ -13,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 
@@ -42,7 +43,8 @@ public class IslandOverviewJobsComponent extends AnchorPane {
     @Inject
     Provider<IslandOverviewJobProgressComponent> progressPaneProvider;
 
-    private JobsService jobsService;
+    @Inject
+    JobsService jobsService;
 
     @Inject
     IslandOverviewJobsComponent() {
@@ -53,6 +55,15 @@ public class IslandOverviewJobsComponent extends AnchorPane {
         this.jobProgressListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.progressPaneProvider));
     }
 
+    @OnInit
+    public void setTextVisibility() {
+        this.jobsService.onJobCommonStart(() -> this.noJobText.setVisible(false));
+        this.jobsService.onJobCommonFinish(() -> {
+            if (this.jobsService.getObservableListForSystem(this.islandAttributes.getIsland().id()).size() < 1)
+                this.noJobText.setVisible(true);
+        });
+    }
+
 
     public void insertIslandName() {
         this.noJobText.setText(this.noJobText.getText()
@@ -60,10 +71,7 @@ public class IslandOverviewJobsComponent extends AnchorPane {
     }
 
     public void setJobsObservableList(ObservableList<Job> observer) {
+        if (observer.size() > 0) this.noJobText.setVisible(false);
         this.jobProgressListView.setItems(observer);
-    }
-
-    public void setJobsService(JobsService jobsService) {
-        this.jobsService = jobsService;
     }
 }

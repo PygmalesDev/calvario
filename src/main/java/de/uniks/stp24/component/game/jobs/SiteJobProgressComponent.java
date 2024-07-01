@@ -6,7 +6,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
-import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 
@@ -25,15 +24,7 @@ public class SiteJobProgressComponent extends Pane {
 
     }
 
-    public void setInitialProgress(Job job) {
-        this.progress = 0;
-        this.total = job.total();
-        this.jobProgressText.setText(String.format("%d/%s", this.progress, this.total));
-        this.jobProgressBar.setProgress(0);
-        this.incrementAmount = (double) 1 /this.total;
-    }
-
-    public void setCurrentProgress(Job job) {
+    public void setJobProgress(Job job) {
         this.progress = job.progress();
         this.total = job.total();
         this.jobProgressText.setText(String.format("%d/%s", this.progress, this.total));
@@ -45,5 +36,9 @@ public class SiteJobProgressComponent extends Pane {
         this.progress++;
         this.jobProgressText.setText(String.format("%d/%s", this.progress, this.total));
         this.jobProgressBar.setProgress(this.progress*this.incrementAmount);
+    }
+
+    public void cancelJob() {
+
     }
 }

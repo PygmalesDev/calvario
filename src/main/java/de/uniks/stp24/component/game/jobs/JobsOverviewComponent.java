@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 
 import javax.inject.Inject;
@@ -20,8 +21,8 @@ public class JobsOverviewComponent extends AnchorPane {
     ListView<Job> jobsListView;
     @FXML
     Button closeButton;
-
-    private JobsService jobsService;
+    @Inject
+    JobsService jobsService;
     private ObservableList<Job> jobsList;
 
     @Inject
@@ -34,14 +35,12 @@ public class JobsOverviewComponent extends AnchorPane {
 
     }
 
-
-    public void setJobsService(JobsService jobsService) {
-        this.jobsService = jobsService;
-    }
-
-    public void setJobsObservableList(ObservableList<Job> observable) {
-        this.jobsList = observable;
-        this.jobsListView.setItems(this.jobsList);
-        this.jobsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.jobProvider));
+    @OnRender
+    public void setJobsObservableList() {
+        this.jobsService.onJobsLoadingFinished(() -> {
+            this.jobsList = this.jobsService.getObservableJobCollection();
+            this.jobsListView.setItems(this.jobsList);
+            this.jobsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.jobProvider));
+        });
     }
 }

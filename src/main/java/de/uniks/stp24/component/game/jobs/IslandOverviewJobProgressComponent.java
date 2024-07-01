@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component(view = "IslandOverviewJobProgress.fxml")
@@ -57,7 +58,14 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
     @Override
     public void setItem(@NotNull Job job) {
         this.job = job;
-        this.jobDescriptionText.setText(String.format("%s of %s", job.type(), job.building()));
+        this.jobProgressBar.setProgress((((double) 1/job.total()) * job.progress()));
+        switch (job.type()) {
+            // TODO: Add translations
+            case "building" -> this.jobDescriptionText.setText(String.format("Building of %s", job.building()));
+            case "district" -> this.jobDescriptionText.setText(String.format("Building on %s", job.district()));
+            // TODO: Change upgrade to next upgrade level
+            case "upgrade" -> this.jobDescriptionText.setText(String.format("Upgrading island to %s", job.type()));
+        }
         this.jobTimeRemaining.setText(String.format("%s/%s", job.progress(), job.total()));
     }
 

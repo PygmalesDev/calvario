@@ -2,39 +2,29 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.AggregateItemDto;
-import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import org.controlsfx.control.GridCell;
-import org.controlsfx.control.GridView;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -84,7 +74,9 @@ public class MarketComponent extends StackPane {
     private String lastUpdate;
     private String lastSeasonUpdate;
     Provider<MarketResourceComponent> marketResourceComponentProvider = () -> new MarketResourceComponent(true,true,true, gameResourceBundle);
-    ObservableList<Resource> resourceList;
+
+    Map<String,Integer> resourceMap = new HashMap<>();
+    Map<String, Integer> creditsMap = new HashMap<>();
 
     @Inject
     public MarketComponent() {
@@ -114,12 +106,26 @@ public class MarketComponent extends StackPane {
         this.getParent().setVisible(false);
     }
 
-    public void filterResourceMap(){
+    public void filterResourceMap() {
+        resourceMap.remove("population");
+        resourceMap.remove("research");
+    }
 
+    public void separateCredits() {
+        if (resourceMap.containsKey("credits")) {
+            creditsMap.put("credits", resourceMap.get("credits"));
+            resourceMap.remove("credits");
+        }
     }
 
     public void listMarketResources(Map<String, Integer> resourceMap) {
-        resourcesListView.getItems().addAll(resourceMap.entrySet());
+        this.resourceMap = resourceMap;
+        filterResourceMap();
+        separateCredits();
+        if(this.resourceMap.isEmpty()){
+            System.out.println("resourceMap is empty");
+        }
+        resourcesListView.getItems().addAll(this.resourceMap.entrySet());
         resourcesListView.setCellFactory(list -> new ResourceCell());
     }
 

@@ -22,8 +22,6 @@ import java.util.Objects;
 public class Building extends VBox {
     @FXML
     Button building;
-    @Inject
-    IslandAttributeStorage islandAttributeStorage;
 
     InGameController inGameController;
 
@@ -74,6 +72,8 @@ public class Building extends VBox {
                 inGameController.buildingsWindowComponent.setVisible(false);
                 inGameController.setSitePropertiesInvisible();
                 inGameController.showBuildingInformation(buildingName);
+                inGameController.selectedBuilding = buildingName;
+                System.out.println(buildingName);
 
             } else {
                 inGameController.showBuildingWindow();

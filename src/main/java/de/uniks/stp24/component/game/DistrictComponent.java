@@ -54,6 +54,7 @@ public class DistrictComponent extends VBox {
         siteElement.setOnMouseClicked(event -> {
             inGameController.showSiteOverview();
             inGameController.setSiteType(name);
+            inGameController.selectedSites = name;
         });
     }
 

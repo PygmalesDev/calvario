@@ -181,6 +181,8 @@ public class InGameController extends BasicController {
     PopupBuilder popupBuildingWindow = new PopupBuilder();
     PopupBuilder popupSiteProperties = new PopupBuilder();
     PopupBuilder popupDeleteStructure = new PopupBuilder();
+    public String selectedBuilding;
+    public String selectedSites;
 
     @OnInit
     public void init() {
@@ -218,10 +220,14 @@ public class InGameController extends BasicController {
                 result -> islandAttributes.setDistrictPresets(result),
                 error -> System.out.println("error in getEmpire in inGame"));
 
-        this.subscriber.subscribe(inGameService.getVariablesPresets()),
+        /*
+        this.subscriber.subscribe(inGameService.getVariablesPresets(),
                 result -> {
+                    explanationService.allVariables.addAll(result.keySet());
+                },
+                error -> System.out.println("error in getEmpire in inGame"));
 
-                });
+         */
 
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
@@ -537,18 +543,17 @@ public class InGameController extends BasicController {
     Methods below showing explanation overview if mouse hovers above a chosen element.
      */
 
-    public void showExplanation(double x, double y){
+    public void showExplanation(double x, double y, String variable){
         explanationContainer.setLayoutX(x);
         explanationContainer.setLayoutY(y);
         explanationContainer.setVisible(true);
 
-        this.subscriber.subscribe(gameLogicApiService.getVariablesExplanations(gameID, empireID),
+        this.subscriber.subscribe(gameLogicApiService.getVariablesExplanations(empireID, variable),
                 result -> {
                     System.out.println(result);
                 });
 
     }
-
     public void unShowExplanation(){
         explanationContainer.setLayoutX(0);
         explanationContainer.setLayoutY(0);

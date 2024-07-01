@@ -56,6 +56,7 @@
     <ListView fx:id="siteConsumesListView" layoutX="48.0" layoutY="261.0" prefHeight="80.0" prefWidth="64.0" style="-fx-background-color: transparent;" styleClass="resourceList" AnchorPane.leftAnchor="48.0" />
     <ListView fx:id="siteProducesListView" layoutX="119.0" layoutY="261.0" prefHeight="80.0" prefWidth="64.0" style="-fx-background-color: transparent;" styleClass="resourceList" AnchorPane.rightAnchor="67.0" />
     <ListView fx:id="siteCostsListView" layoutX="45.0" layoutY="191.0" prefHeight="37.0" prefWidth="191.0" style="-fx-background-color: transparent;" styleClass="resourceList" />
+   <AnchorPane fx:id="jobPane" layoutX="25.0" layoutY="189.0" prefHeight="50.0" prefWidth="200.0" />
    <stylesheets>
       <URL value="@../../style/islandOverview.css" />
       <URL value="@../../style/ingameButtons.css" />

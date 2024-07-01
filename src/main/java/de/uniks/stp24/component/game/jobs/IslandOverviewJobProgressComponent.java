@@ -1,6 +1,7 @@
 package de.uniks.stp24.component.game.jobs;
 
 import de.uniks.stp24.model.Jobs.Job;
+import de.uniks.stp24.service.game.JobsService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
@@ -10,7 +11,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
+import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
@@ -35,6 +38,14 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
     HBox costsHBox;
 
     @Inject
+    JobsService jobsService;
+
+    @Inject
+    Subscriber subscriber;
+
+    private Job job;
+
+    @Inject
     @Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
@@ -45,7 +56,17 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
     }
     @Override
     public void setItem(@NotNull Job job) {
+        this.job = job;
         this.jobDescriptionText.setText(String.format("%s of %s", job.type(), job.building()));
         this.jobTimeRemaining.setText(String.format("%s/%s", job.progress(), job.total()));
+    }
+
+    public void stopJob() {
+        this.subscriber.subscribe(this.jobsService.stopJob(this.job));
+    }
+
+    @OnDestroy
+    public void destroy() {
+        this.subscriber.dispose();
     }
 }

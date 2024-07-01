@@ -24,6 +24,9 @@ public class JobsService {
     EventListener eventListener;
 
     Map<String, ObservableList<Job>> jobCollections = new HashMap<>();
+    Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();
+    Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
+    Map<String, ArrayList<Runnable>> jobProgressFunctions = new HashMap<>();
 
     @Inject
     public JobsService() {
@@ -66,11 +69,9 @@ public class JobsService {
 
         if (!job.system().isEmpty()) {
             if (!this.jobCollections.containsKey(job.system())) {
-                System.out.println("Creating new System collection: " + job.system());
                 this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
             }
             else {
-                System.out.println("System collection exists, adding to it");
                 this.jobCollections.get(job.system()).add(job);
             }
         }
@@ -86,6 +87,10 @@ public class JobsService {
             else
                 this.jobCollections.get(job.system()).replaceAll(other -> other.equals(job) ? job : other);
         }
+
+        if (this.jobProgressFunctions.containsKey(job._id())) {
+            this.jobProgressFunctions.get(job._id()).forEach(Runnable::run);
+        }
     }
 
     public void deleteJobFromGroups(Job job) {
@@ -97,6 +102,46 @@ public class JobsService {
                 this.jobCollections.get(job.system()).removeIf(other -> other._id().equals(job._id()));
             }
         }
+
+        if (this.jobCompletionFunctions.containsKey(job._id())) {
+            this.jobCompletionFunctions.get(job._id()).forEach(Runnable::run);
+        }
+    }
+
+    public void deleteJobFromGroups(String jobID) {
+        this.jobCollections.forEach((key, list) -> list.removeIf(job -> job._id().equals(jobID)));
+        this.jobCompletionFunctions.remove(jobID);
+    }
+
+    /**
+     * A method used to define the further execution result of a job.It's useful if you need to execute
+     * some methods that lay within other classes. The execution function will be deleted after the job is completed.
+     * It is possible to add more than one function on the job completion.
+     * @param jobID ID of the job after completion of which the function will be executed
+     * @param func the execution function
+     */
+    public void onJobCompletion(String jobID, Runnable func) {
+        if (!this.jobCompletionFunctions.containsKey(jobID))
+            this.jobCompletionFunctions.put(jobID, new ArrayList<>());
+        this.jobCompletionFunctions.get(jobID).add(func);
+    }
+
+    public void onJobProgress(String jobID, Runnable func) {
+        if (!this.jobProgressFunctions.containsKey(jobID))
+            this.jobProgressFunctions.put(jobID, new ArrayList<>());
+        this.jobProgressFunctions.get(jobID).add(func);
+    }
+
+    public boolean hasOnProgress(String jobID) {
+        if (this.jobProgressFunctions.containsKey(jobID))
+            return this.jobProgressFunctions.get(jobID).size() > 0;
+        return false;
+    }
+
+    public void onJobDeletion(String jobID, Runnable func) {
+        if (!this.jobDeletionFunctions.containsKey(jobID))
+            this.jobDeletionFunctions.put(jobID, new ArrayList<>());
+        this.jobDeletionFunctions.get(jobID).add(func);
     }
 
     /**
@@ -108,10 +153,6 @@ public class JobsService {
         return this.jobsApiService.createNewJob(this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId(), jobDTO);
     }
 
-    public Observable<Job> getJobByID(String jobID) {
-        return this.jobsApiService.getJobByID(this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId(), jobID);
-    }
-
     /**
      * Stops the job of the given id. If the job is not completed, the resources for its initializing will be returned
      * to the empire.
@@ -119,6 +160,10 @@ public class JobsService {
      * @return {@link Job Job} class containing the result of stopping the job.
      */
     public Observable<Job> stopJob(String jobID) {
+        this.deleteJobFromGroups(jobID);
+        if (this.jobDeletionFunctions.containsKey(jobID))
+            this.jobDeletionFunctions.get(jobID).forEach(Runnable::run);
+
         return this.jobsApiService.deleteJob(this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId(), jobID);
     }
 
@@ -148,9 +193,7 @@ public class JobsService {
     }
 
     public ObservableList<Job> getObservableListForSystem(String systemID) {
-        System.out.println("getting system jobs for " + systemID);
         if (!this.jobCollections.containsKey(systemID)) {
-            System.out.println("no system jobs exist, creating new list");
             this.jobCollections.put(systemID, FXCollections.observableArrayList());
         }
         return this.jobCollections.get(systemID);

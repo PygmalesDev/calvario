@@ -30,11 +30,11 @@ public interface JobsApiService {
     Observable<Job> getJobByID(@Path("game") String gameID, @Path("empire") String empireID,
                                @Path("id") String jobID);
 
-    @PATCH("api/v3/games/{game}/empires/{empire}/jobs/{id}")
+    @PATCH("games/{game}/empires/{empire}/jobs/{id}")
     Observable<Job> patchJobPriority(@Path("game") String gameID, @Path("empire") String empireID,
                                      @Path("id") String jobID, @Body int priority);
 
-    @DELETE("api/v3/games/{game}/empires/{empire}/jobs/{id}")
+    @DELETE("games/{game}/empires/{empire}/jobs/{id}")
     Observable<Job> deleteJob(@Path("game") String gameID, @Path("empire") String empireID,
                               @Path("id") String jobID);
 }

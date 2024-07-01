@@ -1,11 +1,15 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.component.game.jobs.SiteJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.SiteDto;
-import de.uniks.stp24.model.Island;
+import de.uniks.stp24.model.Jobs;
+import de.uniks.stp24.model.Jobs.*;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
@@ -24,7 +28,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.FulibFxApp;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnInit;
+import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 
@@ -33,6 +39,7 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static de.uniks.stp24.service.Constants.*;
@@ -57,6 +64,8 @@ public class SitePropertiesComponent extends AnchorPane {
     Button closeWindowButton;
     @FXML
     Text siteName;
+    @FXML
+    AnchorPane jobPane;
 
     String siteType;
 
@@ -79,8 +88,15 @@ public class SitePropertiesComponent extends AnchorPane {
     App app;
 
     @Inject
+    GameSystemsApiService gameSystemsApiService;
+
+    @Inject
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
+
+    @Inject
+    @SubComponent
+    SiteJobProgressComponent siteJobProgress;
 
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
 
@@ -89,19 +105,27 @@ public class SitePropertiesComponent extends AnchorPane {
     }
     Map<String, String> sitesMap;
 
+    JobsService jobsService;
+
     private int amountSite = 0;
     private int amountSiteSlots = 0;
 
     public ObservableList<Map<String, Integer>> resources;
     public ObservableList<ResourceComponent> resourceComponents;
+    private ObservableList<Job> siteJobs;
 
     InGameController inGameController;
-
-
 
     @OnInit
     public void init(){
         sitesMap = sitesIconPathsMap;
+    }
+
+    @OnRender
+    public void render() {
+        this.jobPane.getChildren().add(this.siteJobProgress);
+        this.jobPane.setPickOnBounds(false);
+        this.jobPane.setVisible(false);
     }
 
     @FXML
@@ -126,6 +150,22 @@ public class SitePropertiesComponent extends AnchorPane {
         displayCostsOfSite();
         displayAmountOfSite();
 
+        if (this.siteJobs.stream().anyMatch(job -> job.district().equals(siteType)
+                && job.system().equals(this.tokenStorage.getIsland().id()))) {
+            Job job = this.siteJobs.stream().filter(started -> started.district().equals(siteType)
+                    && started.system().equals(this.tokenStorage.getIsland().id()))
+                    .findFirst().orElse(null);
+            this.showJobsPane();
+            if (Objects.nonNull(job)) {
+                this.siteJobProgress.setCurrentProgress(job);
+                if (!this.jobsService.hasOnProgress(job._id())) {
+                    this.jobsService.onJobProgress(job._id(), () -> this.siteJobProgress.incrementProgress());
+                }
+            }
+        } else
+            this.hideJobsPane();
+
+
     }
 
     public void onClose(){
@@ -133,17 +173,48 @@ public class SitePropertiesComponent extends AnchorPane {
     }
 
     public void buildSite(){
-        Island island = tokenStorage.getIsland();
-        subscriber.subscribe(resourcesService.buildSite(tokenStorage.getGameId(), island, siteType), result -> {
-            tokenStorage.setIsland(islandsService.updateIsland(result));
-            islandAttributeStorage.setIsland(islandsService.updateIsland(result));
+        this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createDistrictJob(
+                this.tokenStorage.getIsland().id(), this.siteType)), job ->  {
+            this.showJobsPane();
+            this.siteJobProgress.setInitialProgress(job);
+
+            this.jobsService.onJobProgress(job._id(), () -> this.siteJobProgress.incrementProgress());
+            this.jobsService.onJobDeletion(job._id(), this::hideJobsPane);
+            this.jobsService.onJobCompletion(job._id(), () -> {
+                this.updateIslandSites();
+                this.hideJobsPane();
+            });
+        });
+    }
+
+    public void setSitesJobUpdates() {
+        this.jobsService.getJobObservableListOfType("district").forEach(job -> {
+            this.jobsService.onJobDeletion(job._id(), this::hideJobsPane);
+            this.jobsService.onJobCompletion(job._id(), this::hideJobsPane);
+        });
+    }
+
+    public void showJobsPane() {
+        this.jobPane.setVisible(true);
+        this.siteCostsListView.setVisible(false);
+    }
+
+    public void hideJobsPane() {
+        this.jobPane.setVisible(false);
+        this.siteCostsListView.setVisible(true);
+    }
+
+    public void updateIslandSites() {
+        this.subscriber.subscribe(this.gameSystemsApiService.getSystem(this.tokenStorage.getGameId(),
+                this.tokenStorage.getIsland().id()), result -> {
+            this.tokenStorage.setIsland(this.islandsService.updateIsland(result));
+            this.islandAttributeStorage.setIsland(this.islandsService.updateIsland(result));
 
             displayAmountOfSite();
-            inGameController.updateSiteCapacities();
+            this.inGameController.updateSiteCapacities();
         });
-
-
     }
+
 
     public void destroySite(){
         inGameController.handleDeleteStructure(siteType);
@@ -237,6 +308,14 @@ public class SitePropertiesComponent extends AnchorPane {
         Map<String, Integer> resourceMapProduce = siteDto.production();
         ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, siteProducesListView.getItems(), null);
         siteProducesListView.setItems(resourceListProduce);
+    }
+
+    public void setJobService(JobsService jobsService) {
+        this.jobsService = jobsService;
+    }
+
+    public void setSiteJobs(ObservableList<Job> jobsList) {
+        this.siteJobs = jobsList;
     }
 
 }

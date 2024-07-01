@@ -18,12 +18,10 @@ import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
-import javafx.application.Platform;
 import de.uniks.stp24.service.PopupBuilder;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -233,12 +231,18 @@ public class InGameController extends BasicController {
             this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
         }
 
-        // Connect jobService with controllers that require job information
-        this.jobsOverviewComponent.setJobsService(this.jobsService);
-
         // Load jobs for the player's empire and initialize job listener.
         this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListener();
+
+        // Connect jobService with controllers that require job information
+        this.jobsOverviewComponent.setJobsService(this.jobsService);
+        this.sitePropertiesComponent.setJobService(this.jobsService);
+        this.overviewSitesComponent.jobsComponent.setJobsService(this.jobsService);
+        this.buildingPropertiesComponent.setJobsService(this.jobsService);
+
+        this.buildingPropertiesComponent.setBuildingsJobUpdates();
+        this.sitePropertiesComponent.setSitesJobUpdates();
     }
 
     private void handleShowSettings(@NotNull PropertyChangeEvent propertyChangeEvent) {
@@ -303,6 +307,7 @@ public class InGameController extends BasicController {
 
         // Connect observable lists from jobService with the controllers that require job information
         this.jobsOverviewComponent.setJobsObservableList(this.jobsService.getObservableJobCollection());
+        this.sitePropertiesComponent.setSiteJobs(this.jobsService.getJobObservableListOfType("district"));
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -460,7 +465,6 @@ public class InGameController extends BasicController {
         islandComponentList.forEach(IslandComponent::destroy);
         islandComponentList = null;
         islandComponentMap = null;
-        jobsService = null;
         islandsService.removeDataForMap();
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
                 .removePropertyChangeListener(triple.propertyName(), triple.listener()));

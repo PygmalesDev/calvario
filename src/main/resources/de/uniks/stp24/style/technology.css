@@ -56,50 +56,25 @@
     -fx-border-width: 0;
 }
 
-.scroll-pane {
-    -fx-background-color: transparent;
-    -fx-opacity: 1;
+.technologyCategoriesLabel {
+    -fx-font-family: "Tempus Sans ITC";
 }
 
-.scroll-pane > .viewport {
-    -fx-background-color: transparent;
-    -fx-opacity: 1;
+.technologyCategoryTitle {
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
 }
 
-.scroll-pane .scroll-bar:horizontal {
-    -fx-opacity: 0;
-    -fx-background-color: transparent;
-}
-
-.scroll-pane .scroll-bar:vertical {
-    -fx-opacity: 0;
+.list-view {
     -fx-background-color: transparent;
 }
 
-.scroll-bar .thumb {
+.list-cell {
     -fx-background-color: transparent;
-}
-
-.scroll-bar .increment-button,
-.scroll-bar .decrement-button {
-    -fx-background-color: transparent;
-    -fx-padding: 0;
-    -fx-opacity: 1;
-}
-
-.scroll-bar .increment-arrow,
-.scroll-bar .decrement-arrow {
-    -fx-background-color: transparent;
-    -fx-padding: 0;
-    -fx-shape: "";
-    -fx-opacity: 1;
-
-}
-
-.scroll-pane .corner {
-    -fx-background-color: transparent;
-    -fx-opacity: 1;
-
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/red_frame.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
 }
 
 /*.list-view {*/

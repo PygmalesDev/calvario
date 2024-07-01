@@ -142,6 +142,22 @@ public class Constants {
             Map.entry("developed", "update.developed")
     );
 
+    public static final Map<String, String> technologyTranslation = Map.ofEntries(
+            Map.entry("crew_relations", "society"),
+            Map.entry("marine_science", "physics"),
+            Map.entry("shipbuilding", "engineering"),
+            Map.entry("cartography", "computing"),
+            Map.entry("construction", "construction"),
+            Map.entry("pirate_codex", "state"),
+            Map.entry("power", "energy"),
+            Map.entry("sailing", "propulsion"),
+            Map.entry("marine_life", "biology"),
+            Map.entry("plunder", "materials"),
+            Map.entry("hidden_treasure", "rare"),
+            Map.entry("navy", "military"),
+            Map.entry("production", "production"),
+            Map.entry("economy", "economy")
+    );
 
     public static final Map<String, String> sitesIconPathsMap = Map.ofEntries(
             Map.entry("city", "de/uniks/stp24/icons/sites/village_site.png"),

@@ -6,6 +6,8 @@ import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -27,14 +29,18 @@ public class TechnologyService {
 
     Set<String> unlockedTechnologies = new HashSet<>();
 
-    List<TechnologyExtended> researchTechnologiesList = new ArrayList<>();
-    List<TechnologyExtended> unlockedTechnologiesList = new ArrayList<>();
+    ObservableList<TechnologyExtended> researchTechnologiesList = FXCollections.observableArrayList();
+    ObservableList<TechnologyExtended> unlockedTechnologiesList = FXCollections.observableArrayList();
 
     @Inject
     public TechnologyService() {
     }
 
-    public List<TechnologyExtended> getUnlockedTechnologies() {
+    public ObservableList<TechnologyExtended> getUnlockedTechnologies() {
+
+//        unlockedTechnologies.clear();
+//        researchTechnologiesList.clear();
+
         subscriber.subscribe(empireApiService.getEmpiresDtos(tokenStorage.getGameId()),
                 empireDtos -> {
                     for (EmpireDto empireDto : empireDtos) {
@@ -52,8 +58,6 @@ public class TechnologyService {
                         if (unlockedTechnologies.contains(technology.id())) {
                             unlockedTechnologiesList.add(technology);
                         } else {
-                            System.out.println(technology);
-                            System.out.println("Nicht freigeschaltet");
                             researchTechnologiesList.add(technology);
                         }
                     }
@@ -63,12 +67,26 @@ public class TechnologyService {
         return unlockedTechnologiesList;
     }
 
-    public List<TechnologyExtended> getResearchTechnologies() {
+    public ObservableList<TechnologyExtended> getResearchTechnologies() {
         getUnlockedTechnologies();
         return researchTechnologiesList;
     }
 
+    public Observable<TechnologyExtended> getTechnology(String id) {
+        return presetsApiService.getTechnology(id);
+    }
 
+    public List<String> getDescriptionForTechnology(String id) {
+        List<String> description = new ArrayList<>();
+        subscriber.subscribe(presetsApiService.getTechnology(id),
+                technology -> {
+
+                },
+                Throwable::printStackTrace
+        );
+        return description;
+
+    }
 
     public Observable<TechnologyExtended> getTechnologies() {
         return presetsApiService.getTechnologies().flatMap(Observable::fromIterable);

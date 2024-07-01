@@ -88,7 +88,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
         show(technologyCategoryComponent.setCategory("crew_relations"));
     }
 
-    public void marineSience() {
+    public void marineScience() {
         show(technologyCategoryComponent.setCategory("marine_science"));
     }
 

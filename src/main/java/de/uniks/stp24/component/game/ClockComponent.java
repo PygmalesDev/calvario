@@ -68,7 +68,7 @@ public class ClockComponent extends AnchorPane {
     @Inject
     public EventService eventService;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
     public TimerService timerService;
     @Inject

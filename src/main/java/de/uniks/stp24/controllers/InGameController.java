@@ -1,7 +1,6 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.*;
-import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.dto.EmpireDto;
@@ -10,14 +9,20 @@ import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.game.*;
+import de.uniks.stp24.service.game.EventService;
+import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.game.TimerService;
+import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
+import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
+import javafx.application.Platform;
 import de.uniks.stp24.service.PopupBuilder;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -83,6 +88,9 @@ public class InGameController extends BasicController {
     @FXML
     public StackPane storageOverviewContainer;
     @FXML
+    public StackPane empireOverviewContainer;
+
+    @FXML
     StackPane clockComponentContainer;
 
     @Inject
@@ -124,6 +132,9 @@ public class InGameController extends BasicController {
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
 
+    @SubComponent
+    @Inject
+    public EmpireOverviewComponent empireOverviewComponent;
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
@@ -192,6 +203,7 @@ public class InGameController extends BasicController {
         buildingPropertiesComponent.setInGameController(this);
         sitePropertiesComponent.setInGameController(this);
         deleteStructureComponent.setInGameController(this);
+        empireOverviewComponent.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
@@ -279,7 +291,7 @@ public class InGameController extends BasicController {
         siteProperties.setMouseTransparent(true);
         deleteStructureWarningContainer.setMouseTransparent(true);
 
-        pauseMenuContainer.setMouseTransparent(false);
+        pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
         eventComponent.setParent(shadow, eventContainer);
         clockComponent.setToggle(true);
@@ -288,6 +300,8 @@ public class InGameController extends BasicController {
         eventContainer.setVisible(false);
         shadow.setVisible(false);
         eventComponent.setClockComponent(clockComponent);
+
+        pauseMenuContainer.getChildren().add(pauseMenuComponent);
 
         overviewContainer.setVisible(false);
         overviewSitesComponent.setContainer();
@@ -301,9 +315,6 @@ public class InGameController extends BasicController {
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
 
         this.createContextMenuButtons();
-
-        pauseMenuContainer.getChildren().clear();
-        pauseMenuContainer.getChildren().add(pauseMenuComponent);
 
         // Connect observable lists from jobService with the controllers that require job information
         this.jobsOverviewComponent.setJobsObservableList(this.jobsService.getObservableJobCollection());
@@ -326,7 +337,7 @@ public class InGameController extends BasicController {
         }
     }
 
-    @OnKey(code = KeyCode.I)
+    @OnKey(code = KeyCode.I,alt = true)
     public void showIslandOverviewWindows() {
         buildingProperties.setMouseTransparent(false);
         buildingsWindow.setMouseTransparent(false);
@@ -362,7 +373,20 @@ public class InGameController extends BasicController {
     }
 
     public void pauseGame() {
+        closeComponents();
         pauseMenuContainer.setVisible(pause);
+    }
+
+    public void closeComponents() {
+        if(empireOverviewComponent.isVisible()){
+            empireOverviewComponent.closeEmpireOverview();
+        }
+        if (storageOverviewContainer.isVisible()) {
+            storageOverviewComponent.closeStorageOverview();
+        }
+        if (overviewContainer.isVisible()) {
+            overviewSitesComponent.closeOverview();
+        }
     }
 
     public void resumeGame() {

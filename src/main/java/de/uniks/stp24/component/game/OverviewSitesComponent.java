@@ -100,31 +100,31 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void setLevelCheckBox(){
-        switch(islandAttributes.getIsland().upgradeLevel()){
-            case 1:
+        switch (islandAttributes.getIsland().upgradeLevel()) {
+            case 1 -> {
                 inGameController.overviewUpgradeComponent.checkExplored.setVisible(true);
                 inGameController.overviewUpgradeComponent.checkColonized.setVisible(false);
                 inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(false);
                 inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
-                break;
-            case 2:
+            }
+            case 2 -> {
                 inGameController.overviewUpgradeComponent.checkExplored.setVisible(true);
                 inGameController.overviewUpgradeComponent.checkColonized.setVisible(true);
                 inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(false);
                 inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
-                break;
-            case 3:
+            }
+            case 3 -> {
                 inGameController.overviewUpgradeComponent.checkExplored.setVisible(true);
                 inGameController.overviewUpgradeComponent.checkColonized.setVisible(true);
                 inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(true);
                 inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
-                break;
-            case 4:
+            }
+            case 4 -> {
                 inGameController.overviewUpgradeComponent.checkExplored.setVisible(true);
                 inGameController.overviewUpgradeComponent.checkColonized.setVisible(true);
                 inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(true);
                 inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(true);
-                break;
+            }
         }
     }
 
@@ -201,19 +201,31 @@ public class OverviewSitesComponent extends AnchorPane {
         sitesButton.setDisable(false);
     }
 
+    public void updateResCapacity(){
+        int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
+                islandAttributes.getIsland().buildings().size();
+        islandAttributes.setUsedSlots(usedSlots);
+
+        resCapacity.setText(usedSlots + "/" + islandAttributes.getIsland().resourceCapacity());
+    }
+
     public void setOverviewSites() {
         islandFlag.setStyle("-fx-background-image: url('" + inGameController.flagsPath.get(islandAttributes.getIsland().flagIndex()) +"');" +
                 "-fx-background-size: 100% 100%;" + "-fx-background-repeat: no-repeat;");
         showBuildings();
         upgradeButton.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
 
-        int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
-                islandAttributes.getIsland().buildings().size();
-        islandAttributes.setUsedSlots(usedSlots);
+        updateResCapacity();
 
         island_name.setText(islandAttributes.getIslandNameTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");
         crewCapacity.setText(String.valueOf(islandAttributes.getIsland().crewCapacity()));
-        resCapacity.setText(usedSlots + "/" + islandAttributes.getIsland().resourceCapacity());
 
+
+        switch (islandAttributes.getIsland().upgradeLevel()) {
+            case 1 -> island_inf.setText(islandAttributes.upgradeEffects.get(1));
+            case 2 -> island_inf.setText(islandAttributes.upgradeEffects.get(2));
+            case 3 -> island_inf.setText(islandAttributes.upgradeEffects.get(3));
+            case 4 -> island_inf.setText(islandAttributes.upgradeEffects.get(4));
+        }
     }
 }

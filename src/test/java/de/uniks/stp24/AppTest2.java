@@ -80,6 +80,8 @@ public class AppTest2 extends ControllerTest {
     JobsOverviewComponent jobsOverviewComponent;
     @InjectMocks
     IslandOverviewJobsComponent islandOverviewJobsComponent;
+    @InjectMocks
+    EmpireOverviewComponent empireOverviewComponent;
 
 
     @Spy
@@ -146,6 +148,7 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
+        this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;

@@ -110,8 +110,10 @@ public class BuildingPropertiesComponent extends AnchorPane {
         this.buildingType = buildingType;
         displayInfoBuilding();
         disableButtons();
+        startResourceMonitoring();
     }
 
+    //Checks if buy and destroy building has to be deactivated
     public void disableButtons(){
         buyButton.setDisable(true);
         destroyButton.setDisable(true);
@@ -129,6 +131,27 @@ public class BuildingPropertiesComponent extends AnchorPane {
     public void destroyBuilding(){
         disableButtons();
         inGameController.handleDeleteStructure(buildingType);
+    }
+
+    //Gets called every second by a timer
+    public void updateButtonStates(){
+        subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
+            priceOfBuilding = result.cost();
+            buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding) ||
+                    islandAttributeStorage.getUsedSlots() >= islandAttributeStorage.getIsland().resourceCapacity());
+        });
+        destroyButton.setDisable(!tokenStorage.getIsland().buildings().contains(buildingType));
+    }
+
+    //Timer for calling updateButtonStates every second
+    public void startResourceMonitoring() {
+        Timer timer = new Timer(true);
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                updateButtonStates();
+            }
+        }, 0, 1000);
     }
 
     public void buyBuilding(){
@@ -159,6 +182,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
 
+    //Gets resources of the building and shows them in three listviews
     public void displayInfoBuilding(){
         Image imageBuilding = new Image(buildingsMap.get(buildingType));
         buildingImage.setImage(imageBuilding);
@@ -167,9 +191,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
         buildingCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         buildingProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         buildingConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
-        disableButtons();
     }
 
+    //Sets upkeep, production and cost of buildings in listviews
     private void resourceListGeneration(BuildingDto buildingDto) {
         Map<String, Integer> resourceMapUpkeep = buildingDto.upkeep();
         ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, buildingConsumesListView.getItems(), null);

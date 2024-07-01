@@ -91,6 +91,15 @@ public class IslandAttributeStorage {
         };
     }
 
+    public Map<String, Integer> getUpkeep(int key) {
+        return switch (key) {
+            case 2 -> systemPresets.colonized().upkeep();
+            case 3 -> systemPresets.developed().upkeep();
+            case 4 -> systemPresets.upgraded().upkeep();
+            default -> null;
+        };
+    }
+
     public Map<String, Integer> getAvailableResources() {
         return empireDto.resources();
     }

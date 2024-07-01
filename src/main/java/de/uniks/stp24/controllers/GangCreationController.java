@@ -188,6 +188,7 @@ public class GangCreationController extends BasicController {
     String resourcesPaths = "/de/uniks/stp24/assets/";
     String flagsFolderPath = "flags/flag_";
     String portraitsFolderPath = "portraits/captain_";
+    String defaultGangName = "Buccaneers";
     int imagesCount = 16;
     int flagImageIndex = 0;
     int portraitImageIndex = 0;
@@ -290,6 +291,7 @@ public class GangCreationController extends BasicController {
                 applyInputs(gang);
                 traitsBox.setVisible(false);
                 changeEditNodes(false, false);
+                showCreationButton.setVisible(true);
             }
         });
     }
@@ -403,7 +405,7 @@ public class GangCreationController extends BasicController {
 
     private Gang getInputGang() {
         String gangName = gangNameText.getText();
-        if (gangNameText.getText().isEmpty()) gangName = "Buccaneers";
+        if (gangNameText.getText().isEmpty()) gangName = defaultGangName;
         flagImageIndex = flagImageIndex % flagsList.size();
         portraitImageIndex = portraitImageIndex % portraitsList.size();
         ArrayList<Trait> gangsTraits = new ArrayList<>(confirmedTraits);
@@ -653,7 +655,8 @@ public class GangCreationController extends BasicController {
                 showDeletePaneButton,
                 showCreationButton,
                 backButton,
-                chooseTraitsButton);
+                chooseTraitsButton,
+                cancelChangesButton);
     }
 
     public void traitsConfirm() {

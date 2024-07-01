@@ -21,8 +21,6 @@ public class BubbleComponent extends Pane {
     @FXML
     Pane backgroundBubble;
 
-    double w, h;
-
     ScaleTransition scaleTransition;
 
     @Inject

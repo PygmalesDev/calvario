@@ -218,6 +218,15 @@ public class InGameController extends BasicController {
                 result -> islandAttributes.setDistrictPresets(result),
                 error -> System.out.println("error in getEmpire in inGame"));
 
+        /*
+        this.subscriber.subscribe(inGameService.getVariablesPresets(),
+                result -> {
+                    explanationService.allVariables.addAll(result.keySet());
+                },
+                error -> System.out.println("error in getEmpire in inGame"));
+
+         */
+
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
                     result -> islandAttributes.setEmpireDto(result),

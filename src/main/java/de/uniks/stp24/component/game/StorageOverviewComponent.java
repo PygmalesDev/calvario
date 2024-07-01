@@ -2,6 +2,7 @@ package de.uniks.stp24.component.game;
 
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.Game;
@@ -57,15 +58,11 @@ public class StorageOverviewComponent extends AnchorPane {
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
-    @SubComponent
-    @Inject
-    public MarketComponent marketOverviewComponent;
-
-
     private String lastUpdate;
     private String lastSeasonUpdate;
     Provider<ResourceComponent> resourceComponentProvider = () -> new ResourceComponent(true, true, true, true, gameResourceBundle);
-
+    ObservableList<Resource> resourceList;
+    private InGameController inGameController;
 
     @Inject
     public StorageOverviewComponent() {
@@ -78,7 +75,6 @@ public class StorageOverviewComponent extends AnchorPane {
         if (!tokenStorage.isSpectator()) {
             createEmpireListener();
             createSeasonListener();
-            marketOverviewComponent.setStorageOverviewController(this);
         }
     }
 
@@ -109,7 +105,12 @@ public class StorageOverviewComponent extends AnchorPane {
 
     private void resourceListGeneration(EmpireDto empireDto, AggregateItemDto[] aggregateItems) {
         Map<String, Integer> resourceMap = empireDto.resources();
-        ObservableList<Resource> resourceList = resourcesService.generateResourceList(resourceMap, resourceListView.getItems(), aggregateItems);
+        //TODO remove print statement
+        for (Map.Entry<String, Integer> entry : resourceMap.entrySet()) {
+            System.out.println("Schlüssel: " + entry.getKey() + ", Wert: " + entry.getValue());
+        }
+        inGameController.marketOverviewComponent.listMarketResources(resourceMap);
+        resourceList = resourcesService.generateResourceList(resourceMap, resourceListView.getItems(), aggregateItems);
         this.resourceListView.setItems(resourceList);
     }
 
@@ -150,6 +151,14 @@ public class StorageOverviewComponent extends AnchorPane {
 
     public void closeStorageOverview() {
         this.getParent().setVisible(false);
+    }
+
+    public ObservableList<Resource> getResources() {
+        return this.resourceList;
+    }
+
+    public void setInGameController(InGameController ingameController) {
+        this.inGameController = ingameController;
     }
 
     @OnDestroy

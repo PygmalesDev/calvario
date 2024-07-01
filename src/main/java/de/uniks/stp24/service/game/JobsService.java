@@ -27,6 +27,7 @@ public class JobsService {
     Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobProgressFunctions = new HashMap<>();
+    Map<String, ArrayList<Runnable>> jobTypeFunctions = new HashMap<>();
 
     @Inject
     public JobsService() {
@@ -136,6 +137,12 @@ public class JobsService {
         if (this.jobProgressFunctions.containsKey(jobID))
             return this.jobProgressFunctions.get(jobID).size() > 0;
         return false;
+    }
+
+    public void onJobTypeProgress(String jobType, Runnable func) {
+        if (!this.jobProgressFunctions.containsKey(jobType))
+            this.jobProgressFunctions.put(jobType, new ArrayList<>());
+        this.jobProgressFunctions.get(jobType).add(func);
     }
 
     public void onJobDeletion(String jobID, Runnable func) {

@@ -1,6 +1,7 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.dto.EmpireDto;
@@ -9,20 +10,14 @@ import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.game.EventService;
-import de.uniks.stp24.service.game.IslandsService;
-import de.uniks.stp24.service.game.TimerService;
-import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
-import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
-import javafx.application.Platform;
 import de.uniks.stp24.service.PopupBuilder;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -68,8 +63,6 @@ public class InGameController extends BasicController {
     @FXML
     public StackPane overviewContainer;
     @FXML
-    ScrollPane mapPane;
-    @FXML
     public ScrollPane mapScrollPane;
     @FXML
     public Pane mapGrid;
@@ -85,10 +78,6 @@ public class InGameController extends BasicController {
     StackPane buildingsWindow;
     @FXML
     StackPane pauseMenuContainer;
-    @FXML
-    public StackPane storageOverviewContainer;
-    @FXML
-    public StackPane empireOverviewContainer;
 
     @FXML
     StackPane clockComponentContainer;
@@ -207,9 +196,6 @@ public class InGameController extends BasicController {
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
-        //Todo: Outprint for Swagger - can be deleted later
-        System.out.println(this.gameID);
-        System.out.println(empireID);
 
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
@@ -311,7 +297,9 @@ public class InGameController extends BasicController {
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,
-                jobsOverviewComponent);
+                jobsOverviewComponent,
+                empireOverviewComponent
+        );
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
 
         this.createContextMenuButtons();
@@ -337,7 +325,7 @@ public class InGameController extends BasicController {
         }
     }
 
-    @OnKey(code = KeyCode.I,alt = true)
+    @OnKey(code = KeyCode.I, alt = true)
     public void showIslandOverviewWindows() {
         buildingProperties.setMouseTransparent(false);
         buildingsWindow.setMouseTransparent(false);
@@ -378,15 +366,7 @@ public class InGameController extends BasicController {
     }
 
     public void closeComponents() {
-        if(empireOverviewComponent.isVisible()){
-            empireOverviewComponent.closeEmpireOverview();
-        }
-        if (storageOverviewContainer.isVisible()) {
-            storageOverviewComponent.closeStorageOverview();
-        }
-        if (overviewContainer.isVisible()) {
-            overviewSitesComponent.closeOverview();
-        }
+        this.contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
     }
 
     public void resumeGame() {
@@ -400,7 +380,7 @@ public class InGameController extends BasicController {
         if (!tokenStorage.isSpectator())
             this.contextMenuButtons.getChildren().addAll(
                     new ContextMenuButton("storageOverview", this.storageOverviewComponent),
-                    new ContextMenuButton("empireOverview", null),
+                    new ContextMenuButton("empireOverview", this.empireOverviewComponent),
                     new ContextMenuButton("jobsOverview", this.jobsOverviewComponent)
             );
     }
@@ -411,7 +391,6 @@ public class InGameController extends BasicController {
         this.islandComponentMap = islandsService.getComponentMap();
         mapGrid.setMinSize(islandsService.getMapWidth(), islandsService.getMapHeight());
         islandsService.createLines(this.islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
-
 
         this.islandComponentList.forEach(isle -> {
             isle.setInGameController(this);
@@ -489,6 +468,7 @@ public class InGameController extends BasicController {
         islandComponentList.forEach(IslandComponent::destroy);
         islandComponentList = null;
         islandComponentMap = null;
+        this.jobsService = null;
         islandsService.removeDataForMap();
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
                 .removePropertyChangeListener(triple.propertyName(), triple.listener()));

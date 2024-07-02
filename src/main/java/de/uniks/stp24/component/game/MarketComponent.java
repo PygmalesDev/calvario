@@ -51,6 +51,8 @@ public class MarketComponent extends StackPane {
     @FXML
     Button decrementNumberOfGoods;
     @FXML
+    ImageView creditIconImageView;
+    @FXML
     public ListView<Map.Entry<String, Integer>> resourcesListView;
 
     @Inject
@@ -66,9 +68,12 @@ public class MarketComponent extends StackPane {
     @Inject
     TokenStorage tokenStorage;
     @Inject
+    ImageCache imageCache;
+    @Inject
     @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
+
 
     private InGameController inGameController;
     private String lastUpdate;
@@ -116,6 +121,8 @@ public class MarketComponent extends StackPane {
             creditsMap.put("credits", resourceMap.get("credits"));
             resourceMap.remove("credits");
         }
+        creditIconImageView.setImage(imageCache.get("/de/uniks/stp24/icons/resources/credits.png"));
+        userCredits.setText(String.valueOf(creditsMap.get("credits")));
     }
 
     public void listMarketResources(Map<String, Integer> resourceMap) {

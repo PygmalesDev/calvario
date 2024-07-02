@@ -80,16 +80,16 @@ public class TechnologyOverviewComponent extends AnchorPane {
         parent.setVisible(false);
     }
 
-    public void shipbuilding() {
-        show(technologyCategoryComponent.setCategory("shipbuilding"));
+    public void engineering() {
+        show(technologyCategoryComponent.setCategory("engineering"));
     }
 
-    public void crewRelations() {
-        show(technologyCategoryComponent.setCategory("crew_relations"));
+    public void society() {
+        show(technologyCategoryComponent.setCategory("society"));
     }
 
-    public void marineScience() {
-        show(technologyCategoryComponent.setCategory("marine_science"));
+    public void physics() {
+        show(technologyCategoryComponent.setCategory("physics"));
     }
 
     public void setContainer(@NotNull Pane parent) {
@@ -99,15 +99,18 @@ public class TechnologyOverviewComponent extends AnchorPane {
         technologyCategoryComponent.setVisible(false);
     }
 
+    /**
+     * First Child: TechnologyCategoryComponent
+     * Second Child: TechnologyOverviewComponent
+     */
     public void show(@NotNull TechnologyCategoryComponent technologieCategory) {
-        technologieCategory.technologieCategoryBox.setVisible(true);
         setCategoryInfos(technologieCategory);
         parent.getChildren().getFirst().setVisible(true);
         parent.getChildren().getLast().setVisible(false);
     }
 
     public void setCategoryInfos(@NotNull TechnologyCategoryComponent technologieCategory) {
-        technologieCategory.technologyImage.setImage(technologieCategory.imageCache.get("assets/technologies/categories/" + technologieCategory.technologieCategoryName + ".png"));
+        technologieCategory.technologyImage.setImage(technologieCategory.imageCache.get("assets/technologies/categories/" +technologieCategory.technologieCategoryName + ".png"));
         String technologyKey = technologieCategory.technologieCategoryName.replace("_", ".");
         technologieCategory.technologyNameText.setText(resources.getString("technologies." + technologyKey));
     }

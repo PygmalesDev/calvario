@@ -66,9 +66,12 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     public TechnologyCategorySubComponent() {
     }
 
+    /**
+     * Set the item inclusive the attributes tags, costs, and id
+     * @param technologyExtended is the technology for the subcomponent in the ListView
+     */
     @Override
     public void setItem(@NotNull TechnologyExtended technologyExtended) {
-        // TODO: REMOVE
         this.technology = technologyExtended;
         technologyLabel.setText(technologyExtended.id());
         int i = technologyExtended.tags().length;
@@ -97,25 +100,7 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
 
         timeImage.setImage(imageCache.get("icons/time.png"));
         researchImage.setImage(imageCache.get("icons/resources/research.png"));
-//        for (ImageView image : tagImages) {
-//            if (technology != null && technology.tags().length > tagImages.indexOf(image)) {
-//                image.setImage(imageCache.get("assets/tags/" + Constants.technologyTranslation.get(technology.tags()[tagImages.indexOf(image)])));
-//            } else {
-//                image.setImage(imageCache.get("test/847.png"));
-//            }
-//        }
 
-        if (technologyService.getUnlockedTechnologies().contains(technology)) {
-            // TODO: Only set description with effect
-            // TODO: Delete researchButton, researchLabel, researchImage, timeLabel and timeImage
-            researchHBox.getChildren().removeAll();
-        } else if (technologyService.getResearchTechnologies().contains(technology)) {
-            // TODO: Set description for effect and costs
-            // TODO: Set researchButton, researchLabel, researchImage, timeLabel and timeImage
-        }
-
-//        descriptionListView.setItems(description);
-//        descriptionListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
     }
 
     @OnDestroy

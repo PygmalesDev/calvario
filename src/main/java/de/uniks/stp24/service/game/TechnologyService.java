@@ -27,7 +27,7 @@ public class TechnologyService {
     @Inject
     TokenStorage tokenStorage;
 
-    Set<String> unlockedTechnologies = new HashSet<>();
+    Set<TechnologyExtended> unlockedTechnologiesSet = new HashSet<>();
 
     ObservableList<TechnologyExtended> researchTechnologiesList = FXCollections.observableArrayList();
     ObservableList<TechnologyExtended> unlockedTechnologiesList = FXCollections.observableArrayList();
@@ -36,56 +36,51 @@ public class TechnologyService {
     public TechnologyService() {
     }
 
-    public ObservableList<TechnologyExtended> getUnlockedTechnologies() {
-
-//        unlockedTechnologies.clear();
-//        researchTechnologiesList.clear();
+    public ObservableList<TechnologyExtended> getUnlockedTechnologies(String category) {
 
         subscriber.subscribe(empireApiService.getEmpiresDtos(tokenStorage.getGameId()),
                 empireDtos -> {
                     for (EmpireDto empireDto : empireDtos) {
                         if (empireDto.user().equals(tokenStorage.getUserId()) && empireDto.technologies() != null) {
-                            unlockedTechnologies.addAll(List.of(empireDto.technologies()));
-                        }
-                    }
-                },
-                Throwable::printStackTrace
-        );
+                            for (String technology : empireDto.technologies()) {
 
-        subscriber.subscribe(presetsApiService.getTechnologies(),
-                technologies -> {
-                    for (TechnologyExtended technology : technologies) {
-                        if (unlockedTechnologies.contains(technology.id())) {
-                            unlockedTechnologiesList.add(technology);
-                        } else {
-                            researchTechnologiesList.add(technology);
+                                subscriber.subscribe(getTechnology(technology),
+                                        technologyExtended -> {
+                                            ArrayList<String> tempTags = new ArrayList<>(Arrays.asList(technologyExtended.tags()));
+                                            if (tempTags.contains(category)) {
+                                                unlockedTechnologiesSet.add(technologyExtended);
+                                            }
+                                        }
+                                );
+
+                            }
                         }
                     }
                 },
                 Throwable::printStackTrace
         );
+        unlockedTechnologiesList = FXCollections.observableArrayList(unlockedTechnologiesSet);
         return unlockedTechnologiesList;
     }
 
-    public ObservableList<TechnologyExtended> getResearchTechnologies() {
-        getUnlockedTechnologies();
+    public ObservableList<TechnologyExtended> getResearchTechnologies(String category) {
+
+        getUnlockedTechnologies(category);
+        subscriber.subscribe(presetsApiService.getTechnologies(),
+                technologies -> {
+                    for (TechnologyExtended technology : technologies) {
+                        if (!unlockedTechnologiesList.contains(technology) && Arrays.asList(technology.tags()).contains(category)) {
+                            researchTechnologiesList.add(technology);
+                        }
+                    }
+                }
+        );
+
         return researchTechnologiesList;
     }
 
     public Observable<TechnologyExtended> getTechnology(String id) {
         return presetsApiService.getTechnology(id);
-    }
-
-    public List<String> getDescriptionForTechnology(String id) {
-        List<String> description = new ArrayList<>();
-        subscriber.subscribe(presetsApiService.getTechnology(id),
-                technology -> {
-
-                },
-                Throwable::printStackTrace
-        );
-        return description;
-
     }
 
     public Observable<TechnologyExtended> getTechnologies() {

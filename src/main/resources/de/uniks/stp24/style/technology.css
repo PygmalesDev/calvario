@@ -20,7 +20,7 @@
 
 .technologieText {
     -fx-font-family: 'Baskerville Old Face';
-    -fx-font-size: 42;
+    -fx-font-size: 48;
     -fx-opacity: 1;
 }
 
@@ -65,6 +65,11 @@
     -fx-font-weight: bold;
 }
 
+.currentResearchLabel {
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-font-weight: bold;
+}
+
 .list-view {
     -fx-background-color: transparent;
 }
@@ -77,6 +82,23 @@
     -fx-background-position: center;
 }
 
-/*.list-view {*/
-/*    -fx-background-color: transparent;*/
-/*}*/
+.list-view .virtual-flow .scroll-bar:vertical .thumb {
+    -fx-background-color: transparent;
+    -fx-background-size: auto;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-pref-width: 15px;
+    -fx-pref-height: 15px;
+    -fx-background-image: url("/de/uniks/stp24/icons/scroller.png");
+}
+
+.list-view .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-border-width: 1;
+}
+
+.list-view .scroll-bar:vertical .increment-button .increment-arrow, .list-view .scroll-bar .decrement-button .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+}
+

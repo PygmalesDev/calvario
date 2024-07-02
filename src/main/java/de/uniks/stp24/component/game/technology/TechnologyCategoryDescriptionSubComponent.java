@@ -50,9 +50,6 @@ public class TechnologyCategoryDescriptionSubComponent extends VBox implements R
     @OnRender
     public void render() {
 
-        // TODO: REMOVE
-        System.out.println("In TechnologyCategoryDescriptionSubComponent render() method");
-
         subscriber.subscribe(technologyService.getTechnology(technology.id()),
                 technologyExtended -> {
                     technology = technologyExtended;

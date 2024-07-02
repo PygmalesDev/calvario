@@ -53,6 +53,8 @@ public class MarketComponent extends StackPane {
     @FXML
     ImageView creditIconImageView;
     @FXML
+    ImageView selectedIconImage;
+    @FXML
     public ListView<Map.Entry<String, Integer>> resourcesListView;
 
     @Inject
@@ -156,10 +158,14 @@ public class MarketComponent extends StackPane {
                 setGraphic(null);
             } else {
                 imageView.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + item.getKey() + ".png"));
-//                imageView.getStyleClass().add()
                 text.setText(String.valueOf(item.getValue()));
                 setGraphic(vBox);
             }
+
+            resourcesListView.setOnMouseClicked(event -> {
+                selectedIconImage.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + item.getKey() + ".png"));
+                numberOfGoods.setText(String.valueOf(item.getValue()));
+            });
         }
     }
 }

@@ -29,7 +29,6 @@ public class ExplanationService {
     Methods below is made for explanation of resources.
      */
     public CustomComponentListCell<Resource, ResourceComponent> addMouseHoverListener(CustomComponentListCell<Resource, ResourceComponent> cell, String component, String listType) {
-
         cell.setOnMouseMoved(event -> {
             if (!cell.isEmpty() && cell.getItem() != null) {
                 double mouseX = event.getX();

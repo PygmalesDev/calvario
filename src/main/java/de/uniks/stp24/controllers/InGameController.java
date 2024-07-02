@@ -576,6 +576,7 @@ public class InGameController extends BasicController {
      */
 
     public void showExplanation(double x, double y, String variable){
+        /*
         explanationContainer.setLayoutX(x);
         explanationContainer.setLayoutY(y);
         explanationContainer.setVisible(true);
@@ -584,6 +585,8 @@ public class InGameController extends BasicController {
                 result -> {
                     System.out.println(result);
                 });
+
+         */
 
     }
     public void unShowExplanation(){

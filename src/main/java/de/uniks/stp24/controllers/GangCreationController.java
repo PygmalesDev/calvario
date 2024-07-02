@@ -747,7 +747,7 @@ public class GangCreationController extends BasicController {
                 } else if (effect.multiplier() != 0.00) {
                     type = "*" + effect.multiplier() + " ";
                 }
-                effectsText.append(type).append(variable).append("\n");
+                effectsText.append(type).append(variablesResourceBundle.getString(variable)).append("\n");
             }
         }
         traitInfoEffects.setText(effectsText.toString());

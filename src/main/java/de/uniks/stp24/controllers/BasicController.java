@@ -33,6 +33,9 @@ public class BasicController {
     @Named("gameResourceBundle")
     public ResourceBundle gameResourceBundle;
     @Inject
+    @Named("variablesResourceBundle")
+    public ResourceBundle variablesResourceBundle;
+    @Inject
     ErrorService errorService;
     @Inject
     ResponseConstants responseConstants;

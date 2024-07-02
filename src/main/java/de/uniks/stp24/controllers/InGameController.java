@@ -199,6 +199,7 @@ public class InGameController extends BasicController {
         sitePropertiesComponent.setInGameController(this);
         deleteStructureComponent.setInGameController(this);
         empireOverviewComponent.setInGameController(this);
+        variableService.setIngameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
@@ -574,13 +575,7 @@ public class InGameController extends BasicController {
         explanationContainer.setLayoutX(x);
         explanationContainer.setLayoutY(y);
         explanationContainer.setVisible(true);
-
-        this.subscriber.subscribe(gameLogicApiService.getVariablesExplanations(empireID, variable),
-                result -> {
-                    System.out.println(result);
-                });
-
-
+        System.out.println(variableService.getValueOfVariable(variable));
     }
     public void unShowExplanation(){
         explanationContainer.setLayoutX(0);

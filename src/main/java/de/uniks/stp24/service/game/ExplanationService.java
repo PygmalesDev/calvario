@@ -18,7 +18,6 @@ public class ExplanationService {
     boolean entered = false;
 
     private InGameController inGameController;
-    public ArrayList<String> allVariables = new ArrayList<>();
 
     @Inject
     public ExplanationService() {

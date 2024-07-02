@@ -168,6 +168,8 @@ public class InGameController extends BasicController {
     public GameSystemsApiService gameSystemsApiService;
     @Inject
     GameLogicApiService gameLogicApiService;
+    @Inject
+    VariableService variableService;
 
     public IslandComponent selectedIsland;
 
@@ -215,24 +217,17 @@ public class InGameController extends BasicController {
 
         this.subscriber.subscribe(inGameService.loadUpgradePresets(),
                 result -> islandAttributes.setSystemPresets(result),
-                error -> System.out.println("error in getEmpire in inGame"));
+                error -> System.out.println("error in loading upgrade presets"));
 
         this.subscriber.subscribe(inGameService.loadBuildingPresets(),
                 result -> islandAttributes.setBuildingPresets(result),
-                error -> System.out.println("error in getEmpire in inGame"));
+                error -> System.out.println("error in load building presets"));
 
         this.subscriber.subscribe(inGameService.loadDistrictPresets(),
                 result -> islandAttributes.setDistrictPresets(result),
-                error -> System.out.println("error in getEmpire in inGame"));
+                error -> System.out.println("error in load district presets"));
 
-        /*
-        this.subscriber.subscribe(inGameService.getVariablesPresets(),
-                result -> {
-                    explanationService.allVariables.addAll(result.keySet());
-                },
-                error -> System.out.println("error in getEmpire in inGame"));
-
-         */
+        variableService.initVariables();
 
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
@@ -240,7 +235,6 @@ public class InGameController extends BasicController {
                     error -> System.out.println("error in getEmpire in inGame"));
             createEmpireListener();
         }
-
 
         for (int i = 0; i <= 16; i++) {
             this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");

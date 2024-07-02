@@ -300,6 +300,9 @@ public class InGameController extends BasicController {
         explanationContainer.setVisible(false);
         explanationContainer.getChildren().add(variableExplanationComponent);
         explanationService.setInGameController(this);
+
+        empireOverviewContainer.setVisible(false);
+        empireOverviewContainer.getChildren().add(empireOverviewComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -449,12 +452,10 @@ public class InGameController extends BasicController {
 
     @OnKey(code = KeyCode.S,alt = true)
     public void showStorage() {
-        /*
         if(empireOverviewComponent.isVisible()) {
             empireOverviewComponent.closeEmpireOverview();
         }
 
-         */
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
@@ -576,7 +577,6 @@ public class InGameController extends BasicController {
      */
 
     public void showExplanation(double x, double y, String variable){
-        /*
         explanationContainer.setLayoutX(x);
         explanationContainer.setLayoutY(y);
         explanationContainer.setVisible(true);
@@ -586,7 +586,6 @@ public class InGameController extends BasicController {
                     System.out.println(result);
                 });
 
-         */
 
     }
     public void unShowExplanation(){

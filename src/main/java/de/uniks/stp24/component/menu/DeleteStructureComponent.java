@@ -7,6 +7,7 @@ import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
@@ -18,6 +19,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.constructs.listview.ComponentListCell;
@@ -34,6 +36,10 @@ import static de.uniks.stp24.service.Constants.*;
 
 @Component(view = "DeleteStructureWarning.fxml")
 public class DeleteStructureComponent extends VBox{
+    @FXML
+    Text questionMark;
+    @FXML
+    Text deleteText;
     @FXML
     ListView<Resource> deleteStructureListView;
     @FXML
@@ -58,6 +64,9 @@ public class DeleteStructureComponent extends VBox{
 
     @Inject
     App app;
+
+    @Inject
+    ErrorService errorService;
 
 
     @Inject
@@ -86,15 +95,18 @@ public class DeleteStructureComponent extends VBox{
         this.inGameController = inGameController;
     }
 
-
     public void setWarningText(){
+        warningText.setFill(Color.GREEN);
         if(buildings.containsKey(structureType)){
-            warningText.setText(gameResourceBundle.getString("sure.you.want.delete") + " " + gameResourceBundle.getString( buildingTranslation.get(structureType)) + "?");
+            deleteText.setText(gameResourceBundle.getString("sure.you.want.delete") + " ");
+            warningText.setText(gameResourceBundle.getString( buildingTranslation.get(structureType)));
         }else{
-            warningText.setText(gameResourceBundle.getString("sure.you.want.delete") + " " + gameResourceBundle.getString( siteTranslation.get(structureType)) + "?");
+            deleteText.setText(gameResourceBundle.getString("sure.you.want.delete") + " ");
+            warningText.setText(gameResourceBundle.getString( siteTranslation.get(structureType)));
         }
     }
 
+    //This method is called from inGameController and handles displaying the information in the popup
     public void handleDeleteStructure(String structureType){
         this.structureType = structureType;
         setWarningText();
@@ -108,6 +120,8 @@ public class DeleteStructureComponent extends VBox{
         }
     }
 
+    //Checks if structure is a building or a site and calls method resourceListGeneration for calculating resources
+    //that will be returned when deleting a structure
     private void displayStructureInfo() {
         if (buildings.containsKey(structureType)){
             subscriber.subscribe(resourcesService.getResourcesBuilding(structureType), this::resourceListGenerationBuilding);
@@ -143,6 +157,8 @@ public class DeleteStructureComponent extends VBox{
         setVisible(false);
     }
 
+    //Differs between building and site
+    //Calls delete function in resourcesService
     public void delete(){
         Island island = tokenStorage.getIsland();
         if (tokenStorage.getIsland() != null){
@@ -152,10 +168,13 @@ public class DeleteStructureComponent extends VBox{
                     subscriber.subscribe(resourcesService.destroySite(tokenStorage.getGameId(), island, structureType), result -> {
                         tokenStorage.setIsland(islandsService.updateIsland(result));
                         islandAttributeStorage.setIsland(islandsService.updateIsland(result));
+                        inGameController.islandsService.updateIslandBuildings(islandAttributeStorage, inGameController, islandAttributeStorage.getIsland().buildings());
+                        inGameController.updateResCapacity();
                         inGameController.updateAmountSitesGrid();
                         inGameController.updateSiteCapacities();
                         onCancel();
-                    });
+                    },
+                            error -> errorService.getStatus(error));
                 }
             } else if (buildings.containsKey(structureType)) {
                 // Handle deletion for buildings
@@ -163,9 +182,11 @@ public class DeleteStructureComponent extends VBox{
                     tokenStorage.setIsland(islandsService.updateIsland(result));
                     islandAttributeStorage.setIsland(islandsService.updateIsland(result));
                     inGameController.islandsService.updateIslandBuildings(islandAttributeStorage, inGameController, islandAttributeStorage.getIsland().buildings());
+                    inGameController.updateResCapacity();
                     inGameController.setSitePropertiesInvisible();
                     onCancel();
-                });
+                },
+            error -> errorService.getStatus(error));
             } else {
                 throw new IllegalArgumentException("Unknown structure type: " + structureType);
             }

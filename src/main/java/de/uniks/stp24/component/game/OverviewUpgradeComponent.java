@@ -2,6 +2,7 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -155,6 +156,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
                 case 3 -> islandAttributes.systemPresets.developed().id();
                 default -> null;
             };
+            //TODO: Has to be changed. System upgrades is done by jobs now.
             islandsService.upgradeSystem(islandAttributes, upgradeStatus, inGameController);
         }
     }

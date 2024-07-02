@@ -47,7 +47,7 @@ public class ExplanationService {
                         case "building.production":
                             variable = "buildings." + inGameController.selectedBuilding + ".production." + cell.getItem().resourceID();
                             break;
-                        case "building.consumption":
+                        case "building.upkeep":
                             variable = "buildings." + inGameController.selectedBuilding + ".upkeep." + cell.getItem().resourceID();
                             break;
                         case "site.costs":
@@ -60,8 +60,10 @@ public class ExplanationService {
                             variable = "districts." + inGameController.selectedSites + ".production." + cell.getItem().resourceID();
                             break;
                         case "upgrade.costs":
+                            variable = "systems." + inGameController.islandAttributes.getIsland().upgrade() + ".cost." + cell.getItem().resourceID();
                             break;
-                        case "upgrade.production":
+                        case "upgrade.upkeep":
+                            variable = "systems." + inGameController.islandAttributes.getIsland().upgrade() + ".upkeep." + cell.getItem().resourceID();
                             break;
                     }
                     inGameController.showExplanation(this.x, this.y, variable);

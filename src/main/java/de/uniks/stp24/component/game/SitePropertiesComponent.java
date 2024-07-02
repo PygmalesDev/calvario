@@ -131,12 +131,14 @@ public class SitePropertiesComponent extends AnchorPane {
         setVisible(false);
     }
 
+    //Takes siteType, calls buildSite in resourcesService and updates relevant information
     public void buildSite(){
         Island island = tokenStorage.getIsland();
         subscriber.subscribe(resourcesService.buildSite(tokenStorage.getGameId(), island, siteType), result -> {
             tokenStorage.setIsland(islandsService.updateIsland(result));
             islandAttributeStorage.setIsland(islandsService.updateIsland(result));
-
+            inGameController.islandsService.updateIslandBuildings(islandAttributeStorage, inGameController, islandAttributeStorage.getIsland().buildings());
+            inGameController.updateResCapacity();
             displayAmountOfSite();
             inGameController.updateSiteCapacities();
         });
@@ -144,11 +146,14 @@ public class SitePropertiesComponent extends AnchorPane {
 
     }
 
+    //Calls handleDeleteStructure in inGameController which shows the deleteWarning popup
+    //and calls method in DeleteStructureComponent
     public void destroySite(){
         inGameController.handleDeleteStructure(siteType);
 
     }
 
+    //Gets resources of site and displays them in listviews
     public void displayCostsOfSite(){
         siteCostsListView.setSelectionModel(null);
         subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
@@ -158,6 +163,7 @@ public class SitePropertiesComponent extends AnchorPane {
         siteProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview", "site.production"));
     }
 
+    //Uses a GridPane to display a graphic view of how many sites of each type you have
     public void displayAmountOfSite(){
         buildSiteButton.setDisable(false);
         destroySiteButton.setDisable(false);

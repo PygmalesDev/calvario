@@ -102,6 +102,9 @@ public class PauseMenuTest extends ControllerTest {
     SettingsComponent settingsComponent;
 
     @InjectMocks
+    EmpireOverviewComponent empireOverviewComponent;
+
+    @InjectMocks
     OverviewSitesComponent overviewSitesComponent;
 
     @InjectMocks
@@ -153,6 +156,7 @@ public class PauseMenuTest extends ControllerTest {
         super.start(stage);
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
+        this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = this.eventComponent;
@@ -181,7 +185,7 @@ public class PauseMenuTest extends ControllerTest {
         UpgradeStatus upgradeStatus = new UpgradeStatus("test", 20, production, consumption, 20);
 
         doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());
-        doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", true,1,1,null ))).when(gamesApiService).getGame(any());
+        doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", 2,true,1,1,null ))).when(gamesApiService).getGame(any());
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
 
         doReturn(Observable.just(new SystemUpgrades(upgradeStatus,upgradeStatus, upgradeStatus, upgradeStatus, upgradeStatus ))).when(inGameService).loadUpgradePresets();

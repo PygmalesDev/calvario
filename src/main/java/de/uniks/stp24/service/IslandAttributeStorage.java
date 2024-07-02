@@ -85,8 +85,8 @@ public class IslandAttributeStorage {
     public Map<String, Integer> getNeededResources(int key) {
         return switch (key) {
             case 2 -> systemPresets.colonized().cost();
-            case 3 -> systemPresets.developed().cost();
-            case 4 -> systemPresets.upgraded().cost();
+            case 3 -> systemPresets.upgraded().cost();
+            case 4 -> systemPresets.developed().cost();
             default -> null;
         };
     }
@@ -94,8 +94,8 @@ public class IslandAttributeStorage {
     public Map<String, Integer> getUpkeep(int key) {
         return switch (key) {
             case 2 -> systemPresets.colonized().upkeep();
-            case 3 -> systemPresets.developed().upkeep();
-            case 4 -> systemPresets.upgraded().upkeep();
+            case 3 -> systemPresets.upgraded().upkeep();
+            case 4 -> systemPresets.developed().upkeep();
             default -> null;
         };
     }

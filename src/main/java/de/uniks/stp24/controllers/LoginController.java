@@ -160,8 +160,12 @@ public class LoginController extends BasicController {
     }
 
     public void setLanguage(Locale locale) {
+        String username = this.usernameInput.getText();
+        String password = this.passwordInput.getText();
         resources = languageService.setLocale(locale);
         app.refresh();
+        this.usernameInput.setText(username);
+        this.passwordInput.setText(password);
     }
 
     @OnRender(1)

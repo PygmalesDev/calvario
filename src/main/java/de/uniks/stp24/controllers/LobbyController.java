@@ -126,8 +126,7 @@ public class LobbyController extends BasicController {
                     this.game = game;
                     this.gameID = game._id();
                     this.asHost = game.owner().equals(this.tokenStorage.getUserId());
-                    // Todo: add maxMember to Game Model -> this.maxMember = game.maxMember()
-                    this.maxMember = 2;
+                    this.maxMember = game.maxMembers();
                     this.lobbyHostSettingsComponent.setMaxMember(this.maxMember);
                     this.lobbyHostSettingsComponent.setBubbleComponent(this.bubbleComponent);
 

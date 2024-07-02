@@ -119,7 +119,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         doReturn("testGameHostID").when(this.tokenStorage).getUserId();
 
         // Mock getting game
-        doReturn(Observable.just(new Game("1", "a", "testGameID", "testGame", "testGameHostID",
+        doReturn(Observable.just(new Game("1", "a", "testGameID", "testGame", "testGameHostID", 2,
                 false, 1, 0, new GameSettings(1))))
                 .when(this.gamesService).getGame(any());
 
@@ -234,7 +234,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
 
         clickOn("#startJourneyButton");
         this.gameSubject.onNext(new Event<>("games.testGameID.updated", new Game("1", "a",
-                "testGameID", "testGame", "testGameHostID", true, 1, 0, new GameSettings(1))));
+                "testGameID", "testGame", "testGameHostID", 2, true, 1, 0, new GameSettings(1))));
         WaitForAsyncUtils.waitForFxEvents();
         verify(this.app, times(1)).show("/ingame");
 

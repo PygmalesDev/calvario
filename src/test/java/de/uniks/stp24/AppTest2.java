@@ -91,10 +91,6 @@ public class AppTest2 extends ControllerTest {
     @Spy
     InfrastructureService infrastructureService;
 
-
-    @Spy
-    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
-
     @Spy
     GameStatus gameStatus;
 

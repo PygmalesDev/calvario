@@ -30,12 +30,14 @@ public class JobsService {
     Map<String, ObservableList<Job>> jobCollections = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
+    Map<String, ArrayList<Consumer<Job>>> jobDeletionConsumers = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobProgressFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobTypeFunctions = new HashMap<>();
-    Map<String, ArrayList<Consumer<String>>> loadTypeFunctions = new HashMap<>();
+    Map<String, ArrayList<Consumer<Job>>> loadTypeFunctions = new HashMap<>();
     ArrayList<Runnable> loadCommonFunctions = new ArrayList<>();
     ArrayList<Runnable> finishCommonFunctions = new ArrayList<>();
     ArrayList<Runnable> startCommonFunctions = new ArrayList<>();
+    ArrayList<Runnable> jobCommonUpdates = new ArrayList<>();
 
     @Inject
     public JobsService() {}
@@ -60,7 +62,7 @@ public class JobsService {
                     this.loadCommonFunctions.forEach(Runnable::run);
                     this.jobCollections.get("collection").forEach(job -> {
                         if (this.loadTypeFunctions.containsKey(job.type()))
-                            this.loadTypeFunctions.get(job.type()).forEach(func -> func.accept(job._id()));
+                            this.loadTypeFunctions.get(job.type()).forEach(func -> func.accept(job));
                     });
                 }, error -> System.out.println("JobsService: Failed to load job collections \n" + error.getMessage())
         );
@@ -76,11 +78,15 @@ public class JobsService {
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.empires.%s.jobs.*.*",
                 this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), Job.class), result -> {
             Job job = result.data();
+
             switch (result.suffix()) {
                 case "created" -> this.addJobToGroups(job);
                 case "updated" -> this.updateJobInGroups(job);
                 case "deleted" -> this.deleteJobFromGroups(job);
-            }}, error -> System.out.print("JobsService: Failed to receive job updates. \n" + error.getMessage()));
+            }
+            this.jobCommonUpdates.forEach(Runnable::run);
+
+            }, error -> System.out.print("JobsService: Failed to receive job updates. \n" + error.getMessage()));
     }
 
     private void addJobToGroups(@NotNull Job job) {
@@ -145,6 +151,10 @@ public class JobsService {
      */
     public void onJobCommonStart(Runnable func) {
         this.startCommonFunctions.add(func);
+    }
+
+    public void onJobCommonUpdates(Runnable func) {
+        this.jobCommonUpdates.add(func);
     }
 
     /**
@@ -250,7 +260,7 @@ public class JobsService {
      *  Name the parameter inside the consumer function as a <i>jobID</i>: {@code (jobID) -> yourFunction(jobID)}.
      * @param func the function that has to be executed after the job loading process is finished
      */
-    public void onJobsLoadingFinished(String jobType, Consumer<String> func) {
+    public void onJobsLoadingFinished(String jobType, Consumer<Job> func) {
         if (!this.loadTypeFunctions.containsKey(jobType))
             this.loadTypeFunctions.put(jobType, new ArrayList<>());
         this.loadTypeFunctions.get(jobType).add(func);

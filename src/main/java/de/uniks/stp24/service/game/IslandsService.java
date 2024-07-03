@@ -118,7 +118,8 @@ public class IslandsService extends BasicService {
                                 data.districts(),
                                 data.buildings(),
                                 data._id(),
-                                data.upgrade().toString()
+                                data.upgrade().toString(),
+                                data.name()
                         );
                         isles.add(tmp);
                         connections.put(data._id(),linkedIsles);
@@ -371,13 +372,23 @@ public class IslandsService extends BasicService {
                     result.districts(),
                     result.buildings(),
                     result._id(),
-                    result.upgrade()
+                    result.upgrade(),
+                    result.name()
             );
             inGameController.selectedIsland.island = tmp;
             islandAttributes.setIsland(tmp);
             inGameController.showOverview();
 
         });
+    }
+
+    public String getIslandName(String islandID) {
+        Island island = this.isles.stream().filter(isle -> isle.id().equals(islandID)).findFirst().orElse(null);
+        if (Objects.nonNull(island))
+            if (island.name().isEmpty())
+                return "UnchartedIsland";
+            else return island.name();
+        return "MissingNo.";
     }
 
     @OnDestroy
@@ -398,7 +409,8 @@ public class IslandsService extends BasicService {
                 result.districts(),
                 result.buildings(),
                 result._id(),
-                result.upgrade().toString()
+                result.upgrade().toString(),
+                result.name()
         );
     }
 }

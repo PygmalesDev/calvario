@@ -174,10 +174,9 @@ public class OverviewSitesComponent extends AnchorPane {
                 detailsComponent, buildingsComponent, jobsComponent);
     }
 
-
-
     public void setIngameController(InGameController inGameController) {
         this.inGameController = inGameController;
+        this.sitesComponent.setInGameController(inGameController);
     }
 
     public void closeOverview() {
@@ -217,7 +216,7 @@ public class OverviewSitesComponent extends AnchorPane {
 
         updateResCapacity();
 
-        island_name.setText(islandAttributes.getIslandNameTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");
+        island_name.setText(islandAttributes.getIslandTypeTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");
         crewCapacity.setText(String.valueOf(islandAttributes.getIsland().crewCapacity()));
     }
 }

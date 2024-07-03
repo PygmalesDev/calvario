@@ -9,10 +9,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<fx:root alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="40.0" styleClass="overview-text" type="VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-   <HBox alignment="CENTER">
+<fx:root alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="40.0" styleClass="overview-text" type="VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.DistrictComponent">
+   <HBox fx:id="jobProgressBox" alignment="CENTER" visible="false">
       <children>
-         <ImageView fx:id="cellImage1" fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true" styleClass="siteCell">
+         <ImageView fx:id="clockImage" fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true" styleClass="siteCell">
             <image>
                <Image url="@../../icons/stopwatch.png" />
             </image>
@@ -20,11 +20,11 @@
                <Insets right="3.0" />
             </HBox.margin>
          </ImageView>
-         <Text fx:id="districtCapacity1" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="x/x" />
+         <Text fx:id="jobTimeText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="x/x" />
       </children>
    </HBox>
    <Pane prefHeight="40.0" prefWidth="40.0">
-      <Button fx:id="siteElement" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent;" />
+      <Button fx:id="siteElementButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showOverview" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent;" />
    </Pane>
    <HBox alignment="CENTER">
       <children>

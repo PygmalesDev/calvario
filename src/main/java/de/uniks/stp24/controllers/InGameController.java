@@ -71,7 +71,7 @@ public class InGameController extends BasicController {
     @FXML
     StackPane deleteStructureWarningContainer;
     @FXML
-    StackPane siteProperties;
+    public StackPane siteProperties;
     @FXML
     StackPane buildingProperties;
     @FXML

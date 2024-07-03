@@ -160,7 +160,7 @@ public class SitePropertiesComponent extends AnchorPane {
             this.showJobsPane();
             if (Objects.nonNull(job)) {
                 this.siteJobProgress.setJobProgress(job);
-                if (!this.jobsService.hasJobTypeProgress(job.type()))
+                if (!this.jobsService.hasJobTypeProgress(job.type()) && this.siteJobs.get(0).equals(job))
                     this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
             }
         } else {
@@ -181,19 +181,27 @@ public class SitePropertiesComponent extends AnchorPane {
             this.showJobsPane();
             this.siteJobProgress.setJobProgress(job);
 
-            this.jobsService.onJobDeletion(job._id(), this::hideJobsPane);
+            if (!this.jobsService.hasJobTypeProgress(job.type()) &&
+                    (this.siteJobs.size() == 0 || this.siteJobs.get(0).equals(job)))
+                this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
+
+            this.jobsService.onJobDeletion(job._id(), () -> {
+                if (job.district().equals(this.siteType)) this.hideJobsPane();
+            });
             this.jobsService.onJobCompletion(job._id(), () -> {
                 this.updateIslandSites();
-                this.hideJobsPane();
+                if (job.district().equals(this.siteType)) this.hideJobsPane();
             });
         });
     }
 
     @OnInit
     public void setSitesJobUpdates() {
-        this.jobsService.onJobsLoadingFinished("district", (jobID) -> {
-            this.jobsService.onJobDeletion(jobID, this::hideJobsPane);
-            this.jobsService.onJobCompletion(jobID, () -> {
+        this.jobsService.onJobsLoadingFinished("district", job -> {
+            this.jobsService.onJobDeletion(job._id(), () -> {
+                if (job.district().equals(this.siteType)) this.hideJobsPane();
+            });
+            this.jobsService.onJobCompletion(job._id(), () -> {
                 this.updateIslandSites();
                 this.hideJobsPane();
             });
@@ -221,7 +229,7 @@ public class SitePropertiesComponent extends AnchorPane {
             this.islandAttributeStorage.setIsland(this.islandsService.updateIsland(result));
 
             displayAmountOfSite();
-            inGameController.updateSiteCapacities();
+            this.inGameController.updateSiteCapacities();
         });
 
 

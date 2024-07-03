@@ -181,7 +181,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @OnInit
     public void setBuildingsJobUpdates() {
         this.jobsService.onJobsLoadingFinished("building",
-                (jobID) -> this.jobsService.onJobCompletion(jobID, this::updateIslandBuildings));
+                job -> this.jobsService.onJobCompletion(job._id(), this::updateIslandBuildings));
     }
 
 

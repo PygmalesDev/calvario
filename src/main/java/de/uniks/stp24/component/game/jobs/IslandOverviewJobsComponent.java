@@ -5,7 +5,6 @@ import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.JobsService;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -67,7 +66,7 @@ public class IslandOverviewJobsComponent extends AnchorPane {
 
     public void insertIslandName() {
         this.noJobText.setText(this.noJobText.getText()
-                .replace("{ISLAND_NAME}", this.islandAttributes.getIslandNameTranslated()));
+                .replace("{ISLAND_NAME}", this.islandAttributes.getIslandTypeTranslated()));
     }
 
     public void setJobsObservableList(ObservableList<Job> observer) {

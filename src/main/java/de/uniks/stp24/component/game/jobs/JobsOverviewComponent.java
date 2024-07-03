@@ -14,6 +14,7 @@ import org.fulib.fx.constructs.listview.ComponentListCell;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Objects;
 
 @Component(view = "JobsOverview.fxml")
 public class JobsOverviewComponent extends AnchorPane {
@@ -32,7 +33,6 @@ public class JobsOverviewComponent extends AnchorPane {
 
     @Inject
     public JobsOverviewComponent() {
-
     }
 
     @OnRender

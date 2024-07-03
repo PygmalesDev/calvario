@@ -6,7 +6,9 @@
  import de.uniks.stp24.component.menu.GangDeletionComponent;
  import de.uniks.stp24.component.menu.TraitComponent;
  import de.uniks.stp24.controllers.GangCreationController;
+ import de.uniks.stp24.dto.EffectDto;
  import de.uniks.stp24.dto.MemberDto;
+ import de.uniks.stp24.model.Empire;
  import de.uniks.stp24.model.Gang;
  import de.uniks.stp24.model.Trait;
  import de.uniks.stp24.rest.PresetsApiService;
@@ -18,6 +20,7 @@
  import javafx.application.Platform;
  import javafx.collections.FXCollections;
  import javafx.collections.ObservableList;
+ import javafx.scene.control.Label;
  import javafx.scene.control.TextArea;
  import javafx.scene.control.TextField;
  import javafx.scene.input.MouseButton;
@@ -33,6 +36,9 @@
  import javafx.scene.control.ListView;
 
  import javax.inject.Provider;
+
+ import java.util.ArrayList;
+ import java.util.function.BooleanSupplier;
 
  import static org.junit.jupiter.api.Assertions.*;
  import static org.mockito.Mockito.*;
@@ -104,12 +110,12 @@
          this.gangCreationController.gangDeletionComponent = this.gangDeletionComponent;
          gangs.add(gang);
          doReturn(gangs).when(saveLoadService).loadGangs();
-         aTrait = new Trait("__dev__", null, 5, null);
+         aTrait = new Trait("__dev__", new EffectDto[]{new EffectDto("buildings.exchange.build_time", 0, 0, 5)}, 5, null);
          String[] conflictsOfB = {"prepared"};
-         bTrait = new Trait("unprepared", null, 1, conflictsOfB);
+         bTrait = new Trait("unprepared", new EffectDto[]{new EffectDto("buildings.exchange.cost.minerals", 0, 9, 0)}, 1, conflictsOfB);
          String[] conflictsOfC = {"unprepared"};
-         cTrait = new Trait("prepared", null, 1, conflictsOfC);
-         dTrait = new Trait("strong", null, 3, null);
+         cTrait = new Trait("prepared", new EffectDto[]{new EffectDto("buildings.exchange.upkeep.energy", 0, 0, 3)}, 1, conflictsOfC);
+         dTrait = new Trait("strong", new EffectDto[]{new EffectDto("buildings.exchange.upkeep.consumer_goods", 0, 0, 2)}, 3, null);
          doReturn(Observable.just(new Trait[]{aTrait, bTrait, cTrait, dTrait})).when(presetsApiService).getTraitsPreset();
          doReturn(Observable.just(new MemberDto(false, "", null, ""))).when(lobbyService).getMember(any(), any());
          app.show(this.gangCreationController);
@@ -438,6 +444,109 @@
          ObservableList<Trait> confirmedTraits = confirmedTraitsListView.getItems();
          assertTrue(confirmedTraits.contains(cTrait) && confirmedTraits.contains(dTrait));
      }
+
+     @Test
+     public void testTraitInfos() {
+         Label traitName;
+         Label traitConflicts;
+         Label traitEffects;
+
+         clickOn("#showCreationButton");
+         waitForFxEvents();
+         clickOn("#chooseTraitsButton");
+         waitForFxEvents();
+
+         // Trait A
+         moveTo(variablesResourceBundle.getString(aTrait.id()));
+
+         traitName = lookup("#traitInfoName").query();
+         traitConflicts = lookup("#traitInfoConflicts").query();
+         traitEffects = lookup("#traitInfoEffects").query();
+
+         assertEquals(variablesResourceBundle.getString(aTrait.id()), traitName.getText());
+         assertFalse(traitConflicts.getText().contains(variablesResourceBundle.getString(aTrait.id())));
+         assertFalse(traitConflicts.getText().contains(variablesResourceBundle.getString(bTrait.id())));
+         assertFalse(traitConflicts.getText().contains(variablesResourceBundle.getString(cTrait.id())));
+         assertFalse(traitConflicts.getText().contains(variablesResourceBundle.getString(dTrait.id())));
+         assertTrue(traitEffects.getText().contains(variablesResourceBundle.getString(aTrait.effects()[0].variable())));
+         assertFalse(traitEffects.getText().contains(variablesResourceBundle.getString(bTrait.effects()[0].variable())));
+         assertFalse(traitEffects.getText().contains(variablesResourceBundle.getString(cTrait.effects()[0].variable())));
+         assertFalse(traitEffects.getText().contains(variablesResourceBundle.getString(dTrait.effects()[0].variable())));
+         assertTrue(traitEffects.getText().contains("+5"));
+
+         // Trait B
+         moveTo(variablesResourceBundle.getString(bTrait.id()));
+
+         traitName = lookup("#traitInfoName").query();
+         traitConflicts = lookup("#traitInfoConflicts").query();
+         traitEffects = lookup("#traitInfoEffects").query();
+
+         assertEquals(variablesResourceBundle.getString(bTrait.id()), traitName.getText());
+         assertFalse(traitConflicts.getText().contains(variablesResourceBundle.getString(aTrait.id())));
+         assertFalse(traitConflicts.getText().contains(variablesResourceBundle.getString(bTrait.id())));
+         assertTrue(traitConflicts.getText().contains(variablesResourceBundle.getString(cTrait.id())));
+         assertFalse(traitConflicts.getText().contains(variablesResourceBundle.getString(dTrait.id())));
+         assertFalse(traitEffects.getText().contains(variablesResourceBundle.getString(aTrait.effects()[0].variable())));
+         assertTrue(traitEffects.getText().contains(variablesResourceBundle.getString(bTrait.effects()[0].variable())));
+         assertFalse(traitEffects.getText().contains(variablesResourceBundle.getString(cTrait.effects()[0].variable())));
+         assertFalse(traitEffects.getText().contains(variablesResourceBundle.getString(dTrait.effects()[0].variable())));
+         assertTrue(traitEffects.getText().contains("*9"));
+
+         // Trait C
+         moveTo(variablesResourceBundle.getString(cTrait.id()));
+
+         traitName = lookup("#traitInfoName").query();
+         traitConflicts = lookup("#traitInfoConflicts").query();
+         traitEffects = lookup("#traitInfoEffects").query();
+
+         assertEquals(variablesResourceBundle.getString(cTrait.id()), traitName.getText());
+         assertFalse(traitConflicts.getText().contains(variablesResourceBundle.getString(aTrait.id())));
+         assertTrue(traitConflicts.getText().contains(variablesResourceBundle.getString(bTrait.id())));
+         assertFalse(traitConflicts.getText().contains(variablesResourceBundle.getString(cTrait.id())));
+         assertFalse(traitConflicts.getText().contains(variablesResourceBundle.getString(dTrait.id())));
+         assertFalse(traitEffects.getText().contains(variablesResourceBundle.getString(aTrait.effects()[0].variable())));
+         assertFalse(traitEffects.getText().contains(variablesResourceBundle.getString(bTrait.effects()[0].variable())));
+         assertTrue(traitEffects.getText().contains(variablesResourceBundle.getString(cTrait.effects()[0].variable())));
+         assertFalse(traitEffects.getText().contains(variablesResourceBundle.getString(dTrait.effects()[0].variable())));
+         assertTrue(traitEffects.getText().contains("+3"));
+
+         // Trait D
+         moveTo(variablesResourceBundle.getString(dTrait.id()));
+
+         traitName = lookup("#traitInfoName").query();
+         traitConflicts = lookup("#traitInfoConflicts").query();
+         traitEffects = lookup("#traitInfoEffects").query();
+
+         assertEquals(variablesResourceBundle.getString(dTrait.id()), traitName.getText());
+         assertFalse(traitConflicts.getText().contains(variablesResourceBundle.getString(aTrait.id())));
+         assertFalse(traitConflicts.getText().contains(variablesResourceBundle.getString(bTrait.id())));
+         assertFalse(traitConflicts.getText().contains(variablesResourceBundle.getString(cTrait.id())));
+         assertFalse(traitConflicts.getText().contains(variablesResourceBundle.getString(dTrait.id())));
+         assertFalse(traitEffects.getText().contains(variablesResourceBundle.getString(aTrait.effects()[0].variable())));
+         assertFalse(traitEffects.getText().contains(variablesResourceBundle.getString(bTrait.effects()[0].variable())));
+         assertFalse(traitEffects.getText().contains(variablesResourceBundle.getString(cTrait.effects()[0].variable())));
+         assertTrue(traitEffects.getText().contains(variablesResourceBundle.getString(dTrait.effects()[0].variable())));
+         assertTrue(traitEffects.getText().contains("+2"));
+     }
+
+     @Test
+     public void testUserIsSpectator() {
+         assertTrue(gangCreationController.spectatorBox.isVisible());
+     }
+
+//     @Test
+//     public void testUserEmpireIsShown() {
+//         ArrayList<String> traits = new ArrayList<>();
+//         traits.add(variablesResourceBundle.getString(aTrait.id()));
+//         traits.add(variablesResourceBundle.getString(bTrait.id()));
+//         traits.add(variablesResourceBundle.getString(cTrait.id()));
+//         traits.add(variablesResourceBundle.getString(dTrait.id()));
+//
+//         Empire empire = new Empire("Ashkanian", "Ruled by King Ashkan!", "#000000", 0, 0, traits, "");
+//         doReturn(Observable.just(new MemberDto(false, "", empire, ""))).when(this.lobbyService).getMember(any(), any());
+//
+//         waitForFxEvents();
+//     }
 
 //     @Test
 //     public void testGoingBackToLobbyNoGang() {

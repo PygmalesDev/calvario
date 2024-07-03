@@ -80,7 +80,7 @@ public class GangCreationController extends BasicController {
     @FXML
     ImageView spectatorImage;
     @FXML
-    VBox spectatorBox;
+    public VBox spectatorBox;
     @FXML
     Pane captainContainer;
     @FXML

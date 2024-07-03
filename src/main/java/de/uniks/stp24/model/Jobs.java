@@ -10,7 +10,8 @@ import java.util.Objects;
  * {@link #createDistrictJob(String, String) createDistrictJob},
  * {@link #createIslandUpgradeJob(String) createIslandUpgradeJob} or
  * {@link #createTechnologyJob(String) createTechnologyJob} to quickly
- * generate a job of a specific type. A new job has to be started using the...
+ * generate a job of a specific type. A new job has to be started using the
+ * {@link de.uniks.stp24.service.game.JobsService#beginJob(JobDTO) JobService.beginJob}({@link JobDTO JobDTO}).
  */
 public class Jobs {
 
@@ -35,22 +36,14 @@ public class Jobs {
              JobResult result) {
         @Override
         public boolean equals(Object obj) {
-            if (obj instanceof Job)
-                return this._id.equals(((Job) obj)._id());
+            if (obj instanceof Job) return this._id.equals(((Job) obj)._id());
             return false;
-        }
-        @Override
-        public String toString() {
-            return "---------------------- THE JOB ----------------------\n" +
-                    "id: " + this._id + "\n" +
-                    "created at: " + this.createdAt + "\tupdated at: " + this.updatedAt + "\n" +
-                    "job type: " + this.type + "\tjob goal: " + this.building + "\n" +
-                    "initial time: " + this.total + "\tcurrent progress: " + this.progress + "\n";
         }
     }
 
     /**
-     * Generates a basic job for creating a building on a certain island. The job has to be initialized using the...
+     * Generates a basic job for creating a building on a certain island. The job has to be initialized using the
+     * {@link de.uniks.stp24.service.game.JobsService#beginJob(JobDTO) JobService.beginJob}({@link JobDTO JobDTO}).
      *
      * @param systemID ID of an island, where the building has to be placed
      * @param buildingID type of the building
@@ -68,7 +61,8 @@ public class Jobs {
 
     /**
      * Generates a basic job for building a district cell of a district on a certain island.
-     * The job has to be initialized using the...
+     * The job has to be initialized using the
+     * {@link de.uniks.stp24.service.game.JobsService#beginJob(JobDTO) JobService.beginJob}({@link JobDTO JobDTO}).
      *
      * @param systemID ID of an island, where the building has to be placed
      * @param districtID type of the district
@@ -87,7 +81,8 @@ public class Jobs {
 
     /**
      * Generates a basic job for upgrading an island to the next level.
-     * The job has to be initialized using the...
+     * The job has to be initialized using the
+     * {@link de.uniks.stp24.service.game.JobsService#beginJob(JobDTO) JobService.beginJob}({@link JobDTO JobDTO}).
      *
      * @param systemID ID of an island that needs to be upgraded
      * @return New {@link JobDTO JobDTO} for an island upgrade
@@ -105,7 +100,8 @@ public class Jobs {
 
     /**
      * Generates a basic job for researching a technology for the empire.
-     * The job has to be initialized using the...
+     * The job has to be initialized using the
+     * {@link de.uniks.stp24.service.game.JobsService#beginJob(JobDTO) JobService.beginJob}({@link JobDTO JobDTO}).
      *
      * @param technologyID type of the technology that needs to be researched
      * @return New {@link JobDTO JobDTO} for the technology research
@@ -122,7 +118,8 @@ public class Jobs {
     }
 
     /**
-     * Creates a new job from the given one. This job has to be initialized using the...
+     * Creates a new job from the given job instance. This job has to be initialized using the
+     * {@link de.uniks.stp24.service.game.JobsService#beginJob(JobDTO) JobService.beginJob}({@link JobDTO JobDTO}).
      * @return New {@link JobDTO JobDTO} that is a copy of the given job
      */
     public static JobDTO createJobFromGiven(Job job) {
@@ -151,7 +148,7 @@ public class Jobs {
     /**
      * A helper class that contains a result from the server request of starting a new job.
      */
-    private static class JobResult {
+    public static class JobResult {
         int statusCode;
         String error;
         String message;

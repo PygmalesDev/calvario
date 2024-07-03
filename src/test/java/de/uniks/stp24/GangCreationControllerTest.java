@@ -89,7 +89,7 @@
      Provider<TraitComponent> traitComponentProvider = new Provider(){
          @Override
          public TraitComponent get() {
-             return new TraitComponent(gangCreationController, true, true);
+             return new TraitComponent(gangCreationController, variablesResourceBundle, true, true);
          }
      };
 
@@ -104,12 +104,12 @@
          this.gangCreationController.gangDeletionComponent = this.gangDeletionComponent;
          gangs.add(gang);
          doReturn(gangs).when(saveLoadService).loadGangs();
-         aTrait = new Trait("A", null, 5, null);
-         String[] conflictsOfB = {"C"};
-         bTrait = new Trait("B", null, 1, conflictsOfB);
-         String[] conflictsOfC = {"B"};
-         cTrait = new Trait("C", null, 1, conflictsOfC);
-         dTrait = new Trait("D", null, 3, null);
+         aTrait = new Trait("__dev__", null, 5, null);
+         String[] conflictsOfB = {"prepared"};
+         bTrait = new Trait("unprepared", null, 1, conflictsOfB);
+         String[] conflictsOfC = {"unprepared"};
+         cTrait = new Trait("prepared", null, 1, conflictsOfC);
+         dTrait = new Trait("strong", null, 3, null);
          doReturn(Observable.just(new Trait[]{aTrait, bTrait, cTrait, dTrait})).when(presetsApiService).getTraitsPreset();
          doReturn(Observable.just(new MemberDto(false, "", null, ""))).when(lobbyService).getMember(any(), any());
          app.show(this.gangCreationController);
@@ -417,7 +417,7 @@
 
          clickOn("#chooseTraitButton");
          waitForFxEvents();
-         assertEquals(resources.getString("pirate.empireScreen.conflict").replace("{conflict1}", '"' + cTrait.id() + '"').replace("{conflict2}", '"' + bTrait.id() + '"')
+         assertEquals(resources.getString("pirate.empireScreen.conflict").replace("{conflict1}", '"' + variablesResourceBundle.getString(cTrait.id()) + '"').replace("{conflict2}", '"' + variablesResourceBundle.getString(bTrait.id()) + '"')
                  , captainText.getText());
          selectedTraits = selectedTraitsListView.getItems();
          assertFalse(selectedTraits.contains(bTrait));
@@ -428,7 +428,7 @@
          clickOn("#chooseTraitButton");
          waitForFxEvents();
          captainText = lookup("#captainText").query();
-         assertEquals(resources.getString("pirate.empireScreen.scoreOverLimit").replace("{conflict1}", '"' + cTrait.id() + '"').replace("{conflict2}", '"' + bTrait.id() + '"')
+         assertEquals(resources.getString("pirate.empireScreen.scoreOverLimit").replace("{conflict1}", '"' + variablesResourceBundle.getString(cTrait.id()) + '"').replace("{conflict2}", '"' + variablesResourceBundle.getString(bTrait.id()) + '"')
                  , captainText.getText());
          selectedTraits = selectedTraitsListView.getItems();
          assertFalse(selectedTraits.contains(aTrait));

@@ -1,10 +1,7 @@
-import de.uniks.stp24.App;
-import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.service.ImageCache;
+package de.uniks.stp24;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
-
-import javax.inject.Inject;
 
 import java.util.Locale;
 import java.util.ResourceBundle;

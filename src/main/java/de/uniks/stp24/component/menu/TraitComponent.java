@@ -11,6 +11,7 @@ import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
+import java.util.ResourceBundle;
 
 @Component(view = "Trait.fxml")
 public class TraitComponent extends HBox implements ReusableItemComponent<Trait> {
@@ -23,6 +24,7 @@ public class TraitComponent extends HBox implements ReusableItemComponent<Trait>
     @FXML
     Label costText;
 
+    ResourceBundle variablesResourceBundle;
 
     Trait trait;
 
@@ -32,16 +34,17 @@ public class TraitComponent extends HBox implements ReusableItemComponent<Trait>
     Boolean showRemove;
 
     @Inject
-    public TraitComponent(GangCreationController gangCreationController, Boolean showChoose, Boolean showRemove) {
+    public TraitComponent(GangCreationController gangCreationController, ResourceBundle variablesResourceBundle, Boolean showChoose, Boolean showRemove) {
         this.gangCreationController = gangCreationController;
         this.showChoose = showChoose;
         this.showRemove = showRemove;
+        this.variablesResourceBundle = variablesResourceBundle;
     }
 
     @Override
     public void setItem(@NotNull Trait trait) {
         this.trait = trait;
-        traitName.setText(this.trait.id());
+        traitName.setText(variablesResourceBundle.getString(this.trait.id()));
         costText.setText(String.valueOf(trait.cost()));
         setButtonsVisibility(showChoose, showRemove);
     }
@@ -61,7 +64,6 @@ public class TraitComponent extends HBox implements ReusableItemComponent<Trait>
 
     public void showDetails() {
         gangCreationController.showTraitDetails(trait);
-
     }
 
     public void unShowDetails() {

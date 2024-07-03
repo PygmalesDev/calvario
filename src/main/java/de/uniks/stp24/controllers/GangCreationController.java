@@ -68,9 +68,9 @@ public class GangCreationController extends BasicController {
     public Provider<GangComponent> gangComponentProvider;
     private final ObservableList<Gang> gangs = FXCollections.observableArrayList();
 
-    public Provider<TraitComponent> traitComponentProviderAll = () -> new TraitComponent(this, true, false);
-    public Provider<TraitComponent> traitComponentProviderChoosen= () -> new TraitComponent(this, false, true);
-    public Provider<TraitComponent> traitComponentProviderConfirmed= () -> new TraitComponent(this, false, false);
+    public Provider<TraitComponent> traitComponentProviderAll = () -> new TraitComponent(this, variablesResourceBundle, true, false);
+    public Provider<TraitComponent> traitComponentProviderChoosen= () -> new TraitComponent(this, variablesResourceBundle, false, true);
+    public Provider<TraitComponent> traitComponentProviderConfirmed= () -> new TraitComponent(this, variablesResourceBundle, false, false);
     private final ObservableList<Trait> allTraits = FXCollections.observableArrayList();
     private final ObservableList<Trait> choosenTraits = FXCollections.observableArrayList();
     private final ObservableList<Trait> confirmedTraits = FXCollections.observableArrayList();
@@ -688,7 +688,7 @@ public class GangCreationController extends BasicController {
                 if (Objects.nonNull(chosen.conflicts())) {
                     for (String conflict : chosen.conflicts()) {
                         if (conflict.equals(trait.id())) {
-                            bubbleComponent.setCaptainText(resources.getString("pirate.empireScreen.conflict").replace("{conflict1}", '"' + chosen.id() + '"').replace("{conflict2}", '"' + trait.id() + '"'));
+                            bubbleComponent.setCaptainText(resources.getString("pirate.empireScreen.conflict").replace("{conflict1}", '"' + variablesResourceBundle.getString(chosen.id()) + '"').replace("{conflict2}", '"' + variablesResourceBundle.getString(trait.id()) + '"'));
                             return false;
                         }
                     }
@@ -714,9 +714,9 @@ public class GangCreationController extends BasicController {
     public void showTraitDetails(Trait trait) {
         traitInfoPane.setVisible(true);
 
-        traitInfoName.setText(trait.id());
+        traitInfoName.setText(variablesResourceBundle.getString(trait.id()));
 
-        StringBuilder effectsText = new StringBuilder("effects\n");
+        StringBuilder effectsText = new StringBuilder(resources.getString("effects") + "\n");
         if (Objects.nonNull(trait.effects())) {
             for (EffectDto effect : trait.effects()) {
                 String variable = effect.variable();
@@ -734,10 +734,10 @@ public class GangCreationController extends BasicController {
         }
         traitInfoEffects.setText(effectsText.toString());
 
-        StringBuilder conflictsText = new StringBuilder("conflicts\n");
+        StringBuilder conflictsText = new StringBuilder(resources.getString("conflicts") + "\n");
         if (Objects.nonNull(trait.conflicts())) {
             for (String conflict : trait.conflicts()) {
-                conflictsText.append(conflict).append("\n");
+                conflictsText.append(variablesResourceBundle.getString(conflict)).append("\n");
             }
         }
         traitInfoConflicts.setText(conflictsText.toString());

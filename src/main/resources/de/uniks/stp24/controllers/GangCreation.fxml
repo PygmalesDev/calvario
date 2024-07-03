@@ -87,10 +87,10 @@
                   <ToggleButton fx:id="lockTraitsButton" layoutX="415.0" layoutY="205.0" mnemonicParsing="false" onAction="#lockTraits" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
                   <Button fx:id="randomizeButton" layoutX="486.0" layoutY="298.0" mnemonicParsing="false" onAction="#randomize" prefHeight="35.0" prefWidth="35.0" styleClass="normalButton" text="r" />
                   <ListView fx:id="confirmedTraitsListView" layoutX="277.0" layoutY="236.0" prefHeight="133.0" prefWidth="161.0" />
-                  <Pane fx:id="traitInfoPane" layoutX="164.0" layoutY="4.0" prefHeight="197.0" prefWidth="381.0" style="-fx-background-color: White;" visible="false">
-                     <Label fx:id="traitInfoName" layoutX="177.0" layoutY="6.0" text="Label" />
-                     <Label fx:id="traitInfoEffects" layoutX="14.0" layoutY="23.0" text="Label" />
-                     <Label fx:id="traitInfoConflicts" layoutX="287.0" layoutY="23.0" text="Label" />
+                  <Pane fx:id="traitInfoPane" layoutX="31.0" layoutY="4.0" prefHeight="200.0" prefWidth="500.0" style="-fx-background-color: White;" visible="false">
+                     <Label fx:id="traitInfoName" layoutX="200.0" layoutY="6.0" text="Label" />
+                     <Label fx:id="traitInfoEffects" layoutX="14.0" layoutY="25.0" text="Label" />
+                     <Label fx:id="traitInfoConflicts" layoutX="325.0" layoutY="25.0" text="Label" />
                   </Pane>
                </Pane>
                <VBox fx:id="spectatorBox" alignment="CENTER" layoutY="-1.0" prefHeight="405.0" prefWidth="550.0">

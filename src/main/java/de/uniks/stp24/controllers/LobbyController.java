@@ -39,9 +39,6 @@ import java.util.ResourceBundle;
 @Title("%enter.game")
 @Controller
 public class LobbyController extends BasicController {
-
-    @Inject
-    TokenStorage tokenStorage;
     @Inject
     EmpireService empireService;
     @Inject

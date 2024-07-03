@@ -115,8 +115,6 @@ public class EditAccController extends BasicController {
     ObjectMapper objectMapper;
     @Inject
     PopupBuilder popupBuilder;
-    @Inject
-    ImageCache imageCache;
 
     @SubComponent
     @Inject
@@ -502,6 +500,7 @@ public class EditAccController extends BasicController {
     /**
      * Sets visibility of the avatarButtons for editing.
      */
+    //TODO simplify using methods from parent class
     public void avatarButtonsVisible(boolean visible) {
         safeAvatarButton.setVisible(visible);
         cancelAvatarButton.setVisible(visible);

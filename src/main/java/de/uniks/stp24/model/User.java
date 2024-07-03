@@ -9,8 +9,6 @@ public record User(
         String createdAt,
         String updatedAt,
         Map<String,Integer> _public
-
 ) {
-
 }
 

@@ -70,11 +70,11 @@
     -fx-font-weight: bold;
 }
 
-.list-view {
+.technology-list {
     -fx-background-color: transparent;
 }
 
-.list-cell {
+.technology-list .list-cell {
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/red_frame.png");
     -fx-background-size: 100% 100%;
@@ -82,7 +82,7 @@
     -fx-background-position: center;
 }
 
-.list-view .virtual-flow .scroll-bar:vertical .thumb {
+.technology-list .virtual-flow .scroll-bar:vertical .thumb {
     -fx-background-color: transparent;
     -fx-background-size: auto;
     -fx-background-repeat: no-repeat;
@@ -92,13 +92,17 @@
     -fx-background-image: url("/de/uniks/stp24/icons/scroller.png");
 }
 
-.list-view .scroll-bar:vertical {
+.technology-list .scroll-bar:vertical {
     -fx-background-color: transparent;
     -fx-border-width: 1;
 }
 
-.list-view .scroll-bar:vertical .increment-button .increment-arrow, .list-view .scroll-bar .decrement-button .decrement-arrow {
+.technology-list .scroll-bar:vertical .increment-button .increment-arrow, .list-view .scroll-bar .decrement-button .decrement-arrow {
     -fx-background-color: transparent;
     -fx-background-image: none;
+}
+
+.description-list .list-cell {
+    -fx-background-color: transparent;
 }
 

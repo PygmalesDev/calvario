@@ -2,9 +2,9 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<fx:root type="HBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.technology.TechnologyCategoryDescriptionSubComponent">
+<fx:root type="VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.technology.TechnologyCategoryDescriptionSubComponent">
    <ImageView fx:id="resourceImage" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
    <Label fx:id="descriptionLabel" text="Label" />
 </fx:root>

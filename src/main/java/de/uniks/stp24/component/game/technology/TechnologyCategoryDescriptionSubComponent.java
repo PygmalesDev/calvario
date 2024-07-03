@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.game.technology;
 
+import de.uniks.stp24.model.Effect;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
@@ -19,14 +20,14 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 
 @Component(view = "TechnologyCategoryDescription.fxml")
-public class TechnologyCategoryDescriptionSubComponent extends VBox implements ReusableItemComponent<TechnologyExtended> {
+public class TechnologyCategoryDescriptionSubComponent extends VBox implements ReusableItemComponent<Effect> {
 
     @FXML
     public ImageView resourceImage;
     @FXML
     public Label descriptionLabel;
 
-    TechnologyExtended technology;
+    Effect effect;
 
     @Inject
     TechnologyService technologyService;
@@ -41,24 +42,9 @@ public class TechnologyCategoryDescriptionSubComponent extends VBox implements R
 
     }
 
-    @Override
-    public void setItem(@NotNull TechnologyExtended technologyExtended) {
-        this.technology = technologyExtended;
-
-    }
-
     @OnRender
     public void render() {
 
-        subscriber.subscribe(technologyService.getTechnology(technology.id()),
-                technologyExtended -> {
-                    technology = technologyExtended;
-                },
-                error -> System.out.println("Error on getting technology" + technology.id() + ": " + error.getMessage())
-        );
-
-        resourceImage.setImage(imageCache.get("assets/tags/" + Constants.technologyTranslation.get(technology.id())));
-        descriptionLabel.setText("Description: ");
     }
 
     @OnInit
@@ -71,6 +57,19 @@ public class TechnologyCategoryDescriptionSubComponent extends VBox implements R
         if (subscriber != null) {
             subscriber.dispose();
         }
+    }
 
+    @Override
+    public void setItem(@NotNull Effect effect) {
+        String variable = effect.variable();
+        for (String key : Constants.resourceTranslation.keySet()) {
+            if (variable.contains(key)) {
+                // TODO: REMOVE THIS
+                System.out.println("Image sets");
+                resourceImage.setImage(imageCache.get("icons/resources/" + key + ".png"));
+            }
+        }
+
+        descriptionLabel.setText(effect.variable());
     }
 }

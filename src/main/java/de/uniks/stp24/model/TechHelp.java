@@ -1,6 +1,6 @@
 package de.uniks.stp24.model;
 
-public record Technology(
+public record TechHelp(
         String imageID,
         String description
 ) {

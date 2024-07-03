@@ -1,7 +1,6 @@
 package de.uniks.stp24.component.game;
-
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.model.Technology;
+import de.uniks.stp24.model.TechHelp;
 import de.uniks.stp24.service.Constants;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,10 +26,10 @@ public class HelpComponent extends AnchorPane {
     @FXML
     Button backButton;
     @FXML
-    public ListView<Technology> technologyTagsListView;
+    public ListView<TechHelp> technologyTagsListView;
     private InGameController inGameController;
 
-    public ObservableList<Technology> technologies = FXCollections.observableArrayList();
+    public ObservableList<TechHelp> technologies = FXCollections.observableArrayList();
 
 
     @Inject
@@ -55,8 +54,8 @@ public class HelpComponent extends AnchorPane {
 
 
         for (Map.Entry<String, String> icon : Constants.technologyIconMap.entrySet()) {
-            Technology technology = new Technology(icon.getValue(), icon.getKey());
-            technologies.add(technology);
+            TechHelp techHelp = new TechHelp(icon.getValue(), icon.getKey());
+            technologies.add(techHelp);
         }
 
         technologyTagsListView.setItems(technologies);
@@ -64,7 +63,7 @@ public class HelpComponent extends AnchorPane {
     }
 }
 
-class TechnologyListCell extends ListCell<Technology> {
+class TechnologyListCell extends ListCell<TechHelp> {
     private final HBox content;
     private final ImageView imageView;
     private final Text text;
@@ -80,11 +79,11 @@ class TechnologyListCell extends ListCell<Technology> {
     }
 
     @Override
-    protected void updateItem(Technology technology, boolean empty) {
-        super.updateItem(technology, empty);
-        if (technology != null && !empty) {
-            imageView.setImage(new Image(technology.imageID()));
-            text.setText(technology.description());
+    protected void updateItem(TechHelp techHelp, boolean empty) {
+        super.updateItem(techHelp, empty);
+        if (techHelp != null && !empty) {
+            imageView.setImage(new Image(techHelp.imageID()));
+            text.setText(techHelp.description());
             setGraphic(content);
         } else {
             setGraphic(null);

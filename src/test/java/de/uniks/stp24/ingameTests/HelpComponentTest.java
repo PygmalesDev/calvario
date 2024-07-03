@@ -2,7 +2,7 @@ package de.uniks.stp24.ingameTests;
 
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.HelpComponent;
-import de.uniks.stp24.model.Technology;
+import de.uniks.stp24.model.TechHelp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.input.KeyCode;
@@ -19,12 +19,12 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 public class HelpComponentTest extends ControllerTest {
     @InjectMocks
     HelpComponent helpComponent;
-    ObservableList<Technology> technologies = FXCollections.observableArrayList();
+    ObservableList<TechHelp> technologies = FXCollections.observableArrayList();
 
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
-        technologies.add(new Technology("test1", "test1"));
+        technologies.add(new TechHelp("test1", "test1"));
         helpComponent.technologies = technologies;
         this.app.show(this.helpComponent);
         helpComponent.getStylesheets().clear();

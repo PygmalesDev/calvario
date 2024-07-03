@@ -539,29 +539,30 @@ public class GangCreationController extends BasicController {
             portraitImage.setImage(imageCache.get(portraitsList.get(portraitImageIndex)));
         }
 
-        String name;
+        String gangName;
         if (!lockName) {
             nameIndex = rand.nextInt(0, empireTemplates.get("Prefix").length);
             typeIndex = rand.nextInt(0, empireTemplates.get("Type").length);
-            name = empireTemplates.get("Prefix")[nameIndex]
+            String name = empireTemplates.get("Prefix")[nameIndex]
                     + " " + empireTemplates.get("Type")[typeIndex];
             String secondName = "";
             if (rand.nextInt(0, 4) == 3)
                 secondName = " " + resources.getString("of") + " " + empireTemplates.get("Suffix")[rand.nextInt(0, empireTemplates.get("Suffix").length)] +
                         " " + empireTemplates.get("Definition")[rand.nextInt(0, empireTemplates.get("Definition").length)];
-            gangNameText.setText(name + secondName);
+            gangName = name + secondName;
+            gangNameText.setText(gangName);
         } else {
-            name = gangNameText.getText();
+            gangName = gangNameText.getText();
         }
 
         if (!lockDescription) {
             descriptionIndex = rand.nextInt(0, empireTemplates.get("Description").length);
             String description = empireTemplates.get("Description")[descriptionIndex]
-                    .replace("{NAME}", name);
+                    .replace("{NAME}", gangName);
             gangDescriptionText.setText(description);
         } else {
             String description = empireTemplates.get("Description")[descriptionIndex]
-                    .replace("{NAME}", name);
+                    .replace("{NAME}", gangName);
             gangDescriptionText.setText(description);
         }
 

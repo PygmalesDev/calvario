@@ -69,7 +69,6 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     GamesService gamesService;
     @Spy
     EmpireService empireService;
-
     @Spy
     Subscriber subscriber = spy(Subscriber.class);
     @Spy

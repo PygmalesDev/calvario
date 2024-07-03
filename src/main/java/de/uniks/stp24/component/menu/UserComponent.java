@@ -39,16 +39,15 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     @Inject
     Subscriber subscriber;
 
-
     @Resource
-    final ResourceBundle resource;
+    final ResourceBundle resources;
     private final ImageCache imageCache;
     private MemberUser member;
 
     @Inject
-    public UserComponent(ImageCache imageCache, ResourceBundle resource) {
+    public UserComponent(ImageCache imageCache, ResourceBundle resources) {
         this.imageCache = imageCache;
-        this.resource = resource;
+        this.resources = resources;
     }
 
     public void kickUser() {
@@ -65,7 +64,7 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
             this.userHBox.getChildren().remove(this.kickButton);
 
         this.usernameText.setText(member.user().name());
-        this.readyText.setText(resource.getString(member.ready() ? "ready" : "not.ready"));
+        this.readyText.setText(resources.getString(member.ready() ? "ready" : "not.ready"));
 
         this.avatarImageView.setImage(this.imageCache.get(Objects.nonNull(this.member.user().avatar())
                 ? this.member.user().avatar()

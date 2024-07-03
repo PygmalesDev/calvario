@@ -57,6 +57,7 @@ public class PauseMenuTest extends ControllerTest {
 
     @Spy
     PopupBuilder popupBuilder;
+
     @Spy
     EventService eventService;
 
@@ -83,11 +84,12 @@ public class PauseMenuTest extends ControllerTest {
 
     @Spy
     ObjectMapper objectMapper;
+
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
+
     @Spy
     EmpireService empireService;
-
 
     @InjectMocks
     ClockComponent clockComponent;
@@ -115,6 +117,7 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
+
     @InjectMocks
     BuildingPropertiesComponent buildingPropertiesComponent;
 
@@ -123,9 +126,6 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     BuildingsWindowComponent buildingsWindowComponent;
-
-
-
 
     @InjectMocks
     DetailsComponent detailsComponent;
@@ -138,12 +138,6 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     DeleteStructureComponent deleteStructureComponent;
-
-
-
-    @Spy
-    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
-
 
     @InjectMocks
     InGameController inGameController;

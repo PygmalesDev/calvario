@@ -50,8 +50,6 @@ public class StorageComponentTest extends ControllerTest {
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @Spy
     EmpireService empireService;
-    @Spy
-    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
 
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;

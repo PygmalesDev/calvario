@@ -96,6 +96,7 @@ public class DetailsComponent extends AnchorPane {
      */
 
     public void setSumProduction(Map<String, Integer> totalProduction){
+        resetResources();
         int i = 0;
         for (Map.Entry<String, Integer> entry : totalProduction.entrySet()) {
             String imageStyle = resourceImagePath.get(entry.getKey());
@@ -107,6 +108,7 @@ public class DetailsComponent extends AnchorPane {
     }
 
     public void setSumConsumption(Map<String, Integer> totalConsumption){
+        resetResources();
         int i = 0;
         for (Map.Entry<String, Integer> entry : totalConsumption.entrySet()) {
             String imageStyle = resourceImagePath.get(entry.getKey());
@@ -164,5 +166,15 @@ public class DetailsComponent extends AnchorPane {
         showConsumption.setVisible(true);
         setSumProduction(islandAttributes.mergeProduction());
 
+    }
+
+    public void resetResources() {
+        for (Pane resImage : resImages) {
+            resImage.setStyle("");
+        }
+
+        for (Text text : resInf) {
+            text.setText("");
+        }
     }
 }

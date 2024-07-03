@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 public class SaveLoadService {
     private final ObjectMapper objectMapper = new ObjectMapper();
-    String fileName = Constants.DATA_FOLDER_NAME + "/" + "save.json";
+    public String fileName = Constants.DATA_FOLDER_NAME + "/" + "save.json";
 
     @Inject
     public SaveLoadService() {

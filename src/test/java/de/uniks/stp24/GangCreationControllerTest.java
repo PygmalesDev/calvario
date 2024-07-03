@@ -8,7 +8,6 @@
  import de.uniks.stp24.controllers.GangCreationController;
  import de.uniks.stp24.dto.MemberDto;
  import de.uniks.stp24.model.Gang;
- import de.uniks.stp24.model.GangElement;
  import de.uniks.stp24.model.Trait;
  import de.uniks.stp24.rest.PresetsApiService;
  import de.uniks.stp24.service.ImageCache;
@@ -64,8 +63,8 @@
      PresetsApiService presetsApiService;
 
      ObservableList<Gang> gangs = FXCollections.observableArrayList();
-     Gang gang = new Gang("Test Gang", 0, 0, "", "#000000", 0, null);
-     ListView<GangElement> gangsListView;
+     Gang gang = new Gang("Test Gang", 0, "", 0, "", "", "#000000", 0, null);
+     ListView<Gang> gangsListView;
      ListView<Trait> allTraitsListView;
      ListView<Trait> confirmedTraitsListView;
      ListView<Trait> selectedTraitsListView;
@@ -159,9 +158,9 @@
          waitForFxEvents();
 
           assertEquals(gangNums + 1, gangsListView.getItems().size());
-          GangElement selectedGang = gangsListView.getItems().get(1);
-          assertEquals(gangName, selectedGang.gang().name());
-          assertEquals(gangDescription, selectedGang.gang().description());
+          Gang selectedGang = gangsListView.getItems().get(1);
+          assertEquals(gangName, selectedGang.name());
+          assertEquals(gangDescription, selectedGang.description());
           verify(saveLoadService).saveGang(any());
      }
 
@@ -178,7 +177,7 @@
          clickOn("#gangNameText");
          waitForFxEvents();
 
-         Platform.runLater(() -> {((TextField) lookup("#gangNameText").query()).clear();});
+         Platform.runLater(() -> ((TextField) lookup("#gangNameText").query()).clear());
 
          waitForFxEvents();
          write("Ashkanian");
@@ -187,10 +186,10 @@
          clickOn("#confirmButton");
          waitForFxEvents();
 
-         GangElement selectedGang;
-         selectedGang = gangsListView.getItems().get(0);
-         assertEquals("Ashkanian", selectedGang.gang().name());
-         assertTrue(selectedGang.gang().description().isEmpty());
+         Gang selectedGang;
+         selectedGang = gangsListView.getItems().getFirst();
+         assertEquals("Ashkanian", selectedGang.name());
+         assertTrue(selectedGang.description().isEmpty());
 
          clickOn("Ashkanian");
          waitForFxEvents();
@@ -220,12 +219,12 @@
          clickOn("#confirmButton");
          waitForFxEvents();
 
-         selectedGang = gangsListView.getItems().get(0);
-         assertEquals("Ashkanian", selectedGang.gang().name());
-         assertEquals(gangDescription, selectedGang.gang().description());
-         assertEquals(1, selectedGang.gang().flagIndex());
-         assertEquals(1, selectedGang.gang().portraitIndex());
-         assertEquals(1, selectedGang.gang().colorIndex());
+         selectedGang = gangsListView.getItems().getFirst();
+         assertEquals("Ashkanian", selectedGang.name());
+         assertEquals(gangDescription, selectedGang.description());
+         assertEquals(1, selectedGang.flagIndex());
+         assertEquals(1, selectedGang.portraitIndex());
+         assertEquals(1, selectedGang.colorIndex());
 
          clickOn("Ashkanian");
          waitForFxEvents();
@@ -252,33 +251,35 @@
          waitForFxEvents();
 
          // before edit
-         selectedGang = gangsListView.getItems().get(0);
-         assertEquals(1, selectedGang.gang().flagIndex());
-         assertEquals(1, selectedGang.gang().portraitIndex());
-         assertEquals(1, selectedGang.gang().colorIndex());
+         selectedGang = gangsListView.getItems().getFirst();
+         assertEquals(1, selectedGang.flagIndex());
+         assertEquals(1, selectedGang.portraitIndex());
+         assertEquals(1, selectedGang.colorIndex());
 
          clickOn("#confirmButton");
          waitForFxEvents();
 
          // after edit
-         selectedGang = gangsListView.getItems().get(0);
-         assertEquals(16, selectedGang.gang().flagIndex());
-         assertEquals(16, selectedGang.gang().portraitIndex());
-         assertEquals(15, selectedGang.gang().colorIndex());
+         selectedGang = gangsListView.getItems().getFirst();
+         assertEquals(16, selectedGang.flagIndex());
+         assertEquals(16, selectedGang.portraitIndex());
+         assertEquals(15, selectedGang.colorIndex());
      }
 
      @Test
      public void loadingGangsFromSave() {
          assertEquals( 1, gangsListView.getItems().size());
-         GangElement loadedGang = gangsListView.getItems().get(0);
-         assertEquals("Test Gang", loadedGang.gang().name());
-         assertEquals(0, loadedGang.gang().flagIndex());
-         assertEquals(0, loadedGang.gang().portraitIndex());
-         assertEquals(0, loadedGang.gang().colorIndex());
+         Gang loadedGang = gangsListView.getItems().getFirst();
+         assertEquals("Test Gang", loadedGang.name());
+         assertEquals(0, loadedGang.flagIndex());
+         assertEquals(0, loadedGang.portraitIndex());
+         assertEquals(0, loadedGang.colorIndex());
      }
 
      @Test
      public void testRandomGenerationAndLocking() {
+         ObservableList<Trait> confirmedTraits;
+
          clickOn("#showCreationButton");
          waitForFxEvents();
 
@@ -297,6 +298,9 @@
          TextArea description = lookup("#gangDescriptionText").query();
          assertEquals("", description.getText());
 
+         confirmedTraits = confirmedTraitsListView.getItems();
+         assertTrue(confirmedTraits.isEmpty());
+
          clickOn("#randomizeButton");
          waitForFxEvents();
 
@@ -305,6 +309,7 @@
 
          assertNotNull(generatedName);
          assertNotNull(generatedDescription);
+         assertFalse(confirmedTraits.isEmpty());
 
          clickOn("#lockNameButton");
          waitForFxEvents();
@@ -312,19 +317,24 @@
          clickOn("#lockDescriptionButton");
          waitForFxEvents();
 
+         clickOn("#lockTraitsButton");
+         waitForFxEvents();
+
          clickOn("#randomizeButton");
          waitForFxEvents();
 
          assertEquals(generatedName, name.getText());
          assertEquals(generatedDescription, description.getText());
+         assertEquals(confirmedTraits, confirmedTraitsListView.getItems());
 
          clickOn("#createButton");
          waitForFxEvents();
 
-         GangElement selectedGang = gangsListView.getItems().get(1);
-         assertEquals(0, selectedGang.gang().flagIndex());
-         assertEquals(0, selectedGang.gang().portraitIndex());
-         assertEquals(0, selectedGang.gang().colorIndex());
+         Gang selectedGang = gangsListView.getItems().get(1);
+         assertEquals(0, selectedGang.flagIndex());
+         assertEquals(0, selectedGang.portraitIndex());
+         assertEquals(0, selectedGang.colorIndex());
+         assertEquals(confirmedTraits, selectedGang.traits());
      }
 
      @Test
@@ -335,7 +345,7 @@
          clickOn("#gangNameText");
          waitForFxEvents();
 
-         Platform.runLater(() -> {((TextField) lookup("#gangNameText").query()).clear();});
+         Platform.runLater(() -> ((TextField) lookup("#gangNameText").query()).clear());
 
          waitForFxEvents();
          write("Ashkanian");
@@ -387,7 +397,7 @@
 
      @Test
      public void testTraits() {
-         TextArea captainText = (TextArea) lookup("#captainText").query();
+         TextArea captainText = lookup("#captainText").query();
 
          clickOn("#showCreationButton");
          waitForFxEvents();
@@ -413,13 +423,11 @@
          assertFalse(selectedTraits.contains(bTrait));
 
 
-         Platform.runLater(() -> {
-             allTraitsListView.getItems().remove(1);
-         });
+         Platform.runLater(() -> allTraitsListView.getItems().remove(1));
          waitForFxEvents();
          clickOn("#chooseTraitButton");
          waitForFxEvents();
-         captainText = (TextArea) lookup("#captainText").query();
+         captainText = lookup("#captainText").query();
          assertEquals(resources.getString("pirate.empireScreen.scoreOverLimit").replace("{conflict1}", '"' + cTrait.id() + '"').replace("{conflict2}", '"' + bTrait.id() + '"')
                  , captainText.getText());
          selectedTraits = selectedTraitsListView.getItems();

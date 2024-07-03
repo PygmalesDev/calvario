@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -21,8 +22,7 @@ import java.util.Objects;
 public class Building extends VBox {
     @FXML
     Button building;
-    @Inject
-    IslandAttributeStorage islandAttributeStorage;
+
     InGameController inGameController;
 
     private ImageView imageView;
@@ -65,7 +65,6 @@ public class Building extends VBox {
             building.setGraphic(imageView);
         }
 
-
         building.setOnMouseClicked(event -> {
             String imageUrl = imageView.getImage().getUrl();
             String relevantPart = extractRelevantPath(imageUrl);
@@ -73,6 +72,8 @@ public class Building extends VBox {
                 inGameController.buildingsWindowComponent.setVisible(false);
                 inGameController.setSitePropertiesInvisible();
                 inGameController.showBuildingInformation(buildingName);
+                inGameController.selectedBuilding = buildingName;
+                System.out.println(buildingName);
 
             } else {
                 inGameController.showBuildingWindow();
@@ -80,10 +81,7 @@ public class Building extends VBox {
                     buildingsComponent.setGridPane();
                 }
             }
-
         });
-
-
     }
 
     private String extractRelevantPath(String imageUrl) {

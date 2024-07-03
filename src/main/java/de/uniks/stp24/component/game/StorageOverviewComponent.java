@@ -8,6 +8,7 @@ import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.ExplanationService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.collections.ObservableList;
@@ -38,7 +39,6 @@ public class StorageOverviewComponent extends AnchorPane {
     @FXML
     Text empireNameLabel;
 
-
     @Inject
     App app;
     @Inject
@@ -52,7 +52,10 @@ public class StorageOverviewComponent extends AnchorPane {
     @Inject
     TokenStorage tokenStorage;
     @Inject
+    ExplanationService explanationService;
+    @Inject
     @org.fulib.fx.annotation.controller.Resource
+
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
@@ -95,17 +98,15 @@ public class StorageOverviewComponent extends AnchorPane {
                         }
                     },
                     error -> System.out.println("ErrorEmpireSubscriber"));
-            this.resourceListView.setCellFactory(list -> new ComponentListCell<>(app, resourceComponentProvider));
+            this.resourceListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "storageOverview", "total.resources"));
         }
     }
-
 
     private void resourceListGeneration(EmpireDto empireDto, AggregateItemDto[] aggregateItems) {
         Map<String, Integer> resourceMap = empireDto.resources();
         ObservableList<Resource> resourceList = resourcesService.generateResourceList(resourceMap, resourceListView.getItems(), aggregateItems);
         this.resourceListView.setItems(resourceList);
     }
-
 
     /**
      * Listener for the empire: Changes of the resources will change the list in the storage overview.

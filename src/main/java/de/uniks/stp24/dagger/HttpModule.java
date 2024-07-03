@@ -95,4 +95,10 @@ public class HttpModule {
         return retrofit.create(PresetsApiService.class);
     }
 
+    @Provides
+    @Singleton
+    GameLogicApiService gameLogicApiService(Retrofit retrofit) {
+        return retrofit.create(GameLogicApiService.class);
+    }
+
 }

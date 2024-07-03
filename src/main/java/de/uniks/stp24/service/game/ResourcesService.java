@@ -174,7 +174,7 @@ public class ResourcesService {
     }
 
 
-    public void upgradeIsland() {
+    public void upgradeEmpire() {
         Map<String, Integer> difRes = updateAvailableResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()));
 
         this.subscriber.subscribe(empireService.updateEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId(),

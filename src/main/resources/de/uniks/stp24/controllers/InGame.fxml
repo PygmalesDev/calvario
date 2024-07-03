@@ -33,8 +33,9 @@
             <Insets left="30.0" />
         </padding>
     </HBox>
-    <StackPane fx:id="storageOverviewContainer" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="70.0" />
     <StackPane fx:id="empireOverviewContainer" layoutX="25.333333333333332" layoutY="76.33333333333333" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="95.66666666666663" AnchorPane.leftAnchor="25.333333333333332" AnchorPane.topAnchor="76.33333333333333" />
+    <StackPane fx:id="storageOverviewContainer" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="70.0" />
+    <StackPane fx:id="explanationContainer" prefHeight="362.0" prefWidth="304.0" />
     <stylesheets>
         <URL value="@../style/styles.css" />
         <URL value="@../style/ingameButtons.css" />

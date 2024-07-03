@@ -101,9 +101,13 @@ public class OverviewSitesComponent extends AnchorPane {
         }
         inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewUpgradeComponent);
         inGameController.overviewUpgradeComponent.setUpgradeButton();
-        inGameController.overviewUpgradeComponent.setNeededResources();
+        inGameController.overviewUpgradeComponent.setListViews();
         inGameController.overviewUpgradeComponent.setUpgradeInf();
     }
+
+    /*
+    Set upgrade overview of island with inf. of current island level.
+     */
 
     public void setLevelCheckBox(){
         switch (islandAttributes.getIsland().upgradeLevel()) {
@@ -168,6 +172,9 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameController.sitePropertiesComponent.setVisible(false);
         inGameController.buildingPropertiesComponent.setVisible(false);
         inGameController.overviewContainer.setVisible(false);
+        if(inGameController.selectedIsland.rudderImage != null) {
+            inGameController.selectedIsland.rudderImage.setVisible(false);
+        }
         inGameController.selectedIsland.islandIsSelected = false;
 
         if(!inGameController.islandsService.keyCodeFlag) {

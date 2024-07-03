@@ -6,6 +6,7 @@ import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.game.ExplanationService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
@@ -62,19 +63,16 @@ public class SitePropertiesComponent extends AnchorPane {
 
     @Inject
     TokenStorage tokenStorage;
-
     @Inject
     IslandAttributeStorage islandAttributeStorage;
-
     @Inject
     Subscriber subscriber;
-
     @Inject
     ResourcesService resourcesService;
-
     @Inject
     IslandsService islandsService;
-
+    @Inject
+    ExplanationService explanationService;
     @Inject
     App app;
 
@@ -160,9 +158,9 @@ public class SitePropertiesComponent extends AnchorPane {
         siteCostsListView.setSelectionModel(null);
         subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
         inGameController.updateSiteCapacities();
-        siteConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
-        siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
-        siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
+        siteConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview", "site.consumption"));
+        siteCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview", "site.costs"));
+        siteProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview", "site.production"));
     }
 
     //Uses a GridPane to display a graphic view of how many sites of each type you have
@@ -248,74 +246,3 @@ public class SitePropertiesComponent extends AnchorPane {
 
 }
 
-class CustomComponentListCell<Item, Component extends Parent> extends ListCell<Item> {
-
-    private final FulibFxApp app;
-    private final Provider<? extends Component> provider;
-    private final Map<String, Object> extraParams; // extra parameters to pass to the component
-
-    private Component component;
-
-    /**
-     * Creates a new component list cell.
-     *
-     * @param app      The FulibFX app
-     * @param provider The provider to create the component
-     */
-    public CustomComponentListCell(FulibFxApp app, Provider<? extends Component> provider) {
-        this(app, provider, Map.of());
-    }
-
-    /**
-     * Creates a new component list cell.
-     *
-     * @param app         The FulibFX app
-     * @param provider    The provider to create the component
-     * @param extraParams Extra parameters to pass to the component
-     */
-    public CustomComponentListCell(FulibFxApp app, Provider<? extends Component> provider, Map<String, Object> extraParams) {
-        super();
-        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        this.app = app;
-        this.provider = provider;
-        this.extraParams = extraParams;
-    }
-
-    @Override
-    protected void updateItem(Item item, boolean empty) {
-        super.updateItem(item, empty);
-        setPrefHeight(5);
-        setPrefWidth(50);
-        // Destroy component if the cell is emptied
-        if (empty || item == null) {
-            if (component != null) {
-                app.destroy(component);
-                component = null;
-            }
-            setGraphic(null);
-            return;
-        }
-
-        // Destroy old component if necessary (if it is not reusable)
-        if (component != null && !(component instanceof ReusableItemComponent<?>)) {
-            app.destroy(component);
-            component = null;
-        }
-
-        // Create and render new component if necessary
-        if (component == null) {
-            component = provider.get();
-            // Add item and list to parameters if they are not already present
-            final Map<String, Object> params = new HashMap<>(extraParams);
-            params.putIfAbsent("item", item);
-            params.putIfAbsent("list", getListView().getItems());
-            setGraphic(app.initAndRender(component, params));
-        }
-
-        // Update component if possible
-        if (component instanceof ReusableItemComponent<?>) {
-            //noinspection unchecked
-            ((ReusableItemComponent<Item>) component).setItem(item);
-        }
-    }
-}

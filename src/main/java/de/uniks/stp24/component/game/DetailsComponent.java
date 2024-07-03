@@ -90,23 +90,30 @@ public class DetailsComponent extends AnchorPane {
 
     }
 
+    /*
+    The methods below are needed to set a HBOX for showing
+    total consumption and total production of current selected island.
+     */
+
     public void setSumProduction(Map<String, Integer> totalProduction){
+        resetResources();
         int i = 0;
         for (Map.Entry<String, Integer> entry : totalProduction.entrySet()) {
             String imageStyle = resourceImagePath.get(entry.getKey());
             resImages.get(i).setStyle(imageStyle + "-fx-background-size: cover;");
-            resInf.get(i).setText("×" + entry.getValue());
+            resInf.get(i).setText("+" + entry.getValue());
             i ++;
         }
         title.setText("     " + gameResourceBundle.getString("total.production"));
     }
 
     public void setSumConsumption(Map<String, Integer> totalConsumption){
+        resetResources();
         int i = 0;
         for (Map.Entry<String, Integer> entry : totalConsumption.entrySet()) {
             String imageStyle = resourceImagePath.get(entry.getKey());
             resImages.get(i).setStyle(imageStyle + "-fx-background-size: cover;");
-            resInf.get(i).setText("×" + entry.getValue());
+            resInf.get(i).setText("-" + entry.getValue());
             i++;
         }
         title.setText("  " + gameResourceBundle.getString("total.consumption"));
@@ -159,5 +166,15 @@ public class DetailsComponent extends AnchorPane {
         showConsumption.setVisible(true);
         setSumProduction(islandAttributes.mergeProduction());
 
+    }
+
+    public void resetResources() {
+        for (Pane resImage : resImages) {
+            resImage.setStyle("");
+        }
+
+        for (Text text : resInf) {
+            text.setText("");
+        }
     }
 }

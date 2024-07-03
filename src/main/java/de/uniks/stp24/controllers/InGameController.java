@@ -7,6 +7,7 @@ import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
+import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -47,7 +48,8 @@ import java.util.Objects;
 @Title("CALVARIO")
 @Controller
 public class InGameController extends BasicController {
-
+    @FXML
+    public StackPane explanationContainer;
     @FXML
     Pane shadow;
     @FXML
@@ -105,6 +107,8 @@ public class InGameController extends BasicController {
     public IslandsService islandsService;
     @Inject
     ResourcesService resourceService;
+    @Inject
+    ExplanationService explanationService;
 
 
     @SubComponent
@@ -122,20 +126,30 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
-
+    @SubComponent
+    @Inject
+    public VariableExplanationComponent variableExplanationComponent;
     @SubComponent
     @Inject
     public EmpireOverviewComponent empireOverviewComponent;
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
-
     @SubComponent
     @Inject
     public DeleteStructureComponent deleteStructureComponent;
     @SubComponent
     @Inject
     public EventComponent eventComponent;
+    @SubComponent
+    @Inject
+    public BuildingPropertiesComponent buildingPropertiesComponent;
+    @SubComponent
+    @Inject
+    public BuildingsWindowComponent buildingsWindowComponent;
+    @SubComponent
+    @Inject
+    public SitePropertiesComponent sitePropertiesComponent;
 
     List<IslandComponent> islandComponentList;
     Map<String, IslandComponent> islandComponentMap;
@@ -146,9 +160,16 @@ public class InGameController extends BasicController {
     public IslandAttributeStorage islandAttributes;
     @Inject
     EventListener eventListener;
-
+    @Inject
+    public InGameController() {
+        lastUpdate = "";
+    }
     @Inject
     public GameSystemsApiService gameSystemsApiService;
+    @Inject
+    GameLogicApiService gameLogicApiService;
+    @Inject
+    VariableService variableService;
 
     public IslandComponent selectedIsland;
 
@@ -162,29 +183,12 @@ public class InGameController extends BasicController {
     public ArrayList<String> flagsPath = new ArrayList<>();
     String resourcesPaths = "/de/uniks/stp24/assets/";
     String flagsFolderPath = "flags/flag_";
-
-    @SubComponent
-    @Inject
-    public BuildingPropertiesComponent buildingPropertiesComponent;
-
-    @SubComponent
-    @Inject
-    public BuildingsWindowComponent buildingsWindowComponent;
-
-    @SubComponent
-    @Inject
-    public SitePropertiesComponent sitePropertiesComponent;
-
     PopupBuilder popupBuildingProperties = new PopupBuilder();
     PopupBuilder popupBuildingWindow = new PopupBuilder();
     PopupBuilder popupSiteProperties = new PopupBuilder();
     PopupBuilder popupDeleteStructure = new PopupBuilder();
-
-    @Inject
-    public InGameController() {
-        lastUpdate = "";
-    }
-
+    public String selectedBuilding;
+    public String selectedSites;
 
     @OnInit
     public void init() {
@@ -195,6 +199,7 @@ public class InGameController extends BasicController {
         sitePropertiesComponent.setInGameController(this);
         deleteStructureComponent.setInGameController(this);
         empireOverviewComponent.setInGameController(this);
+        variableService.setIngameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
@@ -213,15 +218,17 @@ public class InGameController extends BasicController {
 
         this.subscriber.subscribe(inGameService.loadUpgradePresets(),
                 result -> islandAttributes.setSystemPresets(result),
-                error -> System.out.println("error in getEmpire in inGame"));
+                error -> System.out.println("error in loading upgrade presets"));
 
         this.subscriber.subscribe(inGameService.loadBuildingPresets(),
                 result -> islandAttributes.setBuildingPresets(result),
-                error -> System.out.println("error in getEmpire in inGame"));
+                error -> System.out.println("error in load building presets"));
 
         this.subscriber.subscribe(inGameService.loadDistrictPresets(),
                 result -> islandAttributes.setDistrictPresets(result),
-                error -> System.out.println("error in getEmpire in inGame"));
+                error -> System.out.println("error in load district presets"));
+
+        variableService.initVariables();
 
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
@@ -276,7 +283,6 @@ public class InGameController extends BasicController {
         eventContainer.setVisible(false);
         shadow.setVisible(false);
         eventComponent.setClockComponent(clockComponent);
-
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
 
         overviewContainer.setVisible(false);
@@ -286,9 +292,12 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
 
+        explanationContainer.setVisible(false);
+        explanationContainer.getChildren().add(variableExplanationComponent);
+        explanationService.setInGameController(this);
+
         empireOverviewContainer.setVisible(false);
         empireOverviewContainer.getChildren().add(empireOverviewComponent);
-
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -441,6 +450,7 @@ public class InGameController extends BasicController {
         if(empireOverviewComponent.isVisible()) {
             empireOverviewComponent.closeEmpireOverview();
         }
+
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
 
@@ -531,7 +541,6 @@ public class InGameController extends BasicController {
 
     }
 
-
     public void showSiteOverview() {
         siteProperties.setMouseTransparent(false);
         buildingsWindow.setVisible(false);
@@ -556,5 +565,21 @@ public class InGameController extends BasicController {
 
     public void updateResCapacity() {
         overviewSitesComponent.updateResCapacity();
+    }
+
+    /*
+    Methods below showing explanation overview if mouse hovers above a chosen element.
+     */
+
+    public void showExplanation(double x, double y, String variable){
+        explanationContainer.setLayoutX(x);
+        explanationContainer.setLayoutY(y);
+        explanationContainer.setVisible(true);
+        System.out.println(variableService.getValueOfVariable(variable));
+    }
+    public void unShowExplanation(){
+        explanationContainer.setLayoutX(0);
+        explanationContainer.setLayoutY(0);
+        explanationContainer.setVisible(false);
     }
 }

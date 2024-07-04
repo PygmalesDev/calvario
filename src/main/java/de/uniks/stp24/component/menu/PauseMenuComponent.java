@@ -1,6 +1,7 @@
 package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
@@ -39,6 +40,7 @@ public class PauseMenuComponent extends AnchorPane {
     @Inject
     @Resource
     public ResourceBundle resources;
+    private InGameController inGameController;
 
 
     @Inject
@@ -50,8 +52,8 @@ public class PauseMenuComponent extends AnchorPane {
         if (inGameService.getPaused()) inGameService.setPaused(false);
     }
 
-    public void settings() {
-        inGameService.setShowSettings(false);
+    public void help() {
+        inGameController.showHelp();
     }
 
     @OnKey(code = KeyCode.Q)
@@ -59,5 +61,9 @@ public class PauseMenuComponent extends AnchorPane {
         tokenStorage.setGameId(null);
         tokenStorage.setEmpireId(null);
         if (inGameService.getPaused()) app.show("/browseGames");
+    }
+
+    public void setInGameController(InGameController inGameController) {
+        this.inGameController = inGameController;
     }
 }

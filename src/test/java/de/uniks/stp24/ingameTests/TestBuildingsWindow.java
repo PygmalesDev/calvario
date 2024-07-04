@@ -77,8 +77,6 @@ public class TestBuildingsWindow extends ControllerTest {
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
     @InjectMocks
-    SettingsComponent settingsComponent;
-    @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
     @InjectMocks
     ClockComponent clockComponent;

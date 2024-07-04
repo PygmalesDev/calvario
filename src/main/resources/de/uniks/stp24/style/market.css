@@ -62,3 +62,13 @@ mineralButton{
     -fx-background-repeat: no-repeat;
 }
 
+listViewStyle .list-cell{
+    -fx-background-color: transparent;
+}
+
+creditCoinIcon{
+    -fx-background-image: url("/de/uniks/stp24/icons/resources/credits.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}

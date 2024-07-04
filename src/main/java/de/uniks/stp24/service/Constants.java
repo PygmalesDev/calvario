@@ -1,5 +1,7 @@
 package de.uniks.stp24.service;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 public class Constants {
@@ -195,5 +197,13 @@ public class Constants {
             Map.entry("society" , "de/uniks/stp24/assets/technologies/tags/society.png"),
             Map.entry("state" , "de/uniks/stp24/assets/technologies/tags/state.png")
     );
+
+    public static final ArrayList<String> hints = new ArrayList<>(Arrays.asList(
+            "hint.alt.s",
+            "hint.alt.e",
+            "hint.alt.h",
+            "hint.shift.mw",
+            "hint.space"
+    ));
 
 }

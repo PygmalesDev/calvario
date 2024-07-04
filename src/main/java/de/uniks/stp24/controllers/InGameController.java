@@ -50,6 +50,8 @@ public class InGameController extends BasicController {
     @FXML
     StackPane helpWindowContainer;
     @FXML
+    StackPane hintCaptainContainer;
+    @FXML
     Pane shadow;
     @FXML
     StackPane eventContainer;
@@ -161,32 +163,24 @@ public class InGameController extends BasicController {
     String resourcesPaths = "/de/uniks/stp24/assets/";
     String flagsFolderPath = "flags/flag_";
 
-    @SubComponent
-    @Inject
-    public BuildingPropertiesComponent buildingPropertiesComponent;
-
-    @SubComponent
-    @Inject
-    public BuildingsWindowComponent buildingsWindowComponent;
-
-    @SubComponent
-    @Inject
-    public SitePropertiesComponent sitePropertiesComponent;
-
-    @SubComponent
-    @Inject
-    public HelpComponent helpComponent;
-
     PopupBuilder popupBuildingProperties = new PopupBuilder();
     PopupBuilder popupBuildingWindow = new PopupBuilder();
     PopupBuilder popupSiteProperties = new PopupBuilder();
     PopupBuilder popupDeleteStructure = new PopupBuilder();
-
     PopupBuilder popupHelpWindow = new PopupBuilder();
 
     @Inject
     public InGameController() {
         lastUpdate = "";
+    }
+
+    @OnRender
+    public void addSpeechBubble() {
+        hintCaptainContainer.getChildren().add(hintBubbleComponent);
+        hintBubbleComponent.setCaptainText("hashuhdhas" +
+                "sajkdajs" +
+                "sjakjdsah" +
+                "sjkanh");
     }
 
 
@@ -304,7 +298,6 @@ public class InGameController extends BasicController {
 
     public void pauseGame() {
         closeComponents();
-        pauseMenuComponent.setVisible(true);
         pauseMenuContainer.setVisible(pause);
         pauseMenuContainer.setMouseTransparent(false);
     }
@@ -578,5 +571,4 @@ public class InGameController extends BasicController {
     public void updateResCapacity() {
         overviewSitesComponent.updateResCapacity();
     }
-
 }

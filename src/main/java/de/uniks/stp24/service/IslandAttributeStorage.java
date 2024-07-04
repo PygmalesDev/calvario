@@ -51,6 +51,7 @@ public class IslandAttributeStorage {
     public void setSystemPresets(SystemUpgrades presets) {
         systemPresets = presets;
 
+
         String effectsColonized = "+" + systemPresets.colonized().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
         String effectsUpgraded = "+" + systemPresets.upgraded().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
         String effectsDeveloped = "+" + systemPresets.developed().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");

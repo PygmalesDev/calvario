@@ -209,7 +209,6 @@ public class OverviewSitesComponent extends AnchorPane {
         island_name.setText(islandAttributes.getIslandNameTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");
         crewCapacity.setText(String.valueOf(islandAttributes.getIsland().crewCapacity()));
 
-
         switch (islandAttributes.getIsland().upgradeLevel()) {
             case 1 -> island_inf.setText(islandAttributes.upgradeEffects.get(1));
             case 2 -> island_inf.setText(islandAttributes.upgradeEffects.get(2));

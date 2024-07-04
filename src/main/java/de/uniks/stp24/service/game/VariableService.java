@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 public class VariableService {
     @Inject
@@ -22,9 +23,10 @@ public class VariableService {
     @Inject
     GameLogicApiService gameLogicApiService;
 
-    private Map<String, Object> data = new HashMap<>();
+    public Map<String, ExplainedVariableDTO> data = new HashMap<>();
     private ArrayList<String> allVariables = new ArrayList<>();
     private InGameController inGameController;
+    private  ArrayList<ExplainedVariableDTO> explainedVariableDTOS = new ArrayList<>();
 
     @Inject
     public VariableService(){
@@ -46,19 +48,20 @@ public class VariableService {
     }
 
     /*
-    This method should be called every time after a job is done
+    This method should be called every time after a job is done.
      */
     public void updateVariablesMap(){
-        for(String var: allVariables){
-            this.subscriber.subscribe(gameLogicApiService.getVariablesExplanations(inGameController.tokenStorage.getEmpireId(), var),
-                    result -> {
-                        data.put(var, result);
-                    });
-        }
+        this.subscriber.subscribe(
+                gameLogicApiService.getVariablesExplanations(inGameController.tokenStorage.getEmpireId(), allVariables),
+                result -> {
+                    for(ExplainedVariableDTO explainedVariableDTO: result){
+                        data.put(explainedVariableDTO.variable(), explainedVariableDTO);
+                    }
+                });
     }
 
     public ExplainedVariableDTO getValueOfVariable(String var){
-        return (ExplainedVariableDTO) data.get(var);
+        return data.get(var);
     }
 
     public void setIngameController(InGameController inGameController) {

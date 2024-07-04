@@ -570,12 +570,10 @@ public class InGameController extends BasicController {
     /*
     Methods below showing explanation overview if mouse hovers above a chosen element.
      */
-
     public void showExplanation(double x, double y, String variable){
         explanationContainer.setLayoutX(x);
         explanationContainer.setLayoutY(y);
         explanationContainer.setVisible(true);
-        System.out.println(variableService.getValueOfVariable(variable));
     }
     public void unShowExplanation(){
         explanationContainer.setLayoutX(0);

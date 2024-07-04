@@ -8,6 +8,7 @@ import retrofit2.http.GET;
 
 import javax.inject.Singleton;
 import java.util.ArrayList;
+import java.util.Map;
 
 @Singleton
 public interface PresetsApiService {
@@ -19,4 +20,7 @@ public interface PresetsApiService {
 
     @GET("presets/districts")
     Observable<ArrayList<DistrictPresets>> getDistrictPresets();
+
+    @GET("presets/variables")
+    Observable<Map<String, Integer>> getVariables();
 }

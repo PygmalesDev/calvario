@@ -197,10 +197,7 @@ public class InGameController extends BasicController {
     @OnRender
     public void addSpeechBubble() {
         hintCaptainContainer.getChildren().add(hintBubbleComponent);
-        hintBubbleComponent.setCaptainText("hashuhdhas" +
-                "sajkdajs" +
-                "sjakjdsah" +
-                "sjkanh");
+        hintBubbleComponent.close();
     }
 
 

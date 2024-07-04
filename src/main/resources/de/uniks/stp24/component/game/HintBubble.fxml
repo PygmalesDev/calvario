@@ -1,27 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.HintBubbleComponent">
+<fx:root prefHeight="118.0" prefWidth="308.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.HintBubbleComponent">
    <children>
       <ImageView fx:id="captainLogo" fitHeight="100.0" fitWidth="100.0" layoutX="1.0" layoutY="24.0" onMouseEntered="#scaleUp" onMouseExited="#scaleDown" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/logos/captainWebjaw.png" />
          </image>
       </ImageView>
-      <Pane fx:id="backgroundBubble" layoutX="72.0" layoutY="-27.0" prefHeight="130.0" prefWidth="228.0" styleClass="captainPane" />
-      <TextArea fx:id="captainText" disable="true" editable="false" layoutX="93.0" prefHeight="100.0" prefWidth="200.0" styleClass="hintText" wrapText="true">
+      <VBox fx:id="backgroundBubble" alignment="TOP_RIGHT" layoutX="81.0" layoutY="-29.0" prefHeight="110.0" prefWidth="250.0" styleClass="captainPane">
+         <children>
+            <Button fx:id="closeButton" mnemonicParsing="false" onAction="#close" prefHeight="12.0" prefWidth="28.0" styleClass="closeButtonHint" />
+            <Button fx:id="forwardButton" mnemonicParsing="false" onAction="#forward" prefHeight="10.0" prefWidth="10.0" text="A">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+      <TextArea fx:id="captainText" disable="true" editable="false" layoutX="100.0" layoutY="-25.0" prefHeight="100.0" prefWidth="200.0" styleClass="captainText" wrapText="true">
          <font>
             <Font size="14.0" />
          </font>
       </TextArea>
-      <Button fx:id="closeButton" layoutX="275.0" layoutY="35.0" mnemonicParsing="false" onAction="#close" prefHeight="12.0" prefWidth="28.0" styleClass="closeButtonHint" />
    </children>
    <stylesheets>
       <URL value="@../../style/styles.css" />

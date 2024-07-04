@@ -22,6 +22,8 @@ import java.util.*;
 public class HintBubbleComponent extends Captain {
 
     @FXML
+    Button forwardButton;
+    @FXML
     Button closeButton;
 
     @Inject
@@ -71,6 +73,10 @@ public class HintBubbleComponent extends Captain {
         setVisible(true);
         String hint = possibleHints.get(random.nextInt(possibleHints.size()));
         setCaptainText(gameResourceBundle.getString(hint));
+    }
+
+    public void forward() {
+
     }
 
     @OnKey(code = KeyCode.S, alt = true)

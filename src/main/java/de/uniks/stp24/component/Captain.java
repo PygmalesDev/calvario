@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
@@ -17,7 +18,7 @@ public class Captain extends Pane {
     @FXML
     ImageView captainLogo;
     @FXML
-    Pane backgroundBubble;
+    VBox backgroundBubble;
 
     ScaleTransition scaleTransition;
 

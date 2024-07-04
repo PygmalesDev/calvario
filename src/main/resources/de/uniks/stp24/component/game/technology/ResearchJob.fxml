@@ -9,7 +9,9 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane fx:id="researchBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="190.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="researchBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+         prefHeight="190.0" prefWidth="320.0" type="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="de.uniks.stp24.component.game.technology.ResearchJobComponent">
    <children>
       <ProgressBar fx:id="researchProgressBar" layoutX="14.0" layoutY="157.0" prefWidth="200.0" progress="0.0" />
       <Text fx:id="researchProgressText" layoutX="230.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="/" />
@@ -27,4 +29,4 @@
       <ImageView fx:id="technologyTagImage1" fitHeight="30.0" fitWidth="30.0" layoutX="235.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="technologyTagImage2" fitHeight="30.0" fitWidth="30.0" layoutX="274.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" />
    </children>
-</AnchorPane>
+</fx:root>

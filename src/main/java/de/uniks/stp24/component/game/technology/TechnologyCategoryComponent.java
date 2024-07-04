@@ -137,7 +137,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
      * with the tag of the category
      */
     public TechnologyCategoryComponent setCategory(String category) {
-
+        System.out.println(resourcesService.getResourceCount("research") + " TEST");
         currentResearchResourceLabel.setText(String.valueOf(resourcesService.getResourceCount("research")));
 
         this.technologieCategoryName = category;

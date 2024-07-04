@@ -60,6 +60,9 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     @Inject
     TechnologyService technologyService;
 
+    @Inject
+    ResearchJobComponent researchJobComponent;
+
     ImageCache imageCache = new ImageCache();
 
     ObservableList<Effect> description = FXCollections.observableArrayList();
@@ -128,6 +131,10 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
 
 
 
+    }
+
+    public void researchClicked(){
+        researchJobComponent.handleResearchClicked();
     }
 
     @OnDestroy

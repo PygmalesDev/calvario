@@ -84,8 +84,6 @@ public class MarketComponent extends StackPane {
     private String lastSeasonUpdate;
     Provider<MarketResourceComponent> marketResourceComponentProvider = () -> new MarketResourceComponent(true, true, true, gameResourceBundle);
 
-    Map<String, Integer> variables = new HashMap<>();
-
     Map<String, Integer> resourceMap = new HashMap<>();
     Map<String, Integer> creditsMap = new HashMap<>();
 
@@ -99,29 +97,15 @@ public class MarketComponent extends StackPane {
     public void init() {
         subscriber.subscribe(presetsApiService.getVariables(),
                 res -> {
-                    variables = res;
-                    System.out.println("imran");
-                    System.out.println(variables);
-                    System.out.println(variables.get("empire.market.fee"));
                     marketFee.setText(String.valueOf(res.get("empire.market.fee")));
                 }
         );
     }
 
     // Optional: A method to retrieve data from the map
-
-
     @OnRender
     public void render() {
-        System.out.println(variables);
-        setRessourceAmount();
-
     }
-
-    private void setRessourceAmount() {
-
-    }
-
 
     public void setInGameController(InGameController ingameController) {
         this.inGameController = ingameController;

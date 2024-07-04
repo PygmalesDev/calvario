@@ -20,55 +20,71 @@
 
 /*Buttons*/
 
-alloysButton{
+.alloysButton{
     -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/alloys.png");
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
 }
 
-consumerGoodButton{
+.consumerGoodButton{
     -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/consumer_goods.png");
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
 }
 
-energyButton{
+.energyButton{
     -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/energy.png");
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
 }
 
-foodButton{
+.foodButton{
     -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/food.png");
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
 }
 
-fuelButton{
+.fuelButton{
     -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/fuel.png");
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
 }
 
-mineralButton{
+.mineralButton{
     -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/minerals.png");
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
 }
 
-listViewStyle .list-cell{
+.listViewStyle .list-cell{
     -fx-background-color: transparent;
 }
 
-creditCoinIcon{
+.creditCoinIcon{
     -fx-background-image: url("/de/uniks/stp24/icons/resources/credits.png");
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
 }
+
+.upArrowButton{
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/up_arrow_button.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 120% 100%;
+    -fx-background-repeat: no-repeat;
+}
+
+.downArrowButton{
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/down_arrow_button.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}
+
+

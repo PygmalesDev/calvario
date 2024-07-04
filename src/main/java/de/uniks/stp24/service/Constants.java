@@ -1,6 +1,4 @@
 package de.uniks.stp24.service;
-
-
 import java.nio.file.Path;
 import java.util.Map;
 
@@ -181,5 +179,21 @@ public class Constants {
             "de/uniks/stp24/icons/buildings/scout_hub.png",
             "de/uniks/stp24/icons/buildings/seaside_hut.png",
     };
+    public static final Map<String, String> technologyIconMap = Map.ofEntries(
+            Map.entry("biology", "de/uniks/stp24/assets/technologies/tags/biology.png"),
+            Map.entry("computing" , "de/uniks/stp24/assets/technologies/tags/computing.png"),
+            Map.entry("construction" , "de/uniks/stp24/assets/technologies/tags/construction.png"),
+            Map.entry("economy" , "de/uniks/stp24/assets/technologies/tags/economy.png"),
+            Map.entry("energy" , "de/uniks/stp24/assets/technologies/tags/energy.png"),
+            Map.entry("engineering" , "de/uniks/stp24/assets/technologies/tags/engineering.png"),
+            Map.entry("materials" , "de/uniks/stp24/assets/technologies/tags/materials.png"),
+            Map.entry("military" , "de/uniks/stp24/assets/technologies/tags/military.png"),
+            Map.entry("physics" , "de/uniks/stp24/assets/technologies/tags/physics.png"),
+            Map.entry("production" , "de/uniks/stp24/assets/technologies/tags/production.png"),
+            Map.entry("propulsion" , "de/uniks/stp24/assets/technologies/tags/propulsion.png"),
+            Map.entry("rare" , "de/uniks/stp24/assets/technologies/tags/rare.png"),
+            Map.entry("society" , "de/uniks/stp24/assets/technologies/tags/society.png"),
+            Map.entry("state" , "de/uniks/stp24/assets/technologies/tags/state.png")
+    );
 
 }

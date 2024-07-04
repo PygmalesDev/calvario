@@ -5,6 +5,7 @@ import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.game.JobsService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -12,7 +13,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
+import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
@@ -38,11 +41,16 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
 
     @Inject
     IslandsService islandsService;
+    @Inject
+    JobsService jobsService;
+    @Inject
+    Subscriber subscriber;
 
     @Inject
     @Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
+    private Job job;
 
     @Inject
     public JobElementComponent() {
@@ -51,6 +59,7 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
 
     @Override
     public void setItem(@NotNull Job job) {
+        this.job = job;
 
         this.timerText.setText(String.format("%s/%s", job.progress(), job.total()));
         if (Objects.nonNull(job.system()))
@@ -74,5 +83,19 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
                 this.jobTypeText.setText(String.format("Upgrading island to %s", job.type()));
             }
         }
+    }
+
+    public void cancelJob() {
+        this.subscriber.subscribe(this.jobsService.stopJob(this.job));
+    }
+
+    public void showJobOverview() throws Exception {
+        if (Objects.nonNull(this.job.system()))
+            this.jobsService.getJobInspector("island_jobs_overview").accept(this.job.system());
+    }
+
+    @OnDestroy
+    public void destroy() {
+        this.subscriber.dispose();
     }
 }

@@ -43,4 +43,8 @@ public class JobsOverviewComponent extends AnchorPane {
             this.jobsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.jobProvider));
         });
     }
+
+    public void closeOverview() {
+        this.setVisible(false);
+    }
 }

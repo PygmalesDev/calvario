@@ -85,7 +85,7 @@
 
 .jobsOverviewButton {
     -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/test/847.png");
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/job_overview_button.png");
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
@@ -105,4 +105,8 @@
     -fx-border-width: 0;
     -fx-pref-width: 45px;
     -fx-pref-height: 45px;
+}
+
+.islandChangeNameDisabled {
+
 }

@@ -382,6 +382,18 @@ public class IslandsService extends BasicService {
         });
     }
 
+    public Island getIsland(String islandID) {
+        return this.isles.stream()
+                .filter(isle -> isle.id().equals(islandID))
+                .findFirst().orElse(null);
+    }
+
+    public IslandComponent getIslandComponent(String islandID) {
+        return this.islandComponentList.stream().filter(islandComponent ->
+                islandComponent.island.id().equals(islandID))
+                .findFirst().orElse(null);
+    }
+
     public String getIslandName(String islandID) {
         Island island = this.isles.stream().filter(isle -> isle.id().equals(islandID)).findFirst().orElse(null);
         if (Objects.nonNull(island))

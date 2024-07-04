@@ -10,6 +10,7 @@ import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
@@ -416,9 +417,9 @@ public class InGameController extends BasicController {
 
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
-                tokenStorage.setIsland(selected.getIsland());
-                this.overviewSitesComponent.jobsComponent.setJobsObservableList(
-                        this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
+            tokenStorage.setIsland(selected.getIsland());
+            this.overviewSitesComponent.jobsComponent.setJobsObservableList(
+                    this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
             islandAttributes.setIsland(selected.getIsland());
             selectedIsland = selected;
             if (selected.getIsland().owner() != null) {
@@ -426,6 +427,28 @@ public class InGameController extends BasicController {
                 selected.showUnshowRudder();
             }
         }
+    }
+
+    @OnRender
+    public void setJobInspectors() {
+        this.jobsService.setJobInspector("island_jobs_overview", (String systemID) -> {
+            Island selected = this.islandsService.getIsland(systemID);
+            this.tokenStorage.setIsland(selected);
+            this.overviewSitesComponent.jobsComponent.setJobsObservableList(
+                    this.jobsService.getObservableListForSystem(systemID));
+
+            this.islandAttributes.setIsland(selected);
+            selectedIsland = this.islandsService.getIslandComponent(systemID);
+            if (Objects.nonNull(selected.owner())) {
+                showOverview();
+                this.overviewSitesComponent.showJobs();
+            }
+        });
+
+        this.jobsService.setJobInspector("site_overview", (String districtID) -> {
+            this.setSiteType(districtID);
+            this.showSiteOverview();
+        });
     }
 
     public void showOverview() {

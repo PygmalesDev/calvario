@@ -27,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import de.uniks.stp24.service.Constants;
@@ -116,6 +117,14 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
                 this.jobDescriptionText.setText(String.format("Upgrading island to %s", job.type()));
             }
         }
+    }
+
+    public void showJobDetails() throws Exception {
+        switch (job.type()) {
+            case "district" -> this.jobsService.getJobInspector("site_overview").accept(this.job.district());
+            case "building" -> {}
+        }
+
     }
 
     public void stopJob() {

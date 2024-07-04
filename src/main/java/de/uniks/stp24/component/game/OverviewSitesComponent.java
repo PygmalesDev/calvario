@@ -2,6 +2,7 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import javafx.fxml.FXML;
@@ -15,6 +16,7 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnInit;
+import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -47,6 +49,9 @@ public class OverviewSitesComponent extends AnchorPane {
     public Button upgradeButton;
     @FXML
     public Pane islandFlag;
+
+    @Inject
+    ImageCache imageCache;
 
     @SubComponent
     @Inject
@@ -218,5 +223,14 @@ public class OverviewSitesComponent extends AnchorPane {
 
         island_name.setText(islandAttributes.getIslandTypeTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");
         crewCapacity.setText(String.valueOf(islandAttributes.getIsland().crewCapacity()));
+    }
+
+    @OnRender
+    public void setIslandNameProperties() {
+        this.inputIslandName.getStyleClass().add("");
+    }
+
+    public void setIslandName() {
+
     }
 }

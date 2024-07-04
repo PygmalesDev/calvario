@@ -31,6 +31,7 @@ public class JobsService {
     Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
     Map<String, ArrayList<Consumer<Job>>> jobDeletionConsumers = new HashMap<>();
+    Map<String, Consumer<String>> jobInspectionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobProgressFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobTypeFunctions = new HashMap<>();
     Map<String, ArrayList<Consumer<Job>>> loadTypeFunctions = new HashMap<>();
@@ -349,6 +350,17 @@ public class JobsService {
      */
     public ObservableList<Job> getObservableJobCollection() {
         return this.getJobObservableListOfType("collection");
+    }
+
+    public void setJobInspector(String inspectorID, Consumer<String> func) {
+        this.jobInspectionFunctions.put(inspectorID, func);
+    }
+
+    public Consumer<String> getJobInspector(String inspectorID) throws Exception {
+        if (this.jobInspectionFunctions.containsKey(inspectorID))
+            return this.jobInspectionFunctions.get(inspectorID);
+        else throw new Exception(String.format(
+                "Job Service: the inspection function is not found for a given inspector ID: %s!", inspectorID));
     }
 
     /**

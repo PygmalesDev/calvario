@@ -29,7 +29,7 @@
             <Font size="8.0" />
          </font>
       </Button>
-      <Button fx:id="infoJobButton" layoutX="182.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" styleClass="showJobInfoButton">
+      <Button fx:id="infoJobButton" layoutX="182.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showJobDetails" prefHeight="20.0" prefWidth="20.0" styleClass="showJobInfoButton">
          <font>
             <Font size="8.0" />
          </font>

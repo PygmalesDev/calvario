@@ -1,7 +1,18 @@
 package de.uniks.stp24.service.game;
 
-public class MarketService {
+import de.uniks.stp24.model.ExplainedVariable;
+import de.uniks.stp24.rest.GameLogicApiService;
+import io.reactivex.rxjava3.core.Observable;
 
+import javax.inject.Inject;
+
+public class MarketService {
+    @Inject
+    public GameLogicApiService gameLogicApiService;
+
+    @Inject
+    public MarketService() {
+    }
 
     //TODO get marketFee
 
@@ -10,4 +21,5 @@ public class MarketService {
     //TODO pause seasonal trades
 
     // TODO delete seasonal trades
+
 }

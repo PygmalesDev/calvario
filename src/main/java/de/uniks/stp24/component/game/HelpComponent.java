@@ -44,7 +44,6 @@ public class HelpComponent extends AnchorPane {
 
     public void close(){
         setVisible(false);
-        inGameController.removePause();
     }
 
     public void setInGameController(InGameController inGameController) {

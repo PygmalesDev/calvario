@@ -2,6 +2,7 @@ package de.uniks.stp24.ingameTests;
 
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.HelpComponent;
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.TechHelp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +18,7 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class HelpComponentTest extends ControllerTest {
+    
     @InjectMocks
     HelpComponent helpComponent;
     ObservableList<TechHelp> technologies = FXCollections.observableArrayList();

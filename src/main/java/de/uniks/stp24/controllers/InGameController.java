@@ -449,6 +449,7 @@ public class InGameController extends BasicController {
     public void showHelpOnKey(){
         if (helpComponent.isVisible()){
             helpComponent.close();
+            removePause();
         } else {
             showHelp();
         }

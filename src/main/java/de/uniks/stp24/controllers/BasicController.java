@@ -98,9 +98,9 @@ public class BasicController {
         }
     }
 
-    public void changeNodesDisability(boolean disbale, Node... nodes) {
+    public void changeNodesDisability(boolean disable, Node... nodes) {
         for (Node node : nodes) {
-            node.setDisable(disbale);
+            node.setDisable(disable);
         }
     }
 

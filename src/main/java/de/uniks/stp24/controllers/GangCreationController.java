@@ -9,7 +9,6 @@ import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.rest.PresetsApiService;
-import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.SaveLoadService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -53,8 +52,6 @@ public class GangCreationController extends BasicController {
     LobbyService lobbyService;
     @Inject
     PopupBuilder popupBuilder;
-    @Inject
-    ImageCache imageCache;
 
     @SubComponent
     @Inject
@@ -227,8 +224,7 @@ public class GangCreationController extends BasicController {
                 result -> {
                     traitsPreset = result;
                     allTraits.setAll(traitsPreset);
-                },
-        error -> System.out.println("error with loading presets"));
+                });
     }
 
     @OnRender
@@ -270,8 +266,7 @@ public class GangCreationController extends BasicController {
                         spectatorBox.setVisible(true);
                         spectatorImage.setImage(imageCache.get("icons/spectatorSign.png"));
                     }
-                },
-                error -> System.out.println("Error while handling player data"));
+                });
 
         changeNodesVisibility(false, creationBox, deletePane, editButton, showDeletePaneButton, traitsBox);
 
@@ -432,8 +427,7 @@ public class GangCreationController extends BasicController {
                         this.subscriber.subscribe(this.lobbyService.updateMember(
                 this.gameID, result.user(), result.ready(), empire), result2 ->
                 app.show("/lobby", Map.of("gameid", this.gameID))),
-                error -> {
-                }
+                error -> bubbleComponent.setCaptainText(errorService.getMessage(error))
         );
     }
 

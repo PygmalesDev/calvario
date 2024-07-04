@@ -258,6 +258,7 @@ public class InGameController extends BasicController {
         siteProperties.setMouseTransparent(true);
         deleteStructureWarningContainer.setMouseTransparent(true);
         helpWindowContainer.setMouseTransparent(true);
+        helpComponent.setVisible(false);
 
         pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
@@ -303,6 +304,7 @@ public class InGameController extends BasicController {
 
     public void pauseGame() {
         closeComponents();
+        pauseMenuComponent.setVisible(true);
         pauseMenuContainer.setVisible(pause);
         pauseMenuContainer.setMouseTransparent(false);
     }
@@ -335,6 +337,14 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setVisible(pause);
         shadow.setVisible(false);
     }
+
+    public void removePause() {
+        pause = false;
+        pauseMenuContainer.setVisible(false);
+        shadow.setVisible(false);
+    }
+
+
 
     /**
      * created and add buttons for storage and island overview
@@ -437,7 +447,11 @@ public class InGameController extends BasicController {
     }
     @OnKey(code = KeyCode.H, alt = true)
     public void showHelpOnKey(){
-        showHelp();
+        if (helpComponent.isVisible()){
+            helpComponent.close();
+        } else {
+            showHelp();
+        }
     }
 
     @OnKey(code = KeyCode.E, alt = true)
@@ -552,6 +566,7 @@ public class InGameController extends BasicController {
 
     public void showHelp() {
         popupHelpWindow.showPopup(helpWindowContainer,helpComponent);
+        helpComponent.setVisible(true);
         helpComponent.setMouseTransparent(false);
         helpWindowContainer.setMouseTransparent(false);
         helpWindowContainer.toFront();

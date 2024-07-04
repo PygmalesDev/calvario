@@ -40,5 +40,5 @@
          <Font size="34.0" />
       </font>
    </Text>
-   <TextArea layoutX="49.0" layoutY="100.0" prefHeight="72.0" prefWidth="201.0" styleClass="technologyText" text="Shift + H          Show home island&#10;Alt + S              Show storage&#10;Shift + F           Show flags on &#10;                        occupied islands&#10;Alt + h             help window&#10;Alt + e             Empire overview" />
+   <TextArea layoutX="49.0" layoutY="100.0" prefHeight="72.0" prefWidth="201.0" styleClass="technologyText" text="Alt + S              Show storage&#10;Alt + F              Show flags on &#10;                         occupied islands&#10;Alt + H             help window&#10;Alt + E             Empire overview&#10;Alt + M            Show market&#10;Alt + T              Show technologies&#10;Alt + J              Job overview" />
 </fx:root>

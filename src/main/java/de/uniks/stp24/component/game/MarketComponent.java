@@ -2,6 +2,7 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
@@ -75,14 +76,17 @@ public class MarketComponent extends StackPane {
     @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
-
+    @Inject
+    PresetsApiService presetsApiService;
 
     private InGameController inGameController;
     private String lastUpdate;
     private String lastSeasonUpdate;
-    Provider<MarketResourceComponent> marketResourceComponentProvider = () -> new MarketResourceComponent(true,true,true, gameResourceBundle);
+    Provider<MarketResourceComponent> marketResourceComponentProvider = () -> new MarketResourceComponent(true, true, true, gameResourceBundle);
 
-    Map<String,Integer> resourceMap = new HashMap<>();
+    Map<String, Integer> variables = new HashMap<>();
+
+    Map<String, Integer> resourceMap = new HashMap<>();
     Map<String, Integer> creditsMap = new HashMap<>();
 
     @Inject
@@ -93,11 +97,25 @@ public class MarketComponent extends StackPane {
 
     @OnInit
     public void init() {
+        subscriber.subscribe(presetsApiService.getVariables(),
+                res -> {
+                    variables = res;
+                    System.out.println("imran");
+                    System.out.println(variables);
+                    System.out.println(variables.get("empire.market.fee"));
+                    marketFee.setText(String.valueOf(res.get("empire.market.fee")));
+                }
+        );
     }
+
+    // Optional: A method to retrieve data from the map
+
 
     @OnRender
     public void render() {
+        System.out.println(variables);
         setRessourceAmount();
+
     }
 
     private void setRessourceAmount() {
@@ -112,6 +130,19 @@ public class MarketComponent extends StackPane {
     public void closeMarketOverview() {
         this.getParent().setVisible(false);
     }
+
+    public void incrementAmount() {
+        int amount = Integer.parseInt(numberOfGoods.getText());
+        amount++;
+        numberOfGoods.setText(String.valueOf(amount));
+    }
+
+    public void decrementAmount() {
+        int amount = Integer.parseInt(numberOfGoods.getText());
+        amount--;
+        numberOfGoods.setText(String.valueOf(amount));
+    }
+
 
     public void filterResourceMap() {
         resourceMap.remove("population");
@@ -131,7 +162,7 @@ public class MarketComponent extends StackPane {
         this.resourceMap = resourceMap;
         filterResourceMap();
         separateCredits();
-        if(this.resourceMap.isEmpty()){
+        if (this.resourceMap.isEmpty()) {
             System.out.println("resourceMap is empty");
         }
         resourcesListView.getItems().addAll(this.resourceMap.entrySet());
@@ -143,6 +174,7 @@ public class MarketComponent extends StackPane {
         private ImageView imageView = new ImageView();
         private Text text = new Text();
         ImageCache imageCache = new ImageCache();
+
 
         public ResourceCell() {
             super();
@@ -157,7 +189,10 @@ public class MarketComponent extends StackPane {
                 setText(null);
                 setGraphic(null);
             } else {
-                imageView.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + item.getKey() + ".png"));
+                imageView.setImage(imageCache.get("/de/uniks/stp24/assets/market/buttons/" + item.getKey() + ".png"));
+                imageView.setFitWidth(35);
+                imageView.setFitHeight(35);
+
                 text.setText(String.valueOf(item.getValue()));
                 setGraphic(vBox);
             }

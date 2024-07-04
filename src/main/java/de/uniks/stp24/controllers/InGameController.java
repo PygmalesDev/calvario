@@ -163,6 +163,26 @@ public class InGameController extends BasicController {
     String resourcesPaths = "/de/uniks/stp24/assets/";
     String flagsFolderPath = "flags/flag_";
 
+    @SubComponent
+    @Inject
+    public BuildingPropertiesComponent buildingPropertiesComponent;
+
+    @SubComponent
+    @Inject
+    public BuildingsWindowComponent buildingsWindowComponent;
+
+    @SubComponent
+    @Inject
+    public SitePropertiesComponent sitePropertiesComponent;
+
+    @SubComponent
+    @Inject
+    HintBubbleComponent hintBubbleComponent;
+
+    @SubComponent
+    @Inject
+    public HelpComponent helpComponent;
+
     PopupBuilder popupBuildingProperties = new PopupBuilder();
     PopupBuilder popupBuildingWindow = new PopupBuilder();
     PopupBuilder popupSiteProperties = new PopupBuilder();
@@ -430,8 +450,8 @@ public class InGameController extends BasicController {
         inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
         overviewSitesComponent.setOverviewSites();
     }
-    @OnKey(code = KeyCode.S,alt = true)
 
+    @OnKey(code = KeyCode.S,alt = true)
     public void showStorage() {
         if(empireOverviewComponent.isVisible()) {
             empireOverviewComponent.closeEmpireOverview();
@@ -535,7 +555,6 @@ public class InGameController extends BasicController {
 
     }
 
-
     public void showSiteOverview() {
         siteProperties.setMouseTransparent(false);
         buildingsWindow.setVisible(false);
@@ -568,6 +587,7 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setMouseTransparent(true);
         helpComponent.displayTechnologies();
     }
+
     public void updateResCapacity() {
         overviewSitesComponent.updateResCapacity();
     }

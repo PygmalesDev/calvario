@@ -747,3 +747,25 @@ ToggleButton:hover{
     -fx-stroke-dash-array: 0.5 8;
     -fx-stroke-width: 3;
 }
+
+/*********************************** hint bubble *****************************************************/
+.hintText{
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-background-color: "TRANSPARENT";
+    -fx-font-weight: none;
+    -fx-text-fill: black;
+    -fx-font-size: 12;
+}
+
+.hintText .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.hintText .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+
+
+.hintText .scroll-pane .content{
+    -fx-background-color: transparent;
+}

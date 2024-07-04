@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
+<?import java.net.URL?>
 <fx:root type="javafx.scene.layout.Pane" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="de.uniks.stp24.component.game.HintBubbleComponent">
    <children>
       <ImageView fx:id="captainLogo" fitHeight="100.0" fitWidth="100.0" layoutX="1.0" layoutY="14.0" onMouseEntered="#scaleUp" onMouseExited="#scaleDown" pickOnBounds="true" preserveRatio="true">
@@ -22,4 +23,8 @@
       </TextArea>
       <Button fx:id="closeButton" layoutX="255.0" mnemonicParsing="false" onAction="#close" prefHeight="12.0" prefWidth="28.0" styleClass="closeButtonHint" />
    </children>
+   <stylesheets>
+      <URL value="@../../style/styles.css" />
+      <URL value="@../../style/ingameButtons.css" />
+   </stylesheets>
 </fx:root>

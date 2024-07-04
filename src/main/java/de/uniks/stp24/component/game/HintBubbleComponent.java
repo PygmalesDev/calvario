@@ -1,21 +1,21 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.component.Captain;
-import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.model.Game;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.TimerService;
+import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnInit;
+import org.fulib.fx.annotation.event.OnKey;
+import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
-import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.*;
 
 @Component(view = "HintBubble.fxml")
@@ -26,20 +26,17 @@ public class HintBubbleComponent extends Captain {
 
     @Inject
     TokenStorage tokenStorage;
-
-    @Inject
-    GamesApiService gamesApiService;
     @Inject
     Subscriber subscriber;
     @Inject
-    TimerService timerService;
+    EventListener eventListener;
     @Inject
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
     ArrayList<String> possibleHints = Constants.hints;
 
-    int prevSeasonNumber;
+    int countdown;
     Random random = new Random();
 
     @Inject
@@ -48,40 +45,53 @@ public class HintBubbleComponent extends Captain {
     }
 
     @OnInit
-    public void init(){
-        PropertyChangeListener callHandleHintTiming = this::handleHintTiming;
-        timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_SEASON, callHandleHintTiming);
-        subscriber.subscribe(gamesApiService.getGame(tokenStorage.getGameId()),
-                game -> prevSeasonNumber = game.period(),
-                error -> System.out.println("Error on getting game: " + error)
+    public void init() {
+        setCountDown();
+    }
+
+    private void setCountDown() {
+        countdown = random.nextInt(2, 5);
+    }
+
+    @OnRender
+    public void render() {
+        subscriber.subscribe(this.eventListener.listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
+                result -> {
+                    countdown -= 1;
+                    if (countdown <= 0) {
+                        showRandomTip();
+                        setCountDown();
+                    }
+                },
+                error -> System.out.println("Error on Season: " + error.getMessage())
         );
     }
 
-    private void handleHintTiming(@NotNull PropertyChangeEvent propertyChangeEvent) {
-        if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
-            int season = (int) propertyChangeEvent.getNewValue();
-            if (season - prevSeasonNumber == 1) {
-                removeHint();
-            }
-            if (season - prevSeasonNumber >= 2){
-                setVisible(true);
-//                inGameController.showHint();
-                prevSeasonNumber += 2;
-            }
-        }
-    }
-
-    public void addRandomTip() {
+    public void showRandomTip() {
+        setVisible(true);
         String hint = possibleHints.get(random.nextInt(possibleHints.size()));
         setCaptainText(gameResourceBundle.getString(hint));
     }
 
-    public void close(){
-        removeHint();
+    @OnKey(code = KeyCode.S, alt = true)
+    public void removeAltS(){
+        close();
+        possibleHints.remove("hint.alt.s");
     }
 
-    public void removeHint(){
-//        setVisible(false);
-//        inGameController.removeCaptainHint();
+    @OnKey(code = KeyCode.H, alt = true)
+    public void removeAltH(){
+        close();
+        possibleHints.remove("hint.alt.h");
+    }
+
+    @OnKey(code = KeyCode.E, alt = true)
+    public void removeAltE(){
+        close();
+        possibleHints.remove("hint.alt.e");
+    }
+
+    public void close(){
+        setVisible(false);
     }
 }

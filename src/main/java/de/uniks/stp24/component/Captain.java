@@ -24,7 +24,7 @@ public class Captain extends Pane {
 
     @OnRender
     public void initScaleTransition() {
-        scaleTransition = new ScaleTransition(Duration.seconds(0.5), captainLogo);
+        scaleTransition = new ScaleTransition(Duration.seconds(0.3), captainLogo);
     }
 
     public void setCaptainText(String text) {

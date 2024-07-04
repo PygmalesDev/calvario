@@ -36,7 +36,7 @@
    <StackPane fx:id="storageOverviewContainer" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="70.0" />
    <StackPane fx:id="helpWindowContainer" layoutX="450.0" layoutY="150.0" maxHeight="400.0" maxWidth="355.0" prefHeight="400.0" prefWidth="355.0" style=": ;" visible="false" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="520.0" AnchorPane.rightAnchor="440.0" AnchorPane.topAnchor="120.0" />
     <StackPane fx:id="empireOverviewContainer" layoutX="25.333333333333332" layoutY="76.33333333333333" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="95.66666666666663" AnchorPane.leftAnchor="25.333333333333332" AnchorPane.topAnchor="76.33333333333333" />
-   <StackPane fx:id="hintCaptainContainer" layoutX="20.0" layoutY="10.0" prefHeight="0.0" prefWidth="0.0" />
+   <StackPane fx:id="hintCaptainContainer" layoutX="20.0" layoutY="-10.0" prefHeight="0.0" prefWidth="0.0" />
     <stylesheets>
         <URL value="@../style/styles.css" />
         <URL value="@../style/ingameButtons.css" />

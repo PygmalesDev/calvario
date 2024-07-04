@@ -1,10 +1,14 @@
 package de.uniks.stp24.component.game.technology;
 
+import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.game.TechnologyService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
@@ -22,6 +26,8 @@ import java.util.ResourceBundle;
 @Component(view = "TechnologyOverview.fxml")
 public class TechnologyOverviewComponent extends AnchorPane {
 
+    @FXML
+    public StackPane researchJobContainer;
     @FXML
     VBox technologieOverviewBox;
     @FXML
@@ -43,12 +49,17 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
     @Inject
     @SubComponent
-    TechnologyCategoryComponent technologyCategoryComponent;
+    public TechnologyCategoryComponent technologyCategoryComponent;
+
+    public ResearchJobComponent researchJobComponent;
 
     @Inject
     @Resource
     @Named("gameResourceBundle")
     public ResourceBundle resources;
+    private InGameController inGameController;
+
+    PopupBuilder popupTechResearch = new PopupBuilder();
 
     @Inject
     public TechnologyOverviewComponent() {
@@ -114,4 +125,14 @@ public class TechnologyOverviewComponent extends AnchorPane {
         String technologyKey = technologieCategory.technologieCategoryName.replace("_", ".");
         technologieCategory.technologyNameText.setText(resources.getString("technologies." + technologyKey));
     }
+
+    public void handleResearchClicked() {
+
+    }
+
+
+    public void setInGameController(InGameController inGameController) {
+        this.inGameController = inGameController;
+    }
+
 }

@@ -1,6 +1,7 @@
 package de.uniks.stp24.component.game.technology;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Effect;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.ImageCache;
@@ -28,6 +29,7 @@ import java.util.Arrays;
 
 @Component(view = "TechnologyCategorySubComponent.fxml")
 public class TechnologyCategorySubComponent extends VBox implements ReusableItemComponent<TechnologyExtended> {
+    private final TechnologyCategoryComponent technologyCategoryComponent;
     @FXML
     public ImageView tagImage3;
     @FXML
@@ -61,7 +63,7 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     TechnologyService technologyService;
 
     @Inject
-    ResearchJobComponent researchJobComponent;
+    TechnologyOverviewComponent technologyOverviewComponent;
 
     ImageCache imageCache = new ImageCache();
 
@@ -69,12 +71,14 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     ObservableList<Effect> temp = FXCollections.observableArrayList();
 
     Provider<TechnologyCategoryDescriptionSubComponent> provider = TechnologyCategoryDescriptionSubComponent::new;
+    private InGameController inGameController;
 
     /**
      * This class is for the components of the listView in the technology category
      */
     @Inject
-    public TechnologyCategorySubComponent() {
+    public TechnologyCategorySubComponent(TechnologyCategoryComponent technologyCategoryComponent) {
+        this.technologyCategoryComponent = technologyCategoryComponent;
     }
 
     /**
@@ -125,17 +129,15 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
 
     @OnRender
     public void render() {
-
         timeImage.setImage(imageCache.get("icons/time.png"));
         researchImage.setImage(imageCache.get("icons/resources/research.png"));
-
-
-
     }
 
     public void researchClicked(){
-        researchJobComponent.handleResearchClicked();
+        technologyCategoryComponent.showResearchComponent();
     }
+
+
 
     @OnDestroy
     public void destroy() {

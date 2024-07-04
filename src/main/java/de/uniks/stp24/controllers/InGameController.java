@@ -1,12 +1,16 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.technology.ResearchJobComponent;
+import de.uniks.stp24.component.game.technology.TechnologyCategoryDescriptionSubComponent;
+import de.uniks.stp24.component.game.technology.TechnologyCategorySubComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.model.Technology;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
@@ -39,6 +43,7 @@ import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -157,6 +162,7 @@ public class InGameController extends BasicController {
     @Inject
     public SitePropertiesComponent sitePropertiesComponent;
 
+
     List<IslandComponent> islandComponentList;
     Map<String, IslandComponent> islandComponentMap;
 
@@ -195,7 +201,6 @@ public class InGameController extends BasicController {
     PopupBuilder popupDeleteStructure = new PopupBuilder();
     public String selectedBuilding;
     public String selectedSites;
-
     @OnInit
     public void init() {
         overviewSitesComponent.setIngameController(this);
@@ -206,6 +211,8 @@ public class InGameController extends BasicController {
         deleteStructureComponent.setInGameController(this);
         empireOverviewComponent.setInGameController(this);
         variableService.setIngameController(this);
+        technologiesComponent.setInGameController(this);
+        //technologiesComponent.researchJobComponent.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
@@ -600,5 +607,9 @@ public class InGameController extends BasicController {
         explanationContainer.setLayoutX(0);
         explanationContainer.setLayoutY(0);
         explanationContainer.setVisible(false);
+    }
+
+    public void showResearchComponent() {
+        //technologiesComponent.handleResearchClicked();
     }
 }

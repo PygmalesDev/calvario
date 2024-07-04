@@ -65,7 +65,7 @@ public class TechnologyCategoryDescriptionSubComponent extends VBox implements R
         for (String key : Constants.resourceTranslation.keySet()) {
             if (variable.contains(key)) {
                 // TODO: REMOVE THIS
-                System.out.println("Image sets");
+                //System.out.println("Image sets");
                 resourceImage.setImage(imageCache.get("icons/resources/" + key + ".png"));
             }
         }

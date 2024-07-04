@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.game.technology;
 
+import de.uniks.stp24.controllers.InGameController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -32,6 +33,8 @@ public class ResearchJobComponent extends AnchorPane {
     ProgressBar researchProgressBar;
     @FXML
     AnchorPane researchBackground;
+    private TechnologyCategoryComponent technologyCategoryComponent;
+    private InGameController inGameController;
 
     @Inject
     public ResearchJobComponent(){
@@ -39,6 +42,11 @@ public class ResearchJobComponent extends AnchorPane {
     }
 
     public void handleResearchClicked() {
-        System.out.println("1212");
+        this.inGameController.showResearchComponent();
     }
+
+    public void setInGameController(InGameController inGameController) {
+        this.inGameController = inGameController;
+    }
+
 }

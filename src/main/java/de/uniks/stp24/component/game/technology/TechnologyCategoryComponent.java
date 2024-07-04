@@ -1,13 +1,14 @@
 package de.uniks.stp24.component.game.technology;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TechnologyService;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -33,8 +34,6 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.ResourceBundle;
 
-import static java.lang.Thread.sleep;
-
 @Component(view = "TechnologyCategory.fxml")
 public class TechnologyCategoryComponent extends AnchorPane {
 
@@ -59,12 +58,11 @@ public class TechnologyCategoryComponent extends AnchorPane {
     String technologieCategoryName;
     @Inject
     App app;
-
     @Inject
     TechnologyService technologyService;
 
     @Inject
-    Provider<TechnologyCategorySubComponent> provider;
+    Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this);
 
     ObservableList<TechnologyExtended> unlockedTechnologies = FXCollections.observableArrayList();
     ObservableList<TechnologyExtended> researchTechnologies = FXCollections.observableArrayList();
@@ -82,7 +80,14 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @Inject
     Subscriber subscriber;
 
+    @Inject
+    @SubComponent
+    ResearchJobComponent researchJobComponent;
+
     ImageCache imageCache = new ImageCache();
+
+    PopupBuilder popupTechResearch = new PopupBuilder();
+            ;
 
     @Inject
     public TechnologyCategoryComponent() {
@@ -93,14 +98,10 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     }
 
+
     @OnRender
     public void render() {
 
-        //researchLeftVBox.setVisible(false);
-        //Platform.runLater(() -> {
-        //    technologieCategoryBox.getStyleClass().clear();
-        //    technologieCategoryBox.getStyleClass().add("technologiesActualResearchBackground");
-        //});
     }
 
     @OnDestroy
@@ -157,4 +158,16 @@ public class TechnologyCategoryComponent extends AnchorPane {
     public void setContainer(Pane parent) {
         this.parent = parent;
     }
+
+    public void showResearchComponent() {
+        researchJobContainer.setMouseTransparent(true);
+        researchLeftVBox.setVisible(false);
+        Platform.runLater(() -> {
+            technologieCategoryBox.getStyleClass().clear();
+            technologieCategoryBox.getStyleClass().add("technologiesActualResearchBackground");
+        });
+        popupTechResearch.showPopup(researchJobContainer, researchJobComponent);
+    }
+
+
 }

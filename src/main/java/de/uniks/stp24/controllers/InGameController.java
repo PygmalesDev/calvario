@@ -285,6 +285,11 @@ public class InGameController extends BasicController {
 
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
+        helpComponent.setVisible(false);
+        helpWindowContainer.setVisible(false);
+        helpComponent.setMouseTransparent(true);
+        helpWindowContainer.setMouseTransparent(true);
+
         pause = !pause;
         inGameService.setPaused(pause);
         if (pause) {
@@ -431,7 +436,9 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
     @OnKey(code = KeyCode.H, alt = true)
-    public void showHelpOnKey(){showHelp();}
+    public void showHelpOnKey(){
+        showHelp();
+    }
 
     @OnKey(code = KeyCode.E, alt = true)
     public void showEmpireOverview() {
@@ -545,6 +552,7 @@ public class InGameController extends BasicController {
 
     public void showHelp() {
         popupHelpWindow.showPopup(helpWindowContainer,helpComponent);
+        helpComponent.setMouseTransparent(false);
         helpWindowContainer.setMouseTransparent(false);
         helpWindowContainer.toFront();
         pauseMenuContainer.setVisible(false);

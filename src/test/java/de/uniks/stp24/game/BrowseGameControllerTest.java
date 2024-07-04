@@ -269,7 +269,6 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Test
     public void clickOnLogout() {
         prefService.setRefreshToken("lastRefreshToken");
-        System.out.println(prefService.getRefreshToken());
         doReturn(Observable.just(new LogoutResult("a")))
                 .when(browseGameService).logout(any());
         doReturn(null).when(app).show("/login");

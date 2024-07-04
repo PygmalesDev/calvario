@@ -1,6 +1,6 @@
 .rightTriangleButton {
     -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/assets/buttons/hide_button_vertical.png");
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/hide_button_vertical_right.png");
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
@@ -8,6 +8,18 @@
     -fx-border-width: 0;
     -fx-pref-width: 35px;
     -fx-pref-height: 35px;
+}
+
+.leftTriangleButton {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/hide_button_vertical_left.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 45px;
+    -fx-pref-height: 50px;
 }
 
 .closeButton {
@@ -86,6 +98,18 @@
 .empireOverviewButton {
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/empire_overview_button.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 45px;
+    -fx-pref-height: 45px;
+}
+
+.technologiesButton {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/technology_button.png");
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;

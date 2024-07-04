@@ -19,6 +19,8 @@ public class TimerService {
     public static final String PROPERTY_COUNTDOWN = "countdown";
     public static final String PROPERTY_SPEED = "speed";
     public static final String PROPERTY_SEASON = "season";
+    public static final String PROPERTY_SHOWEVENT = "showEvent";
+    private volatile boolean showEvent = false;
 
     @Inject
     GameStatus gameStatus;
@@ -36,6 +38,20 @@ public class TimerService {
     @Inject
     public TimerService() {
 
+    }
+
+    public void setShowEvent(boolean showEvent) {
+
+        if (showEvent == this.showEvent) {
+            return;
+        }
+        final boolean oldValue = this.showEvent;
+        this.showEvent = showEvent;
+        this.firePropertyChange(PROPERTY_SHOWEVENT, oldValue, showEvent);
+    }
+
+    public boolean getShowEvent() {
+        return showEvent;
     }
 
     /**
@@ -148,7 +164,6 @@ public class TimerService {
             resume();
 
             this.firePropertyChange(PROPERTY_COUNTDOWN, oldValue, value);
-
         }
     }
 

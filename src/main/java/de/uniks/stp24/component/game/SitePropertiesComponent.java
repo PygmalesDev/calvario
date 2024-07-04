@@ -99,7 +99,6 @@ public class SitePropertiesComponent extends AnchorPane {
 
     @OnInit
     public void init(){
-        System.out.println(gameResourceBundle != null);
         sitesMap = sitesIconPathsMap;
     }
 

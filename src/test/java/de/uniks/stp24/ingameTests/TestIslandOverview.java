@@ -691,7 +691,6 @@ public class TestIslandOverview extends ControllerTest {
         int oldValue = this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size();
         clickOn(buildingNodes.getLast());
 
-        System.out.println(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size());
         assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), oldValue + 1);
         assertTrue(!prev.isVisible() && !next.isVisible());
     }

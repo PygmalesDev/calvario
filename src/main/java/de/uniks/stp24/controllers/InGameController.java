@@ -2,6 +2,7 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
+import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.dto.EmpireDto;
@@ -57,7 +58,9 @@ public class InGameController extends BasicController {
     @FXML
     public Button showStorageButton;
     @FXML
-    Button showEmpireOverviewButton;
+    public Button showEmpireOverviewButton;
+    @FXML
+    public Button showTechnologiesButton;
     @FXML
     public HBox storageButtonsBox;
 
@@ -66,7 +69,7 @@ public class InGameController extends BasicController {
     @FXML
     public StackPane overviewContainer;
     @FXML
-    ScrollPane mapPane;
+    public StackPane technologiesContainer;
     @FXML
     public ScrollPane mapScrollPane;
     @FXML
@@ -135,6 +138,9 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
+    @SubComponent
+    @Inject
+    public TechnologyOverviewComponent technologiesComponent;
     @SubComponent
     @Inject
     public DeleteStructureComponent deleteStructureComponent;
@@ -257,12 +263,14 @@ public class InGameController extends BasicController {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             pause = (Boolean) propertyChangeEvent.getNewValue();
             if (pause) {
-                pauseGame();
                 shadow.setVisible(true);
                 shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
+                pauseGame();
             } else {
+                if (!eventContainer.isVisible()) {
+                    shadow.setVisible(false);
+                }
                 resumeGame();
-                shadow.setVisible(false);
             }
         }
     }
@@ -274,7 +282,7 @@ public class InGameController extends BasicController {
         siteProperties.setMouseTransparent(true);
         deleteStructureWarningContainer.setMouseTransparent(true);
 
-        pauseMenuContainer.setMouseTransparent(true);
+        pauseMenuContainer.setMouseTransparent(false);
         pauseMenuContainer.setVisible(false);
         eventComponent.setParent(shadow, eventContainer);
         clockComponent.setToggle(true);
@@ -289,6 +297,7 @@ public class InGameController extends BasicController {
         overviewSitesComponent.setContainer();
         overviewContainer.getChildren().add(overviewSitesComponent);
         overviewContainer.getChildren().add(overviewUpgradeComponent);
+
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
 
@@ -298,6 +307,9 @@ public class InGameController extends BasicController {
 
         empireOverviewContainer.setVisible(false);
         empireOverviewContainer.getChildren().add(empireOverviewComponent);
+        technologiesComponent.setContainer(technologiesContainer);
+        technologiesContainer.setVisible(false);
+        technologiesContainer.getChildren().add(technologiesComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -306,6 +318,8 @@ public class InGameController extends BasicController {
         inGameService.setShowSettings(false);
         inGameService.setPaused(pause);
         if (pause) {
+            shadow.setVisible(true);
+            shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
             pauseMenuContainer.setMouseTransparent(false);
             pauseGame();
         } else {
@@ -350,7 +364,6 @@ public class InGameController extends BasicController {
 
     public void resumeGame() {
         pauseMenuContainer.setVisible(pause);
-        shadow.setVisible(false);
     }
 
     /**
@@ -368,14 +381,26 @@ public class InGameController extends BasicController {
                 showEmpireOverviewButton.getStyleClass().add("empireOverviewButton");
                 showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
                 showStorageButton = new Button();
-                showStorageButton.setPrefHeight(30);
-                showStorageButton.setPrefWidth(30);
+                showStorageButton.setMinHeight(48);
+                showStorageButton.setMinWidth(47);
                 showStorageButton.setId("showStorageButton");
                 showStorageButton.getStyleClass().add("storageButton");
                 showStorageButton.setOnAction(event -> showStorage());
+                showTechnologiesButton = new Button();
+                showTechnologiesButton.setMinHeight(48);
+                showTechnologiesButton.setMinWidth(47);
+                showTechnologiesButton.setId("showTechnologiesButton");
+                showTechnologiesButton.setOnAction(event -> showTechnologies());
+                showTechnologiesButton.getStyleClass().add("technologiesButton");
             }
-            this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton);
+            this.storageButtonsBox.getChildren().addAll(showStorageButton, showEmpireOverviewButton, showTechnologiesButton);
         }
+    }
+
+    private void showTechnologies() {
+        technologiesContainer.setVisible(!technologiesContainer.isVisible());
+        technologiesContainer.getChildren().getFirst().setVisible(false);
+        technologiesContainer.getChildren().getLast().setVisible(true);
     }
 
     @OnRender
@@ -416,7 +441,6 @@ public class InGameController extends BasicController {
             group.setScaleX(scale);
             group.setScaleY(scale);
         });
-
     }
 
     public void showInfo(MouseEvent event) {
@@ -494,7 +518,6 @@ public class InGameController extends BasicController {
     }
 
     public void handleDeleteStructure(String buildingType) {
-        deleteStructureWarningContainer.toFront();
         deleteStructureWarningContainer.setMouseTransparent(false);
         popupDeleteStructure.showPopup(deleteStructureWarningContainer, deleteStructureComponent);
         popupDeleteStructure.setBlur(buildingProperties, buildingsWindow);
@@ -515,7 +538,6 @@ public class InGameController extends BasicController {
         if (!siteProperties.isVisible()) {
             siteProperties.setMouseTransparent(true);
         }
-        buildingsWindow.toFront();
     }
 
     public void createEmpireListener() {
@@ -524,12 +546,11 @@ public class InGameController extends BasicController {
                 event -> {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         islandAttributes.setEmpireDto(event.data());
-                        System.out.println("Event -> minerals: " + islandAttributes.getAvailableResources().get("minerals") + " alloys: " + islandAttributes.getAvailableResources().get("alloys"));
                         overviewUpgradeComponent.setUpgradeButton();
                         this.lastUpdate = event.data().updatedAt();
                     }
                 },
-                error -> System.out.println("errorListener")
+                error -> System.out.println("errorListener: " + error)
         );
     }
 
@@ -538,7 +559,6 @@ public class InGameController extends BasicController {
         buildingsWindow.setMouseTransparent(false);
         popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
         buildingProperties.setMouseTransparent(false);
-
     }
 
     public void showSiteOverview() {
@@ -546,7 +566,6 @@ public class InGameController extends BasicController {
         buildingsWindow.setVisible(false);
         buildingProperties.setVisible(false);
         popupSiteProperties.showPopup(siteProperties, sitePropertiesComponent);
-
     }
 
     public void setSiteType(String siteType) {

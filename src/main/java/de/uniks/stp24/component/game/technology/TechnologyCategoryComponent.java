@@ -16,6 +16,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
@@ -51,6 +52,10 @@ public class TechnologyCategoryComponent extends AnchorPane {
     public VBox technologieCategoryBox;
     @FXML
     public Label currentResearchResourceLabel;
+    @FXML
+    public VBox researchLeftVBox;
+    @FXML
+    public StackPane researchJobContainer;
     String technologieCategoryName;
     @Inject
     App app;
@@ -90,6 +95,12 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     @OnRender
     public void render() {
+
+        //researchLeftVBox.setVisible(false);
+        //Platform.runLater(() -> {
+        //    technologieCategoryBox.getStyleClass().clear();
+        //    technologieCategoryBox.getStyleClass().add("technologiesActualResearchBackground");
+        //});
     }
 
     @OnDestroy

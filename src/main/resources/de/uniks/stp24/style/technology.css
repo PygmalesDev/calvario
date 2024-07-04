@@ -56,6 +56,16 @@
     -fx-border-width: 0;
 }
 
+.technologiesActualResearchBackground {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/technologies_actualResearch_background.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
 .technologyCategoriesLabel {
     -fx-font-family: "Tempus Sans ITC";
 }

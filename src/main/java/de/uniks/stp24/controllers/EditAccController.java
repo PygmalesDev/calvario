@@ -151,6 +151,7 @@ public class EditAccController extends BasicController {
     public WarningScreenComponent warningScreen;
     private BooleanBinding editAccIsNotSelected;
     private BooleanBinding warningIsInvisible;
+    private BooleanBinding editAvatarIsNotSelected;
     public Image editIconBlueImage;
     public Image editIconBlackImage;
     public Image deleteIconRedImage;
@@ -234,6 +235,7 @@ public class EditAccController extends BasicController {
     @OnRender
     public void createBindings() {
         this.editAccIsNotSelected = this.changeUserInfoButton.selectedProperty().not();
+        this.editAvatarIsNotSelected = this.editAvatarButton.selectedProperty().not();
         this.warningIsInvisible = this.warningScreenContainer.visibleProperty().not();
     }
 
@@ -264,8 +266,8 @@ public class EditAccController extends BasicController {
                 .bind(Bindings.createBooleanBinding(() -> !editAccIsNotSelected.get(),
                         this.editAccIsNotSelected));
         this.goBackButton.disableProperty()
-                .bind(Bindings.createBooleanBinding(() -> !editAccIsNotSelected.get(),
-                        this.editAccIsNotSelected));
+                .bind(Bindings.createBooleanBinding(() -> !editAccIsNotSelected.get() || !editAvatarIsNotSelected.get(),
+                        this.editAccIsNotSelected, this.editAvatarIsNotSelected));
     }
 
     /**
@@ -483,6 +485,7 @@ public class EditAccController extends BasicController {
                 });
         avatarButtonsVisible(false);
         editAvatarButton.setStyle("-fx-text-fill: Black");
+        editAvatarButton.setSelected(false);
     }
 
     /**
@@ -495,6 +498,7 @@ public class EditAccController extends BasicController {
         setImageCode(backgroundImageIndex, portraitImageIndex, frameImageIndex);
         avatarButtonsVisible(false);
         editAvatarButton.setStyle("-fx-text-fill: Black");
+        editAvatarButton.setSelected(false);
     }
 
     /**

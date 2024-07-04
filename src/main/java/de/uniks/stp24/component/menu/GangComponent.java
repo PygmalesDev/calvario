@@ -1,30 +1,30 @@
 package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.model.Gang;
-import de.uniks.stp24.model.GangElement;
+import de.uniks.stp24.service.ImageCache;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
+import org.jetbrains.annotations.MustBeInvokedByOverriders;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javax.inject.Inject;
-import java.awt.*;
 
 @Component(view = "Gang.fxml")
-public class GangComponent extends Pane implements ReusableItemComponent<GangElement> {
+public class GangComponent extends Pane implements ReusableItemComponent<Gang> {
 
     @FXML
-    Pane gangColor;
-    @FXML
     Pane pane;
-    @FXML
-    ImageView flagImage;
     @FXML
     ImageView portraitImage;
     @FXML
     Label gangNameTextComponent;
+
+    ImageCache imageCache = new ImageCache();
 
     @Inject
     public GangComponent() {
@@ -32,17 +32,10 @@ public class GangComponent extends Pane implements ReusableItemComponent<GangEle
     }
 
     @Override
-    public void setItem(@NotNull GangElement gangElement) {
-        Gang gang = gangElement.gang();
-
-        java.awt.Color color = java.awt.Color.decode(gang.color());
-        if (color.getRed() + Color.decode("#FFCCEE").getGreen() + color.getBlue() <= 500)
-            gangNameTextComponent.setStyle("-fx-text-fill: white;");
-
+    public void setItem(@NotNull Gang gang) {
+        gangNameTextComponent.setStyle("-fx-text-fill: black;");
         gangNameTextComponent.setText(gang.name());
         pane.setStyle("-fx-background-color: " + gang.color());
-        gangColor.setStyle("-fx-background-color: " + gang.color());
-        flagImage.setImage(gangElement.flag());
-        portraitImage.setImage(gangElement.portrait());
+        portraitImage.setImage(imageCache.get(gang.portraitsPath()));
     }
 }

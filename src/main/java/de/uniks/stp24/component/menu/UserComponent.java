@@ -38,7 +38,7 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     Subscriber subscriber;
 
     @Resource
-    final ResourceBundle resource;
+    final ResourceBundle resources;
     private final ImageCache imageCache;
     private MemberUser member;
     @FXML
@@ -55,9 +55,9 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     ArrayList<Image> framesList = new ArrayList<>();
 
     @Inject
-    public UserComponent(ImageCache imageCache, ResourceBundle resource) {
+    public UserComponent(ImageCache imageCache, ResourceBundle resources) {
         this.imageCache = imageCache;
-        this.resource = resource;
+        this.resources = resources;
     }
 
     public void kickUser() {
@@ -74,7 +74,7 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
             this.userHBox.getChildren().remove(this.kickButton);
 
         this.usernameText.setText(member.user().name());
-        this.readyText.setText(resource.getString(member.ready() ? "ready" : "not.ready"));
+        this.readyText.setText(resources.getString(member.ready() ? "ready" : "not.ready"));
 
         if (Objects.isNull(this.member.user()._public())) {
             avatarMap.put("backgroundIndex", 0);

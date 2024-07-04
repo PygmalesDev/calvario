@@ -310,7 +310,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     public void startGameAsPlayer(){
         WaitForAsyncUtils.waitForFxEvents();
 
-        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
+        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, null, "a");
 
         doReturn(null).when(this.app).show("/ingame");
 
@@ -342,7 +342,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     public void startGameAsSpectator(){
         WaitForAsyncUtils.waitForFxEvents();
 
-        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
+        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, null, "a");
 
         doReturn(null).when(this.app).show("/ingame");
 

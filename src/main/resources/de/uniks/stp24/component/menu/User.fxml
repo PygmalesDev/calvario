@@ -29,15 +29,17 @@
          </StackPane>
          <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="55.0" prefWidth="94.0">
             <HBox.margin>
-               <Insets left="10.0" right="10.0"/>
+               <Insets left="10.0" right="10.0" />
             </HBox.margin>
-            <Text fx:id="usernameText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userComponentText"
-                  text="\%PlayerNickname" wrappingWidth="96.705078125"/>
-            <Text fx:id="readyText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userComponentText" text="%ready">
-               <VBox.margin>
-                  <Insets top="2.0"/>
-               </VBox.margin>
-            </Text>
+            <children>
+                  <Text fx:id="usernameText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userComponentText"
+                        text="\%PlayerNickname" wrappingWidth="96.705078125" />
+               <Text fx:id="readyText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userComponentText" text="%ready">
+                  <VBox.margin>
+                     <Insets top="2.0" />
+                  </VBox.margin>
+               </Text>
+            </children>
          </VBox>
          <Button fx:id="kickButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#kickUser" prefHeight="10.0" prefWidth="10.0" styleClass="kickUserButton" />
       </javafx.scene.layout.HBox>

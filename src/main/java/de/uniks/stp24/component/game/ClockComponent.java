@@ -66,7 +66,7 @@ public class ClockComponent extends AnchorPane {
     @Inject
     public EventService eventService;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
     public TimerService timerService;
     @Inject
@@ -214,6 +214,7 @@ public class ClockComponent extends AnchorPane {
     }
 
 ///////////////--------------------------------------------onAction------------------------------------/////////////
+
 
     public void showFlags() {
         islandsService.setFlag(flagToggle.isSelected());

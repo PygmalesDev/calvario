@@ -69,7 +69,6 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     GamesService gamesService;
     @Spy
     EmpireService empireService;
-
     @Spy
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
@@ -112,7 +111,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         doReturn("testGameHostID").when(this.tokenStorage).getUserId();
 
         // Mock getting game
-        doReturn(Observable.just(new Game("1", "a", "testGameID", "testGame", "testGameHostID",
+        doReturn(Observable.just(new Game("1", "a", "testGameID", "testGame", "testGameHostID", 2,
                 false, 1, 0, new GameSettings(1))))
                 .when(this.gamesService).getGame(any());
 
@@ -167,7 +166,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     @Test
     public void testStartGameAsHost() {
 
-        Empire testEmpire = new Empire("testEmpire", "a", "a", 1, 1, new String[]{"1"}, "a");
+        Empire testEmpire = new Empire("testEmpire", "a", "a", 1, 1, null, "a");
 
         doReturn(null).when(this.app).show("/ingame");
 
@@ -225,7 +224,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
 
         clickOn("#startJourneyButton");
         this.gameSubject.onNext(new Event<>("games.testGameID.updated", new Game("1", "a",
-                "testGameID", "testGame", "testGameHostID", true, 1, 0, new GameSettings(1))));
+                "testGameID", "testGame", "testGameHostID", 2, true, 1, 0, new GameSettings(1))));
         WaitForAsyncUtils.waitForFxEvents();
         verify(this.app, times(1)).show("/ingame");
 
@@ -270,7 +269,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         // If the number of maxMember is changed in LobbyController this test will fail. It is more like a template of
         // how a test for this could look like. The test needs to be adapted after the server communication for maxMember
         // is implemented.
-        Empire testEmpire = new Empire("testEmpire", "a", "a", 1, 1, new String[]{"1"}, "a");
+        Empire testEmpire = new Empire("testEmpire", "a", "a", 1, 1, null, "a");
 
         when(this.lobbyService.loadPlayers(any()))
                 .thenReturn(Observable.just(new MemberDto[]{

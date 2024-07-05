@@ -35,9 +35,9 @@ public class CreateGameService {
 
     // class was modified! some code was deleted
     // error handle occurs now in controller
-    public Observable<CreateGameResultDto> createGame(String name, GameSettings settings, String password) {
+    public Observable<CreateGameResultDto> createGame(String name, GameSettings settings, String password, int maxMembers) {
             return gamesApiService
-                    .createGame(new CreateGameDto(name, false, 1, settings, password))
+                    .createGame(new CreateGameDto(name, maxMembers, false, 1, settings, password))
                     .doOnError(error -> createGameController.showError(error));
     }
     public void setCreateGameController(CreateGameController createGameController){

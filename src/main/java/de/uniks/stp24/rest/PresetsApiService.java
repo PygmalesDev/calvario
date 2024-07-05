@@ -1,5 +1,6 @@
 package de.uniks.stp24.rest;
 
+import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.model.BuildingPresets;
 import de.uniks.stp24.model.DistrictPresets;
 import de.uniks.stp24.model.SystemUpgrades;
@@ -21,6 +22,9 @@ public interface PresetsApiService {
 
     @GET("presets/districts")
     Observable<ArrayList<DistrictPresets>> getDistrictPresets();
+
+    @GET("presets/traits")
+    Observable<Trait[]> getTraitsPreset();
 
     @GET("presets/technologies")
     Observable<ArrayList<TechnologyExtended>> getTechnologies();

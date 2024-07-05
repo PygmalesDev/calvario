@@ -5,7 +5,6 @@ import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateResultDto;
 import de.uniks.stp24.dto.EmpireDto;
@@ -34,6 +33,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.inject.Inject;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -57,6 +57,7 @@ public class PauseMenuTest extends ControllerTest {
 
     @Spy
     PopupBuilder popupBuilder;
+
     @Spy
     EventService eventService;
 
@@ -83,11 +84,12 @@ public class PauseMenuTest extends ControllerTest {
 
     @Spy
     ObjectMapper objectMapper;
+
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
+
     @Spy
     EmpireService empireService;
-
 
     @InjectMocks
     ClockComponent clockComponent;
@@ -97,9 +99,6 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
-
-    @InjectMocks
-    SettingsComponent settingsComponent;
 
     @InjectMocks
     OverviewSitesComponent overviewSitesComponent;
@@ -112,6 +111,7 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
+
     @InjectMocks
     BuildingPropertiesComponent buildingPropertiesComponent;
 
@@ -120,9 +120,6 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     BuildingsWindowComponent buildingsWindowComponent;
-
-
-
 
     @InjectMocks
     DetailsComponent detailsComponent;
@@ -135,12 +132,11 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     DeleteStructureComponent deleteStructureComponent;
+    @InjectMocks
+    EmpireOverviewComponent empireOverviewComponent;
 
-
-
-    @Spy
-    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
-
+    @InjectMocks
+    HelpComponent helpComponent;
 
     @InjectMocks
     InGameController inGameController;
@@ -152,7 +148,6 @@ public class PauseMenuTest extends ControllerTest {
     public void start(Stage stage) throws Exception {
         super.start(stage);
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
-        this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = this.eventComponent;
@@ -163,6 +158,8 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+        this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
+        this.inGameController.helpComponent = this.helpComponent;
 
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
@@ -181,7 +178,7 @@ public class PauseMenuTest extends ControllerTest {
         UpgradeStatus upgradeStatus = new UpgradeStatus("test", 20, production, consumption, 20);
 
         doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());
-        doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", true,1,1,null ))).when(gamesApiService).getGame(any());
+        doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", 2,true,1,1,null ))).when(gamesApiService).getGame(any());
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
 
         doReturn(Observable.just(new SystemUpgrades(upgradeStatus,upgradeStatus, upgradeStatus, upgradeStatus, upgradeStatus ))).when(inGameService).loadUpgradePresets();

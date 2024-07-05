@@ -5,7 +5,6 @@ import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
@@ -82,8 +81,6 @@ public class TestIslandOverview extends ControllerTest {
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
-    @InjectMocks
-    SettingsComponent settingsComponent;
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
     @InjectMocks
@@ -258,7 +255,6 @@ public class TestIslandOverview extends ControllerTest {
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
-        this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = this.eventComponent;
         this.inGameController.eventService = this.eventService;
@@ -294,7 +290,7 @@ public class TestIslandOverview extends ControllerTest {
                 "a", "a", 1, 2, "a", new String[]{"1"}, cost,
                 null))).when(this.empireService).getEmpire(any(), any());
 
-        doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", true, 1, 1, null))).when(gamesApiService).getGame(any());
+        doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", 2,true, 1, 1, null))).when(gamesApiService).getGame(any());
         doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
         doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
         doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
@@ -427,7 +423,6 @@ public class TestIslandOverview extends ControllerTest {
 
         this.storageOverviewComponent.getStylesheets().clear();
         this.pauseMenuComponent.getStylesheets().clear();
-        this.settingsComponent.getStylesheets().clear();
         this.clockComponent.getStylesheets().clear();
         this.eventComponent.getStylesheets().clear();
         this.storageOverviewComponent.getStylesheets().clear();

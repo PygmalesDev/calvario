@@ -38,7 +38,7 @@ public class LobbySettingsComponent extends AnchorPane {
     ImageCache imageCache;
     @Inject
     @Resource
-    ResourceBundle resource;
+    ResourceBundle resources;
     @Inject
     ErrorService errorService;
 

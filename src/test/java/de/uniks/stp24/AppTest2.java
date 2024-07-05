@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
@@ -47,8 +46,6 @@ public class AppTest2 extends ControllerTest {
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
     @InjectMocks
-    SettingsComponent settingsComponent;
-    @InjectMocks
     EventComponent eventComponent;
     @InjectMocks
     ClockComponent clockComponent;
@@ -74,6 +71,10 @@ public class AppTest2 extends ControllerTest {
     BuildingsWindowComponent buildingsWindowComponent;
     @InjectMocks
     DeleteStructureComponent deleteStructureComponent;
+    @InjectMocks
+    EmpireOverviewComponent empireOverviewComponent;
+    @InjectMocks
+    HelpComponent helpComponent;
 
 
     @Spy
@@ -88,10 +89,6 @@ public class AppTest2 extends ControllerTest {
     EmpireService empireService;
     @Spy
     InfrastructureService infrastructureService;
-
-
-    @Spy
-    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
 
     @Spy
     GameStatus gameStatus;
@@ -140,8 +137,8 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
+        this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
-        this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = eventComponent;
@@ -162,7 +159,8 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
-
+        this.inGameController.helpComponent = this.helpComponent;
+        
         inGameController.mapScrollPane = new ScrollPane();
         inGameController.group = new Group();
         inGameController.zoomPane = new StackPane();
@@ -175,7 +173,7 @@ public class AppTest2 extends ControllerTest {
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
         doReturn(Observable
                 .just(new Game("a", null, "game1Id", "testGame1",
-                        "testHost1", true, 1,10, null))).when(gameApiService).getGame(any());
+                        "testHost1", 2, true, 1,10, null))).when(gameApiService).getGame(any());
         doReturn(null).when(this.app).show("/ingame");
         islandsService.saveEmpire("empire",new ReadEmpireDto("a","b","empire","game1","user1","name",
                 "description","#FFDDEE",2,3,"home"));
@@ -231,7 +229,6 @@ public class AppTest2 extends ControllerTest {
         storageOverviewComponent.getStylesheets().clear();
         clockComponent.getStylesheets().clear();
         pauseMenuComponent.getStylesheets().clear();
-        settingsComponent.getStylesheets().clear();
         overviewSitesComponent.getStylesheets().clear();
         overviewUpgradeComponent.getStylesheets().clear();
         sitesComponent.getStylesheets().clear();
@@ -328,6 +325,8 @@ public class AppTest2 extends ControllerTest {
 
         sleep(2000);
 
+        openStorage();
+
     }
 
     public void createIcons(){
@@ -374,6 +373,29 @@ public class AppTest2 extends ControllerTest {
         ) ;
         linesR[1].setStrokeWidth(2);
 
+    }
+
+
+    public void openStorage(){
+        waitForFxEvents();
+        // Storage is closed
+        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
+        // Open storage
+        clickOn("#showStorageButton");
+        waitForFxEvents();
+        assertTrue(this.inGameController.storageOverviewContainer.isVisible());
+        // Close storage with Button in Ingame
+        clickOn("#showStorageButton");
+        waitForFxEvents();
+        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
+        // Open again
+        clickOn("#showStorageButton");
+        waitForFxEvents();
+        assertTrue(this.inGameController.storageOverviewContainer.isVisible());
+        // Close storage with button in StorageOverviewComponent
+        clickOn("#closeStorageOverviewButton");
+        waitForFxEvents();
+        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
     }
 
 }

@@ -108,7 +108,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         doReturn("testMemberUnoID").when(this.tokenStorage).getUserId();
 
         // Mock getting game
-        doReturn(Observable.just(new Game("1", "a","testGameID","testGame","testGameHostID",
+        doReturn(Observable.just(new Game("1", "a","testGameID","testGame","testGameHostID", 2,
                 false, 1, 0, new GameSettings(1))))
                 .when(this.gamesService).getGame(any());
 
@@ -285,7 +285,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
 
         this.gameSubject.onNext(new Event<>("games.testGameID.deleted",
-                new Game("1", "a","testGameID","testGame","testGameHostID",
+                new Game("1", "a","testGameID","testGame","testGameHostID", 2,
                         false, 1, 0, new GameSettings(1))));
 
         WaitForAsyncUtils.waitForFxEvents();
@@ -300,7 +300,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     public void startGameAsPlayer(){
         WaitForAsyncUtils.waitForFxEvents();
 
-        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
+        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, null, "a");
 
         doReturn(null).when(this.app).show("/ingame");
 
@@ -316,7 +316,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
 
         // start game
         this.gameSubject.onNext(new Event<>("games.testGameID.updated",
-                new Game("1", "a","testGameID","testGame","testGameHostID",
+                new Game("1", "a","testGameID","testGame","testGameHostID", 2,
                         true, 1, 0, new GameSettings(1))));
 
         WaitForAsyncUtils.waitForFxEvents();
@@ -332,7 +332,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     public void startGameAsSpectator(){
         WaitForAsyncUtils.waitForFxEvents();
 
-        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
+        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, null, "a");
 
         doReturn(null).when(this.app).show("/ingame");
 
@@ -348,7 +348,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
 
         // start game
         this.gameSubject.onNext(new Event<>("games.testGameID.updated",
-                new Game("1", "a","testGameID","testGame","testGameHostID",
+                new Game("1", "a","testGameID","testGame","testGameHostID", 2,
                         true, 1, 0, new GameSettings(1))));
 
         WaitForAsyncUtils.waitForFxEvents();

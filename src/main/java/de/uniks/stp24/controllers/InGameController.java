@@ -2,6 +2,7 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
+import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.dto.EmpireDto;
@@ -14,16 +15,13 @@ import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.game.EventService;
-import de.uniks.stp24.service.game.IslandsService;
-import de.uniks.stp24.service.game.TimerService;
-import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.PopupBuilder;
+import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
-import de.uniks.stp24.service.PopupBuilder;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -41,18 +39,23 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
-import org.jetbrains.annotations.NotNull;
 import org.fulib.fx.controller.Subscriber;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Title("CALVARIO")
 @Controller
 public class InGameController extends BasicController {
 
+    @FXML
+    StackPane helpWindowContainer;
     @FXML
     Pane shadow;
     @FXML
@@ -91,6 +94,9 @@ public class InGameController extends BasicController {
     @FXML
     public StackPane storageOverviewContainer;
     @FXML
+    public StackPane empireOverviewContainer;
+
+    @FXML
     StackPane clockComponentContainer;
 
     @Inject
@@ -114,9 +120,7 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public PauseMenuComponent pauseMenuComponent;
-    @SubComponent
-    @Inject
-    public SettingsComponent settingsComponent;
+
     @SubComponent
     @Inject
     public OverviewSitesComponent overviewSitesComponent;
@@ -126,6 +130,11 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
+
+    @SubComponent
+    @Inject
+    public EmpireOverviewComponent empireOverviewComponent;
+
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
@@ -179,10 +188,16 @@ public class InGameController extends BasicController {
     @Inject
     public SitePropertiesComponent sitePropertiesComponent;
 
+    @SubComponent
+    @Inject
+    public HelpComponent helpComponent;
+
     PopupBuilder popupBuildingProperties = new PopupBuilder();
     PopupBuilder popupBuildingWindow = new PopupBuilder();
     PopupBuilder popupSiteProperties = new PopupBuilder();
     PopupBuilder popupDeleteStructure = new PopupBuilder();
+
+    PopupBuilder popupHelpWindow = new PopupBuilder();
 
     @Inject
     public InGameController() {
@@ -197,6 +212,9 @@ public class InGameController extends BasicController {
         buildingPropertiesComponent.setInGameController(this);
         sitePropertiesComponent.setInGameController(this);
         deleteStructureComponent.setInGameController(this);
+        empireOverviewComponent.setInGameController(this);
+        pauseMenuComponent.setInGameController(this);
+        helpComponent.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
@@ -208,10 +226,6 @@ public class InGameController extends BasicController {
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_PAUSED"));
-
-        PropertyChangeListener callHandleShowSettings = this::handleShowSettings;
-        gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_SETTINGS, callHandleShowSettings);
-        this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_SETTINGS"));
 
         this.subscriber.subscribe(inGameService.loadUpgradePresets(),
                 result -> islandAttributes.setSystemPresets(result),
@@ -237,17 +251,6 @@ public class InGameController extends BasicController {
         }
     }
 
-    private void handleShowSettings(@NotNull PropertyChangeEvent propertyChangeEvent) {
-        if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
-            Boolean settings = (Boolean) propertyChangeEvent.getNewValue();
-            if (settings) {
-                showSettings();
-            } else {
-                unShowSettings();
-            }
-        }
-    }
-
     private void handlePauseChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             pause = (Boolean) propertyChangeEvent.getNewValue();
@@ -270,6 +273,8 @@ public class InGameController extends BasicController {
         buildingsWindow.setMouseTransparent(true);
         siteProperties.setMouseTransparent(true);
         deleteStructureWarningContainer.setMouseTransparent(true);
+        helpWindowContainer.setMouseTransparent(true);
+        helpComponent.setVisible(false);
 
         pauseMenuContainer.setMouseTransparent(false);
         pauseMenuContainer.setVisible(false);
@@ -303,8 +308,6 @@ public class InGameController extends BasicController {
         inGameService.setShowSettings(false);
         inGameService.setPaused(pause);
         if (pause) {
-            shadow.setVisible(true);
-            shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
             pauseMenuContainer.setMouseTransparent(false);
             pauseGame();
         } else {
@@ -331,12 +334,47 @@ public class InGameController extends BasicController {
     }
 
     public void pauseGame() {
+        closeComponents();
+        pauseMenuComponent.setVisible(true);
         pauseMenuContainer.setVisible(pause);
+        pauseMenuContainer.setMouseTransparent(false);
+    }
+
+    public void pauseGameFromHelp() {
+        pause = true;
+        inGameService.setPaused(true);
+        if (pause) {
+            pauseMenuContainer.setMouseTransparent(false);
+            pauseGame();
+        } else {
+            pauseMenuContainer.setMouseTransparent(true);
+            resumeGame();
+        }
+    }
+
+    public void closeComponents() {
+        if(empireOverviewComponent.isVisible()){
+            empireOverviewComponent.closeEmpireOverview();
+        }
+        if (storageOverviewContainer.isVisible()) {
+            storageOverviewComponent.closeStorageOverview();
+        }
+        if (overviewContainer.isVisible()) {
+            overviewSitesComponent.closeOverview();
+        }
     }
 
     public void resumeGame() {
         pauseMenuContainer.setVisible(pause);
     }
+
+    public void removePause() {
+        pause = false;
+        pauseMenuContainer.setVisible(false);
+        shadow.setVisible(false);
+    }
+
+
 
     /**
      * created and add buttons for storage and island overview
@@ -351,6 +389,8 @@ public class InGameController extends BasicController {
                 showEmpireOverviewButton.setMinWidth(47);
                 showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
                 showEmpireOverviewButton.getStyleClass().add("empireOverviewButton");
+                showEmpireOverviewButton.setId("showEmpireOverviewButton");
+                showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
                 showStorageButton = new Button();
                 showStorageButton.setMinHeight(48);
                 showStorageButton.setMinWidth(47);
@@ -443,9 +483,29 @@ public class InGameController extends BasicController {
         overviewSitesComponent.setOverviewSites();
     }
 
-    @OnKey(code = KeyCode.S)
+    @OnKey(code = KeyCode.S, alt = true)
     public void showStorage() {
+        if(empireOverviewComponent.isVisible()) {
+            empireOverviewComponent.closeEmpireOverview();
+        }
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
+    }
+    @OnKey(code = KeyCode.H, alt = true)
+    public void showHelpOnKey(){
+        if (helpComponent.isVisible()){
+            helpComponent.close();
+            removePause();
+        } else {
+            showHelp();
+        }
+    }
+
+    @OnKey(code = KeyCode.E, alt = true)
+    public void showEmpireOverview() {
+        if(storageOverviewComponent.isVisible()){
+            storageOverviewComponent.closeStorageOverview();
+        }
+        empireOverviewContainer.setVisible(!empireOverviewContainer.isVisible());
     }
 
     @OnKey(code = KeyCode.SPACE)
@@ -542,7 +602,21 @@ public class InGameController extends BasicController {
     public void setSitePropertiesInvisible() {
         sitePropertiesComponent.setVisible(false);
         buildingProperties.setMouseTransparent(false);
-        overviewSitesComponent.buildingsComponent.resetPage();
         overviewSitesComponent.buildingsComponent.setGridPane();
     }
+
+    public void showHelp() {
+        popupHelpWindow.showPopup(helpWindowContainer,helpComponent);
+        helpComponent.setVisible(true);
+        helpComponent.setMouseTransparent(false);
+        helpWindowContainer.setMouseTransparent(false);
+        helpWindowContainer.toFront();
+        pauseMenuContainer.setVisible(false);
+        pauseMenuContainer.setMouseTransparent(true);
+        helpComponent.displayTechnologies();
+    }
+    public void updateResCapacity() {
+        overviewSitesComponent.updateResCapacity();
+    }
+
 }

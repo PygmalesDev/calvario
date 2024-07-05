@@ -1,6 +1,7 @@
 package de.uniks.stp24.component.game.technology;
 
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.TechnologyService;
@@ -12,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 
@@ -43,6 +45,9 @@ public class ResearchJobComponent extends AnchorPane {
     JobsService jobsService;
 
     @Inject
+    Subscriber subscriber;
+
+    @Inject
     public ResearchJobComponent(){
 
     }
@@ -56,6 +61,10 @@ public class ResearchJobComponent extends AnchorPane {
     }
 
     public void handleJob(TechnologyExtended technology) {
-        
+        subscriber.subscribe(jobsService.beginJob(Jobs.createTechnologyJob(technology.id())), result -> {
+            jobsService.onJobCompletion(result._id(), () -> {
+                
+            });
+        });
     }
 }

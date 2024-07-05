@@ -150,11 +150,13 @@ public class TechnologyCategoryComponent extends AnchorPane {
         unlockedTechnologies = technologyService.getUnlockedTechnologies(technologieCategoryName);
         researchTechnologies = technologyService.getResearchTechnologies(technologieCategoryName);
 
+
         unlockedListView.setItems(unlockedTechnologies);
         researchListView.setItems(researchTechnologies);
 
         unlockedListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
         researchListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
+
 
         return this;
     }
@@ -163,15 +165,15 @@ public class TechnologyCategoryComponent extends AnchorPane {
         this.parent = parent;
     }
 
-    public void showResearchComponent() {
+    public void showResearchComponent(TechnologyExtended technology) {
         switch (technologieCategoryName) {
-            case "society" -> handleJobRunning(societyJobRunning);
-            case "engineering" -> handleJobRunning(engineeringJobRunning);
-            case "physics" -> handleJobRunning(physicsJobRunning);
+            case "society" -> handleJobRunning(true, technology);
+            case "engineering" -> handleJobRunning(engineeringJobRunning, technology);
+            case "physics" -> handleJobRunning(physicsJobRunning, technology);
         }
     }
 
-    private void handleJobRunning(boolean booleanJobRunning) {
+    private void handleJobRunning(boolean booleanJobRunning, TechnologyExtended technology) {
         if (booleanJobRunning){
             researchJobContainer.setMouseTransparent(false);
             researchJobComponent.setMouseTransparent(false);
@@ -181,6 +183,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
                 technologieCategoryBox.getStyleClass().add("technologiesActualResearchBackground");
             });
             popupTechResearch.showPopup(researchJobContainer, researchJobComponent);
+            researchJobComponent.handleJob(technology);
         } else {
             researchJobContainer.setMouseTransparent(true);
             researchJobComponent.setMouseTransparent(true);

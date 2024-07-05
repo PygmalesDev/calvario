@@ -107,12 +107,68 @@
     -fx-border-width: 1;
 }
 
-.technology-list .scroll-bar:vertical .increment-button .increment-arrow, .list-view .scroll-bar .decrement-button .decrement-arrow {
+.technology-list .scroll-bar:vertical .increment-button .increment-arrow,
+.list-view .scroll-bar .decrement-button .decrement-arrow {
     -fx-background-color: transparent;
+    -fx-background-image: none;
+}
+
+.list-view .list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
     -fx-background-image: none;
 }
 
 .description-list .list-cell {
     -fx-background-color: transparent;
 }
+
+/*!* Stil für die äußere ListView *!*/
+/*.outer-list-view {*/
+/*    -fx-background-color: #ffeb3b; !* Gelber Hintergrund *!*/
+/*}*/
+
+/*.outer-list-view .list-cell {*/
+/*    -fx-background-color: #ffeb3b; !* Gelber Hintergrund *!*/
+/*    -fx-text-fill: #000; !* Schwarzer Text *!*/
+/*    -fx-padding: 10px;*/
+/*    -fx-border-color: #fbc02d;*/
+/*    -fx-border-width: 1px;*/
+/*}*/
+
+/*!* Hover-Effekt für die Zellen in der äußeren ListView *!*/
+/*.outer-list-view .list-cell:hover {*/
+/*    -fx-background-color: #fbc02d;*/
+/*}*/
+
+/*!* Selektierte Zelle in der äußeren ListView *!*/
+/*.outer-list-view .list-cell:selected {*/
+/*    -fx-background-color: #f57f17;*/
+/*    -fx-text-fill: white;*/
+/*}*/
+
+/*!* Stil für die innere ListView *!*/
+/*.inner-list-view {*/
+/*    -fx-background-color: #bbdefb; !* Blauer Hintergrund *!*/
+/*}*/
+
+/*.inner-list-view .list-cell {*/
+/*    -fx-background-color: #bbdefb; !* Blauer Hintergrund *!*/
+/*    -fx-text-fill: #000; !* Schwarzer Text *!*/
+/*    -fx-padding: 5px;*/
+/*    -fx-border-color: #90caf9;*/
+/*    -fx-border-width: 1px;*/
+/*}*/
+
+/*!* Hover-Effekt für die Zellen in der inneren ListView *!*/
+/*.inner-list-view .list-cell:hover {*/
+/*    -fx-background-color: #90caf9;*/
+/*}*/
+
+/*!* Selektierte Zelle in der inneren ListView *!*/
+/*.inner-list-view .list-cell:selected {*/
+/*    -fx-background-color: #1e88e5;*/
+/*    -fx-text-fill: white;*/
+/*}*/
+
 

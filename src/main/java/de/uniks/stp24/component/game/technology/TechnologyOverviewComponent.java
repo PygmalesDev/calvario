@@ -93,6 +93,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
     public void engineering() {
         show(technologyCategoryComponent.setCategory("engineering"));
+
     }
 
     public void society() {
@@ -116,8 +117,10 @@ public class TechnologyOverviewComponent extends AnchorPane {
      */
     public void show(@NotNull TechnologyCategoryComponent technologieCategory) {
         setCategoryInfos(technologieCategory);
+
         parent.getChildren().getFirst().setVisible(true);
         parent.getChildren().getLast().setVisible(false);
+
     }
 
     public void setCategoryInfos(@NotNull TechnologyCategoryComponent technologieCategory) {

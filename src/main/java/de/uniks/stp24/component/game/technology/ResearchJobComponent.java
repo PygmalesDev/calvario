@@ -1,6 +1,9 @@
 package de.uniks.stp24.component.game.technology;
 
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.model.TechnologyExtended;
+import de.uniks.stp24.service.game.JobsService;
+import de.uniks.stp24.service.game.TechnologyService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -37,6 +40,9 @@ public class ResearchJobComponent extends AnchorPane {
     private InGameController inGameController;
 
     @Inject
+    JobsService jobsService;
+
+    @Inject
     public ResearchJobComponent(){
 
     }
@@ -49,4 +55,7 @@ public class ResearchJobComponent extends AnchorPane {
         this.inGameController = inGameController;
     }
 
+    public void handleJob(TechnologyExtended technology) {
+        
+    }
 }

@@ -4,6 +4,7 @@ import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.PresetsApiService;
+import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.FXCollections;
@@ -27,16 +28,25 @@ public class TechnologyService {
     @Inject
     TokenStorage tokenStorage;
 
-    Set<TechnologyExtended> unlockedTechnologiesSet = new HashSet<>();
+    List<TechnologyExtended> technologies;
 
-    ObservableList<TechnologyExtended> researchTechnologiesList = FXCollections.observableArrayList();
+    Observable<ArrayList<TechnologyExtended>> temp;
+    Set<TechnologyExtended> allUnlockedTechnologiesSet = new HashSet<>();
+
+    public ObservableList<TechnologyExtended> researchTechnologiesList = FXCollections.observableArrayList();
     ObservableList<TechnologyExtended> unlockedTechnologiesList = FXCollections.observableArrayList();
+
+    ObservableList<TechnologyExtended> allUnlockedTechnologiesList = FXCollections.observableArrayList();
+    ObservableList<TechnologyExtended> allResearchTechnologiesList = FXCollections.observableArrayList();
 
     @Inject
     public TechnologyService() {
     }
 
-    public ObservableList<TechnologyExtended> getUnlockedTechnologies(String category) {
+
+    public List<TechnologyExtended> getAllUnlockedTechnologies(String tag) {
+
+        temp = getTechnologies();
 
         subscriber.subscribe(empireApiService.getEmpiresDtos(tokenStorage.getGameId()),
                 empireDtos -> {
@@ -47,8 +57,8 @@ public class TechnologyService {
                                 subscriber.subscribe(getTechnology(technology),
                                         technologyExtended -> {
                                             ArrayList<String> tempTags = new ArrayList<>(Arrays.asList(technologyExtended.tags()));
-                                            if (tempTags.contains(category)) {
-                                                unlockedTechnologiesSet.add(technologyExtended);
+                                            if (tempTags.contains(tag)) {
+                                                allUnlockedTechnologiesSet.add(technologyExtended);
                                             }
                                         }
                                 );
@@ -57,33 +67,100 @@ public class TechnologyService {
                         }
                     }
                 },
-                Throwable::printStackTrace
+                error -> System.out.println("Error when getting all unlocked Technologies: " + error)
         );
-        unlockedTechnologiesList = FXCollections.observableArrayList(unlockedTechnologiesSet);
+        allUnlockedTechnologiesList = FXCollections.observableArrayList(allUnlockedTechnologiesSet);
+        return allUnlockedTechnologiesList;
+    }
+
+    public List<TechnologyExtended> getAllResearchTechnologies(String tag) {
+        List<TechnologyExtended> research = new ArrayList<>();
+        List<TechnologyExtended> unlocked = getAllUnlockedTechnologies(tag);
+
+        technologies = temp.blockingFirst();
+        for (TechnologyExtended technology : technologies) {
+            if (!unlocked.contains(technology) && Arrays.asList(technology.tags()).contains(tag)) {
+                research.add(technology);
+            }
+        }
+        return research;
+    }
+
+    /**
+     * iterate tru all unlocked Technologies independent of the tag and check if any of
+     * their precedes are in temp, if yes add them in unlockedTechnologiesList
+     *
+     * @return unlocked Technologies without precedes that are also unlocked
+     */
+    public ObservableList<TechnologyExtended> getUnlockedTechnologies(String tag) {
+        List<TechnologyExtended> temp = getAllUnlockedTechnologies(tag);
+        unlockedTechnologiesList.clear();
+        for (TechnologyExtended technology : temp) {
+            for (String t : technology.precedes()) {
+
+                if (temp.stream().noneMatch(tech -> tech.id().equals(t))) {
+                    unlockedTechnologiesList.add(technology);
+                }
+            }
+        }
         return unlockedTechnologiesList;
     }
 
-    public ObservableList<TechnologyExtended> getResearchTechnologies(String category) {
+    /**
+     * iterate tru all research Technologies and check their requirements
+     * if all requirements are not in temp, add them in researchTechnologiesList
+     */
+    public ObservableList<TechnologyExtended> getResearchTechnologies(String tag) {
+        List<TechnologyExtended> tempResearch = getResearchTechnologies();
+        List<TechnologyExtended> tempUnlocked = getUnlockedTechnologies();
+        ObservableList<TechnologyExtended> researchTechnologiesList = FXCollections.observableArrayList();
 
-        getUnlockedTechnologies(category);
-        subscriber.subscribe(presetsApiService.getTechnologies(),
-                technologies -> {
-                    for (TechnologyExtended technology : technologies) {
-                        if (!unlockedTechnologiesList.contains(technology) && Arrays.asList(technology.tags()).contains(category)) {
-                            researchTechnologiesList.add(technology);
-                        }
+        for (TechnologyExtended technology : tempResearch) {
+            boolean add = true;
+            if (technology.requires() != null && !Arrays.asList(technology.requires()).isEmpty() && Arrays.asList(technology.tags()).contains(tag)) {
+                for (String t : technology.requires()) {
+                    if (tempUnlocked.stream().noneMatch(tech -> tech.id().equals(t))) {
+                        add = false;
+                        break;
                     }
                 }
-        );
+            }
+            if (add && (Arrays.asList(technology.tags()).contains(tag)) && researchTechnologiesList.stream().noneMatch(tech -> tech.id().equals(technology.id()))) {
+                researchTechnologiesList.add(technology);
+            }
+        }
 
+        System.out.println("Research Technologies: " + researchTechnologiesList);
         return researchTechnologiesList;
+    }
+
+    /**
+     * get all unlocked Technologies independent of the tag
+     */
+    public List<TechnologyExtended> getUnlockedTechnologies() {
+        List<TechnologyExtended> unlocked = new ArrayList<>();
+        for (String tag : Constants.technologyTranslation.keySet()) {
+            unlocked.addAll(getUnlockedTechnologies(tag));
+        }
+        return unlocked;
+    }
+
+    /**
+     * get all research Technologies independent of the tag
+     */
+    public List<TechnologyExtended> getResearchTechnologies() {
+        List<TechnologyExtended> research = new ArrayList<>();
+        for (String tag : Constants.technologyTranslation.values()) {
+            research.addAll(getAllResearchTechnologies(tag));
+        }
+        return research;
     }
 
     public Observable<TechnologyExtended> getTechnology(String id) {
         return presetsApiService.getTechnology(id);
     }
 
-    public Observable<TechnologyExtended> getTechnologies() {
-        return presetsApiService.getTechnologies().flatMap(Observable::fromIterable);
+    public Observable<ArrayList<TechnologyExtended>> getTechnologies() {
+        return presetsApiService.getTechnologies();
     }
 }

@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import java.net.URL?>
 <fx:root id="categorySubComponent" spacing="5.0" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.technology.TechnologyCategorySubComponent">
    <HBox>
       <Label fx:id="technologyLabel" text="TechnologyName" HBox.hgrow="ALWAYS">
@@ -26,8 +27,7 @@
          <ImageView fx:id="tagImage1" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
       </HBox>
    </HBox>
-   <ListView fx:id="descriptionListView" prefHeight="35.0" styleClass="description-list" />
-<!--   <ListView fx:id="descriptionListView" prefHeight="75.0" />-->
+   <ListView fx:id="descriptionListView" prefHeight="35.0" styleClass="inner-list-view" />
    <HBox fx:id="researchHBox" alignment="CENTER_RIGHT" spacing="5.0">
       <ImageView fx:id="timeImage" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
       <Label fx:id="timeLabel" styleClass="technologyCategoriesLabel" text="Label">

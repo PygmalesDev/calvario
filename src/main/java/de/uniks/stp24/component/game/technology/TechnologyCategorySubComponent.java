@@ -96,24 +96,24 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
 
         researchLabel.setText(String.valueOf(technologyExtended.cost()));
 
-        if (temp != description) {
-            if (technologyService.getUnlockedTechnologies(technology.tags()[0]).contains(technology)) {
-                // TODO: Set the description only with the effect of the technology
-                description.setAll(Arrays.asList(technology.effects()));
-            } else if (technologyService.getResearchTechnologies(technology.tags()[0]).contains(technology)) {
-                // TODO: Set description with effect and cost of the technology
-                // TODO: REMOVE THIS
-                description.setAll(Arrays.asList(technology.effects()));
-            }
-            temp = description;
-            setDescriptionView();
-        }
+//        if (temp != description) {
+//            if (technologyService.getUnlockedTechnologies(technology.tags()[0]).contains(technology)) {
+//                // TODO: Set the description only with the effect of the technology
+//                description.setAll(Arrays.asList(technology.effects()));
+//            } else if (technologyService.getResearchTechnologies(technology.tags()[0]).contains(technology)) {
+//                // TODO: Set description with effect and cost of the technology
+//                // TODO: REMOVE THIS
+//                description.setAll(Arrays.asList(technology.effects()));
+//            }
+//            temp = description;
+////            setDescriptionView();
+//        }
     }
 
-    public void setDescriptionView() {
-        descriptionListView.setItems(description);
-        descriptionListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
-    }
+//    public void setDescriptionView() {
+//        descriptionListView.setItems(description);
+//        descriptionListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
+//    }
 
     @OnInit
     public void init() {
@@ -125,8 +125,6 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
 
         timeImage.setImage(imageCache.get("icons/time.png"));
         researchImage.setImage(imageCache.get("icons/resources/research.png"));
-
-
 
     }
 

@@ -30,8 +30,7 @@ public class JobsService {
     Map<String, ObservableList<Job>> jobCollections = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
-    Map<String, ArrayList<Consumer<Job>>> jobDeletionConsumers = new HashMap<>();
-    Map<String, Consumer<String>> jobInspectionFunctions = new HashMap<>();
+    Map<String, Consumer<String[]>> jobInspectionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobProgressFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobTypeFunctions = new HashMap<>();
     Map<String, ArrayList<Consumer<Job>>> loadTypeFunctions = new HashMap<>();
@@ -92,12 +91,14 @@ public class JobsService {
 
     private void addJobToGroups(@NotNull Job job) {
         this.jobCollections.get(job.type()).add(job);
-        this.jobCollections.get("collection").add(job);
 
-        if (!job.system().isEmpty()) {
+        if (!job.type().equals("technology")) {
             if (!this.jobCollections.containsKey(job.system()))
                 this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
             else this.jobCollections.get(job.system()).add(job);
+
+            if (this.jobCollections.get(job.system()).size() == 1)
+                this.jobCollections.get("collection").add(job);
         }
 
         this.startCommonFunctions.forEach(Runnable::run);
@@ -107,10 +108,13 @@ public class JobsService {
         this.jobCollections.get(job.type()).replaceAll(other -> other.equals(job) ? job : other);
         this.jobCollections.get("collection").replaceAll(other -> other.equals(job) ? job : other);
 
-        if (!job.system().isEmpty()) {
+        if (!job.type().equals("technology")) {
             if (!this.jobCollections.containsKey(job.system()))
                 this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
             else this.jobCollections.get(job.system()).replaceAll(other -> other.equals(job) ? job : other);
+
+            if (this.jobCollections.get(job.system()).filtered(job1 -> job1.type().equals(job.type())).size() == 0)
+                this.jobCollections.get("collection").add(job);
         }
 
         if (this.jobTypeFunctions.containsKey(job.type()))
@@ -124,9 +128,10 @@ public class JobsService {
         this.jobCollections.get(job.type()).removeIf(other -> other._id().equals(job._id()));
         this.jobCollections.get("collection").removeIf(other -> other._id().equals(job._id()));
 
-        if (!job.system().isEmpty()) {
-            if (this.jobCollections.containsKey(job.system()))
-                this.jobCollections.get(job.system()).removeIf(other -> other._id().equals(job._id()));
+        if (!job.type().equals("technology")) {
+            this.jobCollections.get(job.system()).removeIf(other -> other._id().equals(job._id()));
+            if (this.jobCollections.get(job.system()).size() > 0)
+                this.jobCollections.get("collection").add(this.jobCollections.get(job.system()).get(0));
         }
 
         if (this.jobCompletionFunctions.containsKey(job._id()))
@@ -352,11 +357,11 @@ public class JobsService {
         return this.getJobObservableListOfType("collection");
     }
 
-    public void setJobInspector(String inspectorID, Consumer<String> func) {
+    public void setJobInspector(String inspectorID, Consumer<String[]> func) {
         this.jobInspectionFunctions.put(inspectorID, func);
     }
 
-    public Consumer<String> getJobInspector(String inspectorID) throws Exception {
+    public Consumer<String[]> getJobInspector(String inspectorID) throws Exception {
         if (this.jobInspectionFunctions.containsKey(inspectorID))
             return this.jobInspectionFunctions.get(inspectorID);
         else throw new Exception(String.format(

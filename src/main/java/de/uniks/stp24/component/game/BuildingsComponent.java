@@ -1,18 +1,26 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.component.game.jobs.SiteJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.model.Island;
+import de.uniks.stp24.model.Jobs;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.JobsService;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.controller.SubComponent;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.ResourceBundle;
+import java.util.*;
 
 @Component(view = "Buildings.fxml")
 public class BuildingsComponent extends AnchorPane {
@@ -29,6 +37,13 @@ public class BuildingsComponent extends AnchorPane {
     TokenStorage tokenStorage;
     @Inject
     public IslandAttributeStorage islandAttributeStorage;
+
+    @Inject
+    JobsService jobsService;
+
+    @Inject
+    ImageCache imageCache;
+
     @Inject
     @Resource
     @Named("gameResourceBundle")
@@ -36,6 +51,7 @@ public class BuildingsComponent extends AnchorPane {
 
     private int currentPage = 0;
     private InGameController inGameController;
+    Set<String[]> buildingList = new LinkedHashSet<>();
 
     @Inject
     public BuildingsComponent() {
@@ -44,6 +60,20 @@ public class BuildingsComponent extends AnchorPane {
     //Call set grid pane if buildings changes
     public void setGridPane() {
         buildings.getChildren().clear();
+        this.buildingList.clear();
+
+        Island island = this.islandAttributes.getIsland();
+
+
+        island.buildings().forEach(building -> this.buildingList.add(new String[]{building, null, ""}));
+
+        ObservableList<Jobs.Job> islandJobs = this.jobsService.getObservableListForSystem(island.id()) ;
+        FilteredList<Jobs.Job> buildingJobs = islandJobs.filtered(job -> job.type().equals("building"));
+        buildingJobs.forEach(job -> {
+                    if (islandJobs.indexOf(job) > 0)
+                        this.buildingList.add(new String[]{job.building(), "on_pause", job._id()});
+                    else this.buildingList.add(new String[]{job.building(), "on_progress", job._id()});
+                });
 
         prev.setVisible(currentPage > 0);
 
@@ -52,27 +82,27 @@ public class BuildingsComponent extends AnchorPane {
 
         int row = 0;
         int col = 0;
+        Iterator<String[]> buildingTypeIter = this.buildingList.iterator();
 
-        for (int i = currentPage * pageCapacity; i < islandAttributes.getIsland().buildings().size(); i++) {
-            Building building = new Building(this, islandAttributes.getIsland().buildings().get(i), tokenStorage, islandAttributes, inGameController);
+        for (int i = currentPage * pageCapacity; i < this.buildingList.size(); i++) {
+            String[] buildingType = buildingTypeIter.next();
+            Building building = new Building(this, buildingType[0], tokenStorage, islandAttributes,
+                    inGameController, buildingType[1], buildingType[2]);
             buildings.add(building, col, row);
 
-            if ((i + 1) % 8 == 0) {
-                break;
-            }
+            if ((i + 1) % 8 == 0) break;
 
             col++;
             if (col >= 4) {
                 col = 0;
                 row++;
-                if (row >= 2) {
-                    break;
-                }
+                if (row >= 2) break;
             }
         }
 
         if (!isGridPaneFull(currentPage)) {
-            buildings.add(new Building(this, "buildNewBuilding", tokenStorage, islandAttributes, inGameController), col, row);
+            buildings.add(new Building(this, "buildNewBuilding",
+                    tokenStorage, islandAttributes, inGameController, null, ""), col, row);
         } else {
             next.setMouseTransparent(false);
             next.setVisible(true);
@@ -107,7 +137,8 @@ public class BuildingsComponent extends AnchorPane {
         } else if(!isGridPaneFull(currentPage + 1) && size % 8 == 0){
             currentPage = currentPage + 1;
             buildings.getChildren().clear();
-            buildings.add(new Building(this, "buildNewBuilding", tokenStorage, islandAttributes, inGameController), 0, 0);
+            buildings.add(new Building(this, "buildNewBuilding", tokenStorage, islandAttributes, inGameController,
+                    null, null), 0, 0);
             prev.setVisible(true);
             next.setVisible(false);
         }

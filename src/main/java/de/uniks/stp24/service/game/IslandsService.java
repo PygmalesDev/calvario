@@ -344,14 +344,17 @@ public class IslandsService extends BasicService {
     }
 
     public void updateIslandBuildings(IslandAttributeStorage islandAttributes, InGameController inGameController, ArrayList<String> buildings){
-        this.subscriber.subscribe(gameSystemsService.updateBuildings(tokenStorage.getGameId(), islandAttributes.getIsland().id(),
-                new UpdateBuildingDto(
-                        buildings
-                        )), result -> {
-            islandAttributes.getIsland().buildings().clear();
-            islandAttributes.getIsland().buildings().addAll(result.buildings());
-            inGameController.selectedIsland.island = islandAttributes.getIsland();
-        });
+        if (Objects.nonNull(inGameController.selectedIsland) && Objects.nonNull(islandAttributes.getIsland())) {
+            this.subscriber.subscribe(gameSystemsService.updateBuildings(
+                    tokenStorage.getGameId(), islandAttributes.getIsland().id(),
+                    new UpdateBuildingDto(buildings)), result -> {
+
+                islandAttributes.getIsland().buildings().clear();
+                islandAttributes.getIsland().buildings().addAll(result.buildings());
+
+                inGameController.selectedIsland.island = islandAttributes.getIsland();
+            });
+        }
     }
 
     public void upgradeSystem(IslandAttributeStorage islandAttributes, String upgradeStatus, InGameController inGameController){
@@ -398,7 +401,7 @@ public class IslandsService extends BasicService {
         Island island = this.isles.stream().filter(isle -> isle.id().equals(islandID)).findFirst().orElse(null);
         if (Objects.nonNull(island))
             if (island.name().isEmpty())
-                return "UnchartedIsland";
+                return "Uncharted Island";
             else return island.name();
         return "MissingNo.";
     }

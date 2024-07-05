@@ -1,6 +1,7 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.component.game.jobs.SiteJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.model.Jobs;
@@ -18,8 +19,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
@@ -47,48 +50,42 @@ public class BuildingPropertiesComponent extends AnchorPane {
     Button closeButton;
     @FXML
     Button destroyButton;
-
     @FXML
     Text buildingName;
     @FXML
     ImageView buildingImage;
-
+    @FXML
+    Pane jobProgressPane;
     @Inject
     JobsService jobsService;
-
     @Inject
     ResourcesService resourcesService;
-
     @Inject
     Subscriber subscriber;
-
     @Inject
     IslandsService islandsService;
-
-
+    @Inject
+    @SubComponent
+    SiteJobProgressComponent siteJobProgressComponent;
     @Inject
     App app;
-
     @Inject
     GameSystemsApiService gameSystemsApiService;
-
     @Inject
     @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
-
-
     @Inject
     TokenStorage tokenStorage;
-
     @Inject
     IslandAttributeStorage islandAttributeStorage;
-
     Map<String, String> buildingsMap;
-
     String buildingType;
     InGameController inGameController;
     Map<String, Integer> priceOfBuilding;
+    ObservableList<Jobs.Job> buildingJobs;
+
+    String currentJobID = "";
 
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
 
@@ -103,31 +100,86 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     }
 
+    @OnRender
+    public void render() {
+        this.jobProgressPane.getChildren().add(this.siteJobProgressComponent);
+    }
+
     public void setInGameController(InGameController inGameController){
         this.inGameController = inGameController;
     }
 
 
-    public void setBuildingType(String buildingType){
+    public void setBuildingType(String buildingType, String jobID){
         this.buildingType = buildingType;
+        this.currentJobID = jobID;
         displayInfoBuilding();
         disableButtons();
         startResourceMonitoring();
+
+        if (!jobID.isEmpty()) {
+            Jobs.Job job = this.buildingJobs.stream()
+                    .filter(started -> started._id().equals(jobID)
+                            && started.system().equals(this.tokenStorage.getIsland().id()))
+                    .findFirst().orElse(null);
+
+            this.showJobsPane();
+            if (Objects.nonNull(job)) {
+                this.siteJobProgressComponent.setJobProgress(job);
+                if (!this.jobsService.hasJobTypeProgress(job.type()) && this.buildingJobs.get(0).equals(job))
+                    this.jobsService.onJobTypeProgress(job.type(), () ->
+                            this.siteJobProgressComponent.incrementProgress());
+                else this.jobsService.stopOnJobTypeProgress("building");
+            }
+        } else {
+            this.hideJobsPane();
+            this.jobsService.stopOnJobTypeProgress("building");
+        }
+
+    }
+
+    @OnInit
+    public void setBuildingUpdates() {
+        this.jobsService.onJobsLoadingFinished("building", job -> {
+            this.jobsService.onJobDeletion(job._id(), () -> {
+                if (this.currentJobID.equals(job._id()))
+                    this.getParent().setVisible(false);
+                this.updateIslandBuildings();
+            });
+
+            this.jobsService.onJobCommonFinish(this::updateIslandBuildings);
+
+            this.jobsService.onJobCompletion(job._id(), () -> {
+                this.updateIslandBuildings();
+                this.hideJobsPane();
+            });
+        });
+
+        this.jobsService.onJobsLoadingFinished(() ->
+                this.buildingJobs = this.jobsService.getJobObservableListOfType("building"));
+    }
+
+    public void showJobsPane() {
+        this.jobProgressPane.setVisible(true);
+        this.buildingCostsListView.setVisible(false);
+        this.buyButton.setDisable(true);
+        this.destroyButton.setDisable(true);
+    }
+
+    public void hideJobsPane() {
+        this.jobProgressPane.setVisible(false);
+        this.buildingCostsListView.setVisible(true);
+        this.updateButtonStates();
     }
 
     //Checks if buy and destroy building has to be deactivated
-    public void disableButtons(){
+    public void disableButtons() {
         buyButton.setDisable(true);
         destroyButton.setDisable(true);
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
-            priceOfBuilding = result.cost();
-            if (resourcesService.hasEnoughResources(priceOfBuilding)) {
-                buyButton.setDisable(false);
-            }
+            if (resourcesService.hasEnoughResources(result.cost())) buyButton.setDisable(false);
         });
-        if (tokenStorage.getIsland().buildings().contains(buildingType)){
-            destroyButton.setDisable(false);
-        }
+        if (tokenStorage.getIsland().buildings().contains(buildingType)) destroyButton.setDisable(false);
     }
 
     public void destroyBuilding(){
@@ -161,28 +213,39 @@ public class BuildingPropertiesComponent extends AnchorPane {
             priceOfBuilding = result.cost();
             if (resourcesService.hasEnoughResources(priceOfBuilding)) {
                 this.subscriber.subscribe(this.jobsService.beginJob(
-                        Jobs.createBuildingJob(this.tokenStorage.getIsland().id(), this.buildingType)), job ->
-                        this.jobsService.onJobCompletion(job._id(), this::updateIslandBuildings));
+                        Jobs.createBuildingJob(this.tokenStorage.getIsland().id(), this.buildingType)), job -> {
+                    this.currentJobID = job._id();
+                    this.siteJobProgressComponent.setJobProgress(job);
+                    this.showJobsPane();
+                    this.updateIslandBuildings();
+                    this.jobsService.onJobDeletion(job._id(), () -> {
+                        if (this.currentJobID.equals(job._id()))
+                            this.getParent().setVisible(false);
+                        this.updateIslandBuildings();
+                    });
+                    this.jobsService.onJobCompletion(job._id(), () -> {
+                        this.updateIslandBuildings();
+                        this.hideJobsPane();
+                    });
+                });
             } else buyButton.setDisable(true);
         });
     }
 
     private void updateIslandBuildings() {
-        this.subscriber.subscribe(this.gameSystemsApiService.getSystem(
-                        this.tokenStorage.getGameId(), this.islandAttributeStorage.getIsland().id()), island -> {
-            this.tokenStorage.setIsland(this.islandsService.updateIsland(island));
-            this.islandAttributeStorage.setIsland(this.islandsService.updateIsland(island));
-            this.inGameController.islandsService.updateIslandBuildings(this.islandAttributeStorage,
-                    this.inGameController, this.islandAttributeStorage.getIsland().buildings());
-            this.inGameController.setSitePropertiesInvisible();
-        });
+        if (Objects.nonNull(this.islandAttributeStorage.getIsland())) {
+            this.subscriber.subscribe(this.gameSystemsApiService.getSystem(
+                    this.tokenStorage.getGameId(), this.islandAttributeStorage.getIsland().id()), island -> {
+                this.tokenStorage.setIsland(this.islandsService.updateIsland(island));
+                this.islandAttributeStorage.setIsland(this.islandsService.updateIsland(island));
+                this.inGameController.islandsService.updateIslandBuildings(this.islandAttributeStorage,
+                        this.inGameController, this.islandAttributeStorage.getIsland().buildings());
+                this.inGameController.setSitePropertiesInvisible();
+            }, error -> System.out.println("error here"));
+        }
     }
 
-    @OnInit
-    public void setBuildingsJobUpdates() {
-        this.jobsService.onJobsLoadingFinished("building",
-                job -> this.jobsService.onJobCompletion(job._id(), this::updateIslandBuildings));
-    }
+
 
 
     //Gets resources of the building and shows them in three listviews

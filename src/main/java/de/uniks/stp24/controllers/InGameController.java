@@ -431,23 +431,34 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void setJobInspectors() {
-        this.jobsService.setJobInspector("island_jobs_overview", (String systemID) -> {
-            Island selected = this.islandsService.getIsland(systemID);
+        this.jobsService.setJobInspector("island_jobs_overview", (String... params) -> {
+            Island selected = this.islandsService.getIsland(params[0]);
             this.tokenStorage.setIsland(selected);
             this.overviewSitesComponent.jobsComponent.setJobsObservableList(
-                    this.jobsService.getObservableListForSystem(systemID));
+                    this.jobsService.getObservableListForSystem(params[0]));
 
             this.islandAttributes.setIsland(selected);
-            selectedIsland = this.islandsService.getIslandComponent(systemID);
+            selectedIsland = this.islandsService.getIslandComponent(params[0]);
             if (Objects.nonNull(selected.owner())) {
                 showOverview();
                 this.overviewSitesComponent.showJobs();
             }
         });
 
-        this.jobsService.setJobInspector("site_overview", (String districtID) -> {
-            this.setSiteType(districtID);
+        this.jobsService.setJobInspector("site_overview", (String... params) -> {
+            Island selected = this.islandsService.getIsland(params[1]);
+            this.islandAttributes.setIsland(selected);
+            this.tokenStorage.setIsland(selected);
+            this.setSiteType(params[0]);
             this.showSiteOverview();
+        });
+
+        this.jobsService.setJobInspector("building_overview", (String... params) -> {
+            Island selected = this.islandsService.getIsland(params[2]);
+            this.islandAttributes.setIsland(selected);
+            this.tokenStorage.setIsland(selected);
+            this.overviewSitesComponent.showBuildings();
+            this.showBuildingInformation(params[0], params[1]);
         });
     }
 
@@ -488,10 +499,10 @@ public class InGameController extends BasicController {
         this.jobsService.dispose();
     }
 
-    public void showBuildingInformation(String buildingToAdd) {
+    public void showBuildingInformation(String buildingToAdd, String jobID) {
         siteProperties.setVisible(false);
         siteProperties.setMouseTransparent(true);
-        buildingPropertiesComponent.setBuildingType(buildingToAdd);
+        buildingPropertiesComponent.setBuildingType(buildingToAdd, jobID);
         popupBuildingProperties.showPopup(buildingProperties, buildingPropertiesComponent);
     }
 

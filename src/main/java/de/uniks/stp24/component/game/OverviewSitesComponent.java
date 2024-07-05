@@ -75,6 +75,7 @@ public class OverviewSitesComponent extends AnchorPane {
     ResourceBundle gameResourceBundle;
 
     private InGameController inGameController;
+    private boolean isNameEditable;
 
     @Inject
     public OverviewSitesComponent() {
@@ -227,10 +228,11 @@ public class OverviewSitesComponent extends AnchorPane {
 
     @OnRender
     public void setIslandNameProperties() {
-        this.inputIslandName.getStyleClass().add("");
+        this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
     }
 
     public void setIslandName() {
-
+        this.islandNameButton.getStyleClass().clear();
+        this.islandNameButton.getStyleClass().add("islandChangeNameActive");
     }
 }

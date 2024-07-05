@@ -34,11 +34,6 @@
           <Font size="20.0" />
         </font>
     </Text>
-    <Button fx:id="closeWindowButton" layoutX="201.0" layoutY="183.0" mnemonicParsing="false" onAction="#onClose" prefHeight="25.0" prefWidth="24.0" styleClass="rightTriangleButton">
-        <font>
-          <Font size="6.0" />
-        </font>
-    </Button>
     <ImageView fx:id="siteImage" fitHeight="50.0" fitWidth="50.0" layoutX="92.0" layoutY="30.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="92.0" AnchorPane.rightAnchor="108.0" />
     <Button fx:id="destroySiteButton" layoutX="71.0" layoutY="162.0" mnemonicParsing="false" onAction="#destroySite" prefHeight="25.0" prefWidth="24.0" styleClass="deleteButton">
         <font>
@@ -57,6 +52,11 @@
     <ListView fx:id="siteProducesListView" layoutX="119.0" layoutY="261.0" prefHeight="80.0" prefWidth="64.0" style="-fx-background-color: transparent;" styleClass="resourceList" AnchorPane.rightAnchor="67.0" />
     <ListView fx:id="siteCostsListView" layoutX="45.0" layoutY="191.0" prefHeight="37.0" prefWidth="191.0" style="-fx-background-color: transparent;" styleClass="resourceList" />
    <AnchorPane fx:id="jobPane" layoutX="25.0" layoutY="189.0" prefHeight="50.0" prefWidth="200.0" />
+    <Button fx:id="closeWindowButton" layoutX="201.0" layoutY="183.0" mnemonicParsing="false" onAction="#onClose" prefHeight="25.0" prefWidth="24.0" styleClass="rightTriangleButton">
+        <font>
+          <Font size="6.0" />
+        </font>
+    </Button>
    <stylesheets>
       <URL value="@../../style/islandOverview.css" />
       <URL value="@../../style/ingameButtons.css" />

@@ -8,7 +8,6 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.game.JobsService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -27,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 import de.uniks.stp24.service.Constants;
@@ -78,7 +76,9 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
 
     @Inject
     public IslandOverviewJobProgressComponent() {
+        this.setPickOnBounds(true);
     }
+
     @Override
     public void setItem(@NotNull Job job) {
         this.job = job;
@@ -120,9 +120,11 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
     }
 
     public void showJobDetails() throws Exception {
-        switch (job.type()) {
-            case "district" -> this.jobsService.getJobInspector("site_overview").accept(this.job.district());
-            case "building" -> {}
+        switch (this.job.type()) {
+            case "district" -> this.jobsService.getJobInspector("site_overview")
+                    .accept(new String[]{this.job.district(), this.job.system()});
+            case "building" -> this.jobsService.getJobInspector("building_overview")
+                    .accept(new String[]{this.job.building(), this.job._id(), this.job.system()});
         }
 
     }

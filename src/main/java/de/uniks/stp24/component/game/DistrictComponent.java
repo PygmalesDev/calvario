@@ -37,8 +37,6 @@ public class DistrictComponent extends VBox implements ReusableItemComponent<Sit
     IslandAttributeStorage islandAttributeStorage;
 
     Map<String, String> sitesMap;
-    int jobProgress;
-    int totalProgress;
 
     private InGameController inGameController;
     private String siteName;
@@ -78,17 +76,6 @@ public class DistrictComponent extends VBox implements ReusableItemComponent<Sit
 
     public void setJobProgress(Job job) {
         this.jobProgressBox.setVisible(true);
-        this.jobProgress = job.progress();
-        this.totalProgress = job.total();
-        this.jobTimeText.setText(String.format("%s/%s", this.jobProgress, this.totalProgress));
-    }
-
-    public void removeJobProgress() {
-        this.jobProgressBox.setVisible(false);
-    }
-
-    public void incrementJobProgress() {
-        this.jobProgress++;
-        this.jobTimeText.setText(String.format("%s/%s", this.jobProgress, this.totalProgress));
+        this.jobTimeText.setText(String.format("%s/%s", job.progress(), job.total()));
     }
 }

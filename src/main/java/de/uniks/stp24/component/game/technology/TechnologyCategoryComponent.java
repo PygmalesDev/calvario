@@ -61,7 +61,6 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @Inject
     TechnologyService technologyService;
 
-    @Inject
     Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this);
 
     ObservableList<TechnologyExtended> unlockedTechnologies = FXCollections.observableArrayList();
@@ -101,7 +100,8 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     @OnRender
     public void render() {
-
+        researchJobContainer.setMouseTransparent(true);
+        researchJobComponent.setMouseTransparent(true);
     }
 
     @OnDestroy
@@ -160,7 +160,8 @@ public class TechnologyCategoryComponent extends AnchorPane {
     }
 
     public void showResearchComponent() {
-        researchJobContainer.setMouseTransparent(true);
+        researchJobContainer.setMouseTransparent(false);
+        researchJobComponent.setMouseTransparent(false);
         researchLeftVBox.setVisible(false);
         Platform.runLater(() -> {
             technologieCategoryBox.getStyleClass().clear();

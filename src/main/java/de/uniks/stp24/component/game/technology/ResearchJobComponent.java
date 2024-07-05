@@ -56,6 +56,7 @@ public class ResearchJobComponent extends AnchorPane {
 
     public void handleJob(TechnologyExtended technology) {
         subscriber.subscribe(jobsService.beginJob(Jobs.createTechnologyJob(technology.id())), job -> {
+            this.researchProgressBar.setProgress((((double) 1/job.total()) * job.progress()));
             jobsService.onJobCompletion(job._id(), () -> {
                 
             });

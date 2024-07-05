@@ -1,7 +1,9 @@
 package de.uniks.stp24.rest;
 
+import de.uniks.stp24.dto.ResourceDto;
 import de.uniks.stp24.model.BuildingPresets;
 import de.uniks.stp24.model.DistrictPresets;
+import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.model.SystemUpgrades;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.GET;
@@ -23,4 +25,7 @@ public interface PresetsApiService {
 
     @GET("presets/variables")
     Observable<Map<String, Integer>> getVariables();
+
+    @GET("presets/resources")
+    Observable<Map<String,ResourceDto>> getResources();
 }

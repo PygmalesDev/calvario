@@ -2,6 +2,7 @@ package de.uniks.stp24.component.game.technology;
 
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Jobs;
+import de.uniks.stp24.model.Technology;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.TechnologyService;
@@ -25,7 +26,7 @@ public class ResearchJobComponent extends AnchorPane {
     @FXML
     ImageView technologyTagImage1;
     @FXML
-    ListView technologyEffectsListView;
+    ListView<Technology> technologyEffectsListView;
     @FXML
     Text technologyNameText;
     @FXML
@@ -38,12 +39,8 @@ public class ResearchJobComponent extends AnchorPane {
     ProgressBar researchProgressBar;
     @FXML
     AnchorPane researchBackground;
-    private TechnologyCategoryComponent technologyCategoryComponent;
-    private InGameController inGameController;
-
     @Inject
     JobsService jobsService;
-
     @Inject
     Subscriber subscriber;
 
@@ -53,12 +50,9 @@ public class ResearchJobComponent extends AnchorPane {
     }
 
     public void handleResearchClicked() {
-        this.inGameController.showResearchComponent();
+
     }
 
-    public void setInGameController(InGameController inGameController) {
-        this.inGameController = inGameController;
-    }
 
     public void handleJob(TechnologyExtended technology) {
         subscriber.subscribe(jobsService.beginJob(Jobs.createTechnologyJob(technology.id())), result -> {

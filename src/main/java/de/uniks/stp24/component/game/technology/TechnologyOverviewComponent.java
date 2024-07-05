@@ -51,15 +51,12 @@ public class TechnologyOverviewComponent extends AnchorPane {
     @SubComponent
     public TechnologyCategoryComponent technologyCategoryComponent;
 
-    public ResearchJobComponent researchJobComponent;
 
     @Inject
     @Resource
     @Named("gameResourceBundle")
     public ResourceBundle resources;
-    private InGameController inGameController;
 
-    PopupBuilder popupTechResearch = new PopupBuilder();
 
     @Inject
     public TechnologyOverviewComponent() {
@@ -93,7 +90,6 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
     public void engineering() {
         show(technologyCategoryComponent.setCategory("engineering"));
-
     }
 
     public void society() {
@@ -128,8 +124,4 @@ public class TechnologyOverviewComponent extends AnchorPane {
         String technologyKey = technologieCategory.technologieCategoryName.replace("_", ".");
         technologieCategory.technologyNameText.setText(resources.getString("technologies." + technologyKey));
     }
-    public void setInGameController(InGameController inGameController) {
-        this.inGameController = inGameController;
-    }
-
 }

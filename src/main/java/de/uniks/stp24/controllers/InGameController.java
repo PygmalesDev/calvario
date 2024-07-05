@@ -211,8 +211,6 @@ public class InGameController extends BasicController {
         deleteStructureComponent.setInGameController(this);
         empireOverviewComponent.setInGameController(this);
         variableService.setIngameController(this);
-        technologiesComponent.setInGameController(this);
-        //technologiesComponent.researchJobComponent.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();

@@ -14,32 +14,26 @@
          <children>
             <Button fx:id="closeMarketOverviewButton" layoutX="324.0" layoutY="14.0" mnemonicParsing="false" onAction="#closeMarketOverview" prefHeight="49.0" prefWidth="51.0" styleClass="closeWindowButton" />
             <Text layoutX="137.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="marketTitle" text="Market" wrappingWidth="186.13670349121094" />
-            <Label fx:id="numberOfGoods" layoutX="106.0" layoutY="198.0" text="Label" />
-            <Button fx:id="sellButton" layoutX="97.0" layoutY="262.0" mnemonicParsing="false" text="Sell" />
-            <Button fx:id="buyButton" layoutX="269.0" layoutY="262.0" mnemonicParsing="false" text="Buy" />
-            <Button fx:id="everySeasonButton" layoutX="298.0" layoutY="216.0" mnemonicParsing="false" text="Button" />
-            <AnchorPane layoutX="84.0" layoutY="234.0" prefHeight="25.0" prefWidth="28.0" style="-fx-background-color: gold;" />
-            <AnchorPane layoutX="131.0" layoutY="152.0" prefHeight="59.0" prefWidth="131.0" />
-            <Button fx:id="incrementNumberOfGoods" layoutX="184.0" layoutY="169.0" mnemonicParsing="false" onAction="#incrementAmount" prefHeight="25.0" prefWidth="28.0" style="-fx-background-color: red;" styleClass="upArrowButton" />
-            <Button fx:id="decrementNumberOfGoods" layoutX="184.0" layoutY="204.0" mnemonicParsing="false" onAction="#decrementAmount" prefHeight="25.0" prefWidth="28.0" style="-fx-background-color: red;" styleClass="downArrowButton" />
-            <Label fx:id="priceTag" layoutX="120.0" layoutY="238.0" prefHeight="17.0" prefWidth="34.0" text="Label" />
+            <Button fx:id="sellButton" layoutX="83.0" layoutY="262.0" mnemonicParsing="false" onAction="#sellItem" prefHeight="25.0" prefWidth="66.0" text="Sell" />
+            <Button fx:id="buyButton" layoutX="253.0" layoutY="262.0" mnemonicParsing="false" onAction="#buyItem" prefHeight="25.0" prefWidth="59.0" text="Buy" />
+            <Button fx:id="everySeasonButton" layoutX="337.0" layoutY="181.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="59.0" text="EVERY SEASON " />
+            <AnchorPane layoutX="123.0" layoutY="234.0" prefHeight="25.0" prefWidth="28.0" style="-fx-background-color: gold;" styleClass="creditCoinIcon" />
+            <AnchorPane layoutX="166.0" layoutY="181.0" prefHeight="25.0" prefWidth="107.0" style="-fx-background-color: brown;">
+               <children>
+                  <Button fx:id="incrementNumberOfGoods" layoutX="91.0" mnemonicParsing="false" onAction="#incrementAmount" prefHeight="5.0" prefWidth="10.0" style="-fx-background-color: red;" styleClass="upArrowButton" />
+                  <Button fx:id="decrementNumberOfGoods" layoutX="58.0" mnemonicParsing="false" onAction="#decrementAmount" prefHeight="0.0" prefWidth="16.0" style="-fx-background-color: red;" styleClass="downArrowButton" />
+                  <Label fx:id="numberOfGoods" layoutX="14.0" layoutY="5.0" text="Label" textFill="WHITE" />
+               </children></AnchorPane>
+            <Label fx:id="sellingPrice" layoutX="89.0" layoutY="238.0" prefHeight="17.0" prefWidth="34.0" text="Label" />
             <ListView layoutX="84.0" layoutY="347.0" prefHeight="105.0" prefWidth="223.0" style="-fx-background-color: brown;" />
             <Label fx:id="userCredits" layoutX="152.0" layoutY="64.0" prefHeight="38.0" prefWidth="45.0" style="-fx-background-color: transparent;" text="Label" />
             <Label fx:id="marketFee" layoutX="243.0" layoutY="64.0" prefHeight="38.0" prefWidth="52.0" text="Label" />
-            <AnchorPane layoutX="98.0" layoutY="70.0" prefHeight="25.0" prefWidth="34.0" style="-fx-background-color: gold;">
-               <children>
-                  <ImageView fx:id="creditIconImageView" fitHeight="25.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true" styleClass="creditCoinIcon" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="210.0" layoutY="70.0" prefHeight="25.0" prefWidth="28.0" style="-fx-background-color: black;">
-               <children>
-                  <ImageView fitHeight="25.0" fitWidth="34.0" layoutX="-3.0" pickOnBounds="true" preserveRatio="true" />
-               </children>
-            </AnchorPane>
+            <AnchorPane layoutX="210.0" layoutY="70.0" prefHeight="25.0" prefWidth="28.0" styleClass="marketFeeIcon" />
             <ListView fx:id="resourcesListView" layoutX="48.0" layoutY="103.0" orientation="HORIZONTAL" prefHeight="71.0" prefWidth="319.0" style="-fx-background-color: transparent;" styleClass="listViewStyle" />
-            <ImageView fx:id="selectedIconImage" fitHeight="38.0" fitWidth="34.0" layoutX="98.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true" />
-            <AnchorPane layoutX="255.0" layoutY="242.0" prefHeight="25.0" prefWidth="28.0" style="-fx-background-color: gold;" />
-            <Label layoutX="281.0" layoutY="254.0" text="Label" />
+            <ImageView fx:id="selectedIconImage" fitHeight="38.0" fitWidth="34.0" layoutX="120.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true" />
+            <AnchorPane layoutX="281.0" layoutY="234.0" prefHeight="25.0" prefWidth="28.0" style="-fx-background-color: gold;" styleClass="creditCoinIcon" />
+            <Label fx:id="buyingPrice" layoutX="248.0" layoutY="238.0" text="Label" />
+            <AnchorPane layoutX="106.0" layoutY="70.0" prefHeight="25.0" prefWidth="28.0" style="-fx-background-color: gold;" styleClass="creditCoinIcon" />
          </children>
       </AnchorPane>
    </children>

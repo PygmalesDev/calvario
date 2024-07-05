@@ -55,8 +55,8 @@ public class ResearchJobComponent extends AnchorPane {
 
 
     public void handleJob(TechnologyExtended technology) {
-        subscriber.subscribe(jobsService.beginJob(Jobs.createTechnologyJob(technology.id())), result -> {
-            jobsService.onJobCompletion(result._id(), () -> {
+        subscriber.subscribe(jobsService.beginJob(Jobs.createTechnologyJob(technology.id())), job -> {
+            jobsService.onJobCompletion(job._id(), () -> {
                 
             });
         });

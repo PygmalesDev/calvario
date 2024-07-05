@@ -117,6 +117,8 @@ public class InGameController extends BasicController {
     ResourcesService resourceService;
     @Inject
     ExplanationService explanationService;
+    @Inject
+    JobsService jobsService;
 
 
     @SubComponent
@@ -315,6 +317,9 @@ public class InGameController extends BasicController {
         technologiesComponent.setContainer(technologiesContainer);
         technologiesContainer.setVisible(false);
         technologiesContainer.getChildren().add(technologiesComponent);
+
+        this.jobsService.loadEmpireJobs();
+        this.jobsService.initializeJobsListener();
     }
 
     @OnKey(code = KeyCode.ESCAPE)

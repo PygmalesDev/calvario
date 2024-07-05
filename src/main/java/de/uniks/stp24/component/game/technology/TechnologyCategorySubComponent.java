@@ -3,6 +3,7 @@ package de.uniks.stp24.component.game.technology;
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Effect;
+import de.uniks.stp24.model.Technology;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.TechnologyService;
@@ -54,12 +55,10 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     @FXML
     public Label technologyLabel;
 
-    @Inject
     App app;
 
     TechnologyExtended technology;
 
-    @Inject
     TechnologyService technologyService;
 
     @Inject
@@ -71,14 +70,15 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     ObservableList<Effect> temp = FXCollections.observableArrayList();
 
     Provider<TechnologyCategoryDescriptionSubComponent> provider = TechnologyCategoryDescriptionSubComponent::new;
-    private InGameController inGameController;
 
     /**
      * This class is for the components of the listView in the technology category
      */
     @Inject
-    public TechnologyCategorySubComponent(TechnologyCategoryComponent technologyCategoryComponent) {
+    public TechnologyCategorySubComponent(TechnologyCategoryComponent technologyCategoryComponent, TechnologyService technologyService, App app) {
         this.technologyCategoryComponent = technologyCategoryComponent;
+        this.technologyService = technologyService;
+        this.app = app;
     }
 
     /**
@@ -104,16 +104,15 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
         researchLabel.setText(String.valueOf(technologyExtended.cost()));
 
         if (temp != description) {
-            if (technologyService != null){
-                if (technologyService.getUnlockedTechnologies(technology.tags()[0]).contains(technology)) {
-                    // TODO: Set the description only with the effect of the technology
-                    description.setAll(Arrays.asList(technology.effects()));
-                } else if (technologyService.getResearchTechnologies(technology.tags()[0]).contains(technology)) {
-                    // TODO: Set description with effect and cost of the technology
-                    // TODO: REMOVE THIS
-                    description.setAll(Arrays.asList(technology.effects()));
-                }
+            if (technologyService.getUnlockedTechnologies(technology.tags()[0]).contains(technology)) {
+                // TODO: Set the description only with the effect of the technology
+                description.setAll(Arrays.asList(technology.effects()));
+            } else if (technologyService.getResearchTechnologies(technology.tags()[0]).contains(technology)) {
+                // TODO: Set description with effect and cost of the technology
+                // TODO: REMOVE THIS
+                description.setAll(Arrays.asList(technology.effects()));
             }
+
             temp = description;
             setDescriptionView();
 

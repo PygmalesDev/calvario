@@ -125,12 +125,6 @@ public class TechnologyOverviewComponent extends AnchorPane {
         String technologyKey = technologieCategory.technologieCategoryName.replace("_", ".");
         technologieCategory.technologyNameText.setText(resources.getString("technologies." + technologyKey));
     }
-
-    public void handleResearchClicked() {
-
-    }
-
-
     public void setInGameController(InGameController inGameController) {
         this.inGameController = inGameController;
     }

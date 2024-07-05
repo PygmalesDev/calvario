@@ -1,7 +1,6 @@
 package de.uniks.stp24.component.game.technology;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PopupBuilder;
@@ -61,7 +60,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @Inject
     TechnologyService technologyService;
 
-    Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this);
+    Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this, technologyService, app);
 
     ObservableList<TechnologyExtended> unlockedTechnologies = FXCollections.observableArrayList();
     ObservableList<TechnologyExtended> researchTechnologies = FXCollections.observableArrayList();
@@ -84,6 +83,11 @@ public class TechnologyCategoryComponent extends AnchorPane {
     ResearchJobComponent researchJobComponent;
 
     ImageCache imageCache = new ImageCache();
+
+    boolean societyJobRunning = false;
+    boolean engineeringJobRunning = false;
+    boolean physicsJobRunning = false;
+
 
     PopupBuilder popupTechResearch = new PopupBuilder();
             ;
@@ -160,14 +164,34 @@ public class TechnologyCategoryComponent extends AnchorPane {
     }
 
     public void showResearchComponent() {
-        researchJobContainer.setMouseTransparent(false);
-        researchJobComponent.setMouseTransparent(false);
-        researchLeftVBox.setVisible(false);
-        Platform.runLater(() -> {
-            technologieCategoryBox.getStyleClass().clear();
-            technologieCategoryBox.getStyleClass().add("technologiesActualResearchBackground");
-        });
-        popupTechResearch.showPopup(researchJobContainer, researchJobComponent);
+        switch (technologieCategoryName) {
+            case "society" -> handleJobRunning(societyJobRunning);
+            case "engineering" -> handleJobRunning(engineeringJobRunning);
+            case "physics" -> handleJobRunning(physicsJobRunning);
+        }
+    }
+
+    private void handleJobRunning(boolean booleanJobRunning) {
+        if (booleanJobRunning){
+            researchJobContainer.setMouseTransparent(false);
+            researchJobComponent.setMouseTransparent(false);
+            researchLeftVBox.setVisible(false);
+            Platform.runLater(() -> {
+                technologieCategoryBox.getStyleClass().clear();
+                technologieCategoryBox.getStyleClass().add("technologiesActualResearchBackground");
+            });
+            popupTechResearch.showPopup(researchJobContainer, researchJobComponent);
+        } else {
+            researchJobContainer.setMouseTransparent(true);
+            researchJobComponent.setMouseTransparent(true);
+            researchLeftVBox.setVisible(true);
+            researchJobContainer.setVisible(false);
+            researchJobComponent.setVisible(false);
+            Platform.runLater(() -> {
+                technologieCategoryBox.getStyleClass().clear();
+                technologieCategoryBox.getStyleClass().add("technologiesCategoryBackground");
+            });
+        }
     }
 
 

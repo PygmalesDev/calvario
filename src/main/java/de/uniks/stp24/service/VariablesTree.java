@@ -66,6 +66,28 @@ public class VariablesTree<T> {
     }
 
     /*
+    Method that search a certain node and returns their children
+     */
+
+    public Node<T> getNode(String startNodeKey, String endNodeKey){
+        Node<T> startNode = recSearch(startNodeKey, root);
+        if (startNode != null) {
+            return recSearch(endNodeKey, startNode);
+        }
+        return null;
+    }
+
+    private Node<T> recSearch(String nodeKey, Node<T> currentNodePos){
+        if(currentNodePos == null) return null;
+        if(currentNodePos.getKey().equals(nodeKey)) return currentNodePos;
+        for(Node<T> child: currentNodePos.getChildren()){
+            Node<T> result = recSearch(nodeKey, child);
+            if (result != null) return result;
+        }
+        return null;
+    }
+
+    /*
    Method to print all paths from root
     */
     public void printPaths() {

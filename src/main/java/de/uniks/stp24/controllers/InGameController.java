@@ -5,7 +5,10 @@ import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.model.BuildingPresets;
+import de.uniks.stp24.model.DistrictPresets;
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.model.SystemUpgrades;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
@@ -160,10 +163,12 @@ public class InGameController extends BasicController {
     public IslandAttributeStorage islandAttributes;
     @Inject
     EventListener eventListener;
+
     @Inject
     public InGameController() {
         lastUpdate = "";
     }
+
     @Inject
     public GameSystemsApiService gameSystemsApiService;
     @Inject
@@ -189,6 +194,12 @@ public class InGameController extends BasicController {
     PopupBuilder popupDeleteStructure = new PopupBuilder();
     public String selectedBuilding;
     public String selectedSites;
+    SystemUpgrades systemUpgradesPresets;
+    @NotNull
+    ArrayList<BuildingPresets> buildingPresets;
+    @NotNull
+    ArrayList<DistrictPresets> districtPresets;
+
 
     @OnInit
     public void init() {
@@ -216,18 +227,6 @@ public class InGameController extends BasicController {
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_SETTINGS, callHandleShowSettings);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_SETTINGS"));
 
-        this.subscriber.subscribe(inGameService.loadUpgradePresets(),
-                result -> islandAttributes.setSystemPresets(result),
-                error -> System.out.println("error in loading upgrade presets"));
-
-        this.subscriber.subscribe(inGameService.loadBuildingPresets(),
-                result -> islandAttributes.setBuildingPresets(result),
-                error -> System.out.println("error in load building presets"));
-
-        this.subscriber.subscribe(inGameService.loadDistrictPresets(),
-                result -> islandAttributes.setDistrictPresets(result),
-                error -> System.out.println("error in load district presets"));
-
         variableService.initVariables();
 
         if (!tokenStorage.isSpectator()) {
@@ -240,6 +239,38 @@ public class InGameController extends BasicController {
         for (int i = 0; i <= 16; i++) {
             this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
         }
+    }
+
+    /*
+      This method should be called every time after a job is done.
+    */
+    public void updateVariableDependencies() {
+        variableService.loadVariablesDataStructure();
+        islandAttributes.setSystemUpgradeAttributes(systemUpgradesPresets);
+        islandAttributes.setBuildingPresets(buildingPresets);
+        islandAttributes.setDistrictPresets(districtPresets);
+    }
+
+    public void loadPresets(){
+        this.subscriber.subscribe(inGameService.loadUpgradePresets(),
+                result -> {
+                    systemUpgradesPresets = result;
+                    islandAttributes.setSystemUpgradeAttributes(result);
+                });
+
+        this.subscriber.subscribe(inGameService.loadBuildingPresets(),
+                result -> {
+                    buildingPresets = result;
+                    islandAttributes.setBuildingPresets(result);
+                },
+                error -> System.out.println("error in load building presets"));
+
+        this.subscriber.subscribe(inGameService.loadDistrictPresets(),
+                result -> {
+                    districtPresets = result;
+                    islandAttributes.setDistrictPresets(result);
+                },
+                error -> System.out.println("error in load district presets"));
     }
 
     private void handleShowSettings(@NotNull PropertyChangeEvent propertyChangeEvent) {
@@ -314,7 +345,7 @@ public class InGameController extends BasicController {
         }
     }
 
-    @OnKey(code = KeyCode.I,alt = true)
+    @OnKey(code = KeyCode.I, alt = true)
     public void showIslandOverviewWindows() {
         buildingProperties.setMouseTransparent(false);
         buildingsWindow.setMouseTransparent(false);
@@ -337,7 +368,7 @@ public class InGameController extends BasicController {
     }
 
     public void closeComponents() {
-        if(empireOverviewComponent.isVisible()){
+        if (empireOverviewComponent.isVisible()) {
             empireOverviewComponent.closeEmpireOverview();
         }
         if (storageOverviewContainer.isVisible()) {
@@ -445,9 +476,9 @@ public class InGameController extends BasicController {
         overviewSitesComponent.setOverviewSites();
     }
 
-    @OnKey(code = KeyCode.S,alt = true)
+    @OnKey(code = KeyCode.S, alt = true)
     public void showStorage() {
-        if(empireOverviewComponent.isVisible()) {
+        if (empireOverviewComponent.isVisible()) {
             empireOverviewComponent.closeEmpireOverview();
         }
 
@@ -456,7 +487,7 @@ public class InGameController extends BasicController {
 
     @OnKey(code = KeyCode.E, alt = true)
     public void showEmpireOverview() {
-        if(storageOverviewComponent.isVisible()){
+        if (storageOverviewComponent.isVisible()) {
             storageOverviewComponent.closeStorageOverview();
         }
         empireOverviewContainer.setVisible(!empireOverviewContainer.isVisible());
@@ -570,12 +601,13 @@ public class InGameController extends BasicController {
     /*
     Methods below showing explanation overview if mouse hovers above a chosen element.
      */
-    public void showExplanation(double x, double y, String variable){
+    public void showExplanation(double x, double y, String variable) {
         explanationContainer.setLayoutX(x);
         explanationContainer.setLayoutY(y);
         explanationContainer.setVisible(true);
     }
-    public void unShowExplanation(){
+
+    public void unShowExplanation() {
         explanationContainer.setLayoutX(0);
         explanationContainer.setLayoutY(0);
         explanationContainer.setVisible(false);

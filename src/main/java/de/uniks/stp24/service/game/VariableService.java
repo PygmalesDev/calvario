@@ -8,9 +8,14 @@ import de.uniks.stp24.service.VariablesTree;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
-import java.util.*;
+import javax.inject.Singleton;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+@Singleton
 public class VariableService {
     @Inject
     InGameService inGameService;
@@ -22,12 +27,12 @@ public class VariableService {
     public Map<String, ExplainedVariableDTO> data = new HashMap<>();
     private ArrayList<String> allVariables = new ArrayList<>();
     private InGameController inGameController;
-    private VariablesTree<ExplainedVariableDTO> buildingsTree;
-    private VariablesTree<ExplainedVariableDTO> districtsTree;
-    private VariablesTree<ExplainedVariableDTO> systemsTree;
-    private VariablesTree<ExplainedVariableDTO> empireTree;
-    private VariablesTree<ExplainedVariableDTO> resourcesTree;
-    private VariablesTree<ExplainedVariableDTO> technologiesTree;
+    public VariablesTree<ExplainedVariableDTO> buildingsTree;
+    public VariablesTree<ExplainedVariableDTO> districtsTree;
+    public VariablesTree<ExplainedVariableDTO> systemsTree;
+    public VariablesTree<ExplainedVariableDTO> empireTree;
+    public VariablesTree<ExplainedVariableDTO> resourcesTree;
+    public VariablesTree<ExplainedVariableDTO> technologiesTree;
 
 
     @Inject
@@ -43,42 +48,18 @@ public class VariableService {
                 result -> {
                     for (Map.Entry<String, Integer> entry : result.entrySet()) {
                         allVariables.add(entry.getKey());
+                        loadVariablesDataStructure();
                     }
-                    loadVariablesDataStructure();
                 },
                 error -> System.out.println("error in loading variable presets"));
     }
 
-    /*
-    This method should be called every time after a job is done.
-     */
     public void loadVariablesDataStructure(){
         loadVariablesMap().thenRun(() -> {
             createAllTrees();
-            buildingsTree.printPaths();
-            System.out.println("##############################################\n" +
-                    "########################################################\n" +
-                    "########################################################");
-            districtsTree.printPaths();
-            System.out.println("##############################################\n" +
-                    "########################################################\n" +
-                    "########################################################");
-            systemsTree.printPaths();
-            System.out.println("##############################################\n" +
-                    "########################################################\n" +
-                    "########################################################");
-            resourcesTree.printPaths();
-            System.out.println("##############################################\n" +
-                    "########################################################\n" +
-                    "########################################################");
-            technologiesTree.printPaths();
-            System.out.println("##############################################\n" +
-                    "########################################################\n" +
-                    "########################################################");
-            empireTree.printPaths();
-
+            inGameController.loadPresets();
         }).exceptionally(ex -> {
-            ex.printStackTrace(); // Fehlerbehandlung
+            ex.printStackTrace();
             return null;
         });
     }
@@ -92,9 +73,9 @@ public class VariableService {
                     for (ExplainedVariableDTO explainedVariableDTO : result) {
                         data.put(explainedVariableDTO.variable(), explainedVariableDTO);
                     }
-                    future.complete(null); // CompletableFuture als abgeschlossen markieren
+                    future.complete(null);
                 },
-                error -> future.completeExceptionally(error) // Bei Fehler CompletableFuture als fehlgeschlagen markieren
+                error -> future.completeExceptionally(error)
         );
 
         return future;
@@ -116,6 +97,10 @@ public class VariableService {
         createTree(resourcesTree);
     }
 
+    /*
+    Logic for creating trees
+     */
+
     public void createTree(VariablesTree<ExplainedVariableDTO> tree){
         for (Map.Entry<String, ExplainedVariableDTO> entry : data.entrySet()) {
             if(entry.getKey().contains(tree.getRoot().getKey())){
@@ -125,7 +110,6 @@ public class VariableService {
                     keys.add(key);
                 }
                 keys.removeFirst();
-
                 createChildrenNodes(tree.getRoot(), keys, entry.getKey());
             }
         }
@@ -159,6 +143,7 @@ public class VariableService {
         }
         return null;
     }
+
 
 
     public void setIngameController(InGameController inGameController) {

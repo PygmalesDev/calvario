@@ -6,6 +6,7 @@ import de.uniks.stp24.model.BuildingPresets;
 import de.uniks.stp24.model.DistrictPresets;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.SystemUpgrades;
+import de.uniks.stp24.service.game.VariableDependencyService;
 import org.fulib.fx.annotation.controller.Resource;
 
 import javax.inject.Inject;
@@ -22,7 +23,7 @@ import static de.uniks.stp24.service.Constants.islandTranslation;
 @Singleton
 public class IslandAttributeStorage {
     public EmpireDto empireDto;
-    public SystemUpgrades systemPresets;
+    public SystemUpgrades systemUpgradeAttributes;
     public Island island;
     public ArrayList<BuildingPresets> buildings;
     public ArrayList<DistrictPresets> districts;
@@ -33,6 +34,8 @@ public class IslandAttributeStorage {
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
     private int usedSlots;
+    @Inject
+    VariableDependencyService variableDependencyService;
 
 
     @Inject
@@ -48,28 +51,27 @@ public class IslandAttributeStorage {
         empireDto = empire;
     }
 
-    public void setSystemPresets(SystemUpgrades presets) {
-        systemPresets = presets;
+    public void setSystemUpgradeAttributes(SystemUpgrades systemUpgradeAttributes) {
+        this.systemUpgradeAttributes = variableDependencyService.createVariableDependencyUpgrades(systemUpgradeAttributes);
 
-
-        String effectsColonized = "+" + systemPresets.colonized().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
-        String effectsUpgraded = "+" + systemPresets.upgraded().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
-        String effectsDeveloped = "+" + systemPresets.developed().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
+        String effectsColonized = "+" + this.systemUpgradeAttributes.colonized().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
+        String effectsUpgraded = "+" + this.systemUpgradeAttributes.upgraded().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
+        String effectsDeveloped = "+" + this.systemUpgradeAttributes.developed().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
 
         String effectsColonizedCap;
         String effectsUpgradedCap;
         String effectsDevelopedCap;
 
-        if(systemPresets.colonized().capacity_multiplier() != 1.0) {
-            effectsColonizedCap = "+" + (systemPresets.colonized().capacity_multiplier() - 1) * 100 + "% " + gameResourceBundle.getString("more.capacity");
+        if(this.systemUpgradeAttributes.colonized().capacity_multiplier() != 1.0) {
+            effectsColonizedCap = "+" + (this.systemUpgradeAttributes.colonized().capacity_multiplier() - 1) * 100 + "% " + gameResourceBundle.getString("more.capacity");
             effectsColonized = effectsColonized + "\n" + effectsColonizedCap;
         }
-        if(systemPresets.upgraded().capacity_multiplier() != 1.0){
-            effectsUpgradedCap = "+" + (systemPresets.upgraded().capacity_multiplier() - 1) * 100 + "% " + gameResourceBundle.getString("more.capacity");
+        if(this.systemUpgradeAttributes.upgraded().capacity_multiplier() != 1.0){
+            effectsUpgradedCap = "+" + (this.systemUpgradeAttributes.upgraded().capacity_multiplier() - 1) * 100 + "% " + gameResourceBundle.getString("more.capacity");
             effectsUpgraded = effectsUpgraded + "\n" + effectsUpgradedCap;
         }
-        if(systemPresets.developed().capacity_multiplier() != 1.0){
-            effectsDevelopedCap = "+" + (systemPresets.developed().capacity_multiplier() - 1) * 100 + "% " + gameResourceBundle.getString("more.capacity");
+        if(this.systemUpgradeAttributes.developed().capacity_multiplier() != 1.0){
+            effectsDevelopedCap = "+" + (this.systemUpgradeAttributes.developed().capacity_multiplier() - 1) * 100 + "% " + gameResourceBundle.getString("more.capacity");
             effectsDeveloped = effectsDeveloped + "\n" + effectsDevelopedCap;
         }
 
@@ -85,18 +87,18 @@ public class IslandAttributeStorage {
 
     public Map<String, Integer> getNeededResources(int key) {
         return switch (key) {
-            case 2 -> systemPresets.colonized().cost();
-            case 3 -> systemPresets.upgraded().cost();
-            case 4 -> systemPresets.developed().cost();
+            case 2 -> systemUpgradeAttributes.colonized().cost();
+            case 3 -> systemUpgradeAttributes.upgraded().cost();
+            case 4 -> systemUpgradeAttributes.developed().cost();
             default -> null;
         };
     }
 
     public Map<String, Integer> getUpkeep(int key) {
         return switch (key) {
-            case 2 -> systemPresets.colonized().upkeep();
-            case 3 -> systemPresets.upgraded().upkeep();
-            case 4 -> systemPresets.developed().upkeep();
+            case 2 -> systemUpgradeAttributes.colonized().upkeep();
+            case 3 -> systemUpgradeAttributes.upgraded().upkeep();
+            case 4 -> systemUpgradeAttributes.developed().upkeep();
             default -> null;
         };
     }

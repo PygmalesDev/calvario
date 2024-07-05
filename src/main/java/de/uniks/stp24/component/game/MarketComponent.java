@@ -2,6 +2,7 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
@@ -25,9 +26,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 @Component(view = "MarketComponent.fxml")
 public class MarketComponent extends StackPane {
@@ -40,7 +39,9 @@ public class MarketComponent extends StackPane {
     @FXML
     Label numberOfGoods;
     @FXML
-    Label priceTag;
+    Label buyingPrice;
+    @FXML
+    Label sellingPrice;
     @FXML
     Button everySeasonButton;
     @FXML
@@ -51,8 +52,7 @@ public class MarketComponent extends StackPane {
     Button incrementNumberOfGoods;
     @FXML
     Button decrementNumberOfGoods;
-    @FXML
-    ImageView creditIconImageView;
+
     @FXML
     ImageView selectedIconImage;
     @FXML
@@ -82,8 +82,18 @@ public class MarketComponent extends StackPane {
     private InGameController inGameController;
     private String lastUpdate;
     private String lastSeasonUpdate;
+    public String selectedItem;
+
     Provider<MarketResourceComponent> marketResourceComponentProvider = () -> new MarketResourceComponent(true, true, true, gameResourceBundle);
 
+    // From Server
+    Map<String,Integer> variables = new HashMap<>();
+    Map<String,Resource> idResourceMap = new HashMap<>();
+
+    Map<String, Integer> resourceCountMap = new HashMap<>();
+    Map<String,Integer> resourcePriceMap = new HashMap<>();
+
+    //From Storage
     Map<String, Integer> resourceMap = new HashMap<>();
     Map<String, Integer> creditsMap = new HashMap<>();
 
@@ -95,11 +105,31 @@ public class MarketComponent extends StackPane {
 
     @OnInit
     public void init() {
+        getVariables();
+        getIdResourcesMap();
+    }
+
+    private void getIdResourcesMap() {
+        subscriber.subscribe(presetsApiService.getResources(),
+                resources -> {
+                    System.out.println("a");
+                    System.out.println(resources.size());
+                    System.out.println(resources);
+                    System.out.println("a");
+                });
+    }
+
+    private void getVariables() {
         subscriber.subscribe(presetsApiService.getVariables(),
                 res -> {
-                    marketFee.setText(String.valueOf(res.get("empire.market.fee")));
+                    this.variables.putAll(res);
+                    setMarketFee();
                 }
         );
+    }
+
+    private void setMarketFee() {
+        marketFee.setText(String.valueOf(variables.get("empire.market.fee")));
     }
 
     // Optional: A method to retrieve data from the map
@@ -115,31 +145,60 @@ public class MarketComponent extends StackPane {
         this.getParent().setVisible(false);
     }
 
+    public void buyingAndSellingPrice(String resource) {
+        createResourceCountMap();
+        createResourcePriceMap();
+
+
+        //TODO add marketFee
+        double sell = (resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoods.getText())) *(1-0.3);
+        double buy = (resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoods.getText())) *(1+0.3);
+
+        buyingPrice.setText(String.valueOf(buy));
+        sellingPrice.setText(String.valueOf(sell));
+    }
+
+    private void createResourcePriceMap() {
+        resourceCountMap.put("energy",variables.get("resources.energy.starting"));
+        resourceCountMap.put("minerals",variables.get("resources.minerals.starting"));
+        resourceCountMap.put("food",variables.get("resources.food.starting"));
+        resourceCountMap.put("fuel",variables.get("resources.fuel.starting"));
+        resourceCountMap.put("alloys",variables.get("resources.alloys.starting"));
+        resourceCountMap.put("consumer_goods",variables.get("resources.consumer.starting"));
+    }
+
+    private void createResourceCountMap() {
+        resourcePriceMap.put("energy",variables.get("resources.energy.credit_value"));
+        resourcePriceMap.put("minerals",variables.get("resources.minerals.credit_value"));
+        resourcePriceMap.put("food",variables.get("resources.food.credit_value"));
+        resourcePriceMap.put("fuel",variables.get("resources.fuel.credit_value"));
+        resourcePriceMap.put("alloys",variables.get("resources.alloys.credit_value"));
+        resourcePriceMap.put("consumer_goods",variables.get("resources.consumer.credit_value"));
+    }
+
+    public void buyItem() {
+        int amount = Integer.parseInt(numberOfGoods.getText());
+        int buy = Integer.parseInt(buyingPrice.getText());
+
+
+    }
+
+    public void sellItem() {
+
+    }
+
     public void incrementAmount() {
         int amount = Integer.parseInt(numberOfGoods.getText());
         amount++;
         numberOfGoods.setText(String.valueOf(amount));
+        buyingAndSellingPrice(selectedItem);
     }
 
     public void decrementAmount() {
         int amount = Integer.parseInt(numberOfGoods.getText());
         amount--;
         numberOfGoods.setText(String.valueOf(amount));
-    }
-
-
-    public void filterResourceMap() {
-        resourceMap.remove("population");
-        resourceMap.remove("research");
-    }
-
-    public void separateCredits() {
-        if (resourceMap.containsKey("credits")) {
-            creditsMap.put("credits", resourceMap.get("credits"));
-            resourceMap.remove("credits");
-        }
-        creditIconImageView.setImage(imageCache.get("/de/uniks/stp24/icons/resources/credits.png"));
-        userCredits.setText(String.valueOf(creditsMap.get("credits")));
+        buyingAndSellingPrice(selectedItem);
     }
 
     public void listMarketResources(Map<String, Integer> resourceMap) {
@@ -153,12 +212,25 @@ public class MarketComponent extends StackPane {
         resourcesListView.setCellFactory(list -> new ResourceCell());
     }
 
+    //--------------------------------------------listViewOfResources-------------------------------------------------//
+    public void separateCredits() {
+        if (resourceMap.containsKey("credits")) {
+            creditsMap.put("credits", resourceMap.get("credits"));
+            resourceMap.remove("credits");
+        }
+        userCredits.setText(String.valueOf(creditsMap.get("credits")));
+    }
+
+    public void filterResourceMap() {
+        resourceMap.remove("population");
+        resourceMap.remove("research");
+    }
+
     public class ResourceCell extends ListCell<Map.Entry<String, Integer>> {
         private VBox vBox = new VBox();
         private ImageView imageView = new ImageView();
         private Text text = new Text();
         ImageCache imageCache = new ImageCache();
-
 
         public ResourceCell() {
             super();
@@ -168,7 +240,6 @@ public class MarketComponent extends StackPane {
         @Override
         protected void updateItem(Map.Entry<String, Integer> item, boolean empty) {
             super.updateItem(item, empty);
-
             if (empty || item == null) {
                 setText(null);
                 setGraphic(null);
@@ -180,10 +251,11 @@ public class MarketComponent extends StackPane {
                 text.setText(String.valueOf(item.getValue()));
                 setGraphic(vBox);
             }
-
             resourcesListView.setOnMouseClicked(event -> {
+                selectedItem = item.getKey();
                 selectedIconImage.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + item.getKey() + ".png"));
                 numberOfGoods.setText(String.valueOf(item.getValue()));
+                buyingAndSellingPrice(item.getKey());
             });
         }
     }

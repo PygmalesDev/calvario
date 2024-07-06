@@ -110,7 +110,9 @@ public class EmpireOverviewComponent extends StackPane {
      * Closes the empire overview by hiding the parent component.
      */
     public void closeEmpireOverview() {
-        this.getParent().setVisible(false);
+        if (this.getParent() != null) {
+            this.getParent().setVisible(false);
+        }
     }
 
     /**

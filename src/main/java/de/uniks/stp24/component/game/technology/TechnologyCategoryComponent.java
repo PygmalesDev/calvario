@@ -5,9 +5,7 @@ import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TechnologyService;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,7 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
-import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
@@ -31,8 +28,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.ResourceBundle;
-
-import static java.lang.Thread.sleep;
 
 @Component(view = "TechnologyCategory.fxml")
 public class TechnologyCategoryComponent extends AnchorPane {
@@ -134,6 +129,8 @@ public class TechnologyCategoryComponent extends AnchorPane {
         unlockedTechnologies = technologyService.getUnlockedTechnologies(technologieCategoryName);
         researchTechnologies = technologyService.getResearchTechnologies(technologieCategoryName);
 
+        researchListView.setSelectionModel(null);
+        unlockedListView.setSelectionModel(null);
 
         unlockedListView.setItems(unlockedTechnologies);
         researchListView.setItems(researchTechnologies);

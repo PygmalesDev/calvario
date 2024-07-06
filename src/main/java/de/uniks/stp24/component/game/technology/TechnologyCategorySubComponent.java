@@ -23,8 +23,9 @@ import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.Arrays;
+import java.util.ResourceBundle;
 
 @Component(view = "TechnologyCategorySubComponent.fxml")
 public class TechnologyCategorySubComponent extends VBox implements ReusableItemComponent<TechnologyExtended> {
@@ -60,6 +61,10 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     @Inject
     TechnologyService technologyService;
 
+    @Inject
+    @Named("technologiesResourceBundle")
+    public ResourceBundle technologiesResourceBundle;
+
     ImageCache imageCache = new ImageCache();
 
     ObservableList<Effect> description = FXCollections.observableArrayList();
@@ -81,7 +86,8 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     @Override
     public void setItem(@NotNull TechnologyExtended technologyExtended) {
         this.technology = technologyExtended;
-        technologyLabel.setText(technologyExtended.id());
+        technologyLabel.setText(technologiesResourceBundle.getString(technologyExtended.id()));
+
         int i = technologyExtended.tags().length;
 
         if (i > 0 && technologyExtended.tags()[0] != null) {
@@ -96,24 +102,11 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
 
         researchLabel.setText(String.valueOf(technologyExtended.cost()));
 
-//        if (temp != description) {
-//            if (technologyService.getUnlockedTechnologies(technology.tags()[0]).contains(technology)) {
-//                // TODO: Set the description only with the effect of the technology
-//                description.setAll(Arrays.asList(technology.effects()));
-//            } else if (technologyService.getResearchTechnologies(technology.tags()[0]).contains(technology)) {
-//                // TODO: Set description with effect and cost of the technology
-//                // TODO: REMOVE THIS
-//                description.setAll(Arrays.asList(technology.effects()));
-//            }
-//            temp = description;
-////            setDescriptionView();
-//        }
+        description.addAll(technologyExtended.effects());
+        descriptionListView.setItems(description);
+        descriptionListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
     }
 
-//    public void setDescriptionView() {
-//        descriptionListView.setItems(description);
-//        descriptionListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
-//    }
 
     @OnInit
     public void init() {

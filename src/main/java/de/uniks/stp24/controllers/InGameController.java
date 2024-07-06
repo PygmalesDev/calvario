@@ -4,12 +4,10 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
-import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
@@ -291,6 +289,9 @@ public class InGameController extends BasicController {
         overviewContainer.getChildren().add(overviewSitesComponent);
         overviewContainer.getChildren().add(overviewUpgradeComponent);
 
+        empireOverviewContainer.setVisible(false);
+        empireOverviewContainer.getChildren().add(empireOverviewComponent);
+
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
 
@@ -321,16 +322,6 @@ public class InGameController extends BasicController {
         buildingProperties.setMouseTransparent(false);
         buildingsWindow.setMouseTransparent(false);
         popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
-    }
-
-    public void showSettings() {
-        pauseMenuContainer.getChildren().remove(pauseMenuComponent);
-        pauseMenuContainer.getChildren().add(settingsComponent);
-    }
-
-    public void unShowSettings() {
-        pauseMenuContainer.getChildren().remove(settingsComponent);
-        pauseMenuContainer.getChildren().add(pauseMenuComponent);
     }
 
     public void pauseGame() {
@@ -412,9 +403,6 @@ public class InGameController extends BasicController {
         technologiesContainer.setVisible(!technologiesContainer.isVisible());
         technologiesContainer.getChildren().getFirst().setVisible(false);
         technologiesContainer.getChildren().getLast().setVisible(true);
-    }
-
-    private void showEmpireOverview() {
     }
 
     @OnRender

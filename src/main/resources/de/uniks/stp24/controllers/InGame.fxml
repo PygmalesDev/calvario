@@ -29,6 +29,7 @@
         </padding>
     </HBox>
     <StackPane fx:id="storageOverviewContainer" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="70.0" />
+    <StackPane fx:id="empireOverviewContainer" layoutX="25.333333333333332" layoutY="76.33333333333333" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="95.66666666666663" AnchorPane.leftAnchor="25.333333333333332" AnchorPane.topAnchor="76.33333333333333" />
     <StackPane fx:id="technologiesContainer" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="160.4" AnchorPane.leftAnchor="340.0" AnchorPane.rightAnchor="340.0" AnchorPane.topAnchor="160.4" />    <StackPane fx:id="deleteStructureWarningContainer" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="250.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="250.0" />
     <Pane fx:id="shadow" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
     <StackPane id="eventContainer" fx:id="eventContainer" layoutX="450.0" layoutY="50.0" style=": ;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />

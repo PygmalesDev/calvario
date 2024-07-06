@@ -48,8 +48,8 @@ public class VariableService {
                 result -> {
                     for (Map.Entry<String, Integer> entry : result.entrySet()) {
                         allVariables.add(entry.getKey());
-                        loadVariablesDataStructure();
                     }
+                    loadVariablesDataStructure();
                 },
                 error -> System.out.println("error in loading variable presets"));
     }

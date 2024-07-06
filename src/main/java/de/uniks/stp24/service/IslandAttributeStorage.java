@@ -51,8 +51,9 @@ public class IslandAttributeStorage {
         empireDto = empire;
     }
 
-    public void setSystemUpgradeAttributes(SystemUpgrades systemUpgradeAttributes) {
-        this.systemUpgradeAttributes = variableDependencyService.createVariableDependencyUpgrades(systemUpgradeAttributes);
+    public void setSystemUpgradeAttributes() {
+        this.systemUpgradeAttributes = variableDependencyService.createVariableDependencyUpgrades();
+        System.out.println(systemUpgradeAttributes);
 
         String effectsColonized = "+" + this.systemUpgradeAttributes.colonized().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
         String effectsUpgraded = "+" + this.systemUpgradeAttributes.upgraded().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");

@@ -246,17 +246,13 @@ public class InGameController extends BasicController {
     */
     public void updateVariableDependencies() {
         variableService.loadVariablesDataStructure();
-        islandAttributes.setSystemUpgradeAttributes(systemUpgradesPresets);
+        islandAttributes.setSystemUpgradeAttributes();
         islandAttributes.setBuildingPresets(buildingPresets);
         islandAttributes.setDistrictPresets(districtPresets);
     }
 
-    public void loadPresets(){
-        this.subscriber.subscribe(inGameService.loadUpgradePresets(),
-                result -> {
-                    systemUpgradesPresets = result;
-                    islandAttributes.setSystemUpgradeAttributes(result);
-                });
+    public void loadPresets() {
+        islandAttributes.setSystemUpgradeAttributes();
 
         this.subscriber.subscribe(inGameService.loadBuildingPresets(),
                 result -> {

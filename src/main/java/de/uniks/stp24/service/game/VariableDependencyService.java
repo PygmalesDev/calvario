@@ -26,45 +26,38 @@ public class VariableDependencyService {
     Logic for making attributes of upgrades dependent from Variables
      */
 
-    public SystemUpgrades createVariableDependencyUpgrades(SystemUpgrades systemUpgradeAttributes){
-        UpgradeStatus upgraded = upgradeDependencyHandler(systemUpgradeAttributes, "upgraded");
-        UpgradeStatus developed = upgradeDependencyHandler(systemUpgradeAttributes, "developed");
-        UpgradeStatus colonized = upgradeDependencyHandler(systemUpgradeAttributes, "colonized");
-        return new SystemUpgrades(systemUpgradeAttributes.unexplored(), systemUpgradeAttributes.explored(), colonized, upgraded, developed);
+    public SystemUpgrades createVariableDependencyUpgrades(){
+        UpgradeStatus unexplored = upgradeDependencyHandler("unexplored");
+        UpgradeStatus explored = upgradeDependencyHandler("explored");
+        UpgradeStatus upgraded = upgradeDependencyHandler("upgraded");
+        UpgradeStatus developed = upgradeDependencyHandler("developed");
+        UpgradeStatus colonized = upgradeDependencyHandler("colonized");
+        return new SystemUpgrades(unexplored, explored, colonized, upgraded, developed);
     }
 
-    private UpgradeStatus upgradeDependencyHandler(SystemUpgrades systemUpgradeAttributes, String key){
-        String id = null;
+    private UpgradeStatus upgradeDependencyHandler(String key){
         float pop_growth = 0;
         Map<String, Integer> cost = new HashMap<>();
         Map<String, Integer> upkeep = new HashMap<>();
         float capacity_multiplier = 0;
 
-        switch(key){
-            case "colonized":
-                id = systemUpgradeAttributes.colonized().id();
-                pop_growth = (float) variableService.systemsTree.getNode("colonized", "pop_growth").getValue().finalValue();
-                cost = castMapToInteger(createResourceMap(variableService.systemsTree.getNode("colonized", "cost").getChildren()));
-                upkeep = castMapToInteger(createResourceMap(variableService.systemsTree.getNode("colonized", "upkeep").getChildren()));
-                capacity_multiplier = (float) variableService.systemsTree.getNode("colonized", "capacity_multiplier").getValue().finalValue();
-                break;
-            case "upgraded":
-                id = systemUpgradeAttributes.upgraded().id();
-                pop_growth = (float) variableService.systemsTree.getNode("upgraded", "pop_growth").getValue().finalValue();
-                cost = castMapToInteger(createResourceMap(variableService.systemsTree.getNode("upgraded", "cost").getChildren()));
-                upkeep = castMapToInteger(createResourceMap(variableService.systemsTree.getNode("upgraded", "upkeep").getChildren()));
-                capacity_multiplier = (float) variableService.systemsTree.getNode("upgraded", "capacity_multiplier").getValue().finalValue();
-                break;
-            case "developed":
-                id = systemUpgradeAttributes.developed().id();
-                pop_growth = (float) variableService.systemsTree.getNode("developed", "pop_growth").getValue().finalValue();
-                cost = castMapToInteger(createResourceMap(variableService.systemsTree.getNode("developed", "cost").getChildren()));
-                upkeep = castMapToInteger(createResourceMap(variableService.systemsTree.getNode("developed", "upkeep").getChildren()));
-                capacity_multiplier = (float) variableService.systemsTree.getNode("developed", "capacity_multiplier").getValue().finalValue();
-                break;
+        if(variableService.systemsTree.getNode(key, "pop_growth") != null) {
+            pop_growth = (float) variableService.systemsTree.getNode(key, "pop_growth").getValue().finalValue();
         }
 
-        return new UpgradeStatus(id, pop_growth, cost, upkeep, capacity_multiplier);
+        if(variableService.systemsTree.getNode(key, "cost") != null){
+            cost = castMapToInteger(createResourceMap(variableService.systemsTree.getNode(key, "cost").getChildren()));
+        }
+
+        if(variableService.systemsTree.getNode(key, "upkeep") != null){
+            upkeep = castMapToInteger(createResourceMap(variableService.systemsTree.getNode(key, "upkeep").getChildren()));
+        }
+
+        if(variableService.systemsTree.getNode(key, "capacity_multiplier") != null){
+            capacity_multiplier = (float) variableService.systemsTree.getNode(key, "capacity_multiplier").getValue().finalValue();
+        }
+
+        return new UpgradeStatus(key, pop_growth, cost, upkeep, capacity_multiplier);
     }
 
     /*

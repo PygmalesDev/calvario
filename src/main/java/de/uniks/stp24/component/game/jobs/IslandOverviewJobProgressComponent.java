@@ -50,29 +50,29 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
     HBox costsHBox;
     @FXML
     ListView<de.uniks.stp24.model.Resource> costsListView;
-    Provider<ResourceComponent> resourceComponentProvider = () ->
+    public Provider<ResourceComponent> resourceComponentProvider = () ->
             new ResourceComponent(true, false,
                     true, false, this.gameResourceBundle);
     private final ObservableList<de.uniks.stp24.model.Resource> resourceObservableList = FXCollections.observableArrayList();
 
     @Inject
-    IslandAttributeStorage islandAttributes;
+    public IslandAttributeStorage islandAttributes;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
     @Inject
-    App app;
+    public App app;
 
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
 
     private Job job;
 
     @Inject
     @Resource
     @Named("gameResourceBundle")
-    ResourceBundle gameResourceBundle;
+    public ResourceBundle gameResourceBundle;
 
     @Inject
     public IslandOverviewJobProgressComponent() {
@@ -83,6 +83,9 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
     public void setItem(@NotNull Job job) {
         this.job = job;
         this.jobProgressBar.setProgress((((double) 1/job.total()) * job.progress()));
+        this.stopJobButton.setId("jobProgressDeleteButton_" + job._id());
+        this.infoJobButton.setId("jobProgressInspectionButton_" + job._id());
+
         ObservableList<Job> systemJobs = this.jobsService.getObservableListForSystem(
                 this.islandAttributes.getIsland().id());
         if (systemJobs.indexOf(job) != 0) {
@@ -119,7 +122,7 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
         }
     }
 
-    public void showJobDetails() throws Exception {
+    public void showJobDetails() {
         switch (this.job.type()) {
             case "district" -> this.jobsService.getJobInspector("site_overview")
                     .accept(new String[]{this.job.district(), this.job.system()});

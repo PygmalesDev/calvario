@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
+import de.uniks.stp24.component.game.jobs.SiteJobProgressComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
@@ -12,6 +13,7 @@ import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -36,6 +38,7 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.sql.Array;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -83,8 +86,12 @@ public class AppTest2 extends ControllerTest {
     IslandOverviewJobsComponent islandOverviewJobsComponent;
     @InjectMocks
     EmpireOverviewComponent empireOverviewComponent;
+    @InjectMocks
+    SiteJobProgressComponent siteJobProgressComponent;
 
 
+    @Spy
+    JobsService jobsService;
     @Spy
     TokenStorage tokenStorage;
     @Spy
@@ -116,6 +123,8 @@ public class AppTest2 extends ControllerTest {
 
     @Spy
     LanguageService languageService;
+    @Spy
+    JobsApiService jobsApiService;
 
     @Spy
     ResourcesService resourcesService;
@@ -177,15 +186,24 @@ public class AppTest2 extends ControllerTest {
         this.timerService.tokenStorage = this.tokenStorage;
         this.timerService.subscriber = this.subscriber;
         this.timerService.gamesApiService = this.gameApiService;
+        this.buildingPropertiesComponent.siteJobProgressComponent = this.siteJobProgressComponent;
+        this.sitePropertiesComponent.siteJobProgress = this.siteJobProgressComponent;
 
         inGameController.mapScrollPane = new ScrollPane();
         inGameController.group = new Group();
         inGameController.zoomPane = new StackPane();
         inGameController.mapGrid = new Pane();
 
+        this.jobsService.tokenStorage = this.tokenStorage;
+        this.jobsService.jobsApiService = this.jobsApiService;
+        this.jobsService.subscriber = this.subscriber;
+        this.jobsService.eventListener =this.eventListener;
+
         inGameController.zoomPane.getChildren().add(inGameController.mapGrid);
         inGameController.group.getChildren().add(inGameController.zoomPane);
         inGameController.mapScrollPane.setContent(inGameController.group);
+
+        doReturn(Observable.empty()).when(this.jobsApiService).getEmpireJobs(any(), any());
 
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
         doReturn(Observable
@@ -263,7 +281,8 @@ public class AppTest2 extends ControllerTest {
           Map.of("energy", 3, "agriculture" , 6),
           buildings,
           "1",
-          "developed"
+          "developed",
+                "TestIsland1"
         );
 
     }

@@ -26,7 +26,7 @@ public class ControllerTest extends ApplicationTest {
     @Spy
     public PrefService prefService;
     @Spy
-    public IslandsService islandsService;
+    public IslandsService islandsService = Mockito.spy(IslandsService.class);
     @Spy
     public ResponseConstants responseConstants;
     @Spy

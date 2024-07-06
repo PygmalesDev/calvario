@@ -35,21 +35,23 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
     public Text timerText;
     @FXML
     Button jobCancelButton;
+    @FXML
+    Button inspectionButton;
 
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
 
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
 
     @Inject
     @Resource
     @Named("gameResourceBundle")
-    ResourceBundle gameResourceBundle;
+    public ResourceBundle gameResourceBundle;
     private Job job;
 
     @Inject
@@ -60,11 +62,11 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
     @Override
     public void setItem(@NotNull Job job) {
         this.job = job;
+        this.jobCancelButton.setId("jobElementDeleteButton_" + job._id());
+        this.inspectionButton.setId("jobElementInspectionButton_" + job._id());
 
         this.timerText.setText(String.format("%s/%s", job.progress(), job.total()));
-        if (Objects.nonNull(job.system()))
-            this.jobNameText.setText(this.islandsService.getIslandName(job.system()));
-        else this.jobNameText.setText("Empire Technologies");
+        this.jobNameText.setText(this.islandsService.getIslandName(job.system()));
 
         switch (job.type()) {
             case "building" -> {
@@ -89,7 +91,7 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
         this.subscriber.subscribe(this.jobsService.stopJob(this.job));
     }
 
-    public void showJobOverview() throws Exception {
+    public void showJobOverview() {
         this.jobsService.getJobInspector("island_jobs_overview").accept(new String[]{this.job.system()});
     }
 

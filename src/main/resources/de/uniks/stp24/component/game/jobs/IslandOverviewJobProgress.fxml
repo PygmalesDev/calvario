@@ -25,6 +25,7 @@
       <Text fx:id="jobDescriptionText" layoutX="77.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="type" wrappingWidth="127.404296875" />
       <Text fx:id="jobPositionText" layoutX="8.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="jobNumerator" text="1." />
       <ListView fx:id="costsListView" layoutX="102.0" layoutY="39.0" maxHeight="-Infinity" orientation="HORIZONTAL" prefHeight="28.0" prefWidth="213.0" styleClass="jobCostsListView" />
+      <Text fx:id="jobTimeRemaining" layoutX="134.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="12/30" wrappingWidth="81.404296875" />
       <Button fx:id="stopJobButton" layoutX="161.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#stopJob" prefHeight="20.0" prefWidth="20.0" styleClass="deleteJobButton">
          <font>
             <Font size="8.0" />
@@ -36,6 +37,5 @@
          </font>
       </Button>
       <ProgressBar fx:id="jobProgressBar" layoutX="29.0" layoutY="61.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="10.0" prefWidth="100.0" progress="0.0" styleClass="jobProgressBar" />
-      <Text fx:id="jobTimeRemaining" layoutX="134.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="12/30" wrappingWidth="81.404296875" />
    </children>
 </fx:root>

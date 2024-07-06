@@ -100,7 +100,7 @@ public class SitePropertiesComponent extends AnchorPane {
 
     @Inject
     @SubComponent
-    SiteJobProgressComponent siteJobProgress;
+    public SiteJobProgressComponent siteJobProgress;
 
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
 

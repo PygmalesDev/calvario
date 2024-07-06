@@ -4,6 +4,7 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -28,9 +29,11 @@ public class IslandOverviewJobsComponent extends AnchorPane {
     @FXML
     ListView<Job> jobProgressListView;
     @Inject
-    IslandAttributeStorage islandAttributes;
+    public IslandAttributeStorage islandAttributes;
     @Inject
     TokenStorage tokenStorage;
+    @Inject
+    IslandsService islandsService;
     @Inject
     App app;
 
@@ -40,10 +43,10 @@ public class IslandOverviewJobsComponent extends AnchorPane {
     ResourceBundle gameResourceBundle;
 
     @Inject
-    Provider<IslandOverviewJobProgressComponent> progressPaneProvider;
+    public Provider<IslandOverviewJobProgressComponent> progressPaneProvider;
 
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
 
     @Inject
     IslandOverviewJobsComponent() {
@@ -66,7 +69,8 @@ public class IslandOverviewJobsComponent extends AnchorPane {
 
     public void insertIslandName() {
         this.noJobText.setText(this.noJobText.getText()
-                .replace("{ISLAND_NAME}", this.islandAttributes.getIslandTypeTranslated()));
+                .replace("{ISLAND_NAME}", this.islandsService.getIslandName(
+                        this.islandAttributes.getIsland().id())));
     }
 
     public void setJobsObservableList(ObservableList<Job> observer) {

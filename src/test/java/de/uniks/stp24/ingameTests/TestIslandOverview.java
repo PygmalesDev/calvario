@@ -321,7 +321,8 @@ public class TestIslandOverview extends ControllerTest {
                 sites,
                 buildings,
                 "1",
-                "explored"
+                "explored",
+                "TestIsland1"
         );
 
         testIsland2 = new Island(
@@ -338,7 +339,8 @@ public class TestIslandOverview extends ControllerTest {
                 buildings,
                 "1"
                 ,
-                "explored"
+                "explored",
+                "TestIsland2"
         );
 
         testIsland3 = new Island(
@@ -354,7 +356,8 @@ public class TestIslandOverview extends ControllerTest {
                 sites,
                 buildings,
                 "1",
-                "explored"
+                "explored",
+                "TestIsland3"
         );
 
         this.islandAttributeStorage.setIsland(testIsland1);

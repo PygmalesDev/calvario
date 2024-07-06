@@ -66,7 +66,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     IslandsService islandsService;
     @Inject
     @SubComponent
-    SiteJobProgressComponent siteJobProgressComponent;
+    public SiteJobProgressComponent siteJobProgressComponent;
     @Inject
     App app;
     @Inject

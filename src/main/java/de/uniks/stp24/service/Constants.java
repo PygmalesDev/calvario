@@ -104,7 +104,7 @@ public class Constants {
             "agriculture","site.harvesting",
             "industry", "site.production",
             "research", "site.expedition",
-            "ancient_fondry","site.epoch",
+            "ancient_foundry","site.epoch",
             "ancient_factory","site.merchant",
             "ancient_refinery", "site.coalmine"
     );

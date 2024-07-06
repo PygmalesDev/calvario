@@ -19,13 +19,13 @@ import java.util.function.Consumer;
 @Singleton
 public class JobsService {
     @Inject
-    JobsApiService jobsApiService;
+    public JobsApiService jobsApiService;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    EventListener eventListener;
+    public EventListener eventListener;
 
     Map<String, ObservableList<Job>> jobCollections = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();
@@ -78,6 +78,8 @@ public class JobsService {
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.empires.%s.jobs.*.*",
                 this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), Job.class), result -> {
             Job job = result.data();
+
+            System.out.println("called!~");
 
             switch (result.suffix()) {
                 case "created" -> this.addJobToGroups(job);
@@ -361,11 +363,11 @@ public class JobsService {
         this.jobInspectionFunctions.put(inspectorID, func);
     }
 
-    public Consumer<String[]> getJobInspector(String inspectorID) throws Exception {
+    public Consumer<String[]> getJobInspector(String inspectorID) {
         if (this.jobInspectionFunctions.containsKey(inspectorID))
             return this.jobInspectionFunctions.get(inspectorID);
-        else throw new Exception(String.format(
-                "Job Service: the inspection function is not found for a given inspector ID: %s!", inspectorID));
+        else System.out.printf("Job Service: the inspection function is not found for a given inspector ID: %s!\n", inspectorID);
+        return null;
     }
 
     /**

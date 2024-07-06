@@ -14,7 +14,6 @@ import org.fulib.fx.constructs.listview.ComponentListCell;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.Objects;
 
 @Component(view = "JobsOverview.fxml")
 public class JobsOverviewComponent extends AnchorPane {
@@ -23,13 +22,14 @@ public class JobsOverviewComponent extends AnchorPane {
     @FXML
     Button closeButton;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
     private ObservableList<Job> jobsList;
 
     @Inject
     App app;
+
     @Inject
-    Provider<JobElementComponent> jobProvider;
+    public Provider<JobElementComponent> jobProvider;
 
     @Inject
     public JobsOverviewComponent() {

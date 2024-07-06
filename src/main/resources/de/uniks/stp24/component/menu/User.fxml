@@ -11,16 +11,29 @@
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="70.0" prefWidth="180.0" type="StackPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.menu.UserComponent">
    <children>
       <javafx.scene.layout.HBox fx:id="userHBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="70.0" prefWidth="180.0">
-            <ImageView fx:id="avatarImageView" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-            <HBox.margin>
-               <Insets left="5.0" />
-            </HBox.margin></ImageView>
+         <StackPane>
+            <ImageView fx:id="backgroundImage" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true"
+                       styleClass="avatarImageLayout"/>
+            <ImageView fx:id="portraitImage" fitHeight="75.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true"
+                       styleClass="avatarImageLayoutPortrait">
+               <StackPane.margin>
+                  <Insets left="5.0" top="5.0"/>
+               </StackPane.margin>
+            </ImageView>
+            <ImageView fx:id="frameImage" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true"
+                       styleClass="avatarImageLayout">
+               <StackPane.margin>
+                  <Insets left="5.0"/>
+               </StackPane.margin>
+            </ImageView>
+         </StackPane>
          <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="55.0" prefWidth="94.0">
             <HBox.margin>
                <Insets left="10.0" right="10.0" />
             </HBox.margin>
             <children>
-                  <Text fx:id="usernameText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userComponentText" text="\%PlayerNickname" wrappingWidth="96.705078125" />
+                  <Text fx:id="usernameText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userComponentText"
+                        text="\%PlayerNickname" wrappingWidth="96.705078125" />
                <Text fx:id="readyText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userComponentText">
                   <VBox.margin>
                      <Insets top="2.0" />

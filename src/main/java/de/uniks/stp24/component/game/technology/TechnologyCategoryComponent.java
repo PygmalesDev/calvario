@@ -98,7 +98,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     @OnInit
     public void init() {
-
+        researchJobComponent.setTechnologyCategoryComponent(this);
     }
 
 
@@ -195,6 +195,18 @@ public class TechnologyCategoryComponent extends AnchorPane {
                 technologieCategoryBox.getStyleClass().add("technologiesCategoryBackground");
             });
         }
+    }
+
+    public void handleJobCompleted(){
+        researchJobContainer.setMouseTransparent(true);
+        researchJobComponent.setMouseTransparent(true);
+        researchLeftVBox.setVisible(true);
+        researchJobContainer.setVisible(false);
+        researchJobComponent.setVisible(false);
+        Platform.runLater(() -> {
+            technologieCategoryBox.getStyleClass().clear();
+            technologieCategoryBox.getStyleClass().add("technologiesCategoryBackground");
+        });
     }
 
 

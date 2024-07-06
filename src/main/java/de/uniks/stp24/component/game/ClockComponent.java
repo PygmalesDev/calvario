@@ -238,7 +238,7 @@ public class ClockComponent extends AnchorPane {
     }
 
     public void x3() {
-        changingSpeed(3);
+        changingSpeed(10);
     }
 
     public void x2() {

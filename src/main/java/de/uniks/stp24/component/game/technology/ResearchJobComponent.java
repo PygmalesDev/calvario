@@ -60,6 +60,7 @@ public class ResearchJobComponent extends AnchorPane {
     @Inject
     Subscriber subscriber;
     private Jobs.Job job;
+    private TechnologyCategoryComponent technologyCategoryComponent;
 
     @Inject
     public ResearchJobComponent(){
@@ -76,13 +77,18 @@ public class ResearchJobComponent extends AnchorPane {
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.empires.%s.jobs.*.*",
                 this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), Jobs.Job.class), result -> {
             Jobs.Job job = result.data();
+            researchProgressText.setText(job.progress() + " / " + job.total());
+            jobsService.onJobCompletion(job._id(), this::handleJobFinished);
             this.researchProgressBar.setProgress((((double) 1/job.total()) * job.progress()));
         }, error -> System.out.print("Error in ResearchJobComponent"));
 
 
     }
 
-
+    private void handleJobFinished() {
+        technologyCategoryComponent.handleJobCompleted();
+        setVisible(false);
+    }
 
 
     public void handleJob(TechnologyExtended technology) {
@@ -91,5 +97,9 @@ public class ResearchJobComponent extends AnchorPane {
             jobsService.onJobCompletion(job._id(), () -> {
             });
         });
+    }
+
+    public void setTechnologyCategoryComponent(TechnologyCategoryComponent technologyCategoryComponent) {
+        this.technologyCategoryComponent = technologyCategoryComponent;
     }
 }

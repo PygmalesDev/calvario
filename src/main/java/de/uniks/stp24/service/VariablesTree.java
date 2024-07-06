@@ -80,9 +80,20 @@ public class VariablesTree<T> {
     private Node<T> recSearch(String nodeKey, Node<T> currentNodePos){
         if(currentNodePos == null) return null;
         if(currentNodePos.getKey().equals(nodeKey)) return currentNodePos;
+
+        if(checkChildrenFirst(currentNodePos.getChildren(), nodeKey) != null){
+            return checkChildrenFirst(currentNodePos.getChildren(), nodeKey);
+        }
         for(Node<T> child: currentNodePos.getChildren()){
             Node<T> result = recSearch(nodeKey, child);
             if (result != null) return result;
+        }
+        return null;
+    }
+
+    private Node<T> checkChildrenFirst(List<VariablesTree. Node<T>> children, String nodeKey){
+        for(Node<T> child: children) {
+            if(child.getKey().equals(nodeKey)) return child;
         }
         return null;
     }

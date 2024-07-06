@@ -117,11 +117,11 @@ public class IslandAttributeStorage {
 
     public void setBuildingPresets() {
         this.buildingsAttributes = variableDependencyService.createVariableDependencyBuildings();
-        System.out.println(buildingsAttributes);
     }
 
-    public void setDistrictPresets(ArrayList<DistrictPresets> districts) {
-        this.districts = districts;
+    public void setDistrictPresets() {
+        this.districts = variableDependencyService.createVariableDependencyDistricts();
+        System.out.println(districts);
     }
 
     public Map<String, Integer> getBuildingsProduction() {

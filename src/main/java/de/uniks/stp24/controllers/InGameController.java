@@ -243,22 +243,13 @@ public class InGameController extends BasicController {
     */
     public void updateVariableDependencies() {
         variableService.loadVariablesDataStructure();
-        islandAttributes.setSystemUpgradeAttributes();
-        islandAttributes.setBuildingPresets();
-        islandAttributes.setDistrictPresets(districtPresets);
+        loadPresets();
     }
 
     public void loadPresets() {
         islandAttributes.setSystemUpgradeAttributes();
         islandAttributes.setBuildingPresets();
-
-
-        this.subscriber.subscribe(inGameService.loadDistrictPresets(),
-                result -> {
-                    districtPresets = result;
-                    islandAttributes.setDistrictPresets(result);
-                },
-                error -> System.out.println("error in load district presets"));
+        islandAttributes.setDistrictPresets();
     }
 
     private void handleShowSettings(@NotNull PropertyChangeEvent propertyChangeEvent) {

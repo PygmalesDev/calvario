@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+import static java.lang.Thread.sleep;
+
 @Singleton
 public class VariableService {
     @Inject
@@ -54,31 +56,17 @@ public class VariableService {
                 error -> System.out.println("error in loading variable presets"));
     }
 
+
     public void loadVariablesDataStructure(){
-        loadVariablesMap().thenRun(() -> {
-            createAllTrees();
-            inGameController.loadPresets();
-        }).exceptionally(ex -> {
-            ex.printStackTrace();
-            return null;
-        });
-    }
-
-    public CompletableFuture<Void> loadVariablesMap(){
-        CompletableFuture<Void> future = new CompletableFuture<>();
-
         this.subscriber.subscribe(
                 gameLogicApiService.getVariablesExplanations(inGameController.tokenStorage.getEmpireId(), allVariables),
                 result -> {
                     for (ExplainedVariableDTO explainedVariableDTO : result) {
                         data.put(explainedVariableDTO.variable(), explainedVariableDTO);
                     }
-                    future.complete(null);
-                },
-                error -> future.completeExceptionally(error)
-        );
-
-        return future;
+                    createAllTrees();
+                    inGameController.loadPresets();
+                });
     }
 
     public void createAllTrees(){

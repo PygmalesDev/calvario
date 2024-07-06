@@ -6,6 +6,7 @@ import de.uniks.stp24.model.Technology;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.TechnologyService;
+import de.uniks.stp24.service.game.TimerService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -41,24 +42,28 @@ public class ResearchJobComponent extends AnchorPane {
     AnchorPane researchBackground;
     @Inject
     JobsService jobsService;
+
+    @Inject
+    TimerService timerService;
     @Inject
     Subscriber subscriber;
+    private Jobs.Job job;
 
     @Inject
     public ResearchJobComponent(){
 
     }
 
-    public void handleResearchClicked() {
-
+    public void setProgressBar() {
+        this.researchProgressBar.setProgress((((double) 1/job.total()) * job.progress()));
     }
 
 
     public void handleJob(TechnologyExtended technology) {
         subscriber.subscribe(jobsService.beginJob(Jobs.createTechnologyJob(technology.id())), job -> {
-            this.researchProgressBar.setProgress((((double) 1/job.total()) * job.progress()));
+            this.job = job;
+            jobsService.onJobProgress(job._id(), this::setProgressBar);
             jobsService.onJobCompletion(job._id(), () -> {
-                
             });
         });
     }

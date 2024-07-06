@@ -30,12 +30,14 @@ public class JobsService {
     Map<String, ObservableList<Job>> jobCollections = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
+    Map<String, Consumer<String[]>> jobInspectionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobProgressFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobTypeFunctions = new HashMap<>();
-    Map<String, ArrayList<Consumer<String>>> loadTypeFunctions = new HashMap<>();
+    Map<String, ArrayList<Consumer<Job>>> loadTypeFunctions = new HashMap<>();
     ArrayList<Runnable> loadCommonFunctions = new ArrayList<>();
     ArrayList<Runnable> finishCommonFunctions = new ArrayList<>();
     ArrayList<Runnable> startCommonFunctions = new ArrayList<>();
+    ArrayList<Runnable> jobCommonUpdates = new ArrayList<>();
 
     @Inject
     public JobsService() {}
@@ -60,7 +62,7 @@ public class JobsService {
                     this.loadCommonFunctions.forEach(Runnable::run);
                     this.jobCollections.get("collection").forEach(job -> {
                         if (this.loadTypeFunctions.containsKey(job.type()))
-                            this.loadTypeFunctions.get(job.type()).forEach(func -> func.accept(job._id()));
+                            this.loadTypeFunctions.get(job.type()).forEach(func -> func.accept(job));
                     });
                 }, error -> System.out.println("JobsService: Failed to load job collections \n" + error.getMessage())
         );
@@ -76,21 +78,27 @@ public class JobsService {
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.empires.%s.jobs.*.*",
                 this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), Job.class), result -> {
             Job job = result.data();
+
             switch (result.suffix()) {
                 case "created" -> this.addJobToGroups(job);
                 case "updated" -> this.updateJobInGroups(job);
                 case "deleted" -> this.deleteJobFromGroups(job);
-            }}, error -> System.out.print("JobsService: Failed to receive job updates. \n" + error.getMessage()));
+            }
+            this.jobCommonUpdates.forEach(Runnable::run);
+
+        }, error -> System.out.print("JobsService: Failed to receive job updates. \n" + error.getMessage()));
     }
 
     private void addJobToGroups(@NotNull Job job) {
         this.jobCollections.get(job.type()).add(job);
-        this.jobCollections.get("collection").add(job);
 
-        if (Objects.nonNull(job.system())) {
+        if (!job.type().equals("technology")) {
             if (!this.jobCollections.containsKey(job.system()))
                 this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
             else this.jobCollections.get(job.system()).add(job);
+
+            if (this.jobCollections.get(job.system()).size() == 1)
+                this.jobCollections.get("collection").add(job);
         }
 
         this.startCommonFunctions.forEach(Runnable::run);
@@ -100,10 +108,13 @@ public class JobsService {
         this.jobCollections.get(job.type()).replaceAll(other -> other.equals(job) ? job : other);
         this.jobCollections.get("collection").replaceAll(other -> other.equals(job) ? job : other);
 
-        if (Objects.nonNull(job.system())) {
+        if (!job.type().equals("technology")) {
             if (!this.jobCollections.containsKey(job.system()))
                 this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
             else this.jobCollections.get(job.system()).replaceAll(other -> other.equals(job) ? job : other);
+
+            if (this.jobCollections.get(job.system()).filtered(job1 -> job1.type().equals(job.type())).size() == 0)
+                this.jobCollections.get("collection").add(job);
         }
 
         if (this.jobTypeFunctions.containsKey(job.type()))
@@ -117,9 +128,10 @@ public class JobsService {
         this.jobCollections.get(job.type()).removeIf(other -> other._id().equals(job._id()));
         this.jobCollections.get("collection").removeIf(other -> other._id().equals(job._id()));
 
-        if (Objects.nonNull(job.system())) {
-            if (this.jobCollections.containsKey(job.system()))
-                this.jobCollections.get(job.system()).removeIf(other -> other._id().equals(job._id()));
+        if (!job.type().equals("technology")) {
+            this.jobCollections.get(job.system()).removeIf(other -> other._id().equals(job._id()));
+            if (this.jobCollections.get(job.system()).size() > 0)
+                this.jobCollections.get("collection").add(this.jobCollections.get(job.system()).get(0));
         }
 
         if (this.jobCompletionFunctions.containsKey(job._id()))
@@ -145,6 +157,10 @@ public class JobsService {
      */
     public void onJobCommonStart(Runnable func) {
         this.startCommonFunctions.add(func);
+    }
+
+    public void onJobCommonUpdates(Runnable func) {
+        this.jobCommonUpdates.add(func);
     }
 
     /**
@@ -250,7 +266,7 @@ public class JobsService {
      *  Name the parameter inside the consumer function as a <i>jobID</i>: {@code (jobID) -> yourFunction(jobID)}.
      * @param func the function that has to be executed after the job loading process is finished
      */
-    public void onJobsLoadingFinished(String jobType, Consumer<String> func) {
+    public void onJobsLoadingFinished(String jobType, Consumer<Job> func) {
         if (!this.loadTypeFunctions.containsKey(jobType))
             this.loadTypeFunctions.put(jobType, new ArrayList<>());
         this.loadTypeFunctions.get(jobType).add(func);
@@ -339,6 +355,17 @@ public class JobsService {
      */
     public ObservableList<Job> getObservableJobCollection() {
         return this.getJobObservableListOfType("collection");
+    }
+
+    public void setJobInspector(String inspectorID, Consumer<String[]> func) {
+        this.jobInspectionFunctions.put(inspectorID, func);
+    }
+
+    public Consumer<String[]> getJobInspector(String inspectorID) throws Exception {
+        if (this.jobInspectionFunctions.containsKey(inspectorID))
+            return this.jobInspectionFunctions.get(inspectorID);
+        else throw new Exception(String.format(
+                "Job Service: the inspection function is not found for a given inspector ID: %s!", inspectorID));
     }
 
     /**

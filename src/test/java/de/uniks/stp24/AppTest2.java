@@ -293,16 +293,10 @@ public class AppTest2 extends ControllerTest {
         islandsService.retrieveIslands("game1");
         gameSystemsApiService.getSystems("game1");
 
-        sleep(100);
-
         List<Island> testIsles = islandsService.getListOfIslands();
 
         testIsleComps = islandsService.createIslands(testIsles);
         Map<String,IslandComponent> testIsleMap = islandsService.getComponentMap();
-
-
-
-        sleep(100);
 
         assertEquals(3,testIsles.size());
         assertEquals(3,testIsleComps.size());
@@ -314,17 +308,15 @@ public class AppTest2 extends ControllerTest {
         assertNotEquals(0,islandsService.getMapHeight());
         assertEquals(2,islandsService.getSiteManagerSize());
 
-        Platform.runLater(() -> {
-            createIcons();
-            createLines();
-            waitForFxEvents();
-            inGameController.mapGrid.setMinSize(1000,600);
-            inGameController.mapGrid.getChildren().addAll(linesR[0],linesR[1]);
-            inGameController.mapGrid.getChildren().add(buttons[0]);
-            inGameController.mapGrid.getChildren().add(buttons[1]);
-            inGameController.mapGrid.getChildren().add(buttons[2]);
-            waitForFxEvents();
-        });
+        createIcons();
+        createLines();
+        waitForFxEvents();
+        inGameController.mapGrid.setMinSize(1000,600);
+        inGameController.mapGrid.getChildren().addAll(linesR[0],linesR[1]);
+        inGameController.mapGrid.getChildren().add(buttons[0]);
+        inGameController.mapGrid.getChildren().add(buttons[1]);
+        inGameController.mapGrid.getChildren().add(buttons[2]);
+        waitForFxEvents();
 
         waitForFxEvents();
         clickOn("#storageOverviewButton");
@@ -339,10 +331,6 @@ public class AppTest2 extends ControllerTest {
         assertEquals(37,islandsService.getAllNumberOfSites("empire"));
         assertEquals(17,islandsService.getCapacityOfOneSystem("home"));
         assertEquals(9,islandsService.getNumberOfSites("empire","energy"));
-
-
-
-        sleep(2000);
 
         openStorage();
 

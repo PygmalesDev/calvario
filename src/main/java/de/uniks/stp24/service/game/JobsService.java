@@ -79,8 +79,6 @@ public class JobsService {
                 this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), Job.class), result -> {
             Job job = result.data();
 
-            System.out.println("called!~");
-
             switch (result.suffix()) {
                 case "created" -> this.addJobToGroups(job);
                 case "updated" -> this.updateJobInGroups(job);

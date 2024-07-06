@@ -17,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.constructs.listview.ReusableItemComponent;
 
 import javax.inject.Inject;
 import java.io.IOException;

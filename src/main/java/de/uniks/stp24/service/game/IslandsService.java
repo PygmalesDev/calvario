@@ -399,7 +399,7 @@ public class IslandsService extends BasicService {
 
     public String getIslandName(String islandID) {
         Island island = this.isles.stream().filter(isle -> isle.id().equals(islandID)).findFirst().orElse(null);
-        if (Objects.nonNull(island))
+        if (Objects.nonNull(island) && Objects.nonNull(island.name()))
             if (island.name().isEmpty())
                 return "Uncharted Island";
             else return island.name();

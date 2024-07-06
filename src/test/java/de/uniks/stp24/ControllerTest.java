@@ -1,5 +1,6 @@
 package de.uniks.stp24;
 
+import de.uniks.stp24.dto.UpdateEmpireDto;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.utils.ResponseConstants;
@@ -38,6 +39,7 @@ public class ControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) throws Exception {
+
         super.start(stage);
         this.stage = stage;
 

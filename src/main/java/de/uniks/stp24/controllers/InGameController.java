@@ -194,9 +194,6 @@ public class InGameController extends BasicController {
     PopupBuilder popupDeleteStructure = new PopupBuilder();
     public String selectedBuilding;
     public String selectedSites;
-    SystemUpgrades systemUpgradesPresets;
-    @NotNull
-    ArrayList<BuildingPresets> buildingPresets;
     @NotNull
     ArrayList<DistrictPresets> districtPresets;
 
@@ -247,19 +244,14 @@ public class InGameController extends BasicController {
     public void updateVariableDependencies() {
         variableService.loadVariablesDataStructure();
         islandAttributes.setSystemUpgradeAttributes();
-        islandAttributes.setBuildingPresets(buildingPresets);
+        islandAttributes.setBuildingPresets();
         islandAttributes.setDistrictPresets(districtPresets);
     }
 
     public void loadPresets() {
         islandAttributes.setSystemUpgradeAttributes();
+        islandAttributes.setBuildingPresets();
 
-        this.subscriber.subscribe(inGameService.loadBuildingPresets(),
-                result -> {
-                    buildingPresets = result;
-                    islandAttributes.setBuildingPresets(result);
-                },
-                error -> System.out.println("error in load building presets"));
 
         this.subscriber.subscribe(inGameService.loadDistrictPresets(),
                 result -> {

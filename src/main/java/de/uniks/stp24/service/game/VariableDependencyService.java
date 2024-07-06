@@ -8,6 +8,7 @@ import de.uniks.stp24.service.VariablesTree;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,27 +65,32 @@ public class VariableDependencyService {
     Logic for making attributes of buildings (cost, upkeep, production) dependent from Variables
      */
 
-    public void createVariableDependencyDistricts(){
-        BuildingPresets buildingPresets;
+    public ArrayList<BuildingPresets> createVariableDependencyBuildings(){
+        ArrayList<BuildingPresets> buildingsAttributes = new ArrayList<>();
         for(VariablesTree.Node<ExplainedVariableDTO> buildingNode: variableService.buildingsTree.getRoot().getChildren()){
-
+        buildingsAttributes.add(buildingDependencyHandler(buildingNode));
         }
+        return buildingsAttributes;
     }
 
     private BuildingPresets buildingDependencyHandler(VariablesTree.Node<ExplainedVariableDTO> buildingNode){
         String id = buildingNode.getKey();
         double build_time = variableService.buildingsTree.getNode(id, "build_time").getValue().finalValue();
-        Map<String, Integer> cost;
-        Map<String, Integer> upkeep;
-        Map<String, Integer> production;
-        return null;
+        Map<String, Integer> cost = castMapToInteger(createResourceMap(variableService.buildingsTree.getNode(id, "cost").getChildren()));
+        Map<String, Integer> upkeep = castMapToInteger(createResourceMap(variableService.buildingsTree.getNode(id, "upkeep").getChildren()));
+        Map<String, Integer> production = new HashMap<>();
+
+        if(variableService.buildingsTree.getNode(id, "production") != null) {
+            production = castMapToInteger(createResourceMap(variableService.buildingsTree.getNode(id, "production").getChildren()));
+        }
+        return new BuildingPresets(id, build_time, cost, upkeep, production);
     }
 
     /*
     Logic for making attributes of districts (cost, upkeep, production) dependent from Variables
      */
 
-    public void createVariableDependencyBuildings(){
+    public void createVariableDependencyDistricts(){
 
     }
 

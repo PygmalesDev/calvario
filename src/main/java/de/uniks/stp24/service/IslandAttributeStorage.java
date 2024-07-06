@@ -25,7 +25,7 @@ public class IslandAttributeStorage {
     public EmpireDto empireDto;
     public SystemUpgrades systemUpgradeAttributes;
     public Island island;
-    public ArrayList<BuildingPresets> buildings;
+    public ArrayList<BuildingPresets> buildingsAttributes;
     public ArrayList<DistrictPresets> districts;
     public Map<Integer, String> upgradeEffects = new HashMap<>();
 
@@ -53,7 +53,6 @@ public class IslandAttributeStorage {
 
     public void setSystemUpgradeAttributes() {
         this.systemUpgradeAttributes = variableDependencyService.createVariableDependencyUpgrades();
-        System.out.println(systemUpgradeAttributes);
 
         String effectsColonized = "+" + this.systemUpgradeAttributes.colonized().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
         String effectsUpgraded = "+" + this.systemUpgradeAttributes.upgraded().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
@@ -116,8 +115,9 @@ public class IslandAttributeStorage {
         return empireDto.technologies();
     }
 
-    public void setBuildingPresets(ArrayList<BuildingPresets> buildings) {
-        this.buildings = buildings;
+    public void setBuildingPresets() {
+        this.buildingsAttributes = variableDependencyService.createVariableDependencyBuildings();
+        System.out.println(buildingsAttributes);
     }
 
     public void setDistrictPresets(ArrayList<DistrictPresets> districts) {
@@ -133,7 +133,7 @@ public class IslandAttributeStorage {
                     counter++;
                 }
             }
-            for (BuildingPresets preset : buildings) {
+            for (BuildingPresets preset : buildingsAttributes) {
                 if(preset.id().equals(building)) {
                     for (Map.Entry<String, Integer> entry : preset.production().entrySet()) {
                         buildingsProduction.merge(entry.getKey(), entry.getValue() * counter, Integer::sum);
@@ -168,7 +168,7 @@ public class IslandAttributeStorage {
                     counter++;
                 }
             }
-            for (BuildingPresets preset : buildings) {
+            for (BuildingPresets preset : buildingsAttributes) {
                 if(preset.id().equals(building)) {
                     for (Map.Entry<String, Integer> entry : preset.upkeep().entrySet()) {
                         buildingsConsumption.merge(entry.getKey(), entry.getValue() * counter, Integer::sum);

@@ -107,8 +107,8 @@ public class JobsTestComponent extends ControllerTest {
 
         doReturn(Observable.just(this.jobsList)).when(this.jobsApiService).getEmpireJobs(this.GAME_ID, this.EMPIRE_ID);
 
-        doReturn(JOB_SUBJECT).when(this.eventListener).listen(String.format("games.%s.empires.%s.jobs.*.*",
-                this.GAME_ID, this.EMPIRE_ID), Job.class);
+        when(this.eventListener.listen(String.format("games.%s.empires.%s.jobs.*.*", this.GAME_ID, this.EMPIRE_ID),
+                Job.class)).thenReturn(JOB_SUBJECT);
 
         this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListener();

@@ -102,6 +102,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     @OnRender
     public void render() {
+        this.setPickOnBounds(false);
+        this.jobProgressPane.setPickOnBounds(false);
+        this.siteJobProgressComponent.setPickOnBounds(false);
         this.jobProgressPane.getChildren().add(this.siteJobProgressComponent);
     }
 
@@ -162,14 +165,16 @@ public class BuildingPropertiesComponent extends AnchorPane {
     public void showJobsPane() {
         this.jobProgressPane.setVisible(true);
         this.buildingCostsListView.setVisible(false);
-        this.buyButton.setDisable(true);
-        this.destroyButton.setDisable(true);
+        this.buyButton.setVisible(false);
+        this.destroyButton.setVisible(false);
     }
 
     public void hideJobsPane() {
         this.jobProgressPane.setVisible(false);
         this.buildingCostsListView.setVisible(true);
         this.updateButtonStates();
+        this.buyButton.setVisible(true);
+        this.destroyButton.setVisible(true);
     }
 
     //Checks if buy and destroy building has to be deactivated

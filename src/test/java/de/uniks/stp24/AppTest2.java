@@ -37,6 +37,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.testfx.util.WaitForAsyncUtils;
 
 import java.sql.Array;
 import java.util.*;
@@ -292,11 +293,12 @@ public class AppTest2 extends ControllerTest {
         assertEquals(0,islandsService.getListOfIslands().size());
         islandsService.retrieveIslands("game1");
         gameSystemsApiService.getSystems("game1");
-
+        WaitForAsyncUtils.waitForFxEvents();
         List<Island> testIsles = islandsService.getListOfIslands();
 
         testIsleComps = islandsService.createIslands(testIsles);
         Map<String,IslandComponent> testIsleMap = islandsService.getComponentMap();
+        WaitForAsyncUtils.waitForFxEvents();
 
         assertEquals(3,testIsles.size());
         assertEquals(3,testIsleComps.size());
@@ -308,15 +310,17 @@ public class AppTest2 extends ControllerTest {
         assertNotEquals(0,islandsService.getMapHeight());
         assertEquals(2,islandsService.getSiteManagerSize());
 
-        createIcons();
-        createLines();
-        waitForFxEvents();
-        inGameController.mapGrid.setMinSize(1000,600);
-        inGameController.mapGrid.getChildren().addAll(linesR[0],linesR[1]);
-        inGameController.mapGrid.getChildren().add(buttons[0]);
-        inGameController.mapGrid.getChildren().add(buttons[1]);
-        inGameController.mapGrid.getChildren().add(buttons[2]);
-        waitForFxEvents();
+        Platform.runLater(() ->{
+            createIcons();
+            createLines();
+            waitForFxEvents();
+            inGameController.mapGrid.setMinSize(1000,600);
+            inGameController.mapGrid.getChildren().addAll(linesR[0],linesR[1]);
+            inGameController.mapGrid.getChildren().add(buttons[0]);
+            inGameController.mapGrid.getChildren().add(buttons[1]);
+            inGameController.mapGrid.getChildren().add(buttons[2]);
+            waitForFxEvents();
+        });
 
         waitForFxEvents();
         clickOn("#storageOverviewButton");

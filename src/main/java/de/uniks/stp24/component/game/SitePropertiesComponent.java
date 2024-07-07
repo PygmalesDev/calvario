@@ -229,7 +229,6 @@ public class SitePropertiesComponent extends AnchorPane {
             this.islandAttributeStorage.setIsland(this.islandsService.updateIsland(result));
 
             displayAmountOfSite();
-            this.inGameController.updateSiteCapacities();
         });
 
 
@@ -245,7 +244,6 @@ public class SitePropertiesComponent extends AnchorPane {
     public void displayCostsOfSite(){
         siteCostsListView.setSelectionModel(null);
         subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
-        inGameController.updateSiteCapacities();
         siteConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));

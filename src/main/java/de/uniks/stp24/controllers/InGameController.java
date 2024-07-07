@@ -261,6 +261,7 @@ public class InGameController extends BasicController {
     @OnRender
     public void render() {
         buildingProperties.setMouseTransparent(true);
+        buildingProperties.setPickOnBounds(false);
         buildingsWindow.setMouseTransparent(true);
         siteProperties.setMouseTransparent(true);
         deleteStructureWarningContainer.setMouseTransparent(true);
@@ -418,13 +419,18 @@ public class InGameController extends BasicController {
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
             tokenStorage.setIsland(selected.getIsland());
-            this.overviewSitesComponent.jobsComponent.setJobsObservableList(
-                    this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
             islandAttributes.setIsland(selected.getIsland());
-            selectedIsland = selected;
             if (selected.getIsland().owner() != null) {
+                selectedIsland = selected;
+                if (selected.island.owner().equals(this.tokenStorage.getEmpireId()))
+                    this.overviewSitesComponent.jobsComponent.setJobsObservableList(
+                        this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
+
                 showOverview();
                 selected.showUnshowRudder();
+            } else if (Objects.nonNull(selectedIsland)) {
+                selectedIsland.showUnshowRudder();
+                this.overviewSitesComponent.closeOverview();
             }
         }
     }
@@ -457,7 +463,6 @@ public class InGameController extends BasicController {
             Island selected = this.islandsService.getIsland(params[2]);
             this.islandAttributes.setIsland(selected);
             this.tokenStorage.setIsland(selected);
-            this.overviewSitesComponent.showBuildings();
             this.showBuildingInformation(params[0], params[1]);
         });
     }
@@ -562,14 +567,8 @@ public class InGameController extends BasicController {
         sitePropertiesComponent.setSiteType(siteType);
     }
 
-    public void updateSiteCapacities() {
-        overviewSitesComponent.showSites();
-    }
-
     public void setSitePropertiesInvisible() {
         sitePropertiesComponent.setVisible(false);
         buildingProperties.setMouseTransparent(false);
-        overviewSitesComponent.buildingsComponent.resetPage();
-        overviewSitesComponent.buildingsComponent.setGridPane();
     }
 }

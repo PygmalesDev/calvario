@@ -17,12 +17,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
-import org.fulib.fx.constructs.listview.ReusableItemComponent;
 
 import javax.inject.Inject;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import static de.uniks.stp24.service.Constants.*;
 
@@ -81,15 +78,7 @@ public class Building extends VBox {
                 inGameController.setSitePropertiesInvisible();
                 inGameController.showBuildingInformation(buildingName, jobID);
 
-            } else {
-                inGameController.showBuildingWindow();
-                if(buildingName.equals("buildNewBuilding") && Objects.equals(tokenStorage.getEmpireId(),
-                        islandAttributes.getIsland().owner()) && islandAttributes.getUsedSlots() < islandAttributes
-                        .getIsland().resourceCapacity()) {
-                    buildingsComponent.setGridPane();
-                }
-            }
-
+            } else inGameController.showBuildingWindow();
         });
     }
 

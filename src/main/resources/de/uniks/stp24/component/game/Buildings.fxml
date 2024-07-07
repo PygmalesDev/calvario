@@ -58,10 +58,10 @@
          </VBox.margin>
         </HBox>
     </VBox>
-    <Pane layoutX="42.0" layoutY="-18.0" prefHeight="36.0" prefWidth="19.0" stylesheets="@../../style/islandOverview.css" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="64.0">
+    <Pane layoutX="42.0" layoutY="-18.0" prefHeight="36.0" prefWidth="19.0" stylesheets="@../../style/islandOverview.css" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="285.0" AnchorPane.topAnchor="64.0">
         <Button fx:id="prev" mnemonicParsing="false" onMouseClicked="#goPrevSite" prefHeight="27.0" prefWidth="0.0" style="-fx-background-color: transparent;" styleClass="goBackBuilding" visible="false" />
     </Pane>
     <Pane layoutX="382.0" layoutY="74.0" prefHeight="36.0" prefWidth="18.0" style="-fx-background-color: transparent;" stylesheets="@../../style/islandOverview.css" AnchorPane.bottomAnchor="80.0" AnchorPane.rightAnchor="62.0" AnchorPane.topAnchor="64.0">
-        <Button fx:id="next" mnemonicParsing="false" onMouseClicked="#goNextSite" prefHeight="27.0" prefWidth="0.0" style="-fx-background-color: transparent;" styleClass="goNextBuilding" visible="false" />
+        <Button fx:id="next" mnemonicParsing="false" onMouseClicked="#goNextSite" prefHeight="27.0" prefWidth="16.0" style="-fx-background-color: transparent;" styleClass="goNextBuilding" visible="false" />
     </Pane>
 </fx:root>

@@ -26,13 +26,8 @@ import static org.mockito.Mockito.doReturn;
 public class TestIslandJobOverview extends JobsTestComponent {
     @InjectMocks
     IslandOverviewJobsComponent islandOverviewJobsComponent;
-
-    Provider<ResourceComponent> resourceComponentProvider = () ->
-            new ResourceComponent(true, false,
-                true, false, this.gameResourceBundle);
     Provider<IslandOverviewJobProgressComponent> islandOverviewJobProgressComponentProvider = () -> {
         IslandOverviewJobProgressComponent comp = new IslandOverviewJobProgressComponent();
-        comp.resourceComponentProvider = this.resourceComponentProvider;
         comp.gameResourceBundle = this.gameResourceBundle;
         comp.islandAttributes = this.islandAttributeStorage;
         comp.subscriber = this.subscriber;
@@ -92,8 +87,11 @@ public class TestIslandJobOverview extends JobsTestComponent {
         doReturn(Observable.empty()).when(this.jobsApiService).deleteJob(eq(this.GAME_ID), eq(this.EMPIRE_ID), anyString());
 
         String jobID = this.jobs.get(0)._id();
-        clickOn("#jobProgressDeleteButton_" + jobID);
+
         this.callSubjectEvent(EVENT.DELETED, jobID);
+        clickOn("#jobProgressDeleteButton_" + jobID);
+
+        sleep(10000);
     }
 
     @Test

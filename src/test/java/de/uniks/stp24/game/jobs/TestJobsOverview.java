@@ -67,12 +67,14 @@ public class TestJobsOverview extends JobsTestComponent {
 
     @Test
     public void testDeletingJob() {
-        doReturn(Observable.just(this.jobsList.get(0)))
-                .when(this.jobsApiService).deleteJob(eq(this.GAME_ID), eq(this.EMPIRE_ID), any());
+        when(this.jobsApiService.deleteJob(eq(this.GAME_ID), eq(this.EMPIRE_ID), any()))
+                .thenReturn(Observable.just(this.jobsList.get(0)));
 
         String jobID = this.jobs.get(0)._id();
-        clickOn("#jobElementDeleteButton_" + jobID);
+
         this.callSubjectEvent(EVENT.DELETED, jobID);
+        clickOn("#jobElementDeleteButton_" + jobID);
+        sleep(10000);
     }
 
     @Test

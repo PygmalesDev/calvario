@@ -170,7 +170,6 @@ public class DeleteStructureComponent extends VBox{
                         islandAttributeStorage.setIsland(islandsService.updateIsland(result));
                         inGameController.islandsService.updateIslandBuildings(islandAttributeStorage, inGameController, islandAttributeStorage.getIsland().buildings());
                         inGameController.updateAmountSitesGrid();
-                        inGameController.updateSiteCapacities();
                         onCancel();
                     },
                             error -> errorService.getStatus(error));

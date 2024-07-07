@@ -215,6 +215,22 @@ public class PauseMenuTest extends ControllerTest {
         doReturn(Observable.just(new ArrayList<DistrictPresets>())).when(inGameService).loadDistrictPresets();
 
         this.app.show(this.inGameController);
+
+        this.storageOverviewComponent.getStylesheets().clear();
+        this.pauseMenuComponent.getStylesheets().clear();
+        this.clockComponent.getStylesheets().clear();
+        this.eventComponent.getStylesheets().clear();
+        this.storageOverviewComponent.getStylesheets().clear();
+        this.overviewSitesComponent.getStylesheets().clear();
+        this.overviewUpgradeComponent.getStylesheets().clear();
+        this.buildingsComponent.getStylesheets().clear();
+        this.sitesComponent.getStylesheets().clear();
+        this.detailsComponent.getStylesheets().clear();
+        this.deleteStructureComponent.getStylesheets().clear();
+        sitePropertiesComponent.getStylesheets().clear();
+        buildingsWindowComponent.getStylesheets().clear();
+        buildingPropertiesComponent.getStylesheets().clear();
+        this.jobsOverviewComponent.getStylesheets().clear();
     }
 
     @Test

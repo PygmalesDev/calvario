@@ -108,6 +108,7 @@ public class BrowseGameControllerTest extends ControllerTest {
         ))).when(gamesApiService).findAll();
 
         Mockito.doReturn(subject).when(eventListener).listen("games.*.*", Game.class);
+        doReturn(null).when(this.imageCache).get(any());
 
         super.start(stage);
         app.show(browseGameController);

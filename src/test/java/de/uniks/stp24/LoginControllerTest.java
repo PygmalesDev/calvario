@@ -61,7 +61,7 @@ public class LoginControllerTest extends ControllerTest {
         _public.put("frameIndex", 1);
 
         when(authApiService.login(any()))
-                .thenReturn(Observable.just(new LoginResult("1", "a", "b", _public, "c", "d")))
+                .thenReturn(Observable.just(new LoginResult("1", "a", "b", _public, "c", "d")));
         doReturn(null).when(app).show("/browseGames");
 
         // Start:

@@ -13,6 +13,7 @@ import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.JobsApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -108,6 +109,8 @@ public class AppTest2 extends ControllerTest {
 
     @Spy
     InGameService inGameService;
+    @Spy
+    ImageCache imageCache;
     @Spy
     EventService eventService;
     @Spy
@@ -246,6 +249,7 @@ public class AppTest2 extends ControllerTest {
         Mockito.doCallRealMethod().when(islandsService).createIslandPaneFromDto(any(),any());
         doCallRealMethod().when(islandComponent).setPosition(anyDouble(),anyDouble());
 
+        doReturn(null).when(imageCache).get(null);
 
         // Mock getEmpire
         doReturn(Observable.just(new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
@@ -255,12 +259,14 @@ public class AppTest2 extends ControllerTest {
 
         app.show(inGameController);
         eventComponent.getStylesheets().clear();
+        helpComponent.getStylesheets().clear();
         storageOverviewComponent.getStylesheets().clear();
         clockComponent.getStylesheets().clear();
         pauseMenuComponent.getStylesheets().clear();
         overviewSitesComponent.getStylesheets().clear();
         overviewUpgradeComponent.getStylesheets().clear();
         sitesComponent.getStylesheets().clear();
+        jobsOverviewComponent.getStylesheets().clear();
 
         island1 = new Island(
           "testEmpireID",

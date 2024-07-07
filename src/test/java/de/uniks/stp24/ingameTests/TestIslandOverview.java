@@ -10,6 +10,7 @@ import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -44,8 +45,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,6 +56,8 @@ public class TestIslandOverview extends ControllerTest {
     GameStatus gameStatus;
     @Spy
     InGameService inGameService;
+    @Spy
+    ImageCache imageCache;
     @Spy
     TimerService timerService;
     @Spy
@@ -398,9 +400,7 @@ public class TestIslandOverview extends ControllerTest {
                 (int) testIsland1.posY(),
                 tokenStorage.getEmpireId()
         );
-
-
-
+        doReturn(null).when(this.imageCache).get(any());
 
         this.islandAttributeStorage.systemPresets = systemUpgrades;
         this.islandAttributeStorage.empireDto = empireDto;

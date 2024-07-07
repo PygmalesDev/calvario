@@ -27,7 +27,7 @@
    </Button>
    <ListView fx:id="buildingConsumesListView" layoutX="37.0" layoutY="117.0" prefHeight="58.0" prefWidth="88.0" style="-fx-background-color: transparent;" styleClass="resourceList" AnchorPane.leftAnchor="37.0" />
    <Text layoutX="45.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="%consumes" />
-   <ListView fx:id="buildingProducesListView" layoutX="131.0" layoutY="116.0" prefHeight="66.0" prefWidth="115.0" style="-fx-background-color: tranparent;" styleClass="resourceList" AnchorPane.rightAnchor="34.0" />
+   <ListView fx:id="buildingProducesListView" layoutX="131.0" layoutY="116.0" prefHeight="66.0" prefWidth="115.0" style="-fx-background-color: transparent;" styleClass="resourceList" AnchorPane.rightAnchor="34.0" />
    <Text layoutX="144.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="%produces" />
    <Button fx:id="buyButton" layoutX="35.0" layoutY="70.0" mnemonicParsing="false" onAction="#buyBuilding" prefHeight="25.0" prefWidth="25.0" style="-fx-font-size: 6;" styleClass="buildButton" textFill="#13b91b" AnchorPane.bottomAnchor="125.0" AnchorPane.rightAnchor="220.0">
       <font>

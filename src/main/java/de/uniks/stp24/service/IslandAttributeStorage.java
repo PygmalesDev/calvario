@@ -3,8 +3,8 @@ package de.uniks.stp24.service;
 import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.Upgrade;
-import de.uniks.stp24.model.BuildingPresets;
-import de.uniks.stp24.model.DistrictPresets;
+import de.uniks.stp24.model.BuildingAttributes;
+import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.SystemUpgrades;
 import de.uniks.stp24.service.game.VariableDependencyService;
@@ -26,8 +26,8 @@ public class IslandAttributeStorage {
     public EmpireDto empireDto;
     public SystemUpgrades systemUpgradeAttributes;
     public Island island;
-    public ArrayList<BuildingDto> buildingsAttributes;
-    public ArrayList<DistrictPresets> districts;
+    public ArrayList<BuildingAttributes> buildingsAttributes;
+    public ArrayList<DistrictAttributes> districts;
     public Map<Integer, String> upgradeEffects = new HashMap<>();
 
     @Inject
@@ -133,7 +133,7 @@ public class IslandAttributeStorage {
                     counter++;
                 }
             }
-            for (BuildingDto preset : buildingsAttributes) {
+            for (BuildingAttributes preset : buildingsAttributes) {
                 if(preset.id().equals(building)) {
                     for (Map.Entry<String, Integer> entry : preset.production().entrySet()) {
                         buildingsProduction.merge(entry.getKey(), entry.getValue() * counter, Integer::sum);
@@ -147,7 +147,7 @@ public class IslandAttributeStorage {
     public Map<String, Integer> getDistrictProduction() {
         Map<String, Integer> sitesProduction = new HashMap<>();
         for(Map.Entry<String, Integer> entry : island.sites().entrySet()){
-            for (DistrictPresets preset : districts) {
+            for (DistrictAttributes preset : districts) {
                 if(preset.id().equals(entry.getKey())) {
                     for (Map.Entry<String, Integer> site : preset.production().entrySet()) {
                         sitesProduction.merge(site.getKey(), site.getValue() * entry.getValue(), Integer::sum);
@@ -168,7 +168,7 @@ public class IslandAttributeStorage {
                     counter++;
                 }
             }
-            for (BuildingDto preset : buildingsAttributes) {
+            for (BuildingAttributes preset : buildingsAttributes) {
                 if(preset.id().equals(building)) {
                     for (Map.Entry<String, Integer> entry : preset.upkeep().entrySet()) {
                         buildingsConsumption.merge(entry.getKey(), entry.getValue() * counter, Integer::sum);
@@ -182,7 +182,7 @@ public class IslandAttributeStorage {
     public Map<String, Integer> getDistrictConsumption() {
         Map<String, Integer> sitesConsumption = new HashMap<>();
         for(Map.Entry<String, Integer> entry : island.sites().entrySet()){
-            for (DistrictPresets preset : districts) {
+            for (DistrictAttributes preset : districts) {
                 if(preset.id().equals(entry.getKey())) {
                     for (Map.Entry<String, Integer> site : preset.upkeep().entrySet()) {
                         sitesConsumption.merge(site.getKey(), site.getValue() * entry.getValue(), Integer::sum);

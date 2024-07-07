@@ -3,7 +3,7 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.BuildingDto;
-import de.uniks.stp24.model.BuildingPresets;
+import de.uniks.stp24.model.BuildingAttributes;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -84,7 +84,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     String buildingType;
     InGameController inGameController;
     Map<String, Integer> priceOfBuilding;
-    BuildingDto certainBuilding;
+    BuildingAttributes certainBuilding;
 
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
 
@@ -188,7 +188,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
     //Sets upkeep, production and cost of buildings in listviews
-    private void resourceListGeneration(BuildingDto buildingDto) {
+    private void resourceListGeneration(BuildingAttributes buildingDto) {
         Map<String, Integer> resourceMapUpkeep = buildingDto.upkeep();
         ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, buildingConsumesListView.getItems(), null);
         buildingConsumesListView.setItems(resourceListUpkeep);
@@ -207,7 +207,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
     private void setCertainBuilding(){
-        for(BuildingDto building: islandAttributeStorage.buildingsAttributes){
+        for(BuildingAttributes building: islandAttributeStorage.buildingsAttributes){
             if(building.id().equals(buildingType)){
                 certainBuilding = building;
                 priceOfBuilding = certainBuilding.cost();

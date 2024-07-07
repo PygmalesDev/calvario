@@ -5,6 +5,8 @@ import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.dto.SiteDto;
+import de.uniks.stp24.model.BuildingAttributes;
+import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.ErrorService;
@@ -30,6 +32,7 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static de.uniks.stp24.service.Constants.*;
@@ -124,7 +127,7 @@ public class DeleteStructureComponent extends VBox{
     //that will be returned when deleting a structure
     private void displayStructureInfo() {
         if (buildings.containsKey(structureType)){
-            for(BuildingDto building: islandAttributeStorage.buildingsAttributes){
+            for(BuildingAttributes building: islandAttributeStorage.buildingsAttributes){
                 if(building.id().equals(structureType)){
                     resourceListGenerationBuilding(building);
                     break;
@@ -132,14 +135,14 @@ public class DeleteStructureComponent extends VBox{
             }
         }
         if (sites.containsKey(structureType)){
-            subscriber.subscribe(resourcesService.getResourcesSite(structureType), this::resourceListGenerationSite);
+            resourceListGenerationSite(Objects.requireNonNull(getCertainSite()));
         }
 
         deleteStructureListView.setCellFactory(list -> new ComponentListCell<>(app, resourceComponentProvider));
     }
 
-    private void resourceListGenerationBuilding(BuildingDto structureDto) {
-        Map<String, Integer> resourceMapCost = structureDto.cost();
+    private void resourceListGenerationBuilding(BuildingAttributes structure) {
+        Map<String, Integer> resourceMapCost = structure.cost();
         Map<String, Integer> halvedResourceMapCost = new HashMap<>();
         for (Map.Entry<String, Integer> entry : resourceMapCost.entrySet()) {
             halvedResourceMapCost.put(entry.getKey(), entry.getValue() / 2);
@@ -147,8 +150,8 @@ public class DeleteStructureComponent extends VBox{
         ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(halvedResourceMapCost, deleteStructureListView.getItems(), null);
         deleteStructureListView.setItems(resourceListCost);
     }
-    private void resourceListGenerationSite(SiteDto structureDto) {
-        Map<String, Integer> resourceMapCost = structureDto.cost();
+    private void resourceListGenerationSite(DistrictAttributes structure) {
+        Map<String, Integer> resourceMapCost = structure.cost();
         Map<String, Integer> halvedResourceMapCost = new HashMap<>();
         for (Map.Entry<String, Integer> entry : resourceMapCost.entrySet()) {
             halvedResourceMapCost.put(entry.getKey(), entry.getValue() / 2);
@@ -196,6 +199,15 @@ public class DeleteStructureComponent extends VBox{
                 throw new IllegalArgumentException("Unknown structure type: " + structureType);
             }
         }
-
     }
+
+    private DistrictAttributes getCertainSite(){
+        for(DistrictAttributes site: islandAttributeStorage.districts){
+            if(site.id().equals(structureType)){
+                return site;
+            }
+        }
+        return null;
+    }
+
 }

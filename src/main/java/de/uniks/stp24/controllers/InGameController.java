@@ -5,10 +5,8 @@ import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.model.BuildingPresets;
-import de.uniks.stp24.model.DistrictPresets;
+import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.SystemUpgrades;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
@@ -194,8 +192,7 @@ public class InGameController extends BasicController {
     PopupBuilder popupDeleteStructure = new PopupBuilder();
     public String selectedBuilding;
     public String selectedSites;
-    @NotNull
-    ArrayList<DistrictPresets> districtPresets;
+
 
 
     @OnInit

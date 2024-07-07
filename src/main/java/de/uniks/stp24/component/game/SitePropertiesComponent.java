@@ -3,6 +3,7 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.SiteDto;
+import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -34,6 +35,7 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static de.uniks.stp24.service.Constants.*;
@@ -156,7 +158,7 @@ public class SitePropertiesComponent extends AnchorPane {
     //Gets resources of site and displays them in listviews
     public void displayCostsOfSite(){
         siteCostsListView.setSelectionModel(null);
-        subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
+        resourceListGeneration(getCertainSite());
         inGameController.updateSiteCapacities();
         siteConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview", "site.consumption"));
         siteCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview", "site.costs"));
@@ -167,12 +169,12 @@ public class SitePropertiesComponent extends AnchorPane {
     public void displayAmountOfSite(){
         buildSiteButton.setDisable(false);
         destroySiteButton.setDisable(false);
-        subscriber.subscribe(resourcesService.getResourcesSite(siteType), result -> {
-            Map<String, Integer> costSite = result.cost();
-            if (!resourcesService.hasEnoughResources(costSite)){
-                buildSiteButton.setDisable(true);
-            }
-        });
+
+        Map<String, Integer> costSite = Objects.requireNonNull(getCertainSite()).cost();
+        if (!resourcesService.hasEnoughResources(costSite)){
+            buildSiteButton.setDisable(true);
+        }
+
 
         if (tokenStorage.getIsland().sites().get(siteType) != null){
             amountSite = tokenStorage.getIsland().sites().get(siteType);
@@ -229,20 +231,28 @@ public class SitePropertiesComponent extends AnchorPane {
 
     }
 
-    private void resourceListGeneration(SiteDto siteDto) {
+    private void resourceListGeneration(DistrictAttributes site) {
 
-        Map<String, Integer> resourceMapPrice = siteDto.cost();
+        Map<String, Integer> resourceMapPrice = site.cost();
         ObservableList<Resource> resourceListPrice = resourcesService.generateResourceList(resourceMapPrice, siteCostsListView.getItems(),null);
         siteCostsListView.setItems(resourceListPrice);
 
-        Map<String, Integer> resourceMapUpkeep = siteDto.upkeep();
+        Map<String, Integer> resourceMapUpkeep = site.upkeep();
         ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, siteConsumesListView.getItems(), null);
         siteConsumesListView.setItems(resourceListUpkeep);
 
-        Map<String, Integer> resourceMapProduce = siteDto.production();
+        Map<String, Integer> resourceMapProduce = site.production();
         ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, siteProducesListView.getItems(), null);
         siteProducesListView.setItems(resourceListProduce);
     }
 
+    private DistrictAttributes getCertainSite(){
+        for(DistrictAttributes site: islandAttributeStorage.districts){
+            if(site.id().equals(siteType)){
+                return site;
+            }
+        }
+        return null;
+    }
 }
 

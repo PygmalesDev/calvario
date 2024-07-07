@@ -1,7 +1,4 @@
 package de.uniks.stp24.service;
-
-import de.uniks.stp24.model.BuildingPresets;
-import de.uniks.stp24.model.DistrictPresets;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.model.SystemUpgrades;
@@ -15,7 +12,6 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.ArrayList;
 import java.util.Map;
 
 @Singleton
@@ -45,14 +41,6 @@ public class InGameService {
 
     public Observable<Map<String, Integer>> getVariablesPresets() {
         return presetsApiService.getVariablesPresets();
-    }
-
-    public Observable<ArrayList<BuildingPresets>> loadBuildingPresets() {
-        return presetsApiService.getBuildingPresets();
-    }
-
-    public Observable<ArrayList<DistrictPresets>> loadDistrictPresets() {
-        return presetsApiService.getDistrictPresets();
     }
 
     public void setPaused(Boolean isPaused) {

@@ -1,7 +1,7 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.component.game.jobs.SiteJobProgressComponent;
+import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.Jobs;
@@ -100,7 +100,7 @@ public class SitePropertiesComponent extends AnchorPane {
 
     @Inject
     @SubComponent
-    public SiteJobProgressComponent siteJobProgress;
+    public PropertiesJobProgressComponent siteJobProgress;
 
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
 

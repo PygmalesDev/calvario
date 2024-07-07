@@ -47,7 +47,6 @@ import java.util.*;
 @Title("CALVARIO")
 @Controller
 public class InGameController extends BasicController {
-
     @FXML
     StackPane helpWindowContainer;
     @FXML
@@ -340,11 +339,9 @@ public class InGameController extends BasicController {
 
     public void showSettings() {
         pauseMenuContainer.getChildren().remove(pauseMenuComponent);
-        pauseMenuContainer.getChildren().add(settingsComponent);
     }
 
     public void unShowSettings() {
-        pauseMenuContainer.getChildren().remove(settingsComponent);
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
     }
 
@@ -505,7 +502,6 @@ public class InGameController extends BasicController {
         if(empireOverviewComponent.isVisible()) {
             empireOverviewComponent.closeEmpireOverview();
         }
-        storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
     }
     @OnKey(code = KeyCode.H, alt = true)
     public void showHelpOnKey(){
@@ -522,7 +518,6 @@ public class InGameController extends BasicController {
         if(storageOverviewComponent.isVisible()){
             storageOverviewComponent.closeStorageOverview();
         }
-        empireOverviewContainer.setVisible(!empireOverviewContainer.isVisible());
     }
 
     @OnKey(code = KeyCode.SPACE)

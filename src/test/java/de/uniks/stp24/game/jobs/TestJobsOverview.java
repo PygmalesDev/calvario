@@ -17,7 +17,6 @@ import org.testfx.util.WaitForAsyncUtils;
 import javax.inject.Provider;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -66,15 +65,36 @@ public class TestJobsOverview extends JobsTestComponent {
     }
 
     @Test
-    public void testDeletingJob() {
+    public void testDeletingJobs() {
         when(this.jobsApiService.deleteJob(eq(this.GAME_ID), eq(this.EMPIRE_ID), any()))
                 .thenReturn(Observable.just(this.jobsList.get(0)));
 
+        // Test deleting a job from an island that has more jobs in the queue
         String jobID = this.jobs.get(0)._id();
 
-        this.callSubjectEvent(EVENT.DELETED, jobID);
         clickOn("#jobElementDeleteButton_" + jobID);
-        sleep(10000);
+        this.deleteInternally(jobID);
+        WaitForAsyncUtils.waitForFxEvents();
+
+        assertEquals(4, this.jobs.size());
+
+        // Test deleting a job from an island with a single job
+        jobID = this.jobs.get(2)._id();
+
+        clickOn("#jobElementDeleteButton_" + jobID);
+        this.deleteInternally(jobID);
+        WaitForAsyncUtils.waitForFxEvents();
+
+        assertEquals(3, this.jobs.size());
+    }
+
+    @Test
+    public void testUpdatingJobs() {
+        // Simulate game tick
+        this.jobs.forEach(job -> this.updateInternally(job._id()));
+        WaitForAsyncUtils.waitForFxEvents();
+
+        this.jobs.forEach(job -> assertEquals(1, job.progress()));
     }
 
     @Test

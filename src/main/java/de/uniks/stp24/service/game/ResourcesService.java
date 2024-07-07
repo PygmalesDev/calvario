@@ -18,7 +18,7 @@ import java.util.*;
 @Singleton
 public class ResourcesService {
  	@Inject
-    GameSystemsApiService gameSystemsApiService;
+    public GameSystemsApiService gameSystemsApiService;
     @Inject
     public IslandAttributeStorage islandAttributes;
     @Inject

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
-import de.uniks.stp24.component.game.jobs.SiteJobProgressComponent;
+import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -27,7 +27,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.QuadCurve;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -38,7 +37,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
 
-import java.sql.Array;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -85,7 +83,7 @@ public class AppTest2 extends ControllerTest {
     @InjectMocks
     EmpireOverviewComponent empireOverviewComponent;
     @InjectMocks
-    SiteJobProgressComponent siteJobProgressComponent;
+    PropertiesJobProgressComponent propertiesJobProgressComponent;
     @InjectMocks
     HelpComponent helpComponent;
 
@@ -183,8 +181,8 @@ public class AppTest2 extends ControllerTest {
         this.timerService.tokenStorage = this.tokenStorage;
         this.timerService.subscriber = this.subscriber;
         this.timerService.gamesApiService = this.gameApiService;
-        this.buildingPropertiesComponent.siteJobProgressComponent = this.siteJobProgressComponent;
-        this.sitePropertiesComponent.siteJobProgress = this.siteJobProgressComponent;
+        this.buildingPropertiesComponent.propertiesJobProgressComponent = this.propertiesJobProgressComponent;
+        this.sitePropertiesComponent.siteJobProgress = this.propertiesJobProgressComponent;
 
         inGameController.mapScrollPane = new ScrollPane();
         inGameController.group = new Group();

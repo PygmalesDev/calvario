@@ -1,7 +1,7 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.component.game.jobs.SiteJobProgressComponent;
+import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.model.Jobs;
@@ -57,20 +57,20 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @FXML
     Pane jobProgressPane;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
     @Inject
-    ResourcesService resourcesService;
+    public ResourcesService resourcesService;
     @Inject
     Subscriber subscriber;
     @Inject
     IslandsService islandsService;
     @Inject
     @SubComponent
-    public SiteJobProgressComponent siteJobProgressComponent;
+    public PropertiesJobProgressComponent propertiesJobProgressComponent;
     @Inject
     App app;
     @Inject
-    GameSystemsApiService gameSystemsApiService;
+    public GameSystemsApiService gameSystemsApiService;
     @Inject
     @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")
@@ -104,8 +104,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
     public void render() {
         this.setPickOnBounds(false);
         this.jobProgressPane.setPickOnBounds(false);
-        this.siteJobProgressComponent.setPickOnBounds(false);
-        this.jobProgressPane.getChildren().add(this.siteJobProgressComponent);
+        this.propertiesJobProgressComponent.setPickOnBounds(false);
+        this.jobProgressPane.getChildren().add(this.propertiesJobProgressComponent);
     }
 
     public void setInGameController(InGameController inGameController){
@@ -128,10 +128,10 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
             this.showJobsPane();
             if (Objects.nonNull(job)) {
-                this.siteJobProgressComponent.setJobProgress(job);
+                this.propertiesJobProgressComponent.setJobProgress(job);
                 if (!this.jobsService.hasJobTypeProgress(job.type()) && this.buildingJobs.get(0).equals(job))
                     this.jobsService.onJobTypeProgress(job.type(), () ->
-                            this.siteJobProgressComponent.incrementProgress());
+                            this.propertiesJobProgressComponent.incrementProgress());
                 else this.jobsService.stopOnJobTypeProgress("building");
             }
         } else {
@@ -220,7 +220,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
                 this.subscriber.subscribe(this.jobsService.beginJob(
                         Jobs.createBuildingJob(this.tokenStorage.getIsland().id(), this.buildingType)), job -> {
                     this.currentJobID = job._id();
-                    this.siteJobProgressComponent.setJobProgress(job);
+                    this.propertiesJobProgressComponent.setJobProgress(job);
                     this.showJobsPane();
                     this.updateIslandBuildings();
                     this.jobsService.onJobDeletion(job._id(), () -> {

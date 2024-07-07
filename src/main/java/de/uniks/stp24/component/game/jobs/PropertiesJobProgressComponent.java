@@ -5,7 +5,6 @@ import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.model.Jobs.*;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.game.JobsService;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -23,8 +22,8 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.ResourceBundle;
 
-@Component(view = "SiteJobProgress.fxml")
-public class SiteJobProgressComponent extends Pane {
+@Component(view = "PropertiesJobProgress.fxml")
+public class PropertiesJobProgressComponent extends Pane {
     @FXML
     Text jobProgressText;
     @FXML
@@ -45,7 +44,7 @@ public class SiteJobProgressComponent extends Pane {
     @Inject
     Subscriber subscriber;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
 
     @Inject
     @org.fulib.fx.annotation.controller.Resource
@@ -55,7 +54,7 @@ public class SiteJobProgressComponent extends Pane {
     private Job job;
 
     @Inject
-    public SiteJobProgressComponent() {
+    public PropertiesJobProgressComponent() {
 
     }
 

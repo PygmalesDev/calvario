@@ -17,8 +17,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import javax.inject.Provider;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doReturn;
 
@@ -90,8 +89,6 @@ public class TestIslandJobOverview extends JobsTestComponent {
 
         this.callSubjectEvent(EVENT.DELETED, jobID);
         clickOn("#jobProgressDeleteButton_" + jobID);
-
-        sleep(10000);
     }
 
     @Test
@@ -105,5 +102,19 @@ public class TestIslandJobOverview extends JobsTestComponent {
         jobID = this.jobs.get(2)._id();
         clickOn("#jobProgressInspectionButton_" + jobID);
         assertEquals(1, this.inspectorCalls.get("site"));
+    }
+
+    @Test
+    public void testNoJobTestAppearance() {
+        WaitForAsyncUtils.waitForFxEvents();
+
+        this.jobs.forEach(job -> this.deleteInternally(job._id()));
+        WaitForAsyncUtils.waitForFxEvents();
+
+        assertTrue(lookup("#noJobText").queryText().isVisible());
+
+        this.createInternally();
+        WaitForAsyncUtils.waitForFxEvents();
+        assertFalse(lookup("#noJobText").queryText().isVisible());
     }
 }

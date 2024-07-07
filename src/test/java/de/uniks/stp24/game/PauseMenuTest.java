@@ -5,7 +5,7 @@ import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
-import de.uniks.stp24.component.game.jobs.SiteJobProgressComponent;
+import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -34,7 +34,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.inject.Inject;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -150,7 +149,7 @@ public class PauseMenuTest extends ControllerTest {
     HelpComponent helpComponent;
 
     @InjectMocks
-    SiteJobProgressComponent siteJobProgressComponent;
+    PropertiesJobProgressComponent propertiesJobProgressComponent;
 
     @Spy
     JobsApiService jobsApiService;
@@ -187,8 +186,8 @@ public class PauseMenuTest extends ControllerTest {
         this.jobsService.jobsApiService = this.jobsApiService;
         this.jobsService.tokenStorage = this.tokenStorage;
         this.jobsService.eventListener = this.eventListener;
-        this.buildingPropertiesComponent.siteJobProgressComponent = this.siteJobProgressComponent;
-        this.sitePropertiesComponent.siteJobProgress = this.siteJobProgressComponent;
+        this.buildingPropertiesComponent.propertiesJobProgressComponent = this.propertiesJobProgressComponent;
+        this.sitePropertiesComponent.siteJobProgress = this.propertiesJobProgressComponent;
 
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;

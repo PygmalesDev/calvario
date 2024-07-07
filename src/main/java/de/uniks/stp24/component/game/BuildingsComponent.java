@@ -1,6 +1,5 @@
 package de.uniks.stp24.component.game;
 
-import de.uniks.stp24.component.game.jobs.SiteJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs;
@@ -16,7 +15,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
-import org.fulib.fx.annotation.controller.SubComponent;
 
 import javax.inject.Inject;
 import javax.inject.Named;

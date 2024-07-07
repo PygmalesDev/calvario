@@ -91,7 +91,7 @@ public class JobsService {
             }, error -> System.out.print("JobsService: Failed to receive job updates. \n" + error.getMessage()));
     }
 
-    private void addJobToGroups(@NotNull Job job) {
+    public void addJobToGroups(@NotNull Job job) {
         this.jobCollections.get(job.type()).add(job);
 
         if (!job.type().equals("technology")) {
@@ -106,7 +106,7 @@ public class JobsService {
         this.startCommonFunctions.forEach(Runnable::run);
     }
 
-    private void updateJobInGroups(@NotNull Job job) {
+    public void updateJobInGroups(@NotNull Job job) {
         this.jobCollections.get(job.type()).replaceAll(other -> other.equals(job) ? job : other);
         this.jobCollections.get("collection").replaceAll(other -> other.equals(job) ? job : other);
 
@@ -126,14 +126,16 @@ public class JobsService {
             this.jobProgressFunctions.get(job._id()).forEach(Runnable::run);
     }
 
-    private void deleteJobFromGroups(@NotNull Job job) {
+    public void deleteJobFromGroups(@NotNull Job job) {
         this.jobCollections.get(job.type()).removeIf(other -> other._id().equals(job._id()));
         this.jobCollections.get("collection").removeIf(other -> other._id().equals(job._id()));
 
         if (!job.type().equals("technology")) {
             this.jobCollections.get(job.system()).removeIf(other -> other._id().equals(job._id()));
-            if (this.jobCollections.get(job.system()).size() > 0)
-                this.jobCollections.get("collection").add(this.jobCollections.get(job.system()).get(0));
+
+            ObservableList<Job> systemJobs = this.jobCollections.get(job.system());
+            if (systemJobs.size() > 0 && !this.jobCollections.get("collection").contains(systemJobs.get(0)))
+                this.jobCollections.get("collection").add(systemJobs.get(0));
         }
 
         if (this.jobCompletionFunctions.containsKey(job._id()))

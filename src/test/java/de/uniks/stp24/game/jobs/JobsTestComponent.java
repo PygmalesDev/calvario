@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Jobs.*;
 import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.service.ImageCache;
@@ -15,6 +16,7 @@ import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.mockito.InjectMocks;
@@ -39,8 +41,6 @@ public class JobsTestComponent extends ControllerTest {
     Subscriber subscriber;
     @Spy
     JobsApiService jobsApiService;
-    @Spy
-    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
 
     @InjectMocks
     JobsService jobsService;
@@ -82,13 +82,13 @@ public class JobsTestComponent extends ControllerTest {
                 new Job("0", "0", "jobID_4", 0, 10,
                         this.GAME_ID, this.EMPIRE_ID, this.SYSTEM_ID_1, 0, "upgrade", null,
                         null, null, Map.of("energy", 30), null),
-                new Job("0", "0", "jobID_5", 3, 6,
+                new Job("0", "0", "jobID_5", 0, 6,
                         this.GAME_ID, this.EMPIRE_ID, this.SYSTEM_ID_2, 0, "district", null,
                         "energy", null, Map.of("energy", 200), null),
-                new Job("0", "0", "jobID_6", 3, 6,
+                new Job("0", "0", "jobID_6", 0, 6,
                         this.GAME_ID, this.EMPIRE_ID, this.SYSTEM_ID_3, 0, "district", null,
                         "ancient_foundry", null, Map.of("energy", 200), null),
-                new Job("0", "0", "jobID_7", 3, 6,
+                new Job("0", "0", "jobID_7", 0, 6,
                         this.GAME_ID, this.EMPIRE_ID, this.SYSTEM_ID_4, 0, "upgrade", null,
                         null, null, Map.of("energy", 200), null)));
 
@@ -143,5 +143,25 @@ public class JobsTestComponent extends ControllerTest {
                 this.inspectorCalls.put("building", this.inspectorCalls.get("building")+1));
         this.jobsService.setJobInspector("site_overview", (id) ->
                 this.inspectorCalls.put("site", this.inspectorCalls.get("site")+1));
+    }
+
+    // EventListener does not respond to Subject calls. Find the issue later
+    // These methods mock the behavior of the event listener
+    // TODO: FIX THIS LOL
+    public void createInternally() {
+        Platform.runLater(() -> this.jobsService.addJobToGroups(this.jobsList.get(0)));
+    }
+
+    public void updateInternally(String jobID) {
+        Job job = this.jobsList.stream().filter(job2 -> job2._id().equals(jobID)).toList().getFirst();
+        Job updatedJob = new Job(job.createdAt(), "1", job._id(), job.progress()+1, job.total(), job.game(),
+                job.empire(), job.system(), job.priority(), job.type(), job.building(), job.district(), job.technology(),
+                job.cost(), job.result());
+        Platform.runLater(() -> this.jobsService.updateJobInGroups(updatedJob));
+    }
+
+    public void deleteInternally(String jobID) {
+        Job job = this.jobsList.stream().filter(job2 -> job2._id().equals(jobID)).toList().getFirst();
+        Platform.runLater(() -> this.jobsService.deleteJobFromGroups(job));
     }
 }

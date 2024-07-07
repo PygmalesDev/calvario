@@ -2,9 +2,8 @@ package de.uniks.stp24;
 
 import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.controllers.LoginController;
-import de.uniks.stp24.model.LoginResult;
 import de.uniks.stp24.rest.AuthApiService;
-import de.uniks.stp24.service.PrefService;
+import de.uniks.stp24.model.*;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.menu.LoginService;
 import io.reactivex.rxjava3.core.Observable;
@@ -17,6 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import javafx.stage.Stage;
+import org.mockito.stubbing.OngoingStubbing;
 import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.HashMap;
@@ -61,7 +61,7 @@ public class LoginControllerTest extends ControllerTest {
         _public.put("frameIndex", 1);
 
         when(authApiService.login(any()))
-                .thenReturn(Observable.just(new LoginResult("1", "a","b", _public, "c","d")));
+                .thenReturn(Observable.just(new LoginResult("1", "a", "b", _public, "c", "d")))
         doReturn(null).when(app).show("/browseGames");
 
         // Start:

@@ -26,10 +26,13 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Arrays;
 
 @Component(view = "ResearchJob.fxml")
 public class ResearchJobComponent extends AnchorPane {
 
+    @FXML
+    ImageView researchCostImage;
     @FXML
     ImageView technologyTagImage2;
     @FXML
@@ -77,6 +80,10 @@ public class ResearchJobComponent extends AnchorPane {
     public void render(){
         cancelResearchButton.getStyleClass().clear();
         Image image = new Image("/de/uniks/stp24/assets/buttons/cancel_button.png");
+        Image image1 = new Image("de/uniks/stp24/icons/resources/research.png");
+        researchCostImage.setImage(image1);
+        researchCostImage.setFitHeight(20);
+        researchCostImage.setFitWidth(20);
         ImageView imageView = new ImageView(image);
         cancelResearchButton.setGraphic(imageView);
     }
@@ -104,6 +111,8 @@ public class ResearchJobComponent extends AnchorPane {
 
 
     public void handleJob(TechnologyExtended technology) {
+        int cost = technology.cost() * 100;
+        researchCostText.setText(String.valueOf(cost));
         technologyNameText.setText(technology.id());
         subscriber.subscribe(jobsService.beginJob(Jobs.createTechnologyJob(technology.id())), job -> {
             this.job = job;

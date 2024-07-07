@@ -98,8 +98,7 @@ public class HintBubbleComponent extends Captain {
 
                         subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                                 aggregateResultDto -> {
-                                    // todo change
-                                    // announcements.clear();
+                                    announcementsService.clearAnnouncements();
                                     for (AggregateItemDto item : aggregateResultDto.items()) {
                                         if (item.count() > 0 && item.count() + item.subtotal() <= 0) {
                                             announcementsService.addAnnouncement(new Resource(item.variable(), item.count(), item.subtotal()));

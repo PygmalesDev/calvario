@@ -23,7 +23,7 @@ public class AnnouncementsService {
     }
 
     public AnnouncementsService addAnnouncement(Jobs.Job job) {
-        announcements.add(job);
+        announcements.addFirst(job);
         return this;
     }
 
@@ -54,5 +54,9 @@ public class AnnouncementsService {
 
     public ObservableList<Object> getAnnouncements() {
         return announcements;
+    }
+
+    public void clearAnnouncements() {
+        announcements.clear();
     }
 }

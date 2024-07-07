@@ -104,7 +104,7 @@ public class ResearchJobComponent extends AnchorPane {
     }
 
     public void removeJob(){
-        jobsService.stopJob(this.job._id());
+        subscriber.subscribe(jobsService.stopJob(this.job._id()));
         technologyCategoryComponent.handleJobCompleted();
     }
 }

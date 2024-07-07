@@ -62,7 +62,6 @@ public class StorageOverviewComponent extends AnchorPane {
     private String lastSeasonUpdate;
     Provider<ResourceComponent> resourceComponentProvider = () -> new ResourceComponent(true, true, true, true, gameResourceBundle);
     ObservableList<Resource> resourceList;
-    private InGameController inGameController;
 
     @Inject
     public StorageOverviewComponent() {
@@ -105,11 +104,6 @@ public class StorageOverviewComponent extends AnchorPane {
 
     private void resourceListGeneration(EmpireDto empireDto, AggregateItemDto[] aggregateItems) {
         Map<String, Integer> resourceMap = empireDto.resources();
-        //TODO remove print statement
-        for (Map.Entry<String, Integer> entry : resourceMap.entrySet()) {
-            System.out.println("Schlüssel: " + entry.getKey() + ", Wert: " + entry.getValue());
-        }
-        inGameController.marketOverviewComponent.listMarketResources(resourceMap);
         resourceList = resourcesService.generateResourceList(resourceMap, resourceListView.getItems(), aggregateItems);
         this.resourceListView.setItems(resourceList);
     }
@@ -155,10 +149,6 @@ public class StorageOverviewComponent extends AnchorPane {
 
     public ObservableList<Resource> getResources() {
         return this.resourceList;
-    }
-
-    public void setInGameController(InGameController ingameController) {
-        this.inGameController = ingameController;
     }
 
     @OnDestroy

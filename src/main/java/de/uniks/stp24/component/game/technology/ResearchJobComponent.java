@@ -4,6 +4,7 @@ import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Technology;
 import de.uniks.stp24.model.TechnologyExtended;
+import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.TechnologyService;
@@ -49,6 +50,9 @@ public class ResearchJobComponent extends AnchorPane {
     JobsService jobsService;
 
     @Inject
+    JobsApiService jobsApiService;
+
+    @Inject
     EventListener eventListener;
 
     @Inject
@@ -76,13 +80,11 @@ public class ResearchJobComponent extends AnchorPane {
     public void setProgressBar(PropertyChangeEvent propertyChangeEvent) {
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.empires.%s.jobs.*.*",
                 this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), Jobs.Job.class), result -> {
-            Jobs.Job job = result.data();
+            this.job = result.data();
             researchProgressText.setText(job.progress() + " / " + job.total());
             jobsService.onJobCompletion(job._id(), this::handleJobFinished);
             this.researchProgressBar.setProgress((((double) 1/job.total()) * job.progress()));
         }, error -> System.out.print("Error in ResearchJobComponent"));
-
-
     }
 
     private void handleJobFinished() {
@@ -94,12 +96,15 @@ public class ResearchJobComponent extends AnchorPane {
     public void handleJob(TechnologyExtended technology) {
         subscriber.subscribe(jobsService.beginJob(Jobs.createTechnologyJob(technology.id())), job -> {
             this.job = job;
-            jobsService.onJobCompletion(job._id(), () -> {
-            });
         });
     }
 
     public void setTechnologyCategoryComponent(TechnologyCategoryComponent technologyCategoryComponent) {
         this.technologyCategoryComponent = technologyCategoryComponent;
+    }
+
+    public void removeJob(){
+        jobsService.stopJob(this.job._id());
+        technologyCategoryComponent.handleJobCompleted();
     }
 }

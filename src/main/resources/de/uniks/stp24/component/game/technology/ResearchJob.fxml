@@ -13,7 +13,7 @@
    <children>
       <ProgressBar fx:id="researchProgressBar" layoutX="14.0" layoutY="157.0" prefWidth="200.0" progress="0.0" />
       <Text fx:id="researchProgressText" layoutX="230.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="/" />
-      <Button fx:id="cancelResearchButton" layoutX="280.0" layoutY="154.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="26.0" styleClass="deleteJobButton" />
+      <Button fx:id="cancelResearchButton" layoutX="280.0" layoutY="154.0" mnemonicParsing="false" onAction="#removeJob" prefHeight="18.0" prefWidth="26.0" styleClass="deleteJobButton" />
       <Text layoutX="124.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Research">
          <font>
             <Font size="18.0" />

@@ -301,7 +301,7 @@ public class JobsService {
         this.deleteJobFromGroups(jobID);
         if (this.jobDeletionFunctions.containsKey(jobID))
             this.jobDeletionFunctions.get(jobID).forEach(Runnable::run);
-
+        System.out.println(this.tokenStorage.getGameId() + " / " + this.tokenStorage.getEmpireId());
         return this.jobsApiService.deleteJob(this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId(), jobID);
     }
 

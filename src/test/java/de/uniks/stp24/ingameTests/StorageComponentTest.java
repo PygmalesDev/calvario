@@ -1,6 +1,7 @@
 package de.uniks.stp24.ingameTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.uniks.stp24.App;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.dto.AggregateItemDto;
@@ -10,6 +11,7 @@ import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.ExplanationService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
@@ -51,6 +53,8 @@ public class StorageComponentTest extends ControllerTest {
     @Spy
     EmpireService empireService;
     @Spy
+    ExplanationService explanationService;
+    @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
 
     @InjectMocks
@@ -76,7 +80,8 @@ public class StorageComponentTest extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
-
+        explanationService.app = this.app;
+        storageOverviewComponent.explanationService = this.explanationService;
         // Mock TokenStorage
         doReturn("testGameID").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();

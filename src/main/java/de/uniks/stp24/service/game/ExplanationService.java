@@ -17,7 +17,7 @@ import java.util.ArrayList;
 @Singleton
 public class ExplanationService {
     @Inject
-    App app;
+    public App app;
     double x;
     double y;
     boolean entered = false;

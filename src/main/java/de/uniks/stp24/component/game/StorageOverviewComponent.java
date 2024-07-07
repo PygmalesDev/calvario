@@ -52,7 +52,7 @@ public class StorageOverviewComponent extends AnchorPane {
     @Inject
     TokenStorage tokenStorage;
     @Inject
-    ExplanationService explanationService;
+    public ExplanationService explanationService;
     @Inject
     @org.fulib.fx.annotation.controller.Resource
 

@@ -114,7 +114,6 @@ public class TestIslandOverview extends ControllerTest {
     DeleteStructureComponent deleteStructureComponent;
 
 
-
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
 
     Map<String, Integer> siteSlots = Map.of("test1", 3, "test2", 3, "test3", 4, "test4", 4);
@@ -134,11 +133,11 @@ public class TestIslandOverview extends ControllerTest {
     Map<String, Integer> consumptionSites = Map.of("energy", 20, "fuel", 19);
 
 
-    UpgradeStatus unexplored = new UpgradeStatus("unexplored", 1, cost, upkeep, 1);
-    UpgradeStatus explored = new UpgradeStatus("explored", 1, cost, upkeep, 1);
-    UpgradeStatus colonized = new UpgradeStatus("colonized", 1, cost, upkeep, 1);
-    UpgradeStatus upgraded = new UpgradeStatus("upgraded", 1, cost, upkeep, 1);
-    UpgradeStatus developed = new UpgradeStatus("developed", 1, cost, upkeep, 1);
+    UpgradeStatus unexplored = new UpgradeStatus("unexplored", null, 0, 1, cost, upkeep, 1);
+    UpgradeStatus explored = new UpgradeStatus("explored", null, 0, 1, cost, upkeep, 1);
+    UpgradeStatus colonized = new UpgradeStatus("colonized", null, 0, 1, cost, upkeep, 1);
+    UpgradeStatus upgraded = new UpgradeStatus("upgraded", null, 0, 1, cost, upkeep, 1);
+    UpgradeStatus developed = new UpgradeStatus("developed", null, 0, 1, cost, upkeep, 1);
 
     EmpireDto empireDto = new EmpireDto(
             null,
@@ -188,62 +187,65 @@ public class TestIslandOverview extends ControllerTest {
             null
     );
 
-    BuildingPresets buildingPreset1 = new BuildingPresets(
+    BuildingAttributes buildingPreset1 = new BuildingAttributes(
             "testBuilding1",
+            0,
             null,
             consumptionBuilding,
             productionBuilding
     );
 
-    BuildingPresets buildingPreset2 = new BuildingPresets(
+    BuildingAttributes buildingPreset2 = new BuildingAttributes(
             "testBuilding2",
+            0,
             null,
             consumptionBuilding,
             productionBuilding
     );
 
-    BuildingPresets buildingPreset3 = new BuildingPresets(
+    BuildingAttributes buildingPreset3 = new BuildingAttributes(
             "testBuilding3",
+            0,
             null,
             consumptionBuilding,
             productionBuilding
     );
 
-    DistrictPresets districtPresets1 = new DistrictPresets(
+    BuildingAttributes districtPresets1 = new BuildingAttributes(
             "test1",
-            null,
+            0,
             null,
             consumptionSites,
             productionSites
     );
 
-    DistrictPresets districtPresets2 = new DistrictPresets(
+    BuildingAttributes districtPresets2 = new BuildingAttributes(
             "test2",
-            null,
+            0,
             null,
             consumptionSites,
             productionSites
     );
 
-    DistrictPresets districtPresets3 = new DistrictPresets(
+    BuildingAttributes districtPresets3 = new BuildingAttributes(
             "test3",
-            null,
+            0,
             null,
             consumptionSites,
             productionSites
     );
 
-    DistrictPresets districtPresets4 = new DistrictPresets(
+    BuildingAttributes districtPresets4 = new BuildingAttributes(
             "test4",
-            null,
+            0,
             null,
             consumptionSites,
             productionSites
     );
 
     SystemUpgrades systemUpgrades = new SystemUpgrades(unexplored, explored, colonized, upgraded, developed);
-    ArrayList<BuildingPresets> buildingPresets = new ArrayList<>();
-    ArrayList<DistrictPresets> districtPresets = new ArrayList<>();
+    ArrayList<BuildingAttributes> buildingPresets = new ArrayList<>();
+    ArrayList<BuildingAttributes> districtPresets = new ArrayList<>();
 
     Island testIsland1;
     Island testIsland2;
@@ -274,7 +276,6 @@ public class TestIslandOverview extends ControllerTest {
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
 
 
-
         // Mock TokenStorage
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();
@@ -294,11 +295,10 @@ public class TestIslandOverview extends ControllerTest {
                 "a", "a", 1, 2, "a", new String[]{"1"}, cost,
                 null))).when(this.empireService).getEmpire(any(), any());
 
-        doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", 2,true, 1, 1, null))).when(gamesApiService).getGame(any());
+        doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", 2, true, 1, 1, null))).when(gamesApiService).getGame(any());
         doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
         doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
-        doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
-        doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
+
 
 
         buildings.add("testBuilding1");
@@ -401,9 +401,7 @@ public class TestIslandOverview extends ControllerTest {
         );
 
 
-
-
-        this.islandAttributeStorage.systemPresets = systemUpgrades;
+        this.islandAttributeStorage.systemUpgradeAttributes = systemUpgrades;
         this.islandAttributeStorage.empireDto = empireDto;
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewSitesComponent.islandAttributes = islandAttributeStorage;

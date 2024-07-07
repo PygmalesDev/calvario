@@ -75,22 +75,22 @@ public class InGameController extends BasicController {
     @FXML
     public StackPane zoomPane;
     @FXML
-    StackPane deleteStructureWarningContainer;
+    public StackPane deleteStructureWarningContainer;
     @FXML
-    StackPane siteProperties;
+    public StackPane siteProperties;
     @FXML
-    StackPane buildingProperties;
+    public StackPane buildingProperties;
     @FXML
-    StackPane buildingsWindow;
+    public StackPane buildingsWindow;
     @FXML
-    StackPane pauseMenuContainer;
+    public StackPane pauseMenuContainer;
     @FXML
     public StackPane storageOverviewContainer;
     @FXML
     public StackPane empireOverviewContainer;
 
     @FXML
-    StackPane clockComponentContainer;
+    public StackPane clockComponentContainer;
 
     @Inject
     public EventService eventService;
@@ -109,7 +109,7 @@ public class InGameController extends BasicController {
     @Inject
     ResourcesService resourceService;
     @Inject
-    ExplanationService explanationService;
+    public ExplanationService explanationService;
 
 
     @SubComponent
@@ -170,9 +170,9 @@ public class InGameController extends BasicController {
     @Inject
     public GameSystemsApiService gameSystemsApiService;
     @Inject
-    GameLogicApiService gameLogicApiService;
+    public GameLogicApiService gameLogicApiService;
     @Inject
-    VariableService variableService;
+    public VariableService variableService;
 
     public IslandComponent selectedIsland;
 

@@ -8,8 +8,10 @@ import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
+import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -76,6 +78,8 @@ public class AppTest2 extends ControllerTest {
     DeleteStructureComponent deleteStructureComponent;
     @InjectMocks
     EmpireOverviewComponent empireOverviewComponent;
+    @InjectMocks
+    VariableExplanationComponent variableExplanationComponent;
 
 
     @Spy
@@ -90,14 +94,12 @@ public class AppTest2 extends ControllerTest {
     EmpireService empireService;
     @Spy
     InfrastructureService infrastructureService;
-
-
+    @Spy
+    VariableService variableService;
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
-
     @Spy
     GameStatus gameStatus;
-
     @Spy
     InGameService inGameService;
     @Spy
@@ -106,28 +108,32 @@ public class AppTest2 extends ControllerTest {
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @Spy
     Subscriber subscriber = spy(Subscriber.class);
-
+    @Spy
+    GameLogicApiService gameLogicApiService;
     @Spy
     LanguageService languageService;
-
+    @Spy
+    PresetsApiService presetsApiService;
     @Spy
     ResourcesService resourcesService;
     @Spy
     GameSystemsApiService gameSystemsApiService;
     @Spy
     IslandComponent islandComponent = spy(IslandComponent.class);
+    @Spy
+    ExplanationService explanationService;
 
     Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
     Map<String, Integer> upkeep = Map.of("energy", 3, "fuel", 8);
-    UpgradeStatus unexplored = new UpgradeStatus("unexplored", 1, cost, upkeep, 1);
-    UpgradeStatus explored = new UpgradeStatus("explored", 1, cost, upkeep, 1);
-    UpgradeStatus colonized = new UpgradeStatus("colonized", 1, cost, upkeep, 1);
-    UpgradeStatus upgraded = new UpgradeStatus("upgraded", 1, cost, upkeep, 1);
-    UpgradeStatus developed = new UpgradeStatus("developed", 1, cost, upkeep, 1);
+    UpgradeStatus unexplored = new UpgradeStatus("unexplored", null, 0,1, cost, upkeep, 1);
+    UpgradeStatus explored = new UpgradeStatus("explored", null, 0,1, cost, upkeep, 1);
+    UpgradeStatus colonized = new UpgradeStatus("colonized", null, 0,1, cost, upkeep, 1);
+    UpgradeStatus upgraded = new UpgradeStatus("upgraded", null, 0,1, cost, upkeep, 1);
+    UpgradeStatus developed = new UpgradeStatus("developed", null, 0,1, cost, upkeep, 1);
 
     SystemUpgrades systemUpgrades = new SystemUpgrades(unexplored, explored, colonized, upgraded, developed);
-    ArrayList<BuildingPresets> buildingPresets = new ArrayList<>();
-    ArrayList<DistrictPresets> districtPresets = new ArrayList<>();
+    ArrayList<BuildingAttributes> buildingPresets = new ArrayList<>();
+    ArrayList<DistrictAttributes> districtPresets = new ArrayList<>();
     SystemDto[] systems = new SystemDto[3];
     List<IslandComponent> testIsleComps;
     Button[] buttons = new Button[3] ;
@@ -135,11 +141,14 @@ public class AppTest2 extends ControllerTest {
     Island island1;
     Map<String,InfrastructureService> testMapInfra = new HashMap<>();
 
+    Map<String, Integer> variablesPresets = new HashMap<>();
 
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
+        this.inGameController.variableService = this.variableService;
+        this.inGameController.gameLogicApiService = this.gameLogicApiService;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
@@ -149,6 +158,7 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = eventComponent;
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
+        this.inGameController.variableService.inGameService = this.inGameService;
         this.clockComponent.timerService = this.timerService;
         this.clockComponent.eventService = this.eventService;
         this.clockComponent.subscriber = this.subscriber;
@@ -156,7 +166,7 @@ public class AppTest2 extends ControllerTest {
         this.clockComponent.islandsService = this.islandsService;
         this.clockComponent.eventComponent = this.eventComponent;
         this.islandsService.app = this.app;
-        this.islandAttributeStorage.systemPresets = systemUpgrades;
+        this.islandAttributeStorage.systemUpgradeAttributes = systemUpgrades;
         inGameService.setGameStatus(gameStatus);
         islandsService.gameSystemsService = this.gameSystemsApiService;
         this.inGameController.islandAttributes = this.islandAttributeStorage;
@@ -165,15 +175,23 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
-
+        this.inGameService.presetsApiService = this.presetsApiService;
         inGameController.mapScrollPane = new ScrollPane();
         inGameController.group = new Group();
         inGameController.zoomPane = new StackPane();
         inGameController.mapGrid = new Pane();
-
         inGameController.zoomPane.getChildren().add(inGameController.mapGrid);
         inGameController.group.getChildren().add(inGameController.zoomPane);
         inGameController.mapScrollPane.setContent(inGameController.group);
+
+        this.inGameController.variableService.subscriber = this.subscriber;
+        this.inGameController.variableExplanationComponent = this.variableExplanationComponent;
+        this.explanationService.app = this.app;
+        this.inGameController.explanationService = this.explanationService;
+        variablesPresets.put("districts.city.build_time", 9);
+        variablesPresets.put("districts.city.cost.minerals", 100);
+        variablesPresets.put("districts.city.upkeep.energy", 5);
+        doReturn(Observable.just(variablesPresets)).when(inGameService).getVariablesPresets();
 
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
         doReturn(Observable
@@ -209,10 +227,6 @@ public class AppTest2 extends ControllerTest {
         doReturn(compMap).when(islandsService).getComponentMap();
 //        doReturn(compList).when(islandsService).createIslands(any());
 
-        doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
-        doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
-        doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
-
         Mockito.doCallRealMethod().when(islandsService).retrieveIslands(any());
         Mockito.doCallRealMethod().when(islandsService).getListOfIslands();
         Mockito.doCallRealMethod().when(islandsService).getMapWidth();
@@ -221,7 +235,6 @@ public class AppTest2 extends ControllerTest {
         Mockito.doCallRealMethod().when(islandsService).createIslands(any());
         Mockito.doCallRealMethod().when(islandsService).createIslandPaneFromDto(any(),any());
         doCallRealMethod().when(islandComponent).setPosition(anyDouble(),anyDouble());
-
 
         // Mock getEmpire
         doReturn(Observable.just(new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
@@ -254,7 +267,6 @@ public class AppTest2 extends ControllerTest {
           "1",
           "developed"
         );
-
     }
 
     @Test

@@ -20,9 +20,9 @@ import static java.lang.Thread.sleep;
 @Singleton
 public class VariableService {
     @Inject
-    InGameService inGameService;
+    public InGameService inGameService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
     GameLogicApiService gameLogicApiService;
 

@@ -17,10 +17,7 @@ import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.EmpireService;
-import de.uniks.stp24.service.game.EventService;
-import de.uniks.stp24.service.game.ResourcesService;
-import de.uniks.stp24.service.game.TimerService;
+import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
@@ -80,13 +77,16 @@ public class PauseMenuTest extends ControllerTest {
 
     @Spy
     ResourcesService resourcesService;
-
+    @Spy
+    VariableService variableService;
     @Spy
     ObjectMapper objectMapper;
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @Spy
     EmpireService empireService;
+    @Spy
+    ExplanationService explanationService;
 
 
     @InjectMocks
@@ -124,9 +124,6 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     BuildingsWindowComponent buildingsWindowComponent;
 
-
-
-
     @InjectMocks
     DetailsComponent detailsComponent;
 
@@ -139,6 +136,11 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     DeleteStructureComponent deleteStructureComponent;
 
+    @InjectMocks
+    VariableExplanationComponent variableExplanationComponent;
+
+
+
 
 
     @Spy
@@ -148,8 +150,9 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     InGameController inGameController;
 
-    ArrayList<BuildingPresets> buildingPresets = new ArrayList<>();
-    ArrayList<DistrictPresets> districtPresets = new ArrayList<>();
+    ArrayList<BuildingAttributes> buildingPresets = new ArrayList<>();
+    ArrayList<BuildingAttributes> districtPresets = new ArrayList<>();
+    Map<String, Integer> variablesPresets = new HashMap<>();
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -172,6 +175,8 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
+        this.variableService.inGameService = this.inGameService;
+        this.inGameController.variableService = this.variableService;
 
         this.inGameService.presetsApiService = this.presetsApiService;
 
@@ -182,16 +187,20 @@ public class PauseMenuTest extends ControllerTest {
         Map<String , Integer> required = new HashMap<>();
         Map<String, Integer> production = new HashMap<>();
         Map<String, Integer> consumption = new HashMap<>();
-        UpgradeStatus upgradeStatus = new UpgradeStatus("test", 20, production, consumption, 20);
+        UpgradeStatus upgradeStatus = new UpgradeStatus("test", null, 0,20, production, consumption, 20);
 
         doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());
         doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", 2,true,1,1,null ))).when(gamesApiService).getGame(any());
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
 
-        doReturn(Observable.just(new SystemUpgrades(upgradeStatus,upgradeStatus, upgradeStatus, upgradeStatus, upgradeStatus ))).when(inGameService).loadUpgradePresets();
-        doReturn(Observable.just(new ArrayList<BuildingPresets>())).when(inGameService).loadBuildingPresets();
-        doReturn(Observable.just(new ArrayList<DistrictPresets>())).when(inGameService).loadDistrictPresets();
-
+        this.inGameController.variableService.subscriber = this.subscriber;
+        this.inGameController.variableExplanationComponent = this.variableExplanationComponent;
+        this.explanationService.app = this.app;
+        this.inGameController.explanationService = this.explanationService;
+        variablesPresets.put("districts.city.build_time", 9);
+        variablesPresets.put("districts.city.cost.minerals", 100);
+        variablesPresets.put("districts.city.upkeep.energy", 5);
+        doReturn(Observable.just(variablesPresets)).when(inGameService).getVariablesPresets();
         this.app.show(this.inGameController);
     }
 

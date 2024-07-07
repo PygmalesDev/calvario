@@ -7,7 +7,6 @@ import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.SiteJobProgressComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
@@ -54,8 +53,6 @@ public class AppTest2 extends ControllerTest {
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
     @InjectMocks
-    SettingsComponent settingsComponent;
-    @InjectMocks
     EventComponent eventComponent;
     @InjectMocks
     ClockComponent clockComponent;
@@ -89,6 +86,8 @@ public class AppTest2 extends ControllerTest {
     EmpireOverviewComponent empireOverviewComponent;
     @InjectMocks
     SiteJobProgressComponent siteJobProgressComponent;
+    @InjectMocks
+    HelpComponent helpComponent;
 
 
     @Spy
@@ -105,10 +104,6 @@ public class AppTest2 extends ControllerTest {
     EmpireService empireService;
     @Spy
     InfrastructureService infrastructureService;
-
-
-    @Spy
-    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
 
     @Spy
     GameStatus gameStatus;
@@ -161,7 +156,6 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
-        this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = eventComponent;
@@ -183,6 +177,8 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
+        this.inGameController.helpComponent = this.helpComponent;
+
         this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
         this.timerService.tokenStorage = this.tokenStorage;
         this.timerService.subscriber = this.subscriber;
@@ -264,7 +260,6 @@ public class AppTest2 extends ControllerTest {
         storageOverviewComponent.getStylesheets().clear();
         clockComponent.getStylesheets().clear();
         pauseMenuComponent.getStylesheets().clear();
-        settingsComponent.getStylesheets().clear();
         overviewSitesComponent.getStylesheets().clear();
         overviewUpgradeComponent.getStylesheets().clear();
         sitesComponent.getStylesheets().clear();

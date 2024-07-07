@@ -32,6 +32,10 @@ public class ControllerTest extends ApplicationTest {
     public ResponseConstants responseConstants;
     @Spy
     public ResourceBundle resources = ResourceBundle.getBundle("de/uniks/stp24/lang/main", Locale.ROOT);
+    @Spy
+    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
+    @Spy
+    public ResourceBundle variablesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/variables", Locale.ROOT);
 
 
     protected Stage stage;

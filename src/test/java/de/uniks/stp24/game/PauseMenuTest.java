@@ -8,7 +8,6 @@ import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.SiteJobProgressComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateResultDto;
 import de.uniks.stp24.dto.EmpireDto;
@@ -35,6 +34,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.inject.Inject;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -60,6 +60,7 @@ public class PauseMenuTest extends ControllerTest {
 
     @Spy
     PopupBuilder popupBuilder;
+
     @Spy
     EventService eventService;
 
@@ -86,11 +87,12 @@ public class PauseMenuTest extends ControllerTest {
 
     @Spy
     ObjectMapper objectMapper;
+
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
+
     @Spy
     EmpireService empireService;
-
 
     @InjectMocks
     ClockComponent clockComponent;
@@ -100,12 +102,6 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
-
-    @InjectMocks
-    SettingsComponent settingsComponent;
-
-    @InjectMocks
-    EmpireOverviewComponent empireOverviewComponent;
 
     @InjectMocks
     OverviewSitesComponent overviewSitesComponent;
@@ -122,6 +118,7 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
+
     @InjectMocks
     BuildingPropertiesComponent buildingPropertiesComponent;
 
@@ -146,16 +143,17 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     DeleteStructureComponent deleteStructureComponent;
+    @InjectMocks
+    EmpireOverviewComponent empireOverviewComponent;
+
+    @InjectMocks
+    HelpComponent helpComponent;
 
     @InjectMocks
     SiteJobProgressComponent siteJobProgressComponent;
 
     @Spy
     JobsApiService jobsApiService;
-
-    @Spy
-    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
-
 
     @InjectMocks
     InGameController inGameController;
@@ -167,8 +165,6 @@ public class PauseMenuTest extends ControllerTest {
     public void start(Stage stage) throws Exception {
         super.start(stage);
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
-        this.inGameController.settingsComponent = this.settingsComponent;
-        this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = this.eventComponent;
@@ -179,6 +175,8 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+        this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
+        this.inGameController.helpComponent = this.helpComponent;
         this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
         this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
         this.timerService.gamesApiService = this.gamesApiService;

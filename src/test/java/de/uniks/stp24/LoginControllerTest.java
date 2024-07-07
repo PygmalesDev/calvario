@@ -19,6 +19,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import javafx.stage.Stage;
 import org.testfx.util.WaitForAsyncUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -52,8 +55,13 @@ public class LoginControllerTest extends ControllerTest {
 
     @Test
     void login(){
+        Map<String,Integer> _public = new HashMap<>();
+        _public.put("backgroundIndex", 1);
+        _public.put("portraitIndex", 1);
+        _public.put("frameIndex", 1);
+
         when(authApiService.login(any()))
-                .thenReturn(Observable.just(new LoginResult("1", "a","b","c","d")));
+                .thenReturn(Observable.just(new LoginResult("1", "a","b", _public, "c","d")));
         doReturn(null).when(app).show("/browseGames");
 
         // Start:

@@ -100,7 +100,7 @@ public class IslandComponent extends Pane {
         inGameController.islandsService.keyCodeFlag = selected;
     }
 
-    @OnKey(code = KeyCode.H, shift = true)
+    @OnKey(code = KeyCode.F,alt = true)
     public void showFlagH() {
         if (island.flagIndex() >= 0 && !islandIsSelected) {
             this.flagPane.setVisible(!flagPane.isVisible());

@@ -5,6 +5,7 @@ import de.uniks.stp24.controllers.helper.JoinGameHelper;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.UserApiService;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -38,7 +39,6 @@ import java.util.ResourceBundle;
 @Title("%enter.game")
 @Controller
 public class LobbyController extends BasicController {
-
     @Inject
     EmpireService empireService;
     @Inject
@@ -279,11 +279,11 @@ public class LobbyController extends BasicController {
                     if (userID.equals(this.game.owner())) suffix += " (Host)";
                     if (Objects.isNull(data.empire())) suffix += " (Spectator)";
 
-                    this.users.add(new MemberUser(new User(user.name() + suffix,
-                            user._id(), user.avatar(), user.createdAt(), user.updatedAt()
-                    ), data.empire(), data.ready(), this.game, this.asHost));
-                },
-                this::errorMsg);
+            this.users.add(new MemberUser(new User(user.name() + suffix,
+                    user._id(), user.avatar(), user.createdAt(), user.updatedAt(), user._public()
+            ), data.empire(), data.ready(), this.game, this.asHost));
+        },
+          error -> {});
     }
 
     /**
@@ -299,14 +299,15 @@ public class LobbyController extends BasicController {
                     return new MemberUser(new User(
                             memberUser.user().name().replace(" (Spectator)", ""),
                             userID, memberUser.user().avatar(), memberUser.user().createdAt(),
-                            memberUser.user().updatedAt()), data.empire(), data.ready(), this.game, this.asHost);
-                } else {
+                            memberUser.user().updatedAt(),memberUser.user()._public()), data.empire(), data.ready(), this.game, this.asHost);
+                }
+                else {
                     String suffix = " (Spectator)";
                     if (memberUser.user().name().contains("(Spectator)"))
                         suffix = "";
                     return new MemberUser(new User(
                             memberUser.user().name() + suffix, userID, memberUser.user().avatar(),
-                            memberUser.user().createdAt(), memberUser.user().updatedAt()),
+                            memberUser.user().createdAt(), memberUser.user().updatedAt(),memberUser.user()._public()),
                             null, data.ready(), this.game, this.asHost);
                 }
             } else

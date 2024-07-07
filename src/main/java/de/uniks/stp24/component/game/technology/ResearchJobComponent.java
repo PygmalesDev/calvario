@@ -5,6 +5,7 @@ import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Technology;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.rest.JobsApiService;
+import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.TechnologyService;
@@ -111,6 +112,16 @@ public class ResearchJobComponent extends AnchorPane {
 
 
     public void handleJob(TechnologyExtended technology) {
+        // Check if there are at least two tags
+        if (technology.tags().length > 0) {
+            Image image1 = new Image(Constants.technologyIconMap.get(technology.tags()[0]));
+            technologyTagImage1.setImage(image1);
+        }
+        if (technology.tags().length > 1) {
+            Image image2 = new Image(Constants.technologyIconMap.get(technology.tags()[1]));
+            technologyTagImage2.setImage(image2);
+        }
+
         int cost = technology.cost() * 100;
         researchCostText.setText(String.valueOf(cost));
         technologyNameText.setText(technology.id());

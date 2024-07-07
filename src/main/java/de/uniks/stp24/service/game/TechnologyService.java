@@ -33,11 +33,9 @@ public class TechnologyService {
     Observable<ArrayList<TechnologyExtended>> temp;
     Set<TechnologyExtended> allUnlockedTechnologiesSet = new HashSet<>();
 
-    public ObservableList<TechnologyExtended> researchTechnologiesList = FXCollections.observableArrayList();
     ObservableList<TechnologyExtended> unlockedTechnologiesList = FXCollections.observableArrayList();
 
     ObservableList<TechnologyExtended> allUnlockedTechnologiesList = FXCollections.observableArrayList();
-    ObservableList<TechnologyExtended> allResearchTechnologiesList = FXCollections.observableArrayList();
 
     @Inject
     public TechnologyService() {

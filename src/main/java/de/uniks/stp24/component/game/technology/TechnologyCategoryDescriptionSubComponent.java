@@ -61,11 +61,29 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
     public void setItem(@NotNull Effect effect) {
         this.effect = effect;
         String variable = this.effect.variable();
+
+        /*
+         * Iterate through all resources and checks if effect variable contains a resource
+         */
         for (String key : Constants.resourceTranslation.keySet()) {
             if (variable.contains(key)) {
                 resourceImage.setImage(imageCache.get("icons/resources/" + key + ".png"));
+                break;
             } else if (variable.contains("pop")) {
                 resourceImage.setImage(imageCache.get("icons/resources/population.png"));
+                break;
+            }
+        }
+
+        /*
+         * If variable doesn't affect a resource, it must be a technology
+         */
+        if (resourceImage.getImage() == null) {
+            for (String tech : Constants.technologyTranslation.values()) {
+                if (variable.contains(tech)) {
+                    resourceImage.setImage(imageCache.get("assets/technologies/tags/" + tech + ".png"));
+                    break;
+                }
             }
         }
 

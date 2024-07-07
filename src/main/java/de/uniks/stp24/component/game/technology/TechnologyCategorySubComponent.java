@@ -11,16 +11,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
+import javafx.util.*;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -52,6 +55,8 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     public HBox researchHBox;
     @FXML
     public Label technologyLabel;
+    @FXML
+    public Tooltip tooltip;
 
     @Inject
     App app;
@@ -65,10 +70,13 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     @Named("technologiesResourceBundle")
     public ResourceBundle technologiesResourceBundle;
 
+    @SubComponent
+    @Inject
+    public TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+
     ImageCache imageCache = new ImageCache();
 
     ObservableList<Effect> description = FXCollections.observableArrayList();
-    ObservableList<Effect> temp = FXCollections.observableArrayList();
 
     Provider<TechnologyCategoryDescriptionSubComponent> provider = TechnologyCategoryDescriptionSubComponent::new;
 
@@ -81,6 +89,7 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
 
     /**
      * Set the item inclusive the attributes tags, costs, and id
+     *
      * @param technologyExtended is the technology for the subcomponent in the ListView
      */
     @Override
@@ -100,6 +109,8 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
             tagImage3.setImage(imageCache.get("assets/technologies/tags/" + technologyExtended.tags()[2] + ".png"));
         }
 
+        technologyResearchDetailsComponent.setTechnologyInfos(technology);
+
         researchLabel.setText(String.valueOf(technologyExtended.cost()));
 
         description.addAll(technologyExtended.effects());
@@ -118,6 +129,12 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
 
         timeImage.setImage(imageCache.get("icons/time.png"));
         researchImage.setImage(imageCache.get("icons/resources/research.png"));
+
+        tooltip.setGraphic(technologyResearchDetailsComponent);
+        tooltip.setShowDelay(Duration.ZERO);
+        tooltip.setShowDuration(Duration.INDEFINITE);
+
+        tooltip.setX(tooltip.getX() - 200);
 
     }
 

@@ -1,9 +1,11 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.component.Captain;
+import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -24,7 +26,7 @@ public class HintBubbleComponent extends Captain {
     @FXML
     Button forwardButton;
     @FXML
-    Button closeButton;
+    Button nextButton;
 
     @Inject
     TokenStorage tokenStorage;
@@ -33,13 +35,20 @@ public class HintBubbleComponent extends Captain {
     @Inject
     EventListener eventListener;
     @Inject
+    EmpireService empireService;
+    @Inject
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
+    Random random = new Random();
+
+    int lastPeriod = 0;
+
+    int hintCountdown;
     ArrayList<String> possibleHints = Constants.hints;
 
-    int countdown;
-    Random random = new Random();
+    Map<String, Integer> worries = new HashMap<>();
+
 
     @Inject
     public HintBubbleComponent(){
@@ -48,56 +57,108 @@ public class HintBubbleComponent extends Captain {
 
     @OnInit
     public void init() {
-        setCountDown();
+        setHintCountDown();
+
+        // todo delete
+        worries.put("resource.doubloons", 10);
+        worries.put("resource.provisions", 30);
+        worries.put("resource.coal", 5);
     }
 
-    private void setCountDown() {
-        countdown = random.nextInt(2, 5);
+    private void setHintCountDown() {
+        // todo change
+        // countdown = random.nextInt(20, 40);
+        hintCountdown = 2;
     }
 
     @OnRender
     public void render() {
-        subscriber.subscribe(this.eventListener.listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
+        rotateCaptain();
+
+        subscriber.subscribe(this.eventListener.listen(String.format("games.%s.ticked", tokenStorage.getGameId()), Game.class),
                 result -> {
-                    countdown -= 1;
-                    if (countdown <= 0) {
-                        showRandomTip();
-                        setCountDown();
+                    if (lastPeriod != result.data().period()) {
+                        lastPeriod = result.data().period();
+
+                        subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                                aggregateResultDto -> {
+                                    // todo change
+                                    // worries.clear();
+                                    for (AggregateItemDto item : aggregateResultDto.items()) {
+                                        if (item.count() > 0 && item.count() + item.subtotal() <= 0) {
+                                            worries.put(item.variable(), item.count());
+                                        }
+                                    }
+                                },
+                                error -> System.out.println("ErrorAggregateSubscriber: " + error));
+
+                        decideWhatToSay();
                     }
                 },
                 error -> System.out.println("Error on Season: " + error.getMessage())
         );
     }
 
-    public void showRandomTip() {
-        setVisible(true);
-        String hint = possibleHints.get(random.nextInt(possibleHints.size()));
-        setCaptainText(gameResourceBundle.getString(hint));
-    }
-
     public void forward() {
 
     }
 
+    public void talk(String text) {
+        // todo
+        System.out.println("text: " + text);
+        setVisible(true);
+        System.out.println(isVisible());
+        setCaptainText(text);
+    }
+
+    private void talkAboutWorry() {
+        if (!worries.isEmpty()) {
+            String nextWorry = worries.keySet().iterator().next();
+            talk(worryToText(gameResourceBundle.getString(nextWorry), worries.remove(nextWorry)));
+        }
+    }
+
+    private String worryToText(String worry, int count) {
+        // todo change text
+        return "Bruh, you are broke. You have only " + count + " " + worry + "! Get your act togehther!";
+    }
+
+    public void decideWhatToSay(){
+        if (worries.isEmpty()) { // todo check for jobs
+            hintCountdown -= 1;
+            if (hintCountdown <= 0) {
+                talk(gameResourceBundle.getString(possibleHints.get(random.nextInt(possibleHints.size()))));
+                setHintCountDown();
+            } else {
+                silence();
+            }
+        } else {
+            // todo for later
+            // talkAboutJobs();
+            talkAboutWorry();
+        }
+    }
+
     @OnKey(code = KeyCode.S, alt = true)
     public void removeAltS(){
-        close();
+        silence();
         possibleHints.remove("hint.alt.s");
     }
 
     @OnKey(code = KeyCode.H, alt = true)
     public void removeAltH(){
-        close();
+        silence();
         possibleHints.remove("hint.alt.h");
     }
 
     @OnKey(code = KeyCode.E, alt = true)
     public void removeAltE(){
-        close();
+        silence();
         possibleHints.remove("hint.alt.e");
     }
 
-    public void close(){
+    public void silence() {
+        worries.clear();
         setVisible(false);
     }
 }

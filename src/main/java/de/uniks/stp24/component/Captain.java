@@ -20,20 +20,36 @@ public class Captain extends Pane {
     @FXML
     VBox backgroundBubble;
 
+    double bubbleWidth;
+    double textWidth;
+    double textHeight;
+
     ScaleTransition scaleTransition;
 
 
     @OnRender
     public void initScaleTransition() {
         scaleTransition = new ScaleTransition(Duration.seconds(0.3), captainLogo);
+        bubbleWidth = backgroundBubble.getPrefWidth();
+        textWidth = captainText.getPrefWidth();
+        textHeight = captainText.getPrefHeight();
+    }
+
+    public void rotateCaptain() {
+        captainLogo.setRotate(-30);
     }
 
     public void setCaptainText(String text) {
         captainText.setText(text);
         double calculated = ceil((double) text.length() /22)*37;
+        double newTextWidth = textWidth, newTextHeight = textHeight, newBubbleWidth = bubbleWidth;
         double bubbleOffset, textOffset;
 
         switch ((int) calculated/37) {
+            case 0 -> {
+                bubbleOffset = 100;
+                textOffset = 0;
+            }
             case 1 -> {
                 bubbleOffset = 70;
                 textOffset = 0;
@@ -47,16 +63,26 @@ public class Captain extends Pane {
                 textOffset = 20;
             }
             case 5 -> {
-                calculated = 4*37+7;
+                calculated = 3*37+7;
                 bubbleOffset = 0;
                 textOffset = 20;
+                newTextWidth *= 1.3;
+                newTextHeight *= 1.3;
+                newBubbleWidth *= 1.3;
             }
             default -> {
+                calculated = 3*37+7;
                 bubbleOffset = 0;
                 textOffset = 20;
+                newTextWidth *= 1.5;
+                newTextHeight *= 1.5;
+                newBubbleWidth *= 1.3;
             }
         }
 
+        this.captainText.setPrefHeight(newTextHeight);
+        this.captainText.setPrefWidth(newTextWidth);
+        this.backgroundBubble.setPrefWidth(newBubbleWidth);
         this.backgroundBubble.setPrefHeight(calculated);
         this.backgroundBubble.setLayoutY(bubbleOffset);
         this.captainText.setLayoutY(bubbleOffset+textOffset);

@@ -405,6 +405,10 @@ ToggleButton:hover{
     -fx-background-color: transparent;
 }
 
+.captainText .scroll-pane .content{
+    -fx-background-color: transparent;
+}
+
 .backgroundTextArea {
     -fx-font-size: 14;
     -fx-font-family: "PT Serif";
@@ -418,10 +422,6 @@ ToggleButton:hover{
 
 .backgroundTextArea .scroll-bar:vertical{
     -fx-background-color: #FFD966;
-}
-
-.captainText .scroll-pane .content{
-    -fx-background-color: transparent;
 }
 
 .inputField {
@@ -749,22 +749,29 @@ ToggleButton:hover{
 }
 
 /*********************************** hint bubble *****************************************************/
-.hintText{
-    -fx-font-family: "Tempus Sans ITC";
-    -fx-background-color: "TRANSPARENT";
-    -fx-font-weight: none;
-    -fx-text-fill: black;
+.hintText {
+    -fx-font-family: "PT Serif";
     -fx-font-size: 12;
-}
-
-.hintText .scroll-pane {
+    -fx-font-weight: bold;
     -fx-background-color: transparent;
+    -fx-focus-traversable: false;
 }
 
-.hintText .scroll-pane .viewport{
+.hintText:disabled {
+    -fx-opacity: 1;
+}
+
+.hintText .scroll-pane .viewport {
     -fx-background-color: transparent;
 }
 
 .hintText .scroll-pane .content{
     -fx-background-color: transparent;
+}
+
+.hintCaptainPane {
+    -fx-background-image: url("/de/uniks/stp24/assets/fields/chat_bubble_ingame.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: left;
 }

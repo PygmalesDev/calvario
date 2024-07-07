@@ -131,15 +131,19 @@ public class HintBubbleComponent extends Captain {
 
     public void decideWhatToSay(){
         if (announcements.isEmpty()) { // todo check for jobs
-            hintCountdown -= 1;
-            if (hintCountdown <= 0) {
-                talk(gameResourceBundle.getString(possibleHints.get(random.nextInt(possibleHints.size()))));
-                setHintCountDown();
-            } else {
-                silence();
-            }
+            sayTip();
         } else {
             announce();
+        }
+    }
+
+    private void sayTip() {
+        hintCountdown -= 1;
+        if (hintCountdown <= 0) {
+            talk(gameResourceBundle.getString(possibleHints.get(random.nextInt(possibleHints.size()))));
+            setHintCountDown();
+        } else {
+            silence();
         }
     }
 

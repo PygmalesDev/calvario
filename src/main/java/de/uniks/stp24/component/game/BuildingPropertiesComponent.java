@@ -3,6 +3,7 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.BuildingDto;
+import de.uniks.stp24.model.BuildingPresets;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -10,6 +11,7 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.ExplanationService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.ResourcesService;
+import de.uniks.stp24.service.game.VariableService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -62,6 +64,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
     App app;
     @Inject
     ExplanationService explanationService;
+    @Inject
+    VariableService variableService;
 
 
     @Inject
@@ -80,6 +84,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     String buildingType;
     InGameController inGameController;
     Map<String, Integer> priceOfBuilding;
+    BuildingDto certainBuilding;
 
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
 
@@ -112,12 +117,10 @@ public class BuildingPropertiesComponent extends AnchorPane {
     public void disableButtons(){
         buyButton.setDisable(true);
         destroyButton.setDisable(true);
-        subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
-            priceOfBuilding = result.cost();
-            if (resourcesService.hasEnoughResources(priceOfBuilding)) {
-                buyButton.setDisable(false);
-            }
-        });
+
+        setCertainBuilding();
+        buyButton.setDisable(false);
+
         if (tokenStorage.getIsland().buildings().contains(buildingType)){
             destroyButton.setDisable(false);
         }
@@ -130,11 +133,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     //Gets called every second by a timer
     public void updateButtonStates(){
-        subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
-            priceOfBuilding = result.cost();
-            buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding) ||
-                    islandAttributeStorage.getUsedSlots() >= islandAttributeStorage.getIsland().resourceCapacity());
-        });
+        setCertainBuilding();
+        buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding) ||
+                islandAttributeStorage.getUsedSlots() >= islandAttributeStorage.getIsland().resourceCapacity());
         destroyButton.setDisable(!tokenStorage.getIsland().buildings().contains(buildingType));
     }
 
@@ -153,22 +154,21 @@ public class BuildingPropertiesComponent extends AnchorPane {
     //Second subscribe will only be reached if hasEnoughResources returns true with priceOfBuilding
     public void buyBuilding(){
         Island island = islandAttributeStorage.getIsland();
-        subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
-            priceOfBuilding = result.cost();
-            if (resourcesService.hasEnoughResources(priceOfBuilding) && islandAttributeStorage.getUsedSlots() < islandAttributeStorage.getIsland().resourceCapacity()) {
-                subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingType), result2 -> {
-                            tokenStorage.setIsland(islandsService.updateIsland(result2));
-                            islandAttributeStorage.setIsland(islandsService.updateIsland(result2));
-                            inGameController.islandsService.updateIslandBuildings(islandAttributeStorage, inGameController, islandAttributeStorage.getIsland().buildings());
-                            inGameController.setSitePropertiesInvisible();
-                            inGameController.updateResCapacity();
+        setCertainBuilding();
 
-                        },
-                        error -> buyButton.setDisable(true));
-            } else {
-                buyButton.setDisable(true);
-            }
-        });
+        if (resourcesService.hasEnoughResources(priceOfBuilding) && islandAttributeStorage.getUsedSlots() < islandAttributeStorage.getIsland().resourceCapacity()) {
+            subscriber.subscribe(resourcesService.createBuilding(tokenStorage.getGameId(), island, buildingType), result2 -> {
+                        tokenStorage.setIsland(islandsService.updateIsland(result2));
+                        islandAttributeStorage.setIsland(islandsService.updateIsland(result2));
+                        inGameController.islandsService.updateIslandBuildings(islandAttributeStorage, inGameController, islandAttributeStorage.getIsland().buildings());
+                        inGameController.setSitePropertiesInvisible();
+                        inGameController.updateResCapacity();
+
+                    },
+                    error -> buyButton.setDisable(true));
+        } else {
+            buyButton.setDisable(true);
+        }
     }
 
     //Gets resources of the building and shows them in three listviews
@@ -176,7 +176,10 @@ public class BuildingPropertiesComponent extends AnchorPane {
         Image imageBuilding = new Image(buildingsMap.get(buildingType));
         buildingImage.setImage(imageBuilding);
         buildingName.setText(gameResourceBundle.getString(buildingTranslation.get(buildingType)));
-        subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), this::resourceListGeneration);
+
+
+        setCertainBuilding();
+        resourceListGeneration(certainBuilding);
 
         buildingCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview", "building.costs"));
         buildingProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview", "building.production"));
@@ -201,5 +204,14 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     public void onClose(){
         setVisible(false);
+    }
+
+    private void setCertainBuilding(){
+        for(BuildingDto building: islandAttributeStorage.buildingsAttributes){
+            if(building.id().equals(buildingType)){
+                certainBuilding = building;
+                priceOfBuilding = certainBuilding.cost();
+            }
+        }
     }
 }

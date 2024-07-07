@@ -73,7 +73,6 @@ public class Building extends VBox {
                 inGameController.setSitePropertiesInvisible();
                 inGameController.showBuildingInformation(buildingName);
                 inGameController.selectedBuilding = buildingName;
-                System.out.println(buildingName);
 
             } else {
                 inGameController.showBuildingWindow();

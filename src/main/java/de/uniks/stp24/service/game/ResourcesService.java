@@ -126,7 +126,6 @@ public class ResourcesService {
         return gameSystemsApiService.getBuilding(buildingType);
     }
 
-
     /**
      * Updates the ObservableList which shows the count and change per season of a resource
      */

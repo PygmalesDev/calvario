@@ -1,5 +1,6 @@
 package de.uniks.stp24.service.game;
 
+import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.dto.ExplainedVariableDTO;
 import de.uniks.stp24.model.BuildingPresets;
 import de.uniks.stp24.model.DistrictPresets;
@@ -87,15 +88,15 @@ public class VariableDependencyService {
     Logic for making attributes of buildings (cost, upkeep, production) dependent from Variables
      */
 
-    public ArrayList<BuildingPresets> createVariableDependencyBuildings() {
-        ArrayList<BuildingPresets> buildingsAttributes = new ArrayList<>();
+    public ArrayList<BuildingDto> createVariableDependencyBuildings() {
+        ArrayList<BuildingDto> buildingsAttributes = new ArrayList<>();
         for (VariablesTree.Node<ExplainedVariableDTO> buildingNode : variableService.buildingsTree.getRoot().getChildren()) {
             buildingsAttributes.add(buildingDependencyHandler(buildingNode));
         }
         return buildingsAttributes;
     }
 
-    private BuildingPresets buildingDependencyHandler(VariablesTree.Node<ExplainedVariableDTO> buildingNode) {
+    private BuildingDto buildingDependencyHandler(VariablesTree.Node<ExplainedVariableDTO> buildingNode) {
         String id = buildingNode.getKey();
         double build_time = variableService.buildingsTree.getNode(id, "build_time").getValue().finalValue();
         Map<String, Integer> cost = castMapToInteger(createResourceMap(variableService.buildingsTree.getNode(id, "cost").getChildren()));
@@ -105,7 +106,7 @@ public class VariableDependencyService {
         if (variableService.buildingsTree.getNode(id, "production") != null) {
             production = castMapToInteger(createResourceMap(variableService.buildingsTree.getNode(id, "production").getChildren()));
         }
-        return new BuildingPresets(id, build_time, cost, upkeep, production);
+        return new BuildingDto(id, build_time, cost, upkeep, production);
     }
 
     /*

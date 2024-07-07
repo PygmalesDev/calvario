@@ -124,7 +124,12 @@ public class DeleteStructureComponent extends VBox{
     //that will be returned when deleting a structure
     private void displayStructureInfo() {
         if (buildings.containsKey(structureType)){
-            subscriber.subscribe(resourcesService.getResourcesBuilding(structureType), this::resourceListGenerationBuilding);
+            for(BuildingDto building: islandAttributeStorage.buildingsAttributes){
+                if(building.id().equals(structureType)){
+                    resourceListGenerationBuilding(building);
+                    break;
+                }
+            }
         }
         if (sites.containsKey(structureType)){
             subscriber.subscribe(resourcesService.getResourcesSite(structureType), this::resourceListGenerationSite);

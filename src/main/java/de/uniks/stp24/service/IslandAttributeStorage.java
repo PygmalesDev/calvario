@@ -1,5 +1,6 @@
 package de.uniks.stp24.service;
 
+import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.BuildingPresets;
@@ -25,7 +26,7 @@ public class IslandAttributeStorage {
     public EmpireDto empireDto;
     public SystemUpgrades systemUpgradeAttributes;
     public Island island;
-    public ArrayList<BuildingPresets> buildingsAttributes;
+    public ArrayList<BuildingDto> buildingsAttributes;
     public ArrayList<DistrictPresets> districts;
     public Map<Integer, String> upgradeEffects = new HashMap<>();
 
@@ -132,7 +133,7 @@ public class IslandAttributeStorage {
                     counter++;
                 }
             }
-            for (BuildingPresets preset : buildingsAttributes) {
+            for (BuildingDto preset : buildingsAttributes) {
                 if(preset.id().equals(building)) {
                     for (Map.Entry<String, Integer> entry : preset.production().entrySet()) {
                         buildingsProduction.merge(entry.getKey(), entry.getValue() * counter, Integer::sum);
@@ -167,7 +168,7 @@ public class IslandAttributeStorage {
                     counter++;
                 }
             }
-            for (BuildingPresets preset : buildingsAttributes) {
+            for (BuildingDto preset : buildingsAttributes) {
                 if(preset.id().equals(building)) {
                     for (Map.Entry<String, Integer> entry : preset.upkeep().entrySet()) {
                         buildingsConsumption.merge(entry.getKey(), entry.getValue() * counter, Integer::sum);

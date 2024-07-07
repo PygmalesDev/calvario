@@ -38,13 +38,34 @@ public class VariableDependencyService {
     }
 
     private UpgradeStatus upgradeDependencyHandler(String key) {
-        float pop_growth = 0;
+        String next = null;
+        double upgrade_time = 0;
+        double pop_growth = 0;
         Map<String, Integer> cost = new HashMap<>();
         Map<String, Integer> upkeep = new HashMap<>();
-        float capacity_multiplier = 0;
+        double capacity_multiplier = 0;
 
         if (variableService.systemsTree.getNode(key, "pop_growth") != null) {
-            pop_growth = (float) variableService.systemsTree.getNode(key, "pop_growth").getValue().finalValue();
+            pop_growth = variableService.systemsTree.getNode(key, "pop_growth").getValue().finalValue();
+        }
+
+        switch(key){
+            case "unexplored":
+                next = "explored";
+                break;
+            case "explored":
+                next = "colonized";
+                break;
+            case "colonized":
+                next = "upgraded";
+                break;
+            case "upgraded":
+                next = "developed";
+                break;
+        }
+
+        if (variableService.systemsTree.getNode(key, "upgrade_time") != null) {
+            upgrade_time = variableService.systemsTree.getNode(key, "upgrade_time").getValue().finalValue();
         }
 
         if (variableService.systemsTree.getNode(key, "cost") != null) {
@@ -56,10 +77,10 @@ public class VariableDependencyService {
         }
 
         if (variableService.systemsTree.getNode(key, "capacity_multiplier") != null) {
-            capacity_multiplier = (float) variableService.systemsTree.getNode(key, "capacity_multiplier").getValue().finalValue();
+            capacity_multiplier = variableService.systemsTree.getNode(key, "capacity_multiplier").getValue().finalValue();
         }
 
-        return new UpgradeStatus(key, pop_growth, cost, upkeep, capacity_multiplier);
+        return new UpgradeStatus(key, next, upgrade_time, pop_growth, cost, upkeep, capacity_multiplier);
     }
 
     /*
@@ -102,8 +123,6 @@ public class VariableDependencyService {
     private DistrictPresets districtsDependencyHandler(VariablesTree.Node<ExplainedVariableDTO> districtNode) {
         String id = districtNode.getKey();
         double build_time = variableService.districtsTree.getNode(id, "build_time").getValue().finalValue();
-        System.out.println(id);
-        System.out.println(build_time);
 
         Map<String, Integer> chance = new HashMap<>();
         if(variableService.districtsTree.getNode(id, "chance") != null){

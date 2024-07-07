@@ -121,7 +121,6 @@ public class IslandAttributeStorage {
 
     public void setDistrictPresets() {
         this.districts = variableDependencyService.createVariableDependencyDistricts();
-        System.out.println(districts);
     }
 
     public Map<String, Integer> getBuildingsProduction() {

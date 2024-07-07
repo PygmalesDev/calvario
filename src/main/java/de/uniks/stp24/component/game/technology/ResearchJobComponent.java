@@ -14,11 +14,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnInit;
+import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -71,6 +73,14 @@ public class ResearchJobComponent extends AnchorPane {
 
     }
 
+    @OnRender
+    public void render(){
+        cancelResearchButton.getStyleClass().clear();
+        Image image = new Image("/de/uniks/stp24/assets/buttons/cancel_button.png");
+        ImageView imageView = new ImageView(image);
+        cancelResearchButton.setGraphic(imageView);
+    }
+
     @OnInit
     public void init(){
         PropertyChangeListener callSetProgressBar = this::setProgressBar;
@@ -94,6 +104,7 @@ public class ResearchJobComponent extends AnchorPane {
 
 
     public void handleJob(TechnologyExtended technology) {
+        technologyNameText.setText(technology.id());
         subscriber.subscribe(jobsService.beginJob(Jobs.createTechnologyJob(technology.id())), job -> {
             this.job = job;
         });

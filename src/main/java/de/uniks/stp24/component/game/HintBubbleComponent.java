@@ -2,14 +2,15 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.component.Captain;
 import de.uniks.stp24.dto.AggregateItemDto;
+import de.uniks.stp24.model.Announcement;
 import de.uniks.stp24.model.Game;
+import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.AnnouncementsService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.ws.EventListener;
-import javafx.collections.FXCollections;
-import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableMap;
+import javafx.collections.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
@@ -38,6 +39,8 @@ public class HintBubbleComponent extends Captain {
     @Inject
     EventListener eventListener;
     @Inject
+    AnnouncementsService announcementsService;
+    @Inject
     EmpireService empireService;
     @Inject
     @Named("gameResourceBundle")
@@ -50,7 +53,7 @@ public class HintBubbleComponent extends Captain {
     int hintCountdown;
     ArrayList<String> possibleHints = Constants.hints;
 
-    ObservableMap<String, Integer> announcements = FXCollections.observableHashMap();
+    ObservableList<Object> announcements;
 
     @Inject
     public HintBubbleComponent(){
@@ -60,34 +63,31 @@ public class HintBubbleComponent extends Captain {
     @OnInit
     public void init() {
         setHintCountDown();
-
+        announcements = announcementsService.getAnnouncements();
         // todo delete
-        announcements.put("resource.doubloons", 10);
-        announcements.put("resource.provisions", 30);
-        announcements.put("resource.coal", 5);
+        announcementsService.addAnnouncement(new Resource("resource.doubloons", 5, 0));
+        announcementsService.addAnnouncement(new Resource("resource.provisions", 5, 0));
+        announcementsService.addAnnouncement(new Resource("resource.coal", 5, 0));
     }
 
     private void setHintCountDown() {
         // todo change
         // countdown = random.nextInt(20, 40);
-        hintCountdown = 2;
+        hintCountdown = 1;
     }
 
     @OnRender
     public void render() {
         rotateCaptain();
 
-        announcements.addListener(new MapChangeListener<String, Integer>() {
-            @Override
-            public void onChanged(Change<? extends String, ? extends Integer> change) {
-                if (announcements.isEmpty()) {
-                    nextButton.getStyleClass().removeAll("rightTriangleButton");
-                    nextButton.getStyleClass().add("closeButtonHint");
-                }
-                else  {
-                    nextButton.getStyleClass().removeAll("closeButtonHint");
-                    nextButton.getStyleClass().add("rightTriangleButton");
-                }
+        announcements.addListener((ListChangeListener<Object>) change -> {
+            if (announcements.isEmpty()) {
+                nextButton.getStyleClass().removeAll("rightTriangleButton");
+                nextButton.getStyleClass().add("closeButtonHint");
+            }
+            else  {
+                nextButton.getStyleClass().removeAll("closeButtonHint");
+                nextButton.getStyleClass().add("rightTriangleButton");
             }
         });
 
@@ -102,7 +102,7 @@ public class HintBubbleComponent extends Captain {
                                     // announcements.clear();
                                     for (AggregateItemDto item : aggregateResultDto.items()) {
                                         if (item.count() > 0 && item.count() + item.subtotal() <= 0) {
-                                            announcements.put(item.variable(), item.count());
+                                            announcementsService.addAnnouncement(new Resource(item.variable(), item.count(), item.subtotal()));
                                         }
                                     }
                                 },
@@ -124,16 +124,10 @@ public class HintBubbleComponent extends Captain {
         setCaptainText(text);
     }
 
-    private void talkAboutWorry() {
-        if (!announcements.isEmpty()) {
-            String nextWorry = announcements.keySet().iterator().next();
-            talk(worryToText(gameResourceBundle.getString(nextWorry), announcements.remove(nextWorry)));
-        }
-    }
-
-    private String worryToText(String worry, int count) {
-        // todo change text
-        return "Bruh, you are broke. You have only " + count + " " + worry + "! Get your act togehther!";
+    private void announce() {
+        Announcement announcement = announcementsService.getNextAnnouncement();
+        forwardButton.setVisible(announcement.showForward());
+        talk(announcement.message());
     }
 
     public void decideWhatToSay(){
@@ -146,9 +140,7 @@ public class HintBubbleComponent extends Captain {
                 silence();
             }
         } else {
-            // todo for later
-            // talkAboutJobs();
-            talkAboutWorry();
+            announce();
         }
     }
 

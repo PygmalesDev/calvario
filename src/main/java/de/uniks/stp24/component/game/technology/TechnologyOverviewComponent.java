@@ -90,14 +90,30 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
     public void engineering() {
         show(technologyCategoryComponent.setCategory("engineering"));
+        if (!technologyCategoryComponent.engineeringJobRunning){
+            technologyCategoryComponent.unShowJobWindow();
+        } else {
+            technologyCategoryComponent.showJobWindow();
+        }
+
     }
 
     public void society() {
         show(technologyCategoryComponent.setCategory("society"));
+        if (!technologyCategoryComponent.societyJobRunning){
+            technologyCategoryComponent.unShowJobWindow();
+        } else {
+            technologyCategoryComponent.showJobWindow();
+        }
     }
 
     public void physics() {
         show(technologyCategoryComponent.setCategory("physics"));
+        if (!technologyCategoryComponent.physicsJobRunning){
+            technologyCategoryComponent.unShowJobWindow();
+        } else {
+            technologyCategoryComponent.showJobWindow();
+        }
     }
 
     public void setContainer(@NotNull Pane parent) {

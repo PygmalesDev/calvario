@@ -1,0 +1,71 @@
+[ {
+  "name" : "Amateur Lords of Secret Reef",
+  "flagIndex" : 13,
+  "flagsPath" : "/de/uniks/stp24/assets/flags/flag_13.png",
+  "portraitIndex" : 4,
+  "portraitsPath" : "/de/uniks/stp24/assets/portraits/captain_4.png",
+  "description" : "Under the black flag of Amateur Lords of Secret Reef, pirates unite in a fierce brotherhood, seeking fortune and infamy across the boundless expanse of the ocean.",
+  "color" : "#F28500",
+  "colorIndex" : 11,
+  "traits" : [ {
+    "id" : "amateur",
+    "effects" : [ {
+      "variable" : "buildings.research_lab.production.research",
+      "base" : 0.0,
+      "multiplier" : 0.96,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.refinery.production.fuel",
+      "base" : 0.0,
+      "multiplier" : 0.96,
+      "bonus" : 0.0
+    } ],
+    "cost" : -2,
+    "conflicts" : [ "assistant_technician", "technician", "beginner", "dilettante" ]
+  }, {
+    "id" : "nature_loving",
+    "effects" : [ {
+      "variable" : "buildings.power_plant.production.energy",
+      "base" : 0.0,
+      "multiplier" : 0.9,
+      "bonus" : 0.0
+    } ],
+    "cost" : -2,
+    "conflicts" : [ "radioactive", "chernobylian", "tsaristic", "ecological", "green" ]
+  }, {
+    "id" : "excavator",
+    "effects" : [ {
+      "variable" : "buildings.mine.production.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.2,
+      "bonus" : 0.0
+    } ],
+    "cost" : 2,
+    "conflicts" : [ "settler", "surface_operator", "claustrophobic", "miner", "pitman" ]
+  }, {
+    "id" : "industrious",
+    "effects" : [ {
+      "variable" : "buildings.farm.production.food",
+      "base" : 0.0,
+      "multiplier" : 1.1,
+      "bonus" : 0.0
+    }, {
+      "variable" : "resources.fuel.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 20.0
+    } ],
+    "cost" : 3,
+    "conflicts" : [ "urban", "gentrified", "agrarian" ]
+  }, {
+    "id" : "weak",
+    "effects" : [ {
+      "variable" : "buildings.mine.production.minerals",
+      "base" : 0.0,
+      "multiplier" : 0.95,
+      "bonus" : 0.0
+    } ],
+    "cost" : -1,
+    "conflicts" : [ "strong" ]
+  } ]
+} ]

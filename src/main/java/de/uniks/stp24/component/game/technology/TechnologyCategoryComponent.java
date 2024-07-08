@@ -31,6 +31,8 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 @Component(view = "TechnologyCategory.fxml")
@@ -171,10 +173,18 @@ public class TechnologyCategoryComponent extends AnchorPane {
     }
 
     public void showResearchComponent(TechnologyExtended technology) {
-        switch (technologieCategoryName) {
-            case "society" -> handleJobRunning(true, technology);
-            case "engineering" -> handleJobRunning(engineeringJobRunning, technology);
-            case "physics" -> handleJobRunning(physicsJobRunning, technology);
+        Map<String, Integer> technologyCostMap = new HashMap<>();
+        technologyCostMap.put("research", technology.cost());
+        System.out.println(technology.cost());
+        if (resourcesService.hasEnoughResources(technologyCostMap)) {
+            switch (technologieCategoryName) {
+                case "society" -> {handleJobRunning(societyJobRunning, technology);
+                                    societyJobRunning = true;}
+                case "engineering" -> {handleJobRunning(engineeringJobRunning, technology);
+                                        engineeringJobRunning = true;}
+                case "physics" -> {handleJobRunning(physicsJobRunning, technology);
+                                    physicsJobRunning = true;}
+            }
         }
     }
 
@@ -190,16 +200,31 @@ public class TechnologyCategoryComponent extends AnchorPane {
             popupTechResearch.showPopup(researchJobContainer, researchJobComponent);
             researchJobComponent.handleJob(technology);
         } else {
-            researchJobContainer.setMouseTransparent(true);
-            researchJobComponent.setMouseTransparent(true);
-            researchLeftVBox.setVisible(true);
-            researchJobContainer.setVisible(false);
-            researchJobComponent.setVisible(false);
-            Platform.runLater(() -> {
-                technologieCategoryBox.getStyleClass().clear();
-                technologieCategoryBox.getStyleClass().add("technologiesCategoryBackground");
-            });
+            unShowJobWindow();
         }
+    }
+
+    public void unShowJobWindow(){
+        researchJobContainer.setMouseTransparent(true);
+        researchJobComponent.setMouseTransparent(true);
+        researchLeftVBox.setVisible(true);
+        researchJobContainer.setVisible(false);
+        researchJobComponent.setVisible(false);
+        Platform.runLater(() -> {
+            technologieCategoryBox.getStyleClass().clear();
+            technologieCategoryBox.getStyleClass().add("technologiesCategoryBackground");
+        });
+    }
+
+    public void showJobWindow() {
+        researchJobComponent.setMouseTransparent(false);
+        researchLeftVBox.setVisible(false);
+        Platform.runLater(() -> {
+            technologieCategoryBox.getStyleClass().clear();
+            technologieCategoryBox.getStyleClass().add("technologiesActualResearchBackground");
+        });
+        popupTechResearch.showPopup(researchJobContainer, researchJobComponent);
+
     }
 
     public void handleJobCompleted(){

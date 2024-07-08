@@ -51,7 +51,7 @@
                            <Insets />
                         </VBox.margin>
                      </Text>
-                     <ListView fx:id="researchListView" maxHeight="280.0" minHeight="290.0" prefHeight="300.0" prefWidth="320.0" styleClass="technology-list" translateY="8.0" />
+                     <ListView fx:id="researchListView" maxHeight="280.0" minHeight="290.0" prefHeight="300.0" prefWidth="320.0" styleClass="technologies-list-view" translateY="8.0" />
                      <HBox alignment="CENTER" spacing="5.0">
                         <Label fx:id="currentResearchResourceLabel" styleClass="currentResearchLabel">
                            <font>

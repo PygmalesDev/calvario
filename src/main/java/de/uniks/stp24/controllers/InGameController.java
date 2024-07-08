@@ -131,7 +131,6 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
-    @SubComponent
     @Inject
     public MarketComponent marketOverviewComponent;
 
@@ -296,8 +295,7 @@ public class InGameController extends BasicController {
         empireOverviewContainer.getChildren().add(empireOverviewComponent);
 
         marketOverviewContainer.setVisible(false);
-        marketOverviewContainer.getChildren().add(marketOverviewComponent);
-
+        marketOverviewContainer.getChildren().add(app.initAndRender(marketOverviewComponent,Map.of("empireID",empireID)));
     }
 
     @OnKey(code = KeyCode.ESCAPE)

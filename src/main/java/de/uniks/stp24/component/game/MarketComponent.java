@@ -145,9 +145,13 @@ public class MarketComponent extends StackPane {
                         eventResources.put(selectedItem, resourceCountMapCopy.get(selectedItem) + Integer.parseInt(numberOfGoodsLabel.getText()));
                     }
                     resourceCountMap = eventResources;
-
+                    refreshListview();
                 }
         );
+    }
+
+    private void refreshListview() {
+        listMarketResources();
     }
 
 
@@ -165,14 +169,9 @@ public class MarketComponent extends StackPane {
         UpdateEmpireMarketDto updateEmpireMarketDto = new UpdateEmpireMarketDto(Map.of(selectedItem, resourceAmount), null, null, null);
         this.subscriber.subscribe(empireService.updateEmpireMarket(tokenStorage.getGameId(), tokenStorage.getEmpireId(), updateEmpireMarketDto),
                 error -> System.out.println("errorEmpireListener"));
+        System.out.println("imran");
     }
 
-
-    private void refreshResourceListView() {
-        resourcesListView.getItems().clear();
-        resourcesListView.getItems().addAll(resourceMap.entrySet());
-        resourcesListView.refresh();
-    }
 
     private void loadVariablesAndSetup() {
         subscriber.subscribe(presetsApiService.getVariables(),
@@ -249,15 +248,16 @@ public class MarketComponent extends StackPane {
 
     public void buyItem() {
         noPurchase = true;
-        resourceCountMapCopy = resourceCountMap;
+        resourceCountMapCopy = new HashMap<>(resourceCountMap);
         boolean userCanBuy = userCredits > 0 && userCredits > buyingPrice;
         resourceAmount = Integer.parseInt(numberOfGoodsLabel.getText());
         if (userCanBuy) {
             System.out.println(userCredits);
             userCredits -= buyingPrice;
             userCreditsLabel.setText(String.valueOf(userCredits));
-            resourceCountMap.put(selectedItem, resourceAmount);
+            resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
             updateResources();
+            refreshListview();
         } else {
             System.out.println("Cannot buy");
         }
@@ -265,15 +265,16 @@ public class MarketComponent extends StackPane {
 
     public void sellItem() {
         noPurchase = false;
-        resourceCountMapCopy = resourceCountMap;
+        resourceCountMapCopy = new HashMap<>(resourceCountMap);
         boolean userCanSell = (resourceCountMap.get(selectedItem)) >= (Integer.parseInt(numberOfGoodsLabel.getText()));
         resourceAmount = Integer.parseInt(numberOfGoodsLabel.getText()) * -1;
         if (userCanSell) {
             System.out.println("userCanSell: " + userCanSell);
             userCredits += sellingPrice;
             userCreditsLabel.setText(String.valueOf(userCredits));
-            resourceCountMap.put(selectedItem, resourceAmount);
+            resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
             updateResources();
+            refreshListview();
         } else {
             System.out.println("Cannot sell");
             System.out.println(resourceCountMap.get(selectedItem));
@@ -311,6 +312,7 @@ public class MarketComponent extends StackPane {
         } else {
             System.out.println("resourceCountMap: " + resourceCountMap);
         }
+        resourcesListView.getItems().clear();
         resourcesListView.getItems().addAll(this.resourceCountMap.entrySet());
         resourcesListView.setCellFactory(list -> new ResourceCell());
     }
@@ -343,7 +345,7 @@ public class MarketComponent extends StackPane {
                 System.out.println(item.getKey());
                 selectedItem = item.getKey();
                 selectedIconImage.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + item.getKey() + ".png"));
-                numberOfGoodsLabel.setText(String.valueOf(item.getValue()));
+                numberOfGoodsLabel.setText(String.valueOf(resourceCountMap.get(selectedItem)));
                 buyingAndSellingPrice(item.getKey());
             });
         }

@@ -199,8 +199,10 @@ public class MarketComponent extends StackPane {
         subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 empire -> {
                     resourceCountMap = empire.resources();
+                    System.out.println("Lewi");
                     System.out.println(empire.resources());
                     System.out.println(resourceCountMap);
+                    System.out.println("Lewi");
                     filterResourceMap();
                     listMarketResources();
 
@@ -337,7 +339,7 @@ public class MarketComponent extends StackPane {
                 text.setText(String.valueOf(item.getValue()));
                 setGraphic(vBox);
             }
-            resourcesListView.setOnMouseClicked(event -> {
+            setOnMouseClicked(event -> {
                 System.out.println(item.getKey());
                 selectedItem = item.getKey();
                 selectedIconImage.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + item.getKey() + ".png"));

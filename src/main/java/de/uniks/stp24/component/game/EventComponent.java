@@ -85,8 +85,11 @@ public class EventComponent extends AnchorPane {
 
 
     ColorAdjust fadeAdjust;
+    ColorAdjust unfadeAdjust;
     ColorAdjust brightenAdjsut;
-    Timeline fadeInTimeline;
+    Timeline nightTimeLine;
+    Timeline dayTimeLine;
+    boolean isDay = true;
 
     @Inject
     public EventComponent() {
@@ -95,12 +98,10 @@ public class EventComponent extends AnchorPane {
 
     @OnInit
     public void init() {
-
         PropertyChangeListener callHandleEventChanged = this::handleEventChanged;
         eventService.listeners().addPropertyChangeListener(EventService.PROPERTY_EVENT, callHandleEventChanged);
 
         createUpdateSeasonsListener();
-
     }
 
 
@@ -117,7 +118,7 @@ public class EventComponent extends AnchorPane {
                         if (activeEvent != null) {
                             // todo delete souts
                             System.out.println("here event 2");
-                            if (activeEvent.effects()[0].eventType().equals("misty")) {
+                            if (activeEvent.effects()[0].eventType().equals("misty") && isDay) {
                                 changeToNight();
                             }
                             subscriber.subscribe(eventService.sendEffect(),
@@ -127,7 +128,9 @@ public class EventComponent extends AnchorPane {
                             setRandomEventInfos(activeEvent);
                             show();
                         } else {
-                            changeToDay();
+                            if (!isDay) {
+                                changeToDay();
+                            }
                         }
                         lastUpdate = event.data().updatedAt();
                     }
@@ -153,16 +156,27 @@ public class EventComponent extends AnchorPane {
         fadeAdjust = new ColorAdjust();
         fadeAdjust.setBrightness(0);
 
+        unfadeAdjust = new ColorAdjust();
+        unfadeAdjust.setBrightness(0);
+
         brightenAdjsut = new ColorAdjust();
         brightenAdjsut.setBrightness(0);
 
-        fadeInTimeline = new Timeline(
+        nightTimeLine = new Timeline(
                 new KeyFrame(Duration.seconds(0),
                         new KeyValue(fadeAdjust.brightnessProperty(), fadeAdjust.brightnessProperty().getValue(), Interpolator.LINEAR)),
-                new KeyFrame(Duration.seconds(7), new KeyValue(fadeAdjust.brightnessProperty(), -1, Interpolator.LINEAR)
+                new KeyFrame(Duration.seconds(7), new KeyValue(fadeAdjust.brightnessProperty(), -0.8, Interpolator.LINEAR)
                 ));
-        fadeInTimeline.setCycleCount(1);
-        fadeInTimeline.setAutoReverse(false);
+        nightTimeLine.setCycleCount(1);
+        nightTimeLine.setAutoReverse(false);
+
+        dayTimeLine = new Timeline(
+                new KeyFrame(Duration.seconds(0),
+                        new KeyValue(unfadeAdjust.brightnessProperty(), unfadeAdjust.brightnessProperty().getValue(), Interpolator.LINEAR)),
+                new KeyFrame(Duration.seconds(3), new KeyValue(unfadeAdjust.brightnessProperty(), 0.3, Interpolator.LINEAR)
+                ));
+        dayTimeLine.setCycleCount(1);
+        dayTimeLine.setAutoReverse(false);
     }
 
     // changes String to camelCase
@@ -222,18 +236,31 @@ public class EventComponent extends AnchorPane {
     }
 
     public void changeToNight() {
+        nightTimeLine.stop();
+
         gameBackground.setEffect(fadeAdjust);
 
-        fadeInTimeline.setOnFinished(event -> {
+        nightTimeLine.setOnFinished(event -> {
             gameBackground.setEffect(brightenAdjsut);
             gameBackground.setStyle(NIGHT);
+            isDay = false;
         });
 
-        fadeInTimeline.play();
+        nightTimeLine.play();
     }
 
     public void changeToDay() {
-        gameBackground.setStyle(DAY);
+        dayTimeLine.stop();
+
+        gameBackground.setEffect(unfadeAdjust);
+
+        dayTimeLine.setOnFinished(event -> {
+            gameBackground.setEffect(brightenAdjsut);
+            gameBackground.setStyle(DAY);
+            isDay = true;
+        });
+
+        dayTimeLine.play();
     }
 
     public void setBackground(Pane gameBackground) {

@@ -152,10 +152,15 @@ public class ResourcesService {
     }
 
     public boolean hasEnoughResources(Map<String, Integer> neededResources) {
+        this.subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                result -> islandAttributes.setEmpireDto(result),
+                error -> System.out.println("error in getEmpire in inGame"));
         for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
             String res = entry.getKey();
             int neededAmount = entry.getValue();
+            System.out.println(neededAmount);
             int availableAmount = islandAttributes.getAvailableResources().get(res);
+            System.out.println(availableAmount + " avail");
             if (availableAmount < neededAmount) {
                 return false;
             }

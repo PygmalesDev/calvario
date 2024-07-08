@@ -27,6 +27,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 @Component(view = "ResearchJob.fxml")
@@ -72,6 +73,15 @@ public class ResearchJobComponent extends AnchorPane {
     private Jobs.Job job;
     private TechnologyCategoryComponent technologyCategoryComponent;
 
+    private String jobIdSociety;
+
+    private String jobIdEngineering;
+
+    private String jobIdComputing;
+
+
+
+
     @Inject
     public ResearchJobComponent(){
 
@@ -99,14 +109,17 @@ public class ResearchJobComponent extends AnchorPane {
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.empires.%s.jobs.*.*",
                 this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), Jobs.Job.class), result -> {
             this.job = result.data();
-            researchProgressText.setText(job.progress() + " / " + job.total());
+            if (job.technology().equals(technologyCategoryComponent.getTechnology().id())){
+                researchProgressText.setText(job.progress() + " / " + job.total());
+                this.researchProgressBar.setProgress((((double) 1/job.total()) * job.progress()));
+            }
             jobsService.onJobCompletion(job._id(), this::handleJobFinished);
-            this.researchProgressBar.setProgress((((double) 1/job.total()) * job.progress()));
         }, error -> System.out.print("Error in ResearchJobComponent"));
+
     }
 
     private void handleJobFinished() {
-        technologyCategoryComponent.handleJobCompleted();
+        technologyCategoryComponent.handleJobCompleted(job);
         setVisible(false);
     }
 
@@ -136,6 +149,6 @@ public class ResearchJobComponent extends AnchorPane {
 
     public void removeJob(){
         subscriber.subscribe(jobsService.stopJob(this.job._id()));
-        technologyCategoryComponent.handleJobCompleted();
+        technologyCategoryComponent.handleJobCompleted(job);
     }
 }

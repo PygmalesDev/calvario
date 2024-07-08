@@ -1,6 +1,7 @@
 package de.uniks.stp24.component.game.technology;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PopupBuilder;
@@ -96,7 +97,8 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
 
     PopupBuilder popupTechResearch = new PopupBuilder();
-            ;
+    private TechnologyExtended technology;
+
 
     @Inject
     public TechnologyCategoryComponent() {
@@ -173,19 +175,30 @@ public class TechnologyCategoryComponent extends AnchorPane {
     }
 
     public void showResearchComponent(TechnologyExtended technology) {
+        this.technology = technology;
         Map<String, Integer> technologyCostMap = new HashMap<>();
-        technologyCostMap.put("research", technology.cost());
-        System.out.println(technology.cost());
+        technologyCostMap.put("research", technology.cost() * 100);
         if (resourcesService.hasEnoughResources(technologyCostMap)) {
+            System.out.println("REIN");
             switch (technologieCategoryName) {
-                case "society" -> {handleJobRunning(societyJobRunning, technology);
-                                    societyJobRunning = true;}
-                case "engineering" -> {handleJobRunning(engineeringJobRunning, technology);
-                                        engineeringJobRunning = true;}
-                case "physics" -> {handleJobRunning(physicsJobRunning, technology);
-                                    physicsJobRunning = true;}
+                case "society" -> {societyJobRunning = true;
+                    handleJobRunning(societyJobRunning, technology);
+                                    }
+                case "engineering" -> {engineeringJobRunning = true;
+                    handleJobRunning(engineeringJobRunning, technology);
+                                        }
+                case "physics" -> {physicsJobRunning = true;
+                    handleJobRunning(physicsJobRunning, technology);}
             }
         }
+    }
+
+    public TechnologyExtended getTechnology(){
+        return technology;
+    }
+
+    public void setTechnology(TechnologyExtended technology){
+        this.technology = technology;
     }
 
     private void handleJobRunning(boolean booleanJobRunning, TechnologyExtended technology) {
@@ -227,7 +240,15 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     }
 
-    public void handleJobCompleted(){
+    public void handleJobCompleted(Jobs.Job job){
+        switch (job._id()) {
+            case "society" -> societyJobRunning = false;
+            case "engineering" -> engineeringJobRunning = false;
+            case "physics" -> physicsJobRunning = false;
+        }
+
+
+
         researchJobContainer.setMouseTransparent(true);
         researchJobComponent.setMouseTransparent(true);
         researchLeftVBox.setVisible(true);

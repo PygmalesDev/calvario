@@ -1,9 +1,7 @@
 package de.uniks.stp24.component.game.technology;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Effect;
-import de.uniks.stp24.model.Technology;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.TechnologyService;
@@ -13,10 +11,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
@@ -25,12 +26,14 @@ import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.Arrays;
+import java.util.ResourceBundle;
 
 @Component(view = "TechnologyCategorySubComponent.fxml")
 public class TechnologyCategorySubComponent extends VBox implements ReusableItemComponent<TechnologyExtended> {
     private final TechnologyCategoryComponent technologyCategoryComponent;
+    private final ResourceBundle technologiesResourceBundle;
     @FXML
     public ImageView tagImage3;
     @FXML
@@ -54,20 +57,29 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     public HBox researchHBox;
     @FXML
     public Label technologyLabel;
+    @FXML
+    public Tooltip tooltip;
 
     App app;
 
     TechnologyExtended technology;
 
     TechnologyService technologyService;
-
+    
     @Inject
     TechnologyOverviewComponent technologyOverviewComponent;
+
+
+    /*
+    @Inject
+    @SubComponent
+    public TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+
+     */
 
     ImageCache imageCache = new ImageCache();
 
     ObservableList<Effect> description = FXCollections.observableArrayList();
-    ObservableList<Effect> temp = FXCollections.observableArrayList();
 
     Provider<TechnologyCategoryDescriptionSubComponent> provider = TechnologyCategoryDescriptionSubComponent::new;
 
@@ -75,20 +87,23 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
      * This class is for the components of the listView in the technology category
      */
     @Inject
-    public TechnologyCategorySubComponent(TechnologyCategoryComponent technologyCategoryComponent, TechnologyService technologyService, App app) {
+    public TechnologyCategorySubComponent(TechnologyCategoryComponent technologyCategoryComponent, TechnologyService technologyService, App app, ResourceBundle technologiesResourceBundle) {
         this.technologyCategoryComponent = technologyCategoryComponent;
         this.technologyService = technologyService;
         this.app = app;
+        this.technologiesResourceBundle = technologiesResourceBundle;
     }
 
     /**
      * Set the item inclusive the attributes tags, costs, and id
+     *
      * @param technologyExtended is the technology for the subcomponent in the ListView
      */
     @Override
     public void setItem(@NotNull TechnologyExtended technologyExtended) {
         this.technology = technologyExtended;
-        technologyLabel.setText(technologyExtended.id());
+        technologyLabel.setText(technologiesResourceBundle.getString(technologyExtended.id()));
+
         int i = technologyExtended.tags().length;
 
         if (i > 0 && technologyExtended.tags()[0] != null) {
@@ -101,26 +116,15 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
             tagImage3.setImage(imageCache.get("assets/technologies/tags/" + technologyExtended.tags()[2] + ".png"));
         }
 
+        //technologyResearchDetailsComponent.setTechnologyInfos(technology);
+
         researchLabel.setText(String.valueOf(technologyExtended.cost()));
 
-//        if (temp != description) {
-//            if (technologyService.getUnlockedTechnologies(technology.tags()[0]).contains(technology)) {
-//                // TODO: Set the description only with the effect of the technology
-//                description.setAll(Arrays.asList(technology.effects()));
-//            } else if (technologyService.getResearchTechnologies(technology.tags()[0]).contains(technology)) {
-//                // TODO: Set description with effect and cost of the technology
-//                // TODO: REMOVE THIS
-//                description.setAll(Arrays.asList(technology.effects()));
-//            }
-//            temp = description;
-////            setDescriptionView();
-//        }
+        description.addAll(technologyExtended.effects());
+        descriptionListView.setItems(description);
+        descriptionListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
     }
 
-//    public void setDescriptionView() {
-//        descriptionListView.setItems(description);
-//        descriptionListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
-//    }
 
     @OnInit
     public void init() {
@@ -131,6 +135,12 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     public void render() {
         timeImage.setImage(imageCache.get("icons/time.png"));
         researchImage.setImage(imageCache.get("icons/resources/research.png"));
+
+        //tooltip.setGraphic(technologyResearchDetailsComponent);
+        tooltip.setShowDelay(Duration.ZERO);
+        tooltip.setShowDuration(Duration.INDEFINITE);
+
+        tooltip.setX(tooltip.getX() - 200);
 
     }
 

@@ -60,7 +60,11 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @Inject
     TechnologyService technologyService;
 
-    Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this, technologyService, app);
+    @Inject
+    @Named("technologiesResourceBundle")
+    public ResourceBundle technologiesResourceBundle;
+
+    Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this, technologyService, app, technologiesResourceBundle);
 
     ObservableList<TechnologyExtended> unlockedTechnologies = FXCollections.observableArrayList();
     ObservableList<TechnologyExtended> researchTechnologies = FXCollections.observableArrayList();
@@ -150,13 +154,14 @@ public class TechnologyCategoryComponent extends AnchorPane {
         unlockedTechnologies = technologyService.getUnlockedTechnologies(technologieCategoryName);
         researchTechnologies = technologyService.getResearchTechnologies(technologieCategoryName);
 
+        researchListView.setSelectionModel(null);
+        unlockedListView.setSelectionModel(null);
 
         unlockedListView.setItems(unlockedTechnologies);
         researchListView.setItems(researchTechnologies);
 
         unlockedListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
         researchListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
-
 
         return this;
     }

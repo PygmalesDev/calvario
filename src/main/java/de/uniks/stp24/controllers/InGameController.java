@@ -1,6 +1,8 @@
 package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
+import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.game.technology.ResearchJobComponent;
 import de.uniks.stp24.component.game.technology.TechnologyCategoryDescriptionSubComponent;
 import de.uniks.stp24.component.game.technology.TechnologyCategorySubComponent;
@@ -8,6 +10,9 @@ import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.component.game.ClockComponent;
+import de.uniks.stp24.component.game.IslandComponent;
+import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Technology;
 import de.uniks.stp24.records.GameListenerTriple;
@@ -19,6 +24,7 @@ import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
+import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -135,6 +141,7 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
+
     @SubComponent
     @Inject
     public VariableExplanationComponent variableExplanationComponent;
@@ -318,22 +325,23 @@ public class InGameController extends BasicController {
 
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
-        helpComponent.setVisible(false);
-        helpWindowContainer.setVisible(false);
-        helpComponent.setMouseTransparent(true);
-        helpWindowContainer.setMouseTransparent(true);
-
         pause = !pause;
+        inGameService.setShowSettings(false);
         inGameService.setPaused(pause);
         if (pause) {
-            shadow.setVisible(true);
-            shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
             pauseMenuContainer.setMouseTransparent(false);
             pauseGame();
         } else {
             pauseMenuContainer.setMouseTransparent(true);
             resumeGame();
         }
+    }
+
+    @OnKey(code = KeyCode.I)
+    public void showIslandOverviewWindows() {
+        buildingProperties.setMouseTransparent(false);
+        buildingsWindow.setMouseTransparent(false);
+        popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
     }
 
     public void pauseGame() {
@@ -388,10 +396,11 @@ public class InGameController extends BasicController {
         if (!tokenStorage.isSpectator()) {
             if (!(Objects.nonNull(showEmpireOverviewButton) && (Objects.nonNull(showStorageButton)))) {
                 showEmpireOverviewButton = new Button();
-                showEmpireOverviewButton.setPrefHeight(30);
-                showEmpireOverviewButton.setPrefWidth(30);
-                showEmpireOverviewButton.setId("showEmpireOverviewButton");
+                showEmpireOverviewButton.setMinHeight(48);
+                showEmpireOverviewButton.setMinWidth(47);
+                showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
                 showEmpireOverviewButton.getStyleClass().add("empireOverviewButton");
+                showEmpireOverviewButton.setId("showEmpireOverviewButton");
                 showEmpireOverviewButton.setOnAction(event -> showEmpireOverview());
                 showStorageButton = new Button();
                 showStorageButton.setMinHeight(48);
@@ -481,8 +490,8 @@ public class InGameController extends BasicController {
         inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
         overviewSitesComponent.setOverviewSites();
     }
-    @OnKey(code = KeyCode.S,alt = true)
 
+    @OnKey(code = KeyCode.S, alt = true)
     public void showStorage() {
         if(empireOverviewComponent.isVisible()) {
             empireOverviewComponent.closeEmpireOverview();

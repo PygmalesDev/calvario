@@ -33,18 +33,16 @@ public class TechnologyService {
     Observable<ArrayList<TechnologyExtended>> temp;
     Set<TechnologyExtended> allUnlockedTechnologiesSet = new HashSet<>();
 
-    public ObservableList<TechnologyExtended> researchTechnologiesList = FXCollections.observableArrayList();
     ObservableList<TechnologyExtended> unlockedTechnologiesList = FXCollections.observableArrayList();
 
     ObservableList<TechnologyExtended> allUnlockedTechnologiesList = FXCollections.observableArrayList();
-    ObservableList<TechnologyExtended> allResearchTechnologiesList = FXCollections.observableArrayList();
 
     @Inject
     public TechnologyService() {
     }
 
 
-    public List<TechnologyExtended> getAllUnlockedTechnologies(String tag) {
+    public ObservableList<TechnologyExtended> getAllUnlockedTechnologies(String tag) {
 
         temp = getTechnologies();
 
@@ -73,9 +71,9 @@ public class TechnologyService {
         return allUnlockedTechnologiesList;
     }
 
-    public List<TechnologyExtended> getAllResearchTechnologies(String tag) {
-        List<TechnologyExtended> research = new ArrayList<>();
-        List<TechnologyExtended> unlocked = getAllUnlockedTechnologies(tag);
+    public ObservableList<TechnologyExtended> getAllResearchTechnologies(String tag) {
+        ObservableList<TechnologyExtended> research = FXCollections.observableArrayList();
+        ObservableList<TechnologyExtended> unlocked = getAllUnlockedTechnologies(tag);
 
         technologies = temp.blockingFirst();
         for (TechnologyExtended technology : technologies) {
@@ -129,16 +127,14 @@ public class TechnologyService {
                 researchTechnologiesList.add(technology);
             }
         }
-
-        System.out.println("Research Technologies: " + researchTechnologiesList);
         return researchTechnologiesList;
     }
 
     /**
      * get all unlocked Technologies independent of the tag
      */
-    public List<TechnologyExtended> getUnlockedTechnologies() {
-        List<TechnologyExtended> unlocked = new ArrayList<>();
+    public ObservableList<TechnologyExtended> getUnlockedTechnologies() {
+        ObservableList<TechnologyExtended> unlocked = FXCollections.observableArrayList();
         for (String tag : Constants.technologyTranslation.keySet()) {
             unlocked.addAll(getUnlockedTechnologies(tag));
         }
@@ -148,8 +144,8 @@ public class TechnologyService {
     /**
      * get all research Technologies independent of the tag
      */
-    public List<TechnologyExtended> getResearchTechnologies() {
-        List<TechnologyExtended> research = new ArrayList<>();
+    public ObservableList<TechnologyExtended> getResearchTechnologies() {
+        ObservableList<TechnologyExtended> research = FXCollections.observableArrayList();
         for (String tag : Constants.technologyTranslation.values()) {
             research.addAll(getAllResearchTechnologies(tag));
         }

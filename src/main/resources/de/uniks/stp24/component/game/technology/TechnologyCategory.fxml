@@ -78,7 +78,7 @@
                      <Insets />
                   </VBox.margin>
                </Text>
-               <ListView fx:id="unlockedListView" styleClass="outer-list-view" maxHeight="280.0" minHeight="290.0" prefHeight="300.0" prefWidth="320.0" translateY="8.0" />
+               <ListView fx:id="unlockedListView" styleClass="technologies-list-view" maxHeight="280.0" minHeight="290.0" prefHeight="300.0" prefWidth="320.0" translateY="8.0" />
             </VBox>
          </HBox>
       </VBox>

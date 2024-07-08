@@ -1,14 +1,13 @@
 package de.uniks.stp24.component.game.technology;
 
 import de.uniks.stp24.model.Effect;
-import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.TechnologyService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -16,11 +15,10 @@ import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
-
 import javax.inject.Inject;
 
 @Component(view = "TechnologyCategoryDescription.fxml")
-public class TechnologyCategoryDescriptionSubComponent extends VBox implements ReusableItemComponent<Effect> {
+public class TechnologyCategoryDescriptionSubComponent extends HBox implements ReusableItemComponent<Effect> {
 
     @FXML
     public ImageView resourceImage;
@@ -61,12 +59,31 @@ public class TechnologyCategoryDescriptionSubComponent extends VBox implements R
 
     @Override
     public void setItem(@NotNull Effect effect) {
-        String variable = effect.variable();
+        this.effect = effect;
+        String variable = this.effect.variable();
+
+        /*
+         * Iterate through all resources and checks if effect variable contains a resource
+         */
         for (String key : Constants.resourceTranslation.keySet()) {
             if (variable.contains(key)) {
-                // TODO: REMOVE THIS
-                //System.out.println("Image sets");
                 resourceImage.setImage(imageCache.get("icons/resources/" + key + ".png"));
+                break;
+            } else if (variable.contains("pop")) {
+                resourceImage.setImage(imageCache.get("icons/resources/population.png"));
+                break;
+            }
+        }
+
+        /*
+         * If variable doesn't affect a resource, it must be a technology
+         */
+        if (resourceImage.getImage() == null) {
+            for (String tech : Constants.technologyTranslation.values()) {
+                if (variable.contains(tech)) {
+                    resourceImage.setImage(imageCache.get("assets/technologies/tags/" + tech + ".png"));
+                    break;
+                }
             }
         }
 

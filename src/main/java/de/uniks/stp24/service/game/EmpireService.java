@@ -24,12 +24,14 @@ public class EmpireService {
     public Observable<ReadEmpireDto[]> getEmpires(String gameID) {
         return this.empireApiService.getEmpires(gameID);
     }
-
     public Observable<List<ResourceDto>> getResources() {
         return this.empireApiService.getResources();
     }
 
     public Observable<AggregateResultDto> getResourceAggregates(String gameID, String empireID) {
         return this.empireApiService.getResourceAggregates(gameID, empireID);
+    }
+    public Observable<UpdateEmpireMarketDto> updateEmpireMarket(String gameID, String empireID, UpdateEmpireMarketDto updateEmpireMarketDto) {
+        return this.empireApiService.updateEmpireMarket(gameID, empireID, updateEmpireMarketDto);
     }
 }

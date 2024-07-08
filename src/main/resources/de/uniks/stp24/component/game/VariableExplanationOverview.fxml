@@ -5,7 +5,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<fx:root prefHeight="320.0" prefWidth="100.0" type="VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.VariableExplanationComponent">
+<fx:root prefHeight="320.0" prefWidth="100.0" type="VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="326.0">
       <Text fx:id="entity_name" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" />
    </HBox>

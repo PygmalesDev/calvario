@@ -129,9 +129,6 @@ public class InGameController extends BasicController {
     public StorageOverviewComponent storageOverviewComponent;
     @SubComponent
     @Inject
-    public VariableExplanationComponent variableExplanationComponent;
-    @SubComponent
-    @Inject
     public EmpireOverviewComponent empireOverviewComponent;
     @SubComponent
     @Inject

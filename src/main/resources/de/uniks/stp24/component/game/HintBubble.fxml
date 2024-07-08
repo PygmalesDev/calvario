@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root prefHeight="118.0" prefWidth="308.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.HintBubbleComponent">
+<fx:root prefHeight="118.0" prefWidth="308.0" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.CoolerBubbleComponent">
    <stylesheets>
       <URL value="@../../style/styles.css" />
       <URL value="@../../style/ingameButtons.css" />

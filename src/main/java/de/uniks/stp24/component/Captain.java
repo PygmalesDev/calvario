@@ -9,6 +9,9 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.controller.Subscriber;
+
+import javax.inject.Inject;
 
 import static java.lang.Math.ceil;
 
@@ -19,6 +22,9 @@ public class Captain extends Pane {
     ImageView captainLogo;
     @FXML
     VBox backgroundBubble;
+
+    @Inject
+    public Subscriber subscriber;
 
     double bubbleWidth;
     double textWidth;
@@ -113,6 +119,7 @@ public class Captain extends Pane {
 
     @OnDestroy
     public void destroy() {
+        subscriber.dispose();
         captainLogo.setImage(null);
     }
 }

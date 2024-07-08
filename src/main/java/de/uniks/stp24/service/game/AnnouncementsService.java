@@ -15,44 +15,37 @@ public class AnnouncementsService {
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
-    ObservableList<Object> announcements = FXCollections.observableArrayList();
+    ObservableList<Announcement> announcements = FXCollections.observableArrayList();
 
     @Inject
     public AnnouncementsService() {
 
     }
 
-    public AnnouncementsService addAnnouncement(Jobs.Job job) {
-        announcements.addFirst(job);
+    public AnnouncementsService addAnnouncement(Jobs.JobDTO job) {
+        // todo change
+        String message = "Building " + job.building() + " on " + job.system() + " is done! good job!";
+        boolean showForward = true;
+        Runnable forwardMethod = null;
+        announcements.addFirst(new Announcement(message, showForward, forwardMethod));
         return this;
     }
 
     public AnnouncementsService addAnnouncement(Resource resource) {
-        announcements.add(resource);
+        // todo change text
+        String message =  "Bruh, you are broke. You have only " + resource.count() + " " +
+                gameResourceBundle.getString(resource.resourceID()) + "! Get your act togehther!";
+        boolean showForward = false;
+        Runnable forwardMethod = null;
+        announcements.add(new Announcement(message, showForward, forwardMethod));
         return this;
     }
 
     public Announcement getNextAnnouncement() {
-        Object announcement = announcements.removeFirst();
-        String message;
-        boolean showForward;
-        Runnable forwardMethod;
-        if (announcement instanceof Resource resource) {
-            // todo change text
-            message =  "Bruh, you are broke. You have only " + resource.count() + " " +
-                    gameResourceBundle.getString(resource.resourceID()) + "! Get your act togehther!";
-            showForward = false;
-            forwardMethod = null;
-        } else {
-            // Todo for jobs
-            message =  "";
-            showForward = true;
-            forwardMethod = null;
-        }
-        return new Announcement(message, showForward, forwardMethod);
+        return announcements.removeFirst();
     }
 
-    public ObservableList<Object> getAnnouncements() {
+    public ObservableList<Announcement> getAnnouncements() {
         return announcements;
     }
 

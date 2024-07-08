@@ -4,6 +4,7 @@ import de.uniks.stp24.component.Captain;
 import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.model.Announcement;
 import de.uniks.stp24.model.Game;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.TokenStorage;
@@ -18,14 +19,13 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.*;
 
 @Component(view = "HintBubble.fxml")
-public class HintBubbleComponent extends Captain {
+public class CoolerBubbleComponent extends Captain {
 
     @FXML
     Button forwardButton;
@@ -34,8 +34,6 @@ public class HintBubbleComponent extends Captain {
 
     @Inject
     TokenStorage tokenStorage;
-    @Inject
-    Subscriber subscriber;
     @Inject
     EventListener eventListener;
     @Inject
@@ -53,10 +51,10 @@ public class HintBubbleComponent extends Captain {
     int hintCountdown;
     ArrayList<String> possibleHints = Constants.hints;
 
-    ObservableList<Object> announcements;
+    ObservableList<Announcement> announcements;
 
     @Inject
-    public HintBubbleComponent(){
+    public CoolerBubbleComponent(){
 
     }
 
@@ -67,6 +65,7 @@ public class HintBubbleComponent extends Captain {
         // todo delete
         announcementsService.addAnnouncement(new Resource("resource.doubloons", 5, 0));
         announcementsService.addAnnouncement(new Resource("resource.provisions", 5, 0));
+        announcementsService.addAnnouncement(Jobs.createBuildingJob("Uncharted Island", "foundary"));
         announcementsService.addAnnouncement(new Resource("resource.coal", 5, 0));
     }
 

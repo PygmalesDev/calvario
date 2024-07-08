@@ -256,6 +256,7 @@ public class InGameController extends BasicController {
         buildingProperties.setPickOnBounds(false);
         buildingsWindow.setMouseTransparent(true);
         siteProperties.setMouseTransparent(true);
+        siteProperties.setPickOnBounds(false);
         deleteStructureWarningContainer.setMouseTransparent(true);
         helpWindowContainer.setMouseTransparent(true);
         helpComponent.setVisible(false);
@@ -319,30 +320,37 @@ public class InGameController extends BasicController {
         popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
     }
 
-    @OnKey(code = KeyCode.J)
+    @OnKey(code = KeyCode.E, alt = true)
+    public void showEmpireOverview() {
+        this.toggleContextMenuVisibility(this.empireOverviewComponent);
+        this.empireOverviewComponent.setVisible(!this.empireOverviewComponent.isVisible());
+    }
+
+
+    @OnKey(code = KeyCode.J, alt = true)
     public void showJobsOverview() {
         this.toggleContextMenuVisibility(this.jobsOverviewComponent);
         this.jobsOverviewComponent.setVisible(!this.jobsOverviewComponent.isVisible());
     }
 
-    @OnKey(code = KeyCode.S)
+    @OnKey(code = KeyCode.S, alt = true)
     public void showStorageOverview() {
         this.toggleContextMenuVisibility(this.storageOverviewComponent);
         this.storageOverviewComponent.setVisible(!this.storageOverviewComponent.isVisible());
+    }
+
+    @OnKey(code = KeyCode.H, alt = true)
+    public void showHelpOverview() {
+        if (this.helpComponent.isVisible()) {
+            this.helpComponent.close();
+            this.removePause();
+        } else showHelp();
     }
 
     private void toggleContextMenuVisibility(Node node) {
         this.contextMenuContainer.getChildren().stream()
                 .filter(child -> !child.equals(node))
                 .forEach(child -> child.setVisible(false));
-    }
-
-    public void showSettings() {
-        pauseMenuContainer.getChildren().remove(pauseMenuComponent);
-    }
-
-    public void unShowSettings() {
-        pauseMenuContainer.getChildren().add(pauseMenuComponent);
     }
 
     public void pauseGame() {
@@ -377,8 +385,6 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setVisible(false);
         shadow.setVisible(false);
     }
-
-
 
     /**
      * Please read the {@link ContextMenuButton ContextMenuButton} documentation to add additional context menu nodes.
@@ -496,31 +502,8 @@ public class InGameController extends BasicController {
         inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
         overviewSitesComponent.setOverviewSites();
     }
-    @OnKey(code = KeyCode.S,alt = true)
 
-    public void showStorage() {
-        if(empireOverviewComponent.isVisible()) {
-            empireOverviewComponent.closeEmpireOverview();
-        }
-    }
-    @OnKey(code = KeyCode.H, alt = true)
-    public void showHelpOnKey(){
-        if (helpComponent.isVisible()){
-            helpComponent.close();
-            removePause();
-        } else {
-            showHelp();
-        }
-    }
-
-    @OnKey(code = KeyCode.E, alt = true)
-    public void showEmpireOverview() {
-        if(storageOverviewComponent.isVisible()){
-            storageOverviewComponent.closeStorageOverview();
-        }
-    }
-
-    @OnKey(code = KeyCode.SPACE)
+    @OnKey(code = KeyCode.SPACE, alt = true)
     public void resetZoom() {
         scale = 0.65;
         group.setScaleX(scale);
@@ -531,18 +514,6 @@ public class InGameController extends BasicController {
         if (event.getButton() == MouseButton.MIDDLE) {
             resetZoom();
         }
-    }
-
-    @OnDestroy
-    public void destroy() {
-        islandComponentList.forEach(IslandComponent::destroy);
-        islandComponentList = null;
-        islandComponentMap = null;
-        islandsService.removeDataForMap();
-        this.gameListenerTriple.forEach(triple -> triple.game().listeners()
-                .removePropertyChangeListener(triple.propertyName(), triple.listener()));
-        this.subscriber.dispose();
-        this.jobsService.dispose();
     }
 
     public void showBuildingInformation(String buildingToAdd, String jobID) {
@@ -624,8 +595,21 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setMouseTransparent(true);
         helpComponent.displayTechnologies();
     }
+
     public void updateResCapacity() {
         overviewSitesComponent.updateResCapacity();
+    }
+
+    @OnDestroy
+    public void destroy() {
+        islandComponentList.forEach(IslandComponent::destroy);
+        islandComponentList = null;
+        islandComponentMap = null;
+        islandsService.removeDataForMap();
+        this.gameListenerTriple.forEach(triple -> triple.game().listeners()
+                .removePropertyChangeListener(triple.propertyName(), triple.listener()));
+        this.subscriber.dispose();
+        this.jobsService.dispose();
     }
 
 }

@@ -11,32 +11,24 @@
 
 <fx:root alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="40.0" styleClass="overview-text" type="VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.DistrictComponent">
    <HBox fx:id="jobProgressBox" alignment="CENTER" visible="false">
-      <children>
-         <ImageView fx:id="clockImage" fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true" styleClass="siteCell">
-            <image>
-               <Image url="@../../icons/stopwatch.png" />
-            </image>
-            <HBox.margin>
-               <Insets right="3.0" />
-            </HBox.margin>
-         </ImageView>
-         <Text fx:id="jobTimeText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="x/x" />
-      </children>
+      <ImageView fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true">
+         <HBox.margin>
+            <Insets right="3.0"/>
+         </HBox.margin>
+         <Image url="@../../icons/stopwatch.png"/>
+      </ImageView>
+      <Text fx:id="jobTimeText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="x/x"/>
    </HBox>
    <Pane prefHeight="40.0" prefWidth="40.0">
       <Button fx:id="siteElementButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showOverview" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent;" />
    </Pane>
    <HBox alignment="CENTER">
-      <children>
-         <ImageView fx:id="cellImage" fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true" styleClass="siteCell">
-            <image>
-               <Image url="@../../icons/other/building_small_element.png" />
-            </image>
-            <HBox.margin>
-               <Insets right="3.0" />
-            </HBox.margin>
-         </ImageView>
-         <Text fx:id="districtCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="x/x" />
-      </children>
+      <ImageView fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true">
+         <HBox.margin>
+            <Insets right="3.0"/>
+         </HBox.margin>
+         <Image url="@../../icons/other/building_small_element.png"/>
+      </ImageView>
+      <Text fx:id="districtCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="x/x"/>
    </HBox>
 </fx:root>

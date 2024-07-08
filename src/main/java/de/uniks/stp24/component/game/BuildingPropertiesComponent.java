@@ -129,7 +129,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
             this.showJobsPane();
             if (Objects.nonNull(job)) {
                 this.propertiesJobProgressComponent.setJobProgress(job);
-                if (!this.jobsService.hasJobTypeProgress(job.type()) && this.buildingJobs.get(0).equals(job))
+                if (this.jobsService.hasNoJobTypeProgress(job.type()) && this.buildingJobs.get(0).equals(job))
                     this.jobsService.onJobTypeProgress(job.type(), () ->
                             this.propertiesJobProgressComponent.incrementProgress());
                 else this.jobsService.stopOnJobTypeProgress("building");

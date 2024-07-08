@@ -58,7 +58,7 @@ public class IslandComponent extends Pane {
         }
         this.islandImage = new ImageView();
         this.flagImage = new ImageView();
-        this.setPickOnBounds(true);
+        this.setPickOnBounds(false);
     }
 
     public void applyIcon(IslandType type) {

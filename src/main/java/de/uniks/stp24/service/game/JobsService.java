@@ -31,7 +31,6 @@ public class JobsService {
     Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
     Map<String, Consumer<String[]>> jobInspectionFunctions = new HashMap<>();
-    Map<String, ArrayList<Runnable>> jobProgressFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobTypeFunctions = new HashMap<>();
     Map<String, ArrayList<Consumer<Job>>> loadTypeFunctions = new HashMap<>();
     ArrayList<Runnable> loadCommonFunctions = new ArrayList<>();
@@ -44,7 +43,7 @@ public class JobsService {
 
     /**
      * Loads jobCollections started by the player's empire upon entering the game. <p>
-     * Call this method inside a method annoted with {@link org.fulib.fx.annotation.event.OnInit @OnInit}
+     * Call this method inside a method annotated with {@link org.fulib.fx.annotation.event.OnInit @OnInit}
      * within the {@link de.uniks.stp24.service.InGameService InGameService} controller before the
      * {@link #initializeJobsListener() initializeJobsListener} method.
      */
@@ -70,7 +69,7 @@ public class JobsService {
 
     /**
      * Creates a listener on job updates. <p>
-     * Call this method inside a method annoted with {@link org.fulib.fx.annotation.event.OnInit @OnInit}
+     * Call this method inside a method annotated with {@link org.fulib.fx.annotation.event.OnInit @OnInit}
      * within the {@link de.uniks.stp24.service.InGameService InGameService} controller after the
      * {@link #loadEmpireJobs() loadEmpireJobs} method.
      */
@@ -121,9 +120,6 @@ public class JobsService {
 
         if (this.jobTypeFunctions.containsKey(job.type()))
             this.jobTypeFunctions.get(job.type()).forEach(Runnable::run);
-
-        if (this.jobProgressFunctions.containsKey(job._id()))
-            this.jobProgressFunctions.get(job._id()).forEach(Runnable::run);
     }
 
     public void deleteJobFromGroups(@NotNull Job job) {
@@ -149,11 +145,6 @@ public class JobsService {
         this.jobCompletionFunctions.remove(jobID);
     }
 
-    public Observable<Job> setJobPriority(String jobID, int priority) {
-        return this.jobsApiService.patchJobPriority(this.tokenStorage.getGameId(),
-                this.tokenStorage.getEmpireId(), jobID, priority);
-    }
-
     /**
      * A method to define further common functions that should be executed when a job of any type
      * is started. It is possible to add more than one function on the job start.
@@ -165,30 +156,6 @@ public class JobsService {
 
     public void onJobCommonUpdates(Runnable func) {
         this.jobCommonUpdates.add(func);
-    }
-
-    /**
-     * A method used to define the methods that should be executed when a certain job progresses.
-     * It is useful if you need to execute some methods that lay within other classes.
-     * It is possible to add more than one function on the job progress.
-     * @param jobID ID of the job on which update the function should be executed
-     * @param func the execution function
-     */
-    public void onJobProgress(String jobID, Runnable func) {
-        if (!this.jobProgressFunctions.containsKey(jobID))
-            this.jobProgressFunctions.put(jobID, new ArrayList<>());
-        this.jobProgressFunctions.get(jobID).add(func);
-    }
-
-    /**
-     * Use this method to check whether a certain job has some functions that run as it is progresses.
-     * @param jobID ID of the job that has to be checked
-     * @return true, if the job has a function set on its progress, false otherwise
-     */
-    public boolean hasOnProgress(String jobID) {
-        if (this.jobProgressFunctions.containsKey(jobID))
-            return this.jobProgressFunctions.get(jobID).size() > 0;
-        return false;
     }
 
     /**
@@ -210,10 +177,10 @@ public class JobsService {
      * @param jobType type of the job that has to be checked
      * @return true, if the job has a function set on its progress, false otherwise
      */
-    public boolean hasJobTypeProgress(String jobType) {
+    public boolean hasNoJobTypeProgress(String jobType) {
         if (this.jobTypeFunctions.containsKey(jobType))
-            return this.jobTypeFunctions.get(jobType).size() > 0;
-        return false;
+            return this.jobTypeFunctions.get(jobType).size() == 0;
+        return true;
     }
 
     /**
@@ -380,7 +347,6 @@ public class JobsService {
         this.jobCollections.clear();
         this.jobTypeFunctions.clear();
         this.jobCompletionFunctions.clear();
-        this.jobProgressFunctions.clear();
         this.jobDeletionFunctions.clear();
         this.loadTypeFunctions.clear();
         this.loadCommonFunctions.clear();

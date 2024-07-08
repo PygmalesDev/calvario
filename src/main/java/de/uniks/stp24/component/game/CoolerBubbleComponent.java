@@ -63,10 +63,11 @@ public class CoolerBubbleComponent extends Captain {
         setHintCountDown();
         announcements = announcementsService.getAnnouncements();
         // todo delete
-        announcementsService.addAnnouncement(new Resource("resource.doubloons", 5, 0));
-        announcementsService.addAnnouncement(new Resource("resource.provisions", 5, 0));
-        announcementsService.addAnnouncement(Jobs.createBuildingJob("Uncharted Island", "foundary"));
-        announcementsService.addAnnouncement(new Resource("resource.coal", 5, 0));
+        // harcoded for team meeting demo
+        announcementsService.addAnnouncement(new Resource("resource.doubloons", 5, 0))
+                .addAnnouncement(new Resource("resource.provisions", 5, 0))
+                .addAnnouncement(Jobs.createBuildingJob("Uncharted Island", "foundary"))
+                .addAnnouncement(new Resource("resource.coal", 5, 0));
     }
 
     private void setHintCountDown() {

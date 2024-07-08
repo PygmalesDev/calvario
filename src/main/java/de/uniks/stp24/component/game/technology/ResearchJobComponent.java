@@ -73,14 +73,6 @@ public class ResearchJobComponent extends AnchorPane {
     private Jobs.Job job;
     private TechnologyCategoryComponent technologyCategoryComponent;
 
-    private String jobIdSociety;
-
-    private String jobIdEngineering;
-
-    private String jobIdComputing;
-
-
-
 
     @Inject
     public ResearchJobComponent(){

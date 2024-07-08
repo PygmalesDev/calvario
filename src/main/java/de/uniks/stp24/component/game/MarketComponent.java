@@ -102,6 +102,7 @@ public class MarketComponent extends StackPane {
 
     private boolean noPurchase;
 
+
     private ResourceDto resourceDto;
 
     Provider<MarketResourceComponent> marketResourceComponentProvider = () -> new MarketResourceComponent(true, true, true, gameResourceBundle);
@@ -128,7 +129,6 @@ public class MarketComponent extends StackPane {
     public void init() {
         loadVariablesAndSetup();
         getIdResourcesMap();
-
     }
 
     private void createResourceListeners() {
@@ -179,7 +179,6 @@ public class MarketComponent extends StackPane {
                     this.variables = res;
                     createResourceCountMap();
                     createResourcePriceMap();
-                    setCreditCount();
                     setMarketFee();
                 }
         );
@@ -198,14 +197,11 @@ public class MarketComponent extends StackPane {
         subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 empire -> {
                     resourceCountMap = empire.resources();
-                    System.out.println("Lewi");
-                    System.out.println(empire.resources());
-                    System.out.println(resourceCountMap);
-                    System.out.println("Lewi");
+                    setCreditCount();
                     filterResourceMap();
                     listMarketResources();
-
                     createResourceListeners();
+                    buttonLogic();
                 }
                 , error -> System.out.println("errorEmpireListener"));
     }
@@ -228,13 +224,8 @@ public class MarketComponent extends StackPane {
     }
 
     private void setCreditCount() {
-        if (variables.get("resources.credits.starting") != null) {
-            userCreditsLabel.setText(String.valueOf(variables.get("resources.credits.starting")));
-            this.userCredits = Double.parseDouble(userCreditsLabel.getText());
-        } else {
-            userCreditsLabel.setText("0");
-            this.userCredits = 0;
-        }
+        userCredits = resourceCountMap.get("credits");
+        userCreditsLabel.setText(String.valueOf(userCredits));
     }
 
     public void buyingAndSellingPrice(String resource) {
@@ -244,43 +235,32 @@ public class MarketComponent extends StackPane {
 
         buyingPriceLabel.setText(String.valueOf(buyingPrice));
         sellingPriceLabel.setText(String.valueOf(sellingPrice));
+        buttonLogic();
     }
 
     public void buyItem() {
         noPurchase = true;
         resourceCountMapCopy = new HashMap<>(resourceCountMap);
-        boolean userCanBuy = userCredits > 0 && userCredits > buyingPrice;
         resourceAmount = Integer.parseInt(numberOfGoodsLabel.getText());
-        if (userCanBuy) {
-            System.out.println(userCredits);
-            userCredits -= buyingPrice;
-            userCreditsLabel.setText(String.valueOf(userCredits));
-            resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
-            updateResources();
-            refreshListview();
-        } else {
-            System.out.println("Cannot buy");
-        }
+
+        userCredits -= buyingPrice;
+        userCreditsLabel.setText(String.valueOf(userCredits));
+        resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
+        updateResources();
+        refreshListview();
+
     }
 
     public void sellItem() {
         noPurchase = false;
         resourceCountMapCopy = new HashMap<>(resourceCountMap);
-        boolean userCanSell = (resourceCountMap.get(selectedItem)) >= (Integer.parseInt(numberOfGoodsLabel.getText()));
         resourceAmount = Integer.parseInt(numberOfGoodsLabel.getText()) * -1;
-        if (userCanSell) {
-            System.out.println("userCanSell: " + userCanSell);
-            userCredits += sellingPrice;
-            userCreditsLabel.setText(String.valueOf(userCredits));
-            resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
-            updateResources();
-            refreshListview();
-        } else {
-            System.out.println("Cannot sell");
-            System.out.println(resourceCountMap.get(selectedItem));
-            System.out.println(Integer.parseInt(numberOfGoodsLabel.getText()));
 
-        }
+        userCredits += sellingPrice;
+        userCreditsLabel.setText(String.valueOf(userCredits));
+        resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
+        updateResources();
+        refreshListview();
     }
 
     public void incrementAmount() {
@@ -349,5 +329,21 @@ public class MarketComponent extends StackPane {
                 buyingAndSellingPrice(item.getKey());
             });
         }
+    }
+
+    private void buttonLogic() {
+        boolean noDebts = userCredits > 0;
+        boolean userSelectedItem = selectedItem != null;
+        boolean moreThanZeroGoods = Integer.parseInt(numberOfGoodsLabel.getText()) > 0;
+        boolean enoughCredits = userCredits > buyingPrice;
+        boolean enoughResources = resourceCountMap.getOrDefault(selectedItem, 0) >= Integer.parseInt(numberOfGoodsLabel.getText());
+
+        boolean userCanBuy = noDebts && enoughCredits && userSelectedItem && moreThanZeroGoods;
+        boolean userCanSell = enoughResources && userSelectedItem && moreThanZeroGoods;
+
+        buyButton.setDisable(!userCanBuy);
+        sellButton.setDisable(!userCanSell);
+        decrementNumberOfGoods.setDisable(Integer.parseInt(numberOfGoodsLabel.getText()) <= 1);
+        incrementNumberOfGoods.setDisable(false);
     }
 }

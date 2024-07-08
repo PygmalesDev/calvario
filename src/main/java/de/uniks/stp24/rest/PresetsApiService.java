@@ -27,5 +27,5 @@ public interface PresetsApiService {
     Observable<Map<String, Integer>> getVariables();
 
     @GET("presets/resources")
-    Observable<Map<String,ResourceDto>> getResources();
+    Observable<ResourceDto> getResources();
 }

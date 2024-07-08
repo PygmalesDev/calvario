@@ -22,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -39,6 +40,7 @@ import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
+import javax.tools.Tool;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -49,8 +51,6 @@ import java.util.Objects;
 @Title("CALVARIO")
 @Controller
 public class InGameController extends BasicController {
-    @FXML
-    public StackPane explanationContainer;
     @FXML
     Pane shadow;
     @FXML
@@ -299,8 +299,6 @@ public class InGameController extends BasicController {
         storageOverviewContainer.setVisible(false);
         storageOverviewContainer.getChildren().add(storageOverviewComponent);
 
-        explanationContainer.setVisible(false);
-        explanationContainer.getChildren().add(variableExplanationComponent);
         explanationService.setInGameController(this);
 
         empireOverviewContainer.setVisible(false);
@@ -577,15 +575,11 @@ public class InGameController extends BasicController {
     /*
     Methods below showing explanation overview if mouse hovers above a chosen element.
      */
-    public void showExplanation(double x, double y, String variable) {
-        explanationContainer.setLayoutX(x);
-        explanationContainer.setLayoutY(y);
-        explanationContainer.setVisible(true);
+    public void showExplanation(Tooltip tooltip, String variable) {
+        //tooltip.setGraphic(variableExplanationComponent);
     }
 
-    public void unShowExplanation() {
-        explanationContainer.setLayoutX(0);
-        explanationContainer.setLayoutY(0);
-        explanationContainer.setVisible(false);
+    public void unShowExplanation(Tooltip tooltip) {
+        tooltip.hide();
     }
 }

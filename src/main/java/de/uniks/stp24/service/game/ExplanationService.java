@@ -35,27 +35,22 @@ public class ExplanationService {
     public CustomComponentListCell<Resource, ResourceComponent> addMouseHoverListener(CustomComponentListCell<Resource, ResourceComponent> cell, String component, String listType) {
         Tooltip tooltip = new Tooltip();
         Tooltip.install(cell, tooltip);
+        tooltip.setGraphic(inGameController.variableExplanationComponent);
 
-        app.stage().getScene().addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
-            if (!cell.isEmpty() && cell.getItem() != null) {
-                double mouseX = event.getScreenX();
-                double mouseY = event.getScreenY();
-
-                Point2D cellStart = cell.localToScreen(0, 0);
-                Point2D cellEnd = cell.localToScreen(cell.getWidth() * 2/3, cell.getHeight());
-
-                entered = mouseX < cellEnd.getX() &&
-                        mouseX > cellStart.getX() &&
-                        mouseY > cellStart.getY() &&
-                        mouseY < cellEnd.getY();
-
-                if (entered) {
-                    tooltip.setText("Tooltip text");
-                    tooltip.show(cell, mouseX, mouseY);
-                } else {
-                    tooltip.hide();
-                }
+        cell.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+            if (cell.isEmpty() || cell.getItem() == null) {
+                tooltip.hide();
+                return;
             }
+
+            double mouseX = event.getScreenX();
+            double mouseY = event.getScreenY();
+
+            tooltip.show(app.stage(), mouseX, mouseY);
+        });
+
+        cell.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+            tooltip.hide();
         });
 
         return cell;

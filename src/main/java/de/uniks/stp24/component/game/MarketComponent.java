@@ -3,7 +3,13 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.dto.ResourceDto;
+import de.uniks.stp24.dto.UpdateEmpireDto;
+import de.uniks.stp24.dto.UpdateEmpireMarketDto;
+import de.uniks.stp24.model.Empire;
+import de.uniks.stp24.model.EmpireExtendedDto;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
@@ -22,6 +28,7 @@ import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -34,15 +41,15 @@ public class MarketComponent extends StackPane {
     @FXML
     Button closeMarketOverviewButton;
     @FXML
-    Label userCredits;
+    Label userCreditsLabel;
     @FXML
-    Label marketFee;
+    Label marketFeeLabel;
     @FXML
-    Label numberOfGoods;
+    Label numberOfGoodsLabel;
     @FXML
-    Label buyingPrice;
+    Label buyingPriceLabel;
     @FXML
-    Label sellingPrice;
+    Label sellingPriceLabel;
     @FXML
     Button everySeasonButton;
     @FXML
@@ -53,7 +60,6 @@ public class MarketComponent extends StackPane {
     Button incrementNumberOfGoods;
     @FXML
     Button decrementNumberOfGoods;
-
     @FXML
     ImageView selectedIconImage;
     @FXML
@@ -80,19 +86,33 @@ public class MarketComponent extends StackPane {
     @Inject
     PresetsApiService presetsApiService;
 
+    @Param("empireID")
+    String empire;
+
     private InGameController inGameController;
     private String lastUpdate;
     private String lastSeasonUpdate;
+
     public String selectedItem;
+    private double sellingPrice;
+    private double buyingPrice;
+    private double userCredits;
+    private double marketFee;
+    private int resourceAmount;
+
+    private boolean noPurchase;
+
+    private ResourceDto resourceDto;
 
     Provider<MarketResourceComponent> marketResourceComponentProvider = () -> new MarketResourceComponent(true, true, true, gameResourceBundle);
 
     // From Server
-    Map<String,Integer> variables = new HashMap<>();
-    Map<String,Resource> idResourceMap = new HashMap<>();
+    Map<String, Integer> variables = new HashMap<>();
+    Map<String, Resource> idResourceMap = new HashMap<>();
 
     Map<String, Integer> resourceCountMap = new HashMap<>();
-    Map<String,Integer> resourcePriceMap = new HashMap<>();
+    Map<String, Integer> resourcePriceMap = new HashMap<>();
+    Map<String, Integer> resourceCountMapCopy = new HashMap<>();
 
     //From Storage
     Map<String, Integer> resourceMap = new HashMap<>();
@@ -108,38 +128,51 @@ public class MarketComponent extends StackPane {
     public void init() {
         loadVariablesAndSetup();
         getIdResourcesMap();
-//        updateResources();
+
     }
 
-//    private void updateResources() {
-//        this.subscriber.subscribe(eventListener
-//                        .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
-//                event -> {
-//                    if (!lastUpdate.equals(event.data().updatedAt())) {
-//                        for (Resource resource : event.data().getResources()) {
-//                            updateResource(resource);
-//                        }
-//                        this.lastUpdate = event.data().updatedAt();
-//                    }
-//                }, error -> System.out.println("errorEmpireListener"));
-//    }
-//
-//    private void updateResource(Resource resource) {
-//        resourceMap.put(resource.getName(), resource.getAmount());
-//
-//        if ("credits".equals(resource.getName())) {
-//            creditsMap.put("credits", resource.getAmount());
-//            userCredits.setText(String.valueOf(resource.getAmount()));
-//        }
-//
-//        refreshResourceListView();
-//    }
-//
-//    private void refreshResourceListView() {
-//        resourcesListView.getItems().clear();
-//        resourcesListView.getItems().addAll(resourceMap.entrySet());
-//        resourcesListView.refresh();
-//    }
+    private void createResourceListeners() {
+        subscriber.subscribe(eventListener.listen(
+                        "games" + tokenStorage.getGameId() + "empires" + tokenStorage.getEmpireId() + ".updated", EmpireExtendedDto.class),
+                event -> {
+                    Map<String, Integer> eventResources = event.data().resources();
+                    if (!eventResources.equals(resourceCountMapCopy)) {
+                        return;
+                    }
+                    if (noPurchase) {
+                        eventResources.put(selectedItem, resourceCountMapCopy.get(selectedItem) - Integer.parseInt(numberOfGoodsLabel.getText()));
+                    } else {
+                        eventResources.put(selectedItem, resourceCountMapCopy.get(selectedItem) + Integer.parseInt(numberOfGoodsLabel.getText()));
+                    }
+                    resourceCountMap = eventResources;
+
+                }
+        );
+    }
+
+
+    private void getIdResourcesMap() {
+        subscriber.subscribe(presetsApiService.getResources(),
+                res -> {
+                    resourceDto = res;
+                    System.out.println();
+                    System.out.println(res);
+                });
+    }
+
+
+    private void updateResources() {
+        UpdateEmpireMarketDto updateEmpireMarketDto = new UpdateEmpireMarketDto(Map.of(selectedItem, resourceAmount), null, null, null);
+        this.subscriber.subscribe(empireService.updateEmpireMarket(tokenStorage.getGameId(), tokenStorage.getEmpireId(), updateEmpireMarketDto),
+                error -> System.out.println("errorEmpireListener"));
+    }
+
+
+    private void refreshResourceListView() {
+        resourcesListView.getItems().clear();
+        resourcesListView.getItems().addAll(resourceMap.entrySet());
+        resourcesListView.refresh();
+    }
 
     private void loadVariablesAndSetup() {
         subscriber.subscribe(presetsApiService.getVariables(),
@@ -147,73 +180,117 @@ public class MarketComponent extends StackPane {
                     this.variables = res;
                     createResourceCountMap();
                     createResourcePriceMap();
+                    setCreditCount();
                     setMarketFee();
-                    listMarketResources();
                 }
         );
     }
 
-    private void createResourceCountMap() {
-        resourcePriceMap.put("energy",variables.get("resources.energy.credit_value"));
-        resourcePriceMap.put("minerals",variables.get("resources.minerals.credit_value"));
-        resourcePriceMap.put("food",variables.get("resources.food.credit_value"));
-        resourcePriceMap.put("fuel",variables.get("resources.fuel.credit_value"));
-        resourcePriceMap.put("alloys",variables.get("resources.alloys.credit_value"));
-        resourcePriceMap.put("consumer_goods",variables.get("resources.consumer_goods.credit_value"));
+    private void createResourcePriceMap() {
+        resourcePriceMap.put("energy", variables.get("resources.energy.credit_value"));
+        resourcePriceMap.put("minerals", variables.get("resources.minerals.credit_value"));
+        resourcePriceMap.put("food", variables.get("resources.food.credit_value"));
+        resourcePriceMap.put("fuel", variables.get("resources.fuel.credit_value"));
+        resourcePriceMap.put("alloys", variables.get("resources.alloys.credit_value"));
+        resourcePriceMap.put("consumer_goods", variables.get("resources.consumer_goods.credit_value"));
     }
 
-    private void createResourcePriceMap() {
-        resourceCountMap.put("energy",variables.get("resources.energy.starting"));
-        resourceCountMap.put("minerals",variables.get("resources.minerals.starting"));
-        resourceCountMap.put("food",variables.get("resources.food.starting"));
-        resourceCountMap.put("fuel",variables.get("resources.fuel.starting"));
-        resourceCountMap.put("alloys",variables.get("resources.alloys.starting"));
-        resourceCountMap.put("consumer_goods",variables.get("resources.consumer_goods.starting"));
-        System.out.println("here");
-        System.out.println(variables);
-        System.out.println(variables.get(("resources.energy.starting")));
+    private void createResourceCountMap() {
+        subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                empire -> {
+                    resourceCountMap = empire.resources();
+                    System.out.println(empire.resources());
+                    System.out.println(resourceCountMap);
+                    filterResourceMap();
+                    listMarketResources();
+
+                    createResourceListeners();
+                }
+                , error -> System.out.println("errorEmpireListener"));
+    }
+
+    public void filterResourceMap() {
+        resourceCountMap.remove("population");
+        resourceCountMap.remove("research");
+        resourceCountMap.remove("credits");
+
     }
 
     private void setMarketFee() {
-        marketFee.setText(String.valueOf(variables.get("empire.market.fee")));
+        if (variables.get("empire.market.fee") != null) {
+            marketFeeLabel.setText(String.valueOf(variables.get("empire.market.fee")));
+            this.marketFee = Double.parseDouble(marketFeeLabel.getText());
+        } else {
+            marketFeeLabel.setText("0");
+            this.marketFee = 0;
+        }
+    }
+
+    private void setCreditCount() {
+        if (variables.get("resources.credits.starting") != null) {
+            userCreditsLabel.setText(String.valueOf(variables.get("resources.credits.starting")));
+            this.userCredits = Double.parseDouble(userCreditsLabel.getText());
+        } else {
+            userCreditsLabel.setText("0");
+            this.userCredits = 0;
+        }
     }
 
     public void buyingAndSellingPrice(String resource) {
-        double sell = (resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoods.getText())) *(1-0.3);
-        double buy = (resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoods.getText())) *(1+0.3);
+        //TODO MarketFee correctly
+        this.sellingPrice = (resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoodsLabel.getText())) * (1 - 0.3);
+        this.buyingPrice = (resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoodsLabel.getText())) * (1 + 0.3);
 
-        buyingPrice.setText(String.valueOf(buy));
-        sellingPrice.setText(String.valueOf(sell));
-    }
-
-    private void getIdResourcesMap() {
-        subscriber.subscribe(presetsApiService.getResources(),
-                resources -> {
-                    System.out.println("Wan");
-                    System.out.println(resources);
-                });
+        buyingPriceLabel.setText(String.valueOf(buyingPrice));
+        sellingPriceLabel.setText(String.valueOf(sellingPrice));
     }
 
     public void buyItem() {
-        int amount = Integer.parseInt(numberOfGoods.getText());
-        int buy = Integer.parseInt(buyingPrice.getText());
+        noPurchase = true;
+        resourceCountMapCopy = resourceCountMap;
+        boolean userCanBuy = userCredits > 0 && userCredits > buyingPrice;
+        resourceAmount = Integer.parseInt(numberOfGoodsLabel.getText());
+        if (userCanBuy) {
+            System.out.println(userCredits);
+            userCredits -= buyingPrice;
+            userCreditsLabel.setText(String.valueOf(userCredits));
+            resourceCountMap.put(selectedItem, resourceAmount);
+            updateResources();
+        } else {
+            System.out.println("Cannot buy");
+        }
     }
 
     public void sellItem() {
+        noPurchase = false;
+        resourceCountMapCopy = resourceCountMap;
+        boolean userCanSell = (resourceCountMap.get(selectedItem)) >= (Integer.parseInt(numberOfGoodsLabel.getText()));
+        resourceAmount = Integer.parseInt(numberOfGoodsLabel.getText()) * -1;
+        if (userCanSell) {
+            System.out.println("userCanSell: " + userCanSell);
+            userCredits += sellingPrice;
+            userCreditsLabel.setText(String.valueOf(userCredits));
+            resourceCountMap.put(selectedItem, resourceAmount);
+            updateResources();
+        } else {
+            System.out.println("Cannot sell");
+            System.out.println(resourceCountMap.get(selectedItem));
+            System.out.println(Integer.parseInt(numberOfGoodsLabel.getText()));
 
+        }
     }
 
     public void incrementAmount() {
-        int amount = Integer.parseInt(numberOfGoods.getText());
+        int amount = Integer.parseInt(numberOfGoodsLabel.getText());
         amount++;
-        numberOfGoods.setText(String.valueOf(amount));
+        numberOfGoodsLabel.setText(String.valueOf(amount));
         buyingAndSellingPrice(selectedItem);
     }
 
     public void decrementAmount() {
-        int amount = Integer.parseInt(numberOfGoods.getText());
+        int amount = Integer.parseInt(numberOfGoodsLabel.getText());
         amount--;
-        numberOfGoods.setText(String.valueOf(amount));
+        numberOfGoodsLabel.setText(String.valueOf(amount));
         buyingAndSellingPrice(selectedItem);
     }
 
@@ -221,14 +298,16 @@ public class MarketComponent extends StackPane {
         this.inGameController = ingameController;
     }
 
-    public void closeMarketOverview() { this.getParent().setVisible(false); }
+    public void closeMarketOverview() {
+        this.getParent().setVisible(false);
+    }
     //--------------------------------------------listViewOfResources-------------------------------------------------//
 
     public void listMarketResources() {
         if (this.resourceCountMap.isEmpty()) {
             System.out.println("resourceMap is empty");
         } else {
-            System.out.println("resourceCountMap: "+ resourceCountMap);
+            System.out.println("resourceCountMap: " + resourceCountMap);
         }
         resourcesListView.getItems().addAll(this.resourceCountMap.entrySet());
         resourcesListView.setCellFactory(list -> new ResourceCell());
@@ -255,7 +334,6 @@ public class MarketComponent extends StackPane {
                 imageView.setImage(imageCache.get("/de/uniks/stp24/assets/market/buttons/" + item.getKey() + ".png"));
                 imageView.setFitWidth(35);
                 imageView.setFitHeight(35);
-
                 text.setText(String.valueOf(item.getValue()));
                 setGraphic(vBox);
             }
@@ -263,7 +341,7 @@ public class MarketComponent extends StackPane {
                 System.out.println(item.getKey());
                 selectedItem = item.getKey();
                 selectedIconImage.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + item.getKey() + ".png"));
-                numberOfGoods.setText(String.valueOf(item.getValue()));
+                numberOfGoodsLabel.setText(String.valueOf(item.getValue()));
                 buyingAndSellingPrice(item.getKey());
             });
         }

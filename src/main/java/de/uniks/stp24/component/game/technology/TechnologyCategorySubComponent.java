@@ -70,6 +70,10 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     @Named("technologiesResourceBundle")
     public ResourceBundle technologiesResourceBundle;
 
+    @Inject
+    @Named("variablesResourceBundle")
+    public ResourceBundle variablesResourceBundle;
+
     @SubComponent
     @Inject
     public TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
@@ -78,7 +82,7 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
 
     ObservableList<Effect> description = FXCollections.observableArrayList();
 
-    Provider<TechnologyCategoryDescriptionSubComponent> provider = TechnologyCategoryDescriptionSubComponent::new;
+    Provider<TechnologyCategoryDescriptionSubComponent> provider = () -> new TechnologyCategoryDescriptionSubComponent(variablesResourceBundle);
 
     /**
      * This class is for the components of the listView in the technology category
@@ -133,9 +137,6 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
         tooltip.setGraphic(technologyResearchDetailsComponent);
         tooltip.setShowDelay(Duration.ZERO);
         tooltip.setShowDuration(Duration.INDEFINITE);
-
-        tooltip.setX(tooltip.getX() - 200);
-
     }
 
     @OnDestroy

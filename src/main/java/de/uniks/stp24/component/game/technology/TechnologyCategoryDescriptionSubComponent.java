@@ -1,9 +1,13 @@
 package de.uniks.stp24.component.game.technology;
 
 import de.uniks.stp24.model.Effect;
+import de.uniks.stp24.model.TechnologyExtended;
+import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.TechnologyService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -16,6 +20,8 @@ import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ResourceBundle;
 
 @Component(view = "TechnologyCategoryDescription.fxml")
 public class TechnologyCategoryDescriptionSubComponent extends HBox implements ReusableItemComponent<Effect> {
@@ -35,9 +41,11 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
     @Inject
     Subscriber subscriber;
 
-    @Inject
-    public TechnologyCategoryDescriptionSubComponent() {
+    ResourceBundle variablesResourceBundle;
 
+    @Inject
+    public TechnologyCategoryDescriptionSubComponent(ResourceBundle variablesResourceBundle) {
+        this.variablesResourceBundle = variablesResourceBundle;
     }
 
     @OnRender
@@ -87,6 +95,15 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
             }
         }
 
-        descriptionLabel.setText(effect.variable());
+        if (effect.base() != 0) {
+            descriptionLabel.setText("+" + effect.base() + " " + variablesResourceBundle.getString(effect.variable()));
+        }
+
+        if (effect.multiplier() != 1) {
+            descriptionLabel.setText(((int)(effect.multiplier() * 100) - 100) + " % "
+                    + variablesResourceBundle.getString(effect.variable()));
+        }
+
+//        descriptionLabel.setText("(" + ")" + variablesResourceBundle.getString(effect.variable()));
     }
 }

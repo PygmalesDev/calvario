@@ -36,6 +36,7 @@
     <StackPane fx:id="storageOverviewContainer" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="70.0" />
     <StackPane fx:id="technologiesContainer" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="160.4" AnchorPane.leftAnchor="340.0" AnchorPane.rightAnchor="340.0" AnchorPane.topAnchor="160.4" />    <StackPane fx:id="deleteStructureWarningContainer" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="250.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="250.0" />
     <StackPane fx:id="explanationContainer" prefHeight="362.0" prefWidth="304.0" />
+   <StackPane fx:id="helpWindowContainer" layoutX="450.0" layoutY="50.0" prefHeight="600.0" prefWidth="400.0" style=": ;" visible="false" />
     <stylesheets>
         <URL value="@../style/styles.css" />
         <URL value="@../style/ingameButtons.css" />

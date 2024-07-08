@@ -15,6 +15,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -51,11 +55,27 @@ public class TestEditAcc extends ControllerTest {
     @InjectMocks
     WarningScreenComponent warningScreenComponent;
 
+    Map<String,Integer>  avatarMap2 = new HashMap<>();
+
     @Override
     public void start(Stage stage) throws Exception{
+        this.editAccController.avatarMap = new HashMap<>();
+        doReturn(null).when(this.imageCache).get(any());
+
+        this.editAccController.avatarMap.put("backgroundIndex", 1);
+        this.editAccController.avatarMap.put("portraitIndex", 1);
+        this.editAccController.avatarMap.put("frameIndex", 1);
+
+        avatarMap2.put("backgroundIndex", 1);
+        avatarMap2.put("portraitIndex", 1);
+        avatarMap2.put("frameIndex", 1);
+
+        this.warningScreenComponent.warningText = new Text("waring");
+
         this.editAccController.warningScreen = this.warningScreenComponent;
         super.start(stage);
         app.show(editAccController);
+
     }
 
     @Test
@@ -114,8 +134,9 @@ public class TestEditAcc extends ControllerTest {
 
     @Test
     void changeAccount() {
+        Map<String,Integer> _public = new HashMap<>();
         // Title: Confirming edited account
-        doReturn(Observable.just(new User("Calvario", "a","b","c","d"))).when(editAccService).changeUserInfo(any(),any());
+        doReturn(Observable.just(new User("Calvario", "a","b","c","d",_public))).when(editAccService).changeUserInfo(any(),any());
 
         final TextField username = lookup("#usernameInput").query();
         final TextField password = lookup("#passwordInput").query();
@@ -158,8 +179,8 @@ public class TestEditAcc extends ControllerTest {
 
         //Action:
         //She clicks cancel because she changed her mind.
-        Button cancelDeleteButton = lookup("#cancelDeleteButton").queryButton();
         Button deleteUserButton = lookup("#deleteUserButton").queryButton();
+        Button cancelDeleteButton = lookup("#cancelDeleteButton").queryButton();
         assertTrue(cancelDeleteButton.isVisible());
         assertFalse(cancelDeleteButton.isDisabled());
         assertEquals(BoxBlur.class, editAccVBoxLeftToBlur.getEffect().getClass());
@@ -183,7 +204,7 @@ public class TestEditAcc extends ControllerTest {
         doAnswer(show -> { tokenStorage.setName(null);
             tokenStorage.setAvatar(null);
             prefService.removeRefreshToken();
-            return Observable.just(new User("1", "a","b","c","d"));
+            return Observable.just(new User("1", "a","b","c","d",avatarMap2));
         }).when(this.editAccService).deleteUser();
 
         // Start:

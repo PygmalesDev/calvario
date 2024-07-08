@@ -7,7 +7,6 @@ import de.uniks.stp24.component.game.technology.TechnologyCategorySubComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Technology;
@@ -56,6 +55,8 @@ import java.util.Objects;
 public class InGameController extends BasicController {
     @FXML
     public StackPane explanationContainer;
+    @FXML
+    StackPane helpWindowContainer;
     @FXML
     Pane shadow;
     @FXML
@@ -124,9 +125,7 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public PauseMenuComponent pauseMenuComponent;
-    @SubComponent
-    @Inject
-    public SettingsComponent settingsComponent;
+
     @SubComponent
     @Inject
     public OverviewSitesComponent overviewSitesComponent;
@@ -142,6 +141,7 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public EmpireOverviewComponent empireOverviewComponent;
+
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
@@ -163,6 +163,10 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public SitePropertiesComponent sitePropertiesComponent;
+    
+    @SubComponent
+    @Inject
+    public HelpComponent helpComponent;
 
 
     List<IslandComponent> islandComponentList;
@@ -203,6 +207,7 @@ public class InGameController extends BasicController {
     PopupBuilder popupDeleteStructure = new PopupBuilder();
     public String selectedBuilding;
     public String selectedSites;
+    PopupBuilder popupHelpWindow = new PopupBuilder();
     @OnInit
     public void init() {
         overviewSitesComponent.setIngameController(this);
@@ -213,6 +218,8 @@ public class InGameController extends BasicController {
         deleteStructureComponent.setInGameController(this);
         empireOverviewComponent.setInGameController(this);
         variableService.setIngameController(this);
+		pauseMenuComponent.setInGameController(this);
+        helpComponent.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
@@ -224,10 +231,6 @@ public class InGameController extends BasicController {
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_PAUSED"));
-
-        PropertyChangeListener callHandleShowSettings = this::handleShowSettings;
-        gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_SETTINGS, callHandleShowSettings);
-        this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_SETTINGS"));
 
         this.subscriber.subscribe(inGameService.loadUpgradePresets(),
                 result -> islandAttributes.setSystemPresets(result),
@@ -255,17 +258,6 @@ public class InGameController extends BasicController {
         }
     }
 
-    private void handleShowSettings(@NotNull PropertyChangeEvent propertyChangeEvent) {
-        if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
-            Boolean settings = (Boolean) propertyChangeEvent.getNewValue();
-            if (settings) {
-                showSettings();
-            } else {
-                unShowSettings();
-            }
-        }
-    }
-
     private void handlePauseChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             pause = (Boolean) propertyChangeEvent.getNewValue();
@@ -288,6 +280,8 @@ public class InGameController extends BasicController {
         buildingsWindow.setMouseTransparent(true);
         siteProperties.setMouseTransparent(true);
         deleteStructureWarningContainer.setMouseTransparent(true);
+        helpWindowContainer.setMouseTransparent(true);
+        helpComponent.setVisible(false);
 
         pauseMenuContainer.setMouseTransparent(false);
         pauseMenuContainer.setVisible(false);
@@ -324,8 +318,12 @@ public class InGameController extends BasicController {
 
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
+        helpComponent.setVisible(false);
+        helpWindowContainer.setVisible(false);
+        helpComponent.setMouseTransparent(true);
+        helpWindowContainer.setMouseTransparent(true);
+
         pause = !pause;
-        inGameService.setShowSettings(false);
         inGameService.setPaused(pause);
         if (pause) {
             shadow.setVisible(true);
@@ -338,26 +336,23 @@ public class InGameController extends BasicController {
         }
     }
 
-    @OnKey(code = KeyCode.I,alt = true)
-    public void showIslandOverviewWindows() {
-        buildingProperties.setMouseTransparent(false);
-        buildingsWindow.setMouseTransparent(false);
-        popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
-    }
-
-    public void showSettings() {
-        pauseMenuContainer.getChildren().remove(pauseMenuComponent);
-        pauseMenuContainer.getChildren().add(settingsComponent);
-    }
-
-    public void unShowSettings() {
-        pauseMenuContainer.getChildren().remove(settingsComponent);
-        pauseMenuContainer.getChildren().add(pauseMenuComponent);
-    }
-
     public void pauseGame() {
         closeComponents();
+        pauseMenuComponent.setVisible(true);
         pauseMenuContainer.setVisible(pause);
+        pauseMenuContainer.setMouseTransparent(false);
+    }
+
+    public void pauseGameFromHelp() {
+        pause = true;
+        inGameService.setPaused(true);
+        if (pause) {
+            pauseMenuContainer.setMouseTransparent(false);
+            pauseGame();
+        } else {
+            pauseMenuContainer.setMouseTransparent(true);
+            resumeGame();
+        }
     }
 
     public void closeComponents() {
@@ -375,6 +370,14 @@ public class InGameController extends BasicController {
     public void resumeGame() {
         pauseMenuContainer.setVisible(pause);
     }
+
+    public void removePause() {
+        pause = false;
+        pauseMenuContainer.setVisible(false);
+        shadow.setVisible(false);
+    }
+
+
 
     /**
      * created and add buttons for storage and island overview
@@ -478,14 +481,23 @@ public class InGameController extends BasicController {
         inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
         overviewSitesComponent.setOverviewSites();
     }
-
     @OnKey(code = KeyCode.S,alt = true)
+
     public void showStorage() {
         if(empireOverviewComponent.isVisible()) {
             empireOverviewComponent.closeEmpireOverview();
         }
 
         storageOverviewContainer.setVisible(!storageOverviewContainer.isVisible());
+    }
+    @OnKey(code = KeyCode.H, alt = true)
+    public void showHelpOnKey(){
+        if (helpComponent.isVisible()){
+            helpComponent.close();
+            removePause();
+        } else {
+            showHelp();
+        }
     }
 
     @OnKey(code = KeyCode.E, alt = true)
@@ -592,6 +604,16 @@ public class InGameController extends BasicController {
         overviewSitesComponent.buildingsComponent.setGridPane();
     }
 
+    public void showHelp() {
+        popupHelpWindow.showPopup(helpWindowContainer,helpComponent);
+        helpComponent.setVisible(true);
+        helpComponent.setMouseTransparent(false);
+        helpWindowContainer.setMouseTransparent(false);
+        helpWindowContainer.toFront();
+        pauseMenuContainer.setVisible(false);
+        pauseMenuContainer.setMouseTransparent(true);
+        helpComponent.displayTechnologies();
+    }
     public void updateResCapacity() {
         overviewSitesComponent.updateResCapacity();
     }

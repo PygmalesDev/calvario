@@ -1,10 +1,13 @@
 package de.uniks.stp24.service;
-
-
 import java.nio.file.Path;
 import java.util.Map;
 
 public class Constants {
+    // Colors
+    public static final String[] colorsArray = {"#DC143C", "#0F52BA", "#50C878", "#9966CC", "#FF7F50",
+            "#40E0D0", "#FF00FF", "#FFD700", "#C0C0C0", "#4B0082",
+            "#36454F", "#F28500", "#E6E6FA", "#008080", "#800000", "#808000"};
+
     // Folder
     public static final String DATA_FOLDER_NAME = "data";
     public static final String EVENT_FOLDER_NAME = "src/main/resources/de/uniks/stp24/data/";
@@ -192,7 +195,6 @@ public class Constants {
             "de/uniks/stp24/icons/buildings/scout_hub.png",
             "de/uniks/stp24/icons/buildings/seaside_hut.png",
     };
-
     public static final Map<String, String> technologyIconMap = Map.ofEntries(
             Map.entry("biology", "de/uniks/stp24/assets/technologies/tags/biology.png"),
             Map.entry("computing" , "de/uniks/stp24/assets/technologies/tags/computing.png"),

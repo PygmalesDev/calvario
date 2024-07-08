@@ -30,6 +30,7 @@ public class LoginService {
                     tokenStorage.setName(loginResult.name());
                     tokenStorage.setAvatar(loginResult.avatar());
                     prefService.setRefreshToken(loginResult.refreshToken());
+                    tokenStorage.setAvatarMap(loginResult._public());
                 });
     }
 
@@ -42,6 +43,7 @@ public class LoginService {
                     tokenStorage.setUserId(loginResult._id());
                     tokenStorage.setName(loginResult.name());
                     tokenStorage.setAvatar(loginResult.avatar());
+                    tokenStorage.setAvatarMap(loginResult._public());
                     if (rememberMe) {
                         prefService.setRefreshToken(loginResult.refreshToken());
                     }

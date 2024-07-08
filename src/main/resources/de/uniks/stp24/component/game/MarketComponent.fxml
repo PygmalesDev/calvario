@@ -22,17 +22,17 @@
                <children>
                   <Button fx:id="incrementNumberOfGoods" layoutX="91.0" mnemonicParsing="false" onAction="#incrementAmount" prefHeight="5.0" prefWidth="10.0" style="-fx-background-color: red;" styleClass="upArrowButton" />
                   <Button fx:id="decrementNumberOfGoods" layoutX="58.0" mnemonicParsing="false" onAction="#decrementAmount" prefHeight="0.0" prefWidth="16.0" style="-fx-background-color: red;" styleClass="downArrowButton" />
-                  <Label fx:id="numberOfGoods" layoutX="14.0" layoutY="5.0" text="Label" textFill="WHITE" />
+                  <Label fx:id="numberOfGoodsLabel" layoutX="14.0" layoutY="5.0" text="Label" textFill="WHITE" />
                </children></AnchorPane>
-            <Label fx:id="sellingPrice" layoutX="89.0" layoutY="238.0" prefHeight="17.0" prefWidth="34.0" text="Label" />
+            <Label fx:id="sellingPriceLabel" layoutX="89.0" layoutY="238.0" prefHeight="17.0" prefWidth="34.0" text="Label" />
             <ListView layoutX="84.0" layoutY="347.0" prefHeight="105.0" prefWidth="223.0" style="-fx-background-color: brown;" />
-            <Label fx:id="userCredits" layoutX="152.0" layoutY="64.0" prefHeight="38.0" prefWidth="45.0" style="-fx-background-color: transparent;" text="Label" />
-            <Label fx:id="marketFee" layoutX="243.0" layoutY="64.0" prefHeight="38.0" prefWidth="52.0" text="Label" />
+            <Label fx:id="userCreditsLabel" layoutX="152.0" layoutY="64.0" prefHeight="38.0" prefWidth="45.0" style="-fx-background-color: transparent;" text="Label" />
+            <Label fx:id="marketFeeLabel" layoutX="243.0" layoutY="64.0" prefHeight="38.0" prefWidth="52.0" text="Label" />
             <AnchorPane layoutX="210.0" layoutY="70.0" prefHeight="25.0" prefWidth="28.0" styleClass="marketFeeIcon" />
             <ListView fx:id="resourcesListView" layoutX="48.0" layoutY="103.0" orientation="HORIZONTAL" prefHeight="71.0" prefWidth="319.0" style="-fx-background-color: transparent;" styleClass="listViewStyle" />
             <ImageView fx:id="selectedIconImage" fitHeight="38.0" fitWidth="34.0" layoutX="120.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true" />
             <AnchorPane layoutX="281.0" layoutY="234.0" prefHeight="25.0" prefWidth="28.0" style="-fx-background-color: gold;" styleClass="creditCoinIcon" />
-            <Label fx:id="buyingPrice" layoutX="248.0" layoutY="238.0" text="Label" />
+            <Label fx:id="buyingPriceLabel" layoutX="248.0" layoutY="238.0" text="Label" />
             <AnchorPane layoutX="106.0" layoutY="70.0" prefHeight="25.0" prefWidth="28.0" style="-fx-background-color: gold;" styleClass="creditCoinIcon" />
          </children>
       </AnchorPane>

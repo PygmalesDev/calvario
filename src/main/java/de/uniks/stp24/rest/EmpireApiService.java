@@ -29,4 +29,7 @@ public interface EmpireApiService {
 
     @GET("games/{game}/empires/{empire}/aggregates/resources.periodic")
     Observable<AggregateResultDto> getResourceAggregates(@Path("game") String game, @Path("empire") String empire);
+
+    @PATCH("games/{game}/empires/{empire}")
+    Observable<UpdateEmpireMarketDto> updateEmpireMarket(@Path("game") String game, @Path("empire") String empire, @Body UpdateEmpireMarketDto updateEmpireMarketDto);
 }

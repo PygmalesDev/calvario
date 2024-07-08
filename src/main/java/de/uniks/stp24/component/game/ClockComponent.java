@@ -284,12 +284,8 @@ public class ClockComponent extends AnchorPane {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             randomEventImage.setVisible(true);
             remainingSeasonsLabel.setVisible(true);
-
-            if (Objects.equals(eventService.getEvent().effects()[0].eventType(), "bad")) {
-                randomEventImage.setImage(imageCache.get("assets/events/badEvent.png"));
-            } else {
-                randomEventImage.setImage(imageCache.get("assets/events/goodEvent.png"));
-            }
+            String eventType = eventService.getEvent().effects()[0].eventType();
+            randomEventImage.setImage(imageCache.get("assets/events/" + eventType + "Event.png"));
         }
     }
 

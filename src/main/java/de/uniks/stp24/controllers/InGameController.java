@@ -48,6 +48,8 @@ import java.util.Objects;
 public class InGameController extends BasicController {
 
     @FXML
+    Pane gameBackground;
+    @FXML
     StackPane helpWindowContainer;
     @FXML
     Pane shadow;
@@ -269,6 +271,7 @@ public class InGameController extends BasicController {
         eventContainer.setVisible(false);
         shadow.setVisible(false);
         eventComponent.setClockComponent(clockComponent);
+        eventComponent.setBackground(gameBackground);
 
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
 
@@ -575,8 +578,8 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setMouseTransparent(true);
         helpComponent.displayTechnologies();
     }
+
     public void updateResCapacity() {
         overviewSitesComponent.updateResCapacity();
     }
-
 }

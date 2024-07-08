@@ -795,8 +795,8 @@ ToggleButton:hover{
 
 .backgroundGame {
     -fx-background-color: "TRANSPARENT";
-    -fx-background-image: url('/de/uniks/stp24/icons/sea_seamless.png');
-    -fx-background-size: cover, auto;
+    -fx-background-image: url('/de/uniks/stp24/assets/backgrounds/sea_seamless.png');
+    -fx-background-repeat: repeat;
 }
 
 /*********************************** for map in game *****************************************************/

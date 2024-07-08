@@ -49,7 +49,7 @@ public class EventService {
 
 ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",
             "grandExp", "reckoning", "rogerFeast", /* Bad Events */ "blackSpot", "dutchman", "foolsGold", "pestilence",
-            "rumBottle", "submerge"));
+            "rumBottle", "submerge", "solarEclipse"));
 
     Map<String, EffectSourceParentDto> eventMap = new HashMap<>();
 
@@ -62,7 +62,9 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
      */
     @Inject
     public EventService() {
-        setNextEvent();
+//        setNextEvent();
+        // todo change
+        nextEvent = 1;
         this.listeners = new PropertyChangeSupport(this);
     }
 
@@ -78,10 +80,10 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
 
     // Gets random a new event
     public EffectSourceParentDto getNewRandomEvent() {
-
         if (nextEvent <= 0) {
-
-            int eventName = random.nextInt(0, eventNames.size());
+            // todo change
+//            int eventName = random.nextInt(0, eventNames.size());
+            int eventName = 12;
             EffectSourceParentDto tmp = readEvent(eventName);
             setNextEvent();
             return tmp;
@@ -91,7 +93,9 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
     }
 
     public void setNextEvent() {
-        nextEvent = random.nextInt(100, 120);
+//        nextEvent = random.nextInt(100, 120);
+        // todo change
+        nextEvent = 3;
     }
 
     public EffectSourceParentDto getEvent() {
@@ -100,7 +104,6 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
 
     // Counts down the time until the next event
     public void setNextEventTimer(int nextEvent) {
-
         if (nextEvent == this.nextEvent) {
             return;
         }
@@ -155,7 +158,6 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
      * Method reads the JSONs in folder .data and creates an EffectSourceParentDto
     /* if the event has not been added to the eventMap yet */
     private @Nullable EffectSourceParentDto readEvent(int eventName) {
-
         try {
             File jsonFile = new File(Constants.EVENT_FOLDER_NAME + eventNames.get(eventName) + "Event.json");
 

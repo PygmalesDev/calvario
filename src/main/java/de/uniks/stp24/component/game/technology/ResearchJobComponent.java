@@ -1,18 +1,17 @@
 package de.uniks.stp24.component.game.technology;
 
-import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.model.Effect;
 import de.uniks.stp24.model.Jobs;
-import de.uniks.stp24.model.Technology;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.JobsService;
-import de.uniks.stp24.service.game.TechnologyService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
@@ -27,8 +26,6 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 @Component(view = "ResearchJob.fxml")
 public class ResearchJobComponent extends AnchorPane {
@@ -40,7 +37,7 @@ public class ResearchJobComponent extends AnchorPane {
     @FXML
     ImageView technologyTagImage1;
     @FXML
-    ListView<Technology> technologyEffectsListView;
+    ListView<String> technologyEffectsListView;
     @FXML
     Text technologyNameText;
     @FXML
@@ -110,6 +107,17 @@ public class ResearchJobComponent extends AnchorPane {
 
     }
 
+    public void setEffectListView(){
+        technologyEffectsListView.getItems().clear();
+        for (Effect effect : technologyCategoryComponent.getTechnology().effects()) {
+            String effectString = effect.multiplier() + " * " + effect.variable();
+
+            technologyEffectsListView.getItems().add(effectString);
+        }
+
+
+    }
+
     private void handleJobFinished() {
         technologyCategoryComponent.handleJobCompleted(job);
         setVisible(false);
@@ -143,4 +151,6 @@ public class ResearchJobComponent extends AnchorPane {
         subscriber.subscribe(jobsService.stopJob(this.job._id()));
         technologyCategoryComponent.handleJobCompleted(job);
     }
+
+
 }

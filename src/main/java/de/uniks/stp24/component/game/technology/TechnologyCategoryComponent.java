@@ -175,6 +175,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
     }
 
     public void showResearchComponent(TechnologyExtended technology) {
+
         this.technology = technology;
         Map<String, Integer> technologyCostMap = new HashMap<>();
         technologyCostMap.put("research", technology.cost() * 100);
@@ -191,6 +192,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
                     handleJobRunning(physicsJobRunning, technology);}
             }
         }
+        researchJobComponent.setEffectListView();
     }
 
     public TechnologyExtended getTechnology(){

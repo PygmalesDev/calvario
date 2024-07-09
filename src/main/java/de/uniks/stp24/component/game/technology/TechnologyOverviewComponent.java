@@ -97,6 +97,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
             technologyCategoryComponent.showJobWindow();
         }
         technologyCategoryComponent.researchJobComponent.setProgressBar(null);
+        technologyCategoryComponent.researchJobComponent.setEffectListView();
     }
 
     public void society() {
@@ -108,6 +109,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
             technologyCategoryComponent.showJobWindow();
         }
         technologyCategoryComponent.researchJobComponent.setProgressBar(null);
+        technologyCategoryComponent.researchJobComponent.setEffectListView();
     }
 
     public void physics() {
@@ -119,6 +121,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
             technologyCategoryComponent.showJobWindow();
         }
         technologyCategoryComponent.researchJobComponent.setProgressBar(null);
+        technologyCategoryComponent.researchJobComponent.setEffectListView();
     }
 
 

@@ -44,7 +44,6 @@ public class TestIslandJobOverview extends JobsTestComponent {
         super.start(stage);
 
         doReturn(null).when(this.imageCache).get(any());
-        doReturn(this.ISLAND_1).when(this.islandAttributeStorage).getIsland();
 
         this.islandOverviewJobsComponent.setPrefHeight(600);
 
@@ -75,6 +74,7 @@ public class TestIslandJobOverview extends JobsTestComponent {
     @Test
     public void testIslandNameInsertion() {
         WaitForAsyncUtils.waitForFxEvents();
+        doReturn(this.ISLAND_1).when(this.islandAttributeStorage).getIsland();
 
         this.islandOverviewJobsComponent.insertIslandName();
         assertTrue(lookup("#noJobText").queryText().getText().contains(this.SYSTEM_NAME_1));
@@ -107,6 +107,7 @@ public class TestIslandJobOverview extends JobsTestComponent {
     @Test
     public void testNoJobTestAppearance() {
         WaitForAsyncUtils.waitForFxEvents();
+        doReturn(this.ISLAND_1).when(this.islandAttributeStorage).getIsland();
 
         this.jobs.forEach(job -> this.deleteInternally(job._id()));
         WaitForAsyncUtils.waitForFxEvents();

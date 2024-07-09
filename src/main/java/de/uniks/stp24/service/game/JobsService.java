@@ -114,7 +114,7 @@ public class JobsService {
                 this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
             else this.jobCollections.get(job.system()).replaceAll(other -> other.equals(job) ? job : other);
 
-            if (this.jobCollections.get(job.system()).filtered(job1 -> job1.type().equals(job.type())).size() == 0)
+            if (this.jobCollections.get(job.system()).filtered(job1 -> job1.type().equals(job.type())).isEmpty())
                 this.jobCollections.get("collection").add(job);
         }
 
@@ -130,8 +130,8 @@ public class JobsService {
             this.jobCollections.get(job.system()).removeIf(other -> other._id().equals(job._id()));
 
             ObservableList<Job> systemJobs = this.jobCollections.get(job.system());
-            if (systemJobs.size() > 0 && !this.jobCollections.get("collection").contains(systemJobs.get(0)))
-                this.jobCollections.get("collection").add(systemJobs.get(0));
+            if (!systemJobs.isEmpty() && !this.jobCollections.get("collection").contains(systemJobs.getFirst()))
+                this.jobCollections.get("collection").add(systemJobs.getFirst());
         }
 
         if (this.jobCompletionFunctions.containsKey(job._id()))
@@ -179,7 +179,7 @@ public class JobsService {
      */
     public boolean hasNoJobTypeProgress(String jobType) {
         if (this.jobTypeFunctions.containsKey(jobType))
-            return this.jobTypeFunctions.get(jobType).size() == 0;
+            return this.jobTypeFunctions.get(jobType).isEmpty();
         return true;
     }
 

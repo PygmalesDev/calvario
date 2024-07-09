@@ -3,6 +3,7 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.EffectSourceParentDto;
 import de.uniks.stp24.model.Game;
+import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EventService;
@@ -12,14 +13,19 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
+import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +40,8 @@ import java.util.ResourceBundle;
 @Component(view = "Event.fxml")
 public class EventComponent extends AnchorPane {
 
+    @FXML
+    TextFlow descriptionTextFlow;
     @FXML
     AnchorPane anchor;
     @FXML
@@ -164,7 +172,37 @@ public class EventComponent extends AnchorPane {
 
         eventImage.setImage(imageCache.get("icons/events/" + id + "Event.png"));
         eventName.setText(resources.getString("event." + id + ".name"));
-        eventDescription.setText(resources.getString("event." + id + ".description"));
+        String description = resources.getString("event." + id + ".description");
+        TextFlow descriptionTextFlow = createTextFlow(description);
+        descriptionTextFlow.getStyleClass().clear();
+        this.descriptionTextFlow.getChildren().setAll(descriptionTextFlow.getChildren());
+        //eventDescription.setText(resources.getString("event." + id + ".description"));
+    }
+
+    private TextFlow createTextFlow(String text) {
+        TextFlow textFlow = new TextFlow();
+        textFlow.getStyleClass().clear();
+        String[] lines = text.split("\\s+");
+
+        for (String line : lines) {
+            Text textNode = new Text(line + " ");
+            textNode.getStyleClass().add("eventDescription");
+            if (line.contains("Gain") || line.contains("doubled") ||
+                    line.contains("Erhalte") || line.contains("verdoppelt") ||
+                    line.matches(".*\\+.*") || line.matches(".*x.*")) {
+                textNode.setFill(Color.GREEN);
+            } else if (line.contains("Lose") || line.contains("halved") || line.contains("decreased") ||
+                    line.contains("Verliere") || line.contains("halbiert") ||
+                    line.matches(".*-.*")) {
+                textNode.setFill(Color.RED);
+            } else {
+                textNode.setFill(Color.BLACK);
+            }
+
+            textFlow.getChildren().add(textNode);
+        }
+
+        return textFlow;
     }
 
     // reduce size of eventName if it's too long
@@ -199,5 +237,6 @@ public class EventComponent extends AnchorPane {
     public void setClockComponent(ClockComponent clockComponent) {
         this.clockComponent = clockComponent;
     }
+
 
 }

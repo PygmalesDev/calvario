@@ -95,7 +95,7 @@ public class EventService {
     }
 
     public void setNextEvent() {
-        nextEvent = random.nextInt(100, 120);
+        nextEvent = random.nextInt(2, 5);
     }
 
     public EffectSourceParentDto getEvent() {

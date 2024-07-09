@@ -212,4 +212,19 @@ public class Constants {
             Map.entry("state" , "de/uniks/stp24/assets/technologies/tags/state.png")
     );
 
+    public static final String[] eventKeys = {
+            "event.abundance.description",
+            "event.crapulence.description",
+            "event.reckoning.description",
+            "event.grandExp.description",
+            "event.equivEx.description",
+            "event.rogerFeast.description",
+            "event.pestilence.description",
+            "event.blackSpot.description",
+            "event.rumBottle.description",
+            "event.dutchman.description",
+            "event.foolsGold.description",
+            "event.submerge.description"
+    };
+
 }

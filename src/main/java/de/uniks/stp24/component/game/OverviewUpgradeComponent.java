@@ -125,7 +125,8 @@ public class OverviewUpgradeComponent extends AnchorPane {
             LinkedList<Text> resTextList = new LinkedList<>(Arrays.asList(res_1, res_2));
             ArrayList<Pane> resPic = new ArrayList<>(Arrays.asList(res1, res2));
             int i = 0;
-            for (Map.Entry<String, Integer> entry : islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()).entrySet()) {
+            for (Map.Entry<String, Integer> entry : islandAttributes.getNeededResources(
+                    islandAttributes.getIsland().upgradeLevel()).entrySet()) {
                 resTextList.get(i).setText(String.valueOf(entry.getValue()));
                 String sourceImage = switch (entry.getKey()) {
                     case "minerals" -> "-fx-background-image: url('/de/uniks/stp24/icons/resources/minerals.png'); ";

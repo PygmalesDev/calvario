@@ -90,11 +90,13 @@ public class OverviewSitesComponent extends AnchorPane {
 
     public void showUpgrades() {
         setLevelCheckBox();
+
+        inGameController.overviewUpgradeComponent.upgrade_box.setVisible(false);
+        inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(true);
+
         if(islandAttributes.getIsland().upgradeLevel() == 4){
-            inGameController.overviewUpgradeComponent.upgrade_box.setVisible(false);
-            inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(true);
             inGameController.overviewUpgradeComponent.confirmUpgrade.setDisable(true);
-        } else {
+        } else if (islandAttributes.getIsland().upgradeLevel() != 0) {
             inGameController.overviewUpgradeComponent.upgrade_box.setVisible(true);
             inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(false);
             inGameController.overviewUpgradeComponent.confirmUpgrade.setDisable(false);
@@ -106,31 +108,17 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void setLevelCheckBox(){
+        inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
+        inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(false);
+        inGameController.overviewUpgradeComponent.checkColonized.setVisible(false);
+        inGameController.overviewUpgradeComponent.checkExplored.setVisible(false);
+
         switch (islandAttributes.getIsland().upgradeLevel()) {
-            case 1 -> {
-                inGameController.overviewUpgradeComponent.checkExplored.setVisible(true);
-                inGameController.overviewUpgradeComponent.checkColonized.setVisible(false);
-                inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(false);
-                inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
-            }
-            case 2 -> {
-                inGameController.overviewUpgradeComponent.checkExplored.setVisible(true);
-                inGameController.overviewUpgradeComponent.checkColonized.setVisible(true);
-                inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(false);
-                inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
-            }
-            case 3 -> {
-                inGameController.overviewUpgradeComponent.checkExplored.setVisible(true);
-                inGameController.overviewUpgradeComponent.checkColonized.setVisible(true);
-                inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(true);
-                inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
-            }
-            case 4 -> {
-                inGameController.overviewUpgradeComponent.checkExplored.setVisible(true);
-                inGameController.overviewUpgradeComponent.checkColonized.setVisible(true);
-                inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(true);
-                inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(true);
-            }
+            case 4: inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(true);
+            case 3: inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(true);
+            case 2: inGameController.overviewUpgradeComponent.checkColonized.setVisible(true);
+            case 1: inGameController.overviewUpgradeComponent.checkExplored.setVisible(true);
+            default: {}
         }
     }
 

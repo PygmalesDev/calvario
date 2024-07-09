@@ -139,6 +139,7 @@ public class Constants {
     );
 
     public static final Map<String, String> upgradeTranslation = Map.ofEntries(
+            Map.entry("unexplored", "update.unexplored"),
             Map.entry("explored", "update.explored"),
             Map.entry("colonized", "update.colonized"),
             Map.entry("upgraded", "update.upgraded"),

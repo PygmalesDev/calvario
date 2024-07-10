@@ -313,13 +313,6 @@ public class InGameController extends BasicController {
         }
     }
 
-    @OnKey(code = KeyCode.I, alt = true)
-    public void showIslandOverviewWindows() {
-        buildingProperties.setMouseTransparent(false);
-        buildingsWindow.setMouseTransparent(false);
-        popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
-    }
-
     @OnKey(code = KeyCode.E, alt = true)
     public void showEmpireOverview() {
         this.toggleContextMenuVisibility(this.empireOverviewComponent);

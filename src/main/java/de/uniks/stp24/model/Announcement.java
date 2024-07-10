@@ -1,7 +1,10 @@
 package de.uniks.stp24.model;
 
+import javafx.scene.image.Image;
+
 public record Announcement(
         String message,
-        Boolean showForward,
+        boolean showForward,
+        Image forwardIcon,
         Runnable forwardMethod) {
 }

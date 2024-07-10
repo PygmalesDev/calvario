@@ -27,7 +27,7 @@ public class AnnouncementsService {
         String message = "Building " + job.building() + " on " + job.system() + " is done! good job!";
         boolean showForward = true;
         Runnable forwardMethod = null;
-        announcements.addFirst(new Announcement(message, showForward, forwardMethod));
+        announcements.addFirst(new Announcement(message, showForward, null, forwardMethod));
         return this;
     }
 
@@ -37,7 +37,7 @@ public class AnnouncementsService {
                 gameResourceBundle.getString(resource.resourceID()) + "! Get your act togehther!";
         boolean showForward = false;
         Runnable forwardMethod = null;
-        announcements.add(new Announcement(message, showForward, forwardMethod));
+        announcements.add(new Announcement(message, showForward, null, forwardMethod));
         return this;
     }
 

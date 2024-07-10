@@ -54,8 +54,7 @@ public class JoinGameHelper extends BasicController {
                 startGame(gameId, null, true);
             }
             islandsService.retrieveIslands(gameId);
-        }, error -> {
-        });
+        }, error -> System.out.println(error.getMessage()));
 
     }
 

@@ -18,6 +18,17 @@
     -fx-font-size: 22;
 }
 
+.islandNameField {
+    -fx-background-color: transparent;
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 22;
+}
+
+.islandNameField:disabled {
+    -fx-opacity: 1.0;
+}
+
+
 /* Buildings Window */
 .buildingsOverviewBackground{
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/site_building_build_overview_window.png");

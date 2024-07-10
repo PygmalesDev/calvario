@@ -16,7 +16,6 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.QuadCurve;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.controller.Subscriber;
@@ -78,14 +77,10 @@ public class IslandsService extends BasicService {
    
     public void setFlag(boolean selected) {
         islandComponentMap.forEach((id, comp) -> {
-            if(selected) {
-                comp.showFlag(true);
-            }
-            if(!selected){
-                if(!comp.islandIsSelected){
-                    comp.showFlag(false);
-                    keyCodeFlag = false;
-                }
+            if(selected) comp.showFlag(true);
+            else if (!comp.islandIsSelected) {
+                comp.showFlag(false);
+                keyCodeFlag = false;
             }
         });
     }
@@ -106,21 +101,7 @@ public class IslandsService extends BasicService {
                         minY = Math.min(data.y(),minY);
                         maxX = Math.max(data.x(),maxX);
                         maxY = Math.max(data.y(),maxY);
-                        Island tmp = new Island(data.owner(),
-                                Objects.isNull(data.owner()) ? -1 : getEmpire(data.owner()).flag(),
-                                data.x(),
-                                data.y(),
-                                IslandType.valueOf(data.type()),
-                                data.population(),
-                                data.capacity(),
-                                data.upgrade().ordinal(),
-                                data.districtSlots(),
-                                data.districts(),
-                                data.buildings(),
-                                data._id(),
-                                data.upgrade().toString(),
-                                data.name()
-                        );
+                        Island tmp = convertToIsland(data);
                         isles.add(tmp);
                         connections.put(data._id(),linkedIsles);
                     });
@@ -239,21 +220,20 @@ public class IslandsService extends BasicService {
      */
     public void refreshListOfColonizedSystems() {
         devIsles.clear();
-        subscriber.subscribe(gameSystemsService.getSystems(this.gameID),
-          dto -> {
+        subscriber.subscribe(gameSystemsService.getSystems(this.gameID), dto -> {
               Arrays.stream(dto).forEach(data -> {
                     if(Objects.nonNull(data.owner())) {
-                       ShortSystemDto tmp = new ShortSystemDto(data.owner(),
-                         data._id(),
-                         data.type(),
-                         data.name(),
-                         data.districtSlots(),
-                         data.districts(),
-                         data.capacity(),
-                         data.buildings(),
-                         data.upgrade(),
-                         data.population()
-                       );
+                        ShortSystemDto tmp = new ShortSystemDto(data.owner(),
+                               data._id(),
+                               data.type(),
+                               data.name().isEmpty() ? "Uncharted Island" : data.name(),
+                               data.districtSlots(),
+                               data.districts(),
+                               data.capacity(),
+                               data.buildings(),
+                               data.upgrade(),
+                               data.population()
+                        );
                         devIsles.add(tmp);
                     }
               });
@@ -376,7 +356,7 @@ public class IslandsService extends BasicService {
                     result.buildings(),
                     result._id(),
                     result.upgrade(),
-                    result.name()
+                    result.name().isEmpty() ? "Uncharted Island" : result.name()
             );
             inGameController.selectedIsland.island = tmp;
             islandAttributes.setIsland(tmp);
@@ -412,6 +392,12 @@ public class IslandsService extends BasicService {
     }
 
     public Island updateIsland(SystemDto result) {
+        Island newIsland = convertToIsland(result);
+        this.isles.replaceAll(island -> island.id().equals(newIsland.id()) ? newIsland : island);
+        return newIsland;
+    }
+
+    private Island convertToIsland(SystemDto result) {
         return new Island(result.owner(),
                 Objects.isNull(result.owner()) ? -1 : getEmpire(result.owner()).flag(),
                 result.x(),
@@ -425,7 +411,7 @@ public class IslandsService extends BasicService {
                 result.buildings(),
                 result._id(),
                 result.upgrade().toString(),
-                result.name()
+                result.name().isEmpty() ? "Uncharted Island" : result.name()
         );
     }
 }

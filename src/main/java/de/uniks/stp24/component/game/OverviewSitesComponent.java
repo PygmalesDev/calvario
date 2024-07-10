@@ -2,9 +2,13 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.SystemRenameDto;
+import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.IslandsService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -15,8 +19,10 @@ import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -52,6 +58,14 @@ public class OverviewSitesComponent extends AnchorPane {
 
     @Inject
     ImageCache imageCache;
+    @Inject
+    Subscriber subscriber;
+    @Inject
+    GameSystemsApiService gameSystemsApiService;
+    @Inject
+    TokenStorage tokenStorage;
+    @Inject
+    IslandsService islandsService;
 
     @SubComponent
     @Inject
@@ -203,6 +217,13 @@ public class OverviewSitesComponent extends AnchorPane {
         islandFlag.setStyle("-fx-background-image: url('" + inGameController.flagsPath.get(islandAttributes.getIsland().flagIndex()) +"');" +
                 "-fx-background-size: 100% 100%;" + "-fx-background-repeat: no-repeat;");
         showBuildings();
+
+        this.inputIslandName.setText(this.islandsService.getIslandName(this.islandAttributes.getIsland().id()));
+        this.inputIslandName.setDisable(true);
+        this.isNameEditable = false;
+        this.inputIslandName.setEditable(false);
+        this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
+
         upgradeButton.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
 
         updateResCapacity();
@@ -211,13 +232,29 @@ public class OverviewSitesComponent extends AnchorPane {
         crewCapacity.setText(String.valueOf(islandAttributes.getIsland().crewCapacity()));
     }
 
-    @OnRender
-    public void setIslandNameProperties() {
-        this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
+    public void setIslandName() {
+        if (this.isNameEditable) {
+            this.inputIslandName.setEditable(false);
+            this.inputIslandName.setStyle("-fx-text-fill: black");
+            this.islandNameButton.getStyleClass().clear();
+            this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
+
+            this.subscriber.subscribe(this.gameSystemsApiService
+                    .renameSystem(this.tokenStorage.getGameId(), this.tokenStorage.getIsland().id(),
+                            new SystemRenameDto(this.inputIslandName.getText())),
+                    result -> this.islandsService.updateIsland(result));
+        } else {
+            this.inputIslandName.setEditable(true);
+            this.inputIslandName.setStyle("-fx-text-fill: blue");
+            this.islandNameButton.getStyleClass().clear();
+            this.islandNameButton.getStyleClass().add("islandChangeNameActive");
+        }
+        this.inputIslandName.setDisable(this.isNameEditable);
+        this.isNameEditable = !this.isNameEditable;
     }
 
-    public void setIslandName() {
-        this.islandNameButton.getStyleClass().clear();
-        this.islandNameButton.getStyleClass().add("islandChangeNameActive");
+    @OnDestroy
+    public void destroy() {
+        this.subscriber.dispose();
     }
 }

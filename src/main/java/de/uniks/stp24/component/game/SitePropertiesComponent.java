@@ -183,7 +183,7 @@ public class SitePropertiesComponent extends AnchorPane {
             this.siteJobProgress.setJobProgress(job);
 
             if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
-                    (this.siteJobs.size() == 0 || this.siteJobs.get(0).equals(job)))
+                    (this.siteJobs.isEmpty() || this.siteJobs.getFirst().equals(job)))
                 this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
 
             this.jobsService.onJobDeletion(job._id(), () -> {

@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
 <fx:root alignment="TOP_CENTER" prefHeight="184.0" prefWidth="374.0" stylesheets="@../../style/islandOverview.css" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.SitesComponent">
-   <HBox alignment="BOTTOM_CENTER" prefHeight="58.0" prefWidth="374.0">
+   <HBox alignment="BOTTOM_CENTER" prefHeight="42.0" prefWidth="374.0">
       <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="headerText" text="%sites" />
+      <VBox.margin>
+         <Insets top="10.0" />
+      </VBox.margin>
    </HBox>
-   <HBox fx:id="sitesBox" alignment="CENTER" prefHeight="64.0" prefWidth="374.0" />
+   <ListView fx:id="sitesListView" orientation="HORIZONTAL" prefHeight="92.0" prefWidth="374.0" styleClass="sitesListView">
+      <VBox.margin>
+         <Insets left="85.0" top="-10.0" />
+      </VBox.margin>
+   </ListView>
 </fx:root>

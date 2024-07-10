@@ -108,6 +108,7 @@ public class BrowseGameControllerTest extends ControllerTest {
         ))).when(gamesApiService).findAll();
 
         Mockito.doReturn(subject).when(eventListener).listen("games.*.*", Game.class);
+        doReturn(null).when(this.imageCache).get(any());
 
         super.start(stage);
         app.show(browseGameController);
@@ -277,7 +278,6 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Test
     public void clickOnLogout() {
         prefService.setRefreshToken("lastRefreshToken");
-        System.out.println(prefService.getRefreshToken());
         doReturn(Observable.just(new LogoutResult("a")))
                 .when(browseGameService).logout(any());
         doReturn(null).when(app).show("/login");

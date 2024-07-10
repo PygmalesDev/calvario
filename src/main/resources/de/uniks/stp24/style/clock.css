@@ -9,6 +9,14 @@ Label {
     -fx-opacity: 1;
 }
 
+.randomEventButton {
+    -fx-background-color: transparent;
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 5, 5);
+}
+
 .flagToggle:selected {
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/toggleFlagButtonOn.png");

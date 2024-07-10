@@ -1,8 +1,10 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.dto.EffectSourceDto;
 import de.uniks.stp24.dto.EffectSourceParentDto;
 import de.uniks.stp24.model.Game;
+import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EventService;
@@ -74,6 +76,8 @@ public class EventComponent extends AnchorPane {
     @Inject
     Subscriber subscriber;
     @Inject
+    EmpireApiService empireApiService;
+    @Inject
     public TokenStorage tokenStorage;
 
     Pane gameBackground;
@@ -83,6 +87,7 @@ public class EventComponent extends AnchorPane {
     ImageCache imageCache = new ImageCache();
     private String lastUpdate = "";
 
+    boolean eventOccured = false;
 
     ColorAdjust fadeAdjust;
     ColorAdjust unfadeAdjust;
@@ -111,23 +116,19 @@ public class EventComponent extends AnchorPane {
                 event -> {
                     if (!Objects.equals(lastUpdate, event.data().updatedAt())) {
                         eventService.setNextEventTimer(eventService.getNextEventTimer()-1);
-                        // todo delete souts
-                        System.out.println("here event");
                         EffectSourceParentDto activeEvent = eventService.getEvent();
-                        System.out.println(activeEvent);
-                        if (activeEvent != null) {
-                            // todo delete souts
-                            System.out.println("here event 2");
-                            if (activeEvent.effects()[0].eventType().equals("misty") && isDay) {
+                        if (activeEvent != null && !eventOccured) {
+                            eventOccured = true;
+                            if (activeEvent.effects()[0].id().equals("solarEclipse") && isDay) {
                                 changeToNight();
                             }
                             subscriber.subscribe(eventService.sendEffect(),
                                     result -> {},
                                     error -> System.out.println("Error beim Senden von Effect: " + error));
-
                             setRandomEventInfos(activeEvent);
                             show();
-                        } else {
+                        } else if (activeEvent == null) {
+                            eventOccured = false;
                             if (!isDay) {
                                 changeToDay();
                             }
@@ -177,6 +178,24 @@ public class EventComponent extends AnchorPane {
                 ));
         dayTimeLine.setCycleCount(1);
         dayTimeLine.setAutoReverse(false);
+
+        subscriber.subscribe(empireApiService.getEmpireEffect(gameId, tokenStorage.getEmpireId()),
+                event -> {
+                    if (event.effects().length > 0) {
+                        EffectSourceDto effect = event.effects()[0];
+                        EffectSourceParentDto activeEvent = eventService.readEvent(effect.id());
+                        if (Objects.nonNull(activeEvent)) {
+                            eventOccured = true;
+                            if (effect.id().equals("solarEclipse") && isDay) {
+                                changeToNightNotAnimated();
+                            }
+                            eventService.setEvent(activeEvent);
+                            setRandomEventInfos(activeEvent);
+                            show();
+                        }
+                    }
+                },
+                error -> System.out.println("Error while loading event: " + error));
     }
 
     // changes String to camelCase
@@ -242,11 +261,15 @@ public class EventComponent extends AnchorPane {
 
         nightTimeLine.setOnFinished(event -> {
             gameBackground.setEffect(brightenAdjsut);
-            gameBackground.setStyle(NIGHT);
-            isDay = false;
+            changeToNightNotAnimated();
         });
 
         nightTimeLine.play();
+    }
+
+    private void changeToNightNotAnimated() {
+        gameBackground.setStyle(NIGHT);
+        isDay = false;
     }
 
     public void changeToDay() {
@@ -256,11 +279,15 @@ public class EventComponent extends AnchorPane {
 
         dayTimeLine.setOnFinished(event -> {
             gameBackground.setEffect(brightenAdjsut);
-            gameBackground.setStyle(DAY);
-            isDay = true;
+            changeToDayNotAnimated();
         });
 
         dayTimeLine.play();
+    }
+
+    private void changeToDayNotAnimated() {
+        gameBackground.setStyle(DAY);
+        isDay = true;
     }
 
     public void setBackground(Pane gameBackground) {

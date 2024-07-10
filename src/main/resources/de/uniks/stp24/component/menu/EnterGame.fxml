@@ -1,37 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<fx:root prefHeight="330.0" prefWidth="500.0" type="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.menu.EnterGameComponent">
-    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <padding>
-            <Insets top="-30.0" />
-        </padding>
-        <TextField fx:id="passwordInputField" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="300.0" promptText="Enter password" styleClass="inputField" />
-        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-            <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false" onAction="#cancel" prefHeight="30.0" prefWidth="80.0" styleClass="smallActionButton" text="%cancel">
-                <graphic>
-                    <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../../icons/leftArrow.png" />
-                    </ImageView>
-                </graphic>
-            </Button>
-            <Button fx:id="joinButton" defaultButton="true" mnemonicParsing="false" onAction="#joinGame" prefHeight="30.0" prefWidth="80.0" styleClass="smallActionButton" text="%join">
-                <graphic>
-                    <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../../icons/enter.png" />
-                    </ImageView>
-                </graphic>
-            </Button>
-        </HBox>
-        <Text fx:id="errorMessage" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="\%ErrorMessage" textAlignment="CENTER" wrappingWidth="142.119140625" />
-    </VBox>
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="162.0" prefWidth="212.0" type="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.menu.EnterGameComponent">
+     <TextField fx:id="passwordInputField" alignment="CENTER" layoutX="-4.0" layoutY="44.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="40.0" prefWidth="233.0" promptText="Enter password" styleClass="lobbyPasswordField" />
+      <Button fx:id="cancelButton" cancelButton="true" layoutX="-9.0" layoutY="112.0" mnemonicParsing="false" onAction="#cancel" prefHeight="50.0" prefWidth="110.0" styleClass="lobbyButtonLeave" text="%cancel" />
+      <Button fx:id="joinButton" defaultButton="true" layoutX="111.0" layoutY="106.0" mnemonicParsing="false" onAction="#joinGame" prefHeight="60.0" prefWidth="110.0" styleClass="lobbyButtonEnter" text="%join" />
+     <Text fx:id="errorMessage" fill="RED" layoutX="35.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\%ErrorMessage" textAlignment="CENTER" wrappingWidth="142.119140625" />
 </fx:root>

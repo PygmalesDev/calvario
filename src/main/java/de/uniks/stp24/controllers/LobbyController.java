@@ -85,6 +85,8 @@ public class LobbyController extends BasicController {
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
+    @FXML
+    Text playerReadinessText;
 
     @SubComponent
     @Inject
@@ -102,13 +104,12 @@ public class LobbyController extends BasicController {
     private final ObservableList<MemberUser> users = FXCollections.observableArrayList();
     private boolean asHost;
     private boolean wasKicked;
-    public int maxMember;
+    public int maxMember, readyAmount;
     private Button[] lobbyButtons;
 
 
     @Inject
     public LobbyController() {
-
     }
 
     /**
@@ -124,6 +125,7 @@ public class LobbyController extends BasicController {
                     this.gameID = game._id();
                     this.asHost = game.owner().equals(this.tokenStorage.getUserId());
                     this.maxMember = game.maxMembers();
+                    this.readyAmount = 0;
                     this.lobbyHostSettingsComponent.setMaxMember(this.maxMember);
                     this.lobbyHostSettingsComponent.setBubbleComponent(this.bubbleComponent);
 
@@ -274,15 +276,8 @@ public class LobbyController extends BasicController {
      * @param data   member data containing their readiness state
      */
     private void addUserToList(String userID, MemberDto data) {
-        this.subscriber.subscribe(this.userApiService.getUser(userID), user -> {
-                    String suffix = "";
-                    if (userID.equals(this.game.owner())) suffix += " (Host)";
-                    if (Objects.isNull(data.empire())) suffix += " (Spectator)";
-
-            this.users.add(new MemberUser(new User(user.name() + suffix,
-                    user._id(), user.avatar(), user.createdAt(), user.updatedAt(), user._public()
-            ), data.empire(), data.ready(), this.game, this.asHost));
-        },
+        this.subscriber.subscribe(this.userApiService.getUser(userID), user ->
+            this.users.add(new MemberUser(user, data.empire(), data.ready(), this.game, this.asHost)),
           error -> {});
     }
 
@@ -295,24 +290,13 @@ public class LobbyController extends BasicController {
     private void replaceUserInList(String userID, MemberDto data) {
         this.users.replaceAll(memberUser -> {
             if (memberUser.user()._id().equals(userID)) {
-                if (Objects.nonNull(data.empire())) {
-                    return new MemberUser(new User(
-                            memberUser.user().name().replace(" (Spectator)", ""),
-                            userID, memberUser.user().avatar(), memberUser.user().createdAt(),
-                            memberUser.user().updatedAt(),memberUser.user()._public()), data.empire(), data.ready(), this.game, this.asHost);
-                }
-                else {
-                    String suffix = " (Spectator)";
-                    if (memberUser.user().name().contains("(Spectator)"))
-                        suffix = "";
-                    return new MemberUser(new User(
-                            memberUser.user().name() + suffix, userID, memberUser.user().avatar(),
-                            memberUser.user().createdAt(), memberUser.user().updatedAt(),memberUser.user()._public()),
-                            null, data.ready(), this.game, this.asHost);
-                }
-            } else
-                return memberUser;
+                return new MemberUser(new User(
+                        memberUser.user().name(), userID, memberUser.user().avatar(), memberUser.user().createdAt(),
+                        memberUser.user().updatedAt(),memberUser.user()._public()), data.empire(), data.ready(), this.game, this.asHost);
+            } else return memberUser;
         });
+        this.playerReadinessText.setText(String.format("Ready %d/%d",
+                this.users.filtered(MemberUser::ready).size(), this.maxMember));
     }
 
     /**
@@ -348,6 +332,8 @@ public class LobbyController extends BasicController {
                         bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.password"));
                         this.lobbyElement.getChildren().add(this.enterGameComponent);
                     }
+                    this.playerReadinessText.setText(String.format("Ready %d/%d",
+                            this.users.filtered(MemberUser::ready).size(), this.maxMember));
                 },
                 this::errorMsg);
     }
@@ -379,6 +365,5 @@ public class LobbyController extends BasicController {
     void destroy() {
         subscriber.dispose();
         backgroundAnchorPane.setStyle("-fx-background-image: null");
-        cardBackgroundVBox.setStyle("-fx-background-image: null");
     }
 }

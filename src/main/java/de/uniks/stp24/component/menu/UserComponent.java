@@ -25,8 +25,6 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     @FXML
     Text usernameText;
     @FXML
-    Text readyText;
-    @FXML
     Button kickButton;
     @FXML
     HBox userHBox;
@@ -36,6 +34,12 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     TokenStorage tokenStorage;
     @Inject
     Subscriber subscriber;
+    @FXML
+    StackPane backgroundPane;
+    @FXML
+    ImageView readyImage;
+    @FXML
+    ImageView flagImage;
 
     @Resource
     final ResourceBundle resources;
@@ -71,10 +75,20 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
         this.member = member;
         this.kickButton.setId("kick" + member.user()._id());
         if (member.user()._id().equals(member.game().owner()) || !member.asHost())
-            this.userHBox.getChildren().remove(this.kickButton);
+            this.kickButton.setVisible(false);
+
+        this.backgroundPane.getStyleClass().clear();
+        if (member.user()._id().equals(member.game().owner()))
+            this.backgroundPane.getStyleClass().add("lobbyListCellHost");
+        else this.backgroundPane.getStyleClass().add("lobbyListCellMember");
+
+        if (member.ready()) this.readyImage.setImage(this.imageCache.get("/de/uniks/stp24/assets/other/ready_gradient.png"));
+        else this.readyImage.setImage(this.imageCache.get("/de/uniks/stp24/assets/other/not_ready_gradient.png"));
+
+        if (Objects.isNull(member.empire())) this.flagImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/spectatorSign.png"));
+        else this.flagImage.setImage(this.imageCache.get(String.format("/de/uniks/stp24/assets/flags/flag_%d.png", member.empire().flag())));
 
         this.usernameText.setText(member.user().name());
-        this.readyText.setText(resources.getString(member.ready() ? "ready" : "not.ready"));
 
         if (Objects.isNull(this.member.user()._public())) {
             avatarMap.put("backgroundIndex", 0);

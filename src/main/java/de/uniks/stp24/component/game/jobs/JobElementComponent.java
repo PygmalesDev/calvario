@@ -6,6 +6,7 @@ import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
+import javafx.beans.binding.StringBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -66,7 +67,7 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
         this.inspectionButton.setId("jobElementInspectionButton_" + job._id());
 
         this.timerText.setText(String.format("%s/%s", job.progress(), job.total()));
-        this.jobNameText.setText(this.islandsService.getIslandName(job.system()));
+        this.jobNameText.setText(this.islandsService.getIsland(job.system()).name());
 
         switch (job.type()) {
             case "building" -> {

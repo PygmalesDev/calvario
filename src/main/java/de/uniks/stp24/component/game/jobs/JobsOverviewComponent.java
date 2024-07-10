@@ -42,6 +42,12 @@ public class JobsOverviewComponent extends AnchorPane {
             this.jobsListView.setItems(this.jobsList);
             this.jobsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.jobProvider));
         });
+
+        this.jobsService.setJobInspector("name_updates", (String... params) -> {
+            this.jobsList = this.jobsService.getObservableJobCollection();
+            this.jobsListView.setItems(this.jobsList);
+            this.jobsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.jobProvider));
+        });
     }
 
     public void closeOverview() {

@@ -2,12 +2,7 @@ package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.ReadEmpireDto;
-import de.uniks.stp24.dto.UpdateBuildingDto;
-import de.uniks.stp24.dto.Upgrade;
-import de.uniks.stp24.dto.UpgradeSystemDto;
-import de.uniks.stp24.dto.SystemDto;
-import de.uniks.stp24.dto.ShortSystemDto;
+import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
@@ -110,7 +105,7 @@ public class IslandsService extends BasicService {
                     this.app.show("/ingame");
                     refreshListOfColonizedSystems();
                 },
-                error -> errorService.getStatus(error));
+                error -> System.out.println(error.getMessage()));
     }
 
     /**
@@ -224,15 +219,15 @@ public class IslandsService extends BasicService {
               Arrays.stream(dto).forEach(data -> {
                     if(Objects.nonNull(data.owner())) {
                         ShortSystemDto tmp = new ShortSystemDto(data.owner(),
-                               data._id(),
-                               data.type(),
-                               data.name().isEmpty() ? "Uncharted Island" : data.name(),
-                               data.districtSlots(),
-                               data.districts(),
-                               data.capacity(),
-                               data.buildings(),
-                               data.upgrade(),
-                               data.population()
+                                data._id(),
+                                data.type(),
+                                Objects.isNull(data.name()) ? "Uncharted Island" : data.name(),
+                                data.districtSlots(),
+                                data.districts(),
+                                data.capacity(),
+                                data.buildings(),
+                                data.upgrade(),
+                                data.population()
                         );
                         devIsles.add(tmp);
                     }
@@ -356,7 +351,7 @@ public class IslandsService extends BasicService {
                     result.buildings(),
                     result._id(),
                     result.upgrade(),
-                    result.name().isEmpty() ? "Uncharted Island" : result.name()
+                    Objects.isNull(result.name()) ? "Uncharted Island" : result.name()
             );
             inGameController.selectedIsland.island = tmp;
             islandAttributes.setIsland(tmp);
@@ -391,6 +386,11 @@ public class IslandsService extends BasicService {
         this.subscriber.dispose();
     }
 
+    public void claimIsland(Island island) {
+        this.subscriber.subscribe(this.gameSystemsService.claimSystem(this.gameID, island.id(),
+                        new SystemClaimDto(this.tokenStorage.getEmpireId())), this::updateIsland);
+    }
+
     public Island updateIsland(SystemDto result) {
         Island newIsland = convertToIsland(result);
         this.isles.replaceAll(island -> island.id().equals(newIsland.id()) ? newIsland : island);
@@ -411,7 +411,7 @@ public class IslandsService extends BasicService {
                 result.buildings(),
                 result._id(),
                 result.upgrade().toString(),
-                result.name().isEmpty() ? "Uncharted Island" : result.name()
+                Objects.isNull(result.name()) ? "Uncharted Island" : result.name()
         );
     }
 }

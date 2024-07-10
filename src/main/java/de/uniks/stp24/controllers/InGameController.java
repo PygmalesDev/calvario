@@ -79,6 +79,8 @@ public class InGameController extends BasicController {
     StackPane buildingsWindow;
     @FXML
     StackPane pauseMenuContainer;
+    @FXML
+    StackPane islandClaimingContainer;
 
     @FXML
     StackPane clockComponentContainer;
@@ -110,6 +112,9 @@ public class InGameController extends BasicController {
     @Inject
     public PauseMenuComponent pauseMenuComponent;
 
+    @SubComponent
+    @Inject
+    public IslandClaimingComponent islandClaimingComponent;
     @SubComponent
     @Inject
     public OverviewSitesComponent overviewSitesComponent;
@@ -156,6 +161,7 @@ public class InGameController extends BasicController {
     String empireID;
     String lastUpdate;
     double scale = 1.0;
+    double claimScale = 1.0;
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
     public ArrayList<String> flagsPath = new ArrayList<>();
     String resourcesPaths = "/de/uniks/stp24/assets/";
@@ -277,6 +283,8 @@ public class InGameController extends BasicController {
         overviewSitesComponent.setContainer();
         overviewContainer.getChildren().add(overviewSitesComponent);
         overviewContainer.getChildren().add(overviewUpgradeComponent);
+        islandClaimingContainer.getChildren().add(this.islandClaimingComponent);
+        islandClaimingContainer.setVisible(true);
 
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
@@ -311,13 +319,6 @@ public class InGameController extends BasicController {
             pauseMenuContainer.setMouseTransparent(true);
             resumeGame();
         }
-    }
-
-    @OnKey(code = KeyCode.I, alt = true)
-    public void showIslandOverviewWindows() {
-        buildingProperties.setMouseTransparent(false);
-        buildingsWindow.setMouseTransparent(false);
-        popupBuildingWindow.showPopup(buildingsWindow, buildingsWindowComponent);
     }
 
     @OnKey(code = KeyCode.J)
@@ -422,13 +423,19 @@ public class InGameController extends BasicController {
         mapGrid.setOnScroll(event -> {
             if (event.isShiftDown() && (event.getDeltaY() > 0 || event.getDeltaX() > 0)) {
                 scale += 0.1;
+                //claimScale -= 0.1;
                 scale = Math.min(scale, 3);
+                //claimScale = Math.max(claimScale, 2.35);
                 event.consume();
             } else if (event.isShiftDown() && (event.getDeltaY() < 0 || event.getDeltaX() < 0)) {
                 scale -= 0.1;
+                //claimScale += 0.1;
+                //claimScale = Math.min(claimScale, 1.65);
                 scale = Math.max(scale, 0.35);
                 event.consume();
             }
+            //this.islandClaimingContainer.setScaleX(claimScale);
+            //this.islandClaimingContainer.setScaleY(claimScale);
             group.setScaleX(scale);
             group.setScaleY(scale);
         });
@@ -445,12 +452,21 @@ public class InGameController extends BasicController {
                 if (selected.island.owner().equals(this.tokenStorage.getEmpireId()))
                     this.overviewSitesComponent.jobsComponent.setJobsObservableList(
                         this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
-
                 showOverview();
                 selected.showUnshowRudder();
-            } else if (Objects.nonNull(selectedIsland)) {
-                selectedIsland.showUnshowRudder();
+            } else {
+                if (Objects.nonNull(selectedIsland)) selectedIsland.showUnshowRudder();
                 this.overviewSitesComponent.closeOverview();
+                if (this.islandClaimingContainer.getLayoutX()+60 == selected.getLayoutX() &&
+                        this.islandClaimingContainer.getLayoutY()+120 == selected.getLayoutY() &&
+                        this.islandClaimingContainer.isVisible()) {
+                    this.islandClaimingContainer.setVisible(false);
+                } else {
+                    this.islandClaimingContainer.setVisible(true);
+                    this.islandClaimingContainer.setLayoutX(selected.getLayoutX()-60);
+                    this.islandClaimingContainer.setLayoutY(selected.getLayoutY()-120);
+                    this.islandClaimingComponent.setIslandInformation(selected.island);
+                }
             }
         }
     }

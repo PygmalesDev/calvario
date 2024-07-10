@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Text?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="148.0" prefWidth="255.0" styleClass="papyrusBackground" stylesheets="@../../style/islandClaiming.css" type="Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.IslandClaimingComponent">
+   <children>
+      <Text fx:id="islandTypeText" layoutX="-43.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="islandTypeText" text="Text" textAlignment="CENTER" wrappingWidth="338.0" />
+      <ImageView fx:id="capacityImage" fitHeight="20.0" fitWidth="20.0" layoutX="169.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../test/863.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="colonizersImage" fitHeight="20.0" fitWidth="20.0" layoutX="100.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../test/927.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="timerImage" fitHeight="20.0" fitWidth="20.0" layoutX="38.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../test/959.png" />
+         </image>
+      </ImageView>
+      <Text fx:id="colonizersText" layoutX="126.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="numText" text="1" />
+      <Text fx:id="timeText" layoutX="64.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="numText" text="3" />
+      <Text fx:id="capacityText" layoutX="194.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="numText" text="16" />
+      <Button fx:id="exploreButton" layoutX="79.0" layoutY="79.0" mnemonicParsing="false" onAction="#exploreIsland" prefHeight="37.0" prefWidth="83.0" styleClass="woodenButton" text="Explore">
+         <effect>
+            <DropShadow height="0.0" offsetX="3.0" offsetY="3.0" radius="0.0" spread="1.0" width="0.0">
+               <color>
+                  <Color opacity="0.25" />
+               </color>
+            </DropShadow>
+         </effect>
+      </Button>
+   </children>
+</fx:root>

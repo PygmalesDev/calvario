@@ -27,6 +27,9 @@ public interface GameSystemsApiService {
     Observable<SystemDto> updateIsland(@Path("game") String gameID, @Path("id") String islandID, @Body SystemsDto dto);
 
     @PATCH("games/{game}/systems/{id}")
+    Observable<SystemDto> claimSystem(@Path("game") String gameID, @Path("id") String islandID, @Body SystemClaimDto dto);
+
+    @PATCH("games/{game}/systems/{id}")
     Observable<SystemDto> renameSystem(@Path("game") String gameID, @Path("id") String islandID, @Body SystemRenameDto dto);
 
     @GET("presets/districts/{id}")

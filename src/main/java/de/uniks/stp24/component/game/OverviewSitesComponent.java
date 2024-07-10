@@ -9,6 +9,7 @@ import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.game.JobsService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -66,6 +67,8 @@ public class OverviewSitesComponent extends AnchorPane {
     TokenStorage tokenStorage;
     @Inject
     IslandsService islandsService;
+    @Inject
+    JobsService jobsService;
 
     @SubComponent
     @Inject
@@ -242,7 +245,10 @@ public class OverviewSitesComponent extends AnchorPane {
             this.subscriber.subscribe(this.gameSystemsApiService
                     .renameSystem(this.tokenStorage.getGameId(), this.tokenStorage.getIsland().id(),
                             new SystemRenameDto(this.inputIslandName.getText())),
-                    result -> this.islandsService.updateIsland(result));
+                    result -> {
+                        this.islandsService.updateIsland(result);
+                        this.jobsService.getJobInspector("name_updates").accept(null);
+                    });
         } else {
             this.inputIslandName.setEditable(true);
             this.inputIslandName.setStyle("-fx-text-fill: blue");

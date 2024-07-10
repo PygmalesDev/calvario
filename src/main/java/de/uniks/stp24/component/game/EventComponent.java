@@ -76,7 +76,7 @@ public class EventComponent extends AnchorPane {
     @Inject
     Subscriber subscriber;
     @Inject
-    EmpireApiService empireApiService;
+    public EmpireApiService empireApiService;
     @Inject
     public TokenStorage tokenStorage;
 

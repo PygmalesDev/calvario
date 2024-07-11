@@ -223,6 +223,9 @@ public class InGameController extends BasicController {
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
 
+        System.out.println(gameID);
+        System.out.println(empireID);
+
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);

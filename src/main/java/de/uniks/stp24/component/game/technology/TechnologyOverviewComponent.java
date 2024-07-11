@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.game.technology;
 
+import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.game.TechnologyService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component(view = "TechnologyOverview.fxml")
@@ -87,11 +89,18 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
     public void engineering() {
         show(technologyCategoryComponent.setCategory("engineering"));
-        technologyCategoryComponent.researchJobComponent.technologyNameText.setText("Engineering");
-        if (!technologyCategoryComponent.engineeringJobRunning){
-            technologyCategoryComponent.unShowJobWindow();
-        } else {
-            technologyCategoryComponent.showJobWindow();
+        outerLoop:
+        for (TechnologyExtended technology : technologyCategoryComponent.researchJobComponent.technologies) {
+            for (String tag : technology.tags()) {
+                if (Objects.equals(tag, "engineering")){
+                    technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technology.id());
+                    technologyCategoryComponent.setTechnology(technology);
+                    technologyCategoryComponent.showJobWindow();
+                    break outerLoop;
+                } else {
+                    technologyCategoryComponent.unShowJobWindow();
+                }
+            }
         }
         technologyCategoryComponent.researchJobComponent.setProgressBar(null);
         technologyCategoryComponent.researchJobComponent.setEffectListView();
@@ -99,23 +108,40 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
     public void society() {
         show(technologyCategoryComponent.setCategory("society"));
-        technologyCategoryComponent.researchJobComponent.technologyNameText.setText("Society");
-        if (!technologyCategoryComponent.societyJobRunning){
-            technologyCategoryComponent.unShowJobWindow();
-        } else {
-            technologyCategoryComponent.showJobWindow();
+
+        technologyCategoryComponent.researchJobComponent.setTag("society");
+        outerLoop:
+        for (TechnologyExtended technology : technologyCategoryComponent.researchJobComponent.technologies) {
+            for (String tag : technology.tags()) {
+                if (Objects.equals(tag, "society")){
+                    technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technology.id());
+                    technologyCategoryComponent.setTechnology(technology);
+                    technologyCategoryComponent.showJobWindow();
+                    break outerLoop;
+                } else {
+                    technologyCategoryComponent.unShowJobWindow();
+                }
+            }
         }
+
         technologyCategoryComponent.researchJobComponent.setProgressBar(null);
         technologyCategoryComponent.researchJobComponent.setEffectListView();
     }
 
     public void physics() {
         show(technologyCategoryComponent.setCategory("physics"));
-        technologyCategoryComponent.researchJobComponent.technologyNameText.setText("Physics");
-        if (!technologyCategoryComponent.physicsJobRunning){
-            technologyCategoryComponent.unShowJobWindow();
-        } else {
-            technologyCategoryComponent.showJobWindow();
+        outerLoop:
+        for (TechnologyExtended technology : technologyCategoryComponent.researchJobComponent.technologies) {
+            for (String tag : technology.tags()) {
+                if (Objects.equals(tag, "computing")){
+                    technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technology.id());
+                    technologyCategoryComponent.setTechnology(technology);
+                    technologyCategoryComponent.showJobWindow();
+                    break outerLoop;
+                } else {
+                    technologyCategoryComponent.unShowJobWindow();
+                }
+            }
         }
         technologyCategoryComponent.researchJobComponent.setProgressBar(null);
         technologyCategoryComponent.researchJobComponent.setEffectListView();

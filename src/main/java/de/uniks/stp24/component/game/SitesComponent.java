@@ -76,7 +76,9 @@ public class SitesComponent extends VBox {
 
     @OnRender
     public void setSiteJobsUpdates() {
-        this.jobsService.onJobCommonUpdates(() -> this.setSitesBox(this.attributeStorage.island));
+        this.jobsService.onJobCommonUpdates(() -> {
+            if (Objects.nonNull(this.attributeStorage.island)) this.setSitesBox(this.attributeStorage.island);
+        });
     }
 
 

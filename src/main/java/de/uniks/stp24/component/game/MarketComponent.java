@@ -109,8 +109,6 @@ public class MarketComponent extends StackPane {
 
     // From Server
     Map<String, Integer> variables = new HashMap<>();
-    Map<String, Resource> idResourceMap = new HashMap<>();
-
     Map<String, Integer> resourceCountMap = new HashMap<>();
     Map<String, Integer> resourcePriceMap = new HashMap<>();
     Map<String, Integer> resourceCountMapCopy = new HashMap<>();
@@ -127,8 +125,46 @@ public class MarketComponent extends StackPane {
 
     @OnInit
     public void init() {
-        loadVariablesAndSetup();
-        getIdResourcesMap();
+        if (!tokenStorage.isSpectator()) {
+            loadVariablesAndSetup();
+            getIdResourcesMap();
+        }
+    }
+
+    private void loadVariablesAndSetup() {
+        subscriber.subscribe(presetsApiService.getVariables(),
+                res -> {
+                    this.variables = res;
+                    createResourcePriceMap();
+                    setMarketFee();
+                    createResourceCountMap();
+                }
+        );
+    }
+
+    private void createResourceCountMap() {
+        subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                empire -> {
+                    resourceCountMap = empire.resources();
+                    setCreditCount();
+                    filterResourceMap();
+                    listMarketResources();
+                    createResourceListeners();
+                    buttonLogic();
+                }
+                , error -> System.out.println("errorEmpireListener"));
+    }
+
+    private void setCreditCount() {
+        userCredits = resourceCountMap.get("credits");
+        userCreditsLabel.setText(String.valueOf(userCredits));
+    }
+
+    public void filterResourceMap() {
+        resourceCountMap.remove("population");
+        resourceCountMap.remove("research");
+        resourceCountMap.remove("credits");
+
     }
 
     private void createResourceListeners() {
@@ -150,10 +186,30 @@ public class MarketComponent extends StackPane {
         );
     }
 
+    private void buttonLogic() {
+        boolean noDebts = userCredits > 0;
+        boolean userSelectedItem = selectedItem != null;
+        boolean moreThanZeroGoods = Integer.parseInt(numberOfGoodsLabel.getText()) > 0;
+        boolean enoughCredits = userCredits > buyingPrice;
+        boolean enoughResources = resourceCountMap.getOrDefault(selectedItem, 0) >= Integer.parseInt(numberOfGoodsLabel.getText());
+
+        boolean userCanBuy = noDebts && enoughCredits && userSelectedItem && moreThanZeroGoods;
+        boolean userCanSell = enoughResources && userSelectedItem && moreThanZeroGoods;
+
+        buyButton.setDisable(!userCanBuy);
+        sellButton.setDisable(!userCanSell);
+        decrementNumberOfGoods.setDisable(Integer.parseInt(numberOfGoodsLabel.getText()) <= 1);
+        incrementNumberOfGoods.setDisable(false);
+    }
+
+    private void setMarketFee() {
+        marketFeeLabel.setText(String.valueOf(this.variables.get("empire.market.fee")));
+        this.marketFee = Double.parseDouble(marketFeeLabel.getText());
+    }
+
     private void refreshListview() {
         listMarketResources();
     }
-
 
     private void getIdResourcesMap() {
         subscriber.subscribe(presetsApiService.getResources(),
@@ -164,24 +220,10 @@ public class MarketComponent extends StackPane {
                 });
     }
 
-
     private void updateResources() {
         UpdateEmpireMarketDto updateEmpireMarketDto = new UpdateEmpireMarketDto(Map.of(selectedItem, resourceAmount), null, null, null);
         this.subscriber.subscribe(empireService.updateEmpireMarket(tokenStorage.getGameId(), tokenStorage.getEmpireId(), updateEmpireMarketDto),
                 error -> System.out.println("errorEmpireListener"));
-        System.out.println("imran");
-    }
-
-
-    private void loadVariablesAndSetup() {
-        subscriber.subscribe(presetsApiService.getVariables(),
-                res -> {
-                    this.variables = res;
-                    createResourceCountMap();
-                    createResourcePriceMap();
-                    setMarketFee();
-                }
-        );
     }
 
     private void createResourcePriceMap() {
@@ -193,41 +235,6 @@ public class MarketComponent extends StackPane {
         resourcePriceMap.put("consumer_goods", variables.get("resources.consumer_goods.credit_value"));
     }
 
-    private void createResourceCountMap() {
-        subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
-                empire -> {
-                    resourceCountMap = empire.resources();
-                    setCreditCount();
-                    filterResourceMap();
-                    listMarketResources();
-                    createResourceListeners();
-                    buttonLogic();
-                }
-                , error -> System.out.println("errorEmpireListener"));
-    }
-
-    public void filterResourceMap() {
-        resourceCountMap.remove("population");
-        resourceCountMap.remove("research");
-        resourceCountMap.remove("credits");
-
-    }
-
-    private void setMarketFee() {
-        if (variables.get("empire.market.fee") != null) {
-            marketFeeLabel.setText(String.valueOf(variables.get("empire.market.fee")));
-            this.marketFee = Double.parseDouble(marketFeeLabel.getText());
-        } else {
-            marketFeeLabel.setText("0");
-            this.marketFee = 0;
-        }
-    }
-
-    private void setCreditCount() {
-        userCredits = resourceCountMap.get("credits");
-        userCreditsLabel.setText(String.valueOf(userCredits));
-    }
-
     public void buyingAndSellingPrice(String resource) {
         //TODO MarketFee correctly
         this.sellingPrice = (resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoodsLabel.getText())) * (1 - 0.3);
@@ -237,6 +244,7 @@ public class MarketComponent extends StackPane {
         sellingPriceLabel.setText(String.valueOf(sellingPrice));
         buttonLogic();
     }
+
 
     public void buyItem() {
         noPurchase = true;
@@ -284,8 +292,8 @@ public class MarketComponent extends StackPane {
     public void closeMarketOverview() {
         this.getParent().setVisible(false);
     }
-    //--------------------------------------------listViewOfResources-------------------------------------------------//
 
+    //--------------------------------------------listViewOfResources-------------------------------------------------//
     public void listMarketResources() {
         if (this.resourceCountMap.isEmpty()) {
             System.out.println("resourceMap is empty");
@@ -296,8 +304,8 @@ public class MarketComponent extends StackPane {
         resourcesListView.getItems().addAll(this.resourceCountMap.entrySet());
         resourcesListView.setCellFactory(list -> new ResourceCell());
     }
-
     public class ResourceCell extends ListCell<Map.Entry<String, Integer>> {
+
         private VBox vBox = new VBox();
         private ImageView imageView = new ImageView();
         private Text text = new Text();
@@ -331,19 +339,4 @@ public class MarketComponent extends StackPane {
         }
     }
 
-    private void buttonLogic() {
-        boolean noDebts = userCredits > 0;
-        boolean userSelectedItem = selectedItem != null;
-        boolean moreThanZeroGoods = Integer.parseInt(numberOfGoodsLabel.getText()) > 0;
-        boolean enoughCredits = userCredits > buyingPrice;
-        boolean enoughResources = resourceCountMap.getOrDefault(selectedItem, 0) >= Integer.parseInt(numberOfGoodsLabel.getText());
-
-        boolean userCanBuy = noDebts && enoughCredits && userSelectedItem && moreThanZeroGoods;
-        boolean userCanSell = enoughResources && userSelectedItem && moreThanZeroGoods;
-
-        buyButton.setDisable(!userCanBuy);
-        sellButton.setDisable(!userCanSell);
-        decrementNumberOfGoods.setDisable(Integer.parseInt(numberOfGoodsLabel.getText()) <= 1);
-        incrementNumberOfGoods.setDisable(false);
-    }
 }

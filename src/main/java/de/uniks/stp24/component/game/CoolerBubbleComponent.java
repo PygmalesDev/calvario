@@ -4,6 +4,7 @@ import de.uniks.stp24.component.Captain;
 import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.model.Announcement;
 import de.uniks.stp24.model.Game;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.service.Constants;
@@ -25,6 +26,7 @@ import org.fulib.fx.annotation.event.OnRender;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.*;
+import java.util.function.Consumer;
 
 @Component(view = "HintBubble.fxml")
 public class CoolerBubbleComponent extends Captain {
@@ -53,13 +55,13 @@ public class CoolerBubbleComponent extends Captain {
     ResourceBundle gameResourceBundle;
 
     Random random = new Random();
-
     int lastPeriod = 0;
-
     int hintCountdown;
     ArrayList<String> possibleHints = Constants.hints;
 
     ObservableList<Announcement> announcements;
+    Consumer<String[]> forwardMethod = null;
+    Jobs.Job job = null;
 
     @Inject
     public CoolerBubbleComponent(){
@@ -70,28 +72,11 @@ public class CoolerBubbleComponent extends Captain {
     public void init() {
         setHintCountDown();
         announcements = announcementsService.getAnnouncements();
-        // todo delete
-        // harcoded for team meeting demo
-//        announcementsService.addAnnouncement(new Resource("resource.doubloons", 5, 0))
-//                .addAnnouncement(new Resource("resource.provisions", 5, 0))
-//                .addAnnouncement(new Resource("resource.coal", 5, 0));
-
         this.jobsService.onJobCommongCompletion(announcementsService::addAnnouncement);
-//
-//        this.subscriber.subscribe(this.jobsApiService.getEmpireJobs(
-//                        this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), jobList -> {
-//                    jobList.forEach(job -> jobsService.onJobCompletion(job._id(), () -> {
-//                            System.out.println("JOBS DONE");
-//                            announcementsService.addAnnouncement(job);
-//                    }));
-//                }, error -> System.out.println("Failed to load job collections \n" + error.getMessage())
-//        );
     }
 
     private void setHintCountDown() {
-        // todo change
-        // countdown = random.nextInt(20, 40);
-        hintCountdown = 1;
+        hintCountdown = random.nextInt(20, 40);
     }
 
     @OnRender
@@ -123,10 +108,9 @@ public class CoolerBubbleComponent extends Captain {
                                             announcementsService.addAnnouncement(resource);
                                         }
                                     }
+                                    decideWhatToSay();
                                 },
                                 error -> System.out.println("ErrorAggregateSubscriber: " + error));
-
-                        decideWhatToSay();
                     }
                 },
                 error -> System.out.println("Error on Season: " + error.getMessage())
@@ -134,7 +118,7 @@ public class CoolerBubbleComponent extends Captain {
     }
 
     public void forward() {
-
+        forwardMethod.accept(new String[]{job.system()});
     }
 
     public void talk(String text) {
@@ -145,12 +129,17 @@ public class CoolerBubbleComponent extends Captain {
     private void announce() {
         Announcement announcement = announcementsService.getNextAnnouncement();
         forwardButton.setVisible(announcement.showForward());
+        forwardMethod = announcement.forwardMethod();
+        job = announcement.job();
         talk(announcement.message());
     }
 
     public void decideWhatToSay(){
-        if (announcements.isEmpty()) { // todo check for jobs
-//            sayTip();
+        forwardButton.setVisible(false);
+        forwardMethod = null;
+        job = null;
+        if (announcements.isEmpty()) {
+            sayTip();
         } else {
             announce();
         }

@@ -129,7 +129,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
             this.showJobsPane();
             if (Objects.nonNull(job)) {
                 this.propertiesJobProgressComponent.setJobProgress(job);
-                if (!this.jobsService.hasJobTypeProgress(job.type()) && this.buildingJobs.get(0).equals(job))
+                if (this.jobsService.hasNoJobTypeProgress(job.type()) && this.buildingJobs.getFirst().equals(job))
                     this.jobsService.onJobTypeProgress(job.type(), () ->
                             this.propertiesJobProgressComponent.incrementProgress());
                 else this.jobsService.stopOnJobTypeProgress("building");
@@ -148,6 +148,11 @@ public class BuildingPropertiesComponent extends AnchorPane {
                 if (this.currentJobID.equals(job._id()))
                     this.getParent().setVisible(false);
                 this.updateIslandBuildings();
+
+                if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
+                        (this.buildingJobs.isEmpty() || this.buildingJobs.getFirst()._id().equals(currentJobID)))
+                    this.jobsService.onJobTypeProgress(job.type(), () ->
+                            this.propertiesJobProgressComponent.incrementProgress());
             });
 
             this.jobsService.onJobCommonFinish(this::updateIslandBuildings);
@@ -155,6 +160,11 @@ public class BuildingPropertiesComponent extends AnchorPane {
             this.jobsService.onJobCompletion(job._id(), () -> {
                 this.updateIslandBuildings();
                 this.hideJobsPane();
+
+                if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
+                        (this.buildingJobs.isEmpty() || this.buildingJobs.getFirst()._id().equals(currentJobID)))
+                    this.jobsService.onJobTypeProgress(job.type(), () ->
+                            this.propertiesJobProgressComponent.incrementProgress());
             });
         });
 
@@ -223,6 +233,12 @@ public class BuildingPropertiesComponent extends AnchorPane {
                     this.propertiesJobProgressComponent.setJobProgress(job);
                     this.showJobsPane();
                     this.updateIslandBuildings();
+
+                    if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
+                            (this.buildingJobs.isEmpty() || this.buildingJobs.getFirst().equals(job)))
+                        this.jobsService.onJobTypeProgress(job.type(), () ->
+                                this.propertiesJobProgressComponent.incrementProgress());
+
                     this.jobsService.onJobDeletion(job._id(), () -> {
                         if (this.currentJobID.equals(job._id()))
                             this.getParent().setVisible(false);

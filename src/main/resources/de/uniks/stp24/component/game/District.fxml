@@ -17,7 +17,7 @@
          </HBox.margin>
          <Image url="@../../icons/stopwatch.png"/>
       </ImageView>
-         <Text fx:id="jobTimeText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="x/x" />
+      <Text fx:id="jobTimeText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="x/x"/>
    </HBox>
    <Pane prefHeight="40.0" prefWidth="40.0">
       <Button fx:id="siteElementButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showOverview" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent;" />

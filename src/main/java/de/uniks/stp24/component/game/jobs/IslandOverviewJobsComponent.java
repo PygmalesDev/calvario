@@ -61,7 +61,7 @@ public class IslandOverviewJobsComponent extends AnchorPane {
     public void setTextVisibility() {
         this.jobsService.onJobCommonStart(() -> this.noJobText.setVisible(false));
         this.jobsService.onJobCommonFinish(() -> {
-            if (this.jobsService.getObservableListForSystem(this.islandAttributes.getIsland().id()).size() < 1)
+            if (this.jobsService.getObservableListForSystem(this.islandAttributes.getIsland().id()).isEmpty())
                 this.noJobText.setVisible(true);
         });
     }
@@ -74,7 +74,7 @@ public class IslandOverviewJobsComponent extends AnchorPane {
     }
 
     public void setJobsObservableList(ObservableList<Job> observer) {
-        if (observer.size() > 0) this.noJobText.setVisible(false);
+        if (!observer.isEmpty()) this.noJobText.setVisible(false);
         this.jobProgressListView.setItems(observer);
     }
 }

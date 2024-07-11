@@ -159,7 +159,7 @@
 
 .jobProgressListView .list-cell {
     -fx-background-color: transparent;
-    -fx-padding: -5;
+    -fx-padding: -5 -5 0 0;
 }
 
 .jobProgressListView .scroll-bar:vertical {

@@ -126,6 +126,7 @@ public class SitePropertiesComponent extends AnchorPane {
     @OnRender
     public void render() {
         this.jobPane.getChildren().add(this.siteJobProgress);
+        this.setPickOnBounds(false);
         this.jobPane.setPickOnBounds(false);
         this.jobPane.setVisible(false);
     }
@@ -160,7 +161,7 @@ public class SitePropertiesComponent extends AnchorPane {
             this.showJobsPane();
             if (Objects.nonNull(job)) {
                 this.siteJobProgress.setJobProgress(job);
-                if (!this.jobsService.hasJobTypeProgress(job.type()) && this.siteJobs.get(0).equals(job))
+                if (this.jobsService.hasNoJobTypeProgress(job.type()) && this.siteJobs.get(0).equals(job))
                     this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
             }
         } else {
@@ -181,8 +182,8 @@ public class SitePropertiesComponent extends AnchorPane {
             this.showJobsPane();
             this.siteJobProgress.setJobProgress(job);
 
-            if (!this.jobsService.hasJobTypeProgress(job.type()) &&
-                    (this.siteJobs.size() == 0 || this.siteJobs.get(0).equals(job)))
+            if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
+                    (this.siteJobs.isEmpty() || this.siteJobs.getFirst().equals(job)))
                 this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
 
             this.jobsService.onJobDeletion(job._id(), () -> {

@@ -46,8 +46,7 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
     Text jobPositionText;
     @FXML
     ImageView jobImage;
-    @FXML
-    HBox costsHBox;
+
     @FXML
     ListView<de.uniks.stp24.model.Resource> costsListView;
     public Provider<ResourceComponent> resourceComponentProvider = () ->
@@ -76,7 +75,7 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
 
     @Inject
     public IslandOverviewJobProgressComponent() {
-        this.setPickOnBounds(true);
+        this.setPickOnBounds(false);
     }
 
     @Override
@@ -86,8 +85,7 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
         this.stopJobButton.setId("jobProgressDeleteButton_" + job._id());
         this.infoJobButton.setId("jobProgressInspectionButton_" + job._id());
 
-        ObservableList<Job> systemJobs = this.jobsService.getObservableListForSystem(
-                this.islandAttributes.getIsland().id());
+        ObservableList<Job> systemJobs = this.jobsService.getObservableListForSystem(job.system());
         if (systemJobs.indexOf(job) != 0) {
             this.jobProgressBar.setVisible(false);
             this.jobTimeRemaining.setVisible(false);

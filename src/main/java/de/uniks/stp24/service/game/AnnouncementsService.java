@@ -28,7 +28,7 @@ public class AnnouncementsService {
 
     }
 
-    public AnnouncementsService addAnnouncement(Jobs.Job job) {
+    public void addAnnouncement(Jobs.Job job) {
         // todo change text
         String message = "";
         Island island = islandsService.getIsland(job.system());
@@ -41,27 +41,26 @@ public class AnnouncementsService {
             }
             case "district"  -> {
                 message = "Construction of " + job.district() + " on " + island.name() + " is finished!";
-                forwardMethod = jobsService.getJobInspector("island_jobs_overview");
+                forwardMethod = jobsService.getJobInspector("site_overview");
             }
             case "building" -> {
                 message = "Construction of " +  job.building() + " on " + island.name() + " is finished!";
-                forwardMethod = jobsService.getJobInspector("island_jobs_overview");
+                forwardMethod = jobsService.getJobInspector("building_overview");
             }
             case "technology" -> {
                 message = "Your scout finished " + job.technology();
-//                forwardMethod = jobsService.getJobInspector("island_jobs_overview");
+                // todo change
+                forwardMethod = jobsService.getJobInspector("island_jobs_overview");
             }
         }
         announcements.addFirst(new Announcement(message, true, null, forwardMethod, job));
-        return this;
     }
 
-    public AnnouncementsService addAnnouncement(Resource resource) {
+    public void addAnnouncement(Resource resource) {
         // todo change text
         String message =  "Bruh, you are broke. You have only " + resource.count() + " " +
                 gameResourceBundle.getString(resource.resourceID()) + "! Get your act togehther!";
         announcements.add(new Announcement(message, false, null, null, null));
-        return this;
     }
 
     public Announcement getNextAnnouncement() {

@@ -484,6 +484,20 @@ public class InGameController extends BasicController {
             }
         });
 
+        this.jobsService.setJobInspector("upgrade_overview", (String... params) -> {
+            Island selected = this.islandsService.getIsland(params[0]);
+            this.tokenStorage.setIsland(selected);
+            this.overviewSitesComponent.jobsComponent.setJobsObservableList(
+                    this.jobsService.getObservableListForSystem(params[0]));
+
+            this.islandAttributes.setIsland(selected);
+            selectedIsland = this.islandsService.getIslandComponent(params[0]);
+            if (Objects.nonNull(selected.owner())) {
+                showOverview();
+                this.overviewSitesComponent.showUpgrades();
+            }
+        });
+
         this.jobsService.setJobInspector("site_overview", (String... params) -> {
             Island selected = this.islandsService.getIsland(params[1]);
             this.islandAttributes.setIsland(selected);

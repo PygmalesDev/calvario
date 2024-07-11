@@ -72,7 +72,7 @@ public class CoolerBubbleComponent extends Captain {
     public void init() {
         setHintCountDown();
         announcements = announcementsService.getAnnouncements();
-        this.jobsService.onJobCommongCompletion(announcementsService::addAnnouncement);
+        this.jobsService.onJobCommonCompletion(announcementsService::addAnnouncement);
     }
 
     private void setHintCountDown() {
@@ -101,7 +101,6 @@ public class CoolerBubbleComponent extends Captain {
 
                         subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                                 aggregateResultDto -> {
-                                    // announcementsService.clearAnnouncements();
                                     for (AggregateItemDto item : aggregateResultDto.items()) {
                                         Resource resource = resourcesService.aggregateItemDtoToResource(item);
                                         if (resource.count() > 0 && resource.count() + item.subtotal() <= 0) {

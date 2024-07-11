@@ -220,7 +220,7 @@ public class JobsService {
         this.jobCompletionFunctions.get(jobID).add(func);
     }
 
-    public void onJobCommongCompletion(Consumer<Job> func) {
+    public void onJobCommonCompletion(Consumer<Job> func) {
         this.jobCompletionConsumers.add(func);
     }
 

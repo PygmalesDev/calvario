@@ -221,7 +221,7 @@ public class IslandAttributeStorage {
         return mergedMap;
     }
 
-    public String getIslandNameTranslated(){
+    public String getIslandTypeTranslated(){
         return gameResourceBundle.getString(islandTranslation.get(island.type().name()));
     }
 

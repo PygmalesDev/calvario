@@ -180,7 +180,6 @@ public class TechnologyCategoryComponent extends AnchorPane {
         Map<String, Integer> technologyCostMap = new HashMap<>();
         technologyCostMap.put("research", technology.cost() * 100);
         if (resourcesService.hasEnoughResources(technologyCostMap)) {
-            System.out.println("REIN");
             switch (technologieCategoryName) {
                 case "society" -> {societyJobRunning = true;
                     handleJobRunning(societyJobRunning, technology);

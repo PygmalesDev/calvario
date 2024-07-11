@@ -176,7 +176,6 @@ public class EventComponent extends AnchorPane {
         TextFlow descriptionTextFlow = createTextFlow(description);
         descriptionTextFlow.getStyleClass().clear();
         this.descriptionTextFlow.getChildren().setAll(descriptionTextFlow.getChildren());
-        //eventDescription.setText(resources.getString("event." + id + ".description"));
     }
 
     private TextFlow createTextFlow(String text) {

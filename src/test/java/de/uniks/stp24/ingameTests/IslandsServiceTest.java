@@ -8,6 +8,7 @@ import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.scene.shape.QuadCurve;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

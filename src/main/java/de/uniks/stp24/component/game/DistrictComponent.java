@@ -1,61 +1,81 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.model.Jobs.*;
+import de.uniks.stp24.model.SiteProperties;
+import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.constructs.listview.ReusableItemComponent;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 
 import static de.uniks.stp24.service.Constants.sitesIconPathsMap;
 
-@Component(view = "DistrictComponent.fxml")
-public class DistrictComponent extends VBox {
+@Component(view = "District.fxml")
+public class DistrictComponent extends VBox implements ReusableItemComponent<SiteProperties> {
     @FXML
     public Text districtCapacity;
     @FXML
-    Button siteElement;
-    Map<String, String> sitesMap;
-
-
+    Button siteElementButton;
+    @FXML
+    HBox jobProgressBox;
+    @FXML
+    Text jobTimeText;
 
     @Inject
-    public DistrictComponent(String name, String capacity, InGameController inGameController){
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("DistrictComponent.fxml"));
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
+    TokenStorage tokenStorage;
+    @Inject
+    IslandAttributeStorage islandAttributeStorage;
 
-        try {
-            fxmlLoader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        sitesMap = sitesIconPathsMap;
-        String imagePath;
-        if (sitesMap.get(name) == null){
-            imagePath = "de/uniks/stp24/icons/sites/production_site.png";
-        } else {
-            imagePath = sitesMap.get(name);
-        }
+    Map<String, String> sitesMap;
 
-        siteElement.setDisable(inGameController.tokenStorage.isSpectator() || !Objects.equals(inGameController.islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
+    private InGameController inGameController;
+    private String siteName;
 
-        siteElement.setStyle("-fx-background-image: url('/" + imagePath + "'); " +
-                "-fx-background-size: 100% 100%;" + "-fx-background-color: transparent;" + "-fx-background-repeat: no-repeat;");
-
-        districtCapacity.setText(capacity);
-
-        siteElement.setOnMouseClicked(event -> {
-            inGameController.showSiteOverview();
-            inGameController.setSiteType(name);
-            inGameController.selectedSites = name;
-        });
+    @Inject
+    public DistrictComponent(){
+        this.sitesMap = sitesIconPathsMap;
     }
 
+    @Override
+    public void setItem(@NotNull SiteProperties properties) {
+        this.siteName = properties.siteName();
+        String siteCapacity = properties.siteCapacity();
+        this.inGameController = properties.inGameController();
+
+        String imagePath;
+        if (Objects.isNull(this.sitesMap.get(this.siteName)))
+            imagePath = "de/uniks/stp24/icons/sites/production_site.png";
+        else imagePath = this.sitesMap.get(this.siteName);
+
+        this.siteElementButton.setDisable(this.tokenStorage.isSpectator() ||
+                !Objects.equals(this.islandAttributeStorage.getIsland().owner(), this.tokenStorage.getEmpireId()));
+
+        this.siteElementButton.setStyle("-fx-background-image: url('/" + imagePath + "'); " +
+                "-fx-background-size: 100% 100%;" + "-fx-background-color: transparent;" +
+                "-fx-background-repeat: no-repeat;");
+
+        districtCapacity.setText(siteCapacity);
+        if (Objects.nonNull(properties.job()))
+            this.setJobProgress(properties.job());
+    }
+
+    public void showOverview() {
+        this.inGameController.showSiteOverview();
+        this.inGameController.setSiteType(this.siteName);
+    }
+
+    public void setJobProgress(Job job) {
+        this.jobProgressBox.setVisible(true);
+        this.jobTimeText.setText(String.format("%s/%s", job.progress(), job.total()));
+    }
 }

@@ -62,6 +62,8 @@ public class ClockComponent extends AnchorPane {
 
     String gameId;
 
+    Game game;
+
     ImageCache imageCache = new ImageCache();
     @Inject
     public EventService eventService;
@@ -111,6 +113,11 @@ public class ClockComponent extends AnchorPane {
 
         PropertyChangeListener callHandleEventChanged = this::handleEventChanged;
         eventService.listeners().addPropertyChangeListener(EventService.PROPERTY_EVENT, callHandleEventChanged);
+
+        subscriber.subscribe(gamesApiService.getGame(tokenStorage.getGameId()),
+                gameResult -> game = gameResult,
+                error -> System.out.println("Error: " + error.getMessage())
+        );
 
         createUpdateSeasonListener();
         createUpdateSpeedListener();
@@ -166,6 +173,9 @@ public class ClockComponent extends AnchorPane {
         countdownLabel.setText(translateCountdown(timerService.getCountdown()));
 
         remainingSeasonsLabel.setVisible(false);
+
+        timerService.reset();
+
     }
 
     @OnDestroy
@@ -179,6 +189,11 @@ public class ClockComponent extends AnchorPane {
         if (subscriber != null) {
             subscriber.dispose();
         }
+
+        if (timerService.subscriber != null) {
+            timerService.subscriber.dispose();
+        }
+
         timerService.stop();
     }
 
@@ -188,12 +203,12 @@ public class ClockComponent extends AnchorPane {
         subscriber.subscribe(this.eventListener
                         .listen("games." + gameId + ".ticked", Game.class),
                 event -> {
-                    if (!(lastUpdateSeason == event.data().period())) {
-                        Game game = event.data();
-                        timerService.setSeason(game.period());
-                        timerService.reset();
-                        lastUpdateSeason = event.data().period();
-                    }
+                        if (!(lastUpdateSeason == event.data().period())) {
+                            Game game = event.data();
+                            timerService.setSeason(game.period());
+                            timerService.reset();
+                            lastUpdateSeason = event.data().period();
+                        }
                 },
                 error -> System.out.println("Error on Season: " + error.getMessage())
         );
@@ -203,11 +218,11 @@ public class ClockComponent extends AnchorPane {
         subscriber.subscribe(this.eventListener
                         .listen("games." + gameId + ".updated", Game.class),
                 event -> {
-                    if (!lastUpdateSpeed.equals(event.data().updatedAt())) {
-                        Game game = event.data();
-                        timerService.setSpeedLocal(game.speed());
-                        lastUpdateSpeed = event.data().updatedAt();
-                    }
+                        if (!lastUpdateSpeed.equals(event.data().updatedAt())) {
+                            Game game = event.data();
+                            timerService.setSpeedLocal(game.speed());
+                            lastUpdateSpeed = event.data().updatedAt();
+                        }
                 },
                 error -> System.out.println("Error on speed: " + error.getMessage())
         );

@@ -1,9 +1,6 @@
 package de.uniks.stp24.component.game.technology;
 
-import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.game.TechnologyService;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;

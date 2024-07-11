@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -56,7 +57,12 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     @FXML
     public Label technologyLabel;
     @FXML
-    public Tooltip tooltip;
+    public Tooltip researchLabelTooltip;
+    @FXML
+    public Tooltip showEffectTooltip;
+    @FXML
+    public Label showEffectLabel;
+
 
     @Inject
     App app;
@@ -74,9 +80,17 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     @Named("variablesResourceBundle")
     public ResourceBundle variablesResourceBundle;
 
+    @Inject
+    @Resource
+    @Named("gameResourceBundle")
+    public ResourceBundle gameResourceBundle;
     @SubComponent
     @Inject
     public TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+
+    @SubComponent
+    @Inject
+    public TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
 
     ImageCache imageCache = new ImageCache();
 
@@ -89,6 +103,7 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
      */
     @Inject
     public TechnologyCategorySubComponent() {
+
     }
 
     /**
@@ -114,12 +129,29 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
         }
 
         technologyResearchDetailsComponent.setTechnologyInfos(technology);
+        technologyEffectDetailsComponent.setTechnologyInfos(technology);
+
+
+        showEffectTooltip.setGraphic(technologyEffectDetailsComponent);
+        showEffectTooltip.setShowDelay(Duration.ZERO);
+        showEffectTooltip.setShowDuration(Duration.INDEFINITE);
 
         researchLabel.setText(String.valueOf(technologyExtended.cost()));
 
-        description.addAll(technologyExtended.effects());
-        descriptionListView.setItems(description);
-        descriptionListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
+        descriptionListView.getItems().clear();
+        if (technologyExtended.effects().length != 0) {
+            description.addAll(technologyExtended.effects());
+            descriptionListView.setItems(description);
+            descriptionListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
+        }
+
+        if (technology.effects().length > 1) {
+            showEffectLabel.setVisible(true);
+            showEffectLabel.setMouseTransparent(false);
+        } else {
+            showEffectLabel.setVisible(false);
+            showEffectLabel.setMouseTransparent(true);
+        }
     }
 
 
@@ -134,9 +166,12 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
         timeImage.setImage(imageCache.get("icons/time.png"));
         researchImage.setImage(imageCache.get("icons/resources/research.png"));
 
-        tooltip.setGraphic(technologyResearchDetailsComponent);
-        tooltip.setShowDelay(Duration.ZERO);
-        tooltip.setShowDuration(Duration.INDEFINITE);
+        researchLabelTooltip.setGraphic(technologyResearchDetailsComponent);
+        researchLabelTooltip.setShowDelay(Duration.ZERO);
+        researchLabelTooltip.setShowDuration(Duration.INDEFINITE);
+
+        technologyEffectDetailsComponent.setTechnology(technology);
+
     }
 
     @OnDestroy

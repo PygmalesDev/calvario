@@ -20,7 +20,6 @@ import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.ResourceBundle;
 
 @Component(view = "TechnologyCategoryDescription.fxml")
@@ -67,7 +66,34 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
 
     @Override
     public void setItem(@NotNull Effect effect) {
+        descriptionLabel.setStyle("-fx-opacity: 1");
+        setEffect(effect);
+        setImage();
+        setDescriptionLabel();
+    }
+
+    public void setEffect(Effect effect) {
         this.effect = effect;
+    }
+
+    public void setDescriptionLabel() {
+
+        if (effect.base() != 0) {
+            descriptionLabel.setText("+" + effect.base() + " " + variablesResourceBundle.getString(effect.variable()));
+        }
+
+        if (effect.multiplier() != 1 && effect.multiplier() != 0) {
+            descriptionLabel.setText(String.format("%+d", (int) ((effect.multiplier() * 100.0) - 100)) + " % "
+                    + variablesResourceBundle.getString(effect.variable()));
+        }
+
+        if (effect.base() != 0) {
+            descriptionLabel.setText(String.format("%+d", (int) effect.base()) + " " + variablesResourceBundle.getString(effect.variable()));
+        }
+    }
+
+    public void setImage() {
+
         String variable = this.effect.variable();
 
         /*
@@ -94,16 +120,5 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
                 }
             }
         }
-
-        if (effect.base() != 0) {
-            descriptionLabel.setText("+" + effect.base() + " " + variablesResourceBundle.getString(effect.variable()));
-        }
-
-        if (effect.multiplier() != 1) {
-            descriptionLabel.setText(((int)(effect.multiplier() * 100) - 100) + " % "
-                    + variablesResourceBundle.getString(effect.variable()));
-        }
-
-//        descriptionLabel.setText("(" + ")" + variablesResourceBundle.getString(effect.variable()));
     }
 }

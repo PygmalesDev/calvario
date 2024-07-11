@@ -92,21 +92,6 @@ public class TechnologyResearchDetailsComponent extends VBox {
 
     public void setTechnologyInfos(TechnologyExtended technology) {
 
-//        // TODO: ADD FOR EVERY EFFECT THAT AFFECTS THE CURRENT TECHNOLOGY A NEW LABEL AN ADD IT TO COSTVBOX
-//        //  SEARCH THE VARIABLE WHICH GIVES YOU THE DISCOUNT (COULD BE TRAIT OR TECHNOLOGIES...)
-//        for (Effect effect : technology.effects()) {
-//
-//            base.setText("Base: " + technology.cost());
-//
-//            if (effect.multiplier() > 0) {
-//                // TODO: Replace the String after the % with the name of the trait or technology that gives your
-//                //  the disocunt
-//                multiplier.setText((((int) (effect.multiplier() * 100) - 100) + " % " + technologiesResourceBundle.getString(technology.id())));
-//            }
-//
-//            total.setText("Total: " + technology.cost());
-//        }
-
         base.setText("Base: " + technology.cost());
 
         total.setText("Total: " + technology.cost());

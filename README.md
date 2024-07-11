@@ -32,11 +32,9 @@ not released yet
 
 ## How To Use It
 
-## How To Build a JAR
-
 To get started with **Calvario**, follow these simple steps:
 
-1. check your Java Run Enviroment (JRE) to have at least Version 21
+1. check your Java Run Environment (JRE) to have at least Version 21
 2. download a JAR version for your operational system (Windows, IOS, Linux)
 3. Open the file location
 4. using the right mouse button your file manager may show the option `run with jre`

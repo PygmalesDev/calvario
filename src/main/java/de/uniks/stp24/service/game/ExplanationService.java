@@ -66,7 +66,7 @@ public class ExplanationService {
 
 
             if (isMouseInsideCell && !entered.get()) {
-                System.out.println(getResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID(), explanationComponent));
+                //getResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID(), explanationComponent);
                 tooltip.show(app.stage(), mouseX, mouseY);
                 entered.set(true);
             } else if (!isMouseInsideCell) {

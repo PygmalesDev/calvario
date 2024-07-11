@@ -4,6 +4,8 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.service.*;
 import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.utils.ResponseConstants;
+import javafx.scene.Node;
+import javafx.scene.control.TextInputControl;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.controller.Subscriber;
 
@@ -30,6 +32,9 @@ public class BasicController {
     @Inject
     @Named("gameResourceBundle")
     public ResourceBundle gameResourceBundle;
+    @Inject
+    @Named("variablesResourceBundle")
+    public ResourceBundle variablesResourceBundle;
     @Inject
     ErrorService errorService;
     @Inject
@@ -87,4 +92,21 @@ public class BasicController {
         return getErrorInfoText(this.controlResponses, code);
     }
 
+    public void changeNodesVisibility(boolean show, Node... nodes) {
+        for (Node node : nodes) {
+            node.setVisible(show);
+        }
+    }
+
+    public void changeNodesDisability(boolean disable, Node... nodes) {
+        for (Node node : nodes) {
+            node.setDisable(disable);
+        }
+    }
+
+    public void setTextEditable(boolean editable, TextInputControl... textFields) {
+        for (TextInputControl textField : textFields) {
+            textField.setEditable(editable);
+        }
+    }
 }

@@ -15,6 +15,9 @@ public interface EmpireApiService {
     @GET("games/{game}/empires")
     Observable<ReadEmpireDto[]> getEmpires(@Path("game") String gameID);
 
+    @GET("games/{game}/empires")
+    Observable<EmpireDto[]> getEmpiresDtos(@Path("game") String gameID);
+
     @GET("games/{game}/empires/{empire}")
     Observable<EmpireDto> getEmpire(@Path("game") String game, @Path("empire") String empire);
 

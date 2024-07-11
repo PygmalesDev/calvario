@@ -1,6 +1,7 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.model.Game;
+import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
@@ -9,14 +10,11 @@ import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -42,7 +40,7 @@ public class ClockComponent extends AnchorPane {
     @FXML
     ToggleButton flagToggle;
     @FXML
-    public ImageView randomEventImage;
+    public Button randomEventButton;
     @FXML
     public Label remainingSeasonsLabel;
     @FXML
@@ -75,6 +73,8 @@ public class ClockComponent extends AnchorPane {
     public IslandsService islandsService;
     @Inject
     public GamesApiService gamesApiService;
+    @Inject
+    public EmpireApiService empireApiService;
     @Inject
     public Subscriber subscriber;
     @Inject
@@ -182,7 +182,7 @@ public class ClockComponent extends AnchorPane {
         timerService.stop();
     }
 
-    /////////////---------------------------------------WS-EventListeners---------------------------------//////////////
+/////////////---------------------------------------WS-EventListeners---------------------------------//////////////
 
     public void createUpdateSeasonListener() {
         subscriber.subscribe(this.eventListener
@@ -213,7 +213,7 @@ public class ClockComponent extends AnchorPane {
         );
     }
 
-    ///////////////--------------------------------------------onAction------------------------------------/////////////
+///////////////--------------------------------------------onAction------------------------------------/////////////
 
 
     public void showFlags() {
@@ -229,7 +229,8 @@ public class ClockComponent extends AnchorPane {
     public void pauseClock() {
         if (timerService.isRunning()) {
             subscriber.subscribe(timerService.setSpeed(gameId, 0),
-                    result -> {},
+                    result -> {
+                    },
                     error -> System.out.println("Error on pause: " + error)
             );
             timerService.stop();
@@ -248,7 +249,11 @@ public class ClockComponent extends AnchorPane {
         changingSpeed(1);
     }
 
-    ////////////--------------------------------Auxiliary Methods-----------------------------------------//////////////
+    public void showEvent() {
+        timerService.setShowEvent(true);
+    }
+
+////////////--------------------------------Auxiliary Methods-----------------------------------------//////////////
 
     @Contract(pure = true)
     private @NotNull String translateCountdown(int countdown) {
@@ -262,8 +267,8 @@ public class ClockComponent extends AnchorPane {
             updateSeasonLabel = true;
             seasonLabel.setStyle("-fx-font-size: 15px;");
             countdownLabel.setStyle("-fx-font-size: 13px");
-            seasonLabel.setTranslateY(seasonLabel.getTranslateY() + 3);
-            countdownLabel.setTranslateY(countdownLabel.getTranslateY() + 3);
+            seasonLabel.setTranslateY(seasonLabel.getTranslateY() + 7);
+            countdownLabel.setTranslateY(countdownLabel.getTranslateY() + 7);
         }
     }
 
@@ -272,23 +277,24 @@ public class ClockComponent extends AnchorPane {
             timerService.resume();
         }
         subscriber.subscribe(timerService.setSpeed(gameId, speed),
-                result -> {},
+                result -> {
+                },
                 error -> System.out.println("Error when changing speed: " + error)
         );
     }
 
-    ////////////--------------------------------PropertyChangeListener--------------------------------------////////////
+////////////--------------------------------PropertyChangeListener--------------------------------------////////////
 
     private void handleEventChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
 
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
-            randomEventImage.setVisible(true);
+            randomEventButton.setVisible(true);
             remainingSeasonsLabel.setVisible(true);
 
             if (Objects.equals(eventService.getEvent().effects()[0].eventType(), "bad")) {
-                randomEventImage.setImage(imageCache.get("assets/events/badEvent.png"));
+                randomEventButton.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/events/badEvent.png')");
             } else {
-                randomEventImage.setImage(imageCache.get("assets/events/goodEvent.png"));
+                randomEventButton.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/events/goodEvent.png')");
             }
         }
     }
@@ -296,16 +302,17 @@ public class ClockComponent extends AnchorPane {
     private void handleRemainingSeasonChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
             int remainingSeasons = (int) propertyChangeEvent.getNewValue();
-            if (remainingSeasons == 0) {
+            if (remainingSeasons <= 0) {
 
                 // Delete event on Server
                 eventService.setEvent(null);
                 subscriber.subscribe(eventService.sendEffect(),
-                        result -> {},
-                        error -> {}
+                        result -> {
+                        },
+                        error -> {
+                        }
                 );
-
-                randomEventImage.setVisible(false);
+                randomEventButton.setVisible(false);
                 remainingSeasonsLabel.setVisible(false);
             } else {
                 Platform.runLater(() -> remainingSeasonsLabel.setText(String.valueOf(remainingSeasons)));

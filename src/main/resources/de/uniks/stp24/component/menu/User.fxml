@@ -21,7 +21,7 @@
             </HBox.margin>
             <children>
                   <Text fx:id="usernameText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userComponentText" text="\%PlayerNickname" wrappingWidth="96.705078125" />
-               <Text fx:id="readyText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userComponentText" text="%ready">
+               <Text fx:id="readyText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="userComponentText">
                   <VBox.margin>
                      <Insets top="2.0" />
                   </VBox.margin>

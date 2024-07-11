@@ -5,7 +5,6 @@ import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
@@ -82,8 +81,6 @@ public class TestIslandOverview extends ControllerTest {
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
-    @InjectMocks
-    SettingsComponent settingsComponent;
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
     @InjectMocks
@@ -260,7 +257,6 @@ public class TestIslandOverview extends ControllerTest {
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
-        this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = this.eventComponent;
         this.inGameController.eventService = this.eventService;
@@ -425,7 +421,6 @@ public class TestIslandOverview extends ControllerTest {
 
         this.storageOverviewComponent.getStylesheets().clear();
         this.pauseMenuComponent.getStylesheets().clear();
-        this.settingsComponent.getStylesheets().clear();
         this.clockComponent.getStylesheets().clear();
         this.eventComponent.getStylesheets().clear();
         this.storageOverviewComponent.getStylesheets().clear();
@@ -689,7 +684,6 @@ public class TestIslandOverview extends ControllerTest {
         int oldValue = this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size();
         clickOn(buildingNodes.getLast());
 
-        System.out.println(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size());
         assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), oldValue + 1);
         assertTrue(!prev.isVisible() && !next.isVisible());
     }

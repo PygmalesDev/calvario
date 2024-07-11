@@ -3,10 +3,11 @@ package de.uniks.stp24.ingameTests;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
-import de.uniks.stp24.component.menu.*;
+import de.uniks.stp24.component.menu.DeleteStructureComponent;
+import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.*;
-import de.uniks.stp24.model.*;
+import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.InGameService;
@@ -19,24 +20,19 @@ import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
-import javafx.scene.input.KeyCode;
-import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
+import static org.mockito.Mockito.spy;
 
 @ExtendWith(MockitoExtension.class)
 public class TestBuildingProperties extends ControllerTest {
@@ -72,8 +68,6 @@ public class TestBuildingProperties extends ControllerTest {
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
-    @InjectMocks
-    SettingsComponent settingsComponent;
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
     @InjectMocks

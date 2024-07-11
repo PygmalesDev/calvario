@@ -96,6 +96,7 @@ public class BrowseGameControllerTest extends ControllerTest {
         browseGameController.logoutComponent = logoutComponent;
         browseGameController.bubbleComponent = bubbleComponent;
         browseGameController.warningComponent = warningComponent;
+
         Mockito.doReturn(Observable.just(List.of(
                 game,
                 new Game("88888", null, "2", "rapapa", "testID", 2,false, 0,0, null)
@@ -269,7 +270,6 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Test
     public void clickOnLogout() {
         prefService.setRefreshToken("lastRefreshToken");
-        System.out.println(prefService.getRefreshToken());
         doReturn(Observable.just(new LogoutResult("a")))
                 .when(browseGameService).logout(any());
         doReturn(null).when(app).show("/login");

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
@@ -49,8 +48,6 @@ public class AppTest2 extends ControllerTest {
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
     @InjectMocks
-    SettingsComponent settingsComponent;
-    @InjectMocks
     EventComponent eventComponent;
     @InjectMocks
     ClockComponent clockComponent;
@@ -80,6 +77,7 @@ public class AppTest2 extends ControllerTest {
     EmpireOverviewComponent empireOverviewComponent;
     @InjectMocks
     VariableExplanationComponent variableExplanationComponent;
+    HelpComponent helpComponent;
 
 
     @Spy
@@ -153,7 +151,6 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
-        this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = eventComponent;
@@ -176,6 +173,8 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
         this.inGameService.presetsApiService = this.presetsApiService;
+        this.inGameController.helpComponent = this.helpComponent;
+        
         inGameController.mapScrollPane = new ScrollPane();
         inGameController.group = new Group();
         inGameController.zoomPane = new StackPane();
@@ -247,7 +246,6 @@ public class AppTest2 extends ControllerTest {
         storageOverviewComponent.getStylesheets().clear();
         clockComponent.getStylesheets().clear();
         pauseMenuComponent.getStylesheets().clear();
-        settingsComponent.getStylesheets().clear();
         overviewSitesComponent.getStylesheets().clear();
         overviewUpgradeComponent.getStylesheets().clear();
         sitesComponent.getStylesheets().clear();

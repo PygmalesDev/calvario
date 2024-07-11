@@ -24,6 +24,19 @@ public class MainModule {
     }
 
     @Provides
+    @Named("variablesResourceBundle")
+    ResourceBundle variablesBundle(PrefService prefService) {
+        return ResourceBundle.getBundle("de/uniks/stp24/lang/variables", prefService.getLocale());
+    }
+
+    @Provides
+    @Named("technologiesResourceBundle")
+    ResourceBundle technologiesBundle(PrefService prefService) {
+        return ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", prefService.getLocale());
+    }
+
+
+    @Provides
     @Singleton
     ObjectMapper mapper() {
         return new ObjectMapper()

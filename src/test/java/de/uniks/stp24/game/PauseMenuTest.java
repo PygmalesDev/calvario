@@ -3,6 +3,9 @@ package de.uniks.stp24.game;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
+import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
+import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -11,15 +14,13 @@ import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.EmpireService;
-import de.uniks.stp24.service.game.EventService;
-import de.uniks.stp24.service.game.ResourcesService;
-import de.uniks.stp24.service.game.TimerService;
+import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
@@ -33,7 +34,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.inject.Inject;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -43,6 +43,8 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class PauseMenuTest extends ControllerTest {
+    @Spy
+    JobsService jobsService;
     @Spy
     GamesApiService gamesApiService;
 
@@ -104,6 +106,10 @@ public class PauseMenuTest extends ControllerTest {
     OverviewSitesComponent overviewSitesComponent;
 
     @InjectMocks
+    SitePropertiesComponent sitePropertiesComponent;
+
+
+    @InjectMocks
     OverviewUpgradeComponent overviewUpgradeComponent;
 
     @InjectMocks
@@ -116,10 +122,14 @@ public class PauseMenuTest extends ControllerTest {
     BuildingPropertiesComponent buildingPropertiesComponent;
 
     @InjectMocks
-    SitePropertiesComponent sitePropertiesComponent;
+    BuildingsWindowComponent buildingsWindowComponent;
 
     @InjectMocks
-    BuildingsWindowComponent buildingsWindowComponent;
+    JobsOverviewComponent jobsOverviewComponent;
+
+    @InjectMocks
+    IslandOverviewJobsComponent islandOverviewJobsComponent;
+
 
     @InjectMocks
     DetailsComponent detailsComponent;
@@ -137,6 +147,12 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     HelpComponent helpComponent;
+
+    @InjectMocks
+    PropertiesJobProgressComponent propertiesJobProgressComponent;
+
+    @Spy
+    JobsApiService jobsApiService;
 
     @InjectMocks
     InGameController inGameController;
@@ -160,6 +176,18 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.helpComponent = this.helpComponent;
+        this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
+        this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
+        this.timerService.gamesApiService = this.gamesApiService;
+        this.timerService.subscriber = this.subscriber;
+        this.timerService.tokenStorage = this.tokenStorage;
+
+        this.jobsService.subscriber = this.subscriber;
+        this.jobsService.jobsApiService = this.jobsApiService;
+        this.jobsService.tokenStorage = this.tokenStorage;
+        this.jobsService.eventListener = this.eventListener;
+        this.buildingPropertiesComponent.propertiesJobProgressComponent = this.propertiesJobProgressComponent;
+        this.sitePropertiesComponent.siteJobProgress = this.propertiesJobProgressComponent;
 
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
@@ -168,6 +196,7 @@ public class PauseMenuTest extends ControllerTest {
 
         this.inGameService.presetsApiService = this.presetsApiService;
 
+        doReturn(Observable.empty()).when(this.jobsApiService).getEmpireJobs(any(), any());
 
         inGameService.setGameStatus(gameStatus);
         inGameService.setTimerService(timerService);
@@ -186,6 +215,22 @@ public class PauseMenuTest extends ControllerTest {
         doReturn(Observable.just(new ArrayList<DistrictPresets>())).when(inGameService).loadDistrictPresets();
 
         this.app.show(this.inGameController);
+
+        this.storageOverviewComponent.getStylesheets().clear();
+        this.pauseMenuComponent.getStylesheets().clear();
+        this.clockComponent.getStylesheets().clear();
+        this.eventComponent.getStylesheets().clear();
+        this.storageOverviewComponent.getStylesheets().clear();
+        this.overviewSitesComponent.getStylesheets().clear();
+        this.overviewUpgradeComponent.getStylesheets().clear();
+        this.buildingsComponent.getStylesheets().clear();
+        this.sitesComponent.getStylesheets().clear();
+        this.detailsComponent.getStylesheets().clear();
+        this.deleteStructureComponent.getStylesheets().clear();
+        sitePropertiesComponent.getStylesheets().clear();
+        buildingsWindowComponent.getStylesheets().clear();
+        buildingPropertiesComponent.getStylesheets().clear();
+        this.jobsOverviewComponent.getStylesheets().clear();
     }
 
     @Test

@@ -1,5 +1,6 @@
 package de.uniks.stp24;
 
+import de.uniks.stp24.dto.UpdateEmpireDto;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.utils.ResponseConstants;
@@ -26,7 +27,7 @@ public class ControllerTest extends ApplicationTest {
     @Spy
     public PrefService prefService;
     @Spy
-    public IslandsService islandsService;
+    public IslandsService islandsService = Mockito.spy(IslandsService.class);
     @Spy
     public ResponseConstants responseConstants;
     @Spy
@@ -42,6 +43,7 @@ public class ControllerTest extends ApplicationTest {
 
     @Override
     public void start(Stage stage) throws Exception {
+
         super.start(stage);
         this.stage = stage;
 

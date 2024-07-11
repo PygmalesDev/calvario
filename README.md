@@ -32,6 +32,8 @@ not released yet
 
 ## How To Use It
 
+## How To Build a JAR
+
 To get started with **Calvario**, follow these simple steps:
 
 1. check your Java Run Enviroment (JRE) to have at least Version 21

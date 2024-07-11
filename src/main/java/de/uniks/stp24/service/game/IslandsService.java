@@ -16,6 +16,7 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.QuadCurve;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.controller.Subscriber;
@@ -36,7 +37,8 @@ public class IslandsService extends BasicService {
 
     String gameID;
 
-    static final int factor = 10;
+    static final int SCALE_FACTOR = 16;
+    static final float DISTANCE_FACTOR = 1.2f;
     double minX, maxX, minY, maxY;
     double widthRange, heightRange;
     private final List<ShortSystemDto> devIsles = new ArrayList<>();
@@ -116,13 +118,14 @@ public class IslandsService extends BasicService {
                                 data.districts(),
                                 data.buildings(),
                                 data._id(),
-                                data.upgrade().toString()
+                                data.upgrade().toString(),
+                                data.name()
                         );
                         isles.add(tmp);
                         connections.put(data._id(),linkedIsles);
                     });
-                    widthRange = maxX-minX;
-                    heightRange = maxY-minY;
+                    widthRange = maxX-minX + 1000;
+                    heightRange = maxY-minY + 1000;
                     this.app.show("/ingame");
                     refreshListOfColonizedSystems();
                 },
@@ -141,28 +144,28 @@ public class IslandsService extends BasicService {
      */
     public IslandComponent createIslandPaneFromDto(Island isleDto, @NotNull IslandComponent component) {
         component.applyInfo(isleDto);
-        double screenOffsetH = widthRange * (factor + 2) / 2.0 - 25;
-        double screenOffSetV = heightRange * (factor + 2) / 2.0 - 25;
+        double screenOffsetH = widthRange * (SCALE_FACTOR + 2) / 2.0 - 25;
+        double screenOffSetV = heightRange * (SCALE_FACTOR + 2) / 2.0 - 25;
         double serverOffsetH = minX + 0.5 * widthRange;
         double serverOffsetV = minY + 0.5 * heightRange;
-        component.setPosition(factor * isleDto.posX() - serverOffsetH + screenOffsetH,
-                factor * isleDto.posY() - serverOffsetV + screenOffSetV);
+        component.setPosition(SCALE_FACTOR * isleDto.posX()*DISTANCE_FACTOR - serverOffsetH + screenOffsetH,
+                SCALE_FACTOR * isleDto.posY()*DISTANCE_FACTOR - serverOffsetV + screenOffSetV);
         component.applyIcon(isleDto.type());
         component.setFlagImage(isleDto.flagIndex());
         if (Objects.nonNull(isleDto.owner())) {
             Color colorWeb = Color.web(getEmpire(isleDto.owner()).color()).brighter();
-            component.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb) + ", 2.0, 0.88, 0, 0);");
-        }
+            component.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb) + ", 4.0, 0.88, 0, 0);");}
+
         return component;
     }
 
-    // return mapRange * (factor + 3)
+    // return mapRange * (SCALE_FACTOR + 3)
     public double getMapWidth() {
-        return this.widthRange * (factor + 3);
+        return this.widthRange * (SCALE_FACTOR + 3);
     }
 
     public double getMapHeight() {
-        return this.heightRange * (factor + 3);
+        return this.heightRange * (SCALE_FACTOR + 3);
     }
 
     public Map<String, List<String>> getConnections() {
@@ -208,12 +211,13 @@ public class IslandsService extends BasicService {
         islandConnections.forEach((isle, list) -> {
             double startX, startY, endX, endY;
             IslandComponent isle1 = idToComponent.get(isle);
-            startX = isle1.getPosX() + 25;
-            startY = isle1.getPosY() + 25;
+            startX = isle1.getPosX() + 60;
+            startY = isle1.getPosY() + 60;
             for (String neighbour : list) {
                 IslandComponent isle2 = idToComponent.get(neighbour);
-                endX = isle2.getPosX() + 25;
-                endY = isle2.getPosY() + 25;
+                endX = isle2.getPosX() + 60;
+                endY = isle2.getPosY() + 60;
+
                 Line tmp = new Line(startX, startY, endX, endY);
                 tmp.getStyleClass().add("connection");
                 linesInMap.add(tmp);
@@ -340,14 +344,17 @@ public class IslandsService extends BasicService {
     }
 
     public void updateIslandBuildings(IslandAttributeStorage islandAttributes, InGameController inGameController, ArrayList<String> buildings){
-        this.subscriber.subscribe(gameSystemsService.updateBuildings(tokenStorage.getGameId(), islandAttributes.getIsland().id(),
-                new UpdateBuildingDto(
-                        buildings
-                        )), result -> {
-            islandAttributes.getIsland().buildings().clear();
-            islandAttributes.getIsland().buildings().addAll(result.buildings());
-            inGameController.selectedIsland.island = islandAttributes.getIsland();
-        });
+        if (Objects.nonNull(inGameController.selectedIsland) && Objects.nonNull(islandAttributes.getIsland())) {
+            this.subscriber.subscribe(gameSystemsService.updateBuildings(
+                    tokenStorage.getGameId(), islandAttributes.getIsland().id(),
+                    new UpdateBuildingDto(buildings)), result -> {
+
+                islandAttributes.getIsland().buildings().clear();
+                islandAttributes.getIsland().buildings().addAll(result.buildings());
+
+                inGameController.selectedIsland.island = islandAttributes.getIsland();
+            });
+        }
     }
 
     public void upgradeSystem(IslandAttributeStorage islandAttributes, String upgradeStatus, InGameController inGameController){
@@ -368,13 +375,35 @@ public class IslandsService extends BasicService {
                     result.districts(),
                     result.buildings(),
                     result._id(),
-                    result.upgrade()
+                    result.upgrade(),
+                    result.name()
             );
             inGameController.selectedIsland.island = tmp;
             islandAttributes.setIsland(tmp);
             inGameController.showOverview();
 
         });
+    }
+
+    public Island getIsland(String islandID) {
+        return this.isles.stream()
+                .filter(isle -> isle.id().equals(islandID))
+                .findFirst().orElse(null);
+    }
+
+    public IslandComponent getIslandComponent(String islandID) {
+        return this.islandComponentList.stream().filter(islandComponent ->
+                islandComponent.island.id().equals(islandID))
+                .findFirst().orElse(null);
+    }
+
+    public String getIslandName(String islandID) {
+        Island island = this.isles.stream().filter(isle -> isle.id().equals(islandID)).findFirst().orElse(null);
+        if (Objects.nonNull(island) && Objects.nonNull(island.name()))
+            if (island.name().isEmpty())
+                return "Uncharted Island";
+            else return island.name();
+        return "MissingNo.";
     }
 
     @OnDestroy
@@ -395,7 +424,8 @@ public class IslandsService extends BasicService {
                 result.districts(),
                 result.buildings(),
                 result._id(),
-                result.upgrade().toString()
+                result.upgrade().toString(),
+                result.name()
         );
     }
 }

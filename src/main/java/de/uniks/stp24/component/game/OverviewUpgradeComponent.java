@@ -97,13 +97,16 @@ public class OverviewUpgradeComponent extends AnchorPane {
     }
 
     public void setUpgradeButton() {
-        if (islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()) != null) {
-            if (resourcesService.hasEnoughResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()))) {
-                confirmUpgrade.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/buttons/upgrade_button_on.png'); " +
-                        "-fx-background-size: cover;" + "-fx-background-color: transparent");
-            } else {
-                confirmUpgrade.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/buttons/upgrade_button_off.png'); " +
-                        "-fx-background-size: cover;" + "-fx-background-color: transparent");
+        if (Objects.nonNull(this.islandAttributes.getIsland())) {
+            if (islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()) != null) {
+                if (resourcesService.hasEnoughResources(islandAttributes
+                        .getNeededResources(islandAttributes.getIsland().upgradeLevel()))) {
+                    confirmUpgrade.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/buttons/upgrade_button_on.png'); " +
+                            "-fx-background-size: cover;" + "-fx-background-color: transparent");
+                } else {
+                    confirmUpgrade.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/buttons/upgrade_button_off.png'); " +
+                            "-fx-background-size: cover;" + "-fx-background-color: transparent");
+                }
             }
         }
     }

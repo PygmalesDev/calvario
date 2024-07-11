@@ -126,6 +126,17 @@ ToggleButton:hover{
     -fx-pref-height: 35px;
 }
 
+.deleteAndSaveButtonaAvatar{
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-text-fill: White;
+    -fx-background-color: Black;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.75), 2, 0, 7, 7);
+    -fx-pref-width: 100px;
+    -fx-pref-height: 35px;
+}
 
 
 .upButton {
@@ -692,6 +703,45 @@ ToggleButton:hover{
 }
 
 
+.normalbuttonShadow {
+    -fx-background-color: #FFD966;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+
+.buttonShadow {
+    -fx-font-family: "PT Serif";
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+    -fx-background-color: #FFD966;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+
+.rightArrow {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/up.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 25px;
+    -fx-pref-height: 25px;
+    -fx-rotate: 90;
+}
+
+.leftArrow {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/up.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 25px;
+    -fx-pref-height: 25px;
+    -fx-rotate: 270;
+}
+
 /*Loading, Login, Register*/
 .calvarioTextLogo{
     -fx-background-image: url("/de/uniks/stp24/assets/logos/calvario_new.png");
@@ -727,6 +777,15 @@ ToggleButton:hover{
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
 }
+
+/*Avatar Image Layout*/
+.avatarImageLayout{
+}
+
+.avatarImageLayoutPortrait .pane{
+    -fx-background-position: center;
+    -fx-background-size: 50% 50%;
+}
 /***************************************************************************************************/
 /***************************************************************************************************/
 /*********************************** Release 2 *****************************************************/
@@ -737,13 +796,14 @@ ToggleButton:hover{
 .backgroundGame {
     -fx-background-color: "TRANSPARENT";
     -fx-background-image: url('/de/uniks/stp24/icons/sea_seamless.png');
-    -fx-background-size: cover, auto;
+    -fx-background-repeat: repeat;
 }
 
 /*********************************** for map in game *****************************************************/
 
 .connection{
     -fx-stroke: #FFFFFF;
-    -fx-stroke-dash-array: 0.5 8;
-    -fx-stroke-width: 3;
+    -fx-stroke-dash-array: 0.5 12;
+    -fx-stroke-width: 5;
+    -fx-fill: transparent;
 }

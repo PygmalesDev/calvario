@@ -4,6 +4,7 @@ import de.uniks.stp24.model.Island;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Map;
 
 @Singleton
 public class TokenStorage {
@@ -15,6 +16,7 @@ public class TokenStorage {
     private String gameId;
     private String empireId;
     private boolean isSpectator;
+    private Map<String,Integer> avatarMap;
 
     @Inject
     public TokenStorage() {
@@ -39,6 +41,13 @@ public class TokenStorage {
 
     public String getAvatar() {return avatar;}
     public void setAvatar(String avatar) {this.avatar = avatar;}
+
+    public void setAvatarMap(Map<String,Integer> avatarMap) {
+        System.out.println("token storage map" + avatarMap);this.avatarMap = avatarMap;}
+
+    public Map<String,Integer> getAvatarMap() {
+        return this.avatarMap;
+    }
 
     public String getGameId() {return gameId;}
     public void setGameId(String gameId) {this.gameId = gameId;}

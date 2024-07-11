@@ -1,6 +1,8 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import javafx.fxml.FXML;
@@ -14,6 +16,7 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnInit;
+import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -22,7 +25,10 @@ import java.util.ResourceBundle;
 
 @Component(view = "IslandOverviewSites.fxml")
 public class OverviewSitesComponent extends AnchorPane {
-
+    @FXML
+    public Button islandNameButton;
+    @FXML
+    public Button jobsButton;
     @FXML
     public Button detailsButton;
     @FXML
@@ -34,8 +40,6 @@ public class OverviewSitesComponent extends AnchorPane {
     @FXML
     public Text island_name;
     @FXML
-    public Text island_inf;
-    @FXML
     public Text crewCapacity;
     @FXML
     public Text resCapacity;
@@ -46,6 +50,12 @@ public class OverviewSitesComponent extends AnchorPane {
     @FXML
     public Pane islandFlag;
 
+    @Inject
+    ImageCache imageCache;
+
+    @SubComponent
+    @Inject
+    public IslandOverviewJobsComponent jobsComponent;
     @SubComponent
     @Inject
     public SitesComponent sitesComponent;
@@ -65,6 +75,7 @@ public class OverviewSitesComponent extends AnchorPane {
     ResourceBundle gameResourceBundle;
 
     private InGameController inGameController;
+    private boolean isNameEditable;
 
     @Inject
     public OverviewSitesComponent() {
@@ -75,17 +86,6 @@ public class OverviewSitesComponent extends AnchorPane {
     public void init(){
         buildingsComponent.setInGameController(inGameController);
         sitesComponent.setInGameController(inGameController);
-    }
-
-    public void showDetails() {
-        detailsButton.setDisable(true);
-        sitesButton.setDisable(false);
-        buildingsButton.setDisable(false);
-
-        detailsComponent.setResLists();
-        detailsComponent.setSumProduction(islandAttributes.mergeProduction());
-
-        inGameService.showOnly(sitesContainer, detailsComponent);
     }
 
     public void showUpgrades() {
@@ -138,11 +138,24 @@ public class OverviewSitesComponent extends AnchorPane {
         }
     }
 
+    public void showDetails() {
+        detailsButton.setDisable(true);
+        sitesButton.setDisable(false);
+        buildingsButton.setDisable(false);
+        jobsButton.setDisable(false);
+
+        detailsComponent.setResLists();
+        detailsComponent.setSumProduction(islandAttributes.mergeProduction());
+
+        inGameService.showOnly(sitesContainer, detailsComponent);
+    }
+
     public void showBuildings() {
         buildingsComponent.setInGameController(inGameController);
         buildingsButton.setDisable(true);
         sitesButton.setDisable(false);
         detailsButton.setDisable(false);
+        jobsButton.setDisable(false);
         buildingsComponent.setGridPane();
         inGameService.showOnly(sitesContainer, buildingsComponent);
     }
@@ -151,19 +164,29 @@ public class OverviewSitesComponent extends AnchorPane {
         detailsButton.setDisable(false);
         sitesButton.setDisable(true);
         buildingsButton.setDisable(false);
+        jobsButton.setDisable(false);
         sitesComponent.setSitesBox(islandAttributes.getIsland());
         inGameService.showOnly(sitesContainer, sitesComponent);
     }
 
+    public void showJobs() {
+        jobsButton.setDisable(true);
+        detailsButton.setDisable(false);
+        sitesButton.setDisable(false);
+        buildingsButton.setDisable(false);
+        jobsComponent.insertIslandName();
+        inGameService.showOnly(sitesContainer, jobsComponent);
+    }
+
     public void setContainer() {
         sitesContainer.setVisible(false);
-        sitesContainer.getChildren().add(sitesComponent);
-        sitesContainer.getChildren().add(detailsComponent);
-        sitesContainer.getChildren().add(buildingsComponent);
+        sitesContainer.getChildren().addAll(sitesComponent,
+                detailsComponent, buildingsComponent, jobsComponent);
     }
 
     public void setIngameController(InGameController inGameController) {
         this.inGameController = inGameController;
+        this.sitesComponent.setInGameController(inGameController);
     }
 
     public void closeOverview() {
@@ -177,12 +200,10 @@ public class OverviewSitesComponent extends AnchorPane {
         }
         inGameController.selectedIsland.islandIsSelected = false;
 
-        if(!inGameController.islandsService.keyCodeFlag) {
+        if (!inGameController.islandsService.keyCodeFlag) {
             inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
             inGameController.selectedIsland.rudderImage.setVisible(false);
         }
-
-        inGameController.selectedIsland = null;
     }
 
     public void resetButtons(){
@@ -206,14 +227,26 @@ public class OverviewSitesComponent extends AnchorPane {
 
         updateResCapacity();
 
-        island_name.setText(islandAttributes.getIslandNameTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");
+        island_name.setText(islandAttributes.getIslandTypeTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");
         crewCapacity.setText(String.valueOf(islandAttributes.getIsland().crewCapacity()));
+    }
 
+    /*
         switch (islandAttributes.getIsland().upgradeLevel()) {
             case 1 -> island_inf.setText(islandAttributes.upgradeEffects.get(1));
             case 2 -> island_inf.setText(islandAttributes.upgradeEffects.get(2));
             case 3 -> island_inf.setText(islandAttributes.upgradeEffects.get(3));
             case 4 -> island_inf.setText(islandAttributes.upgradeEffects.get(4));
         }
+
+     */
+    @OnRender
+    public void setIslandNameProperties() {
+        this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
+    }
+
+    public void setIslandName() {
+        this.islandNameButton.getStyleClass().clear();
+        this.islandNameButton.getStyleClass().add("islandChangeNameActive");
     }
 }

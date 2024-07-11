@@ -5,6 +5,7 @@ import dagger.Provides;
 import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.menu.CreateGameService;
 import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -69,6 +70,17 @@ public class TestModule {
         return Mockito.mock(LobbyService.class);
 
     }
+
+    @Provides
+    @Singleton
+    JobsService jobsService() {
+        return Mockito.mock(JobsService.class);
+    };
+
+    @Provides
+    @Singleton
+    JobsApiService jobsApiService() {return Mockito.mock(JobsApiService.class);}
+
     @Provides
     GameSystemsApiService gameSystemsApiService(){ return Mockito.mock(GameSystemsApiService.class); }
 

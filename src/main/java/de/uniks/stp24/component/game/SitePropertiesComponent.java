@@ -1,12 +1,17 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.SiteDto;
+import de.uniks.stp24.model.Jobs;
+import de.uniks.stp24.model.Jobs.*;
 import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ExplanationService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.TokenStorage;
@@ -26,7 +31,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.FulibFxApp;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnInit;
+import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 
@@ -60,6 +67,8 @@ public class SitePropertiesComponent extends AnchorPane {
     Button closeWindowButton;
     @FXML
     Text siteName;
+    @FXML
+    AnchorPane jobPane;
 
     String siteType;
 
@@ -70,6 +79,10 @@ public class SitePropertiesComponent extends AnchorPane {
     @Inject
     Subscriber subscriber;
     @Inject
+    JobsService jobsService;
+
+
+    @Inject
     ResourcesService resourcesService;
     @Inject
     IslandsService islandsService;
@@ -79,8 +92,15 @@ public class SitePropertiesComponent extends AnchorPane {
     App app;
 
     @Inject
+    GameSystemsApiService gameSystemsApiService;
+
+    @Inject
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
+
+    @Inject
+    @SubComponent
+    public PropertiesJobProgressComponent siteJobProgress;
 
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
 
@@ -94,14 +114,21 @@ public class SitePropertiesComponent extends AnchorPane {
 
     public ObservableList<Map<String, Integer>> resources;
     public ObservableList<ResourceComponent> resourceComponents;
+    private ObservableList<Job> siteJobs;
 
     InGameController inGameController;
-
-
 
     @OnInit
     public void init(){
         sitesMap = sitesIconPathsMap;
+    }
+
+    @OnRender
+    public void render() {
+        this.jobPane.getChildren().add(this.siteJobProgress);
+        this.setPickOnBounds(false);
+        this.jobPane.setPickOnBounds(false);
+        this.jobPane.setVisible(false);
     }
 
     @FXML
@@ -126,22 +153,83 @@ public class SitePropertiesComponent extends AnchorPane {
         displayCostsOfSite();
         displayAmountOfSite();
 
+        if (this.siteJobs.stream().anyMatch(job -> job.district().equals(siteType)
+                && job.system().equals(this.tokenStorage.getIsland().id()))) {
+            Job job = this.siteJobs.stream().filter(started -> started.district().equals(siteType)
+                    && started.system().equals(this.tokenStorage.getIsland().id()))
+                    .findFirst().orElse(null);
+            this.showJobsPane();
+            if (Objects.nonNull(job)) {
+                this.siteJobProgress.setJobProgress(job);
+                if (this.jobsService.hasNoJobTypeProgress(job.type()) && this.siteJobs.get(0).equals(job))
+                    this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
+            }
+        } else {
+            this.hideJobsPane();
+            this.jobsService.stopOnJobTypeProgress("district");
+        }
+
+
     }
 
     public void onClose(){
         setVisible(false);
     }
 
-    //Takes siteType, calls buildSite in resourcesService and updates relevant information
     public void buildSite(){
-        Island island = tokenStorage.getIsland();
-        subscriber.subscribe(resourcesService.buildSite(tokenStorage.getGameId(), island, siteType), result -> {
-            tokenStorage.setIsland(islandsService.updateIsland(result));
-            islandAttributeStorage.setIsland(islandsService.updateIsland(result));
-            inGameController.islandsService.updateIslandBuildings(islandAttributeStorage, inGameController, islandAttributeStorage.getIsland().buildings());
-            inGameController.updateResCapacity();
+        this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createDistrictJob(
+                this.tokenStorage.getIsland().id(), this.siteType)), job ->  {
+            this.showJobsPane();
+            this.siteJobProgress.setJobProgress(job);
+
+            if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
+                    (this.siteJobs.isEmpty() || this.siteJobs.getFirst().equals(job)))
+                this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
+
+            this.jobsService.onJobDeletion(job._id(), () -> {
+                if (job.district().equals(this.siteType)) this.hideJobsPane();
+            });
+            this.jobsService.onJobCompletion(job._id(), () -> {
+                this.updateIslandSites();
+                if (job.district().equals(this.siteType)) this.hideJobsPane();
+            });
+        });
+    }
+
+    @OnInit
+    public void setSitesJobUpdates() {
+        this.jobsService.onJobsLoadingFinished("district", job -> {
+            this.jobsService.onJobDeletion(job._id(), () -> {
+                if (job.district().equals(this.siteType)) this.hideJobsPane();
+            });
+            this.jobsService.onJobCompletion(job._id(), () -> {
+                this.updateIslandSites();
+                this.hideJobsPane();
+            });
+        });
+
+        this.jobsService.onJobsLoadingFinished(() ->
+                this.siteJobs = this.jobsService.getJobObservableListOfType("district"));
+    }
+
+
+    public void showJobsPane() {
+        this.jobPane.setVisible(true);
+        this.siteCostsListView.setVisible(false);
+    }
+
+    public void hideJobsPane() {
+        this.jobPane.setVisible(false);
+        this.siteCostsListView.setVisible(true);
+    }
+
+    public void updateIslandSites() {
+        this.subscriber.subscribe(this.gameSystemsApiService.getSystem(this.tokenStorage.getGameId(),
+                this.tokenStorage.getIsland().id()), result -> {
+            this.tokenStorage.setIsland(this.islandsService.updateIsland(result));
+            this.islandAttributeStorage.setIsland(this.islandsService.updateIsland(result));
+
             displayAmountOfSite();
-            inGameController.updateSiteCapacities();
         });
 
 
@@ -151,17 +239,15 @@ public class SitePropertiesComponent extends AnchorPane {
     //and calls method in DeleteStructureComponent
     public void destroySite(){
         inGameController.handleDeleteStructure(siteType);
-
     }
 
     //Gets resources of site and displays them in listviews
     public void displayCostsOfSite(){
         siteCostsListView.setSelectionModel(null);
-        resourceListGeneration(getCertainSite());
-        inGameController.updateSiteCapacities();
-        siteConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "districts", siteType, "upkeep"));
-        siteCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "districts", siteType, "cost"));
-        siteProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "distrits", siteType, "production"));
+        //subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
+        siteConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
+        siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
+        siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
     }
 
     //Uses a GridPane to display a graphic view of how many sites of each type you have

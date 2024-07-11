@@ -1,5 +1,6 @@
 package de.uniks.stp24.rest;
 
+import de.uniks.stp24.dto.AvatarDto;
 import de.uniks.stp24.model.User;
 import io.reactivex.rxjava3.core.Observable;
 import de.uniks.stp24.dto.CreateUserDto;
@@ -19,5 +20,8 @@ public interface UserApiService {
 
     @PATCH("users/{id}")
     Observable<User> edit(@Path("id") String id, @Body UpdateUserDto dto);
+
+    @PATCH("users/{id}")
+    Observable<User> updateAvatar(@Path("id") String id, @Body AvatarDto dto);
 
 }

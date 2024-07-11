@@ -29,7 +29,9 @@ import org.mockito.stubbing.Answer;
 import org.testfx.matcher.base.WindowMatchers;
 import org.testfx.util.WaitForAsyncUtils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -65,15 +67,21 @@ public class AppTest extends ControllerTest {
 
     @BeforeEach
     public void setUp() {
+        Map<String,Integer> _public = new HashMap<>();
+        _public.put("backgroundIndex", 1);
+        _public.put("portraitIndex", 1);
+        _public.put("frameIndex", 1);
+
+
         SignUpResultDto signUpResult = new SignUpResultDto(null, null, "1", "JustATest", null);
-        LoginResult loginResult = new LoginResult("1", "JustATest", null, "a", "r");
+        LoginResult loginResult = new LoginResult("1", "JustATest", null,_public, "a", "r");
         LoginDto loginDto = new LoginDto("JustATest", "testpassword");
         RefreshDto refreshDto = new RefreshDto("r");
         Game game1 = new Game("2024-05-28T12:55:25.688Z", null, "1", "Was geht", "1", 2,false, 0,0, null);
         Game game2 = new Game("2024-05-28T13:55:25.688Z", null, "2", "rapapa", "testID", 2,false, 0,0, null);
         Game game3 = new Game("2024-05-28T14:55:25.688Z", null, "123", "AwesomeLobby123", "1", 2,false, 0, 0, null);
 
-        User user = new User("JustATest", "1", null, null, null);
+        User user = new User("JustATest", "1", null, null, null,_public);
 
         GameSettings gameSettings = new GameSettings(100);
         CreateGameResultDto createGameResultDto = new CreateGameResultDto("2024-05-28T14:55:25.688Z",null,game3._id(), "AwesomeLobby123","1", false,1, 1, gameSettings);

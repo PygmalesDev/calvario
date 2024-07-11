@@ -2,14 +2,9 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.ResourceDto;
-import de.uniks.stp24.dto.UpdateEmpireDto;
 import de.uniks.stp24.dto.UpdateEmpireMarketDto;
-import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.EmpireExtendedDto;
-import de.uniks.stp24.model.Resource;
-import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
@@ -28,7 +23,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnInit;
-import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.controller.Subscriber;
 
@@ -63,6 +57,8 @@ public class MarketComponent extends StackPane {
     Button decrementNumberOfGoods;
     @FXML
     ImageView selectedIconImage;
+    @FXML
+    Button createSeasonalTrades;
     @FXML
     public ListView<Map.Entry<String, Integer>> resourcesListView;
 
@@ -108,12 +104,12 @@ public class MarketComponent extends StackPane {
 
     private ResourceDto resourceDto;
 
-    Provider<MarketResourceComponent> marketResourceComponentProvider = () -> new MarketResourceComponent(true, true, true, gameResourceBundle);
+//    Provider<MarketSeasonComponent> marketResourceComponentProvider = () -> new MarketSeasonComponent(true, true, true, gameResourceBundle);
 
     // From Server
-    Map<String, Integer> variables = new HashMap<>();
+    Map<String, Double> variables = new HashMap<>();
     Map<String, Integer> resourceCountMap = new HashMap<>();
-    Map<String, Integer> resourcePriceMap = new HashMap<>();
+    Map<String, Double> resourcePriceMap = new HashMap<>();
     Map<String, Integer> resourceCountMapCopy = new HashMap<>();
 
     //From Storage
@@ -185,6 +181,7 @@ public class MarketComponent extends StackPane {
                     }
                     resourceCountMap = eventResources;
                     refreshListview();
+                    // TODO lastUpdate
                 }
         );
     }
@@ -240,8 +237,8 @@ public class MarketComponent extends StackPane {
 
     public void buyingAndSellingPrice(String resource) {
         //TODO MarketFee correctly
-        this.sellingPrice = (resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoodsLabel.getText())) * (1 - 0.3);
-        this.buyingPrice = (resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoodsLabel.getText())) * (1 + 0.3);
+        this.sellingPrice = (resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoodsLabel.getText())) * (1 - this.marketFee);
+        this.buyingPrice = (resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoodsLabel.getText())) * (1 + this.marketFee);
 
         buyingPriceLabel.setText(String.valueOf(buyingPrice));
         sellingPriceLabel.setText(String.valueOf(sellingPrice));
@@ -342,4 +339,8 @@ public class MarketComponent extends StackPane {
         }
     }
 
+    /*---------------------------------------SeasonalTrades------------------------------------------------------------*/
+    public void createSeasonalTrades(){
+
+    }
 }

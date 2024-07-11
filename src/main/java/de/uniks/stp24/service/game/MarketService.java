@@ -22,7 +22,7 @@ public class MarketService {
     public MarketService() {
     }
 
-    public Observable<Map<String, Integer>> getVariables(){
+    public Observable<Map<String,Double>> getVariables(){
         return this.presetsApiService.getVariables();
     }
 

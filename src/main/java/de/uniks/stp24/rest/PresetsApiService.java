@@ -24,7 +24,7 @@ public interface PresetsApiService {
     Observable<ArrayList<DistrictPresets>> getDistrictPresets();
 
     @GET("presets/variables")
-    Observable<Map<String, Integer>> getVariables();
+    Observable<Map<String, Double>> getVariables();
 
     @GET("presets/resources")
     Observable<ResourceDto> getResources();

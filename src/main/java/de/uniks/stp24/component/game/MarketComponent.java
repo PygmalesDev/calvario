@@ -1,10 +1,13 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.component.menu.GangComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.ResourceDto;
 import de.uniks.stp24.dto.UpdateEmpireMarketDto;
 import de.uniks.stp24.model.EmpireExtendedDto;
+import de.uniks.stp24.model.GangElement;
+import de.uniks.stp24.model.SeasonComponent;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
@@ -12,18 +15,19 @@ import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.MarketService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnInit;
+import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
+import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -46,7 +50,7 @@ public class MarketComponent extends StackPane {
     @FXML
     Label sellingPriceLabel;
     @FXML
-    Button everySeasonButton;
+    ToggleButton everySeasonButton;
     @FXML
     Button sellButton;
     @FXML
@@ -61,6 +65,8 @@ public class MarketComponent extends StackPane {
     Button createSeasonalTrades;
     @FXML
     public ListView<Map.Entry<String, Integer>> resourcesListView;
+    @FXML
+    ListView<SeasonComponent> seasonalTradesListView;
 
     @Inject
     App app;
@@ -104,7 +110,9 @@ public class MarketComponent extends StackPane {
 
     private ResourceDto resourceDto;
 
-//    Provider<MarketSeasonComponent> marketResourceComponentProvider = () -> new MarketSeasonComponent(true, true, true, gameResourceBundle);
+    @Inject
+    public Provider<MarketSeasonComponent> marketSeasonComponentProvider;
+    private final ObservableList<SeasonComponent> seasonComponents = FXCollections.observableArrayList();
 
     // From Server
     Map<String, Double> variables = new HashMap<>();
@@ -247,28 +255,35 @@ public class MarketComponent extends StackPane {
 
 
     public void buyItem() {
-        noPurchase = true;
-        resourceCountMapCopy = new HashMap<>(resourceCountMap);
         resourceAmount = Integer.parseInt(numberOfGoodsLabel.getText());
+        if (everySeasonButton.isSelected()) {
+            addSeasonalTransaction("buy", buyingPrice);
+        } else {
+            noPurchase = true;
+            resourceCountMapCopy = new HashMap<>(resourceCountMap);
 
-        userCredits -= buyingPrice;
-        userCreditsLabel.setText(String.valueOf(userCredits));
-        resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
-        updateResources();
-        refreshListview();
-
+            userCredits -= buyingPrice;
+            userCreditsLabel.setText(String.valueOf(userCredits));
+            resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
+            updateResources();
+            refreshListview();
+        }
     }
 
     public void sellItem() {
-        noPurchase = false;
-        resourceCountMapCopy = new HashMap<>(resourceCountMap);
         resourceAmount = Integer.parseInt(numberOfGoodsLabel.getText()) * -1;
+        if (everySeasonButton.isSelected()) {
+            addSeasonalTransaction("sell", sellingPrice);
+        } else {
+            noPurchase = false;
+            resourceCountMapCopy = new HashMap<>(resourceCountMap);
 
-        userCredits += sellingPrice;
-        userCreditsLabel.setText(String.valueOf(userCredits));
-        resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
-        updateResources();
-        refreshListview();
+            userCredits += sellingPrice;
+            userCreditsLabel.setText(String.valueOf(userCredits));
+            resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
+            updateResources();
+            refreshListview();
+        }
     }
 
     public void incrementAmount() {
@@ -294,6 +309,7 @@ public class MarketComponent extends StackPane {
     }
 
     //--------------------------------------------listViewOfResources-------------------------------------------------//
+
     public void listMarketResources() {
         if (this.resourceCountMap.isEmpty()) {
             System.out.println("resourceMap is empty");
@@ -304,9 +320,11 @@ public class MarketComponent extends StackPane {
         resourcesListView.getItems().addAll(this.resourceCountMap.entrySet());
         resourcesListView.setCellFactory(list -> new ResourceCell());
     }
+
     public class ResourceCell extends ListCell<Map.Entry<String, Integer>> {
 
         private VBox vBox = new VBox();
+
         private ImageView imageView = new ImageView();
         private Text text = new Text();
         ImageCache imageCache = new ImageCache();
@@ -337,10 +355,22 @@ public class MarketComponent extends StackPane {
                 buyingAndSellingPrice(item.getKey());
             });
         }
+
+    }
+    /*---------------------------------------SeasonalTrades------------------------------------------------------------*/
+
+    @OnRender
+    public void render() {
+        this.seasonalTradesListView.setItems(this.seasonComponents);
+        this.seasonalTradesListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.marketSeasonComponentProvider));
     }
 
-    /*---------------------------------------SeasonalTrades------------------------------------------------------------*/
-    public void createSeasonalTrades(){
+    public void createSeasonalTrades() {
+        everySeasonButton.setSelected(everySeasonButton.isSelected());
+    }
 
+    private void addSeasonalTransaction(String transactionType, double price) {
+        SeasonComponent seasonComponent = new SeasonComponent(transactionType, this.selectedItem, resourceAmount, price);
+        seasonComponents.add(seasonComponent);
     }
 }

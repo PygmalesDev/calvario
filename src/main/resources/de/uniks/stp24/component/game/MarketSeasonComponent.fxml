@@ -6,10 +6,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="180.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="180.0" type="HBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.MarketSeasonComponent">
    <children>
-      <Text fx:id="transActionTypeTextt" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="23.13671875" />
+      <Text fx:id="transActionTypeText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="23.13671875" />
       <ImageView fx:id="resourceTypeImageView" fitHeight="25.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" />
       <Text fx:id="resourceAmountText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
       <AnchorPane fx:id="moneyIconAnchorPane" prefHeight="7.0" prefWidth="34.0" />
@@ -17,4 +16,4 @@
       <Button fx:id="playControlsButton" mnemonicParsing="false" prefHeight="11.0" prefWidth="23.0" />
       <Button fx:id="cancelTradesButton" mnemonicParsing="false" prefHeight="31.0" prefWidth="22.0" />
    </children>
-</HBox>
+</fx:root>

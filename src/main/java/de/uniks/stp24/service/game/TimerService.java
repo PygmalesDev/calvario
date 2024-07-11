@@ -15,7 +15,6 @@ import java.beans.PropertyChangeSupport;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Flow;
 
 @Singleton
 public class TimerService {
@@ -77,6 +76,11 @@ public class TimerService {
     }
 
     public void start() {
+
+        if (timer == null) {
+            timer = new Timer();
+        }
+
         subscriber.subscribe(gamesApiService.getGame(tokenStorage.getGameId()),
                 gameResult -> game = gameResult,
                 error -> System.out.println("Error: " + error.getMessage())
@@ -99,7 +103,7 @@ public class TimerService {
                 } else if (Objects.equals(game.owner(), tokenStorage.getUserId())) {
                     subscriber.subscribe(gamesApiService.updateSeason(tokenStorage.getGameId(), new UpdateSpeedDto(speed), true),
                             gameResult -> {
-                                setSeason(gameResult.period());
+                                setSeason(season++);
                                 reset();
                             },
                             error -> System.out.println("Error: " + error.getMessage())
@@ -116,6 +120,7 @@ public class TimerService {
         if (timer != null) {
             timer.cancel();
             timer.purge();
+            timer = null;
         }
     }
 

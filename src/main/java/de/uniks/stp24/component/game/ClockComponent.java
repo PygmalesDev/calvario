@@ -68,7 +68,7 @@ public class ClockComponent extends AnchorPane {
     @Inject
     public EventService eventService;
     @Inject
-    public TokenStorage tokenStorage;
+    TokenStorage tokenStorage;
     @Inject
     public TimerService timerService;
     @Inject
@@ -174,6 +174,7 @@ public class ClockComponent extends AnchorPane {
 
         remainingSeasonsLabel.setVisible(false);
 
+        timerService.stop();
         timerService.reset();
 
     }
@@ -203,12 +204,12 @@ public class ClockComponent extends AnchorPane {
         subscriber.subscribe(this.eventListener
                         .listen("games." + gameId + ".ticked", Game.class),
                 event -> {
-                        if (!(lastUpdateSeason == event.data().period())) {
-                            Game game = event.data();
-                            timerService.setSeason(game.period());
-                            timerService.reset();
-                            lastUpdateSeason = event.data().period();
-                        }
+                    if (!(lastUpdateSeason == event.data().period())) {
+                        Game game = event.data();
+                        timerService.setSeason(timerService.getSeason() + 1);
+                        timerService.reset();
+                        lastUpdateSeason = game.period();
+                    }
                 },
                 error -> System.out.println("Error on Season: " + error.getMessage())
         );
@@ -218,18 +219,17 @@ public class ClockComponent extends AnchorPane {
         subscriber.subscribe(this.eventListener
                         .listen("games." + gameId + ".updated", Game.class),
                 event -> {
-                        if (!lastUpdateSpeed.equals(event.data().updatedAt())) {
-                            Game game = event.data();
-                            timerService.setSpeedLocal(game.speed());
-                            lastUpdateSpeed = event.data().updatedAt();
-                        }
+                    if (!lastUpdateSpeed.equals(event.data().updatedAt())) {
+                        Game game = event.data();
+                        timerService.setSpeedLocal(game.speed());
+                        lastUpdateSpeed = event.data().updatedAt();
+                    }
                 },
                 error -> System.out.println("Error on speed: " + error.getMessage())
         );
     }
 
 ///////////////--------------------------------------------onAction------------------------------------/////////////
-
 
     public void showFlags() {
         islandsService.setFlag(flagToggle.isSelected());

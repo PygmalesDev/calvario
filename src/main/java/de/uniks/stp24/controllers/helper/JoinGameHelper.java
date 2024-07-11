@@ -6,6 +6,7 @@ import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.menu.BrowseGameService;
 import de.uniks.stp24.service.menu.LobbyService;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -31,6 +32,9 @@ public class JoinGameHelper extends BasicController {
     IslandsService islandsService;
 
     @Inject
+    JobsService jobsService;
+
+    @Inject
     public JoinGameHelper() {
     }
 
@@ -52,12 +56,14 @@ public class JoinGameHelper extends BasicController {
             islandsService.retrieveIslands(gameId);
         }, error -> {
         });
+
     }
 
     private void startGame(String gameId, String empireId, boolean isSpectator) {
         this.tokenStorage.setGameId(gameId);
         this.tokenStorage.setEmpireId(empireId);
         this.tokenStorage.setIsSpectator(isSpectator);
+
     }
 
     @OnDestroy

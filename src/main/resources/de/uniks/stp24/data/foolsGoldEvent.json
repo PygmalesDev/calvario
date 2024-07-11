@@ -7,19 +7,28 @@
       "variable": "credits",
       "base": 0,
       "multiplier": 1,
-      "bonus": -20
+      "bonus": -20,
+      "condType": null,
+      "condID": null,
+      "effected": null
     },
     {
       "variable": "alloys",
       "base": 0,
       "multiplier": 1,
-      "bonus": -20
+      "bonus": -20,
+      "condType": null,
+      "condID": null,
+      "effected": null
     },
     {
-        "variable": "fuel",
-        "base": 0,
-        "multiplier": 1,
-        "bonus": 30
+      "variable": "fuel",
+      "base": 0,
+      "multiplier": 1,
+      "bonus": 30,
+      "condType": null,
+      "condID": null,
+      "effected": null
     }
   ]
 }

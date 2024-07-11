@@ -106,9 +106,26 @@ public class EventComponent extends AnchorPane {
         PropertyChangeListener callHandleEventChanged = this::handleEventChanged;
         eventService.listeners().addPropertyChangeListener(EventService.PROPERTY_EVENT, callHandleEventChanged);
 
+        PropertyChangeListener callHandleShowEventChanged = this::handleShowEventChanged;
+        timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_SHOWEVENT, callHandleShowEventChanged);
+
         createUpdateSeasonsListener();
     }
 
+    @OnRender
+    public void render() {
+
+        String css = Objects.requireNonNull(this.getClass().getResource("/de/uniks/stp24/style/event.css")).toExternalForm();
+        this.getStylesheets().add(css);
+
+        gameId = tokenStorage.getGameId();
+    }
+
+    @OnDestroy
+    public void destroy() {
+        eventService.listeners().removePropertyChangeListener(EventService.PROPERTY_EVENT, this::handleEventChanged);
+        timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_SHOWEVENT, this::handleShowEventChanged);
+    }
 
     public void createUpdateSeasonsListener() {
         subscriber.subscribe(this.eventListener
@@ -136,7 +153,8 @@ public class EventComponent extends AnchorPane {
                         lastUpdate = event.data().updatedAt();
                     }
                 },
-                error -> System.out.println("Error bei Season: " + error.getMessage()));
+                error -> System.out.println("Error bei Season: " + error.getMessage())
+        );
     }
 
     private void handleEventChanged(PropertyChangeEvent propertyChangeEvent) {
@@ -145,7 +163,6 @@ public class EventComponent extends AnchorPane {
             show();
         }
     }
-
 
     @OnRender
     public void render() {
@@ -196,6 +213,13 @@ public class EventComponent extends AnchorPane {
                     }
                 },
                 error -> System.out.println("Error while loading event: " + error));
+
+    private void handleShowEventChanged(PropertyChangeEvent propertyChangeEvent) {
+        if (timerService.getShowEvent()) {
+            show();
+        } else {
+            close();
+        }
     }
 
     // changes String to camelCase
@@ -229,14 +253,10 @@ public class EventComponent extends AnchorPane {
 
     }
 
-    @OnDestroy
-    public void destroy() {
-
-    }
-
     public void close() {
         container.setVisible(false);
         shadow.setVisible(false);
+        timerService.setShowEvent(false);
     }
 
     public void show() {

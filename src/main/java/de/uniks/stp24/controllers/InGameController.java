@@ -66,9 +66,6 @@ public class InGameController extends BasicController {
     @FXML
     public StackPane contextMenuContainer;
     @FXML
-    public HBox storageButtonsBox;
-
-    @FXML
     public Group group;
     @FXML
     public StackPane overviewContainer;
@@ -329,8 +326,7 @@ public class InGameController extends BasicController {
         overviewSitesComponent.setContainer();
         overviewContainer.getChildren().add(overviewSitesComponent);
         overviewContainer.getChildren().add(overviewUpgradeComponent);
-
-        contextMenuContainer.setMouseTransparent(true);
+        
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,

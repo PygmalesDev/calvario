@@ -280,6 +280,8 @@ public class InGameController extends BasicController {
         deleteStructureWarningContainer.setMouseTransparent(true);
         helpWindowContainer.setMouseTransparent(true);
         helpComponent.setVisible(false);
+        technologiesContainer.setMouseTransparent(true);
+
 
         pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
@@ -299,11 +301,14 @@ public class InGameController extends BasicController {
         overviewContainer.getChildren().add(overviewSitesComponent);
         overviewContainer.getChildren().add(overviewUpgradeComponent);
 
+        technologiesComponent.setContainer(contextMenuContainer);
+
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,
                 jobsOverviewComponent,
                 empireOverviewComponent,
+                technologiesComponent
         );
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
 
@@ -314,9 +319,7 @@ public class InGameController extends BasicController {
         explanationContainer.getChildren().add(variableExplanationComponent);
         explanationService.setInGameController(this);
         
-        technologiesComponent.setContainer(contextMenuContainer);
-        technologiesContainer.setVisible(false);
-        technologiesContainer.getChildren().add(technologiesComponent);
+
 
 
   		this.jobsService.loadEmpireJobs();
@@ -410,7 +413,9 @@ public class InGameController extends BasicController {
             this.contextMenuButtons.getChildren().addAll(
                     new ContextMenuButton("storageOverview", this.storageOverviewComponent),
                     new ContextMenuButton("empireOverview", this.empireOverviewComponent),
-                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent)
+                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent),
+                    new ContextMenuButton("technologies", this.technologiesComponent)
+
             );
     }
     private void showTechnologies() {

@@ -5,6 +5,7 @@ import de.uniks.stp24.component.game.CustomComponentListCell;
 import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.component.game.VariableExplanationComponent;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.ExplainedVariableDTO;
 import de.uniks.stp24.model.Resource;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Tooltip;
@@ -18,6 +19,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ExplanationService {
     @Inject
     public App app;
+    @Inject
+    public VariableService variableService;
 
     private InGameController inGameController;
 
@@ -29,7 +32,7 @@ public class ExplanationService {
     /*
     Methods below is made for explanation of resources.
      */
-    public CustomComponentListCell<Resource, ResourceComponent> addMouseHoverListener(CustomComponentListCell<Resource, ResourceComponent> cell, String component, String listType) {
+    public CustomComponentListCell<Resource, ResourceComponent> addMouseHoverListener(CustomComponentListCell<Resource, ResourceComponent> cell, String listTyp, String indicator, String resourceCategory) {
         VariableExplanationComponent explanationComponent = new VariableExplanationComponent();
 
         Tooltip tooltip = new Tooltip();
@@ -56,6 +59,7 @@ public class ExplanationService {
 
 
             if (isMouseInsideCell && !entered.get()) {
+                System.out.println(getResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID()));
                 tooltip.show(app.stage(), mouseX, mouseY);
                 entered.set(true);
             } else if (!isMouseInsideCell) {
@@ -68,5 +72,11 @@ public class ExplanationService {
 
     public void setInGameController(InGameController inGameController) {
         this.inGameController = inGameController;
+    }
+
+    private ExplainedVariableDTO getResExplanation(String listType, String indicator, String ResCategory, String id){
+        String variable = listType + "." + indicator + "." + ResCategory + "." + id;
+        System.out.println(variable);
+        return variableService.data.get(variable);
     }
 }

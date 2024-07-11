@@ -132,14 +132,14 @@ public class OverviewUpgradeComponent extends AnchorPane {
     }
 
     public void setCosts(){
-        upgradeCostList.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview", "upgrade.costs"));
+        upgradeCostList.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "systems", islandAttributes.getIsland().upgrade(), "costs"));
         Map<String, Integer> resourceMapCost = islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel());
         ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(resourceMapCost, upgradeCostList.getItems(), null);
         upgradeCostList.setItems(resourceListCost);
     }
 
     public void setConsumes(){
-        upgradeUpkeepList.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview", "upgrade.upkeep"));
+        upgradeUpkeepList.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "systems", islandAttributes.getIsland().upgrade(), "upkeep"));
         Map<String, Integer> resourceMapUpkeep = islandAttributes.getUpkeep(islandAttributes.getIsland().upgradeLevel());
         ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, upgradeUpkeepList.getItems(), null);
         upgradeUpkeepList.setItems(resourceListUpkeep);

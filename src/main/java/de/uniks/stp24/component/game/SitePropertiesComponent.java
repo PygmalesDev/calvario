@@ -160,9 +160,9 @@ public class SitePropertiesComponent extends AnchorPane {
         siteCostsListView.setSelectionModel(null);
         resourceListGeneration(getCertainSite());
         inGameController.updateSiteCapacities();
-        siteConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview", "site.consumption"));
-        siteCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview", "site.costs"));
-        siteProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "islandOverview", "site.production"));
+        siteConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "districts", siteType, "upkeep"));
+        siteCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "districts", siteType, "costs"));
+        siteProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "distrits", siteType, "production"));
     }
 
     //Uses a GridPane to display a graphic view of how many sites of each type you have

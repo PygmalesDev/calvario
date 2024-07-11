@@ -116,11 +116,11 @@ public class IslandAttributeStorage {
         return empireDto.technologies();
     }
 
-    public void setBuildingPresets() {
+    public void setBuildingAttributes() {
         this.buildingsAttributes = variableDependencyService.createVariableDependencyBuildings();
     }
 
-    public void setDistrictPresets() {
+    public void setDistrictAttributes() {
         this.districts = variableDependencyService.createVariableDependencyDistricts();
     }
 

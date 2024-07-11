@@ -237,13 +237,13 @@ public class InGameController extends BasicController {
     */
     public void updateVariableDependencies() {
         variableService.loadVariablesDataStructure();
-        loadPresets();
+        loadGameAttributes();
     }
 
-    public void loadPresets() {
+    public void loadGameAttributes() {
         islandAttributes.setSystemUpgradeAttributes();
-        islandAttributes.setBuildingPresets();
-        islandAttributes.setDistrictPresets();
+        islandAttributes.setBuildingAttributes();
+        islandAttributes.setDistrictAttributes();
     }
 
     private void handleShowSettings(@NotNull PropertyChangeEvent propertyChangeEvent) {
@@ -567,16 +567,5 @@ public class InGameController extends BasicController {
 
     public void updateResCapacity() {
         overviewSitesComponent.updateResCapacity();
-    }
-
-    /*
-    Methods below showing explanation overview if mouse hovers above a chosen element.
-     */
-    public void showExplanation(Tooltip tooltip, String variable) {
-        //tooltip.setGraphic(variableExplanationComponent);
-    }
-
-    public void unShowExplanation(Tooltip tooltip) {
-        tooltip.hide();
     }
 }

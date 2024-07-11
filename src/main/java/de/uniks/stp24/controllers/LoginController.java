@@ -58,7 +58,7 @@ public class LoginController extends BasicController {
     @Inject
     Subscriber subscriber;
     @Inject
-    LoginService loginService;
+    public LoginService loginService;
     @SubComponent
     @Inject
     BubbleComponent bubbleComponent;

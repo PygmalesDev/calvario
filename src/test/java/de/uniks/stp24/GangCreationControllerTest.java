@@ -110,6 +110,7 @@
          this.gangCreationController.gangDeletionComponent = this.gangDeletionComponent;
          gangs.add(gang);
          doReturn(gangs).when(saveLoadService).loadGangs();
+         doReturn(null).when(this.imageCache).get(any());
          aTrait = new Trait("__dev__", new EffectDto[]{new EffectDto("buildings.exchange.build_time", 0, 0, 5)}, 5, null);
          String[] conflictsOfB = {"prepared"};
          bTrait = new Trait("unprepared", new EffectDto[]{new EffectDto("buildings.exchange.cost.minerals", 0, 9, 0)}, 1, conflictsOfB);

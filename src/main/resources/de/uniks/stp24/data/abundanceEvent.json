@@ -7,13 +7,19 @@
       "variable": "minerals",
       "base": 0,
       "multiplier": 2,
-      "bonus": 0
+      "bonus": 0,
+      "condType": null,
+      "condID": null,
+      "effected": null
     },
     {
       "variable": "alloys",
       "base": 0,
       "multiplier": 1,
-      "bonus": 15
+      "bonus": 15,
+      "condType": "site",
+      "condID": "mining",
+      "effected": "bonus"
     }
   ]
 }

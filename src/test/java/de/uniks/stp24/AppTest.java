@@ -72,6 +72,7 @@ public class AppTest extends ControllerTest {
         _public.put("portraitIndex", 1);
         _public.put("frameIndex", 1);
 
+
         SignUpResultDto signUpResult = new SignUpResultDto(null, null, "1", "JustATest", null);
         LoginResult loginResult = new LoginResult("1", "JustATest", null,_public, "a", "r");
         LoginDto loginDto = new LoginDto("JustATest", "testpassword");

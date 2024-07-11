@@ -95,4 +95,8 @@ public class HttpModule {
         return retrofit.create(PresetsApiService.class);
     }
 
+    @Provides
+    @Singleton
+    JobsApiService jobsApiService(Retrofit retrofit) {return retrofit.create(JobsApiService.class);}
+
 }

@@ -37,7 +37,7 @@ public class IslandClaimingComponent extends Pane {
     @FXML
     ImageView capacityImage;
     @FXML
-    ImageView colonizerImage;
+    ImageView colonizersImage;
     @FXML
     ImageView timerImage;
     @FXML
@@ -64,7 +64,7 @@ public class IslandClaimingComponent extends Pane {
     public void render() {
         this.timerImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/islands/capacity_icon.png"));
         this.capacityImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/islands/capacity_icon.png"));
-        this.colonizerImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/islands/crewmates_icon.png"));
+        this.colonizersImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/islands/crewmates_icon.png"));
     }
 
     public void setIslandInformation(Island island) {

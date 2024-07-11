@@ -17,7 +17,7 @@ Welcome to **Calvario**, a strategic game inspired by Stellaris, but with a twis
 Initial release with exclusive features:
 - Ability to **save and load** individual **empires** offline.
 - **Multi-Language Support:** English and German.
-- 
+   
 ### Version 2.0.0 (21.06.2024)
 
 - first ingame experience with a **generated map showing all islands** (systems)

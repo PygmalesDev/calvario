@@ -307,7 +307,8 @@ public class ClockComponent extends AnchorPane {
             remainingSeasonsLabel.setVisible(true);
 
             String eventType = eventService.getEvent().effects()[0].eventType();
-            randomEventImage.setImage(imageCache.get("assets/events/" + eventType + "Event.png"));
+            String medallionPath = "/de/uniks/stp24/assets/events/" + eventType + "Event.png";
+            randomEventButton.setStyle("-fx-background-image: url('[MEDALLION]')".replace("[MEDALLION]", medallionPath));
         }
     }
 

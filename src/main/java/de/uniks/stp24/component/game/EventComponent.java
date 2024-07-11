@@ -112,15 +112,6 @@ public class EventComponent extends AnchorPane {
         createUpdateSeasonsListener();
     }
 
-    @OnRender
-    public void render() {
-
-        String css = Objects.requireNonNull(this.getClass().getResource("/de/uniks/stp24/style/event.css")).toExternalForm();
-        this.getStylesheets().add(css);
-
-        gameId = tokenStorage.getGameId();
-    }
-
     @OnDestroy
     public void destroy() {
         eventService.listeners().removePropertyChangeListener(EventService.PROPERTY_EVENT, this::handleEventChanged);
@@ -213,6 +204,7 @@ public class EventComponent extends AnchorPane {
                     }
                 },
                 error -> System.out.println("Error while loading event: " + error));
+    }
 
     private void handleShowEventChanged(PropertyChangeEvent propertyChangeEvent) {
         if (timerService.getShowEvent()) {

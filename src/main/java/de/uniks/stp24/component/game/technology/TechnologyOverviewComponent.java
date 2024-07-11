@@ -82,7 +82,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
     }
 
     public void close() {
-        parent.setVisible(false);
+        this.setVisible(false);
     }
 
     public void engineering() {
@@ -135,7 +135,6 @@ public class TechnologyOverviewComponent extends AnchorPane {
      */
     public void show(@NotNull TechnologyCategoryComponent technologieCategory) {
         setCategoryInfos(technologieCategory);
-
         parent.getChildren().getFirst().setVisible(true);
         parent.getChildren().getLast().setVisible(false);
 

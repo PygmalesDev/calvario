@@ -65,7 +65,6 @@ public class VariableService {
                         data.put(explainedVariableDTO.variable(), explainedVariableDTO);
                     }
                     createAllTrees();
-                    buildingsTree.printPaths();
                     inGameController.loadGameAttributes();
                 });
     }

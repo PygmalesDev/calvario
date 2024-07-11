@@ -161,7 +161,7 @@ public class SitePropertiesComponent extends AnchorPane {
         resourceListGeneration(getCertainSite());
         inGameController.updateSiteCapacities();
         siteConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "districts", siteType, "upkeep"));
-        siteCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "districts", siteType, "costs"));
+        siteCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "districts", siteType, "cost"));
         siteProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "distrits", siteType, "production"));
     }
 

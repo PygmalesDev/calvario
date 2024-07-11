@@ -122,6 +122,10 @@
     -fx-max-height: 0;
 }
 
+.explanation-window -list-cell {
+    -fx-background-color: transparent;
+}
+
 .resourceList .scroll-bar{
     -fx-background-color: transparent;
 }

@@ -180,7 +180,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
         setCertainBuilding();
         resourceListGeneration(certainBuilding);
 
-        buildingCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "buildings", buildingType, "costs"));
+        buildingCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "buildings", buildingType, "cost"));
         buildingProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "buildings", buildingType, "production"));
         buildingConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "buildings", buildingType, "upkeep"));
         disableButtons();

@@ -2,17 +2,24 @@ package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.CustomComponentListCell;
+import de.uniks.stp24.component.game.ExplanationComponent;
 import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.component.game.VariableExplanationComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.ExplainedVariableDTO;
+import de.uniks.stp24.model.Effect;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.model.Sources;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Singleton
@@ -33,7 +40,7 @@ public class ExplanationService {
     Methods below is made for explanation of resources.
      */
     public CustomComponentListCell<Resource, ResourceComponent> addMouseHoverListener(CustomComponentListCell<Resource, ResourceComponent> cell, String listTyp, String indicator, String resourceCategory) {
-        VariableExplanationComponent explanationComponent = new VariableExplanationComponent();
+        VariableExplanationComponent explanationComponent = new VariableExplanationComponent(app);
 
         Tooltip tooltip = new Tooltip();
         Tooltip.install(cell, tooltip);
@@ -59,7 +66,7 @@ public class ExplanationService {
 
 
             if (isMouseInsideCell && !entered.get()) {
-                System.out.println(getResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID()));
+                System.out.println(getResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID(), explanationComponent));
                 tooltip.show(app.stage(), mouseX, mouseY);
                 entered.set(true);
             } else if (!isMouseInsideCell) {
@@ -70,13 +77,24 @@ public class ExplanationService {
         return cell;
     }
 
-    public void setInGameController(InGameController inGameController) {
-        this.inGameController = inGameController;
-    }
-
-    private ExplainedVariableDTO getResExplanation(String listType, String indicator, String ResCategory, String id){
+    private void initializeResExplanation(String listType, String indicator, String ResCategory, String id, VariableExplanationComponent variableExplanationComponent){
         String variable = listType + "." + indicator + "." + ResCategory + "." + id;
         System.out.println(variable);
-        return variableService.data.get(variable);
+
+        List<ExplanationComponent> explanationComponentList = new ArrayList<>();
+        variableExplanationComponent.fillListWithEffects(explanationComponentList);
+
+        ExplainedVariableDTO explanations = variableService.data.get(variable);
+        Map<String, Double> effects= new HashMap<>();
+
+        for(Sources source: explanations.sources()){
+            for(Effect effect: source.effects()){
+                effects.put(effect.variable(), effect.multiplier());
+            }
+        }
+    }
+
+    public void setInGameController(InGameController inGameController) {
+        this.inGameController = inGameController;
     }
 }

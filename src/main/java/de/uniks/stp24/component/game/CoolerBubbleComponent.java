@@ -4,12 +4,14 @@ import de.uniks.stp24.component.Captain;
 import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.model.Announcement;
 import de.uniks.stp24.model.Game;
-import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.AnnouncementsService;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.JobsService;
+import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.collections.*;
 import javafx.fxml.FXML;
@@ -36,6 +38,12 @@ public class CoolerBubbleComponent extends Captain {
     TokenStorage tokenStorage;
     @Inject
     EventListener eventListener;
+    @Inject
+    ResourcesService resourcesService;
+    @Inject
+    JobsService jobsService;
+    @Inject
+    JobsApiService jobsApiService;
     @Inject
     AnnouncementsService announcementsService;
     @Inject
@@ -64,10 +72,20 @@ public class CoolerBubbleComponent extends Captain {
         announcements = announcementsService.getAnnouncements();
         // todo delete
         // harcoded for team meeting demo
-        announcementsService.addAnnouncement(new Resource("resource.doubloons", 5, 0))
-                .addAnnouncement(new Resource("resource.provisions", 5, 0))
-                .addAnnouncement(Jobs.createBuildingJob("Uncharted Island", "foundary"))
-                .addAnnouncement(new Resource("resource.coal", 5, 0));
+//        announcementsService.addAnnouncement(new Resource("resource.doubloons", 5, 0))
+//                .addAnnouncement(new Resource("resource.provisions", 5, 0))
+//                .addAnnouncement(new Resource("resource.coal", 5, 0));
+
+        this.jobsService.onJobCommongCompletion(announcementsService::addAnnouncement);
+//
+//        this.subscriber.subscribe(this.jobsApiService.getEmpireJobs(
+//                        this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), jobList -> {
+//                    jobList.forEach(job -> jobsService.onJobCompletion(job._id(), () -> {
+//                            System.out.println("JOBS DONE");
+//                            announcementsService.addAnnouncement(job);
+//                    }));
+//                }, error -> System.out.println("Failed to load job collections \n" + error.getMessage())
+//        );
     }
 
     private void setHintCountDown() {
@@ -98,10 +116,11 @@ public class CoolerBubbleComponent extends Captain {
 
                         subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                                 aggregateResultDto -> {
-                                    announcementsService.clearAnnouncements();
+                                    // announcementsService.clearAnnouncements();
                                     for (AggregateItemDto item : aggregateResultDto.items()) {
-                                        if (item.count() > 0 && item.count() + item.subtotal() <= 0) {
-                                            announcementsService.addAnnouncement(new Resource(item.variable(), item.count(), item.subtotal()));
+                                        Resource resource = resourcesService.aggregateItemDtoToResource(item);
+                                        if (resource.count() > 0 && resource.count() + item.subtotal() <= 0) {
+                                            announcementsService.addAnnouncement(resource);
                                         }
                                     }
                                 },
@@ -131,7 +150,7 @@ public class CoolerBubbleComponent extends Captain {
 
     public void decideWhatToSay(){
         if (announcements.isEmpty()) { // todo check for jobs
-            sayTip();
+//            sayTip();
         } else {
             announce();
         }

@@ -37,6 +37,7 @@ public class JobsService {
     ArrayList<Runnable> finishCommonFunctions = new ArrayList<>();
     ArrayList<Runnable> startCommonFunctions = new ArrayList<>();
     ArrayList<Runnable> jobCommonUpdates = new ArrayList<>();
+    ArrayList<Consumer<Job>> jobCompletionConsumers = new ArrayList<>();
 
     @Inject
     public JobsService() {}
@@ -138,6 +139,7 @@ public class JobsService {
             this.jobCompletionFunctions.get(job._id()).forEach(Runnable::run);
 
         this.finishCommonFunctions.forEach(Runnable::run);
+        this.jobCompletionConsumers.forEach(func -> func.accept(job));
     }
 
     private void deleteJobFromGroups(String jobID) {
@@ -216,6 +218,10 @@ public class JobsService {
         if (!this.jobCompletionFunctions.containsKey(jobID))
             this.jobCompletionFunctions.put(jobID, new ArrayList<>());
         this.jobCompletionFunctions.get(jobID).add(func);
+    }
+
+    public void onJobCommongCompletion(Consumer<Job> func) {
+        this.jobCompletionConsumers.add(func);
     }
 
 
@@ -351,6 +357,7 @@ public class JobsService {
         this.loadTypeFunctions.clear();
         this.loadCommonFunctions.clear();
         this.finishCommonFunctions.clear();
+        this.jobCompletionConsumers.clear();
         this.subscriber.dispose();
     }
 }

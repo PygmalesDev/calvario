@@ -4,6 +4,7 @@ import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
@@ -179,9 +180,14 @@ public class ResourcesService {
 
         this.subscriber.subscribe(empireService.updateEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId(),
                 new UpdateEmpireDto(difRes, islandAttributes.getTech(), null, null, null)),
-                result -> {
-                    islandAttributes.setEmpireDto(result);
-                });
+                result -> islandAttributes.setEmpireDto(result));
 
+    }
+
+    public Resource aggregateItemDtoToResource(AggregateItemDto aggregateItemDto) {
+        String ressourceID = aggregateItemDto.variable().replace("resources.", "").replace(".periodic", "");
+        int resourceCount = getResourceCount(ressourceID);
+        ressourceID = Constants.resourceTranslation.get(ressourceID);
+        return new Resource(ressourceID, resourceCount, aggregateItemDto.subtotal());
     }
 }

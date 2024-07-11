@@ -22,7 +22,7 @@ public class AnnouncementsService {
 
     }
 
-    public AnnouncementsService addAnnouncement(Jobs.JobDTO job) {
+    public AnnouncementsService addAnnouncement(Jobs.Job job) {
         // todo change
         String message = "Building " + job.building() + " on " + job.system() + " is done! good job!";
         boolean showForward = true;

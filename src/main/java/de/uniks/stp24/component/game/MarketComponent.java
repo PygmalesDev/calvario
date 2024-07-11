@@ -14,6 +14,7 @@ import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.MarketService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
@@ -85,6 +86,8 @@ public class MarketComponent extends StackPane {
     ResourceBundle gameResourceBundle;
     @Inject
     PresetsApiService presetsApiService;
+    @Inject
+    MarketService marketService;
 
     @Param("empireID")
     String empire;
@@ -132,7 +135,7 @@ public class MarketComponent extends StackPane {
     }
 
     private void loadVariablesAndSetup() {
-        subscriber.subscribe(presetsApiService.getVariables(),
+        subscriber.subscribe(marketService.getVariables(),
                 res -> {
                     this.variables = res;
                     createResourcePriceMap();
@@ -143,7 +146,7 @@ public class MarketComponent extends StackPane {
     }
 
     private void createResourceCountMap() {
-        subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+        subscriber.subscribe(marketService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 empire -> {
                     resourceCountMap = empire.resources();
                     setCreditCount();
@@ -212,7 +215,7 @@ public class MarketComponent extends StackPane {
     }
 
     private void getIdResourcesMap() {
-        subscriber.subscribe(presetsApiService.getResources(),
+        subscriber.subscribe(marketService.getResources(),
                 res -> {
                     resourceDto = res;
                     System.out.println();
@@ -222,7 +225,7 @@ public class MarketComponent extends StackPane {
 
     private void updateResources() {
         UpdateEmpireMarketDto updateEmpireMarketDto = new UpdateEmpireMarketDto(Map.of(selectedItem, resourceAmount), null, null, null);
-        this.subscriber.subscribe(empireService.updateEmpireMarket(tokenStorage.getGameId(), tokenStorage.getEmpireId(), updateEmpireMarketDto),
+        this.subscriber.subscribe(marketService.updateEmpireMarket(tokenStorage.getGameId(), tokenStorage.getEmpireId(), updateEmpireMarketDto),
                 error -> System.out.println("errorEmpireListener"));
     }
 

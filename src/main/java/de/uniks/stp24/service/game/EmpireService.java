@@ -31,7 +31,4 @@ public class EmpireService {
     public Observable<AggregateResultDto> getResourceAggregates(String gameID, String empireID) {
         return this.empireApiService.getResourceAggregates(gameID, empireID);
     }
-    public Observable<UpdateEmpireMarketDto> updateEmpireMarket(String gameID, String empireID, UpdateEmpireMarketDto updateEmpireMarketDto) {
-        return this.empireApiService.updateEmpireMarket(gameID, empireID, updateEmpireMarketDto);
-    }
 }

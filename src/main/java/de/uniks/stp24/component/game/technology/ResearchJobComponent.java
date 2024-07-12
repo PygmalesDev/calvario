@@ -30,6 +30,7 @@ import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Component(view = "ResearchJob.fxml")
 public class ResearchJobComponent extends AnchorPane {
@@ -84,6 +85,10 @@ public class ResearchJobComponent extends AnchorPane {
     public ObservableList<TechnologyExtended> technologies = FXCollections.observableArrayList();
     private String tag;
 
+    public boolean showSocietyProgress;
+    public boolean showEngineeringProgress;
+    public boolean showComputingProgress;
+
 
     @Inject
     public ResearchJobComponent(){
@@ -101,8 +106,6 @@ public class ResearchJobComponent extends AnchorPane {
         ImageView imageView = new ImageView(image);
         cancelResearchButton.setGraphic(imageView);
 
-        PropertyChangeListener callSetProgressBar = this::setProgressBar;
-        timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_SEASON, callSetProgressBar);
     }
 
     @OnInit
@@ -110,11 +113,23 @@ public class ResearchJobComponent extends AnchorPane {
 
     }
 
+    public void progressHandling(){
+        for (Jobs.Job job1 : jobList) {
+            if (job1.technology().equals(technologyCategoryComponent.getTechnology().id())){
+                subscriber.subscribe(jobsApiService.getJobByID(tokenStorage.getGameId(), tokenStorage.getEmpireId(), job1._id()), currentJob -> {
+                    System.out.println(currentJob.progress() + " PROGRESS");
+                    researchProgressBar.setProgress((double) currentJob.progress() / currentJob.total());
+                    researchProgressText.setText(currentJob.progress() + " / " + currentJob.total());
+                    this.job = currentJob;
+                    jobsService.onJobCompletion(currentJob._id(), this::handleJobFinished);
+                });
+            }
+        }
+    }
 
-    public void setProgressBar(PropertyChangeEvent propertyChangeEvent) {
 
-        jobsService.onJobCompletion(job._id(), this::handleJobFinished);
-
+    public void setProgressBar() {
+        this.jobsService.onJobTypeProgress("technology", this::progressHandling);
     }
 
     public void setEffectListView(){
@@ -122,16 +137,15 @@ public class ResearchJobComponent extends AnchorPane {
             technologyEffectsListView.getItems().clear();
             for (Effect effect : technologyCategoryComponent.getTechnology().effects()) {
                 String effectString = effect.multiplier() + " * " + effect.variable();
-
                 technologyEffectsListView.getItems().add(effectString);
             }
         }
-
-
-
     }
 
     private void handleJobFinished() {
+        jobList.remove(job);
+        technologies.removeIf(technologyExtended -> technologyExtended.id().equals(job.technology()));
+
         technologyCategoryComponent.handleJobCompleted(job);
         setVisible(false);
     }
@@ -153,13 +167,12 @@ public class ResearchJobComponent extends AnchorPane {
         technologyNameText.setText(technology.id());
         subscriber.subscribe(jobsService.beginJob(Jobs.createTechnologyJob(technology.id())), job1 -> {
             jobList.add(job1);
-            this.jobsService.onJobProgress(job1._id(), () -> {
-                System.out.println("Progress " + job1.progress());
-            });
+            System.out.println("JOBBER");
+            System.out.println(jobList);
             this.job = job1;
+
             subscriber.subscribe(technologyService.getTechnology(job.technology()), result -> {
                 if (!technologies.contains(result)){
-                    System.out.println(result.id() +  " RESULT");
                     technologies.add(result);
                 }
 

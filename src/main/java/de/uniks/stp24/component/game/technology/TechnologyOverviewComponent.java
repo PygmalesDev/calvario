@@ -102,13 +102,13 @@ public class TechnologyOverviewComponent extends AnchorPane {
                 }
             }
         }
-        technologyCategoryComponent.researchJobComponent.setProgressBar(null);
+        technologyCategoryComponent.researchJobComponent.progressHandling();
         technologyCategoryComponent.researchJobComponent.setEffectListView();
     }
 
     public void society() {
         show(technologyCategoryComponent.setCategory("society"));
-
+        technologyCategoryComponent.researchJobComponent.showSocietyProgress = true;
         technologyCategoryComponent.researchJobComponent.setTag("society");
         outerLoop:
         for (TechnologyExtended technology : technologyCategoryComponent.researchJobComponent.technologies) {
@@ -124,7 +124,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
             }
         }
 
-        technologyCategoryComponent.researchJobComponent.setProgressBar(null);
+        technologyCategoryComponent.researchJobComponent.progressHandling();
         technologyCategoryComponent.researchJobComponent.setEffectListView();
     }
 
@@ -143,7 +143,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
                 }
             }
         }
-        technologyCategoryComponent.researchJobComponent.setProgressBar(null);
+        technologyCategoryComponent.researchJobComponent.progressHandling();
         technologyCategoryComponent.researchJobComponent.setEffectListView();
     }
 

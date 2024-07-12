@@ -61,7 +61,7 @@ public class PropertiesJobProgressComponent extends Pane {
     public void setJobProgress(Job job) {
         this.job = job;
         this.progress = job.progress();
-        this.total = job.total();
+        this.total = (int) job.total();
         this.jobProgressText.setText(String.format("%d/%s", this.progress, this.total));
         this.incrementAmount = (double) 1 /this.total;
         this.jobProgressBar.setProgress(this.progress*this.incrementAmount);

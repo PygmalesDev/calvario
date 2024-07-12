@@ -157,8 +157,10 @@ public class SitePropertiesComponent extends AnchorPane {
                     && started.system().equals(this.tokenStorage.getIsland().id()))
                     .findFirst().orElse(null);
             this.showJobsPane();
+
             if (Objects.nonNull(job)) {
                 this.siteJobProgress.setJobProgress(job);
+                buildSiteButton.setDisable(true);
                 if (this.jobsService.hasNoJobTypeProgress(job.type()) && this.siteJobs.get(0).equals(job))
                     this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
             }
@@ -179,7 +181,7 @@ public class SitePropertiesComponent extends AnchorPane {
                 this.tokenStorage.getIsland().id(), this.siteType)), job ->  {
             this.showJobsPane();
             this.siteJobProgress.setJobProgress(job);
-
+            this.buildSiteButton.setDisable(true);
             if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
                     (this.siteJobs.isEmpty() || this.siteJobs.getFirst().equals(job)))
                 this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());

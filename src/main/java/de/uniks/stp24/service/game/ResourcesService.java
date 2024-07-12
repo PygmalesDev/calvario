@@ -158,9 +158,7 @@ public class ResourcesService {
         for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
             String res = entry.getKey();
             int neededAmount = entry.getValue();
-            System.out.println(neededAmount);
             int availableAmount = islandAttributes.getAvailableResources().get(res);
-            System.out.println(availableAmount + " avail");
             if (availableAmount < neededAmount) {
                 return false;
             }

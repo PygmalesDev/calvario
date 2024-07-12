@@ -10,6 +10,7 @@ import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.TechnologyService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.ws.EventListener;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -27,6 +28,7 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Component(view = "ResearchJob.fxml")
 public class ResearchJobComponent extends AnchorPane {
@@ -96,6 +98,7 @@ public class ResearchJobComponent extends AnchorPane {
         researchCostImage.setFitWidth(20);
         ImageView imageView = new ImageView(image);
         cancelResearchButton.setGraphic(imageView);
+        setProgressBar();
     }
 
     @OnInit
@@ -104,20 +107,35 @@ public class ResearchJobComponent extends AnchorPane {
     }
 
     public void progressHandling(){
-        for (Jobs.Job job1 : jobList) {
-            if (job1.technology().equals(technologyCategoryComponent.getTechnology().id())){
-                subscriber.subscribe(jobsApiService.getJobByID(tokenStorage.getGameId(), tokenStorage.getEmpireId(), job1._id()), currentJob -> {
-                    jobsService.onJobCompletion(currentJob._id(), this::handleJobFinished);
-                    System.out.println(currentJob.progress() + " PROGRESS");
-                    researchProgressBar.setProgress((double) currentJob.progress() / currentJob.total());
-                    researchProgressText.setText(currentJob.progress() + " / " + currentJob.total());
-                    this.job = currentJob;
+        jobList.addAll(jobsService.getJobObservableListOfType("technology"));
+        for (Jobs.Job jobAlreadyRunning : jobList) {
+            subscriber.subscribe(technologyService.getTechnology(jobAlreadyRunning.technology()), result -> {
+                if (!technologies.contains(result)){
+                    technologies.add(result);
+                }
+            });
+        }
 
-                }, error -> {
-                    System.out.println("Error trying to get a Job in ResearchComponent");
-                });
+
+        System.out.println("Der Job: " + jobList);
+        if (Objects.nonNull(technologyCategoryComponent.getTechnology())){
+            for (Jobs.Job job1 : jobList) {
+                if (job1.technology().equals(technologyCategoryComponent.getTechnology().id())){
+                    subscriber.subscribe(jobsApiService.getJobByID(tokenStorage.getGameId(), tokenStorage.getEmpireId(), job1._id()), currentJob -> {
+                        System.out.println("ARJEN");
+                        jobsService.onJobCompletion(currentJob._id(), this::handleJobFinished);
+                        double currentJobTotal = currentJob.total();
+                        int roundedUpTotal = (int) Math.ceil(currentJobTotal);
+                        researchProgressBar.setProgress((double) currentJob.progress() / roundedUpTotal);
+                        researchProgressText.setText(currentJob.progress() + " / " + roundedUpTotal);
+                        this.job = currentJob;
+                    }, error -> {
+                        System.out.println("Error trying to get a Job in ResearchComponent");
+                    });
+                }
             }
         }
+
     }
 
 
@@ -125,7 +143,7 @@ public class ResearchJobComponent extends AnchorPane {
         this.jobsService.onJobTypeProgress("technology", this::progressHandling);
     }
 
-    public void setEffectListView(){
+        public void setEffectListView(){
         if (technologyCategoryComponent.getTechnology() != null){
             technologyEffectsListView.getItems().clear();
             for (Effect effect : technologyCategoryComponent.getTechnology().effects()) {
@@ -138,7 +156,6 @@ public class ResearchJobComponent extends AnchorPane {
     private void handleJobFinished() {
         jobList.remove(job);
         technologies.removeIf(technologyExtended -> technologyExtended.id().equals(job.technology()));
-
         technologyCategoryComponent.handleJobCompleted(job);
         setVisible(false);
     }

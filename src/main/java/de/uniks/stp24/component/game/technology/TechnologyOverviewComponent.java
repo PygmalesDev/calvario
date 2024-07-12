@@ -88,6 +88,8 @@ public class TechnologyOverviewComponent extends AnchorPane {
     }
 
     public void engineering() {
+        technologyCategoryComponent.researchJobComponent.progressHandling();
+        technologyCategoryComponent.researchJobComponent.setEffectListView();
         show(technologyCategoryComponent.setCategory("engineering"));
         outerLoop:
         for (TechnologyExtended technology : technologyCategoryComponent.researchJobComponent.technologies) {
@@ -102,12 +104,12 @@ public class TechnologyOverviewComponent extends AnchorPane {
                 }
             }
         }
-        technologyCategoryComponent.researchJobComponent.setProgressBar();
-        technologyCategoryComponent.researchJobComponent.progressHandling();
-        technologyCategoryComponent.researchJobComponent.setEffectListView();
+
     }
 
     public void society() {
+        technologyCategoryComponent.researchJobComponent.progressHandling();
+        technologyCategoryComponent.researchJobComponent.setEffectListView();
         show(technologyCategoryComponent.setCategory("society"));
         technologyCategoryComponent.researchJobComponent.setTag("society");
         outerLoop:
@@ -123,12 +125,12 @@ public class TechnologyOverviewComponent extends AnchorPane {
                 }
             }
         }
-        technologyCategoryComponent.researchJobComponent.setProgressBar();
-        technologyCategoryComponent.researchJobComponent.progressHandling();
-        technologyCategoryComponent.researchJobComponent.setEffectListView();
+
     }
 
     public void physics() {
+        technologyCategoryComponent.researchJobComponent.progressHandling();
+        technologyCategoryComponent.researchJobComponent.setEffectListView();
         show(technologyCategoryComponent.setCategory("physics"));
         outerLoop:
         for (TechnologyExtended technology : technologyCategoryComponent.researchJobComponent.technologies) {
@@ -143,9 +145,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
                 }
             }
         }
-        technologyCategoryComponent.researchJobComponent.setProgressBar();
-        technologyCategoryComponent.researchJobComponent.progressHandling();
-        technologyCategoryComponent.researchJobComponent.setEffectListView();
+
     }
 
 

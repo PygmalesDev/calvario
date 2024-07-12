@@ -37,12 +37,6 @@ public class EventService {
     // with seed, so every Player has the same events at the same time
     Random random = new Random(1000);
 
-
-    @Inject
-    TimerService timerService;
-    @Inject
-    IslandsService islandsService;
-
     @Inject
     EmpireApiService empireApiService;
     @Inject
@@ -204,23 +198,6 @@ public class EventService {
         }
         // if no event can occur
         return null;
-    }
-
-    /**
-     * Looks for the eventType of the event. If it is not from our interface,
-     * it will return "unknown", else it will return "good" or "bad".
-     */
-    public String searchEvent(String eventName) {
-        for (String event : eventNames) {
-            if (event.equals(eventName)) {
-                if (eventNames.indexOf(event) > 5) {
-                    return "bad";
-                } else {
-                    return "good";
-                }
-            }
-        }
-        return "unknown";
     }
 
     public Observable<EmpireDto> sendEffect() {

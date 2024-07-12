@@ -7,13 +7,19 @@
       "variable": "alloy",
       "base": 0,
       "multiplier": 1,
-      "bonus": 0.5
+      "bonus": 0.5,
+      "condType": "resource",
+      "condID": "fuel",
+      "effected": "bonus"
     },
     {
       "variable": "fuel",
       "base": 0,
       "multiplier": 1,
-      "bonus": 0.5
+      "bonus": 0.5,
+      "condType": "resource",
+      "condID": "alloy",
+      "effected": "bonus"
     }
   ]
 }

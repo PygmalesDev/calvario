@@ -9,6 +9,7 @@ import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.*;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.menu.CreateGameService;
 import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -33,6 +34,8 @@ public interface TestComponent extends MainComponent {
     EmpireService empireService();
     IslandsService islandsService();
     PresetsApiService presetsApiService();
+    JobsService jobsService();
+    JobsApiService jobsApiService();
 
     @Component.Builder
     interface Builder extends MainComponent.Builder {

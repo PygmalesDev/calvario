@@ -22,13 +22,11 @@ public class ImageCacheTest extends ControllerTest {
     public void basicTest() {
         assertNull(imageCache);
         imageCache = new ImageCache();
-        System.out.println(imageCache.size());
         imageCache.get("test/911.png");
 
         //fail
         imageCache.get("test/910.png");
         imageCache.get("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==");
-        System.out.println(imageCache.size());
     }
 
 }

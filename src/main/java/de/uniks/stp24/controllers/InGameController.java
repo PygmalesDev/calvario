@@ -70,8 +70,6 @@ public class InGameController extends BasicController {
     @FXML
     public StackPane overviewContainer;
     @FXML
-    public StackPane technologiesContainer;
-    @FXML
     public ScrollPane mapScrollPane;
     @FXML
     public Pane mapGrid;
@@ -325,7 +323,8 @@ public class InGameController extends BasicController {
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,
                 jobsOverviewComponent,
-                empireOverviewComponent
+                empireOverviewComponent,
+                technologiesComponent
         );
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
 
@@ -336,9 +335,7 @@ public class InGameController extends BasicController {
         this.jobsService.initializeJobsListener();
         explanationService.setInGameController(this);
 
-        technologiesComponent.setContainer(technologiesContainer);
-        technologiesContainer.setVisible(false);
-        technologiesContainer.getChildren().add(technologiesComponent);
+        technologiesComponent.setContainer(contextMenuContainer);
 
     }
 
@@ -430,7 +427,8 @@ public class InGameController extends BasicController {
             this.contextMenuButtons.getChildren().addAll(
                     new ContextMenuButton("storageOverview", this.storageOverviewComponent),
                     new ContextMenuButton("empireOverview", this.empireOverviewComponent),
-                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent)
+                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent),
+                    new ContextMenuButton("technologies", this.technologiesComponent)
             );
     }
 

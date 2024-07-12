@@ -77,7 +77,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
     }
 
     public void close() {
-        parent.setVisible(false);
+        setVisible(false);
     }
 
     public void engineering() {

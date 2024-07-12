@@ -37,6 +37,12 @@ public class EventService {
     // with seed, so every Player has the same events at the same time
     Random random = new Random(1000);
 
+
+    @Inject
+    TimerService timerService;
+    @Inject
+    IslandsService islandsService;
+
     @Inject
     EmpireApiService empireApiService;
     @Inject

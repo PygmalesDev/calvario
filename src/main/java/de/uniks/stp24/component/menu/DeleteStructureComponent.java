@@ -199,7 +199,7 @@ public class DeleteStructureComponent extends VBox{
     }
 
     private DistrictAttributes getCertainSite(){
-        for(DistrictAttributes site: islandAttributeStorage.districts){
+        for(DistrictAttributes site: islandAttributeStorage.districtAttributes){
             if(site.id().equals(structureType)){
                 return site;
             }

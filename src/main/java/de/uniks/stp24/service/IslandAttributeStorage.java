@@ -27,7 +27,7 @@ public class IslandAttributeStorage {
     public SystemUpgrades systemUpgradeAttributes;
     public Island island;
     public ArrayList<BuildingAttributes> buildingsAttributes;
-    public ArrayList<DistrictAttributes> districts;
+    public ArrayList<DistrictAttributes> districtAttributes;
     public Map<Integer, String> upgradeEffects = new HashMap<>();
 
     @Inject
@@ -121,7 +121,7 @@ public class IslandAttributeStorage {
     }
 
     public void setDistrictAttributes() {
-        this.districts = variableDependencyService.createVariableDependencyDistricts();
+        this.districtAttributes = variableDependencyService.createVariableDependencyDistricts();
     }
 
     public Map<String, Integer> getBuildingsProduction() {
@@ -147,7 +147,7 @@ public class IslandAttributeStorage {
     public Map<String, Integer> getDistrictProduction() {
         Map<String, Integer> sitesProduction = new HashMap<>();
         for(Map.Entry<String, Integer> entry : island.sites().entrySet()){
-            for (DistrictAttributes preset : districts) {
+            for (DistrictAttributes preset : districtAttributes) {
                 if(preset.id().equals(entry.getKey())) {
                     for (Map.Entry<String, Integer> site : preset.production().entrySet()) {
                         sitesProduction.merge(site.getKey(), site.getValue() * entry.getValue(), Integer::sum);
@@ -182,7 +182,7 @@ public class IslandAttributeStorage {
     public Map<String, Integer> getDistrictConsumption() {
         Map<String, Integer> sitesConsumption = new HashMap<>();
         for(Map.Entry<String, Integer> entry : island.sites().entrySet()){
-            for (DistrictAttributes preset : districts) {
+            for (DistrictAttributes preset : districtAttributes) {
                 if(preset.id().equals(entry.getKey())) {
                     for (Map.Entry<String, Integer> site : preset.upkeep().entrySet()) {
                         sitesConsumption.merge(site.getKey(), site.getValue() * entry.getValue(), Integer::sum);

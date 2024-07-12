@@ -59,16 +59,17 @@ public class ExplanationService {
             Point2D cellStart = cell.localToScreen(0, 0);
             Point2D cellEnd = cell.localToScreen(cell.getWidth() * 2 / 3, cell.getHeight());
 
-            boolean isMouseInsideCell = mouseX < cellEnd.getX() &&
-                    mouseX > cellStart.getX() &&
-                    mouseY > cellStart.getY() + cell.getHeight() * 2/5 &&
-                    mouseY < cellEnd.getY() - cell.getHeight() * 2/5;
+            boolean isMouseInsideCell = false;
+            if (cellEnd != null) {
+                isMouseInsideCell = mouseX < cellEnd.getX() && mouseX > cellStart.getX() && mouseY > cellStart.getY() + cell.getHeight() * 2 / 5 && mouseY < cellEnd.getY() - cell.getHeight() * 2 / 5;
+            }
 
 
             if (isMouseInsideCell && !entered.get()) {
                 //getResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID(), explanationComponent);
                 tooltip.show(app.stage(), mouseX, mouseY);
                 entered.set(true);
+                //inGameController.debugPrints();
             } else if (!isMouseInsideCell) {
                 tooltip.hide();
                 entered.set(false);
@@ -77,7 +78,7 @@ public class ExplanationService {
         return cell;
     }
 
-    private void initializeResExplanation(String listType, String indicator, String ResCategory, String id, VariableExplanationComponent variableExplanationComponent){
+    private void initializeResExplanation(String listType, String indicator, String ResCategory, String id, VariableExplanationComponent variableExplanationComponent) {
         String variable = listType + "." + indicator + "." + ResCategory + "." + id;
         System.out.println(variable);
 
@@ -85,10 +86,10 @@ public class ExplanationService {
         variableExplanationComponent.fillListWithEffects(explanationComponentList);
 
         ExplainedVariableDTO explanations = variableService.data.get(variable);
-        Map<String, Double> effects= new HashMap<>();
+        Map<String, Double> effects = new HashMap<>();
 
-        for(Sources source: explanations.sources()){
-            for(Effect effect: source.effects()){
+        for (Sources source : explanations.sources()) {
+            for (Effect effect : source.effects()) {
                 effects.put(effect.variable(), effect.multiplier());
             }
         }

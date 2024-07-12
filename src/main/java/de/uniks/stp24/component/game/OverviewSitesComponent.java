@@ -231,15 +231,6 @@ public class OverviewSitesComponent extends AnchorPane {
         crewCapacity.setText(String.valueOf(islandAttributes.getIsland().crewCapacity()));
     }
 
-    /*
-        switch (islandAttributes.getIsland().upgradeLevel()) {
-            case 1 -> island_inf.setText(islandAttributes.upgradeEffects.get(1));
-            case 2 -> island_inf.setText(islandAttributes.upgradeEffects.get(2));
-            case 3 -> island_inf.setText(islandAttributes.upgradeEffects.get(3));
-            case 4 -> island_inf.setText(islandAttributes.upgradeEffects.get(4));
-        }
-
-     */
     @OnRender
     public void setIslandNameProperties() {
         this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");

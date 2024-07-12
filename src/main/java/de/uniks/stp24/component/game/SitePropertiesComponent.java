@@ -244,7 +244,12 @@ public class SitePropertiesComponent extends AnchorPane {
     //Gets resources of site and displays them in listviews
     public void displayCostsOfSite(){
         siteCostsListView.setSelectionModel(null);
-        //subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
+        for(DistrictAttributes district: islandAttributeStorage.districtAttributes){
+            if(district.id().equals(siteType)){
+                resourceListGeneration(district);
+                break;
+            }
+        }
         siteConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
@@ -332,7 +337,7 @@ public class SitePropertiesComponent extends AnchorPane {
     }
 
     private DistrictAttributes getCertainSite(){
-        for(DistrictAttributes site: islandAttributeStorage.districts){
+        for(DistrictAttributes site: islandAttributeStorage.districtAttributes){
             if(site.id().equals(siteType)){
                 return site;
             }

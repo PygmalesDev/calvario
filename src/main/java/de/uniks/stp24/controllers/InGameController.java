@@ -85,7 +85,6 @@ public class InGameController extends BasicController {
     public StackPane buildingsWindow;
     @FXML
     public StackPane pauseMenuContainer;
-
     @FXML
     public StackPane clockComponentContainer;
 
@@ -96,20 +95,17 @@ public class InGameController extends BasicController {
     @Inject
     InGameService inGameService;
     @Inject
-    GamesService gamesService;
-    @Inject
-    LobbyService lobbyService;
-    @Inject
     EmpireService empireService;
     @Inject
     public IslandsService islandsService;
     @Inject
-    ResourcesService resourceService;
-    @Inject
     public ExplanationService explanationService;
-
     @Inject
     JobsService jobsService;
+    @Inject
+    GangCreationController gangCreationController;
+    @Inject
+    TechnologyService technologyService;
 
     @SubComponent
     @Inject
@@ -117,7 +113,6 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public PauseMenuComponent pauseMenuComponent;
-
     @SubComponent
     @Inject
     public OverviewSitesComponent overviewSitesComponent;
@@ -179,6 +174,8 @@ public class InGameController extends BasicController {
     public GameLogicApiService gameLogicApiService;
     @Inject
     public VariableService variableService;
+    @Inject
+    LobbyService lobbyService;
 
     public IslandComponent selectedIsland;
 
@@ -230,6 +227,9 @@ public class InGameController extends BasicController {
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_SETTINGS"));
 
         variableService.initVariables();
+
+        this.subscriber.subscribe(this.lobbyService.getMember(gameID, tokenStorage.getUserId()),
+        result -> tokenStorage.setEmpireTraits(result.empire().traits()));
 
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
@@ -643,6 +643,11 @@ public class InGameController extends BasicController {
                 .removePropertyChangeListener(triple.propertyName(), triple.listener()));
         this.subscriber.dispose();
         this.jobsService.dispose();
+    }
+
+    public void debugPrints(){
+        System.out.println(tokenStorage.getEmpireTraits());
+        System.out.println(technologyService.getUnlockedTechnologies());
     }
 
 }

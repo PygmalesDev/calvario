@@ -41,9 +41,7 @@ public class TechnologyService {
     public TechnologyService() {
     }
 
-
     public ObservableList<TechnologyExtended> getAllUnlockedTechnologies(String tag) {
-
         temp = getTechnologies();
 
         subscriber.subscribe(empireApiService.getEmpiresDtos(tokenStorage.getGameId()),

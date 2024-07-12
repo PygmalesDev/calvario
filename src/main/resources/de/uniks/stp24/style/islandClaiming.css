@@ -17,3 +17,43 @@
     -fx-font-family: "Blackadder ITC";
     -fx-font-size: 30;
 }
+
+.jobProgressBar .track {
+    -fx-background-color: transparent;
+    -fx-focus-traversable: false;
+    -fx-background-image: url("/de/uniks/stp24/icons/other/progressBar.png");
+    -fx-background-size: 100% 100%;
+}
+
+.jobProgressBar .bar {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/other/progressBar_inside.png");
+    -fx-background-position: right;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 95% 50%;
+}
+
+.cancelJobButton {
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-image: url("/de/uniks/stp24/icons/buttons/cancel_button.png");
+}
+
+.papyrusBackgroundExplored {
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/details_exploredIslands_background.png");
+}
+
+.commonListView {
+    -fx-background-color: transparent;
+}
+
+.commonListView .list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 0 -80 0 0;
+}
+
+.commonListView .scroll-bar:horizontal {
+    -fx-scale-y: 0;
+}

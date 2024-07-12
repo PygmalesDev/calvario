@@ -463,14 +463,14 @@ public class InGameController extends BasicController {
             } else {
                 if (Objects.nonNull(selectedIsland)) selectedIsland.showUnshowRudder();
                 this.overviewSitesComponent.closeOverview();
-                if (this.islandClaimingContainer.getLayoutX()+60 == selected.getLayoutX() &&
-                        this.islandClaimingContainer.getLayoutY()+120 == selected.getLayoutY() &&
+                if (this.islandClaimingContainer.getLayoutX()+80 == selected.getLayoutX() &&
+                        this.islandClaimingContainer.getLayoutY()+220 == selected.getLayoutY() &&
                         this.islandClaimingContainer.isVisible()) {
                     this.islandClaimingContainer.setVisible(false);
                 } else {
                     this.islandClaimingContainer.setVisible(true);
-                    this.islandClaimingContainer.setLayoutX(selected.getLayoutX()-60);
-                    this.islandClaimingContainer.setLayoutY(selected.getLayoutY()-120);
+                    this.islandClaimingContainer.setLayoutX(selected.getLayoutX()-80);
+                    this.islandClaimingContainer.setLayoutY(selected.getLayoutY()-220);
                     this.islandClaimingComponent.setIslandInformation(selected.island);
                 }
             }

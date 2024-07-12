@@ -388,7 +388,8 @@ public class IslandsService extends BasicService {
 
     public void claimIsland(Island island) {
         this.subscriber.subscribe(this.gameSystemsService.claimSystem(this.gameID, island.id(),
-                        new SystemClaimDto(this.tokenStorage.getEmpireId())), this::updateIsland);
+                        new SystemClaimDto(this.tokenStorage.getEmpireId())), this::updateIsland,
+                error -> System.out.println(error.getMessage()));
     }
 
     public Island updateIsland(SystemDto result) {

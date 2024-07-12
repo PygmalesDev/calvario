@@ -66,9 +66,7 @@ public class PropertiesJobProgressComponent extends Pane {
         this.incrementAmount = (double) 1 /this.total;
         this.jobProgressBar.setProgress(this.progress*this.incrementAmount);
         this.resourceObservableList.clear();
-        job.cost().forEach((name, amount) -> this.resourceObservableList.add(new Resource(
-                name, amount, 0
-        )));
+        job.cost().forEach((name, amount) -> this.resourceObservableList.add(new Resource(name, amount, 0)));
         this.costsListView.setItems(this.resourceObservableList);
         this.costsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.resourceComponentProvider));
     }

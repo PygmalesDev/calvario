@@ -4,6 +4,6 @@ public record SeasonComponent(
         String transActionTypeText,
         String resourceType,
         int resourceAmount,
-        double moneyAmount
+        int moneyAmount
 ) {
 }

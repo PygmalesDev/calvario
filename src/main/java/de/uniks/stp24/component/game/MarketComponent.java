@@ -18,6 +18,8 @@ import de.uniks.stp24.ws.EventListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -99,9 +101,9 @@ public class MarketComponent extends StackPane {
     private String lastSeasonUpdate;
 
     public String selectedItem;
-    private double sellingPrice;
-    private double buyingPrice;
-    private double userCredits;
+    private int sellingPrice;
+    private int buyingPrice;
+    private int userCredits;
     private double marketFee;
     private int resourceAmount;
 
@@ -164,8 +166,7 @@ public class MarketComponent extends StackPane {
 
     private void setCreditCount() {
         userCredits = resourceCountMap.get("credits");
-        userCreditsLabel.setText(String.format("%.2f", userCredits));
-    }
+        userCreditsLabel.setText(String.valueOf(userCredits));     }
 
     public void filterResourceMap() {
         resourceCountMap.remove("population");
@@ -245,11 +246,11 @@ public class MarketComponent extends StackPane {
 
     public void buyingAndSellingPrice(String resource) {
         //TODO MarketFee correctly
-        this.sellingPrice = (resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoodsLabel.getText())) * (1 - this.marketFee);
-        this.buyingPrice = (resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoodsLabel.getText())) * (1 + this.marketFee);
+        this.sellingPrice = (int) Math.round((resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoodsLabel.getText())) * (1 - this.marketFee));
+        this.buyingPrice = (int) Math.round((resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoodsLabel.getText())) * (1 + this.marketFee));
 
-        buyingPriceLabel.setText(String.format("%.2f", buyingPrice));
-        sellingPriceLabel.setText(String.format("%.2f", sellingPrice));
+        buyingPriceLabel.setText(String.valueOf(buyingPrice));
+        sellingPriceLabel.setText(String.valueOf(sellingPrice));
         buttonLogic();
     }
 
@@ -263,7 +264,7 @@ public class MarketComponent extends StackPane {
             resourceCountMapCopy = new HashMap<>(resourceCountMap);
 
             userCredits -= buyingPrice;
-            userCreditsLabel.setText(String.format("%.2f", userCredits));
+            userCreditsLabel.setText(String.valueOf(userCredits));
             resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
             updateResources();
             refreshListview();
@@ -279,7 +280,7 @@ public class MarketComponent extends StackPane {
             resourceCountMapCopy = new HashMap<>(resourceCountMap);
 
             userCredits += sellingPrice;
-            userCreditsLabel.setText(String.format("%.2f", userCredits));
+            userCreditsLabel.setText(String.valueOf(userCredits));
             resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
             updateResources();
             refreshListview();
@@ -335,7 +336,9 @@ public class MarketComponent extends StackPane {
 
         public ResourceCell() {
             super();
+            text.getStyleClass().add("javaneseText");
             vBox.getChildren().addAll(imageView, text);
+            VBox.setMargin(vBox, new Insets(10, 10, 10, 10));
         }
 
         @Override
@@ -373,7 +376,7 @@ public class MarketComponent extends StackPane {
         everySeasonButton.setSelected(everySeasonButton.isSelected());
     }
 
-    private void addSeasonalTransaction(String transactionType, double price) {
+    private void addSeasonalTransaction(String transactionType, int price) {
         SeasonComponent seasonComponent = new SeasonComponent(transactionType, this.selectedItem, resourceAmount, price);
         seasonComponents.add(seasonComponent);
     }

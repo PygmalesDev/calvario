@@ -10,7 +10,6 @@ import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.TechnologyService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.ws.EventListener;
-import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -27,10 +26,7 @@ import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Objects;
 
 @Component(view = "ResearchJob.fxml")
 public class ResearchJobComponent extends AnchorPane {
@@ -77,17 +73,12 @@ public class ResearchJobComponent extends AnchorPane {
     Subscriber subscriber;
     private Jobs.Job job;
 
-    Observable<TechnologyExtended> technology;
 
     ArrayList<Jobs.Job> jobList = new ArrayList<>();
     private TechnologyCategoryComponent technologyCategoryComponent;
 
     public ObservableList<TechnologyExtended> technologies = FXCollections.observableArrayList();
     private String tag;
-
-    public boolean showSocietyProgress;
-    public boolean showEngineeringProgress;
-    public boolean showComputingProgress;
 
 
     @Inject
@@ -105,7 +96,6 @@ public class ResearchJobComponent extends AnchorPane {
         researchCostImage.setFitWidth(20);
         ImageView imageView = new ImageView(image);
         cancelResearchButton.setGraphic(imageView);
-
     }
 
     @OnInit
@@ -117,11 +107,14 @@ public class ResearchJobComponent extends AnchorPane {
         for (Jobs.Job job1 : jobList) {
             if (job1.technology().equals(technologyCategoryComponent.getTechnology().id())){
                 subscriber.subscribe(jobsApiService.getJobByID(tokenStorage.getGameId(), tokenStorage.getEmpireId(), job1._id()), currentJob -> {
+                    jobsService.onJobCompletion(currentJob._id(), this::handleJobFinished);
                     System.out.println(currentJob.progress() + " PROGRESS");
                     researchProgressBar.setProgress((double) currentJob.progress() / currentJob.total());
                     researchProgressText.setText(currentJob.progress() + " / " + currentJob.total());
                     this.job = currentJob;
-                    jobsService.onJobCompletion(currentJob._id(), this::handleJobFinished);
+
+                }, error -> {
+                    System.out.println("Error trying to get a Job in ResearchComponent");
                 });
             }
         }
@@ -167,16 +160,14 @@ public class ResearchJobComponent extends AnchorPane {
         technologyNameText.setText(technology.id());
         subscriber.subscribe(jobsService.beginJob(Jobs.createTechnologyJob(technology.id())), job1 -> {
             jobList.add(job1);
-            System.out.println("JOBBER");
-            System.out.println(jobList);
             this.job = job1;
 
             subscriber.subscribe(technologyService.getTechnology(job.technology()), result -> {
                 if (!technologies.contains(result)){
                     technologies.add(result);
                 }
-
             });
+            progressHandling();
         });
     }
 
@@ -192,6 +183,5 @@ public class ResearchJobComponent extends AnchorPane {
 
     public void setTag(String tag) {
         this.tag = tag;
-
     }
 }

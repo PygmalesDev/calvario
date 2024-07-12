@@ -418,7 +418,6 @@ public class InGameController extends BasicController {
                     new ContextMenuButton("empireOverview", this.empireOverviewComponent),
                     new ContextMenuButton("jobsOverview", this.jobsOverviewComponent),
                     new ContextMenuButton("technologies", this.technologiesComponent)
-
             );
     }
     private void showTechnologies() {

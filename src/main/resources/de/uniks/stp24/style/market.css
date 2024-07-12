@@ -76,14 +76,14 @@
 .upArrowButton{
     -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/up_arrow_button.png");
     -fx-background-color: transparent;
-    -fx-background-size: 60% 60%;
+    -fx-background-size: 80% 80%;
     -fx-background-repeat: no-repeat;
 }
 
 .downArrowButton{
     -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/down_arrow_button.png");
     -fx-background-color: transparent;
-    -fx-background-size: 60% 60%;
+    -fx-background-size: 80% 80%;
     -fx-background-repeat: no-repeat;
 }
 
@@ -94,4 +94,141 @@
     -fx-background-repeat: no-repeat;
 }
 
+.defaultButton{
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/button_element.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}
 
+.amountBox{
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/red_frame.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}
+
+
+.everySeasonButtonDesign {
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/button_element.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.everySeasonButtonDesign:selected {
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/button_green.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+/*TextStyles*/
+.baskervilleOldFace {
+    -fx-font-family: "Baskerville Old Face";
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+    -fx-fill: black;
+}
+
+
+.tempusSansITC {
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+    -fx-fill: black;
+}
+
+.javaneseText {
+    -fx-font-family: "Javanese Text";
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+    -fx-fill: black;
+}
+
+/*Season Design*/
+
+.seasonalTradesListView .list-cell{
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/red_frame.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-padding: 10;
+    -fx-background-insets: 5;
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------*/
+.seasonalTradesListView {
+    -fx-background-color: transparent;
+}
+
+.seasonalTradesListView .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-max-height: 0;
+}
+
+.seasonalTradesListView .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+}
+
+.seasonalTradesListView .scroll-bar .thumb {
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/scroller.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 90% 30%;
+    -fx-background-repeat: no-repeat;
+}
+
+.seasonalTradesListView .scroll-bar .track {
+    -fx-background-color: black;
+    -fx-background-radius: 5;
+}
+
+.seasonalTradesListView .corner {
+    -fx-background-color: transparent; /* Versteckt das weiße Quadrat unten rechts */
+}
+
+/*------------------------------------------------------------------------------------*/
+
+.playButton {
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/continue_seasonalTrade.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.playButton:selected {
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/pause_seasonalTrade.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.cancelTradeButton{
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/cross_black.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.tempusSansITCSeasonComp{
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-font-size: 14px;
+    -fx-font-weight: normal;
+    -fx-fill: white;
+}

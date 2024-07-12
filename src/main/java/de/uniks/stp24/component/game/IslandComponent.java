@@ -15,10 +15,8 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnKey;
-import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import javax.inject.Singleton;
 
@@ -163,7 +161,7 @@ public class IslandComponent extends Pane {
     }
 
     public void reset(){
-        inGameController.overviewSitesComponent.resetButtons();
+        inGameController.islandOverviewComponent.resetButtons();
         inGameController.buildingsWindowComponent.setVisible(false);
         inGameController.sitePropertiesComponent.setVisible(false);
         inGameController.buildingPropertiesComponent.setVisible(false);

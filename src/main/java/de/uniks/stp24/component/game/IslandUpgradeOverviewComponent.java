@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.*;
 
 @Component(view = "IslandOverviewUpgrade.fxml")
-public class OverviewUpgradeComponent extends AnchorPane {
+public class IslandUpgradeOverviewComponent extends AnchorPane {
     @FXML
     public Text res_2;
     @FXML
@@ -83,7 +83,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
     private InGameController inGameController;
 
     @Inject
-    public OverviewUpgradeComponent() {
+    public IslandUpgradeOverviewComponent() {
 
     }
 
@@ -103,7 +103,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
     }
 
     public void goBack() {
-        inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewSitesComponent);
+        inGameService.showOnly(inGameController.overviewContainer, inGameController.islandOverviewComponent);
     }
 
     public void closeOverview() {

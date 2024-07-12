@@ -6,7 +6,6 @@ import de.uniks.stp24.model.Announcement;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Resource;
-import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.AnnouncementsService;
@@ -45,8 +44,6 @@ public class CoolerBubbleComponent extends Captain {
     @Inject
     JobsService jobsService;
     @Inject
-    JobsApiService jobsApiService;
-    @Inject
     AnnouncementsService announcementsService;
     @Inject
     EmpireService empireService;
@@ -60,7 +57,7 @@ public class CoolerBubbleComponent extends Captain {
     ArrayList<String> possibleHints = Constants.hints;
 
     ObservableList<Announcement> announcements;
-    Consumer<String[]> forwardMethod = null;
+    ArrayList<Consumer<Jobs.Job>> forwardMethods = null;
     Jobs.Job job = null;
 
     @Inject
@@ -117,7 +114,9 @@ public class CoolerBubbleComponent extends Captain {
     }
 
     public void forward() {
-        forwardMethod.accept(new String[]{job.system()});
+        for (Consumer<Jobs.Job> method : forwardMethods) {
+            method.accept(job);
+        }
     }
 
     public void talk(String text) {
@@ -127,15 +126,17 @@ public class CoolerBubbleComponent extends Captain {
 
     private void announce() {
         Announcement announcement = announcementsService.getNextAnnouncement();
+
         forwardButton.setVisible(announcement.showForward());
-        forwardMethod = announcement.forwardMethod();
+        forwardButton.setStyle(announcement.forwardIcon());
+        forwardMethods = announcement.forwardMethod();
         job = announcement.job();
         talk(announcement.message());
     }
 
     public void decideWhatToSay(){
         forwardButton.setVisible(false);
-        forwardMethod = null;
+        forwardMethods = null;
         job = null;
         if (announcements.isEmpty()) {
             sayTip();

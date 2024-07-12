@@ -103,14 +103,14 @@ public class PauseMenuTest extends ControllerTest {
     PauseMenuComponent pauseMenuComponent;
 
     @InjectMocks
-    OverviewSitesComponent overviewSitesComponent;
+    IslandOverviewComponent islandOverviewComponent;
 
     @InjectMocks
     SitePropertiesComponent sitePropertiesComponent;
 
 
     @InjectMocks
-    OverviewUpgradeComponent overviewUpgradeComponent;
+    IslandUpgradeOverviewComponent islandUpgradeOverviewComponent;
 
     @InjectMocks
     IslandAttributeStorage islandAttributeStorage;
@@ -168,15 +168,15 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = this.eventComponent;
         inGameService.setEventService(eventService);
-        this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
-        this.inGameController.overviewUpgradeComponent = this.overviewUpgradeComponent;
+        this.inGameController.islandOverviewComponent = this.islandOverviewComponent;
+        this.inGameController.islandUpgradeOverviewComponent = this.islandUpgradeOverviewComponent;
         this.inGameController.islandAttributes = this.islandAttributeStorage;
-        this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
-        this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
-        this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+        this.inGameController.islandOverviewComponent.buildingsComponent = this.buildingsComponent;
+        this.inGameController.islandOverviewComponent.sitesComponent = this.sitesComponent;
+        this.inGameController.islandOverviewComponent.detailsComponent = this.detailsComponent;
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.helpComponent = this.helpComponent;
-        this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
+        this.islandOverviewComponent.jobsComponent = this.islandOverviewJobsComponent;
         this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
         this.timerService.gamesApiService = this.gamesApiService;
         this.timerService.subscriber = this.subscriber;
@@ -221,8 +221,8 @@ public class PauseMenuTest extends ControllerTest {
         this.clockComponent.getStylesheets().clear();
         this.eventComponent.getStylesheets().clear();
         this.storageOverviewComponent.getStylesheets().clear();
-        this.overviewSitesComponent.getStylesheets().clear();
-        this.overviewUpgradeComponent.getStylesheets().clear();
+        this.islandOverviewComponent.getStylesheets().clear();
+        this.islandUpgradeOverviewComponent.getStylesheets().clear();
         this.buildingsComponent.getStylesheets().clear();
         this.sitesComponent.getStylesheets().clear();
         this.detailsComponent.getStylesheets().clear();

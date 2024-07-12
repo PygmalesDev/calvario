@@ -30,7 +30,7 @@ public class JobsService {
     Map<String, ObservableList<Job>> jobCollections = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
-    Map<String, Consumer<String[]>> jobInspectionFunctions = new HashMap<>();
+    Map<String, Consumer<Job>> jobInspectionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobTypeFunctions = new HashMap<>();
     Map<String, ArrayList<Consumer<Job>>> loadTypeFunctions = new HashMap<>();
     ArrayList<Runnable> loadCommonFunctions = new ArrayList<>();
@@ -78,8 +78,6 @@ public class JobsService {
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.empires.%s.jobs.*.*",
                 this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), Job.class), result -> {
             Job job = result.data();
-
-            System.out.println("called!~");
 
             switch (result.suffix()) {
                 case "created" -> this.addJobToGroups(job);
@@ -334,11 +332,11 @@ public class JobsService {
         return this.getJobObservableListOfType("collection");
     }
 
-    public void setJobInspector(String inspectorID, Consumer<String[]> func) {
+    public void setJobInspector(String inspectorID, Consumer<Job> func) {
         this.jobInspectionFunctions.put(inspectorID, func);
     }
 
-    public Consumer<String[]> getJobInspector(String inspectorID) {
+    public Consumer<Job> getJobInspector(String inspectorID) {
         if (this.jobInspectionFunctions.containsKey(inspectorID))
             return this.jobInspectionFunctions.get(inspectorID);
         else System.out.printf("Job Service: the inspection function is not found for a given inspector ID: %s!\n", inspectorID);

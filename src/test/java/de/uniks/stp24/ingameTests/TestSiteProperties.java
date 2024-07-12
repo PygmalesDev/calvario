@@ -19,13 +19,9 @@ import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
-import javafx.application.Platform;
-import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
@@ -36,7 +32,6 @@ import java.util.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
@@ -98,10 +93,10 @@ public class TestSiteProperties extends ControllerTest {
     DeleteStructureComponent deleteStructureComponent;
 
     @InjectMocks
-    OverviewSitesComponent overviewSitesComponent;
+    IslandOverviewComponent islandOverviewComponent;
 
     @InjectMocks
-    OverviewUpgradeComponent overviewUpgradeComponent;
+    IslandUpgradeOverviewComponent islandUpgradeOverviewComponent;
 
     @InjectMocks
     InGameController inGameController;
@@ -141,17 +136,17 @@ public class TestSiteProperties extends ControllerTest {
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
-        this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
+        this.inGameController.islandOverviewComponent = this.islandOverviewComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.inGameController.islandAttributes = this.islandAttributeStorage;
-        this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
-        this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
-        this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
-        this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
+        this.inGameController.islandOverviewComponent.sitesComponent = this.sitesComponent;
+        this.inGameController.islandOverviewComponent.buildingsComponent = this.buildingsComponent;
+        this.inGameController.islandOverviewComponent.detailsComponent = this.detailsComponent;
+        this.inGameController.islandUpgradeOverviewComponent= this.islandUpgradeOverviewComponent;
         this.inGameController.eventComponent= this.eventComponent;
         this.inGameService.setGameStatus(gameStatus);
         Map<String , Integer> chance = new HashMap<>();
@@ -195,8 +190,8 @@ public class TestSiteProperties extends ControllerTest {
         clockComponent.getStylesheets().clear();
         pauseMenuComponent.getStylesheets().clear();
         settingsComponent.getStylesheets().clear();
-        overviewSitesComponent.getStylesheets().clear();
-        overviewUpgradeComponent.getStylesheets().clear();
+        islandOverviewComponent.getStylesheets().clear();
+        islandUpgradeOverviewComponent.getStylesheets().clear();
         sitePropertiesComponent.getStylesheets().clear();
         buildingsWindowComponent.getStylesheets().clear();
         buildingPropertiesComponent.getStylesheets().clear();

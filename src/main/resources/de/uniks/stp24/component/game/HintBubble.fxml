@@ -22,7 +22,7 @@
    <Group layoutX="81.0" layoutY="3.0">
       <VBox fx:id="backgroundBubble" alignment="TOP_RIGHT" layoutX="-10.0" prefHeight="110.0" prefWidth="270.0" styleClass="hintCaptainPane">
          <Button fx:id="nextButton" mnemonicParsing="false" onAction="#decideWhatToSay" prefHeight="12.0" prefWidth="28.0" styleClass="closeButtonHint" />
-         <Button fx:id="forwardButton" mnemonicParsing="false" onAction="#forward" prefHeight="10.0" prefWidth="10.0" text="A">
+         <Button fx:id="forwardButton" mnemonicParsing="false" onAction="#forward" prefHeight="25.0" prefWidth="25.0" styleClass="forwardButton">
             <VBox.margin>
                <Insets right="10.0" top="10.0" />
             </VBox.margin>

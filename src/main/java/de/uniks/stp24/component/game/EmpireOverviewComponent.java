@@ -210,7 +210,7 @@ public class EmpireOverviewComponent extends StackPane {
                     if (clickCounter % 2 == 0) {
                         clicked.inGameController.showOverview();
                     } else {
-                        inGameController.overviewSitesComponent.closeOverview();
+                        inGameController.islandOverviewComponent.closeOverview();
                     }
                     clickCounter++;
                 });

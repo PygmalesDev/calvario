@@ -10,6 +10,7 @@ import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
@@ -114,10 +115,10 @@ public class InGameController extends BasicController {
 
     @SubComponent
     @Inject
-    public OverviewSitesComponent overviewSitesComponent;
+    public IslandOverviewComponent islandOverviewComponent;
     @SubComponent
     @Inject
-    public OverviewUpgradeComponent overviewUpgradeComponent;
+    public IslandUpgradeOverviewComponent islandUpgradeOverviewComponent;
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
@@ -205,8 +206,8 @@ public class InGameController extends BasicController {
 
     @OnInit
     public void init() {
-        overviewSitesComponent.setIngameController(this);
-        overviewUpgradeComponent.setIngameController(this);
+        islandOverviewComponent.setIngameController(this);
+        islandUpgradeOverviewComponent.setIngameController(this);
         buildingsWindowComponent.setInGameController(this);
         buildingPropertiesComponent.setInGameController(this);
         sitePropertiesComponent.setInGameController(this);
@@ -290,9 +291,9 @@ public class InGameController extends BasicController {
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
 
         overviewContainer.setVisible(false);
-        overviewSitesComponent.setContainer();
-        overviewContainer.getChildren().add(overviewSitesComponent);
-        overviewContainer.getChildren().add(overviewUpgradeComponent);
+        islandOverviewComponent.setContainer();
+        overviewContainer.getChildren().add(islandOverviewComponent);
+        overviewContainer.getChildren().add(islandUpgradeOverviewComponent);
 
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
@@ -456,74 +457,81 @@ public class InGameController extends BasicController {
             if (selected.getIsland().owner() != null) {
                 selectedIsland = selected;
                 if (selected.island.owner().equals(this.tokenStorage.getEmpireId()))
-                    this.overviewSitesComponent.jobsComponent.setJobsObservableList(
+                    this.islandOverviewComponent.jobsComponent.setJobsObservableList(
                         this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
 
                 showOverview();
                 selected.showUnshowRudder();
             } else if (Objects.nonNull(selectedIsland)) {
                 selectedIsland.showUnshowRudder();
-                this.overviewSitesComponent.closeOverview();
+                this.islandOverviewComponent.closeOverview();
             }
         }
     }
 
     @OnRender
     public void setJobInspectors() {
-        this.jobsService.setJobInspector("island_jobs_overview", (String... params) -> {
-            Island selected = this.islandsService.getIsland(params[0]);
+        this.jobsService.setJobInspector("island_jobs_overview", (Jobs.Job job) -> {
+            Island selected = this.islandsService.getIsland(job.system());
             this.tokenStorage.setIsland(selected);
-            this.overviewSitesComponent.jobsComponent.setJobsObservableList(
-                    this.jobsService.getObservableListForSystem(params[0]));
+            this.islandOverviewComponent.jobsComponent.setJobsObservableList(
+                    this.jobsService.getObservableListForSystem(job.system()));
 
             this.islandAttributes.setIsland(selected);
-            selectedIsland = this.islandsService.getIslandComponent(params[0]);
+            selectedIsland = this.islandsService.getIslandComponent(job.system());
             if (Objects.nonNull(selected.owner())) {
                 showOverview();
-                this.overviewSitesComponent.showJobs();
+                this.islandOverviewComponent.showJobs();
             }
         });
 
-        this.jobsService.setJobInspector("upgrade_overview", (String... params) -> {
-            Island selected = this.islandsService.getIsland(params[0]);
+        this.jobsService.setJobInspector("upgrade_overview", (Jobs.Job job) -> {
+            Island selected = this.islandsService.getIsland(job.system());
             this.tokenStorage.setIsland(selected);
-            this.overviewSitesComponent.jobsComponent.setJobsObservableList(
-                    this.jobsService.getObservableListForSystem(params[0]));
+            this.islandOverviewComponent.jobsComponent.setJobsObservableList(
+                    this.jobsService.getObservableListForSystem(job.system()));
 
             this.islandAttributes.setIsland(selected);
-            selectedIsland = this.islandsService.getIslandComponent(params[0]);
+            selectedIsland = this.islandsService.getIslandComponent(job.system());
             if (Objects.nonNull(selected.owner())) {
                 showOverview();
-                this.overviewSitesComponent.showUpgrades();
+                this.islandOverviewComponent.showUpgrades();
             }
         });
 
-        this.jobsService.setJobInspector("site_overview", (String... params) -> {
-            Island selected = this.islandsService.getIsland(params[1]);
+        this.jobsService.setJobInspector("site_overview", (Jobs.Job job) -> {
+            Island selected = this.islandsService.getIsland(job.system());
             this.islandAttributes.setIsland(selected);
             this.tokenStorage.setIsland(selected);
-            this.setSiteType(params[0]);
+            this.setSiteType(job.district());
             this.showSiteOverview();
         });
 
-        this.jobsService.setJobInspector("building_overview", (String... params) -> {
-            Island selected = this.islandsService.getIsland(params[2]);
+        this.jobsService.setJobInspector("building_overview", (Jobs.Job job) -> {
+            Island selected = this.islandsService.getIsland(job.system());
             this.islandAttributes.setIsland(selected);
             this.tokenStorage.setIsland(selected);
-            this.showBuildingInformation(params[0], params[1]);
+            this.showBuildingInformation(job.building(), job._id());
+        });
+
+        this.jobsService.setJobInspector("building_done_overview", (Jobs.Job job) -> {
+            Island selected = this.islandsService.getIsland(job.system());
+            this.islandAttributes.setIsland(selected);
+            this.tokenStorage.setIsland(selected);
+            this.showBuildingInformation(job.building(), "");
         });
     }
 
     public void showOverview() {
-        overviewSitesComponent.inputIslandName.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId()));
-        overviewSitesComponent.buildingsComponent.resetPage();
-        overviewSitesComponent.buildingsComponent.setGridPane();
+        islandOverviewComponent.inputIslandName.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId()));
+        islandOverviewComponent.buildingsComponent.resetPage();
+        islandOverviewComponent.buildingsComponent.setGridPane();
         overviewContainer.setVisible(true);
-        overviewSitesComponent.sitesContainer.setVisible(true);
-        overviewSitesComponent.buildingsButton.setDisable(true);
-        inGameService.showOnly(overviewContainer, overviewSitesComponent);
-        inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
-        overviewSitesComponent.setOverviewSites();
+        islandOverviewComponent.sitesContainer.setVisible(true);
+        islandOverviewComponent.buildingsButton.setDisable(true);
+        inGameService.showOnly(overviewContainer, islandOverviewComponent);
+        inGameService.showOnly(islandOverviewComponent.sitesContainer, islandOverviewComponent.buildingsComponent);
+        islandOverviewComponent.setOverviewSites();
     }
 
     @OnKey(code = KeyCode.SPACE, alt = true)
@@ -575,7 +583,7 @@ public class InGameController extends BasicController {
                 event -> {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         islandAttributes.setEmpireDto(event.data());
-                        overviewUpgradeComponent.setUpgradeButton();
+                        islandUpgradeOverviewComponent.setUpgradeButton();
                         this.lastUpdate = event.data().updatedAt();
                     }
                 },
@@ -604,7 +612,7 @@ public class InGameController extends BasicController {
     public void setSitePropertiesInvisible() {
         sitePropertiesComponent.setVisible(false);
         buildingProperties.setMouseTransparent(false);
-        overviewSitesComponent.buildingsComponent.setGridPane();
+        islandOverviewComponent.buildingsComponent.setGridPane();
     }
 
     public void showHelp() {
@@ -619,7 +627,7 @@ public class InGameController extends BasicController {
     }
 
     public void updateResCapacity() {
-        overviewSitesComponent.updateResCapacity();
+        islandOverviewComponent.updateResCapacity();
     }
 
     @OnDestroy

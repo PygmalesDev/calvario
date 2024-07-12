@@ -109,7 +109,6 @@ public class TimerService {
                             error -> System.out.println("Error: " + error.getMessage())
                     );
                 }
-                // if countdown <= 0 -> Wait for Server response to call reset() Method
             }
         };
         timer.scheduleAtFixedRate(timerTask, 0, 1000 / speed);
@@ -173,6 +172,10 @@ public class TimerService {
             this.listeners = new PropertyChangeSupport(this);
         }
         return this.listeners;
+    }
+
+    public int getSpeed() {
+        return speed;
     }
 
     public void setSpeedLocal(int value) {

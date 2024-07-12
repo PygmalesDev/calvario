@@ -35,20 +35,20 @@ public class EventService {
     ObjectMapper objectMapper = new ObjectMapper();
 
     // with seed, so every Player has the same events at the same time
-    Random random = new Random(1000);
+    Random random = new Random();
 
 
     @Inject
-    TimerService timerService;
+    public TimerService timerService;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
 
     @Inject
-    EmpireApiService empireApiService;
+    public EmpireApiService empireApiService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
 
 
     ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",
@@ -66,7 +66,8 @@ public class EventService {
      */
     @Inject
     public EventService() {
-        setNextEvent();
+        //setNextEvent();
+        nextEvent = 2;
         this.listeners = new PropertyChangeSupport(this);
     }
 
@@ -95,7 +96,8 @@ public class EventService {
     }
 
     public void setNextEvent() {
-        nextEvent = random.nextInt(100, 120);
+        nextEvent = 2;
+        //nextEvent = random.nextInt(100, 120);
     }
 
     public EffectSourceParentDto getEvent() {
@@ -204,23 +206,6 @@ public class EventService {
         }
         // if no event can occur
         return null;
-    }
-
-    /**
-     * Looks for the eventType of the event. If it is not from our interface,
-     * it will return "unknown", else it will return "good" or "bad".
-     */
-    public String searchEvent(String eventName) {
-        for (String event : eventNames) {
-            if (event.equals(eventName)) {
-                if (eventNames.indexOf(event) > 5) {
-                    return "bad";
-                } else {
-                    return "good";
-                }
-            }
-        }
-        return "unknown";
     }
 
     public Observable<EmpireDto> sendEffect() {

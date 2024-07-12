@@ -38,7 +38,7 @@ public class ClockComponent extends AnchorPane {
     @FXML
     VBox clockVBox;
     @FXML
-    ToggleButton flagToggle;
+    public ToggleButton flagToggle;
     @FXML
     public Button randomEventButton;
     @FXML
@@ -48,13 +48,13 @@ public class ClockComponent extends AnchorPane {
     @FXML
     ToggleGroup speed;
     @FXML
-    RadioButton x1Button;
+    public RadioButton x1Button;
     @FXML
-    RadioButton x2Button;
+    public RadioButton x2Button;
     @FXML
-    RadioButton x3Button;
+    public RadioButton x3Button;
     @FXML
-    RadioButton pauseClockButton;
+    public RadioButton pauseClockButton;
     @FXML
     Label seasonLabel;
     @FXML
@@ -291,6 +291,7 @@ public class ClockComponent extends AnchorPane {
         if (!timerService.isRunning()) {
             timerService.resume();
         }
+        timerService.setSpeedLocal(speed);
         subscriber.subscribe(timerService.setSpeed(gameId, speed),
                 result -> {
                 },

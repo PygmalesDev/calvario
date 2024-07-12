@@ -33,12 +33,12 @@ public class MarketSeasonComponent extends HBox implements ReusableItemComponent
     Button playControlsButton;
     @FXML
     Button cancelTradesButton;
-//    @Inject
-//    @org.fulib.fx.annotation.controller.Resource
-//    ResourceBundle langBundle;
-//    @Inject
-//    @Named("gameResourceBundle")
-//    ResourceBundle gameResourceBundle;
+    @Inject
+    @org.fulib.fx.annotation.controller.Resource
+    ResourceBundle langBundle;
+    @Inject
+    @Named("gameResourceBundle")
+    ResourceBundle gameResourceBundle;
     @Inject
     ImageCache imageCache;
 

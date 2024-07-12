@@ -164,7 +164,7 @@ public class MarketComponent extends StackPane {
 
     private void setCreditCount() {
         userCredits = resourceCountMap.get("credits");
-        userCreditsLabel.setText(String.valueOf(userCredits));
+        userCreditsLabel.setText(String.format("%.2f", userCredits));
     }
 
     public void filterResourceMap() {
@@ -248,8 +248,8 @@ public class MarketComponent extends StackPane {
         this.sellingPrice = (resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoodsLabel.getText())) * (1 - this.marketFee);
         this.buyingPrice = (resourcePriceMap.get(resource) * Integer.parseInt(numberOfGoodsLabel.getText())) * (1 + this.marketFee);
 
-        buyingPriceLabel.setText(String.valueOf(buyingPrice));
-        sellingPriceLabel.setText(String.valueOf(sellingPrice));
+        buyingPriceLabel.setText(String.format("%.2f", buyingPrice));
+        sellingPriceLabel.setText(String.format("%.2f", sellingPrice));
         buttonLogic();
     }
 
@@ -263,7 +263,7 @@ public class MarketComponent extends StackPane {
             resourceCountMapCopy = new HashMap<>(resourceCountMap);
 
             userCredits -= buyingPrice;
-            userCreditsLabel.setText(String.valueOf(userCredits));
+            userCreditsLabel.setText(String.format("%.2f", userCredits));
             resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
             updateResources();
             refreshListview();
@@ -279,7 +279,7 @@ public class MarketComponent extends StackPane {
             resourceCountMapCopy = new HashMap<>(resourceCountMap);
 
             userCredits += sellingPrice;
-            userCreditsLabel.setText(String.valueOf(userCredits));
+            userCreditsLabel.setText(String.format("%.2f", userCredits));
             resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
             updateResources();
             refreshListview();
@@ -287,17 +287,21 @@ public class MarketComponent extends StackPane {
     }
 
     public void incrementAmount() {
-        int amount = Integer.parseInt(numberOfGoodsLabel.getText());
-        amount++;
-        numberOfGoodsLabel.setText(String.valueOf(amount));
-        buyingAndSellingPrice(selectedItem);
+        if(Objects.nonNull(selectedItem)){
+            int amount = Integer.parseInt(numberOfGoodsLabel.getText());
+            amount++;
+            numberOfGoodsLabel.setText(String.valueOf(amount));
+            buyingAndSellingPrice(selectedItem);
+        }
     }
 
     public void decrementAmount() {
-        int amount = Integer.parseInt(numberOfGoodsLabel.getText());
-        amount--;
-        numberOfGoodsLabel.setText(String.valueOf(amount));
-        buyingAndSellingPrice(selectedItem);
+        if(Objects.nonNull(selectedItem)){
+            int amount = Integer.parseInt(numberOfGoodsLabel.getText());
+            amount--;
+            numberOfGoodsLabel.setText(String.valueOf(amount));
+            buyingAndSellingPrice(selectedItem);
+        }
     }
 
     public void setInGameController(InGameController ingameController) {

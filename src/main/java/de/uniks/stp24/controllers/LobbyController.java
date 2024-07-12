@@ -126,8 +126,6 @@ public class LobbyController extends BasicController {
                     this.asHost = game.owner().equals(this.tokenStorage.getUserId());
                     this.maxMember = game.maxMembers();
                     this.readyAmount = 0;
-                    this.lobbyHostSettingsComponent.setMaxMember(this.maxMember);
-                    this.lobbyHostSettingsComponent.setBubbleComponent(this.bubbleComponent);
 
                     this.enterGameComponent.setGameID(this.gameID);
                     this.lobbySettingsComponent.setGameID(this.gameID);
@@ -164,12 +162,9 @@ public class LobbyController extends BasicController {
                                 this.lobbyHostSettingsComponent.startJourneyButton.setDisable(!allReady || tooManyPlayer);
 
                                 this.sortMemberList();
-                            },
-                            this::errorMsg);
+                            }, this::errorMsg);
                     this.createGameStartedListener();
-                    this.lobbyHostSettingsComponent.createCheckPlayerReadinessListener();
-                },
-                this::errorMsg);
+                }, this::errorMsg);
     }
 
     /**
@@ -177,13 +172,11 @@ public class LobbyController extends BasicController {
      */
     private void createGameDeletedListener() {
         this.subscriber.subscribe(this.eventListener
-                        .listen("games." + this.gameID + ".deleted", Game.class),
-                event -> {
-                    this.lobbyMessagePane.setVisible(true);
-                    this.lobbyMessageElement.setVisible(true);
-                    this.messageText.setText(resources.getString("lobby.has.been.deleted"));
-                },
-                this::errorMsg);
+                .listen("games." + this.gameID + ".deleted", Game.class), event -> {
+            this.lobbyMessagePane.setVisible(true);
+            this.lobbyMessageElement.setVisible(true);
+            this.messageText.setText(resources.getString("lobby.has.been.deleted"));
+            }, this::errorMsg);
     }
 
     /**
@@ -191,8 +184,7 @@ public class LobbyController extends BasicController {
      */
     private void createUserListListener() {
         this.subscriber.subscribe(this.eventListener
-                        .listen("games." + this.gameID + ".members.*.*", MemberDto.class),
-                event -> {
+                        .listen("games." + this.gameID + ".members.*.*", MemberDto.class), event -> {
                     String id = event.data().user();
                     switch (event.suffix()) {
                         case "created" -> {
@@ -208,9 +200,7 @@ public class LobbyController extends BasicController {
                         case "deleted" -> this.removeUserFromList(id);
                     }
                     this.sortMemberList();
-                },
-                this::errorMsg
-        );
+                }, this::errorMsg);
     }
 
     /**
@@ -276,8 +266,12 @@ public class LobbyController extends BasicController {
      * @param data   member data containing their readiness state
      */
     private void addUserToList(String userID, MemberDto data) {
-        this.subscriber.subscribe(this.userApiService.getUser(userID), user ->
-            this.users.add(new MemberUser(user, data.empire(), data.ready(), this.game, this.asHost)),
+        this.subscriber.subscribe(this.userApiService.getUser(userID), user -> {
+                    this.users.add(new MemberUser(user, data.empire(), data.ready(), this.game, this.asHost));
+                    this.playerReadinessText.setText(String.format("Ready %d/%d",
+                            this.users.filtered(MemberUser::ready).size(), this.users.size()));
+                    this.lobbyHostSettingsComponent.startJourneyButton.setDisable(this.users.filtered(MemberUser::ready).size() != this.users.size());
+                },
           error -> {});
     }
 
@@ -296,7 +290,8 @@ public class LobbyController extends BasicController {
             } else return memberUser;
         });
         this.playerReadinessText.setText(String.format("Ready %d/%d",
-                this.users.filtered(MemberUser::ready).size(), this.maxMember));
+                this.users.filtered(MemberUser::ready).size(), this.users.size()));
+        this.lobbyHostSettingsComponent.startJourneyButton.setDisable(this.users.filtered(MemberUser::ready).size() != this.users.size());
     }
 
     /**
@@ -312,6 +307,9 @@ public class LobbyController extends BasicController {
             this.wasKicked = true;
         }
         this.users.removeIf(memberUser -> memberUser.user()._id().equals(userID));
+        this.playerReadinessText.setText(String.format("Ready %d/%d",
+                this.users.filtered(MemberUser::ready).size(), this.users.size()));
+        this.lobbyHostSettingsComponent.startJourneyButton.setDisable(this.users.filtered(MemberUser::ready).size() != this.users.size());
     }
 
     /**
@@ -332,10 +330,8 @@ public class LobbyController extends BasicController {
                         bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.password"));
                         this.lobbyElement.getChildren().add(this.enterGameComponent);
                     }
-                    this.playerReadinessText.setText(String.format("Ready %d/%d",
-                            this.users.filtered(MemberUser::ready).size(), this.maxMember));
-                },
-                this::errorMsg);
+
+                }, this::errorMsg);
     }
 
     /**

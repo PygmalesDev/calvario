@@ -74,8 +74,8 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     public void setItem(@NotNull MemberUser member) {
         this.member = member;
         this.kickButton.setId("kick" + member.user()._id());
-        if (member.user()._id().equals(member.game().owner()) || !member.asHost())
-            this.kickButton.setVisible(false);
+
+        if (member.user()._id().equals(member.game().owner()) || !member.asHost()) this.kickButton.setVisible(false);
 
         this.backgroundPane.getStyleClass().clear();
         if (member.user()._id().equals(member.game().owner()))
@@ -96,10 +96,8 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
             avatarMap.put("frameIndex", 8);
             tokenStorage.setAvatarMap(avatarMap);
             initializeAvatarImage(avatarMap);
-        } else {
-            initializeAvatarImage(this.member.user()._public());
+        } else initializeAvatarImage(this.member.user()._public());
 
-        }
     }
 
     public void initializeAvatarImage(Map<String, Integer> avatarMap) {

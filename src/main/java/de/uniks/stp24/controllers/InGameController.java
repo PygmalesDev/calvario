@@ -87,10 +87,6 @@ public class InGameController extends BasicController {
     public StackPane buildingsWindow;
     @FXML
     public StackPane pauseMenuContainer;
-    @FXML
-    public StackPane storageOverviewContainer;
-    @FXML
-    public StackPane empireOverviewContainer;
 
     @FXML
     public StackPane clockComponentContainer;
@@ -203,8 +199,6 @@ public class InGameController extends BasicController {
     PopupBuilder popupSiteProperties = new PopupBuilder();
     PopupBuilder popupDeleteStructure = new PopupBuilder();
     PopupBuilder popupHelpWindow = new PopupBuilder();
-    public String selectedBuilding;
-    public String selectedSites;
 
 
 
@@ -340,20 +334,12 @@ public class InGameController extends BasicController {
         //Generate job stopping conditions for the already running jobs
         this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListener();
-        System.out.println("2");
         explanationService.setInGameController(this);
-        System.out.println("2");
 
-        empireOverviewContainer.setVisible(false);
-        System.out.println("3");
-        empireOverviewContainer.getChildren().add(empireOverviewComponent);
-        System.out.println("3");
         technologiesComponent.setContainer(technologiesContainer);
-        System.out.println("3");
         technologiesContainer.setVisible(false);
-        System.out.println("3");
         technologiesContainer.getChildren().add(technologiesComponent);
-        System.out.println("3");
+
     }
 
     @OnKey(code = KeyCode.ESCAPE)

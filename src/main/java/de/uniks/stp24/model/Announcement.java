@@ -5,8 +5,7 @@ import java.util.function.Consumer;
 
 public record Announcement(
         String message,
-        boolean showForward,
         String forwardIcon,
-        ArrayList<Consumer<Jobs.Job>> forwardMethod,
+        ArrayList<Consumer<Jobs.Job>> forwardMethods,
         Jobs.Job job) {
 }

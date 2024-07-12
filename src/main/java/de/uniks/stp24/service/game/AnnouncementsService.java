@@ -34,60 +34,65 @@ public class AnnouncementsService {
     }
 
     public void addAnnouncement(Jobs.Job job) {
-        String message = "";
-        Island island = islandsService.getIsland(job.system());
-        String islandName = "";
-        if (Objects.nonNull(island)) {
-            islandName = island.name().isEmpty() ? gameResourceBundle.getString("uncharted") : island.name();
-        }
-        ArrayList<Consumer<Jobs.Job>> forwardMethods = new ArrayList<>();
-        String forwardIcon = "";
+        if (job.progress() >= job.total()) {
+            String message = "";
+            Island island = islandsService.getIsland(job.system());
+            String islandName = "";
+            if (Objects.nonNull(island)) {
+                islandName = island.name().isEmpty() ? gameResourceBundle.getString("uncharted") : island.name();
+            }
+            ArrayList<Consumer<Jobs.Job>> forwardMethods = new ArrayList<>();
+            String forwardIcon = "";
 
-        switch (job.type()) {
-            case "upgrade" -> {
-                message = gameResourceBundle.getString("captain.upgrade.ready")
-                        .replace("{upgradeLevel}", gameResourceBundle.getString(upgradeTranslation.get(island.upgrade())))
-                        .replace("{islandName}", islandName);
-                forwardMethods.add(jobsService.getJobInspector("island_jobs_overview"));
-                forwardIcon = "-fx-background-image: url('[PATH]')"
-                        .replace("[PATH]", "/icons/islands/" + island.type() + ".png");
+            switch (job.type()) {
+                case "upgrade" -> {
+                    message = gameResourceBundle.getString("captain.upgrade.ready")
+                            .replace("{upgradeLevel}", gameResourceBundle.getString(upgradeTranslation.get(island.upgrade())))
+                            .replace("{islandName}", islandName);
+                    forwardMethods.add(jobsService.getJobInspector("island_jobs_overview"));
+                    forwardIcon = "-fx-background-image: url('[PATH]')"
+                            .replace("[PATH]", "/icons/islands/" + island.type() + ".png");
+                }
+                case "district" -> {
+                    message = gameResourceBundle.getString("captain.site.ready")
+                            .replace("{siteId}", this.gameResourceBundle.getString(
+                                    Constants.siteTranslation.get(job.district())) + " Site")
+                            .replace("{islandName}", islandName);
+                    forwardMethods.add(jobsService.getJobInspector("island_jobs_overview"));
+                    forwardMethods.add(jobsService.getJobInspector("site_overview"));
+                    forwardIcon = "-fx-background-image: url('[PATH]')"
+                            .replace("[PATH]", "/" + sitesIconPathsMap.get(job.district()));
+                }
+                case "building" -> {
+                    message = gameResourceBundle.getString("captain.building.ready")
+                            .replace("{buildingId}", this.gameResourceBundle.getString(
+                                    Constants.buildingTranslation.get(job.building())))
+                            .replace("{islandName}", islandName);
+                    forwardMethods.add(jobsService.getJobInspector("island_jobs_overview"));
+                    forwardMethods.add(jobsService.getJobInspector("building_done_overview"));
+                    forwardIcon = "-fx-background-image: url('[PATH]')"
+                            .replace("[PATH]", "/" + buildingsIconPathsMap.get(job.building()));
+                }
+                case "technology" -> {
+                    // todo translate technology
+                    message = gameResourceBundle.getString("captain.technology.ready")
+                            .replace("{technologyId}", job.technology());
+                    // todo change
+                    forwardMethods.add(jobsService.getJobInspector("island_jobs_overview"));
+                }
             }
-            case "district"  -> {
-                message = gameResourceBundle.getString("captain.site.ready")
-                        .replace("{siteId}", this.gameResourceBundle.getString(
-                                Constants.siteTranslation.get(job.district())) + " Site")
-                        .replace("{islandName}", islandName);
-                forwardMethods.add(jobsService.getJobInspector("island_jobs_overview"));
-                forwardMethods.add(jobsService.getJobInspector("site_overview"));
-                forwardIcon = "-fx-background-image: url('[PATH]')"
-                        .replace("[PATH]", "/" + sitesIconPathsMap.get(job.district()));
-            }
-            case "building" -> {
-                message = gameResourceBundle.getString("captain.building.ready")
-                        .replace("{buildingId}", this.gameResourceBundle.getString(
-                                Constants.buildingTranslation.get(job.building())))
-                        .replace("{islandName}", islandName);
-                forwardMethods.add(jobsService.getJobInspector("island_jobs_overview"));
-                forwardMethods.add(jobsService.getJobInspector("building_done_overview"));
-                forwardIcon = "-fx-background-image: url('[PATH]')"
-                        .replace("[PATH]", "/" + buildingsIconPathsMap.get(job.building()));
-            }
-            case "technology" -> {
-                // todo translate technology
-                message = gameResourceBundle.getString("captain.technology.ready")
-                        .replace("{technologyId}", job.technology());
-                // todo change
-                forwardMethods.add(jobsService.getJobInspector("island_jobs_overview"));
-            }
+            announcements.addFirst(new Announcement(message, forwardIcon, forwardMethods, job));
         }
-        announcements.addFirst(new Announcement(message, true, forwardIcon, forwardMethods, job));
     }
 
     public void addAnnouncement(Resource resource) {
-        // todo change text
-        String message =  "Bruh, you are broke. You have only " + resource.count() + " " +
-                gameResourceBundle.getString(resource.resourceID()) + "! Get your act togehther!";
-        announcements.add(new Announcement(message, false, null, null, null));
+        String message = gameResourceBundle.getString("captain.debt")
+                .replace("{resourceCount}", String.valueOf(resource.count()))
+                .replace("{resourceId}", gameResourceBundle.getString(resourceTranslation.get(resource.resourceID())));
+        ArrayList<Consumer<Jobs.Job>> forwardMethods = new ArrayList<>();
+        forwardMethods.add(jobsService.getJobInspector("storage_overview"));
+        String forwardIcon = resourceImagePath.get(resource.resourceID());
+        announcements.add(new Announcement(message, forwardIcon, forwardMethods, null));
     }
 
     public Announcement getNextAnnouncement() {

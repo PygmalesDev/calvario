@@ -520,6 +520,8 @@ public class InGameController extends BasicController {
             this.tokenStorage.setIsland(selected);
             this.showBuildingInformation(job.building(), "");
         });
+
+        this.jobsService.setJobInspector("storage_overview", (Jobs.Job job) -> showStorageOverview());
     }
 
     public void showOverview() {

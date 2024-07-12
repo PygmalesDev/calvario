@@ -37,7 +37,8 @@ public class JobsService {
     ArrayList<Runnable> finishCommonFunctions = new ArrayList<>();
     ArrayList<Runnable> startCommonFunctions = new ArrayList<>();
     ArrayList<Runnable> jobCommonUpdates = new ArrayList<>();
-    ArrayList<Consumer<Job>> jobCompletionConsumers = new ArrayList<>();
+    ArrayList<Consumer<Job>> startCommonConsumers = new ArrayList<>();
+    Map<String, ArrayList<Consumer<Job>>> jobCompletionConsumers = new HashMap<>();
 
     @Inject
     public JobsService() {}
@@ -102,6 +103,7 @@ public class JobsService {
         }
 
         this.startCommonFunctions.forEach(Runnable::run);
+        this.startCommonConsumers.forEach(func -> func.accept(job));
     }
 
     public void updateJobInGroups(@NotNull Job job) {
@@ -137,12 +139,15 @@ public class JobsService {
             this.jobCompletionFunctions.get(job._id()).forEach(Runnable::run);
 
         this.finishCommonFunctions.forEach(Runnable::run);
-        this.jobCompletionConsumers.forEach(func -> func.accept(job));
+
+        if (this.jobCompletionConsumers.containsKey(job._id()))
+            this.jobCompletionConsumers.get(job._id()).forEach(func -> func.accept(job));
     }
 
     private void deleteJobFromGroups(String jobID) {
         this.jobCollections.forEach((key, list) -> list.removeIf(job -> job._id().equals(jobID)));
         this.jobCompletionFunctions.remove(jobID);
+        this.jobCompletionConsumers.remove(jobID);
     }
 
     /**
@@ -152,6 +157,10 @@ public class JobsService {
      */
     public void onJobCommonStart(Runnable func) {
         this.startCommonFunctions.add(func);
+    }
+
+    public void onJobCommonStart(Consumer<Job> func) {
+        this.startCommonConsumers.add(func);
     }
 
     public void onJobCommonUpdates(Runnable func) {
@@ -218,8 +227,10 @@ public class JobsService {
         this.jobCompletionFunctions.get(jobID).add(func);
     }
 
-    public void onJobCommonCompletion(Consumer<Job> func) {
-        this.jobCompletionConsumers.add(func);
+    public void onJobCompletion(String jobID, Consumer<Job> func) {
+        if (!this.jobCompletionConsumers.containsKey(jobID))
+            this.jobCompletionConsumers.put(jobID, new ArrayList<>());
+        this.jobCompletionConsumers.get(jobID).add(func);
     }
 
 

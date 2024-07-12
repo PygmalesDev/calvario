@@ -69,7 +69,7 @@ public class CoolerBubbleComponent extends Captain {
     public void init() {
         setHintCountDown();
         announcements = announcementsService.getAnnouncements();
-        this.jobsService.onJobCommonCompletion(announcementsService::addAnnouncement);
+        this.jobsService.onJobCommonStart((job) -> this.jobsService.onJobCompletion(job._id(), (sameJob) -> announcementsService.addAnnouncement(sameJob)));
     }
 
     private void setHintCountDown() {
@@ -177,7 +177,7 @@ public class CoolerBubbleComponent extends Captain {
     }
 
     public void silence() {
-        announcements.clear();
+        announcementsService.clearAnnouncements();
         setVisible(false);
     }
 }

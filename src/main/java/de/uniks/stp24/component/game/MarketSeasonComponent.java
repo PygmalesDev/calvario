@@ -5,6 +5,7 @@ import de.uniks.stp24.model.SeasonComponent;
 import de.uniks.stp24.service.ImageCache;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -30,7 +31,7 @@ public class MarketSeasonComponent extends HBox implements ReusableItemComponent
     @FXML
     Text moneyAmountText;
     @FXML
-    Button playControlsButton;
+    ToggleButton playControlsButton;
     @FXML
     Button cancelTradesButton;
     @Inject
@@ -49,10 +50,15 @@ public class MarketSeasonComponent extends HBox implements ReusableItemComponent
 
     @Override
     public void setItem(@NotNull SeasonComponent seasonComponent) {
-        System.out.println(seasonComponent);
         transActionTypeText.setText(seasonComponent.transActionTypeText());
-        resourceTypeImageView.setImage(imageCache.get(seasonComponent.resourceType()));
-        resourceAmountText.setText(String.valueOf(seasonComponent.resourceAmount()));
-        moneyAmountText.setText(String.valueOf(seasonComponent.moneyAmount()));
+        resourceTypeImageView.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + seasonComponent.resourceType() + ".png"));
+        if(seasonComponent.transActionTypeText().equals("buy")){
+            resourceAmountText.setText("+" + seasonComponent.resourceAmount());
+            moneyAmountText.setText("-"+ seasonComponent.moneyAmount());
+        } else {
+            int sell = seasonComponent.resourceAmount() * -1;
+            moneyAmountText.setText("+"+ sell);
+            resourceAmountText.setText("-" + seasonComponent.moneyAmount());
+        }
     }
 }

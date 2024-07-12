@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 
 import javax.inject.Inject;
@@ -19,6 +20,10 @@ public class VariableExplanationComponent extends VBox {
 
     @FXML
     ListView effectList;
+    @FXML
+    Text baseValue;
+    @FXML
+    Text totalValue;
 
     App app;
 
@@ -48,7 +53,8 @@ public class VariableExplanationComponent extends VBox {
         explanations.setAll(newEffects);
     }
 
-    private boolean noEffects(){
-        return false;
+    public void setValues(String baseValue, String totalValue){
+        this.baseValue.setText(baseValue);
+        this.totalValue.setText(totalValue);
     }
 }

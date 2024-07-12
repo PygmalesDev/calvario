@@ -10,14 +10,10 @@
       <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="headerTextBuildings" text="\%title" />
    </HBox>
    <HBox alignment="CENTER_LEFT" prefHeight="15.0" prefWidth="183.0" stylesheets="@../../style/islandOverview.css">
-      <children>
-         <Text fx:id="baseValue" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Base:" />
-      </children>
+      <Text fx:id="baseValue" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Base:"/>
    </HBox>
    <ListView fx:id="effectList" prefHeight="51.0" prefWidth="183.0" style="-fx-background-color: transparent;" styleClass="explanation" stylesheets="@../../style/helpWindow.css" />
    <HBox stylesheets="@../../style/islandOverview.css">
-      <children>
-         <Text fx:id="totalValue" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Total: " />
-      </children>
+      <Text fx:id="totalValue" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Total: "/>
    </HBox>
 </fx:root>

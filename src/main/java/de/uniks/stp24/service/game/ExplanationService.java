@@ -66,7 +66,7 @@ public class ExplanationService {
 
 
             if (isMouseInsideCell && !entered.get()) {
-                //getResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID(), explanationComponent);
+                initializeResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID(), explanationComponent);
                 tooltip.show(app.stage(), mouseX, mouseY);
                 entered.set(true);
             } else if (!isMouseInsideCell) {
@@ -79,9 +79,17 @@ public class ExplanationService {
 
     private void initializeResExplanation(String listType, String indicator, String ResCategory, String id, VariableExplanationComponent variableExplanationComponent) {
         String variable = listType + "." + indicator + "." + ResCategory + "." + id;
-        System.out.println(variable);
+        ExplainedVariableDTO explanation = variableService.data.get(variable);
+        variableExplanationComponent.setValues("Base: " + explanation.initial(), "Total: " + explanation.finalValue());
 
         List<ExplanationComponent> explanationComponentList = new ArrayList<>();
+        if(!variableService.getActiveEffects().get(variable).isEmpty()){
+            for(String effect: variableService.getActiveEffects().get(variable)){
+
+            }
+        }
+
+
         variableExplanationComponent.fillListWithEffects(explanationComponentList);
 
         ExplainedVariableDTO explanations = variableService.data.get(variable);

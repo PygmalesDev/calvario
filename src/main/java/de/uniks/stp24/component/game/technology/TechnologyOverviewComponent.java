@@ -95,7 +95,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
     public void setContainer(@NotNull Pane parent) {
         this.parent = parent;
-        parent.getChildren().add(technologyCategoryComponent);
+        this.parent.getChildren().add(technologyCategoryComponent);
         technologyCategoryComponent.setContainer(parent);
         technologyCategoryComponent.setVisible(false);
     }
@@ -107,8 +107,9 @@ public class TechnologyOverviewComponent extends AnchorPane {
     public void show(@NotNull TechnologyCategoryComponent technologieCategory) {
         setCategoryInfos(technologieCategory);
 
-        parent.getChildren().getFirst().setVisible(true);
-        parent.getChildren().getLast().setVisible(false);
+        parent.getChildren().stream().filter(node -> node.equals(technologyCategoryComponent)).forEach(node -> node.setVisible(true));
+//        parent.getChildren().getFirst().setVisible(true);
+//        parent.getChildren().getLast().setVisible(false);
 
     }
 

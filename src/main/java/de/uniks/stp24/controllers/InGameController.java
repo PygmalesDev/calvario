@@ -9,10 +9,6 @@ import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
-import de.uniks.stp24.component.game.ClockComponent;
-import de.uniks.stp24.component.game.IslandComponent;
-import de.uniks.stp24.component.game.StorageOverviewComponent;
-import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
@@ -25,7 +21,6 @@ import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
-import de.uniks.stp24.service.PopupBuilder;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -296,8 +291,10 @@ public class InGameController extends BasicController {
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,
                 jobsOverviewComponent,
-                empireOverviewComponent
+                empireOverviewComponent,
+                technologiesComponent
         );
+        technologiesComponent.setContainer(contextMenuContainer);
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
 
         this.createContextMenuButtons();
@@ -401,15 +398,16 @@ public class InGameController extends BasicController {
             this.contextMenuButtons.getChildren().addAll(
                     new ContextMenuButton("storageOverview", this.storageOverviewComponent),
                     new ContextMenuButton("empireOverview", this.empireOverviewComponent),
-                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent)
+                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent),
+                    new ContextMenuButton("technologiesOverview", this.technologiesComponent)
             );
     }
 
-    private void showTechnologies() {
-        technologiesContainer.setVisible(!technologiesContainer.isVisible());
-        technologiesContainer.getChildren().getFirst().setVisible(false);
-        technologiesContainer.getChildren().getLast().setVisible(true);
-    }
+//    private void showTechnologies() {
+//        technologiesContainer.setVisible(!technologiesContainer.isVisible());
+//        technologiesContainer.getChildren().getFirst().setVisible(false);
+//        technologiesContainer.getChildren().getLast().setVisible(true);
+//    }
 
     @OnRender
     public void createMap() {

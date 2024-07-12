@@ -69,7 +69,6 @@ public class ExplanationService {
                 //getResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID(), explanationComponent);
                 tooltip.show(app.stage(), mouseX, mouseY);
                 entered.set(true);
-                //inGameController.debugPrints();
             } else if (!isMouseInsideCell) {
                 tooltip.hide();
                 entered.set(false);

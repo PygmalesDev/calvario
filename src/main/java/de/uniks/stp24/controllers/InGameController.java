@@ -229,7 +229,10 @@ public class InGameController extends BasicController {
         variableService.initVariables();
 
         this.subscriber.subscribe(this.lobbyService.getMember(gameID, tokenStorage.getUserId()),
-        result -> tokenStorage.setEmpireTraits(result.empire().traits()));
+                result -> tokenStorage.setEmpireTraits(result.empire().traits()));
+
+        this.subscriber.subscribe(this.inGameService.getVariablesEffects(),
+                result -> variableService.setVariablesEffect(result));
 
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
@@ -644,10 +647,4 @@ public class InGameController extends BasicController {
         this.subscriber.dispose();
         this.jobsService.dispose();
     }
-
-    public void debugPrints(){
-        System.out.println(tokenStorage.getEmpireTraits());
-        System.out.println(technologyService.getUnlockedTechnologies());
-    }
-
 }

@@ -30,4 +30,7 @@ public interface PresetsApiService {
 
     @GET("presets/technologies/{id}")
     Observable<TechnologyExtended> getTechnology(@Path("id") String id);
+
+    @GET("presets/variables/effects")
+    Observable<Map<String, ArrayList<String>>> getVariablesEffects();
 }

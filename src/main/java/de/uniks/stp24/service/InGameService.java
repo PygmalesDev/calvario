@@ -12,6 +12,8 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Map;
 
 @Singleton
@@ -41,6 +43,10 @@ public class InGameService {
 
     public Observable<Map<String, Integer>> getVariablesPresets() {
         return presetsApiService.getVariablesPresets();
+    }
+
+    public Observable<Map<String, ArrayList<String>>> getVariablesEffects() {
+        return presetsApiService.getVariablesEffects();
     }
 
     public void setPaused(Boolean isPaused) {

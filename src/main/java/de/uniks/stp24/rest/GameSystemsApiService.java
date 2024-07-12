@@ -20,6 +20,9 @@ public interface GameSystemsApiService {
     @GET("games/{game}/systems")
     Observable<SystemDto[]> getSystems(@Path("game") String gameID);
 
+    @GET("games/{game}/systems/{id}")
+    Observable<SystemDto> getSystem(@Path("game") String gameID, @Path("id") String systemID);
+
     @PATCH("games/{game}/systems/{id}")
     Observable<SystemDto> updateIsland(@Path("game") String gameID, @Path("id") String islandID, @Body SystemsDto dto);
 

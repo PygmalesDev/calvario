@@ -2,7 +2,7 @@ package de.uniks.stp24.rest;
 
 import de.uniks.stp24.dto.LoginDto;
 import de.uniks.stp24.dto.LogoutDto;
-import de.uniks.stp24.model.LoginResult;
+import de.uniks.stp24.model.*;
 import de.uniks.stp24.dto.RefreshDto;
 import de.uniks.stp24.model.LogoutResult;
 import io.reactivex.rxjava3.core.Observable;

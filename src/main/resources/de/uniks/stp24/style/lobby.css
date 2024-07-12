@@ -79,7 +79,7 @@
     -fx-background-color: transparent;
     -fx-background-image: url('/de/uniks/stp24/assets/backgrounds/password_input_background.png');
     -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
+    -fx-background-position: bottom;
     -fx-font-family: "Javanese Text";
     -fx-text-fill: white;
     -fx-prompt-text-fill: white;

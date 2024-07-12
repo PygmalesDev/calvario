@@ -33,8 +33,6 @@ public class TechnologyOverviewComponent extends AnchorPane {
     @FXML
     Button marineSienceButton;
 
-    private String categoryName;
-
     private Pane parent;
     @Inject
     Subscriber subscriber;
@@ -82,7 +80,6 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
     public void engineering() {
         show(technologyCategoryComponent.setCategory("engineering"));
-
     }
 
     public void society() {
@@ -100,17 +97,10 @@ public class TechnologyOverviewComponent extends AnchorPane {
         technologyCategoryComponent.setVisible(false);
     }
 
-    /**
-     * First Child: TechnologyCategoryComponent
-     * Second Child: TechnologyOverviewComponent
-     */
+
     public void show(@NotNull TechnologyCategoryComponent technologieCategory) {
         setCategoryInfos(technologieCategory);
-
         parent.getChildren().stream().filter(node -> node.equals(technologyCategoryComponent)).forEach(node -> node.setVisible(true));
-//        parent.getChildren().getFirst().setVisible(true);
-//        parent.getChildren().getLast().setVisible(false);
-
     }
 
     public void setCategoryInfos(@NotNull TechnologyCategoryComponent technologieCategory) {

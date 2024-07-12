@@ -51,9 +51,11 @@ import java.util.*;
 public class InGameController extends BasicController {
 
     @FXML
+    public StackPane technologiesContainer;
+    @FXML
     StackPane helpWindowContainer;
     @FXML
-    Pane shadow;
+    public Pane shadow;
     @FXML
     StackPane eventContainer;
     @FXML
@@ -291,10 +293,11 @@ public class InGameController extends BasicController {
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,
                 jobsOverviewComponent,
-                empireOverviewComponent,
-                technologiesComponent
+                empireOverviewComponent
         );
-        technologiesComponent.setContainer(contextMenuContainer);
+        technologiesContainer.getChildren().add(technologiesComponent);
+        technologiesComponent.setContainer(technologiesContainer);
+        technologiesComponent.setVisible(false);
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
 
         this.createContextMenuButtons();
@@ -348,7 +351,17 @@ public class InGameController extends BasicController {
         if (this.helpComponent.isVisible()) {
             this.helpComponent.close();
             this.removePause();
-        } else showHelp();
+            this.shadow.setVisible(false);
+        } else {
+            showHelp();
+            this.shadow.setVisible(true);
+        }
+    }
+
+    @OnKey(code = KeyCode.T, alt = true)
+    public void showTechnologies() {
+        this.toggleContextMenuVisibility(this.technologiesComponent);
+        this.technologiesComponent.setVisible(!this.technologiesComponent.isVisible());
     }
 
     private void toggleContextMenuVisibility(Node node) {
@@ -402,12 +415,6 @@ public class InGameController extends BasicController {
                     new ContextMenuButton("technologiesOverview", this.technologiesComponent)
             );
     }
-
-//    private void showTechnologies() {
-//        technologiesContainer.setVisible(!technologiesContainer.isVisible());
-//        technologiesContainer.getChildren().getFirst().setVisible(false);
-//        technologiesContainer.getChildren().getLast().setVisible(true);
-//    }
 
     @OnRender
     public void createMap() {

@@ -66,13 +66,15 @@ public class TechnologyEffectDetailsComponent extends VBox {
 
     public void setTechnologyInfos(TechnologyExtended technology) {
         effectVBox.getChildren().clear();
+        effectTitleVBox.setStyle("-fx-font-size: 20px");
         effectVBox.getChildren().add(effectTitleVBox);
+        effectVBox.setPrefWidth(350);
         for (Effect effect : technology.effects()) {
             TechnologyCategoryDescriptionSubComponent component = provider.get();
             app.initAndRender(component);
             component.setStyle("-fx-font-size: 14px");
             component.setPrefHeight(USE_COMPUTED_SIZE);
-            component.setPrefWidth(USE_COMPUTED_SIZE);
+            component.setMinWidth(350);
             component.setEffect(effect);
             component.setImage();
             component.setDescriptionLabel();
@@ -96,12 +98,4 @@ public class TechnologyEffectDetailsComponent extends VBox {
             this.listeners.firePropertyChange(propertyName, oldValue, newValue);
         }
     }
-
-    public PropertyChangeSupport listeners() {
-        if (this.listeners == null) {
-            this.listeners = new PropertyChangeSupport(this);
-        }
-        return this.listeners;
-    }
-
 }

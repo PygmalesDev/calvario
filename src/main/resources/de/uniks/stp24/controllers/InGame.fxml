@@ -25,6 +25,7 @@
    <StackPane fx:id="buildingsWindow" layoutX="650.0" layoutY="40.0" prefHeight="350.0" prefWidth="200.0" AnchorPane.bottomAnchor="290.0" AnchorPane.rightAnchor="380.0" AnchorPane.topAnchor="80.0" />
    <StackPane fx:id="buildingProperties" layoutX="650.0" layoutY="450.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="100.0" AnchorPane.rightAnchor="390.0" AnchorPane.topAnchor="440.0" />
    <StackPane fx:id="siteProperties" layoutX="650.0" layoutY="290.0" prefHeight="350.0" prefWidth="200.0" AnchorPane.bottomAnchor="100.0" AnchorPane.rightAnchor="380.0" AnchorPane.topAnchor="290.0" />
+    <StackPane fx:id="technologiesContainer" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="160.4" AnchorPane.leftAnchor="340.0" AnchorPane.rightAnchor="340.0" AnchorPane.topAnchor="160.4" />
     <HBox fx:id="contextMenuButtons" alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="611.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
         <padding>
             <Insets left="30.0" />

@@ -182,3 +182,22 @@
 
 .technology-description-label {
 }
+
+.effect-details-tooltip {
+    -fx-opacity: 1;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/technology_effects_background.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.effect-details-title {
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 25;
+}
+
+.effect-details-elements {
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 18;
+}

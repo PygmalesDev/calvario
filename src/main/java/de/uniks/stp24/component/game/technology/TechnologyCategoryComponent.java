@@ -8,6 +8,7 @@ import de.uniks.stp24.service.game.TechnologyService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -78,6 +79,10 @@ public class TechnologyCategoryComponent extends AnchorPane {
     public TechnologyCategoryComponent() {
     }
 
+    private static void accept(Node node) {
+        node.setVisible(!(node instanceof TechnologyCategoryComponent));
+    }
+
     @OnInit
     public void init() {
 
@@ -111,8 +116,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
         unlockedListView.getItems().clear();
         researchListView.getItems().clear();
 
-        parent.getChildren().getFirst().setVisible(false);
-        parent.getChildren().getLast().setVisible(true);
+        parent.getChildren().forEach(TechnologyCategoryComponent::accept);
     }
 
     /**
@@ -137,7 +141,6 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
         unlockedListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
         researchListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
-
 
         return this;
     }

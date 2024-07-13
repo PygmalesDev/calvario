@@ -357,34 +357,6 @@ public class IslandsService extends BasicService {
         }
     }
 
-    public void upgradeSystem(IslandAttributeStorage islandAttributes, String upgradeStatus, InGameController inGameController){
-        this.subscriber.subscribe(gameSystemsService.upgradeSystem(tokenStorage.getGameId(), islandAttributes.getIsland().id(),
-                new UpgradeSystemDto(
-                        upgradeStatus
-                )), result -> {
-            Island tmp = new Island(
-                    result.owner(),
-                    islandAttributes.getIsland().flagIndex(),
-                    result.x(),
-                    result.y(),
-                    IslandType.valueOf(String.valueOf(result.type())),
-                    result.population(),
-                    result.capacity(),
-                    Upgrade.valueOf(result.upgrade()).ordinal(),
-                    result.districtSlots(),
-                    result.districts(),
-                    result.buildings(),
-                    result._id(),
-                    result.upgrade(),
-                    result.name()
-            );
-            inGameController.selectedIsland.island = tmp;
-            islandAttributes.setIsland(tmp);
-            inGameController.showOverview();
-
-        });
-    }
-
     public Island getIsland(String islandID) {
         return this.isles.stream()
                 .filter(isle -> isle.id().equals(islandID))

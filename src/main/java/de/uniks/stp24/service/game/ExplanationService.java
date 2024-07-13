@@ -89,7 +89,7 @@ public class ExplanationService {
             }
         }
 
-
+        //TODO: Frage die size der effekte ab und iteriere über die Größe um die effect types anzuzeigen.
         variableExplanationComponent.fillListWithEffects(explanationComponentList);
 
         ExplainedVariableDTO explanations = variableService.data.get(variable);

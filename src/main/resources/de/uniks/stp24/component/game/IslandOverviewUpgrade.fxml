@@ -66,7 +66,7 @@
          <VBox prefHeight="92.0" prefWidth="66.0">
             <VBox prefHeight="36.0" prefWidth="66.0" />
             <Pane prefHeight="62.0" prefWidth="66.0">
-               <Button fx:id="confirmUpgrade" layoutY="1.0" mnemonicParsing="false" onMouseClicked="#upgradeIsland" prefHeight="62.0" prefWidth="66.0" style="-fx-background-color: transparent;" />
+               <Button fx:id="confirmUpgrade" layoutY="1.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="66.0" style="-fx-background-color: transparent;" />
             </Pane>
          </VBox>
       </HBox>

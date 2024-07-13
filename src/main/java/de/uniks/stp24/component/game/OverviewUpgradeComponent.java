@@ -148,22 +148,6 @@ public class OverviewUpgradeComponent extends AnchorPane {
         upgradeUpkeepList.setItems(resourceListUpkeep);
     }
 
-    public void upgradeIsland() {
-        if (resourcesService.hasEnoughResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()))) {
-            resourcesService.upgradeEmpire();
-            setListViews();
-            String upgradeStatus = switch (islandAttributes.getIsland().upgradeLevel()) {
-                case 0 -> islandAttributes.systemUpgradeAttributes.explored().id();
-                case 1 -> islandAttributes.systemUpgradeAttributes.colonized().id();
-                case 2 -> islandAttributes.systemUpgradeAttributes.upgraded().id();
-                case 3 -> islandAttributes.systemUpgradeAttributes.developed().id();
-                default -> null;
-            };
-            //TODO: Has to be changed. System upgrades is done by jobs now.
-            islandsService.upgradeSystem(islandAttributes, upgradeStatus, inGameController);
-        }
-    }
-
     public void setUpgradeInf() {
         levelOne.setText(islandAttributes.getUpgradeTranslation(1));
         levelTwo.setText(islandAttributes.getUpgradeTranslation(2));

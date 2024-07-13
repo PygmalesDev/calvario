@@ -171,16 +171,4 @@ public class ResourcesService {
         }
         return difRes;
     }
-
-
-    public void upgradeEmpire() {
-        Map<String, Integer> difRes = updateAvailableResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()));
-
-        this.subscriber.subscribe(empireService.updateEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId(),
-                new UpdateEmpireDto(difRes, islandAttributes.getTech(), null, null, null)),
-                result -> {
-                    islandAttributes.setEmpireDto(result);
-                });
-
-    }
 }

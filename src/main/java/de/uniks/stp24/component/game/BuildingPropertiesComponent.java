@@ -202,6 +202,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     public void destroyBuilding(){
         disableButtons();
+        setVisible(false);
         inGameController.handleDeleteStructure(buildingType);
     }
 

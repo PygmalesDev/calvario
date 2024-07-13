@@ -417,7 +417,6 @@ public class InGameController extends BasicController {
                                 && (overviewSitesComponent.isVisible() || overviewUpgradeComponent.isVisible())) {
                             islandAttributes.setIsland(updatedIsland);
                             String shownPage = overviewSitesComponent.getShownPage();
-                            overviewSitesComponent.closeOverview();
                             showOverview();
                             switch (shownPage) {
                                 case "upgrade" -> overviewSitesComponent.showUpgrades();

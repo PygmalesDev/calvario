@@ -8,6 +8,7 @@ public record Game(
         String name,
         String owner,
         int maxMembers,
+        int members,
         boolean started,
         int speed,
         int period,

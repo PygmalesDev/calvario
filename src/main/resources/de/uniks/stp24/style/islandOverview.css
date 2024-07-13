@@ -60,7 +60,9 @@
 
 .resourceList .list-cell {
     -fx-background-color: transparent;
-    -fx-padding: 0 -200 0 0;
+    -fx-font-size: 10;
+    -fx-cell-size: 5;
+    -fx-padding: 0 -205 0 0;
 }
 
 .resourceList .scroll-bar{
@@ -225,7 +227,7 @@
     -fx-background-image: url("/de/uniks/stp24/icons/other/progressBar_inside.png");
     -fx-background-position: right;
     -fx-background-repeat: no-repeat;
-    -fx-background-size: 95% 50%;
+    -fx-background-size: 98% 50%;
 }
 
 .jobNumerator {

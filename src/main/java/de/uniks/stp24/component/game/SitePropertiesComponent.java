@@ -103,7 +103,8 @@ public class SitePropertiesComponent extends AnchorPane {
     @SubComponent
     public PropertiesJobProgressComponent siteJobProgress;
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
+    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle);
+    Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", gameResourceBundle);
     Provider<ImageView> siteEmptyCellProvider = () -> {
         ImageView imageView = new ImageView(this.imageCache.get("/de/uniks/stp24/icons/other/empty_building_small_element.png"));
         imageView.setFitHeight(20);
@@ -259,9 +260,9 @@ public class SitePropertiesComponent extends AnchorPane {
     public void displayCostsOfSite(){
         siteCostsListView.setSelectionModel(null);
         subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
-        siteConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
-        siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
-        siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
+        siteConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, negativeResourceProvider));
+        siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, negativeResourceProvider));
+        siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, positiveResourceProvider));
     }
 
     //Uses a GridPane to display a graphic view of how many sites of each type you have

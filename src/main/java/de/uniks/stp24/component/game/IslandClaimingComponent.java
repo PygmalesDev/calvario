@@ -69,28 +69,26 @@ public class IslandClaimingComponent extends Pane {
     ListView<de.uniks.stp24.model.Resource> costsListView;
 
     @Inject
-    IslandAttributeStorage islandAttributes;
+    public IslandAttributeStorage islandAttributes;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
     App app;
 
     @Inject
     @Resource
     @Named("gameResourceBundle")
-    ResourceBundle gameResourceBundle;
+    public ResourceBundle gameResourceBundle;
 
     @Inject
     public Provider<ClaimingSiteComponent> componentProvider;
-    public Provider<ResourceComponent> resourceComponentProvider = () ->
-            new ResourceComponent(true, false, true, false, this.gameResourceBundle);
-
+    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle);
     private ObservableList<Job> upgradeJobs;
     private final ObservableList<Site> siteObservableList = FXCollections.observableArrayList();
     private final ObservableList<de.uniks.stp24.model.Resource> consumeObservableList = FXCollections.observableArrayList();
@@ -144,12 +142,12 @@ public class IslandClaimingComponent extends Pane {
             this.islandAttributes.systemPresets.colonized().cost().forEach((name, amount) -> this.costsObservableList
                     .add(new de.uniks.stp24.model.Resource(name, amount, 0)));
             this.costsListView.setItems(this.costsObservableList);
-            this.costsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.resourceComponentProvider));
+            this.costsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.negativeResourceProvider));
 
             this.islandAttributes.systemPresets.colonized().upkeep().forEach((name, amount) -> this.consumeObservableList
                     .add(new de.uniks.stp24.model.Resource(name, amount, 0)));
             this.consumeListView.setItems(this.consumeObservableList);
-            this.consumeListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.resourceComponentProvider));
+            this.consumeListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.negativeResourceProvider));
 
             this.exploreButton.setText(this.gameResourceBundle.getString("claiming.colonize"));
             this.colonizePane.setVisible(true);

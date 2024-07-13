@@ -410,6 +410,10 @@ ToggleButton:hover{
     -fx-background-position: left;
 }
 
+.captainWebjaw {
+    -fx-image: url("/de/uniks/stp24/assets/logos/captainWebjaw.png");
+}
+
 .captainText {
     -fx-font-family: "PT Serif";
     -fx-font-size: 14;

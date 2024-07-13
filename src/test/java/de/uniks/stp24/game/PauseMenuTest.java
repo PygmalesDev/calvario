@@ -16,10 +16,7 @@ import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.rest.PresetsApiService;
-import de.uniks.stp24.service.InGameService;
-import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.PopupBuilder;
-import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.*;
 import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -88,6 +85,9 @@ public class PauseMenuTest extends ControllerTest {
     ObjectMapper objectMapper;
 
     @Spy
+    ImageCache imageCache;
+
+    @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
 
     @Spy
@@ -129,6 +129,8 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     IslandOverviewJobsComponent islandOverviewJobsComponent;
+    @InjectMocks
+    IslandClaimingComponent islandClaimingComponent;
 
 
     @InjectMocks
@@ -196,6 +198,14 @@ public class PauseMenuTest extends ControllerTest {
 
         this.inGameService.presetsApiService = this.presetsApiService;
 
+        this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
+        this.islandClaimingComponent.jobsService = this.jobsService;
+        this.islandClaimingComponent.islandAttributes = this.islandAttributeStorage;
+        this.islandClaimingComponent.islandsService = this.islandsService;
+        this.islandClaimingComponent.imageCache = this.imageCache;
+
+        doReturn(null).when(this.imageCache).get(any());
+
         doReturn(Observable.empty()).when(this.jobsApiService).getEmpireJobs(any(), any());
 
         inGameService.setGameStatus(gameStatus);
@@ -231,6 +241,7 @@ public class PauseMenuTest extends ControllerTest {
         buildingsWindowComponent.getStylesheets().clear();
         buildingPropertiesComponent.getStylesheets().clear();
         this.jobsOverviewComponent.getStylesheets().clear();
+        islandClaimingComponent.getStylesheets().clear();
     }
 
     @Test

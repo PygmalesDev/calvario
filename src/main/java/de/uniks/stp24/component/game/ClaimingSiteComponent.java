@@ -21,7 +21,7 @@ public class ClaimingSiteComponent extends Pane implements ReusableItemComponent
     Text siteCapacityText;
 
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
 
     @Inject
     public ClaimingSiteComponent() {}

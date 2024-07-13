@@ -37,12 +37,6 @@ public class EventService {
     // with seed, so every Player has the same events at the same time
     Random random = new Random(1000);
 
-
-    @Inject
-    TimerService timerService;
-    @Inject
-    IslandsService islandsService;
-
     @Inject
     EmpireApiService empireApiService;
     @Inject
@@ -53,7 +47,7 @@ public class EventService {
 
     ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",
             "grandExp", "reckoning", "rogerFeast", /* Bad Events */ "blackSpot", "dutchman", "foolsGold", "pestilence",
-            "rumBottle", "submerge"));
+            "rumBottle", "submerge", /* Misty */ "solarEclipse"));
 
     Map<String, EffectSourceParentDto> eventMap = new HashMap<>();
 
@@ -82,16 +76,14 @@ public class EventService {
 
     // Gets random a new event
     public EffectSourceParentDto getNewRandomEvent() {
-
         if (nextEvent <= 0) {
-
             int eventName = random.nextInt(0, eventNames.size());
             EffectSourceParentDto tmp = readEvent(eventName);
             setNextEvent();
             return tmp;
         }
-        // if no event can occur
-        return null;
+        // if no event can occur (or already occured)
+        return event;
     }
 
     public void setNextEvent() {
@@ -104,7 +96,6 @@ public class EventService {
 
     // Counts down the time until the next event
     public void setNextEventTimer(int nextEvent) {
-
         if (nextEvent == this.nextEvent) {
             return;
         }
@@ -160,10 +151,13 @@ public class EventService {
     /* Parameter eventName is index for List<String> eventNames
      * Method reads the JSONs in folder .data and creates an EffectSourceParentDto
     /* if the event has not been added to the eventMap yet */
-    private @Nullable EffectSourceParentDto readEvent(int eventName) {
+    private @Nullable EffectSourceParentDto readEvent(int eventIndex) {
+        return readEvent(eventNames.get(eventIndex));
+    }
 
+    public @Nullable EffectSourceParentDto readEvent(String eventName) {
         try {
-            File jsonFile = new File(Constants.EVENT_FOLDER_NAME + eventNames.get(eventName) + "Event.json");
+            File jsonFile = new File(Constants.EVENT_FOLDER_NAME + eventName + "Event.json");
 
             // Read the JSON file
             JsonNode rootNode = objectMapper.readTree(jsonFile);
@@ -204,23 +198,6 @@ public class EventService {
         }
         // if no event can occur
         return null;
-    }
-
-    /**
-     * Looks for the eventType of the event. If it is not from our interface,
-     * it will return "unknown", else it will return "good" or "bad".
-     */
-    public String searchEvent(String eventName) {
-        for (String event : eventNames) {
-            if (event.equals(eventName)) {
-                if (eventNames.indexOf(event) > 5) {
-                    return "bad";
-                } else {
-                    return "good";
-                }
-            }
-        }
-        return "unknown";
     }
 
     public Observable<EmpireDto> sendEffect() {

@@ -75,13 +75,11 @@ public class TechnologyResearchDetailsComponent extends VBox {
                     if (empireDto.traits() != null) {
                         for (String traitName : empireDto.traits()) {
                             subscriber.subscribe(presetsApiService.getTrait(traitName),
-                                    trait -> {
-                                        myTraits.add(trait);
-                                    }
+                                    trait -> myTraits.add(trait), error -> {}
                             );
                         }
                     }
-                }
+                }, error -> {}
         );
     }
 

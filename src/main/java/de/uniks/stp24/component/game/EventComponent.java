@@ -128,7 +128,7 @@ public class EventComponent extends AnchorPane {
                         lastUpdate = event.data().updatedAt();
                     }
                 },
-                error -> System.out.println("Error bei Season: " + error.getMessage())
+                error -> System.out.println("Error on Season: " + error.getMessage())
         );
     }
 

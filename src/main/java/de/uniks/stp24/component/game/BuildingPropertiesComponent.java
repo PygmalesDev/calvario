@@ -193,7 +193,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
         destroyButton.setDisable(true);
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
             if (resourcesService.hasEnoughResources(result.cost())) buyButton.setDisable(false);
-        });
+        }, error -> {});
         if (tokenStorage.getIsland().buildings().contains(buildingType)) destroyButton.setDisable(false);
     }
 
@@ -208,7 +208,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
             priceOfBuilding = result.cost();
             buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding) ||
                     islandAttributeStorage.getUsedSlots() >= islandAttributeStorage.getIsland().resourceCapacity());
-        });
+        }, error -> {});
         destroyButton.setDisable(!tokenStorage.getIsland().buildings().contains(buildingType));
     }
 
@@ -248,9 +248,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
                         this.updateIslandBuildings();
                         this.hideJobsPane();
                     });
-                });
+                }, error -> {});
             } else buyButton.setDisable(true);
-        });
+        }, error -> {});
     }
 
     private void updateIslandBuildings() {
@@ -274,7 +274,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
         Image imageBuilding = new Image(buildingsMap.get(buildingType));
         buildingImage.setImage(imageBuilding);
         buildingName.setText(gameResourceBundle.getString(buildingTranslation.get(buildingType)));
-        subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), this::resourceListGeneration);
+        subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), this::resourceListGeneration, error -> {});
         buildingCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         buildingProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         buildingConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));

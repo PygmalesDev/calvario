@@ -80,7 +80,7 @@ public class PropertiesJobProgressComponent extends Pane {
     }
 
     public void cancelJob() {
-        this.subscriber.subscribe(this.jobsService.stopJob(this.job));
+        this.subscriber.subscribe(this.jobsService.stopJob(this.job), result -> {}, error -> {});
         this.getParent().setVisible(false);
         this.getParent().getParent().getParent().setVisible(false);
     }

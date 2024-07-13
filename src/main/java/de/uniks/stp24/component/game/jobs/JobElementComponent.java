@@ -3,7 +3,6 @@ package de.uniks.stp24.component.game.jobs;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
-import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
 import javafx.fxml.FXML;
@@ -20,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component(view = "JobElement.fxml")
@@ -88,7 +86,7 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
     }
 
     public void cancelJob() {
-        this.subscriber.subscribe(this.jobsService.stopJob(this.job));
+        this.subscriber.subscribe(this.jobsService.stopJob(this.job), result -> {}, error -> {});
     }
 
     public void showJobOverview() {

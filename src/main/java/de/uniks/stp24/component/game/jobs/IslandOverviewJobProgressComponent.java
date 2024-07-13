@@ -13,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
@@ -131,7 +130,7 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
     }
 
     public void stopJob() {
-        this.subscriber.subscribe(this.jobsService.stopJob(this.job));
+        this.subscriber.subscribe(this.jobsService.stopJob(this.job), result -> {}, error -> {});
     }
 
     @OnDestroy

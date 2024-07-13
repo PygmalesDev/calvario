@@ -161,7 +161,7 @@ public class SitePropertiesComponent extends AnchorPane {
             this.showJobsPane();
             if (Objects.nonNull(job)) {
                 this.siteJobProgress.setJobProgress(job);
-                if (this.jobsService.hasNoJobTypeProgress(job.type()) && this.siteJobs.get(0).equals(job))
+                if (this.jobsService.hasNoJobTypeProgress(job.type()) && this.siteJobs.getFirst().equals(job))
                     this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
             }
         } else {
@@ -193,7 +193,7 @@ public class SitePropertiesComponent extends AnchorPane {
                 this.updateIslandSites();
                 if (job.district().equals(this.siteType)) this.hideJobsPane();
             });
-        });
+        }, error -> {});
     }
 
     @OnInit
@@ -230,7 +230,7 @@ public class SitePropertiesComponent extends AnchorPane {
             this.islandAttributeStorage.setIsland(this.islandsService.updateIsland(result));
 
             displayAmountOfSite();
-        });
+        }, error -> {});
 
 
     }
@@ -244,7 +244,7 @@ public class SitePropertiesComponent extends AnchorPane {
     //Gets resources of site and displays them in listviews
     public void displayCostsOfSite(){
         siteCostsListView.setSelectionModel(null);
-        subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
+        subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration, error -> {});
         siteConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
@@ -259,7 +259,7 @@ public class SitePropertiesComponent extends AnchorPane {
             if (!resourcesService.hasEnoughResources(costSite)){
                 buildSiteButton.setDisable(true);
             }
-        });
+        }, error -> {});
 
         if (tokenStorage.getIsland().sites().get(siteType) != null){
             amountSite = tokenStorage.getIsland().sites().get(siteType);

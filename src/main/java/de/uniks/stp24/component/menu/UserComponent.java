@@ -75,7 +75,7 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
         this.member = member;
         this.kickButton.setId("kick" + member.user()._id());
 
-        if (member.user()._id().equals(member.game().owner()) || !member.asHost()) this.kickButton.setVisible(false);
+        if (member.user()._id().equals(member.game().owner()) || member.asHost()) this.kickButton.setVisible(false);
 
         this.backgroundPane.getStyleClass().clear();
         if (member.user()._id().equals(member.game().owner()))

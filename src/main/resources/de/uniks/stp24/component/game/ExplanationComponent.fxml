@@ -6,5 +6,5 @@
 
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="165.0" styleClass="explanationText" stylesheets="@../../style/helpWindow.css" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.ExplanationComponent">
    <HBox alignment="CENTER" />
-   <Text fx:id="multiplier" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="explanationText" text="%mult" />
+   <Text fx:id="inf" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="explanationText" text="mult" />
 </fx:root>

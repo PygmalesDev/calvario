@@ -1,15 +1,14 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.component.game.CustomComponentListCell;
-import de.uniks.stp24.component.game.ExplanationComponent;
-import de.uniks.stp24.component.game.ResourceComponent;
-import de.uniks.stp24.component.game.VariableExplanationComponent;
+import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.ExplainedVariableDTO;
 import de.uniks.stp24.model.Effect;
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.model.Sources;
+import de.uniks.stp24.service.IslandAttributeStorage;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
@@ -28,6 +27,8 @@ public class ExplanationService {
     public App app;
     @Inject
     public VariableService variableService;
+    @Inject
+    IslandAttributeStorage islandAttributes;
 
     private InGameController inGameController;
 
@@ -66,12 +67,10 @@ public class ExplanationService {
 
 
             if (isMouseInsideCell && !entered.get()) {
-                if(!listTyp.equals("storage")){
+                if(!listTyp.equals("storage")) {
                     initializeResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID(), variableExplanationComponent);
                     tooltip.show(app.stage(), mouseX, mouseY);
                     entered.set(true);
-                } else {
-                    initializeStorageExplanation(cell.getItem().resourceID());
                 }
             } else if (!isMouseInsideCell) {
                 tooltip.hide();
@@ -107,17 +106,6 @@ public class ExplanationService {
         }
 
         variableExplanationComponent.fillListWithEffects(explanationComponentList);
-    }
-
-    private void initializeStorageExplanation(String recID){
-        /*
-
-        Durchlaufe alle eroberten Inseln.
-        Berechne die differenz production - upkeep, wenn möglich.
-        Setze in den component name: diff
-        Setze die resourcen namen als titel
-        und
-         */
     }
 
     public void setInGameController(InGameController inGameController) {

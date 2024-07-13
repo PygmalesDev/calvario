@@ -158,13 +158,13 @@ public class DetailsComponent extends AnchorPane {
     public void showConsumption(){
         showProduction.setVisible(true);
         showConsumption.setVisible(false);
-        setSumConsumption(islandAttributes.mergeConsumption());
+        setSumConsumption(islandAttributes.mergeConsumption(islandAttributes.island));
     }
 
     public void showProduction(){
         showProduction.setVisible(false);
         showConsumption.setVisible(true);
-        setSumProduction(islandAttributes.mergeProduction());
+        setSumProduction(islandAttributes.mergeProduction(islandAttributes.island));
 
     }
 

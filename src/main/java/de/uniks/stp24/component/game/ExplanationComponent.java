@@ -11,13 +11,13 @@ import javax.inject.Inject;
 public class ExplanationComponent extends VBox {
 
     @FXML
-    public Text multiplier;
+    public Text inf;
 
     @Inject
     public ExplanationComponent(){
     }
 
     public void setInf(String multiplierInf){
-        multiplier.setText(multiplierInf);
+        inf.setText(multiplierInf);
     }
 }

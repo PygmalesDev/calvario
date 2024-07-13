@@ -145,7 +145,7 @@ public class OverviewSitesComponent extends AnchorPane {
         jobsButton.setDisable(false);
 
         detailsComponent.setResLists();
-        detailsComponent.setSumProduction(islandAttributes.mergeProduction());
+        detailsComponent.setSumProduction(islandAttributes.mergeProduction(islandAttributes.getIsland()));
 
         inGameService.showOnly(sitesContainer, detailsComponent);
     }

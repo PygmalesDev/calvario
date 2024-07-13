@@ -30,7 +30,7 @@ public class VariableExplanationComponent extends VBox {
 
     App app;
 
-    Provider<ExplanationComponent> ExplanationComponentProvider = ExplanationComponent::new;
+    Provider<ExplanationComponent> explanationComponentProvider = ExplanationComponent::new;
     ObservableList<ExplanationComponent> explanations = FXCollections.observableArrayList();
 
     public VariableExplanationComponent(App app) {
@@ -48,7 +48,7 @@ public class VariableExplanationComponent extends VBox {
     }
 
     private void initialize() {
-        effectList.setCellFactory(list -> new CustomComponentListCell<>(app, ExplanationComponentProvider));
+        effectList.setCellFactory(list -> new CustomComponentListCell<>(app, explanationComponentProvider));
         effectList.setItems(explanations);
     }
 

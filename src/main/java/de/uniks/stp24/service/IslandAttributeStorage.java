@@ -124,7 +124,7 @@ public class IslandAttributeStorage {
         this.districtAttributes = variableDependencyService.createVariableDependencyDistricts();
     }
 
-    public Map<String, Integer> getBuildingsProduction() {
+    public Map<String, Integer> getBuildingsProduction(Island island) {
         Map<String, Integer> buildingsProduction = new HashMap<>();
         for(String building: island.buildings()){
             int counter = 0;
@@ -144,7 +144,7 @@ public class IslandAttributeStorage {
         return buildingsProduction;
     }
 
-    public Map<String, Integer> getDistrictProduction() {
+    public Map<String, Integer> getDistrictProduction(Island island) {
         Map<String, Integer> sitesProduction = new HashMap<>();
         for(Map.Entry<String, Integer> entry : island.sites().entrySet()){
             for (DistrictAttributes preset : districtAttributes) {
@@ -158,7 +158,7 @@ public class IslandAttributeStorage {
         return sitesProduction;
     }
 
-    public Map<String, Integer> getBuildingsConsumption() {
+    public Map<String, Integer> getBuildingsConsumption(Island island) {
         Map<String, Integer> buildingsConsumption = new HashMap<>();
 
         for(String building: island.buildings()){
@@ -179,7 +179,7 @@ public class IslandAttributeStorage {
         return buildingsConsumption;
     }
 
-    public Map<String, Integer> getDistrictConsumption() {
+    public Map<String, Integer> getDistrictConsumption(Island island) {
         Map<String, Integer> sitesConsumption = new HashMap<>();
         for(Map.Entry<String, Integer> entry : island.sites().entrySet()){
             for (DistrictAttributes preset : districtAttributes) {
@@ -193,10 +193,10 @@ public class IslandAttributeStorage {
         return sitesConsumption;
     }
 
-    public Map<String, Integer> mergeProduction(){
-        Map<String, Integer> mergedMap = new HashMap<>(getBuildingsProduction());
+    public Map<String, Integer> mergeProduction(Island island){
+        Map<String, Integer> mergedMap = new HashMap<>(getBuildingsProduction(island));
 
-        for (Map.Entry<String, Integer> entry : getDistrictProduction().entrySet()) {
+        for (Map.Entry<String, Integer> entry : getDistrictProduction(island).entrySet()) {
             String key = entry.getKey();
             Integer value = entry.getValue();
 
@@ -209,10 +209,25 @@ public class IslandAttributeStorage {
         return mergedMap;
     }
 
-    public Map<String, Integer> mergeConsumption(){
-        Map<String, Integer> mergedMap = new HashMap<>(getBuildingsConsumption());
+    public Map<String, Integer> mergeResourceMaps(ArrayList<Map<String, Integer>> maps) {
+        Map<String, Integer> mergedMap = new HashMap<>();
 
-        for (Map.Entry<String, Integer> entry : getDistrictConsumption().entrySet()) {
+        for (Map<String, Integer> map : maps) {
+            for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                String resourceId = entry.getKey();
+                Integer value = entry.getValue();
+
+                mergedMap.put(resourceId, mergedMap.getOrDefault(resourceId, 0) + value);
+            }
+        }
+
+        return mergedMap;
+    }
+
+    public Map<String, Integer> mergeConsumption(Island island){
+        Map<String, Integer> mergedMap = new HashMap<>(getBuildingsConsumption(island));
+
+        for (Map.Entry<String, Integer> entry : getDistrictConsumption(island).entrySet()) {
             String key = entry.getKey();
             Integer value = entry.getValue();
 

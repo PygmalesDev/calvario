@@ -161,14 +161,4 @@ public class ResourcesService {
         }
         return true;
     }
-
-    public Map<String, Integer> updateAvailableResources(Map<String, Integer> neededResources) {
-        Map<String, Integer> difRes = new HashMap<>();
-        for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
-            String res = entry.getKey();
-            int neededAmount = entry.getValue();
-            difRes.put(res, -neededAmount);
-        }
-        return difRes;
-    }
 }

@@ -6,6 +6,7 @@ import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.ResourceDto;
 import de.uniks.stp24.dto.UpdateEmpireMarketDto;
 import de.uniks.stp24.model.EmpireExtendedDto;
+import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GangElement;
 import de.uniks.stp24.model.SeasonComponent;
 import de.uniks.stp24.rest.PresetsApiService;
@@ -69,6 +70,7 @@ public class MarketComponent extends StackPane {
     public ListView<Map.Entry<String, Integer>> resourcesListView;
     @FXML
     ListView<SeasonComponent> seasonalTradesListView;
+
 
     @Inject
     App app;
@@ -137,6 +139,8 @@ public class MarketComponent extends StackPane {
         if (!tokenStorage.isSpectator()) {
             loadVariablesAndSetup();
             getIdResourcesMap();
+            createResourceListeners();
+            createSeasonListener();
         }
     }
 
@@ -158,7 +162,6 @@ public class MarketComponent extends StackPane {
                     setCreditCount();
                     filterResourceMap();
                     listMarketResources();
-                    createResourceListeners();
                     buttonLogic();
                 }
                 , error -> System.out.println("errorEmpireListener"));
@@ -361,7 +364,7 @@ public class MarketComponent extends StackPane {
                 System.out.println(item.getKey());
                 selectedItem = item.getKey();
                 selectedIconImage.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + item.getKey() + ".png"));
-                numberOfGoodsLabel.setText(String.valueOf(resourceCountMap.get(selectedItem)));
+                numberOfGoodsLabel.setText("1");
                 buyingAndSellingPrice(item.getKey());
             });
         }
@@ -382,5 +385,22 @@ public class MarketComponent extends StackPane {
     private void addSeasonalTransaction(String transactionType, int price) {
         SeasonComponent seasonComponent = new SeasonComponent(transactionType, this.selectedItem, resourceAmount, price);
         seasonComponents.add(seasonComponent);
+    }
+
+
+    public void createSeasonListener() {
+        this.subscriber.subscribe(this.eventListener
+                        .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
+                event -> {
+                    if (!lastSeasonUpdate.equals(event.data().updatedAt())) {
+                        performSeasonalTrades();
+                        this.lastSeasonUpdate = event.data().updatedAt();
+                    }
+                },
+                error -> System.out.println("errorSeasonListener in marketComponent"));
+    }
+
+    //TODO Seasonal Trades
+    private void performSeasonalTrades() {
     }
 }

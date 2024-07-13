@@ -414,7 +414,8 @@ public class InGameController extends BasicController {
                         Island updatedIsland = islandsService.getIslandFromDto(event.data());
                         isle.applyInfo(updatedIsland);
                         System.out.println(updatedIsland.equals(islandAttributes.getIsland()) + "  " + overviewSitesComponent.isVisible());
-                        if (updatedIsland.id().equals(islandAttributes.getIsland().id()) && overviewSitesComponent.isVisible()) {
+                        if (updatedIsland.id().equals(islandAttributes.getIsland().id())
+                                && (overviewSitesComponent.isVisible() || overviewUpgradeComponent.isVisible())) {
                             islandAttributes.setIsland(updatedIsland);
                             String shownPage = overviewSitesComponent.getShownPage();
                             overviewSitesComponent.closeOverview();

@@ -190,7 +190,6 @@ public class SitePropertiesComponent extends AnchorPane {
                 if (job.district().equals(this.siteType)) this.hideJobsPane();
             });
             this.jobsService.onJobCompletion(job._id(), () -> {
-                this.updateIslandSites();
                 if (job.district().equals(this.siteType)) this.hideJobsPane();
             });
         });
@@ -203,7 +202,6 @@ public class SitePropertiesComponent extends AnchorPane {
                 if (job.district().equals(this.siteType)) this.hideJobsPane();
             });
             this.jobsService.onJobCompletion(job._id(), () -> {
-                this.updateIslandSites();
                 this.hideJobsPane();
             });
         });
@@ -223,18 +221,6 @@ public class SitePropertiesComponent extends AnchorPane {
         this.siteCostsListView.setVisible(true);
     }
 
-    public void updateIslandSites() {
-        this.subscriber.subscribe(this.gameSystemsApiService.getSystem(this.tokenStorage.getGameId(),
-                this.tokenStorage.getIsland().id()), result -> {
-            this.tokenStorage.setIsland(this.islandsService.updateIsland(result));
-            this.islandAttributeStorage.setIsland(this.islandsService.updateIsland(result));
-
-            displayAmountOfSite();
-        });
-
-
-    }
-
     //Calls handleDeleteStructure in inGameController which shows the deleteWarning popup
     //and calls method in DeleteStructureComponent
     public void destroySite(){
@@ -244,7 +230,8 @@ public class SitePropertiesComponent extends AnchorPane {
     //Gets resources of site and displays them in listviews
     public void displayCostsOfSite(){
         siteCostsListView.setSelectionModel(null);
-        subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
+        if (Objects.nonNull(siteType))
+            subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
         siteConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
@@ -254,11 +241,12 @@ public class SitePropertiesComponent extends AnchorPane {
     public void displayAmountOfSite(){
         buildSiteButton.setDisable(false);
         destroySiteButton.setDisable(false);
-        subscriber.subscribe(resourcesService.getResourcesSite(siteType), result -> {
-            Map<String, Integer> costSite = result.cost();
-            if (!resourcesService.hasEnoughResources(costSite)){
-                buildSiteButton.setDisable(true);
-            }
+        if (Objects.nonNull(siteType))
+            subscriber.subscribe(resourcesService.getResourcesSite(siteType), result -> {
+                Map<String, Integer> costSite = result.cost();
+                if (!resourcesService.hasEnoughResources(costSite)){
+                    buildSiteButton.setDisable(true);
+                }
         });
 
         if (tokenStorage.getIsland().sites().get(siteType) != null){

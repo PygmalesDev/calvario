@@ -46,7 +46,6 @@ public class EnterGameComponent extends AnchorPane {
     @OnRender
     public void render() {
         this.errorMessage.setVisible(false);
-        this.errorMessage.setStyle("-fx-font-size: 0");
     }
 
     public void cancel() {

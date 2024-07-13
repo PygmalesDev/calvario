@@ -210,7 +210,7 @@ public class AppTest2 extends ControllerTest {
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
         doReturn(Observable
                 .just(new Game("a", null, "game1Id", "testGame1",
-                        "testHost1", 2, true, 1,10, null))).when(gameApiService).getGame(any());
+                        "testHost1", 2, 0, true, 1,10, null))).when(gameApiService).getGame(any());
         doReturn(null).when(this.app).show("/ingame");
         islandsService.saveEmpire("empire",new ReadEmpireDto("a","b","empire","game1","user1","name",
                 "description","#FFDDEE",2,3,"home"));

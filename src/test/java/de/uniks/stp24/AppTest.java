@@ -77,9 +77,9 @@ public class AppTest extends ControllerTest {
         LoginResult loginResult = new LoginResult("1", "JustATest", null,_public, "a", "r");
         LoginDto loginDto = new LoginDto("JustATest", "testpassword");
         RefreshDto refreshDto = new RefreshDto("r");
-        Game game1 = new Game("2024-05-28T12:55:25.688Z", null, "1", "Was geht", "1", 2,false, 0,0, null);
-        Game game2 = new Game("2024-05-28T13:55:25.688Z", null, "2", "rapapa", "testID", 2,false, 0,0, null);
-        Game game3 = new Game("2024-05-28T14:55:25.688Z", null, "123", "AwesomeLobby123", "1", 2,false, 0, 0, null);
+        Game game1 = new Game("2024-05-28T12:55:25.688Z", null, "1", "Was geht", "1", 2,0, false, 0,0, null);
+        Game game2 = new Game("2024-05-28T13:55:25.688Z", null, "2", "rapapa", "testID", 2,0, false, 0,0, null);
+        Game game3 = new Game("2024-05-28T14:55:25.688Z", null, "123", "AwesomeLobby123", "1", 2,0, false, 0, 0, null);
 
         User user = new User("JustATest", "1", null, null, null,_public);
 
@@ -121,7 +121,7 @@ public class AppTest extends ControllerTest {
 
         doReturn(Observable.just(createGameResultDto)).when(createGameService).createGame(any(), any(), any(), eq(2));
 
-        Event<Game> gameEvent = new Event<>("games." + game3._id() + ".created", new Game("2024-05-28T14:55:25.688Z", null, game3._id(), createGameDto.name(), "1", 2,false, 0,0, null));
+        Event<Game> gameEvent = new Event<>("games." + game3._id() + ".created", new Game("2024-05-28T14:55:25.688Z", null, game3._id(), createGameDto.name(), "1", 2,0, false, 0,0, null));
         doReturn(Observable.empty()).doReturn(Observable.just(gameEvent)).when(eventListener).listen(eq("games.*.*"), eq(Game.class));
 
         doReturn(Observable.just(game3)).when(gamesApiService).getGame(game3._id());
@@ -262,7 +262,7 @@ public class AppTest extends ControllerTest {
 
         clickOn("#startJourneyButton");
         this.gameSubject.onNext(new Event<>("games.testGameID.updated", new Game("1", "a","testGameID","testGame","testGameHostID",
-                2, true, 1, 0, new GameSettings(1))));
+                2, 0,true, 1, 0, new GameSettings(1))));
         WaitForAsyncUtils.waitForFxEvents();
 
         // game screen will not be shown, but loaded

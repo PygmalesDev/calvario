@@ -5,7 +5,6 @@ import de.uniks.stp24.controllers.helper.JoinGameHelper;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.UserApiService;
-import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -33,7 +32,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Title("%enter.game")
@@ -84,7 +82,7 @@ public class LobbyController extends BasicController {
     @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
-    VBox cardBackgroundVBox;
+    Text playerReadinessText;
 
     @SubComponent
     @Inject
@@ -102,13 +100,12 @@ public class LobbyController extends BasicController {
     private final ObservableList<MemberUser> users = FXCollections.observableArrayList();
     private boolean asHost;
     private boolean wasKicked;
-    public int maxMember;
+    public int maxMember, readyAmount;
     private Button[] lobbyButtons;
 
 
     @Inject
     public LobbyController() {
-
     }
 
     /**
@@ -124,8 +121,7 @@ public class LobbyController extends BasicController {
                     this.gameID = game._id();
                     this.asHost = game.owner().equals(this.tokenStorage.getUserId());
                     this.maxMember = game.maxMembers();
-                    this.lobbyHostSettingsComponent.setMaxMember(this.maxMember);
-                    this.lobbyHostSettingsComponent.setBubbleComponent(this.bubbleComponent);
+                    this.readyAmount = 0;
 
                     this.enterGameComponent.setGameID(this.gameID);
                     this.lobbySettingsComponent.setGameID(this.gameID);
@@ -162,12 +158,9 @@ public class LobbyController extends BasicController {
                                 this.lobbyHostSettingsComponent.startJourneyButton.setDisable(!allReady || tooManyPlayer);
 
                                 this.sortMemberList();
-                            },
-                            this::errorMsg);
+                            }, this::errorMsg);
                     this.createGameStartedListener();
-                    this.lobbyHostSettingsComponent.createCheckPlayerReadinessListener();
-                },
-                this::errorMsg);
+                }, this::errorMsg);
     }
 
     /**
@@ -175,13 +168,11 @@ public class LobbyController extends BasicController {
      */
     private void createGameDeletedListener() {
         this.subscriber.subscribe(this.eventListener
-                        .listen("games." + this.gameID + ".deleted", Game.class),
-                event -> {
-                    this.lobbyMessagePane.setVisible(true);
-                    this.lobbyMessageElement.setVisible(true);
-                    this.messageText.setText(resources.getString("lobby.has.been.deleted"));
-                },
-                this::errorMsg);
+                .listen("games." + this.gameID + ".deleted", Game.class), event -> {
+            this.lobbyMessagePane.setVisible(true);
+            this.lobbyMessageElement.setVisible(true);
+            this.messageText.setText(resources.getString("lobby.has.been.deleted"));
+            }, this::errorMsg);
     }
 
     /**
@@ -189,8 +180,7 @@ public class LobbyController extends BasicController {
      */
     private void createUserListListener() {
         this.subscriber.subscribe(this.eventListener
-                        .listen("games." + this.gameID + ".members.*.*", MemberDto.class),
-                event -> {
+                        .listen("games." + this.gameID + ".members.*.*", MemberDto.class), event -> {
                     String id = event.data().user();
                     switch (event.suffix()) {
                         case "created" -> {
@@ -205,10 +195,7 @@ public class LobbyController extends BasicController {
                         case "updated" -> this.replaceUserInList(id, event.data());
                         case "deleted" -> this.removeUserFromList(id);
                     }
-                    this.sortMemberList();
-                },
-                this::errorMsg
-        );
+                }, this::errorMsg);
     }
 
     /**
@@ -275,14 +262,12 @@ public class LobbyController extends BasicController {
      */
     private void addUserToList(String userID, MemberDto data) {
         this.subscriber.subscribe(this.userApiService.getUser(userID), user -> {
-                    String suffix = "";
-                    if (userID.equals(this.game.owner())) suffix += " (Host)";
-                    if (Objects.isNull(data.empire())) suffix += " (Spectator)";
-
-            this.users.add(new MemberUser(new User(user.name() + suffix,
-                    user._id(), user.avatar(), user.createdAt(), user.updatedAt(), user._public()
-            ), data.empire(), data.ready(), this.game, this.asHost));
-        },
+                    this.users.add(new MemberUser(user, data.empire(), data.ready(), this.game,
+                            user._id().equals(this.game.owner())));
+                    this.playerReadinessText.setText(String.format("Ready %d/%d",
+                            this.users.filtered(MemberUser::ready).size(), this.users.size()));
+                    this.lobbyHostSettingsComponent.startJourneyButton.setDisable(this.users.filtered(MemberUser::ready).size() != this.users.size());
+                },
           error -> {});
     }
 
@@ -295,24 +280,15 @@ public class LobbyController extends BasicController {
     private void replaceUserInList(String userID, MemberDto data) {
         this.users.replaceAll(memberUser -> {
             if (memberUser.user()._id().equals(userID)) {
-                if (Objects.nonNull(data.empire())) {
-                    return new MemberUser(new User(
-                            memberUser.user().name().replace(" (Spectator)", ""),
-                            userID, memberUser.user().avatar(), memberUser.user().createdAt(),
-                            memberUser.user().updatedAt(),memberUser.user()._public()), data.empire(), data.ready(), this.game, this.asHost);
-                }
-                else {
-                    String suffix = " (Spectator)";
-                    if (memberUser.user().name().contains("(Spectator)"))
-                        suffix = "";
-                    return new MemberUser(new User(
-                            memberUser.user().name() + suffix, userID, memberUser.user().avatar(),
-                            memberUser.user().createdAt(), memberUser.user().updatedAt(),memberUser.user()._public()),
-                            null, data.ready(), this.game, this.asHost);
-                }
-            } else
-                return memberUser;
+                return new MemberUser(new User(
+                        memberUser.user().name(), userID, memberUser.user().avatar(), memberUser.user().createdAt(),
+                        memberUser.user().updatedAt(), memberUser.user()._public()), data.empire(), data.ready(), this.game,
+                        memberUser.user()._id().equals(this.game.owner()));
+            } else return memberUser;
         });
+        this.playerReadinessText.setText(String.format("Ready %d/%d",
+                this.users.filtered(MemberUser::ready).size(), this.users.size()));
+        this.lobbyHostSettingsComponent.startJourneyButton.setDisable(this.users.filtered(MemberUser::ready).size() != this.users.size());
     }
 
     /**
@@ -328,6 +304,9 @@ public class LobbyController extends BasicController {
             this.wasKicked = true;
         }
         this.users.removeIf(memberUser -> memberUser.user()._id().equals(userID));
+        this.playerReadinessText.setText(String.format("Ready %d/%d",
+                this.users.filtered(MemberUser::ready).size(), this.users.size()));
+        this.lobbyHostSettingsComponent.startJourneyButton.setDisable(this.users.filtered(MemberUser::ready).size() != this.users.size());
     }
 
     /**
@@ -348,8 +327,8 @@ public class LobbyController extends BasicController {
                         bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.password"));
                         this.lobbyElement.getChildren().add(this.enterGameComponent);
                     }
-                },
-                this::errorMsg);
+
+                }, this::errorMsg);
     }
 
     /**
@@ -379,6 +358,5 @@ public class LobbyController extends BasicController {
     void destroy() {
         subscriber.dispose();
         backgroundAnchorPane.setStyle("-fx-background-image: null");
-        cardBackgroundVBox.setStyle("-fx-background-image: null");
     }
 }

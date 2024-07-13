@@ -13,7 +13,8 @@
    <ScrollPane fx:id="mapScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" style="-fx-background-color: TRANSPARENT;" vbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" HBox.hgrow="ALWAYS">
             <Group fx:id="group" onMouseClicked="#resetZoomMouse">
                 <StackPane fx:id="zoomPane" style="-fx-background-color: TRANSPARENT;">
-                    <Pane fx:id="mapGrid" styleClass="backgroundGame">
+            <Pane fx:id="gameBackground" prefHeight="0.0" prefWidth="0.0" styleClass="backgroundGame" />
+                    <Pane fx:id="mapGrid">
                     </Pane>
                 </StackPane>
          <StackPane fx:id="islandClaimingContainer" prefHeight="150.0" prefWidth="200.0" />

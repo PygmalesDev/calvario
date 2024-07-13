@@ -10,6 +10,7 @@ import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
+import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.JobsApiService;
@@ -130,6 +131,8 @@ public class AppTest2 extends ControllerTest {
     @Spy
     GameSystemsApiService gameSystemsApiService;
     @Spy
+    EmpireApiService empireApiService;
+    @Spy
     IslandComponent islandComponent = spy(IslandComponent.class);
 
     Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
@@ -170,6 +173,7 @@ public class AppTest2 extends ControllerTest {
         this.clockComponent.gamesApiService = this.gameApiService;
         this.clockComponent.islandsService = this.islandsService;
         this.clockComponent.eventComponent = this.eventComponent;
+        this.eventComponent.empireApiService = this.empireApiService;
         this.islandsService.app = this.app;
         this.islandAttributeStorage.systemPresets = systemUpgrades;
         inGameService.setGameStatus(gameStatus);
@@ -264,6 +268,8 @@ public class AppTest2 extends ControllerTest {
                 "a","a",1, 2, "a", new String[]{"1"}, new HashMap<>() {{put("energy", 5);put("population", 4);}},
                 null))).when(this.empireService).getEmpire(any(),any());
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
+
+        doReturn(Observable.just(new EffectSourceParentDto(new EffectSourceDto[]{}))).when(empireApiService).getEmpireEffect(any(), any());
 
         app.show(inGameController);
         eventComponent.getStylesheets().clear();

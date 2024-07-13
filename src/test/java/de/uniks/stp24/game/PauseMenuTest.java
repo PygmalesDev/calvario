@@ -10,8 +10,11 @@ import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateResultDto;
+import de.uniks.stp24.dto.EffectSourceDto;
+import de.uniks.stp24.dto.EffectSourceParentDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.*;
+import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.JobsApiService;
@@ -50,6 +53,9 @@ public class PauseMenuTest extends ControllerTest {
 
     @Spy
     GameSystemsApiService gameSystemsApiService;
+
+    @Spy
+    EmpireApiService empireApiService;
 
     @Spy
     PresetsApiService presetsApiService;
@@ -167,6 +173,7 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = this.eventComponent;
+        this.eventComponent.empireApiService = this.empireApiService;
         inGameService.setEventService(eventService);
         this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
         this.inGameController.overviewUpgradeComponent = this.overviewUpgradeComponent;
@@ -213,6 +220,9 @@ public class PauseMenuTest extends ControllerTest {
         doReturn(Observable.just(new SystemUpgrades(upgradeStatus,upgradeStatus, upgradeStatus, upgradeStatus, upgradeStatus ))).when(inGameService).loadUpgradePresets();
         doReturn(Observable.just(new ArrayList<BuildingPresets>())).when(inGameService).loadBuildingPresets();
         doReturn(Observable.just(new ArrayList<DistrictPresets>())).when(inGameService).loadDistrictPresets();
+
+        doReturn(Observable.just(new EffectSourceParentDto(new EffectSourceDto[]{}))).when(empireApiService).getEmpireEffect(any(), any());
+
 
         this.app.show(this.inGameController);
 

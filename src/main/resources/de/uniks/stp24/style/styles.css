@@ -5,6 +5,11 @@
     src: url("/de/uniks/stp24/assets/fonts/PTSerif-Bold.ttf");
 }
 
+@font-face {
+    font-family: 'Baskerville Old Face';
+    src: url("/de/uniks/stp24/fonts/Baskerville.ttf");
+}
+
 
 Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-font-family: "PT Serif";
@@ -271,6 +276,11 @@ ToggleButton:hover{
     -fx-pref-height: 75px;
 }
 
+.license-title {
+    -fx-font-family: "Baskerville Old Face";
+    -fx-font-size: 20;
+}
+
 .licensesButton{
     -fx-font-family: "PT Serif";
     -fx-font-size: 24;
@@ -284,6 +294,28 @@ ToggleButton:hover{
     -fx-border-width: 0;
     -fx-pref-width: 200px;
     -fx-pref-height: 100px;
+}
+
+.license-back-button {
+    -fx-font-family: "Stencil";
+    -fx-font-size: 20;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/blue_button_element.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 125px;
+    -fx-pref-height: 50px;
+}
+
+.license-background {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/licenses.png"); /* Pfad zum Hintergrundbild */
+    -fx-background-size: cover; /* Skaliert das Bild, um das gesamte Element zu bedecken */
+    -fx-background-position: center; /* Zentriert das Bild */
+    -fx-background-repeat: no-repeat;
 }
 
 .lobbyButtonSelectEmpire{
@@ -418,17 +450,32 @@ ToggleButton:hover{
 
 .backgroundTextArea {
     -fx-font-size: 14;
-    -fx-font-family: "PT Serif";
-
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    -fx-control-inner-background: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-focus-color: tranparent;
+    -fx-faint-focus-color: transparent;
+    -fx-padding: 20px 5px 3px 20px;
 }
 
-.backgroundTextArea .content{
-    -fx-background-color: #FFD966;
-    -fx-cursor: default;
+.backgroundTextArea .scroll-pane {
+    -fx-background-color: transparent;
 }
 
-.backgroundTextArea .scroll-bar:vertical{
-    -fx-background-color: #FFD966;
+.backgroundTextArea .scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.backgroundTextArea .scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.backgroundTextArea .scroll-bar .thumb {
+    -fx-background-color: transparent;
 }
 
 .captainText .scroll-pane .content{

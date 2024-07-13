@@ -47,7 +47,6 @@ public class LicensesController extends BasicController {
 
     @OnDestroy
     public void destroy(){
-        backgroundAnchorPane.setStyle("-fx-background-image: null");
-        cardBackgroundVBox.setStyle("-fx-background-image: null");
+
     }
 }

@@ -455,6 +455,8 @@ public class InGameController extends BasicController {
             islandAttributes.setIsland(selected.getIsland());
             if (selected.getIsland().owner() != null) {
                 this.islandClaimingContainer.setVisible(false);
+                this.sitePropertiesComponent.setVisible(false);
+                this.buildingPropertiesComponent.setVisible(false);
                 selectedIsland = selected;
                 if (selected.island.owner().equals(this.tokenStorage.getEmpireId()))
                     this.overviewSitesComponent.jobsComponent.setJobsObservableList(

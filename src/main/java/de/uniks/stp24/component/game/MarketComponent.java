@@ -166,7 +166,8 @@ public class MarketComponent extends StackPane {
 
     private void setCreditCount() {
         userCredits = resourceCountMap.get("credits");
-        userCreditsLabel.setText(String.valueOf(userCredits));     }
+        userCreditsLabel.setText(String.valueOf(userCredits));
+    }
 
     public void filterResourceMap() {
         resourceCountMap.remove("population");
@@ -179,18 +180,20 @@ public class MarketComponent extends StackPane {
         subscriber.subscribe(eventListener.listen(
                         "games" + tokenStorage.getGameId() + "empires" + tokenStorage.getEmpireId() + ".updated", EmpireExtendedDto.class),
                 event -> {
-                    Map<String, Integer> eventResources = event.data().resources();
-                    if (!eventResources.equals(resourceCountMapCopy)) {
-                        return;
+                    if (!lastUpdate.equals(event.data().updatedAt())) {
+                        Map<String, Integer> eventResources = event.data().resources();
+                        if (!eventResources.equals(resourceCountMapCopy)) {
+                            return;
+                        }
+                        if (noPurchase) {
+                            eventResources.put(selectedItem, resourceCountMapCopy.get(selectedItem) - Integer.parseInt(numberOfGoodsLabel.getText()));
+                        } else {
+                            eventResources.put(selectedItem, resourceCountMapCopy.get(selectedItem) + Integer.parseInt(numberOfGoodsLabel.getText()));
+                        }
+                        resourceCountMap = eventResources;
+                        refreshListview();
+                        this.lastUpdate = event.data().updatedAt();
                     }
-                    if (noPurchase) {
-                        eventResources.put(selectedItem, resourceCountMapCopy.get(selectedItem) - Integer.parseInt(numberOfGoodsLabel.getText()));
-                    } else {
-                        eventResources.put(selectedItem, resourceCountMapCopy.get(selectedItem) + Integer.parseInt(numberOfGoodsLabel.getText()));
-                    }
-                    resourceCountMap = eventResources;
-                    refreshListview();
-                    // TODO lastUpdate
                 }
         );
     }
@@ -288,7 +291,7 @@ public class MarketComponent extends StackPane {
     }
 
     public void incrementAmount() {
-        if(Objects.nonNull(selectedItem)){
+        if (Objects.nonNull(selectedItem)) {
             int amount = Integer.parseInt(numberOfGoodsLabel.getText());
             amount++;
             numberOfGoodsLabel.setText(String.valueOf(amount));
@@ -297,7 +300,7 @@ public class MarketComponent extends StackPane {
     }
 
     public void decrementAmount() {
-        if(Objects.nonNull(selectedItem)){
+        if (Objects.nonNull(selectedItem)) {
             int amount = Integer.parseInt(numberOfGoodsLabel.getText());
             amount--;
             numberOfGoodsLabel.setText(String.valueOf(amount));

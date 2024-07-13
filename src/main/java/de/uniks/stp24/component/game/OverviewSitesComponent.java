@@ -77,6 +77,8 @@ public class OverviewSitesComponent extends AnchorPane {
     private InGameController inGameController;
     private boolean isNameEditable;
 
+    String shownPage = "details";
+
     @Inject
     public OverviewSitesComponent() {
 
@@ -89,6 +91,8 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showUpgrades() {
+        shownPage = "upgrade";
+
         setLevelCheckBox();
         if(islandAttributes.getIsland().upgradeLevel() == 4){
             inGameController.overviewUpgradeComponent.upgrade_box.setVisible(false);
@@ -135,6 +139,8 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showDetails() {
+        shownPage = "details";
+
         detailsButton.setDisable(true);
         sitesButton.setDisable(false);
         buildingsButton.setDisable(false);
@@ -147,6 +153,8 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showBuildings() {
+        shownPage = "buildings";
+
         buildingsComponent.setInGameController(inGameController);
         buildingsButton.setDisable(true);
         sitesButton.setDisable(false);
@@ -157,6 +165,8 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showSites() {
+        shownPage = "sites";
+
         detailsButton.setDisable(false);
         sitesButton.setDisable(true);
         buildingsButton.setDisable(false);
@@ -166,6 +176,8 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showJobs() {
+        shownPage = "jobs";
+
         jobsButton.setDisable(true);
         detailsButton.setDisable(false);
         sitesButton.setDisable(false);
@@ -231,5 +243,9 @@ public class OverviewSitesComponent extends AnchorPane {
     public void setIslandName() {
         this.islandNameButton.getStyleClass().clear();
         this.islandNameButton.getStyleClass().add("islandChangeNameActive");
+    }
+
+    public String getShownPage() {
+        return shownPage;
     }
 }

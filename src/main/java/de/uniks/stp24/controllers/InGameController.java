@@ -8,6 +8,7 @@ import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.*;
+import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
@@ -405,6 +406,31 @@ public class InGameController extends BasicController {
         group.setScaleY(0.65);
 
         this.islandComponentList.forEach(isle -> {
+
+            // Event Listener for Island changes
+            this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.systems.%s.updated",
+                            tokenStorage.getGameId(), isle.island.id()), SystemDto.class),
+                    event -> {
+                        Island updatedIsland = islandsService.getIslandFromDto(event.data());
+                        isle.applyInfo(updatedIsland);
+                        System.out.println(updatedIsland.equals(islandAttributes.getIsland()) + "  " + overviewSitesComponent.isVisible());
+                        if (updatedIsland.id().equals(islandAttributes.getIsland().id()) && overviewSitesComponent.isVisible()) {
+                            islandAttributes.setIsland(updatedIsland);
+                            String shownPage = overviewSitesComponent.getShownPage();
+                            overviewSitesComponent.closeOverview();
+                            showOverview();
+                            switch (shownPage) {
+                                case "upgrade" -> overviewSitesComponent.showUpgrades();
+                                case "details" -> overviewSitesComponent.showDetails();
+                                case "buildings" -> overviewSitesComponent.showBuildings();
+                                case "sites" -> overviewSitesComponent.showSites();
+                                case "jobs" -> overviewSitesComponent.showJobs();
+                            }
+                        }
+                    },
+                    error -> System.out.println("islands event listener error: " + error)
+            );
+
             isle.setInGameController(this);
             isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
             isle.setScaleX(1.25);
@@ -596,12 +622,16 @@ public class InGameController extends BasicController {
         overviewSitesComponent.updateResCapacity();
     }
 
-    @OnDestroy
-    public void destroy() {
+    private void removeIslands() {
         islandComponentList.forEach(IslandComponent::destroy);
         islandComponentList = null;
         islandComponentMap = null;
         islandsService.removeDataForMap();
+    }
+
+    @OnDestroy
+    public void destroy() {
+        removeIslands();
         this.gameListenerTriple.forEach(triple -> triple.game().listeners()
                 .removePropertyChangeListener(triple.propertyName(), triple.listener()));
         this.subscriber.dispose();

@@ -16,7 +16,6 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.QuadCurve;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.controller.Subscriber;
@@ -106,21 +105,7 @@ public class IslandsService extends BasicService {
                         minY = Math.min(data.y(),minY);
                         maxX = Math.max(data.x(),maxX);
                         maxY = Math.max(data.y(),maxY);
-                        Island tmp = new Island(data.owner(),
-                                Objects.isNull(data.owner()) ? -1 : getEmpire(data.owner()).flag(),
-                                data.x(),
-                                data.y(),
-                                IslandType.valueOf(data.type()),
-                                data.population(),
-                                data.capacity(),
-                                data.upgrade().ordinal(),
-                                data.districtSlots(),
-                                data.districts(),
-                                data.buildings(),
-                                data._id(),
-                                data.upgrade().toString(),
-                                data.name()
-                        );
+                        Island tmp = getIslandFromDto(data);
                         isles.add(tmp);
                         connections.put(data._id(),linkedIsles);
                     });
@@ -130,6 +115,24 @@ public class IslandsService extends BasicService {
                     refreshListOfColonizedSystems();
                 },
                 error -> errorService.getStatus(error));
+    }
+
+    public Island getIslandFromDto(SystemDto data) {
+        return new Island(data.owner(),
+                Objects.isNull(data.owner()) ? -1 : getEmpire(data.owner()).flag(),
+                data.x(),
+                data.y(),
+                IslandType.valueOf(data.type()),
+                data.population(),
+                data.capacity(),
+                data.upgrade().ordinal(),
+                data.districtSlots(),
+                data.districts(),
+                data.buildings(),
+                data._id(),
+                data.upgrade().toString(),
+                data.name()
+        );
     }
 
     /**
@@ -412,20 +415,6 @@ public class IslandsService extends BasicService {
     }
 
     public Island updateIsland(SystemDto result) {
-        return new Island(result.owner(),
-                Objects.isNull(result.owner()) ? -1 : getEmpire(result.owner()).flag(),
-                result.x(),
-                result.y(),
-                IslandType.valueOf(result.type()),
-                result.population(),
-                result.capacity(),
-                result.upgrade().ordinal(),
-                result.districtSlots(),
-                result.districts(),
-                result.buildings(),
-                result._id(),
-                result.upgrade().toString(),
-                result.name()
-        );
+        return getIslandFromDto(result);
     }
 }

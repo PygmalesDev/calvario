@@ -40,11 +40,11 @@ public class ExplanationService {
     Methods below is made for explanation of resources.
      */
     public CustomComponentListCell<Resource, ResourceComponent> addMouseHoverListener(CustomComponentListCell<Resource, ResourceComponent> cell, String listTyp, String indicator, String resourceCategory) {
-        VariableExplanationComponent explanationComponent = new VariableExplanationComponent(app);
+        VariableExplanationComponent variableExplanationComponent = new VariableExplanationComponent(app);
 
         Tooltip tooltip = new Tooltip();
         Tooltip.install(cell, tooltip);
-        tooltip.setGraphic(explanationComponent);
+        tooltip.setGraphic(variableExplanationComponent);
         AtomicBoolean entered = new AtomicBoolean(false);
 
         app.stage().getScene().addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
@@ -66,9 +66,13 @@ public class ExplanationService {
 
 
             if (isMouseInsideCell && !entered.get()) {
-                initializeResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID(), explanationComponent);
-                tooltip.show(app.stage(), mouseX, mouseY);
-                entered.set(true);
+                if(!listTyp.equals("storage")){
+                    initializeResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID(), variableExplanationComponent);
+                    tooltip.show(app.stage(), mouseX, mouseY);
+                    entered.set(true);
+                } else {
+                    initializeStorageExplanation(cell.getItem().resourceID());
+                }
             } else if (!isMouseInsideCell) {
                 tooltip.hide();
                 entered.set(false);
@@ -80,26 +84,40 @@ public class ExplanationService {
     private void initializeResExplanation(String listType, String indicator, String ResCategory, String id, VariableExplanationComponent variableExplanationComponent) {
         String variable = listType + "." + indicator + "." + ResCategory + "." + id;
         ExplainedVariableDTO explanation = variableService.data.get(variable);
-        variableExplanationComponent.setValues("Base: " + explanation.initial(), "Total: " + explanation.finalValue());
+        variableExplanationComponent.setValues("Base: " + explanation.initial(), "Total: " + explanation.finalValue(), id);
+
+        ArrayList<Double> multiplier = new ArrayList<>();
+
+        for (Sources source : explanation.sources()) {
+            double x = 0;
+            for (Effect effect : source.effects()) {
+                if(effect.variable().equals(variable)) x = (effect.multiplier() - 1) * 100;
+            }
+            multiplier.add(x);
+        }
 
         List<ExplanationComponent> explanationComponentList = new ArrayList<>();
+
         if(!variableService.getActiveEffects().get(variable).isEmpty()){
             for(String effect: variableService.getActiveEffects().get(variable)){
-
+                ExplanationComponent explanationComponent = new ExplanationComponent();
+                explanationComponent.setInf(multiplier.getFirst() + " " + effect);
+                explanationComponentList.add(explanationComponent);
             }
         }
 
-        //TODO: Frage die size der effekte ab und iteriere über die Größe um die effect types anzuzeigen.
         variableExplanationComponent.fillListWithEffects(explanationComponentList);
+    }
 
-        ExplainedVariableDTO explanations = variableService.data.get(variable);
-        Map<String, Double> effects = new HashMap<>();
+    private void initializeStorageExplanation(String recID){
+        /*
 
-        for (Sources source : explanations.sources()) {
-            for (Effect effect : source.effects()) {
-                effects.put(effect.variable(), effect.multiplier());
-            }
-        }
+        Durchlaufe alle eroberten Inseln.
+        Berechne die differenz production - upkeep, wenn möglich.
+        Setze in den component name: diff
+        Setze die resourcen namen als titel
+        und
+         */
     }
 
     public void setInGameController(InGameController inGameController) {

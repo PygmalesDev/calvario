@@ -1,4 +1,5 @@
 package de.uniks.stp24.component.game;
+
 import de.uniks.stp24.App;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,13 +25,15 @@ public class VariableExplanationComponent extends VBox {
     Text baseValue;
     @FXML
     Text totalValue;
+    @FXML
+    Text title;
 
     App app;
 
     Provider<ExplanationComponent> ExplanationComponentProvider = ExplanationComponent::new;
     ObservableList<ExplanationComponent> explanations = FXCollections.observableArrayList();
 
-    public VariableExplanationComponent(App app){
+    public VariableExplanationComponent(App app) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("VariableExplanationOverview.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -49,11 +52,12 @@ public class VariableExplanationComponent extends VBox {
         effectList.setItems(explanations);
     }
 
-    public void fillListWithEffects(List<ExplanationComponent> newEffects){
+    public void fillListWithEffects(List<ExplanationComponent> newEffects) {
         explanations.setAll(newEffects);
     }
 
-    public void setValues(String baseValue, String totalValue){
+    public void setValues(String baseValue, String totalValue, String res) {
+        this.title.setText(res);
         this.baseValue.setText(baseValue);
         this.totalValue.setText(totalValue);
     }

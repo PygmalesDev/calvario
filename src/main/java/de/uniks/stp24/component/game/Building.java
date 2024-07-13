@@ -1,16 +1,11 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.model.Jobs;
-import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.JobsService;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -76,7 +71,7 @@ public class Building extends VBox {
                     .equals("/de/uniks/stp24/icons/buildings/empty_building_element.png")){
                 inGameController.buildingsWindowComponent.setVisible(false);
                 inGameController.setSitePropertiesInvisible();
-                inGameController.showBuildingInformation(buildingName, jobID);
+                inGameController.showBuildingInformation(buildingName, jobID, true);
 
             } else inGameController.showBuildingWindow();
         });

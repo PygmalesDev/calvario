@@ -108,17 +108,26 @@ public class BuildingPropertiesComponent extends AnchorPane {
         this.jobProgressPane.getChildren().add(this.propertiesJobProgressComponent);
     }
 
+    @OnRender
+    public void addRunnable() {
+        resourcesService.setOnResourceUpdates(this::updateButtonStates);
+    }
+
     public void setInGameController(InGameController inGameController){
         this.inGameController = inGameController;
     }
 
 
-    public void setBuildingType(String buildingType, String jobID){
+    public void setBuildingType(String buildingType, String jobID, boolean isBuilt){
         this.buildingType = buildingType;
+
+        buyButton.setDisable(isBuilt);
+        if(!isBuilt) updateButtonStates();
+
         this.currentJobID = jobID;
         displayInfoBuilding();
         disableButtons();
-        startResourceMonitoring();
+        destroyButton.setDisable(!isBuilt);
 
         if (!jobID.isEmpty()) {
             Jobs.Job job = this.buildingJobs.stream()
@@ -182,18 +191,12 @@ public class BuildingPropertiesComponent extends AnchorPane {
     public void hideJobsPane() {
         this.jobProgressPane.setVisible(false);
         this.buildingCostsListView.setVisible(true);
-        this.updateButtonStates();
         this.buyButton.setVisible(true);
         this.destroyButton.setVisible(true);
     }
 
     //Checks if buy and destroy building has to be deactivated
     public void disableButtons() {
-        buyButton.setDisable(true);
-        destroyButton.setDisable(true);
-        subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
-            if (resourcesService.hasEnoughResources(result.cost())) buyButton.setDisable(false);
-        });
         if (tokenStorage.getIsland().buildings().contains(buildingType)) destroyButton.setDisable(false);
     }
 
@@ -202,25 +205,13 @@ public class BuildingPropertiesComponent extends AnchorPane {
         inGameController.handleDeleteStructure(buildingType);
     }
 
-    //Gets called every second by a timer
-    public void updateButtonStates(){
-        subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
-            priceOfBuilding = result.cost();
-            buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding) ||
-                    islandAttributeStorage.getUsedSlots() >= islandAttributeStorage.getIsland().resourceCapacity());
-        });
-        destroyButton.setDisable(!tokenStorage.getIsland().buildings().contains(buildingType));
-    }
-
-    //Timer for calling updateButtonStates every second
-    public void startResourceMonitoring() {
-        Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                updateButtonStates();
-            }
-        }, 0, 1000);
+    public void updateButtonStates() {
+        if (Objects.nonNull(buildingType))
+            subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
+                priceOfBuilding = result.cost();
+                buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding) ||
+                        islandAttributeStorage.getUsedSlots() >= islandAttributeStorage.getIsland().resourceCapacity());
+            });
     }
 
     public void buyBuilding(){
@@ -265,9 +256,6 @@ public class BuildingPropertiesComponent extends AnchorPane {
             }, error -> System.out.println("error here"));
         }
     }
-
-
-
 
     //Gets resources of the building and shows them in three listviews
     public void displayInfoBuilding(){

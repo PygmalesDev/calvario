@@ -131,6 +131,11 @@ public class SitePropertiesComponent extends AnchorPane {
         this.jobPane.setVisible(false);
     }
 
+    @OnRender
+    public void addRunnable() {
+        resourcesService.setOnResourceUpdates(this::setButtonsDisable);
+    }
+
     @FXML
     public void initialize() {
         // Ensure resources list is initialized
@@ -146,6 +151,8 @@ public class SitePropertiesComponent extends AnchorPane {
 
     public void setSiteType(String siteType){
         this.siteType = siteType;
+        setButtonsDisable();
+
         siteName.setText(gameResourceBundle.getString(siteTranslation.get(siteType)));
         Image imageSite = new Image(sitesMap.get(siteType));
         siteImage.getStyleClass().clear();
@@ -241,13 +248,7 @@ public class SitePropertiesComponent extends AnchorPane {
     public void displayAmountOfSite(){
         buildSiteButton.setDisable(false);
         destroySiteButton.setDisable(false);
-        if (Objects.nonNull(siteType))
-            subscriber.subscribe(resourcesService.getResourcesSite(siteType), result -> {
-                Map<String, Integer> costSite = result.cost();
-                if (!resourcesService.hasEnoughResources(costSite)){
-                    buildSiteButton.setDisable(true);
-                }
-        });
+        setButtonsDisable();
 
         if (tokenStorage.getIsland().sites().get(siteType) != null){
             amountSite = tokenStorage.getIsland().sites().get(siteType);
@@ -302,6 +303,16 @@ public class SitePropertiesComponent extends AnchorPane {
             }
         }
 
+    }
+
+    private void setButtonsDisable() {
+        if (Objects.nonNull(siteType))
+            subscriber.subscribe(resourcesService.getResourcesSite(siteType), result -> {
+                Map<String, Integer> costSite = result.cost();
+                if (!resourcesService.hasEnoughResources(costSite)){
+                    buildSiteButton.setDisable(true);
+                }
+        });
     }
 
     private void resourceListGeneration(SiteDto siteDto) {

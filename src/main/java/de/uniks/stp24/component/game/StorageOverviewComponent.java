@@ -15,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -103,6 +102,7 @@ public class StorageOverviewComponent extends AnchorPane {
 
     private void resourceListGeneration(EmpireDto empireDto, AggregateItemDto[] aggregateItems) {
         Map<String, Integer> resourceMap = empireDto.resources();
+        resourcesService.setCurrentResources(resourceMap);
         ObservableList<Resource> resourceList = resourcesService.generateResourceList(resourceMap, resourceListView.getItems(), aggregateItems);
         this.resourceListView.setItems(resourceList);
     }
@@ -118,6 +118,7 @@ public class StorageOverviewComponent extends AnchorPane {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         resourceListGeneration(event.data(), null);
                         this.lastUpdate = event.data().updatedAt();
+                        resourcesService.runnables.forEach(Runnable::run);
                     }
                 },
                 error -> System.out.println("errorEmpireListener"));

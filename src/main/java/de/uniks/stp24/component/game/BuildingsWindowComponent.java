@@ -5,7 +5,6 @@ import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
-import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -105,43 +104,43 @@ public class BuildingsWindowComponent extends AnchorPane {
     //The following are onAction methods from buttons
     public void buildExchange(){
         this.buildingToAdd = "exchange";
-        inGameController.showBuildingInformation(buildingToAdd, "");
+        inGameController.showBuildingInformation(buildingToAdd, "", false);
     }
 
     public void buildPowerPlant(){
         this.buildingToAdd = "power_plant";
-        inGameController.showBuildingInformation(buildingToAdd, "");
+        inGameController.showBuildingInformation(buildingToAdd, "", false);
     }
 
     public void buildMine(){
         this.buildingToAdd = "mine";
-        inGameController.showBuildingInformation(buildingToAdd, "");
+        inGameController.showBuildingInformation(buildingToAdd, "", false);
     }
 
 
     public void buildFarm(){
         this.buildingToAdd = "farm";
-        inGameController.showBuildingInformation(buildingToAdd, "");
+        inGameController.showBuildingInformation(buildingToAdd, "", false);
     }
 
     public void buildResearchLab(){
         this.buildingToAdd = "research_lab";
-        inGameController.showBuildingInformation(buildingToAdd, "");
+        inGameController.showBuildingInformation(buildingToAdd, "", false);
     }
 
     public void buildFoundry(){
         this.buildingToAdd = "foundry";
-        inGameController.showBuildingInformation(buildingToAdd, "");
+        inGameController.showBuildingInformation(buildingToAdd, "", false);
     }
 
     public void buildFactory(){
         this.buildingToAdd = "factory";
-        inGameController.showBuildingInformation(buildingToAdd, "");
+        inGameController.showBuildingInformation(buildingToAdd, "", false);
     }
 
     public void buildRefinery(){
         this.buildingToAdd = "refinery";
-        inGameController.showBuildingInformation(buildingToAdd, "");
+        inGameController.showBuildingInformation(buildingToAdd, "", false);
     }
 
     public void onClose(){

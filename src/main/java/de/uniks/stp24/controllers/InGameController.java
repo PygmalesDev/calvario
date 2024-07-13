@@ -413,7 +413,6 @@ public class InGameController extends BasicController {
                     event -> {
                         Island updatedIsland = islandsService.getIslandFromDto(event.data());
                         isle.applyInfo(updatedIsland);
-                        System.out.println(updatedIsland.equals(islandAttributes.getIsland()) + "  " + overviewSitesComponent.isVisible());
                         if (updatedIsland.id().equals(islandAttributes.getIsland().id())
                                 && (overviewSitesComponent.isVisible() || overviewUpgradeComponent.isVisible())) {
                             islandAttributes.setIsland(updatedIsland);
@@ -510,7 +509,7 @@ public class InGameController extends BasicController {
             Island selected = this.islandsService.getIsland(params[2]);
             this.islandAttributes.setIsland(selected);
             this.tokenStorage.setIsland(selected);
-            this.showBuildingInformation(params[0], params[1]);
+            this.showBuildingInformation(params[0], params[1], true);
         });
     }
 
@@ -539,10 +538,10 @@ public class InGameController extends BasicController {
         }
     }
 
-    public void showBuildingInformation(String buildingToAdd, String jobID) {
+    public void showBuildingInformation(String buildingToAdd, String jobID, boolean isBuilt) {
         siteProperties.setVisible(false);
         siteProperties.setMouseTransparent(true);
-        buildingPropertiesComponent.setBuildingType(buildingToAdd, jobID);
+        buildingPropertiesComponent.setBuildingType(buildingToAdd, jobID, isBuilt);
         popupBuildingProperties.showPopup(buildingProperties, buildingPropertiesComponent);
     }
 

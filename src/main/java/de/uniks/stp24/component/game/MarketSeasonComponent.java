@@ -60,5 +60,6 @@ public class MarketSeasonComponent extends HBox implements ReusableItemComponent
             moneyAmountText.setText("+"+ sell);
             resourceAmountText.setText("-" + seasonComponent.moneyAmount());
         }
+        this.setStyle("-fx-background-insets: 10;");
     }
 }

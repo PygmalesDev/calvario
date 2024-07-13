@@ -188,11 +188,11 @@ public class IslandsService extends BasicService {
             double startX, startY, endX, endY;
             IslandComponent isle1 = idToComponent.get(isle);
             startX = isle1.getPosX() + 60;
-            startY = isle1.getPosY() + 60;
+            startY = isle1.getPosY() + 100;
             for (String neighbour : list) {
                 IslandComponent isle2 = idToComponent.get(neighbour);
                 endX = isle2.getPosX() + 60;
-                endY = isle2.getPosY() + 60;
+                endY = isle2.getPosY() + 100;
 
                 Line tmp = new Line(startX, startY, endX, endY);
                 tmp.getStyleClass().add("connection");
@@ -386,17 +386,16 @@ public class IslandsService extends BasicService {
         this.subscriber.dispose();
     }
 
-    public void claimIsland(Island island) {
-        this.subscriber.subscribe(this.gameSystemsService.claimSystem(this.gameID, island.id(),
-                        new SystemClaimDto(this.tokenStorage.getEmpireId())), this::updateIsland,
-                error -> System.out.println(error.getMessage()));
-    }
-
     public Island updateIsland(SystemDto result) {
         Island newIsland = convertToIsland(result);
         this.isles.replaceAll(island -> island.id().equals(newIsland.id()) ? newIsland : island);
         return newIsland;
     }
+
+    public void updateIsland(String islandID) {
+        this.subscriber.subscribe(this.gameSystemsService.getSystem(this.gameID, islandID), this::updateIsland);
+    }
+
 
     private Island convertToIsland(SystemDto result) {
         return new Island(result.owner(),

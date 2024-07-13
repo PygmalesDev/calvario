@@ -1,11 +1,13 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,6 +18,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -77,6 +80,8 @@ public class OverviewUpgradeComponent extends AnchorPane {
     @Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
+    @Inject
+    JobsService jobsService;
 
     public GameSystemsApiService gameSystemsService;
 
@@ -144,7 +149,11 @@ public class OverviewUpgradeComponent extends AnchorPane {
 
     public void upgradeIsland() {
         if (resourcesService.hasEnoughResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()))) {
-            resourcesService.upgradeIsland();
+            //resourcesService.upgradeIsland();
+            this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createIslandUpgradeJob(this.islandAttributes.getIsland().id())),
+                    job -> this.jobsService.onJobCompletion(job._id(), () -> this.islandsService.updateIsland(job.system())),
+                    error -> System.out.println(error.getMessage()));
+
             setNeededResources();
             String upgradeStatus = switch (islandAttributes.getIsland().upgradeLevel()) {
                 case 0 -> islandAttributes.systemPresets.explored().id();
@@ -153,8 +162,14 @@ public class OverviewUpgradeComponent extends AnchorPane {
                 case 3 -> islandAttributes.systemPresets.developed().id();
                 default -> null;
             };
-            islandsService.upgradeSystem(islandAttributes, upgradeStatus, inGameController);
+            //islandsService.upgradeSystem(islandAttributes, upgradeStatus, inGameController);
         }
+    }
+
+    @OnInit
+    public void setIslandUpgradeFinishers() {
+        this.jobsService.onJobsLoadingFinished("upgrade", job ->
+                this.jobsService.onJobCompletion(job._id(), () -> this.islandsService.updateIsland(job.system())));
     }
 
     public void setUpgradeInf() {

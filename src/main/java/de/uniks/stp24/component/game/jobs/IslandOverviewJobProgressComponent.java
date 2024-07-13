@@ -112,10 +112,10 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
                 this.jobDescriptionText.setText(this.gameResourceBundle.getString(
                         Constants.siteTranslation.get(job.district())) + " Site");
             }
-            // TODO: Change upgrade to next upgrade level
             case "upgrade" -> {
-                this.jobImage.setImage(this.imageCache.get("de/uniks/stp24/icons/other/upgrade_job.png"));
-                this.jobDescriptionText.setText(String.format("Upgrading island to %s", job.type()));
+                this.jobImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/other/upgrade_job.png"));
+                this.jobDescriptionText.setText(this.gameResourceBundle.getString("jobs."+
+                        this.islandAttributes.getIsland().upgrade()));
             }
         }
     }

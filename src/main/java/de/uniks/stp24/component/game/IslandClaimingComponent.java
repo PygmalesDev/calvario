@@ -60,6 +60,8 @@ public class IslandClaimingComponent extends Pane {
     @FXML
     Pane colonizePane;
     @FXML
+    Text noSitesText;
+    @FXML
     ListView<Site> sitesListView;
     @FXML
     ListView<de.uniks.stp24.model.Resource> consumeListView;
@@ -89,6 +91,7 @@ public class IslandClaimingComponent extends Pane {
     public Provider<ResourceComponent> resourceComponentProvider = () ->
             new ResourceComponent(true, false, true, false, this.gameResourceBundle);
 
+    private ObservableList<Job> upgradeJobs;
     private final ObservableList<Site> siteObservableList = FXCollections.observableArrayList();
     private final ObservableList<de.uniks.stp24.model.Resource> consumeObservableList = FXCollections.observableArrayList();
     private final ObservableList<de.uniks.stp24.model.Resource> costsObservableList = FXCollections.observableArrayList();
@@ -102,9 +105,13 @@ public class IslandClaimingComponent extends Pane {
 
     @OnRender
     public void render() {
+        this.jobsService.onJobsLoadingFinished(() ->
+                this.upgradeJobs = this.jobsService.getJobObservableListOfType("upgrade"));
+
         this.timerImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/islands/capacity_icon.png"));
         this.capacityImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/islands/capacity_icon.png"));
         this.colonizersImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/islands/crewmates_icon.png"));
+        this.setPickOnBounds(false);
     }
 
     public void setIslandInformation(Island island) {
@@ -114,13 +121,13 @@ public class IslandClaimingComponent extends Pane {
         this.colonizersText.setText(String.valueOf(island.crewCapacity()));
         this.timeText.setText("?");
 
-        this.islandJob = this.jobsService.getJobObservableListOfType("upgrade")
-                .stream().filter(job -> job.system().equals(this.currentIsland.id())).findFirst().orElse(null);
+        this.islandJob = this.upgradeJobs.stream()
+                .filter(job -> job.system().equals(this.currentIsland.id())).findFirst().orElse(null);
         if (Objects.nonNull(this.islandJob)) {
             this.setProgressBarVisibility(true);
             this.progress = this.islandJob.progress();
-            this.incrementAmount = (double) 1 /this.islandJob.total();
-            this.jobProgressBar.setProgress(this.progress*this.incrementAmount);
+            this.incrementAmount = (double) 1 / this.islandJob.total();
+            this.jobProgressBar.setProgress(this.progress * this.incrementAmount);
         } else this.setProgressBarVisibility(false);
 
         if (this.currentIsland.upgrade().equals("explored")) {
@@ -132,8 +139,8 @@ public class IslandClaimingComponent extends Pane {
                     .add(new Site(name, null, null, null, 0, amount)));
             this.sitesListView.setItems(this.siteObservableList);
             this.sitesListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.componentProvider));
+            this.noSitesText.setVisible(this.sitesListView.getItems().isEmpty());
 
-            System.out.println(this.islandAttributes.systemPresets.explored().cost().size());
             this.islandAttributes.systemPresets.colonized().cost().forEach((name, amount) -> this.costsObservableList
                     .add(new de.uniks.stp24.model.Resource(name, amount, 0)));
             this.costsListView.setItems(this.costsObservableList);
@@ -150,7 +157,6 @@ public class IslandClaimingComponent extends Pane {
             this.exploreButton.setText(this.gameResourceBundle.getString("claiming.explore"));
             this.colonizePane.setVisible(false);
         }
-
     }
 
     public void exploreIsland() {
@@ -171,10 +177,12 @@ public class IslandClaimingComponent extends Pane {
     public void setJobUpdaters() {
         this.jobsService.onJobsLoadingFinished("upgrade", (job) ->
             this.jobsService.onJobCompletion(job._id(), () -> {
-                if (this.currentIsland.id().equals(job.system())) this.setProgressBarVisibility(false);
+                if (Objects.nonNull(this.currentIsland))
+                    if (this.currentIsland.id().equals(job.system())) this.getParent().setVisible(false);
             }));
         this.jobsService.onJobTypeProgress("upgrade", (someJob) -> {
-            if (someJob.system().equals(this.currentIsland.id())) this.incrementProgress();
+            if (Objects.nonNull(this.currentIsland))
+                if (someJob.system().equals(this.currentIsland.id())) this.incrementProgress();
         });
     }
 

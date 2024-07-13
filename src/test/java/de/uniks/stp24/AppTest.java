@@ -20,6 +20,7 @@ import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -248,6 +249,7 @@ public class AppTest extends ControllerTest {
         clickOn("#load_game_b");
         WaitForAsyncUtils.waitForFxEvents();
         verifyThat(window("ENTER GAME"), WindowMatchers.isShowing());
+        WaitForAsyncUtils.waitForFxEvents();
         lookup("#backgroundAnchorPane").queryAs(AnchorPane.class).getStylesheets().clear();
     }
 

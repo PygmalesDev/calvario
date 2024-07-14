@@ -197,7 +197,7 @@
 /*------------------------------------------------------------------------------------*/
 
 .playButton {
-    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/continue_seasonalTrade.png");
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/pause_seasonalTrade.png");
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
@@ -207,7 +207,7 @@
 }
 
 .playButton:selected {
-    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/pause_seasonalTrade.png");
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/continue_seasonalTrade.png");
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;

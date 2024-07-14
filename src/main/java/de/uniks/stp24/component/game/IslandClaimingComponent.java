@@ -21,11 +21,9 @@ import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
-import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
-import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -106,7 +104,7 @@ public class IslandClaimingComponent extends Pane {
         this.jobsService.onJobsLoadingFinished(() ->
                 this.upgradeJobs = this.jobsService.getJobObservableListOfType("upgrade"));
 
-        this.timerImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/islands/capacity_icon.png"));
+        this.timerImage.setImage(this.imageCache.get("/de/uniks/stp24/assets/other/time.png"));
         this.capacityImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/islands/capacity_icon.png"));
         this.colonizersImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/islands/crewmates_icon.png"));
         this.setPickOnBounds(false);
@@ -117,7 +115,6 @@ public class IslandClaimingComponent extends Pane {
         this.islandTypeText.setText(this.gameResourceBundle.getString(islandTranslation.get(island.type().toString())));
         this.capacityText.setText(String.valueOf(island.resourceCapacity()));
         this.colonizersText.setText(String.valueOf(island.crewCapacity()));
-        this.timeText.setText("?");
 
         this.islandJob = this.upgradeJobs.stream()
                 .filter(job -> job.system().equals(this.currentIsland.id())).findFirst().orElse(null);
@@ -132,6 +129,7 @@ public class IslandClaimingComponent extends Pane {
             this.siteObservableList.clear();
             this.consumeObservableList.clear();
             this.costsObservableList.clear();
+            this.timeText.setText("12");
 
             island.sitesSlots().forEach((name, amount) -> this.siteObservableList
                     .add(new Site(name, null, null, null, 0, amount)));
@@ -154,6 +152,7 @@ public class IslandClaimingComponent extends Pane {
         } else {
             this.exploreButton.setText(this.gameResourceBundle.getString("claiming.explore"));
             this.colonizePane.setVisible(false);
+            this.timeText.setText("3");
         }
     }
 
@@ -167,7 +166,11 @@ public class IslandClaimingComponent extends Pane {
             this.jobsService.onJobCompletion(job._id(), () -> {
                 if (this.currentIsland.id().equals(job.system())) this.setProgressBarVisibility(false);
             });
-        });
+        }, error -> System.out.printf(
+                        """
+                        Creating a new exploration job failed in IsalndClaimingComponent
+                        An exception was caught here: %s
+                        """, error.getMessage()));
 
     }
 
@@ -193,6 +196,10 @@ public class IslandClaimingComponent extends Pane {
         this.exploreButton.setVisible(!isVisible);
         this.cancelJobButton.setVisible(isVisible);
         this.jobProgressBar.setVisible(isVisible);
+    }
+
+    public void close() {
+        this.getParent().setVisible(false);
     }
 
     public void cancelJob() {

@@ -163,7 +163,6 @@ public class InGameController extends BasicController {
     String empireID;
     String lastUpdate;
     double scale = 1.0;
-    double claimScale = 1.0;
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
     public ArrayList<String> flagsPath = new ArrayList<>();
     String resourcesPaths = "/de/uniks/stp24/assets/";
@@ -432,19 +431,13 @@ public class InGameController extends BasicController {
         mapGrid.setOnScroll(event -> {
             if (event.isShiftDown() && (event.getDeltaY() > 0 || event.getDeltaX() > 0)) {
                 scale += 0.1;
-                //claimScale -= 0.1;
                 scale = Math.min(scale, 3);
-                //claimScale = Math.max(claimScale, 2.35);
                 event.consume();
             } else if (event.isShiftDown() && (event.getDeltaY() < 0 || event.getDeltaX() < 0)) {
                 scale -= 0.1;
-                //claimScale += 0.1;
-                //claimScale = Math.min(claimScale, 1.65);
                 scale = Math.max(scale, 0.35);
                 event.consume();
             }
-            //this.islandClaimingContainer.setScaleX(claimScale);
-            //this.islandClaimingContainer.setScaleY(claimScale);
             group.setScaleX(scale);
             group.setScaleY(scale);
         });
@@ -618,10 +611,6 @@ public class InGameController extends BasicController {
         pauseMenuContainer.setVisible(false);
         pauseMenuContainer.setMouseTransparent(true);
         helpComponent.displayTechnologies();
-    }
-
-    public void updateResCapacity() {
-        overviewSitesComponent.updateResCapacity();
     }
 
     @OnDestroy

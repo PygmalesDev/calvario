@@ -272,7 +272,8 @@ public class SitePropertiesComponent extends AnchorPane {
         subscriber.subscribe(resourcesService.getResourcesSite(siteType), result -> {
             Map<String, Integer> costSite = result.cost();
             if (!resourcesService.hasEnoughResources(costSite)) buildSiteButton.setDisable(true);
-        });
+        }, error -> System.out.println("Caught an error while trying to display the amount of sites " +
+                "in the SitePropertiesComponent:\n %s" + error.getMessage()));
 
         amountSite = Objects.nonNull(tokenStorage.getIsland().sites().get(siteType)) ?
                 tokenStorage.getIsland().sites().get(siteType) : 0;

@@ -248,7 +248,8 @@ public class OverviewSitesComponent extends AnchorPane {
                     result -> {
                         this.islandsService.updateIsland(result);
                         this.jobsService.getJobInspector("name_updates").accept(null);
-                    });
+                    }, error -> System.out.printf("Caught an error while setting the new island name in" +
+                            "OverviewSitesComponent: \n%s", error.getMessage()));
         } else {
             this.inputIslandName.setEditable(true);
             this.inputIslandName.setStyle("-fx-text-fill: blue");

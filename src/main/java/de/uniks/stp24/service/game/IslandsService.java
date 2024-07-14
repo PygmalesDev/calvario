@@ -234,7 +234,8 @@ public class IslandsService extends BasicService {
               });
               mapSitesBuildings();
           },
-          error -> {});
+          error -> System.out.printf(
+                  "Caught an error while refreshing colonized systems list in Islands Service:\n %s", error.getMessage()));
     }
 
     /** after refresh list remap site and buildings (?)

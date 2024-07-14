@@ -8,6 +8,8 @@ import de.uniks.stp24.service.game.TechnologyService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -29,7 +31,7 @@ import javafx.util.*;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.ResourceBundle;
+import java.util.*;
 
 @Component(view = "TechnologyCategorySubComponent.fxml")
 public class TechnologyCategorySubComponent extends VBox implements ReusableItemComponent<TechnologyExtended> {
@@ -152,8 +154,11 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
             showEffectLabel.setVisible(false);
             showEffectLabel.setMouseTransparent(true);
         }
-    }
 
+        if (technologyService.getUnlockedTechnologies().stream().anyMatch(tech -> tech.id().equals(technology.id()))) {
+            getAllChildren(this).removeAll(Arrays.asList(timeImage, timeLabel, researchImage, researchLabel, researchButton));
+        }
+    }
 
     @OnInit
     public void init() {
@@ -178,5 +183,16 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     public void destroy() {
         description.clear();
         descriptionListView.getItems().clear();
+    }
+
+    public List<Node> getAllChildren(Parent parent) {
+        List<Node> nodes = new ArrayList<>();
+        for (Node node : parent.getChildrenUnmodifiable()) {
+            nodes.add(node);
+            if (node instanceof Parent) {
+                nodes.addAll(getAllChildren((Parent) node));
+            }
+        }
+        return nodes;
     }
 }

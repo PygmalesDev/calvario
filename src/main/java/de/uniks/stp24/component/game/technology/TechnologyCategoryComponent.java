@@ -131,7 +131,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
         this.technologieCategoryName = category;
 
         unlockedTechnologies = technologyService.getUnlockedTechnologies(technologieCategoryName);
-        researchTechnologies = technologyService.getAllResearchTechnologies(technologieCategoryName);
+        researchTechnologies = technologyService.getResearchTechnologies(technologieCategoryName);
 
         researchListView.setSelectionModel(null);
         unlockedListView.setSelectionModel(null);

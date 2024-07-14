@@ -27,8 +27,10 @@ import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 @Component(view = "ResearchJob.fxml")
 public class ResearchJobComponent extends AnchorPane {
@@ -74,6 +76,10 @@ public class ResearchJobComponent extends AnchorPane {
     @Inject
     Subscriber subscriber;
     private Jobs.Job job;
+
+    @Inject
+    @Named("variablesResourceBundle")
+    public ResourceBundle variablesResourceBundle;
 
 
     ArrayList<Jobs.Job> jobList = new ArrayList<>();
@@ -147,7 +153,7 @@ public class ResearchJobComponent extends AnchorPane {
         if (technologyCategoryComponent.getTechnology() != null){
             technologyEffectsListView.getItems().clear();
             for (Effect effect : technologyCategoryComponent.getTechnology().effects()) {
-                String effectString = effect.multiplier() + " * " + effect.variable();
+                String effectString = effect.multiplier() + " * " + variablesResourceBundle.getString(effect.variable());
                 technologyEffectsListView.getItems().add(effectString);
             }
         }

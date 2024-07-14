@@ -31,6 +31,8 @@ import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.lang.Thread.sleep;
 
@@ -150,6 +152,19 @@ public class ResearchJobComponent extends AnchorPane {
 
 
     public void progressHandling(){
+        ObservableList<Jobs.Job> newJobList = jobsService.getJobObservableListOfType("technology");
+
+        Set<String> existingJobIds = jobList.stream()
+                .map(Jobs.Job::technology)
+                .collect(Collectors.toSet());
+
+        for (Jobs.Job newJob : newJobList) {
+            if (!existingJobIds.contains(newJob.technology())) {
+                jobList.add(newJob);
+                existingJobIds.add(newJob.technology());
+            }
+        }
+
         if (Objects.nonNull(technologyCategoryComponent.getTechnology())){
             for (Jobs.Job job1 : jobList) {
                 if (job1.technology().equals(technologyCategoryComponent.getTechnology().id())){
@@ -160,7 +175,6 @@ public class ResearchJobComponent extends AnchorPane {
                         researchProgressBar.setProgress((double) currentJob.progress() / roundedUpTotal);
                         researchProgressText.setText(currentJob.progress() + " / " + roundedUpTotal);
                         this.job = currentJob;
-                        technologyCategoryComponent.showJobWindow();
                     }, error -> {
                         System.out.println("Error trying to get a Job in ResearchComponent");
                     });

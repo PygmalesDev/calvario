@@ -97,17 +97,29 @@ public class TechnologyOverviewComponent extends AnchorPane {
         outerLoop:
         for (TechnologyExtended technology : technologyCategoryComponent.researchJobComponent.technologies) {
             for (String tag : technology.tags()) {
-                switch (tag) {
-                    case "engineering", "society", "computing":
-                        technologyCategoryComponent.setTechnology(technology);
-                        technologyCategoryComponent.researchJobComponent.setJobDescription(technology);
-                        technologyCategoryComponent.researchJobComponent.progressHandling();
-                        technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
-                        break outerLoop;
-                    case null:
-                    default:
-                        technologyCategoryComponent.unShowJobWindow();
-                        break;
+                if (Objects.equals(tag, "engineering") && technologyCategoryComponent.technologieCategoryName.equals("engineering")){
+                    technologyCategoryComponent.setTechnology(technology);
+                    technologyCategoryComponent.researchJobComponent.setJobDescription(technology);
+                    technologyCategoryComponent.researchJobComponent.progressHandling();
+                    technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
+                    technologyCategoryComponent.showJobWindow();
+                    break outerLoop;
+                } else if (Objects.equals(tag, "society") && technologyCategoryComponent.technologieCategoryName.equals("society")) {
+                    technologyCategoryComponent.setTechnology(technology);
+                    technologyCategoryComponent.researchJobComponent.setJobDescription(technology);
+                    technologyCategoryComponent.researchJobComponent.progressHandling();
+                    technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
+                    technologyCategoryComponent.showJobWindow();
+                    break outerLoop;
+                } else if (Objects.equals(tag, "physics") && technologyCategoryComponent.technologieCategoryName.equals("physics")) {
+                    technologyCategoryComponent.setTechnology(technology);
+                    technologyCategoryComponent.researchJobComponent.setJobDescription(technology);
+                    technologyCategoryComponent.researchJobComponent.progressHandling();
+                    technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
+                    technologyCategoryComponent.showJobWindow();
+                    break outerLoop;
+                } else {
+                technologyCategoryComponent.unShowJobWindow();
                 }
             }
         }
@@ -125,6 +137,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
                     technologyCategoryComponent.researchJobComponent.setJobDescription(technology);
                     technologyCategoryComponent.researchJobComponent.progressHandling();
                     technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
+                    technologyCategoryComponent.showJobWindow();
                     break outerLoop;
                 } else {
                     technologyCategoryComponent.unShowJobWindow();
@@ -145,6 +158,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
                     technologyCategoryComponent.researchJobComponent.setJobDescription(technology);
                     technologyCategoryComponent.researchJobComponent.progressHandling();
                     technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
+                    technologyCategoryComponent.showJobWindow();
 
                     break outerLoop;
                 } else {
@@ -166,6 +180,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
                     technologyCategoryComponent.researchJobComponent.setJobDescription(technology);
                     technologyCategoryComponent.researchJobComponent.progressHandling();
                     technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
+                    technologyCategoryComponent.showJobWindow();
                     break outerLoop;
                 } else {
                     technologyCategoryComponent.unShowJobWindow();

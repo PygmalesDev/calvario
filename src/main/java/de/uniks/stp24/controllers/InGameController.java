@@ -48,6 +48,8 @@ import java.util.*;
 @Controller
 public class InGameController extends BasicController {
     @FXML
+    Pane gameBackground;
+    @FXML
     StackPane helpWindowContainer;
     @FXML
     Pane shadow;
@@ -270,6 +272,7 @@ public class InGameController extends BasicController {
         eventContainer.setVisible(false);
         shadow.setVisible(false);
         eventComponent.setClockComponent(clockComponent);
+        eventComponent.setBackground(gameBackground);
 
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
 
@@ -604,5 +607,4 @@ public class InGameController extends BasicController {
         this.subscriber.dispose();
         this.jobsService.dispose();
     }
-
 }

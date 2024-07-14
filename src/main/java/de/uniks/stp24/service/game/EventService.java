@@ -37,12 +37,6 @@ public class EventService {
     // with seed, so every Player has the same events at the same time
     Random random = new Random();
 
-
-    @Inject
-    public TimerService timerService;
-    @Inject
-    public IslandsService islandsService;
-
     @Inject
     public EmpireApiService empireApiService;
     @Inject
@@ -53,7 +47,7 @@ public class EventService {
 
     ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",
             "grandExp", "reckoning", "rogerFeast", /* Bad Events */ "blackSpot", "dutchman", "foolsGold", "pestilence",
-            "rumBottle", "submerge"));
+            "rumBottle", "submerge", /* Misty */ "solarEclipse"));
 
     Map<String, EffectSourceParentDto> eventMap = new HashMap<>();
 
@@ -66,8 +60,7 @@ public class EventService {
      */
     @Inject
     public EventService() {
-        //setNextEvent();
-        nextEvent = 2;
+        setNextEvent();
         this.listeners = new PropertyChangeSupport(this);
     }
 
@@ -83,21 +76,18 @@ public class EventService {
 
     // Gets random a new event
     public EffectSourceParentDto getNewRandomEvent() {
-
         if (nextEvent <= 0) {
-
             int eventName = random.nextInt(0, eventNames.size());
             EffectSourceParentDto tmp = readEvent(eventName);
             setNextEvent();
             return tmp;
         }
-        // if no event can occur
-        return null;
+        // if no event can occur (or already occured)
+        return event;
     }
 
     public void setNextEvent() {
-        nextEvent = 2;
-        //nextEvent = random.nextInt(100, 120);
+        nextEvent = random.nextInt(100, 120);
     }
 
     public EffectSourceParentDto getEvent() {
@@ -106,7 +96,6 @@ public class EventService {
 
     // Counts down the time until the next event
     public void setNextEventTimer(int nextEvent) {
-
         if (nextEvent == this.nextEvent) {
             return;
         }
@@ -162,10 +151,13 @@ public class EventService {
     /* Parameter eventName is index for List<String> eventNames
      * Method reads the JSONs in folder .data and creates an EffectSourceParentDto
     /* if the event has not been added to the eventMap yet */
-    private @Nullable EffectSourceParentDto readEvent(int eventName) {
+    private @Nullable EffectSourceParentDto readEvent(int eventIndex) {
+        return readEvent(eventNames.get(eventIndex));
+    }
 
+    public @Nullable EffectSourceParentDto readEvent(String eventName) {
         try {
-            File jsonFile = new File(Constants.EVENT_FOLDER_NAME + eventNames.get(eventName) + "Event.json");
+            File jsonFile = new File(Constants.EVENT_FOLDER_NAME + eventName + "Event.json");
 
             // Read the JSON file
             JsonNode rootNode = objectMapper.readTree(jsonFile);

@@ -81,18 +81,16 @@ public class ClockTest extends ControllerTest {
         this.timerService.subscriber = this.subscriber;
         this.timerService.tokenStorage = this.tokenStorage;
 
-        this.eventService.timerService = this.timerService;
-        this.eventService.islandsService = this.islandsService;
         this.eventService.subscriber = this.subscriber;
         this.eventService.empireApiService = this.empireApiService;
         this.eventService.tokenStorage = this.tokenStorage;
 
         this.empireService.empireApiService = this.empireApiService;
 
-        Game game0 = new Game("yesterday", "today", "gameID", "gameName", "owner", 3, true, 0, 1, null);
-        Game game1 = new Game("yesterday", "today", "gameID", "gameName", "owner", 3, true, 1, 1, null);
-        Game game2 = new Game("yesterday", "today", "gameID", "gameName", "owner", 3, true, 2, 1, null);
-        Game game3 = new Game("yesterday", "today", "gameID", "gameName", "owner", 3, true, 3, 1, null);
+        Game game0 = new Game("yesterday", "today", "gameID", "gameName", "owner", 3, 1, true, 0, 1, null);
+        Game game1 = new Game("yesterday", "today", "gameID", "gameName", "owner", 3, 1, true, 1, 1, null);
+        Game game2 = new Game("yesterday", "today", "gameID", "gameName", "owner", 3, 1, true, 2, 1, null);
+        Game game3 = new Game("yesterday", "today", "gameID", "gameName", "owner", 3, 1, true, 3, 1, null);
 
         switch(ClockTest.testOrder) {
             case 0:

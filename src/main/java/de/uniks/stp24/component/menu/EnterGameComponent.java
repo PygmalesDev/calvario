@@ -4,6 +4,7 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.service.menu.JoinGameService;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
@@ -16,6 +17,10 @@ import java.util.ResourceBundle;
 
 @Component(view = "EnterGame.fxml")
 public class EnterGameComponent extends AnchorPane {
+    @FXML
+    Button joinButton;
+    @FXML
+    Button cancelButton;
     @FXML
     TextField passwordInputField;
     @FXML
@@ -46,7 +51,6 @@ public class EnterGameComponent extends AnchorPane {
     @OnRender
     public void render() {
         this.errorMessage.setVisible(false);
-        this.errorMessage.setStyle("-fx-font-size: 0");
     }
 
     public void cancel() {

@@ -1,7 +1,6 @@
 package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.service.game.EmpireService;
@@ -23,7 +22,6 @@ import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -61,12 +59,10 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     ResourceBundle resources;
     @Inject
     ErrorService errorService;
-
-    private String gameID;
-    private int maxMember;
-    private BubbleComponent bubbleComponent;
     @Inject
     IslandsService islandsService;
+
+    private String gameID;
     public boolean leftLobby;
     public Image readyIconBlueImage;
     public Image readyIconGreenImage;
@@ -79,33 +75,6 @@ public class LobbyHostSettingsComponent extends AnchorPane {
 
     @OnInit
     public void init(){
-    }
-
-    /**
-     * Creates an event listener that checks, if all members are ready and if there are not too many players with a
-     * selected empire.
-     */
-    public void createCheckPlayerReadinessListener() {
-        this.subscriber.subscribe(this.eventListener
-                .listen("games." + this.gameID + ".members.*.updated", MemberDto.class),
-            result -> this.subscriber.subscribe(this.lobbyService.loadPlayers(this.gameID),
-                    members -> {
-                        boolean allReady = Arrays.stream(members)
-                                .map(MemberDto::ready)
-                                .reduce(Boolean::logicalAnd)
-                                .orElse(true);
-                        int countEmpires = (int) Arrays.stream(members)
-                                .filter(member -> member.empire() != null)
-                                .count();
-                        boolean tooManyPlayer = countEmpires > this.maxMember;
-                        if(tooManyPlayer){
-                            bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.too.many.players"));
-                        } else {
-                            bubbleComponent.setCaptainText(resources.getString("pirate.enterGame.next.move"));
-                        }
-                        this.startJourneyButton.setDisable(!allReady || tooManyPlayer);
-                    },
-              error -> errorService.getStatus(error)));
     }
 
     public void setReadyButton(boolean ready){
@@ -145,14 +114,6 @@ public class LobbyHostSettingsComponent extends AnchorPane {
         this.gameID = gameID;
     }
 
-    public void setMaxMember(int maxMember){
-        this.maxMember = maxMember;
-    }
-
-    public void setBubbleComponent(BubbleComponent bubbleComponent){
-        this.bubbleComponent = bubbleComponent;
-    }
-
     public void selectEmpire() {
         this.app.show("/creation", Map.of("gameid", this.gameID));
     }
@@ -160,15 +121,9 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     public void ready() {
         this.subscriber.subscribe(
           this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result -> {
-              if (result.ready()) {
-                  this.subscriber.subscribe(this.lobbyService
-                    .updateMember(this.gameID, this.tokenStorage.getUserId(), false, result.empire()));
-                  setReadyButton(false);
-              } else {
-                  this.subscriber.subscribe(this.lobbyService
-                    .updateMember(this.gameID, this.tokenStorage.getUserId(), true, result.empire()));
-                  setReadyButton(true);
-              }
+                  this.subscriber.subscribe(this.lobbyService.updateMember(this.gameID, this.tokenStorage.getUserId(),
+                          !result.ready(), result.empire()));
+                  setReadyButton(!result.ready());
           });
     }
 

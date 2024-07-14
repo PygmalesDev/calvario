@@ -19,7 +19,6 @@ import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.*;
-import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
@@ -64,13 +63,9 @@ public class TestIslandOverview extends ControllerTest {
     @Spy
     ImageCache imageCache;
     @Spy
-    TimerService timerService;
-    @Spy
     EventService eventService;
     @Spy
     Subscriber subscriber = spy(Subscriber.class);
-    @Spy
-    LanguageService languageService;
     @Spy
     ResourcesService resourcesService;
     @Spy
@@ -97,9 +92,6 @@ public class TestIslandOverview extends ControllerTest {
     ExplanationService explanationService;
     @Spy
     TechnologyService technologyService;
-    @Spy
-    DistrictComponent districtComponent;
-
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
     @InjectMocks
@@ -167,7 +159,6 @@ public class TestIslandOverview extends ControllerTest {
 
     Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
     Map<String, Integer> upkeep = Map.of("energy", 3, "fuel", 8);
-    Map<String, Integer> resAfterUpgrade = Map.of("energy", 0, "fuel", 0);
 
     Map<String, Integer> productionBuilding = Map.of("energy", 10, "fuel", 13);
     Map<String, Integer> productionSites = Map.of("energy", 13, "fuel", 12);
@@ -212,22 +203,6 @@ public class TestIslandOverview extends ControllerTest {
             null
     );
 
-    EmpireDto empireDtoAfterUpgrade = new EmpireDto(
-            null,
-            null,
-            "testEmpireID",
-            "testGameID",
-            "testUserID",
-            null,
-            null,
-            null,
-            1,
-            1,
-            null,
-            null,
-            resAfterUpgrade,
-            null
-    );
 
     BuildingAttributes buildingPreset1 = new BuildingAttributes(
             "testBuilding1",

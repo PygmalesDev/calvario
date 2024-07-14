@@ -109,7 +109,7 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
 
         // Mock getting game
         doReturn(Observable.just(new Game("1", "a","testGameID","testGame","testGameHostID", 2,
-                false, 1, 0, new GameSettings(1))))
+                0, false, 1, 0, new GameSettings(1))))
                 .when(this.gamesService).getGame(any());
 
         // Mock listen to game deletion
@@ -132,8 +132,6 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
         // Mock getting members updates
         doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.*"), eq(MemberDto.class));
 
-        // Mock getting members readiness updates
-        doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.updated"), eq(MemberDto.class));
         this.app.show(this.lobbyController);
 
         doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.updated"),eq(Game.class));
@@ -209,7 +207,6 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
 
         MemberUser newUser = this.lobbyController.playerListView.getItems().getLast();
         assertTrue(newUser.user().name().contains("testNewUser")
-                && newUser.user().name().contains("(Spectator)")
                 && !newUser.ready());
     }
 

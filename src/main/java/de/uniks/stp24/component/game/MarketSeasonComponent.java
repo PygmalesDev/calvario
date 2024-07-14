@@ -42,6 +42,7 @@ public class MarketSeasonComponent extends HBox implements ReusableItemComponent
     ResourceBundle gameResourceBundle;
     @Inject
     ImageCache imageCache;
+    private SeasonComponent seasonComponent;
 
     @Inject
     public MarketSeasonComponent() {
@@ -50,16 +51,20 @@ public class MarketSeasonComponent extends HBox implements ReusableItemComponent
 
     @Override
     public void setItem(@NotNull SeasonComponent seasonComponent) {
-        transActionTypeText.setText(seasonComponent.transActionTypeText());
-        resourceTypeImageView.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + seasonComponent.resourceType() + ".png"));
-        if(seasonComponent.transActionTypeText().equals("buy")){
-            resourceAmountText.setText("+" + seasonComponent.resourceAmount());
-            moneyAmountText.setText("-"+ seasonComponent.moneyAmount());
+        this.seasonComponent = seasonComponent;
+
+        transActionTypeText.setText(this.seasonComponent.getTransActionTypeText());
+        resourceTypeImageView.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + this.seasonComponent.getResourceType() + ".png"));
+        if(this.seasonComponent.getTransActionTypeText().equals("buy")){
+            resourceAmountText.setText("+" + this.seasonComponent.getResourceAmount());
+            moneyAmountText.setText("-"+ this.seasonComponent.getMoneyAmount());
         } else {
-            int sell = seasonComponent.resourceAmount() * -1;
+            int sell = this.seasonComponent.getResourceAmount() * -1;
             moneyAmountText.setText("+"+ sell);
-            resourceAmountText.setText("-" + seasonComponent.moneyAmount());
+            resourceAmountText.setText("-" + this.seasonComponent.getMoneyAmount());
         }
-        this.setStyle("-fx-background-insets: 10;");
+
+        playControlsButton.setSelected(this.seasonComponent.isPlaying());
+        playControlsButton.setOnAction(event -> this.seasonComponent.setPlaying(playControlsButton.isSelected()));
     }
 }

@@ -238,7 +238,8 @@ public class SitePropertiesComponent extends AnchorPane {
     public void displayCostsOfSite(){
         siteCostsListView.setSelectionModel(null);
         if (Objects.nonNull(siteType))
-            subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
+            subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration,
+                    error -> System.out.println("error displayCostsOfSite(): " + error));
         siteConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
@@ -312,7 +313,7 @@ public class SitePropertiesComponent extends AnchorPane {
                 if (!resourcesService.hasEnoughResources(costSite)){
                     buildSiteButton.setDisable(true);
                 }
-        });
+        }, error -> System.out.println("error setButtonsDisable(): " + error));
     }
 
     private void resourceListGeneration(SiteDto siteDto) {

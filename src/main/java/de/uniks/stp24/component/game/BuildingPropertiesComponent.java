@@ -212,7 +212,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
                 priceOfBuilding = result.cost();
                 buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding) ||
                         islandAttributeStorage.getUsedSlots() >= islandAttributeStorage.getIsland().resourceCapacity());
-            });
+            }, error -> System.out.println("error updateButtonStates(): " + error));
     }
 
     public void buyBuilding(){

@@ -420,11 +420,6 @@ public class InGameController extends BasicController {
                     new ContextMenuButton("technologies", this.technologiesComponent)
             );
     }
-    private void showTechnologies() {
-        technologiesContainer.setVisible(!technologiesContainer.isVisible());
-        technologiesContainer.getChildren().getFirst().setVisible(false);
-        technologiesContainer.getChildren().getLast().setVisible(true);
-    }
 
     @OnRender
     public void createMap() {
@@ -658,7 +653,6 @@ public class InGameController extends BasicController {
         explanationContainer.setLayoutX(x);
         explanationContainer.setLayoutY(y);
         explanationContainer.setVisible(true);
-        System.out.println(variableService.getValueOfVariable(variable));
     }
     public void unShowExplanation(){
         explanationContainer.setLayoutX(0);

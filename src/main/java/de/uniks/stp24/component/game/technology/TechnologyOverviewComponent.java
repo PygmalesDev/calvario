@@ -22,6 +22,8 @@ import javax.inject.Named;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import static java.lang.Thread.sleep;
+
 @Component(view = "TechnologyOverview.fxml")
 public class TechnologyOverviewComponent extends AnchorPane {
 
@@ -56,6 +58,10 @@ public class TechnologyOverviewComponent extends AnchorPane {
     @Named("gameResourceBundle")
     public ResourceBundle resources;
 
+    @Inject
+    @Named("technologiesResourceBundle")
+    public ResourceBundle technologiesResourceBundle;
+
 
     @Inject
     public TechnologyOverviewComponent() {
@@ -64,7 +70,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
     @OnInit
     public void init() {
-
+        technologyCategoryComponent.setTechnologyCategoryOverviewComponent(this, technologiesResourceBundle);
     }
 
     @OnRender
@@ -87,64 +93,86 @@ public class TechnologyOverviewComponent extends AnchorPane {
         this.setVisible(false);
     }
 
-    public void engineering() {
-        technologyCategoryComponent.researchJobComponent.progressHandling();
+    public void showWindow(){
+        outerLoop:
+        for (TechnologyExtended technology : technologyCategoryComponent.researchJobComponent.technologies) {
+            for (String tag : technology.tags()) {
+                switch (tag) {
+                    case "engineering", "society", "computing":
+                        technologyCategoryComponent.setTechnology(technology);
+                        technologyCategoryComponent.researchJobComponent.setJobDescription(technology);
+                        technologyCategoryComponent.researchJobComponent.progressHandling();
+                        technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
+                        break outerLoop;
+                    case null:
+                    default:
+                        technologyCategoryComponent.unShowJobWindow();
+                        break;
+                }
+            }
+        }
         technologyCategoryComponent.researchJobComponent.setEffectListView();
+    }
+
+    public void engineering() {
+        technologyCategoryComponent.researchJobComponent.handleJobsAlreadyRunning();
         show(technologyCategoryComponent.setCategory("engineering"));
         outerLoop:
         for (TechnologyExtended technology : technologyCategoryComponent.researchJobComponent.technologies) {
             for (String tag : technology.tags()) {
                 if (Objects.equals(tag, "engineering")){
-                    technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technology.id());
                     technologyCategoryComponent.setTechnology(technology);
-                    technologyCategoryComponent.showJobWindow();
+                    technologyCategoryComponent.researchJobComponent.setJobDescription(technology);
+                    technologyCategoryComponent.researchJobComponent.progressHandling();
+                    technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
                     break outerLoop;
                 } else {
                     technologyCategoryComponent.unShowJobWindow();
                 }
             }
         }
-
+        technologyCategoryComponent.researchJobComponent.setEffectListView();
     }
 
     public void society() {
-        technologyCategoryComponent.researchJobComponent.progressHandling();
-        technologyCategoryComponent.researchJobComponent.setEffectListView();
+        technologyCategoryComponent.researchJobComponent.handleJobsAlreadyRunning();
         show(technologyCategoryComponent.setCategory("society"));
-        technologyCategoryComponent.researchJobComponent.setTag("society");
         outerLoop:
         for (TechnologyExtended technology : technologyCategoryComponent.researchJobComponent.technologies) {
             for (String tag : technology.tags()) {
                 if (Objects.equals(tag, "society")){
-                    technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technology.id());
                     technologyCategoryComponent.setTechnology(technology);
-                    technologyCategoryComponent.showJobWindow();
+                    technologyCategoryComponent.researchJobComponent.setJobDescription(technology);
+                    technologyCategoryComponent.researchJobComponent.progressHandling();
+                    technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
+
                     break outerLoop;
                 } else {
                     technologyCategoryComponent.unShowJobWindow();
                 }
             }
         }
-
+        technologyCategoryComponent.researchJobComponent.setEffectListView();
     }
 
     public void physics() {
-        technologyCategoryComponent.researchJobComponent.progressHandling();
-        technologyCategoryComponent.researchJobComponent.setEffectListView();
+        technologyCategoryComponent.researchJobComponent.handleJobsAlreadyRunning();
         show(technologyCategoryComponent.setCategory("physics"));
         outerLoop:
         for (TechnologyExtended technology : technologyCategoryComponent.researchJobComponent.technologies) {
             for (String tag : technology.tags()) {
                 if (Objects.equals(tag, "computing")){
-                    technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technology.id());
                     technologyCategoryComponent.setTechnology(technology);
-                    technologyCategoryComponent.showJobWindow();
+                    technologyCategoryComponent.researchJobComponent.setJobDescription(technology);
+                    technologyCategoryComponent.researchJobComponent.progressHandling();
+                    technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
                     break outerLoop;
                 } else {
                     technologyCategoryComponent.unShowJobWindow();
                 }
             }
         }
+        technologyCategoryComponent.researchJobComponent.setEffectListView();
 
     }
 

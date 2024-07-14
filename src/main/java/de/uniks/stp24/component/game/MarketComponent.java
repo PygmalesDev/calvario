@@ -1,13 +1,13 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.component.menu.GangComponent;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.AggregateItemDto;
+import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.ResourceDto;
 import de.uniks.stp24.dto.UpdateEmpireMarketDto;
 import de.uniks.stp24.model.EmpireExtendedDto;
 import de.uniks.stp24.model.Game;
-import de.uniks.stp24.model.GangElement;
 import de.uniks.stp24.model.SeasonComponent;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.ImageCache;
@@ -20,7 +20,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -240,6 +239,11 @@ public class MarketComponent extends StackPane {
         this.subscriber.subscribe(marketService.updateEmpireMarket(tokenStorage.getGameId(), tokenStorage.getEmpireId(), updateEmpireMarketDto),
                 error -> System.out.println("errorEmpireListener"));
     }
+    private void updateResources(EmpireDto empireDto, AggregateItemDto[] aggregateItems) {
+        UpdateEmpireMarketDto updateEmpireMarketDto = new UpdateEmpireMarketDto(Map.of(selectedItem, resourceAmount), null, null, null);
+        this.subscriber.subscribe(marketService.updateEmpireMarket(tokenStorage.getGameId(), tokenStorage.getEmpireId(), updateEmpireMarketDto),
+                error -> System.out.println("errorEmpireListener"));
+    }
 
     private void createResourcePriceMap() {
         resourcePriceMap.put("energy", variables.get("resources.energy.credit_value"));
@@ -383,7 +387,7 @@ public class MarketComponent extends StackPane {
     }
 
     private void addSeasonalTransaction(String transactionType, int price) {
-        SeasonComponent seasonComponent = new SeasonComponent(transactionType, this.selectedItem, resourceAmount, price);
+        SeasonComponent seasonComponent = new SeasonComponent(transactionType, this.selectedItem, resourceAmount, price, true);
         seasonComponents.add(seasonComponent);
     }
 
@@ -393,6 +397,13 @@ public class MarketComponent extends StackPane {
                         .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
                 event -> {
                     if (!lastSeasonUpdate.equals(event.data().updatedAt())) {
+
+                        subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                                empireDto -> subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                                        aggregateResultDto -> updateResources(empireDto, aggregateResultDto.items()),
+                                        error -> System.out.println("ErrorAggregateSubscriber")),
+                                error -> System.out.println("ErrorEmpireSubscriber"));
+
                         performSeasonalTrades();
                         this.lastSeasonUpdate = event.data().updatedAt();
                     }
@@ -400,7 +411,42 @@ public class MarketComponent extends StackPane {
                 error -> System.out.println("errorSeasonListener in marketComponent"));
     }
 
-    //TODO Seasonal Trades
+    //TODO Seasonal Trades -> synchronize with storageOverviewComponent by also adding the added resource in storage to market.
+    //TODO Seasonal Trades -> save seasonal trades after leaving
+    //TODO Seasonal Trades -> cancel running seasonal Trades
     private void performSeasonalTrades() {
+        System.out.println("performSeasonalTrades");
+        for (SeasonComponent seasonalTrade : seasonComponents) {
+            if (seasonalTrade.isPlaying()) {
+                System.out.println("trade is playing");
+                if ("buy".equals(seasonalTrade.getTransActionTypeText())) {
+                    System.out.println("buy equals transaction");
+                    performSeasonalBuy(seasonalTrade.getResourceType(), seasonalTrade.getResourceAmount());
+                } else if ("sell".equals(seasonalTrade.getTransActionTypeText())) {
+                    System.out.println("sell equals transaction");
+                    performSeasonalSell(seasonalTrade.getResourceType(), seasonalTrade.getResourceAmount());
+                }
+            }
+        }
+        userCreditsLabel.setText(String.valueOf(userCredits));
+        refreshListview();
+    }
+
+    private void performSeasonalBuy(String resourceType, int resourceAmount) {
+        int totalCost = resourceAmount * (int) Math.round(resourcePriceMap.get(resourceType) * (1 + marketFee));
+        if (userCredits >= totalCost) {
+            userCredits -= totalCost;
+            resourceCountMap.put(resourceType, resourceCountMap.getOrDefault(resourceType, 0) + resourceAmount);
+            updateResources();
+        }
+    }
+
+    private void performSeasonalSell(String resourceType, int resourceAmount) {
+        int totalRevenue = resourceAmount * (int) Math.round(resourcePriceMap.get(resourceType) * (1 - marketFee));
+        if (resourceCountMap.getOrDefault(resourceType, 0) >= resourceAmount) {
+            userCredits += totalRevenue;
+            resourceCountMap.put(resourceType, resourceCountMap.get(resourceType) - resourceAmount);
+            updateResources();
+        }
     }
 }

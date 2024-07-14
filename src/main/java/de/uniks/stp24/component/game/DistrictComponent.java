@@ -32,9 +32,9 @@ public class DistrictComponent extends VBox implements ReusableItemComponent<Sit
     Text jobTimeText;
 
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
-    IslandAttributeStorage islandAttributeStorage;
+    public IslandAttributeStorage islandAttributeStorage;
 
     Map<String, String> sitesMap;
 

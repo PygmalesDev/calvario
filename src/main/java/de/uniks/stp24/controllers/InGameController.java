@@ -10,6 +10,7 @@ import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.component.menu.*;
+import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
@@ -101,7 +102,7 @@ public class InGameController extends BasicController {
     @Inject
     public ExplanationService explanationService;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
     @Inject
     GangCreationController gangCreationController;
     @Inject
@@ -135,8 +136,6 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public TechnologyOverviewComponent technologiesComponent;
-
-
     @SubComponent
     @Inject
     public DeleteStructureComponent deleteStructureComponent;
@@ -175,7 +174,7 @@ public class InGameController extends BasicController {
     @Inject
     public VariableService variableService;
     @Inject
-    LobbyService lobbyService;
+    public LobbyService lobbyService;
 
     public IslandComponent selectedIsland;
 
@@ -529,15 +528,17 @@ public class InGameController extends BasicController {
     }
 
     public void showOverview() {
-        overviewSitesComponent.inputIslandName.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId()));
-        overviewSitesComponent.buildingsComponent.resetPage();
-        overviewSitesComponent.buildingsComponent.setGridPane();
-        overviewContainer.setVisible(true);
-        overviewSitesComponent.sitesContainer.setVisible(true);
-        overviewSitesComponent.buildingsButton.setDisable(true);
-        inGameService.showOnly(overviewContainer, overviewSitesComponent);
-        inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
-        overviewSitesComponent.setOverviewSites();
+        if(islandAttributes.getIsland().owner() != null) {
+            overviewSitesComponent.inputIslandName.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId()));
+            overviewSitesComponent.buildingsComponent.resetPage();
+            overviewSitesComponent.buildingsComponent.setGridPane();
+            overviewContainer.setVisible(true);
+            overviewSitesComponent.sitesContainer.setVisible(true);
+            overviewSitesComponent.buildingsButton.setDisable(true);
+            inGameService.showOnly(overviewContainer, overviewSitesComponent);
+            inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
+            overviewSitesComponent.setOverviewSites();
+        }
     }
 
     @OnKey(code = KeyCode.SPACE, alt = true)

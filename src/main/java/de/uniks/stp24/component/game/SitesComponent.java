@@ -14,6 +14,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 
@@ -30,7 +31,8 @@ public class SitesComponent extends VBox {
     ObservableList<SiteProperties> sitePropertiesList = FXCollections.observableArrayList();
 
     @Inject
-    Provider<DistrictComponent> districtComponentProvider;
+    public Provider<DistrictComponent> districtComponentProvider;
+
     @Inject
     App app;
 

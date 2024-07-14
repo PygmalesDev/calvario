@@ -69,10 +69,12 @@ public class Building extends VBox {
             else imageView.setImage(buildingsComponent.imageCache.get("/" + buildingsJobProgressMap.get(buildingName)));
 
         building.setGraphic(imageView);
-
         building.setOnMouseClicked(event -> {
-            String imageUrl = imageView.getImage().getUrl();
-            String relevantPart = extractRelevantPath(imageUrl);
+            String relevantPart = null;
+            if(imageView.getImage() != null) {
+                String imageUrl = imageView.getImage().getUrl();
+                relevantPart = extractRelevantPath(imageUrl);
+            }
             if (imageView.getImage() != null && !relevantPart
                     .equals("/de/uniks/stp24/icons/buildings/empty_building_element.png")){
                 inGameController.buildingsWindowComponent.setVisible(false);

@@ -39,11 +39,11 @@ public class TechnologyOverviewComponent extends AnchorPane {
     @Inject
     Subscriber subscriber;
     @Inject
-    TechnologyService technologyService;
+    public TechnologyService technologyService;
 
     @Inject
     @SubComponent
-    TechnologyCategoryComponent technologyCategoryComponent;
+    public TechnologyCategoryComponent technologyCategoryComponent;
 
     @Inject
     @Resource

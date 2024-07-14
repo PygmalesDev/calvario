@@ -6,16 +6,16 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
+import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
+import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateResultDto;
 import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.*;
-import de.uniks.stp24.rest.GameSystemsApiService;
-import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.rest.JobsApiService;
-import de.uniks.stp24.rest.PresetsApiService;
+import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
@@ -34,6 +34,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -47,50 +48,38 @@ public class PauseMenuTest extends ControllerTest {
     JobsService jobsService;
     @Spy
     GamesApiService gamesApiService;
-
     @Spy
     GameSystemsApiService gameSystemsApiService;
-
     @Spy
     PresetsApiService presetsApiService;
-
+    @Spy
+    GameMembersApiService gameMembersApiService;
     @Spy
     TokenStorage tokenStorage;
-
     @Spy
     PopupBuilder popupBuilder;
-
     @Spy
     EventService eventService;
-
     @Spy
     GameStatus gameStatus;
-
     @Spy
     InGameService inGameService;
-
     @Spy
     LobbyService lobbyService;
-
     @Spy
     TimerService timerService;
-
     @Spy
     Subscriber subscriber = spy(Subscriber.class);
-
     @Spy
     LanguageService languageService;
-
     @Spy
     ResourcesService resourcesService;
     @Spy
     VariableService variableService;
     @Spy
     ObjectMapper objectMapper;
-
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
-
     @Spy
     EmpireService empireService;
     @Spy
@@ -110,7 +99,6 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     SitePropertiesComponent sitePropertiesComponent;
-
 
     @InjectMocks
     OverviewUpgradeComponent overviewUpgradeComponent;
@@ -133,7 +121,6 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     IslandOverviewJobsComponent islandOverviewJobsComponent;
 
-
     @InjectMocks
     DetailsComponent detailsComponent;
 
@@ -145,26 +132,32 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     DeleteStructureComponent deleteStructureComponent;
+
     @InjectMocks
     EmpireOverviewComponent empireOverviewComponent;
 
     @InjectMocks
+    TechnologyOverviewComponent technologyOverviewComponent;
+
+    @InjectMocks
     HelpComponent helpComponent;
-    VariableExplanationComponent variableExplanationComponent;
 
+    @InjectMocks
+    TechnologyCategoryComponent technologyCategoryComponent;
 
-
-
-
+    /*
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
 
+     */
 
     @InjectMocks
     PropertiesJobProgressComponent propertiesJobProgressComponent;
 
     @Spy
     JobsApiService jobsApiService;
+    @Spy
+    TechnologyService technologyService;
 
     @InjectMocks
     InGameController inGameController;
@@ -194,6 +187,7 @@ public class PauseMenuTest extends ControllerTest {
         this.timerService.gamesApiService = this.gamesApiService;
         this.timerService.subscriber = this.subscriber;
         this.timerService.tokenStorage = this.tokenStorage;
+        this.inGameController.lobbyService.gameMembersApiService = this.gameMembersApiService;
 
         this.jobsService.subscriber = this.subscriber;
         this.jobsService.jobsApiService = this.jobsApiService;
@@ -208,6 +202,11 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.variableService.inGameService = this.inGameService;
         this.inGameController.variableService = this.variableService;
+        this.inGameController.technologiesComponent = this.technologyOverviewComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.resources = this.gameResourceBundle;
+        this.inGameController.technologiesComponent.resources = this.gameResourceBundle;
+        this.inGameController.technologiesComponent.technologyService = this.technologyService;
 
         this.inGameService.presetsApiService = this.presetsApiService;
 
@@ -220,13 +219,32 @@ public class PauseMenuTest extends ControllerTest {
         Map<String, Integer> production = new HashMap<>();
         Map<String, Integer> consumption = new HashMap<>();
         UpgradeStatus upgradeStatus = new UpgradeStatus("test", null, 0,20, production, consumption, 20);
+        ArrayList<String> traits = new ArrayList<>();
+        traits.add("testTrait1");
+        traits.add("testTrait2");
+        Empire testEmpire = new Empire(
+                "testEmpire",
+                "test",
+                "red",
+                0,
+                2,
+                traits,
+                null
+                );
+        Map<String, ArrayList<String>> variablesEffect = new HashMap<>();
 
         doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());
         doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", 2,true,1,1,null ))).when(gamesApiService).getGame(any());
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
 
+        doReturn(Observable.just(new MemberDto(true, "test", testEmpire, "123"))).when(this.gameMembersApiService).getMember(any(), any());
+        doReturn(Observable.just(variablesEffect)).when(this.inGameService).getVariablesEffects();
+
+
+
+
         this.inGameController.variableService.subscriber = this.subscriber;
-        this.inGameController.variableExplanationComponent = this.variableExplanationComponent;
+        //this.inGameController.variableExplanationComponent = this.variableExplanationComponent;
         this.explanationService.app = this.app;
         this.inGameController.explanationService = this.explanationService;
         variablesPresets.put("districts.city.build_time", 9);

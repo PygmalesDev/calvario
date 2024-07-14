@@ -54,8 +54,6 @@ public class StorageComponentTest extends ControllerTest {
     EmpireService empireService;
     @Spy
     ExplanationService explanationService;
-    @Spy
-    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
 
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;

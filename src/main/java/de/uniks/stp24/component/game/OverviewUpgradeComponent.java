@@ -77,7 +77,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
     @Inject
     IslandsService islandsService;
     @Inject
-    ExplanationService explanationService;
+    public ExplanationService explanationService;
     @Inject
     App app;
     @Inject

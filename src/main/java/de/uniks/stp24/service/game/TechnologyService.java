@@ -19,7 +19,7 @@ import java.util.*;
 public class TechnologyService {
 
     @Inject
-    PresetsApiService presetsApiService;
+    public PresetsApiService presetsApiService;
     @Inject
     EmpireApiService empireApiService;
     @Inject

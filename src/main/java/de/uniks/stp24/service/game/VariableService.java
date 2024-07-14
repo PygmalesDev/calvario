@@ -32,7 +32,7 @@ public class VariableService {
     @Inject
     TokenStorage tokenStorage;
     @Inject
-    TechnologyService technologyService;
+    public TechnologyService technologyService;
 
     public Map<String, ExplainedVariableDTO> data = new HashMap<>();
     private ArrayList<String> allVariables = new ArrayList<>();

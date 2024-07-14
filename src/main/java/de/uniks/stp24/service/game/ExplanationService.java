@@ -82,6 +82,7 @@ public class ExplanationService {
 
     private void initializeResExplanation(String listType, String indicator, String ResCategory, String id, VariableExplanationComponent variableExplanationComponent) {
         String variable = listType + "." + indicator + "." + ResCategory + "." + id;
+        System.out.println(variable );
         ExplainedVariableDTO explanation = variableService.data.get(variable);
         variableExplanationComponent.setValues("Base: " + explanation.initial(), "Total: " + explanation.finalValue(), id);
 

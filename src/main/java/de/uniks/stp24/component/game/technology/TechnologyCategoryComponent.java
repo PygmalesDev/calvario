@@ -138,7 +138,6 @@ public class TechnologyCategoryComponent extends AnchorPane {
         unlockedListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
         researchListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
 
-
         return this;
     }
 

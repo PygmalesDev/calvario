@@ -10,6 +10,7 @@ import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
+import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.JobsApiService;
@@ -87,6 +88,8 @@ public class AppTest2 extends ControllerTest {
     PropertiesJobProgressComponent propertiesJobProgressComponent;
     @InjectMocks
     HelpComponent helpComponent;
+    @InjectMocks
+    IslandClaimingComponent islandClaimingComponent;
 
 
     @Spy
@@ -128,6 +131,8 @@ public class AppTest2 extends ControllerTest {
     @Spy
     GameSystemsApiService gameSystemsApiService;
     @Spy
+    EmpireApiService empireApiService;
+    @Spy
     IslandComponent islandComponent = spy(IslandComponent.class);
 
     Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
@@ -168,6 +173,7 @@ public class AppTest2 extends ControllerTest {
         this.clockComponent.gamesApiService = this.gameApiService;
         this.clockComponent.islandsService = this.islandsService;
         this.clockComponent.eventComponent = this.eventComponent;
+        this.eventComponent.empireApiService = this.empireApiService;
         this.islandsService.app = this.app;
         this.islandAttributeStorage.systemPresets = systemUpgrades;
         inGameService.setGameStatus(gameStatus);
@@ -197,6 +203,12 @@ public class AppTest2 extends ControllerTest {
         this.jobsService.subscriber = this.subscriber;
         this.jobsService.eventListener =this.eventListener;
 
+        this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
+        this.islandClaimingComponent.jobsService = this.jobsService;
+        this.islandClaimingComponent.islandAttributes = this.islandAttributeStorage;
+        this.islandClaimingComponent.imageCache = this.imageCache;
+        this.islandClaimingComponent.islandsService = this.islandsService;
+
         inGameController.zoomPane.getChildren().add(inGameController.mapGrid);
         inGameController.group.getChildren().add(inGameController.zoomPane);
         inGameController.mapScrollPane.setContent(inGameController.group);
@@ -206,7 +218,7 @@ public class AppTest2 extends ControllerTest {
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
         doReturn(Observable
                 .just(new Game("a", null, "game1Id", "testGame1",
-                        "testHost1", 2, true, 1,10, null))).when(gameApiService).getGame(any());
+                        "testHost1", 2, 0, true, 1,10, null))).when(gameApiService).getGame(any());
         doReturn(null).when(this.app).show("/ingame");
         islandsService.saveEmpire("empire",new ReadEmpireDto("a","b","empire","game1","user1","name",
                 "description","#FFDDEE",2,3,"home"));
@@ -249,13 +261,15 @@ public class AppTest2 extends ControllerTest {
         Mockito.doCallRealMethod().when(islandsService).createIslandPaneFromDto(any(),any());
         doCallRealMethod().when(islandComponent).setPosition(anyDouble(),anyDouble());
 
-        doReturn(null).when(imageCache).get(null);
+        doReturn(null).when(imageCache).get(any());
 
         // Mock getEmpire
         doReturn(Observable.just(new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
                 "a","a",1, 2, "a", new String[]{"1"}, new HashMap<>() {{put("energy", 5);put("population", 4);}},
                 null))).when(this.empireService).getEmpire(any(),any());
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
+
+        doReturn(Observable.just(new EffectSourceParentDto(new EffectSourceDto[]{}))).when(empireApiService).getEmpireEffect(any(), any());
 
         app.show(inGameController);
         eventComponent.getStylesheets().clear();
@@ -267,6 +281,7 @@ public class AppTest2 extends ControllerTest {
         overviewUpgradeComponent.getStylesheets().clear();
         sitesComponent.getStylesheets().clear();
         jobsOverviewComponent.getStylesheets().clear();
+        islandClaimingComponent.getStylesheets().clear();
 
         island1 = new Island(
           "testEmpireID",

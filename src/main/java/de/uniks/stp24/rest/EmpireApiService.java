@@ -21,6 +21,9 @@ public interface EmpireApiService {
     @GET("games/{game}/empires/{empire}")
     Observable<EmpireDto> getEmpire(@Path("game") String game, @Path("empire") String empire);
 
+    @GET("games/{game}/empires/{empire}")
+    Observable<EffectSourceParentDto> getEmpireEffect(@Path("game") String game, @Path("empire") String empire);
+
     @PATCH("games/{game}/empires/{empire}")
     Observable<EmpireDto> updateEmpire(@Path("game") String game, @Path("empire") String empire, @Body UpdateEmpireDto updateEmpireDto);
 

@@ -306,11 +306,9 @@ public class ClockComponent extends AnchorPane {
             randomEventButton.setVisible(true);
             remainingSeasonsLabel.setVisible(true);
 
-            if (Objects.equals(eventService.getEvent().effects()[0].eventType(), "bad")) {
-                randomEventButton.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/events/badEvent.png')");
-            } else {
-                randomEventButton.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/events/goodEvent.png')");
-            }
+            String eventType = eventService.getEvent().effects()[0].eventType();
+            String medallionPath = "/de/uniks/stp24/assets/events/" + eventType + "Event.png";
+            randomEventButton.setStyle("-fx-background-image: url('[MEDALLION]')".replace("[MEDALLION]", medallionPath));
         }
     }
 

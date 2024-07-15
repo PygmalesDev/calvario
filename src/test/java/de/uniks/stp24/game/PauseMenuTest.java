@@ -10,16 +10,16 @@ import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateResultDto;
+import de.uniks.stp24.dto.EffectSourceDto;
+import de.uniks.stp24.dto.EffectSourceParentDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.*;
+import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.rest.PresetsApiService;
-import de.uniks.stp24.service.InGameService;
-import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.PopupBuilder;
-import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.*;
 import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -50,6 +50,9 @@ public class PauseMenuTest extends ControllerTest {
 
     @Spy
     GameSystemsApiService gameSystemsApiService;
+
+    @Spy
+    EmpireApiService empireApiService;
 
     @Spy
     PresetsApiService presetsApiService;
@@ -86,6 +89,9 @@ public class PauseMenuTest extends ControllerTest {
 
     @Spy
     ObjectMapper objectMapper;
+
+    @Spy
+    ImageCache imageCache;
 
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
@@ -129,6 +135,8 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     IslandOverviewJobsComponent islandOverviewJobsComponent;
+    @InjectMocks
+    IslandClaimingComponent islandClaimingComponent;
 
 
     @InjectMocks
@@ -167,6 +175,7 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = this.eventComponent;
+        this.eventComponent.empireApiService = this.empireApiService;
         inGameService.setEventService(eventService);
         this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
         this.inGameController.overviewUpgradeComponent = this.overviewUpgradeComponent;
@@ -196,6 +205,14 @@ public class PauseMenuTest extends ControllerTest {
 
         this.inGameService.presetsApiService = this.presetsApiService;
 
+        this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
+        this.islandClaimingComponent.jobsService = this.jobsService;
+        this.islandClaimingComponent.islandAttributes = this.islandAttributeStorage;
+        this.islandClaimingComponent.islandsService = this.islandsService;
+        this.islandClaimingComponent.imageCache = this.imageCache;
+
+        doReturn(null).when(this.imageCache).get(any());
+
         doReturn(Observable.empty()).when(this.jobsApiService).getEmpireJobs(any(), any());
 
         inGameService.setGameStatus(gameStatus);
@@ -207,12 +224,15 @@ public class PauseMenuTest extends ControllerTest {
         UpgradeStatus upgradeStatus = new UpgradeStatus("test", 20, production, consumption, 20);
 
         doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());
-        doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", 2,true,1,1,null ))).when(gamesApiService).getGame(any());
+        doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", 2, 0,true,1,1,null ))).when(gamesApiService).getGame(any());
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
 
         doReturn(Observable.just(new SystemUpgrades(upgradeStatus,upgradeStatus, upgradeStatus, upgradeStatus, upgradeStatus ))).when(inGameService).loadUpgradePresets();
         doReturn(Observable.just(new ArrayList<BuildingPresets>())).when(inGameService).loadBuildingPresets();
         doReturn(Observable.just(new ArrayList<DistrictPresets>())).when(inGameService).loadDistrictPresets();
+
+        doReturn(Observable.just(new EffectSourceParentDto(new EffectSourceDto[]{}))).when(empireApiService).getEmpireEffect(any(), any());
+
 
         this.app.show(this.inGameController);
 
@@ -231,6 +251,7 @@ public class PauseMenuTest extends ControllerTest {
         buildingsWindowComponent.getStylesheets().clear();
         buildingPropertiesComponent.getStylesheets().clear();
         this.jobsOverviewComponent.getStylesheets().clear();
+        islandClaimingComponent.getStylesheets().clear();
     }
 
     @Test

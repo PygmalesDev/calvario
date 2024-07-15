@@ -5,6 +5,7 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
+import de.uniks.stp24.component.game.technology.*;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -34,11 +35,14 @@ import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -91,6 +95,23 @@ public class AppTest2 extends ControllerTest {
     @InjectMocks
     IslandClaimingComponent islandClaimingComponent;
 
+    @InjectMocks
+    VariableExplanationComponent variableExplanationComponent;
+
+    @InjectMocks
+    TechnologyOverviewComponent technologiesComponent;
+
+    @InjectMocks
+    TechnologyCategoryComponent technologyCategoryComponent;
+    @InjectMocks
+    ResearchJobComponent researchJobComponent;
+
+    @Mock(name = "technologiesResourceBundle")
+    ResourceBundle technologiesResourceBundle;
+
+
+
+
 
     @Spy
     JobsService jobsService;
@@ -116,6 +137,9 @@ public class AppTest2 extends ControllerTest {
     ImageCache imageCache;
     @Spy
     EventService eventService;
+
+    @Spy
+    VariableService variableService;
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @Spy
@@ -132,6 +156,9 @@ public class AppTest2 extends ControllerTest {
     GameSystemsApiService gameSystemsApiService;
     @Spy
     EmpireApiService empireApiService;
+
+    @Spy
+    TechnologyService technologyService;
     @Spy
     IslandComponent islandComponent = spy(IslandComponent.class);
 
@@ -167,6 +194,10 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.eventComponent = eventComponent;
         this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
+        this.inGameController.variableExplanationComponent = this.variableExplanationComponent;
+        this.inGameController.technologiesComponent = this.technologiesComponent;
+        this.technologiesComponent.technologyCategoryComponent = technologyCategoryComponent;
+        this.technologyCategoryComponent.researchJobComponent = researchJobComponent;
         this.clockComponent.timerService = this.timerService;
         this.clockComponent.eventService = this.eventService;
         this.clockComponent.subscriber = this.subscriber;
@@ -214,6 +245,7 @@ public class AppTest2 extends ControllerTest {
         inGameController.mapScrollPane.setContent(inGameController.group);
 
         doReturn(Observable.empty()).when(this.jobsApiService).getEmpireJobs(any(), any());
+        doNothing().when(variableService).initVariables();
 
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
         doReturn(Observable

@@ -7,7 +7,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 import javax.inject.Singleton;
-import java.util.ArrayList;
 
 @Singleton
 public interface GameLogicApiService {

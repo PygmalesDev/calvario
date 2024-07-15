@@ -43,7 +43,7 @@
                </HBox.margin>
                <children>
                   <VBox fx:id="researchLeftVBox" alignment="TOP_CENTER" layoutY="2.0">
-                     <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="%technologies.research" translateX="-5.0" translateY="-2.0">
+                     <Text fx:id="researchText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="%technologies.research" translateX="-5.0" translateY="-2.0">
                         <font>
                            <Font size="18.0" />
                         </font>
@@ -78,7 +78,7 @@
                      <Insets />
                   </VBox.margin>
                </Text>
-               <ListView fx:id="unlockedListView" styleClass="technologies-list-view" maxHeight="280.0" minHeight="290.0" prefHeight="300.0" prefWidth="320.0" translateY="8.0" />
+               <ListView fx:id="unlockedListView" maxHeight="280.0" minHeight="290.0" prefHeight="300.0" prefWidth="320.0" styleClass="technologies-list-view" translateY="8.0" />
             </VBox>
          </HBox>
       </VBox>

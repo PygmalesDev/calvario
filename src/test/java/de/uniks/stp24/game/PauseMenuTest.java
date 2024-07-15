@@ -6,6 +6,7 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
+import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -45,6 +46,9 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 public class PauseMenuTest extends ControllerTest {
     @Spy
     JobsService jobsService;
+
+    @Spy
+    VariableService variableService;
     @Spy
     GamesApiService gamesApiService;
 
@@ -159,6 +163,12 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     PropertiesJobProgressComponent propertiesJobProgressComponent;
 
+    @InjectMocks
+    VariableExplanationComponent variableExplanationComponent;
+
+    @InjectMocks
+    TechnologyOverviewComponent technologyOverviewComponent;
+
     @Spy
     JobsApiService jobsApiService;
 
@@ -185,6 +195,9 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.helpComponent = this.helpComponent;
+        this.inGameController.variableExplanationComponent = this.variableExplanationComponent;
+        this.inGameController.technologiesComponent = technologyOverviewComponent;
+
         this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
         this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
         this.timerService.gamesApiService = this.gamesApiService;
@@ -233,6 +246,7 @@ public class PauseMenuTest extends ControllerTest {
 
         doReturn(Observable.just(new EffectSourceParentDto(new EffectSourceDto[]{}))).when(empireApiService).getEmpireEffect(any(), any());
 
+        doNothing().when(variableService).initVariables();
 
         this.app.show(this.inGameController);
 

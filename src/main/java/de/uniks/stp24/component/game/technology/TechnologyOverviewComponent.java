@@ -52,15 +52,10 @@ public class TechnologyOverviewComponent extends AnchorPane {
     @SubComponent
     public TechnologyCategoryComponent technologyCategoryComponent;
 
-
     @Inject
     @Resource
-    @Named("gameResourceBundle")
-    public ResourceBundle resources;
-
-    @Inject
     @Named("technologiesResourceBundle")
-    public ResourceBundle technologiesResourceBundle;
+    ResourceBundle technologiesResourceBundle;
 
 
     @Inject
@@ -213,6 +208,6 @@ public class TechnologyOverviewComponent extends AnchorPane {
     public void setCategoryInfos(@NotNull TechnologyCategoryComponent technologieCategory) {
         technologieCategory.technologyImage.setImage(technologieCategory.imageCache.get("assets/technologies/categories/" +technologieCategory.technologieCategoryName + ".png"));
         String technologyKey = technologieCategory.technologieCategoryName.replace("_", ".");
-        technologieCategory.technologyNameText.setText(resources.getString("technologies." + technologyKey));
+        technologieCategory.technologyNameText.setText(technologiesResourceBundle.getString("technologies." + technologyKey));
     }
 }

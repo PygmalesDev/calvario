@@ -99,7 +99,7 @@ public class StorageOverviewComponent extends AnchorPane {
                         }
                     },
                     error -> System.out.println("ErrorEmpireSubscriber"));
-            this.resourceListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "storageOverview", "total.resources"));
+            this.resourceListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         }
     }
 

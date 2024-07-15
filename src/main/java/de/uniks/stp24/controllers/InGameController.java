@@ -330,9 +330,9 @@ public class InGameController extends BasicController {
         this.createContextMenuButtons();
 
         //Generate job stopping conditions for the already running jobs
-        explanationContainer.setVisible(false);
-        explanationContainer.getChildren().add(variableExplanationComponent);
-        explanationService.setInGameController(this);
+//        explanationContainer.setVisible(false);
+//        explanationContainer.getChildren().add(variableExplanationComponent);
+//        explanationService.setInGameController(this);
         
 
 
@@ -674,20 +674,17 @@ public class InGameController extends BasicController {
     Methods below showing explanation overview if mouse hovers above a chosen element.
      */
 
-    public void showExplanation(double x, double y, String variable){
-        explanationContainer.setLayoutX(x);
-        explanationContainer.setLayoutY(y);
-        explanationContainer.setVisible(true);
-    }
-    public void unShowExplanation(){
-        explanationContainer.setLayoutX(0);
-        explanationContainer.setLayoutY(0);
-        explanationContainer.setVisible(false);
-    }
+//    public void showExplanation(double x, double y, String variable){
+//        explanationContainer.setLayoutX(x);
+//        explanationContainer.setLayoutY(y);
+//        explanationContainer.setVisible(true);
+//    }
+//    public void unShowExplanation(){
+//        explanationContainer.setLayoutX(0);
+//        explanationContainer.setLayoutY(0);
+//        explanationContainer.setVisible(false);
+//    }
 
-    public void showResearchComponent() {
-        //technologiesComponent.handleResearchClicked();
-    }
     @OnDestroy
     public void destroy() {
         islandComponentList.forEach(IslandComponent::destroy);

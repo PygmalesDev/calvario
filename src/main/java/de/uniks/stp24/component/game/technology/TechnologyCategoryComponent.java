@@ -57,6 +57,8 @@ public class TechnologyCategoryComponent extends AnchorPane {
     public VBox researchLeftVBox;
     @FXML
     public StackPane researchJobContainer;
+    @FXML
+    public Text researchText;
     String technologieCategoryName;
     @Inject
     App app;
@@ -85,7 +87,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     @Inject
     @SubComponent
-    ResearchJobComponent researchJobComponent;
+    public ResearchJobComponent researchJobComponent;
 
     ImageCache imageCache = new ImageCache();
 

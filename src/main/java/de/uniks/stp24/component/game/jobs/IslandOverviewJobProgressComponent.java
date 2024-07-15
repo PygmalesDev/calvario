@@ -48,9 +48,8 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
 
     @FXML
     ListView<de.uniks.stp24.model.Resource> costsListView;
-    public Provider<ResourceComponent> resourceComponentProvider = () ->
-            new ResourceComponent(true, false,
-                    true, false, this.gameResourceBundle);
+    public Provider<ResourceComponent> negativeResourceProvider = () ->
+            new ResourceComponent("negative", this.gameResourceBundle);
     private final ObservableList<de.uniks.stp24.model.Resource> resourceObservableList = FXCollections.observableArrayList();
 
     @Inject
@@ -97,7 +96,7 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
         job.cost().forEach((name, count) -> this.resourceObservableList
                 .add(new de.uniks.stp24.model.Resource(name, count, 0)));
         this.costsListView.setItems(this.resourceObservableList);
-        this.costsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.resourceComponentProvider));
+        this.costsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.negativeResourceProvider));
         this.costsListView.setMouseTransparent(true);
 
         switch (job.type()) {
@@ -111,10 +110,10 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
                 this.jobDescriptionText.setText(this.gameResourceBundle.getString(
                         Constants.siteTranslation.get(job.district())) + " Site");
             }
-            // TODO: Change upgrade to next upgrade level
             case "upgrade" -> {
-                this.jobImage.setImage(this.imageCache.get("de/uniks/stp24/icons/other/upgrade_job.png"));
-                this.jobDescriptionText.setText(String.format("Upgrading island to %s", job.type()));
+                this.jobImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/other/upgrade_job.png"));
+                this.jobDescriptionText.setText(this.gameResourceBundle.getString("jobs."+
+                        this.islandAttributes.getIsland().upgrade()));
             }
         }
     }

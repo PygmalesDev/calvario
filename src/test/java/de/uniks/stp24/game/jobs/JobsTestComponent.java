@@ -61,8 +61,17 @@ public class JobsTestComponent extends ControllerTest {
     protected List<Job> jobsList = new ArrayList<>();
 
     protected final Island ISLAND_1 = new Island(this.EMPIRE_ID, 0, 0, 0,
-            IslandType.agriculture, 0, 0, 0, null, null,
-            null, this.SYSTEM_ID_1, null, this.SYSTEM_NAME_1);
+            IslandType.agriculture, 3, 12, 0,
+            Map.of("energy", 3), null,
+            null, this.SYSTEM_ID_1, "unexplored", this.SYSTEM_NAME_1);
+    protected final Island ISLAND_UNEXP = new Island(this.EMPIRE_ID, 0, 0, 0,
+            IslandType.agriculture, 3, 12, 0,
+            Map.of("energy", 3), null,
+            null, "ISLAND_UNEXP", "unexplored", this.SYSTEM_NAME_1);
+    protected final Island ISLAND_EXP = new Island(this.EMPIRE_ID, 0, 0, 0,
+            IslandType.agriculture, 3, 24, 0,
+            Map.of("energy", 3), null,
+            null, "ISLAND_EXP", "explored", this.SYSTEM_NAME_1);
 
     protected Map<String, Integer> inspectorCalls = new HashMap<>();
 
@@ -147,9 +156,13 @@ public class JobsTestComponent extends ControllerTest {
 
     // EventListener does not respond to Subject calls. Find the issue later
     // These methods mock the behavior of the event listener
-    // TODO: FIX THIS LOL
     public void createInternally() {
-        Platform.runLater(() -> this.jobsService.addJobToGroups(this.jobsList.get(0)));
+        Platform.runLater(() -> this.jobsService.addJobToGroups(this.jobsList.getFirst()));
+    }
+
+    public void createInternally(Job job) {
+        Platform.runLater(() -> this.jobsService.addJobToGroups(job));
+        this.jobsList.add(job);
     }
 
     public void updateInternally(String jobID) {

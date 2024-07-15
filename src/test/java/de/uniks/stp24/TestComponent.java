@@ -34,6 +34,7 @@ public interface TestComponent extends MainComponent {
     PresetsApiService presetsApiService();
     JobsService jobsService();
     JobsApiService jobsApiService();
+    ImageCache imageCache();
 
     @Component.Builder
     interface Builder extends MainComponent.Builder {

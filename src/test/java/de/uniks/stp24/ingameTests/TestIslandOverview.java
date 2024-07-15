@@ -292,7 +292,7 @@ public class TestIslandOverview extends ControllerTest {
                 "a", "a", 1, 2, "a", new String[]{"1"}, cost,
                 null))).when(this.empireService).getEmpire(any(), any());
 
-        doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", 2,true, 1, 1, null))).when(gamesApiService).getGame(any());
+        doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", 2,0, true, 1, 1, null))).when(gamesApiService).getGame(any());
         doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
         doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
         doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();

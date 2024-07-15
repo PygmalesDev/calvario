@@ -87,8 +87,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     String currentJobID = "";
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
-
+    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle);
+    Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", gameResourceBundle);
 
     @OnInit
     public void init(){
@@ -275,9 +275,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
         buildingImage.setImage(imageBuilding);
         buildingName.setText(gameResourceBundle.getString(buildingTranslation.get(buildingType)));
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), this::resourceListGeneration, error -> {});
-        buildingCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
-        buildingProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
-        buildingConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
+        buildingCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, negativeResourceProvider));
+        buildingProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, positiveResourceProvider));
+        buildingConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, negativeResourceProvider));
     }
 
     //Sets upkeep, production and cost of buildings in listviews

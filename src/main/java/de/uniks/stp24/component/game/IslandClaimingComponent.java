@@ -86,7 +86,7 @@ public class IslandClaimingComponent extends Pane {
 
     @Inject
     public Provider<ClaimingSiteComponent> componentProvider;
-    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle);
+    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle, this.imageCache);
     private ObservableList<Job> upgradeJobs;
     private final ObservableList<Site> siteObservableList = FXCollections.observableArrayList();
     private final ObservableList<de.uniks.stp24.model.Resource> consumeObservableList = FXCollections.observableArrayList();

@@ -1,11 +1,13 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.ResourcesService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -30,39 +32,39 @@ public class DetailsComponent extends AnchorPane {
     @FXML
     public Button showProduction;
     @FXML
-    public Pane res1Pic;
+    public ImageView res1Pic;
     @FXML
     public Text amount1;
     @FXML
-    public Pane res2Pic;
+    public ImageView res2Pic;
     @FXML
     public Text amount2;
     @FXML
-    public Pane res3Pic;
+    public ImageView res3Pic;
     @FXML
     public Text amount3;
     @FXML
-    public Pane res4Pic;
+    public ImageView res4Pic;
     @FXML
     public Text amount4;
     @FXML
-    public Pane res5Pic;
+    public ImageView res5Pic;
     @FXML
     public Text amount5;
     @FXML
-    public Pane res6Pic;
+    public ImageView res6Pic;
     @FXML
     public Text amount6;
     @FXML
-    public Pane res7Pic;
+    public ImageView res7Pic;
     @FXML
     public Text amount7;
     @FXML
-    public Pane res8Pic;
+    public ImageView res8Pic;
     @FXML
     public Text amount8;
     @FXML
-    public Pane res9Pic;
+    public ImageView res9Pic;
     @FXML
     public Text amount9;
     @FXML
@@ -71,6 +73,8 @@ public class DetailsComponent extends AnchorPane {
     InGameService inGameService;
     @Inject
     ResourcesService resourcesService;
+    @Inject
+    ImageCache imageCache;
     @Inject
     public IslandAttributeStorage islandAttributes;
     @Inject
@@ -82,7 +86,7 @@ public class DetailsComponent extends AnchorPane {
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
-    List<Pane> resImages = new ArrayList<>();
+    List<ImageView> resImages = new ArrayList<>();
     List<Text> resInf = new ArrayList<>();
 
     @Inject
@@ -99,8 +103,7 @@ public class DetailsComponent extends AnchorPane {
         resetResources();
         int i = 0;
         for (Map.Entry<String, Integer> entry : totalProduction.entrySet()) {
-            String imageStyle = resourceImagePath.get(entry.getKey());
-            resImages.get(i).setStyle(imageStyle + "-fx-background-size: cover;");
+            resImages.get(i).setImage(this.imageCache.get("/"+resourceImagePath.get(entry.getKey())));
             resInf.get(i).setText("+" + entry.getValue());
             i ++;
         }
@@ -111,8 +114,7 @@ public class DetailsComponent extends AnchorPane {
         resetResources();
         int i = 0;
         for (Map.Entry<String, Integer> entry : totalConsumption.entrySet()) {
-            String imageStyle = resourceImagePath.get(entry.getKey());
-            resImages.get(i).setStyle(imageStyle + "-fx-background-size: cover;");
+            resImages.get(i).setImage(this.imageCache.get("/"+resourceImagePath.get(entry.getKey())));
             resInf.get(i).setText("-" + entry.getValue());
             i++;
         }
@@ -169,8 +171,8 @@ public class DetailsComponent extends AnchorPane {
     }
 
     public void resetResources() {
-        for (Pane resImage : resImages) {
-            resImage.setStyle("");
+        for (ImageView resImage : resImages) {
+            resImage.setImage(null);
         }
 
         for (Text text : resInf) {

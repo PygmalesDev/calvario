@@ -104,7 +104,9 @@ public class SitePropertiesComponent extends AnchorPane {
     @SubComponent
     public PropertiesJobProgressComponent siteJobProgress;
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
+    Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
+    Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);
+
 
     Provider<ImageView> siteEmptyCellProvider = () -> {
         ImageView imageView = new ImageView(this.imageCache.get("/de/uniks/stp24/icons/other/empty_building_small_element.png"));
@@ -163,7 +165,7 @@ public class SitePropertiesComponent extends AnchorPane {
     public void setSiteType(String siteType){
         this.siteType = siteType;
         siteName.setText(gameResourceBundle.getString(siteTranslation.get(siteType)));
-        Image imageSite = new Image(sitesMap.get(siteType));
+        Image imageSite = imageCache.get("/" + sitesMap.get(siteType));
         siteImage.getStyleClass().clear();
         siteImage.setImage(imageSite);
         displayCostsOfSite();
@@ -266,9 +268,9 @@ public class SitePropertiesComponent extends AnchorPane {
                 break;
             }
         }
-        siteConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "districts", siteType, "upkeep"));
-        siteCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "districts", siteType, "cost"));
-        siteProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "districts", siteType, "production"));
+        siteConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, negativeResouceProvider), "districts", siteType, "upkeep"));
+        siteCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, negativeResouceProvider), "districts", siteType, "cost"));
+        siteProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, positiveResourceProvider), "districts", siteType, "production"));
     }
 
     //Uses a GridPane to display a graphic view of how many sites of each type you have

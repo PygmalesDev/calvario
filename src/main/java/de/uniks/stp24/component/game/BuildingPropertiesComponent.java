@@ -9,6 +9,7 @@ import de.uniks.stp24.model.BuildingAttributes;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.ExplanationService;
@@ -80,6 +81,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
     ExplanationService explanationService;
     @Inject
     VariableService variableService;
+    @Inject
+    ImageCache imageCache;
 
 
     @Inject
@@ -100,7 +103,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
     String currentJobID = "";
     BuildingAttributes certainBuilding;
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
+    Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
+    Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);
 
     @OnInit
     public void init(){
@@ -281,16 +285,15 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     //Gets resources of the building and shows them in three listviews
     public void displayInfoBuilding(){
-        Image imageBuilding = new Image(buildingsMap.get(buildingType));
-        buildingImage.setImage(imageBuilding);
+        buildingImage.setImage(this.imageCache.get("/" + buildingsMap.get(buildingType)));
         buildingName.setText(gameResourceBundle.getString(buildingTranslation.get(buildingType)));
 
         setCertainBuilding();
         resourceListGeneration(certainBuilding);
 
-        buildingCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "buildings", buildingType, "cost"));
-        buildingProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "buildings", buildingType, "production"));
-        buildingConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "buildings", buildingType, "upkeep"));
+        buildingCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, negativeResouceProvider), "buildings", buildingType, "cost"));
+        buildingProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, positiveResourceProvider), "buildings", buildingType, "production"));
+        buildingConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, negativeResouceProvider), "buildings", buildingType, "upkeep"));
         disableButtons();
     }
 

@@ -10,6 +10,7 @@ import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.ErrorService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
@@ -62,6 +63,8 @@ public class DeleteStructureComponent extends VBox{
     IslandsService islandsService;
     @Inject
     ResourcesService resourcesService;
+    @Inject
+    ImageCache imageCache;
 
     InGameController inGameController;
 
@@ -85,7 +88,7 @@ public class DeleteStructureComponent extends VBox{
     @Inject
     IslandAttributeStorage islandAttributeStorage;
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
+    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle, this.imageCache);
 
 
     String structureType;
@@ -116,7 +119,7 @@ public class DeleteStructureComponent extends VBox{
         displayStructureInfo();
         if (sites.containsKey(structureType)) {
             // Set the image for sites
-            deleteStructureImageView.setImage(new Image(sites.get(structureType)));
+            deleteStructureImageView.setImage(this.imageCache.get("/"+structureType));
         } else if (buildings.containsKey(structureType)) {
             // Set the image for buildings
             deleteStructureImageView.setImage(new Image(buildings.get(structureType)));

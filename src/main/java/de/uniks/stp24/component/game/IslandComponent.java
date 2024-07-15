@@ -60,6 +60,7 @@ public class IslandComponent extends Pane {
         }
         this.islandImage = new ImageView();
         this.flagImage = new ImageView();
+        this.spyglassImage = new ImageView();
         this.setPickOnBounds(false);
     }
 

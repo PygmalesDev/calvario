@@ -139,11 +139,11 @@ public class IslandOverviewTestComponent extends ControllerTest {
     @InjectMocks
     IslandClaimingComponent islandClaimingComponent;
 
-
     Provider<DistrictComponent> districtComponentProvider = () -> {
         DistrictComponent districtComponent = new DistrictComponent();
         districtComponent.tokenStorage = this.tokenStorage;
         districtComponent.islandAttributeStorage = this.islandAttributeStorage;
+        districtComponent.imageCache = this.imageCache;
         return districtComponent;
     };
 
@@ -563,6 +563,7 @@ public class IslandOverviewTestComponent extends ControllerTest {
         this.inGameController.overviewSitesComponent.detailsComponent.getStylesheets().clear();
         this.inGameController.overviewSitesComponent.buildingsComponent.getStylesheets().clear();
         this.inGameController.overviewSitesComponent.sitesComponent.getStylesheets().clear();
+        this.inGameController.islandClaimingComponent.getStylesheets().clear();
     }
 
 }

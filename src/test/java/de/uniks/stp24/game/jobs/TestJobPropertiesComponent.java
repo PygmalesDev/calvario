@@ -30,6 +30,7 @@ public class TestJobPropertiesComponent extends JobsTestComponent {
         super.start(stage);
 
         this.jobProgressComponent.jobsService = this.jobsService;
+        doReturn(null).when(this.imageCache).get(any());
 
         this.app.show(this.jobProgressComponent);
     }

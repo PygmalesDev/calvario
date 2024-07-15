@@ -32,9 +32,8 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
     @Inject
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
+    ImageCache imageCache;
 
-
-    ImageCache imageCache = new ImageCache();
     boolean showCount;
     boolean showName;
     boolean showIcon;
@@ -42,22 +41,25 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
     private String type = "";
 
     @Inject
-    public ResourceComponent(boolean showCount, boolean showName, boolean showIcon, boolean showChangePerSeason, ResourceBundle gameResourceBundle) {
+    public ResourceComponent(boolean showCount, boolean showName, boolean showIcon, boolean showChangePerSeason,
+                             ResourceBundle gameResourceBundle, ImageCache imageCache) {
         this.showCount = showCount;
         this.showName = showName;
         this.showIcon = showIcon;
         this.showChangePerSeason = showChangePerSeason;
         this.gameResourceBundle = gameResourceBundle;
+        this.imageCache = imageCache;
     }
 
 
-    public ResourceComponent(String type, ResourceBundle gameResourceBundle) {
+    public ResourceComponent(String type, ResourceBundle gameResourceBundle, ImageCache imageCache) {
         this.showCount = true;
         this.showName = false;
         this.showIcon = true;
         this.showChangePerSeason = false;
         this.gameResourceBundle = gameResourceBundle;
         this.type = type;
+        this.imageCache = imageCache;
     }
 
     @Override

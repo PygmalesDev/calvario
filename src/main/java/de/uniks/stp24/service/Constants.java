@@ -89,15 +89,15 @@ public class Constants {
     );
 
     public static final Map<String, String> resourceImagePath = Map.of(
-            "credits", "-fx-background-image: url('/de/uniks/stp24/icons/resources/credits.png');",
-            "minerals", "-fx-background-image: url('/de/uniks/stp24/icons/resources/minerals.png');",
-            "population", "-fx-background-image: url('/de/uniks/stp24/icons/resources/population.png');",
-            "energy", "-fx-background-image: url('/de/uniks/stp24/icons/resources/energy.png');",
-            "food", "-fx-background-image: url('/de/uniks/stp24/icons/resources/food.png');",
-            "fuel","-fx-background-image: url('/de/uniks/stp24/icons/resources/fuel.png');",
-            "research", "-fx-background-image: url('/de/uniks/stp24/icons/resources/research.png');",
-            "alloys", "-fx-background-image: url('/de/uniks/stp24/icons/resources/alloys.png');",
-            "consumer_goods","-fx-background-image: url('/de/uniks/stp24/icons/resources/consumer_goods.png');"
+            "credits", "de/uniks/stp24/icons/resources/credits.png",
+            "minerals", "de/uniks/stp24/icons/resources/minerals.png",
+            "population", "de/uniks/stp24/icons/resources/population.png",
+            "energy", "de/uniks/stp24/icons/resources/energy.png",
+            "food", "de/uniks/stp24/icons/resources/food.png",
+            "fuel","de/uniks/stp24/icons/resources/fuel.png",
+            "research", "de/uniks/stp24/icons/resources/research.png",
+            "alloys", "de/uniks/stp24/icons/resources/alloys.png",
+            "consumer_goods","de/uniks/stp24/icons/resources/consumer_goods.png"
     );
 
     public static final Map<String, String> siteTranslation = Map.of(

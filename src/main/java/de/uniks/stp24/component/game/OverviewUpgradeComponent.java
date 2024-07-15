@@ -6,6 +6,7 @@ import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -89,12 +90,14 @@ public class OverviewUpgradeComponent extends AnchorPane {
     ResourceBundle gameResourceBundle;
     @Inject
     JobsService jobsService;
+    @Inject
+    ImageCache imageCache;
 
     public GameSystemsApiService gameSystemsService;
 
     private InGameController inGameController;
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
+    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle, this.imageCache);
 
     @Inject
     public OverviewUpgradeComponent() {

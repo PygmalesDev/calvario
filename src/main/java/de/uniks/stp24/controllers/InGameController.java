@@ -221,10 +221,6 @@ public class InGameController extends BasicController {
         empireID = tokenStorage.getEmpireId();
         System.out.printf("GAME ID: %s\nEMPIRE ID: %s\n", gameID, empireID);
 
-        //Todo: Outprint for Swagger - can be deleted later
-        System.out.println(this.gameID);
-        System.out.println(empireID);
-
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);

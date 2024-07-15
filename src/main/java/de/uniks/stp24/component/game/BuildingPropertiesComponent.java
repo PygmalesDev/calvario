@@ -100,8 +100,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     String currentJobID = "";
     BuildingAttributes certainBuilding;
 
-    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle);
-    Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", gameResourceBundle);
+    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
 
     @OnInit
     public void init(){

@@ -137,12 +137,12 @@ public class IslandClaimingComponent extends Pane {
             this.sitesListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.componentProvider));
             this.noSitesText.setVisible(this.sitesListView.getItems().isEmpty());
 
-            this.islandAttributes.systemPresets.colonized().cost().forEach((name, amount) -> this.costsObservableList
+            this.islandAttributes.systemUpgradeAttributes.colonized().cost().forEach((name, amount) -> this.costsObservableList
                     .add(new de.uniks.stp24.model.Resource(name, amount, 0)));
             this.costsListView.setItems(this.costsObservableList);
             this.costsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.negativeResourceProvider));
 
-            this.islandAttributes.systemPresets.colonized().upkeep().forEach((name, amount) -> this.consumeObservableList
+            this.islandAttributes.systemUpgradeAttributes.colonized().upkeep().forEach((name, amount) -> this.consumeObservableList
                     .add(new de.uniks.stp24.model.Resource(name, amount, 0)));
             this.consumeListView.setItems(this.consumeObservableList);
             this.consumeListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.negativeResourceProvider));

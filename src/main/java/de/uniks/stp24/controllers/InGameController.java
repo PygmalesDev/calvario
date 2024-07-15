@@ -200,6 +200,7 @@ public class InGameController extends BasicController {
         deleteStructureComponent.setInGameController(this);
         empireOverviewComponent.setInGameController(this);
         marketOverviewComponent.setInGameController(this);
+        storageOverviewComponent.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();

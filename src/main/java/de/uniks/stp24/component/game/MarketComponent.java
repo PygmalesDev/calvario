@@ -282,6 +282,7 @@ public class MarketComponent extends StackPane {
             resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
             updateResources();
             refreshListview();
+            inGameController.storageOverviewComponent.updateMarket();
         }
     }
 
@@ -298,6 +299,7 @@ public class MarketComponent extends StackPane {
             resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
             updateResources();
             refreshListview();
+            inGameController.storageOverviewComponent.updateMarket();
         }
     }
 
@@ -317,10 +319,6 @@ public class MarketComponent extends StackPane {
             numberOfGoodsLabel.setText(String.valueOf(amount));
             buyingAndSellingPrice(selectedItem);
         }
-    }
-
-    public void setInGameController(InGameController ingameController) {
-        this.inGameController = ingameController;
     }
 
     public void closeMarketOverview() {
@@ -379,6 +377,10 @@ public class MarketComponent extends StackPane {
 
     }
     /*---------------------------------------SeasonalTrades------------------------------------------------------------*/
+    //TODO Seasonal Trades -> synchronize with storageOverviewComponent by also adding the added resource in storage to market and vice versa.
+    //                     -> normal buy and sell works but seasonal is really buggy
+    //TODO Seasonal Trades -> cancel running seasonal Trades
+
 
     @OnRender
     public void render() {
@@ -416,9 +418,7 @@ public class MarketComponent extends StackPane {
                 error -> System.out.println("errorSeasonListener in marketComponent"));
     }
 
-    //TODO Seasonal Trades -> synchronize with storageOverviewComponent by also adding the added resource in storage to market.
-    //TODO Seasonal Trades -> save seasonal trades after leaving
-    //TODO Seasonal Trades -> cancel running seasonal Trades
+
     private void performSeasonalTrades() {
         System.out.println("performSeasonalTrades");
         for (SeasonComponent seasonalTrade : seasonComponents) {
@@ -440,6 +440,7 @@ public class MarketComponent extends StackPane {
             userCredits -= buyCost;
             resourceCountMap.put(resourceType, resourceCountMap.getOrDefault(resourceType, 0) + resourceAmount);
             updateResources();
+            inGameController.storageOverviewComponent.updateMarket();
         }
     }
 
@@ -449,7 +450,23 @@ public class MarketComponent extends StackPane {
             userCredits += sellCost;
             resourceCountMap.put(resourceType, resourceCountMap.get(resourceType) + resourceAmount);
             updateResources();
+            inGameController.storageOverviewComponent.updateMarket();
         }
     }
+
+
+    public void setInGameController(InGameController ingameController) {
+        this.inGameController = ingameController;
+    }
+
+    public void updateStorage(String type, int amount) {
+        resourceCountMap.put(type, resourceCountMap.getOrDefault(type, 0) + amount);
+        refreshListview();
+    }
+
+
+    //TODO Seasonal Trades -> save seasonal trades after leaving
+
+
 
 }

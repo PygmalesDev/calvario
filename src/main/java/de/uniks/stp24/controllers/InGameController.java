@@ -33,6 +33,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -55,6 +56,8 @@ import java.util.*;
 @Title("CALVARIO")
 @Controller
 public class InGameController extends BasicController {
+    @FXML
+    public AnchorPane rootPane;
     @FXML
     Pane gameBackground;
     @FXML

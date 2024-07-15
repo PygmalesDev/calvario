@@ -33,6 +33,8 @@ import java.util.ResourceBundle;
 @Component(view = "IslandOverviewSites.fxml")
 public class OverviewSitesComponent extends AnchorPane {
     @FXML
+    public Pane imagePane;
+    @FXML
     public Button islandNameButton;
     @FXML
     public Button jobsButton;

@@ -14,9 +14,12 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 public class TestButtons extends IslandOverviewTestComponent{
     @Override
     public void start(Stage stage) throws Exception {
-        stage.getScene().getStylesheets().clear();
         super.start(stage);
+        stage.getScene().getStylesheets().clear();
         initComponents();
+        inGameController.rootPane.getStylesheets().clear();
+        inGameController.overviewSitesComponent.imagePane.getStylesheets().clear();
+        inGameController.overviewSitesComponent.islandFlag.getStylesheets().clear();
         inGameController.showOverview();
     }
 

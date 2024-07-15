@@ -24,7 +24,7 @@
       <HBox alignment="CENTER_LEFT" prefHeight="133.0" prefWidth="400.0">
          <VBox prefHeight="134.0" prefWidth="46.0" />
          <VBox alignment="CENTER" prefHeight="134.0" prefWidth="292.0">
-            <Pane prefHeight="200.0" prefWidth="200.0" styleClass="islandOverviewImage" stylesheets="@../../style/islandOverview.css" />
+            <Pane fx:id="imagePane" prefHeight="200.0" prefWidth="200.0" styleClass="islandOverviewImage" stylesheets="@../../style/islandOverview.css" />
          </VBox>
       </HBox>
       <HBox alignment="CENTER_LEFT" prefHeight="136.0" prefWidth="398.0">

@@ -288,7 +288,7 @@ public class InGameController extends BasicController {
         overviewContainer.getChildren().add(overviewSitesComponent);
         overviewContainer.getChildren().add(overviewUpgradeComponent);
         islandClaimingContainer.getChildren().add(this.islandClaimingComponent);
-        islandClaimingContainer.setVisible(true);
+        islandClaimingContainer.setVisible(false);
 
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(

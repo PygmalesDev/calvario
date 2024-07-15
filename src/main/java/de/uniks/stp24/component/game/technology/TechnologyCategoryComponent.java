@@ -64,8 +64,10 @@ public class TechnologyCategoryComponent extends AnchorPane {
     App app;
     @Inject
     TechnologyService technologyService;
-
-    private ResourceBundle technologiesResourceBundle;
+    @Inject
+    @Resource
+    @Named("technologiesResourceBundle")
+    public ResourceBundle technologiesResourceBundle;
 
     Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this, technologyService, app, technologiesResourceBundle);
 
@@ -74,10 +76,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     private Pane parent;
 
-    @Inject
-    @Resource
-    @Named("gameResourceBundle")
-    public ResourceBundle resources;
+
 
     @Inject
     ResourcesService resourcesService;
@@ -265,7 +264,6 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     public void setTechnologyCategoryOverviewComponent(TechnologyOverviewComponent technologyOverviewComponent, ResourceBundle technologiesResourceBundle) {
         this.technologyOverviewComponent = technologyOverviewComponent;
-        this.technologiesResourceBundle = technologiesResourceBundle;
     }
 
     public void showWindowOnStart() {

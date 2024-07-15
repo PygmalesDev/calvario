@@ -32,6 +32,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -106,13 +107,8 @@ public class AppTest2 extends ControllerTest {
     @InjectMocks
     ResearchJobComponent researchJobComponent;
 
-    @Mock(name = "technologiesResourceBundle")
-    ResourceBundle technologiesResourceBundle;
-
-
-
-
-
+    @Spy
+    ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ROOT);
     @Spy
     JobsService jobsService;
     @Spy
@@ -198,6 +194,7 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.technologiesComponent = this.technologiesComponent;
         this.technologiesComponent.technologyCategoryComponent = technologyCategoryComponent;
         this.technologyCategoryComponent.researchJobComponent = researchJobComponent;
+
         this.clockComponent.timerService = this.timerService;
         this.clockComponent.eventService = this.eventService;
         this.clockComponent.subscriber = this.subscriber;
@@ -243,6 +240,7 @@ public class AppTest2 extends ControllerTest {
         inGameController.zoomPane.getChildren().add(inGameController.mapGrid);
         inGameController.group.getChildren().add(inGameController.zoomPane);
         inGameController.mapScrollPane.setContent(inGameController.group);
+
 
         doReturn(Observable.empty()).when(this.jobsApiService).getEmpireJobs(any(), any());
         doNothing().when(variableService).initVariables();

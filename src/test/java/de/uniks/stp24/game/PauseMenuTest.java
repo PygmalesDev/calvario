@@ -6,6 +6,8 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
+import de.uniks.stp24.component.game.technology.ResearchJobComponent;
+import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
@@ -169,8 +171,18 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     TechnologyOverviewComponent technologyOverviewComponent;
 
+    @InjectMocks
+    TechnologyCategoryComponent technologyCategoryComponent;
+    @InjectMocks
+    ResearchJobComponent researchJobComponent;
+
     @Spy
     JobsApiService jobsApiService;
+    @Spy
+    TechnologyService technologyService;
+
+    @Spy
+    ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ROOT);
 
     @InjectMocks
     InGameController inGameController;
@@ -197,6 +209,9 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.helpComponent = this.helpComponent;
         this.inGameController.variableExplanationComponent = this.variableExplanationComponent;
         this.inGameController.technologiesComponent = technologyOverviewComponent;
+        this.technologyOverviewComponent.technologyCategoryComponent = technologyCategoryComponent;
+        this.technologyCategoryComponent.researchJobComponent = researchJobComponent;
+
 
         this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
         this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;

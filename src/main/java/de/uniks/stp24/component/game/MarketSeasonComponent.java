@@ -52,19 +52,24 @@ public class MarketSeasonComponent extends HBox implements ReusableItemComponent
     @Override
     public void setItem(@NotNull SeasonComponent seasonComponent) {
         this.seasonComponent = seasonComponent;
-
         transActionTypeText.setText(this.seasonComponent.getTransActionTypeText());
         resourceTypeImageView.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + this.seasonComponent.getResourceType() + ".png"));
         if(this.seasonComponent.getTransActionTypeText().equals("buy")){
             resourceAmountText.setText("+" + this.seasonComponent.getResourceAmount());
             moneyAmountText.setText("-"+ this.seasonComponent.getMoneyAmount());
         } else {
-            int sell = this.seasonComponent.getResourceAmount() * -1;
-            moneyAmountText.setText("+"+ sell);
-            resourceAmountText.setText("-" + this.seasonComponent.getMoneyAmount());
+            int sellAmount = this.seasonComponent.getResourceAmount() * -1;
+            moneyAmountText.setText("+"+ this.seasonComponent.getMoneyAmount());
+            resourceAmountText.setText("-" + sellAmount);
         }
 
         playControlsButton.setSelected(this.seasonComponent.isPlaying());
         playControlsButton.setOnAction(event -> this.seasonComponent.setPlaying(playControlsButton.isSelected()));
+
+        cancelTradesButton.setOnAction(event -> {
+            this.seasonComponent = null;
+        });
     }
+
+
 }

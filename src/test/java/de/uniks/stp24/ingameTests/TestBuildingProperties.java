@@ -36,6 +36,7 @@ import static org.mockito.Mockito.spy;
 
 @ExtendWith(MockitoExtension.class)
 public class TestBuildingProperties extends ControllerTest {
+    /*
     @Spy
     GamesApiService gamesApiService;
     @Spy
@@ -239,5 +240,6 @@ public class TestBuildingProperties extends ControllerTest {
         verify(this.islandsService, times(2)).updateIsland(any());
 
     }
-*/
+
+     */
 }

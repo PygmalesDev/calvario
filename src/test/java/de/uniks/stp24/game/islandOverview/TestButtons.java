@@ -14,6 +14,7 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 public class TestButtons extends IslandOverviewTestComponent{
     @Override
     public void start(Stage stage) throws Exception {
+        stage.getScene().getStylesheets().clear();
         super.start(stage);
         initComponents();
         inGameController.showOverview();

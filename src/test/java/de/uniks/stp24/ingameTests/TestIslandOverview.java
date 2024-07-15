@@ -92,6 +92,8 @@ public class TestIslandOverview extends ControllerTest {
     ExplanationService explanationService;
     @Spy
     TechnologyService technologyService;
+    @Spy
+    TimerService timerService;
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
     @InjectMocks
@@ -495,6 +497,7 @@ public class TestIslandOverview extends ControllerTest {
         this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
         this.inGameController.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
         this.inGameController.overviewSitesComponent.jobsComponent.jobsService = this.jobsService;
+        this.inGameController.clockComponent.timerService = this.timerService;
         this.inGameController.clockComponent.timerService.tokenStorage = this.tokenStorage;
         this.inGameController.clockComponent.timerService.gamesApiService = this.gamesApiService;
         this.inGameController.clockComponent.timerService.subscriber = this.subscriber;

@@ -95,6 +95,7 @@ public class CoolerBubbleComponent extends Captain {
                 result -> {
                     if (lastPeriod != result.data().period()) {
                         lastPeriod = result.data().period();
+                        silence();
                         // todo del
                         announcementsService.addAnnouncement(resourcesService.aggregateItemDtoToResource(new AggregateItemDto("resources.population.periodic", 5, 3)));
                         announcementsService.addAnnouncement(resourcesService.aggregateItemDtoToResource(new AggregateItemDto("resources.minerals.periodic", 5, 3)));

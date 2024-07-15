@@ -32,7 +32,7 @@
          <VBox alignment="TOP_CENTER" prefHeight="122.0" prefWidth="330.0">
             <HBox alignment="CENTER_LEFT" prefHeight="18.0" prefWidth="330.0">
                <VBox prefHeight="25.0" prefWidth="31.0" />
-               <TextField fx:id="inputIslandName" alignment="CENTER" prefHeight="25.0" prefWidth="177.0" style="-fx-background-color: transparent;" styleClass="headerTextBuildings" text="%uncharted.island" />
+               <TextField fx:id="inputIslandName" alignment="CENTER" prefHeight="25.0" prefWidth="177.0" styleClass="islandNameField" text="%uncharted.island" />
                <Button fx:id="islandNameButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#setIslandName" prefHeight="20.0" prefWidth="20.0" styleClass="islandNameButton">
                   <effect>
                      <DropShadow height="1.0" offsetX="3.0" offsetY="3.0" radius="0.0" spread="1.0" width="0.0">

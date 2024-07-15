@@ -26,19 +26,20 @@
     -fx-background-repeat: repeat-y;
     -fx-background-color: transparent;
     -fx-background-size: 50% 100%;
+
+    -fx-pref-height: 15;
+    -fx-max-height: 15;
+    -fx-min-height: 15;
 }
 
 .lobbyList .scroll-bar:horizontal {
     -fx-scale-x: 0;
     -fx-scale-y: 0;
-    -fx-padding: 0 0 0 -20;
     -fx-background-color: transparent;
 }
 
 .lobbyList .scroll-bar:vertical .thumb {
     -fx-padding: 15;
-    -fx-pref-height: 15;
-    -fx-pref-columns: 15;
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
     -fx-background-color: transparent;
@@ -47,7 +48,7 @@
 }
 
 .lobbyList .scroll-bar:vertical .track {
-    -fx-padding: 15;
+    -fx-padding: 0 0 0 -15;
 }
 
 .lobbyList .scroll-bar:vertical .increment-button,

@@ -134,6 +134,8 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
 
         this.app.show(this.lobbyController);
 
+        this.lobbyController.backgroundAnchorPane.getStylesheets().clear();
+
         doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.updated"),eq(Game.class));
 
         doReturn(null).when(imageCache).get(any());

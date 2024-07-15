@@ -33,6 +33,8 @@ public class IslandComponent extends Pane {
     public StackPane flagPane;
     @FXML
     ImageView flagImage;
+    @FXML
+    ImageView spyglassImage;
     @Inject
     TokenStorage tokenStorage;
 
@@ -64,6 +66,8 @@ public class IslandComponent extends Pane {
     public void applyIcon(IslandType type) {
         this.islandImage
                 .setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
+        if (this.island.upgrade().equals("explored"))
+            this.spyglassImage.setImage(imageCache.get("/de/uniks/stp24/icons/other/spyglass.png"));
     }
 
     // use our flag images

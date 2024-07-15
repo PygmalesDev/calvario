@@ -39,6 +39,7 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
     boolean showName;
     boolean showIcon;
     boolean showChangePerSeason;
+    private String type = "";
 
     @Inject
     public ResourceComponent(boolean showCount, boolean showName, boolean showIcon, boolean showChangePerSeason, ResourceBundle gameResourceBundle) {
@@ -47,6 +48,16 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
         this.showIcon = showIcon;
         this.showChangePerSeason = showChangePerSeason;
         this.gameResourceBundle = gameResourceBundle;
+    }
+
+
+    public ResourceComponent(String type, ResourceBundle gameResourceBundle) {
+        this.showCount = true;
+        this.showName = false;
+        this.showIcon = true;
+        this.showChangePerSeason = false;
+        this.gameResourceBundle = gameResourceBundle;
+        this.type = type;
     }
 
     @Override
@@ -59,11 +70,11 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
             descriptionText.setVisible(false);
         }
 
-        if (showCount) {
-            countText.setText("x" + resource.count());
-            countText.setVisible(true);
-        } else {
-            countText.setVisible(false);
+        countText.setVisible(showCount);
+        switch (type) {
+            case "positive" -> countText.setText("+" + resource.count());
+            case "negative" -> countText.setText("-" + resource.count());
+            default -> countText.setText("x" + resource.count());
         }
 
         if (showIcon) {

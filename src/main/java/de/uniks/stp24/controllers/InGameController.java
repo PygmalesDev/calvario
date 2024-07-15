@@ -82,6 +82,8 @@ public class InGameController extends BasicController {
     StackPane buildingsWindow;
     @FXML
     StackPane pauseMenuContainer;
+    @FXML
+    StackPane islandClaimingContainer;
 
     @FXML
     StackPane clockComponentContainer;
@@ -113,6 +115,9 @@ public class InGameController extends BasicController {
     @Inject
     public PauseMenuComponent pauseMenuComponent;
 
+    @SubComponent
+    @Inject
+    public IslandClaimingComponent islandClaimingComponent;
     @SubComponent
     @Inject
     public OverviewSitesComponent overviewSitesComponent;
@@ -207,6 +212,7 @@ public class InGameController extends BasicController {
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
+        System.out.printf("GAME ID: %s\nEMPIRE ID: %s\n", gameID, empireID);
 
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
@@ -281,6 +287,8 @@ public class InGameController extends BasicController {
         overviewSitesComponent.setContainer();
         overviewContainer.getChildren().add(overviewSitesComponent);
         overviewContainer.getChildren().add(overviewUpgradeComponent);
+        islandClaimingContainer.getChildren().add(this.islandClaimingComponent);
+        islandClaimingContainer.setVisible(true);
 
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
@@ -411,7 +419,7 @@ public class InGameController extends BasicController {
             this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.systems.%s.updated",
                             tokenStorage.getGameId(), isle.island.id()), SystemDto.class),
                     event -> {
-                        Island updatedIsland = islandsService.getIslandFromDto(event.data());
+                        Island updatedIsland = islandsService.convertToIsland(event.data());
                         isle.applyInfo(updatedIsland);
                         if (updatedIsland.id().equals(islandAttributes.getIsland().id())
                                 && (overviewSitesComponent.isVisible() || overviewUpgradeComponent.isVisible())) {
@@ -463,9 +471,13 @@ public class InGameController extends BasicController {
 
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
+            System.out.printf("ISLAND ID: %s\n", selected.island.id());
             tokenStorage.setIsland(selected.getIsland());
             islandAttributes.setIsland(selected.getIsland());
             if (selected.getIsland().owner() != null) {
+                this.islandClaimingContainer.setVisible(false);
+                this.sitePropertiesComponent.setVisible(false);
+                this.buildingPropertiesComponent.setVisible(false);
                 selectedIsland = selected;
                 if (selected.island.owner().equals(this.tokenStorage.getEmpireId()))
                     this.overviewSitesComponent.jobsComponent.setJobsObservableList(
@@ -473,9 +485,19 @@ public class InGameController extends BasicController {
 
                 showOverview();
                 selected.showUnshowRudder();
-            } else if (Objects.nonNull(selectedIsland)) {
-                selectedIsland.showUnshowRudder();
+            } else {
+                if (Objects.nonNull(selectedIsland)) selectedIsland.showUnshowRudder();
                 this.overviewSitesComponent.closeOverview();
+                if (this.islandClaimingContainer.getLayoutX()+80 == selected.getLayoutX() &&
+                        this.islandClaimingContainer.getLayoutY()+220 == selected.getLayoutY() &&
+                        this.islandClaimingContainer.isVisible()) {
+                    this.islandClaimingContainer.setVisible(false);
+                } else {
+                    this.islandClaimingContainer.setVisible(true);
+                    this.islandClaimingContainer.setLayoutX(selected.getLayoutX()-80);
+                    this.islandClaimingContainer.setLayoutY(selected.getLayoutY()-220);
+                    this.islandClaimingComponent.setIslandInformation(selected.island);
+                }
             }
         }
     }

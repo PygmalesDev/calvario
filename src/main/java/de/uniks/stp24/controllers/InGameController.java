@@ -292,6 +292,7 @@ public class InGameController extends BasicController {
         helpWindowContainer.setMouseTransparent(true);
         helpComponent.setVisible(false);
         technologiesContainer.setMouseTransparent(true);
+        explanationContainer.setMouseTransparent(true);
 
 
         pauseMenuContainer.setMouseTransparent(true);
@@ -347,10 +348,13 @@ public class InGameController extends BasicController {
         helpWindowContainer.setVisible(false);
         helpComponent.setMouseTransparent(true);
         helpWindowContainer.setMouseTransparent(true);
+
         pause = !pause;
         inGameService.setShowSettings(false);
         inGameService.setPaused(pause);
         if (pause) {
+            shadow.setVisible(true);
+            shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
             pauseMenuContainer.setMouseTransparent(false);
             pauseGame();
         } else {
@@ -388,6 +392,8 @@ public class InGameController extends BasicController {
 
     public void pauseGame() {
         closeComponents();
+        pauseMenuContainer.toFront();
+        pauseMenuComponent.toFront();
         pauseMenuComponent.setVisible(true);
         pauseMenuContainer.setVisible(pause);
         pauseMenuContainer.setMouseTransparent(false);
@@ -557,15 +563,6 @@ public class InGameController extends BasicController {
             empireOverviewComponent.closeEmpireOverview();
         }
     }
-    @OnKey(code = KeyCode.H, alt = true)
-    public void showHelpOnKey(){
-        if (helpComponent.isVisible()){
-            helpComponent.close();
-            removePause();
-        } else {
-            showHelp();
-        }
-    }
 
     @OnKey(code = KeyCode.E, alt = true)
     public void showEmpireOverview() {
@@ -656,6 +653,7 @@ public class InGameController extends BasicController {
     }
 
     public void showHelp() {
+        System.out.println("help");
         popupHelpWindow.showPopup(helpWindowContainer,helpComponent);
         helpComponent.setVisible(true);
         helpComponent.setMouseTransparent(false);
@@ -695,5 +693,9 @@ public class InGameController extends BasicController {
                 .removePropertyChangeListener(triple.propertyName(), triple.listener()));
         this.subscriber.dispose();
         this.jobsService.dispose();
+    }
+
+    public void removeShadow() {
+        shadow.setVisible(false);
     }
 }

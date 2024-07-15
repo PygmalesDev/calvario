@@ -28,10 +28,7 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.lang.Thread.sleep;
@@ -149,21 +146,41 @@ public class ResearchJobComponent extends AnchorPane {
         initializeTechnologiesList();
     }
 
+    public void handleJobInformation(){
+        if (Objects.nonNull(technologyCategoryComponent.getTechnology())){
+            for (Jobs.Job job1 : jobList) {
+                if (job1.technology().equals(technologyCategoryComponent.getTechnology().id())){
+                    subscriber.subscribe(jobsApiService.getJobByID(tokenStorage.getGameId(), tokenStorage.getEmpireId(), job1._id()), currentJob -> {
+        jobsService.onJobCompletion(currentJob._id(), this::handleJobFinished);
+        double currentJobTotal = currentJob.total();
+        int roundedUpTotal = (int) Math.ceil(currentJobTotal);
+        researchProgressBar.setProgress((double) currentJob.progress() / roundedUpTotal);
+        researchProgressText.setText(currentJob.progress() + " / " + roundedUpTotal);
+        this.job = currentJob;
+    }, error -> {
+        System.out.println("Error trying to get a Job in ResearchComponent");
+    });
+    }
+}
+        }
+                }
 
 
-    public void progressHandling(){
+
+public void progressHandling(){
         ObservableList<Jobs.Job> newJobList = jobsService.getJobObservableListOfType("technology");
 
-        Set<String> existingJobIds = jobList.stream()
-                .map(Jobs.Job::technology)
-                .collect(Collectors.toSet());
+        // Verwenden eines Sets, um doppelte Jobs zu vermeiden
+        Set<String> existingJobTechnologies = new HashSet<>();
+        List<Jobs.Job> uniqueJobList = new ArrayList<>();
 
         for (Jobs.Job newJob : newJobList) {
-            if (!existingJobIds.contains(newJob.technology())) {
-                jobList.add(newJob);
-                existingJobIds.add(newJob.technology());
+            if (existingJobTechnologies.add(newJob.technology())) {
+                uniqueJobList.add(newJob);
             }
         }
+        jobList.clear();
+        jobList.addAll(uniqueJobList);
 
         if (Objects.nonNull(technologyCategoryComponent.getTechnology())){
             for (Jobs.Job job1 : jobList) {
@@ -181,8 +198,8 @@ public class ResearchJobComponent extends AnchorPane {
                 }
             }
         }
-
     }
+
 
 
     public void setProgressBar() {
@@ -220,7 +237,7 @@ public class ResearchJobComponent extends AnchorPane {
             }, error -> {
                 System.out.println("Error in handleJob in ResearchComponent technology");
             });
-            progressHandling();
+            handleJobInformation();
         }, error -> {
             System.out.println("Error in handleJob in ResearchComponent job");
         });
@@ -247,6 +264,8 @@ public class ResearchJobComponent extends AnchorPane {
 
     public void removeJob(){
         jobList.remove(job);
+        technologies.removeIf(technology -> technology.id().equals(job.technology()));
+
         subscriber.subscribe(jobsService.stopJob(this.job._id()));
         technologyCategoryComponent.handleJobCompleted(job);
     }

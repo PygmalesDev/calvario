@@ -563,10 +563,6 @@ public class IslandOverviewTestComponent extends ControllerTest {
         this.inGameController.overviewSitesComponent.detailsComponent.getStylesheets().clear();
         this.inGameController.overviewSitesComponent.buildingsComponent.getStylesheets().clear();
         this.inGameController.overviewSitesComponent.sitesComponent.getStylesheets().clear();
-        Platform.runLater(() -> {
-            inGameController.showOverview();
-            waitForFxEvents();
-        });
     }
 
 }

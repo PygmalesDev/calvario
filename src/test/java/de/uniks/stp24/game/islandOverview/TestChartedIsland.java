@@ -1,5 +1,6 @@
 package de.uniks.stp24.game.islandOverview;
 
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -21,7 +22,7 @@ public class TestChartedIsland extends IslandOverviewTestComponent{
     public void start(Stage stage) throws Exception {
         super.start(stage);
         initComponents();
-
+        inGameController.showOverview();
     }
 
 

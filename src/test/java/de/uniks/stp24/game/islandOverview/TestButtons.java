@@ -16,7 +16,7 @@ public class TestButtons extends IslandOverviewTestComponent{
     public void start(Stage stage) throws Exception {
         super.start(stage);
         initComponents();
-
+        inGameController.showOverview();
     }
 
     @Test

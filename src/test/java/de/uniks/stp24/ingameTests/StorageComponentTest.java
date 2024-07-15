@@ -163,7 +163,7 @@ public class StorageComponentTest extends ControllerTest {
         // Season change: energy +1, population +2
         gameSubject.onNext(new Event<>("games.testGameID.ticked",
                 new Game("a","b","testGameID","testGame", "testUserID", 2,
-                        true, 2, 1, null)));
+                        0, true, 2, 1, null)));
         waitForFxEvents();
 
         assertEquals(4,storageOverviewComponent.resourceListView.getItems().getFirst().count());

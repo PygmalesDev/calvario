@@ -32,6 +32,7 @@ public class JobsService {
     Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
     Map<String, Consumer<String[]>> jobInspectionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobTypeFunctions = new HashMap<>();
+    Map<String, ArrayList<Consumer<Job>>> jobTypeConsumers = new HashMap<>();
     Map<String, ArrayList<Consumer<Job>>> loadTypeFunctions = new HashMap<>();
     ArrayList<Runnable> loadCommonFunctions = new ArrayList<>();
     ArrayList<Runnable> finishCommonFunctions = new ArrayList<>();
@@ -120,6 +121,8 @@ public class JobsService {
 
         if (this.jobTypeFunctions.containsKey(job.type()))
             this.jobTypeFunctions.get(job.type()).forEach(Runnable::run);
+        if (this.jobTypeConsumers.containsKey(job.type()))
+            this.jobTypeConsumers.get(job.type()).forEach(func -> func.accept(job));
     }
 
     public void deleteJobFromGroups(@NotNull Job job) {
@@ -169,6 +172,12 @@ public class JobsService {
         if (!this.jobTypeFunctions.containsKey(jobType))
             this.jobTypeFunctions.put(jobType, new ArrayList<>());
         this.jobTypeFunctions.get(jobType).add(func);
+    }
+
+    public void onJobTypeProgress(String jobType, Consumer<Job> func) {
+        if (!this.jobTypeConsumers.containsKey(jobType))
+            this.jobTypeConsumers.put(jobType, new ArrayList<>());
+        this.jobTypeConsumers.get(jobType).add(func);
     }
 
     /**

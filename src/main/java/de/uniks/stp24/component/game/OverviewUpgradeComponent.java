@@ -2,6 +2,7 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
@@ -9,6 +10,7 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.ExplanationService;
 import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,6 +23,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -84,6 +88,8 @@ public class OverviewUpgradeComponent extends AnchorPane {
     @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
+    @Inject
+    JobsService jobsService;
 
     public GameSystemsApiService gameSystemsService;
 
@@ -146,6 +152,12 @@ public class OverviewUpgradeComponent extends AnchorPane {
         Map<String, Integer> resourceMapUpkeep = islandAttributes.getUpkeep(islandAttributes.getIsland().upgradeLevel());
         ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, upgradeUpkeepList.getItems(), null);
         upgradeUpkeepList.setItems(resourceListUpkeep);
+    }
+
+    @OnInit
+    public void setIslandUpgradeFinishers() {
+        this.jobsService.onJobsLoadingFinished("upgrade", job ->
+                this.jobsService.onJobCompletion(job._id(), () -> this.islandsService.updateIsland(job.system())));
     }
 
     public void setUpgradeInf() {

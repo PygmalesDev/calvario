@@ -43,6 +43,7 @@ public class TestJobsOverview extends JobsTestComponent {
         super.start(stage);
 
         doReturn(null).when(this.imageCache).get(any());
+        doReturn(ISLAND_1).when(this.islandsService).getIsland(any());
 
         this.jobsOverviewComponent.jobProvider = this.jobElementComponentProvider;
         this.jobsOverviewComponent.jobsService = this.jobsService;

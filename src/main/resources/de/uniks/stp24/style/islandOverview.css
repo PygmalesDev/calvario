@@ -18,6 +18,17 @@
     -fx-font-size: 22;
 }
 
+.islandNameField {
+    -fx-background-color: transparent;
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 22;
+}
+
+.islandNameField:disabled {
+    -fx-opacity: 1.0;
+}
+
+
 /* Buildings Window */
 .buildingsOverviewBackground{
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/site_building_build_overview_window.png");
@@ -51,6 +62,7 @@
     -fx-background-color: transparent;
     -fx-font-size: 10;
     -fx-cell-size: 5;
+    -fx-padding: 0 -205 0 0;
 }
 
 .resourceList .scroll-bar{
@@ -155,7 +167,8 @@
     -fx-padding: -5 -5 0 0;
 }
 
-.jobProgressListView .scroll-bar:vertical {
+.jobProgressListView .scroll-bar:vertical,
+.sitesScrollPane .scroll-bar:vertical {
     -fx-background-image: url("/de/uniks/stp24/icons/other/black_square.png");
     -fx-background-position: center;
     -fx-background-repeat: repeat-y;
@@ -171,7 +184,9 @@
 }
 
 .jobProgressListView .scroll-bar:vertical .increment-button,
-.jobProgressListView .scroll-bar:vertical .decrement-button {
+.jobProgressListView .scroll-bar:vertical .decrement-button,
+.sitesScrollPane .scroll-bar:vertical .increment-button,
+.sitesScrollPane .scroll-bar:vertical .decrement-button {
     -fx-scale-x: 0;
     -fx-scale-y: 0;
 }
@@ -216,7 +231,7 @@
     -fx-background-image: url("/de/uniks/stp24/icons/other/progressBar_inside.png");
     -fx-background-position: right;
     -fx-background-repeat: no-repeat;
-    -fx-background-size: 95% 50%;
+    -fx-background-size: 98% 50%;
 }
 
 .jobNumerator {
@@ -237,3 +252,14 @@
     -fx-background-size: 100% 100%;
     -fx-background-image: url("/de/uniks/stp24/icons/buttons/lupe.png");
 }
+
+.sitesScrollPane {
+    -fx-background-color: transparent;
+}
+
+.sitesScrollPane .viewport {
+    -fx-background-color: transparent;
+}
+
+
+

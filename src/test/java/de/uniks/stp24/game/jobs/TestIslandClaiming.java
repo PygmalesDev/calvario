@@ -44,8 +44,8 @@ public class TestIslandClaiming extends JobsTestComponent {
     public void start(Stage stage) throws Exception {
         super.start(stage);
 
-        this.islandAttributeStorage.systemPresets = new SystemUpgrades(
-                null, null, new UpgradeStatus("0", 0, Map.of("energy", 100),
+        this.islandAttributeStorage.systemUpgradeAttributes = new SystemUpgrades(
+                null, null, new UpgradeStatus("0","upgraded", 1, 0, Map.of("energy", 100),
                 Map.of("energy", 100), 0), null, null);
 
         doReturn(null).when(this.imageCache).get(any());

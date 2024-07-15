@@ -97,15 +97,13 @@ public class CoolerBubbleComponent extends Captain {
                         lastPeriod = result.data().period();
                         // silence();
                         // todo del
-                        announcementsService.addAnnouncement(resourcesService.aggregateItemDtoToResource(new AggregateItemDto("resources.population.periodic", 5, 3)));
-                        announcementsService.addAnnouncement(resourcesService.aggregateItemDtoToResource(new AggregateItemDto("resources.minerals.periodic", 5, 3)));
-                        announcementsService.addAnnouncement(resourcesService.aggregateItemDtoToResource(new AggregateItemDto("resources.fuel.periodic", 5, 3)));
+                        announcementsService.addAnnouncement(resourcesService.aggregateItemDtoToResource(new AggregateItemDto("resources.fuel.periodic", 0, 0)));
 
                         subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                                 aggregateResultDto -> {
                                     for (AggregateItemDto item : aggregateResultDto.items()) {
                                         Resource resource = resourcesService.aggregateItemDtoToResource(item);
-                                        if (resource.count() > 0 && resource.count() + item.subtotal() <= 0) {
+                                        if (resource.count() == 0 || resource.count() + item.subtotal() <= 0) {
                                             announcementsService.addAnnouncement(resource);
                                         }
                                     }

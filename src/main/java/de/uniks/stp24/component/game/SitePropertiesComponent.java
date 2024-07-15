@@ -250,9 +250,9 @@ public class SitePropertiesComponent extends AnchorPane {
                 break;
             }
         }
-        siteConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
-        siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
-        siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
+        siteConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "districts", siteType, "upkeep"));
+        siteCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "districts", siteType, "cost"));
+        siteProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "districts", siteType, "production"));
     }
 
     //Uses a GridPane to display a graphic view of how many sites of each type you have

@@ -15,6 +15,8 @@ import javafx.scene.input.MouseEvent;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,11 +69,10 @@ public class ExplanationService {
 
 
             if (isMouseInsideCell && !entered.get()) {
-                if(!listTyp.equals("storage")) {
-                    initializeResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID(), variableExplanationComponent);
-                    tooltip.show(app.stage(), mouseX, mouseY);
-                    entered.set(true);
-                }
+                initializeResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID(), variableExplanationComponent);
+                tooltip.show(app.stage(), mouseX, mouseY);
+                entered.set(true);
+
             } else if (!isMouseInsideCell) {
                 tooltip.hide();
                 entered.set(false);
@@ -82,31 +83,36 @@ public class ExplanationService {
 
     private void initializeResExplanation(String listType, String indicator, String ResCategory, String id, VariableExplanationComponent variableExplanationComponent) {
         String variable = listType + "." + indicator + "." + ResCategory + "." + id;
-        System.out.println(variable );
         ExplainedVariableDTO explanation = variableService.data.get(variable);
-        variableExplanationComponent.setValues("Base: " + explanation.initial(), "Total: " + explanation.finalValue(), id);
+        variableExplanationComponent.setValues("Base: " + explanation.initial(), "Total: " + Math.floor(explanation.finalValue()), id);
 
-        ArrayList<Double> multiplier = new ArrayList<>();
+        Map<String, Double> activeEffects = new HashMap<>();
 
         for (Sources source : explanation.sources()) {
             double x = 0;
             for (Effect effect : source.effects()) {
-                if(effect.variable().equals(variable)) x = (effect.multiplier() - 1) * 100;
-            }
-            multiplier.add(x);
-        }
-
-        List<ExplanationComponent> explanationComponentList = new ArrayList<>();
-
-        if(!variableService.getActiveEffects().get(variable).isEmpty()){
-            for(String effect: variableService.getActiveEffects().get(variable)){
-                ExplanationComponent explanationComponent = new ExplanationComponent();
-                explanationComponent.setInf(multiplier.getFirst() + " " + effect);
-                explanationComponentList.add(explanationComponent);
+                if (effect.variable().equals(variable)){
+                    x = (effect.multiplier() - 1) * 100;
+                    activeEffects.put(source.id(), x);
+                }
             }
         }
 
-        variableExplanationComponent.fillListWithEffects(explanationComponentList);
+        List<String> effects = new ArrayList<>();
+
+        if (!variableService.getActiveEffects().get(variable).isEmpty()) {
+            for (String effect : variableService.getActiveEffects().get(variable)) {
+                double mult = activeEffects.get(effect);
+                BigDecimal roundedMult = new BigDecimal(mult).setScale(2, RoundingMode.HALF_UP);
+                if(mult < 0){
+                    effects.add("-" + roundedMult + " " + effect);
+                } else {
+                    effects.add("+" + roundedMult + " " + effect);
+                }
+            }
+        }
+
+        variableExplanationComponent.fillListWithEffects(effects);
     }
 
     public void setInGameController(InGameController inGameController) {

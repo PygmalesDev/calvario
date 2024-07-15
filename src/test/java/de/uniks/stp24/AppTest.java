@@ -3,9 +3,11 @@ package de.uniks.stp24;
 
 import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.menu.BubbleComponent;
+import de.uniks.stp24.controllers.LobbyController;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.*;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.menu.CreateGameService;
@@ -18,11 +20,14 @@ import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.AnchorPane;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -41,7 +46,7 @@ import static org.testfx.api.FxAssert.verifyThat;
 
 
 public class AppTest extends ControllerTest {
-
+    ImageCache imageCache;
     LoginService loginService;
     AuthApiService authApiService;
     GamesApiService gamesApiService;
@@ -72,7 +77,6 @@ public class AppTest extends ControllerTest {
         _public.put("portraitIndex", 1);
         _public.put("frameIndex", 1);
 
-
         SignUpResultDto signUpResult = new SignUpResultDto(null, null, "1", "JustATest", null);
         LoginResult loginResult = new LoginResult("1", "JustATest", null,_public, "a", "r");
         LoginDto loginDto = new LoginDto("JustATest", "testpassword");
@@ -95,7 +99,7 @@ public class AppTest extends ControllerTest {
         userApiService = testComponent.userApiService();
         doReturn(Observable.just(signUpResult)).when(userApiService).signup(any());
 
-
+        imageCache = testComponent.imageCache();
         authApiService = testComponent.authApiService();
         loginService = testComponent.loginService();
         gamesApiService = testComponent.gamesApiService();
@@ -131,7 +135,6 @@ public class AppTest extends ControllerTest {
                 .thenReturn(Observable.just(new MemberDto[]{
                 new MemberDto(true, "1", null, null)}));
 
-
         doReturn(Observable.empty()).when(eventListener).listen(eq("games." + game3._id() + ".deleted"), eq(Game.class));
 
         doReturn(memberSubject).when(eventListener).listen("games." + game3._id() + ".members.*.*", MemberDto.class);
@@ -163,6 +166,7 @@ public class AppTest extends ControllerTest {
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
 
         doReturn(Observable.just(new Trait[]{})).when(presetsApiService).getTraitsPreset();
+        doReturn(null).when(this.imageCache).get(any());
     }
 
     @Test
@@ -245,6 +249,8 @@ public class AppTest extends ControllerTest {
         clickOn("#load_game_b");
         WaitForAsyncUtils.waitForFxEvents();
         verifyThat(window("ENTER GAME"), WindowMatchers.isShowing());
+        WaitForAsyncUtils.waitForFxEvents();
+        lookup("#backgroundAnchorPane").queryAs(AnchorPane.class).getStylesheets().clear();
     }
 
     private void selectEmpire(){
@@ -252,6 +258,7 @@ public class AppTest extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#backButton");
         WaitForAsyncUtils.waitForFxEvents();
+        lookup("#backgroundAnchorPane").queryAs(AnchorPane.class).getStylesheets().clear();
     }
 
     private void startAGame() {

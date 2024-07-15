@@ -88,6 +88,8 @@ public class AppTest2 extends ControllerTest {
     PropertiesJobProgressComponent propertiesJobProgressComponent;
     @InjectMocks
     HelpComponent helpComponent;
+    @InjectMocks
+    IslandClaimingComponent islandClaimingComponent;
 
 
     @Spy
@@ -201,6 +203,12 @@ public class AppTest2 extends ControllerTest {
         this.jobsService.subscriber = this.subscriber;
         this.jobsService.eventListener =this.eventListener;
 
+        this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
+        this.islandClaimingComponent.jobsService = this.jobsService;
+        this.islandClaimingComponent.islandAttributes = this.islandAttributeStorage;
+        this.islandClaimingComponent.imageCache = this.imageCache;
+        this.islandClaimingComponent.islandsService = this.islandsService;
+
         inGameController.zoomPane.getChildren().add(inGameController.mapGrid);
         inGameController.group.getChildren().add(inGameController.zoomPane);
         inGameController.mapScrollPane.setContent(inGameController.group);
@@ -253,7 +261,7 @@ public class AppTest2 extends ControllerTest {
         Mockito.doCallRealMethod().when(islandsService).createIslandPaneFromDto(any(),any());
         doCallRealMethod().when(islandComponent).setPosition(anyDouble(),anyDouble());
 
-        doReturn(null).when(imageCache).get(null);
+        doReturn(null).when(imageCache).get(any());
 
         // Mock getEmpire
         doReturn(Observable.just(new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
@@ -273,6 +281,7 @@ public class AppTest2 extends ControllerTest {
         overviewUpgradeComponent.getStylesheets().clear();
         sitesComponent.getStylesheets().clear();
         jobsOverviewComponent.getStylesheets().clear();
+        islandClaimingComponent.getStylesheets().clear();
 
         island1 = new Island(
           "testEmpireID",

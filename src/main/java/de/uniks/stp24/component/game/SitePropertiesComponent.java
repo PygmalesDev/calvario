@@ -8,6 +8,7 @@ import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Jobs.*;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
@@ -17,10 +18,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -66,6 +64,8 @@ public class SitePropertiesComponent extends AnchorPane {
     Text siteName;
     @FXML
     AnchorPane jobPane;
+    @FXML
+    ScrollPane siteAmountScrollPane;
 
     String siteType;
 
@@ -81,9 +81,10 @@ public class SitePropertiesComponent extends AnchorPane {
     @Inject
     JobsService jobsService;
 
-
     @Inject
     ResourcesService resourcesService;
+    @Inject
+    ImageCache imageCache;
 
     @Inject
     IslandsService islandsService;
@@ -102,11 +103,22 @@ public class SitePropertiesComponent extends AnchorPane {
     @SubComponent
     public PropertiesJobProgressComponent siteJobProgress;
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
+    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle);
+    Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", gameResourceBundle);
+    Provider<ImageView> siteEmptyCellProvider = () -> {
+        ImageView imageView = new ImageView(this.imageCache.get("/de/uniks/stp24/icons/other/empty_building_small_element.png"));
+        imageView.setFitHeight(20);
+        imageView.setFitWidth(20);
+        return imageView;
+    };
 
-    @Inject
-    public SitePropertiesComponent(){
-    }
+    Provider<ImageView> siteCellProvider = () -> {
+        ImageView imageView = new ImageView(this.imageCache.get("/de/uniks/stp24/icons/other/building_small_element.png"));
+        imageView.setFitHeight(20);
+        imageView.setFitWidth(20);
+        return imageView;
+    };
+
     Map<String, String> sitesMap;
 
     private int amountSite = 0;
@@ -117,6 +129,9 @@ public class SitePropertiesComponent extends AnchorPane {
     private ObservableList<Job> siteJobs;
 
     InGameController inGameController;
+
+    @Inject
+    public SitePropertiesComponent() {}
 
     @OnInit
     public void init(){
@@ -245,9 +260,9 @@ public class SitePropertiesComponent extends AnchorPane {
     public void displayCostsOfSite(){
         siteCostsListView.setSelectionModel(null);
         subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
-        siteConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
-        siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
-        siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
+        siteConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, negativeResourceProvider));
+        siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, negativeResourceProvider));
+        siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, positiveResourceProvider));
     }
 
     //Uses a GridPane to display a graphic view of how many sites of each type you have
@@ -256,64 +271,36 @@ public class SitePropertiesComponent extends AnchorPane {
         destroySiteButton.setDisable(false);
         subscriber.subscribe(resourcesService.getResourcesSite(siteType), result -> {
             Map<String, Integer> costSite = result.cost();
-            if (!resourcesService.hasEnoughResources(costSite)){
-                buildSiteButton.setDisable(true);
-            }
-        });
+            if (!resourcesService.hasEnoughResources(costSite)) buildSiteButton.setDisable(true);
+        }, error -> System.out.println("Caught an error while trying to display the amount of sites " +
+                "in the SitePropertiesComponent:\n %s" + error.getMessage()));
 
-        if (tokenStorage.getIsland().sites().get(siteType) != null){
-            amountSite = tokenStorage.getIsland().sites().get(siteType);
-        }
-        if (tokenStorage.getIsland().sitesSlots().get(siteType) != null){
-            amountSiteSlots= tokenStorage.getIsland().sitesSlots().get(siteType);
-        }
-        if (amountSiteSlots == amountSite){
-            buildSiteButton.setDisable(true);
-        }
+        amountSite = Objects.nonNull(tokenStorage.getIsland().sites().get(siteType)) ?
+                tokenStorage.getIsland().sites().get(siteType) : 0;
+        amountSiteSlots = tokenStorage.getIsland().sitesSlots().get(siteType);
 
-        if (amountSite == 0){
-            destroySiteButton.setDisable(true);
-        }
-
-        int count = 0;
-
-        // Clear the existing children in the GridPane
+        siteAmountScrollPane.setVvalue(0);
         siteAmountGridPane.getChildren().clear();
+        siteAmountGridPane.getRowConstraints().clear();
+        siteAmountGridPane.addRow(0);
 
-        // Create an Image object
-        Image emptySlot = new Image("de/uniks/stp24/icons/other/empty_building_small_element.png");
-        Image filledSlot = new Image("de/uniks/stp24/icons/other/building_small_element.png");
+        int x = 0, y = 0, slots = 0, builtSlots = 0;
+        while (slots != amountSiteSlots) {
+            if (builtSlots < amountSite) siteAmountGridPane.add(siteCellProvider.get(), x, y);
+            else siteAmountGridPane.add(siteEmptyCellProvider.get(), x, y);
 
-        // Loop through each cell in the 6x6 grid
-        for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 5; col++) {
-                // Create an ImageView for each cell
-                ImageView imageViewEmpty = new ImageView(emptySlot);
-                ImageView imageViewFilled = new ImageView(filledSlot);
-                imageViewEmpty.setFitWidth(20);
-                imageViewEmpty.setFitHeight(20);
-
-                imageViewFilled.setFitWidth(20);
-                imageViewFilled.setFitHeight(20);
-
-                // Add the ImageView to the GridPane
-                if (count < amountSite){
-                    siteAmountGridPane.add(imageViewFilled, col, row);
-                } else {
-                    siteAmountGridPane.add(imageViewEmpty, col, row);
-                }
-
-                imageViewEmpty.setVisible(false);
-
-                if (amountSiteSlots > amountSite){
-                    if (count >= amountSite && count < amountSiteSlots){
-                        imageViewEmpty.setVisible(true);
-                    }
-                }
-                count++;
+            slots++;
+            builtSlots++;
+            x++;
+            if (x == 5) {
+                x = 0;
+                y++;
+                siteAmountGridPane.addRow(y);
             }
         }
 
+        buildSiteButton.setDisable(amountSiteSlots == amountSite);
+        destroySiteButton.setDisable(amountSite == 0);
     }
 
     private void resourceListGeneration(SiteDto siteDto) {

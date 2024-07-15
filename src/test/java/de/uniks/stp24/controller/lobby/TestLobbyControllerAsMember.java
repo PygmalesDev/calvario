@@ -146,6 +146,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
 
         this.app.show(this.lobbyController);
 
+        this.lobbyController.backgroundAnchorPane.getStylesheets().clear();
 
         doReturn(null).when(imageCache).get(any());
     }

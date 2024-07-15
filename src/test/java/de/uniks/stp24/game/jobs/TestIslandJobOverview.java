@@ -44,6 +44,7 @@ public class TestIslandJobOverview extends JobsTestComponent {
         super.start(stage);
 
         doReturn(null).when(this.imageCache).get(any());
+        doReturn(ISLAND_1).when(this.islandAttributeStorage).getIsland();
 
         this.islandOverviewJobsComponent.setPrefHeight(600);
 

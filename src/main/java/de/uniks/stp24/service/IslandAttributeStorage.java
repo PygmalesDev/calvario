@@ -80,9 +80,10 @@ public class IslandAttributeStorage {
 
     public Map<String, Integer> getNeededResources(int key) {
         return switch (key) {
+            case 0 -> systemPresets.unexplored().cost();
+            case 1 -> systemPresets.explored().cost();
             case 2 -> systemPresets.colonized().cost();
-            case 3 -> systemPresets.developed().cost();
-            case 4 -> systemPresets.upgraded().cost();
+            case 3 -> systemPresets.upgraded().cost();
             default -> null;
         };
     }

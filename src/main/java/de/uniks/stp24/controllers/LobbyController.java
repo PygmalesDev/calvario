@@ -83,7 +83,7 @@ public class LobbyController extends BasicController {
     @FXML
     Text gameNameField;
     @FXML
-    AnchorPane backgroundAnchorPane;
+    public AnchorPane backgroundAnchorPane;
     @FXML
     Text playerReadinessText;
 

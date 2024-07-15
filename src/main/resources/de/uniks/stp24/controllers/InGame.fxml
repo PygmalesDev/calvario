@@ -35,7 +35,7 @@
     </HBox>
     <StackPane fx:id="storageOverviewContainer" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="70.0" />
     <StackPane fx:id="empireOverviewContainer" layoutX="25.333333333333332" layoutY="76.33333333333333" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="95.66666666666663" AnchorPane.leftAnchor="25.333333333333332" AnchorPane.topAnchor="76.33333333333333" />
-   <StackPane fx:id="marketOverviewContainer" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="96.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="76.0" />
+   <StackPane fx:id="marketOverviewContainer" layoutX="440.3333333333333" layoutY="76.0" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="96.0" AnchorPane.leftAnchor="440.3333333333333" AnchorPane.topAnchor="76.0" />
     <stylesheets>
         <URL value="@../style/styles.css" />
         <URL value="@../style/ingameButtons.css" />

@@ -6,8 +6,6 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
-import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
-import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -128,10 +126,6 @@ public class IslandOverviewTestComponent extends ControllerTest {
     JobsOverviewComponent jobsOverviewComponent;
     @InjectMocks
     IslandOverviewJobsComponent islandOverviewJobsComponent;
-    @InjectMocks
-    TechnologyOverviewComponent technologyOverviewComponent;
-    @InjectMocks
-    TechnologyCategoryComponent technologyCategoryComponent;
     @InjectMocks
     PropertiesJobProgressComponent propertiesJobProgressComponent;
     @InjectMocks
@@ -495,19 +489,14 @@ public class IslandOverviewTestComponent extends ControllerTest {
         this.inGameController.clockComponent.timerService.tokenStorage = this.tokenStorage;
         this.inGameController.clockComponent.timerService.gamesApiService = this.gamesApiService;
         this.inGameController.clockComponent.timerService.subscriber = this.subscriber;
-        this.inGameController.technologiesComponent = this.technologyOverviewComponent;
-        this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
         this.inGameController.buildingPropertiesComponent.propertiesJobProgressComponent = this.propertiesJobProgressComponent;
         this.inGameController.sitePropertiesComponent.siteJobProgress = this.siteJobProgress;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.resources = this.gameResourceBundle;
-        this.inGameController.technologiesComponent.resources = this.gameResourceBundle;
         this.inGameController.jobsService.tokenStorage = this.tokenStorage;
         this.inGameController.jobsService.jobsApiService = this.jobsApiService;
         this.inGameController.jobsService.subscriber = this.subscriber;
         this.inGameController.jobsService.eventListener = this.eventListener;
         this.inGameController.explanationService = this.explanationService;
         this.inGameController.explanationService.app = this.app;
-        this.inGameController.technologiesComponent.technologyService = this.technologyService;
         this.inGameController.overviewSitesComponent.buildingsComponent.imageCache = this.imageCache;
         this.inGameController.overviewSitesComponent.sitesComponent.districtComponentProvider = districtComponentProvider;
         this.inGameController.overviewSitesComponent.jobsComponent.islandAttributes = this.islandAttributeStorage;

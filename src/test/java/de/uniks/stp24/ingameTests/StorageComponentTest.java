@@ -9,6 +9,7 @@ import de.uniks.stp24.dto.AggregateResultDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.EmpireApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ExplanationService;
@@ -54,6 +55,8 @@ public class StorageComponentTest extends ControllerTest {
     EmpireService empireService;
     @Spy
     ExplanationService explanationService;
+    @Spy
+    ImageCache imageCache;
 
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;

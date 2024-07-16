@@ -6,8 +6,6 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
-import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
-import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -153,13 +151,7 @@ public class PauseMenuTest extends ControllerTest {
     EmpireOverviewComponent empireOverviewComponent;
 
     @InjectMocks
-    TechnologyOverviewComponent technologyOverviewComponent;
-
-    @InjectMocks
     HelpComponent helpComponent;
-
-    @InjectMocks
-    TechnologyCategoryComponent technologyCategoryComponent;
 
     /*
     @Spy
@@ -219,11 +211,6 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.variableService.inGameService = this.inGameService;
         this.inGameController.variableService = this.variableService;
-        this.inGameController.technologiesComponent = this.technologyOverviewComponent;
-        this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.resources = this.gameResourceBundle;
-        this.inGameController.technologiesComponent.resources = this.gameResourceBundle;
-        this.inGameController.technologiesComponent.technologyService = this.technologyService;
 
         this.inGameService.presetsApiService = this.presetsApiService;
 

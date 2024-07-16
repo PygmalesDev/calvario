@@ -2,7 +2,6 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
-import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.dto.EmpireDto;
@@ -144,9 +143,6 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
-    @SubComponent
-    @Inject
-    public TechnologyOverviewComponent technologiesComponent;
     @SubComponent
     @Inject
     public DeleteStructureComponent deleteStructureComponent;
@@ -337,8 +333,7 @@ public class InGameController extends BasicController {
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,
                 jobsOverviewComponent,
-                empireOverviewComponent,
-                technologiesComponent
+                empireOverviewComponent
         );
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
 
@@ -348,9 +343,6 @@ public class InGameController extends BasicController {
         this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListener();
         explanationService.setInGameController(this);
-
-        technologiesComponent.setContainer(contextMenuContainer);
-
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -441,8 +433,7 @@ public class InGameController extends BasicController {
             this.contextMenuButtons.getChildren().addAll(
                     new ContextMenuButton("storageOverview", this.storageOverviewComponent),
                     new ContextMenuButton("empireOverview", this.empireOverviewComponent),
-                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent),
-                    new ContextMenuButton("technologies", this.technologiesComponent)
+                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent)
             );
     }
 

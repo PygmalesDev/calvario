@@ -104,8 +104,8 @@ public class TechnologyOverviewComponent extends AnchorPane {
     }
 
     public void setCategoryInfos(@NotNull TechnologyCategoryComponent technologieCategory) {
-        technologieCategory.technologyImage.setImage(technologieCategory.imageCache.get("assets/technologies/categories/" +technologieCategory.technologieCategoryName + ".png"));
-        String technologyKey = technologieCategory.technologieCategoryName.replace("_", ".");
+        technologieCategory.technologyImage.setImage(technologieCategory.imageCache.get("assets/technologies/categories/" +technologieCategory.technologyCategory + ".png"));
+        String technologyKey = technologieCategory.technologyCategory.replace("_", ".");
         technologieCategory.technologyNameText.setText(resources.getString("technologies." + technologyKey));
     }
 }

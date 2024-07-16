@@ -47,7 +47,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
     public VBox technologieCategoryBox;
     @FXML
     public Label currentResearchResourceLabel;
-    String technologieCategoryName;
+    String technologyCategory;
     @Inject
     App app;
 
@@ -128,10 +128,11 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
         currentResearchResourceLabel.setText(String.valueOf(resourcesService.getResourceCount("research")));
 
-        this.technologieCategoryName = category;
+        this.technologyCategory = category;
+        technologyService.setCategory(category);
 
-        unlockedTechnologies = technologyService.getUnlockedTechnologies(technologieCategoryName);
-        researchTechnologies = technologyService.getResearchTechnologies(technologieCategoryName);
+        unlockedTechnologies = technologyService.getUnlockedTechnologies(technologyCategory);
+        researchTechnologies = technologyService.getResearchTechnologies(technologyCategory);
 
         researchListView.setSelectionModel(null);
         unlockedListView.setSelectionModel(null);
@@ -148,4 +149,5 @@ public class TechnologyCategoryComponent extends AnchorPane {
     public void setContainer(Pane parent) {
         this.parent = parent;
     }
+
 }

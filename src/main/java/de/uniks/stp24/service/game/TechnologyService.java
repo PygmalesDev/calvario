@@ -28,14 +28,24 @@ public class TechnologyService {
     @Inject
     TokenStorage tokenStorage;
 
-    List<TechnologyExtended> technologies;
+    String category;
 
+    Map<String, Boolean> technologyMap = new HashMap<>(Map.ofEntries(
+            Map.entry("societyUnlocked", false), Map.entry("societyResearch", false),
+            Map.entry("engineeringUnlocked", false), Map.entry("engineeringResearch", false),
+            Map.entry("physicsUnlocked", false), Map.entry("physicsResearch", false))
+    );
+
+    List<TechnologyExtended> technologies;
     Observable<ArrayList<TechnologyExtended>> temp;
     Set<TechnologyExtended> allUnlockedTechnologiesSet = new HashSet<>();
 
     ObservableList<TechnologyExtended> unlockedTechnologiesList = FXCollections.observableArrayList();
 
     ObservableList<TechnologyExtended> allUnlockedTechnologiesList = FXCollections.observableArrayList();
+
+    ObservableList<TechnologyExtended> researchTechnologiesList = FXCollections.observableArrayList();
+
 
     @Inject
     public TechnologyService() {
@@ -91,13 +101,15 @@ public class TechnologyService {
      * @return unlocked Technologies without precedes that are also unlocked
      */
     public ObservableList<TechnologyExtended> getUnlockedTechnologies(String tag) {
-        List<TechnologyExtended> tempUnlocked = getAllUnlockedTechnologies(tag);
-        unlockedTechnologiesList.clear();
-        for (TechnologyExtended technology : tempUnlocked) {
-            for (String t : technology.precedes()) {
+        if (!technologyMap.get(category + "Unlocked")) {
+            List<TechnologyExtended> tempUnlocked = getAllUnlockedTechnologies(tag);
+            unlockedTechnologiesList.clear();
+            for (TechnologyExtended technology : tempUnlocked) {
+                for (String t : technology.precedes()) {
 
-                if (tempUnlocked.stream().noneMatch(tech -> tech.id().equals(t))) {
-                    unlockedTechnologiesList.add(technology);
+                    if (tempUnlocked.stream().noneMatch(tech -> tech.id().equals(t))) {
+                        unlockedTechnologiesList.add(technology);
+                    }
                 }
             }
         }
@@ -111,22 +123,23 @@ public class TechnologyService {
      * @return research Technologies without requirements that are not unlocked
      */
     public ObservableList<TechnologyExtended> getResearchTechnologies(String tag) {
-        List<TechnologyExtended> tempResearch = getResearchTechnologies();
-        List<TechnologyExtended> tempUnlocked = getUnlockedTechnologies();
-        ObservableList<TechnologyExtended> researchTechnologiesList = FXCollections.observableArrayList();
+        if (!technologyMap.get(category + "Research")) {
+            List<TechnologyExtended> tempResearch = getResearchTechnologies();
+            List<TechnologyExtended> tempUnlocked = getUnlockedTechnologies();
 
-        for (TechnologyExtended technology : tempResearch) {
-            boolean add = true;
-            if (technology.requires() != null && !Arrays.asList(technology.requires()).isEmpty() && Arrays.asList(technology.tags()).contains(tag)) {
-                for (String t : technology.requires()) {
-                    if (tempUnlocked.stream().noneMatch(tech -> tech.id().equals(t))) {
-                        add = false;
-                        break;
+            for (TechnologyExtended technology : tempResearch) {
+                boolean add = true;
+                if (technology.requires() != null && !Arrays.asList(technology.requires()).isEmpty() && Arrays.asList(technology.tags()).contains(tag)) {
+                    for (String t : technology.requires()) {
+                        if (tempUnlocked.stream().noneMatch(tech -> tech.id().equals(t))) {
+                            add = false;
+                            break;
+                        }
                     }
                 }
-            }
-            if (add && (Arrays.asList(technology.tags()).contains(tag)) && researchTechnologiesList.stream().noneMatch(tech -> tech.id().equals(technology.id()))) {
-                researchTechnologiesList.add(technology);
+                if (add && (Arrays.asList(technology.tags()).contains(tag)) && researchTechnologiesList.stream().noneMatch(tech -> tech.id().equals(technology.id()))) {
+                    researchTechnologiesList.add(technology);
+                }
             }
         }
         return researchTechnologiesList;
@@ -160,5 +173,9 @@ public class TechnologyService {
 
     public Observable<ArrayList<TechnologyExtended>> getTechnologies() {
         return presetsApiService.getTechnologies();
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

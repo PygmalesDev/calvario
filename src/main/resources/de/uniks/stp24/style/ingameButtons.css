@@ -34,7 +34,7 @@
     -fx-pref-height: 45px;
 }
 
-.acceptButton{
+.acceptButton {
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/accept_button.png");
     -fx-background-size: 100% 100%;
@@ -46,7 +46,7 @@
     -fx-pref-height: 35px;
 }
 
-.declineButton{
+.declineButton {
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/decline_button.png");
     -fx-background-size: 100% 100%;
@@ -84,6 +84,7 @@
 
 
 .storageOverviewButton {
+    -fx-cursor: hand;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/storage_button.png");
     -fx-background-size: 100% 100%;
@@ -96,6 +97,7 @@
 }
 
 .jobsOverviewButton {
+    -fx-cursor: hand;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/job_overview_button.png");
     -fx-background-size: 100% 100%;
@@ -108,6 +110,7 @@
 }
 
 .empireOverviewButton {
+    -fx-cursor: hand;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/empire_overview_button.png");
     -fx-background-size: 100% 100%;
@@ -120,6 +123,7 @@
 }
 
 .technologiesOverviewButton {
+    -fx-cursor: hand;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/technology_button.png");
     -fx-background-size: 100% 100%;

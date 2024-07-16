@@ -305,7 +305,7 @@ public class InGameController extends BasicController {
         );
         technologiesContainer.getChildren().add(technologiesComponent);
         technologiesComponent.setContainer(technologiesContainer);
-        technologiesComponent.setVisible(false);
+        technologiesContainer.setVisible(false);
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
 
         this.createContextMenuButtons();
@@ -369,13 +369,16 @@ public class InGameController extends BasicController {
     @OnKey(code = KeyCode.T, alt = true)
     public void showTechnologies() {
         this.toggleContextMenuVisibility(this.technologiesComponent);
-        this.technologiesComponent.setVisible(!this.technologiesComponent.isVisible());
+        this.technologiesComponent.setVisible(!this.technologiesContainer.isVisible());
     }
 
     private void toggleContextMenuVisibility(Node node) {
         this.contextMenuContainer.getChildren().stream()
                 .filter(child -> !child.equals(node))
                 .forEach(child -> child.setVisible(false));
+        this.technologiesContainer.getChildren().stream()
+                .filter(child -> child.equals(node))
+                .forEach(child -> technologiesContainer.setVisible(true));
     }
 
     public void pauseGame() {

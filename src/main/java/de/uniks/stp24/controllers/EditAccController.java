@@ -2,15 +2,11 @@ package de.uniks.stp24.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.component.menu.BubbleComponent;
-import de.uniks.stp24.component.menu.GangComponent;
 import de.uniks.stp24.component.menu.WarningScreenComponent;
 import de.uniks.stp24.service.*;
 import de.uniks.stp24.service.menu.EditAccService;
-import de.uniks.stp24.service.menu.LobbyService;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -26,12 +22,9 @@ import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.annotation.param.Param;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import java.util.*;
-import java.util.function.ToDoubleBiFunction;
 
 import static de.uniks.stp24.service.Constants.empireTemplatesEnglish;
 import static de.uniks.stp24.service.Constants.empireTemplatesGerman;
@@ -347,7 +340,8 @@ public class EditAccController extends BasicController {
         // warning screen opens
         popup.showPopup(warningScreenContainer, warningScreen);
         popup.setBlur(editAccVBoxLeftToBlur, editAccVBoxRightToBlur);
-        warningScreen.setWarning(resources.getString("warning.deleteAccount") + tokenStorage.getName() + ".");
+        warningScreen.setWarning(resources.getString("warning.deleteAccount"));
+        warningScreen.setUserName(tokenStorage.getName());
     }
 
     /**

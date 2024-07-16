@@ -6,7 +6,6 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
-
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;

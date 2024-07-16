@@ -327,7 +327,6 @@ public class InGameController extends BasicController {
                 storageOverviewComponent,
                 jobsOverviewComponent,
                 empireOverviewComponent
-
         );
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
 
@@ -337,7 +336,6 @@ public class InGameController extends BasicController {
         this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListener();
         explanationService.setInGameController(this);
-
     }
 
     @OnKey(code = KeyCode.ESCAPE)

@@ -84,25 +84,21 @@ public class StorageOverviewComponent extends AnchorPane {
     public void initStorageList() {
         if (!tokenStorage.isSpectator()) {
             this.resourceListView.setSelectionModel(null);
-            initializeResourceList();
+            this.subscriber.subscribe(this.empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                    empireDto -> {
+                        subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                                aggregateResultDto -> resourceListGeneration(empireDto, aggregateResultDto.items()),
+                                error -> System.out.println("ErrorAggregateSubscriber"));
+                        String[] empireNameList = empireDto.name().split("\\s+");
+                        if (empireNameList.length >= 2) {
+                            this.empireNameLabel.setText(empireNameList[0] + " " + empireNameList[1]);
+                        } else {
+                            this.empireNameLabel.setText(empireNameList[0]);
+                        }
+                    },
+                    error -> System.out.println("ErrorEmpireSubscriber"));
             this.resourceListView.setCellFactory(list -> new ComponentListCell<>(app, resourceComponentProvider));
         }
-    }
-
-    private void initializeResourceList() {
-        this.subscriber.subscribe(this.empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
-                empireDto -> {
-                    subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
-                            aggregateResultDto -> resourceListGeneration(empireDto, aggregateResultDto.items()),
-                            error -> System.out.println("ErrorAggregateSubscriber"));
-                    String[] empireNameList = empireDto.name().split("\\s+");
-                    if (empireNameList.length >= 2) {
-                        this.empireNameLabel.setText(empireNameList[0] + " " + empireNameList[1]);
-                    } else {
-                        this.empireNameLabel.setText(empireNameList[0]);
-                    }
-                },
-                error -> System.out.println("ErrorEmpireSubscriber"));
     }
 
 
@@ -140,11 +136,6 @@ public class StorageOverviewComponent extends AnchorPane {
                                 empireDto -> subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                                         aggregateResultDto -> {
                                             resourceListGeneration(empireDto, aggregateResultDto.items());
-                                            for (AggregateItemDto item : aggregateResultDto.items()) {
-                                                if(!(item.variable().equals("population") || item.variable().equals("research") || item.equals("credits"))) {
-                                                    inGameController.marketOverviewComponent.updateStorage(item.variable(), item.count());
-                                                }
-                                            }
                                         },
                                         error -> System.out.println("ErrorAggregateSubscriber")),
                                 error -> System.out.println("ErrorEmpireSubscriber"));
@@ -169,10 +160,5 @@ public class StorageOverviewComponent extends AnchorPane {
 
     public void setInGameController(InGameController ingameController) {
         this.inGameController = ingameController;
-    }
-
-    public void updateMarket() {
-        resourceList.clear();
-        initializeResourceList();
     }
 }

@@ -282,7 +282,6 @@ public class MarketComponent extends StackPane {
             resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
             updateResources();
             refreshListview();
-            inGameController.storageOverviewComponent.updateMarket();
         }
     }
 
@@ -299,7 +298,6 @@ public class MarketComponent extends StackPane {
             resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
             updateResources();
             refreshListview();
-            inGameController.storageOverviewComponent.updateMarket();
         }
     }
 
@@ -379,7 +377,11 @@ public class MarketComponent extends StackPane {
     /*---------------------------------------SeasonalTrades------------------------------------------------------------*/
     //TODO Seasonal Trades -> synchronize with storageOverviewComponent by also adding the added resource in storage to market and vice versa.
     //                     -> normal buy and sell works but seasonal is really buggy
+    //                     -> buy, sell, seasonalBuy, seasonalSell
+
     //TODO Seasonal Trades -> cancel running seasonal Trades
+    //TODO Seasonal Trades -> save seasonal trades after leaving
+
 
 
     @OnRender
@@ -404,14 +406,9 @@ public class MarketComponent extends StackPane {
                         .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
                 event -> {
                     if (!lastSeasonUpdate.equals(event.data().updatedAt())) {
-
-                        subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
-                                empireDto -> subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
-                                        aggregateResultDto -> updateResources(empireDto, aggregateResultDto.items()),
-                                        error -> System.out.println("ErrorAggregateSubscriber")),
-                                error -> System.out.println("ErrorEmpireSubscriber"));
-
                         performSeasonalTrades();
+                        updateResources();
+                        refreshListview();
                         this.lastSeasonUpdate = event.data().updatedAt();
                     }
                 },
@@ -440,7 +437,7 @@ public class MarketComponent extends StackPane {
             userCredits -= buyCost;
             resourceCountMap.put(resourceType, resourceCountMap.getOrDefault(resourceType, 0) + resourceAmount);
             updateResources();
-            inGameController.storageOverviewComponent.updateMarket();
+            refreshListview();
         }
     }
 
@@ -450,7 +447,7 @@ public class MarketComponent extends StackPane {
             userCredits += sellCost;
             resourceCountMap.put(resourceType, resourceCountMap.get(resourceType) + resourceAmount);
             updateResources();
-            inGameController.storageOverviewComponent.updateMarket();
+            refreshListview();
         }
     }
 
@@ -458,15 +455,4 @@ public class MarketComponent extends StackPane {
     public void setInGameController(InGameController ingameController) {
         this.inGameController = ingameController;
     }
-
-    public void updateStorage(String type, int amount) {
-        resourceCountMap.put(type, resourceCountMap.getOrDefault(type, 0) + amount);
-        refreshListview();
-    }
-
-
-    //TODO Seasonal Trades -> save seasonal trades after leaving
-
-
-
 }

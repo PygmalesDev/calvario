@@ -262,7 +262,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
                 this.inGameController.islandsService.updateIslandBuildings(this.islandAttributeStorage,
                         this.inGameController, this.islandAttributeStorage.getIsland().buildings());
                 this.inGameController.setSitePropertiesInvisible();
-            }, error -> System.out.println("error here"));
+            }, error -> System.out.println("Error in Update Island Buildings: " + error.getMessage()));
         }
     }
 

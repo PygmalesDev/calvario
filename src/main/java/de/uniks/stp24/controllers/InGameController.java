@@ -315,6 +315,12 @@ public class InGameController extends BasicController {
         this.jobsService.initializeJobsListener();
     }
 
+    @OnKey(code = KeyCode.T, alt = true)
+    public void showTechnologies() {
+        this.toggleContextMenuVisibility(this.technologiesComponent);
+        this.technologiesComponent.setVisible(!this.technologiesContainer.isVisible());
+    }
+
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
         helpComponent.setVisible(false);
@@ -364,12 +370,6 @@ public class InGameController extends BasicController {
             showHelp();
             this.shadow.setVisible(true);
         }
-    }
-
-    @OnKey(code = KeyCode.T, alt = true)
-    public void showTechnologies() {
-        this.toggleContextMenuVisibility(this.technologiesComponent);
-        this.technologiesComponent.setVisible(!this.technologiesContainer.isVisible());
     }
 
     private void toggleContextMenuVisibility(Node node) {

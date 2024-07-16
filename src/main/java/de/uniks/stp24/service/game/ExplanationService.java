@@ -21,8 +21,7 @@ import java.math.RoundingMode;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static de.uniks.stp24.service.Constants.economyProcess;
-import static de.uniks.stp24.service.Constants.resourceTranslation;
+import static de.uniks.stp24.service.Constants.*;
 
 @Singleton
 public class ExplanationService {
@@ -58,6 +57,13 @@ public class ExplanationService {
         Tooltip tooltip = new Tooltip();
         Tooltip.install(cell, tooltip);
         tooltip.setGraphic(variableExplanationComponent);
+        tooltip.setStyle(
+                "-fx-background-color: transparent; " +
+                        "-fx-background-insets: 0; " +
+                        "-fx-background-radius: 0; " +
+                        "-fx-border-color: transparent; " +
+                        "-fx-padding: 0;"
+        );
         AtomicBoolean entered = new AtomicBoolean(false);
 
         app.stage().getScene().addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
@@ -113,11 +119,7 @@ public class ExplanationService {
             for (String effect : variableService.getActiveEffects().get(variable)) {
                 double mult = activeEffects.get(effect);
                 BigDecimal roundedMult = new BigDecimal(mult).setScale(2, RoundingMode.HALF_UP);
-                if(resCategory.equals("production")){
-                    effects.add("+" + roundedMult + "% " + variablesResourceBundle.getString(effect));
-                } else {
-                    effects.add("-" + roundedMult + "% " + variablesResourceBundle.getString(effect));
-                }
+                effects.add(roundedMult + "% " + variablesResourceBundle.getString(effect));
             }
         }
 
@@ -138,7 +140,7 @@ public class ExplanationService {
             total = gameResourceBundle.getString(economyProcess.get("total")) + ": -" + Math.floor(explanation.finalValue());
         }
 
-        variableExplanationComponent.setValues(base, total, title);
+        variableExplanationComponent.setValues(base, total, title, resourceImagePath.get(id));
 
         return explanation;
     }

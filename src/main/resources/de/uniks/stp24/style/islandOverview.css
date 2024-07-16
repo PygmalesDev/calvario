@@ -18,6 +18,11 @@
     -fx-font-size: 22;
 }
 
+.headerTextExplanation{
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 17;
+}
+
 .islandNameField {
     -fx-background-color: transparent;
     -fx-font-family: "Blackadder ITC";
@@ -68,6 +73,13 @@
 .resourceList .scroll-bar{
     -fx-background-color: transparent;
 }
+
+/* explanation details */
+.explanationBackground{
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/details_background.png");
+    -fx-background-size: 100% 100%;
+}
+
 
 /* side details */
 .siteOverviewBackground{

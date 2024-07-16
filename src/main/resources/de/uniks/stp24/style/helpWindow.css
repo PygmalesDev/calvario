@@ -23,8 +23,9 @@
 }
 
 .explanation .list-cell {
-    -fx-background-color: transparent;
     -fx-font-size: 12;
+    -fx-scrollbar-background: derive(-fx-control-inner-background, -20%);
+    -fx-scrollbar: -fx-base;
 }
 
 .explanationText{

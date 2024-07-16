@@ -537,7 +537,6 @@ public class InGameController extends BasicController {
     }
 
     public void showOverview() {
-        if(islandAttributes.getIsland().owner() != null) {
             overviewSitesComponent.inputIslandName.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId()));
             overviewSitesComponent.buildingsComponent.resetPage();
             overviewSitesComponent.buildingsComponent.setGridPane();
@@ -547,7 +546,6 @@ public class InGameController extends BasicController {
             inGameService.showOnly(overviewContainer, overviewSitesComponent);
             inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
             overviewSitesComponent.setOverviewSites();
-        }
     }
 
     @OnKey(code = KeyCode.SPACE, alt = true)

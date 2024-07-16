@@ -145,7 +145,7 @@
     -fx-max-height: 0;
 }
 
-.explanation-window -list-cell {
+.explanation-window .list-cell {
     -fx-background-color: transparent;
 }
 

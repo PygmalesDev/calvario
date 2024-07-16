@@ -32,6 +32,7 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
     @Inject
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
+    @Inject
     ImageCache imageCache;
 
     boolean showCount;

@@ -168,7 +168,7 @@ public class IslandClaimingComponent extends Pane {
             });
         }, error -> System.out.printf(
                         """
-                        Creating a new exploration job failed in IsalndClaimingComponent
+                        Creating a new exploration job failed in IslandClaimingComponent
                         An exception was caught here: %s
                         """, error.getMessage()));
 

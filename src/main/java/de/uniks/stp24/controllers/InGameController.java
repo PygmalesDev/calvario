@@ -2,16 +2,9 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
-import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.component.game.ClockComponent;
-import de.uniks.stp24.component.game.IslandComponent;
-import de.uniks.stp24.component.game.StorageOverviewComponent;
-import de.uniks.stp24.component.menu.*;
-import de.uniks.stp24.dto.MemberDto;
-import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
@@ -19,17 +12,14 @@ import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.game.*;
-import de.uniks.stp24.service.menu.GamesService;
-import de.uniks.stp24.service.menu.LobbyService;
-import de.uniks.stp24.service.game.ResourcesService;
-import de.uniks.stp24.ws.EventListener;
 import de.uniks.stp24.service.PopupBuilder;
+import de.uniks.stp24.service.game.*;
+import de.uniks.stp24.service.menu.LobbyService;
+import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -44,14 +34,16 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
-import org.jetbrains.annotations.NotNull;
 import org.fulib.fx.controller.Subscriber;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
-import javax.tools.Tool;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Title("CALVARIO")
 @Controller
@@ -144,9 +136,6 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
-    @SubComponent
-    @Inject
-    public TechnologyOverviewComponent technologiesComponent;
     @SubComponent
     @Inject
     public DeleteStructureComponent deleteStructureComponent;
@@ -337,8 +326,8 @@ public class InGameController extends BasicController {
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,
                 jobsOverviewComponent,
-                empireOverviewComponent,
-                technologiesComponent
+                empireOverviewComponent
+
         );
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
 
@@ -348,8 +337,6 @@ public class InGameController extends BasicController {
         this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListener();
         explanationService.setInGameController(this);
-
-        technologiesComponent.setContainer(contextMenuContainer);
 
     }
 
@@ -441,8 +428,7 @@ public class InGameController extends BasicController {
             this.contextMenuButtons.getChildren().addAll(
                     new ContextMenuButton("storageOverview", this.storageOverviewComponent),
                     new ContextMenuButton("empireOverview", this.empireOverviewComponent),
-                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent),
-                    new ContextMenuButton("technologies", this.technologiesComponent)
+                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent)
             );
     }
 

@@ -3,47 +3,44 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.SiteDto;
-import de.uniks.stp24.model.Jobs;
-import de.uniks.stp24.model.Jobs.*;
 import de.uniks.stp24.model.DistrictAttributes;
-import de.uniks.stp24.model.Island;
+import de.uniks.stp24.model.Jobs;
+import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.game.JobsService;
-import de.uniks.stp24.service.game.ExplanationService;
-import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.ExplanationService;
 import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.game.JobsService;
+import de.uniks.stp24.service.game.ResourcesService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import org.fulib.fx.FulibFxApp;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static de.uniks.stp24.service.Constants.*;
+import static de.uniks.stp24.service.Constants.siteTranslation;
+import static de.uniks.stp24.service.Constants.sitesIconPathsMap;
 
 @Component(view = "SiteProperties.fxml")
 public class SitePropertiesComponent extends AnchorPane {
@@ -124,9 +121,6 @@ public class SitePropertiesComponent extends AnchorPane {
 
     Map<String, String> sitesMap;
 
-    private int amountSite = 0;
-    private int amountSiteSlots = 0;
-
     public ObservableList<Map<String, Integer>> resources;
     public ObservableList<ResourceComponent> resourceComponents;
     private ObservableList<Job> siteJobs;
@@ -179,7 +173,7 @@ public class SitePropertiesComponent extends AnchorPane {
             this.showJobsPane();
             if (Objects.nonNull(job)) {
                 this.siteJobProgress.setJobProgress(job);
-                if (this.jobsService.hasNoJobTypeProgress(job.type()) && this.siteJobs.get(0).equals(job))
+                if (this.jobsService.hasNoJobTypeProgress(job.type()) && this.siteJobs.getFirst().equals(job))
                     this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
             }
         } else {
@@ -284,9 +278,9 @@ public class SitePropertiesComponent extends AnchorPane {
         }
 
 
-        amountSite = Objects.nonNull(tokenStorage.getIsland().sites().get(siteType)) ?
+        int amountSite = Objects.nonNull(tokenStorage.getIsland().sites().get(siteType)) ?
                 tokenStorage.getIsland().sites().get(siteType) : 0;
-        amountSiteSlots = tokenStorage.getIsland().sitesSlots().get(siteType);
+        int amountSiteSlots = tokenStorage.getIsland().sitesSlots().get(siteType);
 
         siteAmountScrollPane.setVvalue(0);
         siteAmountGridPane.getChildren().clear();

@@ -26,6 +26,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
@@ -113,11 +114,16 @@ public class MarketComponent extends StackPane {
 
     private boolean noPurchase;
 
-
     private ResourceDto resourceDto;
 
+    //a1 Provider has now lambda expression. In it marketSeasonCompontne is initialized and its marketService too
     @Inject
-    public Provider<MarketSeasonComponent> marketSeasonComponentProvider;
+    public Provider<MarketSeasonComponent> marketSeasonComponentProvider = () ->  {
+        var marketSeasonComponent = new MarketSeasonComponent();
+        marketSeasonComponent.marketService =  this.marketService;
+        return marketSeasonComponent;
+    };
+
     private final ObservableList<SeasonComponent> seasonComponents = FXCollections.observableArrayList();
 
     // From Server
@@ -378,8 +384,6 @@ public class MarketComponent extends StackPane {
     //TODO Seasonal Trades -> synchronize with storageOverviewComponent by also adding the added resource in storage to market and vice versa.
     //                     -> normal buy and sell works but seasonal is really buggy
     //                     -> buy, sell, seasonalBuy, seasonalSell
-
-    //TODO Seasonal Trades -> cancel running seasonal Trades
     //TODO Seasonal Trades -> save seasonal trades after leaving
 
 
@@ -388,6 +392,7 @@ public class MarketComponent extends StackPane {
     public void render() {
         this.seasonalTradesListView.setItems(this.seasonComponents);
         this.seasonalTradesListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.marketSeasonComponentProvider));
+        this.marketService.setSeasonComponents(this.seasonComponents);
     }
 
     public void createSeasonalTrades() {
@@ -455,4 +460,12 @@ public class MarketComponent extends StackPane {
     public void setInGameController(InGameController ingameController) {
         this.inGameController = ingameController;
     }
+
+    //TODO Seasonal Trades -> cancel running seasonal Trades
+    @OnDestroy
+    public void destroy() {
+        this.marketService.dispose();
+        this.subscriber.dispose();
+    }
+
 }

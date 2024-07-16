@@ -3,6 +3,8 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.model.SeasonComponent;
 import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.game.MarketService;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
@@ -43,10 +45,11 @@ public class MarketSeasonComponent extends HBox implements ReusableItemComponent
     @Inject
     ImageCache imageCache;
     private SeasonComponent seasonComponent;
+    @Inject
+    MarketService marketService;
 
     @Inject
     public MarketSeasonComponent() {
-
     }
 
     @Override
@@ -66,8 +69,9 @@ public class MarketSeasonComponent extends HBox implements ReusableItemComponent
         playControlsButton.setSelected(this.seasonComponent.isPlaying());
         playControlsButton.setOnAction(event -> this.seasonComponent.setPlaying(playControlsButton.isSelected()));
 
+        //a3 the cancelButton opens now marketkservie mehtod to cancel seasonalTrades
         cancelTradesButton.setOnAction(event -> {
-            this.seasonComponent = null;
+            marketService.cancelSeasonalTrade(this.seasonComponent);
         });
     }
 

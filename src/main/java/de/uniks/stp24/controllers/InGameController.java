@@ -271,6 +271,8 @@ public class InGameController extends BasicController {
             if (pause) {
                 shadow.setVisible(true);
                 shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
+                eventContainer.toFront();
+                eventComponent.toFront();
                 pauseGame();
             } else {
                 if (!eventContainer.isVisible()) {
@@ -355,6 +357,8 @@ public class InGameController extends BasicController {
         if (pause) {
             shadow.setVisible(true);
             shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
+            eventContainer.toFront();
+            eventComponent.toFront();
             pauseMenuContainer.setMouseTransparent(false);
             pauseGame();
         } else {

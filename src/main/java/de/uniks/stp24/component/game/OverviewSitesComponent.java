@@ -212,7 +212,7 @@ public class OverviewSitesComponent extends AnchorPane {
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
                 islandAttributes.getIsland().buildings().size();
         islandAttributes.setUsedSlots(usedSlots);
-
+        System.out.println("testing 123");
         resCapacity.setText(usedSlots + "/" + islandAttributes.getIsland().resourceCapacity());
     }
 
@@ -228,7 +228,8 @@ public class OverviewSitesComponent extends AnchorPane {
         this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
 
         upgradeButton.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
-
+        jobsService.onJobTypeProgress("district", this::updateResCapacity);
+        jobsService.onJobTypeProgress("building", this::updateResCapacity);
         updateResCapacity();
 
         island_name.setText(islandAttributes.getIslandTypeTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");

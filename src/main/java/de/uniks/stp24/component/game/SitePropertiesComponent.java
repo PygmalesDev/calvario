@@ -127,6 +127,10 @@ public class SitePropertiesComponent extends AnchorPane {
     public ObservableList<ResourceComponent> resourceComponents;
     private ObservableList<Job> siteJobs;
 
+    public ObservableList<Jobs.Job> tempJobListSites = FXCollections.observableArrayList();
+
+    public ObservableList<Jobs.Job> tempJobListBuildings = FXCollections.observableArrayList();
+
     InGameController inGameController;
 
     @Inject
@@ -193,23 +197,31 @@ public class SitePropertiesComponent extends AnchorPane {
     }
 
     public void buildSite(){
-        this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createDistrictJob(
-                this.tokenStorage.getIsland().id(), this.siteType)), job ->  {
-            this.showJobsPane();
-            this.siteJobProgress.setJobProgress(job);
-            this.buildSiteButton.setDisable(true);
-            if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
-                    (this.siteJobs.isEmpty() || this.siteJobs.getFirst().equals(job)))
-                this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
+        tempJobListBuildings = jobsService.getJobObservableListOfType("building");
+        tempJobListSites = jobsService.getJobObservableListOfType("district");
 
-            this.jobsService.onJobDeletion(job._id(), () -> {
-                if (job.district().equals(this.siteType)) this.hideJobsPane();
+        int islandJobsInQueue = tempJobListBuildings.size() + tempJobListSites.size();
+        if (islandAttributeStorage.getUsedSlots() + islandJobsInQueue < islandAttributeStorage.getIsland().resourceCapacity()){
+            this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createDistrictJob(
+                    this.tokenStorage.getIsland().id(), this.siteType)), job ->  {
+                this.showJobsPane();
+                this.siteJobProgress.setJobProgress(job);
+                if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
+                        (this.siteJobs.isEmpty() || this.siteJobs.getFirst().equals(job)))
+                    this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
+
+                this.jobsService.onJobDeletion(job._id(), () -> {
+                    if (job.district().equals(this.siteType)) this.hideJobsPane();
+                });
+                this.jobsService.onJobCompletion(job._id(), () -> {
+                    this.updateIslandSites();
+                    if (job.district().equals(this.siteType)) this.hideJobsPane();
+                });
             });
-            this.jobsService.onJobCompletion(job._id(), () -> {
-                this.updateIslandSites();
-                if (job.district().equals(this.siteType)) this.hideJobsPane();
-            });
-        });
+        } else {
+            this.buildSiteButton.setDisable(true);
+        }
+
     }
 
     @OnInit
@@ -302,6 +314,19 @@ public class SitePropertiesComponent extends AnchorPane {
 
         buildSiteButton.setDisable(amountSiteSlots == amountSite);
         destroySiteButton.setDisable(amountSite == 0);
+
+        checkBuyButtonStatus();
+        jobsService.onJobCommonStart(this::checkBuyButtonStatus);
+
+    }
+
+    private void checkBuyButtonStatus() {
+        tempJobListBuildings = jobsService.getJobObservableListOfType("building");
+        tempJobListSites = jobsService.getJobObservableListOfType("district");
+        int islandJobsInQueue = tempJobListBuildings.size() + tempJobListSites.size();
+        if (islandAttributeStorage.getUsedSlots() + islandJobsInQueue >= islandAttributeStorage.getIsland().resourceCapacity()){
+            buildSiteButton.setDisable(true);
+        }
     }
 
     private void resourceListGeneration(SiteDto siteDto) {

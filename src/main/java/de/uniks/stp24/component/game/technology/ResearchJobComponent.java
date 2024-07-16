@@ -151,26 +151,25 @@ public class ResearchJobComponent extends AnchorPane {
             for (Jobs.Job job1 : jobList) {
                 if (job1.technology().equals(technologyCategoryComponent.getTechnology().id())){
                     subscriber.subscribe(jobsApiService.getJobByID(tokenStorage.getGameId(), tokenStorage.getEmpireId(), job1._id()), currentJob -> {
-        jobsService.onJobCompletion(currentJob._id(), this::handleJobFinished);
-        double currentJobTotal = currentJob.total();
-        int roundedUpTotal = (int) Math.ceil(currentJobTotal);
-        researchProgressBar.setProgress((double) currentJob.progress() / roundedUpTotal);
-        researchProgressText.setText(currentJob.progress() + " / " + roundedUpTotal);
-        this.job = currentJob;
-    }, error -> {
-        System.out.println("Error trying to get a Job in ResearchComponent");
-    });
-    }
-}
-        }
+                    jobsService.onJobCompletion(currentJob._id(), this::handleJobFinished);
+                    double currentJobTotal = currentJob.total();
+                    int roundedUpTotal = (int) Math.ceil(currentJobTotal);
+                    researchProgressBar.setProgress((double) currentJob.progress() / roundedUpTotal);
+                    researchProgressText.setText(currentJob.progress() + " / " + roundedUpTotal);
+                    this.job = currentJob;
+                    }, error -> {
+                        System.out.println("Error trying to get a Job in ResearchComponent");
+                    });
                 }
+            }
+        }
+    }
 
 
 
 public void progressHandling(){
         ObservableList<Jobs.Job> newJobList = jobsService.getJobObservableListOfType("technology");
 
-        // Verwenden eines Sets, um doppelte Jobs zu vermeiden
         Set<String> existingJobTechnologies = new HashSet<>();
         List<Jobs.Job> uniqueJobList = new ArrayList<>();
 

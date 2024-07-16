@@ -88,6 +88,14 @@ public class Constants {
             "consumer_goods","resource.rum"
     );
 
+    public static final Map<String, String> economyProcess = Map.of(
+                "cost", "resource.cost",
+                "upkeep", "resource.upkeep",
+                "production", "resource.production",
+                "base", "resource.base",
+                "total", "resource.total"
+    );
+
     public static final Map<String, String> resourceImagePath = Map.of(
             "credits", "de/uniks/stp24/icons/resources/credits.png",
             "minerals", "de/uniks/stp24/icons/resources/minerals.png",

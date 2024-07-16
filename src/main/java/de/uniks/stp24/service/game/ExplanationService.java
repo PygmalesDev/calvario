@@ -14,14 +14,15 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static de.uniks.stp24.service.Constants.economyProcess;
+import static de.uniks.stp24.service.Constants.resourceTranslation;
 
 @Singleton
 public class ExplanationService {
@@ -31,6 +32,15 @@ public class ExplanationService {
     public VariableService variableService;
     @Inject
     IslandAttributeStorage islandAttributes;
+    @Inject
+    @org.fulib.fx.annotation.controller.Resource
+    ResourceBundle langBundle;
+    @Inject
+    @Named("gameResourceBundle")
+    ResourceBundle gameResourceBundle;
+    @Inject
+    @Named("variablesResourceBundle")
+    ResourceBundle variablesResourceBundle;
 
     private InGameController inGameController;
 
@@ -81,10 +91,9 @@ public class ExplanationService {
         return cell;
     }
 
-    private void initializeResExplanation(String listType, String indicator, String ResCategory, String id, VariableExplanationComponent variableExplanationComponent) {
-        String variable = listType + "." + indicator + "." + ResCategory + "." + id;
-        ExplainedVariableDTO explanation = variableService.data.get(variable);
-        variableExplanationComponent.setValues("Base: " + explanation.initial(), "Total: " + Math.floor(explanation.finalValue()), id);
+    private void initializeResExplanation(String listType, String indicator, String resCategory, String id, VariableExplanationComponent variableExplanationComponent) {
+        String variable = listType + "." + indicator + "." + resCategory + "." + id;
+        ExplainedVariableDTO explanation = setVariableExplanationComponent(variable, resCategory, id, variableExplanationComponent);
 
         Map<String, Double> activeEffects = new HashMap<>();
 
@@ -104,15 +113,34 @@ public class ExplanationService {
             for (String effect : variableService.getActiveEffects().get(variable)) {
                 double mult = activeEffects.get(effect);
                 BigDecimal roundedMult = new BigDecimal(mult).setScale(2, RoundingMode.HALF_UP);
-                if(mult < 0){
-                    effects.add("-" + roundedMult + " " + effect);
+                if(resCategory.equals("production")){
+                    effects.add("+" + roundedMult + "% " + variablesResourceBundle.getString(effect));
                 } else {
-                    effects.add("+" + roundedMult + " " + effect);
+                    effects.add("-" + roundedMult + "% " + variablesResourceBundle.getString(effect));
                 }
             }
         }
 
         variableExplanationComponent.fillListWithEffects(effects);
+    }
+
+    private ExplainedVariableDTO setVariableExplanationComponent(String variable, String resCategory, String id, VariableExplanationComponent variableExplanationComponent){
+        ExplainedVariableDTO explanation = variableService.data.get(variable);
+        String title = gameResourceBundle.getString(resourceTranslation.get(id)) + " " + gameResourceBundle.getString(economyProcess.get(resCategory));
+        String base;
+        String total;
+
+        if(resCategory.equals("production")){
+            base = gameResourceBundle.getString(economyProcess.get("base")) + ": +" + explanation.initial();
+            total = gameResourceBundle.getString(economyProcess.get("total")) + ": +" + Math.floor(explanation.finalValue());
+        } else {
+            base = gameResourceBundle.getString(economyProcess.get("base")) + ": -" + explanation.initial();
+            total = gameResourceBundle.getString(economyProcess.get("total")) + ": -" + Math.floor(explanation.finalValue());
+        }
+
+        variableExplanationComponent.setValues(base, total, title);
+
+        return explanation;
     }
 
     public void setInGameController(InGameController inGameController) {

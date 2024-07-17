@@ -226,6 +226,7 @@ public class MarketComponent extends StackPane {
     }
 
     private void refreshListview() {
+        buttonLogic();
         listMarketResources();
     }
 
@@ -269,7 +270,6 @@ public class MarketComponent extends StackPane {
         } else {
             noPurchase = true;
             resourceCountMapCopy = new HashMap<>(resourceCountMap);
-
             userCredits -= buyingPrice;
             userCreditsLabel.setText(String.valueOf(userCredits));
             resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
@@ -365,8 +365,6 @@ public class MarketComponent extends StackPane {
     //TODO Seasonal Trades -> synchronize with storageOverviewComponent by also adding the added resource in storage to market and vice versa.
     //                     -> normal buy and sell works but seasonal is really buggy
     //                     -> buy, sell, seasonalBuy, seasonalSell
-    //TODO Seasonal Trades -> save seasonal trades after leaving
-    //TODO Seasonal Trades -> cancel running seasonal Trades
 
     @OnRender
     public void render() {

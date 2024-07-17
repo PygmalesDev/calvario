@@ -43,5 +43,4 @@ public class PauseMenuTest extends IslandOverviewTestComponent {
 
         verify(app, times(1)).show("/browseGames");
     }
-
 }

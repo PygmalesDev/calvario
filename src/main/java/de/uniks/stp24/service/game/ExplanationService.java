@@ -104,9 +104,13 @@ public class ExplanationService {
 
         Map<String, Double> activeEffects = new HashMap<>();
 
+        /*
+        Iterate over all active effect of current variable and show the effects visually.
+         */
         for (Sources source : explanation.sources()) {
             double x = 0;
             for (Effect effect : source.effects()) {
+                System.out.println(source.id());
                 if (effect.variable().equals(variable)){
                     x = (effect.multiplier() - 1) * 100;
                     activeEffects.put(source.id(), x);
@@ -116,12 +120,10 @@ public class ExplanationService {
 
         List<String> effects = new ArrayList<>();
 
-        if (!variableService.getActiveEffects().get(variable).isEmpty()) {
-            for (String effect : variableService.getActiveEffects().get(variable)) {
-                double mult = activeEffects.get(effect);
-                BigDecimal roundedMult = new BigDecimal(mult).setScale(2, RoundingMode.HALF_UP);
-                effects.add(roundedMult + "% " + variablesResourceBundle.getString(effect));
-            }
+        for(Map.Entry<String, Double> entry : activeEffects.entrySet()){
+            double mult = entry.getValue();
+            BigDecimal roundedMult = new BigDecimal(mult).setScale(2, RoundingMode.HALF_UP);
+            effects.add(roundedMult + "% " + variablesResourceBundle.getString(entry.getKey()));
         }
 
         variableExplanationComponent.fillListWithEffects(effects);

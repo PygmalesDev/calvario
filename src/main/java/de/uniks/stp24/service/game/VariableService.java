@@ -132,31 +132,6 @@ public class VariableService {
         return null;
     }
 
-    public Map<String, ArrayList<String>> getActiveEffects(){
-        ArrayList<String> activeEffectIDs = new ArrayList<>(tokenStorage.getEmpireTraits());
-
-        for(TechnologyExtended technologyExtended: technologyService.getUnlockedTechnologies()){
-            activeEffectIDs.add(technologyExtended.id());
-        }
-
-        /*
-        Iterate over possible effects & check if its in list of active effects.
-        If not, remove that effect from map. All maps with no affects have empty effect list.
-         */
-        Map<String, ArrayList<String>> tmp = new HashMap<>(variablesEffects);
-
-        for(Map.Entry<String, ArrayList<String>> entry : tmp.entrySet()){
-            ArrayList<String> tmpList = new ArrayList<>();
-            for(String effectID: entry.getValue()){
-                if(activeEffectIDs.contains(effectID)){
-                    tmpList.add(effectID);
-                }
-            }
-            entry.setValue(tmpList);
-        }
-        return tmp;
-    }
-
     public void setVariablesEffect(Map<String, ArrayList<String>> variablesEffect){
         this.variablesEffects.putAll(variablesEffect);
     }

@@ -476,6 +476,7 @@ public class InGameController extends BasicController {
         if (event.getSource() instanceof IslandComponent selected) {
             System.out.printf("ISLAND ID: %s\n", selected.island.id());
             tokenStorage.setIsland(selected.getIsland());
+            selectedIsland = selected;
             islandAttributes.setIsland(selected.getIsland());
             if (selected.getIsland().owner() != null) {
                 this.islandClaimingContainer.setVisible(false);

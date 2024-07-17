@@ -15,6 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
 
@@ -39,6 +40,7 @@ public class PropertiesJobProgressComponent extends Pane {
     private double incrementAmount;
     private int progress;
     private int total;
+    private boolean shouldTick = false;
 
     @Inject
     App app;
@@ -60,6 +62,11 @@ public class PropertiesJobProgressComponent extends Pane {
 
     }
 
+    @OnInit
+    public void init() {
+        this.jobsService.onGameTicked(this::incrementProgress);
+    }
+
     public void setJobProgress(Job job) {
         this.job = job;
         this.progress = job.progress();
@@ -74,15 +81,21 @@ public class PropertiesJobProgressComponent extends Pane {
     }
 
     public void incrementProgress() {
-        this.progress++;
-        this.jobProgressText.setText(String.format("%d/%s", this.progress, this.total));
-        this.jobProgressBar.setProgress(this.progress*this.incrementAmount);
+        if (this.shouldTick) {
+            this.progress++;
+            this.jobProgressText.setText(String.format("%d/%s", this.progress, this.total));
+            this.jobProgressBar.setProgress(this.progress * this.incrementAmount);
+        }
     }
 
     public void cancelJob() {
         this.subscriber.subscribe(this.jobsService.stopJob(this.job));
         this.getParent().setVisible(false);
         this.getParent().getParent().getParent().setVisible(false);
+    }
+
+    public void setShouldTick(boolean shouldTick) {
+        this.shouldTick = shouldTick;
     }
 
     @OnDestroy

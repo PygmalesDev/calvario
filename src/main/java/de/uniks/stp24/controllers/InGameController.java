@@ -327,7 +327,7 @@ public class InGameController extends BasicController {
         overviewContainer.getChildren().add(overviewSitesComponent);
         overviewContainer.getChildren().add(overviewUpgradeComponent);
         islandClaimingContainer.getChildren().add(this.islandClaimingComponent);
-        islandClaimingContainer.setVisible(true);
+        islandClaimingContainer.setVisible(false);
 
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
@@ -341,7 +341,7 @@ public class InGameController extends BasicController {
 
         //Generate job stopping conditions for the already running jobs
         this.jobsService.loadEmpireJobs();
-        this.jobsService.initializeJobsListener();
+        this.jobsService.initializeJobsListeners();
         explanationService.setInGameController(this);
     }
 
@@ -481,7 +481,6 @@ public class InGameController extends BasicController {
 
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
-            System.out.printf("ISLAND ID: %s\n", selected.island.id());
             tokenStorage.setIsland(selected.getIsland());
             islandAttributes.setIsland(selected.getIsland());
             if (selected.getIsland().owner() != null) {
@@ -540,6 +539,13 @@ public class InGameController extends BasicController {
             this.islandAttributes.setIsland(selected);
             this.tokenStorage.setIsland(selected);
             this.showBuildingInformation(params[0], params[1]);
+        });
+
+        this.jobsService.setJobInspector("island_upgrade", (String... params) -> {
+            Island selected = this.islandsService.getIsland(params[0]);
+            this.islandAttributes.setIsland(selected);
+            this.tokenStorage.setIsland(selected);
+            this.overviewSitesComponent.showUpgrades();
         });
     }
 

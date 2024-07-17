@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
+import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
@@ -23,7 +24,6 @@ import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
-import javafx.application.Platform;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -41,13 +41,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
-import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 public class IslandOverviewTestComponent extends ControllerTest {
     @Spy
     GamesApiService gamesApiService;
     @Spy
-    GameStatus gameStatus;
+    protected GameStatus gameStatus;
     @Spy
     InGameService inGameService;
     @Spy
@@ -59,7 +58,7 @@ public class IslandOverviewTestComponent extends ControllerTest {
     @Spy
     ResourcesService resourcesService;
     @Spy
-    TokenStorage tokenStorage;
+    protected TokenStorage tokenStorage;
     @Spy
     ObjectMapper objectMapper;
     @Spy
@@ -132,6 +131,8 @@ public class IslandOverviewTestComponent extends ControllerTest {
     PropertiesJobProgressComponent siteJobProgress;
     @InjectMocks
     IslandClaimingComponent islandClaimingComponent;
+    @InjectMocks
+    IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
 
     Provider<DistrictComponent> districtComponentProvider = () -> {
         DistrictComponent districtComponent = new DistrictComponent();
@@ -271,6 +272,7 @@ public class IslandOverviewTestComponent extends ControllerTest {
     CreateSystemsDto updatedBuildings;
 
     public void initComponents(){
+        this.jobsService.gamesApiService = this.gamesApiService;
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
@@ -310,6 +312,8 @@ public class IslandOverviewTestComponent extends ControllerTest {
 
         doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", 2, 1, true, 1, 1, null))).when(gamesApiService).getGame(any());
         doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
+        doReturn(Observable.just(new Event<>("games.testGameID.ticked", new Game("a", "a", "testGameID", "gameName", "gameOwner", 2, 1, true, 1, 1, null))))
+                .when(this.eventListener).listen("games.testGameID.ticked", Game.class);
 
         buildings.add("testBuilding1");
         buildings.add("testBuilding2");
@@ -489,6 +493,7 @@ public class IslandOverviewTestComponent extends ControllerTest {
         this.inGameController.clockComponent.timerService.tokenStorage = this.tokenStorage;
         this.inGameController.clockComponent.timerService.gamesApiService = this.gamesApiService;
         this.inGameController.clockComponent.timerService.subscriber = this.subscriber;
+        this.overviewUpgradeComponent.jobProgressComponent = this.islandUpgradesJobProgressComponent;
         this.inGameController.buildingPropertiesComponent.propertiesJobProgressComponent = this.propertiesJobProgressComponent;
         this.inGameController.sitePropertiesComponent.siteJobProgress = this.siteJobProgress;
         this.inGameController.jobsService.tokenStorage = this.tokenStorage;

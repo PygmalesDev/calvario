@@ -1,7 +1,9 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.Jobs.*;
+import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
@@ -26,18 +28,21 @@ public class JobsService {
     public Subscriber subscriber;
     @Inject
     public EventListener eventListener;
+    @Inject
+    public GamesApiService gamesApiService;
 
     Map<String, ObservableList<Job>> jobCollections = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
     Map<String, Consumer<String[]>> jobInspectionFunctions = new HashMap<>();
-    Map<String, ArrayList<Runnable>> jobTypeFunctions = new HashMap<>();
-    Map<String, ArrayList<Consumer<Job>>> jobTypeConsumers = new HashMap<>();
     Map<String, ArrayList<Consumer<Job>>> loadTypeFunctions = new HashMap<>();
     ArrayList<Runnable> loadCommonFunctions = new ArrayList<>();
     ArrayList<Runnable> finishCommonFunctions = new ArrayList<>();
     ArrayList<Runnable> startCommonFunctions = new ArrayList<>();
     ArrayList<Runnable> jobCommonUpdates = new ArrayList<>();
+    ArrayList<Runnable> tickedCommonFunctions = new ArrayList<>();
+
+    private int period;
 
     @Inject
     public JobsService() {}
@@ -46,7 +51,7 @@ public class JobsService {
      * Loads jobCollections started by the player's empire upon entering the game. <p>
      * Call this method inside a method annotated with {@link org.fulib.fx.annotation.event.OnInit @OnInit}
      * within the {@link de.uniks.stp24.service.InGameService InGameService} controller before the
-     * {@link #initializeJobsListener() initializeJobsListener} method.
+     * {@link #initializeJobsListeners() initializeJobsListener} method.
      */
     public void loadEmpireJobs() {
         this.jobCollections.put("building", FXCollections.observableArrayList());
@@ -66,6 +71,8 @@ public class JobsService {
                     });
                 }, error -> System.out.println("JobsService: Failed to load job collections \n" + error.getMessage())
         );
+
+        this.subscriber.subscribe(this.gamesApiService.getGame(this.tokenStorage.getGameId()), game -> this.period = game.period());
     }
 
     /**
@@ -74,12 +81,10 @@ public class JobsService {
      * within the {@link de.uniks.stp24.service.InGameService InGameService} controller after the
      * {@link #loadEmpireJobs() loadEmpireJobs} method.
      */
-    public void initializeJobsListener() {
+    public void initializeJobsListeners() {
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.empires.%s.jobs.*.*",
                 this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), Job.class), result -> {
             Job job = result.data();
-
-            System.out.println("called!~");
 
             switch (result.suffix()) {
                 case "created" -> this.addJobToGroups(job);
@@ -89,6 +94,15 @@ public class JobsService {
             this.jobCommonUpdates.forEach(Runnable::run);
 
             }, error -> System.out.print("JobsService: Failed to receive job updates. \n" + error.getMessage()));
+
+        this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.ticked",
+                this.tokenStorage.getGameId()), Game.class), game -> {
+            if (game.data().period() != this.period) {
+                this.tickedCommonFunctions.forEach(Runnable::run);
+                this.period++;
+            }
+
+        });
     }
 
     public void addJobToGroups(@NotNull Job job) {
@@ -118,11 +132,6 @@ public class JobsService {
             if (this.jobCollections.get(job.system()).filtered(job1 -> job1.type().equals(job.type())).isEmpty())
                 this.jobCollections.get("collection").add(job);
         }
-
-        if (this.jobTypeFunctions.containsKey(job.type()))
-            this.jobTypeFunctions.get(job.type()).forEach(Runnable::run);
-        if (this.jobTypeConsumers.containsKey(job.type()))
-            this.jobTypeConsumers.get(job.type()).forEach(func -> func.accept(job));
     }
 
     public void deleteJobFromGroups(@NotNull Job job) {
@@ -161,43 +170,8 @@ public class JobsService {
         this.jobCommonUpdates.add(func);
     }
 
-    /**
-     * A method used to define the {@link Runnable Runnable} lambda functions that should be executed when
-     * any job of certain type progresses. It is useful if you need to execute some methods that lay within
-     * other classes. It is possible to add more than one function on the job type progress.
-     * @param jobType type of the job on which update the function should be executed
-     * @param func the execution function
-     */
-    public void onJobTypeProgress(String jobType, Runnable func) {
-        if (!this.jobTypeFunctions.containsKey(jobType))
-            this.jobTypeFunctions.put(jobType, new ArrayList<>());
-        this.jobTypeFunctions.get(jobType).add(func);
-    }
-
-    public void onJobTypeProgress(String jobType, Consumer<Job> func) {
-        if (!this.jobTypeConsumers.containsKey(jobType))
-            this.jobTypeConsumers.put(jobType, new ArrayList<>());
-        this.jobTypeConsumers.get(jobType).add(func);
-    }
-
-    /**
-     * Use this method to check whether a certain job type has some functions that run as any job of this
-     * type progresses.
-     * @param jobType type of the job that has to be checked
-     * @return true, if the job has a function set on its progress, false otherwise
-     */
-    public boolean hasNoJobTypeProgress(String jobType) {
-        if (this.jobTypeFunctions.containsKey(jobType))
-            return this.jobTypeFunctions.get(jobType).isEmpty();
-        return true;
-    }
-
-    /**
-     * Stops the execution of the functions that run on any job progress of the given type.
-     * @param jobType type of the job for which functions execution should be canceled
-     */
-    public void stopOnJobTypeProgress(String jobType) {
-        this.jobTypeFunctions.remove(jobType);
+    public void onGameTicked(Runnable func) {
+        this.tickedCommonFunctions.add(func);
     }
 
     /**
@@ -348,18 +322,23 @@ public class JobsService {
         return null;
     }
 
+    public boolean isCurrentIslandJob(Job job) {
+        if (this.getObservableListForSystem(job.system()).isEmpty()) return true;
+        return job.equals(this.getObservableListForSystem(job.system()).getFirst());
+    }
+
     /**
      * A clearing method that should be called inside the {@link InGameController#destroy() InGameController.destroy()}
      * to properly dispose of the jobs and functions that were loaded in the service during the game.
      */
     public void dispose() {
         this.jobCollections.clear();
-        this.jobTypeFunctions.clear();
         this.jobCompletionFunctions.clear();
         this.jobDeletionFunctions.clear();
         this.loadTypeFunctions.clear();
         this.loadCommonFunctions.clear();
         this.finishCommonFunctions.clear();
+        this.tickedCommonFunctions.clear();
         this.subscriber.dispose();
     }
 }

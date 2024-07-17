@@ -2,9 +2,11 @@ package de.uniks.stp24.game.jobs;
 
 import de.uniks.stp24.component.game.ClaimingSiteComponent;
 import de.uniks.stp24.component.game.IslandClaimingComponent;
+import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.SystemUpgrades;
 import de.uniks.stp24.model.UpgradeStatus;
+import de.uniks.stp24.ws.Event;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
@@ -104,6 +106,8 @@ public class TestIslandClaiming extends JobsTestComponent {
         assertTrue(lookup("#jobProgressBar").query().isVisible());
 
         this.updateInternally("jobID_12");
+        this.GAME_SUBJECT.onNext(new Event<>(String.format("games.%s.ticked", this.GAME_ID), new Game(null, null, this.GAME_ID, null, null, 0 , 0, true,
+                3, 1, null)));
         WaitForAsyncUtils.waitForFxEvents();
 
         assertTrue(lookup("#jobProgressBar").queryAs(ProgressBar.class).getProgress() > 0);

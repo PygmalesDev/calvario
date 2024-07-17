@@ -18,18 +18,19 @@
       <VBox prefHeight="22.0" prefWidth="40.0" />
       <Text fx:id="baseValue" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Base:" />
    </HBox>
-   <HBox prefHeight="19.0" prefWidth="291.0">
+   <HBox prefHeight="18.0" prefWidth="291.0">
       <children>
          <VBox prefHeight="22.0" prefWidth="40.0" />
          <ListView fx:id="effectList" prefHeight="24.0" prefWidth="183.0" stylesheets="@../../style/helpWindow.css">
             <styleClass>
                <String fx:value="explanation" />
                <String fx:value="tableHeadingText" />
+               <String fx:value="variableExplanationListView" />
             </styleClass>
          </ListView>
       </children>
    </HBox>
-   <VBox prefHeight="22.0" prefWidth="40.0" />
+   <VBox prefHeight="14.0" prefWidth="291.0" />
    <HBox>
       <VBox prefHeight="22.0" prefWidth="42.0" />
       <Text fx:id="totalValue" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Total: " />

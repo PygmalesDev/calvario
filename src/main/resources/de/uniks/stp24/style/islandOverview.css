@@ -188,6 +188,15 @@
     -fx-background-size: 50% 100%;
 }
 
+.variableExplanationListView .scroll-bar:vertical,
+.sitesScrollPane .scroll-bar:vertical {
+    -fx-background-image: url("/de/uniks/stp24/icons/other/black_square.png");
+    -fx-background-position: center;
+    -fx-background-repeat: repeat-y;
+    -fx-background-color: transparent;
+    -fx-background-size: 30% 40%;
+}
+
 .jobProgressListView .virtual-flow .scroll-bar:vertical .thumb {
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;

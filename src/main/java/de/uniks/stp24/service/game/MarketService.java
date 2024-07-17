@@ -2,6 +2,7 @@ package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.ResourceDto;
+import de.uniks.stp24.dto.SeasonalTradeDto;
 import de.uniks.stp24.dto.UpdateEmpireMarketDto;
 import de.uniks.stp24.model.ExplainedVariable;
 import de.uniks.stp24.model.SeasonComponent;
@@ -30,11 +31,11 @@ public class MarketService {
     public MarketService() {
     }
 
-    public Observable<Map<String,Double>> getVariables(){
+    public Observable<Map<String, Double>> getVariables() {
         return this.presetsApiService.getVariables();
     }
 
-    public Observable<ResourceDto> getResources(){
+    public Observable<ResourceDto> getResources() {
         return this.presetsApiService.getResources();
     }
 
@@ -46,14 +47,22 @@ public class MarketService {
         return this.empireApiService.updateEmpireMarket(gameID, empireID, updateEmpireMarketDto);
     }
 
+    public Observable<UpdateEmpireMarketDto> saveSeasonalComponents(String gameID, String empireID, SeasonalTradeDto seasonalTradeDto) {
+        return this.empireApiService.saveSeasonalComponents(gameID, empireID, seasonalTradeDto);
+    }
+
+    public Observable<SeasonalTradeDto> getSeasonalTrades(String gameID, String empireID){
+        return this.empireApiService.getSeasonalTrades(gameID, empireID);
+    }
     //a2 set seasonComponents
+
     public void setSeasonComponents(ObservableList<SeasonComponent> seasonComponents) {
         this.seasonComponents = seasonComponents;
     }
 
     //a4 cancelSeasonalTrades by remoiving here. Important note. You have to do this in service. if you use this method
     //in MarketSEasonsComponent it componentCell will set itself null and thereby also the complete list.
-    public void cancelSeasonalTrade(SeasonComponent seasonComponent){
+    public void cancelSeasonalTrade(SeasonComponent seasonComponent) {
         seasonComponents.remove(seasonComponent);
     }
 

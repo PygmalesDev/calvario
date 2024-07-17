@@ -2,10 +2,7 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.AggregateItemDto;
-import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.dto.ResourceDto;
-import de.uniks.stp24.dto.UpdateEmpireMarketDto;
+import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.EmpireExtendedDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.SeasonComponent;
@@ -36,10 +33,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 @Component(view = "MarketComponent.fxml")
 public class MarketComponent extends StackPane {
@@ -167,12 +161,13 @@ public class MarketComponent extends StackPane {
         subscriber.subscribe(marketService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 empire -> {
                     resourceCountMap = empire.resources();
+
                     setCreditCount();
                     filterResourceMap();
                     listMarketResources();
                     buttonLogic();
                 }
-                , error -> System.out.println("errorEmpireListener"));
+                , error -> System.out.println("errorCreateResouceCountMap: " + error));
     }
 
     private void setCreditCount() {
@@ -238,21 +233,13 @@ public class MarketComponent extends StackPane {
         subscriber.subscribe(marketService.getResources(),
                 res -> {
                     resourceDto = res;
-                    System.out.println();
-                    System.out.println(res);
                 });
     }
 
     private void updateResources() {
         UpdateEmpireMarketDto updateEmpireMarketDto = new UpdateEmpireMarketDto(Map.of(selectedItem, resourceAmount), null, null, null);
         this.subscriber.subscribe(marketService.updateEmpireMarket(tokenStorage.getGameId(), tokenStorage.getEmpireId(), updateEmpireMarketDto),
-                error -> System.out.println("errorEmpireListener"));
-    }
-
-    private void updateResources(EmpireDto empireDto, AggregateItemDto[] aggregateItems) {
-        UpdateEmpireMarketDto updateEmpireMarketDto = new UpdateEmpireMarketDto(Map.of(selectedItem, resourceAmount), null, null, null);
-        this.subscriber.subscribe(marketService.updateEmpireMarket(tokenStorage.getGameId(), tokenStorage.getEmpireId(), updateEmpireMarketDto),
-                error -> System.out.println("errorEmpireListener"));
+                error -> System.out.println("errorUpdateResources" + error));
     }
 
     private void createResourcePriceMap() {
@@ -332,11 +319,6 @@ public class MarketComponent extends StackPane {
     //--------------------------------------------listViewOfResources-------------------------------------------------//
 
     public void listMarketResources() {
-        if (this.resourceCountMap.isEmpty()) {
-            System.out.println("resourceMap is empty");
-        } else {
-            System.out.println("resourceCountMap: " + resourceCountMap);
-        }
         resourcesListView.getItems().clear();
         resourcesListView.getItems().addAll(this.resourceCountMap.entrySet());
         resourcesListView.setCellFactory(list -> new ResourceCell());
@@ -371,7 +353,6 @@ public class MarketComponent extends StackPane {
                 setGraphic(vBox);
             }
             setOnMouseClicked(event -> {
-                System.out.println(item.getKey());
                 selectedItem = item.getKey();
                 selectedIconImage.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + item.getKey() + ".png"));
                 numberOfGoodsLabel.setText("1");
@@ -385,14 +366,11 @@ public class MarketComponent extends StackPane {
     //                     -> normal buy and sell works but seasonal is really buggy
     //                     -> buy, sell, seasonalBuy, seasonalSell
     //TODO Seasonal Trades -> save seasonal trades after leaving
-
-
+    //TODO Seasonal Trades -> cancel running seasonal Trades
 
     @OnRender
     public void render() {
-        this.seasonalTradesListView.setItems(this.seasonComponents);
-        this.seasonalTradesListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.marketSeasonComponentProvider));
-        this.marketService.setSeasonComponents(this.seasonComponents);
+        loadSeasonalTrades();
     }
 
     public void createSeasonalTrades() {
@@ -401,8 +379,8 @@ public class MarketComponent extends StackPane {
 
     private void addSeasonalTransaction(String transactionType, int price) {
         SeasonComponent seasonComponent = new SeasonComponent(transactionType, this.selectedItem, resourceAmount, price, true);
-        System.out.println(resourceAmount);
         seasonComponents.add(seasonComponent);
+        saveSeasonalTrades();
     }
 
 
@@ -417,7 +395,7 @@ public class MarketComponent extends StackPane {
                         this.lastSeasonUpdate = event.data().updatedAt();
                     }
                 },
-                error -> System.out.println("errorSeasonListener in marketComponent"));
+                error -> System.out.println("errorCreatSeasonListener:" + error));
     }
 
 
@@ -461,11 +439,29 @@ public class MarketComponent extends StackPane {
         this.inGameController = ingameController;
     }
 
-    //TODO Seasonal Trades -> cancel running seasonal Trades
     @OnDestroy
     public void destroy() {
         this.marketService.dispose();
         this.subscriber.dispose();
     }
 
+    public void saveSeasonalTrades(){
+        Map<String, List<SeasonComponent>> _private = new HashMap<>();
+        _private.put("allSeasonalTrades", seasonComponents);
+        SeasonalTradeDto seasonalTradeDto = new SeasonalTradeDto(_private);
+        subscriber.subscribe(marketService.saveSeasonalComponents(tokenStorage.getGameId(), tokenStorage.getEmpireId(), seasonalTradeDto),
+                error -> System.out.println("errorSaveSeasonalTrades:" + error));
+    }
+
+    public void loadSeasonalTrades(){
+        subscriber.subscribe(marketService.getSeasonalTrades(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+        seasonalTradeDto -> {
+            this.seasonComponents.addAll(seasonalTradeDto._private().get("allSeasonalTrades"));
+
+            this.seasonalTradesListView.setItems(this.seasonComponents);
+            this.seasonalTradesListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.marketSeasonComponentProvider));
+            this.marketService.setSeasonComponents(this.seasonComponents);
+        }
+        , error -> System.out.println("errorLoadSeasonalTrades:" + error));
+    }
 }

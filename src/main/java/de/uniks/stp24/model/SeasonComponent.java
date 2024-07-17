@@ -7,6 +7,9 @@ public class SeasonComponent {
     int moneyAmount;
     boolean isPlaying;
 
+    public SeasonComponent() {
+    }
+
     public SeasonComponent(String transActionTypeText, String resourceType, int resourceAmount, int moneyAmount, boolean isPlaying) {
         this.transActionTypeText = transActionTypeText;
         this.resourceType = resourceType;

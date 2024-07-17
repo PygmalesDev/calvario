@@ -105,6 +105,7 @@ public class JobsService {
 
     public void addJobToGroups(@NotNull Job job) {
         this.jobCollections.get(job.type()).add(job);
+        System.out.println("calledd");
 
         if (!job.type().equals("technology")) {
             if (!this.jobCollections.containsKey(job.system()))

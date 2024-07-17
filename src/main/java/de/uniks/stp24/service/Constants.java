@@ -169,7 +169,7 @@ public class Constants {
             Map.entry("mining", "de/uniks/stp24/icons/sites/mining_site.png"),
             Map.entry("agriculture", "de/uniks/stp24/icons/sites/harvesting_site.png"),
             Map.entry("industry", "de/uniks/stp24/icons/sites/production_site.png"),
-            Map.entry("research_site", "de/uniks/stp24/icons/sites/epoch_site.png"),
+            Map.entry("research", "de/uniks/stp24/icons/sites/epoch_site.png"),
             Map.entry("ancient_foundry", "de/uniks/stp24/icons/sites/expedition_site.png"),
             Map.entry("ancient_factory", "de/uniks/stp24/icons/sites/merchant_site.png"),
             Map.entry("ancient_refinery", "de/uniks/stp24/icons/sites/coalmine_site.png")

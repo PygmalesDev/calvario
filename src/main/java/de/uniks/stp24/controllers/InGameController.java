@@ -481,6 +481,7 @@ public class InGameController extends BasicController {
 
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
+            System.out.println(selected.island.id());
             tokenStorage.setIsland(selected.getIsland());
             islandAttributes.setIsland(selected.getIsland());
             if (selected.getIsland().owner() != null) {

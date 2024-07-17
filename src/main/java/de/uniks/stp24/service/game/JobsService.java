@@ -42,7 +42,7 @@ public class JobsService {
     ArrayList<Runnable> jobCommonUpdates = new ArrayList<>();
     ArrayList<Runnable> tickedCommonFunctions = new ArrayList<>();
 
-    private int period;
+    private int period = -1;
 
     @Inject
     public JobsService() {}
@@ -71,8 +71,6 @@ public class JobsService {
                     });
                 }, error -> System.out.println("JobsService: Failed to load job collections \n" + error.getMessage())
         );
-
-        this.subscriber.subscribe(this.gamesApiService.getGame(this.tokenStorage.getGameId()), game -> this.period = game.period());
     }
 
     /**
@@ -99,7 +97,7 @@ public class JobsService {
                 this.tokenStorage.getGameId()), Game.class), game -> {
             if (game.data().period() != this.period) {
                 this.tickedCommonFunctions.forEach(Runnable::run);
-                this.period++;
+                this.period = game.data().period();
             }
 
         });

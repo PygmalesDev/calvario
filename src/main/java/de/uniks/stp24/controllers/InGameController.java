@@ -134,6 +134,7 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
+    @SubComponent
     @Inject
     public MarketComponent marketOverviewComponent;
 
@@ -348,6 +349,12 @@ public class InGameController extends BasicController {
         this.storageOverviewComponent.setVisible(!this.storageOverviewComponent.isVisible());
     }
 
+    @OnKey(code = KeyCode.M, alt = true)
+    public void showMarket() {
+        this.toggleContextMenuVisibility(this.marketOverviewComponent);
+        this.marketOverviewComponent.setVisible(!this.marketOverviewComponent.isVisible());
+    }
+
     @OnKey(code = KeyCode.H, alt = true)
     public void showHelpOverview() {
         if (this.helpComponent.isVisible()) {
@@ -404,7 +411,7 @@ public class InGameController extends BasicController {
                     new ContextMenuButton("storageOverview", this.storageOverviewComponent),
                     new ContextMenuButton("empireOverview", this.empireOverviewComponent),
                     new ContextMenuButton("jobsOverview", this.jobsOverviewComponent),
-                    new ContextMEnuButton("marketOverview", this.marketOverviewComponent)
+                    new ContextMenuButton("marketOverview", this.marketOverviewComponent)
             );
     }
 
@@ -556,11 +563,6 @@ public class InGameController extends BasicController {
         scale = 0.65;
         group.setScaleX(scale);
         group.setScaleY(scale);
-    }
-
-    @OnKey(code = KeyCode.M, alt = true)
-    public void showMarket() {
-        marketOverviewContainer.setVisible(!marketOverviewContainer.isVisible());
     }
 
     public void resetZoomMouse(@NotNull MouseEvent event) {

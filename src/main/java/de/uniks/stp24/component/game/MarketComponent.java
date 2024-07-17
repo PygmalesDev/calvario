@@ -167,7 +167,7 @@ public class MarketComponent extends StackPane {
                     listMarketResources();
                     buttonLogic();
                 }
-                , error -> System.out.println("errorCreateResouceCountMap: " + error));
+                , error -> System.out.println("errorCreateResourceCountMap: " + error));
     }
 
     private void setCreditCount() {
@@ -313,7 +313,7 @@ public class MarketComponent extends StackPane {
     }
 
     public void closeMarketOverview() {
-        this.getParent().setVisible(false);
+        this.setVisible(false);
     }
 
     //--------------------------------------------listViewOfResources-------------------------------------------------//
@@ -389,6 +389,7 @@ public class MarketComponent extends StackPane {
                         .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
                 event -> {
                     if (!lastSeasonUpdate.equals(event.data().updatedAt())) {
+
                         performSeasonalTrades();
                         updateResources();
                         refreshListview();
@@ -456,7 +457,8 @@ public class MarketComponent extends StackPane {
     public void loadSeasonalTrades(){
         subscriber.subscribe(marketService.getSeasonalTrades(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
         seasonalTradeDto -> {
-            this.seasonComponents.addAll(seasonalTradeDto._private().get("allSeasonalTrades"));
+            if (Objects.nonNull(seasonalTradeDto._private()))
+                this.seasonComponents.addAll(seasonalTradeDto._private().get("allSeasonalTrades"));
 
             this.seasonalTradesListView.setItems(this.seasonComponents);
             this.seasonalTradesListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.marketSeasonComponentProvider));

@@ -6,6 +6,7 @@ import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.game.IslandsService;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -15,10 +16,8 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnKey;
-import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import javax.inject.Singleton;
 
@@ -37,15 +36,17 @@ public class IslandComponent extends Pane {
     ImageView spyglassImage;
     @Inject
     TokenStorage tokenStorage;
-
     @Inject
     @Resource
     ResourceBundle resource;
-    public Island island;
-
-    ImageCache imageCache;
     @Inject
     IslandAttributeStorage islandAttributes;
+
+    IslandsService islandsService;
+
+    ImageCache imageCache;
+
+    public Island island;
 
     public InGameController inGameController;
 
@@ -64,18 +65,18 @@ public class IslandComponent extends Pane {
     }
 
     public void applyIcon(IslandType type) {
-        this.islandImage
-                .setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
+        this.islandImage.setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
         if (this.island.upgrade().equals("explored"))
             this.spyglassImage.setImage(imageCache.get("/de/uniks/stp24/icons/other/spyglass.png"));
+        else
+            hideSpyGlass();
     }
 
     // use our flag images
     // by the moment numeration from 0 til 16
     public void setFlagImage(int flag) {
         if (flag >= 0) {
-            this.flagImage
-                    .setImage(imageCache.get("assets/flags/flag_" + flag + ".png"));
+            this.flagImage.setImage(imageCache.get("assets/flags/flag_" + flag + ".png"));
         }
     }
 
@@ -179,5 +180,18 @@ public class IslandComponent extends Pane {
         }
 
         inGameController.selectedIsland = null;
+    }
+
+    public void applyEmpireInfo() {
+        this.islandsService.applyDropShadowToIsland(this);
+        this.setFlagImage(islandsService.getEmpire(island.owner()).flag());
+    }
+
+    public void setIslandService(IslandsService islandsService) {
+        this.islandsService = islandsService;
+    }
+
+    public void hideSpyGlass(){
+        this.spyglassImage.setVisible(false);
     }
 }

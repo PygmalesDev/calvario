@@ -421,10 +421,18 @@ public class InGameController extends BasicController {
                     event -> {
                         Island updatedIsland = islandsService.convertToIsland(event.data());
                         isle.applyInfo(updatedIsland);
-                        if (updatedIsland.id().equals(islandAttributes.getIsland().id())
-                                && (overviewSitesComponent.isVisible() || overviewUpgradeComponent.isVisible())) {
+                        if (Objects.nonNull(updatedIsland.owner())) {
+                            // apply drop shadow and flag
+                            isle.applyEmpireInfo();
+                            this.islandClaimingContainer.setVisible(false);
+                        }
+                        // check if the island/upgrade overview is visible for the updated island
+                        if (Objects.nonNull(selectedIsland) &&
+                                updatedIsland.id().equals(selectedIsland.island.id()) &&
+                                (overviewSitesComponent.isVisible() || overviewUpgradeComponent.isVisible())) {
                             islandAttributes.setIsland(updatedIsland);
                             String shownPage = overviewSitesComponent.getShownPage();
+                            // open the island overview again with updated information
                             showOverview();
                             switch (shownPage) {
                                 case "upgrade" -> overviewSitesComponent.showUpgrades();

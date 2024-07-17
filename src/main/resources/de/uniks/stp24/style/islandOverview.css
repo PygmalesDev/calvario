@@ -18,6 +18,11 @@
     -fx-font-size: 22;
 }
 
+.headerTextExplanation{
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 17;
+}
+
 .islandNameField {
     -fx-background-color: transparent;
     -fx-font-family: "Blackadder ITC";
@@ -68,6 +73,13 @@
 .resourceList .scroll-bar{
     -fx-background-color: transparent;
 }
+
+/* explanation details */
+.explanationBackground{
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/details_background.png");
+    -fx-background-size: 100% 100%;
+}
+
 
 /* side details */
 .siteOverviewBackground{
@@ -145,7 +157,7 @@
     -fx-max-height: 0;
 }
 
-.explanation-window -list-cell {
+.explanation-window .list-cell {
     -fx-background-color: transparent;
 }
 
@@ -174,6 +186,15 @@
     -fx-background-repeat: repeat-y;
     -fx-background-color: transparent;
     -fx-background-size: 50% 100%;
+}
+
+.variableExplanationListView .scroll-bar:vertical,
+.sitesScrollPane .scroll-bar:vertical {
+    -fx-background-image: url("/de/uniks/stp24/icons/other/black_square.png");
+    -fx-background-position: center;
+    -fx-background-repeat: repeat-y;
+    -fx-background-color: transparent;
+    -fx-background-size: 30% 40%;
 }
 
 .jobProgressListView .virtual-flow .scroll-bar:vertical .thumb {

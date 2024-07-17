@@ -5,21 +5,13 @@ import de.uniks.stp24.dto.ExplainedVariableDTO;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.service.InGameService;
-import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.VariablesTree;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-
-import static java.lang.Thread.sleep;
+import java.util.*;
 
 @Singleton
 public class VariableService {
@@ -34,10 +26,10 @@ public class VariableService {
     @Inject
     public TechnologyService technologyService;
 
-    public Map<String, ExplainedVariableDTO> data = new HashMap<>();
-    private ArrayList<String> allVariables = new ArrayList<>();
     private InGameController inGameController;
-    private Map<String, ArrayList<String>> variablesEffects = new HashMap<>();
+    private final Map<String, ArrayList<String>> variablesEffects = new HashMap<>();
+    public final ArrayList<String> allVariables = new ArrayList<>();
+    public Map<String, ExplainedVariableDTO> data = new HashMap<>();
     public VariablesTree<ExplainedVariableDTO> buildingsTree;
     public VariablesTree<ExplainedVariableDTO> districtsTree;
     public VariablesTree<ExplainedVariableDTO> systemsTree;
@@ -75,7 +67,8 @@ public class VariableService {
                     }
                     createAllTrees();
                     inGameController.loadGameAttributes();
-                });
+                },
+                error -> System.out.println("error in loading variable data structure"));
     }
 
     public void createAllTrees(){
@@ -103,9 +96,7 @@ public class VariableService {
             if(entry.getKey().contains(tree.getRoot().getKey())){
                 String[] keysArray = entry.getKey().split("\\.");
                 List<String> keys = new ArrayList<>();
-                for(String key: keysArray){
-                    keys.add(key);
-                }
+                Collections.addAll(keys, keysArray);
                 keys.removeFirst();
                 createChildrenNodes(tree.getRoot(), keys, entry.getKey());
             }
@@ -139,32 +130,6 @@ public class VariableService {
             }
         }
         return null;
-    }
-
-    public Map<String, ArrayList<String>> getActiveEffects(){
-        ArrayList<String> activeEffectIDs = new ArrayList<>();
-        activeEffectIDs.addAll(tokenStorage.getEmpireTraits());
-
-        for(TechnologyExtended technologyExtended: technologyService.getUnlockedTechnologies()){
-            activeEffectIDs.add(technologyExtended.id());
-        }
-
-        /*
-        Iterate over possible effects & check if its in list of active effects.
-        If not, remove that effect from map. All maps with no affects have empty effect list.
-         */
-        Map<String, ArrayList<String>> tmp = new HashMap<>(variablesEffects);
-
-        for(Map.Entry<String, ArrayList<String>> entry : tmp.entrySet()){
-            ArrayList<String> tmpList = new ArrayList<>();
-            for(String effectID: entry.getValue()){
-                if(activeEffectIDs.contains(effectID)){
-                    tmpList.add(effectID);
-                }
-            }
-            entry.setValue(tmpList);
-        }
-        return tmp;
     }
 
     public void setVariablesEffect(Map<String, ArrayList<String>> variablesEffect){

@@ -5,12 +5,6 @@ import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.component.game.ClockComponent;
-import de.uniks.stp24.component.game.IslandComponent;
-import de.uniks.stp24.component.game.StorageOverviewComponent;
-import de.uniks.stp24.component.menu.*;
-import de.uniks.stp24.dto.MemberDto;
-import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
@@ -18,17 +12,14 @@ import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.game.*;
-import de.uniks.stp24.service.menu.GamesService;
-import de.uniks.stp24.service.menu.LobbyService;
-import de.uniks.stp24.service.game.ResourcesService;
-import de.uniks.stp24.ws.EventListener;
 import de.uniks.stp24.service.PopupBuilder;
+import de.uniks.stp24.service.game.*;
+import de.uniks.stp24.service.menu.LobbyService;
+import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -43,14 +34,16 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
-import org.jetbrains.annotations.NotNull;
 import org.fulib.fx.controller.Subscriber;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
-import javax.tools.Tool;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Title("CALVARIO")
 @Controller
@@ -99,8 +92,6 @@ public class InGameController extends BasicController {
     @Inject
     public EventService eventService;
     @Inject
-    TimerService timerService;
-    @Inject
     InGameService inGameService;
     @Inject
     EmpireService empireService;
@@ -110,10 +101,6 @@ public class InGameController extends BasicController {
     public ExplanationService explanationService;
     @Inject
     public JobsService jobsService;
-    @Inject
-    GangCreationController gangCreationController;
-    @Inject
-    TechnologyService technologyService;
 
     @SubComponent
     @Inject
@@ -483,6 +470,7 @@ public class InGameController extends BasicController {
         if (event.getSource() instanceof IslandComponent selected) {
             System.out.println(selected.island.id());
             tokenStorage.setIsland(selected.getIsland());
+            selectedIsland = selected;
             islandAttributes.setIsland(selected.getIsland());
             if (selected.getIsland().owner() != null) {
                 this.islandClaimingContainer.setVisible(false);
@@ -551,7 +539,6 @@ public class InGameController extends BasicController {
     }
 
     public void showOverview() {
-        if(islandAttributes.getIsland().owner() != null) {
             overviewSitesComponent.inputIslandName.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId()));
             overviewSitesComponent.buildingsComponent.resetPage();
             overviewSitesComponent.buildingsComponent.setGridPane();
@@ -561,7 +548,6 @@ public class InGameController extends BasicController {
             inGameService.showOnly(overviewContainer, overviewSitesComponent);
             inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
             overviewSitesComponent.setOverviewSites();
-        }
     }
 
     @OnKey(code = KeyCode.SPACE, alt = true)

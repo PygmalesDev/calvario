@@ -14,14 +14,14 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static de.uniks.stp24.service.Constants.*;
 
 @Singleton
 public class ExplanationService {
@@ -31,6 +31,15 @@ public class ExplanationService {
     public VariableService variableService;
     @Inject
     IslandAttributeStorage islandAttributes;
+    @Inject
+    @org.fulib.fx.annotation.controller.Resource
+    ResourceBundle langBundle;
+    @Inject
+    @Named("gameResourceBundle")
+    ResourceBundle gameResourceBundle;
+    @Inject
+    @Named("variablesResourceBundle")
+    ResourceBundle variablesResourceBundle;
 
     private InGameController inGameController;
 
@@ -48,6 +57,13 @@ public class ExplanationService {
         Tooltip tooltip = new Tooltip();
         Tooltip.install(cell, tooltip);
         tooltip.setGraphic(variableExplanationComponent);
+        tooltip.setStyle(
+                "-fx-background-color: transparent; " +
+                        "-fx-background-insets: 0; " +
+                        "-fx-background-radius: 0; " +
+                        "-fx-border-color: transparent; " +
+                        "-fx-padding: 0;"
+        );
         AtomicBoolean entered = new AtomicBoolean(false);
 
         app.stage().getScene().addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
@@ -67,30 +83,34 @@ public class ExplanationService {
                 isMouseInsideCell = mouseX < cellEnd.getX() && mouseX > cellStart.getX() && mouseY > cellStart.getY() + cell.getHeight() * 2 / 5 && mouseY < cellEnd.getY() - cell.getHeight() * 2 / 5;
             }
 
+            if(inGameController.overviewUpgradeComponent.isVisible() || inGameController.buildingPropertiesComponent.isVisible() || inGameController.sitePropertiesComponent.isVisible()){
+                if (isMouseInsideCell && !entered.get()) {
+                    initializeResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID(), variableExplanationComponent);
+                    tooltip.show(app.stage(), mouseX, mouseY);
+                    entered.set(true);
 
-            if (isMouseInsideCell && !entered.get()) {
-                initializeResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID(), variableExplanationComponent);
-                tooltip.show(app.stage(), mouseX, mouseY);
-                entered.set(true);
-
-            } else if (!isMouseInsideCell) {
-                tooltip.hide();
-                entered.set(false);
+                } else if (!isMouseInsideCell) {
+                    tooltip.hide();
+                    entered.set(false);
+                }
             }
         });
         return cell;
     }
 
-    private void initializeResExplanation(String listType, String indicator, String ResCategory, String id, VariableExplanationComponent variableExplanationComponent) {
-        String variable = listType + "." + indicator + "." + ResCategory + "." + id;
-        ExplainedVariableDTO explanation = variableService.data.get(variable);
-        variableExplanationComponent.setValues("Base: " + explanation.initial(), "Total: " + Math.floor(explanation.finalValue()), id);
+    private void initializeResExplanation(String listType, String indicator, String resCategory, String id, VariableExplanationComponent variableExplanationComponent) {
+        String variable = listType + "." + indicator + "." + resCategory + "." + id;
+        ExplainedVariableDTO explanation = setVariableExplanationComponent(variable, resCategory, id, variableExplanationComponent);
 
         Map<String, Double> activeEffects = new HashMap<>();
 
+        /*
+        Iterate over all active effect of current variable and show the effects visually.
+         */
         for (Sources source : explanation.sources()) {
             double x = 0;
             for (Effect effect : source.effects()) {
+                System.out.println(source.id());
                 if (effect.variable().equals(variable)){
                     x = (effect.multiplier() - 1) * 100;
                     activeEffects.put(source.id(), x);
@@ -100,19 +120,32 @@ public class ExplanationService {
 
         List<String> effects = new ArrayList<>();
 
-        if (!variableService.getActiveEffects().get(variable).isEmpty()) {
-            for (String effect : variableService.getActiveEffects().get(variable)) {
-                double mult = activeEffects.get(effect);
-                BigDecimal roundedMult = new BigDecimal(mult).setScale(2, RoundingMode.HALF_UP);
-                if(mult < 0){
-                    effects.add("-" + roundedMult + " " + effect);
-                } else {
-                    effects.add("+" + roundedMult + " " + effect);
-                }
-            }
+        for(Map.Entry<String, Double> entry : activeEffects.entrySet()){
+            double mult = entry.getValue();
+            BigDecimal roundedMult = new BigDecimal(mult).setScale(2, RoundingMode.HALF_UP);
+            effects.add(roundedMult + "% " + variablesResourceBundle.getString(entry.getKey()));
         }
 
         variableExplanationComponent.fillListWithEffects(effects);
+    }
+
+    private ExplainedVariableDTO setVariableExplanationComponent(String variable, String resCategory, String id, VariableExplanationComponent variableExplanationComponent){
+        ExplainedVariableDTO explanation = variableService.data.get(variable);
+        String title = gameResourceBundle.getString(resourceTranslation.get(id)) + " " + gameResourceBundle.getString(economyProcess.get(resCategory));
+        String base;
+        String total;
+
+        if(resCategory.equals("production")){
+            base = gameResourceBundle.getString(economyProcess.get("base")) + ": +" + explanation.initial();
+            total = gameResourceBundle.getString(economyProcess.get("total")) + ": +" + Math.floor(explanation.finalValue());
+        } else {
+            base = gameResourceBundle.getString(economyProcess.get("base")) + ": -" + explanation.initial();
+            total = gameResourceBundle.getString(economyProcess.get("total")) + ": -" + Math.floor(explanation.finalValue());
+        }
+
+        variableExplanationComponent.setValues(base, total, title, resourceImagePath.get(id));
+
+        return explanation;
     }
 
     public void setInGameController(InGameController inGameController) {

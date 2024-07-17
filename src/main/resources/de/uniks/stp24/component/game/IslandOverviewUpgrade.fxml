@@ -56,8 +56,9 @@
                <VBox prefHeight="16.0" prefWidth="30.0" />
                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="Costs" />
             </HBox>
+            <VBox prefHeight="20.0" prefWidth="206.0" />
             <HBox prefHeight="128.0" prefWidth="206.0">
-               <VBox prefHeight="122.0" prefWidth="26.0" />
+               <VBox prefHeight="115.0" prefWidth="34.0" />
                <ListView fx:id="upgradeUpkeepList" prefHeight="122.0" prefWidth="50.0" style="-fx-background-color: transparent;" styleClass="resourceList" />
                <VBox prefHeight="76.0" prefWidth="32.0" />
                <ListView fx:id="upgradeCostList" prefHeight="76.0" prefWidth="79.0" style="-fx-background-color: transparent;" styleClass="resourceList" />

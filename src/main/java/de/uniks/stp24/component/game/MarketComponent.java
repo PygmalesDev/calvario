@@ -105,6 +105,8 @@ public class MarketComponent extends StackPane {
     private int userCredits;
     private double marketFee;
     private int resourceAmount;
+    private int numberOfGoods;
+
 
     private boolean noPurchase;
 
@@ -132,15 +134,14 @@ public class MarketComponent extends StackPane {
 
     @Inject
     public MarketComponent() {
-        lastUpdate = "";
-        lastSeasonUpdate = "";
+        lastUpdate = " ";
+        lastSeasonUpdate = " ";
     }
 
     @OnInit
     public void init() {
         if (!tokenStorage.isSpectator()) {
             loadVariablesAndSetup();
-            getIdResourcesMap();
             createResourceListeners();
             createSeasonListener();
         }
@@ -153,19 +154,25 @@ public class MarketComponent extends StackPane {
                     createResourcePriceMap();
                     setMarketFee();
                     createResourceCountMap();
-                }
+                }, error -> System.out.println("errorLoadVaribleAndSetup:" + error)
         );
     }
 
     private void createResourceCountMap() {
+        System.out.println("Imran");
+        System.out.println(tokenStorage.getEmpireId());
+        System.out.println(tokenStorage.getGameId());
+        System.out.println("Imran");
         subscriber.subscribe(marketService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 empire -> {
+                    System.out.println("Tara");
+                    System.out.println(empire);
+                    System.out.println("Tara");
                     resourceCountMap = empire.resources();
-
                     setCreditCount();
+                    buttonLogic();
                     filterResourceMap();
                     listMarketResources();
-                    buttonLogic();
                 }
                 , error -> System.out.println("errorCreateResourceCountMap: " + error));
     }
@@ -186,22 +193,26 @@ public class MarketComponent extends StackPane {
         subscriber.subscribe(eventListener.listen(
                         "games" + tokenStorage.getGameId() + "empires" + tokenStorage.getEmpireId() + ".updated", EmpireExtendedDto.class),
                 event -> {
+                    if(numberOfGoodsLabel.getText().isEmpty()){
+                        numberOfGoods = 0;
+                    } else {
+                        numberOfGoods = Integer.parseInt(numberOfGoodsLabel.getText());
+                    }
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         Map<String, Integer> eventResources = event.data().resources();
                         if (!eventResources.equals(resourceCountMapCopy)) {
                             return;
                         }
                         if (noPurchase) {
-                            eventResources.put(selectedItem, resourceCountMapCopy.get(selectedItem) - Integer.parseInt(numberOfGoodsLabel.getText()));
+                            eventResources.put(selectedItem, resourceCountMapCopy.get(selectedItem) - numberOfGoods);
                         } else {
-                            eventResources.put(selectedItem, resourceCountMapCopy.get(selectedItem) + Integer.parseInt(numberOfGoodsLabel.getText()));
+                            eventResources.put(selectedItem, resourceCountMapCopy.get(selectedItem) + numberOfGoods);
                         }
                         resourceCountMap = eventResources;
                         refreshListview();
                         this.lastUpdate = event.data().updatedAt();
                     }
-                }
-        );
+                }, error -> System.out.println("errorCreateResourceListener: " + error));
     }
 
     private void buttonLogic() {
@@ -387,10 +398,7 @@ public class MarketComponent extends StackPane {
                         .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
                 event -> {
                     if (!lastSeasonUpdate.equals(event.data().updatedAt())) {
-
                         performSeasonalTrades();
-                        updateResources();
-                        refreshListview();
                         this.lastSeasonUpdate = event.data().updatedAt();
                     }
                 },
@@ -410,7 +418,17 @@ public class MarketComponent extends StackPane {
             }
         }
         userCreditsLabel.setText(String.valueOf(userCredits));
-        refreshListview();
+        updateAfterSeasonalTrade();
+    }
+
+    private void updateAfterSeasonalTrade() {
+
+        subscriber.subscribe(marketService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                empireDto -> {
+                        resourceCountMap = empireDto.resources();
+                    filterResourceMap();
+                        refreshListview();
+                }, error -> System.out.println("errorUpdateAfterSeasonalTrade: " + error));
     }
 
     private void performSeasonalBuy(String resourceType, int resourceAmount) {
@@ -418,18 +436,14 @@ public class MarketComponent extends StackPane {
         if (userCredits >= buyCost) {
             userCredits -= buyCost;
             resourceCountMap.put(resourceType, resourceCountMap.getOrDefault(resourceType, 0) + resourceAmount);
-            updateResources();
-            refreshListview();
         }
     }
 
     private void performSeasonalSell(String resourceType, int resourceAmount) {
         int sellCost = resourceAmount * (int) Math.round(resourcePriceMap.get(resourceType) * (1 - marketFee));
-        if (resourceCountMap.getOrDefault(resourceType, 0) >= resourceAmount) {
+        if (resourceCountMap.get(resourceType) >= resourceAmount) {
             userCredits += sellCost;
             resourceCountMap.put(resourceType, resourceCountMap.get(resourceType) + resourceAmount);
-            updateResources();
-            refreshListview();
         }
     }
 

@@ -313,7 +313,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
     public void onClose(){
-        setVisible(false);
+        inGameController.buildingPropertiesComponent.setVisible(false);
     }
 
     private void setCertainBuilding(){

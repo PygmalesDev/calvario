@@ -83,15 +83,16 @@ public class ExplanationService {
                 isMouseInsideCell = mouseX < cellEnd.getX() && mouseX > cellStart.getX() && mouseY > cellStart.getY() + cell.getHeight() * 2 / 5 && mouseY < cellEnd.getY() - cell.getHeight() * 2 / 5;
             }
 
+            if(inGameController.overviewUpgradeComponent.isVisible() || inGameController.buildingPropertiesComponent.isVisible() || inGameController.sitePropertiesComponent.isVisible()){
+                if (isMouseInsideCell && !entered.get()) {
+                    initializeResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID(), variableExplanationComponent);
+                    tooltip.show(app.stage(), mouseX, mouseY);
+                    entered.set(true);
 
-            if (isMouseInsideCell && !entered.get()) {
-                initializeResExplanation(listTyp, indicator, resourceCategory, cell.getItem().resourceID(), variableExplanationComponent);
-                tooltip.show(app.stage(), mouseX, mouseY);
-                entered.set(true);
-
-            } else if (!isMouseInsideCell) {
-                tooltip.hide();
-                entered.set(false);
+                } else if (!isMouseInsideCell) {
+                    tooltip.hide();
+                    entered.set(false);
+                }
             }
         });
         return cell;

@@ -92,8 +92,6 @@ public class InGameController extends BasicController {
     @Inject
     public EventService eventService;
     @Inject
-    TimerService timerService;
-    @Inject
     InGameService inGameService;
     @Inject
     EmpireService empireService;
@@ -103,10 +101,6 @@ public class InGameController extends BasicController {
     public ExplanationService explanationService;
     @Inject
     public JobsService jobsService;
-    @Inject
-    GangCreationController gangCreationController;
-    @Inject
-    TechnologyService technologyService;
 
     @SubComponent
     @Inject

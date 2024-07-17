@@ -109,7 +109,8 @@ public class OverviewSitesComponent extends AnchorPane {
 
     public void showUpgrades() {
         setLevelCheckBox();
-
+        inGameController.buildingPropertiesComponent.setVisible(false);
+        inGameController.sitePropertiesComponent.setVisible(false);
         inGameController.overviewUpgradeComponent.upgrade_box.setVisible(false);
         inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(true);
 
@@ -201,6 +202,8 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameController.buildingsWindowComponent.setVisible(false);
         inGameController.sitePropertiesComponent.setVisible(false);
         inGameController.buildingPropertiesComponent.setVisible(false);
+        inGameController.buildingPropertiesComponent.setMouseTransparent(true);
+        inGameController.sitePropertiesComponent.setMouseTransparent(true);
         inGameController.overviewContainer.setVisible(false);
 
         if (!inGameController.islandsService.keyCodeFlag) {

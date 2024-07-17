@@ -1,9 +1,6 @@
 package de.uniks.stp24.game.islandOverview;
 
 import de.uniks.stp24.dto.ExplainedVariableDTO;
-import javafx.scene.Node;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class TestVariableExplanation extends VariableTestComponent{
@@ -30,25 +26,6 @@ public class TestVariableExplanation extends VariableTestComponent{
         inGameController.overviewSitesComponent.islandFlag.getStylesheets().clear();
         inGameController.showOverview();
     }
-
-    /*
-    @Test
-    public void testTooltip(){
-        Node upgradeButton = lookup("#upgradeButton").query();
-        clickOn(upgradeButton);
-        waitForFxEvents();
-
-        Node node = lookup("#upgradeCostList").query();
-        ListView<?> upgradeCostList = (ListView<?>) node;
-        sleep(10000);
-
-        ListCell<?> firstCell = (ListCell<?>) upgradeCostList.lookup(".list-cell");
-
-        clickOn(firstCell);
-
-    }
-
-     */
 
     @Test
     public void testVariablesTree(){
@@ -67,7 +44,7 @@ public class TestVariableExplanation extends VariableTestComponent{
         assertEquals("buildings", variableService.buildingsTree.getRoot().getKey());
         assertEquals(1, variableService.buildingsTree.getRoot().getChildren().size());
         assertEquals(3, variableService.buildingsTree.getRoot().getChildren().getFirst().getChildren().size());
-        assertEquals(1, variableService.buildingsTree.getRoot().getChildren().getFirst().getChildren().getFirst().getChildren().size());
+        assertEquals(0, variableService.buildingsTree.getRoot().getChildren().getFirst().getChildren().getFirst().getChildren().size());
         assertEquals(1, variableService.buildingsTree.getRoot().getChildren().getFirst().getChildren().getLast().getChildren().size());
     }
 

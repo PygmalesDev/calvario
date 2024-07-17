@@ -28,7 +28,7 @@ public class EnterGameComponent extends AnchorPane {
     Subscriber subscriber;
     @Inject
     @Resource
-    ResourceBundle resource;
+    ResourceBundle resources;
 
     protected String gameID;
 
@@ -46,7 +46,6 @@ public class EnterGameComponent extends AnchorPane {
     @OnRender
     public void render() {
         this.errorMessage.setVisible(false);
-        this.errorMessage.setStyle("-fx-font-size: 0");
     }
 
     public void cancel() {
@@ -58,10 +57,10 @@ public class EnterGameComponent extends AnchorPane {
             this.subscriber.subscribe(this.joinGameService.joinGame(this.gameID,
                             this.tokenStorage.getUserId(), this.getPassword()),
                     result -> {},
-                    error -> this.errorMessage.setText(this.resource.getString("pirate.enterGame.wrongPassword")
+                    error -> this.errorMessage.setText(this.resources.getString("pirate.enterGame.wrongPassword")
                             .replace("{password}", this.getPassword())));
         else
-            this.errorMessage.setText(this.resource.getString("pirate.enterGame.noPassword"));
+            this.errorMessage.setText(this.resources.getString("pirate.enterGame.noPassword"));
     }
 
     private String getPassword() {

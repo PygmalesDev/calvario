@@ -4,9 +4,7 @@ import jakarta.websocket.*;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 @jakarta.websocket.ClientEndpoint
@@ -15,6 +13,8 @@ public class ClientEndpoint {
     private final List<Consumer<String>> messageHandlers = Collections.synchronizedList(new ArrayList<>());
 
     Session userSession;
+
+    Timer timer = new Timer();
 
     public ClientEndpoint(URI endpointURI) {
         this.endpointURI = endpointURI;
@@ -35,6 +35,19 @@ public class ClientEndpoint {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        forceKeepAwake();
+    }
+
+    private void forceKeepAwake() {
+        final int INTERVAL  = 30000;
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+               sendMessage("keep-alive");
+            }
+        };
+        timer.scheduleAtFixedRate(timerTask, 0, INTERVAL);
     }
 
     @OnOpen

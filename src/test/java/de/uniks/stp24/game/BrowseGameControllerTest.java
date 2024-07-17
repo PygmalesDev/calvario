@@ -7,6 +7,7 @@ import de.uniks.stp24.component.menu.GameComponent;
 import de.uniks.stp24.component.menu.LogoutComponent;
 import de.uniks.stp24.component.menu.WarningComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
+import de.uniks.stp24.controllers.EditAccController;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.LogoutResult;
 import de.uniks.stp24.rest.GameMembersApiService;
@@ -34,7 +35,10 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
 import javax.inject.Provider;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -77,11 +81,13 @@ public class BrowseGameControllerTest extends ControllerTest {
     BubbleComponent bubbleComponent;
     @InjectMocks
     WarningComponent warningComponent;
+    @Spy
+    EditAccController editAccController;
     @Mock
     Comparable<Game> comparable;
 
 
-    Game game = new Game("11", null, "1", "Was geht", "testID2", 2,false, 0,0, null);
+    Game game = new Game("11", null, "1", "Was geht", "testID2", 2,0, false, 0,0, null);
 
     Provider<GameComponent> GameComponentProvider = () -> new GameComponent(bubbleComponent, browseGameService, editGameService, tokenStorage,resources);
 
@@ -98,10 +104,11 @@ public class BrowseGameControllerTest extends ControllerTest {
         browseGameController.warningComponent = warningComponent;
         Mockito.doReturn(Observable.just(List.of(
                 game,
-                new Game("88888", null, "2", "rapapa", "testID", 2,false, 0,0, null)
+                new Game("88888", null, "2", "rapapa", "testID", 2,0, false, 0,0, null)
         ))).when(gamesApiService).findAll();
 
         Mockito.doReturn(subject).when(eventListener).listen("games.*.*", Game.class);
+        doReturn(null).when(this.imageCache).get(any());
 
         super.start(stage);
         app.show(browseGameController);
@@ -155,6 +162,8 @@ public class BrowseGameControllerTest extends ControllerTest {
         assertEquals(resources.getString("browse.game"), stage.getTitle());
         clickOn(browseGameController.edit_acc_b);
         WaitForAsyncUtils.waitForFxEvents();
+        System.out.println(tokenStorage);
+        System.out.println(tokenStorage.getAvatarMap());
         assertEquals(resources.getString("edit.account"), stage.getTitle());
     }
 
@@ -167,12 +176,12 @@ public class BrowseGameControllerTest extends ControllerTest {
         //Create new Game and check if game is listed on ListView
         WaitForAsyncUtils.waitForFxEvents();
         assertEquals(2, browseGameController.gameList.getItems().size());
-        subject.onNext(new Event<>("games.3.created", new Game("22", null, "3", "taschaka", "testID2", 2,false, 0,0, null)));
+        subject.onNext(new Event<>("games.3.created", new Game("22", null, "3", "taschaka", "testID2", 2, 0,false, 0,0, null)));
 
         //Delete existing game and check if game is still listed or not.
         WaitForAsyncUtils.waitForFxEvents();
         assertEquals(3, browseGameController.gameList.getItems().size());
-        subject.onNext(new Event<>("games.652.deleted", new Game("22", null, "2", "rapapa", "testID", 2,false, 0,0, null)));
+        subject.onNext(new Event<>("games.652.deleted", new Game("22", null, "2", "rapapa", "testID", 2, 0,false, 0,0, null)));
 
         //Check amount of Listview items
         WaitForAsyncUtils.waitForFxEvents();
@@ -247,7 +256,7 @@ public class BrowseGameControllerTest extends ControllerTest {
     void deleteGameConfirm(){
         //doNothing().when(warningComponent).setGameName();
         //doNothing().when(warningComponent).deleteGame();
-        doReturn(Observable.just(new Game("1", "a","b","c","d", 2,true,4, 5, null)) ).when(this.browseGameService).deleteGame();
+        doReturn(Observable.just(new Game("1", "a","b","c","d", 2,0, true,4, 5, null)) ).when(this.browseGameService).deleteGame();
         WaitForAsyncUtils.waitForFxEvents();
         browseGameController.browseGameService.setGame(browseGameController.gameList.getItems().get(0));
         browseGameController.browseGameService.setTokenStorage();
@@ -269,7 +278,6 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Test
     public void clickOnLogout() {
         prefService.setRefreshToken("lastRefreshToken");
-        System.out.println(prefService.getRefreshToken());
         doReturn(Observable.just(new LogoutResult("a")))
                 .when(browseGameService).logout(any());
         doReturn(null).when(app).show("/login");

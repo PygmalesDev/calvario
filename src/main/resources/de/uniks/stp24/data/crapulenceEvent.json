@@ -7,13 +7,19 @@
       "variable": "food",
       "base": 0,
       "multiplier": 0.1,
-      "bonus": 0
+      "bonus": 0,
+      "condType": "island",
+      "condID": "agriculture",
+      "effected": "multiplier"
     },
     {
       "variable": "consumer_goods",
       "base": 25,
       "multiplier": 1,
-      "bonus": 0
+      "bonus": 0,
+      "condType": null,
+      "condID": null,
+      "effected": null
     }
   ]
 }

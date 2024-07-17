@@ -2,14 +2,19 @@ package de.uniks.stp24;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
+import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
+import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
+import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.rest.JobsApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -32,6 +37,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.*;
 
@@ -46,8 +52,6 @@ public class AppTest2 extends ControllerTest {
     InGameController inGameController;
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
-    @InjectMocks
-    SettingsComponent settingsComponent;
     @InjectMocks
     EventComponent eventComponent;
     @InjectMocks
@@ -75,9 +79,21 @@ public class AppTest2 extends ControllerTest {
     @InjectMocks
     DeleteStructureComponent deleteStructureComponent;
     @InjectMocks
+    JobsOverviewComponent jobsOverviewComponent;
+    @InjectMocks
+    IslandOverviewJobsComponent islandOverviewJobsComponent;
+    @InjectMocks
     EmpireOverviewComponent empireOverviewComponent;
+    @InjectMocks
+    PropertiesJobProgressComponent propertiesJobProgressComponent;
+    @InjectMocks
+    HelpComponent helpComponent;
+    @InjectMocks
+    IslandClaimingComponent islandClaimingComponent;
 
 
+    @Spy
+    JobsService jobsService;
     @Spy
     TokenStorage tokenStorage;
     @Spy
@@ -91,15 +107,13 @@ public class AppTest2 extends ControllerTest {
     @Spy
     InfrastructureService infrastructureService;
 
-
-    @Spy
-    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
-
     @Spy
     GameStatus gameStatus;
 
     @Spy
     InGameService inGameService;
+    @Spy
+    ImageCache imageCache;
     @Spy
     EventService eventService;
     @Spy
@@ -109,11 +123,15 @@ public class AppTest2 extends ControllerTest {
 
     @Spy
     LanguageService languageService;
+    @Spy
+    JobsApiService jobsApiService;
 
     @Spy
     ResourcesService resourcesService;
     @Spy
     GameSystemsApiService gameSystemsApiService;
+    @Spy
+    EmpireApiService empireApiService;
     @Spy
     IslandComponent islandComponent = spy(IslandComponent.class);
 
@@ -144,10 +162,10 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
-        this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = eventComponent;
+        this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.clockComponent.timerService = this.timerService;
         this.clockComponent.eventService = this.eventService;
@@ -155,6 +173,7 @@ public class AppTest2 extends ControllerTest {
         this.clockComponent.gamesApiService = this.gameApiService;
         this.clockComponent.islandsService = this.islandsService;
         this.clockComponent.eventComponent = this.eventComponent;
+        this.eventComponent.empireApiService = this.empireApiService;
         this.islandsService.app = this.app;
         this.islandAttributeStorage.systemPresets = systemUpgrades;
         inGameService.setGameStatus(gameStatus);
@@ -165,20 +184,41 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
+        this.inGameController.helpComponent = this.helpComponent;
+
+        this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
+        this.timerService.tokenStorage = this.tokenStorage;
+        this.timerService.subscriber = this.subscriber;
+        this.timerService.gamesApiService = this.gameApiService;
+        this.buildingPropertiesComponent.propertiesJobProgressComponent = this.propertiesJobProgressComponent;
+        this.sitePropertiesComponent.siteJobProgress = this.propertiesJobProgressComponent;
 
         inGameController.mapScrollPane = new ScrollPane();
         inGameController.group = new Group();
         inGameController.zoomPane = new StackPane();
         inGameController.mapGrid = new Pane();
 
+        this.jobsService.tokenStorage = this.tokenStorage;
+        this.jobsService.jobsApiService = this.jobsApiService;
+        this.jobsService.subscriber = this.subscriber;
+        this.jobsService.eventListener =this.eventListener;
+
+        this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
+        this.islandClaimingComponent.jobsService = this.jobsService;
+        this.islandClaimingComponent.islandAttributes = this.islandAttributeStorage;
+        this.islandClaimingComponent.imageCache = this.imageCache;
+        this.islandClaimingComponent.islandsService = this.islandsService;
+
         inGameController.zoomPane.getChildren().add(inGameController.mapGrid);
         inGameController.group.getChildren().add(inGameController.zoomPane);
         inGameController.mapScrollPane.setContent(inGameController.group);
 
+        doReturn(Observable.empty()).when(this.jobsApiService).getEmpireJobs(any(), any());
+
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
         doReturn(Observable
                 .just(new Game("a", null, "game1Id", "testGame1",
-                        "testHost1", 2, true, 1,10, null))).when(gameApiService).getGame(any());
+                        "testHost1", 2, 0, true, 1,10, null))).when(gameApiService).getGame(any());
         doReturn(null).when(this.app).show("/ingame");
         islandsService.saveEmpire("empire",new ReadEmpireDto("a","b","empire","game1","user1","name",
                 "description","#FFDDEE",2,3,"home"));
@@ -207,7 +247,6 @@ public class AppTest2 extends ControllerTest {
         List<IslandComponent> compList = Arrays.asList(comp0,comp1,comp2);
         doReturn(Observable.just(systems)).when(gameSystemsApiService).getSystems(any());
         doReturn(compMap).when(islandsService).getComponentMap();
-//        doReturn(compList).when(islandsService).createIslands(any());
 
         doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
         doReturn(Observable.just(districtPresets)).when(inGameService).loadDistrictPresets();
@@ -222,6 +261,7 @@ public class AppTest2 extends ControllerTest {
         Mockito.doCallRealMethod().when(islandsService).createIslandPaneFromDto(any(),any());
         doCallRealMethod().when(islandComponent).setPosition(anyDouble(),anyDouble());
 
+        doReturn(null).when(imageCache).get(any());
 
         // Mock getEmpire
         doReturn(Observable.just(new EmpireDto("a","a","testEmpireID", "testGameID","testUserID","testEmpire",
@@ -229,15 +269,19 @@ public class AppTest2 extends ControllerTest {
                 null))).when(this.empireService).getEmpire(any(),any());
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
 
+        doReturn(Observable.just(new EffectSourceParentDto(new EffectSourceDto[]{}))).when(empireApiService).getEmpireEffect(any(), any());
+
         app.show(inGameController);
         eventComponent.getStylesheets().clear();
+        helpComponent.getStylesheets().clear();
         storageOverviewComponent.getStylesheets().clear();
         clockComponent.getStylesheets().clear();
         pauseMenuComponent.getStylesheets().clear();
-        settingsComponent.getStylesheets().clear();
         overviewSitesComponent.getStylesheets().clear();
         overviewUpgradeComponent.getStylesheets().clear();
         sitesComponent.getStylesheets().clear();
+        jobsOverviewComponent.getStylesheets().clear();
+        islandClaimingComponent.getStylesheets().clear();
 
         island1 = new Island(
           "testEmpireID",
@@ -252,7 +296,8 @@ public class AppTest2 extends ControllerTest {
           Map.of("energy", 3, "agriculture" , 6),
           buildings,
           "1",
-          "developed"
+          "developed",
+                "TestIsland1"
         );
 
     }
@@ -262,17 +307,12 @@ public class AppTest2 extends ControllerTest {
         assertEquals(0,islandsService.getListOfIslands().size());
         islandsService.retrieveIslands("game1");
         gameSystemsApiService.getSystems("game1");
-
-        sleep(100);
-
+        WaitForAsyncUtils.waitForFxEvents();
         List<Island> testIsles = islandsService.getListOfIslands();
 
         testIsleComps = islandsService.createIslands(testIsles);
         Map<String,IslandComponent> testIsleMap = islandsService.getComponentMap();
-
-
-
-        sleep(100);
+        WaitForAsyncUtils.waitForFxEvents();
 
         assertEquals(3,testIsles.size());
         assertEquals(3,testIsleComps.size());
@@ -284,10 +324,7 @@ public class AppTest2 extends ControllerTest {
         assertNotEquals(0,islandsService.getMapHeight());
         assertEquals(2,islandsService.getSiteManagerSize());
 
-
-
-
-        Platform.runLater(() -> {
+        Platform.runLater(() ->{
             createIcons();
             createLines();
             waitForFxEvents();
@@ -298,38 +335,20 @@ public class AppTest2 extends ControllerTest {
             inGameController.mapGrid.getChildren().add(buttons[2]);
             waitForFxEvents();
         });
-        sleep(1000);
-        Platform.runLater(() -> {
-            waitForFxEvents();
-            clickOn("#showStorageButton");
-            waitForFxEvents();
 
-            sleep(500);
+        waitForFxEvents();
+        clickOn("#storageOverviewButton");
+        waitForFxEvents();
 
-        });
         assertTrue(inGameController.storageOverviewComponent.isVisible());
-        sleep(500);
-        Platform.runLater(() -> {
-            waitForFxEvents();
-            clickOn("#showStorageButton");
-            waitForFxEvents();
 
-            sleep(500);
-
-        });
-
-
-
-
-        sleep(2000);
+        waitForFxEvents();
+        clickOn("#storageOverviewButton");
+        waitForFxEvents();
 
         assertEquals(37,islandsService.getAllNumberOfSites("empire"));
         assertEquals(17,islandsService.getCapacityOfOneSystem("home"));
         assertEquals(9,islandsService.getNumberOfSites("empire","energy"));
-
-
-
-        sleep(2000);
 
         openStorage();
 
@@ -362,7 +381,7 @@ public class AppTest2 extends ControllerTest {
 
         buttons[0].setOnAction(event -> System.out.println("food"));
         buttons[1].setOnAction(event -> System.out.println("food"));
-        buttons[2].setOnAction(event -> inGameController.showStorage());
+        buttons[2].setOnAction(event -> inGameController.showStorageOverview());
     }
 
     public void createLines(){
@@ -385,23 +404,23 @@ public class AppTest2 extends ControllerTest {
     public void openStorage(){
         waitForFxEvents();
         // Storage is closed
-        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
+        assertFalse(this.inGameController.storageOverviewComponent.isVisible());
         // Open storage
-        clickOn("#showStorageButton");
+        clickOn("#storageOverviewButton");
         waitForFxEvents();
-        assertTrue(this.inGameController.storageOverviewContainer.isVisible());
+        assertTrue(this.inGameController.storageOverviewComponent.isVisible());
         // Close storage with Button in Ingame
-        clickOn("#showStorageButton");
+        clickOn("#storageOverviewButton");
         waitForFxEvents();
-        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
+        assertFalse(this.inGameController.storageOverviewComponent.isVisible());
         // Open again
-        clickOn("#showStorageButton");
+        clickOn("#storageOverviewButton");
         waitForFxEvents();
-        assertTrue(this.inGameController.storageOverviewContainer.isVisible());
+        assertTrue(this.inGameController.storageOverviewComponent.isVisible());
         // Close storage with button in StorageOverviewComponent
         clickOn("#closeStorageOverviewButton");
         waitForFxEvents();
-        assertFalse(this.inGameController.storageOverviewContainer.isVisible());
+        assertFalse(this.inGameController.storageOverviewComponent.isVisible());
     }
 
 }

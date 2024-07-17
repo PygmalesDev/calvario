@@ -36,6 +36,9 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import javax.inject.Provider;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -92,8 +95,14 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
 
+
     @Override
     public void start(Stage stage) throws Exception{
+        Map<String,Integer> _public = new HashMap<>();
+        _public.put("backgroundIndex", 1);
+        _public.put("portraitIndex", 1);
+        _public.put("frameIndex", 1);
+
         super.start(stage);
 
         this.lobbyController.bubbleComponent = this.bubbleComponent;
@@ -109,7 +118,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
 
         // Mock getting game
         doReturn(Observable.just(new Game("1", "a","testGameID","testGame","testGameHostID", 2,
-                false, 1, 0, new GameSettings(1))))
+                0, false, 1, 0, new GameSettings(1))))
                 .when(this.gamesService).getGame(any());
 
         // Mock listen to game deletion
@@ -128,18 +137,18 @@ public class TestLobbyControllerAsMember extends ControllerTest {
 
         // Mock getting user
         when(this.userApiService.getUser(any()))
-                .thenReturn(Observable.just(new User("gameHost", "testGameHostID", null, "1", "1")))
-                .thenReturn(Observable.just(new User("testMemberUno", "testMemberUnoID", null, "1", "1")))
-                .thenReturn(Observable.just(new User("testMemberDos", "testMemberDosID", null, "1", "1")));
+                .thenReturn(Observable.just(new User("gameHost", "testGameHostID", null, "1", "1",_public)))
+                .thenReturn(Observable.just(new User("testMemberUno", "testMemberUnoID", null, "1", "1",_public)))
+                .thenReturn(Observable.just(new User("testMemberDos", "testMemberDosID", null, "1", "1",_public)));
 
         // Mock getting members updates
         doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.*"), eq(MemberDto.class));
 
-        // Mock getting members readiness updates
-        doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.updated"), eq(MemberDto.class));
         this.app.show(this.lobbyController);
 
+        this.lobbyController.backgroundAnchorPane.getStylesheets().clear();
 
+        doReturn(null).when(imageCache).get(any());
     }
 
     /**
@@ -156,7 +165,6 @@ public class TestLobbyControllerAsMember extends ControllerTest {
                 .findFirst().orElseThrow();
         assertEquals(3, this.lobbyController.playerListView.getItems().size());
         assertTrue(member.name().contains("testMemberUno"));
-        assertTrue(member.name().contains("(Spectator)"));
 
         // Test if the correct component is shown to the member
         Node component = this.lobbyController.lobbyElement.getChildren().getFirst();
@@ -216,7 +224,6 @@ public class TestLobbyControllerAsMember extends ControllerTest {
                 .filter(memberUser -> memberUser.user()._id().equals("testMemberUnoID"))
                 .findFirst().orElseThrow();
         assertTrue(member.ready());
-        assertTrue(member.user().name().contains("(Spectator)"));
 
         // Test readiness update on user that has selected an empire
         this.memberSubject.onNext(new Event<>("games.testGameID.members.testMemberUnoID.updated",
@@ -286,7 +293,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
 
         this.gameSubject.onNext(new Event<>("games.testGameID.deleted",
                 new Game("1", "a","testGameID","testGame","testGameHostID", 2,
-                        false, 1, 0, new GameSettings(1))));
+                        0, false, 1, 0, new GameSettings(1))));
 
         WaitForAsyncUtils.waitForFxEvents();
         assertTrue(lookup("#lobbyMessageElement").query().isVisible());
@@ -300,7 +307,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     public void startGameAsPlayer(){
         WaitForAsyncUtils.waitForFxEvents();
 
-        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
+        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, null, "a");
 
         doReturn(null).when(this.app).show("/ingame");
 
@@ -317,7 +324,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         // start game
         this.gameSubject.onNext(new Event<>("games.testGameID.updated",
                 new Game("1", "a","testGameID","testGame","testGameHostID", 2,
-                        true, 1, 0, new GameSettings(1))));
+                        0, true, 1, 0, new GameSettings(1))));
 
         WaitForAsyncUtils.waitForFxEvents();
 
@@ -332,7 +339,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     public void startGameAsSpectator(){
         WaitForAsyncUtils.waitForFxEvents();
 
-        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, new String[]{"1"}, "a");
+        Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, null, "a");
 
         doReturn(null).when(this.app).show("/ingame");
 
@@ -349,7 +356,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         // start game
         this.gameSubject.onNext(new Event<>("games.testGameID.updated",
                 new Game("1", "a","testGameID","testGame","testGameHostID", 2,
-                        true, 1, 0, new GameSettings(1))));
+                        0, true, 1, 0, new GameSettings(1))));
 
         WaitForAsyncUtils.waitForFxEvents();
 

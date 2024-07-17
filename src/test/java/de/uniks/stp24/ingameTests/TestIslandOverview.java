@@ -5,12 +5,12 @@ import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.component.menu.SettingsComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.rest.GamesApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -45,8 +45,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
@@ -57,6 +56,8 @@ public class TestIslandOverview extends ControllerTest {
     GameStatus gameStatus;
     @Spy
     InGameService inGameService;
+    @Spy
+    ImageCache imageCache;
     @Spy
     TimerService timerService;
     @Spy
@@ -82,8 +83,6 @@ public class TestIslandOverview extends ControllerTest {
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
-    @InjectMocks
-    SettingsComponent settingsComponent;
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
     @InjectMocks
@@ -258,7 +257,6 @@ public class TestIslandOverview extends ControllerTest {
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
-        this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = this.eventComponent;
         this.inGameController.eventService = this.eventService;
@@ -294,7 +292,7 @@ public class TestIslandOverview extends ControllerTest {
                 "a", "a", 1, 2, "a", new String[]{"1"}, cost,
                 null))).when(this.empireService).getEmpire(any(), any());
 
-        doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", 2,true, 1, 1, null))).when(gamesApiService).getGame(any());
+        doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", 2,0, true, 1, 1, null))).when(gamesApiService).getGame(any());
         doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
         doReturn(Observable.just(systemUpgrades)).when(inGameService).loadUpgradePresets();
         doReturn(Observable.just(buildingPresets)).when(inGameService).loadBuildingPresets();
@@ -321,7 +319,8 @@ public class TestIslandOverview extends ControllerTest {
                 sites,
                 buildings,
                 "1",
-                "explored"
+                "explored",
+                "TestIsland1"
         );
 
         testIsland2 = new Island(
@@ -338,7 +337,8 @@ public class TestIslandOverview extends ControllerTest {
                 buildings,
                 "1"
                 ,
-                "explored"
+                "explored",
+                "TestIsland2"
         );
 
         testIsland3 = new Island(
@@ -354,7 +354,8 @@ public class TestIslandOverview extends ControllerTest {
                 sites,
                 buildings,
                 "1",
-                "explored"
+                "explored",
+                "TestIsland3"
         );
 
         this.islandAttributeStorage.setIsland(testIsland1);
@@ -399,9 +400,7 @@ public class TestIslandOverview extends ControllerTest {
                 (int) testIsland1.posY(),
                 tokenStorage.getEmpireId()
         );
-
-
-
+        doReturn(null).when(this.imageCache).get(any());
 
         this.islandAttributeStorage.systemPresets = systemUpgrades;
         this.islandAttributeStorage.empireDto = empireDto;
@@ -418,7 +417,7 @@ public class TestIslandOverview extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.selectedIsland.flagPane = new StackPane();
 
-        this.inGameController.storageButtonsBox = new HBox();
+        this.inGameController.contextMenuButtons = new HBox();
         this.islandsService.isles = islands;
         this.islandsService.tokenStorage = new TokenStorage();
         this.islandsService.gameSystemsService = gameSystemsApiService;
@@ -427,7 +426,6 @@ public class TestIslandOverview extends ControllerTest {
 
         this.storageOverviewComponent.getStylesheets().clear();
         this.pauseMenuComponent.getStylesheets().clear();
-        this.settingsComponent.getStylesheets().clear();
         this.clockComponent.getStylesheets().clear();
         this.eventComponent.getStylesheets().clear();
         this.storageOverviewComponent.getStylesheets().clear();
@@ -691,7 +689,6 @@ public class TestIslandOverview extends ControllerTest {
         int oldValue = this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size();
         clickOn(buildingNodes.getLast());
 
-        System.out.println(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size());
         assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), oldValue + 1);
         assertTrue(!prev.isVisible() && !next.isVisible());
     }

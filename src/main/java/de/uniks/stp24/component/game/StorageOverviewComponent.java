@@ -70,7 +70,7 @@ public class StorageOverviewComponent extends AnchorPane {
     }
 
     @OnInit
-    public void init(StorageOverviewComponent storageOverviewComponent) {
+    public void init() {
         if (!tokenStorage.isSpectator()) {
             createEmpireListener();
             createSeasonListener();
@@ -104,7 +104,8 @@ public class StorageOverviewComponent extends AnchorPane {
 
     private void resourceListGeneration(EmpireDto empireDto, AggregateItemDto[] aggregateItems) {
         Map<String, Integer> resourceMap = empireDto.resources();
-        resourceList = resourcesService.generateResourceList(resourceMap, resourceListView.getItems(), aggregateItems);
+        resourcesService.setCurrentResources(resourceMap);
+        ObservableList<Resource> resourceList = resourcesService.generateResourceList(resourceMap, resourceListView.getItems(), aggregateItems);
         this.resourceListView.setItems(resourceList);
     }
 
@@ -119,6 +120,7 @@ public class StorageOverviewComponent extends AnchorPane {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         resourceListGeneration(event.data(), null);
                         this.lastUpdate = event.data().updatedAt();
+                        resourcesService.runnables.forEach(Runnable::run);
                     }
                 },
                 error -> System.out.println("errorEmpireListener"));
@@ -134,9 +136,7 @@ public class StorageOverviewComponent extends AnchorPane {
                     if (!lastSeasonUpdate.equals(event.data().updatedAt())) {
                         subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                                 empireDto -> subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
-                                        aggregateResultDto -> {
-                                            resourceListGeneration(empireDto, aggregateResultDto.items());
-                                        },
+                                        aggregateResultDto -> resourceListGeneration(empireDto, aggregateResultDto.items()),
                                         error -> System.out.println("ErrorAggregateSubscriber")),
                                 error -> System.out.println("ErrorEmpireSubscriber"));
                         this.lastSeasonUpdate = event.data().updatedAt();

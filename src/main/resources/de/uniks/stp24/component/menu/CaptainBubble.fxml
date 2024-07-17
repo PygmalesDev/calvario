@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
 <fx:root type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.menu.BubbleComponent">
-   <ImageView fx:id="captainLogo" fitHeight="100.0" fitWidth="150.0" layoutX="-10.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true">
-      <Image url="@../../assets/logos/captainWebjaw.png" />
-   </ImageView>
+   <ImageView fx:id="captainLogo" fitHeight="100.0" fitWidth="100.0" layoutX="-10.0" layoutY="100.0" onMouseEntered="#scaleUp" onMouseExited="#scaleDown" pickOnBounds="true" preserveRatio="true" styleClass="captainWebjaw" />
    <Pane fx:id="backgroundBubble" layoutX="28.0" layoutY="26.0" prefHeight="113.0" prefWidth="215.0" styleClass="captainPane" />
    <TextArea fx:id="captainText" disable="true" editable="false" layoutX="46.0" layoutY="29.0" prefHeight="113.0" prefWidth="188.0" styleClass="captainText" wrapText="true">
       <font>

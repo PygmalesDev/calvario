@@ -1,21 +1,26 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.dto.EffectSourceDto;
 import de.uniks.stp24.dto.EffectSourceParentDto;
 import de.uniks.stp24.model.Game;
+import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.ws.EventListener;
+import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -31,9 +36,10 @@ import java.beans.PropertyChangeListener;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import static de.uniks.stp24.service.Constants.*;
+
 @Component(view = "Event.fxml")
 public class EventComponent extends AnchorPane {
-
     @FXML
     AnchorPane anchor;
     @FXML
@@ -70,12 +76,25 @@ public class EventComponent extends AnchorPane {
     @Inject
     Subscriber subscriber;
     @Inject
+    public EmpireApiService empireApiService;
+    @Inject
     public TokenStorage tokenStorage;
+
+    Pane gameBackground;
 
     String gameId;
 
     ImageCache imageCache = new ImageCache();
     private String lastUpdate = "";
+
+    boolean eventOccured = false;
+
+    ColorAdjust fadeAdjust;
+    ColorAdjust unfadeAdjust;
+    ColorAdjust brightenAdjsut;
+    Timeline nightTimeLine;
+    Timeline dayTimeLine;
+    boolean isDay = true;
 
     @Inject
     public EventComponent() {
@@ -84,38 +103,50 @@ public class EventComponent extends AnchorPane {
 
     @OnInit
     public void init() {
-
         PropertyChangeListener callHandleEventChanged = this::handleEventChanged;
         eventService.listeners().addPropertyChangeListener(EventService.PROPERTY_EVENT, callHandleEventChanged);
 
-        createUpdateSeasonsListener();
+        PropertyChangeListener callHandleShowEventChanged = this::handleShowEventChanged;
+        timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_SHOWEVENT, callHandleShowEventChanged);
 
+        createUpdateSeasonsListener();
     }
 
+    @OnDestroy
+    public void destroy() {
+        eventService.listeners().removePropertyChangeListener(EventService.PROPERTY_EVENT, this::handleEventChanged);
+        timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_SHOWEVENT, this::handleShowEventChanged);
+    }
 
     public void createUpdateSeasonsListener() {
         subscriber.subscribe(this.eventListener
                         .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
                 event -> {
                     if (!Objects.equals(lastUpdate, event.data().updatedAt())) {
-
                         eventService.setNextEventTimer(eventService.getNextEventTimer()-1);
-
-                        if (eventService.getEvent() != null) {
-
+                        EffectSourceParentDto activeEvent = eventService.getEvent();
+                        if (activeEvent != null && !eventOccured) {
+                            eventOccured = true;
+                            if (activeEvent.effects()[0].id().equals("solarEclipse") && isDay) {
+                                changeToNight();
+                            }
                             subscriber.subscribe(eventService.sendEffect(),
                                     result -> {},
                                     error -> System.out.println("Error beim Senden von Effect: " + error));
-
-                            setRandomEventInfos(eventService.getEvent());
+                            setRandomEventInfos(activeEvent);
                             show();
+                        } else if (activeEvent == null) {
+                            eventOccured = false;
+                            if (!isDay) {
+                                changeToDay();
+                            }
                         }
                         lastUpdate = event.data().updatedAt();
                     }
                 },
-                error -> System.out.println("Error bei Season: " + error.getMessage()));
+                error -> System.out.println("Error bei Season: " + error.getMessage())
+        );
     }
-
 
     private void handleEventChanged(PropertyChangeEvent propertyChangeEvent) {
         if (Objects.nonNull(eventService.getEvent())) {
@@ -124,15 +155,63 @@ public class EventComponent extends AnchorPane {
         }
     }
 
-
     @OnRender
     public void render() {
-
         String css = Objects.requireNonNull(this.getClass().getResource("/de/uniks/stp24/style/event.css")).toExternalForm();
         this.getStylesheets().add(css);
 
         gameId = tokenStorage.getGameId();
 
+        fadeAdjust = new ColorAdjust();
+        fadeAdjust.setBrightness(0);
+
+        unfadeAdjust = new ColorAdjust();
+        unfadeAdjust.setBrightness(0);
+
+        brightenAdjsut = new ColorAdjust();
+        brightenAdjsut.setBrightness(0);
+
+        nightTimeLine = new Timeline(
+                new KeyFrame(Duration.seconds(0),
+                        new KeyValue(fadeAdjust.brightnessProperty(), fadeAdjust.brightnessProperty().getValue(), Interpolator.LINEAR)),
+                new KeyFrame(Duration.seconds(7), new KeyValue(fadeAdjust.brightnessProperty(), -0.8, Interpolator.LINEAR)
+                ));
+        nightTimeLine.setCycleCount(1);
+        nightTimeLine.setAutoReverse(false);
+
+        dayTimeLine = new Timeline(
+                new KeyFrame(Duration.seconds(0),
+                        new KeyValue(unfadeAdjust.brightnessProperty(), unfadeAdjust.brightnessProperty().getValue(), Interpolator.LINEAR)),
+                new KeyFrame(Duration.seconds(3), new KeyValue(unfadeAdjust.brightnessProperty(), 0.3, Interpolator.LINEAR)
+                ));
+        dayTimeLine.setCycleCount(1);
+        dayTimeLine.setAutoReverse(false);
+
+        subscriber.subscribe(empireApiService.getEmpireEffect(gameId, tokenStorage.getEmpireId()),
+                event -> {
+                    if (event.effects().length > 0) {
+                        EffectSourceDto effect = event.effects()[0];
+                        EffectSourceParentDto activeEvent = eventService.readEvent(effect.id());
+                        if (Objects.nonNull(activeEvent)) {
+                            eventOccured = true;
+                            if (effect.id().equals("solarEclipse") && isDay) {
+                                changeToNightNotAnimated();
+                            }
+                            eventService.setEvent(activeEvent);
+                            setRandomEventInfos(activeEvent);
+                            show();
+                        }
+                    }
+                },
+                error -> System.out.println("Error while loading event: " + error));
+    }
+
+    private void handleShowEventChanged(PropertyChangeEvent propertyChangeEvent) {
+        if (timerService.getShowEvent()) {
+            show();
+        } else {
+            close();
+        }
     }
 
     // changes String to camelCase
@@ -145,7 +224,6 @@ public class EventComponent extends AnchorPane {
     }
 
     public void setRandomEventInfos(@NotNull EffectSourceParentDto event) {
-
         String id = convert(event.effects()[0].id());
 
         checkSize(id);
@@ -167,14 +245,10 @@ public class EventComponent extends AnchorPane {
 
     }
 
-    @OnDestroy
-    public void destroy() {
-
-    }
-
     public void close() {
         container.setVisible(false);
         shadow.setVisible(false);
+        timerService.setShowEvent(false);
     }
 
     public void show() {
@@ -192,4 +266,43 @@ public class EventComponent extends AnchorPane {
         this.clockComponent = clockComponent;
     }
 
+    public void changeToNight() {
+        nightTimeLine.stop();
+
+        gameBackground.setEffect(fadeAdjust);
+
+        nightTimeLine.setOnFinished(event -> {
+            gameBackground.setEffect(brightenAdjsut);
+            changeToNightNotAnimated();
+        });
+
+        nightTimeLine.play();
+    }
+
+    private void changeToNightNotAnimated() {
+        gameBackground.setStyle(NIGHT);
+        isDay = false;
+    }
+
+    public void changeToDay() {
+        dayTimeLine.stop();
+
+        gameBackground.setEffect(unfadeAdjust);
+
+        dayTimeLine.setOnFinished(event -> {
+            gameBackground.setEffect(brightenAdjsut);
+            changeToDayNotAnimated();
+        });
+
+        dayTimeLine.play();
+    }
+
+    private void changeToDayNotAnimated() {
+        gameBackground.setStyle(DAY);
+        isDay = true;
+    }
+
+    public void setBackground(Pane gameBackground) {
+        this.gameBackground = gameBackground;
+    }
 }

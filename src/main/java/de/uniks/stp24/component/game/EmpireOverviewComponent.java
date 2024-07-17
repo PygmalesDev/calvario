@@ -102,15 +102,14 @@ public class EmpireOverviewComponent extends StackPane {
         empireID = tokenStorage.getEmpireId();
         this.subscriber.subscribe(this.empireService.getEmpire(gameID, empireID),
                 this::empireTraits,
-                //TODO Remove
-                error -> System.out.println("error"));
+                error -> System.out.println(error.getMessage()));
     }
 
     /**
      * Closes the empire overview by hiding the parent component.
      */
     public void closeEmpireOverview() {
-        this.getParent().setVisible(false);
+        this.setVisible(false);
     }
 
     /**

@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.paint.Color?>
 
-<fx:root onMouseEntered="#showRudder" onMouseExited="#unshowRudder" onMouseMoved="#showRudder" type="Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.IslandComponent">
-   <ImageView fx:id="islandImage" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
-   <ImageView fx:id="rudderImage" fitHeight="42.0" fitWidth="42.0" layoutX="4.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true" visible="false">
+<fx:root onMouseEntered="#showRudder" onMouseExited="#unshowRudder" prefHeight="162.0" prefWidth="120.0" type="Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.IslandComponent">
+   <ImageView fx:id="islandImage" fitHeight="120.0" fitWidth="120.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true" />
+   <ImageView fx:id="rudderImage" fitHeight="84.0" fitWidth="84.0" layoutX="18.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true" visible="false">
       <Image url="@../../icons/islands/selection_wheel.png" />
    </ImageView>
-   <StackPane fx:id="flagPane" layoutX="9.0" layoutY="-16.0" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="32.0" style="-fx-background-color: Transparent;">
-      <ImageView fx:id="flagImage" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" />
+   <StackPane fx:id="flagPane" layoutX="44.0" layoutY="30.0" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" prefHeight="64.0" prefWidth="64.0" style="-fx-background-color: Transparent;">
+      <ImageView fx:id="flagImage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true" />
    </StackPane>
+   <ImageView fx:id="spyglassImage" fitHeight="24.0" fitWidth="38.0" layoutX="41.0" layoutY="44.0" pickOnBounds="true" preserveRatio="true">
+      <effect>
+         <DropShadow>
+            <color>
+               <Color red="1.0" green="1.0" blue="1.0" />
+            </color>
+         </DropShadow>
+      </effect>
+   </ImageView>
 </fx:root>

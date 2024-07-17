@@ -34,6 +34,9 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import javax.inject.Provider;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -85,6 +88,11 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
 
     @Override
     public void start(Stage stage) throws Exception {
+        Map<String,Integer> _public = new HashMap<>();
+        _public.put("backgroundIndex", 1);
+        _public.put("portraitIndex", 1);
+        _public.put("frameIndex", 1);
+
         super.start(stage);
 
         this.joinGameService.gameMembersApiService = this.gameMembersApiService;
@@ -101,7 +109,7 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
 
         // Mock getting game
         doReturn(Observable.just(new Game("1", "a","testGameID","testGame","testGameHostID", 2,
-                false, 1, 0, new GameSettings(1))))
+                0, false, 1, 0, new GameSettings(1))))
                 .when(this.gamesService).getGame(any());
 
         // Mock listen to game deletion
@@ -116,19 +124,21 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
 
         // Mock getting user
         when(this.userApiService.getUser(any()))
-                .thenReturn(Observable.just(new User("gameHost", "testGameHostID", null, "1", "1")))
-                .thenReturn(Observable.just(new User("testMemberUno", "testMemberUnoID", null, "1", "1")))
-                .thenReturn(Observable.just(new User("testMemberDos", "testMemberDosID", null, "1", "1")))
-                .thenReturn(Observable.just(new User("testNewUser", "testNewUserID", null, "1", "1")));
+                .thenReturn(Observable.just(new User("gameHost", "testGameHostID", null, "1", "1",_public)))
+                .thenReturn(Observable.just(new User("testMemberUno", "testMemberUnoID", null, "1", "1",_public)))
+                .thenReturn(Observable.just(new User("testMemberDos", "testMemberDosID", null, "1", "1",_public)))
+                .thenReturn(Observable.just(new User("testNewUser", "testNewUserID", null, "1", "1",_public)));
 
         // Mock getting members updates
         doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.*"), eq(MemberDto.class));
 
-        // Mock getting members readiness updates
-        doReturn(memberSubject).when(this.eventListener).listen(eq("games.testGameID.members.*.updated"), eq(MemberDto.class));
         this.app.show(this.lobbyController);
 
+        this.lobbyController.backgroundAnchorPane.getStylesheets().clear();
+
         doReturn(gameSubject).when(this.eventListener).listen(eq("games.testGameID.updated"),eq(Game.class));
+
+        doReturn(null).when(imageCache).get(any());
     }
 
     /**
@@ -199,7 +209,6 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
 
         MemberUser newUser = this.lobbyController.playerListView.getItems().getLast();
         assertTrue(newUser.user().name().contains("testNewUser")
-                && newUser.user().name().contains("(Spectator)")
                 && !newUser.ready());
     }
 

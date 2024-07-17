@@ -1,5 +1,5 @@
 {
-  "id": "grand_exp",
+  "id": "grandExp",
   "event_type": "good",
   "duration": 21,
   "effects": [
@@ -7,7 +7,10 @@
       "variable": "research",
       "base": 0,
       "multiplier": 1,
-      "bonus": 5
+      "bonus": 5,
+      "condType": "system",
+      "condID": "system",
+      "effected": "bonus"
     }
   ]
 }

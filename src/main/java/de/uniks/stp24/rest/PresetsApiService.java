@@ -1,5 +1,6 @@
 package de.uniks.stp24.rest;
 
+import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.dto.ResourceDto;
 import de.uniks.stp24.model.BuildingPresets;
 import de.uniks.stp24.model.DistrictPresets;
@@ -22,6 +23,9 @@ public interface PresetsApiService {
 
     @GET("presets/districts")
     Observable<ArrayList<DistrictPresets>> getDistrictPresets();
+
+    @GET("presets/traits")
+    Observable<Trait[]> getTraitsPreset();
 
     @GET("presets/variables")
     Observable<Map<String, Double>> getVariables();

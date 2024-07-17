@@ -30,14 +30,12 @@ public class EventService {
     public static final String PROPERTY_EVENT = "event";
     public static final String PROPERTY_NEXTEVENT = "nextEvent";
     private volatile int remainingSeasons;
-    EffectSourceParentDto event = null;
+    EffectSourceParentDto event;
     private int nextEvent;
     ObjectMapper objectMapper = new ObjectMapper();
+
+    // with seed, so every Player has the same events at the same time
     Random random = new Random(1000);
-
-
-    @Inject
-    TimerService timerService;
 
     @Inject
     EmpireApiService empireApiService;
@@ -47,9 +45,9 @@ public class EventService {
     TokenStorage tokenStorage;
 
 
-ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",
+    ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",
             "grandExp", "reckoning", "rogerFeast", /* Bad Events */ "blackSpot", "dutchman", "foolsGold", "pestilence",
-            "rumBottle", "submerge"));
+            "rumBottle", "submerge", /* Misty */ "solarEclipse"));
 
     Map<String, EffectSourceParentDto> eventMap = new HashMap<>();
 
@@ -57,7 +55,7 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
     /**
      * setNextEvent() in Constructor is for the first time an event can occur.
      * For the beginning it is set to 100-120. For less time until the first event,
-     * please do something like this: setNextEvent(5)
+     * please do something like this: nextEvent = 5
      * if you want to set it to 5 seasons until the first event happens.
      */
     @Inject
@@ -78,16 +76,14 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
 
     // Gets random a new event
     public EffectSourceParentDto getNewRandomEvent() {
-
         if (nextEvent <= 0) {
-
             int eventName = random.nextInt(0, eventNames.size());
             EffectSourceParentDto tmp = readEvent(eventName);
             setNextEvent();
             return tmp;
         }
-        // if no event can occur
-        return null;
+        // if no event can occur (or already occured)
+        return event;
     }
 
     public void setNextEvent() {
@@ -100,7 +96,6 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
 
     // Counts down the time until the next event
     public void setNextEventTimer(int nextEvent) {
-
         if (nextEvent == this.nextEvent) {
             return;
         }
@@ -109,14 +104,16 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
         this.firePropertyChange(PROPERTY_NEXTEVENT, oldValue, nextEvent);
 
         setEvent(getNewRandomEvent());
-         if (remainingSeasons <= 0) {
+        if (remainingSeasons <= 0) {
             setEvent(null);
             // If event is done reset it in Server
-             subscriber.subscribe(sendEffect(),
-                     result -> {},
-                     error -> {});
+            subscriber.subscribe(sendEffect(),
+                    result -> {
+                    },
+                    error -> {
+                    });
         } else {
-            setRemainingSeasons(getRemainingSeasons()-1);
+            setRemainingSeasons(getRemainingSeasons() - 1);
         }
     }
 
@@ -154,10 +151,13 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
     /* Parameter eventName is index for List<String> eventNames
      * Method reads the JSONs in folder .data and creates an EffectSourceParentDto
     /* if the event has not been added to the eventMap yet */
-    private @Nullable EffectSourceParentDto readEvent(int eventName) {
+    private @Nullable EffectSourceParentDto readEvent(int eventIndex) {
+        return readEvent(eventNames.get(eventIndex));
+    }
 
+    public @Nullable EffectSourceParentDto readEvent(String eventName) {
         try {
-            File jsonFile = new File(Constants.EVENT_FOLDER_NAME + eventNames.get(eventName) + "Event.json");
+            File jsonFile = new File(Constants.EVENT_FOLDER_NAME + eventName + "Event.json");
 
             // Read the JSON file
             JsonNode rootNode = objectMapper.readTree(jsonFile);
@@ -180,6 +180,7 @@ ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"a
                         double base = effect.get("base").asDouble();
                         double multiplier = effect.get("multiplier").asDouble();
                         double bonus = effect.get("bonus").asDouble();
+
                         effectsDto.add(new EffectDto(variable, base, multiplier, bonus));
                     }
 

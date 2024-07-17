@@ -10,6 +10,9 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Inject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.spy;
 
@@ -65,8 +68,10 @@ public class AppServicesTest extends ApplicationTest {
         String refresh = "refreshToken";
         String created = "prior";
         String updated = "justNow";
+        Map<String,Integer> _public = new HashMap<>();
 
-        CreateUserDto userDto = new CreateUserDto(name,avatar,password);
+
+        CreateUserDto userDto = new CreateUserDto(name,avatar,password,_public);
         assertEquals(name,userDto.name());
         assertEquals(avatar,userDto.avatar());
         assertEquals(password,userDto.password());
@@ -75,7 +80,7 @@ public class AppServicesTest extends ApplicationTest {
         assertEquals(name,loginDto.name());
         assertEquals(password,loginDto.password());
 
-        LoginResult loginResult = new LoginResult(_id,name,avatar,access,refresh);
+        LoginResult loginResult = new LoginResult(_id,name,avatar,_public,access,refresh);
         assertEquals(_id,loginResult._id());
         assertEquals(name,loginResult.name());
         assertEquals(avatar,loginResult.avatar());

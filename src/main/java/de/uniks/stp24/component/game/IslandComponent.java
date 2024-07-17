@@ -33,6 +33,8 @@ public class IslandComponent extends Pane {
     public StackPane flagPane;
     @FXML
     ImageView flagImage;
+    @FXML
+    ImageView spyglassImage;
     @Inject
     TokenStorage tokenStorage;
 
@@ -58,11 +60,14 @@ public class IslandComponent extends Pane {
         }
         this.islandImage = new ImageView();
         this.flagImage = new ImageView();
+        this.setPickOnBounds(false);
     }
 
     public void applyIcon(IslandType type) {
         this.islandImage
                 .setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
+        if (this.island.upgrade().equals("explored"))
+            this.spyglassImage.setImage(imageCache.get("/de/uniks/stp24/icons/other/spyglass.png"));
     }
 
     // use our flag images
@@ -99,7 +104,7 @@ public class IslandComponent extends Pane {
         inGameController.islandsService.keyCodeFlag = selected;
     }
 
-    @OnKey(code = KeyCode.H, shift = true)
+    @OnKey(code = KeyCode.F,alt = true)
     public void showFlagH() {
         if (island.flagIndex() >= 0 && !islandIsSelected) {
             this.flagPane.setVisible(!flagPane.isVisible());

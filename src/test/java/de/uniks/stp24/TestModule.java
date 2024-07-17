@@ -3,8 +3,10 @@ package de.uniks.stp24;
 import dagger.Module;
 import dagger.Provides;
 import de.uniks.stp24.rest.*;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.menu.CreateGameService;
 import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -13,6 +15,9 @@ import de.uniks.stp24.ws.EventListener;
 import org.mockito.Mockito;
 
 import javax.inject.Singleton;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 
 @Module
 public class TestModule {
@@ -63,6 +68,25 @@ public class TestModule {
         return Mockito.mock(LobbyService.class);
 
     }
+
+    @Provides
+    @Singleton
+    ImageCache imageCache() {
+        var imageCache = Mockito.mock(ImageCache.class);
+        doReturn(null).when(imageCache).get(any());
+        return imageCache;
+    }
+
+    @Provides
+    @Singleton
+    JobsService jobsService() {
+        return Mockito.mock(JobsService.class);
+    };
+
+    @Provides
+    @Singleton
+    JobsApiService jobsApiService() {return Mockito.mock(JobsApiService.class);}
+
     @Provides
     GameSystemsApiService gameSystemsApiService(){ return Mockito.mock(GameSystemsApiService.class); }
 

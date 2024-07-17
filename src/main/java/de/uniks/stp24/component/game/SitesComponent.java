@@ -1,28 +1,51 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Island;
+import de.uniks.stp24.model.Jobs.*;
+import de.uniks.stp24.model.SiteProperties;
+import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.game.JobsService;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.ListView;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.constructs.listview.ComponentListCell;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.Map;
-import java.util.ResourceBundle;
+import javax.inject.Provider;
+import java.util.*;
 
 @Component(view = "Sites.fxml")
-public class SitesComponent extends VBox {
-
+public class SitesComponent extends Pane {
     @FXML
-    public HBox sitesBox;
+    Text noSitesText;
+    @FXML
+    public ListView<SiteProperties> sitesListView;
+    ObservableList<SiteProperties> sitePropertiesList = FXCollections.observableArrayList();
+
+    @Inject
+    Provider<DistrictComponent> districtComponentProvider;
+    @Inject
+    App app;
 
     @Inject
     @Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
+
+    @Inject
+    JobsService jobsService;
+
+    @Inject
+    IslandAttributeStorage attributeStorage;
 
     InGameController inGameController;
 
@@ -31,15 +54,31 @@ public class SitesComponent extends VBox {
 
     }
 
+    @OnRender
+    public void render() {
+        this.sitesListView.setCellFactory(list ->
+                new ComponentListCell<>(this.app, this.districtComponentProvider));
+    }
+
     public void setSitesBox(Island island) {
-        sitesBox.getChildren().clear();
-        VBox vBox = new VBox();
-        vBox.setPrefWidth(10);
-        sitesBox.getChildren().add(vBox);
-        for (Map.Entry<String, Integer> entry : island.sites().entrySet()) {
-            DistrictComponent districtComponent = new DistrictComponent(entry.getKey(), entry.getValue() + "/" + island.sitesSlots().get(entry.getKey()), inGameController);
-            sitesBox.getChildren().add(districtComponent);
-        }
+        this.sitePropertiesList.clear();
+        List<Job> siteJobs = this.jobsService.getObservableListForSystem(island.id()).stream()
+                .filter(job -> job.type().equals("district")).toList();
+
+        island.sitesSlots().forEach((site, capacity) -> this.sitePropertiesList.add(new SiteProperties(
+                this.inGameController, site,
+                (Objects.isNull(island.sites().get(site)) ? "0" : island.sites().get(site)) + "/" + capacity,
+                siteJobs.stream()
+                        .filter(job -> job.district().equals(site))
+                        .findFirst().orElse(null)
+        )));
+        this.noSitesText.setVisible(this.sitePropertiesList.isEmpty());
+        this.sitesListView.setItems(this.sitePropertiesList);
+    }
+
+    @OnRender
+    public void setSiteJobsUpdates() {
+        this.jobsService.onJobCommonUpdates(() -> this.setSitesBox(this.attributeStorage.island));
     }
 
 

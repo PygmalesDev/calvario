@@ -10,6 +10,18 @@
     -fx-pref-height: 35px;
 }
 
+.leftTriangleButton {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/arrow_left.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 35px;
+    -fx-pref-height: 35px;
+}
+
 .closeButton {
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/close_window_button.png");
@@ -71,9 +83,21 @@
 }
 
 
-.storageButton {
+.storageOverviewButton {
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/storage_button.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 45px;
+    -fx-pref-height: 45px;
+}
+
+.jobsOverviewButton {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/job_overview_button.png");
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
@@ -95,7 +119,7 @@
     -fx-pref-height: 45px;
 }
 
-.marketButton{
+.marketOverviewButton{
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/market_button.png");
     -fx-background-size: 100% 100%;
@@ -105,4 +129,30 @@
     -fx-border-width: 0;
     -fx-pref-width: 45px;
     -fx-pref-height: 45px;
+}
+
+.islandChangeNameDisabled {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/change_islandName.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.islandChangeNameActive {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/confirm_islandName2.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.woodenButton {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/button_element.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-text-fill: white;
+    -fx-font-family: "Baskerville";
 }

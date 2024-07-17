@@ -50,8 +50,6 @@ public class StorageComponentTest extends ControllerTest {
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @Spy
     EmpireService empireService;
-    @Spy
-    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
 
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
@@ -160,7 +158,7 @@ public class StorageComponentTest extends ControllerTest {
         // Season change: energy +1, population +2
         gameSubject.onNext(new Event<>("games.testGameID.ticked",
                 new Game("a","b","testGameID","testGame", "testUserID", 2,
-                        true, 2, 1, null)));
+                        0, true, 2, 1, null)));
         waitForFxEvents();
 
         assertEquals(4,storageOverviewComponent.resourceListView.getItems().getFirst().count());

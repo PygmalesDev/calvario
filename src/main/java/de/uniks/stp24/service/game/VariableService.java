@@ -28,7 +28,7 @@ public class VariableService {
 
     private InGameController inGameController;
     private final Map<String, ArrayList<String>> variablesEffects = new HashMap<>();
-    private final ArrayList<String> allVariables = new ArrayList<>();
+    public final ArrayList<String> allVariables = new ArrayList<>();
     public Map<String, ExplainedVariableDTO> data = new HashMap<>();
     public VariablesTree<ExplainedVariableDTO> buildingsTree;
     public VariablesTree<ExplainedVariableDTO> districtsTree;

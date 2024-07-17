@@ -17,7 +17,7 @@ import java.util.Map;
 @Singleton
 public class VariableDependencyService {
     @Inject
-    VariableService variableService;
+    public VariableService variableService;
 
     @Inject
     public VariableDependencyService() {

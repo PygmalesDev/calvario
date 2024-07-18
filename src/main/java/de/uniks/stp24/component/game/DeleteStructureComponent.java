@@ -1,10 +1,7 @@
-package de.uniks.stp24.component.menu;
+package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.BuildingDto;
-import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.BuildingAttributes;
 import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.Island;
@@ -83,10 +80,10 @@ public class DeleteStructureComponent extends VBox{
     public Map<String, String> sites = sitesIconPathsMap;
     public final Map<String, String> buildings = buildingsIconPathsMap;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
 
     @Inject
-    IslandAttributeStorage islandAttributeStorage;
+    public IslandAttributeStorage islandAttributeStorage;
 
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle, this.imageCache);
 

@@ -6,7 +6,7 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
-import de.uniks.stp24.component.menu.DeleteStructureComponent;
+import de.uniks.stp24.component.game.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.GameStatus;
@@ -51,7 +51,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @Spy
     EmpireService empireService;
     @Spy
-    public GameSystemsApiService gameSystemsApiService;
+    GameSystemsApiService gameSystemsApiService;
     @Spy
     PresetsApiService presetsApiService;
     @Spy
@@ -172,8 +172,6 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.clockComponent.timerService.gamesApiService = this.gamesApiService;
         this.inGameController.clockComponent.timerService.subscriber = this.subscriber;
         this.inGameController.buildingPropertiesComponent.propertiesJobProgressComponent = this.propertiesJobProgressComponent;
-        this.inGameController.buildingPropertiesComponent.islandAttributeStorage = this.islandAttributeStorage;
-        this.inGameController.buildingPropertiesComponent.tokenStorage = this.tokenStorage;
         this.inGameController.sitePropertiesComponent.siteJobProgress = this.siteJobProgress;
         this.inGameController.jobsService.tokenStorage = this.tokenStorage;
         this.inGameController.jobsService.jobsApiService = this.jobsApiService;

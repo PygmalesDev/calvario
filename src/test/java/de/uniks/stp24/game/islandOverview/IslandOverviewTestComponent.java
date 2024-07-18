@@ -9,17 +9,21 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 
 import javax.inject.Provider;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
 
 public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
 
 
     Provider<DistrictComponent> districtComponentProvider = () -> {
         DistrictComponent districtComponent = new DistrictComponent();
-        districtComponent.tokenStorage = tokenStorage;
+        districtComponent.tokenStorage = this.tokenStorage;
         districtComponent.islandAttributeStorage = this.islandAttributeStorage;
         districtComponent.imageCache = this.imageCache;
         return districtComponent;
@@ -49,30 +53,7 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
     UpgradeStatus upgraded = new UpgradeStatus("upgraded", null, 0, 1, cost, upkeep, 1);
     UpgradeStatus developed = new UpgradeStatus("developed", null, 0, 1, cost, upkeep, 1);
 
-    Map<String, Integer> empireResourceStorage = new LinkedHashMap<>() {{
-        put("energy", 100);
-        put("fuel", 50);
-    }};
-
-    public AggregateItemDto[] empireResources = new AggregateItemDto[]{
-            new AggregateItemDto(
-                    "energy",
-                    100,
-                    20
-            ),
-            new AggregateItemDto(
-                    "fuel",
-                    50,
-                    -10
-            ),
-    };
-
-    public AggregateResultDto aggregateResult = new AggregateResultDto(
-            0,
-            empireResources
-    );
-
-    public EmpireDto empireDto = new EmpireDto(
+    EmpireDto empireDto = new EmpireDto(
             null,
             null,
             "testEmpireID",
@@ -85,7 +66,7 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
             1,
             null,
             null,
-            empireResourceStorage,
+            cost,
             null
     );
 
@@ -171,29 +152,24 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
 
     Island testIsland;
 
-    SystemDto system;
-
     public void initComponents(){
         initializeComponents();
 
         this.islandAttributeStorage.systemUpgradeAttributes = systemUpgrades;
         this.islandAttributeStorage.empireDto = empireDto;
         this.inGameController.overviewSitesComponent.sitesComponent.districtComponentProvider = districtComponentProvider;
-        this.inGameController.buildingPropertiesComponent.certainBuilding = buildingPreset1;
 
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
-        doReturn(testIsland).when(this.tokenStorage).getIsland();
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
 
         // Mock getEmpire
-        doReturn(Observable.just(empireDto)).when(this.empireService).getEmpire(any(), any());
+        doReturn(Observable.just(new EmpireDto("a", "a", "testEmpireID", "testGameID", "testUserID", "testEmpire",
+                "a", "a", 1, 2, "a", new String[]{"1"}, cost,
+                null))).when(this.empireService).getEmpire(any(), any());
         doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", 2, 1, true, 1, 1, null))).when(gamesApiService).getGame(any());
         doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
-
-        // Mock getResourceAggregates
-        doReturn(Observable.just(aggregateResult)).when(this.empireService).getResourceAggregates(any(), any());
 
         buildings.add("testBuilding1");
         buildings.add("testBuilding2");
@@ -217,27 +193,6 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
                 "1",
                 "explored",
                 "TestIsland1"
-        );
-
-        tokenStorage.setIsland(testIsland);
-
-        system = new SystemDto(
-                "",
-                "",
-                "systemID",
-                "testGameID",
-                "agriculture",
-                "name",
-                siteSlots,
-                sites,
-                25,
-                buildings,
-                Upgrade.explored,
-                20,
-                null,
-                50,
-                50,
-                "testEmpireID"
         );
 
         this.islandAttributeStorage.setIsland(testIsland);
@@ -272,7 +227,6 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
         doReturn(Observable.just(variablesEffect)).when(inGameService).getVariablesEffects();
         doReturn(Observable.just(jobList)).when(jobsApiService).getEmpireJobs(any(), any());
         doReturn(Observable.just(effectSourceParentDto)).when(empireApiService).getEmpireEffect(any(), any());
-        doReturn(Observable.just(new BuildingDto("a", 0, cost, productionBuilding, upkeep))).when(resourcesService).getResourcesBuilding(any());
 
         buildingAttributes.add(buildingPreset1);
         buildingAttributes.add(buildingPreset2);

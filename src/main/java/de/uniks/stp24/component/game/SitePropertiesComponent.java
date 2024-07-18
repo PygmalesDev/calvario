@@ -70,9 +70,9 @@ public class SitePropertiesComponent extends AnchorPane {
     String siteType;
 
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
-    IslandAttributeStorage islandAttributeStorage;
+    public IslandAttributeStorage islandAttributeStorage;
     @Inject
     Subscriber subscriber;
     @Inject
@@ -157,31 +157,31 @@ public class SitePropertiesComponent extends AnchorPane {
 
 
     public void setSiteType(String siteType){
-        this.siteType = siteType;
-        siteName.setText(gameResourceBundle.getString(siteTranslation.get(siteType)));
-        Image imageSite = imageCache.get("/" + sitesMap.get(siteType));
-        siteImage.getStyleClass().clear();
-        siteImage.setImage(imageSite);
-        displayCostsOfSite();
-        displayAmountOfSite();
+        if (Objects.nonNull(siteType)) {
+            this.siteType = siteType;
+            siteName.setText(gameResourceBundle.getString(siteTranslation.get(siteType)));
+            Image imageSite = imageCache.get("/" + sitesMap.get(siteType));
+            siteImage.getStyleClass().clear();
+            siteImage.setImage(imageSite);
+            displayCostsOfSite();
+            displayAmountOfSite();
 
-        if (this.siteJobs.stream().anyMatch(job -> job.district().equals(siteType)
-                && job.system().equals(this.tokenStorage.getIsland().id()))) {
-            Job job = this.siteJobs.stream().filter(started -> started.district().equals(siteType)
-                    && started.system().equals(this.tokenStorage.getIsland().id()))
-                    .findFirst().orElse(null);
-            this.showJobsPane();
-            if (Objects.nonNull(job)) {
-                this.siteJobProgress.setJobProgress(job);
-                if (this.jobsService.hasNoJobTypeProgress(job.type()) && this.siteJobs.getFirst().equals(job))
-                    this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
+            if (this.siteJobs.stream().anyMatch(job -> job.district().equals(siteType)
+                    && job.system().equals(this.tokenStorage.getIsland().id()))) {
+                Job job = this.siteJobs.stream().filter(started -> started.district().equals(siteType)
+                                && started.system().equals(this.tokenStorage.getIsland().id()))
+                        .findFirst().orElse(null);
+                this.showJobsPane();
+                if (Objects.nonNull(job)) {
+                    this.siteJobProgress.setJobProgress(job);
+                    if (this.jobsService.hasNoJobTypeProgress(job.type()) && this.siteJobs.getFirst().equals(job))
+                        this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
+                }
+            } else {
+                this.hideJobsPane();
+                this.jobsService.stopOnJobTypeProgress("district");
             }
-        } else {
-            this.hideJobsPane();
-            this.jobsService.stopOnJobTypeProgress("district");
         }
-
-
     }
 
     public void onClose(){
@@ -272,38 +272,42 @@ public class SitePropertiesComponent extends AnchorPane {
         buildSiteButton.setDisable(false);
         destroySiteButton.setDisable(false);
 
-        Map<String, Integer> costSite = Objects.requireNonNull(getCertainSite()).cost();
-        if (!resourcesService.hasEnoughResources(costSite)){
-            buildSiteButton.setDisable(true);
-        }
-
-
-        int amountSite = Objects.nonNull(tokenStorage.getIsland().sites().get(siteType)) ?
-                tokenStorage.getIsland().sites().get(siteType) : 0;
-        int amountSiteSlots = tokenStorage.getIsland().sitesSlots().get(siteType);
-
-        siteAmountScrollPane.setVvalue(0);
-        siteAmountGridPane.getChildren().clear();
-        siteAmountGridPane.getRowConstraints().clear();
-        siteAmountGridPane.addRow(0);
-
-        int x = 0, y = 0, slots = 0, builtSlots = 0;
-        while (slots != amountSiteSlots) {
-            if (builtSlots < amountSite) siteAmountGridPane.add(siteCellProvider.get(), x, y);
-            else siteAmountGridPane.add(siteEmptyCellProvider.get(), x, y);
-
-            slots++;
-            builtSlots++;
-            x++;
-            if (x == 5) {
-                x = 0;
-                y++;
-                siteAmountGridPane.addRow(y);
+        DistrictAttributes certainSite = getCertainSite();
+        if (Objects.nonNull(certainSite)) {
+            Map<String, Integer> costSite = Objects.requireNonNull(certainSite).cost();
+            if (!resourcesService.hasEnoughResources(costSite)) {
+                buildSiteButton.setDisable(true);
             }
         }
 
-        buildSiteButton.setDisable(amountSiteSlots == amountSite);
-        destroySiteButton.setDisable(amountSite == 0);
+        if (Objects.nonNull(tokenStorage.getIsland())) {
+            int amountSite = Objects.nonNull(tokenStorage.getIsland().sites().get(siteType)) ?
+                    tokenStorage.getIsland().sites().get(siteType) : 0;
+            int amountSiteSlots = tokenStorage.getIsland().sitesSlots().get(siteType);
+
+            siteAmountScrollPane.setVvalue(0);
+            siteAmountGridPane.getChildren().clear();
+            siteAmountGridPane.getRowConstraints().clear();
+            siteAmountGridPane.addRow(0);
+
+            int x = 0, y = 0, slots = 0, builtSlots = 0;
+            while (slots != amountSiteSlots) {
+                if (builtSlots < amountSite) siteAmountGridPane.add(siteCellProvider.get(), x, y);
+                else siteAmountGridPane.add(siteEmptyCellProvider.get(), x, y);
+
+                slots++;
+                builtSlots++;
+                x++;
+                if (x == 5) {
+                    x = 0;
+                    y++;
+                    siteAmountGridPane.addRow(y);
+                }
+            }
+
+            buildSiteButton.setDisable(amountSiteSlots == amountSite);
+            destroySiteButton.setDisable(amountSite == 0);
+        }
     }
 
     private void resourceListGeneration(DistrictAttributes site) {

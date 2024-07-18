@@ -42,7 +42,7 @@ public class BuildingsWindowComponent extends AnchorPane {
     Button closeWindowButton;
 
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
     public ImageCache imageCache;
 

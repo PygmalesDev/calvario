@@ -2,12 +2,13 @@ package de.uniks.stp24;
 
 
 import de.uniks.stp24.dto.AggregateItemDto;
-import de.uniks.stp24.game.islandOverview.IslandOverviewTestComponent;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.model.SiteProperties;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
-public class AppTest2 extends IslandOverviewTestComponent {
+public class AppTest2 extends InGameTestComponent {
 
     Button homeIsland;
 
@@ -59,16 +60,15 @@ public class AppTest2 extends IslandOverviewTestComponent {
     }
 
     private void createMap() {
-        Platform.runLater(() ->{
-            homeIsland = new Button();
-            homeIsland.setLayoutX(500);
-            homeIsland.setLayoutY(500);
-            homeIsland.setPrefWidth(50);
-            homeIsland.setPrefHeight(50);
-            homeIsland.setId("homeIsland");
-            homeIsland.setOnAction(this::openIslandOverview);
-            inGameController.mapGrid.getChildren().add(homeIsland);
-        });
+        homeIsland = new Button();
+        homeIsland.setLayoutX(500);
+        homeIsland.setLayoutY(500);
+        homeIsland.setPrefWidth(50);
+        homeIsland.setPrefHeight(50);
+        homeIsland.setId("homeIsland");
+        homeIsland.setOnAction(this::openIslandOverview);
+        Platform.runLater(() -> inGameController.mapGrid.getChildren().add(homeIsland));
+        waitForFxEvents();
     }
 
     private void openIslandOverview(ActionEvent actionEvent) {
@@ -99,17 +99,31 @@ public class AppTest2 extends IslandOverviewTestComponent {
 
     private void buildBuilding() {
         ArrayList<Node> buildingNodes = new ArrayList<>(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
-        clickOn(buildingNodes.getFirst());
+        clickOn(buildingNodes.get(3));
         waitForFxEvents();
+        assertTrue(this.inGameController.buildingsWindowComponent.isVisible());
         clickOn(this.inGameController.buildingsWindowComponent.buildingRefinery);
         waitForFxEvents();
         assertTrue(inGameController.buildingPropertiesComponent.isVisible());
         waitForFxEvents();
         clickOn("#buyButton");
+        this.inGameController.buildingPropertiesComponent.setVisible(false);
     }
 
     private void destroyBuilding() {
-
+        assertTrue(inGameController.buildingsWindowComponent.isVisible());
+        ArrayList<Node> buildingNodes = new ArrayList<>(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
+        clickOn(buildingNodes.getFirst());
+        waitForFxEvents();
+        assertFalse(inGameController.buildingsWindowComponent.isVisible());
+        assertTrue(inGameController.buildingPropertiesComponent.isVisible());
+        waitForFxEvents();
+        clickOn("#destroyButton");
+        waitForFxEvents();
+        assertTrue(inGameController.deleteStructureWarningContainer.isVisible());
+        clickOn("#confirmButton");
+        waitForFxEvents();
+        inGameController.deleteStructureWarningContainer.setVisible(false);
     }
 
     private void goToSites() {
@@ -123,6 +137,7 @@ public class AppTest2 extends IslandOverviewTestComponent {
     }
 
     private void buildSiteCell() {
+        clickOn("#energy");
 
     }
 
@@ -131,8 +146,12 @@ public class AppTest2 extends IslandOverviewTestComponent {
     }
 
     private void goToUpgrade() {
+//        assertTrue(inGameController.buildingPropertiesComponent.isVisible());
+
         clickOn("#upgradeButton");
         waitForFxEvents();
+
+//        assertFalse(inGameController.buildingPropertiesComponent.isVisible());
 
         Node checkExplored = lookup("#checkExplored").query();
         Node checkColonized = lookup("#checkColonized").query();

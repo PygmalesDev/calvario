@@ -1,12 +1,10 @@
 package de.uniks.stp24;
 
-import de.uniks.stp24.dto.UpdateEmpireDto;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.utils.ResponseConstants;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.testfx.framework.junit5.ApplicationTest;
@@ -31,11 +29,11 @@ public class ControllerTest extends ApplicationTest {
     @Spy
     public ResponseConstants responseConstants;
     @Spy
-    public ResourceBundle resources = ResourceBundle.getBundle("de/uniks/stp24/lang/main", Locale.ROOT);
+    public ResourceBundle resources = ResourceBundle.getBundle("de/uniks/stp24/lang/main", Locale.ENGLISH);
     @Spy
-    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
+    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ENGLISH);
     @Spy
-    public ResourceBundle variablesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/variables", Locale.ROOT);
+    public ResourceBundle variablesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/variables", Locale.ENGLISH);
 
 
     protected Stage stage;
@@ -53,6 +51,7 @@ public class ControllerTest extends ApplicationTest {
             prefService.setLocale(Locale.ENGLISH);
             this.prefService.removeRefreshToken();
         }
+
         testComponent = (TestComponent) DaggerTestComponent.builder().mainApp(app).build();
         app.setComponent(testComponent);
 

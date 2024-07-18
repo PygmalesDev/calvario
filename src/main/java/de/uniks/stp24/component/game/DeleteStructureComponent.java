@@ -40,7 +40,7 @@ public class DeleteStructureComponent extends VBox{
     @FXML
     Text questionMark;
     @FXML
-    Text deleteText;
+    public Text deleteText;
     @FXML
     ListView<Resource> deleteStructureListView;
     @FXML
@@ -50,7 +50,7 @@ public class DeleteStructureComponent extends VBox{
     @FXML
     Button cancelButton;
     @FXML
-    Text warningText;
+    public Text warningText;
     @FXML
     VBox warningContainer;
     @Inject

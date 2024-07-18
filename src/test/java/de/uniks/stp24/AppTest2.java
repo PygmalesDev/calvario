@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 
+import static de.uniks.stp24.service.Constants.buildingTranslation;
+import static de.uniks.stp24.service.Constants.siteTranslation;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
@@ -119,14 +121,18 @@ public class AppTest2 extends InGameTestComponent {
         clickOn(buildingNodes.getFirst());
         waitForFxEvents();
         assertTrue(inGameController.buildingPropertiesComponent.isVisible());
-
         clickOn("#destroyButton");
         waitForFxEvents();
-        assertTrue(inGameController.deleteStructureWarningContainer.isVisible());
+        assertTrue(inGameController.deleteStructureComponent.isVisible());
+        assertEquals(gameResourceBundle.getString("sure.you.want.delete") + " ",
+                inGameController.deleteStructureComponent.deleteText.getText());
+        assertEquals(gameResourceBundle.getString(buildingTranslation.get("refinery")),
+                inGameController.deleteStructureComponent.warningText.getText());
+
 
         clickOn("#confirmButton");
         waitForFxEvents();
-        inGameController.deleteStructureWarningContainer.setVisible(false);
+        inGameController.deleteStructureComponent.setVisible(false);
         inGameController.buildingPropertiesComponent.setVisible(false);
     }
 
@@ -152,11 +158,7 @@ public class AppTest2 extends InGameTestComponent {
 
         clickOn("#buildSiteButton");
         waitForFxEvents();
-        assertTrue(this.inGameController.deleteStructureComponent.isVisible());
 
-        clickOn("#confirmButton");
-        waitForFxEvents();
-        inGameController.deleteStructureWarningContainer.setVisible(false);
         inGameController.buildingPropertiesComponent.setVisible(false);
     }
 
@@ -172,10 +174,14 @@ public class AppTest2 extends InGameTestComponent {
         clickOn("#destroySiteButton");
         waitForFxEvents();
         assertTrue(this.inGameController.deleteStructureComponent.isVisible());
+        assertEquals(gameResourceBundle.getString("sure.you.want.delete") + " ",
+                inGameController.deleteStructureComponent.deleteText.getText());
+        assertEquals(gameResourceBundle.getString(siteTranslation.get("energy")),
+                inGameController.deleteStructureComponent.warningText.getText());
 
         clickOn("#confirmButton");
         waitForFxEvents();
-        inGameController.deleteStructureWarningContainer.setVisible(false);
+        inGameController.deleteStructureComponent.setVisible(false);
         inGameController.buildingPropertiesComponent.setVisible(false);
     }
 

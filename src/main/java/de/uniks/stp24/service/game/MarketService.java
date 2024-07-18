@@ -1,5 +1,6 @@
 package de.uniks.stp24.service.game;
 
+import de.uniks.stp24.component.game.MarketComponent;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.ResourceDto;
 import de.uniks.stp24.dto.SeasonalTradeDto;
@@ -9,12 +10,16 @@ import de.uniks.stp24.model.SeasonComponent;
 import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.PresetsApiService;
+import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //a5 Singleton so there is only one instance of MarketService
@@ -24,10 +29,16 @@ public class MarketService {
     public PresetsApiService presetsApiService;
     @Inject
     EmpireApiService empireApiService;
+    @Inject
+    Subscriber subscriber;
+    @Inject
+    TokenStorage tokenStorage;
 
     private ObservableList<SeasonComponent> seasonComponents;
 
+
     @Inject
+
     public MarketService() {
     }
 
@@ -64,13 +75,18 @@ public class MarketService {
     //in MarketSEasonsComponent it componentCell will set itself null and thereby also the complete list.
     public void cancelSeasonalTrade(SeasonComponent seasonComponent) {
         seasonComponents.remove(seasonComponent);
+        saveSeasonalTrades();
     }
 
-    //TODO create seasonal trades
+    public void saveSeasonalTrades(){
+        Map<String, List<SeasonComponent>> _private = new HashMap<>();
+        _private.put("allSeasonalTrades", seasonComponents);
+        SeasonalTradeDto seasonalTradeDto = new SeasonalTradeDto(_private);
+        subscriber.subscribe(saveSeasonalComponents(tokenStorage.getGameId(), tokenStorage.getEmpireId(), seasonalTradeDto),
+                error -> System.out.println("errorSaveSeasonalTrades:" + error));
+    }
 
-    //TODO pause seasonal trades
-
-    //TODO delete seasonal trades
+    
 
     public void dispose() {
         this.seasonComponents.clear();

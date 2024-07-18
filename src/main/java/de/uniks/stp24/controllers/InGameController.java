@@ -8,7 +8,6 @@ import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
-import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -164,8 +163,6 @@ public class InGameController extends BasicController {
     @Inject
     public GameSystemsApiService gameSystemsApiService;
     @Inject
-    public GameLogicApiService gameLogicApiService;
-    @Inject
     public VariableService variableService;
     @Inject
     public LobbyService lobbyService;
@@ -212,10 +209,6 @@ public class InGameController extends BasicController {
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_PAUSED"));
 
-        PropertyChangeListener callHandleShowSettings = this::handleShowSettings;
-        gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_SETTINGS, callHandleShowSettings);
-        this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_SETTINGS"));
-
         variableService.initVariables();
 
         this.subscriber.subscribe(this.lobbyService.getMember(gameID, tokenStorage.getUserId()),
@@ -248,25 +241,6 @@ public class InGameController extends BasicController {
         islandAttributes.setSystemUpgradeAttributes();
         islandAttributes.setBuildingAttributes();
         islandAttributes.setDistrictAttributes();
-    }
-
-    private void handleShowSettings(@NotNull PropertyChangeEvent propertyChangeEvent) {
-        if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
-            Boolean settings = (Boolean) propertyChangeEvent.getNewValue();
-            if (settings) {
-                showSettings();
-            } else {
-                unShowSettings();
-            }
-        }
-    }
-
-    public void showSettings() {
-        pauseMenuContainer.getChildren().remove(pauseMenuComponent);
-    }
-
-    public void unShowSettings() {
-        pauseMenuContainer.getChildren().add(pauseMenuComponent);
     }
 
     private void handlePauseChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
@@ -469,14 +443,13 @@ public class InGameController extends BasicController {
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
             System.out.printf("ISLAND ID: %s\n", selected.island.id());
-            tokenStorage.setIsland(selected.getIsland());
             selectedIsland = selected;
-            islandAttributes.setIsland(selected.getIsland());
+            tokenStorage.setIsland(selectedIsland.getIsland());
+            islandAttributes.setIsland(selectedIsland.getIsland());
             if (selected.getIsland().owner() != null) {
                 this.islandClaimingContainer.setVisible(false);
                 this.sitePropertiesComponent.setVisible(false);
                 this.buildingPropertiesComponent.setVisible(false);
-                selectedIsland = selected;
                 if (selected.island.owner().equals(this.tokenStorage.getEmpireId()))
                     this.overviewSitesComponent.jobsComponent.setJobsObservableList(
                         this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
@@ -543,7 +516,7 @@ public class InGameController extends BasicController {
             overviewSitesComponent.setOverviewSites();
     }
 
-    @OnKey(code = KeyCode.SPACE, alt = true)
+    @OnKey(code = KeyCode.Z, alt = true)
     public void resetZoom() {
         scale = 0.65;
         group.setScaleX(scale);

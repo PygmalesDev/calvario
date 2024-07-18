@@ -161,13 +161,16 @@
 
 /*Season Design*/
 
-.seasonalTradesListView .list-cell{
-    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/red_frame.png");
+.seasonalTradeBackground{
     -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/jobsOverview/red_frame.png");
+    -fx-background-position: center;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
-    -fx-padding: 10;
-    -fx-background-insets: 10;
+}
+
+.seasonalTradesListView .list-cell{
+    -fx-background-color: transparent;
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------*/

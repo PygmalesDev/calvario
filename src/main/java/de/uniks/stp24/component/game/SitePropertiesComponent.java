@@ -3,44 +3,44 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.SiteDto;
+import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.Jobs;
-import de.uniks.stp24.model.Jobs.*;
+import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.ExplanationService;
+import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
-import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.IslandsService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import org.fulib.fx.FulibFxApp;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static de.uniks.stp24.service.Constants.*;
+import static de.uniks.stp24.service.Constants.siteTranslation;
+import static de.uniks.stp24.service.Constants.sitesIconPathsMap;
 
 @Component(view = "SiteProperties.fxml")
 public class SitePropertiesComponent extends AnchorPane {
@@ -71,13 +71,10 @@ public class SitePropertiesComponent extends AnchorPane {
 
     @Inject
     TokenStorage tokenStorage;
-
     @Inject
     IslandAttributeStorage islandAttributeStorage;
-
     @Inject
     Subscriber subscriber;
-
     @Inject
     JobsService jobsService;
 
@@ -88,7 +85,8 @@ public class SitePropertiesComponent extends AnchorPane {
 
     @Inject
     IslandsService islandsService;
-
+    @Inject
+    ExplanationService explanationService;
     @Inject
     App app;
 
@@ -103,8 +101,10 @@ public class SitePropertiesComponent extends AnchorPane {
     @SubComponent
     public PropertiesJobProgressComponent siteJobProgress;
 
-    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle);
-    Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", gameResourceBundle);
+    Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
+    Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);
+
+
     Provider<ImageView> siteEmptyCellProvider = () -> {
         ImageView imageView = new ImageView(this.imageCache.get("/de/uniks/stp24/icons/other/empty_building_small_element.png"));
         imageView.setFitHeight(20);
@@ -120,9 +120,6 @@ public class SitePropertiesComponent extends AnchorPane {
     };
 
     Map<String, String> sitesMap;
-
-    private int amountSite = 0;
-    private int amountSiteSlots = 0;
 
     public ObservableList<Map<String, Integer>> resources;
     public ObservableList<ResourceComponent> resourceComponents;
@@ -162,7 +159,7 @@ public class SitePropertiesComponent extends AnchorPane {
     public void setSiteType(String siteType){
         this.siteType = siteType;
         siteName.setText(gameResourceBundle.getString(siteTranslation.get(siteType)));
-        Image imageSite = new Image(sitesMap.get(siteType));
+        Image imageSite = imageCache.get("/" + sitesMap.get(siteType));
         siteImage.getStyleClass().clear();
         siteImage.setImage(imageSite);
         displayCostsOfSite();
@@ -259,25 +256,31 @@ public class SitePropertiesComponent extends AnchorPane {
     //Gets resources of site and displays them in listviews
     public void displayCostsOfSite(){
         siteCostsListView.setSelectionModel(null);
-        subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration, error -> {});
-        siteConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, negativeResourceProvider));
-        siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, negativeResourceProvider));
-        siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, positiveResourceProvider));
+        for(DistrictAttributes district: islandAttributeStorage.districtAttributes){
+            if(district.id().equals(siteType)){
+                resourceListGeneration(district);
+                break;
+            }
+        }
+        siteConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, negativeResouceProvider), "districts", siteType, "upkeep"));
+        siteCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, negativeResouceProvider), "districts", siteType, "cost"));
+        siteProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, positiveResourceProvider), "districts", siteType, "production"));
     }
 
     //Uses a GridPane to display a graphic view of how many sites of each type you have
     public void displayAmountOfSite(){
         buildSiteButton.setDisable(false);
         destroySiteButton.setDisable(false);
-        subscriber.subscribe(resourcesService.getResourcesSite(siteType), result -> {
-            Map<String, Integer> costSite = result.cost();
-            if (!resourcesService.hasEnoughResources(costSite)) buildSiteButton.setDisable(true);
-        }, error -> System.out.println("Caught an error while trying to display the amount of sites " +
-                "in the SitePropertiesComponent:\n %s" + error.getMessage()));
 
-        amountSite = Objects.nonNull(tokenStorage.getIsland().sites().get(siteType)) ?
+        Map<String, Integer> costSite = Objects.requireNonNull(getCertainSite()).cost();
+        if (!resourcesService.hasEnoughResources(costSite)){
+            buildSiteButton.setDisable(true);
+        }
+
+
+        int amountSite = Objects.nonNull(tokenStorage.getIsland().sites().get(siteType)) ?
                 tokenStorage.getIsland().sites().get(siteType) : 0;
-        amountSiteSlots = tokenStorage.getIsland().sitesSlots().get(siteType);
+        int amountSiteSlots = tokenStorage.getIsland().sitesSlots().get(siteType);
 
         siteAmountScrollPane.setVvalue(0);
         siteAmountGridPane.getChildren().clear();
@@ -303,91 +306,28 @@ public class SitePropertiesComponent extends AnchorPane {
         destroySiteButton.setDisable(amountSite == 0);
     }
 
-    private void resourceListGeneration(SiteDto siteDto) {
+    private void resourceListGeneration(DistrictAttributes site) {
 
-        Map<String, Integer> resourceMapPrice = siteDto.cost();
+        Map<String, Integer> resourceMapPrice = site.cost();
         ObservableList<Resource> resourceListPrice = resourcesService.generateResourceList(resourceMapPrice, siteCostsListView.getItems(),null);
         siteCostsListView.setItems(resourceListPrice);
 
-        Map<String, Integer> resourceMapUpkeep = siteDto.upkeep();
+        Map<String, Integer> resourceMapUpkeep = site.upkeep();
         ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, siteConsumesListView.getItems(), null);
         siteConsumesListView.setItems(resourceListUpkeep);
 
-        Map<String, Integer> resourceMapProduce = siteDto.production();
+        Map<String, Integer> resourceMapProduce = site.production();
         ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, siteProducesListView.getItems(), null);
         siteProducesListView.setItems(resourceListProduce);
     }
 
-}
-
-class CustomComponentListCell<Item, Component extends Parent> extends ListCell<Item> {
-
-    private final FulibFxApp app;
-    private final Provider<? extends Component> provider;
-    private final Map<String, Object> extraParams; // extra parameters to pass to the component
-
-    private Component component;
-
-    /**
-     * Creates a new component list cell.
-     *
-     * @param app      The FulibFX app
-     * @param provider The provider to create the component
-     */
-    public CustomComponentListCell(FulibFxApp app, Provider<? extends Component> provider) {
-        this(app, provider, Map.of());
-    }
-
-    /**
-     * Creates a new component list cell.
-     *
-     * @param app         The FulibFX app
-     * @param provider    The provider to create the component
-     * @param extraParams Extra parameters to pass to the component
-     */
-    public CustomComponentListCell(FulibFxApp app, Provider<? extends Component> provider, Map<String, Object> extraParams) {
-        super();
-        setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        this.app = app;
-        this.provider = provider;
-        this.extraParams = extraParams;
-    }
-
-    @Override
-    protected void updateItem(Item item, boolean empty) {
-        super.updateItem(item, empty);
-        setPrefHeight(5);
-        setPrefWidth(50);
-        // Destroy component if the cell is emptied
-        if (empty || item == null) {
-            if (component != null) {
-                app.destroy(component);
-                component = null;
+    private DistrictAttributes getCertainSite(){
+        for(DistrictAttributes site: islandAttributeStorage.districtAttributes){
+            if(site.id().equals(siteType)){
+                return site;
             }
-            setGraphic(null);
-            return;
         }
-
-        // Destroy old component if necessary (if it is not reusable)
-        if (component != null && !(component instanceof ReusableItemComponent<?>)) {
-            app.destroy(component);
-            component = null;
-        }
-
-        // Create and render new component if necessary
-        if (component == null) {
-            component = provider.get();
-            // Add item and list to parameters if they are not already present
-            final Map<String, Object> params = new HashMap<>(extraParams);
-            params.putIfAbsent("item", item);
-            params.putIfAbsent("list", getListView().getItems());
-            setGraphic(app.initAndRender(component, params));
-        }
-
-        // Update component if possible
-        if (component instanceof ReusableItemComponent<?>) {
-            //noinspection unchecked
-            ((ReusableItemComponent<Item>) component).setItem(item);
-        }
+        return null;
     }
 }
+

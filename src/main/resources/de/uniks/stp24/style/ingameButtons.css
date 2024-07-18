@@ -1,6 +1,6 @@
 .rightTriangleButton {
     -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/assets/buttons/arrow_right.png");
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/hide_button_vertical_right.png");
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
@@ -122,19 +122,6 @@
     -fx-pref-height: 45px;
 }
 
-.technologiesOverviewButton {
-    -fx-cursor: hand;
-    -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/assets/buttons/technology_button.png");
-    -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-padding: 0;
-    -fx-border-width: 0;
-    -fx-pref-width: 45px;
-    -fx-pref-height: 45px;
-}
-
 .islandChangeNameDisabled {
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/change_islandName.png");
@@ -159,4 +146,15 @@
     -fx-background-position: center;
     -fx-text-fill: white;
     -fx-font-family: "Baskerville";
+}
+.technologiesButton {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/technology_button.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 45px;
+    -fx-pref-height: 45px;
 }

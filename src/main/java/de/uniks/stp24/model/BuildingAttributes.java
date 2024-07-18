@@ -2,9 +2,9 @@ package de.uniks.stp24.model;
 
 import java.util.Map;
 
-public record DistrictPresets(
+public record BuildingAttributes(
         String id,
-        Map<String, Integer> chance,
+        double build_time,
         Map<String, Integer> cost,
         Map<String, Integer> upkeep,
         Map<String, Integer> production

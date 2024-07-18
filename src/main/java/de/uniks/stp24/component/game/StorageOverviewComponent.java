@@ -6,8 +6,10 @@ import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.ExplanationService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.collections.ObservableList;
@@ -38,7 +40,6 @@ public class StorageOverviewComponent extends AnchorPane {
     @FXML
     Text empireNameLabel;
 
-
     @Inject
     App app;
     @Inject
@@ -52,13 +53,18 @@ public class StorageOverviewComponent extends AnchorPane {
     @Inject
     TokenStorage tokenStorage;
     @Inject
+    public ExplanationService explanationService;
+    @Inject
+    ImageCache imageCache;
+    @Inject
     @org.fulib.fx.annotation.controller.Resource
+
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
     private String lastUpdate;
     private String lastSeasonUpdate;
-    Provider<ResourceComponent> resourceComponentProvider = () -> new ResourceComponent(true, true, true, true, gameResourceBundle);
+    Provider<ResourceComponent> resourceComponentProvider = () -> new ResourceComponent(true, true, true, true, gameResourceBundle, this.imageCache);
 
 
     @Inject
@@ -94,8 +100,8 @@ public class StorageOverviewComponent extends AnchorPane {
                             this.empireNameLabel.setText(empireNameList[0]);
                         }
                     },
-                    error -> {});
-            this.resourceListView.setCellFactory(list -> new ComponentListCell<>(app, resourceComponentProvider));
+                    error -> System.out.println("ErrorEmpireSubscriber"));
+            this.resourceListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         }
     }
 
@@ -105,7 +111,6 @@ public class StorageOverviewComponent extends AnchorPane {
         ObservableList<Resource> resourceList = resourcesService.generateResourceList(resourceMap, resourceListView.getItems(), aggregateItems);
         this.resourceListView.setItems(resourceList);
     }
-
 
     /**
      * Listener for the empire: Changes of the resources will change the list in the storage overview.

@@ -19,7 +19,7 @@ import java.util.*;
 public class TechnologyService {
 
     @Inject
-    PresetsApiService presetsApiService;
+    public PresetsApiService presetsApiService;
     @Inject
     EmpireApiService empireApiService;
     @Inject
@@ -51,9 +51,7 @@ public class TechnologyService {
     public TechnologyService() {
     }
 
-
     public ObservableList<TechnologyExtended> getAllUnlockedTechnologies(String tag) {
-
         temp = getTechnologies();
 
         subscriber.subscribe(empireApiService.getEmpiresDtos(tokenStorage.getGameId()),

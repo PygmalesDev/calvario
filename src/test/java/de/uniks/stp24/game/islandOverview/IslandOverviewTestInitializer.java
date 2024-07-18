@@ -51,7 +51,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @Spy
     EmpireService empireService;
     @Spy
-    GameSystemsApiService gameSystemsApiService;
+    public GameSystemsApiService gameSystemsApiService;
     @Spy
     PresetsApiService presetsApiService;
     @Spy
@@ -172,6 +172,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.clockComponent.timerService.gamesApiService = this.gamesApiService;
         this.inGameController.clockComponent.timerService.subscriber = this.subscriber;
         this.inGameController.buildingPropertiesComponent.propertiesJobProgressComponent = this.propertiesJobProgressComponent;
+        this.inGameController.buildingPropertiesComponent.islandAttributeStorage = this.islandAttributeStorage;
         this.inGameController.sitePropertiesComponent.siteJobProgress = this.siteJobProgress;
         this.inGameController.jobsService.tokenStorage = this.tokenStorage;
         this.inGameController.jobsService.jobsApiService = this.jobsApiService;

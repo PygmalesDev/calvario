@@ -3,10 +3,8 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.BuildingAttributes;
-import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.ImageCache;
@@ -21,9 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -93,7 +89,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @Inject
     TokenStorage tokenStorage;
     @Inject
-    IslandAttributeStorage islandAttributeStorage;
+    public IslandAttributeStorage islandAttributeStorage;
     Map<String, String> buildingsMap;
     String buildingType;
     InGameController inGameController;
@@ -101,7 +97,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     ObservableList<Jobs.Job> buildingJobs;
 
     String currentJobID = "";
-    BuildingAttributes certainBuilding;
+    public BuildingAttributes certainBuilding;
 
     Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
     Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);

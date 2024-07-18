@@ -1,10 +1,8 @@
 package de.uniks.stp24.component.game;
 
-import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.model.SeasonComponent;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.MarketService;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
@@ -56,25 +54,20 @@ public class MarketSeasonComponent extends HBox implements ReusableItemComponent
     public void setItem(@NotNull SeasonComponent seasonComponent) {
         this.seasonComponent = seasonComponent;
         resourceTypeImageView.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + this.seasonComponent.getResourceType() + ".png"));
-        if(this.seasonComponent.getTransActionTypeText().equals("buy")){
+        if (this.seasonComponent.getTransActionTypeText().equals("buy")) {
             transActionTypeText.setText("Buy");
             resourceAmountText.setText("+" + this.seasonComponent.getResourceAmount());
-            moneyAmountText.setText("-"+ this.seasonComponent.getMoneyAmount());
+            moneyAmountText.setText("-" + this.seasonComponent.getMoneyAmount());
         } else {
             transActionTypeText.setText("Sell");
             int sellAmount = this.seasonComponent.getResourceAmount() * -1;
-            moneyAmountText.setText("+"+ this.seasonComponent.getMoneyAmount());
+            moneyAmountText.setText("+" + this.seasonComponent.getMoneyAmount());
             resourceAmountText.setText("-" + sellAmount);
         }
 
         playControlsButton.setSelected(this.seasonComponent.isPlaying());
         playControlsButton.setOnAction(event -> this.seasonComponent.setPlaying(playControlsButton.isSelected()));
 
-        //a3 the cancelButton opens now marketkservie mehtod to cancel seasonalTrades
-        cancelTradesButton.setOnAction(event -> {
-            marketService.cancelSeasonalTrade(this.seasonComponent);
-        });
+        cancelTradesButton.setOnAction(event -> marketService.cancelSeasonalTrade(this.seasonComponent));
     }
-
-
 }

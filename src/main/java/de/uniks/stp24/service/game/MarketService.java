@@ -1,18 +1,14 @@
 package de.uniks.stp24.service.game;
 
-import de.uniks.stp24.component.game.MarketComponent;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.ResourceDto;
 import de.uniks.stp24.dto.SeasonalTradeDto;
 import de.uniks.stp24.dto.UpdateEmpireMarketDto;
-import de.uniks.stp24.model.ExplainedVariable;
 import de.uniks.stp24.model.SeasonComponent;
 import de.uniks.stp24.rest.EmpireApiService;
-import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.fulib.fx.controller.Subscriber;
 
@@ -22,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//a5 Singleton so there is only one instance of MarketService
 @Singleton
 public class MarketService {
     @Inject
@@ -36,9 +31,7 @@ public class MarketService {
 
     private ObservableList<SeasonComponent> seasonComponents;
 
-
     @Inject
-
     public MarketService() {
     }
 
@@ -62,23 +55,20 @@ public class MarketService {
         return this.empireApiService.saveSeasonalComponents(gameID, empireID, seasonalTradeDto);
     }
 
-    public Observable<SeasonalTradeDto> getSeasonalTrades(String gameID, String empireID){
+    public Observable<SeasonalTradeDto> getSeasonalTrades(String gameID, String empireID) {
         return this.empireApiService.getSeasonalTrades(gameID, empireID);
     }
-    //a2 set seasonComponents
 
     public void setSeasonComponents(ObservableList<SeasonComponent> seasonComponents) {
         this.seasonComponents = seasonComponents;
     }
 
-    //a4 cancelSeasonalTrades by remoiving here. Important note. You have to do this in service. if you use this method
-    //in MarketSEasonsComponent it componentCell will set itself null and thereby also the complete list.
     public void cancelSeasonalTrade(SeasonComponent seasonComponent) {
         seasonComponents.remove(seasonComponent);
         saveSeasonalTrades();
     }
 
-    public void saveSeasonalTrades(){
+    public void saveSeasonalTrades() {
         Map<String, List<SeasonComponent>> _private = new HashMap<>();
         _private.put("allSeasonalTrades", seasonComponents);
         SeasonalTradeDto seasonalTradeDto = new SeasonalTradeDto(_private);
@@ -86,10 +76,7 @@ public class MarketService {
                 error -> System.out.println("errorSaveSeasonalTrades:" + error));
     }
 
-    
-
     public void dispose() {
         this.seasonComponents.clear();
     }
-
 }

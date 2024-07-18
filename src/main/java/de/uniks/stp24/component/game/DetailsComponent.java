@@ -121,25 +121,11 @@ public class DetailsComponent extends AnchorPane {
     }
 
     public void setResLists(){
-        resImages.add(res1Pic);
-        resImages.add(res2Pic);
-        resImages.add(res3Pic);
-        resImages.add(res4Pic);
-        resImages.add(res5Pic);
-        resImages.add(res6Pic);
-        resImages.add(res7Pic);
-        resImages.add(res8Pic);
-        resImages.add(res9Pic);
+        ImageView[] images = {res1Pic, res2Pic, res3Pic, res4Pic, res5Pic, res6Pic, res7Pic, res7Pic, res8Pic, res9Pic};
+        resImages.addAll(List.of(images));
 
-        resInf.add(amount1);
-        resInf.add(amount2);
-        resInf.add(amount3);
-        resInf.add(amount4);
-        resInf.add(amount5);
-        resInf.add(amount6);
-        resInf.add(amount7);
-        resInf.add(amount8);
-        resInf.add(amount9);
+        Text[] amounts = {amount1, amount2, amount3, amount4, amount5, amount6, amount7, amount8, amount9};
+        resInf.addAll(List.of(amounts));
 
         for(int i = 0; i < 9; i++){
             resInf.get(i).setStyle("-fx-font-family: 'Tempus Sans ITC';" +

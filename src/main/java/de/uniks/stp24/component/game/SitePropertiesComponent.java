@@ -71,13 +71,10 @@ public class SitePropertiesComponent extends AnchorPane {
 
     @Inject
     TokenStorage tokenStorage;
-
     @Inject
     IslandAttributeStorage islandAttributeStorage;
-
     @Inject
     Subscriber subscriber;
-
     @Inject
     JobsService jobsService;
 
@@ -146,11 +143,6 @@ public class SitePropertiesComponent extends AnchorPane {
         this.jobPane.setVisible(false);
     }
 
-    @OnRender
-    public void addRunnable() {
-        resourcesService.setOnResourceUpdates(this::setButtonsDisable);
-    }
-
     @FXML
     public void initialize() {
         // Ensure resources list is initialized
@@ -166,8 +158,6 @@ public class SitePropertiesComponent extends AnchorPane {
 
     public void setSiteType(String siteType){
         this.siteType = siteType;
-        setButtonsDisable();
-
         siteName.setText(gameResourceBundle.getString(siteTranslation.get(siteType)));
         Image imageSite = imageCache.get("/" + sitesMap.get(siteType));
         siteImage.getStyleClass().clear();
@@ -178,7 +168,7 @@ public class SitePropertiesComponent extends AnchorPane {
         if (this.siteJobs.stream().anyMatch(job -> job.district().equals(siteType)
                 && job.system().equals(this.tokenStorage.getIsland().id()))) {
             Job job = this.siteJobs.stream().filter(started -> started.district().equals(siteType)
-                    && started.system().equals(this.tokenStorage.getIsland().id()))
+                            && started.system().equals(this.tokenStorage.getIsland().id()))
                     .findFirst().orElse(null);
             this.showJobsPane();
             if (Objects.nonNull(job)) {
@@ -338,14 +328,5 @@ public class SitePropertiesComponent extends AnchorPane {
             }
         }
         return null;
-    }
-}
-
-
-        // Update component if possible
-        if (component instanceof ReusableItemComponent<?>) {
-            //noinspection unchecked
-            ((ReusableItemComponent<Item>) component).setItem(item);
-        }
     }
 }

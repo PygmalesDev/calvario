@@ -2,8 +2,6 @@ package de.uniks.stp24.rest;
 
 import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.dto.ResourceDto;
-import de.uniks.stp24.model.BuildingPresets;
-import de.uniks.stp24.model.DistrictPresets;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.model.SystemUpgrades;
 import de.uniks.stp24.model.TechnologyExtended;

@@ -2,6 +2,7 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
+import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.GameStatus;

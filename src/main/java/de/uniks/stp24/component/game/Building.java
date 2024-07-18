@@ -74,7 +74,7 @@ public class Building extends VBox {
                     .equals("/de/uniks/stp24/icons/buildings/empty_building_element.png")){
                 inGameController.buildingsWindowComponent.setVisible(false);
                 inGameController.setSitePropertiesInvisible();
-                inGameController.showBuildingInformation(buildingName, jobID, true);
+                inGameController.showBuildingInformation(buildingName, jobID);
 
             } else inGameController.showBuildingWindow();
         });

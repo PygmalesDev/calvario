@@ -116,7 +116,7 @@ public class DeleteStructureComponent extends VBox{
         displayStructureInfo();
         if (sites.containsKey(structureType)) {
             // Set the image for sites
-            deleteStructureImageView.setImage(this.imageCache.get("/"+structureType));
+            deleteStructureImageView.setImage(this.imageCache.get("/"+sites.get(structureType)));
         } else if (buildings.containsKey(structureType)) {
             // Set the image for buildings
             deleteStructureImageView.setImage(new Image(buildings.get(structureType)));

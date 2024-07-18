@@ -90,21 +90,22 @@ public class IslandsService extends BasicService {
         this.gameID = gameID;
         subscriber.subscribe(gameSystemsService.getSystems(gameID),
                 dto -> {
-            Arrays.stream(dto).forEach(data -> {
-                List<String> linkedIsles = new ArrayList<>(data.links().keySet());
-                minX = Math.min(data.x(),minX);
-                minY = Math.min(data.y(),minY);
-                maxX = Math.max(data.x(),maxX);
-                maxY = Math.max(data.y(),maxY);
-                Island tmp = convertToIsland(data);
-                isles.add(tmp);
-                connections.put(data._id(),linkedIsles);
-            });
-            widthRange = maxX-minX + 1000;
-            heightRange = maxY-minY + 1000;
-            this.app.show("/ingame");
-            refreshListOfColonizedSystems();
-            }, error -> System.out.println(error.getMessage()));
+                    Arrays.stream(dto).forEach(data -> {
+                        List<String> linkedIsles = new ArrayList<>(data.links().keySet());
+                        minX = Math.min(data.x(),minX);
+                        minY = Math.min(data.y(),minY);
+                        maxX = Math.max(data.x(),maxX);
+                        maxY = Math.max(data.y(),maxY);
+                        Island tmp = convertToIsland(data);
+                        isles.add(tmp);
+                        connections.put(data._id(),linkedIsles);
+                    });
+                    widthRange = maxX-minX + 1000;
+                    heightRange = maxY-minY + 1000;
+                    this.app.show("/ingame");
+                    refreshListOfColonizedSystems();
+                },
+                error -> System.out.println("Error while retrieving islands in the IslandsService:\n"+error.getMessage()));
     }
 
     /**
@@ -274,14 +275,6 @@ public class IslandsService extends BasicService {
         return total;
     }
 
-    public int getNumberOfBuildings(String empireID, String buildingID) {
-        int total = 0;
-        if (empiresInGame.containsKey(empireID)) {
-            total = siteManager.get(empireID).getBuildingCapacities(buildingID);
-        }
-        return total;
-    }
-
     public List<Island> getListOfIslands() {
         return Collections.unmodifiableList(this.isles);
     }
@@ -363,11 +356,6 @@ public class IslandsService extends BasicService {
         this.isles.replaceAll(island -> island.id().equals(newIsland.id()) ? newIsland : island);
         return newIsland;
     }
-
-    public void updateIsland(String islandID) {
-        this.subscriber.subscribe(this.gameSystemsService.getSystem(this.gameID, islandID), this::updateIsland);
-    }
-
 
     private Island convertToIsland(SystemDto result) {
         return new Island(result.owner(),

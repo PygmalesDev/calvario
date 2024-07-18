@@ -3,25 +3,22 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.Jobs;
-import de.uniks.stp24.model.Jobs.Job;
+import de.uniks.stp24.model.Jobs.*;
+import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.ExplanationService;
-import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
+import de.uniks.stp24.service.game.ExplanationService;
 import de.uniks.stp24.service.game.ResourcesService;
+import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.IslandsService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -39,8 +36,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static de.uniks.stp24.service.Constants.siteTranslation;
-import static de.uniks.stp24.service.Constants.sitesIconPathsMap;
+import static de.uniks.stp24.service.Constants.*;
 
 @Component(view = "SiteProperties.fxml")
 public class SitePropertiesComponent extends AnchorPane {
@@ -104,7 +100,6 @@ public class SitePropertiesComponent extends AnchorPane {
     Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
     Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);
 
-
     Provider<ImageView> siteEmptyCellProvider = () -> {
         ImageView imageView = new ImageView(this.imageCache.get("/de/uniks/stp24/icons/other/empty_building_small_element.png"));
         imageView.setFitHeight(20);
@@ -120,9 +115,7 @@ public class SitePropertiesComponent extends AnchorPane {
     };
 
     Map<String, String> sitesMap;
-
-    public ObservableList<Map<String, Integer>> resources;
-    public ObservableList<ResourceComponent> resourceComponents;
+    public ObservableList<Map<String, Integer>> resources = FXCollections.observableArrayList();
     private ObservableList<Job> siteJobs;
 
     InGameController inGameController;
@@ -131,8 +124,13 @@ public class SitePropertiesComponent extends AnchorPane {
     public SitePropertiesComponent() {}
 
     @OnInit
-    public void init(){
-        sitesMap = sitesIconPathsMap;
+    public void init(){ sitesMap = sitesIconPathsMap;}
+
+    @OnInit
+    public void setSitesJobUpdates() {
+        this.jobsService.onJobsLoadingFinished("district", this::setSiteFinishers);
+        this.jobsService.onJobsLoadingFinished(() ->
+                this.siteJobs = this.jobsService.getJobObservableListOfType("district"));
     }
 
     @OnRender
@@ -143,98 +141,53 @@ public class SitePropertiesComponent extends AnchorPane {
         this.jobPane.setVisible(false);
     }
 
-    @FXML
-    public void initialize() {
-        // Ensure resources list is initialized
-        if (this.resourceComponents == null) {
-            this.resourceComponents = FXCollections.observableArrayList();
-        }
-    }
-
     public void setInGameController(InGameController inGameController){
         this.inGameController = inGameController;
     }
 
-
     public void setSiteType(String siteType){
-        if (Objects.nonNull(siteType)) {
-            this.siteType = siteType;
-            siteName.setText(gameResourceBundle.getString(siteTranslation.get(siteType)));
-            Image imageSite = imageCache.get("/" + sitesMap.get(siteType));
-            siteImage.getStyleClass().clear();
-            siteImage.setImage(imageSite);
-            displayCostsOfSite();
-            displayAmountOfSite();
+        this.siteType = siteType;
+        System.out.println(siteType);
+        this.siteName.setText(gameResourceBundle.getString(siteTranslation.get(siteType)));
+        this.siteImage.setImage(imageCache.get("/" + sitesMap.get(siteType)));
+        displayCostsOfSite();
+        displayAmountOfSite();
 
-            if (this.siteJobs.stream().anyMatch(job -> job.district().equals(siteType)
-                    && job.system().equals(this.tokenStorage.getIsland().id()))) {
-                Job job = this.siteJobs.stream().filter(started -> started.district().equals(siteType)
-                                && started.system().equals(this.tokenStorage.getIsland().id()))
-                        .findFirst().orElse(null);
-                this.showJobsPane();
-                if (Objects.nonNull(job)) {
-                    this.siteJobProgress.setJobProgress(job);
-                    if (this.jobsService.hasNoJobTypeProgress(job.type()) && this.siteJobs.getFirst().equals(job))
-                        this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
-                }
-            } else {
-                this.hideJobsPane();
-                this.jobsService.stopOnJobTypeProgress("district");
-            }
-        }
-    }
-
-    public void onClose(){
-        setVisible(false);
+        this.setJobsPaneProgress(this.siteJobs.stream().filter(started -> started.district().equals(siteType)
+                && started.system().equals(this.tokenStorage.getIsland().id())).findFirst().orElse(null));
     }
 
     public void buildSite(){
-        if (Objects.nonNull(this.tokenStorage.getIsland())) {
-            this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createDistrictJob(
-                    this.tokenStorage.getIsland().id(), this.siteType)), job -> {
-                this.showJobsPane();
-                this.siteJobProgress.setJobProgress(job);
-
-                if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
-                        (this.siteJobs.isEmpty() || this.siteJobs.getFirst().equals(job)))
-                    this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
-
-                this.jobsService.onJobDeletion(job._id(), () -> {
-                    if (job.district().equals(this.siteType)) this.hideJobsPane();
-                });
-                this.jobsService.onJobCompletion(job._id(), () -> {
-                    this.updateIslandSites();
-                    if (job.district().equals(this.siteType)) this.hideJobsPane();
-                });
-            });
-        }
-    }
-
-    @OnInit
-    public void setSitesJobUpdates() {
-        this.jobsService.onJobsLoadingFinished("district", job -> {
-            this.jobsService.onJobDeletion(job._id(), () -> {
-                if (job.district().equals(this.siteType)) this.hideJobsPane();
-            });
-            this.jobsService.onJobCompletion(job._id(), () -> {
-                this.updateIslandSites();
-                this.hideJobsPane();
-            });
+        this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createDistrictJob(
+                this.tokenStorage.getIsland().id(), this.siteType)), job ->  {
+            this.setJobsPaneProgress(job);
+            this.setSiteFinishers(job);
         });
-
-        this.jobsService.onJobsLoadingFinished(() ->
-                this.siteJobs = this.jobsService.getJobObservableListOfType("district"));
     }
 
-
-    public void showJobsPane() {
-        this.jobPane.setVisible(true);
-        this.siteCostsListView.setVisible(false);
+    private void setSiteFinishers(Job job) {
+        this.jobsService.onJobDeletion(job._id(), () -> {
+            if (job.district().equals(this.siteType)) this.setJobsPaneVisibility(false);
+        });
+        this.jobsService.onJobCompletion(job._id(), () -> {
+            if (job.system().equals(this.islandAttributeStorage.getIsland().id())) {
+                this.updateIslandSites();
+                if (job.district().equals(this.siteType)) this.setJobsPaneVisibility(false);
+            }
+        });
     }
 
-    public void hideJobsPane() {
-        this.jobPane.setVisible(false);
-        this.siteCostsListView.setVisible(true);
+    private void setJobsPaneVisibility(boolean isVisible) {
+        this.jobPane.setVisible(isVisible);
+        this.siteCostsListView.setVisible(!isVisible);
+    }
+
+    private void setJobsPaneProgress(Jobs.Job job) {
+        this.setJobsPaneVisibility(Objects.nonNull(job));
+        if (Objects.nonNull(job)) {
+            this.siteJobProgress.setJobProgress(job);
+            this.siteJobProgress.setShouldTick(this.jobsService.isCurrentIslandJob(job));
+        }
     }
 
     public void updateIslandSites() {
@@ -242,11 +195,8 @@ public class SitePropertiesComponent extends AnchorPane {
                 this.tokenStorage.getIsland().id()), result -> {
             this.tokenStorage.setIsland(this.islandsService.updateIsland(result));
             this.islandAttributeStorage.setIsland(this.islandsService.updateIsland(result));
-
             displayAmountOfSite();
         });
-
-
     }
 
     //Calls handleDeleteStructure in inGameController which shows the deleteWarning popup
@@ -258,8 +208,8 @@ public class SitePropertiesComponent extends AnchorPane {
     //Gets resources of site and displays them in listviews
     public void displayCostsOfSite(){
         siteCostsListView.setSelectionModel(null);
-        for(DistrictAttributes district: islandAttributeStorage.districtAttributes){
-            if(district.id().equals(siteType)){
+        for (DistrictAttributes district: islandAttributeStorage.districtAttributes){
+            if (district.id().equals(siteType)) {
                 resourceListGeneration(district);
                 break;
             }
@@ -274,66 +224,52 @@ public class SitePropertiesComponent extends AnchorPane {
         buildSiteButton.setDisable(false);
         destroySiteButton.setDisable(false);
 
-        DistrictAttributes certainSite = getCertainSite();
-        if (Objects.nonNull(certainSite)) {
-            Map<String, Integer> costSite = Objects.requireNonNull(certainSite).cost();
-            if (!resourcesService.hasEnoughResources(costSite)) {
-                buildSiteButton.setDisable(true);
+        Map<String, Integer> costSite = Objects.requireNonNull(getCertainSite()).cost();
+        if (!resourcesService.hasEnoughResources(costSite)) buildSiteButton.setDisable(true);
+
+        int amountSite = Objects.nonNull(tokenStorage.getIsland().sites().get(siteType)) ?
+                tokenStorage.getIsland().sites().get(siteType) : 0;
+        int amountSiteSlots = tokenStorage.getIsland().sitesSlots().get(siteType);
+
+        siteAmountScrollPane.setVvalue(0);
+        siteAmountGridPane.getChildren().clear();
+        siteAmountGridPane.getRowConstraints().clear();
+        siteAmountGridPane.addRow(0);
+
+        int x = 0, y = 0, slots = 0, builtSlots = 0;
+        while (slots != amountSiteSlots) {
+            if (builtSlots < amountSite) siteAmountGridPane.add(siteCellProvider.get(), x, y);
+            else siteAmountGridPane.add(siteEmptyCellProvider.get(), x, y);
+
+            slots++;
+            builtSlots++;
+            x++;
+            if (x == 5) {
+                x = 0;
+                y++;
+                siteAmountGridPane.addRow(y);
             }
         }
 
-        if (Objects.nonNull(tokenStorage.getIsland())) {
-            int amountSite = Objects.nonNull(tokenStorage.getIsland().sites().get(siteType)) ?
-                    tokenStorage.getIsland().sites().get(siteType) : 0;
-            int amountSiteSlots = tokenStorage.getIsland().sitesSlots().get(siteType);
-
-            siteAmountScrollPane.setVvalue(0);
-            siteAmountGridPane.getChildren().clear();
-            siteAmountGridPane.getRowConstraints().clear();
-            siteAmountGridPane.addRow(0);
-
-            int x = 0, y = 0, slots = 0, builtSlots = 0;
-            while (slots != amountSiteSlots) {
-                if (builtSlots < amountSite) siteAmountGridPane.add(siteCellProvider.get(), x, y);
-                else siteAmountGridPane.add(siteEmptyCellProvider.get(), x, y);
-
-                slots++;
-                builtSlots++;
-                x++;
-                if (x == 5) {
-                    x = 0;
-                    y++;
-                    siteAmountGridPane.addRow(y);
-                }
-            }
-
-            buildSiteButton.setDisable(amountSiteSlots == amountSite);
-            destroySiteButton.setDisable(amountSite == 0);
-        }
+        buildSiteButton.setDisable(amountSiteSlots == amountSite);
+        destroySiteButton.setDisable(amountSite == 0);
     }
 
     private void resourceListGeneration(DistrictAttributes site) {
-
-        Map<String, Integer> resourceMapPrice = site.cost();
-        ObservableList<Resource> resourceListPrice = resourcesService.generateResourceList(resourceMapPrice, siteCostsListView.getItems(),null);
+        ObservableList<Resource> resourceListPrice = resourcesService.generateResourceList(site.cost(), siteCostsListView.getItems(),null);
         siteCostsListView.setItems(resourceListPrice);
-
-        Map<String, Integer> resourceMapUpkeep = site.upkeep();
-        ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, siteConsumesListView.getItems(), null);
+        ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(site.upkeep(), siteConsumesListView.getItems(), null);
         siteConsumesListView.setItems(resourceListUpkeep);
-
-        Map<String, Integer> resourceMapProduce = site.production();
-        ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, siteProducesListView.getItems(), null);
+        ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(site.production(), siteProducesListView.getItems(), null);
         siteProducesListView.setItems(resourceListProduce);
     }
 
     private DistrictAttributes getCertainSite(){
-        for(DistrictAttributes site: islandAttributeStorage.districtAttributes){
-            if(site.id().equals(siteType)){
-                return site;
-            }
-        }
+        for(DistrictAttributes site: islandAttributeStorage.districtAttributes)
+            if (site.id().equals(siteType)) return site;
         return null;
     }
+
+    public void onClose() { setVisible(false);}
 }
 

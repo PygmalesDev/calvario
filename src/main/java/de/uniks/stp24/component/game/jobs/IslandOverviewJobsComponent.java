@@ -66,7 +66,6 @@ public class IslandOverviewJobsComponent extends AnchorPane {
         });
     }
 
-
     public void insertIslandName() {
         this.noJobText.setText(this.noJobText.getText()
                 .replace("{ISLAND_NAME}", this.islandsService.getIslandName(
@@ -74,7 +73,10 @@ public class IslandOverviewJobsComponent extends AnchorPane {
     }
 
     public void setJobsObservableList(ObservableList<Job> observer) {
-        if (!observer.isEmpty()) this.noJobText.setVisible(false);
+        if (!islandAttributes.getIsland().owner().equals(this.tokenStorage.getEmpireId()))
+            this.noJobText.setText(this.gameResourceBundle.getString("overview.jobs.enemyIsland"));
+        else this.noJobText.setText(this.gameResourceBundle.getString("jobs.island.noJob"));
+        this.noJobText.setVisible(observer.isEmpty());
         this.jobProgressListView.setItems(observer);
     }
 }

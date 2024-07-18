@@ -22,7 +22,6 @@ import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
-import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -109,8 +108,7 @@ public class OverviewSitesComponent extends AnchorPane {
 
     public void showUpgrades() {
         setLevelCheckBox();
-        inGameController.buildingPropertiesComponent.setVisible(false);
-        inGameController.sitePropertiesComponent.setVisible(false);
+
         inGameController.overviewUpgradeComponent.upgrade_box.setVisible(false);
         inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(true);
 
@@ -203,7 +201,8 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameController.sitePropertiesComponent.setVisible(false);
         inGameController.buildingPropertiesComponent.setVisible(false);
         inGameController.overviewContainer.setVisible(false);
-        inGameController.selectedIsland.rudderImage.setVisible(false);
+        if (Objects.nonNull(inGameController.selectedIsland.rudderImage))
+            inGameController.selectedIsland.rudderImage.setVisible(false);
         inGameController.selectedIsland.islandIsSelected = false;
 
         if (!inGameController.islandsService.keyCodeFlag) {

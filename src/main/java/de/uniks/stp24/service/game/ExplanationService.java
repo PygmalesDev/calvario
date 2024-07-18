@@ -1,15 +1,9 @@
 package de.uniks.stp24.service.game;
 
-import de.uniks.stp24.component.game.CustomComponentListCell;
-import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.model.Resource;
-import javafx.scene.input.MouseEvent;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.awt.*;
-import java.util.ArrayList;
 
 @Singleton
 public class ExplanationService {

@@ -3,7 +3,6 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Jobs;
-import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -12,9 +11,7 @@ import de.uniks.stp24.service.game.ExplanationService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import de.uniks.stp24.model.Resource;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -29,9 +26,6 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Map;
 import java.util.*;
 
 @Component(view = "IslandOverviewUpgrade.fxml")

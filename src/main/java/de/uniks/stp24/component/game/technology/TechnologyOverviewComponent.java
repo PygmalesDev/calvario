@@ -28,7 +28,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
     @FXML
     public StackPane researchJobContainer;
     @FXML
-    VBox technologieOverviewBox;
+    VBox technologyOverviewBox;
     @FXML
     Button closeButton;
     @FXML
@@ -89,25 +89,13 @@ public class TechnologyOverviewComponent extends AnchorPane {
         for (TechnologyExtended technology : technologyCategoryComponent.researchJobComponent.technologies) {
             for (String tag : technology.tags()) {
                 if (Objects.equals(tag, "engineering") && technologyCategoryComponent.technologieCategoryName.equals("engineering")){
-                    technologyCategoryComponent.setTechnology(technology);
-                    technologyCategoryComponent.researchJobComponent.setJobDescription(technology);
-                    technologyCategoryComponent.researchJobComponent.progressHandling();
-                    technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
-                    technologyCategoryComponent.showJobWindow();
+                    initialJobDescriptionHandling(technology);
                     break outerLoop;
                 } else if (Objects.equals(tag, "society") && technologyCategoryComponent.technologieCategoryName.equals("society")) {
-                    technologyCategoryComponent.setTechnology(technology);
-                    technologyCategoryComponent.researchJobComponent.setJobDescription(technology);
-                    technologyCategoryComponent.researchJobComponent.progressHandling();
-                    technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
-                    technologyCategoryComponent.showJobWindow();
+                    initialJobDescriptionHandling(technology);
                     break outerLoop;
                 } else if (Objects.equals(tag, "physics") && technologyCategoryComponent.technologieCategoryName.equals("physics")) {
-                    technologyCategoryComponent.setTechnology(technology);
-                    technologyCategoryComponent.researchJobComponent.setJobDescription(technology);
-                    technologyCategoryComponent.researchJobComponent.progressHandling();
-                    technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
-                    technologyCategoryComponent.showJobWindow();
+                    initialJobDescriptionHandling(technology);
                     break outerLoop;
                 } else {
                 technologyCategoryComponent.unShowJobWindow();
@@ -115,6 +103,14 @@ public class TechnologyOverviewComponent extends AnchorPane {
             }
         }
         technologyCategoryComponent.researchJobComponent.setEffectListView();
+    }
+
+    public void initialJobDescriptionHandling(TechnologyExtended technology){
+        technologyCategoryComponent.setTechnology(technology);
+        technologyCategoryComponent.researchJobComponent.setJobDescription(technology);
+        technologyCategoryComponent.researchJobComponent.progressHandling();
+        technologyCategoryComponent.researchJobComponent.technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
+        technologyCategoryComponent.showJobWindow();
     }
 
     public void engineering() {

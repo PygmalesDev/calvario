@@ -5,43 +5,42 @@ import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.Jobs;
-import de.uniks.stp24.model.Jobs.*;
+import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.ExplanationService;
+import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
-import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.IslandsService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import org.fulib.fx.FulibFxApp;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static de.uniks.stp24.service.Constants.*;
+import static de.uniks.stp24.service.Constants.siteTranslation;
+import static de.uniks.stp24.service.Constants.sitesIconPathsMap;
 
 @Component(view = "SiteProperties.fxml")
 public class SitePropertiesComponent extends AnchorPane {

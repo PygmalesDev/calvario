@@ -5,32 +5,31 @@ import de.uniks.stp24.dto.EffectSourceDto;
 import de.uniks.stp24.dto.EffectSourceParentDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.EmpireApiService;
-import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.ws.EventListener;
-import javafx.animation.*;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 import javafx.scene.text.TextFlow;
+import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
-import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +41,8 @@ import java.beans.PropertyChangeListener;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static de.uniks.stp24.service.Constants.*;
+import static de.uniks.stp24.service.Constants.DAY;
+import static de.uniks.stp24.service.Constants.NIGHT;
 
 @Component(view = "Event.fxml")
 public class EventComponent extends AnchorPane {
@@ -52,8 +52,6 @@ public class EventComponent extends AnchorPane {
     AnchorPane anchor;
     @FXML
     ScrollPane descriptionScrollPane;
-    @FXML
-    Text eventDescription;
     @FXML
     Text eventName;
     @FXML

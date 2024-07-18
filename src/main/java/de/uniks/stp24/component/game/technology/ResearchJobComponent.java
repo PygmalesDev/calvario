@@ -201,7 +201,8 @@ public void progressHandling(){
         if (technologyCategoryComponent.getTechnology() != null){
             technologyEffectsListView.getItems().clear();
             for (Effect effect : technologyCategoryComponent.getTechnology().effects()) {
-                String effectString = effect.multiplier() + " * " + variablesResourceBundle.getString(effect.variable());
+                double effectPercent =  100 - effect.multiplier() * 100;
+                String effectString = "-" + (int) effectPercent + "% " + variablesResourceBundle.getString(effect.variable());
                 technologyEffectsListView.getItems().add(effectString);
             }
         }

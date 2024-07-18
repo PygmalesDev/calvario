@@ -2,7 +2,7 @@ package de.uniks.stp24.component.game.jobs;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.ResourceComponent;
-import de.uniks.stp24.model.Jobs.*;
+import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.game.JobsService;
 import javafx.application.Platform;

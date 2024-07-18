@@ -5,12 +5,9 @@ import de.uniks.stp24.dto.ExplainedVariableDTO;
 import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.service.InGameService;
 import org.fulib.fx.controller.Subscriber;
-import org.intellij.lang.annotations.JdkConstants;
 
 import javax.inject.Inject;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -66,15 +66,7 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     
     @Inject
     TechnologyOverviewComponent technologyOverviewComponent;
-
-
-    /*
     @Inject
-    @SubComponent
-    public TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
-
-     */
-
     ImageCache imageCache = new ImageCache();
 
     ObservableList<Effect> description = FXCollections.observableArrayList();

@@ -126,7 +126,6 @@ public class ResourcesService {
         return gameSystemsApiService.getBuilding(buildingType);
     }
 
-
     /**
      * Updates the ObservableList which shows the count and change per season of a resource
      */
@@ -164,27 +163,5 @@ public class ResourcesService {
             }
         }
         return true;
-    }
-
-    public Map<String, Integer> updateAvailableResources(Map<String, Integer> neededResources) {
-        Map<String, Integer> difRes = new HashMap<>();
-        for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
-            String res = entry.getKey();
-            int neededAmount = entry.getValue();
-            difRes.put(res, -neededAmount);
-        }
-        return difRes;
-    }
-
-
-    public void upgradeEmpire() {
-        Map<String, Integer> difRes = updateAvailableResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()));
-
-        this.subscriber.subscribe(empireService.updateEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId(),
-                new UpdateEmpireDto(difRes, islandAttributes.getTech(), null, null, null)),
-                result -> {
-                    islandAttributes.setEmpireDto(result);
-                });
-
     }
 }

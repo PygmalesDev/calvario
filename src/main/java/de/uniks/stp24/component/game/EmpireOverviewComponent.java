@@ -72,7 +72,7 @@ public class EmpireOverviewComponent extends StackPane {
 
     List<Island> islandList = new ArrayList<>();
     List<IslandComponent> islandComponentList = new ArrayList<>();
-    List<IslandComponent> empireIslands = new ArrayList<>();
+    public List<IslandComponent> empireIslands = new ArrayList<>();
     List<Image> gridViewImages = new ArrayList<>();
 
     Map<IslandType, Image> imageMap = new HashMap<>();
@@ -109,9 +109,7 @@ public class EmpireOverviewComponent extends StackPane {
      * Closes the empire overview by hiding the parent component.
      */
     public void closeEmpireOverview() {
-        if (this.getParent() != null) {
-            this.getParent().setVisible(false);
-        }
+        this.setVisible(false);
     }
 
     /**

@@ -5,14 +5,16 @@ import de.uniks.stp24.dto.ExplainedVariableDTO;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 import javax.inject.Singleton;
+import java.util.ArrayList;
 
 @Singleton
 public interface GameLogicApiService {
 
-    @GET("games/{game}/empires/{empire}/variables/{variable}")
-    Observable<ExplainedVariableDTO> getVariablesExplanations(@Path("empire") String empireID, @Path("variable") String variable);
+    @GET("games/{game}/empires/{empire}/variables")
+    Observable<ArrayList<ExplainedVariableDTO>> getVariablesExplanations(@Path("empire") String empireID, @Query("variables") ArrayList<String> variables);
 
     @GET("games/{game}/empires/{empire}/aggregates/{aggregate}/technologies/{id}")
     Observable<AggregateResultDto> getTechnologyCostAndTime(@Path("empire") String empireID, @Path("aggregate") String aggregate, @Path("id") String techID);

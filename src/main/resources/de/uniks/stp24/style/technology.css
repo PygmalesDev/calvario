@@ -113,6 +113,10 @@
     -fx-background-image: none;
 }
 
+.list-view:focused {
+
+}
+
 /*.list-view .list-cell:empty {*/
 /*    -fx-background-color: transparent;*/
 /*    -fx-border-color: transparent;*/
@@ -158,7 +162,7 @@
     -fx-background-image: none;
 }
 
-.tooltip {
+.research-tooltip {
     -fx-opacity: 1;
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/details_background.png");
@@ -198,4 +202,14 @@
 }
 
 
+.description-tooltip {
+    -fx-opacity: 1;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/details_background.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
 
+.technology-description-label {
+}

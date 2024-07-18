@@ -8,7 +8,7 @@
     -fx-background-image: url("/de/uniks/stp24/assets/jobsOverview/job_overview_background.png");
     -fx-background-position: center;
     -fx-background-size: 100% 100%;
-    -fx-background-repeat: false;
+    -fx-background-repeat: no-repeat;
 }
 
 .jobsOverviewList {
@@ -67,7 +67,7 @@
     -fx-background-image: url("/de/uniks/stp24/assets/jobsOverview/red_frame.png");
     -fx-background-position: center;
     -fx-background-size: 100% 100%;
-    -fx-background-repeat: false;
+    -fx-background-repeat: no-repeat;
 }
 
 .jobIslandNameText {

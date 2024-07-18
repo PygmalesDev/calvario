@@ -6,6 +6,7 @@ import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.ExplanationService;
@@ -53,7 +54,9 @@ public class StorageOverviewComponent extends AnchorPane {
     @Inject
     TokenStorage tokenStorage;
     @Inject
-    ExplanationService explanationService;
+    public ExplanationService explanationService;
+    @Inject
+    ImageCache imageCache;
     @Inject
     @org.fulib.fx.annotation.controller.Resource
 
@@ -62,7 +65,7 @@ public class StorageOverviewComponent extends AnchorPane {
 
     private String lastUpdate;
     private String lastSeasonUpdate;
-    Provider<ResourceComponent> resourceComponentProvider = () -> new ResourceComponent(true, true, true, true, gameResourceBundle);
+    Provider<ResourceComponent> resourceComponentProvider = () -> new ResourceComponent(true, true, true, true, gameResourceBundle, this.imageCache);
 
 
     @Inject

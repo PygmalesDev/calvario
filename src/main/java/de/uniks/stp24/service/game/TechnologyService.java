@@ -19,7 +19,7 @@ import java.util.*;
 public class TechnologyService {
 
     @Inject
-    PresetsApiService presetsApiService;
+    public PresetsApiService presetsApiService;
     @Inject
     EmpireApiService empireApiService;
     @Inject
@@ -41,9 +41,7 @@ public class TechnologyService {
     public TechnologyService() {
     }
 
-
     public ObservableList<TechnologyExtended> getAllUnlockedTechnologies(String tag) {
-
         temp = getTechnologies();
 
         subscriber.subscribe(empireApiService.getEmpiresDtos(tokenStorage.getGameId()),
@@ -91,12 +89,12 @@ public class TechnologyService {
      * @return unlocked Technologies without precedes that are also unlocked
      */
     public ObservableList<TechnologyExtended> getUnlockedTechnologies(String tag) {
-        List<TechnologyExtended> temp = getAllUnlockedTechnologies(tag);
+        List<TechnologyExtended> tempUnlocked = getAllUnlockedTechnologies(tag);
         unlockedTechnologiesList.clear();
-        for (TechnologyExtended technology : temp) {
+        for (TechnologyExtended technology : tempUnlocked) {
             for (String t : technology.precedes()) {
 
-                if (temp.stream().noneMatch(tech -> tech.id().equals(t))) {
+                if (tempUnlocked.stream().noneMatch(tech -> tech.id().equals(t))) {
                     unlockedTechnologiesList.add(technology);
                 }
             }
@@ -107,6 +105,8 @@ public class TechnologyService {
     /**
      * iterate tru all research Technologies and check their requirements
      * if all requirements are not in temp, add them in researchTechnologiesList
+     *
+     * @return research Technologies without requirements that are not unlocked
      */
     public ObservableList<TechnologyExtended> getResearchTechnologies(String tag) {
         List<TechnologyExtended> tempResearch = getResearchTechnologies();

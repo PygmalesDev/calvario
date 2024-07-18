@@ -3,7 +3,7 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.SiteDto;
+import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Resource;
@@ -101,8 +101,10 @@ public class SitePropertiesComponent extends AnchorPane {
     @SubComponent
     public PropertiesJobProgressComponent siteJobProgress;
 
-    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle);
-    Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", gameResourceBundle);
+    Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
+    Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);
+
+
     Provider<ImageView> siteEmptyCellProvider = () -> {
         ImageView imageView = new ImageView(this.imageCache.get("/de/uniks/stp24/icons/other/empty_building_small_element.png"));
         imageView.setFitHeight(20);
@@ -118,9 +120,6 @@ public class SitePropertiesComponent extends AnchorPane {
     };
 
     Map<String, String> sitesMap;
-
-    private int amountSite = 0;
-    private int amountSiteSlots = 0;
 
     public ObservableList<Map<String, Integer>> resources;
     public ObservableList<ResourceComponent> resourceComponents;
@@ -164,7 +163,7 @@ public class SitePropertiesComponent extends AnchorPane {
     public void setSiteType(String siteType){
         this.siteType = siteType;
         siteName.setText(gameResourceBundle.getString(siteTranslation.get(siteType)));
-        Image imageSite = new Image(sitesMap.get(siteType));
+        Image imageSite = imageCache.get("/" + sitesMap.get(siteType));
         siteImage.getStyleClass().clear();
         siteImage.setImage(imageSite);
         displayCostsOfSite();
@@ -271,25 +270,31 @@ public class SitePropertiesComponent extends AnchorPane {
     //Gets resources of site and displays them in listviews
     public void displayCostsOfSite(){
         siteCostsListView.setSelectionModel(null);
-        subscriber.subscribe(resourcesService.getResourcesSite(siteType), this::resourceListGeneration);
-        siteConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, negativeResourceProvider));
-        siteCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, negativeResourceProvider));
-        siteProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, positiveResourceProvider));
+        for(DistrictAttributes district: islandAttributeStorage.districtAttributes){
+            if(district.id().equals(siteType)){
+                resourceListGeneration(district);
+                break;
+            }
+        }
+        siteConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, negativeResouceProvider), "districts", siteType, "upkeep"));
+        siteCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, negativeResouceProvider), "districts", siteType, "cost"));
+        siteProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, positiveResourceProvider), "districts", siteType, "production"));
     }
 
     //Uses a GridPane to display a graphic view of how many sites of each type you have
     public void displayAmountOfSite(){
         buildSiteButton.setDisable(false);
         destroySiteButton.setDisable(false);
-        subscriber.subscribe(resourcesService.getResourcesSite(siteType), result -> {
-            Map<String, Integer> costSite = result.cost();
-            if (!resourcesService.hasEnoughResources(costSite)) buildSiteButton.setDisable(true);
-        }, error -> System.out.println("Caught an error while trying to display the amount of sites " +
-                "in the SitePropertiesComponent:\n %s" + error.getMessage()));
 
-        amountSite = Objects.nonNull(tokenStorage.getIsland().sites().get(siteType)) ?
+        Map<String, Integer> costSite = Objects.requireNonNull(getCertainSite()).cost();
+        if (!resourcesService.hasEnoughResources(costSite)){
+            buildSiteButton.setDisable(true);
+        }
+
+
+        int amountSite = Objects.nonNull(tokenStorage.getIsland().sites().get(siteType)) ?
                 tokenStorage.getIsland().sites().get(siteType) : 0;
-        amountSiteSlots = tokenStorage.getIsland().sitesSlots().get(siteType);
+        int amountSiteSlots = tokenStorage.getIsland().sitesSlots().get(siteType);
 
         siteAmountScrollPane.setVvalue(0);
         siteAmountGridPane.getChildren().clear();
@@ -328,20 +333,28 @@ public class SitePropertiesComponent extends AnchorPane {
         }
     }
 
-    private void resourceListGeneration(SiteDto siteDto) {
+    private void resourceListGeneration(DistrictAttributes site) {
 
-        Map<String, Integer> resourceMapPrice = siteDto.cost();
+        Map<String, Integer> resourceMapPrice = site.cost();
         ObservableList<Resource> resourceListPrice = resourcesService.generateResourceList(resourceMapPrice, siteCostsListView.getItems(),null);
         siteCostsListView.setItems(resourceListPrice);
 
-        Map<String, Integer> resourceMapUpkeep = siteDto.upkeep();
+        Map<String, Integer> resourceMapUpkeep = site.upkeep();
         ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, siteConsumesListView.getItems(), null);
         siteConsumesListView.setItems(resourceListUpkeep);
 
-        Map<String, Integer> resourceMapProduce = siteDto.production();
+        Map<String, Integer> resourceMapProduce = site.production();
         ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, siteProducesListView.getItems(), null);
         siteProducesListView.setItems(resourceListProduce);
     }
 
+    private DistrictAttributes getCertainSite(){
+        for(DistrictAttributes site: islandAttributeStorage.districtAttributes){
+            if(site.id().equals(siteType)){
+                return site;
+            }
+        }
+        return null;
+    }
 }
 

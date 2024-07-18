@@ -1,11 +1,13 @@
 package de.uniks.stp24.service;
 
+import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.Upgrade;
-import de.uniks.stp24.model.BuildingPresets;
-import de.uniks.stp24.model.DistrictPresets;
+import de.uniks.stp24.model.BuildingAttributes;
+import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.SystemUpgrades;
+import de.uniks.stp24.service.game.VariableDependencyService;
 import org.fulib.fx.annotation.controller.Resource;
 
 import javax.inject.Inject;
@@ -22,10 +24,10 @@ import static de.uniks.stp24.service.Constants.islandTranslation;
 @Singleton
 public class IslandAttributeStorage {
     public EmpireDto empireDto;
-    public SystemUpgrades systemPresets;
+    public SystemUpgrades systemUpgradeAttributes;
     public Island island;
-    public ArrayList<BuildingPresets> buildings;
-    public ArrayList<DistrictPresets> districts;
+    public ArrayList<BuildingAttributes> buildingsAttributes;
+    public ArrayList<DistrictAttributes> districtAttributes;
     public Map<Integer, String> upgradeEffects = new HashMap<>();
 
     @Inject
@@ -33,6 +35,8 @@ public class IslandAttributeStorage {
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
     private int usedSlots;
+    @Inject
+    VariableDependencyService variableDependencyService;
 
 
     @Inject
@@ -48,27 +52,27 @@ public class IslandAttributeStorage {
         empireDto = empire;
     }
 
-    public void setSystemPresets(SystemUpgrades presets) {
-        systemPresets = presets;
+    public void setSystemUpgradeAttributes() {
+        this.systemUpgradeAttributes = variableDependencyService.createVariableDependencyUpgrades();
 
-        String effectsColonized = "+" + systemPresets.colonized().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
-        String effectsUpgraded = "+" + systemPresets.upgraded().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
-        String effectsDeveloped = "+" + systemPresets.developed().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
+        String effectsColonized = "+" + this.systemUpgradeAttributes.colonized().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
+        String effectsUpgraded = "+" + this.systemUpgradeAttributes.upgraded().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
+        String effectsDeveloped = "+" + this.systemUpgradeAttributes.developed().pop_growth() * 100 + "% " + gameResourceBundle.getString("more.crewmates");
 
         String effectsColonizedCap;
         String effectsUpgradedCap;
         String effectsDevelopedCap;
 
-        if(systemPresets.colonized().capacity_multiplier() != 1.0) {
-            effectsColonizedCap = "+" + (systemPresets.colonized().capacity_multiplier() - 1) * 100 + "% " + gameResourceBundle.getString("more.capacity");
+        if(this.systemUpgradeAttributes.colonized().capacity_multiplier() != 1.0) {
+            effectsColonizedCap = "+" + (this.systemUpgradeAttributes.colonized().capacity_multiplier() - 1) * 100 + "% " + gameResourceBundle.getString("more.capacity");
             effectsColonized = effectsColonized + "\n" + effectsColonizedCap;
         }
-        if(systemPresets.upgraded().capacity_multiplier() != 1.0){
-            effectsUpgradedCap = "+" + (systemPresets.upgraded().capacity_multiplier() - 1) * 100 + "% " + gameResourceBundle.getString("more.capacity");
+        if(this.systemUpgradeAttributes.upgraded().capacity_multiplier() != 1.0){
+            effectsUpgradedCap = "+" + (this.systemUpgradeAttributes.upgraded().capacity_multiplier() - 1) * 100 + "% " + gameResourceBundle.getString("more.capacity");
             effectsUpgraded = effectsUpgraded + "\n" + effectsUpgradedCap;
         }
-        if(systemPresets.developed().capacity_multiplier() != 1.0){
-            effectsDevelopedCap = "+" + (systemPresets.developed().capacity_multiplier() - 1) * 100 + "% " + gameResourceBundle.getString("more.capacity");
+        if(this.systemUpgradeAttributes.developed().capacity_multiplier() != 1.0){
+            effectsDevelopedCap = "+" + (this.systemUpgradeAttributes.developed().capacity_multiplier() - 1) * 100 + "% " + gameResourceBundle.getString("more.capacity");
             effectsDeveloped = effectsDeveloped + "\n" + effectsDevelopedCap;
         }
 
@@ -84,20 +88,18 @@ public class IslandAttributeStorage {
 
     public Map<String, Integer> getNeededResources(int key) {
         return switch (key) {
-            case 0 -> systemPresets.unexplored().cost();
-            case 1 -> systemPresets.explored().cost();
-            case 2 -> systemPresets.colonized().cost();
-            case 3 -> systemPresets.upgraded().cost();
-            case 4 -> systemPresets.developed().cost();
+            case 2 -> systemUpgradeAttributes.colonized().cost();
+            case 3 -> systemUpgradeAttributes.upgraded().cost();
+            case 4 -> systemUpgradeAttributes.developed().cost();
             default -> null;
         };
     }
 
     public Map<String, Integer> getUpkeep(int key) {
         return switch (key) {
-            case 2 -> systemPresets.colonized().upkeep();
-            case 3 -> systemPresets.upgraded().upkeep();
-            case 4 -> systemPresets.developed().upkeep();
+            case 2 -> systemUpgradeAttributes.colonized().upkeep();
+            case 3 -> systemUpgradeAttributes.upgraded().upkeep();
+            case 4 -> systemUpgradeAttributes.developed().upkeep();
             default -> null;
         };
     }
@@ -114,15 +116,15 @@ public class IslandAttributeStorage {
         return empireDto.technologies();
     }
 
-    public void setBuildingPresets(ArrayList<BuildingPresets> buildings) {
-        this.buildings = buildings;
+    public void setBuildingAttributes() {
+        this.buildingsAttributes = variableDependencyService.createVariableDependencyBuildings();
     }
 
-    public void setDistrictPresets(ArrayList<DistrictPresets> districts) {
-        this.districts = districts;
+    public void setDistrictAttributes() {
+        this.districtAttributes = variableDependencyService.createVariableDependencyDistricts();
     }
 
-    public Map<String, Integer> getBuildingsProduction() {
+    public Map<String, Integer> getBuildingsProduction(Island island) {
         Map<String, Integer> buildingsProduction = new HashMap<>();
         for(String building: island.buildings()){
             int counter = 0;
@@ -131,7 +133,7 @@ public class IslandAttributeStorage {
                     counter++;
                 }
             }
-            for (BuildingPresets preset : buildings) {
+            for (BuildingAttributes preset : buildingsAttributes) {
                 if(preset.id().equals(building)) {
                     for (Map.Entry<String, Integer> entry : preset.production().entrySet()) {
                         buildingsProduction.merge(entry.getKey(), entry.getValue() * counter, Integer::sum);
@@ -142,10 +144,10 @@ public class IslandAttributeStorage {
         return buildingsProduction;
     }
 
-    public Map<String, Integer> getDistrictProduction() {
+    public Map<String, Integer> getDistrictProduction(Island island) {
         Map<String, Integer> sitesProduction = new HashMap<>();
         for(Map.Entry<String, Integer> entry : island.sites().entrySet()){
-            for (DistrictPresets preset : districts) {
+            for (DistrictAttributes preset : districtAttributes) {
                 if(preset.id().equals(entry.getKey())) {
                     for (Map.Entry<String, Integer> site : preset.production().entrySet()) {
                         sitesProduction.merge(site.getKey(), site.getValue() * entry.getValue(), Integer::sum);
@@ -156,7 +158,7 @@ public class IslandAttributeStorage {
         return sitesProduction;
     }
 
-    public Map<String, Integer> getBuildingsConsumption() {
+    public Map<String, Integer> getBuildingsConsumption(Island island) {
         Map<String, Integer> buildingsConsumption = new HashMap<>();
 
         for(String building: island.buildings()){
@@ -166,7 +168,7 @@ public class IslandAttributeStorage {
                     counter++;
                 }
             }
-            for (BuildingPresets preset : buildings) {
+            for (BuildingAttributes preset : buildingsAttributes) {
                 if(preset.id().equals(building)) {
                     for (Map.Entry<String, Integer> entry : preset.upkeep().entrySet()) {
                         buildingsConsumption.merge(entry.getKey(), entry.getValue() * counter, Integer::sum);
@@ -177,10 +179,10 @@ public class IslandAttributeStorage {
         return buildingsConsumption;
     }
 
-    public Map<String, Integer> getDistrictConsumption() {
+    public Map<String, Integer> getDistrictConsumption(Island island) {
         Map<String, Integer> sitesConsumption = new HashMap<>();
         for(Map.Entry<String, Integer> entry : island.sites().entrySet()){
-            for (DistrictPresets preset : districts) {
+            for (DistrictAttributes preset : districtAttributes) {
                 if(preset.id().equals(entry.getKey())) {
                     for (Map.Entry<String, Integer> site : preset.upkeep().entrySet()) {
                         sitesConsumption.merge(site.getKey(), site.getValue() * entry.getValue(), Integer::sum);
@@ -191,10 +193,10 @@ public class IslandAttributeStorage {
         return sitesConsumption;
     }
 
-    public Map<String, Integer> mergeProduction(){
-        Map<String, Integer> mergedMap = new HashMap<>(getBuildingsProduction());
+    public Map<String, Integer> mergeProduction(Island island){
+        Map<String, Integer> mergedMap = new HashMap<>(getBuildingsProduction(island));
 
-        for (Map.Entry<String, Integer> entry : getDistrictProduction().entrySet()) {
+        for (Map.Entry<String, Integer> entry : getDistrictProduction(island).entrySet()) {
             String key = entry.getKey();
             Integer value = entry.getValue();
 
@@ -207,10 +209,25 @@ public class IslandAttributeStorage {
         return mergedMap;
     }
 
-    public Map<String, Integer> mergeConsumption(){
-        Map<String, Integer> mergedMap = new HashMap<>(getBuildingsConsumption());
+    public Map<String, Integer> mergeResourceMaps(ArrayList<Map<String, Integer>> maps) {
+        Map<String, Integer> mergedMap = new HashMap<>();
 
-        for (Map.Entry<String, Integer> entry : getDistrictConsumption().entrySet()) {
+        for (Map<String, Integer> map : maps) {
+            for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                String resourceId = entry.getKey();
+                Integer value = entry.getValue();
+
+                mergedMap.put(resourceId, mergedMap.getOrDefault(resourceId, 0) + value);
+            }
+        }
+
+        return mergedMap;
+    }
+
+    public Map<String, Integer> mergeConsumption(Island island){
+        Map<String, Integer> mergedMap = new HashMap<>(getBuildingsConsumption(island));
+
+        for (Map.Entry<String, Integer> entry : getDistrictConsumption(island).entrySet()) {
             String key = entry.getKey();
             Integer value = entry.getValue();
 

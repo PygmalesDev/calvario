@@ -3,7 +3,10 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Jobs;
+import de.uniks.stp24.dto.Upgrade;
+import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -11,6 +14,7 @@ import de.uniks.stp24.service.game.ExplanationService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -83,7 +87,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
     @Inject
     IslandsService islandsService;
     @Inject
-    ExplanationService explanationService;
+    public ExplanationService explanationService;
     @Inject
     App app;
     @Inject
@@ -92,12 +96,14 @@ public class OverviewUpgradeComponent extends AnchorPane {
     ResourceBundle gameResourceBundle;
     @Inject
     JobsService jobsService;
+    @Inject
+    ImageCache imageCache;
 
     public GameSystemsApiService gameSystemsService;
 
     private InGameController inGameController;
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
+    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle, this.imageCache);
 
     @Inject
     public OverviewUpgradeComponent() {
@@ -127,6 +133,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
         inGameController.overviewContainer.setVisible(false);
         inGameController.selectedIsland.rudderImage.setVisible(false);
         inGameController.selectedIsland.islandIsSelected = false;
+
         if(!islandsService.keyCodeFlag) {
             inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
         }
@@ -137,45 +144,23 @@ public class OverviewUpgradeComponent extends AnchorPane {
         this.inGameController = inGameController;
     }
 
-    public void setNeededResources() {
-        if (inGameController != null) {
-            LinkedList<Text> resTextList = new LinkedList<>(Arrays.asList(res_1, res_2));
-            ArrayList<Pane> resPic = new ArrayList<>(Arrays.asList(res1, res2));
-            int i = 0;
-            for (Map.Entry<String, Integer> entry : islandAttributes.getNeededResources(
-                    islandAttributes.getIsland().upgradeLevel()).entrySet()) {
-                resTextList.get(i).setText(String.valueOf(entry.getValue()));
-                String sourceImage = switch (entry.getKey()) {
-                    case "minerals" -> "-fx-background-image: url('/de/uniks/stp24/icons/resources/minerals.png'); ";
-                    case "energy" -> "-fx-background-image: url('/de/uniks/stp24/icons/resources/energy.png'); ";
-                    case "alloys" -> "-fx-background-image: url('/de/uniks/stp24/icons/resources/alloys.png'); ";
-                    case "fuel" -> "-fx-background-image: url('/de/uniks/stp24/icons/resources/fuel.png'); ";
-                    default -> "";
-                };
-                resPic.get(i).setStyle(sourceImage +
-                        "-fx-background-size: cover;");
-                i += 1;
-            }
-        }
+    public void setListViews() {
+        setCosts();
+        setConsumes();
     }
 
-    public void upgradeIsland() {
-        if (resourcesService.hasEnoughResources(islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel()))) {
-            //resourcesService.upgradeIsland();
-            this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createIslandUpgradeJob(this.islandAttributes.getIsland().id())),
-                    job -> this.jobsService.onJobCompletion(job._id(), () -> this.islandsService.updateIsland(job.system())),
-                    error -> System.out.println(error.getMessage()));
+    public void setCosts(){
+        upgradeCostList.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "systems", islandAttributes.getIsland().upgrade(), "cost"));
+        Map<String, Integer> resourceMapCost = islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel());
+        ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(resourceMapCost, upgradeCostList.getItems(), null);
+        upgradeCostList.setItems(resourceListCost);
+    }
 
-            setNeededResources();
-            String upgradeStatus = switch (islandAttributes.getIsland().upgradeLevel()) {
-                case 0 -> islandAttributes.systemPresets.explored().id();
-                case 1 -> islandAttributes.systemPresets.colonized().id();
-                case 2 -> islandAttributes.systemPresets.upgraded().id();
-                case 3 -> islandAttributes.systemPresets.developed().id();
-                default -> null;
-            };
-            //islandsService.upgradeSystem(islandAttributes, upgradeStatus, inGameController);
-        }
+    public void setConsumes(){
+        upgradeUpkeepList.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "systems", islandAttributes.getIsland().upgrade(), "upkeep"));
+        Map<String, Integer> resourceMapUpkeep = islandAttributes.getUpkeep(islandAttributes.getIsland().upgradeLevel());
+        ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, upgradeUpkeepList.getItems(), null);
+        upgradeUpkeepList.setItems(resourceListUpkeep);
     }
 
     @OnInit

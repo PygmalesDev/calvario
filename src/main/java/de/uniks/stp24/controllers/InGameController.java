@@ -9,7 +9,6 @@ import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.records.GameListenerTriple;
-import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -25,6 +24,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -50,6 +50,8 @@ import java.util.Objects;
 @Controller
 public class InGameController extends BasicController {
     @FXML
+    public AnchorPane rootPane;
+    @FXML
     public StackPane explanationContainer;
     @FXML
     Pane gameBackground;
@@ -69,47 +71,38 @@ public class InGameController extends BasicController {
     @FXML
     public StackPane overviewContainer;
     @FXML
-    public StackPane technologiesContainer;
-    @FXML
     public ScrollPane mapScrollPane;
     @FXML
     public Pane mapGrid;
     @FXML
     public StackPane zoomPane;
     @FXML
-    StackPane deleteStructureWarningContainer;
+    public StackPane deleteStructureWarningContainer;
     @FXML
     public StackPane siteProperties;
     @FXML
-    StackPane buildingProperties;
+    public StackPane buildingProperties;
     @FXML
-    StackPane buildingsWindow;
+    public StackPane buildingsWindow;
     @FXML
     StackPane pauseMenuContainer;
     @FXML
     StackPane islandClaimingContainer;
 
     @FXML
-    StackPane clockComponentContainer;
+    public StackPane clockComponentContainer;
 
     @Inject
     public EventService eventService;
     @Inject
-    TimerService timerService;
-    @Inject
     InGameService inGameService;
-    @Inject
-    GamesService gamesService;
-    @Inject
-    LobbyService lobbyService;
     @Inject
     EmpireService empireService;
     @Inject
     public IslandsService islandsService;
     @Inject
-    ResourcesService resourceService;
-    @Inject
-    ExplanationService explanationService;
+    public ExplanationService explanationService;
+
     @Inject
     JobsService jobsService;
 
@@ -119,7 +112,6 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public PauseMenuComponent pauseMenuComponent;
-
     @SubComponent
     @Inject
     public IslandClaimingComponent islandClaimingComponent;
@@ -135,10 +127,10 @@ public class InGameController extends BasicController {
 
     @SubComponent
     @Inject
-    public VariableExplanationComponent variableExplanationComponent;
+    public EmpireOverviewComponent empireOverviewComponent;
     @SubComponent
     @Inject
-    public EmpireOverviewComponent empireOverviewComponent;
+    public HelpComponent helpComponent;
 
     @SubComponent
     @Inject
@@ -161,10 +153,6 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public SitePropertiesComponent sitePropertiesComponent;
-    
-    @SubComponent
-    @Inject
-    public HelpComponent helpComponent;
 
 
     List<IslandComponent> islandComponentList;
@@ -176,16 +164,18 @@ public class InGameController extends BasicController {
     public IslandAttributeStorage islandAttributes;
     @Inject
     EventListener eventListener;
+
     @Inject
     public InGameController() {
         lastUpdate = "";
     }
+
     @Inject
     public GameSystemsApiService gameSystemsApiService;
     @Inject
-    GameLogicApiService gameLogicApiService;
+    public VariableService variableService;
     @Inject
-    VariableService variableService;
+    public LobbyService lobbyService;
 
     public IslandComponent selectedIsland;
 
@@ -229,19 +219,13 @@ public class InGameController extends BasicController {
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_PAUSED"));
 
-        this.subscriber.subscribe(inGameService.loadUpgradePresets(),
-                result -> islandAttributes.setSystemPresets(result),
-                error -> System.out.println("error in loading upgrade presets"));
-
-        this.subscriber.subscribe(inGameService.loadBuildingPresets(),
-                result -> islandAttributes.setBuildingPresets(result),
-                error -> System.out.println("error in load building presets"));
-
-        this.subscriber.subscribe(inGameService.loadDistrictPresets(),
-                result -> islandAttributes.setDistrictPresets(result),
-                error -> System.out.println("error in load district presets"));
-
         variableService.initVariables();
+
+        this.subscriber.subscribe(this.lobbyService.getMember(gameID, tokenStorage.getUserId()),
+                result -> tokenStorage.setEmpireTraits(result.empire().traits()));
+
+        this.subscriber.subscribe(this.inGameService.getVariablesEffects(),
+                result -> variableService.setVariablesEffect(result));
 
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
@@ -253,6 +237,20 @@ public class InGameController extends BasicController {
         for (int i = 0; i <= 16; i++) {
             this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
         }
+    }
+
+    /*
+      This method should be called every time after a job is done.
+    */
+    public void updateVariableDependencies() {
+        variableService.loadVariablesDataStructure();
+        loadGameAttributes();
+    }
+
+    public void loadGameAttributes() {
+        islandAttributes.setSystemUpgradeAttributes();
+        islandAttributes.setBuildingAttributes();
+        islandAttributes.setDistrictAttributes();
     }
 
     private void handlePauseChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
@@ -283,11 +281,12 @@ public class InGameController extends BasicController {
         deleteStructureWarningContainer.setMouseTransparent(true);
         helpWindowContainer.setMouseTransparent(true);
         helpComponent.setVisible(false);
-        technologiesContainer.setMouseTransparent(true);
+        helpComponent.setMouseTransparent(true);
         explanationContainer.setMouseTransparent(true);
 
 
         pauseMenuContainer.setMouseTransparent(true);
+        pauseMenuComponent.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
         eventComponent.setParent(shadow, eventContainer);
         clockComponent.setToggle(true);
@@ -299,8 +298,6 @@ public class InGameController extends BasicController {
         eventComponent.setBackground(gameBackground);
 
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
-
-
 
         overviewContainer.setVisible(false);
         overviewSitesComponent.setContainer();
@@ -324,6 +321,7 @@ public class InGameController extends BasicController {
 
   		this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListener();
+        explanationService.setInGameController(this);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -389,6 +387,7 @@ public class InGameController extends BasicController {
         pause = true;
         inGameService.setPaused(true);
         if (pause) {
+            System.out.println("pausetest");
             pauseMenuContainer.setMouseTransparent(false);
             pauseGame();
         } else {
@@ -414,7 +413,6 @@ public class InGameController extends BasicController {
     /**
      * Please read the {@link ContextMenuButton ContextMenuButton} documentation to add additional context menu nodes.
      */
-
     private void createContextMenuButtons() {
         if (!tokenStorage.isSpectator())
             this.contextMenuButtons.getChildren().addAll(
@@ -470,13 +468,13 @@ public class InGameController extends BasicController {
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
             System.out.printf("ISLAND ID: %s\n", selected.island.id());
-            tokenStorage.setIsland(selected.getIsland());
-            islandAttributes.setIsland(selected.getIsland());
+            selectedIsland = selected;
+            tokenStorage.setIsland(selectedIsland.getIsland());
+            islandAttributes.setIsland(selectedIsland.getIsland());
             if (selected.getIsland().owner() != null) {
                 this.islandClaimingContainer.setVisible(false);
                 this.sitePropertiesComponent.setVisible(false);
                 this.buildingPropertiesComponent.setVisible(false);
-                selectedIsland = selected;
                 if (selected.island.owner().equals(this.tokenStorage.getEmpireId()))
                     this.overviewSitesComponent.jobsComponent.setJobsObservableList(
                         this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
@@ -532,15 +530,15 @@ public class InGameController extends BasicController {
     }
 
     public void showOverview() {
-        overviewSitesComponent.inputIslandName.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId()));
-        overviewSitesComponent.buildingsComponent.resetPage();
-        overviewSitesComponent.buildingsComponent.setGridPane();
-        overviewContainer.setVisible(true);
-        overviewSitesComponent.sitesContainer.setVisible(true);
-        overviewSitesComponent.buildingsButton.setDisable(true);
-        inGameService.showOnly(overviewContainer, overviewSitesComponent);
-        inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
-        overviewSitesComponent.setOverviewSites();
+            overviewSitesComponent.inputIslandName.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId()));
+            overviewSitesComponent.buildingsComponent.resetPage();
+            overviewSitesComponent.buildingsComponent.setGridPane();
+            overviewContainer.setVisible(true);
+            overviewSitesComponent.sitesContainer.setVisible(true);
+            overviewSitesComponent.buildingsButton.setDisable(true);
+            inGameService.showOnly(overviewContainer, overviewSitesComponent);
+            inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
+            overviewSitesComponent.setOverviewSites();
     }
 
     @OnKey(code = KeyCode.S, alt = true)

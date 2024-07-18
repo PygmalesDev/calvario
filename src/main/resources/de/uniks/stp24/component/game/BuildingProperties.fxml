@@ -29,7 +29,7 @@
    <ListView fx:id="buildingCostsListView" layoutX="86.0" layoutY="66.0" orientation="HORIZONTAL" prefHeight="38.0" prefWidth="158.0" style="-fx-background-color: transparent;" styleClass="resourceList" />
    <ListView fx:id="buildingConsumesListView" layoutX="37.0" layoutY="129.0" prefHeight="58.0" prefWidth="88.0" style="-fx-background-color: transparent;" styleClass="resourceList" AnchorPane.leftAnchor="37.0" />
    <Text layoutX="45.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="%consumes" />
-   <ListView fx:id="buildingProducesListView" layoutX="131.0" layoutY="128.0" prefHeight="66.0" prefWidth="115.0" style="-fx-background-color: tranparent;" styleClass="resourceList" AnchorPane.rightAnchor="34.0" />
+   <ListView fx:id="buildingProducesListView" layoutX="131.0" layoutY="128.0" prefHeight="66.0" prefWidth="115.0" style="-fx-background-color: transparent;" styleClass="resourceList" AnchorPane.rightAnchor="34.0" />
    <Text layoutX="144.0" layoutY="118.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="%produces" />
    <Pane fx:id="jobProgressPane" layoutX="68.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="216.0" />
    <Text layoutX="97.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="%costs" />

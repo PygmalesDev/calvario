@@ -86,7 +86,7 @@ public class IslandClaimingComponent extends Pane {
 
     @Inject
     public Provider<ClaimingSiteComponent> componentProvider;
-    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle);
+    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle, this.imageCache);
     private ObservableList<Job> upgradeJobs;
     private final ObservableList<Site> siteObservableList = FXCollections.observableArrayList();
     private final ObservableList<de.uniks.stp24.model.Resource> consumeObservableList = FXCollections.observableArrayList();
@@ -137,12 +137,12 @@ public class IslandClaimingComponent extends Pane {
             this.sitesListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.componentProvider));
             this.noSitesText.setVisible(this.sitesListView.getItems().isEmpty());
 
-            this.islandAttributes.systemPresets.colonized().cost().forEach((name, amount) -> this.costsObservableList
+            this.islandAttributes.systemUpgradeAttributes.colonized().cost().forEach((name, amount) -> this.costsObservableList
                     .add(new de.uniks.stp24.model.Resource(name, amount, 0)));
             this.costsListView.setItems(this.costsObservableList);
             this.costsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.negativeResourceProvider));
 
-            this.islandAttributes.systemPresets.colonized().upkeep().forEach((name, amount) -> this.consumeObservableList
+            this.islandAttributes.systemUpgradeAttributes.colonized().upkeep().forEach((name, amount) -> this.consumeObservableList
                     .add(new de.uniks.stp24.model.Resource(name, amount, 0)));
             this.consumeListView.setItems(this.consumeObservableList);
             this.consumeListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.negativeResourceProvider));
@@ -168,7 +168,7 @@ public class IslandClaimingComponent extends Pane {
             });
         }, error -> System.out.printf(
                         """
-                        Creating a new exploration job failed in IsalndClaimingComponent
+                        Creating a new exploration job failed in IslandClaimingComponent
                         An exception was caught here: %s
                         """, error.getMessage()));
 

@@ -38,9 +38,8 @@ public class BuildingsComponent extends AnchorPane {
 
     @Inject
     JobsService jobsService;
-
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
 
     @Inject
     @Resource

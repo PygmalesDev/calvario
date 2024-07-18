@@ -5,16 +5,13 @@ import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.BuildingAttributes;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.ExplanationService;
-import de.uniks.stp24.service.game.IslandsService;
-import de.uniks.stp24.service.game.JobsService;
-import de.uniks.stp24.service.game.ResourcesService;
-import de.uniks.stp24.service.game.VariableService;
+import de.uniks.stp24.service.game.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -101,11 +98,6 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
     Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);
-
-    @Inject
-    public BuildingPropertiesComponent(){
-
-    }
 
     @OnInit
     public void init(){

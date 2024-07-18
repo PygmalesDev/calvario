@@ -53,6 +53,7 @@ public class ControllerTest extends ApplicationTest {
         }
 
         testComponent = (TestComponent) DaggerTestComponent.builder().mainApp(app).build();
+        testComponent.prefService().setLocale(Locale.ENGLISH);
         app.setComponent(testComponent);
 
         app.start(stage);

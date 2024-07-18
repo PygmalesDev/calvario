@@ -37,11 +37,11 @@ public class TechnologyOverviewComponent extends AnchorPane {
     @Inject
     Subscriber subscriber;
     @Inject
-    public TechnologyService technologyService;
+    TechnologyService technologyService;
 
     @Inject
     @SubComponent
-    public TechnologyCategoryComponent technologyCategoryComponent;
+    TechnologyCategoryComponent technologyCategoryComponent;
 
     @Inject
     @Resource
@@ -80,6 +80,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
     public void engineering() {
         show(technologyCategoryComponent.setCategory("engineering"));
+
     }
 
     public void society() {
@@ -92,20 +93,26 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
     public void setContainer(@NotNull Pane parent) {
         this.parent = parent;
-        this.parent.getChildren().add(technologyCategoryComponent);
+        parent.getChildren().add(technologyCategoryComponent);
         technologyCategoryComponent.setContainer(parent);
         technologyCategoryComponent.setVisible(false);
     }
 
-
+    /**
+     * First Child: TechnologyCategoryComponent
+     * Second Child: TechnologyOverviewComponent
+     */
     public void show(@NotNull TechnologyCategoryComponent technologieCategory) {
         setCategoryInfos(technologieCategory);
-        parent.getChildren().stream().filter(node -> node.equals(technologyCategoryComponent)).forEach(node -> node.setVisible(true));
+
+        parent.getChildren().getFirst().setVisible(true);
+        parent.getChildren().getLast().setVisible(false);
+
     }
 
     public void setCategoryInfos(@NotNull TechnologyCategoryComponent technologieCategory) {
-        technologieCategory.technologyImage.setImage(technologieCategory.imageCache.get("assets/technologies/categories/" +technologieCategory.technologyCategory + ".png"));
-        String technologyKey = technologieCategory.technologyCategory.replace("_", ".");
+        technologieCategory.technologyImage.setImage(technologieCategory.imageCache.get("assets/technologies/categories/" +technologieCategory.technologieCategoryName + ".png"));
+        String technologyKey = technologieCategory.technologieCategoryName.replace("_", ".");
         technologieCategory.technologyNameText.setText(resources.getString("technologies." + technologyKey));
     }
 }

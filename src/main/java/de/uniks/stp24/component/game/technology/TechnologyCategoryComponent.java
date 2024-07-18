@@ -8,7 +8,6 @@ import de.uniks.stp24.service.game.TechnologyService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -47,12 +46,12 @@ public class TechnologyCategoryComponent extends AnchorPane {
     public VBox technologieCategoryBox;
     @FXML
     public Label currentResearchResourceLabel;
-    String technologyCategory;
+    String technologieCategoryName;
     @Inject
     App app;
 
     @Inject
-    public TechnologyService technologyService;
+    TechnologyService technologyService;
 
     @Inject
     Provider<TechnologyCategorySubComponent> provider;
@@ -73,15 +72,10 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @Inject
     Subscriber subscriber;
 
-    @Inject
-    public ImageCache imageCache;
+    ImageCache imageCache = new ImageCache();
 
     @Inject
     public TechnologyCategoryComponent() {
-    }
-
-    private static void accept(Node node) {
-        node.setVisible(!(node instanceof TechnologyCategoryComponent));
     }
 
     @OnInit
@@ -117,7 +111,8 @@ public class TechnologyCategoryComponent extends AnchorPane {
         unlockedListView.getItems().clear();
         researchListView.getItems().clear();
 
-        parent.getChildren().forEach(TechnologyCategoryComponent::accept);
+        parent.getChildren().getFirst().setVisible(false);
+        parent.getChildren().getLast().setVisible(true);
     }
 
     /**
@@ -129,11 +124,10 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
         currentResearchResourceLabel.setText(String.valueOf(resourcesService.getResourceCount("research")));
 
-        this.technologyCategory = category;
-        technologyService.setCategory(category);
+        this.technologieCategoryName = category;
 
-        unlockedTechnologies = technologyService.getUnlockedTechnologies(technologyCategory);
-        researchTechnologies = technologyService.getResearchTechnologies(technologyCategory);
+        unlockedTechnologies = technologyService.getUnlockedTechnologies(technologieCategoryName);
+        researchTechnologies = technologyService.getAllResearchTechnologies(technologieCategoryName);
 
         researchListView.setSelectionModel(null);
         unlockedListView.setSelectionModel(null);
@@ -144,11 +138,11 @@ public class TechnologyCategoryComponent extends AnchorPane {
         unlockedListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
         researchListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
 
+
         return this;
     }
 
     public void setContainer(Pane parent) {
         this.parent = parent;
     }
-
 }

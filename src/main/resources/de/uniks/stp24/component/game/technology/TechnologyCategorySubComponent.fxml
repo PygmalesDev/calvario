@@ -41,7 +41,7 @@
             <Insets right="40.0" />
          </HBox.margin>
          <tooltip>
-            <Tooltip fx:id="showEffectTooltip" styleClass="effect-details-tooltip" />
+            <Tooltip fx:id="showEffectTooltip" styleClass="description-tooltip"/>
          </tooltip>
       </Label>
       <ImageView fx:id="timeImage" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />

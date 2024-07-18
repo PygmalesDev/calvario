@@ -4,6 +4,7 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.model.Jobs.*;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.JobsService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,7 +31,10 @@ public class PropertiesJobProgressComponent extends Pane {
     ProgressBar jobProgressBar;
     @FXML
     ListView<Resource> costsListView;
-    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle);
+    @Inject
+    ImageCache imageCache;
+
+    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
     ObservableList<Resource> resourceObservableList = FXCollections.observableArrayList();
     private double incrementAmount;
     private int progress;

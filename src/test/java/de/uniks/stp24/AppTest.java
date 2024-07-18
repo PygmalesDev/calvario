@@ -170,7 +170,7 @@ public class AppTest extends ControllerTest {
     }
 
     @Test
-    public void v1(){
+    public void v1() throws Exception {
         goToSignup();
         signupUser();
         loginUser();

@@ -1,0 +1,184 @@
+@font-face {
+    font-family: 'Blackadder ITC';
+    src: url("/de/uniks/stp24/fonts/Blackladder.ttf");
+}
+
+@font-face {
+    font-family: 'Tempus Sans ITC';
+    src: url("/de/uniks/stp24/fonts/TempusSans.ttf");
+}
+
+@font-face {
+    font-family: 'Stencil';
+    src: url("/de/uniks/stp24/assets/fonts/Stencil.ttf");
+}
+
+@font-face {
+    font-family: 'Baskerville Old Face';
+    src: url("/de/uniks/stp24/fonts/Baskerville.ttf");
+}
+
+.technologieText {
+    -fx-font-family: 'Baskerville Old Face';
+    -fx-font-size: 48;
+    -fx-opacity: 1;
+}
+
+.mainButtons {
+    -fx-font-family: Stencil;
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/blue_button_element.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.technologiesBackground {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/technologies_selectCategory_background.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.technologiesCategoryBackground {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/technologies_chooseResearch_background.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.technologyCategoriesLabel {
+    -fx-font-family: "Tempus Sans ITC";
+}
+
+.technologyCategoryTitle {
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+}
+
+.currentResearchLabel {
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-font-weight: bold;
+}
+
+/*.technology-list {*/
+/*    -fx-background-color: transparent;*/
+/*}*/
+
+/*.technology-list .list-cell {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/red_frame.png");*/
+/*    -fx-background-size: 100% 100%;*/
+/*    -fx-background-repeat: no-repeat;*/
+/*    -fx-background-position: center;*/
+/*}*/
+
+.technologies-list-view .virtual-flow .scroll-bar:vertical .thumb {
+    -fx-background-color: transparent;
+    -fx-background-size: auto;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-pref-width: 15px;
+    -fx-pref-height: 15px;
+    -fx-background-image: url("/de/uniks/stp24/icons/scroller.png");
+}
+
+.technologies-list-view .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-border-width: 1;
+}
+
+.technologies-list-view .scroll-bar:vertical .increment-button .increment-arrow,
+.list-view .scroll-bar .decrement-button .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+}
+
+.list-view:focused {
+
+}
+
+/*.list-view .list-cell:empty {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-border-color: transparent;*/
+/*    -fx-background-image: none;*/
+/*}*/
+
+/*.description-list .list-cell {*/
+/*}*/
+
+/* Stil für die äußere ListView */
+.technologies-list-view {
+    -fx-background-color: transparent;
+}
+
+.technologies-list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/red_frame.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+/* Stil für die innere ListView */
+.description-list-view {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+}
+
+.description-list-view .list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-image: none;
+}
+.technologies-list-view .list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-image: none;
+}
+
+/* Hover-Effekt für die Zellen in der inneren ListView */
+.description-list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+}
+
+.research-tooltip {
+    -fx-opacity: 1;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/details_background.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.research-cost-title {
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 25;
+}
+
+.research-cost-details {
+    -fx-font-size: 16;
+}
+
+
+.description-tooltip {
+    -fx-opacity: 1;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/details_background.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.technology-description-label {
+}

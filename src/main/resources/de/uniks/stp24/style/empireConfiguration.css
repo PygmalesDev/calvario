@@ -1,0 +1,43 @@
+@font-face {
+    font-family: 'Baskerville';
+    src: url("/de/uniks/stp24/fonts/Baskerville.ttf");
+}
+
+/* Text style */
+
+.titleText {
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 30;
+}
+
+.listViewFont {
+    -fx-font-family: 'Baskerville';
+    -fx-font-smoothing-type: lcd;
+    -fx-font-weight: bolder;
+    -fx-fill: white;
+    -fx-font-size: 13;
+}
+
+.explanationFont {
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-background-color: "TRANSPARENT";
+    -fx-font-weight: none;
+    -fx-font-size: 15;
+}
+
+/* Background */
+
+.createEmpireBackground {
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/create-empire-background.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.empireFrame {
+    -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/empire-frame.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+

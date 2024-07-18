@@ -17,13 +17,13 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane fx:id="backgroundAnchorPane" prefHeight="860.0" prefWidth="1280.0" styleClass="background" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.GangCreationController">
-   <HBox alignment="CENTER" prefHeight="860.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="660.0" prefWidth="550.0">
+   <HBox alignment="CENTER" layoutX="209.0" prefHeight="860.0" prefWidth="1071.0" styleClass="createEmpireBackground" stylesheets="@../style/empireConfiguration.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="265.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="-25.0">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="874.0" prefWidth="782.0" stylesheets="@../style/empireConfiguration.css">
          <HBox.margin>
-            <Insets bottom="10.0" left="300.0" top="10.0" />
+            <Insets right="-20.0" />
          </HBox.margin>
-         <VBox prefHeight="200.0" prefWidth="550.0" styleClass="cardBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <Pane>
+         <VBox alignment="CENTER" layoutY="-81.0" prefHeight="885.0" prefWidth="751.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Pane prefHeight="385.0" prefWidth="804.0">
                <Pane fx:id="creationBox" prefHeight="405.0" prefWidth="550.0">
                   <Pane layoutX="31.0" layoutY="75.0">
                      <ImageView fx:id="portraitImage" fitHeight="100.0" fitWidth="100.0" layoutX="30.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
@@ -93,20 +93,35 @@
                      <Label fx:id="traitInfoConflicts" layoutX="325.0" layoutY="25.0" text="Label" />
                   </Pane>
                </Pane>
-               <VBox fx:id="spectatorBox" alignment="CENTER" layoutY="-1.0" prefHeight="405.0" prefWidth="550.0">
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Spectator">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
+               <VBox fx:id="spectatorBox" alignment="CENTER" layoutY="-1.0" prefHeight="405.0" prefWidth="550.0" stylesheets="@../style/empireConfiguration.css">
+                  <ImageView fx:id="spectatorImage" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                     <VBox.margin>
+                        <Insets left="35.0" />
+                     </VBox.margin>
+                  </ImageView>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="explanationFont" text="Select an empire or &#10;create a new one. &#10;&#10;You will be considered&#10;a Spectator if you don't&#10;choose any empire!" textAlignment="CENTER">
+                     <VBox.margin>
+                        <Insets left="30.0" />
+                     </VBox.margin>
                   </Text>
-                  <ImageView fx:id="spectatorImage" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
                </VBox>
+               <VBox.margin>
+                  <Insets left="80.0" right="80.0" />
+               </VBox.margin>
             </Pane>
-            <ListView fx:id="gangsListView" prefHeight="200.0" prefWidth="304.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="214.0">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
-            </ListView>
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="245.0" />
+                  <ListView fx:id="gangsListView" prefHeight="150.0" prefWidth="249.0" styleClass="jobsOverviewList" stylesheets="@../style/jobsOverview.css">
+                     <HBox.margin>
+                        <Insets bottom="80.0" top="-20.0" />
+                     </HBox.margin>
+                  </ListView>
+               </children>
+            </HBox>
             <Pane fx:id="buttonsPane" prefHeight="91.0" prefWidth="550.0">
                <Button fx:id="backButton" layoutX="89.0" layoutY="25.0" mnemonicParsing="false" onAction="#back" prefWidth="100.0" text="be spectator" />
                <Button fx:id="showCreationButton" layoutX="194.0" layoutY="25.0" mnemonicParsing="false" onAction="#showCreationPane" prefWidth="100.0" text="%new.island" />

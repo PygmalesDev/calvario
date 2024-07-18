@@ -194,7 +194,7 @@
     -fx-background-position: center;
     -fx-background-repeat: repeat-y;
     -fx-background-color: transparent;
-    -fx-background-size: 30% 40%;
+    -fx-background-size: 15% 100%;
 }
 
 .jobProgressListView .virtual-flow .scroll-bar:vertical .thumb {

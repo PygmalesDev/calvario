@@ -74,6 +74,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     GameLogicApiService gameLogicApiService;
     @Spy
     VariableDependencyService variableDependencyService;
+    @Spy
+    MarketService marketService;
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
@@ -121,6 +123,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     PropertiesJobProgressComponent siteJobProgress;
     @InjectMocks
     IslandClaimingComponent islandClaimingComponent;
+    @InjectMocks
+    MarketComponent marketComponent;
 
 
 
@@ -143,6 +147,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.inGameController.overviewSitesComponent.buildingsComponent.imageCache = this.imageCache;
+        this.inGameController.marketOverviewComponent = this.marketComponent;
+
 
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewSitesComponent.islandAttributes = islandAttributeStorage;

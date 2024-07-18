@@ -153,6 +153,9 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     HelpComponent helpComponent;
 
+    @InjectMocks
+    MarketComponent marketComponent;
+
     /*
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
@@ -166,6 +169,8 @@ public class PauseMenuTest extends ControllerTest {
     JobsApiService jobsApiService;
     @Spy
     TechnologyService technologyService;
+    @Spy
+    MarketService marketService;
 
     @InjectMocks
     InGameController inGameController;
@@ -197,6 +202,8 @@ public class PauseMenuTest extends ControllerTest {
         this.timerService.subscriber = this.subscriber;
         this.timerService.tokenStorage = this.tokenStorage;
         this.inGameController.lobbyService.gameMembersApiService = this.gameMembersApiService;
+        this.inGameController.marketOverviewComponent = this.marketComponent;
+
 
         this.jobsService.subscriber = this.subscriber;
         this.jobsService.jobsApiService = this.jobsApiService;
@@ -213,6 +220,7 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.variableService = this.variableService;
 
         this.inGameService.presetsApiService = this.presetsApiService;
+        this.marketService.presetsApiService = this.presetsApiService;
 
         this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
         this.islandClaimingComponent.jobsService = this.jobsService;

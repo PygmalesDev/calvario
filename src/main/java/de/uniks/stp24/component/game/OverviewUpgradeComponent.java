@@ -66,9 +66,9 @@ public class OverviewUpgradeComponent extends AnchorPane {
     @FXML
     public Label levelFourText;
     @FXML
-    public ListView upgradeUpkeepList;
+    public ListView<Resource> upgradeUpkeepList;
     @FXML
-    public ListView upgradeCostList;
+    public ListView<Resource> upgradeCostList;
     @FXML
     public Pane jobsContainer;
 
@@ -212,8 +212,11 @@ public class OverviewUpgradeComponent extends AnchorPane {
     private void setJobFinishers(Jobs.Job job) {
         this.jobsService.onJobCompletion(job._id(), () -> {
             if (Objects.nonNull(this.islandAttributes.getIsland()))
-                if (job.system().equals(this.islandAttributes.getIsland().id()))
+                if (job.system().equals(this.islandAttributes.getIsland().id())) {
+                    this.inGameController.showOverview();
                     this.jobsContainer.setVisible(false);
+                }
+
         });
         this.jobsService.onJobDeletion(job._id(), () -> {
             if (Objects.nonNull(this.islandAttributes.getIsland()))
@@ -230,6 +233,9 @@ public class OverviewUpgradeComponent extends AnchorPane {
         levelTwoText.setText(islandAttributes.upgradeEffects.get(2));
         levelThreeText.setText(islandAttributes.upgradeEffects.get(3));
         levelFourText.setText(islandAttributes.upgradeEffects.get(4));
+
+        this.updateButtonState = true;
+        this.setUpgradeButton();
 
         FilteredList<Jobs.Job> filteredList = this.jobObservableList
                 .filtered(job -> job.system().equals(this.islandAttributes.getIsland().id()));

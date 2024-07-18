@@ -99,6 +99,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
     Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
     Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);
 
+    @Inject
+    public BuildingPropertiesComponent() {}
+
     @OnInit
     public void init(){
         buildingsMap = buildingsIconPathsMap;

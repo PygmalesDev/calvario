@@ -100,12 +100,12 @@ public class JobsService {
                 this.period = game.data().period();
             }
 
-        });
+        }, error -> System.out.println("Error listening to game ticks in the JobsService\n" + error.getMessage()));
     }
 
     public void addJobToGroups(@NotNull Job job) {
         this.jobCollections.get(job.type()).add(job);
-        System.out.println("calledd");
+        System.out.println("creating new job");
 
         if (!job.type().equals("technology")) {
             if (!this.jobCollections.containsKey(job.system()))

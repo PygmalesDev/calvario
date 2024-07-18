@@ -38,9 +38,8 @@ public class BuildingsComponent extends AnchorPane {
 
     @Inject
     JobsService jobsService;
-
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
 
     @Inject
     @Resource
@@ -55,7 +54,13 @@ public class BuildingsComponent extends AnchorPane {
     public BuildingsComponent() {
     }
 
-    //Call set grid pane if buildings changes
+    /*
+
+    This method creates and updates the pages for showing all buildings of an island.
+    If you click on next or prev the page that should appear will be updated with
+    the buildings on next or prev page.
+
+     */
     public void setGridPane() {
         buildings.getChildren().clear();
         this.buildingList.clear();
@@ -106,6 +111,11 @@ public class BuildingsComponent extends AnchorPane {
         }
     }
 
+    /*
+
+    Checks if page on current page is full.
+
+     */
     public boolean isGridPaneFull(int pageToCheck) {
         if (!this.buildingList.isEmpty()) {
             int size = this.buildingList.size();
@@ -144,6 +154,5 @@ public class BuildingsComponent extends AnchorPane {
     public void setInGameController(InGameController inGameController){
         this.inGameController = inGameController;
     }
-
 
 }

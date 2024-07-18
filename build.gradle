@@ -143,4 +143,7 @@ test {
                 'prism.text'       : 't2k',
         ]
     }
+
+    minHeapSize = "128m" // initial heap size
+    maxHeapSize = "4512m" // maximum heap size
 }

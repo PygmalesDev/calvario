@@ -30,7 +30,6 @@ public class SignUpService {
 
 
     // Creates a random avatar for new user account
-    // TODO: Implement!
     private String generateRandomAvatar() {
         return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
     }

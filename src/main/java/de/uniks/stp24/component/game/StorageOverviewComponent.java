@@ -7,8 +7,10 @@ import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.ExplanationService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.collections.ObservableList;
@@ -16,6 +18,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -53,15 +56,20 @@ public class StorageOverviewComponent extends AnchorPane {
     @Inject
     TokenStorage tokenStorage;
     @Inject
+    public ExplanationService explanationService;
+    @Inject
+    ImageCache imageCache;
+    @Inject
     @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
     private String lastUpdate;
     private String lastSeasonUpdate;
-    Provider<ResourceComponent> resourceComponentProvider = () -> new ResourceComponent(true, true, true, true, gameResourceBundle);
+    Provider<ResourceComponent> resourceComponentProvider = () -> new ResourceComponent(true, true, true, true, gameResourceBundle, this.imageCache);
     ObservableList<Resource> resourceList;
     private InGameController inGameController;
+
 
     @Inject
     public StorageOverviewComponent() {
@@ -97,7 +105,7 @@ public class StorageOverviewComponent extends AnchorPane {
                         }
                     },
                     error -> System.out.println("ErrorEmpireSubscriber"));
-            this.resourceListView.setCellFactory(list -> new ComponentListCell<>(app, resourceComponentProvider));
+            this.resourceListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
         }
     }
 

@@ -102,6 +102,7 @@ public class BrowseGameControllerTest extends ControllerTest {
         browseGameController.logoutComponent = logoutComponent;
         browseGameController.bubbleComponent = bubbleComponent;
         browseGameController.warningComponent = warningComponent;
+
         Mockito.doReturn(Observable.just(List.of(
                 game,
                 new Game("88888", null, "2", "rapapa", "testID", 2,0, false, 0,0, null)

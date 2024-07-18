@@ -202,14 +202,14 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameController.buildingsWindowComponent.setVisible(false);
         inGameController.sitePropertiesComponent.setVisible(false);
         inGameController.buildingPropertiesComponent.setVisible(false);
-        inGameController.buildingPropertiesComponent.setMouseTransparent(true);
-        inGameController.sitePropertiesComponent.setMouseTransparent(true);
         inGameController.overviewContainer.setVisible(false);
+        inGameController.selectedIsland.rudderImage.setVisible(false);
+        inGameController.selectedIsland.islandIsSelected = false;
 
         if (!inGameController.islandsService.keyCodeFlag) {
-            inGameController.selectedIsland.rudderImage.setVisible(false);
             inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
         }
+        inGameController.selectedIsland = null;
     }
 
 

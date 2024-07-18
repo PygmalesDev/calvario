@@ -443,14 +443,13 @@ public class InGameController extends BasicController {
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
             System.out.printf("ISLAND ID: %s\n", selected.island.id());
-            tokenStorage.setIsland(selected.getIsland());
             selectedIsland = selected;
-            islandAttributes.setIsland(selected.getIsland());
+            tokenStorage.setIsland(selectedIsland.getIsland());
+            islandAttributes.setIsland(selectedIsland.getIsland());
             if (selected.getIsland().owner() != null) {
                 this.islandClaimingContainer.setVisible(false);
                 this.sitePropertiesComponent.setVisible(false);
                 this.buildingPropertiesComponent.setVisible(false);
-                selectedIsland = selected;
                 if (selected.island.owner().equals(this.tokenStorage.getEmpireId()))
                     this.overviewSitesComponent.jobsComponent.setJobsObservableList(
                         this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));

@@ -13,22 +13,22 @@
    <HBox fx:id="jobProgressBox" alignment="CENTER" visible="false">
       <ImageView fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true">
          <HBox.margin>
-            <Insets right="3.0"/>
+            <Insets right="3.0" />
          </HBox.margin>
-         <Image url="@../../icons/stopwatch.png"/>
+         <Image url="@../../icons/stopwatch.png" />
       </ImageView>
-      <Text fx:id="jobTimeText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="x/x"/>
+      <Text fx:id="jobTimeText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="x/x" />
    </HBox>
-   <Pane prefHeight="40.0" prefWidth="40.0">
+   <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="40.0">
       <Button fx:id="siteElementButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showOverview" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent;" />
    </Pane>
    <HBox alignment="CENTER">
       <ImageView fitHeight="10.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true">
          <HBox.margin>
-            <Insets right="3.0"/>
+            <Insets right="3.0" />
          </HBox.margin>
-         <Image url="@../../icons/other/building_small_element.png"/>
+         <Image url="@../../icons/other/building_small_element.png" />
       </ImageView>
-      <Text fx:id="districtCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="x/x"/>
+      <Text fx:id="districtCapacity" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" text="x/x" />
    </HBox>
 </fx:root>

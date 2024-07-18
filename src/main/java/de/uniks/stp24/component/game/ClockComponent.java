@@ -33,6 +33,8 @@ import java.util.Objects;
 public class ClockComponent extends AnchorPane {
 
     @FXML
+    Label otherSpeedLabel;
+    @FXML
     ImageView spectatorImage;
     @FXML
     VBox clockVBox;
@@ -54,8 +56,6 @@ public class ClockComponent extends AnchorPane {
     public RadioButton x3Button;
     @FXML
     public RadioButton pauseClockButton;
-    @FXML
-    public RadioButton otherSpeedButton;
     @FXML
     Label seasonLabel;
 
@@ -127,7 +127,7 @@ public class ClockComponent extends AnchorPane {
             return;
         }
 
-        otherSpeedButton.setVisible(false);
+        otherSpeedLabel.setVisible(false);
         pauseClockButton.setVisible(false);
         x1Button.setVisible(false);
         x2Button.setVisible(false);
@@ -155,10 +155,9 @@ public class ClockComponent extends AnchorPane {
                 x3Button.setVisible(true);
                 break;
             default:
-                otherSpeedButton.setDisable(true);
-                otherSpeedButton.setStyle("-fx-opacity: 1");
-                otherSpeedButton.setVisible(true);
-                otherSpeedButton.setText("x" + game.speed());
+                otherSpeedLabel.setVisible(true);
+                otherSpeedLabel.setStyle("-fx-opacity: 1");
+                otherSpeedLabel.setText("x" + game.speed());
                 break;
         }
     }
@@ -177,7 +176,7 @@ public class ClockComponent extends AnchorPane {
         subscriber.subscribe(gamesApiService.getGame(tokenStorage.getGameId()),
                 game -> {
 
-                    otherSpeedButton.setVisible(false);
+                    otherSpeedLabel.setVisible(false);
 
                     setClockButtons(game);
                     // Set Clock and Season for the current Game

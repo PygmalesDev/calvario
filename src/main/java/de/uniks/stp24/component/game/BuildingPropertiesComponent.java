@@ -236,7 +236,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     public void buyBuilding(){
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
             priceOfBuilding = result.cost();
-            if (resourcesService.hasEnoughResources(priceOfBuilding)) {
+            if (Objects.nonNull(tokenStorage.getIsland()) && resourcesService.hasEnoughResources(priceOfBuilding)) {
                 this.subscriber.subscribe(this.jobsService.beginJob(
                         Jobs.createBuildingJob(this.tokenStorage.getIsland().id(), this.buildingType)), job -> {
                     this.currentJobID = job._id();

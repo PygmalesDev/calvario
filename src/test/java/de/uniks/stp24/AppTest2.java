@@ -98,13 +98,14 @@ public class AppTest2 extends IslandOverviewTestComponent {
     }
 
     private void buildBuilding() {
-        //-> Check if building nodes are visible
         ArrayList<Node> buildingNodes = new ArrayList<>(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
         clickOn(buildingNodes.getFirst());
         waitForFxEvents();
         clickOn(this.inGameController.buildingsWindowComponent.buildingRefinery);
         waitForFxEvents();
-        sleep(1000);
+        assertTrue(inGameController.buildingPropertiesComponent.isVisible());
+        waitForFxEvents();
+        clickOn("#buyButton");
     }
 
     private void destroyBuilding() {

@@ -219,6 +219,8 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
                 "TestIsland1"
         );
 
+        tokenStorage.setIsland(testIsland);
+
         system = new SystemDto(
                 "",
                 "",

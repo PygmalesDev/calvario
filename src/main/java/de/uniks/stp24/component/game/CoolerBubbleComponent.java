@@ -95,10 +95,6 @@ public class CoolerBubbleComponent extends Captain {
                 result -> {
                     if (lastPeriod != result.data().period()) {
                         lastPeriod = result.data().period();
-                        // silence();
-                        // todo del
-                        announcementsService.addAnnouncement(resourcesService.aggregateItemDtoToResource(new AggregateItemDto("resources.fuel.periodic", 0, 0)));
-
                         subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                                 aggregateResultDto -> {
                                     for (AggregateItemDto item : aggregateResultDto.items()) {
@@ -120,6 +116,7 @@ public class CoolerBubbleComponent extends Captain {
         for (Consumer<Jobs.Job> method : forwardMethods) {
             method.accept(job);
         }
+        decideWhatToSay();
     }
 
     public void talk(String text) {

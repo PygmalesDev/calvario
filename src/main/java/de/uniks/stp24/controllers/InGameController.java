@@ -21,7 +21,6 @@ import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -65,13 +64,6 @@ public class InGameController extends BasicController {
 
     @FXML
     public StackPane contextMenuContainer;
-    @FXML
-    public Button showEmpireOverviewButton;
-    @FXML
-    public Button showTechnologiesButton;
-    @FXML
-    public HBox storageButtonsBox;
-
     @FXML
     public Group group;
     @FXML
@@ -211,8 +203,6 @@ public class InGameController extends BasicController {
     PopupBuilder popupBuildingWindow = new PopupBuilder();
     PopupBuilder popupSiteProperties = new PopupBuilder();
     PopupBuilder popupDeleteStructure = new PopupBuilder();
-    public String selectedBuilding;
-    public String selectedSites;
     PopupBuilder popupHelpWindow = new PopupBuilder();
     @OnInit
     public void init() {
@@ -331,14 +321,6 @@ public class InGameController extends BasicController {
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
 
         this.createContextMenuButtons();
-
-        //Generate job stopping conditions for the already running jobs
-//        explanationContainer.setVisible(false);
-//        explanationContainer.getChildren().add(variableExplanationComponent);
-//        explanationService.setInGameController(this);
-        
-
-
 
   		this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListener();
@@ -668,25 +650,6 @@ public class InGameController extends BasicController {
         helpComponent.displayTechnologies();
     }
 
-    public void updateResCapacity() {
-        overviewSitesComponent.updateResCapacity();
-    }
-
-    /*
-    Methods below showing explanation overview if mouse hovers above a chosen element.
-     */
-
-//    public void showExplanation(double x, double y, String variable){
-//        explanationContainer.setLayoutX(x);
-//        explanationContainer.setLayoutY(y);
-//        explanationContainer.setVisible(true);
-//    }
-//    public void unShowExplanation(){
-//        explanationContainer.setLayoutX(0);
-//        explanationContainer.setLayoutY(0);
-//        explanationContainer.setVisible(false);
-//    }
-
     @OnDestroy
     public void destroy() {
         islandComponentList.forEach(IslandComponent::destroy);
@@ -697,9 +660,5 @@ public class InGameController extends BasicController {
                 .removePropertyChangeListener(triple.propertyName(), triple.listener()));
         this.subscriber.dispose();
         this.jobsService.dispose();
-    }
-
-    public void removeShadow() {
-        shadow.setVisible(false);
     }
 }

@@ -22,8 +22,6 @@ import javax.inject.Named;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static java.lang.Thread.sleep;
-
 @Component(view = "TechnologyOverview.fxml")
 public class TechnologyOverviewComponent extends AnchorPane {
 
@@ -39,8 +37,6 @@ public class TechnologyOverviewComponent extends AnchorPane {
     Button shipbuildingButton;
     @FXML
     Button marineSienceButton;
-
-    private String categoryName;
 
     private Pane parent;
     @Inject
@@ -65,7 +61,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
     @OnInit
     public void init() {
-        technologyCategoryComponent.setTechnologyCategoryOverviewComponent(this, technologiesResourceBundle);
+        technologyCategoryComponent.setTechnologyCategoryOverviewComponent(this);
     }
 
     @OnRender

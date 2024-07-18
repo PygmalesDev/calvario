@@ -176,5 +176,26 @@
     -fx-font-size: 16;
 }
 
+.technologyName {
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-background-color: transparent;
+    -fx-font-weight: none;
+    -fx-font-size: 22;
+}
+
+.researchDescription {
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-background-color: transparent;
+    -fx-font-weight: none;
+    -fx-font-size: 14;
+}
+
+.researchHeadLine {
+    -fx-font-family: "Blackadder ITC";
+    -fx-background-color: transparent;
+    -fx-font-weight: none;
+    -fx-font-size: 30;
+}
+
 
 

@@ -262,7 +262,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
     }
 
 
-    public void setTechnologyCategoryOverviewComponent(TechnologyOverviewComponent technologyOverviewComponent, ResourceBundle technologiesResourceBundle) {
+    public void setTechnologyCategoryOverviewComponent(TechnologyOverviewComponent technologyOverviewComponent) {
         this.technologyOverviewComponent = technologyOverviewComponent;
     }
 

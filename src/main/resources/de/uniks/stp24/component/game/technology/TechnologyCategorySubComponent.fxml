@@ -16,16 +16,14 @@
    <HBox>
       <HBox HBox.hgrow="ALWAYS">
          <HBox.margin>
-            <Insets />
+            <Insets/>
          </HBox.margin>
-         <children>
-            <Label fx:id="technologyLabel" text="TechnologyName">
-               <styleClass>
-                  <String fx:value="technologyCategoriesLabel" />
-                  <String fx:value="technologyCategoryTitle" />
-               </styleClass>
-            </Label>
-         </children>
+         <Label fx:id="technologyLabel" text="TechnologyName">
+            <styleClass>
+               <String fx:value="technologyCategoriesLabel"/>
+               <String fx:value="technologyCategoryTitle"/>
+            </styleClass>
+         </Label>
       </HBox>
       <HBox alignment="CENTER_RIGHT" HBox.hgrow="NEVER">
          <ImageView fx:id="tagImage3" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />

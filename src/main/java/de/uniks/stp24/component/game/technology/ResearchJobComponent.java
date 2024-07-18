@@ -11,7 +11,6 @@ import de.uniks.stp24.service.game.TechnologyService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -29,9 +28,6 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.lang.Thread.sleep;
 
 @Component(view = "ResearchJob.fxml")
 public class ResearchJobComponent extends AnchorPane {
@@ -157,9 +153,7 @@ public class ResearchJobComponent extends AnchorPane {
                     researchProgressBar.setProgress((double) currentJob.progress() / roundedUpTotal);
                     researchProgressText.setText(currentJob.progress() + " / " + roundedUpTotal);
                     this.job = currentJob;
-                    }, error -> {
-                        System.out.println("Error trying to get a Job in ResearchComponent");
-                    });
+                    }, error -> System.out.println("Error trying to get a Job in ResearchComponent"));
                 }
             }
         }
@@ -191,9 +185,7 @@ public void progressHandling(){
                         researchProgressBar.setProgress((double) currentJob.progress() / roundedUpTotal);
                         researchProgressText.setText(currentJob.progress() + " / " + roundedUpTotal);
                         this.job = currentJob;
-                    }, error -> {
-                        System.out.println("Error trying to get a Job in ResearchComponent");
-                    });
+                    }, error -> System.out.println("Error trying to get a Job in ResearchComponent"));
                 }
             }
         }
@@ -233,13 +225,9 @@ public void progressHandling(){
                 if (!technologies.contains(result)){
                     technologies.add(result);
                 }
-            }, error -> {
-                System.out.println("Error in handleJob in ResearchComponent technology");
-            });
+            }, error -> System.out.println("Error in handleJob in ResearchComponent technology"));
             handleJobInformation();
-        }, error -> {
-            System.out.println("Error in handleJob in ResearchComponent job");
-        });
+        }, error -> System.out.println("Error in handleJob in ResearchComponent job"));
     }
 
     public void setJobDescription(TechnologyExtended technology){

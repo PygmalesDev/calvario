@@ -52,8 +52,6 @@ public class InGameController extends BasicController {
     @FXML
     public AnchorPane rootPane;
     @FXML
-    public StackPane explanationContainer;
-    @FXML
     Pane gameBackground;
     @FXML
     StackPane helpWindowContainer;
@@ -282,11 +280,10 @@ public class InGameController extends BasicController {
         helpWindowContainer.setMouseTransparent(true);
         helpComponent.setVisible(false);
         helpComponent.setMouseTransparent(true);
-        explanationContainer.setMouseTransparent(true);
+
 
 
         pauseMenuContainer.setMouseTransparent(true);
-        pauseMenuComponent.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
         eventComponent.setParent(shadow, eventContainer);
         clockComponent.setToggle(true);

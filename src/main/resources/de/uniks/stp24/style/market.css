@@ -18,6 +18,12 @@
     -fx-font-size: 38;
 }
 
+.seasonTitle{
+    -fx-font-family: "Baskerville Old Face";
+    -fx-fill: white;
+    -fx-font-size: 20;
+}
+
 /*Buttons*/
 
 .alloysButton{
@@ -117,6 +123,7 @@
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
+    -fx-font-size: 12;
 }
 
 .everySeasonButtonDesign:selected {

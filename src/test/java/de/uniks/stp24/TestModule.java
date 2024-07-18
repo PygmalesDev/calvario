@@ -45,11 +45,14 @@ public class TestModule {
         return Mockito.mock(GamesApiService.class);
     }
 
+    /*
     @Provides
     @Singleton
     GameLogicApiService gameLogicApiService() {
         return Mockito.mock(GameLogicApiService.class);
     }
+
+     */
   
     @Provides
     GameMembersApiService gameMembersApiService(){

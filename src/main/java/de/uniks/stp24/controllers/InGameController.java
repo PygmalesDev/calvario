@@ -102,7 +102,7 @@ public class InGameController extends BasicController {
     public ExplanationService explanationService;
 
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
 
     @SubComponent
     @Inject

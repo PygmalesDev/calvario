@@ -89,8 +89,7 @@ public class PauseMenuTest extends ControllerTest {
     LanguageService languageService;
     @Spy
     ResourcesService resourcesService;
-    @Spy
-    VariableService variableService;
+
     @Spy
     ObjectMapper objectMapper;
     @Spy
@@ -169,9 +168,6 @@ public class PauseMenuTest extends ControllerTest {
     PropertiesJobProgressComponent propertiesJobProgressComponent;
 
     @InjectMocks
-    VariableExplanationComponent variableExplanationComponent;
-
-    @InjectMocks
     TechnologyOverviewComponent technologyOverviewComponent;
 
     @InjectMocks
@@ -211,7 +207,6 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.helpComponent = this.helpComponent;
-        this.inGameController.variableExplanationComponent = this.variableExplanationComponent;
         this.inGameController.technologiesComponent = technologyOverviewComponent;
         this.technologyOverviewComponent.technologyCategoryComponent = technologyCategoryComponent;
         this.technologyCategoryComponent.researchJobComponent = researchJobComponent;
@@ -247,7 +242,7 @@ public class PauseMenuTest extends ControllerTest {
         this.islandClaimingComponent.imageCache = this.imageCache;
 
         doReturn(null).when(this.imageCache).get(any());
-
+        doReturn(Observable.empty()).when(this.empireApiService).getEmpireEffect(any(), any());
         doReturn(Observable.empty()).when(this.jobsApiService).getEmpireJobs(any(), any());
 
         inGameService.setGameStatus(gameStatus);
@@ -288,8 +283,6 @@ public class PauseMenuTest extends ControllerTest {
         variablesPresets.put("districts.city.build_time", 9);
         variablesPresets.put("districts.city.cost.minerals", 100);
         variablesPresets.put("districts.city.upkeep.energy", 5);
-        doReturn(Observable.just(variablesPresets)).when(inGameService).getVariablesPresets();
-        doReturn(Observable.just(new EffectSourceParentDto(new EffectSourceDto[]{}))).when(empireApiService).getEmpireEffect(any(), any());
 
         doNothing().when(variableService).initVariables();
 

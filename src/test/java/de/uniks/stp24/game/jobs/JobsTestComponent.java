@@ -6,7 +6,6 @@ import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.model.Jobs.*;
-import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -42,8 +41,6 @@ public class JobsTestComponent extends ControllerTest {
     Subscriber subscriber;
     @Spy
     JobsApiService jobsApiService;
-    @Spy
-    GamesApiService gamesApiService;
 
     @InjectMocks
     JobsService jobsService;
@@ -117,10 +114,6 @@ public class JobsTestComponent extends ControllerTest {
         doReturn(this.SYSTEM_NAME_2).when(this.islandsService).getIslandName(this.SYSTEM_ID_2);
         doReturn(this.SYSTEM_NAME_3).when(this.islandsService).getIslandName(this.SYSTEM_ID_3);
         doReturn(this.SYSTEM_NAME_4).when(this.islandsService).getIslandName(this.SYSTEM_ID_4);
-
-        doReturn(Observable.just(
-                new Game(null, null, this.GAME_ID, null, null, 0 , 0, true,
-                3, 0, null))).when(this.gamesApiService).getGame(any());
 
         doReturn(Observable.just(this.jobsList)).when(this.jobsApiService).getEmpireJobs(this.GAME_ID, this.EMPIRE_ID);
 

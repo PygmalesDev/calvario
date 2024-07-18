@@ -272,7 +272,6 @@ public class IslandOverviewTestComponent extends ControllerTest {
     CreateSystemsDto updatedBuildings;
 
     public void initComponents(){
-        this.jobsService.gamesApiService = this.gamesApiService;
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;

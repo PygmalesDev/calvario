@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
+import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
@@ -121,6 +122,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     PropertiesJobProgressComponent siteJobProgress;
     @InjectMocks
     IslandClaimingComponent islandClaimingComponent;
+    @InjectMocks
+    IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
 
 
 
@@ -147,6 +150,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewSitesComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewUpgradeComponent.islandAttributes = islandAttributeStorage;
+        this.inGameController.overviewUpgradeComponent.jobsService = this.jobsService;
         this.inGameController.selectedIsland = new IslandComponent();
         this.resourcesService.islandAttributes = islandAttributeStorage;
         this.resourcesService.tokenStorage = tokenStorage;
@@ -185,6 +189,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.overviewUpgradeComponent.explanationService.variableService = this.variableService;
         this.inGameController.overviewUpgradeComponent.explanationService.variableService.technologyService.presetsApiService = this.presetsApiService;
         this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
+        this.inGameController.overviewUpgradeComponent.jobProgressComponent = this.islandUpgradesJobProgressComponent;
         this.inGameController.eventComponent = this.eventComponent;
 
         this.inGameController.contextMenuButtons = new HBox();

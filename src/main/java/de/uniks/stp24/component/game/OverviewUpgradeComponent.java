@@ -93,7 +93,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
     @Inject
     ImageCache imageCache;
 

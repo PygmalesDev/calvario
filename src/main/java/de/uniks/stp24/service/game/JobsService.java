@@ -3,7 +3,6 @@ package de.uniks.stp24.service.game;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.Jobs.*;
-import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
@@ -28,8 +27,6 @@ public class JobsService {
     public Subscriber subscriber;
     @Inject
     public EventListener eventListener;
-    @Inject
-    public GamesApiService gamesApiService;
 
     Map<String, ObservableList<Job>> jobCollections = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();

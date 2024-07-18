@@ -17,6 +17,7 @@ import java.util.Map;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 public class VariableTestComponent extends IslandOverviewTestInitializer{
 
@@ -48,7 +49,8 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
 
         doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", 2, 1, true, 1, 1, null))).when(gamesApiService).getGame(any());
         doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
-
+        doReturn(Observable.just(new Event<>("games.testGameID.ticked", new Game("a", "a", "testGameID", "gameName", "gameOwner", 2, 1, true, 1, 1, null))))
+                .when(this.eventListener).listen("games.testGameID.ticked", Game.class);
         testIsland = new Island(
                 "testEmpireID",
                 1,

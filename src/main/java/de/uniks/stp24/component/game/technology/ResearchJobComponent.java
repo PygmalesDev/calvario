@@ -21,6 +21,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
@@ -78,6 +79,7 @@ public class ResearchJobComponent extends AnchorPane {
     @Named("variablesResourceBundle")
     public ResourceBundle variablesResourceBundle;
 
+    @Resource
     @Inject
     @Named("technologiesResourceBundle")
     public ResourceBundle technologiesResourceBundle;

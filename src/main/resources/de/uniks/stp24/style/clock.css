@@ -84,6 +84,19 @@ Label {
 
 }
 
+#otherSpeed {
+    -fx-font-weight: bold;
+    -fx-text-fill: black;
+    -fx-pref-width: 20;
+    -fx-pref-height: 20;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/time_button.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 5, 5);
+}
+
 #pause:selected {
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/timeButtonPausePressed.png");
     -fx-background-size: cover;

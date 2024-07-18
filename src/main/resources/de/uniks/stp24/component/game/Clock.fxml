@@ -40,7 +40,7 @@
          <RadioButton id="x3" mnemonicParsing="false" onAction="#x3" toggleGroup="$speed" translateX="-10.0" translateY="2.0" fx:id="x3Button" />
          <RadioButton id="x2" mnemonicParsing="false" onAction="#x2" toggleGroup="$speed" translateX="-1.0" fx:id="x2Button" />
          <RadioButton id="x1" mnemonicParsing="false" onAction="#x1" toggleGroup="$speed" translateX="-2.0" fx:id="x1Button" />
-         <RadioButton id="otherSpeed" fx:id="otherSpeedButton" toggleGroup="$speed" mnemonicParsing="false" translateX="-10.0">
+         <RadioButton id="otherSpeed" fx:id="otherSpeedButton" mnemonicParsing="false" toggleGroup="$speed" translateX="-25.0">
          </RadioButton>
          <HBox.margin>
             <Insets right="2.0" />

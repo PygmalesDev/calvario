@@ -61,7 +61,7 @@ public class IslandsService extends BasicService {
             siteManager.put(id,new InfrastructureService());
             siteManager.get(id).setEmpireID(id);
         });
-        siteManager.put("noBody",new InfrastructureService());
+        siteManager.put("noBody", new InfrastructureService());
         siteManager.get("noBody").setEmpireID("noBody");
     }
 
@@ -90,22 +90,21 @@ public class IslandsService extends BasicService {
         this.gameID = gameID;
         subscriber.subscribe(gameSystemsService.getSystems(gameID),
                 dto -> {
-                    Arrays.stream(dto).forEach(data -> {
-                        List<String> linkedIsles = new ArrayList<>(data.links().keySet());
-                        minX = Math.min(data.x(),minX);
-                        minY = Math.min(data.y(),minY);
-                        maxX = Math.max(data.x(),maxX);
-                        maxY = Math.max(data.y(),maxY);
-                        Island tmp = convertToIsland(data);
-                        isles.add(tmp);
-                        connections.put(data._id(),linkedIsles);
-                    });
-                    widthRange = maxX-minX + 1000;
-                    heightRange = maxY-minY + 1000;
-                    this.app.show("/ingame");
-                    refreshListOfColonizedSystems();
-                },
-                error -> System.out.println(error.getMessage()));
+            Arrays.stream(dto).forEach(data -> {
+                List<String> linkedIsles = new ArrayList<>(data.links().keySet());
+                minX = Math.min(data.x(),minX);
+                minY = Math.min(data.y(),minY);
+                maxX = Math.max(data.x(),maxX);
+                maxY = Math.max(data.y(),maxY);
+                Island tmp = convertToIsland(data);
+                isles.add(tmp);
+                connections.put(data._id(),linkedIsles);
+            });
+            widthRange = maxX-minX + 1000;
+            heightRange = maxY-minY + 1000;
+            this.app.show("/ingame");
+            refreshListOfColonizedSystems();
+            }, error -> System.out.println(error.getMessage()));
     }
 
     /**

@@ -12,7 +12,7 @@ public class BasicService {
     @Inject
     public TokenStorage tokenStorage;
     @Inject
-    protected Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    protected ErrorService errorService;
+    public ErrorService errorService;
 }

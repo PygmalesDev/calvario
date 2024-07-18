@@ -38,15 +38,15 @@ import java.util.ResourceBundle;
 @Controller
 public class LobbyController extends BasicController {
     @Inject
-    EmpireService empireService;
+    public EmpireService empireService;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
-    UserApiService userApiService;
+    public UserApiService userApiService;
     @Inject
-    LobbyService lobbyService;
+    public LobbyService lobbyService;
     @Inject
-    GamesService gamesService;
+    public GamesService gamesService;
     @Inject
     public JoinGameHelper joinGameHelper;
     @SubComponent
@@ -64,7 +64,7 @@ public class LobbyController extends BasicController {
     @Inject
     public Provider<UserComponent> userComponentProvider;
     @Inject
-    EventListener eventListener;
+    public EventListener eventListener;
     @FXML
     public ListView<MemberUser> playerListView;
     @FXML
@@ -98,7 +98,6 @@ public class LobbyController extends BasicController {
     Game game;
 
     private final ObservableList<MemberUser> users = FXCollections.observableArrayList();
-    private boolean asHost;
     private boolean wasKicked;
     public int maxMember, readyAmount;
     private Button[] lobbyButtons;
@@ -119,7 +118,6 @@ public class LobbyController extends BasicController {
                 game -> {
                     this.game = game;
                     this.gameID = game._id();
-                    this.asHost = game.owner().equals(this.tokenStorage.getUserId());
                     this.maxMember = game.maxMembers();
                     this.readyAmount = 0;
 

@@ -1,6 +1,5 @@
 package de.uniks.stp24.game.jobs;
 
-import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobProgressComponent;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.model.Jobs;
@@ -86,7 +85,7 @@ public class TestIslandJobOverview extends JobsTestComponent {
         WaitForAsyncUtils.waitForFxEvents();
         doReturn(Observable.empty()).when(this.jobsApiService).deleteJob(eq(this.GAME_ID), eq(this.EMPIRE_ID), anyString());
 
-        String jobID = this.jobs.get(0)._id();
+        String jobID = this.jobs.getFirst()._id();
 
         this.callSubjectEvent(EVENT.DELETED, jobID);
         clickOn("#jobProgressDeleteButton_" + jobID);
@@ -96,7 +95,7 @@ public class TestIslandJobOverview extends JobsTestComponent {
     public void testOpeningInspectionWindow() {
         WaitForAsyncUtils.waitForFxEvents();
 
-        String jobID = this.jobs.get(0)._id();
+        String jobID = this.jobs.getFirst()._id();
         clickOn("#jobProgressInspectionButton_" + jobID);
         assertEquals(1, this.inspectorCalls.get("building"));
 

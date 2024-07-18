@@ -45,13 +45,13 @@ public class GangCreationController extends BasicController {
     String gameID;
 
     @Inject
-    SaveLoadService saveLoadService;
+    public SaveLoadService saveLoadService;
     @Inject
-    PresetsApiService presetsApiService;
+    public PresetsApiService presetsApiService;
     @Inject
-    LobbyService lobbyService;
+    public LobbyService lobbyService;
     @Inject
-    PopupBuilder popupBuilder;
+    public PopupBuilder popupBuilder;
 
     @SubComponent
     @Inject
@@ -426,7 +426,8 @@ public class GangCreationController extends BasicController {
         this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result ->
                         this.subscriber.subscribe(this.lobbyService.updateMember(
                 this.gameID, result.user(), result.ready(), empire), result2 ->
-                app.show("/lobby", Map.of("gameid", this.gameID))),
+                app.show("/lobby", Map.of("gameid", this.gameID)),
+                                error -> bubbleComponent.setCaptainText(errorService.getMessage(error))),
                 error -> bubbleComponent.setCaptainText(errorService.getMessage(error))
         );
     }

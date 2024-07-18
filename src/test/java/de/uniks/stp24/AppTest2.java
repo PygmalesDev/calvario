@@ -1,12 +1,10 @@
 package de.uniks.stp24;
 
 
+import de.uniks.stp24.appTestModules.InGameTestComponent;
 import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.model.Resource;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,9 +19,6 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class AppTest2 extends InGameTestComponent {
-
-    Button homeIsland;
-
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
@@ -57,25 +52,6 @@ public class AppTest2 extends InGameTestComponent {
 
         // Empire Overview
         checkEmpireOverview();
-    }
-
-    private void createMap() {
-        homeIsland = new Button();
-        homeIsland.setLayoutX(500);
-        homeIsland.setLayoutY(500);
-        homeIsland.setPrefWidth(50);
-        homeIsland.setPrefHeight(50);
-        homeIsland.setId("homeIsland");
-        homeIsland.setOnAction(this::openIslandOverview);
-        Platform.runLater(() -> {
-            inGameController.mapGrid.getChildren().add(homeIsland);
-            waitForFxEvents();
-        });
-        waitForFxEvents();
-    }
-
-    private void openIslandOverview(ActionEvent actionEvent) {
-        this.inGameController.showOverview();
     }
 
     private void openIslandOverview() {

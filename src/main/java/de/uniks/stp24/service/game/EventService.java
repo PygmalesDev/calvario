@@ -38,11 +38,11 @@ public class EventService {
     Random random = new Random(1000);
 
     @Inject
-    EmpireApiService empireApiService;
+    public EmpireApiService empireApiService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
 
 
     ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",

@@ -91,7 +91,7 @@ public class InGameController extends BasicController {
     @Inject
     public EventService eventService;
     @Inject
-    InGameService inGameService;
+    public InGameService inGameService;
     @Inject
     EmpireService empireService;
     @Inject

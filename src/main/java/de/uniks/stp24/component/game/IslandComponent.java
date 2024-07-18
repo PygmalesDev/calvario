@@ -60,6 +60,7 @@ public class IslandComponent extends Pane {
         }
         this.islandImage = new ImageView();
         this.flagImage = new ImageView();
+        this.spyglassImage = new ImageView();
         this.setPickOnBounds(false);
     }
 
@@ -125,7 +126,9 @@ public class IslandComponent extends Pane {
         }
     }
 
-    //Logic for showing rudder if other island is already selected
+    /*
+    Logic for showing/unshowing rudder
+     */
     public void showUnshowRudder() {
         if (islandIsSelected) {
             reset();
@@ -165,6 +168,10 @@ public class IslandComponent extends Pane {
         this.tokenStorage = tokenStorage;
         return this;
     }
+
+    /*
+    Reset of componentes for showing informations of current selected island.
+     */
 
     public void reset(){
         inGameController.overviewSitesComponent.resetButtons();

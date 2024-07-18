@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.image.ImageView?>
 <fx:root prefHeight="248.0" prefWidth="332.0" stylesheets="@../../style/islandOverview.css" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.DetailsComponent">
 <VBox alignment="CENTER_RIGHT" prefHeight="209.0" prefWidth="332.0" style="-fx-background-color: transparent;" stylesheets="@../../style/islandOverview.css">
       <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="%details" wrappingWidth="217.7578125" />
@@ -14,35 +15,35 @@
          <VBox prefHeight="126.0" prefWidth="98.0" />
       <VBox prefHeight="82.0" prefWidth="201.0">
          <HBox alignment="CENTER" prefHeight="23.0" prefWidth="225.0">
-               <Pane fx:id="res1Pic" prefHeight="25.0" prefWidth="25.0" />
+               <ImageView fx:id="res1Pic" fitHeight="25.0" fitWidth="25.0" />
             <VBox prefHeight="25.0" prefWidth="6.0" />
             <Text fx:id="amount1" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" wrappingWidth="37.46875" />
-               <Pane fx:id="res2Pic" prefHeight="25.0" prefWidth="25.0" />
+               <ImageView fx:id="res2Pic" fitHeight="25.0" fitWidth="25.0" />
             <VBox prefHeight="25.0" prefWidth="6.0" />
             <Text fx:id="amount2" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" wrappingWidth="37.46875" />
-               <Pane fx:id="res3Pic" prefHeight="25.0" prefWidth="25.0" />
+               <ImageView fx:id="res3Pic" fitHeight="25.0" fitWidth="25.0" />
             <VBox prefHeight="25.0" prefWidth="6.0" />
             <Text fx:id="amount3" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" wrappingWidth="37.46875" />
          </HBox>
          <HBox alignment="CENTER" prefHeight="23.0" prefWidth="225.0">
-               <Pane fx:id="res4Pic" prefHeight="25.0" prefWidth="25.0" />
+               <ImageView fx:id="res4Pic" fitHeight="25.0" fitWidth="25.0" />
             <VBox prefHeight="25.0" prefWidth="6.0" />
             <Text fx:id="amount4" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" wrappingWidth="37.46875" />
-               <Pane fx:id="res5Pic" prefHeight="25.0" prefWidth="25.0" />
+               <ImageView fx:id="res5Pic" fitHeight="25.0" fitWidth="25.0" />
             <VBox prefHeight="25.0" prefWidth="6.0" />
             <Text fx:id="amount5" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" wrappingWidth="37.46875" />
-               <Pane fx:id="res6Pic" prefHeight="25.0" prefWidth="25.0" />
+               <ImageView fx:id="res6Pic" fitHeight="25.0" fitWidth="25.0" />
             <VBox prefHeight="25.0" prefWidth="6.0" />
             <Text fx:id="amount6" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" wrappingWidth="37.46875" />
          </HBox>
          <HBox alignment="CENTER" prefHeight="23.0" prefWidth="225.0">
-               <Pane fx:id="res7Pic" prefHeight="25.0" prefWidth="25.0" />
+               <ImageView fx:id="res7Pic" fitHeight="25.0" fitWidth="25.0" />
             <VBox prefHeight="25.0" prefWidth="6.0" />
             <Text fx:id="amount7" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tableHeadingText" wrappingWidth="37.46875" />
-               <Pane fx:id="res8Pic" prefHeight="25.0" prefWidth="25.0" />
+               <ImageView fx:id="res8Pic" fitHeight="25.0" fitWidth="25.0" />
             <VBox prefHeight="25.0" prefWidth="6.0" />
             <Text fx:id="amount8" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="37.46875" />
-               <Pane fx:id="res9Pic" prefHeight="25.0" prefWidth="25.0" />
+               <ImageView fx:id="res9Pic" fitHeight="25.0" fitWidth="25.0" />
             <VBox prefHeight="25.0" prefWidth="6.0" />
             <Text fx:id="amount9" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="37.46875" />
          </HBox>

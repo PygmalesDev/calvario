@@ -23,6 +23,7 @@ public class JobsOverviewComponent extends AnchorPane {
     Button closeButton;
     @Inject
     public JobsService jobsService;
+
     private ObservableList<Job> jobsList;
 
     @Inject

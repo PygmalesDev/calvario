@@ -3,6 +3,7 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.service.Constants;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
@@ -44,6 +45,8 @@ public class BuildingsWindowComponent extends AnchorPane {
 
     @Inject
     TokenStorage tokenStorage;
+    @Inject
+    public ImageCache imageCache;
 
     @Inject
     Subscriber subscriber;
@@ -94,8 +97,7 @@ public class BuildingsWindowComponent extends AnchorPane {
     @OnRender
     public void setImages() {
         for (int i = 0; i < buttons.length; i++) {
-            Image image = new Image(Constants.imagePaths[i]);
-            ImageView imageView = new ImageView(image);
+            ImageView imageView = new ImageView(this.imageCache.get("/"+Constants.imagePaths[i]));
             imageView.setFitWidth(40);
             imageView.setFitHeight(40);
             buttons[i].setGraphic(imageView);

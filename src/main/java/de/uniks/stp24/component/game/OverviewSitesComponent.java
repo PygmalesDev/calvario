@@ -33,6 +33,8 @@ import java.util.ResourceBundle;
 @Component(view = "IslandOverviewSites.fxml")
 public class OverviewSitesComponent extends AnchorPane {
     @FXML
+    public Pane imagePane;
+    @FXML
     public Button islandNameButton;
     @FXML
     public Button jobsButton;
@@ -107,7 +109,8 @@ public class OverviewSitesComponent extends AnchorPane {
 
     public void showUpgrades() {
         setLevelCheckBox();
-
+        inGameController.buildingPropertiesComponent.setVisible(false);
+        inGameController.sitePropertiesComponent.setVisible(false);
         inGameController.overviewUpgradeComponent.upgrade_box.setVisible(false);
         inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(true);
 
@@ -120,9 +123,13 @@ public class OverviewSitesComponent extends AnchorPane {
         }
         inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewUpgradeComponent);
         inGameController.overviewUpgradeComponent.setUpgradeButton();
-        inGameController.overviewUpgradeComponent.setNeededResources();
+        inGameController.overviewUpgradeComponent.setListViews();
         inGameController.overviewUpgradeComponent.setUpgradeInf();
     }
+
+    /*
+    Set upgrade overview of island with inf. of current island level.
+     */
 
     public void setLevelCheckBox(){
         inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
@@ -146,7 +153,7 @@ public class OverviewSitesComponent extends AnchorPane {
         jobsButton.setDisable(false);
 
         detailsComponent.setResLists();
-        detailsComponent.setSumProduction(islandAttributes.mergeProduction());
+        detailsComponent.setSumProduction(islandAttributes.mergeProduction(islandAttributes.getIsland()));
 
         inGameService.showOnly(sitesContainer, detailsComponent);
     }
@@ -196,12 +203,15 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameController.sitePropertiesComponent.setVisible(false);
         inGameController.buildingPropertiesComponent.setVisible(false);
         inGameController.overviewContainer.setVisible(false);
+        inGameController.selectedIsland.rudderImage.setVisible(false);
+        inGameController.selectedIsland.islandIsSelected = false;
 
         if (!inGameController.islandsService.keyCodeFlag) {
             inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
-            inGameController.selectedIsland.rudderImage.setVisible(false);
         }
+        inGameController.selectedIsland = null;
     }
+
 
     public void resetButtons(){
         detailsButton.setDisable(false);

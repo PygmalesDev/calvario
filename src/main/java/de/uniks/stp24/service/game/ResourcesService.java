@@ -153,12 +153,14 @@ public class ResourcesService {
     }
 
     public boolean hasEnoughResources(Map<String, Integer> neededResources) {
-        for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
-            String res = entry.getKey();
-            int neededAmount = entry.getValue();
-            int availableAmount = islandAttributes.getAvailableResources().get(res);
-            if (availableAmount < neededAmount) {
-                return false;
+        if (Objects.nonNull(neededResources)) {
+            for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
+                String res = entry.getKey();
+                int neededAmount = entry.getValue();
+                int availableAmount = islandAttributes.getAvailableResources().get(res);
+                if (availableAmount < neededAmount) {
+                    return false;
+                }
             }
         }
         return true;

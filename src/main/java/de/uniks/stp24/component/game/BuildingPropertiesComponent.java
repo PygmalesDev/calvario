@@ -87,7 +87,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     ResourceBundle gameResourceBundle;
 
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
     public IslandAttributeStorage islandAttributeStorage;
     Map<String, String> buildingsMap;
@@ -206,7 +206,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
             if (resourcesService.hasEnoughResources(result.cost())) buyButton.setDisable(false);
         });
-        if (tokenStorage.getIsland().buildings().contains(buildingType)) destroyButton.setDisable(false);
+        if (Objects.nonNull(tokenStorage.getIsland()) && tokenStorage.getIsland().buildings().contains(buildingType)) destroyButton.setDisable(false);
     }
 
     public void destroyBuilding(){
@@ -219,7 +219,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
         setCertainBuilding();
         buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding) ||
                 islandAttributeStorage.getUsedSlots() >= islandAttributeStorage.getIsland().resourceCapacity());
-        destroyButton.setDisable(!tokenStorage.getIsland().buildings().contains(buildingType));
+        destroyButton.setDisable(Objects.nonNull(tokenStorage.getIsland()) && !tokenStorage.getIsland().buildings().contains(buildingType));
     }
 
     //Timer for calling updateButtonStates every second

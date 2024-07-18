@@ -173,6 +173,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.clockComponent.timerService.subscriber = this.subscriber;
         this.inGameController.buildingPropertiesComponent.propertiesJobProgressComponent = this.propertiesJobProgressComponent;
         this.inGameController.buildingPropertiesComponent.islandAttributeStorage = this.islandAttributeStorage;
+        this.inGameController.buildingPropertiesComponent.tokenStorage = this.tokenStorage;
         this.inGameController.sitePropertiesComponent.siteJobProgress = this.siteJobProgress;
         this.inGameController.jobsService.tokenStorage = this.tokenStorage;
         this.inGameController.jobsService.jobsApiService = this.jobsApiService;

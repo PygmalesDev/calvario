@@ -86,6 +86,7 @@ public class AppTest2 extends IslandOverviewTestComponent {
         assertEquals(this.inGameController.overviewSitesComponent.resCapacity.getText(), usedSlots + "/" + islandAttributeStorage.getIsland().resourceCapacity());
         assertEquals(this.inGameController.overviewSitesComponent.island_name.getText(), "Plundered Island(Colony)");
     }
+
     private void goToBuilduings() {
         clickOn(inGameController.overviewSitesComponent.buildingsButton);
         waitForFxEvents();

@@ -19,7 +19,7 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
 
     Provider<DistrictComponent> districtComponentProvider = () -> {
         DistrictComponent districtComponent = new DistrictComponent();
-        districtComponent.tokenStorage = this.tokenStorage;
+        districtComponent.tokenStorage = tokenStorage;
         districtComponent.islandAttributeStorage = this.islandAttributeStorage;
         districtComponent.imageCache = this.imageCache;
         return districtComponent;
@@ -184,6 +184,7 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
+        doReturn(testIsland).when(this.tokenStorage).getIsland();
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
 
         // Mock getEmpire

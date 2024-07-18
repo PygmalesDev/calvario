@@ -189,23 +189,25 @@ public class SitePropertiesComponent extends AnchorPane {
     }
 
     public void buildSite(){
-        this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createDistrictJob(
-                this.tokenStorage.getIsland().id(), this.siteType)), job ->  {
-            this.showJobsPane();
-            this.siteJobProgress.setJobProgress(job);
+        if (Objects.nonNull(this.tokenStorage.getIsland())) {
+            this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createDistrictJob(
+                    this.tokenStorage.getIsland().id(), this.siteType)), job -> {
+                this.showJobsPane();
+                this.siteJobProgress.setJobProgress(job);
 
-            if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
-                    (this.siteJobs.isEmpty() || this.siteJobs.getFirst().equals(job)))
-                this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
+                if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
+                        (this.siteJobs.isEmpty() || this.siteJobs.getFirst().equals(job)))
+                    this.jobsService.onJobTypeProgress(job.type(), () -> this.siteJobProgress.incrementProgress());
 
-            this.jobsService.onJobDeletion(job._id(), () -> {
-                if (job.district().equals(this.siteType)) this.hideJobsPane();
+                this.jobsService.onJobDeletion(job._id(), () -> {
+                    if (job.district().equals(this.siteType)) this.hideJobsPane();
+                });
+                this.jobsService.onJobCompletion(job._id(), () -> {
+                    this.updateIslandSites();
+                    if (job.district().equals(this.siteType)) this.hideJobsPane();
+                });
             });
-            this.jobsService.onJobCompletion(job._id(), () -> {
-                this.updateIslandSites();
-                if (job.district().equals(this.siteType)) this.hideJobsPane();
-            });
-        });
+        }
     }
 
     @OnInit

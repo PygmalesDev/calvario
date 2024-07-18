@@ -3,12 +3,10 @@ package de.uniks.stp24;
 
 import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.model.Resource;
-import de.uniks.stp24.model.SiteProperties;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,8 +44,8 @@ public class AppTest2 extends InGameTestComponent {
         buildBuilding();
         destroyBuilding();
         goToSites();
-        buildSiteCell();
         destroySiteCell();
+        buildSiteCell();
         goToUpgrade();
         upgradeIsland();
         closeIslandOverview();
@@ -67,7 +65,10 @@ public class AppTest2 extends InGameTestComponent {
         homeIsland.setPrefHeight(50);
         homeIsland.setId("homeIsland");
         homeIsland.setOnAction(this::openIslandOverview);
-        Platform.runLater(() -> inGameController.mapGrid.getChildren().add(homeIsland));
+        Platform.runLater(() -> {
+            inGameController.mapGrid.getChildren().add(homeIsland);
+            waitForFxEvents();
+        });
         waitForFxEvents();
     }
 
@@ -101,12 +102,14 @@ public class AppTest2 extends InGameTestComponent {
         ArrayList<Node> buildingNodes = new ArrayList<>(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
         clickOn(buildingNodes.get(3));
         waitForFxEvents();
+
         assertTrue(this.inGameController.buildingsWindowComponent.isVisible());
         clickOn(this.inGameController.buildingsWindowComponent.buildingRefinery);
         waitForFxEvents();
         assertTrue(inGameController.buildingPropertiesComponent.isVisible());
-        waitForFxEvents();
+
         clickOn("#buyButton");
+        waitForFxEvents();
         this.inGameController.buildingPropertiesComponent.setVisible(false);
     }
 
@@ -115,15 +118,16 @@ public class AppTest2 extends InGameTestComponent {
         ArrayList<Node> buildingNodes = new ArrayList<>(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
         clickOn(buildingNodes.getFirst());
         waitForFxEvents();
-        assertFalse(inGameController.buildingsWindowComponent.isVisible());
         assertTrue(inGameController.buildingPropertiesComponent.isVisible());
-        waitForFxEvents();
+
         clickOn("#destroyButton");
         waitForFxEvents();
         assertTrue(inGameController.deleteStructureWarningContainer.isVisible());
+
         clickOn("#confirmButton");
         waitForFxEvents();
         inGameController.deleteStructureWarningContainer.setVisible(false);
+        inGameController.buildingPropertiesComponent.setVisible(false);
     }
 
     private void goToSites() {
@@ -136,22 +140,52 @@ public class AppTest2 extends InGameTestComponent {
         assertFalse(this.inGameController.overviewSitesComponent.jobsButton.isDisable());
     }
 
-    private void buildSiteCell() {
+    private void destroySiteCell() {
+        assertFalse(this.inGameController.sitePropertiesComponent.isVisible());
         clickOn("#energy");
+        waitForFxEvents();
 
+        // DO NOT DELETE THIS! SOMETIMES YO HAVE TO CLICK 2 TIMES ON DISTRICT TO OPEN THE WINDOW
+        clickOn("#energy");
+        waitForFxEvents();
+        assertTrue(this.inGameController.sitePropertiesComponent.isVisible());
+
+        clickOn("#buildSiteButton");
+        waitForFxEvents();
+        assertTrue(this.inGameController.deleteStructureComponent.isVisible());
+
+        clickOn("#confirmButton");
+        waitForFxEvents();
+        inGameController.deleteStructureWarningContainer.setVisible(false);
+        inGameController.buildingPropertiesComponent.setVisible(false);
     }
 
-    private void destroySiteCell() {
+    private void buildSiteCell() {
+        clickOn("#energy");
+        waitForFxEvents();
 
+        // DO NOT DELETE THIS! SOMETIMES YO HAVE TO CLICK 2 TIMES ON DISTRICT TO OPEN THE WINDOW
+        clickOn("#energy");
+        waitForFxEvents();
+        assertTrue(this.inGameController.sitePropertiesComponent.isVisible());
+
+        clickOn("#destroySiteButton");
+        waitForFxEvents();
+        assertTrue(this.inGameController.deleteStructureComponent.isVisible());
+
+        clickOn("#confirmButton");
+        waitForFxEvents();
+        inGameController.deleteStructureWarningContainer.setVisible(false);
+        inGameController.buildingPropertiesComponent.setVisible(false);
     }
 
     private void goToUpgrade() {
-//        assertTrue(inGameController.buildingPropertiesComponent.isVisible());
+        assertFalse(inGameController.overviewUpgradeComponent.isVisible());
 
         clickOn("#upgradeButton");
         waitForFxEvents();
 
-//        assertFalse(inGameController.buildingPropertiesComponent.isVisible());
+        assertTrue(inGameController.overviewUpgradeComponent.isVisible());
 
         Node checkExplored = lookup("#checkExplored").query();
         Node checkColonized = lookup("#checkColonized").query();
@@ -165,7 +199,8 @@ public class AppTest2 extends InGameTestComponent {
     }
 
     private void upgradeIsland() {
-
+        clickOn("#confirmUpgrade");
+        waitForFxEvents();
     }
 
     private void closeIslandOverview() {

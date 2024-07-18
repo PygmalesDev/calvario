@@ -5,6 +5,8 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
+import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
+import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -90,6 +92,10 @@ public class AppTest2 extends ControllerTest {
     HelpComponent helpComponent;
     @InjectMocks
     IslandClaimingComponent islandClaimingComponent;
+    @InjectMocks
+    TechnologyOverviewComponent technologiesComponent;
+    @InjectMocks
+    TechnologyCategoryComponent technologyCategoryComponent;
 
 
     @Spy
@@ -125,6 +131,8 @@ public class AppTest2 extends ControllerTest {
     LanguageService languageService;
     @Spy
     JobsApiService jobsApiService;
+    @Spy
+    TechnologyService technologyService;
 
     @Spy
     ResourcesService resourcesService;
@@ -185,6 +193,12 @@ public class AppTest2 extends ControllerTest {
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
         this.inGameController.helpComponent = this.helpComponent;
+
+        this.inGameController.technologiesComponent = this.technologiesComponent;
+        this.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
+        this.technologiesComponent.technologyService = this.technologyService;
+        this.technologyCategoryComponent.imageCache = this.imageCache;
+        this.technologyCategoryComponent.technologyService = this.technologyService;
 
         this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
         this.timerService.tokenStorage = this.tokenStorage;

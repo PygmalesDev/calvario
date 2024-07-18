@@ -23,8 +23,13 @@ public class HelpComponentTest extends ControllerTest {
     HelpComponent helpComponent;
     ObservableList<TechHelp> technologies = FXCollections.observableArrayList();
 
+    @InjectMocks
+    InGameController inGameController;
+
     @Override
     public void start(Stage stage) throws Exception {
+
+
         super.start(stage);
         technologies.add(new TechHelp("test1", "test1"));
         helpComponent.technologies = technologies;

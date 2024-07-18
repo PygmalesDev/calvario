@@ -52,7 +52,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
     App app;
 
     @Inject
-    TechnologyService technologyService;
+    public TechnologyService technologyService;
 
     @Inject
     Provider<TechnologyCategorySubComponent> provider;
@@ -73,7 +73,8 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @Inject
     Subscriber subscriber;
 
-    ImageCache imageCache = new ImageCache();
+    @Inject
+    public ImageCache imageCache;
 
     @Inject
     public TechnologyCategoryComponent() {

@@ -184,6 +184,8 @@ public class PauseMenuTest extends ControllerTest {
     TechnologyService technologyService;
     @Spy
     MarketService marketService;
+    @Spy
+    AnnouncementsService announcementsService;
 
     @Spy
     ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ROOT);

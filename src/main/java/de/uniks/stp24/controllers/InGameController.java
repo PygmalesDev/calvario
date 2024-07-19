@@ -566,6 +566,11 @@ public class InGameController extends BasicController {
         });
 
         this.jobsService.setJobInspector("storage_overview", (Jobs.Job job) -> showStorageOverview());
+
+//        this.jobsService.setJobInspector("technology_overview", (Jobs.Job job) ->
+//                showStorageOverview()
+//        );
+
     }
 
     public void showOverview() {

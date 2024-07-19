@@ -44,7 +44,7 @@ public class CoolerBubbleComponent extends Captain {
     @Inject
     JobsService jobsService;
     @Inject
-    AnnouncementsService announcementsService;
+    public AnnouncementsService announcementsService;
     @Inject
     EmpireService empireService;
     @Inject

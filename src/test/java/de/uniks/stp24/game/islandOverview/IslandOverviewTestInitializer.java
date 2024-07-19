@@ -121,6 +121,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @InjectMocks
     VariableService variableService;
     @InjectMocks
+    AnnouncementsService announcementsService;
+    @InjectMocks
     HelpComponent helpComponent;
     @InjectMocks
     JobsOverviewComponent jobsOverviewComponent;
@@ -181,6 +183,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewSitesComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewUpgradeComponent.islandAttributes = islandAttributeStorage;
+        this.inGameController.coolerBubbleComponent.announcementsService = this.announcementsService;
         this.inGameController.selectedIsland = new IslandComponent();
         this.resourcesService.islandAttributes = islandAttributeStorage;
         this.resourcesService.tokenStorage = tokenStorage;

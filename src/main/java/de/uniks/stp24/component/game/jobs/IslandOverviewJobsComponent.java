@@ -6,7 +6,6 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -21,6 +20,7 @@ import org.fulib.fx.constructs.listview.ComponentListCell;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component(view = "IslandOverviewJobs.fxml")
@@ -70,15 +70,14 @@ public class IslandOverviewJobsComponent extends AnchorPane {
 
     public void insertIslandName() {
         this.noJobText.setText(this.noJobText.getText()
-                .replace("{ISLAND_NAME}", this.islandsService.getIslandName(
-                        this.islandAttributes.getIsland().id())));
+                .replace("{ISLAND_NAME}", this.islandsService.getIslandName(this.islandAttributes.getIsland().id())));
     }
 
     public void setJobsObservableList(ObservableList<Job> observer) {
-        if (!observer.isEmpty()) this.noJobText.setVisible(false);
-        Platform.runLater(()-> {
-            this.jobProgressListView.setItems(observer);
-        });
-
+        if (Objects.nonNull(this.islandAttributes.getIsland()) && !islandAttributes.getIsland().owner().equals(this.tokenStorage.getEmpireId()))
+            this.noJobText.setText(this.gameResourceBundle.getString("overview.jobs.enemyIsland"));
+        else this.noJobText.setText(this.gameResourceBundle.getString("jobs.island.noJob"));
+        this.noJobText.setVisible(observer.isEmpty());
+        this.jobProgressListView.setItems(observer);
     }
 }

@@ -112,8 +112,7 @@ public class OverviewSitesComponent extends AnchorPane {
         shownPage = "upgrade";
 
         setLevelCheckBox();
-        inGameController.buildingPropertiesComponent.setVisible(false);
-        inGameController.sitePropertiesComponent.setVisible(false);
+
         inGameController.overviewUpgradeComponent.upgrade_box.setVisible(false);
         inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(true);
 
@@ -126,7 +125,7 @@ public class OverviewSitesComponent extends AnchorPane {
         }
         inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewUpgradeComponent);
         inGameController.overviewUpgradeComponent.setUpgradeButton();
-        //inGameController.overviewUpgradeComponent.setNeededResources();
+        inGameController.overviewUpgradeComponent.setListViews();
         inGameController.overviewUpgradeComponent.setUpgradeInf();
     }
 
@@ -210,7 +209,8 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameController.sitePropertiesComponent.setVisible(false);
         inGameController.buildingPropertiesComponent.setVisible(false);
         inGameController.overviewContainer.setVisible(false);
-        inGameController.selectedIsland.rudderImage.setVisible(false);
+        if (Objects.nonNull(inGameController.selectedIsland.rudderImage))
+            inGameController.selectedIsland.rudderImage.setVisible(false);
         inGameController.selectedIsland.islandIsSelected = false;
 
         if (!inGameController.islandsService.keyCodeFlag) {
@@ -245,8 +245,6 @@ public class OverviewSitesComponent extends AnchorPane {
         this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
 
         upgradeButton.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
-        jobsService.onJobTypeProgress("district", this::updateResCapacity);
-        jobsService.onJobTypeProgress("building", this::updateResCapacity);
         updateResCapacity();
 
         island_name.setText(islandAttributes.getIslandTypeTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");

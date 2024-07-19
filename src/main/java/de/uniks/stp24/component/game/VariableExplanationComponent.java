@@ -21,7 +21,7 @@ import java.util.Objects;
 public class VariableExplanationComponent extends VBox {
 
     @FXML
-    ListView effectList;
+    ListView<String> effectList;
     @FXML
     Text baseValue;
     @FXML

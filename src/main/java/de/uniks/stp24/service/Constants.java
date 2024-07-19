@@ -177,7 +177,7 @@ public class Constants {
             Map.entry("mining", "de/uniks/stp24/icons/sites/mining_site.png"),
             Map.entry("agriculture", "de/uniks/stp24/icons/sites/harvesting_site.png"),
             Map.entry("industry", "de/uniks/stp24/icons/sites/production_site.png"),
-            Map.entry("research_site", "de/uniks/stp24/icons/sites/epoch_site.png"),
+            Map.entry("research", "de/uniks/stp24/icons/sites/epoch_site.png"),
             Map.entry("ancient_foundry", "de/uniks/stp24/icons/sites/expedition_site.png"),
             Map.entry("ancient_factory", "de/uniks/stp24/icons/sites/merchant_site.png"),
             Map.entry("ancient_refinery", "de/uniks/stp24/icons/sites/coalmine_site.png")
@@ -195,24 +195,24 @@ public class Constants {
     );
 
     public static final Map<String, String> buildingsOnQueueMap = Map.ofEntries(
-            Map.entry("refinery", "de/uniks/stp24/icons/buildings/jobPause/alloy_smeltery_onQueue.png"),
-            Map.entry("factory", "de/uniks/stp24/icons/buildings/jobPause/theurgy_hall_onQueue.png"),
-            Map.entry("foundry", "de/uniks/stp24/icons/buildings/jobPause/chophouse_onQueue.png"),
-            Map.entry("research_lab", "de/uniks/stp24/icons/buildings/jobPause/resonating_delves_onQueue.png"),
+            Map.entry("foundry", "de/uniks/stp24/icons/buildings/jobPause/alloy_smeltery_onQueue.png"),
+            Map.entry("power_plant", "de/uniks/stp24/icons/buildings/jobPause/theurgy_hall_onQueue.png"),
+            Map.entry("factory", "de/uniks/stp24/icons/buildings/jobPause/chophouse_onQueue.png"),
+            Map.entry("mine", "de/uniks/stp24/icons/buildings/jobPause/resonating_delves_onQueue.png"),
             Map.entry("farm", "de/uniks/stp24/icons/buildings/jobPause/farmside_onQueue.png"),
-            Map.entry("mine", "de/uniks/stp24/icons/buildings/jobPause/coal_querry_onQueue.png"),
-            Map.entry("power_plant", "de/uniks/stp24/icons/buildings/jobPause/scout_hub_onQueue.png"),
+            Map.entry("refinery", "de/uniks/stp24/icons/buildings/jobPause/coal_querry_onQueue.png"),
+            Map.entry("research_lab", "de/uniks/stp24/icons/buildings/jobPause/scout_hub_onQueue.png"),
             Map.entry("exchange", "de/uniks/stp24/icons/buildings/jobPause/seaside_hut_onQueue.png")
     );
 
     public static final Map<String, String> buildingsJobProgressMap = Map.ofEntries(
-            Map.entry("refinery", "de/uniks/stp24/icons/buildings/jobProgress/alloy_smeltery_onConstruction.png"),
-            Map.entry("factory", "de/uniks/stp24/icons/buildings/jobProgress/theurgy_hall_onConstruction.png"),
-            Map.entry("foundry", "de/uniks/stp24/icons/buildings/jobProgress/chophouse_onConstruction.png"),
-            Map.entry("research_lab", "de/uniks/stp24/icons/buildings/jobProgress/resonating_delves_onConstruction.png"),
+            Map.entry("foundry", "de/uniks/stp24/icons/buildings/jobProgress/alloy_smeltery_onConstruction.png"),
+            Map.entry("power_plant", "de/uniks/stp24/icons/buildings/jobProgress/theurgy_hall_onConstruction.png"),
+            Map.entry("factory", "de/uniks/stp24/icons/buildings/jobProgress/chophouse_onConstruction.png"),
+            Map.entry("mine", "de/uniks/stp24/icons/buildings/jobProgress/resonating_delves_onConstruction.png"),
             Map.entry("farm", "de/uniks/stp24/icons/buildings/jobProgress/farmside_onConstruction.png"),
-            Map.entry("mine", "de/uniks/stp24/icons/buildings/jobProgress/coal_querry_onConstruction.png"),
-            Map.entry("power_plant", "de/uniks/stp24/icons/buildings/jobProgress/scout_hub_onConstruction.png"),
+            Map.entry("refinery", "de/uniks/stp24/icons/buildings/jobProgress/coal_querry_onConstruction.png"),
+            Map.entry("research_lab", "de/uniks/stp24/icons/buildings/jobProgress/scout_hub_onConstruction.png"),
             Map.entry("exchange", "de/uniks/stp24/icons/buildings/jobProgress/seaside_hut_onConstruction.png")
     );
 

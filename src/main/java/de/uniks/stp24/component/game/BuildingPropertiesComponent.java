@@ -3,6 +3,7 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.BuildingAttributes;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Resource;
@@ -92,20 +93,26 @@ public class BuildingPropertiesComponent extends AnchorPane {
     Map<String, Integer> priceOfBuilding;
     ObservableList<Jobs.Job> buildingJobs;
 
-    String currentJobID = "";
+    Jobs.Job currentJob;
     BuildingAttributes certainBuilding;
 
     Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
     Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);
+
+    @Inject
+    public BuildingPropertiesComponent() {}
 
     @OnInit
     public void init(){
         buildingsMap = buildingsIconPathsMap;
     }
 
-    @Inject
-    public BuildingPropertiesComponent(){
-
+    @OnInit
+    public void setBuildingUpdates() {
+        this.jobsService.onJobsLoadingFinished("building", this::setBuildingJobFinishers);
+        this.jobsService.onJobCommonFinish(this::updateIslandBuildings);
+        this.jobsService.onJobsLoadingFinished(() ->
+                this.buildingJobs = this.jobsService.getJobObservableListOfType("building"));
     }
 
     @OnRender
@@ -123,76 +130,44 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     public void setBuildingType(String buildingType, String jobID){
         this.buildingType = buildingType;
-        this.currentJobID = jobID;
         displayInfoBuilding();
         disableButtons();
         startResourceMonitoring();
 
-        if (!jobID.isEmpty()) {
-            Jobs.Job job = this.buildingJobs.stream()
-                    .filter(started -> started._id().equals(jobID)
-                            && started.system().equals(this.tokenStorage.getIsland().id()))
-                    .findFirst().orElse(null);
+        this.setJobsPaneProgress(this.buildingJobs.stream().filter(started -> started._id().equals(jobID)
+                        && started.system().equals(this.tokenStorage.getIsland().id())).findFirst().orElse(null));
+    }
 
-            this.showJobsPane();
-            if (Objects.nonNull(job)) {
-                this.propertiesJobProgressComponent.setJobProgress(job);
-                if (this.jobsService.hasNoJobTypeProgress(job.type()) && this.buildingJobs.getFirst().equals(job))
-                    this.jobsService.onJobTypeProgress(job.type(), () ->
-                            this.propertiesJobProgressComponent.incrementProgress());
-                else this.jobsService.stopOnJobTypeProgress("building");
+    private void setBuildingJobFinishers(Jobs.Job job) {
+        this.jobsService.onJobDeletion(job._id(), () -> {
+            this.updateIslandBuildings();
+            if (Objects.nonNull(this.currentJob)) {
+                if (this.currentJob._id().equals(job._id())) this.getParent().setVisible(false);
+                else this.setJobsPaneProgress(this.currentJob);
             }
-        } else {
-            this.hideJobsPane();
-            this.jobsService.stopOnJobTypeProgress("building");
-        }
-
-    }
-
-    @OnInit
-    public void setBuildingUpdates() {
-        this.jobsService.onJobsLoadingFinished("building", job -> {
-            this.jobsService.onJobDeletion(job._id(), () -> {
-                if (this.currentJobID.equals(job._id()))
-                    this.getParent().setVisible(false);
-                this.updateIslandBuildings();
-
-                if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
-                        (this.buildingJobs.isEmpty() || this.buildingJobs.getFirst()._id().equals(currentJobID)))
-                    this.jobsService.onJobTypeProgress(job.type(), () ->
-                            this.propertiesJobProgressComponent.incrementProgress());
-            });
-
-            this.jobsService.onJobCommonFinish(this::updateIslandBuildings);
-
-            this.jobsService.onJobCompletion(job._id(), () -> {
-                this.updateIslandBuildings();
-                this.hideJobsPane();
-
-                if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
-                        (this.buildingJobs.isEmpty() || this.buildingJobs.getFirst()._id().equals(currentJobID)))
-                    this.jobsService.onJobTypeProgress(job.type(), () ->
-                            this.propertiesJobProgressComponent.incrementProgress());
-            });
         });
-
-        this.jobsService.onJobsLoadingFinished(() ->
-                this.buildingJobs = this.jobsService.getJobObservableListOfType("building"));
+        this.jobsService.onJobCompletion(job._id(), () -> {
+            if (Objects.nonNull(this.currentJob)) {
+                if (this.currentJob._id().equals(job._id())) this.getParent().setVisible(false);
+                else this.setJobsPaneProgress(this.currentJob);
+            }
+        });
     }
 
-    public void showJobsPane() {
-        this.jobProgressPane.setVisible(true);
-        this.buildingCostsListView.setVisible(false);
-        this.buyButton.setVisible(false);
-        this.destroyButton.setVisible(false);
+    private void setJobsPaneProgress(Jobs.Job job) {
+        this.currentJob = job;
+        this.setJobsPaneVisibility(Objects.nonNull(job));
+        if (Objects.nonNull(job)) {
+            this.propertiesJobProgressComponent.setJobProgress(job);
+            this.propertiesJobProgressComponent.setShouldTick(this.jobsService.isCurrentIslandJob(job));
+        }
     }
 
-    public void hideJobsPane() {
-        this.jobProgressPane.setVisible(false);
-        this.buildingCostsListView.setVisible(true);
-        this.updateButtonStates();
-        this.buyButton.setVisible(true);
-        this.destroyButton.setVisible(true);
+    public void setJobsPaneVisibility(boolean isVisible) {
+        this.jobProgressPane.setVisible(isVisible);
+        this.buildingCostsListView.setVisible(!isVisible);
+        this.buyButton.setVisible(!isVisible);
+        this.destroyButton.setVisible(!isVisible);
     }
 
     //Checks if buy and destroy building has to be deactivated
@@ -235,25 +210,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
             if (resourcesService.hasEnoughResources(priceOfBuilding)) {
                 this.subscriber.subscribe(this.jobsService.beginJob(
                         Jobs.createBuildingJob(this.tokenStorage.getIsland().id(), this.buildingType)), job -> {
-                    this.currentJobID = job._id();
-                    this.propertiesJobProgressComponent.setJobProgress(job);
-                    this.showJobsPane();
+                    this.setJobsPaneProgress(job);
                     this.updateIslandBuildings();
-
-                    if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
-                            (this.buildingJobs.isEmpty() || this.buildingJobs.getFirst().equals(job)))
-                        this.jobsService.onJobTypeProgress(job.type(), () ->
-                                this.propertiesJobProgressComponent.incrementProgress());
-
-                    this.jobsService.onJobDeletion(job._id(), () -> {
-                        if (this.currentJobID.equals(job._id()))
-                            this.getParent().setVisible(false);
-                        this.updateIslandBuildings();
-                    });
-                    this.jobsService.onJobCompletion(job._id(), () -> {
-                        this.updateIslandBuildings();
-                        this.hideJobsPane();
-                    });
+                    this.setBuildingJobFinishers(job);
                 });
             } else buyButton.setDisable(true);
         });
@@ -272,11 +231,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
         }
     }
 
-
-
-
     //Gets resources of the building and shows them in three listviews
-    public void displayInfoBuilding(){
+    public void displayInfoBuilding() {
         buildingImage.setImage(this.imageCache.get("/" + buildingsMap.get(buildingType)));
         buildingName.setText(gameResourceBundle.getString(buildingTranslation.get(buildingType)));
 

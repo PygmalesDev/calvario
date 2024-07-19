@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
+import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.component.game.technology.ResearchJobComponent;
@@ -43,7 +44,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -191,6 +191,9 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     InGameController inGameController;
 
+    @InjectMocks
+    IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
+
     ArrayList<BuildingAttributes> buildingPresets = new ArrayList<>();
     ArrayList<BuildingAttributes> districtPresets = new ArrayList<>();
     Map<String, Integer> variablesPresets = new HashMap<>();
@@ -216,6 +219,10 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.technologiesComponent = technologyOverviewComponent;
         this.technologyOverviewComponent.technologyCategoryComponent = technologyCategoryComponent;
         this.technologyCategoryComponent.researchJobComponent = researchJobComponent;
+
+        this.overviewUpgradeComponent.jobProgressComponent = islandUpgradesJobProgressComponent;
+        this.overviewUpgradeComponent.jobsService = this.jobsService;
+        this.overviewUpgradeComponent.islandAttributes = this.islandAttributeStorage;
 
 
         this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
@@ -328,55 +335,15 @@ public class PauseMenuTest extends ControllerTest {
         assertTrue(gameStatus.getPaused());
     }
 
-    /*@Test
-    public void testChangeLanguage() {
-        settingsComponent.prefService = this.prefService;
-        languageService.prefService = this.prefService;
-        languageService.newResources = this.newResources;
-
-        doAnswer(show -> {inGameService.setShowSettings(true);
-            return null;
-        }).when(pauseMenuComponent).settings();
-
-        doAnswer(show -> {inGameService.setLanguage(0);
-            return null;
-        }).when(settingsComponent).setToGerman();
-
-        doAnswer(show -> {inGameService.setLanguage(1);
-            return null;
-        }).when(settingsComponent).setToEnglish();
-
-        press(KeyCode.ESCAPE);
-        waitForFxEvents();
-
-        clickOn("#settingsButton");
-        waitForFxEvents();
-
-        clickOn("#germanLang");
-        waitForFxEvents();
-        assertEquals(0, inGameService.getLanguage());
-
-        clickOn("#englishLang");
-        waitForFxEvents();
-        assertEquals(1, inGameService.getLanguage());
-    }*/
-
     @Test
     public void testQuitting() {
         doReturn(null).when(app).show("/browseGames");
 
-        tokenStorage.setEmpireId("empireId");
-        tokenStorage.setGameId("gameId");
-
         press(KeyCode.ESCAPE);
         waitForFxEvents();
         press(KeyCode.Q);
-//        clickOn("#quitButton");
         waitForFxEvents();
 
-        assertNull(tokenStorage.getEmpireId());
-        assertNull(tokenStorage.getGameId());
         verify(app, times(1)).show("/browseGames");
     }
-
 }

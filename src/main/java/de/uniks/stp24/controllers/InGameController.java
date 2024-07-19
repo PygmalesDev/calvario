@@ -8,6 +8,7 @@ import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
@@ -55,6 +56,8 @@ public class InGameController extends BasicController {
     Pane gameBackground;
     @FXML
     StackPane helpWindowContainer;
+    @FXML
+    StackPane hintCaptainContainer;
     @FXML
     Pane shadow;
     @FXML
@@ -129,7 +132,9 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public HelpComponent helpComponent;
-
+    @SubComponent
+    @Inject
+    public CoolerBubbleComponent coolerBubbleComponent;
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
@@ -196,6 +201,12 @@ public class InGameController extends BasicController {
     PopupBuilder popupDeleteStructure = new PopupBuilder();
     PopupBuilder popupHelpWindow = new PopupBuilder();
 
+
+    @OnRender
+    public void addSpeechBubble() {
+        hintCaptainContainer.getChildren().add(coolerBubbleComponent);
+        coolerBubbleComponent.silence();
+    }
 
 
     @OnInit
@@ -511,40 +522,55 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void setJobInspectors() {
-        this.jobsService.setJobInspector("island_jobs_overview", (String... params) -> {
-            Island selected = this.islandsService.getIsland(params[0]);
+        this.jobsService.setJobInspector("island_jobs_overview", (Jobs.Job job) -> {
+            Island selected = this.islandsService.getIsland(job.system());
             this.tokenStorage.setIsland(selected);
-            this.islandAttributes.setIsland(selected);
-            this.selectedIsland = this.islandsService.getIslandComponent(params[0]);
             this.overviewSitesComponent.jobsComponent.setJobsObservableList(
-                    this.jobsService.getObservableListForSystem(params[0]));
+                    this.jobsService.getObservableListForSystem(job.system()));
+
+            this.islandAttributes.setIsland(selected);
+            selectedIsland = this.islandsService.getIslandComponent(job.system());
             if (Objects.nonNull(selected.owner())) {
                 showOverview();
                 this.overviewSitesComponent.showJobs();
             }
         });
 
-        this.jobsService.setJobInspector("site_overview", (String... params) -> {
-            Island selected = this.islandsService.getIsland(params[1]);
-            this.islandAttributes.setIsland(selected);
-            this.tokenStorage.setIsland(selected);
-            this.setSiteType(params[0]);
-            this.showSiteOverview();
-        });
-
-        this.jobsService.setJobInspector("building_overview", (String... params) -> {
-            Island selected = this.islandsService.getIsland(params[2]);
-            this.islandAttributes.setIsland(selected);
-            this.tokenStorage.setIsland(selected);
-            this.showBuildingInformation(params[0], params[1]);
-        });
-
-        this.jobsService.setJobInspector("island_upgrade", (String... params) -> {
-            Island selected = this.islandsService.getIsland(params[0]);
+        this.jobsService.setJobInspector("island_upgrade", (Jobs.Job job) -> {
+            Island selected = this.islandsService.getIsland(job.system());
             this.islandAttributes.setIsland(selected);
             this.tokenStorage.setIsland(selected);
             this.overviewSitesComponent.showUpgrades();
         });
+
+        this.jobsService.setJobInspector("site_overview", (Jobs.Job job) -> {
+            Island selected = this.islandsService.getIsland(job.system());
+            this.islandAttributes.setIsland(selected);
+            this.tokenStorage.setIsland(selected);
+            this.setSiteType(job.district());
+            this.showSiteOverview();
+        });
+
+        this.jobsService.setJobInspector("building_overview", (Jobs.Job job) -> {
+            Island selected = this.islandsService.getIsland(job.system());
+            this.islandAttributes.setIsland(selected);
+            this.tokenStorage.setIsland(selected);
+            this.showBuildingInformation(job.building(), job._id());
+        });
+
+        this.jobsService.setJobInspector("building_done_overview", (Jobs.Job job) -> {
+            Island selected = this.islandsService.getIsland(job.system());
+            this.islandAttributes.setIsland(selected);
+            this.tokenStorage.setIsland(selected);
+            this.showBuildingInformation(job.building(), "");
+        });
+
+        this.jobsService.setJobInspector("storage_overview", (Jobs.Job job) -> showStorageOverview());
+
+//        this.jobsService.setJobInspector("technology_overview", (Jobs.Job job) ->
+//                showStorageOverview()
+//        );
+
     }
 
     public void showOverview() {

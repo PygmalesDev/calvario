@@ -6,6 +6,7 @@ import de.uniks.stp24.controllers.CreateGameController;
 import de.uniks.stp24.service.menu.CreateGameService;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,6 +25,9 @@ public class CreateGameControllerTest extends ControllerTest {
     @Mock
     CreateGameService createGameService;
 
+    @Spy
+    Subscriber subscriber;
+
     @InjectMocks
     CreateGameController createGameController;
     @Spy
@@ -32,6 +36,7 @@ public class CreateGameControllerTest extends ControllerTest {
     @Override
     public void start(Stage stage)  throws Exception{
         super.start(stage);
+        bubbleComponent.subscriber = this.subscriber;
         app.show(createGameController);
     }
 

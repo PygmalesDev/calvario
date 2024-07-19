@@ -87,6 +87,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
     @InjectMocks
+    CoolerBubbleComponent coolerBubbleComponent;
+    @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
     @InjectMocks
     ClockComponent clockComponent;
@@ -118,6 +120,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     EmpireOverviewComponent empireOverviewComponent;
     @InjectMocks
     VariableService variableService;
+    @InjectMocks
+    AnnouncementsService announcementsService;
     @InjectMocks
     HelpComponent helpComponent;
     @InjectMocks
@@ -169,6 +173,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.inGameController.overviewSitesComponent.buildingsComponent.imageCache = this.imageCache;
         this.inGameController.marketOverviewComponent = this.marketComponent;
+        this.coolerBubbleComponent.subscriber = this.subscriber;
+        this.inGameController.coolerBubbleComponent = this.coolerBubbleComponent;
 
         this.overviewUpgradeComponent.jobProgressComponent = islandUpgradesJobProgressComponent;
         this.overviewUpgradeComponent.jobsService = this.jobsService;
@@ -177,6 +183,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewSitesComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewUpgradeComponent.islandAttributes = islandAttributeStorage;
+        this.inGameController.coolerBubbleComponent.announcementsService = this.announcementsService;
         this.inGameController.selectedIsland = new IslandComponent();
         this.resourcesService.islandAttributes = islandAttributeStorage;
         this.resourcesService.tokenStorage = tokenStorage;

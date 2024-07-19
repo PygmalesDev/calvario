@@ -29,8 +29,6 @@ public class LobbyTestLoader extends InGameTestLoader {
     @InjectMocks
     JoinGameHelper joinGameHelper;
     @InjectMocks
-    EditGameService editGameService;
-    @InjectMocks
     LobbyService lobbyService;
     @InjectMocks
     protected LobbyController lobbyController;
@@ -91,8 +89,6 @@ public class LobbyTestLoader extends InGameTestLoader {
         this.lobbyService.userApiService = this.userApiService;
 
         this.lobbyHostSettingsComponent.editGameService = this.editGameService;
-
-        this.editGameService.gamesApiService = this.gamesApiService;
 
         this.joinGameHelper.islandsService = this.islandsService;
         this.joinGameHelper.empireService = this.empireService;

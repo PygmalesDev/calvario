@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.*;
+import de.uniks.stp24.component.game.technology.ResearchJobComponent;
+import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
+import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.rest.*;
@@ -12,6 +15,7 @@ import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.*;
+import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.stage.Stage;
@@ -21,6 +25,9 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 
 import javax.inject.Provider;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static org.mockito.Mockito.spy;
 
@@ -69,7 +76,12 @@ public class InGameTestLoader extends ControllerTest {
     GameLogicApiService gameLogicApiService;
     @Spy
     VariableDependencyService variableDependencyService;
+    @Spy
+    public ResourceBundle technologiesResourceBundle =
+            ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ENGLISH);
 
+    @InjectMocks
+    MarketService marketService;
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
     @InjectMocks
@@ -92,6 +104,8 @@ public class InGameTestLoader extends ControllerTest {
     EventComponent eventComponent;
     @InjectMocks
     protected InGameController inGameController;
+    @InjectMocks
+    MarketComponent marketComponent;
     @InjectMocks
     BuildingPropertiesComponent buildingPropertiesComponent;
     @InjectMocks
@@ -118,6 +132,14 @@ public class InGameTestLoader extends ControllerTest {
     IslandClaimingComponent islandClaimingComponent;
     @InjectMocks
     IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
+    @InjectMocks
+    TechnologyOverviewComponent technologyOverviewComponent;
+    @InjectMocks
+    TechnologyCategoryComponent technologyCategoryComponent;
+    @InjectMocks
+    ResearchJobComponent researchJobComponent;
+    @InjectMocks
+    EditGameService editGameService;
 
     Provider<ClaimingSiteComponent> claimingComponentProvider = () -> {
         var component = new ClaimingSiteComponent();
@@ -151,15 +173,21 @@ public class InGameTestLoader extends ControllerTest {
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
+        this.inGameController.technologiesComponent = this.technologyOverviewComponent;
         this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
         this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
+        this.inGameController.marketOverviewComponent = this.marketComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.eventComponent = this.eventComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.helpComponent = this.helpComponent;
+
+        this.technologyOverviewComponent.technologyCategoryComponent = this.technologyCategoryComponent;
+
+        this.technologyCategoryComponent.researchJobComponent = this.researchJobComponent;
 
         this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
         this.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
@@ -210,7 +238,25 @@ public class InGameTestLoader extends ControllerTest {
 
         this.lobbyService.gameMembersApiService = this.gameMembersApiService;
 
+        this.editGameService.gamesApiService = this.gamesApiService;
+
+        this.resourcesService.gameSystemsApiService = this.gameSystemsApiService;
+        this.resourcesService.islandAttributes = this.islandAttributeStorage;
+        this.resourcesService.empireService = this.empireService;
+        this.resourcesService.tokenStorage = this.tokenStorage;
+        this.resourcesService.subscriber = this.subscriber;
+
+        this.explanationService.app = this.app;
+
         this.clockComponent.subscriber = this.subscriber;
+
+        this.islandOverviewJobsComponent.islandAttributes = this.islandAttributeStorage;
+
+        this.buildingsComponent.islandAttributes = this.islandAttributeStorage;
+
+        this.overviewSitesComponent.islandAttributes = this.islandAttributeStorage;
+
+        this.buildingPropertiesComponent.islandAttributeStorage = this.islandAttributeStorage;
 
         this.timerService.gamesApiService = this.gamesApiService;
         this.timerService.tokenStorage = this.tokenStorage;
@@ -233,6 +279,13 @@ public class InGameTestLoader extends ControllerTest {
         this.storageOverviewComponent.tokenStorage = this.tokenStorage;
         this.storageOverviewComponent.subscriber = this.subscriber;
 
+        this.marketService.presetsApiService = this.presetsApiService;
+
+        this.marketComponent.marketService = this.marketService;
+        this.marketComponent.subscriber = this.subscriber;
+        this.marketComponent.presetsApiService = this.presetsApiService;
+        this.marketComponent.explanationService = this.explanationService;
+
         this.sitesComponent.attributeStorage = this.islandAttributeStorage;
 
         this.overviewUpgradeComponent.islandAttributes = this.islandAttributeStorage;
@@ -243,6 +296,8 @@ public class InGameTestLoader extends ControllerTest {
         this.buildingPropertiesComponent.jobsService = this.jobsService;
 
         this.propertiesJobProgressComponent.jobsService = this.jobsService;
+
+        this.technologyOverviewComponent.technologiesResourceBundle = this.technologiesResourceBundle;
     }
 
     protected void clearStyles() {

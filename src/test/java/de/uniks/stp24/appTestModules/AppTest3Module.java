@@ -7,6 +7,7 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.stage.Stage;
+import org.fulib.fx.annotation.event.OnRender;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,9 @@ public class AppTest3Module extends LobbyTestLoader {
             GAME_ID = "testGameID",
             EMPIRE_ID = "testEmpireID",
             USER_ID = "testUserID";
+
+    protected final BuildingDto BUILDING_DTO = new BuildingDto("refinery", 3, Map.of("energy", 30),
+            Map.of("energy", 30), Map.of("energy", 30));
 
     protected final String JOB_EVENT_PATH = String.format("games.%s.empires.%s.jobs.*.", GAME_ID, EMPIRE_ID);
 
@@ -133,12 +137,15 @@ public class AppTest3Module extends LobbyTestLoader {
                 .when(this.gamesApiService).startGame(any(), any());
         when(this.gamesApiService.getGame(any())).thenReturn(Observable.just(GAME));
 
+        when(this.empireApiService.getSeasonalTrades(any(), any())).thenReturn(Observable.just(new SeasonalTradeDto(new HashMap<>())));
+
         when(this.presetsApiService.getVariablesPresets()).thenReturn(Observable.just(new HashMap<>()));
         when(this.presetsApiService.getVariablesEffects()).thenReturn(Observable.just(new HashMap<>()));
         when(this.presetsApiService.getTraitsPreset()).thenReturn(Observable.just(TRAITS));
+        when(this.presetsApiService.getVariables()).thenReturn(Observable.just(new HashMap<>()));
 
         when(this.gameSystemsApiService.getSystems(any())).thenReturn(Observable.just(GAME_SYSTEMS));
-
+        when(this.gameSystemsApiService.getBuilding(any())).thenReturn(Observable.just(BUILDING_DTO));
         doAnswer(inv -> this.app.show("/lobby")).when(this.gameMembersApiService).patchMember(any(), any(), any());
         when(this.gameMembersApiService.getMembers(any())).thenReturn(Observable.just(new MemberDto[]{MEMBER_DTO2}));
         when(this.gameMembersApiService.getMember(any(), any())).thenReturn(Observable.just(MEMBER_DTO));
@@ -162,6 +169,9 @@ public class AppTest3Module extends LobbyTestLoader {
         this.islandAttributeStorage.systemUpgradeAttributes = new SystemUpgrades(
                 null, null, new UpgradeStatus("0","upgraded", 1, 0, Map.of("energy", 100),
                 Map.of("energy", 100), 0), null, null);
+        this.islandAttributeStorage.buildingsAttributes = new ArrayList<>(List.of(new BuildingAttributes(
+                BUILDING_DTO.id(), BUILDING_DTO.build_time(), BUILDING_DTO.cost(), BUILDING_DTO.upkeep(),
+                BUILDING_DTO.production())));
     }
 
     protected Event<Game> tickGame() {

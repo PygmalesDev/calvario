@@ -46,7 +46,7 @@ public class SitesComponent extends Pane {
     JobsService jobsService;
 
     @Inject
-    IslandAttributeStorage attributeStorage;
+    public IslandAttributeStorage attributeStorage;
 
     InGameController inGameController;
 

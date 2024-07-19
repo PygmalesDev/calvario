@@ -51,7 +51,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
     @Inject
     @Resource
     @Named("technologiesResourceBundle")
-    ResourceBundle technologiesResourceBundle;
+    public ResourceBundle technologiesResourceBundle;
 
 
     @Inject

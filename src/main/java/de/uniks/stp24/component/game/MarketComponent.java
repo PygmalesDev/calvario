@@ -186,7 +186,7 @@ public class MarketComponent extends StackPane {
      */
     private void createResourceListeners() {
         subscriber.subscribe(eventListener.listen(
-                        "games" + tokenStorage.getGameId() + "empires" + tokenStorage.getEmpireId() + ".updated", EmpireExtendedDto.class),
+                        "games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
                 event -> {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         Map<String, Integer> eventResources = event.data().resources();

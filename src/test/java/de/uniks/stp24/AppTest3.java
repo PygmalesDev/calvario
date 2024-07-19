@@ -30,7 +30,10 @@ public class AppTest3 extends AppTest3Module {
     public void testApp() {
         this.selectTraits();
         this.loadGame();
-        this.beginIslandClaiming();
+        this.beginBuildingJob();
+
+
+        sleep(100000);
     }
 
     public void selectTraits() {
@@ -70,6 +73,16 @@ public class AppTest3 extends AppTest3Module {
         clickOn("#startJourneyButton");
     }
 
+    public void beginBuildingJob() {
+        clickOn("#islandID_1_instance");
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#buildingsButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#empty_building_element");
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#buildingRefinery");
+    }
+
     public void beginIslandClaiming() {
         clickOn("#jobsOverviewButton");
 
@@ -89,6 +102,5 @@ public class AppTest3 extends AppTest3Module {
         WaitForAsyncUtils.waitForFxEvents();
         GAME_SUBJECT.onNext(this.tickGame());
 
-        sleep(100000);
     }
 }

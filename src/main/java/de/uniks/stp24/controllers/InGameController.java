@@ -377,6 +377,7 @@ public class InGameController extends BasicController {
     public void showHelpOverview() {
         if (this.helpComponent.isVisible()) {
             this.helpComponent.close();
+            shadow.setVisible(false);
             this.removePause();
         } else showHelp();
     }
@@ -400,8 +401,8 @@ public class InGameController extends BasicController {
         pause = true;
         inGameService.setPaused(true);
         if (pause) {
-            System.out.println("pausetest");
             pauseMenuContainer.setMouseTransparent(false);
+            shadow.setVisible(true);
             pauseGame();
         } else {
             pauseMenuContainer.setMouseTransparent(true);
@@ -654,6 +655,7 @@ public class InGameController extends BasicController {
         System.out.println("help");
         popupHelpWindow.showPopup(helpWindowContainer,helpComponent);
         helpComponent.setVisible(true);
+        shadow.setVisible(false);
         helpComponent.setMouseTransparent(false);
         helpWindowContainer.setMouseTransparent(false);
         helpWindowContainer.toFront();

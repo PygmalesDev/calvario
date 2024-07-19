@@ -134,7 +134,7 @@ public class InGameController extends BasicController {
     public HelpComponent helpComponent;
     @SubComponent
     @Inject
-    CoolerBubbleComponent coolerBubbleComponent;
+    public CoolerBubbleComponent coolerBubbleComponent;
     @SubComponent
     @Inject
     public ClockComponent clockComponent;

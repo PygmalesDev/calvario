@@ -86,6 +86,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
     @InjectMocks
+    CoolerBubbleComponent coolerBubbleComponent;
+    @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
     @InjectMocks
     ClockComponent clockComponent;
@@ -166,6 +168,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.inGameController.overviewSitesComponent.buildingsComponent.imageCache = this.imageCache;
         this.inGameController.marketOverviewComponent = this.marketComponent;
+        this.coolerBubbleComponent.subscriber = this.subscriber;
+        this.inGameController.coolerBubbleComponent = this.coolerBubbleComponent;
 
 
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;

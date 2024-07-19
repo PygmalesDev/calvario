@@ -31,6 +31,8 @@ public class IslandComponent extends Pane {
     public StackPane flagPane;
     @FXML
     ImageView flagImage;
+    @FXML
+    ImageView spyglassImage;
     @Inject
     TokenStorage tokenStorage;
 
@@ -56,12 +58,15 @@ public class IslandComponent extends Pane {
         }
         this.islandImage = new ImageView();
         this.flagImage = new ImageView();
+        this.spyglassImage = new ImageView();
         this.setPickOnBounds(false);
     }
 
     public void applyIcon(IslandType type) {
         this.islandImage
                 .setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
+        if (this.island.upgrade().equals("explored"))
+            this.spyglassImage.setImage(imageCache.get("/de/uniks/stp24/icons/other/spyglass.png"));
     }
 
     // use our flag images
@@ -119,7 +124,9 @@ public class IslandComponent extends Pane {
         }
     }
 
-    //Logic for showing rudder if other island is already selected
+    /*
+    Logic for showing/unshowing rudder
+     */
     public void showUnshowRudder() {
         if (islandIsSelected) {
             reset();
@@ -159,6 +166,10 @@ public class IslandComponent extends Pane {
         this.tokenStorage = tokenStorage;
         return this;
     }
+
+    /*
+    Reset of componentes for showing informations of current selected island.
+     */
 
     public void reset(){
         inGameController.overviewSitesComponent.resetButtons();

@@ -3,20 +3,18 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.BuildingDto;
+import de.uniks.stp24.model.BuildingAttributes;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.IslandsService;
-import de.uniks.stp24.service.game.JobsService;
-import de.uniks.stp24.service.game.ResourcesService;
+import de.uniks.stp24.service.game.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -68,13 +66,22 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @SubComponent
     public PropertiesJobProgressComponent propertiesJobProgressComponent;
     @Inject
+    public GameSystemsApiService gameSystemsApiService;
+    @Inject
     App app;
     @Inject
-    public GameSystemsApiService gameSystemsApiService;
+    ExplanationService explanationService;
+    @Inject
+    VariableService variableService;
+    @Inject
+    ImageCache imageCache;
+
+
     @Inject
     @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
+
     @Inject
     TokenStorage tokenStorage;
     @Inject
@@ -86,9 +93,10 @@ public class BuildingPropertiesComponent extends AnchorPane {
     ObservableList<Jobs.Job> buildingJobs;
 
     String currentJobID = "";
+    BuildingAttributes certainBuilding;
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle);
-
+    Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
+    Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);
 
     @OnInit
     public void init(){
@@ -204,11 +212,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     //Gets called every second by a timer
     public void updateButtonStates(){
-        subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
-            priceOfBuilding = result.cost();
-            buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding) ||
-                    islandAttributeStorage.getUsedSlots() >= islandAttributeStorage.getIsland().resourceCapacity());
-        });
+        setCertainBuilding();
+        buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding) ||
+                islandAttributeStorage.getUsedSlots() >= islandAttributeStorage.getIsland().resourceCapacity());
         destroyButton.setDisable(!tokenStorage.getIsland().buildings().contains(buildingType));
     }
 
@@ -271,17 +277,20 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     //Gets resources of the building and shows them in three listviews
     public void displayInfoBuilding(){
-        Image imageBuilding = new Image(buildingsMap.get(buildingType));
-        buildingImage.setImage(imageBuilding);
+        buildingImage.setImage(this.imageCache.get("/" + buildingsMap.get(buildingType)));
         buildingName.setText(gameResourceBundle.getString(buildingTranslation.get(buildingType)));
-        subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), this::resourceListGeneration);
-        buildingCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
-        buildingProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
-        buildingConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, resourceComponentProvider));
+
+        setCertainBuilding();
+        resourceListGeneration(certainBuilding);
+
+        buildingCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, negativeResouceProvider), "buildings", buildingType, "cost"));
+        buildingProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, positiveResourceProvider), "buildings", buildingType, "production"));
+        buildingConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, negativeResouceProvider), "buildings", buildingType, "upkeep"));
+        disableButtons();
     }
 
     //Sets upkeep, production and cost of buildings in listviews
-    private void resourceListGeneration(BuildingDto buildingDto) {
+    private void resourceListGeneration(BuildingAttributes buildingDto) {
         Map<String, Integer> resourceMapUpkeep = buildingDto.upkeep();
         ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, buildingConsumesListView.getItems(), null);
         buildingConsumesListView.setItems(resourceListUpkeep);
@@ -296,6 +305,15 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
     public void onClose(){
-        setVisible(false);
+        inGameController.buildingPropertiesComponent.setVisible(false);
+    }
+
+    private void setCertainBuilding(){
+        for(BuildingAttributes building: islandAttributeStorage.buildingsAttributes){
+            if(building.id().equals(buildingType)){
+                certainBuilding = building;
+                priceOfBuilding = certainBuilding.cost();
+            }
+        }
     }
 }

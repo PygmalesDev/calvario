@@ -3,9 +3,11 @@ package de.uniks.stp24;
 
 import de.uniks.stp24.component.game.ClockComponent;
 import de.uniks.stp24.component.menu.BubbleComponent;
+import de.uniks.stp24.controllers.LobbyController;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.*;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.menu.CreateGameService;
@@ -18,11 +20,14 @@ import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.AnchorPane;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -41,7 +46,7 @@ import static org.testfx.api.FxAssert.verifyThat;
 
 
 public class AppTest extends ControllerTest {
-
+    ImageCache imageCache;
     LoginService loginService;
     AuthApiService authApiService;
     GamesApiService gamesApiService;
@@ -72,14 +77,13 @@ public class AppTest extends ControllerTest {
         _public.put("portraitIndex", 1);
         _public.put("frameIndex", 1);
 
-
         SignUpResultDto signUpResult = new SignUpResultDto(null, null, "1", "JustATest", null);
         LoginResult loginResult = new LoginResult("1", "JustATest", null,_public, "a", "r");
         LoginDto loginDto = new LoginDto("JustATest", "testpassword");
         RefreshDto refreshDto = new RefreshDto("r");
-        Game game1 = new Game("2024-05-28T12:55:25.688Z", null, "1", "Was geht", "1", 2,false, 0,0, null);
-        Game game2 = new Game("2024-05-28T13:55:25.688Z", null, "2", "rapapa", "testID", 2,false, 0,0, null);
-        Game game3 = new Game("2024-05-28T14:55:25.688Z", null, "123", "AwesomeLobby123", "1", 2,false, 0, 0, null);
+        Game game1 = new Game("2024-05-28T12:55:25.688Z", null, "1", "Was geht", "1", 2,0, false, 0,0, null);
+        Game game2 = new Game("2024-05-28T13:55:25.688Z", null, "2", "rapapa", "testID", 2,0, false, 0,0, null);
+        Game game3 = new Game("2024-05-28T14:55:25.688Z", null, "123", "AwesomeLobby123", "1", 2,0, false, 0, 0, null);
 
         User user = new User("JustATest", "1", null, null, null,_public);
 
@@ -95,7 +99,7 @@ public class AppTest extends ControllerTest {
         userApiService = testComponent.userApiService();
         doReturn(Observable.just(signUpResult)).when(userApiService).signup(any());
 
-
+        imageCache = testComponent.imageCache();
         authApiService = testComponent.authApiService();
         loginService = testComponent.loginService();
         gamesApiService = testComponent.gamesApiService();
@@ -121,7 +125,7 @@ public class AppTest extends ControllerTest {
 
         doReturn(Observable.just(createGameResultDto)).when(createGameService).createGame(any(), any(), any(), eq(2));
 
-        Event<Game> gameEvent = new Event<>("games." + game3._id() + ".created", new Game("2024-05-28T14:55:25.688Z", null, game3._id(), createGameDto.name(), "1", 2,false, 0,0, null));
+        Event<Game> gameEvent = new Event<>("games." + game3._id() + ".created", new Game("2024-05-28T14:55:25.688Z", null, game3._id(), createGameDto.name(), "1", 2,0, false, 0,0, null));
         doReturn(Observable.empty()).doReturn(Observable.just(gameEvent)).when(eventListener).listen(eq("games.*.*"), eq(Game.class));
 
         doReturn(Observable.just(game3)).when(gamesApiService).getGame(game3._id());
@@ -130,7 +134,6 @@ public class AppTest extends ControllerTest {
                 .thenReturn(Observable.just(memberDtos))
                 .thenReturn(Observable.just(new MemberDto[]{
                 new MemberDto(true, "1", null, null)}));
-
 
         doReturn(Observable.empty()).when(eventListener).listen(eq("games." + game3._id() + ".deleted"), eq(Game.class));
 
@@ -163,10 +166,11 @@ public class AppTest extends ControllerTest {
         doReturn(Observable.just(new AggregateResultDto(1,null))).when(this.empireService).getResourceAggregates(any(),any());
 
         doReturn(Observable.just(new Trait[]{})).when(presetsApiService).getTraitsPreset();
+        doReturn(null).when(this.imageCache).get(any());
     }
 
     @Test
-    public void v1(){
+    public void v1() throws Exception {
         goToSignup();
         signupUser();
         loginUser();
@@ -245,6 +249,8 @@ public class AppTest extends ControllerTest {
         clickOn("#load_game_b");
         WaitForAsyncUtils.waitForFxEvents();
         verifyThat(window("ENTER GAME"), WindowMatchers.isShowing());
+        WaitForAsyncUtils.waitForFxEvents();
+        lookup("#backgroundAnchorPane").queryAs(AnchorPane.class).getStylesheets().clear();
     }
 
     private void selectEmpire(){
@@ -252,6 +258,7 @@ public class AppTest extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#backButton");
         WaitForAsyncUtils.waitForFxEvents();
+        lookup("#backgroundAnchorPane").queryAs(AnchorPane.class).getStylesheets().clear();
     }
 
     private void startAGame() {
@@ -262,7 +269,7 @@ public class AppTest extends ControllerTest {
 
         clickOn("#startJourneyButton");
         this.gameSubject.onNext(new Event<>("games.testGameID.updated", new Game("1", "a","testGameID","testGame","testGameHostID",
-                2, true, 1, 0, new GameSettings(1))));
+                2, 0,true, 1, 0, new GameSettings(1))));
         WaitForAsyncUtils.waitForFxEvents();
 
         // game screen will not be shown, but loaded

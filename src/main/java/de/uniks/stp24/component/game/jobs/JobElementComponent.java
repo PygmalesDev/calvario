@@ -1,10 +1,12 @@
 package de.uniks.stp24.component.game.jobs;
 
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
+import javafx.beans.binding.StringBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -63,8 +65,9 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
         this.jobCancelButton.setId("jobElementDeleteButton_" + job._id());
         this.inspectionButton.setId("jobElementInspectionButton_" + job._id());
 
+        Island island = this.islandsService.getIsland(job.system());
         this.timerText.setText(String.format("%s/%s", job.progress(), job.total()));
-        this.jobNameText.setText(this.islandsService.getIslandName(job.system()));
+        this.jobNameText.setText(island.name());
 
         switch (job.type()) {
             case "building" -> {
@@ -77,10 +80,9 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
                 this.jobTypeText.setText(this.gameResourceBundle.getString(
                         Constants.siteTranslation.get(job.district())) + " Site");
             }
-            // TODO: Change upgrade to next upgrade level
             case "upgrade" -> {
-                this.jobImage.setImage(this.imageCache.get("de/uniks/stp24/icons/other/upgrade_job.png"));
-                this.jobTypeText.setText(String.format("Upgrading island to %s", job.type()));
+                this.jobImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/other/upgrade_job.png"));
+                this.jobTypeText.setText(this.gameResourceBundle.getString("jobs."+island.upgrade()));
             }
         }
     }

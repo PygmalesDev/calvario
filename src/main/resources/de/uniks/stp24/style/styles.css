@@ -16,11 +16,12 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-pref-height: 100;
     -fx-background-size: 100% 100%;
     -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/assets/fields/textField.png");
+    -fx-background-image: url('/de/uniks/stp24/assets/fields/textField.png');
 }
 
 .gameName {
-    -fx-font-size: 30;
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 40;
 }
 
 .capitals {
@@ -40,6 +41,12 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
 .background{
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/background.png");
     -fx-background-size: cover;
+}
+
+.lobbyBackground {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/lobby_background.png");
+    -fx-background-size: 100% 100%;
 }
 
 .cardBackground{
@@ -76,6 +83,7 @@ Text, TextField, PasswordField, Button, CheckBox, ToggleButton {
     -fx-border-style: solid;
     -fx-border-width: 2;
 }
+
 
 /*
 .island-overview{
@@ -282,8 +290,6 @@ ToggleButton:hover{
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
-    -fx-pref-width: 200px;
-    -fx-pref-height: 100px;
 }
 
 .lobbyButtonSelectEmpire{
@@ -296,8 +302,6 @@ ToggleButton:hover{
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
-    -fx-pref-width: 150px;
-    -fx-pref-height: 80px;
 }
 
 .lobbyButtonReady{
@@ -310,8 +314,6 @@ ToggleButton:hover{
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
-    -fx-pref-width: 150px;
-    -fx-pref-height: 80px;
 }
 
 .lobbyButtonReadyNot{
@@ -324,23 +326,33 @@ ToggleButton:hover{
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
-    -fx-pref-width: 150px;
-    -fx-pref-height: 80px;
 }
 
 
-.lobbyButtonLeave{
+.lobbyButtonLeave {
     -fx-font-family: "Stencil";
     -fx-font-size: 15;
     -fx-background-color: transparent;
+    -fx-text-fill: white;
     -fx-background-image: url("/de/uniks/stp24/icons/leaveMan.png");
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
-    -fx-pref-width: 150px;
-    -fx-pref-height: 80px;
+}
+
+.lobbyButtonEnter {
+    -fx-font-family: "Stencil";
+    -fx-font-size: 15;
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/enter_lobby_button.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
 }
 
 .lobbyButtonStart{
@@ -353,8 +365,6 @@ ToggleButton:hover{
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
-    -fx-pref-width: 150px;
-    -fx-pref-height: 80px;
 }
 
 
@@ -400,6 +410,10 @@ ToggleButton:hover{
     -fx-background-position: left;
 }
 
+.captainWebjaw {
+    -fx-image: url("/de/uniks/stp24/assets/logos/captainWebjaw.png");
+}
+
 .captainText {
     -fx-font-family: "PT Serif";
     -fx-font-size: 14;
@@ -425,6 +439,8 @@ ToggleButton:hover{
     -fx-font-family: "PT Serif";
 
 }
+
+
 
 .backgroundTextArea .content{
     -fx-background-color: #FFD966;
@@ -478,7 +494,6 @@ ToggleButton:hover{
 
 /**********************************************************************************************************************************/
 /************************* Lists **************************************************************************************************/
-
 .listBrowseGame, .listEnterGame{
     -fx-background-color: transparent;
 }
@@ -794,8 +809,8 @@ ToggleButton:hover{
 /***************************************************************************************************/
 
 .backgroundGame {
-    -fx-background-color: transparent;
-    -fx-background-image: url('/de/uniks/stp24/icons/sea_seamless.png');
+    -fx-background-color: "TRANSPARENT";
+    -fx-background-image: url('/de/uniks/stp24/assets/backgrounds/sea_seamless.png');
     -fx-background-repeat: repeat;
 }
 

@@ -4,6 +4,7 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.model.Jobs.*;
 import de.uniks.stp24.model.Resource;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.JobsService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,9 +31,10 @@ public class PropertiesJobProgressComponent extends Pane {
     ProgressBar jobProgressBar;
     @FXML
     ListView<Resource> costsListView;
-    Provider<ResourceComponent> resourceComponentProvider = () ->
-            new ResourceComponent(true, false,
-                    true, false, this.gameResourceBundle);
+    @Inject
+    ImageCache imageCache;
+
+    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
     ObservableList<Resource> resourceObservableList = FXCollections.observableArrayList();
     private double incrementAmount;
     private int progress;
@@ -66,11 +68,9 @@ public class PropertiesJobProgressComponent extends Pane {
         this.incrementAmount = (double) 1 /this.total;
         this.jobProgressBar.setProgress(this.progress*this.incrementAmount);
         this.resourceObservableList.clear();
-        job.cost().forEach((name, amount) -> this.resourceObservableList.add(new Resource(
-                name, amount, 0
-        )));
+        job.cost().forEach((name, amount) -> this.resourceObservableList.add(new Resource(name, amount, 0)));
         this.costsListView.setItems(this.resourceObservableList);
-        this.costsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.resourceComponentProvider));
+        this.costsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.negativeResourceProvider));
     }
 
     public void incrementProgress() {

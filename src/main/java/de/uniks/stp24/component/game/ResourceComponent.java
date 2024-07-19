@@ -32,21 +32,35 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
     @Inject
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
+    @Inject
+    ImageCache imageCache;
 
-
-    ImageCache imageCache = new ImageCache();
     boolean showCount;
     boolean showName;
     boolean showIcon;
     boolean showChangePerSeason;
+    private String type = "";
 
     @Inject
-    public ResourceComponent(boolean showCount, boolean showName, boolean showIcon, boolean showChangePerSeason, ResourceBundle gameResourceBundle) {
+    public ResourceComponent(boolean showCount, boolean showName, boolean showIcon, boolean showChangePerSeason,
+                             ResourceBundle gameResourceBundle, ImageCache imageCache) {
         this.showCount = showCount;
         this.showName = showName;
         this.showIcon = showIcon;
         this.showChangePerSeason = showChangePerSeason;
         this.gameResourceBundle = gameResourceBundle;
+        this.imageCache = imageCache;
+    }
+
+
+    public ResourceComponent(String type, ResourceBundle gameResourceBundle, ImageCache imageCache) {
+        this.showCount = true;
+        this.showName = false;
+        this.showIcon = true;
+        this.showChangePerSeason = false;
+        this.gameResourceBundle = gameResourceBundle;
+        this.type = type;
+        this.imageCache = imageCache;
     }
 
     @Override
@@ -59,11 +73,11 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
             descriptionText.setVisible(false);
         }
 
-        if (showCount) {
-            countText.setText("x" + resource.count());
-            countText.setVisible(true);
-        } else {
-            countText.setVisible(false);
+        countText.setVisible(showCount);
+        switch (type) {
+            case "positive" -> countText.setText("+" + resource.count());
+            case "negative" -> countText.setText("-" + resource.count());
+            default -> countText.setText("x" + resource.count());
         }
 
         if (showIcon) {

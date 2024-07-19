@@ -23,6 +23,7 @@ public class JobsOverviewComponent extends AnchorPane {
     Button closeButton;
     @Inject
     public JobsService jobsService;
+
     private ObservableList<Job> jobsList;
 
     @Inject
@@ -38,6 +39,12 @@ public class JobsOverviewComponent extends AnchorPane {
     @OnRender
     public void setJobsObservableList() {
         this.jobsService.onJobsLoadingFinished(() -> {
+            this.jobsList = this.jobsService.getObservableJobCollection();
+            this.jobsListView.setItems(this.jobsList);
+            this.jobsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.jobProvider));
+        });
+
+        this.jobsService.setJobInspector("name_updates", (String... params) -> {
             this.jobsList = this.jobsService.getObservableJobCollection();
             this.jobsListView.setItems(this.jobsList);
             this.jobsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.jobProvider));

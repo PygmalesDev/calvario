@@ -90,16 +90,24 @@ public class Constants {
             "consumer_goods","resource.rum"
     );
 
+    public static final Map<String, String> economyProcess = Map.of(
+                "cost", "resource.cost",
+                "upkeep", "resource.upkeep",
+                "production", "resource.production",
+                "base", "resource.base",
+                "total", "resource.total"
+    );
+
     public static final Map<String, String> resourceImagePath = Map.of(
-            "credits", "-fx-background-image: url('/de/uniks/stp24/icons/resources/credits.png');",
-            "minerals", "-fx-background-image: url('/de/uniks/stp24/icons/resources/minerals.png');",
-            "population", "-fx-background-image: url('/de/uniks/stp24/icons/resources/population.png');",
-            "energy", "-fx-background-image: url('/de/uniks/stp24/icons/resources/energy.png');",
-            "food", "-fx-background-image: url('/de/uniks/stp24/icons/resources/food.png');",
-            "fuel","-fx-background-image: url('/de/uniks/stp24/icons/resources/fuel.png');",
-            "research", "-fx-background-image: url('/de/uniks/stp24/icons/resources/research.png');",
-            "alloys", "-fx-background-image: url('/de/uniks/stp24/icons/resources/alloys.png');",
-            "consumer_goods","-fx-background-image: url('/de/uniks/stp24/icons/resources/consumer_goods.png');"
+            "credits", "de/uniks/stp24/icons/resources/credits.png",
+            "minerals", "de/uniks/stp24/icons/resources/minerals.png",
+            "population", "de/uniks/stp24/icons/resources/population.png",
+            "energy", "de/uniks/stp24/icons/resources/energy.png",
+            "food", "de/uniks/stp24/icons/resources/food.png",
+            "fuel","de/uniks/stp24/icons/resources/fuel.png",
+            "research", "de/uniks/stp24/icons/resources/research.png",
+            "alloys", "de/uniks/stp24/icons/resources/alloys.png",
+            "consumer_goods","de/uniks/stp24/icons/resources/consumer_goods.png"
     );
 
     public static final Map<String, String> siteTranslation = Map.of(
@@ -141,12 +149,29 @@ public class Constants {
     );
 
     public static final Map<String, String> upgradeTranslation = Map.ofEntries(
+            Map.entry("unexplored", "update.unexplored"),
             Map.entry("explored", "update.explored"),
             Map.entry("colonized", "update.colonized"),
             Map.entry("upgraded", "update.upgraded"),
             Map.entry("developed", "update.developed")
     );
 
+    public static final Map<String, String> technologyTranslation = Map.ofEntries(
+            Map.entry("crew_relations", "society"),
+            Map.entry("marine_science", "physics"),
+            Map.entry("shipbuilding", "engineering"),
+            Map.entry("cartography", "computing"),
+            Map.entry("construction", "construction"),
+            Map.entry("pirate_codex", "state"),
+            Map.entry("power", "energy"),
+            Map.entry("sailing", "propulsion"),
+            Map.entry("marine_life", "biology"),
+            Map.entry("plunder", "materials"),
+            Map.entry("hidden_treasure", "rare"),
+            Map.entry("navy", "military"),
+            Map.entry("production", "production"),
+            Map.entry("economy", "economy")
+    );
 
     public static final Map<String, String> sitesIconPathsMap = Map.ofEntries(
             Map.entry("city", "de/uniks/stp24/icons/sites/village_site.png"),
@@ -219,6 +244,10 @@ public class Constants {
             Map.entry("society" , "de/uniks/stp24/assets/technologies/tags/society.png"),
             Map.entry("state" , "de/uniks/stp24/assets/technologies/tags/state.png")
     );
+
+    // Sea Backgrounds
+    public static final String NIGHT = "-fx-background-image: url('/de/uniks/stp24/assets/backgrounds/eclipse_seamless.png')";
+    public static final String DAY = "-fx-background-image: url('/de/uniks/stp24/assets/backgrounds/sea_seamless.png')";
 
     public static final ArrayList<String> hints = new ArrayList<>(Arrays.asList(
             "hint.alt.s",

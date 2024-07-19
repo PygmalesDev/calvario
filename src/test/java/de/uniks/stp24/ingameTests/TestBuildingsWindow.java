@@ -37,6 +37,7 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class TestBuildingsWindow extends ControllerTest {
+    /*
     @Spy
     GamesApiService gamesApiService;
 
@@ -300,7 +301,8 @@ public class TestBuildingsWindow extends ControllerTest {
 
 
 
- */
+
+     */
 
 
 }

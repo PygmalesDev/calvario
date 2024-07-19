@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
+import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.component.game.technology.ResearchJobComponent;
@@ -138,6 +139,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
 
     @InjectMocks
     ResearchJobComponent researchJobComponent;
+    @InjectMocks
+    IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
 
     @Spy
     ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ROOT);
@@ -167,6 +170,9 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent.imageCache = this.imageCache;
         this.inGameController.marketOverviewComponent = this.marketComponent;
 
+        this.overviewUpgradeComponent.jobProgressComponent = islandUpgradesJobProgressComponent;
+        this.overviewUpgradeComponent.jobsService = this.jobsService;
+        this.overviewUpgradeComponent.islandAttributes = this.islandAttributeStorage;
 
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewSitesComponent.islandAttributes = islandAttributeStorage;

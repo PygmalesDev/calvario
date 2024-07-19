@@ -49,7 +49,7 @@
 }
 
 .technologyList .scroll-bar:vertical .increment-button .increment-arrow, .listBrowseGame .scroll-bar .decrement-button .decrement-arrow,
-.backgroundTextArea .scroll-bar:vertical .increment-button .increment-arrow .backgroundTextArea .decrement-button .decrement-arrow,
+.backgroundTextArea .scroll-bar:vertical .increment-button .increment-arrow .backgroundTextArea .decrement-button .decrement-arrow
 {
     -fx-background-color: transparent;
     -fx-background-image: none;

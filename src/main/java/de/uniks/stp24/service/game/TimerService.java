@@ -39,8 +39,7 @@ public class TimerService {
     public Game game;
 
     Timer timer = new Timer();
-    final int TIME = 60;
-    int countdown = TIME;
+    int countdown = 0;
     int season;
     int speed;
     private volatile boolean isRunning = false;
@@ -76,6 +75,11 @@ public class TimerService {
     }
 
     public void start() {
+
+        if (timer == null) {
+            timer = new Timer();
+        }
+
         subscriber.subscribe(gamesApiService.getGame(tokenStorage.getGameId()),
                 gameResult -> game = gameResult,
                 error -> System.out.println("Error: " + error.getMessage())
@@ -93,21 +97,21 @@ public class TimerService {
                 if (!isRunning) {
                     return;
                 }
-                if (countdown > 0) {
-                    setCountdown(countdown - 1);
-                } else if (Objects.equals(game.owner(), tokenStorage.getUserId())) {
+
+                countdown++;
+
+                if ((countdown % (60 / speed) == 0) && (Objects.equals(game.owner(), tokenStorage.getUserId()))) {
                     subscriber.subscribe(gamesApiService.updateSeason(tokenStorage.getGameId(), new UpdateSpeedDto(speed), true),
                             gameResult -> {
-                                setSeason(gameResult.period());
+                                setSeason(game.period());
                                 reset();
                             },
                             error -> System.out.println("Error: " + error.getMessage())
                     );
                 }
-                // if countdown <= 0 -> Wait for Server response to call reset() Method
             }
         };
-        timer.scheduleAtFixedRate(timerTask, 0, 1000 / speed);
+        timer.scheduleAtFixedRate(timerTask, 0, 1000);
     }
 
     public void stop() {
@@ -115,6 +119,7 @@ public class TimerService {
         if (timer != null) {
             timer.cancel();
             timer.purge();
+            timer = null;
         }
     }
 
@@ -125,7 +130,7 @@ public class TimerService {
     }
 
     public void reset() {
-        setCountdown(TIME);
+        setCountdown(0);
     }
 
     public int getSeason() {
@@ -140,10 +145,6 @@ public class TimerService {
         oldValue = this.season;
         this.season = value;
         this.firePropertyChange(PROPERTY_SEASON, oldValue, value);
-    }
-
-    public int getCountdown() {
-        return countdown;
     }
 
     public void setCountdown(int value) {
@@ -167,6 +168,10 @@ public class TimerService {
             this.listeners = new PropertyChangeSupport(this);
         }
         return this.listeners;
+    }
+
+    public int getSpeed() {
+        return speed;
     }
 
     public void setSpeedLocal(int value) {

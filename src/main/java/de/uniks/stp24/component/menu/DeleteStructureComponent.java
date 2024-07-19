@@ -3,8 +3,6 @@ package de.uniks.stp24.component.menu;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.BuildingDto;
-import de.uniks.stp24.dto.SiteDto;
 import de.uniks.stp24.model.BuildingAttributes;
 import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.Island;
@@ -119,7 +117,7 @@ public class DeleteStructureComponent extends VBox{
         displayStructureInfo();
         if (sites.containsKey(structureType)) {
             // Set the image for sites
-            deleteStructureImageView.setImage(this.imageCache.get("/"+structureType));
+            deleteStructureImageView.setImage(this.imageCache.get("/"+sites.get(structureType)));
         } else if (buildings.containsKey(structureType)) {
             // Set the image for buildings
             deleteStructureImageView.setImage(new Image(buildings.get(structureType)));

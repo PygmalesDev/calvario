@@ -2,7 +2,6 @@ package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.ExplainedVariableDTO;
-import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
@@ -42,8 +41,20 @@ public class VariableService {
 
 
     @Inject
-    public VariableService(){
+    public VariableService() {
 
+    }
+
+    public void dispose() {
+        variablesEffects.clear();
+        allVariables.clear();
+        data.clear();
+        buildingsTree = null;
+        districtsTree = null;
+        systemsTree = null;
+        empireTree = null;
+        resourcesTree = null;
+        technologiesTree = null;
     }
 
     /*
@@ -71,7 +82,7 @@ public class VariableService {
                     createAllTrees();
                     inGameController.loadGameAttributes();
                 },
-                error -> System.out.println("error in loading variable data structure"));
+                error -> System.out.println("error in loading variable data structure:\n" + error.getMessage()));
     }
 
     public void createAllTrees(){

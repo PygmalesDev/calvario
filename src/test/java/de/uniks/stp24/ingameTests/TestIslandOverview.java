@@ -81,9 +81,9 @@ public class TestIslandOverview extends ControllerTest {
     @InjectMocks
     ClockComponent clockComponent;
     @InjectMocks
-    IslandOverviewComponent islandOverviewComponent;
+    OverviewSitesComponent overviewSitesComponent;
     @InjectMocks
-    IslandUpgradeOverviewComponent islandUpgradeOverviewComponent;
+    OverviewUpgradeComponent overviewUpgradeComponent;
     @InjectMocks
     IslandAttributeStorage islandAttributeStorage;
     @InjectMocks
@@ -256,12 +256,12 @@ public class TestIslandOverview extends ControllerTest {
         this.clockComponent.eventService = this.eventService;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameService.setGameStatus(gameStatus);
-        this.inGameController.islandOverviewComponent = this.islandOverviewComponent;
-        this.inGameController.islandUpgradeOverviewComponent = this.islandUpgradeOverviewComponent;
+        this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
+        this.inGameController.overviewUpgradeComponent = this.overviewUpgradeComponent;
         this.inGameController.islandAttributes = this.islandAttributeStorage;
-        this.inGameController.islandOverviewComponent.buildingsComponent = this.buildingsComponent;
-        this.inGameController.islandOverviewComponent.sitesComponent = this.sitesComponent;
-        this.inGameController.islandOverviewComponent.detailsComponent = this.detailsComponent;
+        this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
+        this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
+        this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
 
 
@@ -397,17 +397,17 @@ public class TestIslandOverview extends ControllerTest {
 
         this.islandAttributeStorage.systemPresets = systemUpgrades;
         this.islandAttributeStorage.empireDto = empireDto;
-        this.inGameController.islandOverviewComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
-        this.inGameController.islandOverviewComponent.islandAttributes = islandAttributeStorage;
-        this.inGameController.islandUpgradeOverviewComponent.islandAttributes = islandAttributeStorage;
+        this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
+        this.inGameController.overviewSitesComponent.islandAttributes = islandAttributeStorage;
+        this.inGameController.overviewUpgradeComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.selectedIsland = new IslandComponent();
         this.resourcesService.islandAttributes = islandAttributeStorage;
         this.resourcesService.tokenStorage = tokenStorage;
         this.resourcesService.empireService = empireService;
         this.inGameController.selectedIsland.rudderImage = new ImageView();
         this.resourcesService.subscriber = subscriber;
-        this.inGameController.islandUpgradeOverviewComponent.gameSystemsService = gameSystemsApiService;
-        this.inGameController.islandOverviewComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
+        this.inGameController.overviewUpgradeComponent.gameSystemsService = gameSystemsApiService;
+        this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.selectedIsland.flagPane = new StackPane();
 
         this.inGameController.contextMenuButtons = new HBox();
@@ -422,8 +422,8 @@ public class TestIslandOverview extends ControllerTest {
         this.clockComponent.getStylesheets().clear();
         this.eventComponent.getStylesheets().clear();
         this.storageOverviewComponent.getStylesheets().clear();
-        this.islandOverviewComponent.getStylesheets().clear();
-        this.islandUpgradeOverviewComponent.getStylesheets().clear();
+        this.overviewSitesComponent.getStylesheets().clear();
+        this.overviewUpgradeComponent.getStylesheets().clear();
         this.buildingsComponent.getStylesheets().clear();
         this.sitesComponent.getStylesheets().clear();
         this.detailsComponent.getStylesheets().clear();
@@ -450,63 +450,63 @@ public class TestIslandOverview extends ControllerTest {
         waitForFxEvents();
         assertTrue(this.inGameController.overviewContainer.isVisible());
         waitForFxEvents();
-        assertEquals(this.inGameController.islandOverviewComponent.crewCapacity.getText(), String.valueOf(20));
+        assertEquals(this.inGameController.overviewSitesComponent.crewCapacity.getText(), String.valueOf(20));
         waitForFxEvents();
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributeStorage.getIsland()) +
                 islandAttributeStorage.getIsland().buildings().size();
-        assertEquals(this.inGameController.islandOverviewComponent.resCapacity.getText(), usedSlots + "/" + islandAttributeStorage.getIsland().resourceCapacity());
+        assertEquals(this.inGameController.overviewSitesComponent.resCapacity.getText(), usedSlots + "/" + islandAttributeStorage.getIsland().resourceCapacity());
         waitForFxEvents();
-        assertEquals(this.inGameController.islandOverviewComponent.island_name.getText(), "Plundered Island(Colony)");
+        assertEquals(this.inGameController.overviewSitesComponent.island_name.getText(), "Plundered Island(Colony)");
         waitForFxEvents();
-        assertFalse(this.inGameController.islandOverviewComponent.inputIslandName.isDisable());
+        assertFalse(this.inGameController.overviewSitesComponent.inputIslandName.isDisable());
         waitForFxEvents();
-        assertFalse(this.inGameController.islandOverviewComponent.inputIslandName.isDisable());
+        assertFalse(this.inGameController.overviewSitesComponent.inputIslandName.isDisable());
         waitForFxEvents();
-        assertEquals(this.inGameController.islandOverviewComponent.island_inf.getText(), "+100.0% more crew mates");
+        assertEquals(this.inGameController.overviewSitesComponent.island_inf.getText(), "+100.0% more crew mates");
 
 
         //Test function of buttons
         //"Buildings" selected
-        assertFalse(this.inGameController.islandOverviewComponent.detailsButton.isDisable());
-        assertFalse(this.inGameController.islandOverviewComponent.sitesButton.isDisable());
-        assertTrue(this.inGameController.islandOverviewComponent.buildingsButton.isDisable());
+        assertFalse(this.inGameController.overviewSitesComponent.detailsButton.isDisable());
+        assertFalse(this.inGameController.overviewSitesComponent.sitesButton.isDisable());
+        assertTrue(this.inGameController.overviewSitesComponent.buildingsButton.isDisable());
         waitForFxEvents();
 
         Node prev = lookup("#prev").query();
         Node next = lookup("#next").query();
 
         //-> Check functions buildings
-        ArrayList<Node> buildingNodes = new ArrayList<>(this.inGameController.islandOverviewComponent.buildingsComponent.buildings.lookupAll("#building"));
+        ArrayList<Node> buildingNodes = new ArrayList<>(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
 
         for (int i = 0; i < buildingNodes.size() - 2; i++) {
             clickOn(buildingNodes.get(i));
-            assertEquals(this.inGameController.islandOverviewComponent.buildingsComponent.buildings.lookupAll("#building").size(), buildingNodes.size());
+            assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), buildingNodes.size());
             assertTrue(!prev.isVisible() && !next.isVisible());
         }
 
         clickOn(buildingNodes.getLast());
-        assertEquals(this.inGameController.islandOverviewComponent.buildingsComponent.buildings.lookupAll("#building").size(), buildingNodes.size() + 1);
+        assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), buildingNodes.size() + 1);
         assertTrue(!prev.isVisible() && !next.isVisible());
 
         buildingNodes.clear();
-        buildingNodes.addAll(this.inGameController.islandOverviewComponent.buildingsComponent.buildings.lookupAll("#building"));
+        buildingNodes.addAll(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
         clickOn(buildingNodes.getLast());
         assertTrue(!prev.isVisible() && next.isVisible());
 
         clickOn(next);
         buildingNodes.clear();
-        assertEquals(this.inGameController.islandOverviewComponent.buildingsComponent.buildings.lookupAll("#building").size(), 1);
+        assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), 1);
         assertTrue(prev.isVisible() && !next.isVisible());
         waitForFxEvents();
         clickOn(prev);
-        assertEquals(this.inGameController.islandOverviewComponent.buildingsComponent.buildings.lookupAll("#building").size(), 8);
+        assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), 8);
         waitForFxEvents();
 
         //"Details" selected
-        clickOn(this.inGameController.islandOverviewComponent.detailsButton);
-        assertTrue(this.inGameController.islandOverviewComponent.detailsButton.isDisable());
-        assertFalse(this.inGameController.islandOverviewComponent.sitesButton.isDisable());
-        assertFalse(this.inGameController.islandOverviewComponent.buildingsButton.isDisable());
+        clickOn(this.inGameController.overviewSitesComponent.detailsButton);
+        assertTrue(this.inGameController.overviewSitesComponent.detailsButton.isDisable());
+        assertFalse(this.inGameController.overviewSitesComponent.sitesButton.isDisable());
+        assertFalse(this.inGameController.overviewSitesComponent.buildingsButton.isDisable());
         waitForFxEvents();
 
         Node prodNode = lookup("#sumProduction").query();
@@ -539,17 +539,17 @@ public class TestIslandOverview extends ControllerTest {
         }
 
         //"Sites" selected
-        clickOn(this.inGameController.islandOverviewComponent.sitesButton);
-        assertFalse(this.inGameController.islandOverviewComponent.detailsButton.isDisable());
-        assertTrue(this.inGameController.islandOverviewComponent.sitesButton.isDisable());
-        assertFalse(this.inGameController.islandOverviewComponent.buildingsButton.isDisable());
+        clickOn(this.inGameController.overviewSitesComponent.sitesButton);
+        assertFalse(this.inGameController.overviewSitesComponent.detailsButton.isDisable());
+        assertTrue(this.inGameController.overviewSitesComponent.sitesButton.isDisable());
+        assertFalse(this.inGameController.overviewSitesComponent.buildingsButton.isDisable());
         waitForFxEvents();
         //-> Check Sites information
-        assertEquals(this.inGameController.islandOverviewComponent.sitesComponent.sitesBox.getChildren().size(), siteSlots.size());
+        assertEquals(this.inGameController.overviewSitesComponent.sitesComponent.sitesBox.getChildren().size(), siteSlots.size());
         ArrayList<Text> sitesName = new ArrayList<>();
         ArrayList<String> sitesInf = new ArrayList<>();
 
-        this.inGameController.islandOverviewComponent.sitesComponent.sitesBox.lookupAll("#districtName").
+        this.inGameController.overviewSitesComponent.sitesComponent.sitesBox.lookupAll("#districtName").
                 forEach(node ->
                 {
                     Text textNode = (Text) node;
@@ -557,7 +557,7 @@ public class TestIslandOverview extends ControllerTest {
                     assertTrue(sites.containsKey(textNode.getText()));
                 });
 
-        this.inGameController.islandOverviewComponent.sitesComponent.sitesBox.lookupAll("#districtCapacity").
+        this.inGameController.overviewSitesComponent.sitesComponent.sitesBox.lookupAll("#districtCapacity").
                 forEach(node ->
                 {
                     Text textNode = (Text) node;
@@ -677,12 +677,12 @@ public class TestIslandOverview extends ControllerTest {
         Node next = lookup("#next").query();
 
         ArrayList<Node> buildingNodes = new ArrayList<>();
-        buildingNodes.addAll(this.inGameController.islandOverviewComponent.buildingsComponent.buildings.lookupAll("#building"));
+        buildingNodes.addAll(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
 
-        int oldValue = this.inGameController.islandOverviewComponent.buildingsComponent.buildings.lookupAll("#building").size();
+        int oldValue = this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size();
         clickOn(buildingNodes.getLast());
 
-        assertEquals(this.inGameController.islandOverviewComponent.buildingsComponent.buildings.lookupAll("#building").size(), oldValue + 1);
+        assertEquals(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size(), oldValue + 1);
         assertTrue(!prev.isVisible() && !next.isVisible());
     }
 

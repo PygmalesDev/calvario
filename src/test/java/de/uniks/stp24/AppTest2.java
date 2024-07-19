@@ -60,7 +60,7 @@ public class AppTest2 extends ControllerTest {
     @InjectMocks
     IslandAttributeStorage islandAttributeStorage;
     @InjectMocks
-    IslandOverviewComponent islandOverviewComponent;
+    OverviewSitesComponent overviewSitesComponent;
     @InjectMocks
     SitesComponent sitesComponent;
     @InjectMocks
@@ -68,7 +68,7 @@ public class AppTest2 extends ControllerTest {
     @InjectMocks
     BuildingsComponent buildingsComponent;
     @InjectMocks
-    IslandUpgradeOverviewComponent islandUpgradeOverviewComponent;
+    OverviewUpgradeComponent overviewUpgradeComponent;
     @InjectMocks
     BuildingPropertiesComponent buildingPropertiesComponent;
     @InjectMocks
@@ -173,14 +173,14 @@ public class AppTest2 extends ControllerTest {
         inGameService.setGameStatus(gameStatus);
         islandsService.gameSystemsService = this.gameSystemsApiService;
         this.inGameController.islandAttributes = this.islandAttributeStorage;
-        this.inGameController.islandOverviewComponent = this.islandOverviewComponent;
-        this.inGameController.islandOverviewComponent.sitesComponent = this.sitesComponent;
-        this.inGameController.islandOverviewComponent.buildingsComponent = this.buildingsComponent;
-        this.inGameController.islandOverviewComponent.detailsComponent = this.detailsComponent;
-        this.inGameController.islandUpgradeOverviewComponent = this.islandUpgradeOverviewComponent;
+        this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
+        this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
+        this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
+        this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+        this.inGameController.overviewUpgradeComponent = this.overviewUpgradeComponent;
         this.inGameController.helpComponent = this.helpComponent;
 
-        this.islandOverviewComponent.jobsComponent = this.islandOverviewJobsComponent;
+        this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
         this.timerService.tokenStorage = this.tokenStorage;
         this.timerService.subscriber = this.subscriber;
         this.timerService.gamesApiService = this.gameApiService;
@@ -263,8 +263,8 @@ public class AppTest2 extends ControllerTest {
         storageOverviewComponent.getStylesheets().clear();
         clockComponent.getStylesheets().clear();
         pauseMenuComponent.getStylesheets().clear();
-        islandOverviewComponent.getStylesheets().clear();
-        islandUpgradeOverviewComponent.getStylesheets().clear();
+        overviewSitesComponent.getStylesheets().clear();
+        overviewUpgradeComponent.getStylesheets().clear();
         sitesComponent.getStylesheets().clear();
         jobsOverviewComponent.getStylesheets().clear();
 

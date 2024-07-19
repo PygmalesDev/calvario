@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component(view = "IslandOverviewSites.fxml")
-public class IslandOverviewComponent extends AnchorPane {
+public class OverviewSitesComponent extends AnchorPane {
     @FXML
     public Button islandNameButton;
     @FXML
@@ -78,7 +78,7 @@ public class IslandOverviewComponent extends AnchorPane {
     private boolean isNameEditable;
 
     @Inject
-    public IslandOverviewComponent() {
+    public OverviewSitesComponent() {
 
     }
 
@@ -91,45 +91,45 @@ public class IslandOverviewComponent extends AnchorPane {
     public void showUpgrades() {
         setLevelCheckBox();
         if(islandAttributes.getIsland().upgradeLevel() == 4){
-            inGameController.islandUpgradeOverviewComponent.upgrade_box.setVisible(false);
-            inGameController.islandUpgradeOverviewComponent.upgrade_box.setMouseTransparent(true);
-            inGameController.islandUpgradeOverviewComponent.confirmUpgrade.setDisable(true);
+            inGameController.overviewUpgradeComponent.upgrade_box.setVisible(false);
+            inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(true);
+            inGameController.overviewUpgradeComponent.confirmUpgrade.setDisable(true);
         } else {
-            inGameController.islandUpgradeOverviewComponent.upgrade_box.setVisible(true);
-            inGameController.islandUpgradeOverviewComponent.upgrade_box.setMouseTransparent(false);
-            inGameController.islandUpgradeOverviewComponent.confirmUpgrade.setDisable(false);
+            inGameController.overviewUpgradeComponent.upgrade_box.setVisible(true);
+            inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(false);
+            inGameController.overviewUpgradeComponent.confirmUpgrade.setDisable(false);
         }
-        inGameService.showOnly(inGameController.overviewContainer, inGameController.islandUpgradeOverviewComponent);
-        inGameController.islandUpgradeOverviewComponent.setUpgradeButton();
-        inGameController.islandUpgradeOverviewComponent.setNeededResources();
-        inGameController.islandUpgradeOverviewComponent.setUpgradeInf();
+        inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewUpgradeComponent);
+        inGameController.overviewUpgradeComponent.setUpgradeButton();
+        inGameController.overviewUpgradeComponent.setNeededResources();
+        inGameController.overviewUpgradeComponent.setUpgradeInf();
     }
 
     public void setLevelCheckBox(){
         switch (islandAttributes.getIsland().upgradeLevel()) {
             case 1 -> {
-                inGameController.islandUpgradeOverviewComponent.checkExplored.setVisible(true);
-                inGameController.islandUpgradeOverviewComponent.checkColonized.setVisible(false);
-                inGameController.islandUpgradeOverviewComponent.checkUpgraded.setVisible(false);
-                inGameController.islandUpgradeOverviewComponent.checkDeveloped.setVisible(false);
+                inGameController.overviewUpgradeComponent.checkExplored.setVisible(true);
+                inGameController.overviewUpgradeComponent.checkColonized.setVisible(false);
+                inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(false);
+                inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
             }
             case 2 -> {
-                inGameController.islandUpgradeOverviewComponent.checkExplored.setVisible(true);
-                inGameController.islandUpgradeOverviewComponent.checkColonized.setVisible(true);
-                inGameController.islandUpgradeOverviewComponent.checkUpgraded.setVisible(false);
-                inGameController.islandUpgradeOverviewComponent.checkDeveloped.setVisible(false);
+                inGameController.overviewUpgradeComponent.checkExplored.setVisible(true);
+                inGameController.overviewUpgradeComponent.checkColonized.setVisible(true);
+                inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(false);
+                inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
             }
             case 3 -> {
-                inGameController.islandUpgradeOverviewComponent.checkExplored.setVisible(true);
-                inGameController.islandUpgradeOverviewComponent.checkColonized.setVisible(true);
-                inGameController.islandUpgradeOverviewComponent.checkUpgraded.setVisible(true);
-                inGameController.islandUpgradeOverviewComponent.checkDeveloped.setVisible(false);
+                inGameController.overviewUpgradeComponent.checkExplored.setVisible(true);
+                inGameController.overviewUpgradeComponent.checkColonized.setVisible(true);
+                inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(true);
+                inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
             }
             case 4 -> {
-                inGameController.islandUpgradeOverviewComponent.checkExplored.setVisible(true);
-                inGameController.islandUpgradeOverviewComponent.checkColonized.setVisible(true);
-                inGameController.islandUpgradeOverviewComponent.checkUpgraded.setVisible(true);
-                inGameController.islandUpgradeOverviewComponent.checkDeveloped.setVisible(true);
+                inGameController.overviewUpgradeComponent.checkExplored.setVisible(true);
+                inGameController.overviewUpgradeComponent.checkColonized.setVisible(true);
+                inGameController.overviewUpgradeComponent.checkUpgraded.setVisible(true);
+                inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(true);
             }
         }
     }

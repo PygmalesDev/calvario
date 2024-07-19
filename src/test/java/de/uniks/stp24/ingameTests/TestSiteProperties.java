@@ -93,10 +93,10 @@ public class TestSiteProperties extends ControllerTest {
     DeleteStructureComponent deleteStructureComponent;
 
     @InjectMocks
-    IslandOverviewComponent islandOverviewComponent;
+    OverviewSitesComponent overviewSitesComponent;
 
     @InjectMocks
-    IslandUpgradeOverviewComponent islandUpgradeOverviewComponent;
+    OverviewUpgradeComponent overviewUpgradeComponent;
 
     @InjectMocks
     InGameController inGameController;
@@ -136,17 +136,17 @@ public class TestSiteProperties extends ControllerTest {
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.settingsComponent = this.settingsComponent;
         this.inGameController.clockComponent = this.clockComponent;
-        this.inGameController.islandOverviewComponent = this.islandOverviewComponent;
+        this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.inGameController.islandAttributes = this.islandAttributeStorage;
-        this.inGameController.islandOverviewComponent.sitesComponent = this.sitesComponent;
-        this.inGameController.islandOverviewComponent.buildingsComponent = this.buildingsComponent;
-        this.inGameController.islandOverviewComponent.detailsComponent = this.detailsComponent;
-        this.inGameController.islandUpgradeOverviewComponent= this.islandUpgradeOverviewComponent;
+        this.inGameController.overviewSitesComponent.sitesComponent = this.sitesComponent;
+        this.inGameController.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
+        this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
+        this.inGameController.overviewUpgradeComponent= this.overviewUpgradeComponent;
         this.inGameController.eventComponent= this.eventComponent;
         this.inGameService.setGameStatus(gameStatus);
         Map<String , Integer> chance = new HashMap<>();
@@ -190,8 +190,8 @@ public class TestSiteProperties extends ControllerTest {
         clockComponent.getStylesheets().clear();
         pauseMenuComponent.getStylesheets().clear();
         settingsComponent.getStylesheets().clear();
-        islandOverviewComponent.getStylesheets().clear();
-        islandUpgradeOverviewComponent.getStylesheets().clear();
+        overviewSitesComponent.getStylesheets().clear();
+        overviewUpgradeComponent.getStylesheets().clear();
         sitePropertiesComponent.getStylesheets().clear();
         buildingsWindowComponent.getStylesheets().clear();
         buildingPropertiesComponent.getStylesheets().clear();

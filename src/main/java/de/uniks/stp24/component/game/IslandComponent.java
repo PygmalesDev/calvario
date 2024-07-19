@@ -161,7 +161,7 @@ public class IslandComponent extends Pane {
     }
 
     public void reset(){
-        inGameController.islandOverviewComponent.resetButtons();
+        inGameController.overviewSitesComponent.resetButtons();
         inGameController.buildingsWindowComponent.setVisible(false);
         inGameController.sitePropertiesComponent.setVisible(false);
         inGameController.buildingPropertiesComponent.setVisible(false);

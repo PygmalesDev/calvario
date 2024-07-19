@@ -115,10 +115,10 @@ public class InGameController extends BasicController {
 
     @SubComponent
     @Inject
-    public IslandOverviewComponent islandOverviewComponent;
+    public OverviewSitesComponent overviewSitesComponent;
     @SubComponent
     @Inject
-    public IslandUpgradeOverviewComponent islandUpgradeOverviewComponent;
+    public OverviewUpgradeComponent overviewUpgradeComponent;
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
@@ -206,8 +206,8 @@ public class InGameController extends BasicController {
 
     @OnInit
     public void init() {
-        islandOverviewComponent.setIngameController(this);
-        islandUpgradeOverviewComponent.setIngameController(this);
+        overviewSitesComponent.setIngameController(this);
+        overviewUpgradeComponent.setIngameController(this);
         buildingsWindowComponent.setInGameController(this);
         buildingPropertiesComponent.setInGameController(this);
         sitePropertiesComponent.setInGameController(this);
@@ -291,9 +291,9 @@ public class InGameController extends BasicController {
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
 
         overviewContainer.setVisible(false);
-        islandOverviewComponent.setContainer();
-        overviewContainer.getChildren().add(islandOverviewComponent);
-        overviewContainer.getChildren().add(islandUpgradeOverviewComponent);
+        overviewSitesComponent.setContainer();
+        overviewContainer.getChildren().add(overviewSitesComponent);
+        overviewContainer.getChildren().add(overviewUpgradeComponent);
 
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
@@ -457,14 +457,14 @@ public class InGameController extends BasicController {
             if (selected.getIsland().owner() != null) {
                 selectedIsland = selected;
                 if (selected.island.owner().equals(this.tokenStorage.getEmpireId()))
-                    this.islandOverviewComponent.jobsComponent.setJobsObservableList(
+                    this.overviewSitesComponent.jobsComponent.setJobsObservableList(
                         this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
 
                 showOverview();
                 selected.showUnshowRudder();
             } else if (Objects.nonNull(selectedIsland)) {
                 selectedIsland.showUnshowRudder();
-                this.islandOverviewComponent.closeOverview();
+                this.overviewSitesComponent.closeOverview();
             }
         }
     }
@@ -474,28 +474,28 @@ public class InGameController extends BasicController {
         this.jobsService.setJobInspector("island_jobs_overview", (Jobs.Job job) -> {
             Island selected = this.islandsService.getIsland(job.system());
             this.tokenStorage.setIsland(selected);
-            this.islandOverviewComponent.jobsComponent.setJobsObservableList(
+            this.overviewSitesComponent.jobsComponent.setJobsObservableList(
                     this.jobsService.getObservableListForSystem(job.system()));
 
             this.islandAttributes.setIsland(selected);
             selectedIsland = this.islandsService.getIslandComponent(job.system());
             if (Objects.nonNull(selected.owner())) {
                 showOverview();
-                this.islandOverviewComponent.showJobs();
+                this.overviewSitesComponent.showJobs();
             }
         });
 
         this.jobsService.setJobInspector("upgrade_overview", (Jobs.Job job) -> {
             Island selected = this.islandsService.getIsland(job.system());
             this.tokenStorage.setIsland(selected);
-            this.islandOverviewComponent.jobsComponent.setJobsObservableList(
+            this.overviewSitesComponent.jobsComponent.setJobsObservableList(
                     this.jobsService.getObservableListForSystem(job.system()));
 
             this.islandAttributes.setIsland(selected);
             selectedIsland = this.islandsService.getIslandComponent(job.system());
             if (Objects.nonNull(selected.owner())) {
                 showOverview();
-                this.islandOverviewComponent.showUpgrades();
+                this.overviewSitesComponent.showUpgrades();
             }
         });
 
@@ -525,15 +525,15 @@ public class InGameController extends BasicController {
     }
 
     public void showOverview() {
-        islandOverviewComponent.inputIslandName.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId()));
-        islandOverviewComponent.buildingsComponent.resetPage();
-        islandOverviewComponent.buildingsComponent.setGridPane();
+        overviewSitesComponent.inputIslandName.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId()));
+        overviewSitesComponent.buildingsComponent.resetPage();
+        overviewSitesComponent.buildingsComponent.setGridPane();
         overviewContainer.setVisible(true);
-        islandOverviewComponent.sitesContainer.setVisible(true);
-        islandOverviewComponent.buildingsButton.setDisable(true);
-        inGameService.showOnly(overviewContainer, islandOverviewComponent);
-        inGameService.showOnly(islandOverviewComponent.sitesContainer, islandOverviewComponent.buildingsComponent);
-        islandOverviewComponent.setOverviewSites();
+        overviewSitesComponent.sitesContainer.setVisible(true);
+        overviewSitesComponent.buildingsButton.setDisable(true);
+        inGameService.showOnly(overviewContainer, overviewSitesComponent);
+        inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
+        overviewSitesComponent.setOverviewSites();
     }
 
     @OnKey(code = KeyCode.SPACE, alt = true)
@@ -585,7 +585,7 @@ public class InGameController extends BasicController {
                 event -> {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         islandAttributes.setEmpireDto(event.data());
-                        islandUpgradeOverviewComponent.setUpgradeButton();
+                        overviewUpgradeComponent.setUpgradeButton();
                         this.lastUpdate = event.data().updatedAt();
                     }
                 },
@@ -614,7 +614,7 @@ public class InGameController extends BasicController {
     public void setSitePropertiesInvisible() {
         sitePropertiesComponent.setVisible(false);
         buildingProperties.setMouseTransparent(false);
-        islandOverviewComponent.buildingsComponent.setGridPane();
+        overviewSitesComponent.buildingsComponent.setGridPane();
     }
 
     public void showHelp() {
@@ -629,7 +629,7 @@ public class InGameController extends BasicController {
     }
 
     public void updateResCapacity() {
-        islandOverviewComponent.updateResCapacity();
+        overviewSitesComponent.updateResCapacity();
     }
 
     @OnDestroy

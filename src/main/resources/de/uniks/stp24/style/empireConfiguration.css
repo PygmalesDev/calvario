@@ -20,7 +20,7 @@
     -fx-font-family: "Blackadder ITC";
     -fx-background-color: "TRANSPARENT";
     -fx-font-weight: none;
-    -fx-font-size: 25;
+    -fx-font-size: 20;
     -fx-text-fill: "#000000";
     -fx-prompt-text-fill: black;
 
@@ -38,11 +38,50 @@
     -fx-background-color: black;
 }
 
+.returnButton {
+    -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/button_red.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.createEmpireButton {
+    -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/button_grey.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.greenButton {
+    -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/button_green.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+    -fx-font-family: "GillSansUltraBold";
+    -fx-font-size: 8;
+    -fx-text-fill: white;
+}
+
+.traitsButton {
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/button_element.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.backgroundTextArea .scroll-bar:vertical .increment-button .increment-arrow .backgroundTextArea .decrement-button .decrement-arrow,
+{
+    -fx-background-color: transparent;
+}
+
+
 .descriptionFontComponent {
     -fx-font-family: "Tempus Sans ITC";
-    -fx-font-size: 12;
+    -fx-background-color: transparent;
+    -fx-font-weight: normal;
     -fx-text-fill: black;
     -fx-prompt-text-fill: black;
+    -fx-font-size: 12;
 }
 
 .traitsFontComponent {

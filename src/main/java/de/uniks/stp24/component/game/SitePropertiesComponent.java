@@ -171,13 +171,14 @@ public class SitePropertiesComponent extends AnchorPane {
 
     private void setSiteFinishers(Job job) {
         this.jobsService.onJobDeletion(job._id(), () -> {
-            if (job.district().equals(this.siteType)) this.setJobsPaneVisibility(false);
+            if (Objects.nonNull(this.islandAttributeStorage.getIsland()) &&
+                    job.system().equals(this.islandAttributeStorage.getIsland().id()))
+                if (job.district().equals(this.siteType)) this.setJobsPaneVisibility(false);
         });
         this.jobsService.onJobCompletion(job._id(), () -> {
-            if (job.system().equals(this.islandAttributeStorage.getIsland().id())) {
-                this.updateIslandSites();
+            if (Objects.nonNull(this.islandAttributeStorage.getIsland()) &&
+                    job.system().equals(this.islandAttributeStorage.getIsland().id()))
                 if (job.district().equals(this.siteType)) this.setJobsPaneVisibility(false);
-            }
         });
     }
 

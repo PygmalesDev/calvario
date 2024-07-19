@@ -412,17 +412,17 @@
          clickOn("#chooseTraitsButton");
          waitForFxEvents();
 
-         clickOn("#chooseTraitButton");
+         clickOn("#strongButtonChoose");
          waitForFxEvents();
          ObservableList<Trait> selectedTraits = selectedTraitsListView.getItems();
          assertTrue(selectedTraits.contains(dTrait));
 
-         clickOn("#chooseTraitButton");
+         clickOn("#preparedButtonChoose");
          waitForFxEvents();
          selectedTraits = selectedTraitsListView.getItems();
          assertTrue(selectedTraits.contains(dTrait) && selectedTraits.contains(cTrait));
 
-         clickOn("#chooseTraitButton");
+         clickOn("#unpreparedButtonChoose");
          waitForFxEvents();
          assertEquals(resources.getString("pirate.empireScreen.conflict").replace("{conflict1}", '"' + variablesResourceBundle.getString(cTrait.id()) + '"').replace("{conflict2}", '"' + variablesResourceBundle.getString(bTrait.id()) + '"')
                  , captainText.getText());
@@ -432,7 +432,7 @@
 
          Platform.runLater(() -> allTraitsListView.getItems().remove(1));
          waitForFxEvents();
-         clickOn("#chooseTraitButton");
+         clickOn("#__dev__ButtonChoose");
          waitForFxEvents();
          captainText = lookup("#captainText").query();
          assertEquals(resources.getString("pirate.empireScreen.scoreOverLimit").replace("{conflict1}", '"' + variablesResourceBundle.getString(cTrait.id()) + '"').replace("{conflict2}", '"' + variablesResourceBundle.getString(bTrait.id()) + '"')

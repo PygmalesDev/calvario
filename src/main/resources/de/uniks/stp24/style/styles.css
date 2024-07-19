@@ -167,8 +167,8 @@ ToggleButton:hover{
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
-    -fx-pref-width: 25px;
-    -fx-pref-height: 25px;
+    -fx-pref-width: 15px;
+    -fx-pref-height: 20px;
 }
 
 .lockButton {
@@ -179,8 +179,8 @@ ToggleButton:hover{
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
-    -fx-pref-width: 25px;
-    -fx-pref-height: 25px;
+    -fx-pref-width: 15px;
+    -fx-pref-height: 20px;
 }
 
 .lockButton:selected {
@@ -191,8 +191,8 @@ ToggleButton:hover{
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
-    -fx-pref-width: 25px;
-    -fx-pref-height: 25px;
+    -fx-pref-width: 15px;
+    -fx-pref-height: 20px;
 }
 
 .actionButton{

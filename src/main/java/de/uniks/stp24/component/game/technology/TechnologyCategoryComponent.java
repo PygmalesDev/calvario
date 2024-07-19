@@ -142,7 +142,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
         researchListView.getItems().clear();
 
         parent.getChildren().getFirst().setVisible(false);
-        parent.getChildren().getLast().setVisible(true);
+        technologyOverviewComponent.setVisible(true);
     }
 
     /**

@@ -138,6 +138,10 @@ public class InGameController extends BasicController {
     public TechnologyOverviewComponent technologiesComponent;
     @SubComponent
     @Inject
+    public MarketComponent marketOverviewComponent;
+
+    @SubComponent
+    @Inject
     public DeleteStructureComponent deleteStructureComponent;
     @SubComponent
     @Inject
@@ -151,7 +155,6 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public SitePropertiesComponent sitePropertiesComponent;
-
 
     List<IslandComponent> islandComponentList;
     Map<String, IslandComponent> islandComponentMap;
@@ -192,6 +195,9 @@ public class InGameController extends BasicController {
     PopupBuilder popupSiteProperties = new PopupBuilder();
     PopupBuilder popupDeleteStructure = new PopupBuilder();
     PopupBuilder popupHelpWindow = new PopupBuilder();
+
+
+
     @OnInit
     public void init() {
         overviewSitesComponent.setIngameController(this);
@@ -203,6 +209,9 @@ public class InGameController extends BasicController {
         empireOverviewComponent.setInGameController(this);
         variableService.setIngameController(this);
 		pauseMenuComponent.setInGameController(this);
+        marketOverviewComponent.setInGameController(this);
+        storageOverviewComponent.setInGameController(this);
+        pauseMenuComponent.setInGameController(this);
         helpComponent.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
@@ -310,7 +319,8 @@ public class InGameController extends BasicController {
                 storageOverviewComponent,
                 jobsOverviewComponent,
                 empireOverviewComponent,
-                technologiesComponent
+                technologiesComponent,
+                marketOverviewComponent
         );
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
 
@@ -355,6 +365,12 @@ public class InGameController extends BasicController {
     public void showStorageOverview() {
         this.toggleContextMenuVisibility(this.storageOverviewComponent);
         this.storageOverviewComponent.setVisible(!this.storageOverviewComponent.isVisible());
+    }
+
+    @OnKey(code = KeyCode.M, alt = true)
+    public void showMarket() {
+        this.toggleContextMenuVisibility(this.marketOverviewComponent);
+        this.marketOverviewComponent.setVisible(!this.marketOverviewComponent.isVisible());
     }
 
     @OnKey(code = KeyCode.H, alt = true)
@@ -416,7 +432,8 @@ public class InGameController extends BasicController {
                     new ContextMenuButton("storageOverview", this.storageOverviewComponent),
                     new ContextMenuButton("empireOverview", this.empireOverviewComponent),
                     new ContextMenuButton("jobsOverview", this.jobsOverviewComponent),
-                    new ContextMenuButton("technologies", this.technologiesComponent)
+                    new ContextMenuButton("technologies", this.technologiesComponent),
+                    new ContextMenuButton("marketOverview", this.marketOverviewComponent)
             );
     }
 

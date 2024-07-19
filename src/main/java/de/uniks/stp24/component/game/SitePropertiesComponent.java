@@ -172,7 +172,7 @@ public class SitePropertiesComponent extends AnchorPane {
         if (this.siteJobs.stream().anyMatch(job -> job.district().equals(siteType)
                 && job.system().equals(this.tokenStorage.getIsland().id()))) {
             Job job = this.siteJobs.stream().filter(started -> started.district().equals(siteType)
-                    && started.system().equals(this.tokenStorage.getIsland().id()))
+                            && started.system().equals(this.tokenStorage.getIsland().id()))
                     .findFirst().orElse(null);
             this.showJobsPane();
 
@@ -357,4 +357,3 @@ public class SitePropertiesComponent extends AnchorPane {
         return null;
     }
 }
-

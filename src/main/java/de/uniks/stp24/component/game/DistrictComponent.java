@@ -81,6 +81,6 @@ public class DistrictComponent extends VBox implements ReusableItemComponent<Sit
 
     public void setJobProgress(Job job) {
         this.jobProgressBox.setVisible(true);
-        this.jobTimeText.setText(String.format("%s/%s", job.progress(), job.total()));
+        this.jobTimeText.setText(String.format("%s/%s", job.progress(), (int) job.total()));
     }
 }

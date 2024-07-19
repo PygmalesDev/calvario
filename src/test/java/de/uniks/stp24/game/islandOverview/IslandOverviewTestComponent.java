@@ -17,6 +17,7 @@ import java.util.Map;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
 
@@ -30,6 +31,9 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
     };
 
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
+
+    Map<String, Integer> variablesMarket = new HashMap<>();
+    Map<String,List<SeasonComponent>> _private = new HashMap<>();
 
     Map<String, Integer> siteSlots = Map.of("test1", 3, "test2", 3, "test3", 4, "test4", 4);
     Map<String, Integer> sites = Map.of("test1", 2, "test2", 3, "test3", 4, "test4", 4);
@@ -240,6 +244,16 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
         this.islandAttributeStorage.buildingsAttributes = this.buildingAttributes;
         this.islandAttributeStorage.districtAttributes = this.districtAttributes;
         this.islandsService.isles = islands;
+
+        this.marketComponent.marketService = this.marketService;
+        this.marketService.presetsApiService = this.presetsApiService;
+        this.marketComponent.presetsApiService = this.presetsApiService;
+        this.marketComponent.subscriber = this.subscriber;
+        this.inGameController.marketOverviewComponent = this.marketComponent;
+        this.marketService.subscriber = this.subscriber;
+
+        when(this.presetsApiService.getVariables()).thenReturn(Observable.just(new HashMap<>()));
+        doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
 
         this.app.show(this.inGameController);
         clearStyleSheets();

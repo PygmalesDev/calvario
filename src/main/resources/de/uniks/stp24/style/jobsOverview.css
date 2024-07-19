@@ -88,7 +88,7 @@
 .deleteJobButton {
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
-    -fx-background-image: url("/de/uniks/stp24/icons/buttons/cancel_button.png");
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/cancel_button.png");
 }
 
 .inspectJobButton {

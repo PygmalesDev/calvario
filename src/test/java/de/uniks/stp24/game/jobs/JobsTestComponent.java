@@ -2,9 +2,9 @@ package de.uniks.stp24.game.jobs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
-import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Jobs.*;
 import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.service.ImageCache;
@@ -48,6 +48,7 @@ public class JobsTestComponent extends ControllerTest {
     protected enum EVENT {CREATED, UPDATED, DELETED}
 
     protected final Subject<Event<Job>> JOB_SUBJECT = BehaviorSubject.create();
+    protected final Subject<Event<Game>> GAME_SUBJECT = BehaviorSubject.create();
     protected final String GAME_ID = "jobsGameID";
     protected final String EMPIRE_ID = "jobsEmpireID";
     protected final String SYSTEM_ID_1 = "jobsSystemID_1";
@@ -118,9 +119,11 @@ public class JobsTestComponent extends ControllerTest {
 
         when(this.eventListener.listen(String.format("games.%s.empires.%s.jobs.*.*", this.GAME_ID, this.EMPIRE_ID),
                 Job.class)).thenReturn(JOB_SUBJECT);
+        when(this.eventListener.listen(String.format("games.%s.ticked", this.GAME_ID), Game.class))
+                .thenReturn(GAME_SUBJECT);
 
         this.jobsService.loadEmpireJobs();
-        this.jobsService.initializeJobsListener();
+        this.jobsService.initializeJobsListeners();
     }
 
     protected void callSubjectEvent(EVENT type, String jobID) {

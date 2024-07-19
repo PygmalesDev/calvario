@@ -54,6 +54,7 @@ public class TestJobPropertiesComponent extends JobsTestComponent {
     @Test
     public void testIncrementProgress() {
         WaitForAsyncUtils.waitForFxEvents();
+        this.jobProgressComponent.setShouldTick(true);
         this.jobProgressComponent.incrementProgress();
         assertEquals("1/10", lookup("#jobProgressText").queryText().getText());
         assertEquals(0.1, ((ProgressBar) lookup("#jobProgressBar").query()).getProgress());

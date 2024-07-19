@@ -323,6 +323,7 @@ public class IslandsService extends BasicService {
                 inGameController.selectedIsland.island = islandAttributes.getIsland();
             });
         }
+        inGameController.overviewSitesComponent.updateResCapacity();
     }
 
     public Island getIsland(String islandID) {

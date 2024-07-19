@@ -95,6 +95,8 @@ public class OverviewSitesComponent extends AnchorPane {
     private InGameController inGameController;
     private boolean isNameEditable;
 
+    String shownPage = "details";
+
     @Inject
     public OverviewSitesComponent() {
 
@@ -107,6 +109,8 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showUpgrades() {
+        shownPage = "upgrade";
+
         setLevelCheckBox();
 
         inGameController.overviewUpgradeComponent.upgrade_box.setVisible(false);
@@ -121,13 +125,9 @@ public class OverviewSitesComponent extends AnchorPane {
         }
         inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewUpgradeComponent);
         inGameController.overviewUpgradeComponent.setUpgradeButton();
-        inGameController.overviewUpgradeComponent.setListViews();
+        //inGameController.overviewUpgradeComponent.setNeededResources();
         inGameController.overviewUpgradeComponent.setUpgradeInf();
     }
-
-    /*
-    Set upgrade overview of island with inf. of current island level.
-     */
 
     public void setLevelCheckBox(){
         inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
@@ -145,6 +145,8 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showDetails() {
+        shownPage = "details";
+
         detailsButton.setDisable(true);
         sitesButton.setDisable(false);
         buildingsButton.setDisable(false);
@@ -157,6 +159,8 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showBuildings() {
+        shownPage = "buildings";
+
         buildingsComponent.setInGameController(inGameController);
         buildingsButton.setDisable(true);
         sitesButton.setDisable(false);
@@ -167,6 +171,8 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showSites() {
+        shownPage = "sites";
+
         detailsButton.setDisable(false);
         sitesButton.setDisable(true);
         buildingsButton.setDisable(false);
@@ -176,6 +182,8 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showJobs() {
+        shownPage = "jobs";
+
         jobsButton.setDisable(true);
         detailsButton.setDisable(false);
         sitesButton.setDisable(false);
@@ -221,7 +229,7 @@ public class OverviewSitesComponent extends AnchorPane {
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
                 islandAttributes.getIsland().buildings().size();
         islandAttributes.setUsedSlots(usedSlots);
-
+        System.out.println("testing 123");
         resCapacity.setText(usedSlots + "/" + islandAttributes.getIsland().resourceCapacity());
     }
 
@@ -237,7 +245,8 @@ public class OverviewSitesComponent extends AnchorPane {
         this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
 
         upgradeButton.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
-
+        jobsService.onJobTypeProgress("district", this::updateResCapacity);
+        jobsService.onJobTypeProgress("building", this::updateResCapacity);
         updateResCapacity();
 
         island_name.setText(islandAttributes.getIslandTypeTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");
@@ -252,8 +261,8 @@ public class OverviewSitesComponent extends AnchorPane {
             this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
 
             this.subscriber.subscribe(this.gameSystemsApiService
-                    .renameSystem(this.tokenStorage.getGameId(), this.tokenStorage.getIsland().id(),
-                            new SystemRenameDto(this.inputIslandName.getText())),
+                            .renameSystem(this.tokenStorage.getGameId(), this.tokenStorage.getIsland().id(),
+                                    new SystemRenameDto(this.inputIslandName.getText())),
                     result -> {
                         this.islandsService.updateIsland(result);
                         this.jobsService.getJobInspector("name_updates").accept(null);
@@ -272,5 +281,9 @@ public class OverviewSitesComponent extends AnchorPane {
     @OnDestroy
     public void destroy() {
         this.subscriber.dispose();
+    }
+
+    public String getShownPage() {
+        return shownPage;
     }
 }

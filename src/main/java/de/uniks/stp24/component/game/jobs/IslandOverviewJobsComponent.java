@@ -66,6 +66,7 @@ public class IslandOverviewJobsComponent extends AnchorPane {
         });
     }
 
+
     public void insertIslandName() {
         this.noJobText.setText(this.noJobText.getText()
                 .replace("{ISLAND_NAME}", this.islandsService.getIslandName(

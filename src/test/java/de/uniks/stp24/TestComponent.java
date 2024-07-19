@@ -23,6 +23,7 @@ public interface TestComponent extends MainComponent {
     AuthApiService authApiService();
     UserApiService userApiService();
     GamesApiService gamesApiService();
+    GameLogicApiService gameLogicApiService();
     LoginService loginService();
     CreateGameService createGameService();
     EventListener eventListener();

@@ -333,6 +333,7 @@ public class JobsService {
         this.jobDeletionFunctions.clear();
         this.loadTypeFunctions.clear();
         this.loadCommonFunctions.clear();
+        this.jobProgressFunctions.clear();
         this.finishCommonFunctions.clear();
         this.tickedCommonFunctions.clear();
         this.subscriber.dispose();

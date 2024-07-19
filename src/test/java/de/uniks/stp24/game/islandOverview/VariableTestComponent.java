@@ -32,6 +32,8 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
     ArrayList<String> buildings = new ArrayList();
     List<Island> islands = new ArrayList<>();
     Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
+    Map<String,List<SeasonComponent>> _private = new HashMap<>();
+
 
     Island testIsland;
     public void initComponents(){
@@ -113,6 +115,16 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
         doReturn(Observable.just(jobList)).when(jobsApiService).getEmpireJobs(any(), any());
         doReturn(Observable.just(effectSourceParentDto)).when(empireApiService).getEmpireEffect(any(), any());
         doReturn(Observable.just(explainedVariableDTOS)).when(gameLogicApiService).getVariablesExplanations(any(), any());
+
+        this.marketComponent.marketService = this.marketService;
+        this.marketService.presetsApiService = this.presetsApiService;
+        this.marketComponent.presetsApiService = this.presetsApiService;
+        this.marketComponent.subscriber = this.subscriber;
+        this.inGameController.marketOverviewComponent = this.marketComponent;
+        this.marketService.subscriber = this.subscriber;
+
+        when(this.presetsApiService.getVariables()).thenReturn(Observable.just(new HashMap<>()));
+        doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
 
         this.islandsService.isles = islands;
         this.app.show(this.inGameController);

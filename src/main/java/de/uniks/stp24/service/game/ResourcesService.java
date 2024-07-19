@@ -28,6 +28,8 @@ public class ResourcesService {
     @Inject
     public Subscriber subscriber;
 
+    public ArrayList<Runnable> runnables = new ArrayList<>();
+
     /**
      * storage for actual resources
      */
@@ -88,6 +90,10 @@ public class ResourcesService {
         return gameSystemsApiService.getBuilding(buildingType);
     }
 
+    public void setCurrentResources(Map<String, Integer> resourceMap) {
+        currentResources = resourceMap;
+    }
+
     /**
      * Updates the ObservableList which shows the count and change per season of a resource
      */
@@ -113,6 +119,9 @@ public class ResourcesService {
     }
 
     public boolean hasEnoughResources(Map<String, Integer> neededResources) {
+        this.subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                result -> islandAttributes.setEmpireDto(result),
+                error -> System.out.println("error in getEmpire in inGame"));
         for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
             String res = entry.getKey();
             int neededAmount = entry.getValue();

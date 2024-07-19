@@ -4,10 +4,8 @@ import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
-import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
-import javafx.beans.binding.StringBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -22,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component(view = "JobElement.fxml")

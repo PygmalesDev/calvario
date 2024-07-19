@@ -57,7 +57,7 @@
 
 .technologyText{
     -fx-font-family: "Tempus Sans ITC";
-    -fx-background-color: "TRANSPARENT";
+    -fx-background-color: transparent;
     -fx-font-weight: none;
     -fx-text-fill: black;
     -fx-font-size: 12;

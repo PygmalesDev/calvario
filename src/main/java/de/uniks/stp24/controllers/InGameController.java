@@ -128,7 +128,9 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public HelpComponent helpComponent;
-
+    @SubComponent
+    @Inject
+    CoolerBubbleComponent coolerBubbleComponent;
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
@@ -192,8 +194,7 @@ public class InGameController extends BasicController {
     @OnRender
     public void addSpeechBubble() {
         hintCaptainContainer.getChildren().add(coolerBubbleComponent);
-        // todo change
-        coolerBubbleComponent.decideWhatToSay();
+        coolerBubbleComponent.silence();
     }
 
 

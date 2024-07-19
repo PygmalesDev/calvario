@@ -218,9 +218,6 @@ public class InGameController extends BasicController {
         empireID = tokenStorage.getEmpireId();
         System.out.printf("GAME ID: %s\nEMPIRE ID: %s\n", gameID, empireID);
 
-        System.out.println(gameID);
-        System.out.println(empireID);
-
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
@@ -486,7 +483,7 @@ public class InGameController extends BasicController {
             selectedIsland = selected;
             tokenStorage.setIsland(selectedIsland.getIsland());
             islandAttributes.setIsland(selectedIsland.getIsland());
-            if (selected.getIsland().owner() != null) {
+            if (Objects.nonNull(selected.getIsland().owner())) {
                 this.islandClaimingContainer.setVisible(false);
                 this.sitePropertiesComponent.setVisible(false);
                 this.buildingPropertiesComponent.setVisible(false);
@@ -517,11 +514,10 @@ public class InGameController extends BasicController {
         this.jobsService.setJobInspector("island_jobs_overview", (String... params) -> {
             Island selected = this.islandsService.getIsland(params[0]);
             this.tokenStorage.setIsland(selected);
+            this.islandAttributes.setIsland(selected);
+            this.selectedIsland = this.islandsService.getIslandComponent(params[0]);
             this.overviewSitesComponent.jobsComponent.setJobsObservableList(
                     this.jobsService.getObservableListForSystem(params[0]));
-
-            this.islandAttributes.setIsland(selected);
-            selectedIsland = this.islandsService.getIslandComponent(params[0]);
             if (Objects.nonNull(selected.owner())) {
                 showOverview();
                 this.overviewSitesComponent.showJobs();
@@ -552,7 +548,6 @@ public class InGameController extends BasicController {
     }
 
     public void showOverview() {
-            overviewSitesComponent.inputIslandName.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId()));
             overviewSitesComponent.buildingsComponent.resetPage();
             overviewSitesComponent.buildingsComponent.setGridPane();
             overviewContainer.setVisible(true);

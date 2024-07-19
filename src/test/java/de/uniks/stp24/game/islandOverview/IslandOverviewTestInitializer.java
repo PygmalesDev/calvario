@@ -130,8 +130,6 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     PropertiesJobProgressComponent siteJobProgress;
     @InjectMocks
     IslandClaimingComponent islandClaimingComponent;
-    @InjectMocks
-    IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
 
     @InjectMocks
     TechnologyOverviewComponent technologyOverviewComponent;
@@ -141,6 +139,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
 
     @InjectMocks
     ResearchJobComponent researchJobComponent;
+    @InjectMocks
+    IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
 
     @Spy
     ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ROOT);
@@ -170,11 +170,13 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent.imageCache = this.imageCache;
         this.inGameController.marketOverviewComponent = this.marketComponent;
 
+        this.overviewUpgradeComponent.jobProgressComponent = islandUpgradesJobProgressComponent;
+        this.overviewUpgradeComponent.jobsService = this.jobsService;
+        this.overviewUpgradeComponent.islandAttributes = this.islandAttributeStorage;
 
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewSitesComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewUpgradeComponent.islandAttributes = islandAttributeStorage;
-        this.inGameController.overviewUpgradeComponent.jobsService = this.jobsService;
         this.inGameController.selectedIsland = new IslandComponent();
         this.resourcesService.islandAttributes = islandAttributeStorage;
         this.resourcesService.tokenStorage = tokenStorage;
@@ -213,7 +215,6 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.overviewUpgradeComponent.explanationService.variableService = this.variableService;
         this.inGameController.overviewUpgradeComponent.explanationService.variableService.technologyService.presetsApiService = this.presetsApiService;
         this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
-        this.inGameController.overviewUpgradeComponent.jobProgressComponent = this.islandUpgradesJobProgressComponent;
         this.inGameController.eventComponent = this.eventComponent;
         this.inGameController.technologiesComponent = this.technologyOverviewComponent;
         this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
+import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.component.game.technology.ResearchJobComponent;
@@ -190,6 +191,9 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     InGameController inGameController;
 
+    @InjectMocks
+    IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
+
     ArrayList<BuildingAttributes> buildingPresets = new ArrayList<>();
     ArrayList<BuildingAttributes> districtPresets = new ArrayList<>();
     Map<String, Integer> variablesPresets = new HashMap<>();
@@ -215,6 +219,10 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.technologiesComponent = technologyOverviewComponent;
         this.technologyOverviewComponent.technologyCategoryComponent = technologyCategoryComponent;
         this.technologyCategoryComponent.researchJobComponent = researchJobComponent;
+
+        this.overviewUpgradeComponent.jobProgressComponent = islandUpgradesJobProgressComponent;
+        this.overviewUpgradeComponent.jobsService = this.jobsService;
+        this.overviewUpgradeComponent.islandAttributes = this.islandAttributeStorage;
 
 
         this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;

@@ -32,7 +32,6 @@ public class JobsService {
     Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
     Map<String, Consumer<Job>> jobInspectionFunctions = new HashMap<>();
-    Map<String, Consumer<Job>> jobInspectionFunctions = new HashMap<>();
     Map<String, ArrayList<Consumer<Job>>> loadTypeFunctions = new HashMap<>();
     ArrayList<Runnable> loadCommonFunctions = new ArrayList<>();
     ArrayList<Runnable> finishCommonFunctions = new ArrayList<>();

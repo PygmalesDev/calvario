@@ -118,6 +118,10 @@ public class SitePropertiesComponent extends AnchorPane {
     public ObservableList<Map<String, Integer>> resources = FXCollections.observableArrayList();
     private ObservableList<Job> siteJobs;
 
+    public ObservableList<Jobs.Job> tempJobListSites = FXCollections.observableArrayList();
+
+    public ObservableList<Jobs.Job> tempJobListBuildings = FXCollections.observableArrayList();
+
     InGameController inGameController;
 
     @Inject
@@ -167,13 +171,14 @@ public class SitePropertiesComponent extends AnchorPane {
 
     private void setSiteFinishers(Job job) {
         this.jobsService.onJobDeletion(job._id(), () -> {
-            if (job.district().equals(this.siteType)) this.setJobsPaneVisibility(false);
+            if (Objects.nonNull(this.islandAttributeStorage.getIsland()) &&
+                    job.system().equals(this.islandAttributeStorage.getIsland().id()))
+                if (job.district().equals(this.siteType)) this.setJobsPaneVisibility(false);
         });
         this.jobsService.onJobCompletion(job._id(), () -> {
-            if (job.system().equals(this.islandAttributeStorage.getIsland().id())) {
-                this.updateIslandSites();
+            if (Objects.nonNull(this.islandAttributeStorage.getIsland()) &&
+                    job.system().equals(this.islandAttributeStorage.getIsland().id()))
                 if (job.district().equals(this.siteType)) this.setJobsPaneVisibility(false);
-            }
         });
     }
 
@@ -253,6 +258,19 @@ public class SitePropertiesComponent extends AnchorPane {
 
         buildSiteButton.setDisable(amountSiteSlots == amountSite);
         destroySiteButton.setDisable(amountSite == 0);
+
+        checkBuyButtonStatus();
+        jobsService.onJobCommonStart(this::checkBuyButtonStatus);
+
+    }
+
+    private void checkBuyButtonStatus() {
+        tempJobListBuildings = jobsService.getJobObservableListOfType("building");
+        tempJobListSites = jobsService.getJobObservableListOfType("district");
+        int islandJobsInQueue = tempJobListBuildings.size() + tempJobListSites.size();
+        if (islandAttributeStorage.getUsedSlots() + islandJobsInQueue >= islandAttributeStorage.getIsland().resourceCapacity()){
+            buildSiteButton.setDisable(true);
+        }
     }
 
     private void resourceListGeneration(DistrictAttributes site) {
@@ -272,4 +290,3 @@ public class SitePropertiesComponent extends AnchorPane {
 
     public void onClose() { setVisible(false);}
 }
-

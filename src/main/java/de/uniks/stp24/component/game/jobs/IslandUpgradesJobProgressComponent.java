@@ -26,7 +26,7 @@ public class IslandUpgradesJobProgressComponent extends Pane {
 
     public void setJobProgress(Jobs.Job job) {
         this.jobProgress = job.progress();
-        this.totalJobProgress = job.total();
+        this.totalJobProgress = (int) job.total();
         this.jobProgressBar.setProgress((((double) 1/job.total()) * job.progress()));
         this.jobTimerText.setText(String.format("%s/%s", job.progress(), job.total()));
     }

@@ -28,6 +28,8 @@ public class ResourcesService {
     @Inject
     public Subscriber subscriber;
 
+    public ArrayList<Runnable> runnables = new ArrayList<>();
+
     /**
      * storage for actual resources
      */
@@ -88,6 +90,10 @@ public class ResourcesService {
         return gameSystemsApiService.getBuilding(buildingType);
     }
 
+    public void setCurrentResources(Map<String, Integer> resourceMap) {
+        currentResources = resourceMap;
+    }
+
     /**
      * Updates the ObservableList which shows the count and change per season of a resource
      */
@@ -95,34 +101,33 @@ public class ResourcesService {
         currentResources = resourceMap;
         int i = 0;
         ObservableList<Resource> resourceList = FXCollections.observableArrayList();
-        if (Objects.nonNull(resourceMap)) {
-            for (Map.Entry<String, Integer> entry : resourceMap.entrySet()) {
-                String resourceID = entry.getKey();
-                int count = entry.getValue();
-                int changeProSeason = 0;
-                if (!oldResourceList.isEmpty() && oldResourceList.size() >= 2) {
-                    changeProSeason = oldResourceList.get(i).changePerSeason();
-                }
-                if (Objects.nonNull(aggregateItems)) {
-                    changeProSeason = aggregateItems[i].subtotal();
-                }
-                Resource resource = new Resource(resourceID, count, changeProSeason);
-                resourceList.add(resource);
-                i++;
+        for (Map.Entry<String, Integer> entry : resourceMap.entrySet()) {
+            String resourceID = entry.getKey();
+            int count = entry.getValue();
+            int changeProSeason = 0;
+            if (!oldResourceList.isEmpty() && oldResourceList.size() >= 2) {
+                changeProSeason = oldResourceList.get(i).changePerSeason();
             }
+            if (Objects.nonNull(aggregateItems)) {
+                changeProSeason = aggregateItems[i].subtotal();
+            }
+            Resource resource = new Resource(resourceID, count, changeProSeason);
+            resourceList.add(resource);
+            i++;
         }
         return resourceList;
     }
 
     public boolean hasEnoughResources(Map<String, Integer> neededResources) {
-        if (Objects.nonNull(neededResources)) {
-            for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
-                String res = entry.getKey();
-                int neededAmount = entry.getValue();
-                int availableAmount = islandAttributes.getAvailableResources().get(res);
-                if (availableAmount < neededAmount) {
-                    return false;
-                }
+        this.subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                result -> islandAttributes.setEmpireDto(result),
+                error -> System.out.println("error in getEmpire in inGame"));
+        for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
+            String res = entry.getKey();
+            int neededAmount = entry.getValue();
+            int availableAmount = islandAttributes.getAvailableResources().get(res);
+            if (availableAmount < neededAmount) {
+                return false;
             }
         }
         return true;

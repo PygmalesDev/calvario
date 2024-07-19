@@ -35,7 +35,7 @@ public class EventService {
     ObjectMapper objectMapper = new ObjectMapper();
 
     // with seed, so every Player has the same events at the same time
-    Random random = new Random(1000);
+    Random random = new Random();
 
     @Inject
     public EmpireApiService empireApiService;
@@ -43,7 +43,6 @@ public class EventService {
     public Subscriber subscriber;
     @Inject
     public TokenStorage tokenStorage;
-
 
     ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",
             "grandExp", "reckoning", "rogerFeast", /* Bad Events */ "blackSpot", "dutchman", "foolsGold", "pestilence",

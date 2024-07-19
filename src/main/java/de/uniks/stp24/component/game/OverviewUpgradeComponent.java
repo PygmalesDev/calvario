@@ -70,7 +70,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
     @FXML
     public ListView<Resource> upgradeCostList;
     @FXML
-    public Pane jobsContainer;
+    Pane jobsContainer;
 
     @Inject
     InGameService inGameService;

@@ -10,7 +10,10 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.ws.EventListener;
-import javafx.animation.*;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -19,7 +22,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
@@ -36,16 +41,17 @@ import java.beans.PropertyChangeListener;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static de.uniks.stp24.service.Constants.*;
+import static de.uniks.stp24.service.Constants.DAY;
+import static de.uniks.stp24.service.Constants.NIGHT;
 
 @Component(view = "Event.fxml")
 public class EventComponent extends AnchorPane {
     @FXML
+    TextFlow descriptionTextFlow;
+    @FXML
     AnchorPane anchor;
     @FXML
     ScrollPane descriptionScrollPane;
-    @FXML
-    Text eventDescription;
     @FXML
     Text eventName;
     @FXML
@@ -230,7 +236,36 @@ public class EventComponent extends AnchorPane {
 
         eventImage.setImage(imageCache.get("icons/events/" + id + "Event.png"));
         eventName.setText(resources.getString("event." + id + ".name"));
-        eventDescription.setText(resources.getString("event." + id + ".description"));
+        String description = resources.getString("event." + id + ".description");
+        TextFlow descriptionTextFlow = createTextFlow(description);
+        descriptionTextFlow.getStyleClass().clear();
+        this.descriptionTextFlow.getChildren().setAll(descriptionTextFlow.getChildren());
+    }
+
+    private TextFlow createTextFlow(String text) {
+        TextFlow textFlow = new TextFlow();
+        textFlow.getStyleClass().clear();
+        String[] lines = text.split("\\s+");
+
+        for (String line : lines) {
+            Text textNode = new Text(line + " ");
+            textNode.getStyleClass().add("eventDescription");
+            if (line.contains("Gain") || line.contains("doubled") ||
+                    line.contains("Erhalte") || line.contains("verdoppelt") ||
+                    line.matches(".*\\+.*") || line.matches(".*x.*")) {
+                textNode.setFill(Color.GREEN);
+            } else if (line.contains("Lose") || line.contains("halved") || line.contains("decreased") ||
+                    line.contains("Verliere") || line.contains("halbiert") ||
+                    line.matches(".*-.*")) {
+                textNode.setFill(Color.RED);
+            } else {
+                textNode.setFill(Color.BLACK);
+            }
+
+            textFlow.getChildren().add(textNode);
+        }
+
+        return textFlow;
     }
 
     // reduce size of eventName if it's too long

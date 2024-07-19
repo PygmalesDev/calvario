@@ -46,7 +46,7 @@ public class SitesComponent extends Pane {
     JobsService jobsService;
 
     @Inject
-    public IslandAttributeStorage attributeStorage;
+    IslandAttributeStorage attributeStorage;
 
     InGameController inGameController;
 
@@ -75,6 +75,13 @@ public class SitesComponent extends Pane {
         )));
         this.noSitesText.setVisible(this.sitePropertiesList.isEmpty());
         this.sitesListView.setItems(this.sitePropertiesList);
+    }
+
+    @OnRender
+    public void setSiteJobsUpdates() {
+        this.jobsService.onJobCommonUpdates(() -> {
+            if (Objects.nonNull(this.attributeStorage.island)) this.setSitesBox(this.attributeStorage.island);
+        });
     }
 
 

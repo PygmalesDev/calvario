@@ -2,6 +2,7 @@ package de.uniks.stp24;
 
 
 import de.uniks.stp24.component.game.BuildingPropertiesComponent;
+import de.uniks.stp24.component.game.technology.ResearchJobComponent;
 import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.*;
 import org.fulib.fx.annotation.Route;

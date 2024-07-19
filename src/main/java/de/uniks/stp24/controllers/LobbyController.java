@@ -37,6 +37,7 @@ import java.util.ResourceBundle;
 @Title("%enter.game")
 @Controller
 public class LobbyController extends BasicController {
+
     @Inject
     public EmpireService empireService;
     @Inject
@@ -67,6 +68,8 @@ public class LobbyController extends BasicController {
     public EventListener eventListener;
     @FXML
     public ListView<MemberUser> playerListView;
+    @FXML
+    Button returnButton;
     @FXML
     Text messageText;
     @FXML

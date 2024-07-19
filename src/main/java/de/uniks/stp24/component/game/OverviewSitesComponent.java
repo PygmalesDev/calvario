@@ -59,17 +59,17 @@ public class OverviewSitesComponent extends AnchorPane {
     public Pane islandFlag;
 
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    GameSystemsApiService gameSystemsApiService;
+    public GameSystemsApiService gameSystemsApiService;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
 
     @SubComponent
     @Inject

@@ -77,17 +77,17 @@ public class AppTest3 extends AppTest3Module {
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#exploreButton");
         JOB_SUBJECT.onNext(new Event<>(JOB_EVENT_PATH + "created", JOBS[0]));
-//        clickOn("#islandID_2_instance");
-//
-//        clickOn("#islandID_3_instance");
-//        WaitForAsyncUtils.waitForFxEvents();
-//        clickOn("#exploreButton");
-//        JOB_SUBJECT.onNext(new Event<>(JOB_EVENT_PATH + "created", JOBS[1]));
+        clickOn("#islandID_2_instance");
+        WaitForAsyncUtils.waitForFxEvents();
+
+        clickOn("#islandID_3_instance");
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#exploreButton");
+        JOB_SUBJECT.onNext(new Event<>(JOB_EVENT_PATH + "created", JOBS[1]));
 
         GAME_SUBJECT.onNext(this.tickGame());
         WaitForAsyncUtils.waitForFxEvents();
         GAME_SUBJECT.onNext(this.tickGame());
-
 
         sleep(100000);
     }

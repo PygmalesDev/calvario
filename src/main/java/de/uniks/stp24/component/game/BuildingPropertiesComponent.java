@@ -93,7 +93,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     ObservableList<Jobs.Job> buildingJobs;
 
     Jobs.Job currentJob;
-    BuildingAttributes certainBuilding;
+    public BuildingAttributes certainBuilding;
 
     Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
     Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);

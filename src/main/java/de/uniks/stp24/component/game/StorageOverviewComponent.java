@@ -44,15 +44,15 @@ public class StorageOverviewComponent extends AnchorPane {
     @Inject
     App app;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    ResourcesService resourcesService;
+    public ResourcesService resourcesService;
     @Inject
-    EmpireService empireService;
+    public EmpireService empireService;
     @Inject
     EventListener eventListener;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
     public ExplanationService explanationService;
     @Inject
@@ -93,7 +93,7 @@ public class StorageOverviewComponent extends AnchorPane {
                     empireDto -> {
                         subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                                 aggregateResultDto -> resourceListGeneration(empireDto, aggregateResultDto.items()),
-                                error -> System.out.println("ErrorAggregateSubscriber"));
+                                error -> System.out.println("ErrorAggregateSubscriber:\n" + error.getMessage()));
                         String[] empireNameList = empireDto.name().split("\\s+");
                         if (empireNameList.length >= 2) {
                             this.empireNameLabel.setText(empireNameList[0] + " " + empireNameList[1]);

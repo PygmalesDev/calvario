@@ -143,11 +143,10 @@ public class AppTest3Module extends LobbyTestLoader {
         when(this.gameMembersApiService.getMembers(any())).thenReturn(Observable.just(new MemberDto[]{MEMBER_DTO2}));
         when(this.gameMembersApiService.getMember(any(), any())).thenReturn(Observable.just(MEMBER_DTO));
 
-
-
         when(this.empireApiService.getEmpireEffect(any(), any())).thenReturn(Observable.just(SOURCE_PARENT_DTO));
         when(this.empireApiService.getEmpire(any(), any())).thenReturn(Observable.just(EMPIRE_DTO));
         when(this.empireApiService.getEmpires(any())).thenReturn(Observable.just(new ReadEmpireDto[]{READ_EMPIRE_DTO}));
+        when(this.empireApiService.getResourceAggregates(any(), any())).thenReturn(Observable.just(new AggregateResultDto(20, new AggregateItemDto[]{})));
 
         when(this.jobsApiService.getEmpireJobs(any(), any())).thenReturn(Observable.just(new ArrayList<>()));
         when(this.jobsApiService.createNewJob(any(), any(), any()))

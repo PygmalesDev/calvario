@@ -72,7 +72,7 @@ public class SitePropertiesComponent extends AnchorPane {
     @Inject
     Subscriber subscriber;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
 
     @Inject
     ResourcesService resourcesService;

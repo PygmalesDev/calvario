@@ -93,6 +93,7 @@ public class JobsService {
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.ticked",
                 this.tokenStorage.getGameId()), Game.class), game -> {
             if (game.data().period() != this.period) {
+                System.out.println("i ticked!");
                 this.tickedCommonFunctions.forEach(Runnable::run);
                 this.period = game.data().period();
             }

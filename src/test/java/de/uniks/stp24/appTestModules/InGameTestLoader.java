@@ -116,6 +116,8 @@ public class InGameTestLoader extends ControllerTest {
     PropertiesJobProgressComponent siteJobProgress;
     @InjectMocks
     IslandClaimingComponent islandClaimingComponent;
+    @InjectMocks
+    IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
 
     Provider<ClaimingSiteComponent> claimingComponentProvider = () -> {
         var component = new ClaimingSiteComponent();
@@ -169,7 +171,10 @@ public class InGameTestLoader extends ControllerTest {
         this.sitePropertiesComponent.siteJobProgress = this.siteJobProgress;
 
         this.jobsOverviewComponent.jobProvider = this.jobElementComponentProvider;
+
         this.islandOverviewJobsComponent.progressPaneProvider = this.islandOverviewJobProgressComponentProvider;
+
+        this.overviewUpgradeComponent.jobProgressComponent = this.islandUpgradesJobProgressComponent;
 
     }
 
@@ -223,7 +228,21 @@ public class InGameTestLoader extends ControllerTest {
         this.jobsService.tokenStorage = this.tokenStorage;
         this.jobsService.subscriber = this.subscriber;
 
+        this.storageOverviewComponent.empireService = this.empireService;
+        this.storageOverviewComponent.resourcesService = this.resourcesService;
+        this.storageOverviewComponent.tokenStorage = this.tokenStorage;
+        this.storageOverviewComponent.subscriber = this.subscriber;
+
         this.sitesComponent.attributeStorage = this.islandAttributeStorage;
+
+        this.overviewUpgradeComponent.islandAttributes = this.islandAttributeStorage;
+        this.overviewUpgradeComponent.jobsService = this.jobsService;
+
+        this.sitePropertiesComponent.jobsService = this.jobsService;
+
+        this.buildingPropertiesComponent.jobsService = this.jobsService;
+
+        this.propertiesJobProgressComponent.jobsService = this.jobsService;
     }
 
     protected void clearStyles() {

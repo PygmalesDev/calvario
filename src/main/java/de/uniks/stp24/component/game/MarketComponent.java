@@ -10,6 +10,7 @@ import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.ExplanationService;
 import de.uniks.stp24.service.game.MarketService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
@@ -44,13 +45,13 @@ public class MarketComponent extends StackPane {
     @FXML
     Label marketFeeLabel;
     @FXML
-    Label numberOfGoodsLabel;
+    public Label numberOfGoodsLabel;
     @FXML
     Label buyingPriceLabel;
     @FXML
     Label sellingPriceLabel;
     @FXML
-    ToggleButton everySeasonButton;
+    public ToggleButton everySeasonButton;
     @FXML
     Button sellButton;
     @FXML
@@ -62,8 +63,6 @@ public class MarketComponent extends StackPane {
     @FXML
     ImageView selectedIconImage;
     @FXML
-    Button createSeasonalTrades;
-    @FXML
     public ListView<Map.Entry<String, Integer>> resourcesListView;
     @FXML
     ListView<SeasonComponent> seasonalTradesListView;
@@ -71,7 +70,7 @@ public class MarketComponent extends StackPane {
     @Inject
     App app;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
     ResourcesService resourcesService;
     @Inject
@@ -83,13 +82,15 @@ public class MarketComponent extends StackPane {
     @Inject
     ImageCache imageCache;
     @Inject
+    public PresetsApiService presetsApiService;
+    @Inject
+    public MarketService marketService;
+    @Inject
+    public ExplanationService explanationService;
+    @Inject
     @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
-    @Inject
-    PresetsApiService presetsApiService;
-    @Inject
-    MarketService marketService;
 
     @Param("empireID")
     String empire;
@@ -99,15 +100,17 @@ public class MarketComponent extends StackPane {
     private String lastSeasonUpdate;
 
     public String selectedItem;
-    private int sellingPrice;
-    private int buyingPrice;
-    private int userCredits;
-    private double marketFee;
-    private int resourceAmount;
+    public int sellingPrice;
+    public int buyingPrice;
+    public int userCredits;
+    public double marketFee;
+    public int resourceAmount;
+    public boolean noPurchase;
 
-    private boolean noPurchase;
-
-    private ResourceDto resourceDto;
+    public Map<String, Double> variables = new HashMap<>();
+    public Map<String, Integer> resourceCountMap = new HashMap<>();
+    public Map<String, Double> resourcePriceMap = new HashMap<>();
+    public Map<String, Integer> resourceCountMapCopy = new HashMap<>();
 
     @Inject
     public Provider<MarketSeasonComponent> marketSeasonComponentProvider = () -> {
@@ -115,18 +118,7 @@ public class MarketComponent extends StackPane {
         marketSeasonComponent.marketService = this.marketService;
         return marketSeasonComponent;
     };
-
-    private final ObservableList<SeasonComponent> seasonComponents = FXCollections.observableArrayList();
-
-    // From Server
-    Map<String, Double> variables = new HashMap<>();
-    Map<String, Integer> resourceCountMap = new HashMap<>();
-    Map<String, Double> resourcePriceMap = new HashMap<>();
-    Map<String, Integer> resourceCountMapCopy = new HashMap<>();
-
-    // From Storage
-    Map<String, Integer> resourceMap = new HashMap<>();
-    Map<String, Integer> creditsMap = new HashMap<>();
+    public final ObservableList<SeasonComponent> seasonComponents = FXCollections.observableArrayList();
 
     @Inject
     public MarketComponent() {
@@ -143,6 +135,9 @@ public class MarketComponent extends StackPane {
         }
     }
 
+    /**
+     * Initializes amount of resources, their prices and the market fee.
+     */
     private void loadVariablesAndSetup() {
         subscriber.subscribe(marketService.getVariables(),
                 res -> {
@@ -154,6 +149,9 @@ public class MarketComponent extends StackPane {
         );
     }
 
+    /**
+     * Creates ResourceCountMap by fetching data form empire's resources.
+     */
     private void createResourceCountMap() {
         subscriber.subscribe(marketService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 empire -> {
@@ -166,17 +164,26 @@ public class MarketComponent extends StackPane {
                 , error -> System.out.println("errorCreateResourceCountMap: " + error));
     }
 
+    /**
+     * Sets the user's credit count.
+     */
     private void setCreditCount() {
         userCredits = resourceCountMap.get("credits");
         userCreditsLabel.setText(String.valueOf(userCredits));
     }
 
+    /**
+     * Non-tradable resources are filtered out in resourceCountMap.
+     */
     private void filterResourceMap() {
         resourceCountMap.remove("population");
         resourceCountMap.remove("research");
         resourceCountMap.remove("credits");
     }
 
+    /**
+     * Creates listeners for resource updates.
+     */
     private void createResourceListeners() {
         subscriber.subscribe(eventListener.listen(
                         "games" + tokenStorage.getGameId() + "empires" + tokenStorage.getEmpireId() + ".updated", EmpireExtendedDto.class),
@@ -199,6 +206,9 @@ public class MarketComponent extends StackPane {
                 }, error -> System.out.println("errorCreateResourceListener: " + error));
     }
 
+    /**
+     * This method provides logic for enabling and disabling buttons based on user actions and available resources.
+     */
     private void buttonLogic() {
         int numberOfGoods = getNumberOfGoods();
         boolean noDebts = userCredits > 0;
@@ -216,29 +226,34 @@ public class MarketComponent extends StackPane {
         incrementNumberOfGoods.setDisable(false);
     }
 
+    /**
+     * Sets the market fee.
+     */
     private void setMarketFee() {
         marketFeeLabel.setText(String.valueOf(this.variables.get("empire.market.fee")));
         this.marketFee = Double.parseDouble(marketFeeLabel.getText());
     }
 
+    /**
+     * Refreshes the list view with updated resource data and also the buttonLogic.
+     */
     private void refreshListview() {
         buttonLogic();
         listMarketResources();
     }
 
-    private void getIdResourcesMap() {
-        subscriber.subscribe(marketService.getResources(),
-                res -> {
-                    resourceDto = res;
-                });
-    }
-
+    /**
+     * Updates the resources on the server by providing a map of the updated amount of resources and resourcesType after transactions.
+     */
     private void updateResources() {
         UpdateEmpireMarketDto updateEmpireMarketDto = new UpdateEmpireMarketDto(Map.of(selectedItem, resourceAmount), null, null, null);
         this.subscriber.subscribe(marketService.updateEmpireMarket(tokenStorage.getGameId(), tokenStorage.getEmpireId(), updateEmpireMarketDto),
                 error -> System.out.println("errorUpdateResources" + error));
     }
 
+    /**
+     * Creates a map of resource prices.
+     */
     private void createResourcePriceMap() {
         resourcePriceMap.put("energy", variables.get("resources.energy.credit_value"));
         resourcePriceMap.put("minerals", variables.get("resources.minerals.credit_value"));
@@ -248,6 +263,9 @@ public class MarketComponent extends StackPane {
         resourcePriceMap.put("consumer_goods", variables.get("resources.consumer_goods.credit_value"));
     }
 
+    /**
+     * Dynamically updating the buying and selling price of the resources after incrementing or decrementing numberOfGoods.
+     */
     public void buyingAndSellingPrice(String resource) {
         int numberOfGoods = getNumberOfGoods();
         this.sellingPrice = (int) Math.round((resourcePriceMap.get(resource) * numberOfGoods) * (1 - this.marketFee));
@@ -258,6 +276,9 @@ public class MarketComponent extends StackPane {
         buttonLogic();
     }
 
+    /**
+     * Handles buying an item. Distinction between seasonal and non-seasonal buys.
+     */
     public void buyItem() {
         int numberOfGoods = getNumberOfGoods();
         resourceAmount = numberOfGoods;
@@ -274,6 +295,9 @@ public class MarketComponent extends StackPane {
         }
     }
 
+    /**
+     * Handles selling an item. Distinction between seasonal and non-seasonal sells.
+     */
     public void sellItem() {
         int numberOfGoods = getNumberOfGoods();
         resourceAmount = numberOfGoods * -1;
@@ -291,10 +315,16 @@ public class MarketComponent extends StackPane {
         }
     }
 
+    /**
+     * Checks if the numberOfGoodsLabel is empty to prevent numberFormatException
+     */
     private int getNumberOfGoods() {
         return numberOfGoodsLabel.getText().isEmpty() ? 0 : Integer.parseInt(numberOfGoodsLabel.getText());
     }
 
+    /**
+     * Increments the amount of goods.
+     */
     public void incrementAmount() {
         if (Objects.nonNull(selectedItem)) {
             int amount = getNumberOfGoods();
@@ -304,6 +334,9 @@ public class MarketComponent extends StackPane {
         }
     }
 
+    /**
+     * Decrements the amount of goods.
+     */
     public void decrementAmount() {
         if (Objects.nonNull(selectedItem)) {
             int amount = getNumberOfGoods();
@@ -313,20 +346,28 @@ public class MarketComponent extends StackPane {
         }
     }
 
+    /**
+     * Closes the market overview.
+     */
     public void closeMarketOverview() {
         this.setVisible(false);
     }
 
     // --------------------------------------------listViewOfResources-------------------------------------------------//
 
+    /**
+     * Lists the market resources in the ListView.
+     */
     public void listMarketResources() {
         resourcesListView.getItems().clear();
         resourcesListView.getItems().addAll(this.resourceCountMap.entrySet());
         resourcesListView.setCellFactory(list -> new ResourceCell());
     }
 
+    /**
+     * Custom ListCell for displaying resources in the ListView.
+     */
     public class ResourceCell extends ListCell<Map.Entry<String, Integer>> {
-
         private VBox vBox = new VBox();
         private ImageView imageView = new ImageView();
         private Text text = new Text();
@@ -368,16 +409,25 @@ public class MarketComponent extends StackPane {
         loadSeasonalTrades();
     }
 
+    /**
+     * Toggles the creation of seasonal trades.
+     */
     public void createSeasonalTrades() {
         everySeasonButton.setSelected(everySeasonButton.isSelected());
     }
 
+    /**
+     * Adds a seasonal transaction.
+     */
     private void addSeasonalTransaction(String transactionType, int price) {
         SeasonComponent seasonComponent = new SeasonComponent(transactionType, this.selectedItem, resourceAmount, price, true);
         seasonComponents.add(seasonComponent);
         saveSeasonalTrades();
     }
 
+    /**
+     * Creates a listener for seasonal trades.
+     */
     public void createSeasonListener() {
         this.subscriber.subscribe(this.eventListener
                         .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
@@ -390,6 +440,9 @@ public class MarketComponent extends StackPane {
                 error -> System.out.println("errorCreateSeasonListener:" + error));
     }
 
+    /**
+     * Performs seasonal trades.
+     */
     private void performSeasonalTrades() {
         for (SeasonComponent seasonalTrade : seasonComponents) {
             if (seasonalTrade.isPlaying()) {
@@ -403,6 +456,9 @@ public class MarketComponent extends StackPane {
         userCreditsLabel.setText(String.valueOf(userCredits));
     }
 
+    /**
+     * Updates resources after a seasonal trade.
+     */
     private void updateAfterSeasonalTrade() {
         subscriber.subscribe(marketService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 empireDto -> {
@@ -413,6 +469,9 @@ public class MarketComponent extends StackPane {
                 }, error -> System.out.println("errorUpdateAfterSeasonalTrade: " + error));
     }
 
+    /**
+     * Performs a seasonal buy transaction.
+     */
     private void performSeasonalBuy(String resourceType, int resourceAmount) {
         this.resourceAmount = resourceAmount;
         int buyCost = (int) Math.round((resourcePriceMap.get(resourceType) * this.resourceAmount) * (1 + this.marketFee));
@@ -425,6 +484,9 @@ public class MarketComponent extends StackPane {
         }
     }
 
+    /**
+     * Performs a seasonal sell transaction.
+     */
     private void performSeasonalSell(String resourceType, int resourceAmount) {
         this.resourceAmount = resourceAmount;
         int sellCost = (int) Math.round((resourcePriceMap.get(resourceType) * resourceAmount) * (1 - this.marketFee));
@@ -437,6 +499,9 @@ public class MarketComponent extends StackPane {
         }
     }
 
+    /**
+     * Sets the in-game controller.
+     */
     public void setInGameController(InGameController inGameController) {
         this.inGameController = inGameController;
     }
@@ -447,10 +512,16 @@ public class MarketComponent extends StackPane {
         this.subscriber.dispose();
     }
 
+    /**
+     * Saves seasonal trades to the server.
+     */
     public void saveSeasonalTrades() {
         marketService.saveSeasonalTrades();
     }
 
+    /**
+     * Loads seasonal trades from the server.
+     */
     public void loadSeasonalTrades() {
         subscriber.subscribe(marketService.getSeasonalTrades(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 seasonalTradeDto -> {

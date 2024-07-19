@@ -9,6 +9,7 @@ import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.fulib.fx.controller.Subscriber;
 
@@ -25,11 +26,11 @@ public class MarketService {
     @Inject
     EmpireApiService empireApiService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
     TokenStorage tokenStorage;
 
-    private ObservableList<SeasonComponent> seasonComponents;
+    private ObservableList<SeasonComponent> seasonComponents = FXCollections.observableArrayList();
 
     @Inject
     public MarketService() {

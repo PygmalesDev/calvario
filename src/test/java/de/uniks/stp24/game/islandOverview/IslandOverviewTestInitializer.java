@@ -127,7 +127,6 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     MarketComponent marketComponent;
 
 
-
     public void initializeComponents() {
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
@@ -199,7 +198,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
 
     }
 
-    public void clearStyleSheets(){
+    public void clearStyleSheets() {
         this.storageOverviewComponent.getStylesheets().clear();
         this.pauseMenuComponent.getStylesheets().clear();
         this.clockComponent.getStylesheets().clear();

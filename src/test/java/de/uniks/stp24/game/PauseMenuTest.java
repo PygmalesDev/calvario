@@ -179,6 +179,7 @@ public class PauseMenuTest extends ControllerTest {
     ArrayList<BuildingAttributes> districtPresets = new ArrayList<>();
     Map<String, Integer> variablesPresets = new HashMap<>();
 
+
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
@@ -204,7 +205,6 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.lobbyService.gameMembersApiService = this.gameMembersApiService;
         this.inGameController.marketOverviewComponent = this.marketComponent;
 
-
         this.jobsService.subscriber = this.subscriber;
         this.jobsService.jobsApiService = this.jobsApiService;
         this.jobsService.tokenStorage = this.tokenStorage;
@@ -228,6 +228,8 @@ public class PauseMenuTest extends ControllerTest {
         this.islandClaimingComponent.islandsService = this.islandsService;
         this.islandClaimingComponent.imageCache = this.imageCache;
 
+        this.marketComponent.marketService = this.marketService;
+
         doReturn(null).when(this.imageCache).get(any());
 
         doReturn(Observable.empty()).when(this.jobsApiService).getEmpireJobs(any(), any());
@@ -238,6 +240,8 @@ public class PauseMenuTest extends ControllerTest {
         Map<String , Integer> required = new HashMap<>();
         Map<String, Integer> production = new HashMap<>();
         Map<String, Integer> consumption = new HashMap<>();
+        Map<String, Integer> variablesMarket = new HashMap<>();
+        Map<String,List<SeasonComponent>> _private = new HashMap<>();
         UpgradeStatus upgradeStatus = new UpgradeStatus("test", null, 0,20, production, consumption, 20);
         ArrayList<String> traits = new ArrayList<>();
         traits.add("testTrait1");
@@ -259,6 +263,9 @@ public class PauseMenuTest extends ControllerTest {
 
         doReturn(Observable.just(new MemberDto(true, "test", testEmpire, "123"))).when(this.gameMembersApiService).getMember(any(), any());
         doReturn(Observable.just(variablesEffect)).when(this.inGameService).getVariablesEffects();
+
+        doReturn(Observable.just(variablesMarket)).when(this.marketService).getVariables();
+        doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
 
 
 

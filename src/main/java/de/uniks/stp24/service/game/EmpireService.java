@@ -24,7 +24,6 @@ public class EmpireService {
     public Observable<ReadEmpireDto[]> getEmpires(String gameID) {
         return this.empireApiService.getEmpires(gameID);
     }
-
     public Observable<List<ResourceDto>> getResources() {
         return this.empireApiService.getResources();
     }

@@ -331,6 +331,7 @@ public class IslandsService extends BasicService {
                 inGameController.selectedIsland.island = islandAttributes.getIsland();
             });
         }
+        inGameController.overviewSitesComponent.updateResCapacity();
     }
 
     public Island getIsland(String islandID) {
@@ -370,7 +371,7 @@ public class IslandsService extends BasicService {
     }
 
 
-    private Island convertToIsland(SystemDto result) {
+    public Island convertToIsland(SystemDto result) {
         return new Island(result.owner(),
                 Objects.isNull(result.owner()) ? -1 : getEmpire(result.owner()).flag(),
                 result.x(),

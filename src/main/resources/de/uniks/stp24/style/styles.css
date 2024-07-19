@@ -859,3 +859,29 @@ ToggleButton:hover{
     -fx-pref-width: 45px;
     -fx-pref-height: 45px;
 }
+
+.pause-background {
+    -fx-pref-width: 100px;
+    -fx-max-height: 20px;
+    -fx-background-color: transparent;
+    -fx-background-image: url('/de/uniks/stp24/assets/backgrounds/pause_menu_background.png');
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-padding: 0 25px 5px 0;
+}
+
+.pause-menu-button {
+    -fx-pref-width: 150px;
+    -fx-pref-height: 15px;
+    -fx-background-color: transparent;
+    -fx-background-image: url('/de/uniks/stp24/assets/buttons/button_element.png');
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-font-family: "Stencil";
+    -fx-text-fill: white;
+}
+
+.pause-menu-market-info {
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-text-fill: black;
+}

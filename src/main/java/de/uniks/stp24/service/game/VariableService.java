@@ -12,6 +12,9 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Singleton
 public class VariableService {

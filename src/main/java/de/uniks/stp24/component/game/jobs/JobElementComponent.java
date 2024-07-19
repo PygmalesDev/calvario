@@ -65,7 +65,7 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
         this.inspectionButton.setId("jobElementInspectionButton_" + job._id());
 
         Island island = this.islandsService.getIsland(job.system());
-        this.timerText.setText(String.format("%s/%s", job.progress(), job.total()));
+        this.timerText.setText(String.format("%s/%s", job.progress(), (int) job.total()));
         this.jobNameText.setText(island.name());
 
         switch (job.type()) {
@@ -80,6 +80,13 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
                         Constants.siteTranslation.get(job.district())) + " Site");
             }
             case "upgrade" -> {
+                String islandUpgrade = island.upgrade();
+                this.inspectionButton.setVisible(islandUpgrade.equals("colonized")
+                        || islandUpgrade.equals("upgraded") || islandUpgrade.equals("developed"));
+                if (!islandUpgrade.equals("colonized") && !islandUpgrade.equals("upgraded") &&
+                        !islandUpgrade.equals("developed"))
+                    this.jobCancelButton.setLayoutX(this.inspectionButton.getLayoutX());
+
                 this.jobImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/other/upgrade_job.png"));
                 this.jobTypeText.setText(this.gameResourceBundle.getString("jobs."+island.upgrade()));
             }

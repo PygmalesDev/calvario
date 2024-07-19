@@ -163,9 +163,7 @@ public class IslandClaimingComponent extends Pane {
             this.islandJob = job;
             this.jobProgressBar.setProgress(this.progress);
             this.incrementAmount = (double) 1 /job.total();
-            this.jobsService.onJobCompletion(job._id(), () -> {
-                if (this.currentIsland.id().equals(job.system())) this.setProgressBarVisibility(false);
-            });
+            this.setJobFinishers(job);
         }, error -> System.out.printf(
                         """
                         Creating a new exploration job failed in IslandClaimingComponent
@@ -175,17 +173,18 @@ public class IslandClaimingComponent extends Pane {
     }
 
     @OnRender
-    public void setJobUpdaters() {
-        this.jobsService.onJobsLoadingFinished("upgrade", (job) ->
-            this.jobsService.onJobCompletion(job._id(), () -> {
-                if (Objects.nonNull(this.currentIsland))
-                    if (this.currentIsland.id().equals(job.system())) this.getParent().setVisible(false);
-            }));
-        this.jobsService.onJobTypeProgress("upgrade", (someJob) -> {
+    public void setJobUpdates() {
+        this.jobsService.onJobsLoadingFinished("upgrade", this::setJobFinishers);
+        this.jobsService.onGameTicked(this::incrementProgress);
+    }
+
+    private void setJobFinishers(Job job) {
+        this.jobsService.onJobCompletion(job._id(), () -> {
             if (Objects.nonNull(this.currentIsland))
-                if (someJob.system().equals(this.currentIsland.id())) this.incrementProgress();
+                if (this.currentIsland.id().equals(job.system())) this.getParent().setVisible(false);
         });
     }
+
 
     private void incrementProgress() {
         this.progress++;
@@ -203,7 +202,8 @@ public class IslandClaimingComponent extends Pane {
     }
 
     public void cancelJob() {
-        this.subscriber.subscribe(this.jobsService.stopJob(this.islandJob._id()));
+        this.subscriber.subscribe(this.jobsService.stopJob(this.islandJob._id()),
+                result -> this.setProgressBarVisibility(false));
     }
 
     @OnDestroy

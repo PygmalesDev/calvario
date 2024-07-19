@@ -90,7 +90,7 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
         }
 
         this.jobPositionText.setText(systemJobs.indexOf(job)+1 + ".");
-        this.jobTimeRemaining.setText(String.format("%s/%s", job.progress(), job.total()));
+        this.jobTimeRemaining.setText(String.format("%s/%s", job.progress(), (int) job.total()));
 
         this.resourceObservableList.clear();
         job.cost().forEach((name, count) -> this.resourceObservableList
@@ -124,8 +124,9 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
                     .accept(job);
             case "building" -> this.jobsService.getJobInspector("building_overview")
                     .accept(job);
+            case "upgrade" -> this.jobsService.getJobInspector("island_upgrade")
+                    .accept(job);
         }
-
     }
 
     public void stopJob() {

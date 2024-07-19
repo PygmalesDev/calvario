@@ -19,7 +19,7 @@ import org.fulib.fx.annotation.event.OnKey;
 import javax.inject.Inject;
 import java.util.ResourceBundle;
 import javax.inject.Singleton;
-import java.util.ResourceBundle;
+
 
 @Component(view = "IslandComponent.fxml")
 @Singleton

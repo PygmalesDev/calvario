@@ -229,9 +229,6 @@ public class InGameController extends BasicController {
         empireID = tokenStorage.getEmpireId();
         System.out.printf("GAME ID: %s\nEMPIRE ID: %s\n", gameID, empireID);
 
-        System.out.println(gameID);
-        System.out.println(empireID);
-
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
@@ -321,7 +318,7 @@ public class InGameController extends BasicController {
         overviewContainer.getChildren().add(overviewSitesComponent);
         overviewContainer.getChildren().add(overviewUpgradeComponent);
         islandClaimingContainer.getChildren().add(this.islandClaimingComponent);
-        islandClaimingContainer.setVisible(true);
+        islandClaimingContainer.setVisible(false);
 
         technologiesComponent.setContainer(contextMenuContainer);
 
@@ -338,7 +335,7 @@ public class InGameController extends BasicController {
         this.createContextMenuButtons();
 
   		this.jobsService.loadEmpireJobs();
-        this.jobsService.initializeJobsListener();
+        this.jobsService.initializeJobsListeners();
         explanationService.setInGameController(this);
     }
 
@@ -493,10 +490,11 @@ public class InGameController extends BasicController {
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
             System.out.printf("ISLAND ID: %s\n", selected.island.id());
+            tokenStorage.setIsland(selected.getIsland());
             selectedIsland = selected;
             tokenStorage.setIsland(selectedIsland.getIsland());
             islandAttributes.setIsland(selectedIsland.getIsland());
-            if (selected.getIsland().owner() != null) {
+            if (Objects.nonNull(selected.getIsland().owner())) {
                 this.islandClaimingContainer.setVisible(false);
                 this.sitePropertiesComponent.setVisible(false);
                 this.buildingPropertiesComponent.setVisible(false);
@@ -538,18 +536,11 @@ public class InGameController extends BasicController {
             }
         });
 
-        this.jobsService.setJobInspector("upgrade_overview", (Jobs.Job job) -> {
+        this.jobsService.setJobInspector("island_upgrade", (Jobs.Job job) -> {
             Island selected = this.islandsService.getIsland(job.system());
-            this.tokenStorage.setIsland(selected);
-            this.overviewSitesComponent.jobsComponent.setJobsObservableList(
-                    this.jobsService.getObservableListForSystem(job.system()));
-
             this.islandAttributes.setIsland(selected);
-            selectedIsland = this.islandsService.getIslandComponent(job.system());
-            if (Objects.nonNull(selected.owner())) {
-                showOverview();
-                this.overviewSitesComponent.showUpgrades();
-            }
+            this.tokenStorage.setIsland(selected);
+            this.overviewSitesComponent.showUpgrades();
         });
 
         this.jobsService.setJobInspector("site_overview", (Jobs.Job job) -> {
@@ -578,7 +569,6 @@ public class InGameController extends BasicController {
     }
 
     public void showOverview() {
-            overviewSitesComponent.inputIslandName.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), tokenStorage.getEmpireId()));
             overviewSitesComponent.buildingsComponent.resetPage();
             overviewSitesComponent.buildingsComponent.setGridPane();
             overviewContainer.setVisible(true);
@@ -706,5 +696,6 @@ public class InGameController extends BasicController {
                 .removePropertyChangeListener(triple.propertyName(), triple.listener()));
         this.subscriber.dispose();
         this.jobsService.dispose();
+        this.variableService.dispose();
     }
 }

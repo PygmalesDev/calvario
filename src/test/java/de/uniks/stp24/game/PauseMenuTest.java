@@ -158,6 +158,9 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     HelpComponent helpComponent;
 
+    @InjectMocks
+    MarketComponent marketComponent;
+
     /*
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
@@ -179,6 +182,8 @@ public class PauseMenuTest extends ControllerTest {
     JobsApiService jobsApiService;
     @Spy
     TechnologyService technologyService;
+    @Spy
+    MarketService marketService;
 
     @Spy
     ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ROOT);
@@ -189,6 +194,7 @@ public class PauseMenuTest extends ControllerTest {
     ArrayList<BuildingAttributes> buildingPresets = new ArrayList<>();
     ArrayList<BuildingAttributes> districtPresets = new ArrayList<>();
     Map<String, Integer> variablesPresets = new HashMap<>();
+
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -218,6 +224,7 @@ public class PauseMenuTest extends ControllerTest {
         this.timerService.subscriber = this.subscriber;
         this.timerService.tokenStorage = this.tokenStorage;
         this.inGameController.lobbyService.gameMembersApiService = this.gameMembersApiService;
+        this.inGameController.marketOverviewComponent = this.marketComponent;
 
         this.jobsService.subscriber = this.subscriber;
         this.jobsService.jobsApiService = this.jobsApiService;
@@ -234,12 +241,15 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.variableService = this.variableService;
 
         this.inGameService.presetsApiService = this.presetsApiService;
+        this.marketService.presetsApiService = this.presetsApiService;
 
         this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
         this.islandClaimingComponent.jobsService = this.jobsService;
         this.islandClaimingComponent.islandAttributes = this.islandAttributeStorage;
         this.islandClaimingComponent.islandsService = this.islandsService;
         this.islandClaimingComponent.imageCache = this.imageCache;
+
+        this.marketComponent.marketService = this.marketService;
 
         doReturn(null).when(this.imageCache).get(any());
         doReturn(Observable.empty()).when(this.empireApiService).getEmpireEffect(any(), any());
@@ -251,6 +261,8 @@ public class PauseMenuTest extends ControllerTest {
         Map<String , Integer> required = new HashMap<>();
         Map<String, Integer> production = new HashMap<>();
         Map<String, Integer> consumption = new HashMap<>();
+        Map<String, Integer> variablesMarket = new HashMap<>();
+        Map<String,List<SeasonComponent>> _private = new HashMap<>();
         UpgradeStatus upgradeStatus = new UpgradeStatus("test", null, 0,20, production, consumption, 20);
         ArrayList<String> traits = new ArrayList<>();
         traits.add("testTrait1");
@@ -272,6 +284,9 @@ public class PauseMenuTest extends ControllerTest {
 
         doReturn(Observable.just(new MemberDto(true, "test", testEmpire, "123"))).when(this.gameMembersApiService).getMember(any(), any());
         doReturn(Observable.just(variablesEffect)).when(this.inGameService).getVariablesEffects();
+
+        doReturn(Observable.just(variablesMarket)).when(this.marketService).getVariables();
+        doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
 
 
 

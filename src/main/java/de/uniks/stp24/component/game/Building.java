@@ -64,7 +64,6 @@ public class Building extends VBox {
             else imageView.setImage(buildingsComponent.imageCache.get("/" + buildingsJobProgressMap.get(buildingName)));
 
         building.setGraphic(imageView);
-
         building.setOnMouseClicked(event -> {
             String relevantPart = null;
             if(imageView.getImage() != null) {

@@ -1,6 +1,8 @@
 package de.uniks.stp24.rest;
 
 import de.uniks.stp24.model.Trait;
+import de.uniks.stp24.dto.ResourceDto;
+import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.model.SystemUpgrades;
 import de.uniks.stp24.model.TechnologyExtended;
 import io.reactivex.rxjava3.core.Observable;
@@ -34,4 +36,10 @@ public interface PresetsApiService {
 
     @GET("presets/variables/effects")
     Observable<Map<String, ArrayList<String>>> getVariablesEffects();
+
+    @GET("presets/variables")
+    Observable<Map<String, Double>> getVariables();
+
+    @GET("presets/resources")
+    Observable<ResourceDto> getResources();
 }

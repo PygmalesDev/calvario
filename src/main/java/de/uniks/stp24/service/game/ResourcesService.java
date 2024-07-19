@@ -28,6 +28,8 @@ public class ResourcesService {
     @Inject
     public Subscriber subscriber;
 
+    public ArrayList<Runnable> runnables = new ArrayList<>();
+
     /**
      * storage for actual resources
      */
@@ -124,6 +126,10 @@ public class ResourcesService {
 
     public Observable<BuildingDto> getResourcesBuilding(String buildingType) {
         return gameSystemsApiService.getBuilding(buildingType);
+    }
+
+    public void setCurrentResources(Map<String, Integer> resourceMap) {
+        currentResources = resourceMap;
     }
 
     /**

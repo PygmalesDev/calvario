@@ -80,6 +80,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     GameLogicApiService gameLogicApiService;
     @Spy
     VariableDependencyService variableDependencyService;
+    @Spy
+    MarketService marketService;
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
@@ -140,6 +142,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @Spy
     ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ROOT);
 
+    @InjectMocks
+    MarketComponent marketComponent;
 
 
     public void initializeComponents() {
@@ -161,6 +165,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.inGameController.overviewSitesComponent.buildingsComponent.imageCache = this.imageCache;
+        this.inGameController.marketOverviewComponent = this.marketComponent;
+
 
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewSitesComponent.islandAttributes = islandAttributeStorage;
@@ -214,7 +220,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
 
     }
 
-    public void clearStyleSheets(){
+    public void clearStyleSheets() {
         this.storageOverviewComponent.getStylesheets().clear();
         this.pauseMenuComponent.getStylesheets().clear();
         this.clockComponent.getStylesheets().clear();

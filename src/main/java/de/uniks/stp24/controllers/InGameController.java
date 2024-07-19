@@ -18,6 +18,7 @@ import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -323,7 +324,6 @@ public class InGameController extends BasicController {
                 marketOverviewComponent
         );
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
-
         this.createContextMenuButtons();
 
   		this.jobsService.loadEmpireJobs();
@@ -568,6 +568,12 @@ public class InGameController extends BasicController {
         if(storageOverviewComponent.isVisible()){
             storageOverviewComponent.closeStorageOverview();
         }
+    }
+
+    @OnKey(code = KeyCode.T, alt = true)
+    public void showTechnologies() {
+        this.toggleContextMenuVisibility(this.technologiesComponent);
+        this.technologiesComponent.setVisible(!this.technologiesComponent.isVisible());
     }
 
     @OnKey(code = KeyCode.SPACE)

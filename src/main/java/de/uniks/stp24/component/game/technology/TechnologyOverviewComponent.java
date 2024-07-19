@@ -32,11 +32,11 @@ public class TechnologyOverviewComponent extends AnchorPane {
     @FXML
     Button closeButton;
     @FXML
-    Button crewRelationsButton;
+    public Button crewRelationsButton;
     @FXML
-    Button shipbuildingButton;
+    public Button shipbuildingButton;
     @FXML
-    Button marineSienceButton;
+    public Button marineSienceButton;
 
     private Pane parent;
     @Inject
@@ -192,7 +192,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
      */
     public void show(@NotNull TechnologyCategoryComponent technologieCategory) {
         setCategoryInfos(technologieCategory);
-        parent.getChildren().getFirst().setVisible(true);
+        technologieCategory.setVisible(true);
         this.setVisible(false);
 
     }

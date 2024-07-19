@@ -59,7 +59,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
     public StackPane researchJobContainer;
     @FXML
     public Text researchText;
-    String technologieCategoryName;
+    public String technologieCategoryName;
     @Inject
     App app;
     @Inject
@@ -152,7 +152,6 @@ public class TechnologyCategoryComponent extends AnchorPane {
      */
     public TechnologyCategoryComponent setCategory(String category) {
         currentResearchResourceLabel.setText(String.valueOf(resourcesService.getResourceCount("research")));
-
         this.technologieCategoryName = category;
 
         unlockedTechnologies = technologyService.getUnlockedTechnologies(technologieCategoryName);

@@ -4,8 +4,8 @@ import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.service.ImageCache;
-import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -15,12 +15,10 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnKey;
-import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
-import java.util.Objects;
-import java.util.ResourceBundle;
 import javax.inject.Singleton;
+import java.util.ResourceBundle;
 
 @Component(view = "IslandComponent.fxml")
 @Singleton

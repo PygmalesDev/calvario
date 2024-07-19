@@ -31,9 +31,6 @@ public class AppTest3 extends AppTest3Module {
         this.selectTraits();
         this.loadGame();
         this.beginBuildingJob();
-
-
-        sleep(100000);
     }
 
     public void selectTraits() {

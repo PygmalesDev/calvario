@@ -43,11 +43,11 @@
                                  <Font name="System Bold" size="12.0" />
                               </font>
                            </Button>
-                           <ToggleButton fx:id="lockPortraitButton" layoutX="40.0" layoutY="63.0" mnemonicParsing="false" onAction="#lockPortrait" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+                           <ToggleButton fx:id="lockPortraitButton" layoutX="40.0" layoutY="63.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#lockPortrait" prefHeight="15.0" prefWidth="15.0" style="-fx-background-color: transparent;" styleClass="lockButton" />
                         </Pane>
                         <Pane layoutX="31.0" layoutY="275.0">
                            <Pane fx:id="colorField" layoutX="97.0" layoutY="-30.0" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: RED;" />
-                           <ToggleButton fx:id="lockColorButton" layoutX="40.0" layoutY="-26.0" mnemonicParsing="false" onAction="#lockColor" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+                           <ToggleButton fx:id="lockColorButton" layoutX="40.0" layoutY="-26.0" mnemonicParsing="false" onAction="#lockColor" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: transparent;" styleClass="lockButton" />
                            <Button fx:id="lastColorButton" layoutX="65.0" layoutY="-7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showLastColor" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" styleClass="downButtonArrow">
                               <font>
                                  <Font name="System Bold" size="12.0" />
@@ -73,25 +73,25 @@
                                  <Font name="System Bold" size="12.0" />
                               </font>
                            </Button>
-                           <ToggleButton fx:id="lockFlagButton" layoutX="40.0" layoutY="20.0" mnemonicParsing="false" onAction="#lockFlag" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+                           <ToggleButton fx:id="lockFlagButton" layoutX="40.0" layoutY="20.0" mnemonicParsing="false" onAction="#lockFlag" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: transparent;" styleClass="lockButton" />
                         </Pane>
                         <TextField fx:id="gangNameText" alignment="CENTER" layoutX="107.0" layoutY="87.0" prefHeight="51.0" prefWidth="238.0" promptText="Enter name" styleClass="enterNameFont">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </TextField>
-                        <ToggleButton fx:id="lockNameButton" layoutX="320.0" layoutY="87.0" mnemonicParsing="false" onAction="#lockName" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+                        <ToggleButton fx:id="lockNameButton" layoutX="320.0" layoutY="87.0" mnemonicParsing="false" onAction="#lockName" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: transparent;" styleClass="lockButton" />
                         <TextArea fx:id="gangDescriptionText" layoutX="175.0" layoutY="135.0" prefHeight="80.0" prefWidth="171.0" promptText="%enter.description" style="-fx-background-color: transparent;" styleClass="descriptionFontComponent" wrapText="true">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </TextArea>
-                        <ToggleButton fx:id="lockDescriptionButton" layoutX="320.0" layoutY="135.0" mnemonicParsing="false" onAction="#lockDescription" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+                        <ToggleButton fx:id="lockDescriptionButton" layoutX="320.0" layoutY="135.0" mnemonicParsing="false" onAction="#lockDescription" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: transparent;" styleClass="lockButton" />
                         <Button fx:id="chooseTraitsButton" layoutX="237.0" layoutY="217.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#chooseTraits" prefHeight="16.0" prefWidth="40.0" styleClass="buttonsFont" text="TRAITS">
                            <font>
                               <Font size="8.0" />
                            </font></Button>
-                        <ToggleButton fx:id="lockTraitsButton" layoutX="280.0" layoutY="212.0" mnemonicParsing="false" onAction="#lockTraits" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
+                        <ToggleButton fx:id="lockTraitsButton" layoutX="280.0" layoutY="212.0" mnemonicParsing="false" onAction="#lockTraits" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: transparent;" styleClass="lockButton" />
                         <Button fx:id="randomizeButton" layoutX="310.0" layoutY="267.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#randomize" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: transparent;" styleClass="randomDice">
                            <font>
                               <Font size="8.0" />

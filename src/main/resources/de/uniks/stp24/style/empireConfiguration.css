@@ -34,7 +34,7 @@
 
 .countTraitFont {
     -fx-font-family: "Baskerville";
-    -fx-font-size: ;
+    -fx-font-size: 16;
     -fx-background-color: black;
 }
 
@@ -123,6 +123,20 @@
 
 .traitsOverview {
     -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/trait_overview_background.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.locked {
+    -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/random_button.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.unlocked {
+    -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/random_button.png");
     -fx-background-size: cover;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;

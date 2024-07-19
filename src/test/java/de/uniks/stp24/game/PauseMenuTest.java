@@ -184,6 +184,8 @@ public class PauseMenuTest extends ControllerTest {
     TechnologyService technologyService;
     @Spy
     MarketService marketService;
+    @Spy
+    AnnouncementsService announcementsService;
 
     @Spy
     ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ROOT);
@@ -194,6 +196,9 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
 
+    @InjectMocks
+    CoolerBubbleComponent coolerBubbleComponent;
+
     ArrayList<BuildingAttributes> buildingPresets = new ArrayList<>();
     ArrayList<BuildingAttributes> districtPresets = new ArrayList<>();
     Map<String, Integer> variablesPresets = new HashMap<>();
@@ -202,6 +207,8 @@ public class PauseMenuTest extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
+        coolerBubbleComponent.subscriber = this.subscriber;
+        this.inGameController.coolerBubbleComponent = coolerBubbleComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;

@@ -31,12 +31,14 @@ public class JobsService {
     Map<String, ObservableList<Job>> jobCollections = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
-    Map<String, Consumer<String[]>> jobInspectionFunctions = new HashMap<>();
+    Map<String, Consumer<Job>> jobInspectionFunctions = new HashMap<>();
     Map<String, ArrayList<Consumer<Job>>> loadTypeFunctions = new HashMap<>();
     ArrayList<Runnable> loadCommonFunctions = new ArrayList<>();
     ArrayList<Runnable> finishCommonFunctions = new ArrayList<>();
     ArrayList<Runnable> startCommonFunctions = new ArrayList<>();
     ArrayList<Runnable> jobCommonUpdates = new ArrayList<>();
+    ArrayList<Consumer<Job>> startCommonConsumers = new ArrayList<>();
+    Map<String, ArrayList<Consumer<Job>>> jobCompletionConsumers = new HashMap<>();
     ArrayList<Runnable> tickedCommonFunctions = new ArrayList<>();
 
     private int period = -1;
@@ -114,6 +116,7 @@ public class JobsService {
         }
 
         this.startCommonFunctions.forEach(Runnable::run);
+        this.startCommonConsumers.forEach(func -> func.accept(job));
     }
 
     public void updateJobInGroups(@NotNull Job job) {
@@ -146,11 +149,15 @@ public class JobsService {
             this.jobCompletionFunctions.get(job._id()).forEach(Runnable::run);
 
         this.finishCommonFunctions.forEach(Runnable::run);
+
+        if (this.jobCompletionConsumers.containsKey(job._id()))
+            this.jobCompletionConsumers.get(job._id()).forEach(func -> func.accept(job));
     }
 
     private void deleteJobFromGroups(String jobID) {
         this.jobCollections.forEach((key, list) -> list.removeIf(job -> job._id().equals(jobID)));
         this.jobCompletionFunctions.remove(jobID);
+        this.jobCompletionConsumers.remove(jobID);
     }
 
     /**
@@ -160,6 +167,10 @@ public class JobsService {
      */
     public void onJobCommonStart(Runnable func) {
         this.startCommonFunctions.add(func);
+    }
+
+    public void onJobCommonStart(Consumer<Job> func) {
+        this.startCommonConsumers.add(func);
     }
 
     public void onJobCommonUpdates(Runnable func) {
@@ -195,6 +206,12 @@ public class JobsService {
         if (!this.jobCompletionFunctions.containsKey(jobID))
             this.jobCompletionFunctions.put(jobID, new ArrayList<>());
         this.jobCompletionFunctions.get(jobID).add(func);
+    }
+
+    public void onJobCompletion(String jobID, Consumer<Job> func) {
+        if (!this.jobCompletionConsumers.containsKey(jobID))
+            this.jobCompletionConsumers.put(jobID, new ArrayList<>());
+        this.jobCompletionConsumers.get(jobID).add(func);
     }
 
 
@@ -307,11 +324,11 @@ public class JobsService {
         return this.getJobObservableListOfType("collection");
     }
 
-    public void setJobInspector(String inspectorID, Consumer<String[]> func) {
+    public void setJobInspector(String inspectorID, Consumer<Job> func) {
         this.jobInspectionFunctions.put(inspectorID, func);
     }
 
-    public Consumer<String[]> getJobInspector(String inspectorID) {
+    public Consumer<Job> getJobInspector(String inspectorID) {
         if (this.jobInspectionFunctions.containsKey(inspectorID))
             return this.jobInspectionFunctions.get(inspectorID);
         else System.out.printf("Job Service: the inspection function is not found for a given inspector ID: %s!\n", inspectorID);
@@ -335,6 +352,7 @@ public class JobsService {
         this.loadCommonFunctions.clear();
         this.finishCommonFunctions.clear();
         this.tickedCommonFunctions.clear();
+        this.jobCompletionConsumers.clear();
         this.subscriber.dispose();
     }
 }

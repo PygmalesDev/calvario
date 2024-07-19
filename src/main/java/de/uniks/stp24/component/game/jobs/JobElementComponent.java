@@ -98,7 +98,7 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
     }
 
     public void showJobOverview() {
-        this.jobsService.getJobInspector("island_jobs_overview").accept(new String[]{this.job.system()});
+        this.jobsService.getJobInspector("island_jobs_overview").accept(job);
     }
 
     @OnDestroy

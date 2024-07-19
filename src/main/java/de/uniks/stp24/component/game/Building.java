@@ -1,14 +1,13 @@
 package de.uniks.stp24.component.game;
 
-import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.JobsService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -17,6 +16,7 @@ import org.fulib.fx.annotation.controller.Component;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Objects;
+
 import static de.uniks.stp24.service.Constants.*;
 
 

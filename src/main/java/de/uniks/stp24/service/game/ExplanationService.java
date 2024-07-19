@@ -12,6 +12,7 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
+import de.uniks.stp24.controllers.InGameController;
 
 import javax.inject.Inject;
 import javax.inject.Named;

@@ -2,10 +2,11 @@ package de.uniks.stp24.component.game.jobs;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.ResourceComponent;
-import de.uniks.stp24.model.Jobs.*;
+import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.JobsService;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -63,13 +64,15 @@ public class PropertiesJobProgressComponent extends Pane {
     public void setJobProgress(Job job) {
         this.job = job;
         this.progress = job.progress();
-        this.total = job.total();
+        this.total = (int) job.total();
         this.jobProgressText.setText(String.format("%d/%s", this.progress, this.total));
         this.incrementAmount = (double) 1 /this.total;
         this.jobProgressBar.setProgress(this.progress*this.incrementAmount);
         this.resourceObservableList.clear();
         job.cost().forEach((name, amount) -> this.resourceObservableList.add(new Resource(name, amount, 0)));
-        this.costsListView.setItems(this.resourceObservableList);
+        Platform.runLater(()-> {
+            this.costsListView.setItems(this.resourceObservableList);
+        });
         this.costsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.negativeResourceProvider));
     }
 

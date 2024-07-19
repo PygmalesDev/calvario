@@ -1,5 +1,6 @@
 package de.uniks.stp24.rest;
 
+import de.uniks.stp24.dto.AggregateResultDto;
 import de.uniks.stp24.dto.ExplainedVariableDTO;
 import de.uniks.stp24.model.ExplainedVariable;
 import io.reactivex.rxjava3.core.Observable;
@@ -18,5 +19,8 @@ public interface GameLogicApiService {
 
     @GET("games/{gameID}/empires/{empireID}/variables/{variable}")
     Observable<ExplainedVariable> getVariable(@Path("gameID") String gameID, @Path("empireID") String empireID, @Path("variable") String variable);
+
+    @GET("games/{game}/empires/{empire}/aggregates/{aggregate}/technologies/{id}")
+    Observable<AggregateResultDto> getTechnologyCostAndTime(@Path("empire") String empireID, @Path("aggregate") String aggregate, @Path("id") String techID);
 
 }

@@ -6,6 +6,9 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
+import de.uniks.stp24.component.game.technology.ResearchJobComponent;
+import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
+import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -52,6 +55,9 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 public class PauseMenuTest extends ControllerTest {
     @Spy
     JobsService jobsService;
+
+    @Spy
+    VariableService variableService;
     @Spy
     GamesApiService gamesApiService;
     @Spy
@@ -83,8 +89,7 @@ public class PauseMenuTest extends ControllerTest {
     LanguageService languageService;
     @Spy
     ResourcesService resourcesService;
-    @Spy
-    VariableService variableService;
+
     @Spy
     ObjectMapper objectMapper;
     @Spy
@@ -165,12 +170,23 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     PropertiesJobProgressComponent propertiesJobProgressComponent;
 
+    @InjectMocks
+    TechnologyOverviewComponent technologyOverviewComponent;
+
+    @InjectMocks
+    TechnologyCategoryComponent technologyCategoryComponent;
+    @InjectMocks
+    ResearchJobComponent researchJobComponent;
+
     @Spy
     JobsApiService jobsApiService;
     @Spy
     TechnologyService technologyService;
     @Spy
     MarketService marketService;
+
+    @Spy
+    ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ROOT);
 
     @InjectMocks
     InGameController inGameController;
@@ -197,6 +213,11 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.helpComponent = this.helpComponent;
+        this.inGameController.technologiesComponent = technologyOverviewComponent;
+        this.technologyOverviewComponent.technologyCategoryComponent = technologyCategoryComponent;
+        this.technologyCategoryComponent.researchJobComponent = researchJobComponent;
+
+
         this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
         this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
         this.timerService.gamesApiService = this.gamesApiService;
@@ -231,7 +252,7 @@ public class PauseMenuTest extends ControllerTest {
         this.marketComponent.marketService = this.marketService;
 
         doReturn(null).when(this.imageCache).get(any());
-
+        doReturn(Observable.empty()).when(this.empireApiService).getEmpireEffect(any(), any());
         doReturn(Observable.empty()).when(this.jobsApiService).getEmpireJobs(any(), any());
 
         inGameService.setGameStatus(gameStatus);
@@ -277,9 +298,8 @@ public class PauseMenuTest extends ControllerTest {
         variablesPresets.put("districts.city.build_time", 9);
         variablesPresets.put("districts.city.cost.minerals", 100);
         variablesPresets.put("districts.city.upkeep.energy", 5);
-        doReturn(Observable.just(variablesPresets)).when(inGameService).getVariablesPresets();
-        doReturn(Observable.just(new EffectSourceParentDto(new EffectSourceDto[]{}))).when(empireApiService).getEmpireEffect(any(), any());
 
+        doNothing().when(variableService).initVariables();
 
         this.app.show(this.inGameController);
 

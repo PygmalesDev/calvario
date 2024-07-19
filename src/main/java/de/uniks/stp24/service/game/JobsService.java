@@ -31,6 +31,7 @@ public class JobsService {
     Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
     Map<String, Consumer<String[]>> jobInspectionFunctions = new HashMap<>();
+    Map<String, ArrayList<Runnable>> jobProgressFunctions = new HashMap<>();
     Map<String, ArrayList<Runnable>> jobTypeFunctions = new HashMap<>();
     Map<String, ArrayList<Consumer<Job>>> jobTypeConsumers = new HashMap<>();
     Map<String, ArrayList<Consumer<Job>>> loadTypeFunctions = new HashMap<>();
@@ -117,6 +118,9 @@ public class JobsService {
                 this.jobCollections.get("collection").add(job);
         }
 
+        if (this.jobProgressFunctions.containsKey(job._id()))
+            this.jobProgressFunctions.get(job._id()).forEach(Runnable::run);
+
         if (this.jobTypeFunctions.containsKey(job.type()))
             this.jobTypeFunctions.get(job.type()).forEach(Runnable::run);
         if (this.jobTypeConsumers.containsKey(job.type()))
@@ -157,6 +161,12 @@ public class JobsService {
 
     public void onJobCommonUpdates(Runnable func) {
         this.jobCommonUpdates.add(func);
+    }
+
+    public void onJobProgress(String jobID, Runnable func) {
+        if (!this.jobProgressFunctions.containsKey(jobID))
+            this.jobProgressFunctions.put(jobID, new ArrayList<>());
+        this.jobProgressFunctions.get(jobID).add(func);
     }
 
     /**
@@ -279,7 +289,7 @@ public class JobsService {
         this.deleteJobFromGroups(jobID);
         if (this.jobDeletionFunctions.containsKey(jobID))
             this.jobDeletionFunctions.get(jobID).forEach(Runnable::run);
-
+        System.out.println(this.tokenStorage.getGameId() + " / " + this.tokenStorage.getEmpireId());
         return this.jobsApiService.deleteJob(this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId(), jobID);
     }
 
@@ -357,6 +367,7 @@ public class JobsService {
         this.jobDeletionFunctions.clear();
         this.loadTypeFunctions.clear();
         this.loadCommonFunctions.clear();
+        this.jobProgressFunctions.clear();
         this.finishCommonFunctions.clear();
         this.subscriber.dispose();
     }

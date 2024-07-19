@@ -1,0 +1,11 @@
+[ {
+  "name" : "Buccaneers",
+  "flagIndex" : 0,
+  "flagsPath" : "/de/uniks/stp24/assets/flags/flag_0.png",
+  "portraitIndex" : 0,
+  "portraitsPath" : "/de/uniks/stp24/assets/portraits/captain_0.png",
+  "description" : "",
+  "color" : "#DC143C",
+  "colorIndex" : 0,
+  "traits" : [ ]
+} ]

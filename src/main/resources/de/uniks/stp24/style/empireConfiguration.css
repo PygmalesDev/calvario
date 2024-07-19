@@ -3,11 +3,63 @@
     src: url("/de/uniks/stp24/fonts/Baskerville.ttf");
 }
 
+@font-face {
+    font-family: 'GillSansUltraBold';
+    src: url("/de/uniks/stp24/fonts/GillSansUltraBold.ttf");
+}
+
 /* Text style */
 
-.titleText {
+.titleFontHead {
+    -fx-font-family: "Baskerville";
+    -fx-font-size: 25;
+    -fx-background-color: "#ffffff";
+}
+
+.enterNameFont  {
     -fx-font-family: "Blackadder ITC";
-    -fx-font-size: 30;
+    -fx-background-color: "TRANSPARENT";
+    -fx-font-weight: none;
+    -fx-font-size: 25;
+    -fx-text-fill: "#000000";
+    -fx-prompt-text-fill: black;
+
+}
+
+.titleFontComponent {
+    -fx-font-family: "Baskerville";
+    -fx-font-size: 18;
+    -fx-background-color: "#ffffff";
+}
+
+.countTraitFont {
+    -fx-font-family: "Baskerville";
+    -fx-font-size: ;
+    -fx-background-color: black;
+}
+
+.descriptionFontComponent {
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-font-size: 12;
+    -fx-text-fill: black;
+    -fx-prompt-text-fill: black;
+}
+
+.traitsFontComponent {
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-font-size: 12;
+    -fx-text-fill: black;
+    -fx-prompt-text-fill: black;
+}
+
+.text-area .content {
+    -fx-background-color: transparent;
+}
+
+.buttonsFont {
+    -fx-font-family: "GillSansUltraBold";
+    -fx-font-size: 8;
+    -fx-text-fill: white;
 }
 
 .listViewFont {
@@ -41,3 +93,37 @@
     -fx-background-position: center center;
 }
 
+.captainBackground {
+    -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/captain-background.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.downButtonArrow {
+    -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/down_arrow_button.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.upButtonArrow {
+    -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/up_arrow_button.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.randomDice {
+    -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/random_button.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.traitsOverview {
+    -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/trait_overview_background.png");
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}

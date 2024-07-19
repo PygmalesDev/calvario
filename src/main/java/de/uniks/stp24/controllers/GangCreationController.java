@@ -238,6 +238,7 @@ public class GangCreationController extends BasicController {
     @OnRender
     public void render() {
         buttonsPane.setPickOnBounds(false);
+        showCreationButton.setText("NEW EMPIRE");
 
         subscriber.subscribe(lobbyService.getMember(gameID, tokenStorage.getUserId()),
                 result -> {

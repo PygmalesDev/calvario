@@ -25,6 +25,9 @@ public class AnnouncementsService {
     @Inject
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
+    @Inject
+    @Named("technologiesResourceBundle")
+    public ResourceBundle technologiesResourceBundle;
 
     ObservableList<Announcement> announcements = FXCollections.observableArrayList();
 
@@ -49,7 +52,7 @@ public class AnnouncementsService {
                     message = gameResourceBundle.getString("captain.upgrade.ready")
                             .replace("{upgradeLevel}", gameResourceBundle.getString(upgradeTranslation.get(island.upgrade())))
                             .replace("{islandName}", islandName);
-                    forwardMethods.add(jobsService.getJobInspector("island_jobs_overview"));
+                    forwardMethods.add(jobsService.getJobInspector("island_upgrade"));
                     forwardIcon = "-fx-background-image: url('[PATH]')"
                             .replace("[PATH]", "/icons/islands/" + island.type() + ".png");
                 }
@@ -74,11 +77,11 @@ public class AnnouncementsService {
                             .replace("[PATH]", "/" + buildingsIconPathsMap.get(job.building()));
                 }
                 case "technology" -> {
-                    // todo translate technology
                     message = gameResourceBundle.getString("captain.technology.ready")
-                            .replace("{technologyId}", job.technology());
-                    // todo change
+                            .replace("{technologyId}", technologiesResourceBundle.getString(job.technology()));
                     forwardMethods.add(jobsService.getJobInspector("island_jobs_overview"));
+                    forwardIcon = "-fx-background-image: url('[PATH]')"
+                            .replace("[PATH]", "/" + technologyIconMap.get(job.technology()));
                 }
             }
             announcements.addFirst(new Announcement(message, forwardIcon, forwardMethods, job));

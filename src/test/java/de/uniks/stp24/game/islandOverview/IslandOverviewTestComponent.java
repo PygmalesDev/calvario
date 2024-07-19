@@ -43,7 +43,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-public class IslandOverviewTestComponent extends ControllerTest {
+public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
     @Spy
     GamesApiService gamesApiService;
     @Spy

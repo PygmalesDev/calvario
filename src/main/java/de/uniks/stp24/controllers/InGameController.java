@@ -327,7 +327,7 @@ public class InGameController extends BasicController {
         this.createContextMenuButtons();
 
   		this.jobsService.loadEmpireJobs();
-        this.jobsService.initializeJobsListener();
+        this.jobsService.initializeJobsListeners();
         explanationService.setInGameController(this);
     }
 

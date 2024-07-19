@@ -245,8 +245,6 @@ public class OverviewSitesComponent extends AnchorPane {
         this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
 
         upgradeButton.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
-        jobsService.onJobTypeProgress("district", this::updateResCapacity);
-        jobsService.onJobTypeProgress("building", this::updateResCapacity);
         updateResCapacity();
 
         island_name.setText(islandAttributes.getIslandTypeTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");

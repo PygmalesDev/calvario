@@ -36,9 +36,14 @@ import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;

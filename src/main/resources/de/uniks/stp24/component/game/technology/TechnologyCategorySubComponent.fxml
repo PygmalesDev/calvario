@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<fx:root id="categorySubComponent" maxWidth="290.0" prefWidth="290.0" spacing="5.0" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.technology.TechnologyCategorySubComponent">
+   <HBox>
+      <HBox HBox.hgrow="ALWAYS">
+         <HBox.margin>
+            <Insets/>
+         </HBox.margin>
+         <Label fx:id="technologyLabel" text="TechnologyName">
+            <styleClass>
+               <String fx:value="technologyCategoriesLabel"/>
+               <String fx:value="technologyCategoryTitle"/>
+            </styleClass>
+         </Label>
+      </HBox>
+      <HBox alignment="CENTER_RIGHT" HBox.hgrow="NEVER">
+         <ImageView fx:id="tagImage3" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+         <ImageView fx:id="tagImage2" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+         <ImageView fx:id="tagImage1" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+      </HBox>
+   </HBox>
+   <ListView fx:id="descriptionListView" prefHeight="35.0" styleClass="description-list-view" />
+   <HBox fx:id="researchHBox" alignment="CENTER_RIGHT" spacing="5.0">
+      <ImageView fx:id="timeImage" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="timeLabel" styleClass="technologyCategoriesLabel" text="Label">
+         <font>
+            <Font size="15.0" />
+         </font></Label>
+      <ImageView fx:id="researchImage" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="researchLabel" minHeight="25.0" minWidth="25.0" styleClass="technologyCategoriesLabel" text="Label" textAlignment="CENTER">
+         <font>
+            <Font size="15.0" />
+         </font>
+         <tooltip>
+            <Tooltip fx:id="tooltip" anchorLocation="WINDOW_TOP_RIGHT" autoFix="false" consumeAutoHidingEvents="false" contentDisplay="RIGHT" hideOnEscape="false" />
+         </tooltip></Label>
+      <Button fx:id="researchButton" mnemonicParsing="false" onAction="#researchClicked" prefHeight="25.0" prefWidth="25.0" styleClass="buildButton" />
+   </HBox>
+   <padding>
+      <Insets bottom="25.0" left="15.0" right="10.0" top="20.0" />
+   </padding>
+   <stylesheets>
+      <URL value="@../../../style/technologySubComponent.css" />
+   </stylesheets>
+</fx:root>

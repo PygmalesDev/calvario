@@ -6,6 +6,7 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -75,6 +76,9 @@ public class IslandOverviewJobsComponent extends AnchorPane {
 
     public void setJobsObservableList(ObservableList<Job> observer) {
         if (!observer.isEmpty()) this.noJobText.setVisible(false);
-        this.jobProgressListView.setItems(observer);
+        Platform.runLater(()-> {
+            this.jobProgressListView.setItems(observer);
+        });
+
     }
 }

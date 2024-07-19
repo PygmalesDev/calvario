@@ -22,7 +22,6 @@ import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
-import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -123,13 +122,9 @@ public class OverviewSitesComponent extends AnchorPane {
         }
         inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewUpgradeComponent);
         inGameController.overviewUpgradeComponent.setUpgradeButton();
-        inGameController.overviewUpgradeComponent.setListViews();
+        //inGameController.overviewUpgradeComponent.setNeededResources();
         inGameController.overviewUpgradeComponent.setUpgradeInf();
     }
-
-    /*
-    Set upgrade overview of island with inf. of current island level.
-     */
 
     public void setLevelCheckBox(){
         inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
@@ -222,7 +217,7 @@ public class OverviewSitesComponent extends AnchorPane {
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
                 islandAttributes.getIsland().buildings().size();
         islandAttributes.setUsedSlots(usedSlots);
-
+        System.out.println("testing 123");
         resCapacity.setText(usedSlots + "/" + islandAttributes.getIsland().resourceCapacity());
     }
 
@@ -238,7 +233,8 @@ public class OverviewSitesComponent extends AnchorPane {
         this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
 
         upgradeButton.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
-
+        jobsService.onJobTypeProgress("district", this::updateResCapacity);
+        jobsService.onJobTypeProgress("building", this::updateResCapacity);
         updateResCapacity();
 
         island_name.setText(islandAttributes.getIslandTypeTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");
@@ -253,8 +249,8 @@ public class OverviewSitesComponent extends AnchorPane {
             this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
 
             this.subscriber.subscribe(this.gameSystemsApiService
-                    .renameSystem(this.tokenStorage.getGameId(), this.tokenStorage.getIsland().id(),
-                            new SystemRenameDto(this.inputIslandName.getText())),
+                            .renameSystem(this.tokenStorage.getGameId(), this.tokenStorage.getIsland().id(),
+                                    new SystemRenameDto(this.inputIslandName.getText())),
                     result -> {
                         this.islandsService.updateIsland(result);
                         this.jobsService.getJobInspector("name_updates").accept(null);

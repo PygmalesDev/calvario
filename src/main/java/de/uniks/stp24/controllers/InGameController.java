@@ -2,6 +2,7 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
+import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.dto.EmpireDto;
@@ -13,6 +14,7 @@ import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.game.*;
+import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
@@ -98,6 +100,7 @@ public class InGameController extends BasicController {
     public IslandsService islandsService;
     @Inject
     public ExplanationService explanationService;
+
     @Inject
     public JobsService jobsService;
 
@@ -119,6 +122,7 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
+
     @SubComponent
     @Inject
     public EmpireOverviewComponent empireOverviewComponent;
@@ -129,6 +133,9 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public ClockComponent clockComponent;
+    @SubComponent
+    @Inject
+    public TechnologyOverviewComponent technologiesComponent;
     @SubComponent
     @Inject
     public DeleteStructureComponent deleteStructureComponent;
@@ -144,6 +151,7 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public SitePropertiesComponent sitePropertiesComponent;
+
 
     List<IslandComponent> islandComponentList;
     Map<String, IslandComponent> islandComponentMap;
@@ -184,9 +192,6 @@ public class InGameController extends BasicController {
     PopupBuilder popupSiteProperties = new PopupBuilder();
     PopupBuilder popupDeleteStructure = new PopupBuilder();
     PopupBuilder popupHelpWindow = new PopupBuilder();
-
-
-
     @OnInit
     public void init() {
         overviewSitesComponent.setIngameController(this);
@@ -197,12 +202,15 @@ public class InGameController extends BasicController {
         deleteStructureComponent.setInGameController(this);
         empireOverviewComponent.setInGameController(this);
         variableService.setIngameController(this);
-        pauseMenuComponent.setInGameController(this);
+		pauseMenuComponent.setInGameController(this);
         helpComponent.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
         System.out.printf("GAME ID: %s\nEMPIRE ID: %s\n", gameID, empireID);
+
+        System.out.println(gameID);
+        System.out.println(empireID);
 
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
@@ -249,6 +257,8 @@ public class InGameController extends BasicController {
             if (pause) {
                 shadow.setVisible(true);
                 shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
+                eventContainer.toFront();
+                eventComponent.toFront();
                 pauseGame();
             } else {
                 if (!eventContainer.isVisible()) {
@@ -269,6 +279,9 @@ public class InGameController extends BasicController {
         deleteStructureWarningContainer.setMouseTransparent(true);
         helpWindowContainer.setMouseTransparent(true);
         helpComponent.setVisible(false);
+        helpComponent.setMouseTransparent(true);
+
+
 
         pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
@@ -290,40 +303,45 @@ public class InGameController extends BasicController {
         islandClaimingContainer.getChildren().add(this.islandClaimingComponent);
         islandClaimingContainer.setVisible(true);
 
+        technologiesComponent.setContainer(contextMenuContainer);
+
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,
                 jobsOverviewComponent,
-                empireOverviewComponent
+                empireOverviewComponent,
+                technologiesComponent
         );
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
 
         this.createContextMenuButtons();
 
-        //Generate job stopping conditions for the already running jobs
-        this.jobsService.loadEmpireJobs();
+  		this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListener();
         explanationService.setInGameController(this);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
+        helpComponent.setVisible(false);
+        helpWindowContainer.setVisible(false);
+        helpComponent.setMouseTransparent(true);
+        helpWindowContainer.setMouseTransparent(true);
+
         pause = !pause;
         inGameService.setShowSettings(false);
         inGameService.setPaused(pause);
         if (pause) {
+            shadow.setVisible(true);
+            shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
+            eventContainer.toFront();
+            eventComponent.toFront();
             pauseMenuContainer.setMouseTransparent(false);
             pauseGame();
         } else {
             pauseMenuContainer.setMouseTransparent(true);
             resumeGame();
         }
-    }
-
-    @OnKey(code = KeyCode.E, alt = true)
-    public void showEmpireOverview() {
-        this.toggleContextMenuVisibility(this.empireOverviewComponent);
-        this.empireOverviewComponent.setVisible(!this.empireOverviewComponent.isVisible());
     }
 
 
@@ -355,6 +373,8 @@ public class InGameController extends BasicController {
 
     public void pauseGame() {
         closeComponents();
+        pauseMenuContainer.toFront();
+        pauseMenuComponent.toFront();
         pauseMenuComponent.setVisible(true);
         pauseMenuContainer.setVisible(pause);
         pauseMenuContainer.setMouseTransparent(false);
@@ -364,6 +384,7 @@ public class InGameController extends BasicController {
         pause = true;
         inGameService.setPaused(true);
         if (pause) {
+            System.out.println("pausetest");
             pauseMenuContainer.setMouseTransparent(false);
             pauseGame();
         } else {
@@ -394,7 +415,8 @@ public class InGameController extends BasicController {
             this.contextMenuButtons.getChildren().addAll(
                     new ContextMenuButton("storageOverview", this.storageOverviewComponent),
                     new ContextMenuButton("empireOverview", this.empireOverviewComponent),
-                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent)
+                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent),
+                    new ContextMenuButton("technologies", this.technologiesComponent)
             );
     }
 
@@ -516,7 +538,21 @@ public class InGameController extends BasicController {
             overviewSitesComponent.setOverviewSites();
     }
 
-    @OnKey(code = KeyCode.Z, alt = true)
+    @OnKey(code = KeyCode.S, alt = true)
+    public void showStorage() {
+        if(empireOverviewComponent.isVisible()) {
+            empireOverviewComponent.closeEmpireOverview();
+        }
+    }
+
+    @OnKey(code = KeyCode.E, alt = true)
+    public void showEmpireOverview() {
+        if(storageOverviewComponent.isVisible()){
+            storageOverviewComponent.closeStorageOverview();
+        }
+    }
+
+    @OnKey(code = KeyCode.SPACE)
     public void resetZoom() {
         scale = 0.65;
         group.setScaleX(scale);
@@ -598,6 +634,7 @@ public class InGameController extends BasicController {
     }
 
     public void showHelp() {
+        System.out.println("help");
         popupHelpWindow.showPopup(helpWindowContainer,helpComponent);
         helpComponent.setVisible(true);
         helpComponent.setMouseTransparent(false);

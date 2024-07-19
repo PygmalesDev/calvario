@@ -159,4 +159,5 @@ public class TechnologyService {
     public Observable<ArrayList<TechnologyExtended>> getTechnologies() {
         return presetsApiService.getTechnologies();
     }
+
 }

@@ -30,9 +30,6 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Map;
 import java.util.*;
 
 @Component(view = "IslandOverviewUpgrade.fxml")
@@ -67,6 +64,15 @@ public class OverviewUpgradeComponent extends AnchorPane {
     public ListView upgradeUpkeepList;
     @FXML
     public ListView upgradeCostList;
+    @FXML
+    public Pane res1;
+    @FXML
+    public Pane res2;
+    @FXML
+    public Text res_1;
+    @FXML
+    public Text res_2;
+
 
     @Inject
     InGameService inGameService;

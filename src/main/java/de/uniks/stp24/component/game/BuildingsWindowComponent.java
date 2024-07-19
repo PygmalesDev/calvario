@@ -6,7 +6,6 @@ import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
-import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

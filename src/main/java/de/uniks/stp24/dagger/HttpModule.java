@@ -97,11 +97,14 @@ public class HttpModule {
 
     @Provides
     @Singleton
-    JobsApiService jobsApiService(Retrofit retrofit) {return retrofit.create(JobsApiService.class);}
-    @Provides
-    @Singleton
     GameLogicApiService gameLogicApiService(Retrofit retrofit) {
         return retrofit.create(GameLogicApiService.class);
+    }
+
+    @Provides
+    @Singleton
+    JobsApiService jobsApiService(Retrofit retrofit){
+        return  retrofit.create(JobsApiService.class);
     }
 
 }

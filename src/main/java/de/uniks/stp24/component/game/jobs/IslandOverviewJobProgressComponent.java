@@ -130,7 +130,7 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
     }
 
     public void stopJob() {
-        this.subscriber.subscribe(this.jobsService.stopJob(this.job));
+        this.subscriber.subscribe(this.jobsService.stopJob(this.job), result -> {}, error -> {});
     }
 
     @OnDestroy

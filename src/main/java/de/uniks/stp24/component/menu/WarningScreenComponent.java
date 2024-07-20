@@ -8,6 +8,7 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.utils.ResponseConstants;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -28,6 +29,8 @@ public class WarningScreenComponent extends VBox {
     public Button cancelDeleteButton;
     @FXML
     public Text warningText;
+    @FXML
+    public Label userName;
     @FXML
     VBox warningContainer;
     @Inject
@@ -54,11 +57,12 @@ public class WarningScreenComponent extends VBox {
 
     @OnKey(code = KeyCode.ESCAPE)
     public void cancelDelete() {
-        getParent().setVisible(false);
+        if (getParent() != null)
+            getParent().setVisible(false);
     }
 
     public void deleteAcc() {
-        //Delete user and switch back to the login screen
+        // Delete user and switch back to the login screen
         this.subscriber.subscribe(editAccService.deleteUser(),
             result -> app.show("/login",
                         Map.of("info","deleted")),
@@ -77,5 +81,9 @@ public class WarningScreenComponent extends VBox {
 
     public void setWarning(String text) {
         this.warningText.setText(text);
+    }
+
+    public void setUserName(String name) {
+        this.userName.setText(name);
     }
 }

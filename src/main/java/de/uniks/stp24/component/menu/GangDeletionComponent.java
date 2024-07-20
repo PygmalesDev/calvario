@@ -3,6 +3,7 @@ package de.uniks.stp24.component.menu;
 import de.uniks.stp24.controllers.GangCreationController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
@@ -14,6 +15,8 @@ import java.util.ResourceBundle;
 @Component(view = "WarningGangDeletion.fxml")
 public class GangDeletionComponent extends VBox {
 
+    @FXML
+    Label gameName;
     @FXML
     Button deleteGangButton;
     @FXML
@@ -40,8 +43,8 @@ public class GangDeletionComponent extends VBox {
         this.gangCreationController = gangCreationController;
     }
 
-    public void setWarningText(String warningText){
-        this.warningText.setText("YOU ARE ABOUT TO DELETE: " + warningText);
+    public void setWarningText(String deletedGang){
+        this.gameName.setText(deletedGang);
     }
 
     public void cancelDelete() {
@@ -49,9 +52,7 @@ public class GangDeletionComponent extends VBox {
     }
 
     public void deleteGang(){
-        gangCreationController.delete();
-        getParent().setVisible(false);
+            gangCreationController.delete();
+            getParent().setVisible(false);
     }
-
-
 }

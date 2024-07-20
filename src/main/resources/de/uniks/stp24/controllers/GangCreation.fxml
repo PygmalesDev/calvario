@@ -151,5 +151,5 @@
          </VBox>
       </AnchorPane>
    </HBox>
-   <Pane fx:id="deletePane" layoutX="425.0" layoutY="210.0" prefHeight="250.0" prefWidth="450.0" style="-fx-border-color: BLACK; -fx-border-width: 3;" styleClass="backgroundLightYellow" visible="false" />
+   <Pane fx:id="deletePane" layoutX="425.0" layoutY="210.0" prefHeight="250.0" prefWidth="450.0" visible="false" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="425.0" AnchorPane.rightAnchor="405.0" AnchorPane.topAnchor="210.0" />
 </AnchorPane>

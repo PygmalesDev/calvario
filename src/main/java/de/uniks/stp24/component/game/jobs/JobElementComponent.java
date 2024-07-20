@@ -94,7 +94,7 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
     }
 
     public void cancelJob() {
-        this.subscriber.subscribe(this.jobsService.stopJob(this.job));
+        this.subscriber.subscribe(this.jobsService.stopJob(this.job), result -> {}, error -> {});
     }
 
     public void showJobOverview() {

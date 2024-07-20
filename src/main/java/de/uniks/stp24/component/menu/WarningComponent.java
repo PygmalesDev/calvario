@@ -49,7 +49,7 @@ public class WarningComponent extends VBox {
     }
     @OnRender
     public void setBackground() {
-        warningWindow.setStyle("-fx-background-color: white;");
+        warningWindow.setStyle("-fx-background-color: transparent;");
     }
 
     public void setGameName() {

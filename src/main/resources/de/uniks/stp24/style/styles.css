@@ -731,31 +731,6 @@ ToggleButton:hover{
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
 }
 
-.rightArrow {
-    -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/icons/up.png");
-    -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-padding: 0;
-    -fx-border-width: 0;
-    -fx-pref-width: 25px;
-    -fx-pref-height: 25px;
-    -fx-rotate: 90;
-}
-
-.leftArrow {
-    -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/icons/up.png");
-    -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-padding: 0;
-    -fx-border-width: 0;
-    -fx-pref-width: 25px;
-    -fx-pref-height: 25px;
-    -fx-rotate: 270;
-}
 
 /*Loading, Login, Register*/
 .calvarioTextLogo{

@@ -32,6 +32,10 @@ public class AppTest3 extends AppTest3Module {
         this.inspectJobs();
         this.cancelJob();
         this.beginIslandClaiming();
+        this.performMarketTrades();
+        this.performSeasonalTrades();
+        this.beginTechnologyJob();
+        sleep(100000);
     }
 
     public void selectTraits() {
@@ -74,14 +78,18 @@ public class AppTest3 extends AppTest3Module {
     public void beginSiteJob() {
         clickOn("#jobsOverviewButton");
         WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(this.jobsOverviewComponent.isVisible());
         clickOn("#islandID_1_instance");
         WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(this.overviewSitesComponent.isVisible());
         clickOn("#sitesButton");
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#energy");
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#buildSiteButton");
         JOB_SUBJECT.onNext(new Event<>(JOB_EVENT_PATHS[3] + "created", JOBS[3]));
+        WaitForAsyncUtils.waitForFxEvents();
+        assertFalse(this.jobsService.getObservableListForSystem("islandID_1").isEmpty());
     }
 
     public void beginBuildingJob() {
@@ -94,6 +102,8 @@ public class AppTest3 extends AppTest3Module {
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#buyButton");
         JOB_SUBJECT.onNext(new Event<>(JOB_EVENT_PATHS[2] + "created", JOBS[2]));
+        WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(this.propertiesJobProgressComponent.isVisible());
     }
 
     public void beginIslandUpgrade() {
@@ -104,6 +114,7 @@ public class AppTest3 extends AppTest3Module {
         clickOn("#backButton");
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#closeButton");
+        assertTrue(this.islandUpgradesJobProgressComponent.isVisible());
     }
 
     public void inspectJobs() {
@@ -129,15 +140,62 @@ public class AppTest3 extends AppTest3Module {
         JOB_SUBJECT.onNext(new Event<>(JOB_EVENT_PATHS[0] + "created", JOBS[0]));
         clickOn("#islandID_2_instance");
         WaitForAsyncUtils.waitForFxEvents();
-
         clickOn("#islandID_3_instance");
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#exploreButton");
         JOB_SUBJECT.onNext(new Event<>(JOB_EVENT_PATHS[1] + "created", JOBS[1]));
+        clickOn("#closeClaimingButton");
+    }
 
-        GAME_SUBJECT.onNext(this.tickGame());
+    public void performMarketTrades() {
         WaitForAsyncUtils.waitForFxEvents();
-        GAME_SUBJECT.onNext(this.tickGame());
+        clickOn("#marketOverviewButton");
+        assertTrue(this.marketComponent.isVisible());
+        clickOn("#minerals_marketButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#incrementNumberOfGoods");
+        clickOn("#incrementNumberOfGoods");
+        clickOn("#incrementNumberOfGoods");
+        clickOn("#buyButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("1000000004", lookup("#minerals_marketGoods").queryText().getText());
+        clickOn("#incrementNumberOfGoods");
+        clickOn("#incrementNumberOfGoods");
+        clickOn("#incrementNumberOfGoods");
+        clickOn("#sellButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        assertEquals("999999997", lookup("#minerals_marketGoods").queryText().getText());
+    }
 
+    public void performSeasonalTrades() {
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#everySeasonButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#buyButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        assertFalse(lookup("#seasonalTradesListView").queryListView().getItems().isEmpty());
+        clickOn("#playControlsButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#cancelTradesButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(lookup("#seasonalTradesListView").queryListView().getItems().isEmpty());
+        clickOn("#closeMarketOverviewButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        assertFalse(this.marketComponent.isVisible());
+    }
+
+    public void beginTechnologyJob() {
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#storageOverviewButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#closeStorageOverviewButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#technologiesButton");
+        assertTrue(this.technologyOverviewComponent.isVisible());
+        clickOn("#crewRelationsButton");
+        //TODO: Remove this line when (or if) the bug with overview not closing is fixed!
+        clickOn("#closeTechnologyOverviewButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#researchButton");
     }
 }

@@ -151,7 +151,6 @@ public class SitePropertiesComponent extends AnchorPane {
 
     public void setSiteType(String siteType){
         this.siteType = siteType;
-        System.out.println(siteType);
         this.siteName.setText(gameResourceBundle.getString(siteTranslation.get(siteType)));
         this.siteImage.setImage(imageCache.get("/" + sitesMap.get(siteType)));
         displayCostsOfSite();

@@ -30,7 +30,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
     @FXML
     VBox technologyOverviewBox;
     @FXML
-    Button closeButton;
+    Button closeTechnologyOverviewButton;
     @FXML
     Button crewRelationsButton;
     @FXML

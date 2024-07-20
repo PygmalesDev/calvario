@@ -79,69 +79,69 @@ public class InGameTestLoader extends ControllerTest {
             ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ENGLISH);
 
     @InjectMocks
-    MarketService marketService;
+    protected MarketService marketService;
     @InjectMocks
-    PauseMenuComponent pauseMenuComponent;
+    protected PauseMenuComponent pauseMenuComponent;
     @InjectMocks
-    StorageOverviewComponent storageOverviewComponent;
+    protected StorageOverviewComponent storageOverviewComponent;
     @InjectMocks
-    ClockComponent clockComponent;
+    protected ClockComponent clockComponent;
     @InjectMocks
-    OverviewSitesComponent overviewSitesComponent;
+    protected OverviewSitesComponent overviewSitesComponent;
     @InjectMocks
-    OverviewUpgradeComponent overviewUpgradeComponent;
+    protected OverviewUpgradeComponent overviewUpgradeComponent;
     @InjectMocks
-    IslandAttributeStorage islandAttributeStorage;
+    protected IslandAttributeStorage islandAttributeStorage;
     @InjectMocks
-    DetailsComponent detailsComponent;
+    protected DetailsComponent detailsComponent;
     @InjectMocks
-    SitesComponent sitesComponent;
+    protected SitesComponent sitesComponent;
     @InjectMocks
-    BuildingsComponent buildingsComponent;
+    protected BuildingsComponent buildingsComponent;
     @InjectMocks
-    EventComponent eventComponent;
+    protected EventComponent eventComponent;
     @InjectMocks
     protected InGameController inGameController;
     @InjectMocks
-    MarketComponent marketComponent;
+    protected MarketComponent marketComponent;
     @InjectMocks
-    BuildingPropertiesComponent buildingPropertiesComponent;
+    protected BuildingPropertiesComponent buildingPropertiesComponent;
     @InjectMocks
-    SitePropertiesComponent sitePropertiesComponent;
+    protected SitePropertiesComponent sitePropertiesComponent;
     @InjectMocks
-    BuildingsWindowComponent buildingsWindowComponent;
+    protected BuildingsWindowComponent buildingsWindowComponent;
     @InjectMocks
-    DeleteStructureComponent deleteStructureComponent;
+    protected DeleteStructureComponent deleteStructureComponent;
     @InjectMocks
-    EmpireOverviewComponent empireOverviewComponent;
+    protected EmpireOverviewComponent empireOverviewComponent;
     @InjectMocks
-    VariableService variableService;
+    protected VariableService variableService;
     @InjectMocks
-    HelpComponent helpComponent;
+    protected HelpComponent helpComponent;
     @InjectMocks
-    JobsOverviewComponent jobsOverviewComponent;
+    protected JobsOverviewComponent jobsOverviewComponent;
     @InjectMocks
-    IslandOverviewJobsComponent islandOverviewJobsComponent;
+    protected IslandOverviewJobsComponent islandOverviewJobsComponent;
     @InjectMocks
-    PropertiesJobProgressComponent propertiesJobProgressComponent;
+    protected PropertiesJobProgressComponent propertiesJobProgressComponent;
     @InjectMocks
-    PropertiesJobProgressComponent siteJobProgress;
+    protected PropertiesJobProgressComponent siteJobProgress;
     @InjectMocks
-    IslandClaimingComponent islandClaimingComponent;
+    protected IslandClaimingComponent islandClaimingComponent;
     @InjectMocks
-    IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
+    protected IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
     @InjectMocks
-    TechnologyOverviewComponent technologyOverviewComponent;
+    protected TechnologyOverviewComponent technologyOverviewComponent;
     @InjectMocks
-    TechnologyCategoryComponent technologyCategoryComponent;
+    protected TechnologyCategoryComponent technologyCategoryComponent;
     @InjectMocks
-    ResearchJobComponent researchJobComponent;
+    protected ResearchJobComponent researchJobComponent;
     @InjectMocks
-    EditGameService editGameService;
+    protected EditGameService editGameService;
     @InjectMocks
-    JobsService jobsService;
+    protected JobsService jobsService;
     @InjectMocks
-    CoolerBubbleComponent coolerBubbleComponent;
+    protected CoolerBubbleComponent coolerBubbleComponent;
 
     Provider<ClaimingSiteComponent> claimingComponentProvider = () -> {
         var component = new ClaimingSiteComponent();
@@ -151,30 +151,38 @@ public class InGameTestLoader extends ControllerTest {
 
     Provider<JobElementComponent> jobElementComponentProvider = () -> {
         JobElementComponent comp = new JobElementComponent();
-        comp.islandsService = islandsService;
-        comp.imageCache = imageCache;
-        comp.jobsService = jobsService;
-        comp.subscriber = subscriber;
         comp.gameResourceBundle = gameResourceBundle;
+        comp.islandsService = islandsService;
+        comp.jobsService = jobsService;
+        comp.imageCache = imageCache;
+        comp.subscriber = subscriber;
         return comp;
     };
 
     Provider<DistrictComponent> districtComponentProvider = () -> {
         DistrictComponent comp = new DistrictComponent();
+        comp.islandAttributeStorage = this.islandAttributeStorage;
         comp.tokenStorage = this.tokenStorage;
         comp.imageCache = this.imageCache;
-        comp.islandAttributeStorage = this.islandAttributeStorage;
         return comp;
     };
 
     Provider<IslandOverviewJobProgressComponent> islandOverviewJobProgressComponentProvider = () -> {
         IslandOverviewJobProgressComponent comp = new IslandOverviewJobProgressComponent();
-        comp.gameResourceBundle = this.gameResourceBundle;
         comp.islandAttributes = this.islandAttributeStorage;
-        comp.subscriber = this.subscriber;
+        comp.gameResourceBundle = this.gameResourceBundle;
         comp.jobsService = this.jobsService;
+        comp.subscriber = this.subscriber;
         comp.imageCache = this.imageCache;
         comp.app = this.app;
+        return comp;
+    };
+
+    Provider<MarketSeasonComponent> marketSeasonComponentProvider = () -> {
+        MarketSeasonComponent comp = new MarketSeasonComponent();
+        comp.gameResourceBundle = this.gameResourceBundle;
+        comp.marketService = this.marketService;
+        comp.imageCache = this.imageCache;
         return comp;
     };
 
@@ -264,6 +272,7 @@ public class InGameTestLoader extends ControllerTest {
         this.islandsService.subscriber = this.subscriber;
         this.islandsService.app = this.app;
 
+
         this.inGameService.presetsApiService = this.presetsApiService;
 
         this.empireService.empireApiService = this.empireApiService;
@@ -326,10 +335,13 @@ public class InGameTestLoader extends ControllerTest {
         this.marketService.empireApiService = this.empireApiService;
         this.marketService.subscriber = this.subscriber;
 
+        this.marketComponent.marketSeasonComponentProvider = this.marketSeasonComponentProvider;
         this.marketComponent.explanationService = this.explanationService;
         this.marketComponent.presetsApiService = this.presetsApiService;
         this.marketComponent.marketService = this.marketService;
+        this.marketComponent.tokenStorage = this.tokenStorage;
         this.marketComponent.subscriber = this.subscriber;
+        this.marketComponent.imageCache = this.imageCache;
 
         this.sitesComponent.districtComponentProvider = this.districtComponentProvider;
         this.sitesComponent.attributeStorage = this.islandAttributeStorage;
@@ -356,6 +368,11 @@ public class InGameTestLoader extends ControllerTest {
         this.siteJobProgress.jobsService = this.jobsService;
 
         this.jobsOverviewComponent.jobsService = this.jobsService;
+
+        this.technologyService.presetsApiService = this.presetsApiService;
+        this.technologyService.empireApiService = this.empireApiService;
+        this.technologyService.tokenStorage = this.tokenStorage;
+        this.technologyService.subscriber = this.subscriber;
 
         this.technologyOverviewComponent.technologiesResourceBundle = this.technologiesResourceBundle;
     }

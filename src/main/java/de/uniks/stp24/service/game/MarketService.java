@@ -74,6 +74,7 @@ public class MarketService {
         _private.put("allSeasonalTrades", seasonComponents);
         SeasonalTradeDto seasonalTradeDto = new SeasonalTradeDto(_private);
         subscriber.subscribe(saveSeasonalComponents(tokenStorage.getGameId(), tokenStorage.getEmpireId(), seasonalTradeDto),
+                result -> {},
                 error -> System.out.println("errorSaveSeasonalTrades:" + error));
     }
 

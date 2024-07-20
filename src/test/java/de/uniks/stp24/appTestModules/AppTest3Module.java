@@ -104,6 +104,16 @@ public class AppTest3Module extends LobbyTestLoader {
             "systems.colonized.cost.energy", 100
     );
 
+    protected final Map<String, Double> MARKET_VARIABLES = Map.of(
+            "resources.energy.credit_value", 1.0,
+            "resources.minerals.credit_value", 1.0,
+            "resources.food.credit_value", 1.0,
+            "resources.fuel.credit_value", 5.0,
+            "resources.alloys.credit_value", 8.0,
+            "resources.consumer_goods.credit_value", 6.0,
+            "empire.market.fee", 0.3
+    );
+
     protected final ArrayList<ExplainedVariableDTO> VARIABLE_EXPLANATIONS = new ArrayList<>(List.of(
             new ExplainedVariableDTO("districts.energy.cost.minerals", 75, new ArrayList<>(), 75),
             new ExplainedVariableDTO("districts.energy.upkeep.minerals", 2, new ArrayList<>(), 2),
@@ -144,8 +154,32 @@ public class AppTest3Module extends LobbyTestLoader {
                     "building", "refinery", null, null, new HashMap<>(), null),
             new Jobs.Job("0", "0",
                     "jobSiteID", 0, 12, GAME_ID, EMPIRE_ID, "islandID_1", 0,
-                    "district", null, "energy", null, new HashMap<>(), null)
+                    "district", null, "energy", null, new HashMap<>(), null),
+            new Jobs.Job("0", "0",
+                    "jobTechnologyID", 0, 12, GAME_ID, EMPIRE_ID, "islandID_1", 0,
+                    "technology", null, null, "society", new HashMap<>(), null)
     };
+
+    protected final TechnologyExtended TECHNOLOGY = new TechnologyExtended("society", new Effect[]{
+        new Effect("technologies.society.cost_multiplier", 0, 0.9, 0)},
+            new String[]{"society"}, 2, null, null);
+
+    protected final ArrayList<TechnologyExtended> TECHNOLOGIES = new ArrayList<>(List.of(TECHNOLOGY));
+
+    protected final UpdateEmpireMarketDto MARKET_UPDATE_DTO = new UpdateEmpireMarketDto(
+            DEV_RESOURCES, null, null, null);
+
+    protected final AggregateResultDto RESOURCE_AGGREGATES = new AggregateResultDto(-437, new AggregateItemDto[]{
+            new AggregateItemDto("resources.credits.periodic", 1, -112),
+            new AggregateItemDto("resources.population.periodic", 1, 0),
+            new AggregateItemDto("resources.energy.periodic", 1, -122),
+            new AggregateItemDto("resources.minerals.periodic", 1, -99),
+            new AggregateItemDto("resources.food.periodic", 1, -156),
+            new AggregateItemDto("resources.fuel.periodic", 1, 14),
+            new AggregateItemDto("resources.research.periodic", 1, 10),
+            new AggregateItemDto("resources.alloys.periodic", 1, -1),
+            new AggregateItemDto("resources.consumer_goods.periodic", 1, 29),
+    });
 
     protected final EffectSourceParentDto SOURCE_PARENT_DTO = new EffectSourceParentDto(new EffectSourceDto[]{});
 
@@ -179,6 +213,10 @@ public class AppTest3Module extends LobbyTestLoader {
                 .listen("games." + GAME_ID + ".empires." + EMPIRE_ID + ".updated", EmpireDto.class);
 
         when(this.eventListener.listen(JOB_EVENT_PATH + "*", Jobs.Job.class)).thenReturn(JOB_SUBJECT);
+        when(this.eventListener.listen(JOB_EVENT_PATHS[0] + "*", Jobs.Job.class)).thenReturn(JOB_SUBJECT);
+        when(this.eventListener.listen(JOB_EVENT_PATHS[1] + "*", Jobs.Job.class)).thenReturn(JOB_SUBJECT);
+        when(this.eventListener.listen(JOB_EVENT_PATHS[2] + "*", Jobs.Job.class)).thenReturn(JOB_SUBJECT);
+        when(this.eventListener.listen(JOB_EVENT_PATHS[3] + "*", Jobs.Job.class)).thenReturn(JOB_SUBJECT);
     }
 
     private void initializeApiMocks() {
@@ -199,8 +237,10 @@ public class AppTest3Module extends LobbyTestLoader {
 
         when(this.presetsApiService.getVariablesPresets()).thenReturn(Observable.just(VARIABLE_PRESETS));
         when(this.presetsApiService.getVariablesEffects()).thenReturn(Observable.just(new HashMap<>()));
+        when(this.presetsApiService.getVariables()).thenReturn(Observable.just(MARKET_VARIABLES));
+        when(this.presetsApiService.getTechnology(any())).thenReturn(Observable.just(TECHNOLOGY));
+        when(this.presetsApiService.getTechnologies()).thenReturn(Observable.just(TECHNOLOGIES));
         when(this.presetsApiService.getTraitsPreset()).thenReturn(Observable.just(TRAITS));
-        when(this.presetsApiService.getVariables()).thenReturn(Observable.just(new HashMap<>()));
 
         when(this.gameLogicApiService.getVariablesExplanations(any(), any())).thenReturn(Observable.just(VARIABLE_EXPLANATIONS));
 
@@ -215,19 +255,21 @@ public class AppTest3Module extends LobbyTestLoader {
         when(this.gameSystemsApiService.getBuilding(any())).thenReturn(Observable.just(BUILDING_DTO));
         when(this.gameSystemsApiService.getSystems(any())).thenReturn(Observable.just(GAME_SYSTEMS));
 
-        when(this.empireApiService.getResourceAggregates(any(), any())).thenReturn(Observable.just(new AggregateResultDto(20, new AggregateItemDto[]{})));
+        when(this.empireApiService.getSeasonalTrades(any(), any())).thenReturn(Observable.just(new SeasonalTradeDto(null)));
+        when(this.empireApiService.saveSeasonalComponents(any(), any(), any())).thenReturn(Observable.just(MARKET_UPDATE_DTO));
+        when(this.empireApiService.updateEmpireMarket(any(), any(), any())).thenReturn(Observable.just(MARKET_UPDATE_DTO));
+        when(this.empireApiService.getResourceAggregates(any(), any())).thenReturn(Observable.just(RESOURCE_AGGREGATES));
+        when(this.empireApiService.getEmpiresDtos(anyString())).thenReturn(Observable.just(new EmpireDto[]{EMPIRE_DTO}));
         when(this.empireApiService.getEmpires(any())).thenReturn(Observable.just(new ReadEmpireDto[]{READ_EMPIRE_DTO}));
         when(this.empireApiService.getEmpireEffect(any(), any())).thenReturn(Observable.just(SOURCE_PARENT_DTO));
         when(this.empireApiService.getEmpire(any(), any())).thenReturn(Observable.just(EMPIRE_DTO));
-        when(this.empireApiService.getSeasonalTrades(any(), any())).thenReturn(Observable.just(
-                new SeasonalTradeDto(new HashMap<>())));
 
+        when(this.jobsApiService.deleteJob(anyString(), anyString(), any())).thenReturn(Observable.just(JOBS[3]));
         when(this.jobsApiService.getEmpireJobs(any(), any())).thenReturn(Observable.just(new ArrayList<>()));
         when(this.jobsApiService.createNewJob(anyString(), anyString(), any(Jobs.JobDTO.class)))
                 .thenReturn(Observable.just(JOBS[3])).thenReturn(Observable.just(JOBS[2]))
-                .thenReturn(Observable.just(JOBS[0])).thenReturn(Observable.just(JOBS[1]));
-        when(this.jobsApiService.deleteJob(anyString(), anyString(), any()))
-                .thenReturn(Observable.just(JOBS[3]));
+                .thenReturn(Observable.just(JOBS[0])).thenReturn(Observable.just(JOBS[1]))
+                .thenReturn(Observable.just(JOBS[4]));
 
         doAnswer(inv -> this.app.show(this.gangCreationController)).when(this.app).show(eq("/creation"), any());
         doAnswer(inv -> this.app.show(this.inGameController)).when(this.app).show(eq("/ingame"), any());

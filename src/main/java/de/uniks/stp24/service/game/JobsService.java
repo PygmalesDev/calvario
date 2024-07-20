@@ -83,8 +83,6 @@ public class JobsService {
                 this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), Job.class), result -> {
             Job job = result.data();
 
-            System.out.println("called~");
-
             switch (result.suffix()) {
                 case "created" -> this.addJobToGroups(job);
                 case "updated" -> this.updateJobInGroups(job);
@@ -97,7 +95,6 @@ public class JobsService {
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.ticked",
                 this.tokenStorage.getGameId()), Game.class), game -> {
             if (game.data().period() != this.period) {
-                System.out.println("i ticked!");
                 this.tickedCommonFunctions.forEach(Runnable::run);
                 this.period = game.data().period();
             }
@@ -107,7 +104,6 @@ public class JobsService {
 
     public void addJobToGroups(@NotNull Job job) {
         this.jobCollections.get(job.type()).add(job);
-        System.out.println("creating new job");
 
         if (!job.type().equals("technology")) {
             if (!this.jobCollections.containsKey(job.system()))

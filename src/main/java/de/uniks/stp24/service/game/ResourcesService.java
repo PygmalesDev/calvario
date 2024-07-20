@@ -40,7 +40,10 @@ public class ResourcesService {
     }
 
     public int getResourceCount(String resourceId) {
-        return currentResources.get(resourceId);
+        System.out.println(currentResources);
+        if (currentResources.containsKey(resourceId))
+            return currentResources.get(resourceId);
+        return 0;
     }
 
     public Observable<SystemDto> destroyBuilding(String gameID, Island island, String buildingToDestroy) {

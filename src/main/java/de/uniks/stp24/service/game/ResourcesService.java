@@ -131,4 +131,10 @@ public class ResourcesService {
         }
         return true;
     }
+
+    public Resource aggregateItemDtoToResource(AggregateItemDto aggregateItemDto) {
+        String resourceID = aggregateItemDto.variable().replace("resources.", "").replace(".periodic", "");
+        int resourceCount = getResourceCount(resourceID);
+        return new Resource(resourceID, resourceCount, aggregateItemDto.subtotal());
+    }
 }

@@ -382,7 +382,7 @@ public class GangCreationController extends BasicController {
     }
 
     public void cancelChanges() {
-        Gang gang =gangsListView.getSelectionModel().getSelectedItem();
+        Gang gang = gangsListView.getSelectionModel().getSelectedItem();
         applyInputs(gang);
         selectGangInListView(gang);
         showCreationButton.setVisible(true);

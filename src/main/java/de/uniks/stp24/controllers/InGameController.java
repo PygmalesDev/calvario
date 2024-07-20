@@ -6,16 +6,17 @@ import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import static de.uniks.stp24.service.Constants.*;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.game.*;
-import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
@@ -587,7 +588,7 @@ public class InGameController extends BasicController {
             Island selected = this.islandsService.getIsland(job.system());
             this.islandAttributes.setIsland(selected);
             this.tokenStorage.setIsland(selected);
-            this.showBuildingInformation(job.building(), job._id(), true);
+            this.showBuildingInformation(job.building(), job._id(), BUILT_STATUS.QUEUED);
         });
 
         this.jobsService.setJobInspector("building_done_overview", (Jobs.Job job) -> {
@@ -595,7 +596,7 @@ public class InGameController extends BasicController {
             this.islandAttributes.setIsland(selected);
             this.tokenStorage.setIsland(selected);
             // after the job is done, the isBuilt should be true cause the building is built!
-            this.showBuildingInformation(job.building(), "", true);
+            this.showBuildingInformation(job.building(), "", BUILT_STATUS.BUILT);
         });
 
         this.jobsService.setJobInspector("storage_overview", (Jobs.Job job) -> showStorageOverview());
@@ -644,10 +645,11 @@ public class InGameController extends BasicController {
         }
     }
 
-    public void showBuildingInformation(String buildingToAdd, String jobID) {
+    public void showBuildingInformation(String buildingToAdd, String jobID, BUILT_STATUS isBuilt) {
+        System.out.println("built " + isBuilt);
         siteProperties.setVisible(false);
         siteProperties.setMouseTransparent(true);
-        buildingPropertiesComponent.setBuildingType(buildingToAdd, jobID);
+        buildingPropertiesComponent.setBuildingType(buildingToAdd, jobID, isBuilt);
         popupBuildingProperties.showPopup(buildingProperties, buildingPropertiesComponent);
     }
 

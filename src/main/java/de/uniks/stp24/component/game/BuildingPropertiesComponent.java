@@ -5,9 +5,9 @@ import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.BuildingAttributes;
-import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -31,6 +31,7 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.*;
 
+import static de.uniks.stp24.service.Constants.*;
 import static de.uniks.stp24.service.Constants.buildingTranslation;
 import static de.uniks.stp24.service.Constants.buildingsIconPathsMap;
 
@@ -110,9 +111,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @OnInit
     public void setBuildingUpdates() {
         this.jobsService.onJobsLoadingFinished("building", this::setBuildingJobFinishers);
-        this.jobsService.onJobCommonFinish(this::updateIslandBuildings);
         this.jobsService.onJobsLoadingFinished(() ->
                 this.buildingJobs = this.jobsService.getJobObservableListOfType("building"));
+        this.jobsService.onJobCommonFinish(this::updateIslandBuildings);
     }
 
     @OnRender
@@ -126,7 +127,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @OnRender
     public void addRunnable() {
         // this method will be run after resources update themselves, to (dis)-enable buttons dynamically
-        resourcesService.setOnResourceUpdates(this::updateButtonStates);
+        resourcesService.setOnResourceUpdates(this::setButtonsDisable);
     }
 
     public void setInGameController(InGameController inGameController){
@@ -134,53 +135,50 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
 
-    public void setBuildingType(String buildingType, String jobID){
+    public void setBuildingType(String buildingType, String jobID, BUILT_STATUS isBuilt){
         this.buildingType = buildingType;
 
-        // when isBuilt = True, buyButton should be disabled
-        // else destroy Button should be disabled
-        buyButton.setDisable(isBuilt);
-        if(!isBuilt) updateButtonStates();
-
-        this.currentJobID = jobID;
         displayInfoBuilding();
-        disableButtons();
-        destroyButton.setDisable(!isBuilt);
-
-        if (!jobID.isEmpty()) {
-            Jobs.Job job = this.buildingJobs.stream()
-                    .filter(started -> started._id().equals(jobID)
-                            && started.system().equals(this.tokenStorage.getIsland().id()))
-                    .findFirst().orElse(null);
-
-            this.showJobsPane();
-            if (Objects.nonNull(job)) {
-                this.propertiesJobProgressComponent.setJobProgress(job);
-                if (this.jobsService.hasNoJobTypeProgress(job.type()) && this.buildingJobs.getFirst().equals(job))
-                    this.jobsService.onJobTypeProgress(job.type(), () ->
-                            this.propertiesJobProgressComponent.incrementProgress());
-                else this.jobsService.stopOnJobTypeProgress("building");
-            }
-        } else {
-            this.hideJobsPane();
-            this.jobsService.stopOnJobTypeProgress("building");
-        }
 
         this.setJobsPaneProgress(this.buildingJobs.stream().filter(started -> started._id().equals(jobID)
-                        && started.system().equals(this.tokenStorage.getIsland().id())).findFirst().orElse(null));
+                && started.system().equals(this.tokenStorage.getIsland().id())).findFirst().orElse(null));
+
+
+        switch (isBuilt) {
+            case BUILT -> {
+                this.buyButton.setVisible(false);
+                this.destroyButton.setVisible(true);
+                setDestroyButtonDisable();
+            }
+            case QUEUED -> {
+                this.buyButton.setVisible(false);
+                this.destroyButton.setVisible(false);
+            }
+            case NOT_BUILT -> {
+                this.buyButton.setVisible(true);
+                this.destroyButton.setVisible(false);
+                setBuyButtonDisable();
+            }
+        }
+
     }
+
 
     private void setBuildingJobFinishers(Jobs.Job job) {
         this.jobsService.onJobDeletion(job._id(), () -> {
-            this.updateIslandBuildings();
             if (Objects.nonNull(this.currentJob)) {
                 if (this.currentJob._id().equals(job._id())) this.getParent().setVisible(false);
                 else this.setJobsPaneProgress(this.currentJob);
             }
         });
+
         this.jobsService.onJobCompletion(job._id(), () -> {
             if (Objects.nonNull(this.currentJob)) {
-                if (this.currentJob._id().equals(job._id())) this.getParent().setVisible(false);
+                if (this.currentJob._id().equals(job._id())) {
+                    this.setJobsPaneVisibility(false);
+                    this.destroyButton.setVisible(true);
+                    setDestroyButtonDisable();
+                }
                 else this.setJobsPaneProgress(this.currentJob);
             }
         });
@@ -198,22 +196,15 @@ public class BuildingPropertiesComponent extends AnchorPane {
     public void setJobsPaneVisibility(boolean isVisible) {
         this.jobProgressPane.setVisible(isVisible);
         this.buildingCostsListView.setVisible(!isVisible);
-        this.buyButton.setVisible(!isVisible);
-        this.destroyButton.setVisible(!isVisible);
     }
 
-    //Checks if buy and destroy building has to be deactivated
-    public void disableButtons() {
-        if (tokenStorage.getIsland().buildings().contains(buildingType)) destroyButton.setDisable(false);
+    // Checks if buy and destroy building has to be deactivated
+    public void setButtonsDisable() {
+        setDestroyButtonDisable();
+        setBuyButtonDisable();
     }
 
-    public void destroyBuilding(){
-        disableButtons();
-        setVisible(false);
-        inGameController.handleDeleteStructure(buildingType);
-    }
-
-    public void updateButtonStates() {
+    private void setBuyButtonDisable() {
         // check if empire has enough resources to build this building
         if (Objects.nonNull(buildingType))
             subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
@@ -221,6 +212,17 @@ public class BuildingPropertiesComponent extends AnchorPane {
                 buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding) ||
                         islandAttributeStorage.getUsedSlots() >= islandAttributeStorage.getIsland().resourceCapacity());
             }, error -> System.out.println("error updateButtonStates(): " + error));
+    }
+
+    private void setDestroyButtonDisable() {
+        if (tokenStorage.getIsland().buildings().contains(buildingType))
+            destroyButton.setDisable(false);
+    }
+
+    public void destroyBuilding(){
+        setDestroyButtonDisable();
+        setVisible(false);
+        inGameController.handleDeleteStructure(buildingType);
     }
 
     public void buyBuilding(){
@@ -232,6 +234,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
                     this.setJobsPaneProgress(job);
                     this.updateIslandBuildings();
                     this.setBuildingJobFinishers(job);
+                    buyButton.setVisible(false);
                 });
             } else buyButton.setDisable(true);
         });
@@ -261,7 +264,6 @@ public class BuildingPropertiesComponent extends AnchorPane {
         buildingCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, negativeResouceProvider), "buildings", buildingType, "cost"));
         buildingProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, positiveResourceProvider), "buildings", buildingType, "production"));
         buildingConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, negativeResouceProvider), "buildings", buildingType, "upkeep"));
-        disableButtons();
     }
 
     //Sets upkeep, production and cost of buildings in listviews

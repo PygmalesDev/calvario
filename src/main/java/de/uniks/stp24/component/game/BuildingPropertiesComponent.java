@@ -110,6 +110,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     @OnRender
     public void addRunnable() {
+        // this method will be run after resources update themselves, to (dis)-enable buttons dynamically
         resourcesService.setOnResourceUpdates(this::updateButtonStates);
     }
 
@@ -121,6 +122,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
     public void setBuildingType(String buildingType, String jobID, boolean isBuilt){
         this.buildingType = buildingType;
 
+        // when isBuilt = True, buyButton should be disabled
+        // else destroy Button should be disabled
         buyButton.setDisable(isBuilt);
         if(!isBuilt) updateButtonStates();
 
@@ -207,6 +210,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
     public void updateButtonStates() {
+        // check if empire has enough resources to build this building
         if (Objects.nonNull(buildingType))
             subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
                 priceOfBuilding = result.cost();

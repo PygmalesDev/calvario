@@ -66,9 +66,10 @@ public class IslandComponent extends Pane {
 
     public void applyIcon(IslandType type) {
         this.islandImage.setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
+
         if (this.island.upgrade().equals("explored"))
             this.spyglassImage.setImage(imageCache.get("/de/uniks/stp24/icons/other/spyglass.png"));
-        else
+        else // islands with upgrades other than explored
             hideSpyGlass();
     }
 
@@ -183,6 +184,7 @@ public class IslandComponent extends Pane {
     }
 
     public void applyEmpireInfo() {
+        // apply drop shadow and flag for newly colonized systems
         this.islandsService.applyDropShadowToIsland(this);
         this.setFlagImage(islandsService.getEmpire(island.owner()).flag());
     }

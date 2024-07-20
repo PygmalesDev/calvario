@@ -415,6 +415,7 @@ public class IslandsService extends BasicService {
     }
 
     public void applyDropShadowToIsland(IslandComponent islandComponent) {
+        // adds a background color to island as same as owner empire color
         if (Objects.nonNull(islandComponent.island.owner())) {
             Color colorWeb = Color.web(getEmpire(islandComponent.island.owner()).color()).brighter();
             islandComponent.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb) + ", 4.0, 0.88, 0, 0);");}

@@ -149,6 +149,7 @@ public class SitePropertiesComponent extends AnchorPane {
 
     @OnRender
     public void addRunnable() {
+        // this method will be run after resources update themselves, to (dis)-enable buttons dynamically
         resourcesService.setOnResourceUpdates(this::setButtonsDisable);
     }
 
@@ -299,6 +300,7 @@ public class SitePropertiesComponent extends AnchorPane {
     }
 
     private void setButtonsDisable() {
+        // check if empire has enough resources to build a site cell
         if (Objects.nonNull(siteType))
             subscriber.subscribe(resourcesService.getResourcesSite(siteType), result -> {
                 Map<String, Integer> costSite = result.cost();

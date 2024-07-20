@@ -101,7 +101,11 @@ public class BuildingsWindowComponent extends AnchorPane {
             buttons[i].getStyleClass().clear();
         }
     }
-    //The following are onAction methods from buttons
+
+    /*
+    The following are onAction methods from buttons
+    isBuilt = false cause these are for build new Buildings window
+     */
     public void buildExchange(){
         this.buildingToAdd = "exchange";
         inGameController.showBuildingInformation(buildingToAdd, "", false);

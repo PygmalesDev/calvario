@@ -189,6 +189,7 @@ public class ResourcesService {
     }
 
     public void setOnResourceUpdates(Runnable func) {
+        // methods to run after resource updates
         runnables.add(func);
     }
 }

@@ -128,6 +128,7 @@ public class ResourcesService {
         return gameSystemsApiService.getBuilding(buildingType);
     }
 
+    // made a new method in order to prevent currentResources being overwritten in generateResourceList
     public void setCurrentResources(Map<String, Integer> resourceMap) {
         currentResources = resourceMap;
     }

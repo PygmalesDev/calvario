@@ -114,7 +114,6 @@ public class TechnologyOverviewComponent extends AnchorPane {
     }
 
     public void engineering() {
-        System.out.println("ayri");
         technologyCategoryComponent.researchJobComponent.handleJobsAlreadyRunning();
         show(technologyCategoryComponent.setCategory("engineering"));
         outerLoop:

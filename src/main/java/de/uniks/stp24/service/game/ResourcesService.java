@@ -40,7 +40,6 @@ public class ResourcesService {
     }
 
     public int getResourceCount(String resourceId) {
-        System.out.println(currentResources);
         if (currentResources.containsKey(resourceId))
             return currentResources.get(resourceId);
         return 0;

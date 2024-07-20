@@ -405,7 +405,6 @@ public class InGameController extends BasicController {
         pause = true;
         inGameService.setPaused(true);
         if (pause) {
-            System.out.println("pausetest");
             pauseMenuContainer.setMouseTransparent(false);
             pauseGame();
         } else {
@@ -676,7 +675,6 @@ public class InGameController extends BasicController {
     }
 
     public void showHelp() {
-        System.out.println("help");
         popupHelpWindow.showPopup(helpWindowContainer,helpComponent);
         helpComponent.setVisible(true);
         helpComponent.setMouseTransparent(false);

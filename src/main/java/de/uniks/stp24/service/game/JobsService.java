@@ -96,6 +96,7 @@ public class JobsService {
                 this.tokenStorage.getGameId()), Game.class), game -> {
             if (game.data().period() != this.period) {
                 this.tickedCommonFunctions.forEach(Runnable::run);
+                System.out.println("i ticked!");
                 this.period = game.data().period();
             }
 

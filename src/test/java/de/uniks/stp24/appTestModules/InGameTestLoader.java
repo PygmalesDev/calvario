@@ -9,6 +9,7 @@ import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
@@ -75,8 +76,11 @@ public class InGameTestLoader extends ControllerTest {
     @Spy
     AnnouncementsService announcementsService;
     @Spy
+    GameStatus gameStatus;
+    @Spy
     public ResourceBundle technologiesResourceBundle =
             ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ENGLISH);
+
 
     @InjectMocks
     protected MarketService marketService;
@@ -272,8 +276,8 @@ public class InGameTestLoader extends ControllerTest {
         this.islandsService.subscriber = this.subscriber;
         this.islandsService.app = this.app;
 
-
         this.inGameService.presetsApiService = this.presetsApiService;
+        this.inGameService.gameStatus = this.gameStatus;
 
         this.empireService.empireApiService = this.empireApiService;
 
@@ -375,11 +379,21 @@ public class InGameTestLoader extends ControllerTest {
         this.technologyService.subscriber = this.subscriber;
 
         this.technologyOverviewComponent.technologiesResourceBundle = this.technologiesResourceBundle;
+
     }
 
     protected void clearStyles() {
+        this.technologyOverviewComponent.getStylesheets().clear();
+        this.technologyCategoryComponent.getStylesheets().clear();
+        this.buildingPropertiesComponent.getStylesheets().clear();
         this.inGameController.rootPane.getStylesheets().clear();
+        this.storageOverviewComponent.getStylesheets().clear();
         this.islandClaimingComponent.getStylesheets().clear();
+        this.sitePropertiesComponent.getStylesheets().clear();
+        this.overviewSitesComponent.getStylesheets().clear();
+        this.jobsOverviewComponent.getStylesheets().clear();
+        this.buildingsComponent.getStylesheets().clear();
+        this.marketComponent.getStylesheets().clear();
         this.clockComponent.getStylesheets().clear();
     }
 }

@@ -4,6 +4,7 @@ import de.uniks.stp24.appTestModules.AppTest3Module;
 import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.ws.Event;
 import javafx.scene.control.ListView;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,7 @@ public class AppTest3 extends AppTest3Module {
         this.selectTraits();
         this.loadGame();
 
+        this.showTip();
         this.beginSiteJob();
         this.beginBuildingJob();
         this.beginIslandUpgrade();
@@ -35,7 +37,7 @@ public class AppTest3 extends AppTest3Module {
         this.performMarketTrades();
         this.performSeasonalTrades();
         this.beginTechnologyJob();
-        sleep(100000);
+        this.showHelpWindow();
     }
 
     public void selectTraits() {
@@ -197,5 +199,28 @@ public class AppTest3 extends AppTest3Module {
         clickOn("#closeTechnologyOverviewButton");
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#researchButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#closeCategoryButton");
+    }
+
+    public void showTip() {
+        GAME_SUBJECT.onNext(this.tickGame());
+        WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(this.coolerBubbleComponent.isVisible());
+        clickOn("#nextButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        assertFalse(this.coolerBubbleComponent.isVisible());
+    }
+
+    public void showHelpWindow() {
+        press(KeyCode.ESCAPE);
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#settingsButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        assertTrue(this.helpComponent.isVisible());
+        clickOn("#closeHelpButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        assertFalse(this.helpComponent.isVisible());
+
     }
 }

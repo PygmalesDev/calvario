@@ -290,7 +290,8 @@ public class MarketComponent extends StackPane {
             resourceCountMapCopy = new HashMap<>(resourceCountMap);
             userCredits -= buyingPrice;
             userCreditsLabel.setText(String.valueOf(userCredits));
-            resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
+            int result = resourceCountMap.get(selectedItem) + resourceAmount;
+            resourceCountMap.put(selectedItem, result);
             updateResources();
             refreshListview();
         }
@@ -465,7 +466,7 @@ public class MarketComponent extends StackPane {
     private void updateAfterSeasonalTrade() {
         subscriber.subscribe(marketService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 empireDto -> {
-                    resourceCountMap = empireDto.resources();
+                    resourceCountMap.putAll(empireDto.resources());
                     filterResourceMap();
                     refreshListview();
                     performSeasonalTrades();

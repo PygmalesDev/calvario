@@ -205,13 +205,21 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
     private void setBuyButtonDisable() {
-        // check if empire has enough resources to build this building
-        if (Objects.nonNull(buildingType))
-            subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
-                priceOfBuilding = result.cost();
-                buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding) ||
-                        islandAttributeStorage.getUsedSlots() >= islandAttributeStorage.getIsland().resourceCapacity());
-            }, error -> System.out.println("error updateButtonStates(): " + error));
+        // check
+        // 1) if empire has enough resources to build this building
+        // 2) if island has enough capacity
+        if (Objects.nonNull(buildingType)) {
+            int islandJobsInQueue = jobsService.getObservableListForSystem(islandAttributeStorage.getIsland().id()).size();
+            if (islandAttributeStorage.getUsedSlots() + islandJobsInQueue >=
+                    islandAttributeStorage.getIsland().resourceCapacity()) {
+                buyButton.setDisable(true);
+            } else {
+                subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
+                    priceOfBuilding = result.cost();
+                    buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding));
+                }, error -> System.out.println("error updateButtonStates(): " + error));
+            }
+        }
     }
 
     private void setDestroyButtonDisable() {

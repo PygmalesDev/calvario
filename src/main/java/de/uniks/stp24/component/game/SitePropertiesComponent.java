@@ -273,11 +273,7 @@ public class SitePropertiesComponent extends AnchorPane {
         // 2) if island has enough capacity for this building
         if (Objects.nonNull(siteType)) {
             Map<String, Integer> costSite = Objects.requireNonNull(getCertainSite()).cost();
-
-            tempJobListBuildings = jobsService.getJobObservableListOfType("building");
-            tempJobListSites = jobsService.getJobObservableListOfType("district");
-            int islandJobsInQueue = tempJobListBuildings.size() + tempJobListSites.size();
-
+            int islandJobsInQueue = jobsService.getObservableListForSystem(islandAttributeStorage.getIsland().id()).size();
             buildSiteButton.setDisable(!resourcesService.hasEnoughResources(costSite)
             ||
             islandAttributeStorage.getUsedSlots() + islandJobsInQueue >=

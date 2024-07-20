@@ -539,6 +539,7 @@ public class InGameController extends BasicController {
             Island selected = this.islandsService.getIsland(params[2]);
             this.islandAttributes.setIsland(selected);
             this.tokenStorage.setIsland(selected);
+            // after the job is done, the isBuilt should be true cause the building is built!
             this.showBuildingInformation(params[0], params[1], true);
         });
     }
@@ -653,6 +654,7 @@ public class InGameController extends BasicController {
     }
 
     private void removeIslands() {
+        // removes islands from map
         islandComponentList.forEach(IslandComponent::destroy);
         islandComponentList = null;
         islandComponentMap = null;

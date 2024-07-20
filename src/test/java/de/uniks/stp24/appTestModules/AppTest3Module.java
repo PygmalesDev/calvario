@@ -7,7 +7,6 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.stage.Stage;
-import org.fulib.fx.annotation.event.OnRender;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,10 +22,36 @@ public class AppTest3Module extends LobbyTestLoader {
             EMPIRE_ID = "testEmpireID",
             USER_ID = "testUserID";
 
-    protected final BuildingDto BUILDING_DTO = new BuildingDto("refinery", 3, Map.of("energy", 30),
-            Map.of("energy", 30), Map.of("energy", 30));
+    protected final Map<String, Integer> DEV_RESOURCES = Map.of(
+            "credits", 1000000000,
+            "energy",1000000000,
+            "minerals",1000000000,
+            "food", 1000000000,
+            "fuel", 1000000000,
+            "research", 1000000000,
+            "alloys", 1000000000,
+            "consumer_goods", 1000000000
+    );
 
-    protected final String JOB_EVENT_PATH = String.format("games.%s.empires.%s.jobs.*.", GAME_ID, EMPIRE_ID);
+    protected final BuildingDto BUILDING_DTO = new BuildingDto("refinery", 3,
+            Map.of("minerals", 100),
+            Map.of("minerals", 10, "energy", 15),
+            Map.of("fuel", 10));
+
+    protected final DistrictAttributes DISTRICT_ATTRIBUTES = new DistrictAttributes("energy", 3,
+            new HashMap<>(),
+            Map.of("minerals", 75),
+            Map.of("minerals", 2),
+            Map.of("energy", 30));
+
+    protected final String[] JOB_EVENT_PATHS = new String[]{
+            "games.testGameID.empires.testEmpireID.jobs.jobClaimingID_1.",
+            "games.testGameID.empires.testEmpireID.jobs.jobClaimingID_2.",
+            "games.testGameID.empires.testEmpireID.jobs.jobBuildingID.",
+            "games.testGameID.empires.testEmpireID.jobs.jobSiteID."
+    };
+
+    protected final String JOB_EVENT_PATH = "games.testGameID.empires.testEmpireID.jobs.*.";
 
     protected final GameStatus GAME_STATUS = new GameStatus();
 
@@ -43,7 +68,7 @@ public class AppTest3Module extends LobbyTestLoader {
 
     protected final EmpireDto EMPIRE_DTO = new EmpireDto("0", "0", EMPIRE_ID, GAME_ID, USER_ID,
             EMPIRE.name(), EMPIRE.description(), EMPIRE.color(), EMPIRE.flag(), EMPIRE.portrait(),
-            EMPIRE.homeSystem(), EMPIRE.traits().toArray(new String[]{}), Map.of("energy", 100), new String[]{});
+            EMPIRE.homeSystem(), EMPIRE.traits().toArray(new String[]{}), DEV_RESOURCES, new String[]{});
 
     protected final ReadEmpireDto READ_EMPIRE_DTO = new ReadEmpireDto(EMPIRE_DTO.createdAt(), EMPIRE_DTO.updatedAt(),
             EMPIRE_ID, GAME_ID, USER_ID, EMPIRE.name(), EMPIRE.description(), EMPIRE.color(), EMPIRE.flag(), EMPIRE.portrait(),
@@ -68,6 +93,26 @@ public class AppTest3Module extends LobbyTestLoader {
                     1, new String[]{"prepared"})
                     };
 
+    protected final Map<String, Integer> VARIABLE_PRESETS = Map.of(
+            "districts.energy.cost.minerals", 75,
+            "districts.energy.upkeep.minerals", 2,
+            "districts.energy.production.energy", 30,
+            "buildings.refinery.cost.minerals", 100,
+            "buildings.refinery.upkeep.minerals", 10,
+            "buildings.refinery.upkeep.energy", 15,
+            "buildings.refinery.production.fuel", 10
+    );
+
+    protected final ArrayList<ExplainedVariableDTO> VARIABLE_EXPLANATIONS = new ArrayList<>(List.of(
+            new ExplainedVariableDTO("districts.energy.cost.minerals", 75, new ArrayList<>(), 75),
+            new ExplainedVariableDTO("districts.energy.upkeep.minerals", 2, new ArrayList<>(), 2),
+            new ExplainedVariableDTO("districts.energy.production.energy", 30, new ArrayList<>(), 30),
+            new ExplainedVariableDTO("buildings.refinery.cost.minerals", 100, new ArrayList<>(), 100),
+            new ExplainedVariableDTO("buildings.refinery.upkeep.minerals", 10, new ArrayList<>(), 10),
+            new ExplainedVariableDTO("buildings.refinery.upkeep.energy", 15, new ArrayList<>(), 15),
+            new ExplainedVariableDTO("buildings.refinery.production.fuel", 10, new ArrayList<>(), 10)
+    ));
+
     protected final SystemDto[] GAME_SYSTEMS = new SystemDto[]{
             new SystemDto("0", "0", "islandID_1", GAME_ID, "regular", "TestIslandOne",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
@@ -80,13 +125,24 @@ public class AppTest3Module extends LobbyTestLoader {
                     Upgrade.explored, 13, Map.of("islandID_1", 3, "islandID_2", 3), 55, 62, null)
     };
 
+    protected final CreateSystemsDto CREATE_SYSTEM_DTO = new CreateSystemsDto(
+            "0", "0", "islandID_1", GAME_ID, IslandType.regular, "TestIslandOne",
+            Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
+            "colonized", 13, Map.of("islandID_2", 3, "islandID_3", 3), 50, 50, EMPIRE_ID);
+
     protected final Jobs.Job[] JOBS = new Jobs.Job[]{
             new Jobs.Job("0", "0",
                     "jobClaimingID_1", 0, 3, GAME_ID, EMPIRE_ID, "islandID_2", 0,
                     "upgrade", null, null, null, new HashMap<>(), null),
             new Jobs.Job("0", "0",
                     "jobClaimingID_2", 0, 12, GAME_ID, EMPIRE_ID, "islandID_3", 0,
-                    "upgrade", null, null, null, new HashMap<>(), null)
+                    "upgrade", null, null, null, new HashMap<>(), null),
+            new Jobs.Job("0", "0",
+                    "jobBuildingID", 0, 12, GAME_ID, EMPIRE_ID, "islandID_1", 0,
+                    "building", "refinery", null, null, new HashMap<>(), null),
+            new Jobs.Job("0", "0",
+                    "jobSiteID", 0, 12, GAME_ID, EMPIRE_ID, "islandID_1", 0,
+                    "district", null, "energy", null, new HashMap<>(), null)
     };
 
     protected final EffectSourceParentDto SOURCE_PARENT_DTO = new EffectSourceParentDto(new EffectSourceDto[]{});
@@ -119,8 +175,8 @@ public class AppTest3Module extends LobbyTestLoader {
                 .listen("games." + GAME_ID + ".ticked", Game.class);
         doReturn(EMPIRE_SUBJECT).when(this.eventListener)
                 .listen("games." + GAME_ID + ".empires." + EMPIRE_ID + ".updated", EmpireDto.class);
-        doReturn(JOB_SUBJECT).when(this.eventListener)
-                .listen(String.format(JOB_EVENT_PATH + "*", GAME_ID, EMPIRE_ID), Jobs.Job.class);
+
+        when(this.eventListener.listen(JOB_EVENT_PATH + "*", Jobs.Job.class)).thenReturn(JOB_SUBJECT);
     }
 
     private void initializeApiMocks() {
@@ -139,26 +195,34 @@ public class AppTest3Module extends LobbyTestLoader {
 
         when(this.empireApiService.getSeasonalTrades(any(), any())).thenReturn(Observable.just(new SeasonalTradeDto(new HashMap<>())));
 
-        when(this.presetsApiService.getVariablesPresets()).thenReturn(Observable.just(new HashMap<>()));
+        when(this.presetsApiService.getVariablesPresets()).thenReturn(Observable.just(VARIABLE_PRESETS));
         when(this.presetsApiService.getVariablesEffects()).thenReturn(Observable.just(new HashMap<>()));
         when(this.presetsApiService.getTraitsPreset()).thenReturn(Observable.just(TRAITS));
         when(this.presetsApiService.getVariables()).thenReturn(Observable.just(new HashMap<>()));
 
-        when(this.gameSystemsApiService.getSystems(any())).thenReturn(Observable.just(GAME_SYSTEMS));
-        when(this.gameSystemsApiService.getBuilding(any())).thenReturn(Observable.just(BUILDING_DTO));
-        doAnswer(inv -> this.app.show("/lobby")).when(this.gameMembersApiService).patchMember(any(), any(), any());
-        when(this.gameMembersApiService.getMembers(any())).thenReturn(Observable.just(new MemberDto[]{MEMBER_DTO2}));
-        when(this.gameMembersApiService.getMember(any(), any())).thenReturn(Observable.just(MEMBER_DTO));
+        when(this.gameLogicApiService.getVariablesExplanations(any(), any())).thenReturn(Observable.just(VARIABLE_EXPLANATIONS));
 
+        doAnswer(inv -> this.app.show("/lobby")).when(this.gameMembersApiService).patchMember(any(), any(), any());
+        when(this.gameSystemsApiService.updateBuildings(any(), any(), any())).thenReturn(Observable.just(CREATE_SYSTEM_DTO));
+        when(this.gameMembersApiService.getMembers(any())).thenReturn(Observable.just(new MemberDto[]{MEMBER_DTO2}));
+        when(this.gameSystemsApiService.getSystem(any(), any())).thenReturn(Observable.just(GAME_SYSTEMS[0]));
+        when(this.gameMembersApiService.getMember(any(), any())).thenReturn(Observable.just(MEMBER_DTO));
+        when(this.gameSystemsApiService.getBuilding(any())).thenReturn(Observable.just(BUILDING_DTO));
+        when(this.gameSystemsApiService.getSystems(any())).thenReturn(Observable.just(GAME_SYSTEMS));
+
+        when(this.empireApiService.getResourceAggregates(any(), any())).thenReturn(Observable.just(new AggregateResultDto(20, new AggregateItemDto[]{})));
+        when(this.empireApiService.getEmpires(any())).thenReturn(Observable.just(new ReadEmpireDto[]{READ_EMPIRE_DTO}));
         when(this.empireApiService.getEmpireEffect(any(), any())).thenReturn(Observable.just(SOURCE_PARENT_DTO));
         when(this.empireApiService.getEmpire(any(), any())).thenReturn(Observable.just(EMPIRE_DTO));
-        when(this.empireApiService.getEmpires(any())).thenReturn(Observable.just(new ReadEmpireDto[]{READ_EMPIRE_DTO}));
-        when(this.empireApiService.getResourceAggregates(any(), any())).thenReturn(Observable.just(new AggregateResultDto(20, new AggregateItemDto[]{})));
+        when(this.empireApiService.getSeasonalTrades(any(), any())).thenReturn(Observable.just(
+                new SeasonalTradeDto(new HashMap<>())));
 
         when(this.jobsApiService.getEmpireJobs(any(), any())).thenReturn(Observable.just(new ArrayList<>()));
-        when(this.jobsApiService.createNewJob(any(), any(), any()))
-                .thenReturn(Observable.just(JOBS[0]))
-                .thenReturn(Observable.just(JOBS[1]));
+        when(this.jobsApiService.createNewJob(anyString(), anyString(), any(Jobs.JobDTO.class)))
+                .thenReturn(Observable.just(JOBS[3])).thenReturn(Observable.just(JOBS[2]))
+                .thenReturn(Observable.just(JOBS[0])).thenReturn(Observable.just(JOBS[1]));
+        when(this.jobsApiService.deleteJob(anyString(), anyString(), any()))
+                .thenReturn(Observable.just(JOBS[3]));
 
         doAnswer(inv -> this.app.show(this.gangCreationController)).when(this.app).show(eq("/creation"), any());
         doAnswer(inv -> this.app.show(this.inGameController)).when(this.app).show(eq("/ingame"), any());
@@ -172,6 +236,7 @@ public class AppTest3Module extends LobbyTestLoader {
         this.islandAttributeStorage.buildingsAttributes = new ArrayList<>(List.of(new BuildingAttributes(
                 BUILDING_DTO.id(), BUILDING_DTO.build_time(), BUILDING_DTO.cost(), BUILDING_DTO.upkeep(),
                 BUILDING_DTO.production())));
+        this.islandAttributeStorage.districtAttributes = new ArrayList<>(List.of(DISTRICT_ATTRIBUTES));
     }
 
     protected Event<Game> tickGame() {

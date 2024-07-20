@@ -46,8 +46,6 @@ public class InGameTestLoader extends ControllerTest {
     ResourcesService resourcesService;
     @Spy
     TokenStorage tokenStorage;
-    @Spy
-    ObjectMapper objectMapper;
     @Mock
     EventListener eventListener;
     @Spy
@@ -62,8 +60,6 @@ public class InGameTestLoader extends ControllerTest {
     GameMembersApiService gameMembersApiService;
     @Spy
     EmpireApiService empireApiService;
-    @Spy
-    JobsService jobsService;
     @Spy
     JobsApiService jobsApiService;
     @Spy
@@ -140,6 +136,8 @@ public class InGameTestLoader extends ControllerTest {
     ResearchJobComponent researchJobComponent;
     @InjectMocks
     EditGameService editGameService;
+    @InjectMocks
+    JobsService jobsService;
 
     Provider<ClaimingSiteComponent> claimingComponentProvider = () -> {
         var component = new ClaimingSiteComponent();
@@ -157,7 +155,24 @@ public class InGameTestLoader extends ControllerTest {
         return comp;
     };
 
-    Provider<IslandOverviewJobProgressComponent> islandOverviewJobProgressComponentProvider = IslandOverviewJobProgressComponent::new;
+    Provider<DistrictComponent> districtComponentProvider = () -> {
+        DistrictComponent comp = new DistrictComponent();
+        comp.tokenStorage = this.tokenStorage;
+        comp.imageCache = this.imageCache;
+        comp.islandAttributeStorage = this.islandAttributeStorage;
+        return comp;
+    };
+
+    Provider<IslandOverviewJobProgressComponent> islandOverviewJobProgressComponentProvider = () -> {
+        IslandOverviewJobProgressComponent comp = new IslandOverviewJobProgressComponent();
+        comp.gameResourceBundle = this.gameResourceBundle;
+        comp.islandAttributes = this.islandAttributeStorage;
+        comp.subscriber = this.subscriber;
+        comp.jobsService = this.jobsService;
+        comp.imageCache = this.imageCache;
+        comp.app = this.app;
+        return comp;
+    };
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -203,7 +218,6 @@ public class InGameTestLoader extends ControllerTest {
         this.islandOverviewJobsComponent.progressPaneProvider = this.islandOverviewJobProgressComponentProvider;
 
         this.overviewUpgradeComponent.jobProgressComponent = this.islandUpgradesJobProgressComponent;
-
     }
 
     protected void setServices() {
@@ -214,6 +228,7 @@ public class InGameTestLoader extends ControllerTest {
         this.inGameController.tokenStorage = this.tokenStorage;
         this.inGameController.eventService = this.eventService;
         this.inGameController.lobbyService = this.lobbyService;
+        this.inGameController.jobsService = this.jobsService;
         this.inGameController.subscriber = this.subscriber;
 
         this.islandClaimingComponent.componentProvider = this.claimingComponentProvider;
@@ -246,17 +261,29 @@ public class InGameTestLoader extends ControllerTest {
         this.resourcesService.tokenStorage = this.tokenStorage;
         this.resourcesService.subscriber = this.subscriber;
 
+        this.explanationService.variablesResourceBundle = this.variablesResourceBundle;
+        this.explanationService.gameResourceBundle = this.gameResourceBundle;
+        this.explanationService.variableService = this.variableService;
         this.explanationService.app = this.app;
 
         this.clockComponent.subscriber = this.subscriber;
 
+        this.islandOverviewJobsComponent.progressPaneProvider = this.islandOverviewJobProgressComponentProvider;
         this.islandOverviewJobsComponent.islandAttributes = this.islandAttributeStorage;
 
         this.buildingsComponent.islandAttributes = this.islandAttributeStorage;
+        this.buildingsComponent.jobsService = this.jobsService;
 
         this.overviewSitesComponent.islandAttributes = this.islandAttributeStorage;
 
         this.buildingPropertiesComponent.islandAttributeStorage = this.islandAttributeStorage;
+        this.buildingPropertiesComponent.gameSystemsApiService = this.gameSystemsApiService;
+        this.buildingPropertiesComponent.resourcesService = this.resourcesService;
+        this.buildingPropertiesComponent.islandsService = this.islandsService;
+        this.buildingPropertiesComponent.jobsService = this.jobsService;
+        this.buildingPropertiesComponent.subscriber = this.subscriber;
+        this.buildingPropertiesComponent.imageCache = this.imageCache;
+        this.buildingPropertiesComponent.app = this.app;
 
         this.timerService.gamesApiService = this.gamesApiService;
         this.timerService.tokenStorage = this.tokenStorage;
@@ -270,32 +297,48 @@ public class InGameTestLoader extends ControllerTest {
         this.eventService.subscriber = this.subscriber;
 
         this.jobsService.jobsApiService = this.jobsApiService;
-        this.jobsService.eventListener = this.eventListener;
         this.jobsService.tokenStorage = this.tokenStorage;
         this.jobsService.subscriber = this.subscriber;
 
-        this.storageOverviewComponent.empireService = this.empireService;
         this.storageOverviewComponent.resourcesService = this.resourcesService;
+        this.storageOverviewComponent.empireService = this.empireService;
         this.storageOverviewComponent.tokenStorage = this.tokenStorage;
         this.storageOverviewComponent.subscriber = this.subscriber;
 
         this.marketService.presetsApiService = this.presetsApiService;
+        this.marketService.empireApiService = this.empireApiService;
+        this.marketService.subscriber = this.subscriber;
 
+        this.marketComponent.explanationService = this.explanationService;
+        this.marketComponent.presetsApiService = this.presetsApiService;
         this.marketComponent.marketService = this.marketService;
         this.marketComponent.subscriber = this.subscriber;
-        this.marketComponent.presetsApiService = this.presetsApiService;
-        this.marketComponent.explanationService = this.explanationService;
 
+        this.sitesComponent.districtComponentProvider = this.districtComponentProvider;
         this.sitesComponent.attributeStorage = this.islandAttributeStorage;
+        this.sitesComponent.jobsService = this.jobsService;
+
+        this.researchJobComponent.jobsService = this.jobsService;
 
         this.overviewUpgradeComponent.islandAttributes = this.islandAttributeStorage;
         this.overviewUpgradeComponent.jobsService = this.jobsService;
 
+        this.sitePropertiesComponent.islandAttributeStorage = this.islandAttributeStorage;
+        this.sitePropertiesComponent.gameSystemsApiService = this.gameSystemsApiService;
+        this.sitePropertiesComponent.gameResourceBundle = this.gameResourceBundle;
+        this.sitePropertiesComponent.resourcesService = this.resourcesService;
         this.sitePropertiesComponent.jobsService = this.jobsService;
+        this.sitePropertiesComponent.subscriber = this.subscriber;
+        this.sitePropertiesComponent.imageCache = this.imageCache;
+        this.sitePropertiesComponent.app = this.app;
 
-        this.buildingPropertiesComponent.jobsService = this.jobsService;
+        this.islandOverviewJobsComponent.jobsService = this.jobsService;
 
         this.propertiesJobProgressComponent.jobsService = this.jobsService;
+
+        this.siteJobProgress.jobsService = this.jobsService;
+
+        this.jobsOverviewComponent.jobsService = this.jobsService;
 
         this.technologyOverviewComponent.technologiesResourceBundle = this.technologiesResourceBundle;
     }

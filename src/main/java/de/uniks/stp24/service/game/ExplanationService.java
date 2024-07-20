@@ -37,10 +37,10 @@ public class ExplanationService {
     ResourceBundle langBundle;
     @Inject
     @Named("gameResourceBundle")
-    ResourceBundle gameResourceBundle;
+    public ResourceBundle gameResourceBundle;
     @Inject
     @Named("variablesResourceBundle")
-    ResourceBundle variablesResourceBundle;
+    public ResourceBundle variablesResourceBundle;
 
     private InGameController inGameController;
 

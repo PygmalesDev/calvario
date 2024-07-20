@@ -54,7 +54,7 @@ public class ResearchJobComponent extends AnchorPane {
     @FXML
     AnchorPane researchBackground;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
 
     @Inject
     TechnologyService technologyService;

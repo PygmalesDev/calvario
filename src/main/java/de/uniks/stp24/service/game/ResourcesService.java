@@ -46,7 +46,6 @@ public class ResourcesService {
     public Observable<SystemDto> destroyBuilding(String gameID, Island island, String buildingToDestroy) {
         ArrayList<String> buildings = island.buildings();
 
-
         // Look in list for building to delete
         Iterator<String> iterator = buildings.iterator();
         while (iterator.hasNext()) {

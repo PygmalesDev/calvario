@@ -43,7 +43,7 @@ public class SitesComponent extends Pane {
     ResourceBundle gameResourceBundle;
 
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
 
     @Inject
     public IslandAttributeStorage attributeStorage;

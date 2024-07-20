@@ -24,7 +24,7 @@ public class MarketService {
     @Inject
     public PresetsApiService presetsApiService;
     @Inject
-    EmpireApiService empireApiService;
+    public EmpireApiService empireApiService;
     @Inject
     public Subscriber subscriber;
     @Inject

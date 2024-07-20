@@ -59,23 +59,22 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @Inject
     public ResourcesService resourcesService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
     @SubComponent
     public PropertiesJobProgressComponent propertiesJobProgressComponent;
     @Inject
     public GameSystemsApiService gameSystemsApiService;
     @Inject
-    App app;
+    public App app;
     @Inject
-    ExplanationService explanationService;
+    public ExplanationService explanationService;
     @Inject
-    VariableService variableService;
+    public VariableService variableService;
     @Inject
-    ImageCache imageCache;
-
+    public ImageCache imageCache;
 
     @Inject
     @org.fulib.fx.annotation.controller.Resource
@@ -226,7 +225,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
                 this.inGameController.islandsService.updateIslandBuildings(this.islandAttributeStorage,
                         this.inGameController, this.islandAttributeStorage.getIsland().buildings());
                 this.inGameController.setSitePropertiesInvisible();
-            }, error -> System.out.println("error here"));
+            }, error -> System.out.println("Error by updating island buildings in BuildingPropertiesComponent:\n"
+            + error.getMessage()));
         }
     }
 

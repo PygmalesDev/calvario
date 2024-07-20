@@ -70,28 +70,28 @@ public class SitePropertiesComponent extends AnchorPane {
     @Inject
     public IslandAttributeStorage islandAttributeStorage;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
     public JobsService jobsService;
 
     @Inject
-    ResourcesService resourcesService;
+    public ResourcesService resourcesService;
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
 
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
-    ExplanationService explanationService;
+    public ExplanationService explanationService;
     @Inject
-    App app;
+    public App app;
 
     @Inject
-    GameSystemsApiService gameSystemsApiService;
+    public GameSystemsApiService gameSystemsApiService;
 
     @Inject
     @Named("gameResourceBundle")
-    ResourceBundle gameResourceBundle;
+    public ResourceBundle gameResourceBundle;
 
     @Inject
     @SubComponent

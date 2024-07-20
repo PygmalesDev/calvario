@@ -153,13 +153,14 @@
     -fx-background-color: transparent;
 }
 
-.description-list-view .scroll-bar:horizontal .corner {
+.description-list-view .corner {
+    -fx-background-color: transparent;
+    -fx-opacity: 1;
+ }
+.description-list-view .viewport {
     -fx-background-color: transparent;
     -fx-padding: 0;
-}.description-list-view .scroll-bar:vertical .corner {
-     -fx-background-color: transparent;
-     -fx-padding: 0;
- }
+}
 
 
 .research-tooltip {

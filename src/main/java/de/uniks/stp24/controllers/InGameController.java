@@ -59,7 +59,7 @@ public class InGameController extends BasicController {
     @FXML
     StackPane hintCaptainContainer;
     @FXML
-    Pane shadow;
+    public Pane shadow;
     @FXML
     StackPane eventContainer;
     @FXML

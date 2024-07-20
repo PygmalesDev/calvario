@@ -138,7 +138,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
     }
 
     public void close() {
-        this.setVisible(false);
+        this.parent.setVisible(false);
     }
 
     /**

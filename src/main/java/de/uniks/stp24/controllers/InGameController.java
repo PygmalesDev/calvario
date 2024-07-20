@@ -15,12 +15,13 @@ import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.game.*;
-import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -52,6 +53,8 @@ import java.util.Objects;
 public class InGameController extends BasicController {
     @FXML
     public AnchorPane rootPane;
+    @FXML
+    public StackPane technologiesContainer;
     @FXML
     Pane gameBackground;
     @FXML
@@ -298,8 +301,6 @@ public class InGameController extends BasicController {
         helpComponent.setVisible(false);
         helpComponent.setMouseTransparent(true);
 
-
-
         pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
         eventComponent.setParent(shadow, eventContainer);
@@ -320,14 +321,11 @@ public class InGameController extends BasicController {
         islandClaimingContainer.getChildren().add(this.islandClaimingComponent);
         islandClaimingContainer.setVisible(false);
 
-        technologiesComponent.setContainer(contextMenuContainer);
-
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,
                 jobsOverviewComponent,
                 empireOverviewComponent,
-                technologiesComponent,
                 marketOverviewComponent
         );
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
@@ -337,6 +335,10 @@ public class InGameController extends BasicController {
   		this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListeners();
         explanationService.setInGameController(this);
+
+        technologiesComponent.setContainer(technologiesContainer);
+        technologiesContainer.setVisible(false);
+        technologiesContainer.getChildren().add(technologiesComponent);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -384,9 +386,20 @@ public class InGameController extends BasicController {
     @OnKey(code = KeyCode.H, alt = true)
     public void showHelpOverview() {
         if (this.helpComponent.isVisible()) {
+            this.shadow.setVisible(false);
             this.helpComponent.close();
             this.removePause();
-        } else showHelp();
+        } else {
+            this.shadow.setVisible(true);
+            showHelp();
+        }
+    }
+
+    @OnKey(code = KeyCode.T, alt = true)
+    public void showTechnologies() {
+        technologiesContainer.setVisible(!technologiesContainer.isVisible());
+        technologiesContainer.getChildren().getFirst().setVisible(false);
+        technologiesContainer.getChildren().getLast().setVisible(true);
     }
 
     private void toggleContextMenuVisibility(Node node) {
@@ -439,9 +452,7 @@ public class InGameController extends BasicController {
             this.contextMenuButtons.getChildren().addAll(
                     new ContextMenuButton("storageOverview", this.storageOverviewComponent),
                     new ContextMenuButton("empireOverview", this.empireOverviewComponent),
-                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent),
-                    new ContextMenuButton("technologies", this.technologiesComponent),
-                    new ContextMenuButton("marketOverview", this.marketOverviewComponent)
+                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent)
             );
     }
 
@@ -461,6 +472,14 @@ public class InGameController extends BasicController {
             isle.setScaleX(1.25);
             isle.setScaleY(1.25);
             this.mapGrid.getChildren().add(isle);
+        });
+
+        Platform.runLater(() -> {
+            Button showTechnologiesButton = new Button();
+            showTechnologiesButton.setId("showTechnologiesButton");
+            showTechnologiesButton.setOnAction(event -> showTechnologies());
+            showTechnologiesButton.getStyleClass().add("technologiesButton");
+            contextMenuButtons.getChildren().addAll(showTechnologiesButton, new ContextMenuButton("marketOverview", marketOverviewComponent));
         });
 
         mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight()));
@@ -680,7 +699,7 @@ public class InGameController extends BasicController {
     }
 
     public void showHelp() {
-        System.out.println("help");
+        this.shadow.setVisible(true);
         popupHelpWindow.showPopup(helpWindowContainer,helpComponent);
         helpComponent.setVisible(true);
         helpComponent.setMouseTransparent(false);

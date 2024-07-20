@@ -81,7 +81,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
     }
 
     public void close() {
-        this.setVisible(false);
+        parent.setVisible(false);
     }
 
     public void showWindow(){
@@ -177,7 +177,6 @@ public class TechnologyOverviewComponent extends AnchorPane {
         technologyCategoryComponent.researchJobComponent.setEffectListView();
 
     }
-
 
     public void setContainer(@NotNull Pane parent) {
         this.parent = parent;

@@ -198,19 +198,15 @@ public class ClockComponent extends AnchorPane {
                     }
                     timerService.setSpeedLocal(game.speed());
                     timerService.setSeason(game.period());
+                    setSeasonLabelSize();
                 },
                 error -> System.out.println("Error on getting game: " + error)
         );
-
-        setSeasonLabelSize();
 
         timerService.start();
         seasonLabel.setText(timerService.getSeason() + "");
 
         remainingSeasonsLabel.setVisible(false);
-
-//        timerService.stop();
-//        timerService.reset();
 
     }
 

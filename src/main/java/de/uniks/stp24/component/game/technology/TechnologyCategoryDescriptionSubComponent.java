@@ -16,6 +16,7 @@ import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
+import java.util.ResourceBundle;
 
 @Component(view = "TechnologyCategoryDescription.fxml")
 public class TechnologyCategoryDescriptionSubComponent extends HBox implements ReusableItemComponent<Effect> {
@@ -35,9 +36,11 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
     @Inject
     Subscriber subscriber;
 
-    @Inject
-    public TechnologyCategoryDescriptionSubComponent() {
+    ResourceBundle variablesResourceBundle;
 
+    @Inject
+    public TechnologyCategoryDescriptionSubComponent(ResourceBundle variablesResourceBundle) {
+        this.variablesResourceBundle = variablesResourceBundle;
     }
 
     @OnRender
@@ -59,8 +62,18 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
 
     @Override
     public void setItem(@NotNull Effect effect) {
+        descriptionLabel.setStyle("-fx-opacity: 1");
+        setEffect(effect);
+        setImage();
+        setDescriptionLabel();
+    }
+
+    public void setEffect(Effect effect) {
         this.effect = effect;
-        String variable = this.effect.variable();
+    }
+
+    public void setImage() {
+        String variable = effect.variable();
 
         /*
          * Iterate through all resources and checks if effect variable contains a resource
@@ -71,7 +84,6 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
                 break;
             } else if (variable.contains("pop")) {
                 resourceImage.setImage(imageCache.get("icons/resources/population.png"));
-                break;
             }
         }
 
@@ -82,11 +94,20 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
             for (String tech : Constants.technologyTranslation.values()) {
                 if (variable.contains(tech)) {
                     resourceImage.setImage(imageCache.get("assets/technologies/tags/" + tech + ".png"));
-                    break;
                 }
             }
         }
+    }
 
-        descriptionLabel.setText(effect.variable());
+    public void setDescriptionLabel() {
+
+        if (effect.multiplier() != 1 && effect.multiplier() != 0) {
+            descriptionLabel.setText(String.format("%+d", (int) ((effect.multiplier() * 100.0) - 100)) + " % "
+                    + variablesResourceBundle.getString(effect.variable()));
+        }
+
+        if (effect.base() != 0) {
+            descriptionLabel.setText(String.format("%+d", (int) effect.base()) + " " + variablesResourceBundle.getString(effect.variable()));
+        }
     }
 }

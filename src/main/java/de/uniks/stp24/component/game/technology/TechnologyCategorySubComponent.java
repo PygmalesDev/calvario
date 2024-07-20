@@ -16,6 +16,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -84,23 +85,32 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     @Named("gameResourceBundle")
     public ResourceBundle gameResourceBundle;
 
+    public ResourceBundle variablesResourceBundle;
+
     @Resource
     public final ResourceBundle technologiesResourceBundle;
     TokenStorage tokenStorage;
 
-    Provider<TechnologyCategoryDescriptionSubComponent> provider = TechnologyCategoryDescriptionSubComponent::new;
+    public TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+
+    public TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
+
+    Provider<TechnologyCategoryDescriptionSubComponent> provider = () -> new TechnologyCategoryDescriptionSubComponent(variablesResourceBundle);
 
     /**
      * This class is for the components of the listView in the technology category
      */
     @Inject
-    public TechnologyCategorySubComponent(TechnologyCategoryComponent technologyCategoryComponent, TechnologyService technologyService, App app, ResourceBundle technologiesResourceBundle, TokenStorage tokenStorage, Subscriber subscriber) {
+    public TechnologyCategorySubComponent(TechnologyCategoryComponent technologyCategoryComponent, TechnologyService technologyService, App app, ResourceBundle technologiesResourceBundle, TokenStorage tokenStorage, Subscriber subscriber, ResourceBundle variablesResourceBundle, TechnologyEffectDetailsComponent technologyEffectDetailsComponent, TechnologyResearchDetailsComponent technologyResearchDetailsComponent) {
         this.technologyCategoryComponent = technologyCategoryComponent;
         this.technologyService = technologyService;
         this.app = app;
         this.technologiesResourceBundle = technologiesResourceBundle;
+        this.variablesResourceBundle = variablesResourceBundle;
         this.tokenStorage = tokenStorage;
         this.subscriber = subscriber;
+        this.technologyEffectDetailsComponent = technologyEffectDetailsComponent;
+        this.technologyResearchDetailsComponent = technologyResearchDetailsComponent;
     }
 
     /**
@@ -132,9 +142,27 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
                 aggregateResultDto -> timeLabel.setText(String.valueOf(aggregateResultDto.total())),
                 error -> System.out.println("Error after ty to get time of technology " + technology.id() + " reason: " + error.getMessage()));
 
-        description.addAll(technologyExtended.effects());
-        descriptionListView.setItems(description);
-        descriptionListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
+        technologyResearchDetailsComponent.setTechnologyInfos(technology);
+        technologyEffectDetailsComponent.setTechnologyInfos(technology);
+
+        showEffectTooltip.setGraphic(technologyEffectDetailsComponent);
+        showEffectTooltip.setShowDelay(Duration.ZERO);
+        showEffectTooltip.setShowDuration(Duration.INDEFINITE);
+
+        descriptionListView.getItems().clear();
+        if (technology.effects().length != 0) {
+            description.addAll(technology.effects());
+            descriptionListView.setItems(description);
+            descriptionListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
+        }
+
+        if (technology.effects().length > 1) {
+            showEffectLabel.setVisible(true);
+            showEffectLabel.setMouseTransparent(false);
+        } else {
+            showEffectLabel.setVisible(false);
+            showEffectLabel.setMouseTransparent(true);
+        }
     }
 
     @OnInit
@@ -146,9 +174,15 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     public void render() {
         timeImage.setImage(imageCache.get("icons/time.png"));
         researchImage.setImage(imageCache.get("icons/resources/research.png"));
+
+        researchLabelTooltip.setGraphic(technologyResearchDetailsComponent);
+        researchLabelTooltip.setShowDelay(Duration.ZERO);
+        researchLabelTooltip.setShowDuration(Duration.INDEFINITE);
+
+        technologyEffectDetailsComponent.setTechnology(technology);
     }
 
-    public void researchClicked(){
+    public void researchClicked() {
         technologyCategoryComponent.showResearchComponent(technology);
     }
 

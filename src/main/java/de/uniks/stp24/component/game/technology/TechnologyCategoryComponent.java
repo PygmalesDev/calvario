@@ -73,8 +73,17 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @Resource
     @Named("technologiesResourceBundle")
     public ResourceBundle technologiesResourceBundle;
+    @Inject
+    @Named("variablesResourceBundle")
+    public ResourceBundle variablesResourceBundle;
+    @SubComponent
+    @Inject
+    public TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+    @SubComponent
+    @Inject
+    public TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
 
-    Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this, technologyService, app, technologiesResourceBundle, tokenStorage, subscriber);
+    Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this, technologyService, app, technologiesResourceBundle, tokenStorage, subscriber, variablesResourceBundle, technologyEffectDetailsComponent, technologyResearchDetailsComponent);
 
     ObservableList<TechnologyExtended> unlockedTechnologies = FXCollections.observableArrayList();
     ObservableList<TechnologyExtended> researchTechnologies = FXCollections.observableArrayList();
@@ -83,7 +92,6 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     @Inject
     ResourcesService resourcesService;
-
 
     @Inject
     @SubComponent
@@ -99,7 +107,6 @@ public class TechnologyCategoryComponent extends AnchorPane {
     PopupBuilder popupTechResearch = new PopupBuilder();
     private TechnologyExtended technology;
     private TechnologyOverviewComponent technologyOverviewComponent;
-
 
 
     @Inject
@@ -182,29 +189,33 @@ public class TechnologyCategoryComponent extends AnchorPane {
         technologyCostMap.put("research", technology.cost() * 100);
         if (resourcesService.hasEnoughResources(technologyCostMap)) {
             switch (technologieCategoryName) {
-                case "society" -> {societyJobRunning = true;
+                case "society" -> {
+                    societyJobRunning = true;
                     handleJobRunning(societyJobRunning, technology);
-                                    }
-                case "engineering" -> {engineeringJobRunning = true;
+                }
+                case "engineering" -> {
+                    engineeringJobRunning = true;
                     handleJobRunning(engineeringJobRunning, technology);
-                                        }
-                case "physics" -> {physicsJobRunning = true;
-                    handleJobRunning(physicsJobRunning, technology);}
+                }
+                case "physics" -> {
+                    physicsJobRunning = true;
+                    handleJobRunning(physicsJobRunning, technology);
+                }
             }
         }
         researchJobComponent.setEffectListView();
     }
 
-    public TechnologyExtended getTechnology(){
+    public TechnologyExtended getTechnology() {
         return technology;
     }
 
-    public void setTechnology(TechnologyExtended technology){
+    public void setTechnology(TechnologyExtended technology) {
         this.technology = technology;
     }
 
     private void handleJobRunning(boolean booleanJobRunning, TechnologyExtended technology) {
-        if (booleanJobRunning){
+        if (booleanJobRunning) {
             researchJobContainer.setMouseTransparent(false);
             researchJobComponent.setMouseTransparent(false);
             researchLeftVBox.setVisible(false);
@@ -219,7 +230,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
         }
     }
 
-    public void unShowJobWindow(){
+    public void unShowJobWindow() {
         setMouseTransparency();
     }
 
@@ -246,7 +257,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     }
 
-    public void handleJobCompleted(Jobs.Job job){
+    public void handleJobCompleted(Jobs.Job job) {
         switch (job._id()) {
             case "society" -> societyJobRunning = false;
             case "engineering" -> engineeringJobRunning = false;

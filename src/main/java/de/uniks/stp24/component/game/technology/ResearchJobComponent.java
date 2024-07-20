@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.game.technology;
 
+import de.uniks.stp24.App;
 import de.uniks.stp24.model.Effect;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.TechnologyExtended;
@@ -24,10 +25,12 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 import java.util.*;
 
 @Component(view = "ResearchJob.fxml")
@@ -40,7 +43,7 @@ public class ResearchJobComponent extends AnchorPane {
     @FXML
     ImageView technologyTagImage1;
     @FXML
-    ListView<String> technologyEffectsListView;
+    ListView<Effect> technologyEffectsListView;
     @FXML
     Text technologyNameText;
     @FXML
@@ -89,9 +92,14 @@ public class ResearchJobComponent extends AnchorPane {
 
     public ObservableList<TechnologyExtended> technologies = FXCollections.observableArrayList();
 
+    ObservableList<Effect> description = FXCollections.observableArrayList();
+    Provider<TechnologyCategoryDescriptionSubComponent> provider = () -> new TechnologyCategoryDescriptionSubComponent(variablesResourceBundle);
 
     private boolean isJobListInitialized = false;
     private boolean isTechnologiesListInitialized = false;
+
+    @Inject
+    App app;
 
 
 
@@ -145,6 +153,10 @@ public class ResearchJobComponent extends AnchorPane {
     }
 
     public void handleJobInformation(){
+        setInfos();
+    }
+
+    private void setInfos() {
         if (Objects.nonNull(technologyCategoryComponent.getTechnology())){
             for (Jobs.Job job1 : jobList) {
                 if (job1.technology().equals(technologyCategoryComponent.getTechnology().id())){
@@ -162,8 +174,7 @@ public class ResearchJobComponent extends AnchorPane {
     }
 
 
-
-public void progressHandling(){
+    public void progressHandling(){
         ObservableList<Jobs.Job> newJobList = jobsService.getJobObservableListOfType("technology");
 
         Set<String> existingJobTechnologies = new HashSet<>();
@@ -177,20 +188,7 @@ public void progressHandling(){
         jobList.clear();
         jobList.addAll(uniqueJobList);
 
-        if (Objects.nonNull(technologyCategoryComponent.getTechnology())){
-            for (Jobs.Job job1 : jobList) {
-                if (job1.technology().equals(technologyCategoryComponent.getTechnology().id())){
-                    subscriber.subscribe(jobsApiService.getJobByID(tokenStorage.getGameId(), tokenStorage.getEmpireId(), job1._id()), currentJob -> {
-                        jobsService.onJobCompletion(currentJob._id(), this::handleJobFinished);
-                        double currentJobTotal = currentJob.total();
-                        int roundedUpTotal = (int) Math.ceil(currentJobTotal);
-                        researchProgressBar.setProgress((double) currentJob.progress() / roundedUpTotal);
-                        researchProgressText.setText(currentJob.progress() + " / " + roundedUpTotal);
-                        this.job = currentJob;
-                    }, error -> System.out.println("Error trying to get a Job in ResearchComponent"));
-                }
-            }
-        }
+        setInfos();
     }
 
     public void setProgressBar() {
@@ -199,13 +197,11 @@ public void progressHandling(){
 
         public void setEffectListView(){
         if (technologyCategoryComponent.getTechnology() != null){
+            description.clear();
+            description.addAll(technologyCategoryComponent.getTechnology().effects());
             technologyEffectsListView.getItems().clear();
-            for (Effect effect : technologyCategoryComponent.getTechnology().effects()) {
-                double effectPercent =  100 - effect.multiplier() * 100;
-                String effectString = "-" + (int) effectPercent + "% " + variablesResourceBundle.getString(effect.variable());
-                technologyEffectsListView.getItems().add(effectString);
-            }
-        }
+            technologyEffectsListView.setItems(description);
+            technologyEffectsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));        }
     }
 
     private void handleJobFinished() {

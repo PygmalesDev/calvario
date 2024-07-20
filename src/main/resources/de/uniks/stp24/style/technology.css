@@ -95,16 +95,6 @@
 
 }
 
-/*.list-view .list-cell:empty {*/
-/*    -fx-background-color: transparent;*/
-/*    -fx-border-color: transparent;*/
-/*    -fx-background-image: none;*/
-/*}*/
-
-/*.description-list .list-cell {*/
-/*}*/
-
-/* Stil für die äußere ListView */
 .technologies-list-view {
     -fx-background-color: transparent;
 }
@@ -128,17 +118,49 @@
     -fx-border-color: transparent;
     -fx-background-image: none;
 }
+
+.description-list-view .viewport {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
 .technologies-list-view .list-cell:empty {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-background-image: none;
 }
 
-/* Hover-Effekt für die Zellen in der inneren ListView */
 .description-list-view .list-cell {
     -fx-background-color: transparent;
     -fx-background-image: none;
 }
+
+.description-list-view .scroll-bar:horizontal .thumb {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+}
+
+.description-list-view .scroll-bar:horizontal .increment-button,
+.description-list-view .scroll-bar:horizontal .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+}
+
+.description-list-view .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-max-height: 0;
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.description-list-view .scroll-bar:horizontal .corner {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}.description-list-view .scroll-bar:vertical .corner {
+     -fx-background-color: transparent;
+     -fx-padding: 0;
+ }
+
 
 .research-tooltip {
     -fx-opacity: 1;
@@ -173,12 +195,6 @@
     -fx-background-color: transparent;
     -fx-font-weight: none;
     -fx-font-size: 30;
-}
-.researchDescription {
-    -fx-font-family: "Tempus Sans ITC";
-    -fx-background-color: transparent;
-    -fx-font-weight: none;
-    -fx-font-size: 14;
 }
 
 .technologyName {

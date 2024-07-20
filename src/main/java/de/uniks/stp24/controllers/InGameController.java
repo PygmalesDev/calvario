@@ -424,6 +424,7 @@ public class InGameController extends BasicController {
                         if (Objects.nonNull(updatedIsland.owner())) {
                             // apply drop shadow and flag
                             isle.applyEmpireInfo();
+                            // island is already claimed
                             this.islandClaimingContainer.setVisible(false);
                         }
                         // check if the island/upgrade overview is visible for the updated island

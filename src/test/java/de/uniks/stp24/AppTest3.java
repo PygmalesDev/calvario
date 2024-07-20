@@ -22,17 +22,16 @@ public class AppTest3 extends AppTest3Module {
     }
 
     @Test
-    public void testApp() {
+    public void v3() {
         this.selectTraits();
         this.loadGame();
 
-        clickOn("#jobsOverviewButton");
         this.beginSiteJob();
         this.beginBuildingJob();
-        this.testInspectJobs();
-        this.testJobCancellation();
+        this.beginIslandUpgrade();
+        this.inspectJobs();
+        this.cancelJob();
         this.beginIslandClaiming();
-        sleep(100000);
     }
 
     public void selectTraits() {
@@ -73,6 +72,8 @@ public class AppTest3 extends AppTest3Module {
     }
 
     public void beginSiteJob() {
+        clickOn("#jobsOverviewButton");
+        WaitForAsyncUtils.waitForFxEvents();
         clickOn("#islandID_1_instance");
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#sitesButton");
@@ -93,17 +94,26 @@ public class AppTest3 extends AppTest3Module {
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#buyButton");
         JOB_SUBJECT.onNext(new Event<>(JOB_EVENT_PATHS[2] + "created", JOBS[2]));
+    }
+
+    public void beginIslandUpgrade() {
+        clickOn("#upgradeButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#confirmUpgrade");
+        WaitForAsyncUtils.waitForFxEvents();
+        clickOn("#backButton");
+        WaitForAsyncUtils.waitForFxEvents();
         clickOn("#closeButton");
     }
 
-    public void testInspectJobs() {
+    public void inspectJobs() {
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#jobElementInspectionButton_jobSiteID");
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#jobProgressInspectionButton_jobSiteID");
     }
 
-    public void testJobCancellation() {
+    public void cancelJob() {
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#jobElementDeleteButton_jobSiteID");
         JOB_SUBJECT.onNext(new Event<>(JOB_EVENT_PATHS[3] + "deleted", JOBS[3]));

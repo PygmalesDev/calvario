@@ -36,20 +36,20 @@ public class CoolerBubbleComponent extends Captain {
     Button nextButton;
 
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
     EventListener eventListener;
     @Inject
-    ResourcesService resourcesService;
+    public ResourcesService resourcesService;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
     @Inject
     public AnnouncementsService announcementsService;
     @Inject
-    EmpireService empireService;
+    public EmpireService empireService;
     @Inject
     @Named("gameResourceBundle")
-    ResourceBundle gameResourceBundle;
+    public  ResourceBundle gameResourceBundle;
 
     Random random = new Random();
     int lastPeriod = 0;

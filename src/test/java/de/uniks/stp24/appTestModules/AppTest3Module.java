@@ -100,7 +100,8 @@ public class AppTest3Module extends LobbyTestLoader {
             "buildings.refinery.cost.minerals", 100,
             "buildings.refinery.upkeep.minerals", 10,
             "buildings.refinery.upkeep.energy", 15,
-            "buildings.refinery.production.fuel", 10
+            "buildings.refinery.production.fuel", 10,
+            "systems.colonized.cost.energy", 100
     );
 
     protected final ArrayList<ExplainedVariableDTO> VARIABLE_EXPLANATIONS = new ArrayList<>(List.of(
@@ -110,7 +111,8 @@ public class AppTest3Module extends LobbyTestLoader {
             new ExplainedVariableDTO("buildings.refinery.cost.minerals", 100, new ArrayList<>(), 100),
             new ExplainedVariableDTO("buildings.refinery.upkeep.minerals", 10, new ArrayList<>(), 10),
             new ExplainedVariableDTO("buildings.refinery.upkeep.energy", 15, new ArrayList<>(), 15),
-            new ExplainedVariableDTO("buildings.refinery.production.fuel", 10, new ArrayList<>(), 10)
+            new ExplainedVariableDTO("buildings.refinery.production.fuel", 10, new ArrayList<>(), 10),
+            new ExplainedVariableDTO("systems.colonized.cost.energy", 100, new ArrayList<>(), 100)
     ));
 
     protected final SystemDto[] GAME_SYSTEMS = new SystemDto[]{
@@ -202,7 +204,10 @@ public class AppTest3Module extends LobbyTestLoader {
 
         when(this.gameLogicApiService.getVariablesExplanations(any(), any())).thenReturn(Observable.just(VARIABLE_EXPLANATIONS));
 
-        doAnswer(inv -> this.app.show("/lobby")).when(this.gameMembersApiService).patchMember(any(), any(), any());
+        doAnswer(inv -> {
+            this.app.show("/lobby", Map.of("gameid", GAME_ID));
+            return Observable.empty();
+        }).when(this.gameMembersApiService).patchMember(any(), any(), any());
         when(this.gameSystemsApiService.updateBuildings(any(), any(), any())).thenReturn(Observable.just(CREATE_SYSTEM_DTO));
         when(this.gameMembersApiService.getMembers(any())).thenReturn(Observable.just(new MemberDto[]{MEMBER_DTO2}));
         when(this.gameSystemsApiService.getSystem(any(), any())).thenReturn(Observable.just(GAME_SYSTEMS[0]));

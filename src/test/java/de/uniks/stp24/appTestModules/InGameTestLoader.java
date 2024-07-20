@@ -73,6 +73,8 @@ public class InGameTestLoader extends ControllerTest {
     @Spy
     VariableDependencyService variableDependencyService;
     @Spy
+    AnnouncementsService announcementsService;
+    @Spy
     public ResourceBundle technologiesResourceBundle =
             ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ENGLISH);
 
@@ -138,6 +140,8 @@ public class InGameTestLoader extends ControllerTest {
     EditGameService editGameService;
     @InjectMocks
     JobsService jobsService;
+    @InjectMocks
+    CoolerBubbleComponent coolerBubbleComponent;
 
     Provider<ClaimingSiteComponent> claimingComponentProvider = () -> {
         var component = new ClaimingSiteComponent();
@@ -193,12 +197,25 @@ public class InGameTestLoader extends ControllerTest {
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
+        this.inGameController.coolerBubbleComponent = this.coolerBubbleComponent;
         this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
         this.inGameController.marketOverviewComponent = this.marketComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.eventComponent = this.eventComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.helpComponent = this.helpComponent;
+
+        this.coolerBubbleComponent.announcementsService = this.announcementsService;
+        this.coolerBubbleComponent.gameResourceBundle = this.gameResourceBundle;
+        this.coolerBubbleComponent.empireService = this.empireService;
+        this.coolerBubbleComponent.tokenStorage = this.tokenStorage;
+        this.coolerBubbleComponent.jobsService = this.jobsService;
+        this.coolerBubbleComponent.subscriber = this.subscriber;
+
+        this.announcementsService.technologiesResourceBundle = this.technologiesResourceBundle;
+        this.announcementsService.gameResourceBundle = this.gameResourceBundle;
+        this.announcementsService.islandsService = this.islandsService;
+        this.announcementsService.jobsService = this.jobsService;
 
         this.technologyOverviewComponent.technologyCategoryComponent = this.technologyCategoryComponent;
 

@@ -113,8 +113,9 @@ public class OverviewSitesComponent extends AnchorPane {
 
         setLevelCheckBox();
 
-        inGameController.overviewUpgradeComponent.upgrade_box.setVisible(false);
-        inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(true);
+        inGameController.buildingsWindowComponent.setVisible(false);
+        inGameController.sitePropertiesComponent.setVisible(false);
+        inGameController.buildingPropertiesComponent.setVisible(false);
 
         if(islandAttributes.getIsland().upgradeLevel() == 4){
             inGameController.overviewUpgradeComponent.confirmUpgrade.setDisable(true);

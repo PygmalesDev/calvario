@@ -161,6 +161,7 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
 
         this.islandAttributeStorage.systemUpgradeAttributes = systemUpgrades;
         this.islandAttributeStorage.empireDto = empireDto;
+        this.resourcesService.setCurrentResources(empireDto.resources());
         this.inGameController.overviewSitesComponent.sitesComponent.districtComponentProvider = districtComponentProvider;
 
         doReturn("testUserID").when(this.tokenStorage).getUserId();

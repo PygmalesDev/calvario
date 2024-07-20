@@ -44,9 +44,12 @@ public class TraitComponent extends HBox implements ReusableItemComponent<Trait>
     @Override
     public void setItem(@NotNull Trait trait) {
         this.trait = trait;
+        this.setId(trait.id());
         traitName.setText(variablesResourceBundle.getString(this.trait.id()));
-        costText.setText(String.valueOf(trait.cost()));
+        costText.setText(" + " + trait.cost());
         setButtonsVisibility(showChoose, showRemove);
+        this.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/empireConfiguration/trait_unhovered.png');" +
+                "-fx-background-size: 80% 100%;" + "-fx-background-repeat: no-repeat;" + "-fx-background-position: center center;");
     }
 
     public void chooseTrait() {
@@ -64,9 +67,13 @@ public class TraitComponent extends HBox implements ReusableItemComponent<Trait>
 
     public void showDetails() {
         gangCreationController.showTraitDetails(trait);
+        this.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/empireConfiguration/trait_hovered.png');" +
+                "-fx-background-size: 80% 100%;" + "-fx-background-repeat: no-repeat;" + "-fx-background-position: center center;");
     }
 
     public void unShowDetails() {
         gangCreationController.unShowTraitDetails();
+        this.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/empireConfiguration/trait_unhovered.png');" +
+                "-fx-background-size: 85% 100%;" + "-fx-background-repeat: no-repeat;" + "-fx-background-position: center center;");
     }
 }

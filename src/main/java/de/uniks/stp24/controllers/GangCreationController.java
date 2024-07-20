@@ -148,7 +148,7 @@ public class GangCreationController extends BasicController {
     @FXML
     Text traitsLimitText;
     @FXML
-    ListView<Trait> allTraitsListView;
+    public ListView<Trait> allTraitsListView;
     @FXML
     ListView<Trait> selectedTraitsListView;
     @FXML

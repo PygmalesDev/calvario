@@ -617,7 +617,6 @@ public class InGameController extends BasicController {
             inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
             overviewSitesComponent.setOverviewSites();
             // update island name
-            System.out.println("new name " + this.islandAttributes.getIsland().name());
             overviewSitesComponent.inputIslandName.setText(this.islandAttributes.getIsland().name());
     }
 

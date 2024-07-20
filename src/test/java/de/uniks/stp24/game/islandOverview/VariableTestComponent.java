@@ -17,6 +17,7 @@ import java.util.Map;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 public class VariableTestComponent extends IslandOverviewTestInitializer{
 
@@ -31,6 +32,8 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
     ArrayList<String> buildings = new ArrayList();
     List<Island> islands = new ArrayList<>();
     Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
+    Map<String,List<SeasonComponent>> _private = new HashMap<>();
+
 
     Island testIsland;
     public void initComponents(){
@@ -48,7 +51,8 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
 
         doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", 2, 1, true, 1, 1, null))).when(gamesApiService).getGame(any());
         doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
-
+        doReturn(Observable.just(new Event<>("games.testGameID.ticked", new Game("a", "a", "testGameID", "gameName", "gameOwner", 2, 1, true, 1, 1, null))))
+                .when(this.eventListener).listen("games.testGameID.ticked", Game.class);
         testIsland = new Island(
                 "testEmpireID",
                 1,
@@ -111,6 +115,16 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
         doReturn(Observable.just(jobList)).when(jobsApiService).getEmpireJobs(any(), any());
         doReturn(Observable.just(effectSourceParentDto)).when(empireApiService).getEmpireEffect(any(), any());
         doReturn(Observable.just(explainedVariableDTOS)).when(gameLogicApiService).getVariablesExplanations(any(), any());
+
+        this.marketComponent.marketService = this.marketService;
+        this.marketService.presetsApiService = this.presetsApiService;
+        this.marketComponent.presetsApiService = this.presetsApiService;
+        this.marketComponent.subscriber = this.subscriber;
+        this.inGameController.marketOverviewComponent = this.marketComponent;
+        this.marketService.subscriber = this.subscriber;
+
+        when(this.presetsApiService.getVariables()).thenReturn(Observable.just(new HashMap<>()));
+        doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
 
         this.islandsService.isles = islands;
         this.app.show(this.inGameController);

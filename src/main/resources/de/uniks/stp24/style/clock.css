@@ -84,6 +84,21 @@ Label {
 
 }
 
+#otherSpeed {
+    -fx-text-fill: black;
+    -fx-font-family: "Baskerville Old Face";
+    -fx-padding: 1px 0 0 3px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 20;
+    -fx-pref-height: 20;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/timeButtonAny.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 5, 5);
+}
+
 #pause:selected {
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/timeButtonPausePressed.png");
     -fx-background-size: cover;

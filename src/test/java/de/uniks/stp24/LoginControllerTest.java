@@ -49,6 +49,8 @@ public class LoginControllerTest extends ControllerTest {
         super.start(stage);
 
         this.loginController.loginService = this.loginService;
+        bubbleComponent.subscriber = this.subscriber;
+
 
         app.show(loginController);
     }

@@ -193,10 +193,8 @@ public void progressHandling(){
         }
     }
 
-
-
     public void setProgressBar() {
-        this.jobsService.onJobTypeProgress("technology", this::progressHandling);
+        this.jobsService.onGameTicked(this::progressHandling);
     }
 
         public void setEffectListView(){

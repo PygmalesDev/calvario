@@ -19,13 +19,9 @@ import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.service.menu.LanguageService;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
-import javafx.application.Platform;
-import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
@@ -36,7 +32,6 @@ import java.util.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)

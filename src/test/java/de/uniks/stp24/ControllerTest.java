@@ -78,8 +78,8 @@ public class ControllerTest extends ApplicationTest {
         Mockito.framework().clearInlineMocks();
     }
 
-    @AfterEach
-    public void tearDown2() {
+    @AfterAll
+    public static void tearDown2() {
         System.gc();
     }
 }

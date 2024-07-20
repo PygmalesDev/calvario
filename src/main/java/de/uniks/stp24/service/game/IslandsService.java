@@ -105,7 +105,7 @@ public class IslandsService extends BasicService {
                     this.app.show("/ingame");
                     refreshListOfColonizedSystems();
                 },
-                error -> System.out.println(error.getMessage()));
+                error -> System.out.println("Error while retrieving islands in the IslandsService:\n"+error.getMessage()));
     }
 
     /**
@@ -273,14 +273,6 @@ public class IslandsService extends BasicService {
         return total;
     }
 
-    public int getNumberOfBuildings(String empireID, String buildingID) {
-        int total = 0;
-        if (empiresInGame.containsKey(empireID)) {
-            total = siteManager.get(empireID).getBuildingCapacities(buildingID);
-        }
-        return total;
-    }
-
     public List<Island> getListOfIslands() {
         return Collections.unmodifiableList(this.isles);
     }
@@ -329,34 +321,7 @@ public class IslandsService extends BasicService {
                 inGameController.selectedIsland.island = islandAttributes.getIsland();
             });
         }
-    }
-
-    public void upgradeSystem(IslandAttributeStorage islandAttributes, String upgradeStatus, InGameController inGameController){
-        this.subscriber.subscribe(gameSystemsService.upgradeSystem(tokenStorage.getGameId(), islandAttributes.getIsland().id(),
-                new UpgradeSystemDto(
-                        upgradeStatus
-                )), result -> {
-            Island tmp = new Island(
-                    result.owner(),
-                    islandAttributes.getIsland().flagIndex(),
-                    result.x(),
-                    result.y(),
-                    IslandType.valueOf(String.valueOf(result.type())),
-                    result.population(),
-                    result.capacity(),
-                    Upgrade.valueOf(result.upgrade()).ordinal(),
-                    result.districtSlots(),
-                    result.districts(),
-                    result.buildings(),
-                    result._id(),
-                    result.upgrade(),
-                    Objects.isNull(result.name()) ? "Uncharted Island" : result.name()
-            );
-            inGameController.selectedIsland.island = tmp;
-            islandAttributes.setIsland(tmp);
-            inGameController.showOverview();
-
-        });
+        inGameController.overviewSitesComponent.updateResCapacity();
     }
 
     public Island getIsland(String islandID) {
@@ -391,12 +356,7 @@ public class IslandsService extends BasicService {
         return newIsland;
     }
 
-    public void updateIsland(String islandID) {
-        this.subscriber.subscribe(this.gameSystemsService.getSystem(this.gameID, islandID), this::updateIsland);
-    }
-
-
-    public Island convertToIsland(SystemDto result) {
+    private Island convertToIsland(SystemDto result) {
         return new Island(result.owner(),
                 Objects.isNull(result.owner()) ? -1 : getEmpire(result.owner()).flag(),
                 result.x(),

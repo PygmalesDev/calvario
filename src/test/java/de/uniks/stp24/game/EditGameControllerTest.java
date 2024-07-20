@@ -41,6 +41,7 @@ public class EditGameControllerTest extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
+        bubbleComponent.subscriber = this.subscriber;
         app.show(editGameController);
     }
 

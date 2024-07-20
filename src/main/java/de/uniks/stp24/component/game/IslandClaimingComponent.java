@@ -86,7 +86,7 @@ public class IslandClaimingComponent extends Pane {
 
     @Inject
     public Provider<ClaimingSiteComponent> componentProvider;
-    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle);
+    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle, this.imageCache);
     private ObservableList<Job> upgradeJobs;
     private final ObservableList<Site> siteObservableList = FXCollections.observableArrayList();
     private final ObservableList<de.uniks.stp24.model.Resource> consumeObservableList = FXCollections.observableArrayList();
@@ -137,12 +137,12 @@ public class IslandClaimingComponent extends Pane {
             this.sitesListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.componentProvider));
             this.noSitesText.setVisible(this.sitesListView.getItems().isEmpty());
 
-            this.islandAttributes.systemPresets.colonized().cost().forEach((name, amount) -> this.costsObservableList
+            this.islandAttributes.systemUpgradeAttributes.colonized().cost().forEach((name, amount) -> this.costsObservableList
                     .add(new de.uniks.stp24.model.Resource(name, amount, 0)));
             this.costsListView.setItems(this.costsObservableList);
             this.costsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.negativeResourceProvider));
 
-            this.islandAttributes.systemPresets.colonized().upkeep().forEach((name, amount) -> this.consumeObservableList
+            this.islandAttributes.systemUpgradeAttributes.colonized().upkeep().forEach((name, amount) -> this.consumeObservableList
                     .add(new de.uniks.stp24.model.Resource(name, amount, 0)));
             this.consumeListView.setItems(this.consumeObservableList);
             this.consumeListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.negativeResourceProvider));
@@ -163,29 +163,28 @@ public class IslandClaimingComponent extends Pane {
             this.islandJob = job;
             this.jobProgressBar.setProgress(this.progress);
             this.incrementAmount = (double) 1 /job.total();
-            this.jobsService.onJobCompletion(job._id(), () -> {
-                if (this.currentIsland.id().equals(job.system())) this.setProgressBarVisibility(false);
-            });
+            this.setJobFinishers(job);
         }, error -> System.out.printf(
                         """
-                        Creating a new exploration job failed in IsalndClaimingComponent
+                        Creating a new exploration job failed in IslandClaimingComponent
                         An exception was caught here: %s
                         """, error.getMessage()));
 
     }
 
     @OnRender
-    public void setJobUpdaters() {
-        this.jobsService.onJobsLoadingFinished("upgrade", (job) ->
-            this.jobsService.onJobCompletion(job._id(), () -> {
-                if (Objects.nonNull(this.currentIsland))
-                    if (this.currentIsland.id().equals(job.system())) this.getParent().setVisible(false);
-            }));
-        this.jobsService.onJobTypeProgress("upgrade", (someJob) -> {
+    public void setJobUpdates() {
+        this.jobsService.onJobsLoadingFinished("upgrade", this::setJobFinishers);
+        this.jobsService.onGameTicked(this::incrementProgress);
+    }
+
+    private void setJobFinishers(Job job) {
+        this.jobsService.onJobCompletion(job._id(), () -> {
             if (Objects.nonNull(this.currentIsland))
-                if (someJob.system().equals(this.currentIsland.id())) this.incrementProgress();
+                if (this.currentIsland.id().equals(job.system())) this.getParent().setVisible(false);
         });
     }
+
 
     private void incrementProgress() {
         this.progress++;
@@ -203,7 +202,8 @@ public class IslandClaimingComponent extends Pane {
     }
 
     public void cancelJob() {
-        this.subscriber.subscribe(this.jobsService.stopJob(this.islandJob._id()));
+        this.subscriber.subscribe(this.jobsService.stopJob(this.islandJob._id()),
+                result -> this.setProgressBarVisibility(false));
     }
 
     @OnDestroy

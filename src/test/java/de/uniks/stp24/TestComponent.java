@@ -1,12 +1,11 @@
 package de.uniks.stp24;
 
 import dagger.Component;
-import de.uniks.stp24.component.menu.BubbleComponent;
-import de.uniks.stp24.controllers.BrowseGameController;
 import de.uniks.stp24.dagger.MainComponent;
 import de.uniks.stp24.dagger.MainModule;
 import de.uniks.stp24.rest.*;
-import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
@@ -24,6 +23,7 @@ public interface TestComponent extends MainComponent {
     AuthApiService authApiService();
     UserApiService userApiService();
     GamesApiService gamesApiService();
+    GameLogicApiService gameLogicApiService();
     LoginService loginService();
     CreateGameService createGameService();
     EventListener eventListener();

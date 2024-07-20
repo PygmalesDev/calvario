@@ -2,15 +2,12 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.JobsService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 
 import javax.inject.Inject;
@@ -23,10 +20,6 @@ import static de.uniks.stp24.service.Constants.*;
 public class Building extends VBox {
     @FXML
     Button building;
-    @FXML
-    HBox jobProgressBox;
-    @FXML
-    Text jobTimeText;
 
     @Inject
     IslandAttributeStorage islandAttributeStorage;
@@ -34,7 +27,7 @@ public class Building extends VBox {
     @Inject
     JobsService jobsService;
 
-    public Building(BuildingsComponent buildingsComponent, String buildingName, TokenStorage tokenStorage,
+    public Building(BuildingsComponent buildingsComponent, String buildingName,
                     IslandAttributeStorage islandAttributes, InGameController inGameController, String presetType, String jobID){
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("BuildingElement.fxml"));
         fxmlLoader.setRoot(this);
@@ -63,15 +56,17 @@ public class Building extends VBox {
             else imageView.setImage(buildingsComponent.imageCache.get("/" + buildingsJobProgressMap.get(buildingName)));
 
         building.setGraphic(imageView);
-
         building.setOnMouseClicked(event -> {
-            String imageUrl = imageView.getImage().getUrl();
-            String relevantPart = extractRelevantPath(imageUrl);
-            if (imageView.getImage() != null && !relevantPart
-                    .equals("/de/uniks/stp24/icons/buildings/empty_building_element.png")){
+            String relevantPart = null;
+            if(imageView.getImage() != null) {
+                String imageUrl = imageView.getImage().getUrl();
+                relevantPart = extractRelevantPath(imageUrl);
+            }
+            if (imageView.getImage() != null && !Objects.equals(relevantPart,
+                    "/de/uniks/stp24/icons/buildings/empty_building_element.png")){
                 inGameController.buildingsWindowComponent.setVisible(false);
                 inGameController.setSitePropertiesInvisible();
-                inGameController.showBuildingInformation(buildingName, jobID, true);
+                inGameController.showBuildingInformation(buildingName, jobID);
 
             } else inGameController.showBuildingWindow();
         });

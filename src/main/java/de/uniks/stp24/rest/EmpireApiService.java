@@ -15,6 +15,9 @@ public interface EmpireApiService {
     @GET("games/{game}/empires")
     Observable<ReadEmpireDto[]> getEmpires(@Path("game") String gameID);
 
+    @GET("games/{game}/empires")
+    Observable<EmpireDto[]> getEmpiresDtos(@Path("game") String gameID);
+
     @GET("games/{game}/empires/{empire}")
     Observable<EmpireDto> getEmpire(@Path("game") String game, @Path("empire") String empire);
 
@@ -32,4 +35,15 @@ public interface EmpireApiService {
 
     @GET("games/{game}/empires/{empire}/aggregates/resources.periodic")
     Observable<AggregateResultDto> getResourceAggregates(@Path("game") String game, @Path("empire") String empire);
+
+    @PATCH("games/{game}/empires/{empire}")
+    Observable<UpdateEmpireMarketDto> updateEmpireMarket(@Path("game") String game, @Path("empire") String empire, @Body UpdateEmpireMarketDto updateEmpireMarketDto);
+
+    @PATCH("games/{game}/empires/{empire}")
+    Observable<UpdateEmpireMarketDto> saveSeasonalComponents(@Path("game") String game, @Path("empire") String empire, @Body SeasonalTradeDto seasonalTradeDto);
+
+    @GET("games/{game}/empires/{empire}")
+    Observable<SeasonalTradeDto> getSeasonalTrades(@Path("game") String game, @Path("empire") String empire);
+
+
 }

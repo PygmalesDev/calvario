@@ -4,8 +4,8 @@ import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.service.ImageCache;
-import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
@@ -20,6 +20,7 @@ import org.fulib.fx.annotation.event.OnKey;
 import javax.inject.Inject;
 import java.util.ResourceBundle;
 import javax.inject.Singleton;
+
 
 @Component(view = "IslandComponent.fxml")
 @Singleton
@@ -61,6 +62,7 @@ public class IslandComponent extends Pane {
         }
         this.islandImage = new ImageView();
         this.flagImage = new ImageView();
+        this.spyglassImage = new ImageView();
         this.setPickOnBounds(false);
     }
 
@@ -127,7 +129,9 @@ public class IslandComponent extends Pane {
         }
     }
 
-    //Logic for showing rudder if other island is already selected
+    /*
+    Logic for showing/unshowing rudder
+     */
     public void showUnshowRudder() {
         if (islandIsSelected) {
             reset();
@@ -167,6 +171,10 @@ public class IslandComponent extends Pane {
         this.tokenStorage = tokenStorage;
         return this;
     }
+
+    /*
+    Reset of componentes for showing informations of current selected island.
+     */
 
     public void reset(){
         inGameController.overviewSitesComponent.resetButtons();

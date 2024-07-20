@@ -2,9 +2,11 @@ package de.uniks.stp24.game.jobs;
 
 import de.uniks.stp24.component.game.ClaimingSiteComponent;
 import de.uniks.stp24.component.game.IslandClaimingComponent;
+import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.SystemUpgrades;
 import de.uniks.stp24.model.UpgradeStatus;
+import de.uniks.stp24.ws.Event;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.application.Platform;
 import javafx.scene.control.ProgressBar;
@@ -44,8 +46,8 @@ public class TestIslandClaiming extends JobsTestComponent {
     public void start(Stage stage) throws Exception {
         super.start(stage);
 
-        this.islandAttributeStorage.systemPresets = new SystemUpgrades(
-                null, null, new UpgradeStatus("0", 0, Map.of("energy", 100),
+        this.islandAttributeStorage.systemUpgradeAttributes = new SystemUpgrades(
+                null, null, new UpgradeStatus("0","upgraded", 1, 0, Map.of("energy", 100),
                 Map.of("energy", 100), 0), null, null);
 
         doReturn(null).when(this.imageCache).get(any());
@@ -104,6 +106,8 @@ public class TestIslandClaiming extends JobsTestComponent {
         assertTrue(lookup("#jobProgressBar").query().isVisible());
 
         this.updateInternally("jobID_12");
+        this.GAME_SUBJECT.onNext(new Event<>(String.format("games.%s.ticked", this.GAME_ID), new Game(null, null, this.GAME_ID, null, null, 0 , 0, true,
+                3, 1, null)));
         WaitForAsyncUtils.waitForFxEvents();
 
         assertTrue(lookup("#jobProgressBar").queryAs(ProgressBar.class).getProgress() > 0);

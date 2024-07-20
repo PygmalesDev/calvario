@@ -38,9 +38,8 @@ public class BuildingsComponent extends AnchorPane {
 
     @Inject
     JobsService jobsService;
-
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
 
     @Inject
     @Resource
@@ -55,7 +54,13 @@ public class BuildingsComponent extends AnchorPane {
     public BuildingsComponent() {
     }
 
-    //Call set grid pane if buildings changes
+    /*
+
+    This method creates and updates the pages for showing all buildings of an island.
+    If you click on next or prev the page that should appear will be updated with
+    the buildings on next or prev page.
+
+     */
     public void setGridPane() {
         buildings.getChildren().clear();
         this.buildingList.clear();
@@ -83,7 +88,7 @@ public class BuildingsComponent extends AnchorPane {
 
         for (int i = currentPage * pageCapacity; i < this.buildingList.size(); i++) {
             String[] buildingType = this.buildingList.get(i);
-            Building building = new Building(this, buildingType[0], tokenStorage, islandAttributes,
+            Building building = new Building(this, buildingType[0], islandAttributes,
                     inGameController, buildingType[1], buildingType[2]);
             buildings.add(building, col, row);
 
@@ -98,14 +103,18 @@ public class BuildingsComponent extends AnchorPane {
         }
 
         if (!isGridPaneFull(currentPage)) {
-            buildings.add(new Building(this, "buildNewBuilding",
-                    tokenStorage, islandAttributes, inGameController, null, ""), col, row);
+            buildings.add(new Building(this, "buildNewBuilding", islandAttributes, inGameController, null, ""), col, row);
         } else {
             next.setMouseTransparent(false);
             next.setVisible(true);
         }
     }
 
+    /*
+
+    Checks if page on current page is full.
+
+     */
     public boolean isGridPaneFull(int pageToCheck) {
         if (!this.buildingList.isEmpty()) {
             int size = this.buildingList.size();
@@ -134,7 +143,7 @@ public class BuildingsComponent extends AnchorPane {
         } else if(!isGridPaneFull(currentPage + 1) && size % 8 == 0){
             currentPage = currentPage + 1;
             buildings.getChildren().clear();
-            buildings.add(new Building(this, "buildNewBuilding", tokenStorage, islandAttributes, inGameController,
+            buildings.add(new Building(this, "buildNewBuilding", islandAttributes, inGameController,
                     null, ""), 0, 0);
             prev.setVisible(true);
             next.setVisible(false);
@@ -144,6 +153,5 @@ public class BuildingsComponent extends AnchorPane {
     public void setInGameController(InGameController inGameController){
         this.inGameController = inGameController;
     }
-
 
 }

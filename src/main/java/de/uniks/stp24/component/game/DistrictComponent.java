@@ -3,11 +3,13 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Jobs.*;
 import de.uniks.stp24.model.SiteProperties;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
@@ -30,11 +32,13 @@ public class DistrictComponent extends VBox implements ReusableItemComponent<Sit
     HBox jobProgressBox;
     @FXML
     Text jobTimeText;
+    @Inject
+    public ImageCache imageCache;
 
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
-    IslandAttributeStorage islandAttributeStorage;
+    public IslandAttributeStorage islandAttributeStorage;
 
     Map<String, String> sitesMap;
 
@@ -54,15 +58,16 @@ public class DistrictComponent extends VBox implements ReusableItemComponent<Sit
 
         String imagePath;
         if (Objects.isNull(this.sitesMap.get(this.siteName)))
-            imagePath = "de/uniks/stp24/icons/sites/production_site.png";
-        else imagePath = this.sitesMap.get(this.siteName);
+            imagePath = "/de/uniks/stp24/icons/sites/production_site.png";
+        else imagePath = "/" + this.sitesMap.get(this.siteName);
 
         this.siteElementButton.setDisable(this.tokenStorage.isSpectator() ||
                 !Objects.equals(this.islandAttributeStorage.getIsland().owner(), this.tokenStorage.getEmpireId()));
 
-        this.siteElementButton.setStyle("-fx-background-image: url('/" + imagePath + "'); " +
-                "-fx-background-size: 100% 100%;" + "-fx-background-color: transparent;" +
-                "-fx-background-repeat: no-repeat;");
+        ImageView imageView = new ImageView(this.imageCache.get(imagePath));
+        imageView.setFitWidth(40);
+        imageView.setFitHeight(40);
+        this.siteElementButton.setGraphic(imageView);
 
         districtCapacity.setText(siteCapacity);
         if (Objects.nonNull(properties.job()))
@@ -76,6 +81,6 @@ public class DistrictComponent extends VBox implements ReusableItemComponent<Sit
 
     public void setJobProgress(Job job) {
         this.jobProgressBox.setVisible(true);
-        this.jobTimeText.setText(String.format("%s/%s", job.progress(), job.total()));
+        this.jobTimeText.setText(String.format("%s/%s", job.progress(), (int) job.total()));
     }
 }

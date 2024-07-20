@@ -3,20 +3,19 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.BuildingDto;
+import de.uniks.stp24.model.Jobs;
+import de.uniks.stp24.model.BuildingAttributes;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.IslandsService;
-import de.uniks.stp24.service.game.JobsService;
-import de.uniks.stp24.service.game.ResourcesService;
+import de.uniks.stp24.service.game.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -68,13 +67,22 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @SubComponent
     public PropertiesJobProgressComponent propertiesJobProgressComponent;
     @Inject
+    public GameSystemsApiService gameSystemsApiService;
+    @Inject
     App app;
     @Inject
-    public GameSystemsApiService gameSystemsApiService;
+    ExplanationService explanationService;
+    @Inject
+    VariableService variableService;
+    @Inject
+    ImageCache imageCache;
+
+
     @Inject
     @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
+
     @Inject
     TokenStorage tokenStorage;
     @Inject
@@ -85,19 +93,26 @@ public class BuildingPropertiesComponent extends AnchorPane {
     Map<String, Integer> priceOfBuilding;
     ObservableList<Jobs.Job> buildingJobs;
 
-    String currentJobID = "";
+    Jobs.Job currentJob;
+    BuildingAttributes certainBuilding;
 
-    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle);
-    Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", gameResourceBundle);
+    Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
+    Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);
+
+    @Inject
+    public BuildingPropertiesComponent() {}
 
     @OnInit
     public void init(){
         buildingsMap = buildingsIconPathsMap;
     }
 
-    @Inject
-    public BuildingPropertiesComponent(){
-
+    @OnInit
+    public void setBuildingUpdates() {
+        this.jobsService.onJobsLoadingFinished("building", this::setBuildingJobFinishers);
+        this.jobsService.onJobCommonFinish(this::updateIslandBuildings);
+        this.jobsService.onJobsLoadingFinished(() ->
+                this.buildingJobs = this.jobsService.getJobObservableListOfType("building"));
     }
 
     @OnRender
@@ -119,7 +134,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
 
-    public void setBuildingType(String buildingType, String jobID, boolean isBuilt){
+    public void setBuildingType(String buildingType, String jobID){
         this.buildingType = buildingType;
 
         // when isBuilt = True, buyButton should be disabled
@@ -151,51 +166,40 @@ public class BuildingPropertiesComponent extends AnchorPane {
             this.jobsService.stopOnJobTypeProgress("building");
         }
 
+        this.setJobsPaneProgress(this.buildingJobs.stream().filter(started -> started._id().equals(jobID)
+                        && started.system().equals(this.tokenStorage.getIsland().id())).findFirst().orElse(null));
     }
 
-    @OnInit
-    public void setBuildingUpdates() {
-        this.jobsService.onJobsLoadingFinished("building", job -> {
-            this.jobsService.onJobDeletion(job._id(), () -> {
-                if (this.currentJobID.equals(job._id()))
-                    this.getParent().setVisible(false);
-                this.updateIslandBuildings();
-
-                if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
-                        (this.buildingJobs.isEmpty() || this.buildingJobs.getFirst()._id().equals(currentJobID)))
-                    this.jobsService.onJobTypeProgress(job.type(), () ->
-                            this.propertiesJobProgressComponent.incrementProgress());
-            });
-
-            this.jobsService.onJobCommonFinish(this::updateIslandBuildings);
-
-            this.jobsService.onJobCompletion(job._id(), () -> {
-                this.updateIslandBuildings();
-                this.hideJobsPane();
-
-                if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
-                        (this.buildingJobs.isEmpty() || this.buildingJobs.getFirst()._id().equals(currentJobID)))
-                    this.jobsService.onJobTypeProgress(job.type(), () ->
-                            this.propertiesJobProgressComponent.incrementProgress());
-            });
+    private void setBuildingJobFinishers(Jobs.Job job) {
+        this.jobsService.onJobDeletion(job._id(), () -> {
+            this.updateIslandBuildings();
+            if (Objects.nonNull(this.currentJob)) {
+                if (this.currentJob._id().equals(job._id())) this.getParent().setVisible(false);
+                else this.setJobsPaneProgress(this.currentJob);
+            }
         });
-
-        this.jobsService.onJobsLoadingFinished(() ->
-                this.buildingJobs = this.jobsService.getJobObservableListOfType("building"));
+        this.jobsService.onJobCompletion(job._id(), () -> {
+            if (Objects.nonNull(this.currentJob)) {
+                if (this.currentJob._id().equals(job._id())) this.getParent().setVisible(false);
+                else this.setJobsPaneProgress(this.currentJob);
+            }
+        });
     }
 
-    public void showJobsPane() {
-        this.jobProgressPane.setVisible(true);
-        this.buildingCostsListView.setVisible(false);
-        this.buyButton.setVisible(false);
-        this.destroyButton.setVisible(false);
+    private void setJobsPaneProgress(Jobs.Job job) {
+        this.currentJob = job;
+        this.setJobsPaneVisibility(Objects.nonNull(job));
+        if (Objects.nonNull(job)) {
+            this.propertiesJobProgressComponent.setJobProgress(job);
+            this.propertiesJobProgressComponent.setShouldTick(this.jobsService.isCurrentIslandJob(job));
+        }
     }
 
-    public void hideJobsPane() {
-        this.jobProgressPane.setVisible(false);
-        this.buildingCostsListView.setVisible(true);
-        this.buyButton.setVisible(true);
-        this.destroyButton.setVisible(true);
+    public void setJobsPaneVisibility(boolean isVisible) {
+        this.jobProgressPane.setVisible(isVisible);
+        this.buildingCostsListView.setVisible(!isVisible);
+        this.buyButton.setVisible(!isVisible);
+        this.destroyButton.setVisible(!isVisible);
     }
 
     //Checks if buy and destroy building has to be deactivated
@@ -225,25 +229,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
             if (resourcesService.hasEnoughResources(priceOfBuilding)) {
                 this.subscriber.subscribe(this.jobsService.beginJob(
                         Jobs.createBuildingJob(this.tokenStorage.getIsland().id(), this.buildingType)), job -> {
-                    this.currentJobID = job._id();
-                    this.propertiesJobProgressComponent.setJobProgress(job);
-                    this.showJobsPane();
+                    this.setJobsPaneProgress(job);
                     this.updateIslandBuildings();
-
-                    if (this.jobsService.hasNoJobTypeProgress(job.type()) &&
-                            (this.buildingJobs.isEmpty() || this.buildingJobs.getFirst().equals(job)))
-                        this.jobsService.onJobTypeProgress(job.type(), () ->
-                                this.propertiesJobProgressComponent.incrementProgress());
-
-                    this.jobsService.onJobDeletion(job._id(), () -> {
-                        if (this.currentJobID.equals(job._id()))
-                            this.getParent().setVisible(false);
-                        this.updateIslandBuildings();
-                    });
-                    this.jobsService.onJobCompletion(job._id(), () -> {
-                        this.updateIslandBuildings();
-                        this.hideJobsPane();
-                    });
+                    this.setBuildingJobFinishers(job);
                 });
             } else buyButton.setDisable(true);
         });
@@ -263,18 +251,21 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
     //Gets resources of the building and shows them in three listviews
-    public void displayInfoBuilding(){
-        Image imageBuilding = new Image(buildingsMap.get(buildingType));
-        buildingImage.setImage(imageBuilding);
+    public void displayInfoBuilding() {
+        buildingImage.setImage(this.imageCache.get("/" + buildingsMap.get(buildingType)));
         buildingName.setText(gameResourceBundle.getString(buildingTranslation.get(buildingType)));
-        subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), this::resourceListGeneration);
-        buildingCostsListView.setCellFactory(list -> new CustomComponentListCell<>(app, negativeResourceProvider));
-        buildingProducesListView.setCellFactory(list -> new CustomComponentListCell<>(app, positiveResourceProvider));
-        buildingConsumesListView.setCellFactory(list -> new CustomComponentListCell<>(app, negativeResourceProvider));
+
+        setCertainBuilding();
+        resourceListGeneration(certainBuilding);
+
+        buildingCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, negativeResouceProvider), "buildings", buildingType, "cost"));
+        buildingProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, positiveResourceProvider), "buildings", buildingType, "production"));
+        buildingConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, negativeResouceProvider), "buildings", buildingType, "upkeep"));
+        disableButtons();
     }
 
     //Sets upkeep, production and cost of buildings in listviews
-    private void resourceListGeneration(BuildingDto buildingDto) {
+    private void resourceListGeneration(BuildingAttributes buildingDto) {
         Map<String, Integer> resourceMapUpkeep = buildingDto.upkeep();
         ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, buildingConsumesListView.getItems(), null);
         buildingConsumesListView.setItems(resourceListUpkeep);
@@ -289,6 +280,15 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
     public void onClose(){
-        setVisible(false);
+        inGameController.buildingPropertiesComponent.setVisible(false);
+    }
+
+    private void setCertainBuilding(){
+        for(BuildingAttributes building: islandAttributeStorage.buildingsAttributes){
+            if(building.id().equals(buildingType)){
+                certainBuilding = building;
+                priceOfBuilding = certainBuilding.cost();
+            }
+        }
     }
 }

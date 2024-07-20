@@ -1,6 +1,7 @@
  package de.uniks.stp24;
 
  import com.fasterxml.jackson.databind.ObjectMapper;
+ import de.uniks.stp24.component.Captain;
  import de.uniks.stp24.component.menu.BubbleComponent;
  import de.uniks.stp24.component.menu.GangComponent;
  import de.uniks.stp24.component.menu.GangDeletionComponent;
@@ -36,9 +37,6 @@
  import javafx.scene.control.ListView;
 
  import javax.inject.Provider;
-
- import java.util.ArrayList;
- import java.util.function.BooleanSupplier;
 
  import static org.junit.jupiter.api.Assertions.*;
  import static org.mockito.Mockito.*;
@@ -107,6 +105,8 @@
      @Override
      public void start(Stage stage) throws Exception{
          super.start(stage);
+         bubbleComponent.subscriber = this.subscriber;
+
          this.gangCreationController.gangDeletionComponent = this.gangDeletionComponent;
          gangs.add(gang);
          doReturn(gangs).when(saveLoadService).loadGangs();

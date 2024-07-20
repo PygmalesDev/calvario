@@ -22,7 +22,6 @@ import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
-import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -32,6 +31,8 @@ import java.util.ResourceBundle;
 
 @Component(view = "IslandOverviewSites.fxml")
 public class OverviewSitesComponent extends AnchorPane {
+    @FXML
+    public Pane imagePane;
     @FXML
     public Button islandNameButton;
     @FXML
@@ -125,7 +126,7 @@ public class OverviewSitesComponent extends AnchorPane {
         }
         inGameService.showOnly(inGameController.overviewContainer, inGameController.overviewUpgradeComponent);
         inGameController.overviewUpgradeComponent.setUpgradeButton();
-        inGameController.overviewUpgradeComponent.setNeededResources();
+        inGameController.overviewUpgradeComponent.setListViews();
         inGameController.overviewUpgradeComponent.setUpgradeInf();
     }
 
@@ -153,7 +154,7 @@ public class OverviewSitesComponent extends AnchorPane {
         jobsButton.setDisable(false);
 
         detailsComponent.setResLists();
-        detailsComponent.setSumProduction(islandAttributes.mergeProduction());
+        detailsComponent.setSumProduction(islandAttributes.mergeProduction(islandAttributes.getIsland()));
 
         inGameService.showOnly(sitesContainer, detailsComponent);
     }
@@ -209,12 +210,16 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameController.sitePropertiesComponent.setVisible(false);
         inGameController.buildingPropertiesComponent.setVisible(false);
         inGameController.overviewContainer.setVisible(false);
+        if (Objects.nonNull(inGameController.selectedIsland.rudderImage))
+            inGameController.selectedIsland.rudderImage.setVisible(false);
+        inGameController.selectedIsland.islandIsSelected = false;
 
         if (!inGameController.islandsService.keyCodeFlag) {
             inGameController.selectedIsland.flagPane.setVisible(!inGameController.selectedIsland.flagPane.isVisible());
-            inGameController.selectedIsland.rudderImage.setVisible(false);
         }
+        inGameController.selectedIsland = null;
     }
+
 
     public void resetButtons(){
         detailsButton.setDisable(false);
@@ -225,7 +230,7 @@ public class OverviewSitesComponent extends AnchorPane {
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
                 islandAttributes.getIsland().buildings().size();
         islandAttributes.setUsedSlots(usedSlots);
-
+        System.out.println("testing 123");
         resCapacity.setText(usedSlots + "/" + islandAttributes.getIsland().resourceCapacity());
     }
 
@@ -241,7 +246,6 @@ public class OverviewSitesComponent extends AnchorPane {
         this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
 
         upgradeButton.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
-
         updateResCapacity();
 
         island_name.setText(islandAttributes.getIslandTypeTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");
@@ -256,8 +260,8 @@ public class OverviewSitesComponent extends AnchorPane {
             this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
 
             this.subscriber.subscribe(this.gameSystemsApiService
-                    .renameSystem(this.tokenStorage.getGameId(), this.tokenStorage.getIsland().id(),
-                            new SystemRenameDto(this.inputIslandName.getText())),
+                            .renameSystem(this.tokenStorage.getGameId(), this.tokenStorage.getIsland().id(),
+                                    new SystemRenameDto(this.inputIslandName.getText())),
                     result -> {
                         this.islandsService.updateIsland(result);
                         this.jobsService.getJobInspector("name_updates").accept(null);

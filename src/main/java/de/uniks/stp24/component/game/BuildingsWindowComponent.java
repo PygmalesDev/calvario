@@ -3,12 +3,12 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.service.Constants;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.controller.Component;
@@ -43,6 +43,8 @@ public class BuildingsWindowComponent extends AnchorPane {
 
     @Inject
     TokenStorage tokenStorage;
+    @Inject
+    public ImageCache imageCache;
 
     @Inject
     Subscriber subscriber;
@@ -93,8 +95,7 @@ public class BuildingsWindowComponent extends AnchorPane {
     @OnRender
     public void setImages() {
         for (int i = 0; i < buttons.length; i++) {
-            Image image = new Image(Constants.imagePaths[i]);
-            ImageView imageView = new ImageView(image);
+            ImageView imageView = new ImageView(this.imageCache.get("/"+Constants.imagePaths[i]));
             imageView.setFitWidth(40);
             imageView.setFitHeight(40);
             buttons[i].setGraphic(imageView);
@@ -108,43 +109,43 @@ public class BuildingsWindowComponent extends AnchorPane {
      */
     public void buildExchange(){
         this.buildingToAdd = "exchange";
-        inGameController.showBuildingInformation(buildingToAdd, "", false);
+        inGameController.showBuildingInformation(buildingToAdd, "");
     }
 
     public void buildPowerPlant(){
         this.buildingToAdd = "power_plant";
-        inGameController.showBuildingInformation(buildingToAdd, "", false);
+        inGameController.showBuildingInformation(buildingToAdd, "");
     }
 
     public void buildMine(){
         this.buildingToAdd = "mine";
-        inGameController.showBuildingInformation(buildingToAdd, "", false);
+        inGameController.showBuildingInformation(buildingToAdd, "");
     }
 
 
     public void buildFarm(){
         this.buildingToAdd = "farm";
-        inGameController.showBuildingInformation(buildingToAdd, "", false);
+        inGameController.showBuildingInformation(buildingToAdd, "");
     }
 
     public void buildResearchLab(){
         this.buildingToAdd = "research_lab";
-        inGameController.showBuildingInformation(buildingToAdd, "", false);
+        inGameController.showBuildingInformation(buildingToAdd, "");
     }
 
     public void buildFoundry(){
         this.buildingToAdd = "foundry";
-        inGameController.showBuildingInformation(buildingToAdd, "", false);
+        inGameController.showBuildingInformation(buildingToAdd, "");
     }
 
     public void buildFactory(){
         this.buildingToAdd = "factory";
-        inGameController.showBuildingInformation(buildingToAdd, "", false);
+        inGameController.showBuildingInformation(buildingToAdd, "");
     }
 
     public void buildRefinery(){
         this.buildingToAdd = "refinery";
-        inGameController.showBuildingInformation(buildingToAdd, "", false);
+        inGameController.showBuildingInformation(buildingToAdd, "");
     }
 
     public void onClose(){

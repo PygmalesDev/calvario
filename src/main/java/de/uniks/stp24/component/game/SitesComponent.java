@@ -32,7 +32,8 @@ public class SitesComponent extends Pane {
     ObservableList<SiteProperties> sitePropertiesList = FXCollections.observableArrayList();
 
     @Inject
-    Provider<DistrictComponent> districtComponentProvider;
+    public Provider<DistrictComponent> districtComponentProvider;
+
     @Inject
     App app;
 
@@ -78,7 +79,9 @@ public class SitesComponent extends Pane {
 
     @OnRender
     public void setSiteJobsUpdates() {
-        this.jobsService.onJobCommonUpdates(() -> this.setSitesBox(this.attributeStorage.island));
+        this.jobsService.onJobCommonUpdates(() -> {
+            if (Objects.nonNull(this.attributeStorage.island)) this.setSitesBox(this.attributeStorage.island);
+        });
     }
 
 

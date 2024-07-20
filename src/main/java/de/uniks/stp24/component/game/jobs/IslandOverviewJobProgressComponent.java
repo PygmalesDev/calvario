@@ -3,6 +3,7 @@ package de.uniks.stp24.component.game.jobs;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.model.Jobs.Job;
+import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.game.JobsService;
@@ -13,7 +14,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
@@ -23,12 +23,11 @@ import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.ResourceBundle;
-
-import de.uniks.stp24.service.Constants;
 
 @Component(view = "IslandOverviewJobProgress.fxml")
 public class IslandOverviewJobProgressComponent extends Pane implements ReusableItemComponent<Job> {
@@ -50,7 +49,7 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
     @FXML
     ListView<de.uniks.stp24.model.Resource> costsListView;
     public Provider<ResourceComponent> negativeResourceProvider = () ->
-            new ResourceComponent("negative", this.gameResourceBundle);
+            new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
     private final ObservableList<de.uniks.stp24.model.Resource> resourceObservableList = FXCollections.observableArrayList();
 
     @Inject
@@ -91,7 +90,7 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
         }
 
         this.jobPositionText.setText(systemJobs.indexOf(job)+1 + ".");
-        this.jobTimeRemaining.setText(String.format("%s/%s", job.progress(), job.total()));
+        this.jobTimeRemaining.setText(String.format("%s/%s", job.progress(), (int) job.total()));
 
         this.resourceObservableList.clear();
         job.cost().forEach((name, count) -> this.resourceObservableList
@@ -122,11 +121,12 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
     public void showJobDetails() {
         switch (this.job.type()) {
             case "district" -> this.jobsService.getJobInspector("site_overview")
-                    .accept(new String[]{this.job.district(), this.job.system()});
+                    .accept(job);
             case "building" -> this.jobsService.getJobInspector("building_overview")
-                    .accept(new String[]{this.job.building(), this.job._id(), this.job.system()});
+                    .accept(job);
+            case "upgrade" -> this.jobsService.getJobInspector("island_upgrade")
+                    .accept(job);
         }
-
     }
 
     public void stopJob() {

@@ -72,7 +72,7 @@ public class EmpireOverviewComponent extends StackPane {
 
     List<Island> islandList = new ArrayList<>();
     List<IslandComponent> islandComponentList = new ArrayList<>();
-    List<IslandComponent> empireIslands = new ArrayList<>();
+    public List<IslandComponent> empireIslands = new ArrayList<>();
     List<Image> gridViewImages = new ArrayList<>();
 
     Map<IslandType, Image> imageMap = new HashMap<>();
@@ -102,7 +102,7 @@ public class EmpireOverviewComponent extends StackPane {
         empireID = tokenStorage.getEmpireId();
         this.subscriber.subscribe(this.empireService.getEmpire(gameID, empireID),
                 this::empireTraits,
-                error -> System.out.println(error.getMessage()));
+                error -> System.out.println("Error in EmpireOverviewComponent on initEmpireList:\n" + error.getMessage()));
     }
 
     /**

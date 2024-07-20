@@ -1,5 +1,7 @@
 package de.uniks.stp24.service;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 public class Constants {
@@ -88,16 +90,24 @@ public class Constants {
             "consumer_goods","resource.rum"
     );
 
+    public static final Map<String, String> economyProcess = Map.of(
+                "cost", "resource.cost",
+                "upkeep", "resource.upkeep",
+                "production", "resource.production",
+                "base", "resource.base",
+                "total", "resource.total"
+    );
+
     public static final Map<String, String> resourceImagePath = Map.of(
-            "credits", "-fx-background-image: url('/de/uniks/stp24/icons/resources/credits.png');",
-            "minerals", "-fx-background-image: url('/de/uniks/stp24/icons/resources/minerals.png');",
-            "population", "-fx-background-image: url('/de/uniks/stp24/icons/resources/population.png');",
-            "energy", "-fx-background-image: url('/de/uniks/stp24/icons/resources/energy.png');",
-            "food", "-fx-background-image: url('/de/uniks/stp24/icons/resources/food.png');",
-            "fuel","-fx-background-image: url('/de/uniks/stp24/icons/resources/fuel.png');",
-            "research", "-fx-background-image: url('/de/uniks/stp24/icons/resources/research.png');",
-            "alloys", "-fx-background-image: url('/de/uniks/stp24/icons/resources/alloys.png');",
-            "consumer_goods","-fx-background-image: url('/de/uniks/stp24/icons/resources/consumer_goods.png');"
+            "credits", "de/uniks/stp24/icons/resources/credits.png",
+            "minerals", "de/uniks/stp24/icons/resources/minerals.png",
+            "population", "de/uniks/stp24/icons/resources/population.png",
+            "energy", "de/uniks/stp24/icons/resources/energy.png",
+            "food", "de/uniks/stp24/icons/resources/food.png",
+            "fuel","de/uniks/stp24/icons/resources/fuel.png",
+            "research", "de/uniks/stp24/icons/resources/research.png",
+            "alloys", "de/uniks/stp24/icons/resources/alloys.png",
+            "consumer_goods","de/uniks/stp24/icons/resources/consumer_goods.png"
     );
 
     public static final Map<String, String> siteTranslation = Map.of(
@@ -146,6 +156,22 @@ public class Constants {
             Map.entry("developed", "update.developed")
     );
 
+    public static final Map<String, String> technologyTranslation = Map.ofEntries(
+            Map.entry("crew_relations", "society"),
+            Map.entry("marine_science", "physics"),
+            Map.entry("shipbuilding", "engineering"),
+            Map.entry("cartography", "computing"),
+            Map.entry("construction", "construction"),
+            Map.entry("pirate_codex", "state"),
+            Map.entry("power", "energy"),
+            Map.entry("sailing", "propulsion"),
+            Map.entry("marine_life", "biology"),
+            Map.entry("plunder", "materials"),
+            Map.entry("hidden_treasure", "rare"),
+            Map.entry("navy", "military"),
+            Map.entry("production", "production"),
+            Map.entry("economy", "economy")
+    );
 
     public static final Map<String, String> sitesIconPathsMap = Map.ofEntries(
             Map.entry("city", "de/uniks/stp24/icons/sites/village_site.png"),
@@ -153,7 +179,7 @@ public class Constants {
             Map.entry("mining", "de/uniks/stp24/icons/sites/mining_site.png"),
             Map.entry("agriculture", "de/uniks/stp24/icons/sites/harvesting_site.png"),
             Map.entry("industry", "de/uniks/stp24/icons/sites/production_site.png"),
-            Map.entry("research_site", "de/uniks/stp24/icons/sites/epoch_site.png"),
+            Map.entry("research", "de/uniks/stp24/icons/sites/epoch_site.png"),
             Map.entry("ancient_foundry", "de/uniks/stp24/icons/sites/expedition_site.png"),
             Map.entry("ancient_factory", "de/uniks/stp24/icons/sites/merchant_site.png"),
             Map.entry("ancient_refinery", "de/uniks/stp24/icons/sites/coalmine_site.png")
@@ -171,24 +197,24 @@ public class Constants {
     );
 
     public static final Map<String, String> buildingsOnQueueMap = Map.ofEntries(
-            Map.entry("refinery", "de/uniks/stp24/icons/buildings/jobPause/alloy_smeltery_onQueue.png"),
-            Map.entry("factory", "de/uniks/stp24/icons/buildings/jobPause/theurgy_hall_onQueue.png"),
-            Map.entry("foundry", "de/uniks/stp24/icons/buildings/jobPause/chophouse_onQueue.png"),
-            Map.entry("research_lab", "de/uniks/stp24/icons/buildings/jobPause/resonating_delves_onQueue.png"),
+            Map.entry("foundry", "de/uniks/stp24/icons/buildings/jobPause/alloy_smeltery_onQueue.png"),
+            Map.entry("power_plant", "de/uniks/stp24/icons/buildings/jobPause/theurgy_hall_onQueue.png"),
+            Map.entry("factory", "de/uniks/stp24/icons/buildings/jobPause/chophouse_onQueue.png"),
+            Map.entry("mine", "de/uniks/stp24/icons/buildings/jobPause/resonating_delves_onQueue.png"),
             Map.entry("farm", "de/uniks/stp24/icons/buildings/jobPause/farmside_onQueue.png"),
-            Map.entry("mine", "de/uniks/stp24/icons/buildings/jobPause/coal_querry_onQueue.png"),
-            Map.entry("power_plant", "de/uniks/stp24/icons/buildings/jobPause/scout_hub_onQueue.png"),
+            Map.entry("refinery", "de/uniks/stp24/icons/buildings/jobPause/coal_querry_onQueue.png"),
+            Map.entry("research_lab", "de/uniks/stp24/icons/buildings/jobPause/scout_hub_onQueue.png"),
             Map.entry("exchange", "de/uniks/stp24/icons/buildings/jobPause/seaside_hut_onQueue.png")
     );
 
     public static final Map<String, String> buildingsJobProgressMap = Map.ofEntries(
-            Map.entry("refinery", "de/uniks/stp24/icons/buildings/jobProgress/alloy_smeltery_onConstruction.png"),
-            Map.entry("factory", "de/uniks/stp24/icons/buildings/jobProgress/theurgy_hall_onConstruction.png"),
-            Map.entry("foundry", "de/uniks/stp24/icons/buildings/jobProgress/chophouse_onConstruction.png"),
-            Map.entry("research_lab", "de/uniks/stp24/icons/buildings/jobProgress/resonating_delves_onConstruction.png"),
+            Map.entry("foundry", "de/uniks/stp24/icons/buildings/jobProgress/alloy_smeltery_onConstruction.png"),
+            Map.entry("power_plant", "de/uniks/stp24/icons/buildings/jobProgress/theurgy_hall_onConstruction.png"),
+            Map.entry("factory", "de/uniks/stp24/icons/buildings/jobProgress/chophouse_onConstruction.png"),
+            Map.entry("mine", "de/uniks/stp24/icons/buildings/jobProgress/resonating_delves_onConstruction.png"),
             Map.entry("farm", "de/uniks/stp24/icons/buildings/jobProgress/farmside_onConstruction.png"),
-            Map.entry("mine", "de/uniks/stp24/icons/buildings/jobProgress/coal_querry_onConstruction.png"),
-            Map.entry("power_plant", "de/uniks/stp24/icons/buildings/jobProgress/scout_hub_onConstruction.png"),
+            Map.entry("refinery", "de/uniks/stp24/icons/buildings/jobProgress/coal_querry_onConstruction.png"),
+            Map.entry("research_lab", "de/uniks/stp24/icons/buildings/jobProgress/scout_hub_onConstruction.png"),
             Map.entry("exchange", "de/uniks/stp24/icons/buildings/jobProgress/seaside_hut_onConstruction.png")
     );
 
@@ -222,4 +248,28 @@ public class Constants {
     // Sea Backgrounds
     public static final String NIGHT = "-fx-background-image: url('/de/uniks/stp24/assets/backgrounds/eclipse_seamless.png')";
     public static final String DAY = "-fx-background-image: url('/de/uniks/stp24/assets/backgrounds/sea_seamless.png')";
+    public static final String[] eventKeys = {
+            "event.abundance.description",
+            "event.crapulence.description",
+            "event.reckoning.description",
+            "event.grandExp.description",
+            "event.equivEx.description",
+            "event.rogerFeast.description",
+            "event.pestilence.description",
+            "event.blackSpot.description",
+            "event.rumBottle.description",
+            "event.dutchman.description",
+            "event.foolsGold.description",
+            "event.submerge.description"
+    };
+
+
+    public static final ArrayList<String> hints = new ArrayList<>(Arrays.asList(
+            "hint.alt.s",
+            "hint.alt.e",
+            "hint.alt.h",
+            "hint.shift.mw",
+            "hint.space"
+    ));
+
 }

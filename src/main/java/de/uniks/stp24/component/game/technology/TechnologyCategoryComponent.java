@@ -5,6 +5,7 @@ import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PopupBuilder;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TechnologyService;
 import javafx.application.Platform;
@@ -63,26 +64,26 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @Inject
     App app;
     @Inject
+    TokenStorage tokenStorage;
+    @Inject
+    Subscriber subscriber;
+    @Inject
     TechnologyService technologyService;
     @Inject
     @Resource
     @Named("technologiesResourceBundle")
     public ResourceBundle technologiesResourceBundle;
 
-    Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this, technologyService, app, technologiesResourceBundle);
+    Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this, technologyService, app, technologiesResourceBundle, tokenStorage, subscriber);
 
     ObservableList<TechnologyExtended> unlockedTechnologies = FXCollections.observableArrayList();
     ObservableList<TechnologyExtended> researchTechnologies = FXCollections.observableArrayList();
 
     private Pane parent;
 
-
-
     @Inject
     ResourcesService resourcesService;
 
-    @Inject
-    Subscriber subscriber;
 
     @Inject
     @SubComponent
@@ -219,6 +220,10 @@ public class TechnologyCategoryComponent extends AnchorPane {
     }
 
     public void unShowJobWindow(){
+        setMouseTransparency();
+    }
+
+    private void setMouseTransparency() {
         researchJobContainer.setMouseTransparent(true);
         researchJobComponent.setMouseTransparent(true);
         researchLeftVBox.setVisible(true);
@@ -249,16 +254,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
         }
 
 
-
-        researchJobContainer.setMouseTransparent(true);
-        researchJobComponent.setMouseTransparent(true);
-        researchLeftVBox.setVisible(true);
-        researchJobContainer.setVisible(false);
-        researchJobComponent.setVisible(false);
-        Platform.runLater(() -> {
-            technologieCategoryBox.getStyleClass().clear();
-            technologieCategoryBox.getStyleClass().add("technologiesCategoryBackground");
-        });
+        setMouseTransparency();
     }
 
 

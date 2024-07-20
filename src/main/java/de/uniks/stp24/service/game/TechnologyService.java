@@ -1,8 +1,10 @@
 package de.uniks.stp24.service.game;
 
+import de.uniks.stp24.dto.AggregateResultDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.rest.EmpireApiService;
+import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.TokenStorage;
@@ -23,19 +25,25 @@ public class TechnologyService {
     @Inject
     EmpireApiService empireApiService;
     @Inject
+    GameLogicApiService gameLogicApiService;
+    @Inject
     public Subscriber subscriber;
 
     @Inject
     TokenStorage tokenStorage;
 
-    List<TechnologyExtended> technologies;
+    String category;
 
+    List<TechnologyExtended> technologies;
     Observable<ArrayList<TechnologyExtended>> temp;
     Set<TechnologyExtended> allUnlockedTechnologiesSet = new HashSet<>();
 
     ObservableList<TechnologyExtended> unlockedTechnologiesList = FXCollections.observableArrayList();
 
     ObservableList<TechnologyExtended> allUnlockedTechnologiesList = FXCollections.observableArrayList();
+
+    ObservableList<TechnologyExtended> researchTechnologiesList = FXCollections.observableArrayList();
+
 
     @Inject
     public TechnologyService() {
@@ -89,16 +97,16 @@ public class TechnologyService {
      * @return unlocked Technologies without precedes that are also unlocked
      */
     public ObservableList<TechnologyExtended> getUnlockedTechnologies(String tag) {
-        List<TechnologyExtended> tempUnlocked = getAllUnlockedTechnologies(tag);
-        unlockedTechnologiesList.clear();
-        for (TechnologyExtended technology : tempUnlocked) {
-            for (String t : technology.precedes()) {
+            List<TechnologyExtended> tempUnlocked = getAllUnlockedTechnologies(tag);
+            unlockedTechnologiesList.clear();
+            for (TechnologyExtended technology : tempUnlocked) {
+                for (String t : technology.precedes()) {
 
-                if (tempUnlocked.stream().noneMatch(tech -> tech.id().equals(t))) {
-                    unlockedTechnologiesList.add(technology);
+                    if (tempUnlocked.stream().noneMatch(tech -> tech.id().equals(t))) {
+                        unlockedTechnologiesList.add(technology);
+                    }
                 }
             }
-        }
         return unlockedTechnologiesList;
     }
 
@@ -109,24 +117,23 @@ public class TechnologyService {
      * @return research Technologies without requirements that are not unlocked
      */
     public ObservableList<TechnologyExtended> getResearchTechnologies(String tag) {
-        List<TechnologyExtended> tempResearch = getResearchTechnologies();
-        List<TechnologyExtended> tempUnlocked = getUnlockedTechnologies();
-        ObservableList<TechnologyExtended> researchTechnologiesList = FXCollections.observableArrayList();
+            List<TechnologyExtended> tempResearch = getResearchTechnologies();
+            List<TechnologyExtended> tempUnlocked = getUnlockedTechnologies();
 
-        for (TechnologyExtended technology : tempResearch) {
-            boolean add = true;
-            if (technology.requires() != null && !Arrays.asList(technology.requires()).isEmpty() && Arrays.asList(technology.tags()).contains(tag)) {
-                for (String t : technology.requires()) {
-                    if (tempUnlocked.stream().noneMatch(tech -> tech.id().equals(t))) {
-                        add = false;
-                        break;
+            for (TechnologyExtended technology : tempResearch) {
+                boolean add = true;
+                if (technology.requires() != null && !Arrays.asList(technology.requires()).isEmpty() && Arrays.asList(technology.tags()).contains(tag)) {
+                    for (String t : technology.requires()) {
+                        if (tempUnlocked.stream().noneMatch(tech -> tech.id().equals(t))) {
+                            add = false;
+                            break;
+                        }
                     }
                 }
+                if (add && (Arrays.asList(technology.tags()).contains(tag)) && researchTechnologiesList.stream().noneMatch(tech -> tech.id().equals(technology.id()))) {
+                    researchTechnologiesList.add(technology);
+                }
             }
-            if (add && (Arrays.asList(technology.tags()).contains(tag)) && researchTechnologiesList.stream().noneMatch(tech -> tech.id().equals(technology.id()))) {
-                researchTechnologiesList.add(technology);
-            }
-        }
         return researchTechnologiesList;
     }
 
@@ -160,4 +167,11 @@ public class TechnologyService {
         return presetsApiService.getTechnologies();
     }
 
+    public Observable<AggregateResultDto> getTechnologyTimeAndCost(String empireID, String aggregate, String techID) {
+        return gameLogicApiService.getTechnologyCostAndTime(empireID, aggregate, techID);
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 }

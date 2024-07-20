@@ -31,22 +31,33 @@
          <ImageView fx:id="tagImage1" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
       </HBox>
    </HBox>
-   <ListView fx:id="descriptionListView" prefHeight="35.0" styleClass="description-list-view" />
+   <ListView fx:id="descriptionListView" disable="true" prefHeight="35.0" style="-fx-opacity: 1;" styleClass="description-list-view" />
    <HBox fx:id="researchHBox" alignment="CENTER_RIGHT" spacing="5.0">
+      <Label fx:id="showEffectLabel" text="%all.effects">
+         <font>
+            <Font size="15.0" />
+         </font>
+         <HBox.margin>
+            <Insets right="40.0" />
+         </HBox.margin>
+         <tooltip>
+            <Tooltip fx:id="showEffectTooltip" styleClass="description-tooltip"/>
+         </tooltip>
+      </Label>
       <ImageView fx:id="timeImage" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
       <Label fx:id="timeLabel" styleClass="technologyCategoriesLabel" text="Label">
          <font>
             <Font size="15.0" />
          </font></Label>
       <ImageView fx:id="researchImage" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="researchLabel" minHeight="25.0" minWidth="25.0" styleClass="technologyCategoriesLabel" text="Label" textAlignment="CENTER">
+      <Label fx:id="researchLabel" minWidth="20.0" styleClass="technologyCategoriesLabel" text="Label" textAlignment="CENTER">
          <font>
             <Font size="15.0" />
          </font>
          <tooltip>
-            <Tooltip fx:id="tooltip" anchorLocation="WINDOW_TOP_RIGHT" autoFix="false" consumeAutoHidingEvents="false" contentDisplay="RIGHT" hideOnEscape="false" />
+            <Tooltip fx:id="researchLabelTooltip" styleClass="research-tooltip" anchorLocation="WINDOW_TOP_RIGHT" autoFix="false" consumeAutoHidingEvents="false" contentDisplay="RIGHT" hideOnEscape="false" />
          </tooltip></Label>
-      <Button fx:id="researchButton" mnemonicParsing="false" onAction="#researchClicked" prefHeight="25.0" prefWidth="25.0" styleClass="buildButton" />
+      <Button fx:id="researchButton" onAction="#researchClicked" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" styleClass="buildButton" />
    </HBox>
    <padding>
       <Insets bottom="25.0" left="15.0" right="10.0" top="20.0" />

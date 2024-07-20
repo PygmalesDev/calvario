@@ -56,16 +56,6 @@
     -fx-border-width: 0;
 }
 
-.technologiesActualResearchBackground {
-    -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/technologies_actualResearch_background.png");
-    -fx-background-size: contain;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-padding: 0;
-    -fx-border-width: 0;
-}
-
 .technologyCategoriesLabel {
     -fx-font-family: "Tempus Sans ITC";
 }
@@ -79,18 +69,6 @@
     -fx-font-family: "Tempus Sans ITC";
     -fx-font-weight: bold;
 }
-
-/*.technology-list {*/
-/*    -fx-background-color: transparent;*/
-/*}*/
-
-/*.technology-list .list-cell {*/
-/*    -fx-background-color: transparent;*/
-/*    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/red_frame.png");*/
-/*    -fx-background-size: 100% 100%;*/
-/*    -fx-background-repeat: no-repeat;*/
-/*    -fx-background-position: center;*/
-/*}*/
 
 .technologies-list-view .virtual-flow .scroll-bar:vertical .thumb {
     -fx-background-color: transparent;
@@ -180,27 +158,6 @@
     -fx-font-size: 16;
 }
 
-.technologyName {
-    -fx-font-family: "Tempus Sans ITC";
-    -fx-background-color: transparent;
-    -fx-font-weight: none;
-    -fx-font-size: 22;
-}
-
-.researchDescription {
-    -fx-font-family: "Tempus Sans ITC";
-    -fx-background-color: transparent;
-    -fx-font-weight: none;
-    -fx-font-size: 14;
-}
-
-.researchHeadLine {
-    -fx-font-family: "Blackadder ITC";
-    -fx-background-color: transparent;
-    -fx-font-weight: none;
-    -fx-font-size: 30;
-}
-
 
 .description-tooltip {
     -fx-opacity: 1;
@@ -212,4 +169,23 @@
 }
 
 .technology-description-label {
+}
+
+.effect-details-tooltip {
+    -fx-opacity: 1;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/technology_effects_background.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.effect-details-title {
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 25;
+}
+
+.effect-details-elements {
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 18;
 }

@@ -16,7 +16,7 @@ public interface GameLogicApiService {
     @GET("games/{game}/empires/{empire}/variables")
     Observable<ArrayList<ExplainedVariableDTO>> getVariablesExplanations(@Path("empire") String empireID, @Query("variables") ArrayList<String> variables);
 
-    @GET("games/{game}/empires/{empire}/aggregates/{aggregate}/technologies/{id}")
-    Observable<AggregateResultDto> getTechnologyCostAndTime(@Path("empire") String empireID, @Path("aggregate") String aggregate, @Path("id") String techID);
+    @GET("games/{game}/empires/{empire}/aggregates/{aggregate}")
+    Observable<AggregateResultDto> getTechnologyCostAndTime(@Path("empire") String empireID, @Path("aggregate") String aggregate, @Query("technology") String techID);
 
 }

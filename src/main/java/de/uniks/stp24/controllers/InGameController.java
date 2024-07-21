@@ -61,7 +61,7 @@ public class InGameController extends BasicController {
     @FXML
     StackPane hintCaptainContainer;
     @FXML
-    Pane shadow;
+    public Pane shadow;
     @FXML
     StackPane eventContainer;
     @FXML
@@ -707,7 +707,7 @@ public class InGameController extends BasicController {
     public void showHelp() {
         popupHelpWindow.showPopup(helpWindowContainer,helpComponent);
         helpComponent.setVisible(true);
-        shadow.setVisible(false);
+        shadow.setVisible(true);
         helpComponent.setMouseTransparent(false);
         helpWindowContainer.setMouseTransparent(false);
         pauseMenuContainer.setVisible(false);

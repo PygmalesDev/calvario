@@ -293,7 +293,6 @@ public class InGameTestComponent extends InGameTestInitializer {
         this.islandsService.isles = islands;
 
         doReturn(Observable.empty()).when(marketService).getSeasonalTrades(any(), any());
-        doReturn(FXCollections.observableArrayList()).when(announcementsService).getAnnouncements();
         doReturn(FXCollections.observableArrayList()).when(jobsService).getObservableListForSystem(any());
         doReturn(Observable.empty()).when(jobsService).beginJob(any());
         doReturn(testIsland).when(tokenStorage).getIsland();

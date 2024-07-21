@@ -145,6 +145,13 @@ public class SitePropertiesComponent extends AnchorPane {
         this.jobPane.setVisible(false);
     }
 
+    @OnRender
+    public void addRunnable() {
+        // this method will be run after resources update themselves, to (dis)-enable buttons dynamically
+        resourcesService.setOnResourceUpdates(this::setButtonsDisable);
+        jobsService.onJobCommonStart(this::setButtonsDisable);
+    }
+
     public void setInGameController(InGameController inGameController){
         this.inGameController = inGameController;
     }
@@ -224,12 +231,9 @@ public class SitePropertiesComponent extends AnchorPane {
     }
 
     //Uses a GridPane to display a graphic view of how many sites of each type you have
-    public void displayAmountOfSite(){
+    public void displayAmountOfSite() {
         buildSiteButton.setDisable(false);
         destroySiteButton.setDisable(false);
-
-        Map<String, Integer> costSite = Objects.requireNonNull(getCertainSite()).cost();
-        if (!resourcesService.hasEnoughResources(costSite)) buildSiteButton.setDisable(true);
 
         int amountSite = Objects.nonNull(tokenStorage.getIsland().sites().get(siteType)) ?
                 tokenStorage.getIsland().sites().get(siteType) : 0;
@@ -255,20 +259,25 @@ public class SitePropertiesComponent extends AnchorPane {
             }
         }
 
-        buildSiteButton.setDisable(amountSiteSlots == amountSite);
+        if (amountSiteSlots == amountSite)
+            buildSiteButton.setDisable(true);
+        else
+            setButtonsDisable();
+
         destroySiteButton.setDisable(amountSite == 0);
-
-        checkBuyButtonStatus();
-        jobsService.onJobCommonStart(this::checkBuyButtonStatus);
-
     }
 
-    private void checkBuyButtonStatus() {
-        tempJobListBuildings = jobsService.getJobObservableListOfType("building");
-        tempJobListSites = jobsService.getJobObservableListOfType("district");
-        int islandJobsInQueue = tempJobListBuildings.size() + tempJobListSites.size();
-        if (islandAttributeStorage.getUsedSlots() + islandJobsInQueue >= islandAttributeStorage.getIsland().resourceCapacity()){
-            buildSiteButton.setDisable(true);
+    private void setButtonsDisable() {
+        // checks:
+        // 1) if empire has enough resources to build a site cell
+        // 2) if island has enough capacity for this building
+        if (Objects.nonNull(siteType)) {
+            Map<String, Integer> costSite = Objects.requireNonNull(getCertainSite()).cost();
+            int islandJobsInQueue = jobsService.getObservableListForSystem(islandAttributeStorage.getIsland().id()).size();
+            buildSiteButton.setDisable(!resourcesService.hasEnoughResources(costSite)
+            ||
+            islandAttributeStorage.getUsedSlots() + islandJobsInQueue >=
+                    islandAttributeStorage.getIsland().resourceCapacity());
         }
     }
 

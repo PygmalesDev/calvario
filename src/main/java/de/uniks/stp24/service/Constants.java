@@ -276,4 +276,9 @@ public class Constants {
             "hint.space"
     ));
 
+    public enum BUILT_STATUS {
+            BUILT,
+            QUEUED,
+            NOT_BUILT
+    }
 }

@@ -128,6 +128,7 @@ public class StorageOverviewComponent extends AnchorPane {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         resourceListGeneration(event.data(), null);
                         this.lastUpdate = event.data().updatedAt();
+                        // call the methods that have to listen to resource changes
                         resourcesService.runnables.forEach(Runnable::run);
                     }
                 },

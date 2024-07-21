@@ -128,10 +128,7 @@ public class IslandsService extends BasicService {
                 SCALE_FACTOR * isleDto.posY()*DISTANCE_FACTOR - serverOffsetV + screenOffSetV);
         component.applyIcon(isleDto.type());
         component.setFlagImage(isleDto.flagIndex());
-        if (Objects.nonNull(isleDto.owner())) {
-            Color colorWeb = Color.web(getEmpire(isleDto.owner()).color()).brighter();
-            component.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb) + ", 4.0, 0.88, 0, 0);");}
-
+        applyDropShadowToIsland(component);
         return component;
     }
 
@@ -171,6 +168,7 @@ public class IslandsService extends BasicService {
                 app.initAndRender(new IslandComponent()));
               tmp.setLayoutX(tmp.getPosX());
               tmp.setLayoutY(tmp.getPosY());
+              tmp.setIslandService(this);
               islandComponentList.add(tmp);
               islandComponentMap.put(island.id(), tmp);
           }
@@ -374,5 +372,13 @@ public class IslandsService extends BasicService {
                 result.upgrade().toString(),
                 Objects.isNull(result.name()) ? "Uncharted Island" : result.name()
         );
+    }
+
+    public void applyDropShadowToIsland(IslandComponent islandComponent) {
+        // adds a background color to island as same as owner empire color
+        if (Objects.nonNull(islandComponent.island.owner())) {
+            Color colorWeb = Color.web(getEmpire(islandComponent.island.owner()).color()).brighter();
+            islandComponent.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb) + ", 4.0, 0.88, 0, 0);");}
+
     }
 }

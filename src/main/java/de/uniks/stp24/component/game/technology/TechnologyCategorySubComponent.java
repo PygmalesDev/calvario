@@ -101,7 +101,11 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
      */
     @Inject
     public TechnologyCategorySubComponent(TechnologyCategoryComponent technologyCategoryComponent, TechnologyService technologyService,
-                                          App app, ResourceBundle technologiesResourceBundle, TokenStorage tokenStorage, Subscriber subscriber, ResourceBundle variablesResourceBundle, TechnologyEffectDetailsComponent technologyEffectDetailsComponent, TechnologyResearchDetailsComponent technologyResearchDetailsComponent, ImageCache imageCache) {
+                                          App app, ResourceBundle technologiesResourceBundle, TokenStorage tokenStorage,
+                                          Subscriber subscriber, ResourceBundle variablesResourceBundle,
+                                          TechnologyEffectDetailsComponent technologyEffectDetailsComponent,
+                                          TechnologyResearchDetailsComponent technologyResearchDetailsComponent, ImageCache imageCache) {
+
         this.technologyCategoryComponent = technologyCategoryComponent;
         this.technologyService = technologyService;
         this.app = app;

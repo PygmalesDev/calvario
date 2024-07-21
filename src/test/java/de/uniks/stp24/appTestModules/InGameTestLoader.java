@@ -192,7 +192,8 @@ public class InGameTestLoader extends ControllerTest {
 
     final Provider<TechnologyCategorySubComponent> technologyCategorySubComponentProvider = () ->
             new TechnologyCategorySubComponent(this.technologyCategoryComponent, this.technologyService,
-                    this.app, this.technologiesResourceBundle, this.imageCache);
+                    this.app, this.technologiesResourceBundle, this.tokenStorage, this.subscriber, this.variablesResourceBundle, this.technologyEffectDetailsComponent,
+                    this.technologyResearchDetailsComponent, this.imageCache);
 
     @Override
     public void start(Stage stage) throws Exception {

@@ -50,9 +50,9 @@ public class TestVariableExplanation extends VariableTestComponent{
 
     @Test
     public void variableDependencies(){
-        verify(variableDependencyService, times(1)).createVariableDependencyUpgrades();
-        verify(variableDependencyService, times(1)).createVariableDependencyBuildings();
-        verify(variableDependencyService, times(1)).createVariableDependencyDistricts();
+        verify(variableDependencyService, times(2)).createVariableDependencyUpgrades();
+        verify(variableDependencyService, times(2)).createVariableDependencyBuildings();
+        verify(variableDependencyService, times(2)).createVariableDependencyDistricts();
 
         assertEquals(1, islandAttributeStorage.buildingsAttributes.size());
         assertEquals("church", islandAttributeStorage.buildingsAttributes.getFirst().id());

@@ -17,7 +17,6 @@ import java.util.Map;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 
 public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
 
@@ -232,6 +231,7 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
         doReturn(Observable.just(variablesEffect)).when(inGameService).getVariablesEffects();
         doReturn(Observable.just(jobList)).when(jobsApiService).getEmpireJobs(any(), any());
         doReturn(Observable.just(effectSourceParentDto)).when(empireApiService).getEmpireEffect(any(), any());
+        doReturn(Observable.empty()).when(marketService).getSeasonalTrades(any(), any());
 
         buildingAttributes.add(buildingPreset1);
         buildingAttributes.add(buildingPreset2);
@@ -252,9 +252,6 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
         this.marketComponent.subscriber = this.subscriber;
         this.inGameController.marketOverviewComponent = this.marketComponent;
         this.marketService.subscriber = this.subscriber;
-
-        when(this.presetsApiService.getVariables()).thenReturn(Observable.just(new HashMap<>()));
-        doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
 
         this.app.show(this.inGameController);
         clearStyleSheets();

@@ -5,6 +5,7 @@ import de.uniks.stp24.model.Effect;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.rest.EmpireApiService;
+import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.TechnologyService;
@@ -44,6 +45,8 @@ public class TechnologyResearchDetailsComponent extends VBox {
 
     @Inject
     EmpireApiService empireApiService;
+    @Inject
+    GameLogicApiService gameLogicApiService;
 
     @Inject
     TokenStorage tokenStorage;
@@ -91,9 +94,11 @@ public class TechnologyResearchDetailsComponent extends VBox {
 
     public void setTechnologyInfos(TechnologyExtended technology) {
 
-        base.setText("Base: " + technology.cost());
+        base.setText("Base: " + technology.cost() * 100);
 
-        total.setText("Total: " + technology.cost());
+        subscriber.subscribe(gameLogicApiService.getTechnologyCostAndTime(tokenStorage.getEmpireId(), "technology.cost", technology.id()),
+                aggregateResultDto -> total.setText("Total: " + aggregateResultDto.total()),
+                error -> System.out.println("Error try to get costs of " + technology.id() + " because: " + error.getMessage()));
 
         for (Trait trait : myTraits) {
             for (EffectDto effect : trait.effects()) {
@@ -105,7 +110,8 @@ public class TechnologyResearchDetailsComponent extends VBox {
             }
         }
 
-        for (TechnologyExtended tech : technologyService.getUnlockedTechnologies()) {
+        // TODO: REMOVE GETALLUNLOCKED() CHANGE BACK TO getUnlockedTechnologies()
+        for (TechnologyExtended tech : technologyService.getAllUnlocked()) {
             for (Effect effect : tech.effects()) {
                 if (effect.variable().contains(technology.id())) {
                     Label l = new Label((1 - (int) (effect.multiplier() * 100)) + " % "

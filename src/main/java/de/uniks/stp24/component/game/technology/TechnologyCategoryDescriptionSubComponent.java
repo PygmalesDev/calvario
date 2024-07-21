@@ -76,7 +76,7 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
         String variable = effect.variable();
 
         /*
-         * Iterate through all resources and checks if effect variable contains a resource
+         * Iterate through all possible paths that technologies can affect
          */
         for (String key : Constants.resourceTranslation.keySet()) {
             if (variable.contains(key)) {
@@ -84,19 +84,57 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
                 break;
             } else if (variable.contains("pop")) {
                 resourceImage.setImage(imageCache.get("icons/resources/population.png"));
+                break;
+            } else if (variable.contains("market.fee")) {
+                resourceImage.setImage(imageCache.get("assets/market/market_fee.png"));
+                break;
             }
         }
 
-        /*
-         * If variable doesn't affect a resource, it must be a technology
-         */
         if (resourceImage.getImage() == null) {
             for (String tech : Constants.technologyTranslation.values()) {
                 if (variable.contains(tech)) {
                     resourceImage.setImage(imageCache.get("assets/technologies/tags/" + tech + ".png"));
+                    break;
                 }
             }
         }
+
+        if (resourceImage.getImage() == null && variable.contains("systems")) {
+            for (String island : Constants.islandTranslation.keySet()) {
+                if (variable.contains(island)) {
+                    resourceImage.setImage(imageCache.get("icons/islands/" + island + ".png"));
+                    break;
+                }
+            }
+            if (resourceImage.getImage() == null) {
+                for (String upgrade : Constants.upgradeTranslation.keySet()) {
+                    if (variable.contains(upgrade)) {
+                        resourceImage.setImage(imageCache.get("icons/islands/regular.png"));
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (resourceImage.getImage() == null && variable.contains("buildings")) {
+            for (String building : Constants.buildingTranslation.keySet()) {
+                if (variable.contains(building)) {
+                    resourceImage.setImage(imageCache.get(Constants.buildingsIconPathsMap.get(building).replace("de/uniks/stp24/", "")));
+                    break;
+                }
+            }
+        }
+
+        if (resourceImage.getImage() == null && variable.contains("district")) {
+            for (String district : Constants.siteTranslation.keySet()) {
+                if (variable.contains(district)) {
+                    resourceImage.setImage(imageCache.get(Constants.sitesIconPathsMap.get(district).replace("de/uniks/stp24/", "")));
+                    break;
+                }
+            }
+        }
+
     }
 
     public void setDescriptionLabel() {

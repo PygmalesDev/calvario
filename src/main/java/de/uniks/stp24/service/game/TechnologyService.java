@@ -42,6 +42,9 @@ public class TechnologyService {
 
     ObservableList<TechnologyExtended> researchTechnologiesList = FXCollections.observableArrayList();
 
+    ObservableList<TechnologyExtended> unlockedList = FXCollections.observableArrayList();
+    ObservableList<TechnologyExtended> researchList = FXCollections.observableArrayList();
+
 
     @Inject
     public TechnologyService() {
@@ -188,6 +191,8 @@ public class TechnologyService {
         ObservableList<ObservableList<TechnologyExtended>> unlockedAndResearch = FXCollections.observableArrayList();
         unlockedAndResearch.add(unlocked);
         unlockedAndResearch.add(research);
+        unlockedList.clear();
+        researchList.clear();
         subscriber.subscribe(empireApiService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 empire -> {
                     if (empire.technologies() != null) {
@@ -196,6 +201,7 @@ public class TechnologyService {
                                     unlocked::add, error -> System.out.println("Error after try to get Technology " + techId + " because: " + error.getMessage()));
                         }
                     }
+                    unlockedList = unlocked;
                     unlockedAndResearch.add(unlocked);
                     subscriber.subscribe(getTechnologies(),
                             techList -> {
@@ -204,6 +210,7 @@ public class TechnologyService {
                                         research.add(tech);
                                     }
                                 }
+                                researchList = research;
                                 unlockedAndResearch.add(research);
                             });
                 }, error -> System.out.println("Error after try to get empire because of: " + error.getMessage()));
@@ -225,6 +232,14 @@ public class TechnologyService {
                     System.out.println("Research" + research);
                 }, error -> System.out.println("Error after try to get all technologies"));
         return research;
+    }
+
+    public ObservableList<TechnologyExtended> getUnlockedList() {
+        return unlockedList;
+    }
+
+    public ObservableList<TechnologyExtended> getResearchList() {
+        return researchList;
     }
 
     public Observable<TechnologyExtended> getTechnology(String id) {

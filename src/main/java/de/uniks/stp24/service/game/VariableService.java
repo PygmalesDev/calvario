@@ -6,6 +6,7 @@ import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.VariablesTree;
+import io.reactivex.rxjava3.core.Observable;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -38,6 +39,7 @@ public class VariableService {
     public VariablesTree<ExplainedVariableDTO> empireTree;
     public VariablesTree<ExplainedVariableDTO> resourcesTree;
     public VariablesTree<ExplainedVariableDTO> technologiesTree;
+    public ArrayList<Runnable> runnables = new ArrayList<>();
 
 
     @Inject
@@ -74,15 +76,19 @@ public class VariableService {
 
     public void loadVariablesDataStructure(){
         this.subscriber.subscribe(
-                gameLogicApiService.getVariablesExplanations(inGameController.tokenStorage.getEmpireId(), allVariables),
+                this.getAllVariables(),
                 result -> {
                     for (ExplainedVariableDTO explainedVariableDTO : result) {
                         data.put(explainedVariableDTO.variable(), explainedVariableDTO);
                     }
                     createAllTrees();
-                    inGameController.loadGameAttributes();
+                    runRunnables();
                 },
                 error -> System.out.println("error in loading variable data structure:\n" + error.getMessage()));
+    }
+
+    public Observable<ArrayList<ExplainedVariableDTO>> getAllVariables(){
+        return gameLogicApiService.getVariablesExplanations(inGameController.tokenStorage.getEmpireId(), allVariables);
     }
 
     public void createAllTrees(){
@@ -152,5 +158,21 @@ public class VariableService {
 
     public void setIngameController(InGameController inGameController) {
         this.inGameController = inGameController;
+    }
+
+    public Map<String, Double> convertVariablesToMap(ArrayList<ExplainedVariableDTO> variables) {
+        Map<String, Double> variablesMap = new HashMap<>();
+        for (ExplainedVariableDTO variableDTO : variables) {
+            variablesMap.put(variableDTO.variable(), variableDTO.finalValue());
+        }
+        return variablesMap;
+    }
+
+    public void addRunnable(Runnable func) {
+        runnables.add(func);
+    }
+
+    public void runRunnables() {
+        runnables.forEach(Runnable::run);
     }
 }

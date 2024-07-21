@@ -41,7 +41,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
@@ -320,7 +319,6 @@ public class PauseMenuTest extends ControllerTest {
         doReturn(Observable.just(new MemberDto(true, "test", testEmpire, "123"))).when(this.gameMembersApiService).getMember(any(), any());
         doReturn(Observable.just(variablesEffect)).when(this.inGameService).getVariablesEffects();
 
-        doReturn(Observable.just(variablesMarket)).when(this.marketService).getVariables();
         doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
 
 

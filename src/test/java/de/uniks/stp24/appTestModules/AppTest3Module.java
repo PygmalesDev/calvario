@@ -122,8 +122,14 @@ public class AppTest3Module extends LobbyTestLoader {
             new ExplainedVariableDTO("buildings.refinery.upkeep.minerals", 10, new ArrayList<>(), 10),
             new ExplainedVariableDTO("buildings.refinery.upkeep.energy", 15, new ArrayList<>(), 15),
             new ExplainedVariableDTO("buildings.refinery.production.fuel", 10, new ArrayList<>(), 10),
-            new ExplainedVariableDTO("systems.colonized.cost.energy", 100, new ArrayList<>(), 100)
-    ));
+            new ExplainedVariableDTO("systems.colonized.cost.energy", 100, new ArrayList<>(), 100),
+            new ExplainedVariableDTO("resources.energy.credit_value", 1.0, new ArrayList<>(), 1.0),
+            new ExplainedVariableDTO("resources.minerals.credit_value", 1.0, new ArrayList<>(), 1.0),
+            new ExplainedVariableDTO("resources.food.credit_value", 1.0, new ArrayList<>(), 1.0),
+            new ExplainedVariableDTO("resources.fuel.credit_value", 5.0, new ArrayList<>(), 5.0),
+            new ExplainedVariableDTO("resources.alloys.credit_value", 8.0, new ArrayList<>(), 8.0),
+            new ExplainedVariableDTO("resources.consumer_goods.credit_value", 6.0, new ArrayList<>(), 6.0),
+            new ExplainedVariableDTO("resources.consumer_goods.empire.market.fee", 0.3, new ArrayList<>(), 0.3)));
 
     protected final SystemDto[] GAME_SYSTEMS = new SystemDto[]{
             new SystemDto("0", "0", "islandID_1", GAME_ID, "regular", "TestIslandOne",

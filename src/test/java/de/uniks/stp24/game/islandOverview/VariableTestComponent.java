@@ -1,6 +1,5 @@
 package de.uniks.stp24.game.islandOverview;
 
-import de.uniks.stp24.component.game.DistrictComponent;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.ws.Event;
@@ -8,7 +7,6 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 
-import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +15,6 @@ import java.util.Map;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 
 public class VariableTestComponent extends IslandOverviewTestInitializer{
 
@@ -123,7 +120,6 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
         this.inGameController.marketOverviewComponent = this.marketComponent;
         this.marketService.subscriber = this.subscriber;
 
-        when(this.presetsApiService.getVariables()).thenReturn(Observable.just(new HashMap<>()));
         doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
 
         this.islandsService.isles = islands;

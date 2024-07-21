@@ -9,6 +9,9 @@ import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.component.game.DeleteStructureComponent;
 import de.uniks.stp24.component.game.technology.*;
+import de.uniks.stp24.component.game.technology.ResearchJobComponent;
+import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
+import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateItemDto;
@@ -47,8 +50,8 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 public class InGameTestInitializer extends ControllerTest {
-    @Mock
-    protected MarketService marketService;
+    @Spy
+    MarketService marketService;
     @Spy
     GamesApiService gamesApiService;
     @Spy
@@ -258,6 +261,7 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent.imageCache = this.imageCache;
 
         this.inGameController.marketOverviewComponent = this.marketComponent;
+        this.inGameController.marketOverviewComponent.variableService = this.variableService;
         this.marketComponent.marketSeasonComponentProvider = this.marketSeasonComponentProvider;
         this.marketComponent.explanationService = this.explanationService;
         this.marketComponent.presetsApiService = this.presetsApiService;

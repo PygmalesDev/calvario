@@ -30,14 +30,14 @@ public class AppTest3 extends AppTest3Module {
         this.loadGame();
 
         this.showTip();
+        this.performMarketTrades();
+        this.performSeasonalTrades();
         this.beginSiteJob();
         this.beginBuildingJob();
         this.beginIslandUpgrade();
         this.inspectJobs();
         this.cancelJob();
         this.beginIslandClaiming();
-        this.performMarketTrades();
-        this.performSeasonalTrades();
         this.beginTechnologyJob();
         this.showHelpWindow();
     }
@@ -152,6 +152,8 @@ public class AppTest3 extends AppTest3Module {
     }
 
     public void performMarketTrades() {
+        marketComponent.updateInformation();
+        marketComponent.userCredits = 1000000000;
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#marketOverviewButton");
         assertTrue(this.marketComponent.isVisible());

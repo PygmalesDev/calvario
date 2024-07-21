@@ -5,14 +5,12 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.ExplainedVariableDTO;
 import de.uniks.stp24.model.Effect;
-import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.model.Sources;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
-import de.uniks.stp24.controllers.InGameController;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -32,6 +30,8 @@ public class ExplanationService {
     public VariableService variableService;
     @Inject
     IslandAttributeStorage islandAttributes;
+    @Inject
+    EventService eventService;
     @Inject
     @org.fulib.fx.annotation.controller.Resource
     ResourceBundle langBundle;
@@ -109,7 +109,7 @@ public class ExplanationService {
         Iterate over all active effect of current variable and show the effects visually.
          */
         for (Sources source : explanation.sources()) {
-            double x = 0;
+            double x;
             for (Effect effect : source.effects()) {
                 if (effect.variable().equals(variable)){
                     x = (effect.multiplier() - 1) * 100;
@@ -123,7 +123,14 @@ public class ExplanationService {
         for(Map.Entry<String, Double> entry : activeEffects.entrySet()){
             double mult = entry.getValue();
             BigDecimal roundedMult = new BigDecimal(mult).setScale(2, RoundingMode.HALF_UP);
-            effects.add(roundedMult + "% " + variablesResourceBundle.getString(entry.getKey()));
+            String effect = entry.getKey();
+            String effectText;
+            if (eventService.eventNames.contains(effect)) {
+                effectText = gameResourceBundle.getString("event." + effect + ".name");
+            } else {
+                effectText = variablesResourceBundle.getString(effect);
+            }
+            effects.add(roundedMult + "% " + effectText);
         }
 
         variableExplanationComponent.fillListWithEffects(effects);

@@ -224,9 +224,13 @@ public class InGameController extends BasicController {
         storageOverviewComponent.setInGameController(this);
         pauseMenuComponent.setInGameController(this);
         helpComponent.setInGameController(this);
+        clockComponent.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
+
+        System.out.println("GAME ID " + gameID);
+        System.out.println("EMPIRE ID " + empireID);
 
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
@@ -234,6 +238,7 @@ public class InGameController extends BasicController {
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_PAUSED"));
 
         variableService.initVariables();
+        variableService.addRunnable(this::loadGameAttributes);
 
         if (!tokenStorage.isSpectator())
             this.subscriber.subscribe(this.lobbyService.getMember(gameID, tokenStorage.getUserId()),
@@ -259,7 +264,6 @@ public class InGameController extends BasicController {
     */
     public void updateVariableDependencies() {
         variableService.loadVariablesDataStructure();
-        loadGameAttributes();
     }
 
     public void loadGameAttributes() {
@@ -565,7 +569,7 @@ public class InGameController extends BasicController {
 
             this.islandAttributes.setIsland(selected);
             selectedIsland = this.islandsService.getIslandComponent(job.system());
-            if (Objects.nonNull(selected.owner())) {
+            if (Objects.nonNull(selected) && Objects.nonNull(selected.owner())) {
                 showOverview();
                 this.overviewSitesComponent.showJobs();
             }
@@ -637,7 +641,6 @@ public class InGameController extends BasicController {
     }
 
     public void showBuildingInformation(String buildingToAdd, String jobID, BUILT_STATUS isBuilt) {
-        System.out.println("built " + isBuilt);
         siteProperties.setVisible(false);
         siteProperties.setMouseTransparent(true);
         buildingPropertiesComponent.setBuildingType(buildingToAdd, jobID, isBuilt);

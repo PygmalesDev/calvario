@@ -3,16 +3,12 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
-import de.uniks.stp24.model.EmpireExtendedDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.SeasonComponent;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.EmpireService;
-import de.uniks.stp24.service.game.ExplanationService;
-import de.uniks.stp24.service.game.MarketService;
-import de.uniks.stp24.service.game.ResourcesService;
+import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.ws.EventListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -88,6 +84,8 @@ public class MarketComponent extends StackPane {
     @Inject
     public ExplanationService explanationService;
     @Inject
+    VariableService variableService;
+    @Inject
     @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
@@ -127,7 +125,11 @@ public class MarketComponent extends StackPane {
     }
 
     @OnInit
-    public void init() {
+    public void addRunnable() {
+        variableService.addRunnable(this::updateInformation);
+    }
+
+    public void updateInformation() {
         if (!tokenStorage.isSpectator()) {
             loadVariablesAndSetup();
             createResourceListeners();
@@ -139,9 +141,9 @@ public class MarketComponent extends StackPane {
      * Initializes amount of resources, their prices and the market fee.
      */
     private void loadVariablesAndSetup() {
-        subscriber.subscribe(marketService.getVariables(),
+        subscriber.subscribe(variableService.getAllVariables(),
                 res -> {
-                    this.variables = res;
+                    this.variables = variableService.convertVariablesToMap(res);
                     createResourcePriceMap();
                     setMarketFee();
                     createResourceCountMap();
@@ -230,8 +232,9 @@ public class MarketComponent extends StackPane {
      * Sets the market fee.
      */
     private void setMarketFee() {
-        marketFeeLabel.setText(String.valueOf(this.variables.get("empire.market.fee")));
-        this.marketFee = Double.parseDouble(marketFeeLabel.getText());
+        this.marketFee = this.variables.get("empire.market.fee");
+        marketFeeLabel.setText(String.valueOf(marketFee));
+        System.out.println("market fee: " + marketFee);
     }
 
     /**

@@ -163,7 +163,8 @@ public class SitePropertiesComponent extends AnchorPane {
         displayCostsOfSite();
         displayAmountOfSite();
 
-        this.setJobsPaneProgress(this.siteJobs.stream().filter(started -> started.district().equals(siteType)
+        if (Objects.nonNull(this.siteJobs))
+            this.setJobsPaneProgress(this.siteJobs.stream().filter(started -> started.district().equals(siteType)
                 && started.system().equals(this.tokenStorage.getIsland().id())).findFirst().orElse(null));
     }
 

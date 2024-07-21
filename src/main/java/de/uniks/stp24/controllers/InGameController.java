@@ -551,13 +551,15 @@ public class InGameController extends BasicController {
     public void setJobInspectors() {
         this.jobsService.setJobInspector("island_jobs_overview", (Jobs.Job job) -> {
             Island selected = this.islandsService.getIsland(job.system());
+            if (selected.upgrade().equals("unexplored") || selected.upgrade().equals("explored")) return;
+
             this.tokenStorage.setIsland(selected);
             this.overviewSitesComponent.jobsComponent.setJobsObservableList(
                     this.jobsService.getObservableListForSystem(job.system()));
 
             this.islandAttributes.setIsland(selected);
             selectedIsland = this.islandsService.getIslandComponent(job.system());
-            if (Objects.nonNull(selected) && Objects.nonNull(selected.owner())) {
+            if (Objects.nonNull(selected.owner())) {
                 showOverview();
                 this.overviewSitesComponent.showJobs();
             }

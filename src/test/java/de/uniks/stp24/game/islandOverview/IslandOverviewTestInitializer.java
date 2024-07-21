@@ -145,9 +145,6 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @InjectMocks
     IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
 
-    @Spy
-    ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ROOT);
-
     @InjectMocks
     MarketComponent marketComponent;
 

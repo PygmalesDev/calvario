@@ -292,8 +292,6 @@ public class InGameTestComponent extends InGameTestInitializer {
         this.islandAttributeStorage.districtAttributes = this.districtAttributes;
         this.islandsService.isles = islands;
 
-
-        doReturn(Observable.empty()).when(marketService).getVariables();
         doReturn(Observable.empty()).when(marketService).getSeasonalTrades(any(), any());
         doReturn(FXCollections.observableArrayList()).when(announcementsService).getAnnouncements();
         doReturn(FXCollections.observableArrayList()).when(jobsService).getObservableListForSystem(any());

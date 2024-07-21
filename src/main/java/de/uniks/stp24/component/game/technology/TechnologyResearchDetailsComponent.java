@@ -73,18 +73,22 @@ public class TechnologyResearchDetailsComponent extends VBox {
 
     @OnInit
     public void init() {
-//        subscriber.subscribe(empireApiService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
-//                empireDto -> {
-//                    if (empireDto.traits() != null) {
-//                        for (String traitName : empireDto.traits()) {
-//                            subscriber.subscribe(presetsApiService.getTrait(traitName),
-//                                    trait -> myTraits.add(trait),
-//                                    error -> System.out.println("Error on getting traits: " + error.getMessage())
-//                            );
-//                        }
-//                    }
-//                }, error -> System.out.println("Error on getting empire: " + error.getMessage()
-//        ));
+
+    }
+
+    public void initTraits() {
+        subscriber.subscribe(empireApiService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                empireDto -> {
+                    if (empireDto.traits() != null) {
+                        for (String traitName : empireDto.traits()) {
+                            subscriber.subscribe(presetsApiService.getTrait(traitName),
+                                    trait -> myTraits.add(trait),
+                                    error -> System.out.println("Error on getting traits: " + error.getMessage())
+                            );
+                        }
+                    }
+                }, error -> System.out.println("Error on getting empire: " + error.getMessage()
+                ));
     }
 
     @OnDestroy

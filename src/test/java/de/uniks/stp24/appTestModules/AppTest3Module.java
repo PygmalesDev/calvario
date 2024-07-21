@@ -223,6 +223,8 @@ public class AppTest3Module extends LobbyTestLoader {
     }
 
     private void initializeApiMocks() {
+
+        doReturn(Observable.just(RESOURCE_AGGREGATES)).when(this.gameLogicApiService).getTechnologyCostAndTime(any(), any(), any());
         doReturn(null).when(this.imageCache).get(any());
         doNothing().when(this.saveLoadService).saveGang(any());
 

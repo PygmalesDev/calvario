@@ -512,6 +512,7 @@ public class InGameController extends BasicController {
             Button showTechnologiesButton = new Button();
             showTechnologiesButton.setId("showTechnologiesButton");
             showTechnologiesButton.setOnAction(event -> showTechnologies());
+            showTechnologiesButton.setId("technologiesButton");
             showTechnologiesButton.getStyleClass().add("technologiesButton");
             contextMenuButtons.getChildren().addAll(showTechnologiesButton, new ContextMenuButton("marketOverview", marketOverviewComponent));
         });
@@ -638,12 +639,6 @@ public class InGameController extends BasicController {
             // update island name
             if (!this.islandAttributes.getIsland().name().isEmpty())
                 overviewSitesComponent.inputIslandName.setText(this.islandAttributes.getIsland().name());
-    }
-
-    @OnKey(code = KeyCode.T, alt = true)
-    public void showTechnologies() {
-        this.toggleContextMenuVisibility(this.technologiesComponent);
-        this.technologiesComponent.setVisible(!this.technologiesComponent.isVisible());
     }
 
     @OnKey(code = KeyCode.SPACE)

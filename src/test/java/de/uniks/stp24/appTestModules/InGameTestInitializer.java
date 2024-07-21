@@ -212,10 +212,6 @@ public class InGameTestInitializer extends ControllerTest {
 
     public void initializeComponents() {
 
-        doReturn(Observable.just(empireDto)).when(this.empireService).getEmpire(any(), any());
-        doReturn(Observable.just(traitDto)).when(this.presetsApiService).getTrait(any());
-        doReturn(Observable.just(aggregateResult)).when(this.gameLogicApiService).getTechnologyCostAndTime(any(), any(), any());
-
         this.inGameController.technologiesComponent = this.technologyOverviewComponent;
         this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
         this.inGameController.technologiesComponent.technologyCategoryComponent.researchJobComponent = this.researchJobComponent;

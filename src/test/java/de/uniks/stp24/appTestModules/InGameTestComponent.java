@@ -190,8 +190,6 @@ public class InGameTestComponent extends InGameTestInitializer {
         this.islandAttributeStorage.empireDto = empireDto;
         this.inGameController.overviewSitesComponent.sitesComponent.districtComponentProvider = districtComponentProvider;
 
-
-
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();

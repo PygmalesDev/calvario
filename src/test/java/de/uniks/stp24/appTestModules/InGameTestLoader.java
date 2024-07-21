@@ -3,9 +3,7 @@ package de.uniks.stp24.appTestModules;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.*;
-import de.uniks.stp24.component.game.technology.ResearchJobComponent;
-import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
-import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
+import de.uniks.stp24.component.game.technology.*;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.GameStatus;
@@ -138,6 +136,11 @@ public class InGameTestLoader extends ControllerTest {
     protected JobsService jobsService;
     @InjectMocks
     protected CoolerBubbleComponent coolerBubbleComponent;
+    @InjectMocks
+    protected TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+    @InjectMocks
+    protected TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
+
 
     Provider<ClaimingSiteComponent> claimingComponentProvider = () -> {
         var component = new ClaimingSiteComponent();
@@ -191,12 +194,33 @@ public class InGameTestLoader extends ControllerTest {
     }
 
     protected void setControllers() {
+        this.inGameController.technologiesComponent = this.technologyOverviewComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.researchJobComponent = this.researchJobComponent;
+        this.inGameController.technologiesComponent.technologyService = this.technologyService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyService = this.technologyService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent = this.technologyResearchDetailsComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyEffectDetailsComponent = this.technologyEffectDetailsComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.resourcesService = this.resourcesService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.resourcesService.subscriber = this.subscriber;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyOverviewComponent = this.technologyOverviewComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.tokenStorage = this.tokenStorage;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.presetsApiService = this.presetsApiService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.technologyService = this.technologyService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.empireApiService = this.empireApiService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.gameLogicApiService = this.gameLogicApiService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.tokenStorage = this.tokenStorage;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.subscriber = this.subscriber;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.subscriber = this.subscriber;
+        this.inGameController.technologiesComponent.technologyService.subscriber = this.subscriber;
+        this.inGameController.technologiesComponent.subscriber = this.subscriber;
+        this.technologyService.gameLogicApiService = this.gameLogicApiService;
+
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.overviewUpgradeComponent = this.overviewUpgradeComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
-        this.inGameController.technologiesComponent = this.technologyOverviewComponent;
         this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;

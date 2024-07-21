@@ -7,9 +7,7 @@ import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
-import de.uniks.stp24.component.game.technology.ResearchJobComponent;
-import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
-import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
+import de.uniks.stp24.component.game.technology.*;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateResultDto;
@@ -174,6 +172,11 @@ public class PauseMenuTest extends ControllerTest {
     TechnologyCategoryComponent technologyCategoryComponent;
     @InjectMocks
     ResearchJobComponent researchJobComponent;
+    @InjectMocks
+    TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+    @InjectMocks
+    TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
+
 
     @Spy
     JobsApiService jobsApiService;
@@ -183,6 +186,8 @@ public class PauseMenuTest extends ControllerTest {
     MarketService marketService;
     @Spy
     AnnouncementsService announcementsService;
+    @Spy
+    GameLogicApiService gameLogicApiService;
 
     @InjectMocks
     InGameController inGameController;
@@ -201,6 +206,28 @@ public class PauseMenuTest extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
+
+        this.inGameController.technologiesComponent = this.technologyOverviewComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.researchJobComponent = this.researchJobComponent;
+        this.inGameController.technologiesComponent.technologyService = this.technologyService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyService = this.technologyService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent = this.technologyResearchDetailsComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyEffectDetailsComponent = this.technologyEffectDetailsComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.resourcesService = this.resourcesService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.resourcesService.subscriber = this.subscriber;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyOverviewComponent = this.technologyOverviewComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.tokenStorage = this.tokenStorage;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.presetsApiService = this.presetsApiService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.technologyService = this.technologyService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.empireApiService = this.empireApiService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.gameLogicApiService = this.gameLogicApiService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.tokenStorage = this.tokenStorage;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.subscriber = this.subscriber;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.subscriber = this.subscriber;
+        this.inGameController.technologiesComponent.technologyService.subscriber = this.subscriber;
+        this.inGameController.technologiesComponent.subscriber = this.subscriber;
+
         coolerBubbleComponent.subscriber = this.subscriber;
         this.inGameController.coolerBubbleComponent = coolerBubbleComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;

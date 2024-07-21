@@ -185,6 +185,7 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
         researchLabelTooltip.setShowDuration(Duration.INDEFINITE);
 
         technologyEffectDetailsComponent.setTechnology(technology);
+        technologyResearchDetailsComponent.initTraits();
     }
 
     public void researchClicked() {

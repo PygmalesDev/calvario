@@ -87,10 +87,10 @@ public class ResearchJobComponent extends AnchorPane {
     @Named("technologiesResourceBundle")
     public ResourceBundle technologiesResourceBundle;
 
-    public ObservableList<Jobs.Job> jobList = FXCollections.observableArrayList();
+    public final ObservableList<Jobs.Job> jobList = FXCollections.observableArrayList();
     private TechnologyCategoryComponent technologyCategoryComponent;
 
-    public ObservableList<TechnologyExtended> technologies = FXCollections.observableArrayList();
+    public final ObservableList<TechnologyExtended> technologies = FXCollections.observableArrayList();
 
     ObservableList<Effect> description = FXCollections.observableArrayList();
     Provider<TechnologyCategoryDescriptionSubComponent> provider = () -> new TechnologyCategoryDescriptionSubComponent(variablesResourceBundle);
@@ -153,11 +153,7 @@ public class ResearchJobComponent extends AnchorPane {
     }
 
     public void handleJobInformation(){
-        setInfos();
-    }
-
-    private void setInfos() {
-        if (Objects.nonNull(technologyCategoryComponent.getTechnology())){
+        if (Objects.nonNull(technologyCategoryComponent.getTechnology())) {
             for (Jobs.Job job1 : jobList) {
                 if (job1.technology().equals(technologyCategoryComponent.getTechnology().id())){
                     subscriber.subscribe(jobsApiService.getJobByID(tokenStorage.getGameId(), tokenStorage.getEmpireId(), job1._id()), currentJob -> {
@@ -173,7 +169,6 @@ public class ResearchJobComponent extends AnchorPane {
         }
     }
 
-
     public void progressHandling(){
         ObservableList<Jobs.Job> newJobList = jobsService.getJobObservableListOfType("technology");
 
@@ -188,7 +183,7 @@ public class ResearchJobComponent extends AnchorPane {
         jobList.clear();
         jobList.addAll(uniqueJobList);
 
-        setInfos();
+        this.handleJobInformation();
     }
 
     public void setProgressBar() {

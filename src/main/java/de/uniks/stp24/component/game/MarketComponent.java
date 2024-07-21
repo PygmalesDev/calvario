@@ -3,6 +3,8 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
+import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.dto.UpdateEmpireMarketDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.SeasonComponent;
 import de.uniks.stp24.rest.PresetsApiService;
@@ -30,7 +32,10 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 @Component(view = "MarketComponent.fxml")
 public class MarketComponent extends StackPane {
@@ -93,7 +98,6 @@ public class MarketComponent extends StackPane {
     @Param("empireID")
     String empire;
 
-    private InGameController inGameController;
     private String lastUpdate;
     private String lastSeasonUpdate;
 
@@ -107,7 +111,7 @@ public class MarketComponent extends StackPane {
 
     public Map<String, Double> variables = new HashMap<>();
     public Map<String, Integer> resourceCountMap = new HashMap<>();
-    public Map<String, Double> resourcePriceMap = new HashMap<>();
+    public final Map<String, Double> resourcePriceMap = new HashMap<>();
     public Map<String, Integer> resourceCountMapCopy = new HashMap<>();
 
     @Inject
@@ -283,8 +287,7 @@ public class MarketComponent extends StackPane {
      * Handles buying an item. Distinction between seasonal and non-seasonal buys.
      */
     public void buyItem() {
-        int numberOfGoods = getNumberOfGoods();
-        resourceAmount = numberOfGoods;
+        resourceAmount = getNumberOfGoods();
         if (everySeasonButton.isSelected()) {
             addSeasonalTransaction("buy", buyingPrice);
         } else {
@@ -372,10 +375,10 @@ public class MarketComponent extends StackPane {
      * Custom ListCell for displaying resources in the ListView.
      */
     public class ResourceCell extends ListCell<Map.Entry<String, Integer>> {
-        private VBox vBox = new VBox();
-        private ImageView imageView = new ImageView();
-        private Text text = new Text();
-        ImageCache imageCache = new ImageCache();
+        private final VBox vBox = new VBox();
+        private final ImageView imageView = new ImageView();
+        private final Text text = new Text();
+        final ImageCache imageCache = new ImageCache();
 
         public ResourceCell() {
             super();
@@ -400,10 +403,12 @@ public class MarketComponent extends StackPane {
                 setGraphic(vBox);
             }
             setOnMouseClicked(event -> {
-                selectedItem = item.getKey();
-                selectedIconImage.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + item.getKey() + ".png"));
-                numberOfGoodsLabel.setText("1");
-                buyingAndSellingPrice(item.getKey());
+                if (Objects.nonNull(item)) {
+                    selectedItem = item.getKey();
+                    selectedIconImage.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + item.getKey() + ".png"));
+                    numberOfGoodsLabel.setText("1");
+                    buyingAndSellingPrice(item.getKey());
+                }
             });
         }
     }
@@ -503,13 +508,6 @@ public class MarketComponent extends StackPane {
             updateResources();
             refreshListview();
         }
-    }
-
-    /**
-     * Sets the in-game controller.
-     */
-    public void setInGameController(InGameController inGameController) {
-        this.inGameController = inGameController;
     }
 
     @OnDestroy

@@ -40,7 +40,7 @@
 
 .traitsFont {
     -fx-font-family: "Baskerville";
-    -fx-font-size: 11;
+    -fx-font-size: 12;
     -fx-text-fill: white;
 }
 
@@ -70,7 +70,7 @@
 
 .traitsButton {
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/button_element.png");
-    -fx-background-size: cover;
+    -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
 }
@@ -80,6 +80,13 @@
     -fx-background-color: transparent;
 }
 
+.tinyTraitsListView {
+    -fx-background-color: transparent;
+}
+
+.tinyTraitsListView .list-cell {
+    -fx-padding: 0 0 0 0;
+}
 
 .descriptionFontComponent {
     -fx-font-family: "Tempus Sans ITC";
@@ -119,7 +126,7 @@
     -fx-font-smoothing-type: lcd;
     -fx-font-weight: bolder;
     -fx-fill: white;
-    -fx-font-size: 13;
+    -fx-font-size: 16;
 }
 
 .explanationFont {
@@ -151,14 +158,14 @@
 
 .createEmpireBackground {
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/create-empire-background.png");
-    -fx-background-size: cover;
+    -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
 }
 
 .empireFrame {
     -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/empire-frame.png");
-    -fx-background-size: cover;
+    -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
 }
@@ -193,7 +200,7 @@
 
 .traitsOverview {
     -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/trait_overview_background.png");
-    -fx-background-size: cover;
+    -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
 }
@@ -241,7 +248,7 @@
 }
 
 .traitsDetailsBackground{
-    -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/traits_details_background.png");
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/trait_details_background.png");
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;

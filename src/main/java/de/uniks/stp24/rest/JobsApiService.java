@@ -1,12 +1,12 @@
 package de.uniks.stp24.rest;
 
-import de.uniks.stp24.model.Jobs.*;
+import de.uniks.stp24.model.Jobs.Job;
+import de.uniks.stp24.model.Jobs.JobDTO;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.*;
 
 import javax.inject.Singleton;
 import java.util.ArrayList;
-import java.util.List;
 
 @Singleton
 public interface JobsApiService {

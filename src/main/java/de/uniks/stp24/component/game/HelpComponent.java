@@ -52,6 +52,7 @@ public class HelpComponent extends AnchorPane {
 
     public void close(){
         setVisible(false);
+        this.inGameController.shadow.setVisible(false);
     }
 
     public void setInGameController(InGameController inGameController) {

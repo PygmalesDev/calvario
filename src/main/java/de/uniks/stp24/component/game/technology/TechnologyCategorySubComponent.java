@@ -68,18 +68,18 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
 
     Subscriber subscriber;
 
-    App app;
+   final App app;
 
     TechnologyExtended technology;
 
-    TechnologyService technologyService;
+   final TechnologyService technologyService;
 
     @Inject
     TechnologyOverviewComponent technologyOverviewComponent;
     @Inject
-    ImageCache imageCache = new ImageCache();
+   final ImageCache imageCache = new ImageCache();
 
-    ObservableList<Effect> description = FXCollections.observableArrayList();
+   final ObservableList<Effect> description = FXCollections.observableArrayList();
 
     @Inject
     @Named("gameResourceBundle")
@@ -95,13 +95,14 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
 
     public TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
 
-    Provider<TechnologyCategoryDescriptionSubComponent> provider = () -> new TechnologyCategoryDescriptionSubComponent(variablesResourceBundle);
+   final Provider<TechnologyCategoryDescriptionSubComponent> provider = () -> new TechnologyCategoryDescriptionSubComponent(variablesResourceBundle);
 
     /**
      * This class is for the components of the listView in the technology category
      */
     @Inject
-    public TechnologyCategorySubComponent(TechnologyCategoryComponent technologyCategoryComponent, TechnologyService technologyService, App app, ResourceBundle technologiesResourceBundle, TokenStorage tokenStorage, Subscriber subscriber, ResourceBundle variablesResourceBundle, TechnologyEffectDetailsComponent technologyEffectDetailsComponent, TechnologyResearchDetailsComponent technologyResearchDetailsComponent) {
+    public TechnologyCategorySubComponent(TechnologyCategoryComponent technologyCategoryComponent, TechnologyService technologyService,
+                                          App app, ResourceBundle technologiesResourceBundle, TokenStorage tokenStorage, Subscriber subscriber, ResourceBundle variablesResourceBundle, TechnologyEffectDetailsComponent technologyEffectDetailsComponent, TechnologyResearchDetailsComponent technologyResearchDetailsComponent, ImageCache imageCache) {
         this.technologyCategoryComponent = technologyCategoryComponent;
         this.technologyService = technologyService;
         this.app = app;
@@ -111,6 +112,7 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
         this.subscriber = subscriber;
         this.technologyEffectDetailsComponent = technologyEffectDetailsComponent;
         this.technologyResearchDetailsComponent = technologyResearchDetailsComponent;
+        this.imageCache = imageCache;
     }
 
     /**

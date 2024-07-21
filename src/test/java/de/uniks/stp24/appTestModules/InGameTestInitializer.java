@@ -63,6 +63,7 @@ public class InGameTestInitializer extends ControllerTest {
     @Spy
     EventService eventService;
     @Spy
+    final
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
     ResourcesService resourcesService;
@@ -71,6 +72,7 @@ public class InGameTestInitializer extends ControllerTest {
     @Spy
     ObjectMapper objectMapper;
     @Spy
+    final
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @Spy
     EmpireService empireService;
@@ -164,7 +166,7 @@ public class InGameTestInitializer extends ControllerTest {
     @Mock
     AnnouncementsService announcementsService;
 
-    Provider<MarketSeasonComponent> marketSeasonComponentProvider = () -> {
+    final Provider<MarketSeasonComponent> marketSeasonComponentProvider = () -> {
         MarketSeasonComponent comp = new MarketSeasonComponent();
         comp.gameResourceBundle = this.gameResourceBundle;
         comp.marketService = this.marketService;

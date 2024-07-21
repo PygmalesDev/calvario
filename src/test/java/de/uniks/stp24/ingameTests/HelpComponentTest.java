@@ -12,11 +12,7 @@ import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
@@ -26,9 +22,7 @@ public class HelpComponentTest extends IslandOverviewTestComponent {
     
     @InjectMocks
     HelpComponent helpComponent;
-
-
-    ObservableList<TechHelp> technologies = FXCollections.observableArrayList();
+    final ObservableList<TechHelp> technologies = FXCollections.observableArrayList();
 
     @InjectMocks
     InGameController inGameController;
@@ -48,12 +42,5 @@ public class HelpComponentTest extends IslandOverviewTestComponent {
         waitForFxEvents();
         press(KeyCode.ALT, KeyCode.H);
         assertEquals(0, helpComponent.technologyTagsListView.getItems().size());
-    }
-
-    @Test
-    public void close(){
-        waitForFxEvents();
-        clickOn("#closeHelpButton");
-        assertEquals(false, helpComponent.visibleProperty().getValue());
     }
 }

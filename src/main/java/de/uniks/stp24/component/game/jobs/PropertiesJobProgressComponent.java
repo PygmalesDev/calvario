@@ -36,8 +36,8 @@ public class PropertiesJobProgressComponent extends Pane {
     @Inject
     ImageCache imageCache;
 
-    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
-    ObservableList<Resource> resourceObservableList = FXCollections.observableArrayList();
+    final Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
+    final ObservableList<Resource> resourceObservableList = FXCollections.observableArrayList();
     private double incrementAmount;
     private int progress;
     private int total;
@@ -77,9 +77,7 @@ public class PropertiesJobProgressComponent extends Pane {
         this.jobProgressBar.setProgress(this.progress*this.incrementAmount);
         this.resourceObservableList.clear();
         job.cost().forEach((name, amount) -> this.resourceObservableList.add(new Resource(name, amount, 0)));
-        Platform.runLater(()-> {
-            this.costsListView.setItems(this.resourceObservableList);
-        });
+        Platform.runLater(()-> this.costsListView.setItems(this.resourceObservableList));
         this.costsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.negativeResourceProvider));
     }
 

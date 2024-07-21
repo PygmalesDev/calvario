@@ -1,15 +1,14 @@
 package de.uniks.stp24.service;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.model.LoginResult;
 import de.uniks.stp24.dto.*;
+import de.uniks.stp24.model.LoginResult;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Inject;
-
 import java.util.HashMap;
 import java.util.Map;
 

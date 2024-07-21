@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import org.controlsfx.control.GridView?>
-
+<?import java.lang.String?>
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="450.0" styleClass="empireOverviewBackground" stylesheets="@../../style/empireOverview.css" type="StackPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.EmpireOverviewComponent">
     <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="empireOverviewSc">
         <AnchorPane layoutX="220.0" layoutY="81.0" prefHeight="109.0" prefWidth="117.0" styleClass="portraitBackground" />
@@ -26,14 +23,14 @@
                 <String fx:value="listIslands" />
             </styleClass>
         </GridView>
-        <ScrollPane hbarPolicy="NEVER" layoutX="93.0" layoutY="188.0" prefHeight="66.0" prefWidth="233.0" vbarPolicy="ALWAYS">
-            <content>
-                <Text fx:id="empireDescriptionContainer" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="216.80354118347168">
-                    <font>
-                        <Font size="14.0" />
-                    </font>
-                </Text>
-            </content>
+        <ScrollPane hbarPolicy="NEVER" layoutX="93.0" layoutY="188.0" prefHeight="66.0" prefWidth="233.0"
+                    vbarPolicy="ALWAYS">
+            <Text fx:id="empireDescriptionContainer" strokeType="OUTSIDE" strokeWidth="0.0" text="Text"
+                  wrappingWidth="216.80354118347168">
+                <font>
+                    <Font size="14.0"/>
+                </font>
+            </Text>
         </ScrollPane>
         <Label alignment="CENTER" layoutX="121.0" layoutY="264.0" prefHeight="56.0" prefWidth="183.0" styleClass="islandLabel" text="Islands">
             <font>

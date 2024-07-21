@@ -72,10 +72,6 @@ public class TechnologyService {
         }
         return unlockedTag;
     }
-//
-//    public ObservableList<TechnologyExtended> getUnlocked(String tag) {
-//
-//    }
 
     public ObservableList<TechnologyExtended> getResearch(String tag) {
         ObservableList<TechnologyExtended> unlocked = getAllUnlocked();
@@ -133,7 +129,6 @@ public class TechnologyService {
         return unlockedAndResearch;
     }
 
-    // TOOD: MAYBE DO GETRESEACHANDUNLOCKED IN AN ARRAYLIST IN ONE METHOD
     public ObservableList<TechnologyExtended> getAllResearch() {
         ObservableList<TechnologyExtended> research = FXCollections.observableArrayList();
         ObservableList<TechnologyExtended> unlocked = getAllUnlocked();

@@ -2,6 +2,7 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.service.menu.LoginService;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import org.fulib.fx.annotation.controller.Controller;
@@ -17,6 +18,7 @@ import java.util.Map;
 @Title("Calvario")
 @Controller
 public class LoadController extends BasicController{
+    public Label press_any_key;
     @FXML
     HBox backgroundHBox;
     @FXML
@@ -55,7 +57,6 @@ public class LoadController extends BasicController{
                             prefService.removeRefreshToken();
                         });
             } catch (Exception e) {
-                e.printStackTrace();
                 this.autologin = false;
             }
         }

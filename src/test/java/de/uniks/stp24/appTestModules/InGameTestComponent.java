@@ -24,7 +24,7 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 public class InGameTestComponent extends InGameTestInitializer {
     Button homeIsland;
 
-    Provider<DistrictComponent> districtComponentProvider = () -> {
+    final Provider<DistrictComponent> districtComponentProvider = () -> {
         DistrictComponent districtComponent = new DistrictComponent();
         districtComponent.tokenStorage = tokenStorage;
         districtComponent.islandAttributeStorage = this.islandAttributeStorage;
@@ -34,34 +34,34 @@ public class InGameTestComponent extends InGameTestInitializer {
 
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
 
-    Map<String, Integer> siteSlots = Map.of("energy", 3, "city", 3, "mining", 4, "research", 4);
-    Map<String, Integer> sites = Map.of("energy", 2, "city", 3, "mining", 4, "research", 4);
+    final Map<String, Integer> siteSlots = Map.of("energy", 3, "city", 3, "mining", 4, "research", 4);
+    final Map<String, Integer> sites = Map.of("energy", 2, "city", 3, "mining", 4, "research", 4);
 
-    IslandType myTestIsland = IslandType.valueOf("uninhabitable_0");
-    ArrayList<String> buildings = new ArrayList();
-    List<Island> islands = new ArrayList<>();
+    final IslandType myTestIsland = IslandType.valueOf("uninhabitable_0");
+    final ArrayList<String> buildings = new ArrayList();
+    final List<Island> islands = new ArrayList<>();
 
-    Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
-    Map<String, Integer> upkeep = Map.of("energy", 3, "fuel", 8);
+    final Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
+    final Map<String, Integer> upkeep = Map.of("energy", 3, "fuel", 8);
 
-    Map<String, Integer> productionBuilding = Map.of("energy", 10, "fuel", 13);
-    Map<String, Integer> productionSites = Map.of("energy", 13, "fuel", 12);
-    Map<String, Integer> consumptionBuilding = Map.of("energy", 5, "fuel", 6);
-    Map<String, Integer> consumptionSites = Map.of("energy", 20, "fuel", 19);
+    final Map<String, Integer> productionBuilding = Map.of("energy", 10, "fuel", 13);
+    final Map<String, Integer> productionSites = Map.of("energy", 13, "fuel", 12);
+    final Map<String, Integer> consumptionBuilding = Map.of("energy", 5, "fuel", 6);
+    final Map<String, Integer> consumptionSites = Map.of("energy", 20, "fuel", 19);
 
 
-    UpgradeStatus unexplored = new UpgradeStatus("unexplored", null, 0, 1, cost, upkeep, 1);
-    UpgradeStatus explored = new UpgradeStatus("explored", null, 0, 1, cost, upkeep, 1);
-    UpgradeStatus colonized = new UpgradeStatus("colonized", null, 0, 1, cost, upkeep, 1);
-    UpgradeStatus upgraded = new UpgradeStatus("upgraded", null, 0, 1, cost, upkeep, 1);
-    UpgradeStatus developed = new UpgradeStatus("developed", null, 0, 1, cost, upkeep, 1);
+    final UpgradeStatus unexplored = new UpgradeStatus("unexplored", null, 0, 1, cost, upkeep, 1);
+    final UpgradeStatus explored = new UpgradeStatus("explored", null, 0, 1, cost, upkeep, 1);
+    final UpgradeStatus colonized = new UpgradeStatus("colonized", null, 0, 1, cost, upkeep, 1);
+    final UpgradeStatus upgraded = new UpgradeStatus("upgraded", null, 0, 1, cost, upkeep, 1);
+    final UpgradeStatus developed = new UpgradeStatus("developed", null, 0, 1, cost, upkeep, 1);
 
-    Map<String, Integer> empireResourceStorage = new LinkedHashMap<>() {{
+    final Map<String, Integer> empireResourceStorage = new LinkedHashMap<>() {{
         put("energy", 100);
         put("fuel", 50);
     }};
 
-    public AggregateItemDto[] empireResources = new AggregateItemDto[]{
+    public final AggregateItemDto[] empireResources = new AggregateItemDto[]{
             new AggregateItemDto(
                     "energy",
                     100,
@@ -74,12 +74,12 @@ public class InGameTestComponent extends InGameTestInitializer {
             ),
     };
 
-    public AggregateResultDto aggregateResult = new AggregateResultDto(
+    public final AggregateResultDto aggregateResult = new AggregateResultDto(
             0,
             empireResources
     );
 
-    public EmpireDto empireDto = new EmpireDto(
+    public final EmpireDto empireDto = new EmpireDto(
             null,
             null,
             "testEmpireID",
@@ -111,7 +111,7 @@ public class InGameTestComponent extends InGameTestInitializer {
     );
 
 
-    BuildingAttributes buildingPreset1 = new BuildingAttributes(
+    final BuildingAttributes buildingPreset1 = new BuildingAttributes(
             "testBuilding1",
             0,
             null,
@@ -119,7 +119,7 @@ public class InGameTestComponent extends InGameTestInitializer {
             productionBuilding
     );
 
-    BuildingAttributes buildingPreset2 = new BuildingAttributes(
+    final BuildingAttributes buildingPreset2 = new BuildingAttributes(
             "testBuilding2",
             0,
             null,
@@ -127,7 +127,7 @@ public class InGameTestComponent extends InGameTestInitializer {
             productionBuilding
     );
 
-    BuildingAttributes buildingPreset3 = new BuildingAttributes(
+    final BuildingAttributes buildingPreset3 = new BuildingAttributes(
             "testBuilding3",
             0,
             null,
@@ -135,7 +135,7 @@ public class InGameTestComponent extends InGameTestInitializer {
             productionBuilding
     );
 
-    DistrictAttributes districtPresets1 = new DistrictAttributes(
+    final DistrictAttributes districtPresets1 = new DistrictAttributes(
             "energy",
             0,
             null,
@@ -144,7 +144,7 @@ public class InGameTestComponent extends InGameTestInitializer {
             productionSites
     );
 
-    DistrictAttributes districtPresets2 = new DistrictAttributes(
+    final DistrictAttributes districtPresets2 = new DistrictAttributes(
             "city",
             0,
             null,
@@ -153,7 +153,7 @@ public class InGameTestComponent extends InGameTestInitializer {
             productionSites
     );
 
-    DistrictAttributes districtPresets3 = new DistrictAttributes(
+    final DistrictAttributes districtPresets3 = new DistrictAttributes(
             "mining",
             0,
             null,
@@ -162,7 +162,7 @@ public class InGameTestComponent extends InGameTestInitializer {
             productionSites
     );
 
-    DistrictAttributes districtPresets4 = new DistrictAttributes(
+    final DistrictAttributes districtPresets4 = new DistrictAttributes(
             "research",
             0,
             null,
@@ -171,10 +171,10 @@ public class InGameTestComponent extends InGameTestInitializer {
             productionSites
     );
 
-    ArrayList<BuildingAttributes> buildingAttributes = new ArrayList<>();
-    ArrayList<DistrictAttributes> districtAttributes = new ArrayList<>();
+    final ArrayList<BuildingAttributes> buildingAttributes = new ArrayList<>();
+    final ArrayList<DistrictAttributes> districtAttributes = new ArrayList<>();
 
-    SystemUpgrades systemUpgrades = new SystemUpgrades(unexplored, explored, colonized, upgraded, developed);
+    final SystemUpgrades systemUpgrades = new SystemUpgrades(unexplored, explored, colonized, upgraded, developed);
 
     Island testIsland;
 
@@ -273,8 +273,6 @@ public class InGameTestComponent extends InGameTestInitializer {
         EffectSourceParentDto effectSourceParentDto = new EffectSourceParentDto(new EffectSourceDto[3]);
 
         doReturn(Observable.just(variablesPresets)).when(inGameService).getVariablesPresets();
-        doReturn(Observable.just(member)).when(lobbyService).getMember(any(), any());
-        doReturn(Observable.just(variablesEffect)).when(inGameService).getVariablesEffects();
         doReturn(Observable.just(effectSourceParentDto)).when(empireApiService).getEmpireEffect(any(), any());
         doReturn(Observable.just(new BuildingDto("a", 0, cost, productionBuilding, upkeep))).when(resourcesService).getResourcesBuilding(any());
 

@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.fulib.fx.FulibFxApp;
+
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import java.awt.*;

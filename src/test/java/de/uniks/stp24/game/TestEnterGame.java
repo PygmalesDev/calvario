@@ -75,6 +75,7 @@ public class TestEnterGame extends ControllerTest {
     @Spy
     LobbyService lobbyService;
     @Spy
+    final
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @InjectMocks
     JoinGameHelper joinGameHelper;
@@ -89,9 +90,9 @@ public class TestEnterGame extends ControllerTest {
 
     Provider<GameComponent> GameComponentProvider = () -> new GameComponent(bubbleComponent, browseGameService, editGameService, tokenStorage,resources);
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
-    Game game1 = new Game("a", null, "game1Id", "testGame1", "testHost1", 2,0, true, 1,10, null);
-    Game game2 = new Game("a", null, "game2Id", "testGame2", "testHost2", 2,0, false, 1,10, null);
-    Game game3 = new Game("a", null, "game3Id", "testGame3", "testHost3", 2,0, true, 0,0, null);
+    final Game game1 = new Game("a", null, "game1Id", "testGame1", "testHost1", 2,0, true, 1,10, null);
+    final Game game2 = new Game("a", null, "game2Id", "testGame2", "testHost2", 2,0, false, 1,10, null);
+    final Game game3 = new Game("a", null, "game3Id", "testGame3", "testHost3", 2,0, true, 0,0, null);
 
 
     @Override

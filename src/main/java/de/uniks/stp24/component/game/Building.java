@@ -5,14 +5,15 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.game.JobsService;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
 
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Objects;
+
 import static de.uniks.stp24.service.Constants.*;
 
 

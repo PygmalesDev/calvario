@@ -11,7 +11,8 @@ import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
-import static de.uniks.stp24.service.Constants.*;
+
+import static de.uniks.stp24.service.Constants.sitesIconPathsMap;
 
 @Component(view = "ClaimingSite.fxml")
 public class ClaimingSiteComponent extends Pane implements ReusableItemComponent<Site> {

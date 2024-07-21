@@ -66,10 +66,6 @@ public class LogoutComponent extends VBox {
         this.getParent().setVisible(false);
     }
 
-    public void setText(){
-
-    }
-
     @OnDestroy
     public void destroy() {
         if (subscriber != null) {

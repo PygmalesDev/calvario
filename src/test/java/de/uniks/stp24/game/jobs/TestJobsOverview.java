@@ -2,7 +2,7 @@ package de.uniks.stp24.game.jobs;
 
 import de.uniks.stp24.component.game.jobs.JobElementComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
-import de.uniks.stp24.model.Jobs.*;
+import de.uniks.stp24.model.Jobs.Job;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
@@ -16,7 +16,8 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import javax.inject.Provider;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
@@ -25,7 +26,7 @@ public class TestJobsOverview extends JobsTestComponent {
     @InjectMocks
     JobsOverviewComponent jobsOverviewComponent;
 
-    Provider<JobElementComponent> jobElementComponentProvider = () -> {
+    final Provider<JobElementComponent> jobElementComponentProvider = () -> {
         JobElementComponent comp = new JobElementComponent();
         comp.islandsService = islandsService;
         comp.imageCache = imageCache;

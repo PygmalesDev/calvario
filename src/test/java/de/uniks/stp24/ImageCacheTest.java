@@ -1,10 +1,8 @@
 package de.uniks.stp24;
 
 import de.uniks.stp24.service.ImageCache;
-import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
-import org.testfx.framework.junit5.ApplicationTest;
 
 import javax.inject.Inject;
 

@@ -48,7 +48,7 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
 
     @FXML
     ListView<de.uniks.stp24.model.Resource> costsListView;
-    public Provider<ResourceComponent> negativeResourceProvider = () ->
+    public final Provider<ResourceComponent> negativeResourceProvider = () ->
             new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
     private final ObservableList<de.uniks.stp24.model.Resource> resourceObservableList = FXCollections.observableArrayList();
 

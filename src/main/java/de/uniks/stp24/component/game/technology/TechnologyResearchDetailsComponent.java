@@ -114,7 +114,6 @@ public class TechnologyResearchDetailsComponent extends VBox {
             }
         }
 
-        // TODO: REMOVE GETALLUNLOCKED() CHANGE BACK TO getUnlockedTechnologies()
         for (TechnologyExtended tech : technologyService.getAllUnlocked()) {
             for (Effect effect : tech.effects()) {
                 if (effect.variable().contains(technology.id())) {

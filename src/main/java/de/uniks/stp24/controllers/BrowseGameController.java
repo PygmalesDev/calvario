@@ -114,9 +114,9 @@ BrowseGameController extends BasicController {
     PopupBuilder popupBuilder;
     @Inject
     CreateGameService createGameService;
-    PopupBuilder popup = new PopupBuilder();
+    final PopupBuilder popup = new PopupBuilder();
 
-    Provider<GameComponent> gameComponentProvider = () -> new GameComponent(this.bubbleComponent, this.browseGameService, this.editGameService, this.tokenStorage, this.resources);
+    final Provider<GameComponent> gameComponentProvider = () -> new GameComponent(this.bubbleComponent, this.browseGameService, this.editGameService, this.tokenStorage, this.resources);
 
     @Inject
     public BrowseGameController() {

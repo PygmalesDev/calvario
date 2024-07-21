@@ -1,7 +1,7 @@
 package de.uniks.stp24;
 
-import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.PrefService;
+import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.utils.ResponseConstants;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.AfterAll;
@@ -11,7 +11,6 @@ import org.testfx.framework.junit5.ApplicationTest;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
-
 
 import static org.mockito.Mockito.spy;
 
@@ -25,17 +24,17 @@ public class ControllerTest extends ApplicationTest {
     @Spy
     public PrefService prefService;
     @Spy
-    public IslandsService islandsService = Mockito.spy(IslandsService.class);
+    public final IslandsService islandsService = Mockito.spy(IslandsService.class);
     @Spy
     public ResponseConstants responseConstants;
     @Spy
     public ResourceBundle resources = ResourceBundle.getBundle("de/uniks/stp24/lang/main", Locale.ENGLISH);
     @Spy
-    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ENGLISH);
+    public final ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ENGLISH);
     @Spy
-    public ResourceBundle variablesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/variables", Locale.ENGLISH);
+    public final ResourceBundle variablesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/variables", Locale.ENGLISH);
     @Spy
-    public ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ENGLISH);
+    public final ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ENGLISH);
 
     protected Stage stage;
     protected TestComponent testComponent;

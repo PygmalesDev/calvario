@@ -5,7 +5,6 @@ import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Resource;
-import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -35,7 +34,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.Map;
-import java.util.*;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 @Component(view = "IslandOverviewUpgrade.fxml")
 public class OverviewUpgradeComponent extends AnchorPane {
@@ -69,6 +69,8 @@ public class OverviewUpgradeComponent extends AnchorPane {
     public ListView<Resource> upgradeUpkeepList;
     @FXML
     public ListView<Resource> upgradeCostList;
+    public Button backButton;
+    public Button close;
     @FXML
     Pane jobsContainer;
 
@@ -103,15 +105,13 @@ public class OverviewUpgradeComponent extends AnchorPane {
 
     private Jobs.Job currentJob;
 
-    public GameSystemsApiService gameSystemsService;
-
     private InGameController inGameController;
     private ObservableList<Jobs.Job> jobObservableList = FXCollections.observableArrayList();
     private enum BUTTON_STATES {ACTIVE, CANCEL_JOB, INACTIVE}
     private BUTTON_STATES currentButtonState = BUTTON_STATES.ACTIVE;
     private boolean updateButtonState = true;
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle, this.imageCache);
+    final Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle, this.imageCache);
 
     @Inject
     public OverviewUpgradeComponent() {

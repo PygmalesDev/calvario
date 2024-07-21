@@ -2,9 +2,9 @@ package de.uniks.stp24.component.menu;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.App;
-import de.uniks.stp24.service.menu.EditAccService;
 import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.menu.EditAccService;
 import de.uniks.stp24.utils.ResponseConstants;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -17,6 +17,7 @@ import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.controller.Subscriber;
+
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.ResourceBundle;

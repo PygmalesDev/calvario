@@ -2,7 +2,6 @@ package de.uniks.stp24.component.game;
 
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.Game;
@@ -23,7 +22,6 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -65,9 +63,8 @@ public class StorageOverviewComponent extends AnchorPane {
 
     private String lastUpdate;
     private String lastSeasonUpdate;
-    Provider<ResourceComponent> resourceComponentProvider = () -> new ResourceComponent(true, true, true, true, gameResourceBundle, this.imageCache);
+    final Provider<ResourceComponent> resourceComponentProvider = () -> new ResourceComponent(true, true, true, true, gameResourceBundle, this.imageCache);
     ObservableList<Resource> resourceList;
-    private InGameController inGameController;
 
 
     @Inject
@@ -164,9 +161,5 @@ public class StorageOverviewComponent extends AnchorPane {
     @OnDestroy
     void destroy() {
         this.subscriber.dispose();
-    }
-
-    public void setInGameController(InGameController ingameController) {
-        this.inGameController = ingameController;
     }
 }

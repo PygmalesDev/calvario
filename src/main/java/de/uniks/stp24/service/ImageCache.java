@@ -1,13 +1,13 @@
 package de.uniks.stp24.service;
 
 import de.uniks.stp24.Main;
+import javafx.scene.image.Image;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.HashMap;
-import javafx.scene.image.Image;
-import java.util.Map;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 @Singleton
 public class ImageCache {

@@ -90,7 +90,7 @@ public class EventComponent extends AnchorPane {
 
     String gameId;
 
-    ImageCache imageCache = new ImageCache();
+    final ImageCache imageCache = new ImageCache();
     private String lastUpdate = "";
 
     boolean eventOccured = false;

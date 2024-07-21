@@ -12,7 +12,10 @@ import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.LogoutResult;
 import de.uniks.stp24.rest.GameMembersApiService;
 import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.ErrorService;
+import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.PopupBuilder;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.BrowseGameService;
 import de.uniks.stp24.service.menu.CreateGameService;
@@ -34,11 +37,9 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
+
 import javax.inject.Provider;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -74,6 +75,7 @@ public class BrowseGameControllerTest extends ControllerTest {
     @Spy
     LobbyService lobbyService;
     @Spy
+    final
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @InjectMocks
     LogoutComponent logoutComponent;
@@ -87,7 +89,7 @@ public class BrowseGameControllerTest extends ControllerTest {
     Comparable<Game> comparable;
 
 
-    Game game = new Game("11", null, "1", "Was geht", "testID2", 2,0, false, 0,0, null);
+    final Game game = new Game("11", null, "1", "Was geht", "testID2", 2,0, false, 0,0, null);
 
     Provider<GameComponent> GameComponentProvider = () -> new GameComponent(bubbleComponent, browseGameService, editGameService, tokenStorage,resources);
 

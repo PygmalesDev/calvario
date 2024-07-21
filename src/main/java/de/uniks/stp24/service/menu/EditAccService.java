@@ -45,10 +45,7 @@ public class EditAccService {
     public Observable<User> changeAvatar(Map<String,Integer> avatarCode){
         return userApiService
                 .updateAvatar(tokenStorage.getUserId(), new AvatarDto(avatarCode))
-                .doOnNext(editResult ->{
-                    tokenStorage.setAvatarMap(editResult._public());
-                    System.out.println(tokenStorage.getAvatarMap());
-                });
+                .doOnNext(editResult ->tokenStorage.setAvatarMap(editResult._public()));
     }
 
 }

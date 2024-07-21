@@ -54,7 +54,7 @@ public class ResearchJobComponent extends AnchorPane {
     @FXML
     AnchorPane researchBackground;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
 
     @Inject
     TechnologyService technologyService;
@@ -226,9 +226,11 @@ public void progressHandling(){
                 if (!technologies.contains(result)){
                     technologies.add(result);
                 }
-            }, error -> System.out.println("Error in handleJob in ResearchComponent technology"));
+            }, error -> System.out.println("Error in handleJob in ResearchComponent technology: \n" +
+                    error.getMessage()));
             handleJobInformation();
-        }, error -> System.out.println("Error in handleJob in ResearchComponent job"));
+        }, error -> System.out.println("Error in handleJob in ResearchComponent job: \n" +
+                error.getMessage()));
     }
 
     public void setJobDescription(TechnologyExtended technology){

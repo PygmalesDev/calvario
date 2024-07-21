@@ -78,9 +78,9 @@ public class MarketComponent extends StackPane {
     @Inject
     EventListener eventListener;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
     @Inject
     public PresetsApiService presetsApiService;
     @Inject
@@ -155,7 +155,7 @@ public class MarketComponent extends StackPane {
     private void createResourceCountMap() {
         subscriber.subscribe(marketService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 empire -> {
-                    resourceCountMap = empire.resources();
+                    resourceCountMap.putAll(empire.resources());
                     setCreditCount();
                     filterResourceMap();
                     listMarketResources();
@@ -186,7 +186,7 @@ public class MarketComponent extends StackPane {
      */
     private void createResourceListeners() {
         subscriber.subscribe(eventListener.listen(
-                        "games" + tokenStorage.getGameId() + "empires" + tokenStorage.getEmpireId() + ".updated", EmpireExtendedDto.class),
+                        "games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
                 event -> {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         Map<String, Integer> eventResources = event.data().resources();
@@ -248,7 +248,8 @@ public class MarketComponent extends StackPane {
     private void updateResources() {
         UpdateEmpireMarketDto updateEmpireMarketDto = new UpdateEmpireMarketDto(Map.of(selectedItem, resourceAmount), null, null, null);
         this.subscriber.subscribe(marketService.updateEmpireMarket(tokenStorage.getGameId(), tokenStorage.getEmpireId(), updateEmpireMarketDto),
-                error -> System.out.println("errorUpdateResources" + error));
+                result -> {},
+                error -> System.out.println("errorUpdateResources:\n" + error.getMessage()));
     }
 
     /**
@@ -289,7 +290,8 @@ public class MarketComponent extends StackPane {
             resourceCountMapCopy = new HashMap<>(resourceCountMap);
             userCredits -= buyingPrice;
             userCreditsLabel.setText(String.valueOf(userCredits));
-            resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
+            int result = resourceCountMap.get(selectedItem) + resourceAmount;
+            resourceCountMap.put(selectedItem, result);
             updateResources();
             refreshListview();
         }
@@ -387,10 +389,12 @@ public class MarketComponent extends StackPane {
                 setText(null);
                 setGraphic(null);
             } else {
+                setId(item.getKey() + "_marketButton");
                 imageView.setImage(imageCache.get("/de/uniks/stp24/assets/market/buttons/" + item.getKey() + ".png"));
                 imageView.setFitWidth(35);
                 imageView.setFitHeight(35);
                 text.setText(String.valueOf(item.getValue()));
+                text.setId(item.getKey() + "_marketGoods");
                 setGraphic(vBox);
             }
             setOnMouseClicked(event -> {
@@ -462,7 +466,7 @@ public class MarketComponent extends StackPane {
     private void updateAfterSeasonalTrade() {
         subscriber.subscribe(marketService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 empireDto -> {
-                    resourceCountMap = empireDto.resources();
+                    resourceCountMap.putAll(empireDto.resources());
                     filterResourceMap();
                     refreshListview();
                     performSeasonalTrades();

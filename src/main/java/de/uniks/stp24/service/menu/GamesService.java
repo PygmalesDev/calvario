@@ -13,7 +13,7 @@ public class GamesService {
     }
 
     @Inject
-    GamesApiService gamesApiService;
+    public GamesApiService gamesApiService;
 
     public Observable<Game> getGame(String gameID) {
         return this.gamesApiService.getGame(gameID);

@@ -66,32 +66,32 @@ public class SitePropertiesComponent extends AnchorPane {
     String siteType;
 
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
-    IslandAttributeStorage islandAttributeStorage;
+    public IslandAttributeStorage islandAttributeStorage;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
 
     @Inject
-    ResourcesService resourcesService;
+    public ResourcesService resourcesService;
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
 
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
-    ExplanationService explanationService;
+    public ExplanationService explanationService;
     @Inject
-    App app;
+    public App app;
 
     @Inject
-    GameSystemsApiService gameSystemsApiService;
+    public GameSystemsApiService gameSystemsApiService;
 
     @Inject
     @Named("gameResourceBundle")
-    ResourceBundle gameResourceBundle;
+    public ResourceBundle gameResourceBundle;
 
     @Inject
     @SubComponent
@@ -151,7 +151,6 @@ public class SitePropertiesComponent extends AnchorPane {
 
     public void setSiteType(String siteType){
         this.siteType = siteType;
-        System.out.println(siteType);
         this.siteName.setText(gameResourceBundle.getString(siteTranslation.get(siteType)));
         this.siteImage.setImage(imageCache.get("/" + sitesMap.get(siteType)));
         displayCostsOfSite();

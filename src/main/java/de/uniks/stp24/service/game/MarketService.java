@@ -24,7 +24,7 @@ public class MarketService {
     @Inject
     public PresetsApiService presetsApiService;
     @Inject
-    EmpireApiService empireApiService;
+    public EmpireApiService empireApiService;
     @Inject
     public Subscriber subscriber;
     @Inject
@@ -74,6 +74,7 @@ public class MarketService {
         _private.put("allSeasonalTrades", seasonComponents);
         SeasonalTradeDto seasonalTradeDto = new SeasonalTradeDto(_private);
         subscriber.subscribe(saveSeasonalComponents(tokenStorage.getGameId(), tokenStorage.getEmpireId(), seasonalTradeDto),
+                result -> {},
                 error -> System.out.println("errorSaveSeasonalTrades:" + error));
     }
 

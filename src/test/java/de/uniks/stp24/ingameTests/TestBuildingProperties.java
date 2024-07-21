@@ -1,38 +1,9 @@
 package de.uniks.stp24.ingameTests;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.game.*;
-import de.uniks.stp24.component.menu.DeleteStructureComponent;
-import de.uniks.stp24.component.menu.PauseMenuComponent;
-import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.rest.PresetsApiService;
-import de.uniks.stp24.service.InGameService;
-import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.EmpireService;
-import de.uniks.stp24.service.game.EventService;
-import de.uniks.stp24.service.game.ResourcesService;
-import de.uniks.stp24.service.game.TimerService;
-import de.uniks.stp24.service.menu.LanguageService;
-import de.uniks.stp24.ws.Event;
-import de.uniks.stp24.ws.EventListener;
-import io.reactivex.rxjava3.subjects.BehaviorSubject;
-import io.reactivex.rxjava3.subjects.Subject;
-import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import static org.mockito.Mockito.spy;
 
 @ExtendWith(MockitoExtension.class)
 public class TestBuildingProperties extends ControllerTest {

@@ -235,7 +235,8 @@ public class InGameController extends BasicController {
 
         variableService.initVariables();
 
-        this.subscriber.subscribe(this.lobbyService.getMember(gameID, tokenStorage.getUserId()),
+        if (!tokenStorage.isSpectator())
+            this.subscriber.subscribe(this.lobbyService.getMember(gameID, tokenStorage.getUserId()),
                 result -> tokenStorage.setEmpireTraits(result.empire().traits()));
 
         this.subscriber.subscribe(this.inGameService.getVariablesEffects(),

@@ -51,7 +51,6 @@ public class TechnologyService {
                                     unlocked::add, error -> System.out.println("Error after try to get Technology " + techId + " because: " + error.getMessage()));
                         }
                     }
-                    System.out.println("Unlocked: " + unlocked);
                 }, error -> System.out.println("Error after try to get empire because of: " + error.getMessage()));
         return unlocked;
     }

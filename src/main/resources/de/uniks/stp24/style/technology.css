@@ -116,7 +116,7 @@
 }
 
 .description-list-view .list-cell {
-    -fx-pref-height: 40px;
+    -fx-pref-height: 45px;
     -fx-alignment: TOP_LEFT;
 }
 

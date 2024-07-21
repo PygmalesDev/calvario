@@ -298,8 +298,6 @@ public class InGameController extends BasicController {
         helpComponent.setVisible(false);
         helpComponent.setMouseTransparent(true);
 
-
-
         pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
         eventComponent.setParent(shadow, eventContainer);
@@ -347,6 +345,7 @@ public class InGameController extends BasicController {
         helpWindowContainer.setMouseTransparent(true);
 
         pause = !pause;
+        this.inGameService.gameStatus.firePropertyChange(GameStatus.PROPERTY_PAUSED, null, null);
         inGameService.setShowSettings(false);
         inGameService.setPaused(pause);
         if (pause) {

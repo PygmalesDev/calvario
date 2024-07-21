@@ -2,6 +2,8 @@ package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.dto.UpdateSpeedDto;
+import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
@@ -15,6 +17,7 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.ResourceBundle;
@@ -39,6 +42,10 @@ public class PauseMenuComponent extends AnchorPane {
     TokenStorage tokenStorage;
     @Inject
     ImageCache imageCache;
+    @Inject
+    GamesApiService gamesApiService;
+    @Inject
+    Subscriber subscriber;
 
     @Inject
     InGameService inGameService;
@@ -70,9 +77,12 @@ public class PauseMenuComponent extends AnchorPane {
 
     @OnKey(code = KeyCode.Q)
     public void quit() {
-        tokenStorage.setGameId(null);
-        tokenStorage.setEmpireId(null);
-        if (inGameService.getPaused()) app.show("/browseGames");
+        this.subscriber.subscribe(this.gamesApiService.editSpeed(this.tokenStorage.getGameId(),
+                new UpdateSpeedDto(0)), result -> {
+            tokenStorage.setGameId(null);
+            tokenStorage.setEmpireId(null);
+            if (inGameService.getPaused()) app.show("/browseGames");
+        });
     }
 
     public void setInGameController(InGameController inGameController) {

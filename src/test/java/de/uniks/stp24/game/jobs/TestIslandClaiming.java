@@ -18,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javax.inject.Provider;
-
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,11 +30,11 @@ public class TestIslandClaiming extends JobsTestComponent {
     @InjectMocks
     IslandClaimingComponent islandClaimingComponent;
 
-    Jobs.Job explorationJob = new Jobs.Job("0", "0", "jobID_12", 0, 6,
+    final Jobs.Job explorationJob = new Jobs.Job("0", "0", "jobID_12", 0, 6,
             this.GAME_ID, this.EMPIRE_ID, "ISLAND_UNEXP", 0, "upgrade", null,
             null, null, Map.of("energy", 200), null);
 
-    Provider<ClaimingSiteComponent> componentProvider = () -> {
+    final Provider<ClaimingSiteComponent> componentProvider = () -> {
         var component = new ClaimingSiteComponent();
         component.imageCache = this.imageCache;
         return component;

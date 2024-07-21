@@ -24,7 +24,7 @@ import static org.mockito.Mockito.doReturn;
 public class TestIslandJobOverview extends JobsTestComponent {
     @InjectMocks
     IslandOverviewJobsComponent islandOverviewJobsComponent;
-    Provider<IslandOverviewJobProgressComponent> islandOverviewJobProgressComponentProvider = () -> {
+    final Provider<IslandOverviewJobProgressComponent> islandOverviewJobProgressComponentProvider = () -> {
         IslandOverviewJobProgressComponent comp = new IslandOverviewJobProgressComponent();
         comp.gameResourceBundle = this.gameResourceBundle;
         comp.islandAttributes = this.islandAttributeStorage;

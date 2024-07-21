@@ -1,17 +1,15 @@
 package de.uniks.stp24.component.game;
 
-import de.uniks.stp24.App;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
-
-import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,11 +29,9 @@ public class VariableExplanationComponent extends VBox {
     @FXML
     ImageView resImage;
 
-    App app;
+    final ObservableList<String> explanations = FXCollections.observableArrayList();
 
-    ObservableList<String> explanations = FXCollections.observableArrayList();
-
-    public VariableExplanationComponent(App app) {
+    public VariableExplanationComponent() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("VariableExplanationOverview.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -45,7 +41,6 @@ public class VariableExplanationComponent extends VBox {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        this.app = app;
         initialize();
     }
 

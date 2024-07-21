@@ -43,7 +43,6 @@ public class SaveLoadService {
             try {
                 gangs = FXCollections.observableArrayList(Arrays.asList(objectMapper.readValue(Paths.get(fileName).toFile(), Gang[].class)));
             } catch (IOException e) {
-                System.out.println(e);
                 return gangs;
             }
         }

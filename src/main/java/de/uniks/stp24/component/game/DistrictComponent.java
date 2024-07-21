@@ -1,16 +1,16 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.model.Jobs.*;
+import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.SiteProperties;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
@@ -40,7 +40,7 @@ public class DistrictComponent extends VBox implements ReusableItemComponent<Sit
     @Inject
     public IslandAttributeStorage islandAttributeStorage;
 
-    Map<String, String> sitesMap;
+    final Map<String, String> sitesMap;
 
     private InGameController inGameController;
     private String siteName;

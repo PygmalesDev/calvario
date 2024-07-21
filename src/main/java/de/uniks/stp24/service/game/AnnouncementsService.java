@@ -4,8 +4,6 @@ import de.uniks.stp24.model.Announcement;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Resource;
-import static de.uniks.stp24.service.Constants.*;
-
 import de.uniks.stp24.service.Constants;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +15,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
+
+import static de.uniks.stp24.service.Constants.*;
 
 public class AnnouncementsService {
     @Inject
@@ -30,7 +30,7 @@ public class AnnouncementsService {
     @Named("technologiesResourceBundle")
     public ResourceBundle technologiesResourceBundle;
 
-    ObservableList<Announcement> announcements = FXCollections.observableArrayList();
+    final ObservableList<Announcement> announcements = FXCollections.observableArrayList();
 
     @Inject
     public AnnouncementsService() {

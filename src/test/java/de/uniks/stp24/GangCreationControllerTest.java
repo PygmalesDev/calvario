@@ -1,7 +1,5 @@
  package de.uniks.stp24;
 
- import com.fasterxml.jackson.databind.ObjectMapper;
- import de.uniks.stp24.component.Captain;
  import de.uniks.stp24.component.menu.BubbleComponent;
  import de.uniks.stp24.component.menu.GangComponent;
  import de.uniks.stp24.component.menu.GangDeletionComponent;
@@ -9,7 +7,6 @@
  import de.uniks.stp24.controllers.GangCreationController;
  import de.uniks.stp24.dto.EffectDto;
  import de.uniks.stp24.dto.MemberDto;
- import de.uniks.stp24.model.Empire;
  import de.uniks.stp24.model.Gang;
  import de.uniks.stp24.model.Trait;
  import de.uniks.stp24.rest.PresetsApiService;
@@ -21,21 +18,20 @@
  import javafx.application.Platform;
  import javafx.collections.FXCollections;
  import javafx.collections.ObservableList;
- import javafx.scene.Node;
  import javafx.scene.control.Label;
+ import javafx.scene.control.ListView;
  import javafx.scene.control.TextArea;
  import javafx.scene.control.TextField;
  import javafx.scene.input.MouseButton;
+ import javafx.stage.Stage;
  import org.fulib.fx.controller.Subscriber;
  import org.junit.jupiter.api.BeforeEach;
- import org.mockito.InjectMocks;
- import org.mockito.Spy;
- import javafx.stage.Stage;
  import org.junit.jupiter.api.Test;
  import org.junit.jupiter.api.extension.ExtendWith;
+ import org.mockito.InjectMocks;
  import org.mockito.Mock;
+ import org.mockito.Spy;
  import org.mockito.junit.jupiter.MockitoExtension;
- import javafx.scene.control.ListView;
 
  import javax.inject.Provider;
 
@@ -45,18 +41,14 @@
 
  @ExtendWith(MockitoExtension.class)
  public class GangCreationControllerTest extends ControllerTest {
-
-     @Spy
-     ObjectMapper objectMapper;
+     @Mock
+     TokenStorage tokenStorage;
 
      @Spy
      BubbleComponent bubbleComponent;
 
      @Spy
      ImageCache imageCache;
-
-     @Spy
-     TokenStorage tokenStorage;
 
      @Spy
      Subscriber subscriber;
@@ -67,8 +59,8 @@
      @Mock
      PresetsApiService presetsApiService;
 
-     ObservableList<Gang> gangs = FXCollections.observableArrayList();
-     Gang gang = new Gang("Test Gang", 0, "", 0, "", "", "#000000", 0, null);
+     final ObservableList<Gang> gangs = FXCollections.observableArrayList();
+     final Gang gang = new Gang("Test Gang", 0, "", 0, "", "", "#000000", 0, null);
      ListView<Gang> gangsListView;
      ListView<Trait> allTraitsListView;
      ListView<Trait> confirmedTraitsListView;
@@ -405,8 +397,7 @@
 
      @Test
      public void testTraits() {
-         Node listOne = lookup("#allTraitsListView").query();
-         ListView alltraits = (ListView) listOne;
+         ListView<Trait> alltraits = lookup("#allTraitsListView").queryListView();
          double currentHeight = alltraits.getHeight();
          double newHeight = currentHeight * 2;
 
@@ -463,8 +454,7 @@
          Label traitConflicts;
          Label traitEffects;
 
-         Node listOne = lookup("#allTraitsListView").query();
-         ListView alltraits = (ListView) listOne;
+         ListView<Trait> alltraits = lookup("#allTraitsListView").queryListView();
          double currentHeight = alltraits.getHeight();
          double newHeight = currentHeight * 2;
 
@@ -510,7 +500,7 @@
          assertTrue(traitEffects.getText().contains(variablesResourceBundle.getString(bTrait.effects()[0].variable())));
          assertFalse(traitEffects.getText().contains(variablesResourceBundle.getString(cTrait.effects()[0].variable())));
          assertFalse(traitEffects.getText().contains(variablesResourceBundle.getString(dTrait.effects()[0].variable())));
-         assertTrue(traitEffects.getText().contains("*9"));
+         assertTrue(traitEffects.getText().contains("x9"));
 
          // Trait C
          moveTo("#" + cTrait.id());

@@ -1,8 +1,6 @@
 package de.uniks.stp24.model;
 
-import javax.inject.Inject;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * A supermodel for creating jobs and controlling their status. <br>

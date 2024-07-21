@@ -2,6 +2,7 @@ package de.uniks.stp24.service;
 
 import de.uniks.stp24.App;
 import org.fulib.fx.controller.Subscriber;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 

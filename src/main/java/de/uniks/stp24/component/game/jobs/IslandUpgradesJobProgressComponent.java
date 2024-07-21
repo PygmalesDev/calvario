@@ -6,7 +6,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
-import org.fulib.fx.annotation.event.OnInit;
 
 import javax.inject.Inject;
 

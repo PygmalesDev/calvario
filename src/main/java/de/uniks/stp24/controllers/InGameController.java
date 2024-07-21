@@ -11,7 +11,6 @@ import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
-import static de.uniks.stp24.service.Constants.*;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
@@ -48,6 +47,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static de.uniks.stp24.service.Constants.BUILT_STATUS;
+
 @Title("CALVARIO")
 @Controller
 public class InGameController extends BasicController {
@@ -60,7 +61,7 @@ public class InGameController extends BasicController {
     @FXML
     StackPane hintCaptainContainer;
     @FXML
-    Pane shadow;
+    public Pane shadow;
     @FXML
     StackPane eventContainer;
     @FXML
@@ -193,14 +194,14 @@ public class InGameController extends BasicController {
     String lastUpdate;
     double scale = 1.0;
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
-    public ArrayList<String> flagsPath = new ArrayList<>();
-    String resourcesPaths = "/de/uniks/stp24/assets/";
-    String flagsFolderPath = "flags/flag_";
-    PopupBuilder popupBuildingProperties = new PopupBuilder();
-    PopupBuilder popupBuildingWindow = new PopupBuilder();
-    PopupBuilder popupSiteProperties = new PopupBuilder();
-    PopupBuilder popupDeleteStructure = new PopupBuilder();
-    PopupBuilder popupHelpWindow = new PopupBuilder();
+    public final ArrayList<String> flagsPath = new ArrayList<>();
+    final String resourcesPaths = "/de/uniks/stp24/assets/";
+    final String flagsFolderPath = "flags/flag_";
+    final PopupBuilder popupBuildingProperties = new PopupBuilder();
+    final PopupBuilder popupBuildingWindow = new PopupBuilder();
+    final PopupBuilder popupSiteProperties = new PopupBuilder();
+    final PopupBuilder popupDeleteStructure = new PopupBuilder();
+    final PopupBuilder popupHelpWindow = new PopupBuilder();
 
 
     @OnRender
@@ -221,8 +222,6 @@ public class InGameController extends BasicController {
         empireOverviewComponent.setInGameController(this);
         variableService.setIngameController(this);
 		pauseMenuComponent.setInGameController(this);
-        marketOverviewComponent.setInGameController(this);
-        storageOverviewComponent.setInGameController(this);
         pauseMenuComponent.setInGameController(this);
         helpComponent.setInGameController(this);
         clockComponent.setInGameController(this);
@@ -241,13 +240,6 @@ public class InGameController extends BasicController {
         variableService.initVariables();
         variableService.addRunnable(this::loadGameAttributes);
 
-        if (!tokenStorage.isSpectator())
-            this.subscriber.subscribe(this.lobbyService.getMember(gameID, tokenStorage.getUserId()),
-                result -> tokenStorage.setEmpireTraits(result.empire().traits()));
-
-        this.subscriber.subscribe(this.inGameService.getVariablesEffects(),
-                result -> variableService.setVariablesEffect(result));
-
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
                     result -> islandAttributes.setEmpireDto(result),
@@ -255,9 +247,7 @@ public class InGameController extends BasicController {
             createEmpireListener();
         }
 
-        for (int i = 0; i <= 16; i++) {
-            this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
-        }
+        for (int i = 0; i <= 16; i++) this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
     }
 
     /*
@@ -281,9 +271,7 @@ public class InGameController extends BasicController {
                 shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
                 pauseGame();
             } else {
-                if (!eventContainer.isVisible()) {
-                    shadow.setVisible(false);
-                }
+                if (!eventContainer.isVisible()) shadow.setVisible(false);
                 resumeGame();
             }
         }
@@ -300,8 +288,6 @@ public class InGameController extends BasicController {
         helpWindowContainer.setMouseTransparent(true);
         helpComponent.setVisible(false);
         helpComponent.setMouseTransparent(true);
-
-
 
         pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
@@ -349,6 +335,7 @@ public class InGameController extends BasicController {
         helpWindowContainer.setMouseTransparent(true);
 
         pause = !pause;
+        this.inGameService.gameStatus.firePropertyChange(GameStatus.PROPERTY_PAUSED, null, null);
         inGameService.setShowSettings(false);
         inGameService.setPaused(pause);
         if (pause) {
@@ -543,7 +530,7 @@ public class InGameController extends BasicController {
                         this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
                 showOverview();
                 selected.showUnshowRudder();
-            } else {
+            } else if (!this.tokenStorage.isSpectator()) {
                 if (Objects.nonNull(selectedIsland)) selectedIsland.showUnshowRudder();
                 this.overviewSitesComponent.closeOverview();
                 if (this.islandClaimingContainer.getLayoutX()+80 == selected.getLayoutX() &&
@@ -564,13 +551,15 @@ public class InGameController extends BasicController {
     public void setJobInspectors() {
         this.jobsService.setJobInspector("island_jobs_overview", (Jobs.Job job) -> {
             Island selected = this.islandsService.getIsland(job.system());
+            if (selected.upgrade().equals("unexplored") || selected.upgrade().equals("explored")) return;
+
             this.tokenStorage.setIsland(selected);
             this.overviewSitesComponent.jobsComponent.setJobsObservableList(
                     this.jobsService.getObservableListForSystem(job.system()));
 
             this.islandAttributes.setIsland(selected);
             selectedIsland = this.islandsService.getIslandComponent(job.system());
-            if (Objects.nonNull(selected) && Objects.nonNull(selected.owner())) {
+            if (Objects.nonNull(selected.owner())) {
                 showOverview();
                 this.overviewSitesComponent.showJobs();
             }
@@ -718,7 +707,7 @@ public class InGameController extends BasicController {
     public void showHelp() {
         popupHelpWindow.showPopup(helpWindowContainer,helpComponent);
         helpComponent.setVisible(true);
-        shadow.setVisible(false);
+        shadow.setVisible(true);
         helpComponent.setMouseTransparent(false);
         helpWindowContainer.setMouseTransparent(false);
         pauseMenuContainer.setVisible(false);

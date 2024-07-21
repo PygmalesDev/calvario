@@ -3,22 +3,23 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.model.Jobs;
-import de.uniks.stp24.model.Jobs.*;
 import de.uniks.stp24.model.DistrictAttributes;
+import de.uniks.stp24.model.Jobs;
+import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.game.JobsService;
-import de.uniks.stp24.service.game.ExplanationService;
-import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.ExplanationService;
 import de.uniks.stp24.service.game.IslandsService;
-import javafx.collections.FXCollections;
+import de.uniks.stp24.service.game.JobsService;
+import de.uniks.stp24.service.game.ResourcesService;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -36,7 +37,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static de.uniks.stp24.service.Constants.*;
+import static de.uniks.stp24.service.Constants.siteTranslation;
+import static de.uniks.stp24.service.Constants.sitesIconPathsMap;
 
 @Component(view = "SiteProperties.fxml")
 public class SitePropertiesComponent extends AnchorPane {
@@ -97,17 +99,17 @@ public class SitePropertiesComponent extends AnchorPane {
     @SubComponent
     public PropertiesJobProgressComponent siteJobProgress;
 
-    Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
-    Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);
+    final Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
+    final Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);
 
-    Provider<ImageView> siteEmptyCellProvider = () -> {
+    final Provider<ImageView> siteEmptyCellProvider = () -> {
         ImageView imageView = new ImageView(this.imageCache.get("/de/uniks/stp24/icons/other/empty_building_small_element.png"));
         imageView.setFitHeight(20);
         imageView.setFitWidth(20);
         return imageView;
     };
 
-    Provider<ImageView> siteCellProvider = () -> {
+    final Provider<ImageView> siteCellProvider = () -> {
         ImageView imageView = new ImageView(this.imageCache.get("/de/uniks/stp24/icons/other/building_small_element.png"));
         imageView.setFitHeight(20);
         imageView.setFitWidth(20);
@@ -115,12 +117,7 @@ public class SitePropertiesComponent extends AnchorPane {
     };
 
     Map<String, String> sitesMap;
-    public ObservableList<Map<String, Integer>> resources = FXCollections.observableArrayList();
     private ObservableList<Job> siteJobs;
-
-    public ObservableList<Jobs.Job> tempJobListSites = FXCollections.observableArrayList();
-
-    public ObservableList<Jobs.Job> tempJobListBuildings = FXCollections.observableArrayList();
 
     InGameController inGameController;
 
@@ -202,14 +199,14 @@ public class SitePropertiesComponent extends AnchorPane {
         }
     }
 
-    public void updateIslandSites() {
-        this.subscriber.subscribe(this.gameSystemsApiService.getSystem(this.tokenStorage.getGameId(),
-                this.tokenStorage.getIsland().id()), result -> {
-            this.tokenStorage.setIsland(this.islandsService.updateIsland(result));
-            this.islandAttributeStorage.setIsland(this.islandsService.updateIsland(result));
-            displayAmountOfSite();
-        });
-    }
+//    public void updateIslandSites() {
+//        this.subscriber.subscribe(this.gameSystemsApiService.getSystem(this.tokenStorage.getGameId(),
+//                this.tokenStorage.getIsland().id()), result -> {
+//            this.tokenStorage.setIsland(this.islandsService.updateIsland(result));
+//            this.islandAttributeStorage.setIsland(this.islandsService.updateIsland(result));
+//            displayAmountOfSite();
+//        });
+//    }
 
     //Calls handleDeleteStructure in inGameController which shows the deleteWarning popup
     //and calls method in DeleteStructureComponent

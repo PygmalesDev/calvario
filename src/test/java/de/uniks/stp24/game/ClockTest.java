@@ -55,6 +55,7 @@ public class ClockTest extends ControllerTest {
     @Spy
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @Spy
+    final
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
     GamesApiService gameApiService;

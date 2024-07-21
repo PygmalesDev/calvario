@@ -3,7 +3,7 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Island;
-import de.uniks.stp24.model.Jobs.*;
+import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.SiteProperties;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.game.JobsService;
@@ -21,7 +21,10 @@ import org.fulib.fx.constructs.listview.ComponentListCell;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 @Component(view = "Sites.fxml")
 public class SitesComponent extends Pane {
@@ -29,7 +32,7 @@ public class SitesComponent extends Pane {
     Text noSitesText;
     @FXML
     public ListView<SiteProperties> sitesListView;
-    ObservableList<SiteProperties> sitePropertiesList = FXCollections.observableArrayList();
+    final ObservableList<SiteProperties> sitePropertiesList = FXCollections.observableArrayList();
 
     @Inject
     public Provider<DistrictComponent> districtComponentProvider;

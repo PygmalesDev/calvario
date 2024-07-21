@@ -66,21 +66,21 @@ public class EmpireOverviewComponent extends StackPane {
     ResourceBundle gameResourceBundle;
 
     private InGameController inGameController;
-    private String gameID, empireID;
+    private String empireID;
     public int portrait, flag;
     public String colour, empireName, empireDescription;
 
     List<Island> islandList = new ArrayList<>();
-    List<IslandComponent> islandComponentList = new ArrayList<>();
-    public List<IslandComponent> empireIslands = new ArrayList<>();
-    List<Image> gridViewImages = new ArrayList<>();
+    final List<IslandComponent> islandComponentList = new ArrayList<>();
+    public final List<IslandComponent> empireIslands = new ArrayList<>();
+    final List<Image> gridViewImages = new ArrayList<>();
 
-    Map<IslandType, Image> imageMap = new HashMap<>();
+    final Map<IslandType, Image> imageMap = new HashMap<>();
 
-    String resourcesPaths = "/de/uniks/stp24/assets/";
-    String flagsFolderPath = "flags/flag_";
-    String portraitsFolderPath = "portraits/captain_";
-    String islandButtonsFolderPath = "buttons/IslandButton/";
+    final String resourcesPaths = "/de/uniks/stp24/assets/";
+    final String flagsFolderPath = "flags/flag_";
+    final String portraitsFolderPath = "portraits/captain_";
+    final String islandButtonsFolderPath = "buttons/IslandButton/";
 
     @Inject
     public EmpireOverviewComponent() {
@@ -98,7 +98,7 @@ public class EmpireOverviewComponent extends StackPane {
      */
     @OnInit
     public void initEmpireList() {
-        gameID = tokenStorage.getGameId();
+        String gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
         this.subscriber.subscribe(this.empireService.getEmpire(gameID, empireID),
                 this::empireTraits,

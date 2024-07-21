@@ -3,7 +3,7 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs;
-import de.uniks.stp24.model.Jobs.*;
+import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Site;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -31,10 +31,11 @@ import javax.inject.Provider;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-import static de.uniks.stp24.service.Constants.*;
+import static de.uniks.stp24.service.Constants.islandTranslation;
 
 @Component(view = "IslandClaiming.fxml")
 public class IslandClaimingComponent extends Pane {
+    public Button closeClaimingButton;
     @FXML
     Text islandTypeText;
     @FXML
@@ -86,7 +87,7 @@ public class IslandClaimingComponent extends Pane {
 
     @Inject
     public Provider<ClaimingSiteComponent> componentProvider;
-    Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle, this.imageCache);
+    final Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle, this.imageCache);
     private ObservableList<Job> upgradeJobs;
     private final ObservableList<Site> siteObservableList = FXCollections.observableArrayList();
     private final ObservableList<de.uniks.stp24.model.Resource> consumeObservableList = FXCollections.observableArrayList();

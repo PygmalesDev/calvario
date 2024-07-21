@@ -8,9 +8,13 @@ import de.uniks.stp24.controllers.helper.JoinGameHelper;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.dto.UpdateGameResultDto;
-import de.uniks.stp24.model.*;
+import de.uniks.stp24.model.Empire;
+import de.uniks.stp24.model.Game;
+import de.uniks.stp24.model.GameSettings;
+import de.uniks.stp24.model.User;
 import de.uniks.stp24.rest.*;
-import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.GamesService;
@@ -32,7 +36,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javax.inject.Provider;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +43,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class TestLobbyControllerAsHost extends ControllerTest {
@@ -73,6 +75,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     @Spy
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
+    final
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
 
     @InjectMocks
@@ -90,7 +93,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
     @InjectMocks
     BubbleComponent bubbleComponent;
 
-    Provider<UserComponent> userComponentProvider = () -> new UserComponent(imageCache, resources);
+    final Provider<UserComponent> userComponentProvider = () -> new UserComponent(imageCache, resources);
 
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();

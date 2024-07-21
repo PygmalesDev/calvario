@@ -1,19 +1,16 @@
 package de.uniks.stp24;
 
-
-import de.uniks.stp24.component.game.ClockComponent;
-import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.menu.CreateGameService;
 import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.menu.LoginService;
-import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
@@ -21,12 +18,9 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Spy;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.testfx.matcher.base.WindowMatchers;
 import org.testfx.util.WaitForAsyncUtils;
@@ -35,7 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -57,11 +52,6 @@ public class AppTest extends ControllerTest {
     EditGameService editGameService;
     EmpireService empireService;
     IslandsService islandsService;
-
-    @Spy
-    BubbleComponent bubbleComponent;
-    @Spy
-    ClockComponent clockComponent;
 
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
@@ -142,12 +132,9 @@ public class AppTest extends ControllerTest {
         doReturn(Observable.just(new MemberDto(true, user._id(), null, null))).when(lobbyService).updateMember(game3._id(), user._id(), true, null);
 
         doReturn(true).when(createGameService).nameIsAvailable("AwesomeLobby123");
-        doAnswer(new Answer<Observable<User>>() {
-            @Override
-            public Observable<User> answer(InvocationOnMock invocation) throws Throwable {
-                // Hier können wir eine Benachrichtigung senden, dass getUser aufgerufen wurde
-                return Observable.just(user);
-            }
+        doAnswer((Answer<Observable<User>>) invocation -> {
+            // Hier können wir eine Benachrichtigung senden, dass getUser aufgerufen wurde
+            return Observable.just(user);
         }).when(userApiService).getUser(any());
 
         doReturn("1").when(tokenStorage).getUserId();

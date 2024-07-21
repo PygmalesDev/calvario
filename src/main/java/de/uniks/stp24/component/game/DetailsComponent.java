@@ -85,8 +85,8 @@ public class DetailsComponent extends AnchorPane {
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
-    List<ImageView> resImages = new ArrayList<>();
-    List<Text> resInf = new ArrayList<>();
+    final List<ImageView> resImages = new ArrayList<>();
+    final List<Text> resInf = new ArrayList<>();
 
     @Inject
     public DetailsComponent(){

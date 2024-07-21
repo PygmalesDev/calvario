@@ -197,8 +197,6 @@ public class AppTest3 extends AppTest3Module {
         clickOn("#technologiesButton");
         assertTrue(this.technologyOverviewComponent.isVisible());
         clickOn("#crewRelationsButton");
-        //TODO: Remove this line when (or if) the bug with overview not closing is fixed!
-        clickOn("#closeTechnologyOverviewButton");
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#researchButton");
         WaitForAsyncUtils.waitForFxEvents();

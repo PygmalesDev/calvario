@@ -7,7 +7,6 @@ import de.uniks.stp24.dto.UpdateMemberDto;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.rest.GameMembersApiService;
 import de.uniks.stp24.rest.UserApiService;
-import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 
 import javax.inject.Inject;

@@ -13,7 +13,8 @@ import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.ws.EventListener;
-import javafx.collections.*;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
@@ -24,7 +25,9 @@ import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 @Component(view = "HintBubble.fxml")
@@ -51,10 +54,10 @@ public class CoolerBubbleComponent extends Captain {
     @Named("gameResourceBundle")
     public  ResourceBundle gameResourceBundle;
 
-    Random random = new Random();
+    final Random random = new Random();
     int lastPeriod = 0;
     int hintCountdown;
-    ArrayList<String> possibleHints = Constants.hints;
+    final ArrayList<String> possibleHints = Constants.hints;
 
     ObservableList<Announcement> announcements;
     ArrayList<Consumer<Jobs.Job>> forwardMethods = null;

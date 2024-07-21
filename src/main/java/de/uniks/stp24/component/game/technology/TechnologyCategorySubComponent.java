@@ -58,30 +58,32 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     @FXML
     public Tooltip tooltip;
 
-    App app;
+    final App app;
 
     TechnologyExtended technology;
 
-    TechnologyService technologyService;
+    final TechnologyService technologyService;
     
     @Inject
     TechnologyOverviewComponent technologyOverviewComponent;
     @Inject
-    ImageCache imageCache = new ImageCache();
+    public ImageCache imageCache;
 
-    ObservableList<Effect> description = FXCollections.observableArrayList();
+    final ObservableList<Effect> description = FXCollections.observableArrayList();
 
-    Provider<TechnologyCategoryDescriptionSubComponent> provider = TechnologyCategoryDescriptionSubComponent::new;
+    final Provider<TechnologyCategoryDescriptionSubComponent> provider = TechnologyCategoryDescriptionSubComponent::new;
 
     /**
      * This class is for the components of the listView in the technology category
      */
     @Inject
-    public TechnologyCategorySubComponent(TechnologyCategoryComponent technologyCategoryComponent, TechnologyService technologyService, App app, ResourceBundle technologiesResourceBundle) {
+    public TechnologyCategorySubComponent(TechnologyCategoryComponent technologyCategoryComponent, TechnologyService technologyService,
+                                          App app, ResourceBundle technologiesResourceBundle, ImageCache imageCache) {
         this.technologyCategoryComponent = technologyCategoryComponent;
         this.technologyService = technologyService;
         this.app = app;
         this.technologiesResourceBundle = technologiesResourceBundle;
+        this.imageCache = imageCache;
     }
 
     /**

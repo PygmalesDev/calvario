@@ -1,9 +1,9 @@
 package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.model.Game;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.menu.BrowseGameService;
 import de.uniks.stp24.service.menu.EditGameService;
-import de.uniks.stp24.service.TokenStorage;
 import javafx.fxml.FXML;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -12,6 +12,7 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
+
 import javax.inject.Inject;
 import java.util.ResourceBundle;
 
@@ -32,13 +33,11 @@ public class GameComponent extends HBox implements ReusableItemComponent<Game> {
     @Resource
     ResourceBundle resources;
 
-    private BubbleComponent bubbleComponent;
     private Game game;
 
     //Check if component is selected
     @Inject
     public GameComponent(BubbleComponent bubbleComponent, BrowseGameService browseGameService, EditGameService editGameService, TokenStorage tokenStorage, ResourceBundle resources){
-        this.bubbleComponent = bubbleComponent;
         this.tokenStorage = tokenStorage;
         this.browseGameService = browseGameService;
         this.editGameService = editGameService;

@@ -31,9 +31,9 @@ public class TechnologyService {
     List<TechnologyExtended> technologies;
 
     Observable<ArrayList<TechnologyExtended>> temp;
-    Set<TechnologyExtended> allUnlockedTechnologiesSet = new HashSet<>();
+    final Set<TechnologyExtended> allUnlockedTechnologiesSet = new HashSet<>();
 
-    ObservableList<TechnologyExtended> unlockedTechnologiesList = FXCollections.observableArrayList();
+    final ObservableList<TechnologyExtended> unlockedTechnologiesList = FXCollections.observableArrayList();
 
     ObservableList<TechnologyExtended> allUnlockedTechnologiesList = FXCollections.observableArrayList();
 

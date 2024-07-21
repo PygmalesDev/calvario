@@ -188,6 +188,7 @@ public class AppTest3Module extends LobbyTestLoader {
 
     protected final Subject<Event<MemberDto>> MEMBER_DTO_SUBJECT = BehaviorSubject.create();
     protected final Subject<Event<Game>> GAME_SUBJECT = BehaviorSubject.create();
+    protected final Subject<Event<SystemDto>> SYSTEMDTO_SUBJECT = BehaviorSubject.create();
     protected final Subject<Event<EmpireDto>> EMPIRE_SUBJECT = BehaviorSubject.create();
     protected final Subject<Event<Jobs.Job>> JOB_SUBJECT = BehaviorSubject.create();
 
@@ -211,6 +212,8 @@ public class AppTest3Module extends LobbyTestLoader {
                 .listen("games." + GAME_ID + ".ticked", Game.class);
         doReturn(EMPIRE_SUBJECT).when(this.eventListener)
                 .listen("games." + GAME_ID + ".empires." + EMPIRE_ID + ".updated", EmpireDto.class);
+        doReturn(SYSTEMDTO_SUBJECT).when(this.eventListener)
+                .listen(String.format("games.%s.systems.%s.updated", GAME_ID, "*"),  SystemDto.class);
 
         when(this.eventListener.listen(JOB_EVENT_PATH + "*", Jobs.Job.class)).thenReturn(JOB_SUBJECT);
         when(this.eventListener.listen(JOB_EVENT_PATHS[0] + "*", Jobs.Job.class)).thenReturn(JOB_SUBJECT);

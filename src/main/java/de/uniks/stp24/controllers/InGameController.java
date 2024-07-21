@@ -453,40 +453,40 @@ public class InGameController extends BasicController {
         group.setScaleX(0.65);
         group.setScaleY(0.65);
 
+        // Event Listener for Island changes
+        this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.systems.%s.updated",
+                        tokenStorage.getGameId(), "*"), SystemDto.class),
+                event -> {
+                    IslandComponent isle = islandsService.getIslandComponent(event.data()._id());
+                    Island updatedIsland = islandsService.convertToIsland(event.data());
+                    isle.applyInfo(updatedIsland);
+                    if (Objects.nonNull(updatedIsland.owner())) {
+                        // apply drop shadow and flag
+                        isle.applyEmpireInfo();
+                        // island is already claimed
+                        this.islandClaimingContainer.setVisible(false);
+                    }
+                    // check if the island/upgrade overview is visible for the updated island
+                    if (Objects.nonNull(selectedIsland) &&
+                            updatedIsland.id().equals(selectedIsland.island.id()) &&
+                            (overviewSitesComponent.isVisible() || overviewUpgradeComponent.isVisible())) {
+                        islandAttributes.setIsland(updatedIsland);
+                        String shownPage = overviewSitesComponent.getShownPage();
+                        // open the island overview again with updated information
+                        showOverview();
+                        switch (shownPage) {
+                            case "upgrade" -> overviewSitesComponent.showUpgrades();
+                            case "details" -> overviewSitesComponent.showDetails();
+                            case "buildings" -> overviewSitesComponent.showBuildings();
+                            case "sites" -> overviewSitesComponent.showSites();
+                            case "jobs" -> overviewSitesComponent.showJobs();
+                        }
+                    }
+                },
+                error -> System.out.println("islands event listener error: " + error)
+        );
+
         this.islandComponentList.forEach(isle -> {
-
-            // Event Listener for Island changes
-            this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.systems.%s.updated",
-                            tokenStorage.getGameId(), isle.island.id()), SystemDto.class),
-                    event -> {
-                        Island updatedIsland = islandsService.convertToIsland(event.data());
-                        isle.applyInfo(updatedIsland);
-                        if (Objects.nonNull(updatedIsland.owner())) {
-                            // apply drop shadow and flag
-                            isle.applyEmpireInfo();
-                            // island is already claimed
-                            this.islandClaimingContainer.setVisible(false);
-                        }
-                        // check if the island/upgrade overview is visible for the updated island
-                        if (Objects.nonNull(selectedIsland) &&
-                                updatedIsland.id().equals(selectedIsland.island.id()) &&
-                                (overviewSitesComponent.isVisible() || overviewUpgradeComponent.isVisible())) {
-                            islandAttributes.setIsland(updatedIsland);
-                            String shownPage = overviewSitesComponent.getShownPage();
-                            // open the island overview again with updated information
-                            showOverview();
-                            switch (shownPage) {
-                                case "upgrade" -> overviewSitesComponent.showUpgrades();
-                                case "details" -> overviewSitesComponent.showDetails();
-                                case "buildings" -> overviewSitesComponent.showBuildings();
-                                case "sites" -> overviewSitesComponent.showSites();
-                                case "jobs" -> overviewSitesComponent.showJobs();
-                            }
-                        }
-                    },
-                    error -> System.out.println("islands event listener error: " + error)
-            );
-
             isle.setInGameController(this);
             isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
             isle.setScaleX(1.25);
@@ -614,7 +614,8 @@ public class InGameController extends BasicController {
             inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
             overviewSitesComponent.setOverviewSites();
             // update island name
-            overviewSitesComponent.inputIslandName.setText(this.islandAttributes.getIsland().name());
+            if (!this.islandAttributes.getIsland().name().isEmpty())
+                overviewSitesComponent.inputIslandName.setText(this.islandAttributes.getIsland().name());
     }
 
     @OnKey(code = KeyCode.S, alt = true)

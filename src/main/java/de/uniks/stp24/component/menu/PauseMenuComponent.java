@@ -77,12 +77,16 @@ public class PauseMenuComponent extends AnchorPane {
 
     @OnKey(code = KeyCode.Q)
     public void quit() {
-        this.subscriber.subscribe(this.gamesApiService.editSpeed(this.tokenStorage.getGameId(),
-                new UpdateSpeedDto(0)), result -> {
-            tokenStorage.setGameId(null);
-            tokenStorage.setEmpireId(null);
-            if (inGameService.getPaused()) app.show("/browseGames");
-        });
+        if (this.inGameService.getGameOwnerID().equals(this.tokenStorage.getUserId()))
+            this.subscriber.subscribe(this.gamesApiService.editSpeed(this.tokenStorage.getGameId(),
+                new UpdateSpeedDto(0)), result -> this.handleGameLeaving());
+        else this.handleGameLeaving();
+    }
+
+    public void handleGameLeaving() {
+        tokenStorage.setGameId(null);
+        tokenStorage.setEmpireId(null);
+        if (inGameService.getPaused()) app.show("/browseGames");
     }
 
     public void setInGameController(InGameController inGameController) {

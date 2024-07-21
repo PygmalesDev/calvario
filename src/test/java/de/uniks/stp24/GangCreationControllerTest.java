@@ -510,7 +510,7 @@
          assertTrue(traitEffects.getText().contains(variablesResourceBundle.getString(bTrait.effects()[0].variable())));
          assertFalse(traitEffects.getText().contains(variablesResourceBundle.getString(cTrait.effects()[0].variable())));
          assertFalse(traitEffects.getText().contains(variablesResourceBundle.getString(dTrait.effects()[0].variable())));
-         assertTrue(traitEffects.getText().contains("*9"));
+         assertTrue(traitEffects.getText().contains("x9"));
 
          // Trait C
          moveTo("#" + cTrait.id());

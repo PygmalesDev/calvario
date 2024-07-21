@@ -1,7 +1,6 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.model.Game;
-import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.ImageCache;
@@ -114,12 +113,10 @@ public class ClockComponent extends AnchorPane {
         PropertyChangeListener callHandleEventChanged = this::handleEventChanged;
         eventService.listeners().addPropertyChangeListener(EventService.PROPERTY_EVENT, callHandleEventChanged);
 
-        PropertyChangeListener callHandleHostLeaving = this::setPauseButtonOnHostLeaving;
-        inGameService.getGameStatus().listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandleHostLeaving);
-
-        subscriber.subscribe(gamesApiService.getGame(tokenStorage.getGameId()),
-                gameResult -> game = gameResult,
-                error -> System.out.println("Error: " + error.getMessage())
+        subscriber.subscribe(gamesApiService.getGame(tokenStorage.getGameId()), gameResult -> {
+            this.inGameService.setGameOwnerID(gameResult.owner());
+            game = gameResult;
+            }, error -> System.out.println("Error: " + error.getMessage())
         );
 
         createUpdateSeasonListener();
@@ -393,21 +390,6 @@ public class ClockComponent extends AnchorPane {
             int speed = (int) propertyChangeEvent.getNewValue();
             timerService.setSpeedLocal(speed);
         }
-    }
-
-    public void setPauseButtonOnHostLeaving(@NotNull PropertyChangeEvent propertyChangeEvent) {
-        if (Objects.equals(game.owner(), tokenStorage.getUserId())) {
-            return;
-        }
-
-        otherSpeedLabel.setVisible(false);
-        pauseClockButton.setVisible(true);
-        pauseClockButton.setDisable(true);
-        pauseClockButton.setStyle("-fx-opacity: 1;");
-
-        x1Button.setVisible(false);
-        x2Button.setVisible(false);
-        x3Button.setVisible(false);
     }
 
     public void setToggle(boolean visibility) {

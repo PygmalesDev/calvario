@@ -32,9 +32,19 @@ public class InGameService {
     @Inject
     public PresetsApiService presetsApiService;
 
+    private String gameOwnerID = "";
+
     @Inject
     public InGameService() {
 
+    }
+
+    public void setGameOwnerID(String gameOwnerID) {
+        this.gameOwnerID = gameOwnerID;
+    }
+
+    public String getGameOwnerID() {
+        return gameOwnerID;
     }
 
     public Observable<SystemUpgrades> loadUpgradePresets() {

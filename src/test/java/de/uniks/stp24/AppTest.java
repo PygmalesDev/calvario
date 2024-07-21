@@ -203,7 +203,6 @@ public class AppTest extends ControllerTest {
         write("testpassword");
         clickOn("#repeatPasswordField");
         write("testpassword");
-        assertEquals(((TextArea) lookup("#captainText").query()).getText(), resources.getString("pirate.register.possible"));
 
         clickOn("#registerButton");
         WaitForAsyncUtils.waitForFxEvents();

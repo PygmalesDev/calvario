@@ -29,7 +29,7 @@
    <ImageView fitHeight="26.0" fitWidth="26.0" layoutX="51.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true" />
    <Text fx:id="researchCostText" layoutX="82.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="jobNumerator" text="Text" />
    <Text fx:id="technologyNameText" layoutX="17.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="technologyName" text="Technology name" />
-   <ListView fx:id="technologyEffectsListView" layoutX="17.0" layoutY="64.0" prefHeight="80.0" prefWidth="313.0" styleClass="researchDescription" />
+   <ListView fx:id="technologyEffectsListView" layoutX="17.0" layoutY="64.0" prefHeight="80.0" prefWidth="313.0" styleClass="description-list-view" />
    <ImageView fx:id="technologyTagImage1" fitHeight="30.0" fitWidth="30.0" layoutX="238.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" styleClass="technologyList" />
    <ImageView fx:id="technologyTagImage2" fitHeight="30.0" fitWidth="30.0" layoutX="277.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true" />
    <ImageView fx:id="researchCostImage" fitHeight="17.0" fitWidth="16.0" layoutX="114.0" layoutY="127.0" pickOnBounds="true" preserveRatio="true" />

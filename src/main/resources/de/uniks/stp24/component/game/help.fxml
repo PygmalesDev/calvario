@@ -24,7 +24,7 @@
          <Font size="14.0" />
       </font>
    </Text>
-   <ListView fx:id="technologyTagsListView" layoutX="55.0" layoutY="196.0" prefHeight="117.0" prefWidth="189.0" style="-fx-background-color: transparent;" styleClass="technologyList" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="111.0" />
+   <ListView fx:id="technologyTagsListView" layoutX="55.0" layoutY="196.0" prefHeight="117.0" prefWidth="214.0" style="-fx-background-color: transparent;" styleClass="technologyList" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="86.0" />
    <Button fx:id="backButton" layoutX="7.0" layoutY="16.0" mnemonicParsing="false" onAction="#back" prefHeight="20.0" prefWidth="20.0" styleClass="leftTriangleButton" textFill="WHITE" AnchorPane.leftAnchor="7.0">
       <font>
          <Font size="6.0" />
@@ -40,5 +40,5 @@
          <Font size="34.0" />
       </font>
    </Text>
-   <TextArea layoutX="49.0" layoutY="100.0" prefHeight="72.0" prefWidth="201.0" styleClass="technologyText" text="Alt + S              Show storage&#10;Alt + F              Show flags on &#10;                         occupied islands&#10;Alt + H             help window&#10;Alt + E             Empire overview&#10;Alt + M            Show market&#10;Alt + T              Show technologies&#10;Alt + J              Job overview" />
+   <TextArea layoutX="49.0" layoutY="100.0" prefHeight="72.0" prefWidth="201.0" styleClass="text-area" text="Alt + S              Show storage&#10;Alt + F              Show flags on &#10;                         occupied islands&#10;Alt + H             help window&#10;Alt + E             Empire overview&#10;Alt + M            Show market&#10;Alt + T              Show technologies&#10;Alt + J              Job overview" />
 </fx:root>

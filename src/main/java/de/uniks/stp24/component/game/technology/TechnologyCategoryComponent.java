@@ -82,8 +82,9 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @SubComponent
     @Inject
     public TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
+    final ImageCache imageCache = new ImageCache();
 
-    public Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this, technologyService, app, technologiesResourceBundle, tokenStorage, subscriber, variablesResourceBundle, technologyEffectDetailsComponent, technologyResearchDetailsComponent);
+    public Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this, technologyService, app, technologiesResourceBundle, tokenStorage, subscriber, variablesResourceBundle, technologyEffectDetailsComponent, technologyResearchDetailsComponent, imageCache);
 
     ObservableList<TechnologyExtended> unlockedTechnologies = FXCollections.observableArrayList();
     ObservableList<TechnologyExtended> researchTechnologies = FXCollections.observableArrayList();
@@ -97,7 +98,6 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @SubComponent
     public ResearchJobComponent researchJobComponent;
 
-    final ImageCache imageCache = new ImageCache();
 
     boolean societyJobRunning = false;
     boolean engineeringJobRunning = false;

@@ -11,11 +11,9 @@ import de.uniks.stp24.component.game.DeleteStructureComponent;
 import de.uniks.stp24.component.game.technology.ResearchJobComponent;
 import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
-import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent_MembersInjector;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.Technology;
 import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
@@ -27,20 +25,18 @@ import de.uniks.stp24.ws.EventListener;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.controller.Subscriber;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 
 import static org.mockito.Mockito.spy;
 
 public class InGameTestInitializer extends ControllerTest {
-    @Mock
-    protected MarketService marketService;
+    @Spy
+    MarketService marketService;
     @Spy
     GamesApiService gamesApiService;
     @Spy
@@ -186,6 +182,7 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent.imageCache = this.imageCache;
 
         this.inGameController.marketOverviewComponent = this.marketComponent;
+        this.inGameController.marketOverviewComponent.variableService = this.variableService;
         this.marketComponent.marketSeasonComponentProvider = this.marketSeasonComponentProvider;
         this.marketComponent.explanationService = this.explanationService;
         this.marketComponent.presetsApiService = this.presetsApiService;

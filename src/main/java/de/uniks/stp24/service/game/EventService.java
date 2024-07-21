@@ -44,7 +44,7 @@ public class EventService {
     @Inject
     public TokenStorage tokenStorage;
 
-    ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",
+    public ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",
             "grandExp", "reckoning", "rogerFeast", /* Bad Events */ "blackSpot", "dutchman", "foolsGold", "pestilence",
             "rumBottle", "submerge", /* Misty */ "solarEclipse"));
 

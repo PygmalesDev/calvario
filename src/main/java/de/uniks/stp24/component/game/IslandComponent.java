@@ -57,9 +57,7 @@ public class IslandComponent extends Pane {
 
     @Inject
     public IslandComponent() {
-        if (this.imageCache == null) {
-            this.imageCache = new ImageCache();
-        }
+        if (this.imageCache == null) this.imageCache = new ImageCache();
         this.islandImage = new ImageView();
         this.flagImage = new ImageView();
         this.spyglassImage = new ImageView();
@@ -78,13 +76,12 @@ public class IslandComponent extends Pane {
     // use our flag images
     // by the moment numeration from 0 til 16
     public void setFlagImage(int flag) {
-        if (flag >= 0) {
-            this.flagImage.setImage(imageCache.get("assets/flags/flag_" + flag + ".png"));
-        }
+        if (flag >= 0) this.flagImage.setImage(imageCache.get("assets/flags/flag_" + flag + ".png"));
     }
 
     public void applyInfo(Island islandInfo) {
         this.island = islandInfo;
+        this.setId(island.id()+"_instance");
         applyIcon(this.island.type());
     }
 

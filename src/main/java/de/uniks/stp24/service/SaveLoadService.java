@@ -33,7 +33,6 @@ public class SaveLoadService {
             }
             this.objectMapper.writeValue(Paths.get(fileName).toFile(), gang);
         } catch (IOException e) {
-            // TODO handle
             throw new RuntimeException(e);
         }
     }

@@ -61,23 +61,22 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @Inject
     public ResourcesService resourcesService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
     @SubComponent
     public PropertiesJobProgressComponent propertiesJobProgressComponent;
     @Inject
     public GameSystemsApiService gameSystemsApiService;
     @Inject
-    App app;
+    public App app;
     @Inject
-    ExplanationService explanationService;
+    public ExplanationService explanationService;
     @Inject
-    VariableService variableService;
+    public VariableService variableService;
     @Inject
-    ImageCache imageCache;
-
+    public ImageCache imageCache;
 
     @Inject
     @org.fulib.fx.annotation.controller.Resource
@@ -85,9 +84,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
     ResourceBundle gameResourceBundle;
 
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
-    IslandAttributeStorage islandAttributeStorage;
+    public IslandAttributeStorage islandAttributeStorage;
     Map<String, String> buildingsMap;
     String buildingType;
     InGameController inGameController;
@@ -95,7 +94,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     ObservableList<Jobs.Job> buildingJobs;
 
     Jobs.Job currentJob;
-    BuildingAttributes certainBuilding;
+    public BuildingAttributes certainBuilding;
 
     Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
     Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);
@@ -257,7 +256,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
                 this.inGameController.islandsService.updateIslandBuildings(this.islandAttributeStorage,
                         this.inGameController, this.islandAttributeStorage.getIsland().buildings());
                 this.inGameController.setSitePropertiesInvisible();
-            }, error -> System.out.println("error here"));
+            }, error -> System.out.println("Error by updating island buildings in BuildingPropertiesComponent:\n"
+            + error.getMessage()));
         }
     }
 

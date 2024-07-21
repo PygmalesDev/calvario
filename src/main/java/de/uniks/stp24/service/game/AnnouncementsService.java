@@ -19,12 +19,12 @@ import java.util.function.Consumer;
 
 public class AnnouncementsService {
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
     @Named("gameResourceBundle")
-    ResourceBundle gameResourceBundle;
+    public ResourceBundle gameResourceBundle;
     @Inject
     @Named("technologiesResourceBundle")
     public ResourceBundle technologiesResourceBundle;

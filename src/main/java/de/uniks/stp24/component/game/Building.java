@@ -50,6 +50,7 @@ public class Building extends VBox {
 
         imageView.setImage(buildingsComponent.imageCache.get("/" + buildingsIconPathsMap.getOrDefault(buildingName,
                 "de/uniks/stp24/icons/buildings/empty_building_element.png")));
+        setId("empty_building_element");
         if (Objects.nonNull(presetType))
             if (presetType.equals("on_pause"))
                 imageView.setImage(buildingsComponent.imageCache.get("/" + buildingsOnQueueMap.get(buildingName)));

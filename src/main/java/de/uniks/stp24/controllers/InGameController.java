@@ -3,7 +3,6 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
-import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.SystemDto;
@@ -97,7 +96,7 @@ public class InGameController extends BasicController {
     @Inject
     public EventService eventService;
     @Inject
-    InGameService inGameService;
+    public InGameService inGameService;
     @Inject
     EmpireService empireService;
     @Inject
@@ -228,7 +227,6 @@ public class InGameController extends BasicController {
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
-        System.out.printf("GAME ID: %s\nEMPIRE ID: %s\n", gameID, empireID);
 
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
@@ -522,7 +520,6 @@ public class InGameController extends BasicController {
 
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
-            System.out.printf("ISLAND ID: %s\n", selected.island.id());
             tokenStorage.setIsland(selected.getIsland());
             selectedIsland = selected;
             tokenStorage.setIsland(selectedIsland.getIsland());

@@ -61,7 +61,7 @@ public class IslandsService extends BasicService {
             siteManager.put(id,new InfrastructureService());
             siteManager.get(id).setEmpireID(id);
         });
-        siteManager.put("noBody",new InfrastructureService());
+        siteManager.put("noBody", new InfrastructureService());
         siteManager.get("noBody").setEmpireID("noBody");
     }
 

@@ -10,7 +10,6 @@ import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.component.game.technology.ResearchJobComponent;
 import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
-import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.GameStatus;
@@ -145,9 +144,6 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     ResearchJobComponent researchJobComponent;
     @InjectMocks
     IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
-
-    @Spy
-    ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ROOT);
 
     @InjectMocks
     MarketComponent marketComponent;

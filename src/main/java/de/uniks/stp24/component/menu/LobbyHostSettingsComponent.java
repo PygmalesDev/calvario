@@ -38,7 +38,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @FXML
     public Button closeLobbyButton;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
     LobbyService lobbyService;
     @Inject
@@ -50,7 +50,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @Inject
     GamesApiService gamesApiService;
     @Inject
-    EditGameService editGameService;
+    public EditGameService editGameService;
     @Inject
     EventListener eventListener;
     @Inject

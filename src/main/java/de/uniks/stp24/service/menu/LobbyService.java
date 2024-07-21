@@ -16,7 +16,7 @@ public class LobbyService extends BasicController {
     @Inject
     public GameMembersApiService gameMembersApiService;
     @Inject
-    UserApiService userApiService;
+    public UserApiService userApiService;
 
     @Inject
     public LobbyService() {}

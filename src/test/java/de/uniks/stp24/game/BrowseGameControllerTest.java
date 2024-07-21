@@ -163,8 +163,6 @@ public class BrowseGameControllerTest extends ControllerTest {
         assertEquals(resources.getString("browse.game"), stage.getTitle());
         clickOn(browseGameController.edit_acc_b);
         WaitForAsyncUtils.waitForFxEvents();
-        System.out.println(tokenStorage);
-        System.out.println(tokenStorage.getAvatarMap());
         assertEquals(resources.getString("edit.account"), stage.getTitle());
     }
 

@@ -16,6 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -34,9 +35,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.*;
 
-import static de.uniks.stp24.service.Constants.empireTemplatesEnglish;
-import static de.uniks.stp24.service.Constants.empireTemplatesGerman;
-import static de.uniks.stp24.service.Constants.colorsArray;
+import static de.uniks.stp24.service.Constants.*;
 
 @Title("%create.island")
 @Controller
@@ -45,13 +44,13 @@ public class GangCreationController extends BasicController {
     String gameID;
 
     @Inject
-    SaveLoadService saveLoadService;
+    public SaveLoadService saveLoadService;
     @Inject
-    PresetsApiService presetsApiService;
+    public PresetsApiService presetsApiService;
     @Inject
-    LobbyService lobbyService;
+    public LobbyService lobbyService;
     @Inject
-    PopupBuilder popupBuilder;
+    public PopupBuilder popupBuilder;
 
     @SubComponent
     @Inject
@@ -111,8 +110,6 @@ public class GangCreationController extends BasicController {
     @FXML
     Button lastColorButton;
     @FXML
-    Pane colorField;
-    @FXML
     Button backButton;
     @FXML
     Button showCreationButton;
@@ -151,7 +148,7 @@ public class GangCreationController extends BasicController {
     @FXML
     Text traitsLimitText;
     @FXML
-    ListView<Trait> allTraitsListView;
+    public ListView<Trait> allTraitsListView;
     @FXML
     ListView<Trait> selectedTraitsListView;
     @FXML
@@ -164,6 +161,8 @@ public class GangCreationController extends BasicController {
     Label traitInfoEffects;
     @FXML
     Label traitInfoConflicts;
+    @FXML
+    ImageView splashImageView;
 
     boolean lockFlag = false;
     boolean lockPortrait = false;
@@ -180,6 +179,7 @@ public class GangCreationController extends BasicController {
     ArrayList<String> flagsList = new ArrayList<>();
     ArrayList<String> portraitsList = new ArrayList<>();
     ArrayList<String> colorsList = new ArrayList<>();
+    ArrayList<Double> colorsHSVList = new ArrayList<>();
     String resourcesPaths = "/de/uniks/stp24/assets/";
     String flagsFolderPath = "flags/flag_";
     String portraitsFolderPath = "portraits/captain_";
@@ -195,6 +195,7 @@ public class GangCreationController extends BasicController {
 
     Map<String, String[]> empireTemplates;
     PopupBuilder popup = new PopupBuilder();
+    ColorAdjust splashAdjust = new ColorAdjust();
 
     @Inject
     public GangCreationController() {
@@ -212,6 +213,7 @@ public class GangCreationController extends BasicController {
         this.gangDeletionComponent.setGangCreationController(this);
 
         this.colorsList.addAll(Arrays.asList(colorsArray));
+        this.colorsHSVList.addAll(Arrays.asList(colorsHSV));
         for (int i = 0; i <= imagesCount; i++) {
             this.flagsList.add(resourcesPaths + flagsFolderPath + i + ".png");
             this.portraitsList.add(resourcesPaths + portraitsFolderPath + i + ".png");
@@ -238,6 +240,12 @@ public class GangCreationController extends BasicController {
     @OnRender
     public void render() {
         buttonsPane.setPickOnBounds(false);
+        showCreationButton.setText("NEW EMPIRE");
+        this.splashAdjust.setBrightness(0.35);
+        this.splashAdjust.setContrast(0.0);
+        this.splashAdjust.setHue(-0.31);
+        this.splashAdjust.setSaturation(1.0);
+        this.splashImageView.setEffect(this.splashAdjust);
 
         subscriber.subscribe(lobbyService.getMember(gameID, tokenStorage.getUserId()),
                 result -> {
@@ -339,7 +347,7 @@ public class GangCreationController extends BasicController {
         portraitImage.setImage(imageCache.get(portraitsList.get(portraitImageIndex)));
         gangDescriptionText.setText(gang.description());
         colorIndex = gang.colorIndex() % colorsList.size();
-        colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
+        this.splashAdjust.setHue(colorsHSVList.get(colorIndex));
         confirmedTraits.clear();
         if (Objects.nonNull(gang.traits())) confirmedTraits.setAll(gang.traits());
     }
@@ -426,7 +434,8 @@ public class GangCreationController extends BasicController {
         this.subscriber.subscribe(this.lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()), result ->
                         this.subscriber.subscribe(this.lobbyService.updateMember(
                 this.gameID, result.user(), result.ready(), empire), result2 ->
-                app.show("/lobby", Map.of("gameid", this.gameID))),
+                app.show("/lobby", Map.of("gameid", this.gameID)),
+                                error -> bubbleComponent.setCaptainText(errorService.getMessage(error))),
                 error -> bubbleComponent.setCaptainText(errorService.getMessage(error))
         );
     }
@@ -486,7 +495,7 @@ public class GangCreationController extends BasicController {
         colorIndex = 0;
         flagImage.setImage(imageCache.get(flagsList.get(flagImageIndex)));
         portraitImage.setImage(imageCache.get(portraitsList.get(portraitImageIndex)));
-        colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
+        this.splashAdjust.setHue(colorsHSVList.get(colorIndex));
         gangNameText.setText("");
         gangDescriptionText.setText("");
         confirmedTraits.clear();
@@ -504,12 +513,12 @@ public class GangCreationController extends BasicController {
 
     public void showLastColor() {
         colorIndex = colorIndex - 1 >= 0 ? colorIndex - 1 : colorsList.size() - 1;
-        colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
+        this.splashAdjust.setHue(colorsHSVList.get(colorIndex));
     }
 
     public void showNextColor() {
         colorIndex = colorIndex + 1 < colorsList.size() ? colorIndex + 1 : 0;
-        colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
+        this.splashAdjust.setHue(colorsHSVList.get(colorIndex));
     }
 
     public void showLastPortrait() {
@@ -562,7 +571,7 @@ public class GangCreationController extends BasicController {
 
         if (!lockColor) {
             colorIndex = rand.nextInt(0, colorsList.size());
-            colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
+            this.splashAdjust.setHue(colorsHSVList.get(colorIndex));
         }
 
         if (!lockTraits) {

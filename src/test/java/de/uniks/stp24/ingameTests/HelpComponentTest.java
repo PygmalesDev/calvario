@@ -47,7 +47,7 @@ public class HelpComponentTest extends ControllerTest {
     @Test
     public void close(){
         waitForFxEvents();
-        clickOn("#closeButton");
+        clickOn("#closeHelpButton");
         assertEquals(false, helpComponent.visibleProperty().getValue());
     }
 }

@@ -10,6 +10,10 @@ public class Constants {
             "#40E0D0", "#FF00FF", "#FFD700", "#C0C0C0", "#4B0082",
             "#36454F", "#F28500", "#E6E6FA", "#008080", "#800000", "#808000"};
 
+    public static final Double[] colorsHSV = new Double[]{
+            0.93, 0.2, -0.22, 0.5, -0.91, -0.03, 0.67, -0.72, -1.00, 0.53, 0.13, -0.82, 0.33, 0.00, -1.00, -0.67
+    };
+
     // Folder
     public static final String DATA_FOLDER_NAME = "data";
     public static final String EVENT_FOLDER_NAME = "src/main/resources/de/uniks/stp24/data/";
@@ -272,4 +276,9 @@ public class Constants {
             "hint.space"
     ));
 
+    public enum BUILT_STATUS {
+            BUILT,
+            QUEUED,
+            NOT_BUILT
+    }
 }

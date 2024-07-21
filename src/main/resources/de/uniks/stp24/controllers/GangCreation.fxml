@@ -16,140 +16,275 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="backgroundAnchorPane" prefHeight="860.0" prefWidth="1280.0" styleClass="background" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.GangCreationController">
-   <HBox alignment="CENTER" prefHeight="860.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="660.0" prefWidth="550.0">
-         <HBox.margin>
-            <Insets bottom="10.0" left="300.0" top="10.0" />
-         </HBox.margin>
-         <VBox prefHeight="200.0" prefWidth="550.0" styleClass="cardBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <Pane>
-               <Pane fx:id="creationBox" prefHeight="405.0" prefWidth="550.0">
-                  <Pane layoutX="31.0" layoutY="75.0">
-                     <ImageView fx:id="portraitImage" fitHeight="100.0" fitWidth="100.0" layoutX="30.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
-                        <Image url="@../assets/flags/flag_0.png" />
+<AnchorPane fx:id="backgroundAnchorPane" prefHeight="860.0" prefWidth="1280.0" styleClass="background" stylesheets="@../style/empireConfiguration.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.controllers.GangCreationController">
+   <HBox alignment="CENTER_LEFT" layoutX="265.0" layoutY="-25.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="265.0" AnchorPane.rightAnchor="265.0" AnchorPane.topAnchor="-25.0">
+      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="885.0" prefWidth="688.0" stylesheets="@../style/empireConfiguration.css">
+         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="694.0" prefWidth="843.0" styleClass="createEmpireBackground" stylesheets="@../style/empireConfiguration.css">
+            <HBox.margin>
+               <Insets right="-120.0" />
+            </HBox.margin>
+            <Text fill="WHITE" layoutX="24.0" layoutY="-52.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="titleFontHead" text="CREATE EMPIRE" textAlignment="CENTER" wrappingWidth="419.0" AnchorPane.leftAnchor="180.0" AnchorPane.topAnchor="55.0" />
+            <Text fill="WHITE" layoutX="34.0" layoutY="-42.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="titleFontComponent" text="MY EMPIRES" textAlignment="CENTER" wrappingWidth="419.0" AnchorPane.leftAnchor="177.0" AnchorPane.topAnchor="351.0" />
+            <VBox alignment="CENTER" layoutY="-81.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="874.0" prefWidth="919.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="385.0" prefWidth="492.0" stylesheets="@../style/empireConfiguration.css">
+                  <Pane fx:id="creationBox" prefHeight="405.0" prefWidth="550.0">
+                     <Pane layoutX="31.0" layoutY="75.0" stylesheets="@../style/empireConfiguration.css">
+                        <Button fx:id="lastPortraitButton" layoutX="65.0" layoutY="83.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showLastPortrait" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" styleClass="downButtonArrow">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="nextPortraitButton" layoutX="65.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showNextPortrait" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" styleClass="upButtonArrow">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <ToggleButton fx:id="lockPortraitButton" layoutX="45.0" layoutY="70.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#lockPortrait" prefHeight="20.0" prefWidth="15.0" style="-fx-background-color: transparent;" styleClass="lockButton" />
+                        <ImageView fx:id="portraitImage" fitHeight="50.0" fitWidth="50.0" layoutX="90.0" layoutY="50.0" pickOnBounds="true" preserveRatio="true">
+                           <Image url="@../assets/flags/flag_0.png" />
+                        </ImageView>
+                     </Pane>
+                     <Pane layoutX="31.0" layoutY="275.0">
+                        <ImageView fx:id="splashImageView" fitHeight="150.0" fitWidth="40.0" layoutX="97.0" layoutY="-30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/color_splash.png" />
+                           </image>
+                        </ImageView>
+                        <ToggleButton fx:id="lockColorButton" layoutX="45.0" layoutY="-20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#lockColor" prefHeight="20.0" prefWidth="15.0" style="-fx-background-color: transparent;" styleClass="lockButton" />
+                        <Button fx:id="lastColorButton" layoutX="65.0" layoutY="-7.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showLastColor" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" styleClass="downButtonArrow">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="nextColorButton" layoutX="65.0" layoutY="-30.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showNextColor" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" styleClass="upButtonArrow">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </Pane>
+                     <Pane layoutX="31.0" layoutY="175.0">
+                        <ImageView fx:id="flagImage" fitHeight="50.0" fitWidth="50.0" layoutX="90.0" layoutY="10.0" pickOnBounds="true">
+                           <Image url="@../assets/flags/flag_0.png" />
+                        </ImageView>
+                        <Button fx:id="lastFlagButton" layoutX="65.0" layoutY="39.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showLastFlag" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" styleClass="downButtonArrow">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="nextFlagButton" layoutX="65.0" layoutY="17.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showNextFlag" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: transparent;" styleClass="upButtonArrow">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <ToggleButton fx:id="lockFlagButton" layoutX="45.0" layoutY="26.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#lockFlag" prefHeight="20.0" prefWidth="15.0" style="-fx-background-color: transparent;" styleClass="lockButton" />
+                     </Pane>
+                     <TextField fx:id="gangNameText" alignment="CENTER" layoutX="107.0" layoutY="87.0" prefHeight="51.0" prefWidth="238.0" promptText="Enter name" styleClass="enterNameFont">
+                        <font>
+                           <Font size="24.0" />
+                        </font>
+                     </TextField>
+                     <ToggleButton fx:id="lockNameButton" layoutX="310.0" layoutY="110.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#lockName" prefHeight="20.0" prefWidth="15.0" style="-fx-background-color: transparent;" styleClass="lockButton" />
+                     <TextArea fx:id="gangDescriptionText" layoutX="175.0" layoutY="135.0" prefHeight="80.0" prefWidth="171.0" promptText="%enter.description" style="-fx-background-color: transparent;" styleClass="descriptionFontComponent" wrapText="true">
+                        <font>
+                           <Font size="20.0" />
+                        </font>
+                     </TextArea>
+                     <ToggleButton fx:id="lockDescriptionButton" layoutX="325.0" layoutY="137.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#lockDescription" prefHeight="20.0" prefWidth="15.0" style="-fx-background-color: transparent;" styleClass="lockButton" />
+                     <Button fx:id="chooseTraitsButton" layoutX="237.0" layoutY="217.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#chooseTraits" prefHeight="16.0" prefWidth="40.0" style="-fx-background-color: transparent;" text="TRAITS">
+                        <font>
+                           <Font size="8.0" />
+                        </font>
+                        <styleClass>
+                           <String fx:value="traitsButton" />
+                           <String fx:value="buttonsFont" />
+                        </styleClass>
+                     </Button>
+                     <ToggleButton fx:id="lockTraitsButton" layoutX="285.0" layoutY="212.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#lockTraits" prefHeight="20.0" prefWidth="15.0" style="-fx-background-color: transparent;" styleClass="lockButton" />
+                     <Button fx:id="randomizeButton" layoutX="310.0" layoutY="267.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#randomize" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: transparent;" styleClass="randomDice">
+                        <font>
+                           <Font size="8.0" />
+                        </font>
+                     </Button>
+                     <ListView fx:id="confirmedTraitsListView" layoutX="181.0" layoutY="236.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="67.0" prefWidth="124.0" style="-fx-background-color: transparent; -fx-border-color: #000000;" />
+                     <Pane fx:id="traitInfoPane" layoutX="-330.0" layoutY="50.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="214.0" prefWidth="500.0" style="-fx-background-color: transparent;" styleClass="traitsDetailsBackground" stylesheets="@../style/empireConfiguration.css" visible="false">
+                        <VBox>
+                           <children>
+                              <HBox alignment="CENTER" prefHeight="54.0" prefWidth="500.0">
+                                 <children>
+                                    <Label fx:id="traitInfoName" styleClass="explanationTitleFont" text="Label" />
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="100.0" prefWidth="500.0">
+                                 <children>
+                                    <VBox prefHeight="100.0" prefWidth="72.0" />
+                                    <Label fx:id="traitInfoEffects" alignment="TOP_LEFT" prefHeight="144.0" prefWidth="220.0" styleClass="explanationTextFont" text="Label" />
+                                    <Label fx:id="traitInfoConflicts" alignment="TOP_LEFT" prefHeight="100.0" prefWidth="172.0" styleClass="explanationTextFont" text="Label" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </Pane>
+                  </Pane>
+                  <VBox fx:id="spectatorBox" alignment="CENTER" layoutY="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="405.0" prefWidth="550.0" stylesheets="@../style/empireConfiguration.css">
+                     <ImageView fx:id="spectatorImage" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                        <VBox.margin>
+                           <Insets left="-120.0" />
+                        </VBox.margin>
                      </ImageView>
-                     <Button fx:id="lastPortraitButton" layoutY="80.0" mnemonicParsing="false" onAction="#showLastPortrait" prefWidth="30.0" styleClass="downButton">
-                        <font>
-                           <Font name="System Bold" size="12.0" />
-                        </font>
-                     </Button>
-                     <Button fx:id="nextPortraitButton" layoutY="31.0" mnemonicParsing="false" onAction="#showNextPortrait" prefHeight="25.0" prefWidth="30.0" styleClass="upButton">
-                        <font>
-                           <Font name="System Bold" size="12.0" />
-                        </font>
-                     </Button>
-                     <ToggleButton fx:id="lockPortraitButton" layoutX="-29.0" layoutY="55.0" mnemonicParsing="false" onAction="#lockPortrait" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
-                  </Pane>
-                  <Pane layoutX="31.0" layoutY="275.0">
-                     <Pane fx:id="colorField" layoutX="41.0" layoutY="18.0" prefHeight="75.0" prefWidth="75.0" style="-fx-background-color: RED;" />
-                     <ToggleButton fx:id="lockColorButton" layoutX="-29.0" layoutY="44.0" mnemonicParsing="false" onAction="#lockColor" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
-                     <Button fx:id="lastColorButton" layoutY="68.0" mnemonicParsing="false" onAction="#showLastColor" prefWidth="30.0" styleClass="downButton">
-                        <font>
-                           <Font name="System Bold" size="12.0" />
-                        </font>
-                     </Button>
-                     <Button fx:id="nextColorButton" layoutY="20.0" mnemonicParsing="false" onAction="#showNextColor" prefHeight="25.0" prefWidth="30.0" styleClass="upButton">
-                        <font>
-                           <Font name="System Bold" size="12.0" />
-                        </font>
-                     </Button>
-                  </Pane>
-                  <Pane layoutX="31.0" layoutY="175.0">
-                     <ImageView fx:id="flagImage" fitHeight="100.0" fitWidth="100.0" layoutX="32.0" layoutY="17.0" pickOnBounds="true">
-                        <Image url="@../assets/flags/flag_0.png" />
-                     </ImageView>
-                     <Button fx:id="lastFlagButton" layoutY="80.0" mnemonicParsing="false" onAction="#showLastFlag" prefWidth="30.0" styleClass="downButton">
-                        <font>
-                           <Font name="System Bold" size="12.0" />
-                        </font>
-                     </Button>
-                     <Button fx:id="nextFlagButton" layoutY="31.0" mnemonicParsing="false" onAction="#showNextFlag" prefHeight="25.0" prefWidth="30.0" styleClass="upButton">
-                        <font>
-                           <Font name="System Bold" size="12.0" />
-                        </font>
-                     </Button>
-                     <ToggleButton fx:id="lockFlagButton" layoutX="-29.0" layoutY="55.0" mnemonicParsing="false" onAction="#lockFlag" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
-                  </Pane>
-                  <TextField fx:id="gangNameText" alignment="CENTER" layoutX="31.0" layoutY="14.0" prefHeight="77.0" prefWidth="500.0" promptText="Buccaneers" styleClass="textFieldGang">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                  </TextField>
-                  <ToggleButton fx:id="lockNameButton" layoutX="506.0" layoutY="14.0" mnemonicParsing="false" onAction="#lockName" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
-                  <TextArea fx:id="gangDescriptionText" layoutX="165.0" layoutY="96.0" prefHeight="100.0" prefWidth="367.0" promptText="%enter.description" wrapText="true">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </TextArea>
-                  <ToggleButton fx:id="lockDescriptionButton" layoutX="509.0" layoutY="96.0" mnemonicParsing="false" onAction="#lockDescription" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
-                  <Button fx:id="chooseTraitsButton" layoutX="275.0" layoutY="205.0" mnemonicParsing="false" onAction="#chooseTraits" prefHeight="16.0" prefWidth="128.0" text="traits" />
-                  <ToggleButton fx:id="lockTraitsButton" layoutX="415.0" layoutY="205.0" mnemonicParsing="false" onAction="#lockTraits" prefHeight="25.0" prefWidth="25.0" styleClass="lockButton" />
-                  <Button fx:id="randomizeButton" layoutX="486.0" layoutY="298.0" mnemonicParsing="false" onAction="#randomize" prefHeight="35.0" prefWidth="35.0" styleClass="normalButton" text="r" />
-                  <ListView fx:id="confirmedTraitsListView" layoutX="277.0" layoutY="236.0" prefHeight="133.0" prefWidth="161.0" />
-                  <Pane fx:id="traitInfoPane" layoutX="31.0" layoutY="4.0" prefHeight="200.0" prefWidth="500.0" style="-fx-background-color: White;" visible="false">
-                     <Label fx:id="traitInfoName" layoutX="200.0" layoutY="6.0" text="Label" />
-                     <Label fx:id="traitInfoEffects" layoutX="14.0" layoutY="25.0" text="Label" />
-                     <Label fx:id="traitInfoConflicts" layoutX="325.0" layoutY="25.0" text="Label" />
-                  </Pane>
+                     <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="explanationFont" text="Select an empire or &#10;create a new one. &#10;&#10;You will be considered&#10;a Spectator if you don't&#10;choose any empire!" textAlignment="CENTER">
+                        <VBox.margin>
+                           <Insets left="-120.0" />
+                        </VBox.margin>
+                     </Text>
+                  </VBox>
+                  <VBox.margin>
+                     <Insets left="80.0" right="80.0" />
+                  </VBox.margin>
                </Pane>
-               <VBox fx:id="spectatorBox" alignment="CENTER" layoutY="-1.0" prefHeight="405.0" prefWidth="550.0">
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Spectator">
+               <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="652.0">
+                  <VBox.margin>
+                     <Insets />
+                  </VBox.margin>
+                  <children>
+                     <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="245.0" />
+                     <ListView fx:id="gangsListView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="249.0" styleClass="jobsOverviewList" stylesheets="@../style/jobsOverview.css">
+                        <HBox.margin>
+                           <Insets bottom="60.0" left="-75.0" top="-20.0" />
+                        </HBox.margin>
+                     </ListView>
+                  </children>
+               </HBox>
+               <Pane fx:id="buttonsPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="91.0" prefWidth="652.0" stylesheets="@../style/empireConfiguration.css">
+                  <Button fx:id="backButton" layoutX="210.0" layoutY="-5.0" mnemonicParsing="false" onAction="#back" prefHeight="0.0" prefWidth="68.0" style="-fx-background-color: transparent;" text="RETURN">
                      <font>
-                        <Font size="36.0" />
+                        <Font size="8.0" />
                      </font>
-                  </Text>
-                  <ImageView fx:id="spectatorImage" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                     <styleClass>
+                        <String fx:value="returnButton" />
+                        <String fx:value="buttonsFont" />
+                     </styleClass>
+                  </Button>
+                  <Button fx:id="showCreationButton" layoutX="255.0" layoutY="-30.0" mnemonicParsing="false" onAction="#showCreationPane" prefHeight="18.0" prefWidth="68.0" style="-fx-background-color: transparent;" text="%new.island">
+                     <font>
+                        <Font size="8.0" />
+                     </font>
+                     <styleClass>
+                        <String fx:value="createEmpireButton" />
+                        <String fx:value="buttonsFont" />
+                     </styleClass>
+                  </Button>
+                  <Button fx:id="selectButton" layoutX="300.0" layoutY="-5.0" mnemonicParsing="false" onAction="#select" prefHeight="16.0" prefWidth="68.0" style="-fx-background-color: transparent;" styleClass="greenButton" text="SELECT" visible="false">
+                     <font>
+                        <Font size="8.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="createButton" layoutX="300.0" layoutY="-5.0" mnemonicParsing="false" onAction="#create" prefHeight="16.0" prefWidth="68.0" style="-fx-background-color: transparent;" styleClass="greenButton" text="CREATE" visible="false">
+                     <font>
+                        <Font size="8.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="confirmButton" layoutX="300.0" layoutY="-5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#confirm" prefHeight="16.0" prefWidth="68.0" styleClass="greenButton" text="CONFIRM" visible="false" />
+                  <Button fx:id="editButton" layoutX="427.0" layoutY="-40.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#edit" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: transparent;" styleClass="editButton" text="e">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="showDeletePaneButton" layoutX="404.0" layoutY="-8.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#showDeletePane" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: transparent;" styleClass="trashButton" text="d">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Button>
+                  <Pane fx:id="captainContainer" layoutX="548.0" layoutY="-113.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="133.0" prefWidth="93.0" />
+                  <Button fx:id="cancelChangesButton" layoutX="255.0" layoutY="-30.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancelChanges" prefHeight="16.0" prefWidth="68.0" text="CANCEL" visible="false">
+                     <styleClass>
+                        <String fx:value="returnButton" />
+                        <String fx:value="buttonsFont" />
+                     </styleClass>
+                  </Button>
+                  <Button fx:id="selectButton1" layoutX="310.0" layoutY="5.0" mnemonicParsing="false" onAction="#select" prefHeight="16.0" prefWidth="68.0" styleClass="greenButton" text="SELECT" visible="false">
+                     <font>
+                        <Font size="8.0" />
+                     </font>
+                  </Button>
+                  <VBox.margin>
+                     <Insets />
+                  </VBox.margin>
+               </Pane>
+            </VBox>
+         </AnchorPane>
+      </HBox>
+      <AnchorPane fx:id="traitsBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="860.0" prefWidth="419.0" stylesheets="@../style/empireConfiguration.css" visible="false" HBox.hgrow="NEVER">
+         <HBox layoutX="-167.0" layoutY="111.0" prefHeight="498.0" prefWidth="376.0" styleClass="traitsOverview" AnchorPane.bottomAnchor="251.0" AnchorPane.leftAnchor="-167.0" AnchorPane.rightAnchor="210.0" AnchorPane.topAnchor="111.0">
+            <children>
+               <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="550.0">
+                  <HBox prefHeight="207.0" prefWidth="376.0">
+                     <children>
+                        <VBox prefHeight="214.0" prefWidth="85.0" />
+                        <VBox prefHeight="204.0" prefWidth="222.0">
+                           <children>
+                              <VBox prefHeight="86.0" prefWidth="200.0" />
+                              <ListView fx:id="selectedTraitsListView" prefHeight="106.0" prefWidth="256.0" styleClass="jobsOverviewList" stylesheets="@../style/jobsOverview.css" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <VBox prefHeight="17.0" prefWidth="189.0" />
+                        <Text fx:id="traitsLimitText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="countTraitFont" text="0/5" />
+                        <ImageView fitHeight="27.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../assets/empireConfiguration/trait_point.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <VBox prefHeight="214.0" prefWidth="85.0" />
+                        <VBox prefHeight="214.0" prefWidth="224.0">
+                           <children>
+                              <VBox prefHeight="54.0" prefWidth="211.0" />
+                              <ListView fx:id="allTraitsListView" prefHeight="83.0" prefWidth="211.0" styleClass="jobsOverviewList" stylesheets="@../style/jobsOverview.css" />
+                              <VBox prefHeight="30.0" prefWidth="238.0" />
+                              <HBox prefHeight="33.0" prefWidth="211.0">
+                                 <VBox prefHeight="34.0" prefWidth="57.0" />
+                                 <Button fx:id="traitsReturnButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#traitsReturn" prefWidth="50.0" text="CANCEL">
+                                    <HBox.margin>
+                                       <Insets right="5.0" />
+                                    </HBox.margin>
+                                    <font>
+                                       <Font size="8.0" />
+                                    </font>
+                                    <styleClass>
+                                       <String fx:value="buttonsFont" />
+                                       <String fx:value="returnButton" />
+                                    </styleClass>
+                                 </Button>
+                                 <VBox prefHeight="33.0" prefWidth="12.0" />
+                                 <Button fx:id="traitsConfirmButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#traitsConfirm" prefWidth="50.0" text="CONFIRM">
+                                    <HBox.margin>
+                                       <Insets left="5.0" />
+                                    </HBox.margin>
+                                    <font>
+                                       <Font size="8.0" />
+                                    </font>
+                                    <styleClass>
+                                       <String fx:value="greenButton" />
+                                       <String fx:value="buttonsFont" />
+                                    </styleClass>
+                                 </Button>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
                </VBox>
-            </Pane>
-            <ListView fx:id="gangsListView" prefHeight="200.0" prefWidth="304.0">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </ListView>
-            <Pane fx:id="buttonsPane" prefHeight="91.0" prefWidth="550.0">
-               <Button fx:id="backButton" layoutX="89.0" layoutY="25.0" mnemonicParsing="false" onAction="#back" prefWidth="100.0" text="be spectator" />
-               <Button fx:id="showCreationButton" layoutX="194.0" layoutY="25.0" mnemonicParsing="false" onAction="#showCreationPane" prefWidth="100.0" text="%new.island" />
-               <Button fx:id="selectButton" layoutX="300.0" layoutY="25.0" mnemonicParsing="false" onAction="#select" prefWidth="100.0" text="select" visible="false" />
-               <Button fx:id="createButton" layoutX="300.0" layoutY="25.0" mnemonicParsing="false" onAction="#create" prefWidth="100.0" text="create" visible="false" />
-               <Button fx:id="confirmButton" layoutX="300.0" layoutY="25.0" mnemonicParsing="false" onAction="#confirm" prefWidth="100.0" text="confirm" visible="false" />
-               <Button fx:id="editButton" layoutX="463.0" layoutY="18.0" maxHeight="62.0" mnemonicParsing="false" onAction="#edit" prefHeight="25.0" prefWidth="25.0" styleClass="normalButton" text="e">
-                  <font>
-                     <Font name="System Bold" size="18.0" />
-                  </font>
-               </Button>
-               <Button fx:id="showDeletePaneButton" layoutX="407.0" layoutY="18.0" mnemonicParsing="false" onAction="#showDeletePane" prefHeight="25.0" prefWidth="25.0" styleClass="normalButton" text="d">
-                  <font>
-                     <Font name="System Bold" size="18.0" />
-                  </font>
-               </Button>
-               <Pane fx:id="captainContainer" layoutX="548.0" layoutY="-113.0" prefHeight="133.0" prefWidth="93.0" />
-               <Button fx:id="cancelChangesButton" layoutX="194.0" layoutY="25.0" mnemonicParsing="false" onAction="#cancelChanges" prefWidth="100.0" text="cancel" visible="false" />
-            </Pane>
-         </VBox>
-      </AnchorPane>
-      <AnchorPane fx:id="traitsBox" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="394.0" prefWidth="312.0" visible="false">
-         <HBox.margin>
-            <Insets bottom="200.0" />
-         </HBox.margin>
-         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="550.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <ListView fx:id="selectedTraitsListView" prefHeight="225.0" prefWidth="550.0" />
-            <Text fx:id="traitsLimitText" strokeType="OUTSIDE" strokeWidth="0.0" text="0/5" />
-            <ListView fx:id="allTraitsListView" prefHeight="200.0" prefWidth="200.0" />
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-               <Button fx:id="traitsReturnButton" mnemonicParsing="false" onAction="#traitsReturn" text="Cancel">
-                  <HBox.margin>
-                     <Insets right="5.0" />
-                  </HBox.margin>
-               </Button>
-               <Button fx:id="traitsConfirmButton" mnemonicParsing="false" onAction="#traitsConfirm" text="Confirm">
-                  <HBox.margin>
-                     <Insets left="5.0" />
-                  </HBox.margin>
-               </Button>
-            </HBox>
-         </VBox>
+            </children>
+         </HBox>
+         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="titleFontComponent" text="MY TRAITS" textAlignment="CENTER" wrappingWidth="286.0" AnchorPane.bottomAnchor="677.0" AnchorPane.rightAnchor="243.0" />
+         <Text fill="WHITE" layoutX="10.0" layoutY="10.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="titleFontComponent" text="ALL TRAITS" textAlignment="CENTER" wrappingWidth="286.0" AnchorPane.bottomAnchor="475.0" AnchorPane.rightAnchor="243.0" />
       </AnchorPane>
    </HBox>
-   <Pane fx:id="deletePane" layoutX="425.0" layoutY="210.0" prefHeight="250.0" prefWidth="450.0" visible="false" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="425.0" AnchorPane.rightAnchor="405.0" AnchorPane.topAnchor="210.0" />
+   <Pane fx:id="deletePane" layoutX="425.0" layoutY="210.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="450.0" style="-fx-border-color: BLACK; -fx-border-width: 3;" styleClass="backgroundLightYellow" visible="false" />
 </AnchorPane>

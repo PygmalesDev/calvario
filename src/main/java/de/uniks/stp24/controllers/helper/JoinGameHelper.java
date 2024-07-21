@@ -19,17 +19,17 @@ public class JoinGameHelper extends BasicController {
     @Inject
     App app;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    EmpireService empireService;
+    public EmpireService empireService;
     @Inject
     LobbyService lobbyService;
     @Inject
     BrowseGameService browseGameService;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
 
     @Inject
     JobsService jobsService;

@@ -80,7 +80,7 @@ public class EventComponent extends AnchorPane {
     @Inject
     EventListener eventListener;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
     public EmpireApiService empireApiService;
     @Inject

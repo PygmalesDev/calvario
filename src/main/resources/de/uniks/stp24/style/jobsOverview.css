@@ -24,7 +24,7 @@
     -fx-background-position: center;
     -fx-background-repeat: repeat-y;
     -fx-background-color: transparent;
-    -fx-background-size: 50% 100%;
+    -fx-background-size: 15% 100%;
 }
 
 .jobsOverviewList .scroll-bar:vertical .thumb {

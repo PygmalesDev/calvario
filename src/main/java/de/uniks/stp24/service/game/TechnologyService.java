@@ -21,14 +21,14 @@ public class TechnologyService {
     @Inject
     public PresetsApiService presetsApiService;
     @Inject
-    EmpireApiService empireApiService;
+    public EmpireApiService empireApiService;
     @Inject
     GameLogicApiService gameLogicApiService;
     @Inject
     public Subscriber subscriber;
 
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
 
     String category;
 

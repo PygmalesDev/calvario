@@ -260,7 +260,6 @@ public class PauseMenuTest extends ControllerTest {
         doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());
         doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", 2, 0,true,1,1,null ))).when(gamesApiService).getGame(any());
 
-        doReturn(Observable.just(variablesMarket)).when(this.marketService).getVariables();
         doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
 
 

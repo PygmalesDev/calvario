@@ -33,6 +33,8 @@ public class ExplanationService {
     @Inject
     IslandAttributeStorage islandAttributes;
     @Inject
+    EventService eventService;
+    @Inject
     @org.fulib.fx.annotation.controller.Resource
     ResourceBundle langBundle;
     @Inject
@@ -118,7 +120,14 @@ public class ExplanationService {
         for(Map.Entry<String, Double> entry : activeEffects.entrySet()){
             double mult = entry.getValue();
             BigDecimal roundedMult = new BigDecimal(mult).setScale(2, RoundingMode.HALF_UP);
-            effects.add(roundedMult + "% " + variablesResourceBundle.getString(entry.getKey()));
+            String effect = entry.getKey();
+            String effectText;
+            if (eventService.eventNames.contains(effect)) {
+                effectText = gameResourceBundle.getString("event." + effect + ".name");
+            } else {
+                effectText = variablesResourceBundle.getString(effect);
+            }
+            effects.add(roundedMult + "% " + effectText);
         }
 
         variableExplanationComponent.fillListWithEffects(effects);

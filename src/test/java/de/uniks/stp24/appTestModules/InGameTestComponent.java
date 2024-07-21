@@ -289,14 +289,12 @@ public class InGameTestComponent extends InGameTestInitializer {
         this.islandAttributeStorage.districtAttributes = this.districtAttributes;
         this.islandsService.isles = islands;
 
-
-        doReturn(Observable.empty()).when(marketService).getVariables();
-        doReturn(Observable.empty()).when(marketService).getSeasonalTrades(any(), any());
-        doReturn(FXCollections.observableArrayList()).when(announcementsService).getAnnouncements();
         doReturn(FXCollections.observableArrayList()).when(jobsService).getObservableListForSystem(any());
         doReturn(Observable.empty()).when(jobsService).beginJob(any());
         doReturn(testIsland).when(tokenStorage).getIsland();
         doReturn(Observable.empty()).when(gameSystemsApiService).updateIsland(any(), any(), any());
+        doReturn(FXCollections.observableArrayList()).when(announcementsService).getAnnouncements();
+        doReturn(Observable.empty()).when(marketService).getSeasonalTrades(any(), any());
 
         this.inGameController.buildingPropertiesComponent.certainBuilding = buildingPreset1;
 

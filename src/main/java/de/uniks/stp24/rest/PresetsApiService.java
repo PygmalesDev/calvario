@@ -26,7 +26,6 @@ public interface PresetsApiService {
     @GET("presets/traits/{id}")
     Observable<Trait> getTrait(@Path("id") String id);
 
-
     @GET("presets/technologies")
     Observable<ArrayList<TechnologyExtended>> getTechnologies();
 

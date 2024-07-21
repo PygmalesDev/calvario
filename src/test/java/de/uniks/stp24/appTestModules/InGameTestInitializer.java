@@ -34,8 +34,8 @@ import javax.inject.Provider;
 import static org.mockito.Mockito.spy;
 
 public class InGameTestInitializer extends ControllerTest {
-    @Mock
-    protected MarketService marketService;
+    @Spy
+    MarketService marketService;
     @Spy
     GamesApiService gamesApiService;
     @Spy
@@ -183,6 +183,7 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent.imageCache = this.imageCache;
 
         this.inGameController.marketOverviewComponent = this.marketComponent;
+        this.inGameController.marketOverviewComponent.variableService = this.variableService;
         this.marketComponent.marketSeasonComponentProvider = this.marketSeasonComponentProvider;
         this.marketComponent.explanationService = this.explanationService;
         this.marketComponent.presetsApiService = this.presetsApiService;

@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.GamesApiService;
@@ -83,6 +84,8 @@ public class ClockComponent extends AnchorPane {
     public EventListener eventListener;
     @Inject
     public InGameService inGameService;
+
+    InGameController inGameController;
 
     private int lastUpdateSeason = -1;
     private String lastUpdateSpeed = "";
@@ -202,7 +205,8 @@ public class ClockComponent extends AnchorPane {
                     }
                     timerService.setSpeedLocal(game.speed());
                     timerService.setSeason(game.period());
-                },
+
+                    },
                 error -> System.out.println("Error on getting game: " + error)
         );
 
@@ -249,6 +253,7 @@ public class ClockComponent extends AnchorPane {
                             timerService.reset();
                         }
                         lastUpdateSeason = game.period();
+                        inGameController.updateVariableDependencies();
                     }
                 },
                 error -> System.out.println("Error on Season: " + error.getMessage())
@@ -394,5 +399,9 @@ public class ClockComponent extends AnchorPane {
 
     public void setToggle(boolean visibility) {
         this.flagToggle.setSelected(visibility);
+    }
+
+    public void setInGameController(InGameController inGameController) {
+        this.inGameController = inGameController;
     }
 }

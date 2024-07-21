@@ -32,13 +32,12 @@ public class TechnologyOverviewComponent extends AnchorPane {
     @FXML
     Button closeTechnologyOverviewButton;
     @FXML
-    Button crewRelationsButton;
+    public Button crewRelationsButton;
     @FXML
-    Button shipbuildingButton;
+    public Button shipbuildingButton;
     @FXML
-    Button marineSienceButton;
+    public Button marineSienceButton;
 
-    private Pane parent;
     @Inject
     Subscriber subscriber;
     @Inject
@@ -180,7 +179,6 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
 
     public void setContainer(@NotNull Pane parent) {
-        this.parent = parent;
         parent.getChildren().add(technologyCategoryComponent);
         technologyCategoryComponent.setContainer(parent);
         technologyCategoryComponent.setVisible(false);
@@ -192,8 +190,8 @@ public class TechnologyOverviewComponent extends AnchorPane {
      */
     public void show(@NotNull TechnologyCategoryComponent technologieCategory) {
         setCategoryInfos(technologieCategory);
-        parent.getChildren().getFirst().setVisible(true);
-        parent.getChildren().getLast().setVisible(false);
+        technologieCategory.setVisible(true);
+        this.setVisible(false);
 
     }
 

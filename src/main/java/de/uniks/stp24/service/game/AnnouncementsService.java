@@ -79,7 +79,7 @@ public class AnnouncementsService {
                 case "technology" -> {
                     message = gameResourceBundle.getString("captain.technology.ready")
                             .replace("{technologyId}", technologiesResourceBundle.getString(job.technology()));
-                    forwardMethods.add(jobsService.getJobInspector("island_jobs_overview"));
+                    forwardMethods.add(jobsService.getJobInspector("technology_overview"));
                     forwardIcon = "-fx-background-image: url('[PATH]')"
                             .replace("[PATH]", "/" + technologyIconMap.get(job.technology()));
                 }
@@ -90,11 +90,12 @@ public class AnnouncementsService {
 
     public void addAnnouncement(Resource resource) {
         String message = gameResourceBundle.getString("captain.debt")
-                .replace("{resourceCount}", String.valueOf(resource.count()))
+                .replace("{resourceCount}", String.valueOf(resource.count() + resource.changePerSeason()))
                 .replace("{resourceId}", gameResourceBundle.getString(resourceTranslation.get(resource.resourceID())));
         ArrayList<Consumer<Jobs.Job>> forwardMethods = new ArrayList<>();
         forwardMethods.add(jobsService.getJobInspector("storage_overview"));
-        String forwardIcon = resourceImagePath.get(resource.resourceID());
+        String forwardIcon = "-fx-background-image: url('[PATH]')"
+                .replace("[PATH]", "/" + resourceImagePath.get(resource.resourceID()));
         announcements.add(new Announcement(message, forwardIcon, forwardMethods, null));
     }
 

@@ -377,13 +377,18 @@ public class InGameController extends BasicController {
     }
 
     @OnKey(code = KeyCode.E, alt = true)
-    public void showEmpire() {
+    public void showEmpireOverview() {
         this.toggleContextMenuVisibility(this.empireOverviewComponent);
     }
 
     @OnKey(code = KeyCode.M, alt = true)
     public void showMarket() {
         this.toggleContextMenuVisibility(this.marketOverviewComponent);
+    }
+
+    @OnKey(code = KeyCode.T, alt = true)
+    public void showTechnologiesOverview() {
+        this.toggleContextMenuVisibility(this.technologiesComponent);
     }
 
     @OnKey(code = KeyCode.H, alt = true)
@@ -607,9 +612,9 @@ public class InGameController extends BasicController {
 
         this.jobsService.setJobInspector("storage_overview", (Jobs.Job job) -> showStorageOverview());
 
-//        this.jobsService.setJobInspector("technology_overview", (Jobs.Job job) ->
-//                showStorageOverview()
-//        );
+        this.jobsService.setJobInspector("technology_overview", (Jobs.Job job) ->
+                showTechnologiesOverview()
+        );
 
     }
 

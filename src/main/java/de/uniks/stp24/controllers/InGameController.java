@@ -19,6 +19,7 @@ import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -278,8 +279,6 @@ public class InGameController extends BasicController {
             if (pause) {
                 shadow.setVisible(true);
                 shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
-                eventContainer.toFront();
-                eventComponent.toFront();
                 pauseGame();
             } else {
                 if (!eventContainer.isVisible()) {
@@ -335,7 +334,6 @@ public class InGameController extends BasicController {
                 marketOverviewComponent
         );
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
-
         this.createContextMenuButtons();
 
   		this.jobsService.loadEmpireJobs();
@@ -356,8 +354,6 @@ public class InGameController extends BasicController {
         if (pause) {
             shadow.setVisible(true);
             shadow.setStyle("-fx-opacity: 0.5; -fx-background-color: black");
-            eventContainer.toFront();
-            eventComponent.toFront();
             pauseMenuContainer.setMouseTransparent(false);
             pauseGame();
         } else {
@@ -395,6 +391,7 @@ public class InGameController extends BasicController {
     public void showHelpOverview() {
         if (this.helpComponent.isVisible()) {
             this.helpComponent.close();
+            shadow.setVisible(false);
             this.removePause();
         } else showHelp();
     }
@@ -410,8 +407,6 @@ public class InGameController extends BasicController {
 
     public void pauseGame() {
         closeComponents();
-        pauseMenuContainer.toFront();
-        pauseMenuComponent.toFront();
         pauseMenuComponent.setVisible(true);
         pauseMenuContainer.setVisible(pause);
         pauseMenuContainer.setMouseTransparent(false);
@@ -422,6 +417,7 @@ public class InGameController extends BasicController {
         inGameService.setPaused(true);
         if (pause) {
             pauseMenuContainer.setMouseTransparent(false);
+            shadow.setVisible(true);
             pauseGame();
         } else {
             pauseMenuContainer.setMouseTransparent(true);
@@ -632,6 +628,12 @@ public class InGameController extends BasicController {
                 overviewSitesComponent.inputIslandName.setText(this.islandAttributes.getIsland().name());
     }
 
+    @OnKey(code = KeyCode.T, alt = true)
+    public void showTechnologies() {
+        this.toggleContextMenuVisibility(this.technologiesComponent);
+        this.technologiesComponent.setVisible(!this.technologiesComponent.isVisible());
+    }
+
     @OnKey(code = KeyCode.SPACE)
     public void resetZoom() {
         scale = 0.65;
@@ -716,9 +718,9 @@ public class InGameController extends BasicController {
     public void showHelp() {
         popupHelpWindow.showPopup(helpWindowContainer,helpComponent);
         helpComponent.setVisible(true);
+        shadow.setVisible(false);
         helpComponent.setMouseTransparent(false);
         helpWindowContainer.setMouseTransparent(false);
-        helpWindowContainer.toFront();
         pauseMenuContainer.setVisible(false);
         pauseMenuContainer.setMouseTransparent(true);
         helpComponent.displayTechnologies();

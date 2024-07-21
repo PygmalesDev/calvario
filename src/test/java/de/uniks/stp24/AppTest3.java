@@ -131,7 +131,7 @@ public class AppTest3 extends AppTest3Module {
         clickOn("#jobElementDeleteButton_jobSiteID");
         JOB_SUBJECT.onNext(new Event<>(JOB_EVENT_PATHS[3] + "deleted", JOBS[3]));
         WaitForAsyncUtils.waitForFxEvents();
-        clickOn("#closeButton");
+        clickOn("#closeOverviewButton");
     }
 
     public void beginIslandClaiming() {

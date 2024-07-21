@@ -348,7 +348,6 @@ public class GangCreationController extends BasicController {
         gangDescriptionText.setText(gang.description());
         colorIndex = gang.colorIndex() % colorsList.size();
         this.splashAdjust.setHue(colorsHSVList.get(colorIndex));
-        //colorField.setStyle("-fx-background-color: " + colorsList.get(colorIndex));
         confirmedTraits.clear();
         if (Objects.nonNull(gang.traits())) confirmedTraits.setAll(gang.traits());
     }

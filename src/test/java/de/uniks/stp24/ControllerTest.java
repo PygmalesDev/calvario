@@ -34,7 +34,8 @@ public class ControllerTest extends ApplicationTest {
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ENGLISH);
     @Spy
     public ResourceBundle variablesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/variables", Locale.ENGLISH);
-
+    @Spy
+    public ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ENGLISH);
 
     protected Stage stage;
     protected TestComponent testComponent;
@@ -53,6 +54,7 @@ public class ControllerTest extends ApplicationTest {
         }
 
         testComponent = (TestComponent) DaggerTestComponent.builder().mainApp(app).build();
+        testComponent.prefService().setLocale(Locale.ENGLISH);
         app.setComponent(testComponent);
 
         app.start(stage);

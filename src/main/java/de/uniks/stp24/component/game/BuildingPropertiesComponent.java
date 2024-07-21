@@ -7,7 +7,6 @@ import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.BuildingAttributes;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
-import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -139,9 +138,10 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
         displayInfoBuilding();
 
-        this.setJobsPaneProgress(this.buildingJobs.stream().filter(started -> started._id().equals(jobID)
-                && started.system().equals(this.tokenStorage.getIsland().id())).findFirst().orElse(null));
 
+        if (Objects.nonNull(this.buildingJobs))
+            this.setJobsPaneProgress(this.buildingJobs.stream().filter(started -> started._id().equals(jobID)
+                        && started.system().equals(this.tokenStorage.getIsland().id())).findFirst().orElse(null));
 
         switch (isBuilt) {
             case BUILT -> {
@@ -159,7 +159,6 @@ public class BuildingPropertiesComponent extends AnchorPane {
                 setBuyButtonDisable();
             }
         }
-
     }
 
 
@@ -241,10 +240,13 @@ public class BuildingPropertiesComponent extends AnchorPane {
                     this.setJobsPaneProgress(job);
                     this.updateIslandBuildings();
                     this.setBuildingJobFinishers(job);
+                },
+                        error -> System.out.println("Error in buyBuilding: " + error));
                     buyButton.setVisible(false);
-                });
+
             } else buyButton.setDisable(true);
-        });
+        },
+                error -> System.out.println("Error in buyBuilding: " + error));
     }
 
     private void updateIslandBuildings() {

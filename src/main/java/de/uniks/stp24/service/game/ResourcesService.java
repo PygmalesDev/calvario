@@ -102,19 +102,21 @@ public class ResourcesService {
     public ObservableList<Resource> generateResourceList(Map<String, Integer> resourceMap, ObservableList<Resource> oldResourceList, AggregateItemDto[] aggregateItems) {
         int i = 0;
         ObservableList<Resource> resourceList = FXCollections.observableArrayList();
-        for (Map.Entry<String, Integer> entry : resourceMap.entrySet()) {
-            String resourceID = entry.getKey();
-            int count = entry.getValue();
-            int changeProSeason = 0;
-            if (!oldResourceList.isEmpty() && oldResourceList.size() >= 2) {
-                changeProSeason = oldResourceList.get(i).changePerSeason();
+        if (Objects.nonNull(resourceMap)) {
+            for (Map.Entry<String, Integer> entry : resourceMap.entrySet()) {
+                String resourceID = entry.getKey();
+                int count = entry.getValue();
+                int changeProSeason = 0;
+                if (!oldResourceList.isEmpty() && oldResourceList.size() >= 2) {
+                    changeProSeason = oldResourceList.get(i).changePerSeason();
+                }
+                if (Objects.nonNull(aggregateItems)) {
+                    changeProSeason = aggregateItems[i].subtotal();
+                }
+                Resource resource = new Resource(resourceID, count, changeProSeason);
+                resourceList.add(resource);
+                i++;
             }
-            if (Objects.nonNull(aggregateItems)) {
-                changeProSeason = aggregateItems[i].subtotal();
-            }
-            Resource resource = new Resource(resourceID, count, changeProSeason);
-            resourceList.add(resource);
-            i++;
         }
         return resourceList;
     }
@@ -129,12 +131,14 @@ public class ResourcesService {
                     error -> System.out.println("error in getEmpire in inGame"));
         }
 
-        for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
-            String res = entry.getKey();
-            int neededAmount = entry.getValue();
-            int availableAmount = currentResources.get(res);
-            if (availableAmount < neededAmount) {
-                return false;
+        if (Objects.nonNull(neededResources)) {
+            for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
+                String res = entry.getKey();
+                int neededAmount = entry.getValue();
+                int availableAmount = currentResources.get(res);
+                if (availableAmount < neededAmount) {
+                    return false;
+                }
             }
         }
 

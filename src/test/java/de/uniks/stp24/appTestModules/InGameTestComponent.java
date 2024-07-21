@@ -186,7 +186,6 @@ public class InGameTestComponent extends InGameTestInitializer {
         this.islandAttributeStorage.systemUpgradeAttributes = systemUpgrades;
         this.islandAttributeStorage.empireDto = empireDto;
         this.inGameController.overviewSitesComponent.sitesComponent.districtComponentProvider = districtComponentProvider;
-        this.inGameController.buildingPropertiesComponent.certainBuilding = buildingPreset1;
 
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();

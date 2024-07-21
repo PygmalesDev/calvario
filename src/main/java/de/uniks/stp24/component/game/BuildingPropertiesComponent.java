@@ -244,7 +244,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
                 },
                         error -> System.out.println("Error in buyBuilding: " + error));
                     buyButton.setVisible(false);
-                });
+
             } else buyButton.setDisable(true);
         },
                 error -> System.out.println("Error in buyBuilding: " + error));

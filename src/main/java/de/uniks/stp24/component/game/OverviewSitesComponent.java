@@ -59,17 +59,17 @@ public class OverviewSitesComponent extends AnchorPane {
     public Pane islandFlag;
 
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    GameSystemsApiService gameSystemsApiService;
+    public GameSystemsApiService gameSystemsApiService;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
 
     @SubComponent
     @Inject
@@ -113,8 +113,9 @@ public class OverviewSitesComponent extends AnchorPane {
 
         setLevelCheckBox();
 
-        inGameController.overviewUpgradeComponent.upgrade_box.setVisible(false);
-        inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(true);
+        inGameController.buildingsWindowComponent.setVisible(false);
+        inGameController.sitePropertiesComponent.setVisible(false);
+        inGameController.buildingPropertiesComponent.setVisible(false);
 
         if(islandAttributes.getIsland().upgradeLevel() == 4){
             inGameController.overviewUpgradeComponent.confirmUpgrade.setDisable(true);
@@ -229,7 +230,6 @@ public class OverviewSitesComponent extends AnchorPane {
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
                 islandAttributes.getIsland().buildings().size();
         islandAttributes.setUsedSlots(usedSlots);
-        System.out.println("testing 123");
         resCapacity.setText(usedSlots + "/" + islandAttributes.getIsland().resourceCapacity());
     }
 

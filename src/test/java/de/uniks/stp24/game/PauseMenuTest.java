@@ -10,12 +10,9 @@ import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.component.game.technology.ResearchJobComponent;
 import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
-import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateResultDto;
-import de.uniks.stp24.dto.EffectSourceDto;
-import de.uniks.stp24.dto.EffectSourceParentDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.*;
@@ -184,6 +181,8 @@ public class PauseMenuTest extends ControllerTest {
     TechnologyService technologyService;
     @Spy
     MarketService marketService;
+    @Spy
+    AnnouncementsService announcementsService;
 
     @Spy
     ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ROOT);
@@ -194,6 +193,9 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
 
+    @InjectMocks
+    CoolerBubbleComponent coolerBubbleComponent;
+
     ArrayList<BuildingAttributes> buildingPresets = new ArrayList<>();
     ArrayList<BuildingAttributes> districtPresets = new ArrayList<>();
     Map<String, Integer> variablesPresets = new HashMap<>();
@@ -202,6 +204,8 @@ public class PauseMenuTest extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
+        coolerBubbleComponent.subscriber = this.subscriber;
+        this.inGameController.coolerBubbleComponent = coolerBubbleComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;

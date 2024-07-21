@@ -1,5 +1,7 @@
 package de.uniks.stp24.service;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 public class Constants {
@@ -264,5 +266,14 @@ public class Constants {
             "event.foolsGold.description",
             "event.submerge.description"
     };
+
+
+    public static final ArrayList<String> hints = new ArrayList<>(Arrays.asList(
+            "hint.alt.s",
+            "hint.alt.e",
+            "hint.alt.h",
+            "hint.shift.mw",
+            "hint.space"
+    ));
 
 }

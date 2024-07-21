@@ -52,6 +52,7 @@ public class DistrictComponent extends VBox implements ReusableItemComponent<Sit
 
     @Override
     public void setItem(@NotNull SiteProperties properties) {
+        this.setId(properties.siteName());
         this.siteName = properties.siteName();
         String siteCapacity = properties.siteCapacity();
         this.inGameController = properties.inGameController();

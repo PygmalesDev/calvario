@@ -59,6 +59,7 @@ public class TestEditAcc extends ControllerTest {
 
     @Override
     public void start(Stage stage) throws Exception{
+        bubbleComponent.subscriber = this.subscriber;
         this.editAccController.avatarMap = new HashMap<>();
         doReturn(null).when(this.imageCache).get(any());
 
@@ -74,6 +75,7 @@ public class TestEditAcc extends ControllerTest {
 
         this.editAccController.warningScreen = this.warningScreenComponent;
         super.start(stage);
+        bubbleComponent.subscriber = this.subscriber;
         app.show(editAccController);
 
     }

@@ -39,12 +39,12 @@ public class MarketSeasonComponent extends HBox implements ReusableItemComponent
     ResourceBundle langBundle;
     @Inject
     @Named("gameResourceBundle")
-    ResourceBundle gameResourceBundle;
+    public ResourceBundle gameResourceBundle;
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
     private SeasonComponent seasonComponent;
     @Inject
-    MarketService marketService;
+    public MarketService marketService;
 
     @Inject
     public MarketSeasonComponent() {

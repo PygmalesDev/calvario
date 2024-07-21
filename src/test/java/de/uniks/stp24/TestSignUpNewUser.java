@@ -32,6 +32,7 @@ public class TestSignUpNewUser extends ControllerTest {
     @Override
     public void start(Stage stage) throws Exception{
         super.start(stage);
+        bubbleComponent.subscriber = this.subscriber;
         this.app.show(this.signUpController);
     }
 

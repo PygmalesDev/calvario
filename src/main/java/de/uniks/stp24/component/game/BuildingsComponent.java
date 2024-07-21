@@ -32,12 +32,10 @@ public class BuildingsComponent extends AnchorPane {
     @Inject
     public IslandAttributeStorage islandAttributes;
     @Inject
-    TokenStorage tokenStorage;
-    @Inject
-    public IslandAttributeStorage islandAttributeStorage;
+    public TokenStorage tokenStorage;
 
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
     @Inject
     public ImageCache imageCache;
 

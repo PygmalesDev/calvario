@@ -22,7 +22,7 @@ import java.util.Map;
 public class HelpComponent extends AnchorPane {
 
     @FXML
-    Button closeButton;
+    Button closeHelpButton;
     @FXML
     Button backButton;
     @FXML

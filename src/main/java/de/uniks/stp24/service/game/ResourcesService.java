@@ -40,12 +40,13 @@ public class ResourcesService {
     }
 
     public int getResourceCount(String resourceId) {
-        return currentResources.get(resourceId);
+        if (currentResources.containsKey(resourceId))
+            return currentResources.get(resourceId);
+        return 0;
     }
 
     public Observable<SystemDto> destroyBuilding(String gameID, Island island, String buildingToDestroy) {
         ArrayList<String> buildings = island.buildings();
-
 
         // Look in list for building to delete
         Iterator<String> iterator = buildings.iterator();
@@ -131,5 +132,11 @@ public class ResourcesService {
             }
         }
         return true;
+    }
+
+    public Resource aggregateItemDtoToResource(AggregateItemDto aggregateItemDto) {
+        String resourceID = aggregateItemDto.variable().replace("resources.", "").replace(".periodic", "");
+        int resourceCount = getResourceCount(resourceID);
+        return new Resource(resourceID, resourceCount, aggregateItemDto.subtotal());
     }
 }

@@ -36,13 +36,13 @@ public class BasicController {
     @Named("variablesResourceBundle")
     public ResourceBundle variablesResourceBundle;
     @Inject
-    ErrorService errorService;
+    public ErrorService errorService;
     @Inject
     ResponseConstants responseConstants;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
     @Inject
     public TokenStorage tokenStorage;
 

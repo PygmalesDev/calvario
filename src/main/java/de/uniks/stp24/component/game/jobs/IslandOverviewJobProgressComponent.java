@@ -121,13 +121,12 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
     public void showJobDetails() {
         switch (this.job.type()) {
             case "district" -> this.jobsService.getJobInspector("site_overview")
-                    .accept(new String[]{this.job.district(), this.job.system()});
+                    .accept(job);
             case "building" -> this.jobsService.getJobInspector("building_overview")
-                    .accept(new String[]{this.job.building(), this.job._id(), this.job.system()});
+                    .accept(job);
             case "upgrade" -> this.jobsService.getJobInspector("island_upgrade")
-                    .accept(new String[]{this.job.system()});
+                    .accept(job);
         }
-
     }
 
     public void stopJob() {

@@ -43,6 +43,8 @@ public class TraitComponent extends HBox implements ReusableItemComponent<Trait>
 
     @Override
     public void setItem(@NotNull Trait trait) {
+        this.chooseTraitButton.setId(trait.id() + "ButtonChoose");
+        this.unChooseTraitButton.setId(trait.id() + "ButtonUnChoose");
         this.trait = trait;
         this.setId(trait.id());
         traitName.setText(variablesResourceBundle.getString(this.trait.id()));

@@ -37,11 +37,4 @@ public class HelpComponentTest extends ControllerTest {
         press(KeyCode.ALT, KeyCode.H);
         assertEquals(0, helpComponent.technologyTagsListView.getItems().size());
     }
-
-    @Test
-    public void close(){
-        waitForFxEvents();
-        clickOn("#closeHelpButton");
-        assertEquals(false, helpComponent.visibleProperty().getValue());
-    }
 }

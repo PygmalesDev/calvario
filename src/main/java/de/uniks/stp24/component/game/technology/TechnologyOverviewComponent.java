@@ -38,7 +38,6 @@ public class TechnologyOverviewComponent extends AnchorPane {
     @FXML
     public Button marineSienceButton;
 
-    private Pane parent;
     @Inject
     Subscriber subscriber;
     @Inject
@@ -180,7 +179,6 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
 
     public void setContainer(@NotNull Pane parent) {
-        this.parent = parent;
         parent.getChildren().add(technologyCategoryComponent);
         technologyCategoryComponent.setContainer(parent);
         technologyCategoryComponent.setVisible(false);

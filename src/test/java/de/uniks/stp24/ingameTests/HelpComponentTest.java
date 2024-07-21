@@ -25,8 +25,7 @@ public class HelpComponentTest extends ControllerTest {
     @InjectMocks
     HelpComponent helpComponent;
 
-    @Spy
-    ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ROOT);
+
     ObservableList<TechHelp> technologies = FXCollections.observableArrayList();
 
     @Override

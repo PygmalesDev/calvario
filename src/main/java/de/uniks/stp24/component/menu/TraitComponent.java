@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +21,7 @@ public class TraitComponent extends HBox implements ReusableItemComponent<Trait>
     @FXML
     Button unChooseTraitButton;
     @FXML
-    Label traitName;
+    Text traitName;
     @FXML
     Label costText;
 
@@ -48,7 +49,10 @@ public class TraitComponent extends HBox implements ReusableItemComponent<Trait>
         this.trait = trait;
         this.setId(trait.id());
         traitName.setText(variablesResourceBundle.getString(this.trait.id()));
-        costText.setText(" + " + trait.cost());
+
+        if (trait.cost() > 0) costText.setText("+"+ trait.cost());
+        else costText.setText(String.valueOf(trait.cost()));
+
         setButtonsVisibility(showChoose, showRemove);
         this.setStyle("-fx-background-image: url('/de/uniks/stp24/assets/empireConfiguration/trait_unhovered.png');" +
                 "-fx-background-size: 80% 100%;" + "-fx-background-repeat: no-repeat;" + "-fx-background-position: center center;");

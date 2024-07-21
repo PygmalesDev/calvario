@@ -1,9 +1,6 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.menu.BubbleComponent;
-import de.uniks.stp24.component.menu.GangComponent;
-import de.uniks.stp24.component.menu.GangDeletionComponent;
-import de.uniks.stp24.component.menu.TraitComponent;
+import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.dto.EffectDto;
 import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.model.Empire;
@@ -66,7 +63,7 @@ public class GangCreationController extends BasicController {
 
     public Provider<TraitComponent> traitComponentProviderAll = () -> new TraitComponent(this, variablesResourceBundle, true, false);
     public Provider<TraitComponent> traitComponentProviderChoosen= () -> new TraitComponent(this, variablesResourceBundle, false, true);
-    public Provider<TraitComponent> traitComponentProviderConfirmed= () -> new TraitComponent(this, variablesResourceBundle, false, false);
+    public Provider<TraitComponent> traitComponentProviderConfirmed= () -> new TraitTinyComponent(this, variablesResourceBundle, false, false);
     private final ObservableList<Trait> allTraits = FXCollections.observableArrayList();
     private final ObservableList<Trait> choosenTraits = FXCollections.observableArrayList();
     private final ObservableList<Trait> confirmedTraits = FXCollections.observableArrayList();
@@ -731,7 +728,7 @@ public class GangCreationController extends BasicController {
                     }
                     type += effect.bonus() + " ";
                 } else if (effect.multiplier() != 0.00) {
-                    type = "*" + effect.multiplier() + " ";
+                    type = "x" + effect.multiplier() + " ";
                 }
                 effectsText.append(type).append(variablesResourceBundle.getString(variable)).append("\n");
             }

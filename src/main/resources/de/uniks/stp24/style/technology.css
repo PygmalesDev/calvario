@@ -111,6 +111,8 @@
 .description-list-view {
     -fx-background-color: transparent;
     -fx-background-image: none;
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-font-size: 14;
 }
 
 .description-list-view .list-cell {

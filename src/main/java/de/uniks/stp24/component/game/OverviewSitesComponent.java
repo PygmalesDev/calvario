@@ -87,6 +87,9 @@ public class OverviewSitesComponent extends AnchorPane {
     public InGameService inGameService;
     @Inject
     public IslandAttributeStorage islandAttributes;
+
+    @FXML
+    public Button closeButton;
     @Inject
     @Resource
     @Named("gameResourceBundle")

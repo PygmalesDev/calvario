@@ -40,6 +40,7 @@ public class TestButtons extends IslandOverviewTestComponent{
         waitForFxEvents();
         Node closeButton = lookup("#closeButton").query();
         clickOn(closeButton);
+        sleep(5000);
         waitForFxEvents();
         assertFalse(inGameController.overviewContainer.isVisible());
     }

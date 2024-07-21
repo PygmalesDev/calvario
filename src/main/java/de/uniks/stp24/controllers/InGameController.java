@@ -361,24 +361,25 @@ public class InGameController extends BasicController {
             resumeGame();
         }
     }
-
-
+    
     @OnKey(code = KeyCode.J, alt = true)
     public void showJobsOverview() {
         this.toggleContextMenuVisibility(this.jobsOverviewComponent);
-        this.jobsOverviewComponent.setVisible(!this.jobsOverviewComponent.isVisible());
     }
 
     @OnKey(code = KeyCode.S, alt = true)
     public void showStorageOverview() {
         this.toggleContextMenuVisibility(this.storageOverviewComponent);
-        this.storageOverviewComponent.setVisible(!this.storageOverviewComponent.isVisible());
+    }
+
+    @OnKey(code = KeyCode.E, alt = true)
+    public void showEmpire() {
+        this.toggleContextMenuVisibility(this.empireOverviewComponent);
     }
 
     @OnKey(code = KeyCode.M, alt = true)
     public void showMarket() {
         this.toggleContextMenuVisibility(this.marketOverviewComponent);
-        this.marketOverviewComponent.setVisible(!this.marketOverviewComponent.isVisible());
     }
 
     @OnKey(code = KeyCode.H, alt = true)
@@ -390,9 +391,12 @@ public class InGameController extends BasicController {
     }
 
     private void toggleContextMenuVisibility(Node node) {
-        this.contextMenuContainer.getChildren().stream()
-                .filter(child -> !child.equals(node))
-                .forEach(child -> child.setVisible(false));
+        if (!tokenStorage.isSpectator()) {
+            this.contextMenuContainer.getChildren().stream()
+                    .filter(child -> !child.equals(node))
+                    .forEach(child -> child.setVisible(false));
+            node.setVisible(!node.isVisible());
+        }
     }
 
     public void pauseGame() {
@@ -617,20 +621,6 @@ public class InGameController extends BasicController {
             // update island name
             if (!this.islandAttributes.getIsland().name().isEmpty())
                 overviewSitesComponent.inputIslandName.setText(this.islandAttributes.getIsland().name());
-    }
-
-    @OnKey(code = KeyCode.S, alt = true)
-    public void showStorage() {
-        if(empireOverviewComponent.isVisible()) {
-            empireOverviewComponent.closeEmpireOverview();
-        }
-    }
-
-    @OnKey(code = KeyCode.E, alt = true)
-    public void showEmpireOverview() {
-        if(storageOverviewComponent.isVisible()){
-            storageOverviewComponent.closeStorageOverview();
-        }
     }
 
     @OnKey(code = KeyCode.SPACE)

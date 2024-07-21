@@ -4,9 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
+import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
-import de.uniks.stp24.component.game.DeleteStructureComponent;
+import de.uniks.stp24.component.game.technology.ResearchJobComponent;
+import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
+import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.GameStatus;
@@ -24,6 +27,9 @@ import javafx.scene.layout.StackPane;
 import org.fulib.fx.controller.Subscriber;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static org.mockito.Mockito.spy;
 
@@ -74,9 +80,13 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     GameLogicApiService gameLogicApiService;
     @Spy
     VariableDependencyService variableDependencyService;
+    @Spy
+    MarketService marketService;
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
+    @InjectMocks
+    CoolerBubbleComponent coolerBubbleComponent;
     @InjectMocks
     StorageOverviewComponent storageOverviewComponent;
     @InjectMocks
@@ -110,6 +120,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @InjectMocks
     VariableService variableService;
     @InjectMocks
+    AnnouncementsService announcementsService;
+    @InjectMocks
     HelpComponent helpComponent;
     @InjectMocks
     JobsOverviewComponent jobsOverviewComponent;
@@ -122,6 +134,22 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @InjectMocks
     IslandClaimingComponent islandClaimingComponent;
 
+    @InjectMocks
+    TechnologyOverviewComponent technologyOverviewComponent;
+
+    @InjectMocks
+    TechnologyCategoryComponent technologyCategoryComponent;
+
+    @InjectMocks
+    ResearchJobComponent researchJobComponent;
+    @InjectMocks
+    IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
+
+    @Spy
+    ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ROOT);
+
+    @InjectMocks
+    MarketComponent marketComponent;
 
 
     public void initializeComponents() {
@@ -143,10 +171,18 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.inGameController.overviewSitesComponent.buildingsComponent.imageCache = this.imageCache;
+        this.inGameController.marketOverviewComponent = this.marketComponent;
+        this.coolerBubbleComponent.subscriber = this.subscriber;
+        this.inGameController.coolerBubbleComponent = this.coolerBubbleComponent;
+
+        this.overviewUpgradeComponent.jobProgressComponent = islandUpgradesJobProgressComponent;
+        this.overviewUpgradeComponent.jobsService = this.jobsService;
+        this.overviewUpgradeComponent.islandAttributes = this.islandAttributeStorage;
 
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewSitesComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewUpgradeComponent.islandAttributes = islandAttributeStorage;
+        this.inGameController.coolerBubbleComponent.announcementsService = this.announcementsService;
         this.inGameController.selectedIsland = new IslandComponent();
         this.resourcesService.islandAttributes = islandAttributeStorage;
         this.resourcesService.tokenStorage = tokenStorage;
@@ -186,6 +222,9 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.overviewUpgradeComponent.explanationService.variableService.technologyService.presetsApiService = this.presetsApiService;
         this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
         this.inGameController.eventComponent = this.eventComponent;
+        this.inGameController.technologiesComponent = this.technologyOverviewComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
+        this.technologyCategoryComponent.researchJobComponent = researchJobComponent;
 
         this.inGameController.contextMenuButtons = new HBox();
         this.islandsService.tokenStorage = new TokenStorage();
@@ -193,7 +232,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
 
     }
 
-    public void clearStyleSheets(){
+    public void clearStyleSheets() {
         this.storageOverviewComponent.getStylesheets().clear();
         this.pauseMenuComponent.getStylesheets().clear();
         this.clockComponent.getStylesheets().clear();

@@ -22,7 +22,6 @@ import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
-import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -60,17 +59,17 @@ public class OverviewSitesComponent extends AnchorPane {
     public Pane islandFlag;
 
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    GameSystemsApiService gameSystemsApiService;
+    public GameSystemsApiService gameSystemsApiService;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
 
     @SubComponent
     @Inject
@@ -96,6 +95,8 @@ public class OverviewSitesComponent extends AnchorPane {
     private InGameController inGameController;
     private boolean isNameEditable;
 
+    String shownPage = "details";
+
     @Inject
     public OverviewSitesComponent() {
 
@@ -108,11 +109,13 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showUpgrades() {
+        shownPage = "upgrade";
+
         setLevelCheckBox();
-        inGameController.buildingPropertiesComponent.setVisible(false);
+
+        inGameController.buildingsWindowComponent.setVisible(false);
         inGameController.sitePropertiesComponent.setVisible(false);
-        inGameController.overviewUpgradeComponent.upgrade_box.setVisible(false);
-        inGameController.overviewUpgradeComponent.upgrade_box.setMouseTransparent(true);
+        inGameController.buildingPropertiesComponent.setVisible(false);
 
         if(islandAttributes.getIsland().upgradeLevel() == 4){
             inGameController.overviewUpgradeComponent.confirmUpgrade.setDisable(true);
@@ -126,10 +129,6 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameController.overviewUpgradeComponent.setListViews();
         inGameController.overviewUpgradeComponent.setUpgradeInf();
     }
-
-    /*
-    Set upgrade overview of island with inf. of current island level.
-     */
 
     public void setLevelCheckBox(){
         inGameController.overviewUpgradeComponent.checkDeveloped.setVisible(false);
@@ -147,6 +146,8 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showDetails() {
+        shownPage = "details";
+
         detailsButton.setDisable(true);
         sitesButton.setDisable(false);
         buildingsButton.setDisable(false);
@@ -159,6 +160,8 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showBuildings() {
+        shownPage = "buildings";
+
         buildingsComponent.setInGameController(inGameController);
         buildingsButton.setDisable(true);
         sitesButton.setDisable(false);
@@ -169,6 +172,8 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showSites() {
+        shownPage = "sites";
+
         detailsButton.setDisable(false);
         sitesButton.setDisable(true);
         buildingsButton.setDisable(false);
@@ -178,6 +183,8 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void showJobs() {
+        shownPage = "jobs";
+
         jobsButton.setDisable(true);
         detailsButton.setDisable(false);
         sitesButton.setDisable(false);
@@ -203,7 +210,8 @@ public class OverviewSitesComponent extends AnchorPane {
         inGameController.sitePropertiesComponent.setVisible(false);
         inGameController.buildingPropertiesComponent.setVisible(false);
         inGameController.overviewContainer.setVisible(false);
-        inGameController.selectedIsland.rudderImage.setVisible(false);
+        if (Objects.nonNull(inGameController.selectedIsland.rudderImage))
+            inGameController.selectedIsland.rudderImage.setVisible(false);
         inGameController.selectedIsland.islandIsSelected = false;
 
         if (!inGameController.islandsService.keyCodeFlag) {
@@ -222,7 +230,6 @@ public class OverviewSitesComponent extends AnchorPane {
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributes.getIsland()) +
                 islandAttributes.getIsland().buildings().size();
         islandAttributes.setUsedSlots(usedSlots);
-
         resCapacity.setText(usedSlots + "/" + islandAttributes.getIsland().resourceCapacity());
     }
 
@@ -238,7 +245,6 @@ public class OverviewSitesComponent extends AnchorPane {
         this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
 
         upgradeButton.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
-
         updateResCapacity();
 
         island_name.setText(islandAttributes.getIslandTypeTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");
@@ -253,8 +259,8 @@ public class OverviewSitesComponent extends AnchorPane {
             this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
 
             this.subscriber.subscribe(this.gameSystemsApiService
-                    .renameSystem(this.tokenStorage.getGameId(), this.tokenStorage.getIsland().id(),
-                            new SystemRenameDto(this.inputIslandName.getText())),
+                            .renameSystem(this.tokenStorage.getGameId(), this.tokenStorage.getIsland().id(),
+                                    new SystemRenameDto(this.inputIslandName.getText())),
                     result -> {
                         this.islandsService.updateIsland(result);
                         this.jobsService.getJobInspector("name_updates").accept(null);
@@ -273,5 +279,9 @@ public class OverviewSitesComponent extends AnchorPane {
     @OnDestroy
     public void destroy() {
         this.subscriber.dispose();
+    }
+
+    public String getShownPage() {
+        return shownPage;
     }
 }

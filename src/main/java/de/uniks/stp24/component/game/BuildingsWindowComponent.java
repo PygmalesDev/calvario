@@ -94,6 +94,8 @@ public class BuildingsWindowComponent extends AnchorPane {
     //Takes buttons in order and sets image for each button
     @OnRender
     public void setImages() {
+        this.setPickOnBounds(true);
+
         for (int i = 0; i < buttons.length; i++) {
             ImageView imageView = new ImageView(this.imageCache.get("/"+Constants.imagePaths[i]));
             imageView.setFitWidth(40);

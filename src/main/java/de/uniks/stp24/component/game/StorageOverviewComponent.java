@@ -2,6 +2,7 @@ package de.uniks.stp24.component.game;
 
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.Game;
@@ -41,31 +42,33 @@ public class StorageOverviewComponent extends AnchorPane {
     @FXML
     Text empireNameLabel;
 
+
     @Inject
     App app;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    ResourcesService resourcesService;
+    public ResourcesService resourcesService;
     @Inject
-    EmpireService empireService;
+    public EmpireService empireService;
     @Inject
     EventListener eventListener;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
     public ExplanationService explanationService;
     @Inject
     ImageCache imageCache;
     @Inject
     @org.fulib.fx.annotation.controller.Resource
-
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
     private String lastUpdate;
     private String lastSeasonUpdate;
     Provider<ResourceComponent> resourceComponentProvider = () -> new ResourceComponent(true, true, true, true, gameResourceBundle, this.imageCache);
+    ObservableList<Resource> resourceList;
+    private InGameController inGameController;
 
 
     @Inject
@@ -93,7 +96,7 @@ public class StorageOverviewComponent extends AnchorPane {
                     empireDto -> {
                         subscriber.subscribe(empireService.getResourceAggregates(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                                 aggregateResultDto -> resourceListGeneration(empireDto, aggregateResultDto.items()),
-                                error -> System.out.println("ErrorAggregateSubscriber"));
+                                error -> System.out.println("ErrorAggregateSubscriber:\n" + error.getMessage()));
                         String[] empireNameList = empireDto.name().split("\\s+");
                         if (empireNameList.length >= 2) {
                             this.empireNameLabel.setText(empireNameList[0] + " " + empireNameList[1]);
@@ -106,11 +109,14 @@ public class StorageOverviewComponent extends AnchorPane {
         }
     }
 
+
     private void resourceListGeneration(EmpireDto empireDto, AggregateItemDto[] aggregateItems) {
         Map<String, Integer> resourceMap = empireDto.resources();
+        resourcesService.setCurrentResources(resourceMap);
         ObservableList<Resource> resourceList = resourcesService.generateResourceList(resourceMap, resourceListView.getItems(), aggregateItems);
         this.resourceListView.setItems(resourceList);
     }
+
 
     /**
      * Listener for the empire: Changes of the resources will change the list in the storage overview.
@@ -122,6 +128,7 @@ public class StorageOverviewComponent extends AnchorPane {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         resourceListGeneration(event.data(), null);
                         this.lastUpdate = event.data().updatedAt();
+                        resourcesService.runnables.forEach(Runnable::run);
                     }
                 },
                 error -> System.out.println("errorEmpireListener"));
@@ -150,9 +157,16 @@ public class StorageOverviewComponent extends AnchorPane {
         this.setVisible(false);
     }
 
+    public ObservableList<Resource> getResources() {
+        return this.resourceList;
+    }
+
     @OnDestroy
     void destroy() {
         this.subscriber.dispose();
     }
 
+    public void setInGameController(InGameController ingameController) {
+        this.inGameController = ingameController;
+    }
 }

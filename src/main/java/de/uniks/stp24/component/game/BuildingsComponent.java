@@ -33,11 +33,9 @@ public class BuildingsComponent extends AnchorPane {
     public IslandAttributeStorage islandAttributes;
     @Inject
     public TokenStorage tokenStorage;
-    @Inject
-    public IslandAttributeStorage islandAttributeStorage;
 
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
     @Inject
     public ImageCache imageCache;
 
@@ -88,7 +86,7 @@ public class BuildingsComponent extends AnchorPane {
 
         for (int i = currentPage * pageCapacity; i < this.buildingList.size(); i++) {
             String[] buildingType = this.buildingList.get(i);
-            Building building = new Building(this, buildingType[0], tokenStorage, islandAttributes,
+            Building building = new Building(this, buildingType[0], islandAttributes,
                     inGameController, buildingType[1], buildingType[2]);
             buildings.add(building, col, row);
 
@@ -103,8 +101,7 @@ public class BuildingsComponent extends AnchorPane {
         }
 
         if (!isGridPaneFull(currentPage)) {
-            buildings.add(new Building(this, "buildNewBuilding",
-                    tokenStorage, islandAttributes, inGameController, null, ""), col, row);
+            buildings.add(new Building(this, "buildNewBuilding", islandAttributes, inGameController, null, ""), col, row);
         } else {
             next.setMouseTransparent(false);
             next.setVisible(true);
@@ -144,7 +141,7 @@ public class BuildingsComponent extends AnchorPane {
         } else if(!isGridPaneFull(currentPage + 1) && size % 8 == 0){
             currentPage = currentPage + 1;
             buildings.getChildren().clear();
-            buildings.add(new Building(this, "buildNewBuilding", tokenStorage, islandAttributes, inGameController,
+            buildings.add(new Building(this, "buildNewBuilding", islandAttributes, inGameController,
                     null, ""), 0, 0);
             prev.setVisible(true);
             next.setVisible(false);

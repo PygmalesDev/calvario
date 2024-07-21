@@ -15,7 +15,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
-import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 
@@ -44,10 +43,10 @@ public class SitesComponent extends Pane {
     ResourceBundle gameResourceBundle;
 
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
 
     @Inject
-    IslandAttributeStorage attributeStorage;
+    public IslandAttributeStorage attributeStorage;
 
     InGameController inGameController;
 
@@ -80,7 +79,9 @@ public class SitesComponent extends Pane {
 
     @OnRender
     public void setSiteJobsUpdates() {
-        this.jobsService.onJobCommonUpdates(() -> this.setSitesBox(this.attributeStorage.island));
+        this.jobsService.onJobCommonUpdates(() -> {
+            if (Objects.nonNull(this.attributeStorage.island)) this.setSitesBox(this.attributeStorage.island);
+        });
     }
 
 

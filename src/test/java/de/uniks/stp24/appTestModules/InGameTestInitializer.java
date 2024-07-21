@@ -1,6 +1,7 @@
-package de.uniks.stp24;
+package de.uniks.stp24.appTestModules;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;

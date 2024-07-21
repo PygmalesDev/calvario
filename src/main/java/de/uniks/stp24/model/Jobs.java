@@ -23,7 +23,7 @@ public class Jobs {
              String updatedAt,
              String _id,
              int progress,
-             int total,
+             double total,
              String game,
              String empire,
              String system,

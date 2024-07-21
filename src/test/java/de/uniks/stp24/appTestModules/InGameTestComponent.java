@@ -1,4 +1,4 @@
-package de.uniks.stp24;
+package de.uniks.stp24.appTestModules;
 
 import de.uniks.stp24.component.game.DistrictComponent;
 import de.uniks.stp24.dto.*;
@@ -7,6 +7,9 @@ import de.uniks.stp24.ws.Event;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 
 import javax.inject.Provider;
 import java.util.*;
@@ -14,9 +17,10 @@ import java.util.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
+import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 public class InGameTestComponent extends InGameTestInitializer {
-
+    Button homeIsland;
 
     Provider<DistrictComponent> districtComponentProvider = () -> {
         DistrictComponent districtComponent = new DistrictComponent();
@@ -291,6 +295,25 @@ public class InGameTestComponent extends InGameTestInitializer {
 
         this.app.show(this.inGameController);
         clearStyleSheets();
+    }
+
+    protected void createMap() {
+        homeIsland = new Button();
+        homeIsland.setLayoutX(500);
+        homeIsland.setLayoutY(500);
+        homeIsland.setPrefWidth(50);
+        homeIsland.setPrefHeight(50);
+        homeIsland.setId("homeIsland");
+        homeIsland.setOnAction(this::openIslandOverview);
+        Platform.runLater(() -> {
+            inGameController.mapGrid.getChildren().add(homeIsland);
+            waitForFxEvents();
+        });
+        waitForFxEvents();
+    }
+
+    protected void openIslandOverview(ActionEvent actionEvent) {
+        this.inGameController.showOverview();
     }
 
 }

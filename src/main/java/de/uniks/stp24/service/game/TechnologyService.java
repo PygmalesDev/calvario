@@ -21,12 +21,12 @@ public class TechnologyService {
     @Inject
     public PresetsApiService presetsApiService;
     @Inject
-    EmpireApiService empireApiService;
+    public EmpireApiService empireApiService;
     @Inject
     public Subscriber subscriber;
 
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
 
     List<TechnologyExtended> technologies;
 
@@ -159,4 +159,5 @@ public class TechnologyService {
     public Observable<ArrayList<TechnologyExtended>> getTechnologies() {
         return presetsApiService.getTechnologies();
     }
+
 }

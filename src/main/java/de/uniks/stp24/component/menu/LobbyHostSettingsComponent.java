@@ -1,15 +1,14 @@
 package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.ErrorService;
+import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.LobbyService;
-import de.uniks.stp24.service.ImageCache;
-import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -21,9 +20,9 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -39,7 +38,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @FXML
     public Button closeLobbyButton;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
     LobbyService lobbyService;
     @Inject
@@ -51,7 +50,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     @Inject
     GamesApiService gamesApiService;
     @Inject
-    EditGameService editGameService;
+    public EditGameService editGameService;
     @Inject
     EventListener eventListener;
     @Inject

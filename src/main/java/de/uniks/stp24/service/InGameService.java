@@ -22,7 +22,7 @@ public class InGameService {
     @Inject
     TimerService timerService;
     @Inject
-    GameStatus gameStatus;
+    public GameStatus gameStatus;
     @Inject
     EventService eventService;
     @Inject

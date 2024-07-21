@@ -102,7 +102,7 @@ public class EmpireOverviewComponent extends StackPane {
         empireID = tokenStorage.getEmpireId();
         this.subscriber.subscribe(this.empireService.getEmpire(gameID, empireID),
                 this::empireTraits,
-                error -> System.out.println(error.getMessage()));
+                error -> System.out.println("Error in EmpireOverviewComponent on initEmpireList:\n" + error.getMessage()));
     }
 
     /**

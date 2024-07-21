@@ -12,6 +12,7 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
+import de.uniks.stp24.controllers.InGameController;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -36,10 +37,10 @@ public class ExplanationService {
     ResourceBundle langBundle;
     @Inject
     @Named("gameResourceBundle")
-    ResourceBundle gameResourceBundle;
+    public ResourceBundle gameResourceBundle;
     @Inject
     @Named("variablesResourceBundle")
-    ResourceBundle variablesResourceBundle;
+    public ResourceBundle variablesResourceBundle;
 
     private InGameController inGameController;
 
@@ -110,7 +111,6 @@ public class ExplanationService {
         for (Sources source : explanation.sources()) {
             double x = 0;
             for (Effect effect : source.effects()) {
-                System.out.println(source.id());
                 if (effect.variable().equals(variable)){
                     x = (effect.multiplier() - 1) * 100;
                     activeEffects.put(source.id(), x);

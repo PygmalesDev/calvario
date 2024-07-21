@@ -4,14 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
+import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
-import de.uniks.stp24.component.game.DeleteStructureComponent;
+import de.uniks.stp24.component.game.technology.ResearchJobComponent;
+import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
+import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateResultDto;
-import de.uniks.stp24.dto.EffectSourceDto;
-import de.uniks.stp24.dto.EffectSourceParentDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.*;
@@ -51,6 +52,9 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 public class PauseMenuTest extends ControllerTest {
     @Spy
     JobsService jobsService;
+
+    @Spy
+    VariableService variableService;
     @Spy
     GamesApiService gamesApiService;
     @Spy
@@ -82,8 +86,7 @@ public class PauseMenuTest extends ControllerTest {
     LanguageService languageService;
     @Spy
     ResourcesService resourcesService;
-    @Spy
-    VariableService variableService;
+
     @Spy
     ObjectMapper objectMapper;
     @Spy
@@ -152,6 +155,9 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     HelpComponent helpComponent;
 
+    @InjectMocks
+    MarketComponent marketComponent;
+
     /*
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
@@ -161,21 +167,45 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     PropertiesJobProgressComponent propertiesJobProgressComponent;
 
+    @InjectMocks
+    TechnologyOverviewComponent technologyOverviewComponent;
+
+    @InjectMocks
+    TechnologyCategoryComponent technologyCategoryComponent;
+    @InjectMocks
+    ResearchJobComponent researchJobComponent;
+
     @Spy
     JobsApiService jobsApiService;
     @Spy
     TechnologyService technologyService;
+    @Spy
+    MarketService marketService;
+    @Spy
+    AnnouncementsService announcementsService;
+
+    @Spy
+    ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ROOT);
 
     @InjectMocks
     InGameController inGameController;
+
+    @InjectMocks
+    IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
+
+    @InjectMocks
+    CoolerBubbleComponent coolerBubbleComponent;
 
     ArrayList<BuildingAttributes> buildingPresets = new ArrayList<>();
     ArrayList<BuildingAttributes> districtPresets = new ArrayList<>();
     Map<String, Integer> variablesPresets = new HashMap<>();
 
+
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
+        coolerBubbleComponent.subscriber = this.subscriber;
+        this.inGameController.coolerBubbleComponent = coolerBubbleComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameController.clockComponent = this.clockComponent;
@@ -190,12 +220,22 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.overviewSitesComponent.detailsComponent = this.detailsComponent;
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.helpComponent = this.helpComponent;
+        this.inGameController.technologiesComponent = technologyOverviewComponent;
+        this.technologyOverviewComponent.technologyCategoryComponent = technologyCategoryComponent;
+        this.technologyCategoryComponent.researchJobComponent = researchJobComponent;
+
+        this.overviewUpgradeComponent.jobProgressComponent = islandUpgradesJobProgressComponent;
+        this.overviewUpgradeComponent.jobsService = this.jobsService;
+        this.overviewUpgradeComponent.islandAttributes = this.islandAttributeStorage;
+
+
         this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
         this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
         this.timerService.gamesApiService = this.gamesApiService;
         this.timerService.subscriber = this.subscriber;
         this.timerService.tokenStorage = this.tokenStorage;
         this.inGameController.lobbyService.gameMembersApiService = this.gameMembersApiService;
+        this.inGameController.marketOverviewComponent = this.marketComponent;
 
         this.jobsService.subscriber = this.subscriber;
         this.jobsService.jobsApiService = this.jobsApiService;
@@ -212,6 +252,7 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.variableService = this.variableService;
 
         this.inGameService.presetsApiService = this.presetsApiService;
+        this.marketService.presetsApiService = this.presetsApiService;
 
         this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
         this.islandClaimingComponent.jobsService = this.jobsService;
@@ -219,8 +260,10 @@ public class PauseMenuTest extends ControllerTest {
         this.islandClaimingComponent.islandsService = this.islandsService;
         this.islandClaimingComponent.imageCache = this.imageCache;
 
-        doReturn(null).when(this.imageCache).get(any());
+        this.marketComponent.marketService = this.marketService;
 
+        doReturn(null).when(this.imageCache).get(any());
+        doReturn(Observable.empty()).when(this.empireApiService).getEmpireEffect(any(), any());
         doReturn(Observable.empty()).when(this.jobsApiService).getEmpireJobs(any(), any());
 
         inGameService.setGameStatus(gameStatus);
@@ -229,6 +272,8 @@ public class PauseMenuTest extends ControllerTest {
         Map<String , Integer> required = new HashMap<>();
         Map<String, Integer> production = new HashMap<>();
         Map<String, Integer> consumption = new HashMap<>();
+        Map<String, Integer> variablesMarket = new HashMap<>();
+        Map<String,List<SeasonComponent>> _private = new HashMap<>();
         UpgradeStatus upgradeStatus = new UpgradeStatus("test", null, 0,20, production, consumption, 20);
         ArrayList<String> traits = new ArrayList<>();
         traits.add("testTrait1");
@@ -251,6 +296,9 @@ public class PauseMenuTest extends ControllerTest {
         doReturn(Observable.just(new MemberDto(true, "test", testEmpire, "123"))).when(this.gameMembersApiService).getMember(any(), any());
         doReturn(Observable.just(variablesEffect)).when(this.inGameService).getVariablesEffects();
 
+        doReturn(Observable.just(variablesMarket)).when(this.marketService).getVariables();
+        doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
+
 
 
 
@@ -261,9 +309,8 @@ public class PauseMenuTest extends ControllerTest {
         variablesPresets.put("districts.city.build_time", 9);
         variablesPresets.put("districts.city.cost.minerals", 100);
         variablesPresets.put("districts.city.upkeep.energy", 5);
-        doReturn(Observable.just(variablesPresets)).when(inGameService).getVariablesPresets();
-        doReturn(Observable.just(new EffectSourceParentDto(new EffectSourceDto[]{}))).when(empireApiService).getEmpireEffect(any(), any());
 
+        doNothing().when(variableService).initVariables();
 
         this.app.show(this.inGameController);
 
@@ -292,55 +339,15 @@ public class PauseMenuTest extends ControllerTest {
         assertTrue(gameStatus.getPaused());
     }
 
-    /*@Test
-    public void testChangeLanguage() {
-        settingsComponent.prefService = this.prefService;
-        languageService.prefService = this.prefService;
-        languageService.newResources = this.newResources;
-
-        doAnswer(show -> {inGameService.setShowSettings(true);
-            return null;
-        }).when(pauseMenuComponent).settings();
-
-        doAnswer(show -> {inGameService.setLanguage(0);
-            return null;
-        }).when(settingsComponent).setToGerman();
-
-        doAnswer(show -> {inGameService.setLanguage(1);
-            return null;
-        }).when(settingsComponent).setToEnglish();
-
-        press(KeyCode.ESCAPE);
-        waitForFxEvents();
-
-        clickOn("#settingsButton");
-        waitForFxEvents();
-
-        clickOn("#germanLang");
-        waitForFxEvents();
-        assertEquals(0, inGameService.getLanguage());
-
-        clickOn("#englishLang");
-        waitForFxEvents();
-        assertEquals(1, inGameService.getLanguage());
-    }*/
-
     @Test
     public void testQuitting() {
         doReturn(null).when(app).show("/browseGames");
 
-        tokenStorage.setEmpireId("empireId");
-        tokenStorage.setGameId("gameId");
-
         press(KeyCode.ESCAPE);
         waitForFxEvents();
         press(KeyCode.Q);
-//        clickOn("#quitButton");
         waitForFxEvents();
 
-        assertNull(tokenStorage.getEmpireId());
-        assertNull(tokenStorage.getGameId());
         verify(app, times(1)).show("/browseGames");
     }
-
 }

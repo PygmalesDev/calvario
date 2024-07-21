@@ -4,10 +4,8 @@ import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
-import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
-import javafx.beans.binding.StringBinding;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -22,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component(view = "JobElement.fxml")
@@ -68,7 +65,7 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
         this.inspectionButton.setId("jobElementInspectionButton_" + job._id());
 
         Island island = this.islandsService.getIsland(job.system());
-        this.timerText.setText(String.format("%s/%s", job.progress(), job.total()));
+        this.timerText.setText(String.format("%s/%s", job.progress(), (int) job.total()));
         this.jobNameText.setText(island.name());
 
         switch (job.type()) {
@@ -94,7 +91,7 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
     }
 
     public void showJobOverview() {
-        this.jobsService.getJobInspector("island_jobs_overview").accept(new String[]{this.job.system()});
+        this.jobsService.getJobInspector("island_jobs_overview").accept(job);
     }
 
     @OnDestroy

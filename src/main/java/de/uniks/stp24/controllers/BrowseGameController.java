@@ -192,7 +192,6 @@ BrowseGameController extends BasicController {
     @OnRender
     public void addSpeechBubble() {
         captainContainer.getChildren().add(bubbleComponent);
-        bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.which.game"));
     }
 
     //Make list of games visible

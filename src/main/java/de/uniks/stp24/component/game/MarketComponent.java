@@ -70,7 +70,7 @@ public class MarketComponent extends StackPane {
     @Inject
     ResourcesService resourcesService;
     @Inject
-    EmpireService empireService;
+    public EmpireService empireService;
     @Inject
     EventListener eventListener;
     @Inject
@@ -154,7 +154,7 @@ public class MarketComponent extends StackPane {
     /**
      * Creates ResourceCountMap by fetching data form empire's resources.
      */
-    private void createResourceCountMap() {
+    public void createResourceCountMap() {
         subscriber.subscribe(marketService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 empire -> {
                     resourceCountMap.putAll(empire.resources());
@@ -234,7 +234,6 @@ public class MarketComponent extends StackPane {
     private void setMarketFee() {
         this.marketFee = this.variables.get("empire.market.fee");
         marketFeeLabel.setText(String.valueOf(marketFee));
-        System.out.println("market fee: " + marketFee);
     }
 
     /**

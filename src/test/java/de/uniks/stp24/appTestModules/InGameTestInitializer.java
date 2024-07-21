@@ -35,8 +35,8 @@ import javax.inject.Provider;
 import static org.mockito.Mockito.spy;
 
 public class InGameTestInitializer extends ControllerTest {
-    @Mock
-    protected MarketService marketService;
+    @Spy
+    MarketService marketService;
     @Spy
     GamesApiService gamesApiService;
     @Spy

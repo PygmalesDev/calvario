@@ -5,7 +5,6 @@ import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.ws.Event;
 import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.ObservableEmitter;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.application.Platform;
@@ -292,11 +291,12 @@ public class InGameTestComponent extends InGameTestInitializer {
         this.islandAttributeStorage.districtAttributes = this.districtAttributes;
         this.islandsService.isles = islands;
 
-        doReturn(Observable.empty()).when(marketService).getSeasonalTrades(any(), any());
         doReturn(FXCollections.observableArrayList()).when(jobsService).getObservableListForSystem(any());
         doReturn(Observable.empty()).when(jobsService).beginJob(any());
         doReturn(testIsland).when(tokenStorage).getIsland();
         doReturn(Observable.empty()).when(gameSystemsApiService).updateIsland(any(), any(), any());
+        doReturn(FXCollections.observableArrayList()).when(announcementsService).getAnnouncements();
+        doReturn(Observable.empty()).when(marketService).getSeasonalTrades(any(), any());
 
         this.inGameController.buildingPropertiesComponent.certainBuilding = buildingPreset1;
 

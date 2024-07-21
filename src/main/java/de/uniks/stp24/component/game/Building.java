@@ -50,6 +50,7 @@ public class Building extends VBox {
 
         imageView.setImage(buildingsComponent.imageCache.get("/" + buildingsIconPathsMap.getOrDefault(buildingName,
                 "de/uniks/stp24/icons/buildings/empty_building_element.png")));
+        setId("empty_building_element");
         if (Objects.nonNull(presetType))
             if (presetType.equals("on_pause"))
                 imageView.setImage(buildingsComponent.imageCache.get("/" + buildingsOnQueueMap.get(buildingName)));
@@ -66,7 +67,12 @@ public class Building extends VBox {
                     "/de/uniks/stp24/icons/buildings/empty_building_element.png")){
                 inGameController.buildingsWindowComponent.setVisible(false);
                 inGameController.setSitePropertiesInvisible();
-                inGameController.showBuildingInformation(buildingName, jobID);
+                BUILT_STATUS isBuilt;
+                if (jobID.isEmpty())
+                    isBuilt = BUILT_STATUS.BUILT;
+                else
+                    isBuilt = BUILT_STATUS.QUEUED;
+                inGameController.showBuildingInformation(buildingName, jobID, isBuilt);
 
             } else inGameController.showBuildingWindow();
         });

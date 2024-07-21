@@ -2,7 +2,7 @@ package de.uniks.stp24.component.game;
 
 
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.service.Constants;
+import static de.uniks.stp24.service.Constants.*;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 @Component(view = "BuildingsWindow.fxml")
 public class BuildingsWindowComponent extends AnchorPane {
     @FXML
-    Button buildingRefinery;
+    public Button buildingRefinery;
     @FXML
     Button buildingFactory;
     @FXML
@@ -42,7 +42,7 @@ public class BuildingsWindowComponent extends AnchorPane {
     Button closeWindowButton;
 
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
     public ImageCache imageCache;
 
@@ -94,54 +94,60 @@ public class BuildingsWindowComponent extends AnchorPane {
     //Takes buttons in order and sets image for each button
     @OnRender
     public void setImages() {
+        this.setPickOnBounds(true);
+
         for (int i = 0; i < buttons.length; i++) {
-            ImageView imageView = new ImageView(this.imageCache.get("/"+Constants.imagePaths[i]));
+            ImageView imageView = new ImageView(this.imageCache.get("/" + imagePaths[i]));
             imageView.setFitWidth(40);
             imageView.setFitHeight(40);
             buttons[i].setGraphic(imageView);
             buttons[i].getStyleClass().clear();
         }
     }
-    //The following are onAction methods from buttons
+
+    /*
+    The following are onAction methods from buttons
+    isBuilt = false cause these are for build new Buildings window
+     */
     public void buildExchange(){
         this.buildingToAdd = "exchange";
-        inGameController.showBuildingInformation(buildingToAdd, "");
+        inGameController.showBuildingInformation(buildingToAdd, "", BUILT_STATUS.NOT_BUILT);
     }
 
     public void buildPowerPlant(){
         this.buildingToAdd = "power_plant";
-        inGameController.showBuildingInformation(buildingToAdd, "");
+        inGameController.showBuildingInformation(buildingToAdd, "",  BUILT_STATUS.NOT_BUILT);
     }
 
     public void buildMine(){
         this.buildingToAdd = "mine";
-        inGameController.showBuildingInformation(buildingToAdd, "");
+        inGameController.showBuildingInformation(buildingToAdd, "",  BUILT_STATUS.NOT_BUILT);
     }
 
 
     public void buildFarm(){
         this.buildingToAdd = "farm";
-        inGameController.showBuildingInformation(buildingToAdd, "");
+        inGameController.showBuildingInformation(buildingToAdd, "",  BUILT_STATUS.NOT_BUILT);
     }
 
     public void buildResearchLab(){
         this.buildingToAdd = "research_lab";
-        inGameController.showBuildingInformation(buildingToAdd, "");
+        inGameController.showBuildingInformation(buildingToAdd, "",  BUILT_STATUS.NOT_BUILT);
     }
 
     public void buildFoundry(){
         this.buildingToAdd = "foundry";
-        inGameController.showBuildingInformation(buildingToAdd, "");
+        inGameController.showBuildingInformation(buildingToAdd, "",  BUILT_STATUS.NOT_BUILT);
     }
 
     public void buildFactory(){
         this.buildingToAdd = "factory";
-        inGameController.showBuildingInformation(buildingToAdd, "");
+        inGameController.showBuildingInformation(buildingToAdd, "",  BUILT_STATUS.NOT_BUILT);
     }
 
     public void buildRefinery(){
         this.buildingToAdd = "refinery";
-        inGameController.showBuildingInformation(buildingToAdd, "");
+        inGameController.showBuildingInformation(buildingToAdd, "",  BUILT_STATUS.NOT_BUILT);
     }
 
     public void onClose(){

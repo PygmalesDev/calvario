@@ -10,12 +10,9 @@ import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.component.game.technology.ResearchJobComponent;
 import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
-import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.AggregateResultDto;
-import de.uniks.stp24.dto.EffectSourceDto;
-import de.uniks.stp24.dto.EffectSourceParentDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.*;
@@ -186,9 +183,6 @@ public class PauseMenuTest extends ControllerTest {
     MarketService marketService;
     @Spy
     AnnouncementsService announcementsService;
-
-    @Spy
-    ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ROOT);
 
     @InjectMocks
     InGameController inGameController;

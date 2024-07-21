@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 public class HelpComponent extends AnchorPane {
 
     @FXML
-    Button closeButton;
+    Button closeHelpButton;
     @FXML
     Button backButton;
     @FXML

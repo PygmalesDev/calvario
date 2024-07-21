@@ -96,6 +96,7 @@ public class JobsService {
                 this.tokenStorage.getGameId()), Game.class), game -> {
             if (game.data().period() != this.period) {
                 this.tickedCommonFunctions.forEach(Runnable::run);
+                System.out.println("i ticked!");
                 this.period = game.data().period();
             }
 
@@ -104,7 +105,6 @@ public class JobsService {
 
     public void addJobToGroups(@NotNull Job job) {
         this.jobCollections.get(job.type()).add(job);
-        System.out.println("creating new job");
 
         if (!job.type().equals("technology")) {
             if (!this.jobCollections.containsKey(job.system()))

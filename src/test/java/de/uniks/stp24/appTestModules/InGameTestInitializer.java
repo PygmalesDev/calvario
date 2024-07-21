@@ -180,9 +180,9 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.deleteStructureComponent.tokenStorage = this.tokenStorage;
         this.inGameController.deleteStructureComponent.islandAttributeStorage = this.islandAttributeStorage;
         this.inGameController.overviewSitesComponent.buildingsComponent.imageCache = this.imageCache;
-        this.inGameController.marketOverviewComponent.variableService = this.variableService;
 
         this.inGameController.marketOverviewComponent = this.marketComponent;
+        this.inGameController.marketOverviewComponent.variableService = this.variableService;
         this.marketComponent.marketSeasonComponentProvider = this.marketSeasonComponentProvider;
         this.marketComponent.explanationService = this.explanationService;
         this.marketComponent.presetsApiService = this.presetsApiService;

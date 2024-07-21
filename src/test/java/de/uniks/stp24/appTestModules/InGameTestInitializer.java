@@ -25,9 +25,13 @@ import org.fulib.fx.controller.Subscriber;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 
+import javax.inject.Provider;
+
 import static org.mockito.Mockito.spy;
 
 public class InGameTestInitializer extends ControllerTest {
+    @InjectMocks
+    protected MarketService marketService;
     @Spy
     GamesApiService gamesApiService;
     @Spy
@@ -121,8 +125,16 @@ public class InGameTestInitializer extends ControllerTest {
     PropertiesJobProgressComponent siteJobProgress;
     @InjectMocks
     IslandClaimingComponent islandClaimingComponent;
+    @InjectMocks
+    protected MarketComponent marketComponent;
 
-
+    Provider<MarketSeasonComponent> marketSeasonComponentProvider = () -> {
+        MarketSeasonComponent comp = new MarketSeasonComponent();
+        comp.gameResourceBundle = this.gameResourceBundle;
+        comp.marketService = this.marketService;
+        comp.imageCache = this.imageCache;
+        return comp;
+    };
 
     public void initializeComponents() {
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
@@ -146,6 +158,15 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.deleteStructureComponent.tokenStorage = this.tokenStorage;
         this.inGameController.deleteStructureComponent.islandAttributeStorage = this.islandAttributeStorage;
         this.inGameController.overviewSitesComponent.buildingsComponent.imageCache = this.imageCache;
+
+        this.inGameController.marketOverviewComponent = this.marketComponent;
+        this.marketComponent.marketSeasonComponentProvider = this.marketSeasonComponentProvider;
+        this.marketComponent.explanationService = this.explanationService;
+        this.marketComponent.presetsApiService = this.presetsApiService;
+        this.marketComponent.marketService = this.marketService;
+        this.marketComponent.tokenStorage = this.tokenStorage;
+        this.marketComponent.subscriber = this.subscriber;
+        this.marketComponent.imageCache = this.imageCache;
 
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewSitesComponent.islandAttributes = islandAttributeStorage;
@@ -220,6 +241,7 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.overviewSitesComponent.detailsComponent.getStylesheets().clear();
         this.inGameController.overviewSitesComponent.buildingsComponent.getStylesheets().clear();
         this.inGameController.overviewSitesComponent.sitesComponent.getStylesheets().clear();
+        this.inGameController.marketOverviewComponent.getStylesheets().clear();
         this.inGameController.islandClaimingComponent.getStylesheets().clear();
     }
 }

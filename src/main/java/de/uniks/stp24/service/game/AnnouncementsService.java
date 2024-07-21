@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
@@ -49,8 +50,18 @@ public class AnnouncementsService {
 
             switch (job.type()) {
                 case "upgrade" -> {
+                    String nextUpgradeLevel;
+
+                    switch (island.upgrade()) {
+                        case "unexplored" -> nextUpgradeLevel = "explored";
+                        case "explored" -> nextUpgradeLevel = "colonized";
+                        case "colonized" -> nextUpgradeLevel = "upgraded";
+                        case "upgraded" -> nextUpgradeLevel = "developed";
+                        default -> nextUpgradeLevel = "";
+                    }
+
                     message = gameResourceBundle.getString("captain.upgrade.ready")
-                            .replace("{upgradeLevel}", gameResourceBundle.getString(upgradeTranslation.get(island.upgrade())))
+                            .replace("{upgradeLevel}", gameResourceBundle.getString(upgradeTranslation.get(nextUpgradeLevel)))
                             .replace("{islandName}", islandName);
                     forwardMethods.add(jobsService.getJobInspector("island_upgrade"));
                     forwardIcon = "-fx-background-image: url('[PATH]')"

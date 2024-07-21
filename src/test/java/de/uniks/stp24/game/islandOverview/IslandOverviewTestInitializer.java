@@ -28,9 +28,6 @@ import org.fulib.fx.controller.Subscriber;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 import static org.mockito.Mockito.spy;
 
 public class IslandOverviewTestInitializer extends ControllerTest {
@@ -169,6 +166,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.inGameController.overviewSitesComponent.buildingsComponent.imageCache = this.imageCache;
         this.inGameController.marketOverviewComponent = this.marketComponent;
+        this.inGameController.marketOverviewComponent.variableService = this.variableService;
         this.coolerBubbleComponent.subscriber = this.subscriber;
         this.inGameController.coolerBubbleComponent = this.coolerBubbleComponent;
 

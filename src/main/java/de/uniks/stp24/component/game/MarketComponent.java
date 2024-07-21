@@ -84,7 +84,7 @@ public class MarketComponent extends StackPane {
     @Inject
     public ExplanationService explanationService;
     @Inject
-    VariableService variableService;
+    public VariableService variableService;
     @Inject
     @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")

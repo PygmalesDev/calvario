@@ -132,7 +132,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
         disableButtons();
         startResourceMonitoring();
 
-        this.setJobsPaneProgress(this.buildingJobs.stream().filter(started -> started._id().equals(jobID)
+        if (Objects.nonNull(this.buildingJobs))
+            this.setJobsPaneProgress(this.buildingJobs.stream().filter(started -> started._id().equals(jobID)
                         && started.system().equals(this.tokenStorage.getIsland().id())).findFirst().orElse(null));
     }
 
@@ -211,9 +212,11 @@ public class BuildingPropertiesComponent extends AnchorPane {
                     this.setJobsPaneProgress(job);
                     this.updateIslandBuildings();
                     this.setBuildingJobFinishers(job);
-                });
+                },
+                        error -> System.out.println("Error in buyBuilding: " + error));
             } else buyButton.setDisable(true);
-        });
+        },
+                error -> System.out.println("Error in buyBuilding: " + error));
     }
 
     private void updateIslandBuildings() {

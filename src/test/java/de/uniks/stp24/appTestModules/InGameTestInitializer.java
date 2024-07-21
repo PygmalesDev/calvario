@@ -4,12 +4,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
+import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.component.game.DeleteStructureComponent;
+import de.uniks.stp24.component.game.technology.ResearchJobComponent;
+import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
+import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
+import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent_MembersInjector;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.GameStatus;
+import de.uniks.stp24.model.Technology;
 import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.InGameService;
@@ -21,16 +27,19 @@ import de.uniks.stp24.ws.EventListener;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.controller.Subscriber;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Spy;
 
+import javax.inject.Inject;
 import javax.inject.Provider;
 
 import static org.mockito.Mockito.spy;
 
 public class InGameTestInitializer extends ControllerTest {
-    @InjectMocks
+    @Mock
     protected MarketService marketService;
     @Spy
     GamesApiService gamesApiService;
@@ -64,21 +73,29 @@ public class InGameTestInitializer extends ControllerTest {
     GameMembersApiService gameMembersApiService;
     @Spy
     EmpireApiService empireApiService;
-    @Spy
+    @Mock
     JobsService jobsService;
+    @Mock
+    TechnologyService technologyService;
+    @InjectMocks
+    TechnologyOverviewComponent technologyOverviewComponent;
     @Spy
     JobsApiService jobsApiService;
     @Spy
     ExplanationService explanationService;
-    @Spy
-    TechnologyService technologyService;
+    @InjectMocks
+    TechnologyCategoryComponent technologyCategoryComponent;
     @Spy
     TimerService timerService;
     @Spy
     GameLogicApiService gameLogicApiService;
     @Spy
     VariableDependencyService variableDependencyService;
+    @InjectMocks
+    ResearchJobComponent researchJobComponent;
 
+    @InjectMocks
+    IslandUpgradesJobProgressComponent jobProgressComponent;
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
     @InjectMocks
@@ -127,6 +144,10 @@ public class InGameTestInitializer extends ControllerTest {
     IslandClaimingComponent islandClaimingComponent;
     @InjectMocks
     protected MarketComponent marketComponent;
+    @InjectMocks
+    CoolerBubbleComponent coolerBubbleComponent;
+    @Mock
+    AnnouncementsService announcementsService;
 
     Provider<MarketSeasonComponent> marketSeasonComponentProvider = () -> {
         MarketSeasonComponent comp = new MarketSeasonComponent();
@@ -137,6 +158,11 @@ public class InGameTestInitializer extends ControllerTest {
     };
 
     public void initializeComponents() {
+        this.inGameController.technologiesComponent = this.technologyOverviewComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.researchJobComponent = this.researchJobComponent;
+        this.inGameController.coolerBubbleComponent = this.coolerBubbleComponent;
+        this.inGameController.coolerBubbleComponent.subscriber = this.coolerBubbleComponent.subscriber;
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.buildingsWindowComponent.tokenStorage = this.tokenStorage;
@@ -181,6 +207,7 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.selectedIsland.flagPane = new StackPane();
         this.variableDependencyService.variableService = this.variableService;
+        this.inGameController.overviewUpgradeComponent.jobProgressComponent = this.jobProgressComponent;
 
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.variableService = this.variableService;
@@ -190,6 +217,7 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.lobbyService.gameMembersApiService = this.gameMembersApiService;
         this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
         this.inGameController.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
+        this.inGameController.overviewUpgradeComponent.jobsService = this.jobsService;
         this.inGameController.overviewSitesComponent.jobsComponent.jobsService = this.jobsService;
         this.inGameController.clockComponent.timerService = this.timerService;
         this.inGameController.clockComponent.timerService.tokenStorage = this.tokenStorage;
@@ -201,6 +229,7 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.sitePropertiesComponent.siteJobProgress = this.siteJobProgress;
         this.inGameController.sitePropertiesComponent.islandAttributeStorage = this.islandAttributeStorage;
         this.inGameController.sitePropertiesComponent.tokenStorage = this.tokenStorage;
+        this.inGameController.jobsService = this.jobsService;
         this.inGameController.jobsService.tokenStorage = this.tokenStorage;
         this.inGameController.jobsService.jobsApiService = this.jobsApiService;
         this.inGameController.jobsService.subscriber = this.subscriber;
@@ -215,6 +244,11 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.overviewUpgradeComponent.explanationService.variableService.technologyService.presetsApiService = this.presetsApiService;
         this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
         this.inGameController.eventComponent = this.eventComponent;
+        this.resourcesService.gameSystemsApiService = this.gameSystemsApiService;
+
+        this.marketService.presetsApiService = this.presetsApiService;
+        this.marketService.empireApiService = this.empireApiService;
+        this.marketService.subscriber = this.subscriber;
 
         this.inGameController.contextMenuButtons = new HBox();
         this.islandsService.tokenStorage = new TokenStorage();

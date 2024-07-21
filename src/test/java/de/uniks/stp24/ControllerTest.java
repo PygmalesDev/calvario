@@ -4,11 +4,13 @@ import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.utils.ResponseConstants;
 import javafx.stage.Stage;
+import org.fulib.fx.annotation.controller.Resource;
 import org.junit.jupiter.api.AfterAll;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import javax.inject.Named;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -34,7 +36,8 @@ public class ControllerTest extends ApplicationTest {
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ENGLISH);
     @Spy
     public ResourceBundle variablesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/variables", Locale.ENGLISH);
-
+    @Spy
+    public ResourceBundle technologiesResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ENGLISH);
 
     protected Stage stage;
     protected TestComponent testComponent;

@@ -5,9 +5,11 @@ import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.ws.Event;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.ObservableEmitter;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 
@@ -189,7 +191,6 @@ public class InGameTestComponent extends InGameTestInitializer {
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
-        doReturn(testIsland).when(this.tokenStorage).getIsland();
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
 
         // Mock getEmpire
@@ -273,7 +274,6 @@ public class InGameTestComponent extends InGameTestInitializer {
         doReturn(Observable.just(variablesPresets)).when(inGameService).getVariablesPresets();
         doReturn(Observable.just(member)).when(lobbyService).getMember(any(), any());
         doReturn(Observable.just(variablesEffect)).when(inGameService).getVariablesEffects();
-        doReturn(Observable.just(jobList)).when(jobsApiService).getEmpireJobs(any(), any());
         doReturn(Observable.just(effectSourceParentDto)).when(empireApiService).getEmpireEffect(any(), any());
         doReturn(Observable.just(new BuildingDto("a", 0, cost, productionBuilding, upkeep))).when(resourcesService).getResourcesBuilding(any());
 
@@ -292,6 +292,16 @@ public class InGameTestComponent extends InGameTestInitializer {
         this.islandAttributeStorage.buildingsAttributes = this.buildingAttributes;
         this.islandAttributeStorage.districtAttributes = this.districtAttributes;
         this.islandsService.isles = islands;
+
+
+        doReturn(Observable.empty()).when(marketService).getVariables();
+        doReturn(Observable.empty()).when(marketService).getSeasonalTrades(any(), any());
+        doReturn(FXCollections.observableArrayList()).when(announcementsService).getAnnouncements();
+        doReturn(FXCollections.observableArrayList()).when(jobsService).getObservableListForSystem(any());
+        doReturn(FXCollections.observableArrayList()).when(jobsService).getJobObservableListOfType(any());
+        doReturn(Observable.empty()).when(jobsService).beginJob(any());
+        doReturn(testIsland).when(tokenStorage).getIsland();
+        doReturn(Observable.empty()).when(gameSystemsApiService).updateIsland(any(), any(), any());
 
         this.app.show(this.inGameController);
         clearStyleSheets();

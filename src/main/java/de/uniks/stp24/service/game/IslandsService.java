@@ -358,7 +358,7 @@ public class IslandsService extends BasicService {
         return newIsland;
     }
 
-    private Island convertToIsland(SystemDto result) {
+    public Island convertToIsland(SystemDto result) {
         return new Island(result.owner(),
                 Objects.isNull(result.owner()) ? -1 : getEmpire(result.owner()).flag(),
                 result.x(),

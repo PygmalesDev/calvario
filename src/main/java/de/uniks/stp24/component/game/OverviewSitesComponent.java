@@ -95,6 +95,7 @@ public class OverviewSitesComponent extends AnchorPane {
     private InGameController inGameController;
     private boolean isNameEditable;
 
+    // track which page was shown to open it again after island info has been updated
     String shownPage = "details";
 
     @Inject

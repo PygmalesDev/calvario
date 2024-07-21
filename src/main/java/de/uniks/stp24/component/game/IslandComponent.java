@@ -6,6 +6,7 @@ import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.IslandsService;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -36,15 +37,17 @@ public class IslandComponent extends Pane {
     ImageView spyglassImage;
     @Inject
     TokenStorage tokenStorage;
-
     @Inject
     @Resource
     ResourceBundle resource;
-    public Island island;
-
-    ImageCache imageCache;
     @Inject
     IslandAttributeStorage islandAttributes;
+
+    IslandsService islandsService;
+
+    ImageCache imageCache;
+
+    public Island island;
 
     public InGameController inGameController;
 
@@ -63,8 +66,11 @@ public class IslandComponent extends Pane {
 
     public void applyIcon(IslandType type) {
         this.islandImage.setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
+
         if (this.island.upgrade().equals("explored"))
             this.spyglassImage.setImage(imageCache.get("/de/uniks/stp24/icons/other/spyglass.png"));
+        else // islands with upgrades other than explored
+            hideSpyGlass();
     }
 
     // use our flag images
@@ -180,5 +186,19 @@ public class IslandComponent extends Pane {
         }
 
         inGameController.selectedIsland = null;
+    }
+
+    public void applyEmpireInfo() {
+        // apply drop shadow and flag for newly colonized systems
+        this.islandsService.applyDropShadowToIsland(this);
+        this.setFlagImage(islandsService.getEmpire(island.owner()).flag());
+    }
+
+    public void setIslandService(IslandsService islandsService) {
+        this.islandsService = islandsService;
+    }
+
+    public void hideSpyGlass(){
+        this.spyglassImage.setVisible(false);
     }
 }

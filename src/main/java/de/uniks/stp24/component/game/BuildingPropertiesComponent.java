@@ -7,6 +7,7 @@ import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.BuildingAttributes;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -30,6 +31,7 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.*;
 
+import static de.uniks.stp24.service.Constants.*;
 import static de.uniks.stp24.service.Constants.buildingTranslation;
 import static de.uniks.stp24.service.Constants.buildingsIconPathsMap;
 
@@ -108,9 +110,9 @@ public class BuildingPropertiesComponent extends AnchorPane {
     @OnInit
     public void setBuildingUpdates() {
         this.jobsService.onJobsLoadingFinished("building", this::setBuildingJobFinishers);
-        this.jobsService.onJobCommonFinish(this::updateIslandBuildings);
         this.jobsService.onJobsLoadingFinished(() ->
                 this.buildingJobs = this.jobsService.getJobObservableListOfType("building"));
+        this.jobsService.onJobCommonFinish(this::updateIslandBuildings);
     }
 
     @OnRender
@@ -121,32 +123,61 @@ public class BuildingPropertiesComponent extends AnchorPane {
         this.jobProgressPane.getChildren().add(this.propertiesJobProgressComponent);
     }
 
+    @OnRender
+    public void addRunnable() {
+        // this method will be run after resources update themselves, to (dis)-enable buttons dynamically
+        resourcesService.setOnResourceUpdates(this::setButtonsDisable);
+    }
+
     public void setInGameController(InGameController inGameController){
         this.inGameController = inGameController;
     }
 
 
-    public void setBuildingType(String buildingType, String jobID){
+    public void setBuildingType(String buildingType, String jobID, BUILT_STATUS isBuilt){
         this.buildingType = buildingType;
+
         displayInfoBuilding();
-        disableButtons();
-        startResourceMonitoring();
 
         this.setJobsPaneProgress(this.buildingJobs.stream().filter(started -> started._id().equals(jobID)
-                        && started.system().equals(this.tokenStorage.getIsland().id())).findFirst().orElse(null));
+                && started.system().equals(this.tokenStorage.getIsland().id())).findFirst().orElse(null));
+
+
+        switch (isBuilt) {
+            case BUILT -> {
+                this.buyButton.setVisible(false);
+                this.destroyButton.setVisible(true);
+                setDestroyButtonDisable();
+            }
+            case QUEUED -> {
+                this.buyButton.setVisible(false);
+                this.destroyButton.setVisible(false);
+            }
+            case NOT_BUILT -> {
+                this.buyButton.setVisible(true);
+                this.destroyButton.setVisible(false);
+                setBuyButtonDisable();
+            }
+        }
+
     }
+
 
     private void setBuildingJobFinishers(Jobs.Job job) {
         this.jobsService.onJobDeletion(job._id(), () -> {
-            this.updateIslandBuildings();
             if (Objects.nonNull(this.currentJob)) {
                 if (this.currentJob._id().equals(job._id())) this.getParent().setVisible(false);
                 else this.setJobsPaneProgress(this.currentJob);
             }
         });
+
         this.jobsService.onJobCompletion(job._id(), () -> {
             if (Objects.nonNull(this.currentJob)) {
-                if (this.currentJob._id().equals(job._id())) this.getParent().setVisible(false);
+                if (this.currentJob._id().equals(job._id())) {
+                    this.setJobsPaneVisibility(false);
+                    this.destroyButton.setVisible(true);
+                    setDestroyButtonDisable();
+                }
                 else this.setJobsPaneProgress(this.currentJob);
             }
         });
@@ -164,42 +195,41 @@ public class BuildingPropertiesComponent extends AnchorPane {
     public void setJobsPaneVisibility(boolean isVisible) {
         this.jobProgressPane.setVisible(isVisible);
         this.buildingCostsListView.setVisible(!isVisible);
-        this.buyButton.setVisible(!isVisible);
-        this.destroyButton.setVisible(!isVisible);
     }
 
-    //Checks if buy and destroy building has to be deactivated
-    public void disableButtons() {
-        buyButton.setDisable(true);
-        destroyButton.setDisable(true);
-        subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
-            if (resourcesService.hasEnoughResources(result.cost())) buyButton.setDisable(false);
-        });
-        if (tokenStorage.getIsland().buildings().contains(buildingType)) destroyButton.setDisable(false);
+    // Checks if buy and destroy building has to be deactivated
+    public void setButtonsDisable() {
+        setDestroyButtonDisable();
+        setBuyButtonDisable();
+    }
+
+    private void setBuyButtonDisable() {
+        // check
+        // 1) if empire has enough resources to build this building
+        // 2) if island has enough capacity
+        if (Objects.nonNull(buildingType)) {
+            int islandJobsInQueue = jobsService.getObservableListForSystem(islandAttributeStorage.getIsland().id()).size();
+            if (islandAttributeStorage.getUsedSlots() + islandJobsInQueue >=
+                    islandAttributeStorage.getIsland().resourceCapacity()) {
+                buyButton.setDisable(true);
+            } else {
+                subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
+                    priceOfBuilding = result.cost();
+                    buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding));
+                }, error -> System.out.println("error updateButtonStates(): " + error));
+            }
+        }
+    }
+
+    private void setDestroyButtonDisable() {
+        if (tokenStorage.getIsland().buildings().contains(buildingType))
+            destroyButton.setDisable(false);
     }
 
     public void destroyBuilding(){
-        disableButtons();
+        setDestroyButtonDisable();
+        setVisible(false);
         inGameController.handleDeleteStructure(buildingType);
-    }
-
-    //Gets called every second by a timer
-    public void updateButtonStates(){
-        setCertainBuilding();
-        buyButton.setDisable(!resourcesService.hasEnoughResources(priceOfBuilding) ||
-                islandAttributeStorage.getUsedSlots() >= islandAttributeStorage.getIsland().resourceCapacity());
-        destroyButton.setDisable(!tokenStorage.getIsland().buildings().contains(buildingType));
-    }
-
-    //Timer for calling updateButtonStates every second
-    public void startResourceMonitoring() {
-        Timer timer = new Timer(true);
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                updateButtonStates();
-            }
-        }, 0, 1000);
     }
 
     public void buyBuilding(){
@@ -211,6 +241,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
                     this.setJobsPaneProgress(job);
                     this.updateIslandBuildings();
                     this.setBuildingJobFinishers(job);
+                    buyButton.setVisible(false);
                 });
             } else buyButton.setDisable(true);
         });
@@ -241,7 +272,6 @@ public class BuildingPropertiesComponent extends AnchorPane {
         buildingCostsListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, negativeResouceProvider), "buildings", buildingType, "cost"));
         buildingProducesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, positiveResourceProvider), "buildings", buildingType, "production"));
         buildingConsumesListView.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, negativeResouceProvider), "buildings", buildingType, "upkeep"));
-        disableButtons();
     }
 
     //Sets upkeep, production and cost of buildings in listviews

@@ -11,13 +11,13 @@ import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
-import javafx.fxml.FXML;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
@@ -64,7 +64,7 @@ public class ClockComponent extends AnchorPane {
 
     Game game;
 
-    ImageCache imageCache = new ImageCache();
+    final ImageCache imageCache = new ImageCache();
     @Inject
     public EventService eventService;
     @Inject

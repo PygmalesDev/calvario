@@ -3,8 +3,8 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.BuildingAttributes;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.ImageCache;
@@ -28,11 +28,11 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 import static de.uniks.stp24.service.Constants.*;
-import static de.uniks.stp24.service.Constants.buildingTranslation;
-import static de.uniks.stp24.service.Constants.buildingsIconPathsMap;
 
 @Component(view = "BuildingProperties.fxml")
 public class BuildingPropertiesComponent extends AnchorPane {
@@ -95,8 +95,8 @@ public class BuildingPropertiesComponent extends AnchorPane {
     Jobs.Job currentJob;
     public BuildingAttributes certainBuilding;
 
-    Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
-    Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);
+    final Provider<ResourceComponent> negativeResouceProvider = () -> new ResourceComponent("negative", this.gameResourceBundle, this.imageCache);
+    final Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);
 
     @Inject
     public BuildingPropertiesComponent() {}

@@ -12,20 +12,9 @@ import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.AggregateResultDto;
 import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.rest.*;
-import de.uniks.stp24.service.InGameService;
-import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.PopupBuilder;
-import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.rest.EmpireApiService;
-import de.uniks.stp24.rest.GameSystemsApiService;
-import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.rest.JobsApiService;
-import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.*;
 import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LanguageService;
@@ -42,9 +31,10 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
@@ -94,6 +84,7 @@ public class PauseMenuTest extends ControllerTest {
     ImageCache imageCache;
 
     @Spy
+    final
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @Spy
     EmpireService empireService;
@@ -194,10 +185,7 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     CoolerBubbleComponent coolerBubbleComponent;
 
-    ArrayList<BuildingAttributes> buildingPresets = new ArrayList<>();
-    ArrayList<BuildingAttributes> districtPresets = new ArrayList<>();
-    Map<String, Integer> variablesPresets = new HashMap<>();
-
+    final Map<String, Integer> variablesPresets = new HashMap<>();
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -266,31 +254,11 @@ public class PauseMenuTest extends ControllerTest {
 
         inGameService.setGameStatus(gameStatus);
         inGameService.setTimerService(timerService);
-        Map<String , Integer> chance = new HashMap<>();
-        Map<String , Integer> required = new HashMap<>();
-        Map<String, Integer> production = new HashMap<>();
-        Map<String, Integer> consumption = new HashMap<>();
         Map<String, Integer> variablesMarket = new HashMap<>();
         Map<String,List<SeasonComponent>> _private = new HashMap<>();
-        UpgradeStatus upgradeStatus = new UpgradeStatus("test", null, 0,20, production, consumption, 20);
-        ArrayList<String> traits = new ArrayList<>();
-        traits.add("testTrait1");
-        traits.add("testTrait2");
-        Empire testEmpire = new Empire(
-                "testEmpire",
-                "test",
-                "red",
-                0,
-                2,
-                traits,
-                null
-                );
-        Map<String, ArrayList<String>> variablesEffect = new HashMap<>();
 
         doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());
         doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", 2, 0,true,1,1,null ))).when(gamesApiService).getGame(any());
-        doReturn(Observable.just(new MemberDto(true, "test", testEmpire, "123"))).when(this.gameMembersApiService).getMember(any(), any());
-        doReturn(Observable.just(variablesEffect)).when(this.inGameService).getVariablesEffects();
 
         doReturn(Observable.just(variablesMarket)).when(this.marketService).getVariables();
         doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());

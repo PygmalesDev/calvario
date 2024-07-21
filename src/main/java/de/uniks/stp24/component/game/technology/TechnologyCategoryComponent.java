@@ -69,7 +69,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @Named("technologiesResourceBundle")
     public ResourceBundle technologiesResourceBundle;
 
-    Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this, technologyService, app, technologiesResourceBundle);
+    public Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this, technologyService, app, technologiesResourceBundle, this.imageCache);
 
     ObservableList<TechnologyExtended> unlockedTechnologies = FXCollections.observableArrayList();
     ObservableList<TechnologyExtended> researchTechnologies = FXCollections.observableArrayList();
@@ -88,14 +88,14 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @SubComponent
     public ResearchJobComponent researchJobComponent;
 
-    ImageCache imageCache = new ImageCache();
+    final ImageCache imageCache = new ImageCache();
 
     boolean societyJobRunning = false;
     boolean engineeringJobRunning = false;
     boolean physicsJobRunning = false;
 
 
-    PopupBuilder popupTechResearch = new PopupBuilder();
+    final PopupBuilder popupTechResearch = new PopupBuilder();
     private TechnologyExtended technology;
     private TechnologyOverviewComponent technologyOverviewComponent;
 
@@ -179,18 +179,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
         this.technology = technology;
         Map<String, Integer> technologyCostMap = new HashMap<>();
         technologyCostMap.put("research", technology.cost() * 100);
-        if (resourcesService.hasEnoughResources(technologyCostMap)) {
-            switch (technologieCategoryName) {
-                case "society" -> {societyJobRunning = true;
-                    handleJobRunning(societyJobRunning, technology);
-                                    }
-                case "engineering" -> {engineeringJobRunning = true;
-                    handleJobRunning(engineeringJobRunning, technology);
-                                        }
-                case "physics" -> {physicsJobRunning = true;
-                    handleJobRunning(physicsJobRunning, technology);}
-            }
-        }
+        if (resourcesService.hasEnoughResources(technologyCostMap)) handleJobRunning(technology);
         researchJobComponent.setEffectListView();
     }
 
@@ -202,20 +191,17 @@ public class TechnologyCategoryComponent extends AnchorPane {
         this.technology = technology;
     }
 
-    private void handleJobRunning(boolean booleanJobRunning, TechnologyExtended technology) {
-        if (booleanJobRunning){
-            researchJobContainer.setMouseTransparent(false);
-            researchJobComponent.setMouseTransparent(false);
-            researchLeftVBox.setVisible(false);
-            Platform.runLater(() -> {
-                technologieCategoryBox.getStyleClass().clear();
-                technologieCategoryBox.getStyleClass().add("technologiesActualResearchBackground");
-            });
-            popupTechResearch.showPopup(researchJobContainer, researchJobComponent);
-            researchJobComponent.handleJob(technology);
-        } else {
-            unShowJobWindow();
-        }
+    private void handleJobRunning(TechnologyExtended technology) {
+        researchJobContainer.setMouseTransparent(false);
+        researchJobComponent.setMouseTransparent(false);
+        researchLeftVBox.setVisible(false);
+        Platform.runLater(() -> {
+            technologieCategoryBox.getStyleClass().clear();
+            technologieCategoryBox.getStyleClass().add("technologiesActualResearchBackground");
+        });
+        popupTechResearch.showPopup(researchJobContainer, researchJobComponent);
+        researchJobComponent.handleJob(technology);
+//        unShowJobWindow();
     }
 
     public void unShowJobWindow(){

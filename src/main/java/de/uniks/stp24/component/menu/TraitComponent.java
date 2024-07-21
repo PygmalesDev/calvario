@@ -25,14 +25,14 @@ public class TraitComponent extends HBox implements ReusableItemComponent<Trait>
     @FXML
     Label costText;
 
-    ResourceBundle variablesResourceBundle;
+    final ResourceBundle variablesResourceBundle;
 
     Trait trait;
 
-    GangCreationController gangCreationController;
+    final GangCreationController gangCreationController;
 
-    Boolean showChoose;
-    Boolean showRemove;
+    final Boolean showChoose;
+    final Boolean showRemove;
 
     @Inject
     public TraitComponent(GangCreationController gangCreationController, ResourceBundle variablesResourceBundle, Boolean showChoose, Boolean showRemove) {

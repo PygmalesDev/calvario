@@ -2,9 +2,8 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
 <fx:root minHeight="-Infinity" minWidth="-Infinity" prefHeight="59.0" prefWidth="250.0" stylesheets="@../../style/empireConfiguration.css" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.menu.GangComponent">
    <Pane fx:id="pane" layoutX="12.0" layoutY="9.0" prefHeight="43.0" prefWidth="226.0" />
    <Pane prefHeight="59.0" prefWidth="250.0" styleClass="empireFrame" />

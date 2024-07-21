@@ -46,7 +46,7 @@ public class LobbyTestLoader extends InGameTestLoader {
     @InjectMocks
     GangDeletionComponent gangDeletionComponent;
 
-    Provider<GangComponent> gangComponentProvider = GangComponent::new;
+    final Provider<GangComponent> gangComponentProvider = GangComponent::new;
 
 
     @Override

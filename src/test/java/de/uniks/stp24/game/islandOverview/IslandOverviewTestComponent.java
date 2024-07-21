@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
 
 
-    Provider<DistrictComponent> districtComponentProvider = () -> {
+    final Provider<DistrictComponent> districtComponentProvider = () -> {
         DistrictComponent districtComponent = new DistrictComponent();
         districtComponent.tokenStorage = this.tokenStorage;
         districtComponent.islandAttributeStorage = this.islandAttributeStorage;
@@ -33,31 +33,31 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
 
     Map<String, Integer> variablesMarket = new HashMap<>();
-    Map<String,List<SeasonComponent>> _private = new HashMap<>();
+    final Map<String,List<SeasonComponent>> _private = new HashMap<>();
 
-    Map<String, Integer> siteSlots = Map.of("test1", 3, "test2", 3, "test3", 4, "test4", 4);
-    Map<String, Integer> sites = Map.of("test1", 2, "test2", 3, "test3", 4, "test4", 4);
+    final Map<String, Integer> siteSlots = Map.of("test1", 3, "test2", 3, "test3", 4, "test4", 4);
+    final Map<String, Integer> sites = Map.of("test1", 2, "test2", 3, "test3", 4, "test4", 4);
 
-    IslandType myTestIsland = IslandType.valueOf("uninhabitable_0");
-    ArrayList<String> buildings = new ArrayList();
-    List<Island> islands = new ArrayList<>();
+    final IslandType myTestIsland = IslandType.valueOf("uninhabitable_0");
+    final ArrayList<String> buildings = new ArrayList();
+    final List<Island> islands = new ArrayList<>();
 
-    Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
-    Map<String, Integer> upkeep = Map.of("energy", 3, "fuel", 8);
+    final Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
+    final Map<String, Integer> upkeep = Map.of("energy", 3, "fuel", 8);
 
-    Map<String, Integer> productionBuilding = Map.of("energy", 10, "fuel", 13);
-    Map<String, Integer> productionSites = Map.of("energy", 13, "fuel", 12);
-    Map<String, Integer> consumptionBuilding = Map.of("energy", 5, "fuel", 6);
-    Map<String, Integer> consumptionSites = Map.of("energy", 20, "fuel", 19);
+    final Map<String, Integer> productionBuilding = Map.of("energy", 10, "fuel", 13);
+    final Map<String, Integer> productionSites = Map.of("energy", 13, "fuel", 12);
+    final Map<String, Integer> consumptionBuilding = Map.of("energy", 5, "fuel", 6);
+    final Map<String, Integer> consumptionSites = Map.of("energy", 20, "fuel", 19);
 
 
-    UpgradeStatus unexplored = new UpgradeStatus("unexplored", null, 0, 1, cost, upkeep, 1);
-    UpgradeStatus explored = new UpgradeStatus("explored", null, 0, 1, cost, upkeep, 1);
-    UpgradeStatus colonized = new UpgradeStatus("colonized", null, 0, 1, cost, upkeep, 1);
-    UpgradeStatus upgraded = new UpgradeStatus("upgraded", null, 0, 1, cost, upkeep, 1);
-    UpgradeStatus developed = new UpgradeStatus("developed", null, 0, 1, cost, upkeep, 1);
+    final UpgradeStatus unexplored = new UpgradeStatus("unexplored", null, 0, 1, cost, upkeep, 1);
+    final UpgradeStatus explored = new UpgradeStatus("explored", null, 0, 1, cost, upkeep, 1);
+    final UpgradeStatus colonized = new UpgradeStatus("colonized", null, 0, 1, cost, upkeep, 1);
+    final UpgradeStatus upgraded = new UpgradeStatus("upgraded", null, 0, 1, cost, upkeep, 1);
+    final UpgradeStatus developed = new UpgradeStatus("developed", null, 0, 1, cost, upkeep, 1);
 
-    EmpireDto empireDto = new EmpireDto(
+    final EmpireDto empireDto = new EmpireDto(
             null,
             null,
             "testEmpireID",
@@ -74,7 +74,7 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
             null
     );
 
-    public ReadEmpireDto readEmpireDto = new ReadEmpireDto(
+    public final ReadEmpireDto readEmpireDto = new ReadEmpireDto(
             null,
             null,
             "testEmpireID",
@@ -89,7 +89,7 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
     );
 
 
-    BuildingAttributes buildingPreset1 = new BuildingAttributes(
+    final BuildingAttributes buildingPreset1 = new BuildingAttributes(
             "testBuilding1",
             0,
             null,
@@ -97,7 +97,7 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
             productionBuilding
     );
 
-    BuildingAttributes buildingPreset2 = new BuildingAttributes(
+    final BuildingAttributes buildingPreset2 = new BuildingAttributes(
             "testBuilding2",
             0,
             null,
@@ -105,7 +105,7 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
             productionBuilding
     );
 
-    BuildingAttributes buildingPreset3 = new BuildingAttributes(
+    final BuildingAttributes buildingPreset3 = new BuildingAttributes(
             "testBuilding3",
             0,
             null,
@@ -113,7 +113,7 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
             productionBuilding
     );
 
-    DistrictAttributes districtPresets1 = new DistrictAttributes(
+    final DistrictAttributes districtPresets1 = new DistrictAttributes(
             "test1",
             0,
             null,
@@ -122,7 +122,7 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
             productionSites
     );
 
-    DistrictAttributes districtPresets2 = new DistrictAttributes(
+    final DistrictAttributes districtPresets2 = new DistrictAttributes(
             "test2",
             0,
             null,
@@ -131,7 +131,7 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
             productionSites
     );
 
-    DistrictAttributes districtPresets3 = new DistrictAttributes(
+    final DistrictAttributes districtPresets3 = new DistrictAttributes(
             "test3",
             0,
             null,
@@ -140,7 +140,7 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
             productionSites
     );
 
-    DistrictAttributes districtPresets4 = new DistrictAttributes(
+    final DistrictAttributes districtPresets4 = new DistrictAttributes(
             "test4",
             0,
             null,
@@ -149,10 +149,10 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
             productionSites
     );
 
-    ArrayList<BuildingAttributes> buildingAttributes = new ArrayList<>();
-    ArrayList<DistrictAttributes> districtAttributes = new ArrayList<>();
+    final ArrayList<BuildingAttributes> buildingAttributes = new ArrayList<>();
+    final ArrayList<DistrictAttributes> districtAttributes = new ArrayList<>();
 
-    SystemUpgrades systemUpgrades = new SystemUpgrades(unexplored, explored, colonized, upgraded, developed);
+    final SystemUpgrades systemUpgrades = new SystemUpgrades(unexplored, explored, colonized, upgraded, developed);
 
     Island testIsland;
 
@@ -228,8 +228,6 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
         EffectSourceParentDto effectSourceParentDto = new EffectSourceParentDto(new EffectSourceDto[3]);
 
         doReturn(Observable.just(variablesPresets)).when(inGameService).getVariablesPresets();
-        doReturn(Observable.just(member)).when(lobbyService).getMember(any(), any());
-        doReturn(Observable.just(variablesEffect)).when(inGameService).getVariablesEffects();
         doReturn(Observable.just(jobList)).when(jobsApiService).getEmpireJobs(any(), any());
         doReturn(Observable.just(effectSourceParentDto)).when(empireApiService).getEmpireEffect(any(), any());
 

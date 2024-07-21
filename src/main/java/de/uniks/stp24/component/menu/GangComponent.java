@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Polygon;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +22,7 @@ public class GangComponent extends Pane implements ReusableItemComponent<Gang> {
     @FXML
     Label gangNameTextComponent;
 
-    ImageCache imageCache = new ImageCache();
+    final ImageCache imageCache = new ImageCache();
 
     @Inject
     public GangComponent() {

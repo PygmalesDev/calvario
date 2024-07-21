@@ -20,6 +20,8 @@ import java.util.ResourceBundle;
 
 @Component(view = "MarketSeasonComponent.fxml")
 public class MarketSeasonComponent extends HBox implements ReusableItemComponent<SeasonComponent> {
+    public Button resourceIconButton;
+    public Text resourceAmount;
     @FXML
     Text transActionTypeText;
     @FXML

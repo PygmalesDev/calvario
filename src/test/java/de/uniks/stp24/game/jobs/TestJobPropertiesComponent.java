@@ -1,13 +1,8 @@
 package de.uniks.stp24.game.jobs;
 
-import de.uniks.stp24.component.game.Building;
-import de.uniks.stp24.component.game.BuildingPropertiesComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
-import io.reactivex.rxjava3.core.Observable;
 import javafx.application.Platform;
-import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,9 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
 public class TestJobPropertiesComponent extends JobsTestComponent {

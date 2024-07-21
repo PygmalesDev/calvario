@@ -11,9 +11,6 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @Singleton
 public class VariableService {
@@ -29,9 +26,8 @@ public class VariableService {
     public TechnologyService technologyService;
 
     private InGameController inGameController;
-    private final Map<String, ArrayList<String>> variablesEffects = new HashMap<>();
     public final ArrayList<String> allVariables = new ArrayList<>();
-    public Map<String, ExplainedVariableDTO> data = new HashMap<>();
+    public final Map<String, ExplainedVariableDTO> data = new HashMap<>();
     public VariablesTree<ExplainedVariableDTO> buildingsTree;
     public VariablesTree<ExplainedVariableDTO> districtsTree;
     public VariablesTree<ExplainedVariableDTO> systemsTree;
@@ -46,7 +42,6 @@ public class VariableService {
     }
 
     public void dispose() {
-        variablesEffects.clear();
         allVariables.clear();
         data.clear();
         buildingsTree = null;
@@ -144,10 +139,6 @@ public class VariableService {
             }
         }
         return null;
-    }
-
-    public void setVariablesEffect(Map<String, ArrayList<String>> variablesEffect){
-        this.variablesEffects.putAll(variablesEffect);
     }
 
     public void setIngameController(InGameController inGameController) {

@@ -1,10 +1,9 @@
 package de.uniks.stp24.rest;
 
-import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.dto.ResourceDto;
-import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.model.SystemUpgrades;
 import de.uniks.stp24.model.TechnologyExtended;
+import de.uniks.stp24.model.Trait;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;

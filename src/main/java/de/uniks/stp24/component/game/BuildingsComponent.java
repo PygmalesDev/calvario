@@ -18,7 +18,9 @@ import org.fulib.fx.annotation.controller.Resource;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 @Component(view = "Buildings.fxml")
 public class BuildingsComponent extends AnchorPane {
@@ -46,7 +48,7 @@ public class BuildingsComponent extends AnchorPane {
 
     private int currentPage = 0;
     private InGameController inGameController;
-    List<String[]> buildingList = new ArrayList<>();
+    final List<String[]> buildingList = new ArrayList<>();
 
     @Inject
     public BuildingsComponent() {

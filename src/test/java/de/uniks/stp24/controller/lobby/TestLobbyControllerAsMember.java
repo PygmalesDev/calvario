@@ -14,7 +14,9 @@ import de.uniks.stp24.rest.AuthApiService;
 import de.uniks.stp24.rest.GameMembersApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.UserApiService;
-import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.ErrorService;
+import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.JoinGameService;
@@ -35,7 +37,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javax.inject.Provider;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -73,9 +74,10 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     @Spy
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
+    final
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
 
-    Provider<UserComponent> userComponentProvider = ()-> new UserComponent(imageCache, resources);
+    final Provider<UserComponent> userComponentProvider = ()-> new UserComponent(imageCache, resources);
 
     @InjectMocks
     JoinGameHelper joinGameHelper;

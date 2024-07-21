@@ -16,7 +16,7 @@ public class SignUpService {
     @Inject
     App app;
 
-    Map<String,Integer> defaultAvatarCode = new HashMap<>();
+    final Map<String,Integer> defaultAvatarCode = new HashMap<>();
 
     @Inject
     public  SignUpService(){

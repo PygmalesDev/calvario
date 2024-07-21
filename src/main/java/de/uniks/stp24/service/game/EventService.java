@@ -32,10 +32,10 @@ public class EventService {
     private volatile int remainingSeasons;
     EffectSourceParentDto event;
     private int nextEvent;
-    ObjectMapper objectMapper = new ObjectMapper();
+    final ObjectMapper objectMapper = new ObjectMapper();
 
     // with seed, so every Player has the same events at the same time
-    Random random = new Random();
+    final Random random = new Random();
 
     @Inject
     public EmpireApiService empireApiService;
@@ -44,11 +44,11 @@ public class EventService {
     @Inject
     public TokenStorage tokenStorage;
 
-    ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",
+    final ArrayList<String> eventNames = new ArrayList<>(Arrays.asList(/* Good Events */"abundance", "crapulence", "equivEx",
             "grandExp", "reckoning", "rogerFeast", /* Bad Events */ "blackSpot", "dutchman", "foolsGold", "pestilence",
             "rumBottle", "submerge", /* Misty */ "solarEclipse"));
 
-    Map<String, EffectSourceParentDto> eventMap = new HashMap<>();
+    final Map<String, EffectSourceParentDto> eventMap = new HashMap<>();
 
 
     /**

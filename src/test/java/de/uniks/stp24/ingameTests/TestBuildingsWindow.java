@@ -1,39 +1,8 @@
 package de.uniks.stp24.ingameTests;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.game.*;
-import de.uniks.stp24.component.menu.*;
-import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.*;
-import de.uniks.stp24.model.*;
-import de.uniks.stp24.rest.GamesApiService;
-import de.uniks.stp24.rest.PresetsApiService;
-import de.uniks.stp24.service.InGameService;
-import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.EmpireService;
-import de.uniks.stp24.service.game.EventService;
-import de.uniks.stp24.service.game.ResourcesService;
-import de.uniks.stp24.service.game.TimerService;
-import de.uniks.stp24.service.menu.LanguageService;
-import de.uniks.stp24.ws.Event;
-import de.uniks.stp24.ws.EventListener;
-import io.reactivex.rxjava3.subjects.BehaviorSubject;
-import io.reactivex.rxjava3.subjects.Subject;
-import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
 public class TestBuildingsWindow extends ControllerTest {

@@ -2,9 +2,9 @@ package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.service.ErrorService;
-import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.menu.LobbyService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -14,6 +14,7 @@ import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.controller.Subscriber;
+
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.ResourceBundle;

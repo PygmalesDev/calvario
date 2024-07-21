@@ -14,7 +14,7 @@ public class ClientEndpoint {
 
     Session userSession;
 
-    Timer timer = new Timer();
+    final Timer timer = new Timer();
 
     public ClientEndpoint(URI endpointURI) {
         this.endpointURI = endpointURI;

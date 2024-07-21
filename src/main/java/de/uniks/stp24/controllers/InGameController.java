@@ -11,7 +11,6 @@ import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
-import static de.uniks.stp24.service.Constants.*;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
@@ -46,6 +45,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static de.uniks.stp24.service.Constants.BUILT_STATUS;
 
 @Title("CALVARIO")
 @Controller
@@ -192,14 +193,14 @@ public class InGameController extends BasicController {
     String lastUpdate;
     double scale = 1.0;
     private final List<GameListenerTriple> gameListenerTriple = new ArrayList<>();
-    public ArrayList<String> flagsPath = new ArrayList<>();
-    String resourcesPaths = "/de/uniks/stp24/assets/";
-    String flagsFolderPath = "flags/flag_";
-    PopupBuilder popupBuildingProperties = new PopupBuilder();
-    PopupBuilder popupBuildingWindow = new PopupBuilder();
-    PopupBuilder popupSiteProperties = new PopupBuilder();
-    PopupBuilder popupDeleteStructure = new PopupBuilder();
-    PopupBuilder popupHelpWindow = new PopupBuilder();
+    public final ArrayList<String> flagsPath = new ArrayList<>();
+    final String resourcesPaths = "/de/uniks/stp24/assets/";
+    final String flagsFolderPath = "flags/flag_";
+    final PopupBuilder popupBuildingProperties = new PopupBuilder();
+    final PopupBuilder popupBuildingWindow = new PopupBuilder();
+    final PopupBuilder popupSiteProperties = new PopupBuilder();
+    final PopupBuilder popupDeleteStructure = new PopupBuilder();
+    final PopupBuilder popupHelpWindow = new PopupBuilder();
 
 
     @OnRender
@@ -220,8 +221,6 @@ public class InGameController extends BasicController {
         empireOverviewComponent.setInGameController(this);
         variableService.setIngameController(this);
 		pauseMenuComponent.setInGameController(this);
-        marketOverviewComponent.setInGameController(this);
-        storageOverviewComponent.setInGameController(this);
         pauseMenuComponent.setInGameController(this);
         helpComponent.setInGameController(this);
 
@@ -235,13 +234,6 @@ public class InGameController extends BasicController {
 
         variableService.initVariables();
 
-        if (!tokenStorage.isSpectator())
-            this.subscriber.subscribe(this.lobbyService.getMember(gameID, tokenStorage.getUserId()),
-                result -> tokenStorage.setEmpireTraits(result.empire().traits()));
-
-        this.subscriber.subscribe(this.inGameService.getVariablesEffects(),
-                result -> variableService.setVariablesEffect(result));
-
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
                     result -> islandAttributes.setEmpireDto(result),
@@ -249,18 +241,16 @@ public class InGameController extends BasicController {
             createEmpireListener();
         }
 
-        for (int i = 0; i <= 16; i++) {
-            this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
-        }
+        for (int i = 0; i <= 16; i++) this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
     }
 
     /*
       This method should be called every time after a job is done.
     */
-    public void updateVariableDependencies() {
-        variableService.loadVariablesDataStructure();
-        loadGameAttributes();
-    }
+//    public void updateVariableDependencies() {
+//        variableService.loadVariablesDataStructure();
+//        loadGameAttributes();
+//    }
 
     public void loadGameAttributes() {
         islandAttributes.setSystemUpgradeAttributes();
@@ -278,9 +268,7 @@ public class InGameController extends BasicController {
                 eventComponent.toFront();
                 pauseGame();
             } else {
-                if (!eventContainer.isVisible()) {
-                    shadow.setVisible(false);
-                }
+                if (!eventContainer.isVisible()) shadow.setVisible(false);
                 resumeGame();
             }
         }

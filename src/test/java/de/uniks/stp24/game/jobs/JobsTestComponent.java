@@ -5,7 +5,7 @@ import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
-import de.uniks.stp24.model.Jobs.*;
+import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -22,9 +22,13 @@ import org.fulib.fx.controller.Subscriber;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.when;
 
 public class JobsTestComponent extends ControllerTest {
     @Spy
@@ -36,6 +40,7 @@ public class JobsTestComponent extends ControllerTest {
     @Spy
     TokenStorage tokenStorage;
     @Spy
+    final
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @Spy
     Subscriber subscriber;
@@ -59,7 +64,7 @@ public class JobsTestComponent extends ControllerTest {
     protected final String SYSTEM_NAME_2 = "TestIslandDos";
     protected final String SYSTEM_NAME_3 = "TestIslandTres";
     protected final String SYSTEM_NAME_4 = "TestIslandCuatro";
-    protected List<Job> jobsList = new ArrayList<>();
+    protected final List<Job> jobsList = new ArrayList<>();
 
     protected final Island ISLAND_1 = new Island(this.EMPIRE_ID, 0, 0, 0,
             IslandType.agriculture, 3, 12, 0,
@@ -74,7 +79,7 @@ public class JobsTestComponent extends ControllerTest {
             Map.of("energy", 3), null,
             null, "ISLAND_EXP", "explored", this.SYSTEM_NAME_1);
 
-    protected Map<String, Integer> inspectorCalls = new HashMap<>();
+    protected final Map<String, Integer> inspectorCalls = new HashMap<>();
 
     @Override
     public void start(Stage stage) throws Exception {

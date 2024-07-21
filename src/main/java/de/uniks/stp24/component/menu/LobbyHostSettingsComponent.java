@@ -64,7 +64,7 @@ public class LobbyHostSettingsComponent extends AnchorPane {
     IslandsService islandsService;
 
     private String gameID;
-    public boolean leftLobby;
+    public final boolean leftLobby;
     public Image readyIconBlueImage;
     public Image readyIconGreenImage;
 

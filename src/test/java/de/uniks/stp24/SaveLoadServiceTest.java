@@ -3,6 +3,7 @@ package de.uniks.stp24;
 import de.uniks.stp24.service.SaveLoadService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SaveLoadServiceTest {
@@ -11,6 +12,7 @@ public class SaveLoadServiceTest {
 //    ObjectMapper objectMapper;
 
     @InjectMocks
+    final
     SaveLoadService saveLoadService = new SaveLoadService();
 
     @Test

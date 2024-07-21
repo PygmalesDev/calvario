@@ -84,10 +84,10 @@ public class ResearchJobComponent extends AnchorPane {
     @Named("technologiesResourceBundle")
     public ResourceBundle technologiesResourceBundle;
 
-    public ObservableList<Jobs.Job> jobList = FXCollections.observableArrayList();
+    public final ObservableList<Jobs.Job> jobList = FXCollections.observableArrayList();
     private TechnologyCategoryComponent technologyCategoryComponent;
 
-    public ObservableList<TechnologyExtended> technologies = FXCollections.observableArrayList();
+    public final ObservableList<TechnologyExtended> technologies = FXCollections.observableArrayList();
 
 
     private boolean isJobListInitialized = false;
@@ -145,7 +145,7 @@ public class ResearchJobComponent extends AnchorPane {
     }
 
     public void handleJobInformation(){
-        if (Objects.nonNull(technologyCategoryComponent.getTechnology())){
+        if (Objects.nonNull(technologyCategoryComponent.getTechnology())) {
             for (Jobs.Job job1 : jobList) {
                 if (job1.technology().equals(technologyCategoryComponent.getTechnology().id())){
                     subscriber.subscribe(jobsApiService.getJobByID(tokenStorage.getGameId(), tokenStorage.getEmpireId(), job1._id()), currentJob -> {
@@ -161,9 +161,7 @@ public class ResearchJobComponent extends AnchorPane {
         }
     }
 
-
-
-public void progressHandling(){
+    public void progressHandling(){
         ObservableList<Jobs.Job> newJobList = jobsService.getJobObservableListOfType("technology");
 
         Set<String> existingJobTechnologies = new HashSet<>();
@@ -177,20 +175,7 @@ public void progressHandling(){
         jobList.clear();
         jobList.addAll(uniqueJobList);
 
-        if (Objects.nonNull(technologyCategoryComponent.getTechnology())){
-            for (Jobs.Job job1 : jobList) {
-                if (job1.technology().equals(technologyCategoryComponent.getTechnology().id())){
-                    subscriber.subscribe(jobsApiService.getJobByID(tokenStorage.getGameId(), tokenStorage.getEmpireId(), job1._id()), currentJob -> {
-                        jobsService.onJobCompletion(currentJob._id(), this::handleJobFinished);
-                        double currentJobTotal = currentJob.total();
-                        int roundedUpTotal = (int) Math.ceil(currentJobTotal);
-                        researchProgressBar.setProgress((double) currentJob.progress() / roundedUpTotal);
-                        researchProgressText.setText(currentJob.progress() + " / " + roundedUpTotal);
-                        this.job = currentJob;
-                    }, error -> System.out.println("Error trying to get a Job in ResearchComponent"));
-                }
-            }
-        }
+        this.handleJobInformation();
     }
 
     public void setProgressBar() {

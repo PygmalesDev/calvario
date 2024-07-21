@@ -82,6 +82,7 @@ public class IslandComponent extends Pane {
     public void applyInfo(Island islandInfo) {
         this.island = islandInfo;
         this.setId(island.id()+"_instance");
+        this.spyglassImage.setVisible(island.upgrade().equals("explored"));
         applyIcon(this.island.type());
     }
 

@@ -1,9 +1,11 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.model.Game;
+import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.IslandsService;
@@ -80,6 +82,8 @@ public class ClockComponent extends AnchorPane {
     public Subscriber subscriber;
     @Inject
     public EventListener eventListener;
+    @Inject
+    public InGameService inGameService;
 
     private int lastUpdateSeason = -1;
     private String lastUpdateSpeed = "";
@@ -109,6 +113,9 @@ public class ClockComponent extends AnchorPane {
 
         PropertyChangeListener callHandleEventChanged = this::handleEventChanged;
         eventService.listeners().addPropertyChangeListener(EventService.PROPERTY_EVENT, callHandleEventChanged);
+
+        PropertyChangeListener callHandleHostLeaving = this::setPauseButtonOnHostLeaving;
+        inGameService.getGameStatus().listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandleHostLeaving);
 
         subscriber.subscribe(gamesApiService.getGame(tokenStorage.getGameId()),
                 gameResult -> game = gameResult,
@@ -386,6 +393,21 @@ public class ClockComponent extends AnchorPane {
             int speed = (int) propertyChangeEvent.getNewValue();
             timerService.setSpeedLocal(speed);
         }
+    }
+
+    public void setPauseButtonOnHostLeaving(@NotNull PropertyChangeEvent propertyChangeEvent) {
+        if (Objects.equals(game.owner(), tokenStorage.getUserId())) {
+            return;
+        }
+
+        otherSpeedLabel.setVisible(false);
+        pauseClockButton.setVisible(true);
+        pauseClockButton.setDisable(true);
+        pauseClockButton.setStyle("-fx-opacity: 1;");
+
+        x1Button.setVisible(false);
+        x2Button.setVisible(false);
+        x3Button.setVisible(false);
     }
 
     public void setToggle(boolean visibility) {

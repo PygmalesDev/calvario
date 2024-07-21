@@ -538,7 +538,7 @@ public class InGameController extends BasicController {
                         this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
                 showOverview();
                 selected.showUnshowRudder();
-            } else {
+            } else if (!this.tokenStorage.isSpectator()) {
                 if (Objects.nonNull(selectedIsland)) selectedIsland.showUnshowRudder();
                 this.overviewSitesComponent.closeOverview();
                 if (this.islandClaimingContainer.getLayoutX()+80 == selected.getLayoutX() &&

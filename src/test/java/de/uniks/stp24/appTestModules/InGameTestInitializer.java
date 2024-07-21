@@ -281,7 +281,6 @@ public class InGameTestInitializer extends ControllerTest {
         this.resourcesService.empireService = empireService;
         this.inGameController.selectedIsland.rudderImage = new ImageView();
         this.resourcesService.subscriber = subscriber;
-        this.inGameController.overviewUpgradeComponent.gameSystemsService = gameSystemsApiService;
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.selectedIsland.flagPane = new StackPane();
         this.variableDependencyService.variableService = this.variableService;

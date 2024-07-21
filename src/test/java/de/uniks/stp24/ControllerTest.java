@@ -4,13 +4,11 @@ import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.utils.ResponseConstants;
 import javafx.stage.Stage;
-import org.fulib.fx.annotation.controller.Resource;
 import org.junit.jupiter.api.AfterAll;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import javax.inject.Named;
 import java.util.Locale;
 import java.util.ResourceBundle;
 

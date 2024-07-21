@@ -297,10 +297,11 @@ public class InGameTestComponent extends InGameTestInitializer {
         doReturn(Observable.empty()).when(marketService).getSeasonalTrades(any(), any());
         doReturn(FXCollections.observableArrayList()).when(announcementsService).getAnnouncements();
         doReturn(FXCollections.observableArrayList()).when(jobsService).getObservableListForSystem(any());
-        doReturn(FXCollections.observableArrayList()).when(jobsService).getJobObservableListOfType(any());
         doReturn(Observable.empty()).when(jobsService).beginJob(any());
         doReturn(testIsland).when(tokenStorage).getIsland();
         doReturn(Observable.empty()).when(gameSystemsApiService).updateIsland(any(), any(), any());
+
+        this.inGameController.buildingPropertiesComponent.certainBuilding = buildingPreset1;
 
         this.app.show(this.inGameController);
         clearStyleSheets();

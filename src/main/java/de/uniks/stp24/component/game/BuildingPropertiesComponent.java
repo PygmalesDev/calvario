@@ -7,7 +7,6 @@ import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.BuildingAttributes;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
-import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;

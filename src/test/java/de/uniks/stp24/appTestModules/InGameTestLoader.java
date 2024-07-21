@@ -1,6 +1,5 @@
 package de.uniks.stp24.appTestModules;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.*;
@@ -26,9 +25,6 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 
 import javax.inject.Provider;
-
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 import static org.mockito.Mockito.spy;
 
@@ -77,10 +73,6 @@ public class InGameTestLoader extends ControllerTest {
     AnnouncementsService announcementsService;
     @Spy
     GameStatus gameStatus;
-    @Spy
-    public ResourceBundle technologiesResourceBundle =
-            ResourceBundle.getBundle("de/uniks/stp24/lang/technologies", Locale.ENGLISH);
-
 
     @InjectMocks
     protected MarketService marketService;

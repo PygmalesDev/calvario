@@ -131,12 +131,14 @@ public class ResourcesService {
                     error -> System.out.println("error in getEmpire in inGame"));
         }
 
-        for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
-            String res = entry.getKey();
-            int neededAmount = entry.getValue();
-            int availableAmount = currentResources.get(res);
-            if (availableAmount < neededAmount) {
-                return false;
+        if (Objects.nonNull(neededResources)) {
+            for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
+                String res = entry.getKey();
+                int neededAmount = entry.getValue();
+                int availableAmount = currentResources.get(res);
+                if (availableAmount < neededAmount) {
+                    return false;
+                }
             }
         }
 

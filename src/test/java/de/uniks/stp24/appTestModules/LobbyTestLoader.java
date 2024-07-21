@@ -7,7 +7,6 @@ import de.uniks.stp24.controllers.helper.JoinGameHelper;
 import de.uniks.stp24.rest.UserApiService;
 import de.uniks.stp24.service.ErrorService;
 import de.uniks.stp24.service.SaveLoadService;
-import de.uniks.stp24.service.menu.EditGameService;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.stage.Stage;

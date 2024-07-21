@@ -1,7 +1,6 @@
-package de.uniks.stp24.component.menu;
+package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.component.game.ResourceComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.BuildingAttributes;
 import de.uniks.stp24.model.DistrictAttributes;
@@ -41,7 +40,7 @@ public class DeleteStructureComponent extends VBox{
     @FXML
     Text questionMark;
     @FXML
-    Text deleteText;
+    public Text deleteText;
     @FXML
     ListView<Resource> deleteStructureListView;
     @FXML
@@ -51,7 +50,7 @@ public class DeleteStructureComponent extends VBox{
     @FXML
     Button cancelButton;
     @FXML
-    Text warningText;
+    public Text warningText;
     @FXML
     VBox warningContainer;
     @Inject
@@ -81,10 +80,10 @@ public class DeleteStructureComponent extends VBox{
     public Map<String, String> sites = sitesIconPathsMap;
     public final Map<String, String> buildings = buildingsIconPathsMap;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
 
     @Inject
-    IslandAttributeStorage islandAttributeStorage;
+    public IslandAttributeStorage islandAttributeStorage;
 
     Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle, this.imageCache);
 
@@ -154,11 +153,13 @@ public class DeleteStructureComponent extends VBox{
     private void resourceListGenerationSite(DistrictAttributes structure) {
         Map<String, Integer> resourceMapCost = structure.cost();
         Map<String, Integer> halvedResourceMapCost = new HashMap<>();
-        for (Map.Entry<String, Integer> entry : resourceMapCost.entrySet()) {
-            halvedResourceMapCost.put(entry.getKey(), entry.getValue() / 2);
+        if (Objects.nonNull(resourceMapCost)) {
+            for (Map.Entry<String, Integer> entry : resourceMapCost.entrySet()) {
+                halvedResourceMapCost.put(entry.getKey(), entry.getValue() / 2);
+            }
+            ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(halvedResourceMapCost, deleteStructureListView.getItems(), null);
+            deleteStructureListView.setItems(resourceListCost);
         }
-        ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(halvedResourceMapCost, deleteStructureListView.getItems(), null);
-        deleteStructureListView.setItems(resourceListCost);
     }
 
     public void onCancel(){

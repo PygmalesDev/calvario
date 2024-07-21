@@ -3,7 +3,6 @@ package de.uniks.stp24.controllers;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
-import de.uniks.stp24.component.menu.DeleteStructureComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.GameStatus;
@@ -15,7 +14,6 @@ import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.game.*;
-import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
@@ -96,7 +94,7 @@ public class InGameController extends BasicController {
     @Inject
     public EventService eventService;
     @Inject
-    InGameService inGameService;
+    public InGameService inGameService;
     @Inject
     EmpireService empireService;
     @Inject
@@ -227,7 +225,6 @@ public class InGameController extends BasicController {
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
-        System.out.printf("GAME ID: %s\nEMPIRE ID: %s\n", gameID, empireID);
 
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
@@ -408,7 +405,6 @@ public class InGameController extends BasicController {
         pause = true;
         inGameService.setPaused(true);
         if (pause) {
-            System.out.println("pausetest");
             pauseMenuContainer.setMouseTransparent(false);
             pauseGame();
         } else {
@@ -489,7 +485,6 @@ public class InGameController extends BasicController {
 
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
-            System.out.printf("ISLAND ID: %s\n", selected.island.id());
             tokenStorage.setIsland(selected.getIsland());
             selectedIsland = selected;
             tokenStorage.setIsland(selectedIsland.getIsland());
@@ -680,7 +675,6 @@ public class InGameController extends BasicController {
     }
 
     public void showHelp() {
-        System.out.println("help");
         popupHelpWindow.showPopup(helpWindowContainer,helpComponent);
         helpComponent.setVisible(true);
         helpComponent.setMouseTransparent(false);

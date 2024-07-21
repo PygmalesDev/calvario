@@ -67,8 +67,8 @@ public class EmpireOverviewComponent extends StackPane {
 
     private InGameController inGameController;
     private String gameID, empireID;
-    int portrait, flag;
-    String colour, empireName, empireDescription;
+    public int portrait, flag;
+    public String colour, empireName, empireDescription;
 
     List<Island> islandList = new ArrayList<>();
     List<IslandComponent> islandComponentList = new ArrayList<>();

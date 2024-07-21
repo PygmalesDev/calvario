@@ -30,7 +30,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
     @FXML
     VBox technologyOverviewBox;
     @FXML
-    Button closeButton;
+    Button closeTechnologyOverviewButton;
     @FXML
     Button crewRelationsButton;
     @FXML
@@ -51,7 +51,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
     @Inject
     @Resource
     @Named("technologiesResourceBundle")
-    ResourceBundle technologiesResourceBundle;
+    public ResourceBundle technologiesResourceBundle;
 
 
     @Inject
@@ -114,7 +114,6 @@ public class TechnologyOverviewComponent extends AnchorPane {
     }
 
     public void engineering() {
-        System.out.println("ayri");
         technologyCategoryComponent.researchJobComponent.handleJobsAlreadyRunning();
         show(technologyCategoryComponent.setCategory("engineering"));
         outerLoop:

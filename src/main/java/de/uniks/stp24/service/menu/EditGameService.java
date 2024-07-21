@@ -19,7 +19,7 @@ import javax.inject.Singleton;
 @Singleton
 public class EditGameService {
     @Inject
-    GamesApiService gamesApiService;
+    public GamesApiService gamesApiService;
     EditGameController editGameController;
 
     @Inject

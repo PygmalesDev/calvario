@@ -35,21 +35,21 @@ public class TechnologyResearchDetailsComponent extends VBox {
     public Label total;
 
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
 
     @Inject
-    PresetsApiService presetsApiService;
+    public PresetsApiService presetsApiService;
 
     @Inject
-    TechnologyService technologyService;
+    public TechnologyService technologyService;
 
     @Inject
-    EmpireApiService empireApiService;
+    public EmpireApiService empireApiService;
     @Inject
-    GameLogicApiService gameLogicApiService;
+    public GameLogicApiService gameLogicApiService;
 
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
 
     @Inject
     @Named("technologiesResourceBundle")
@@ -73,18 +73,18 @@ public class TechnologyResearchDetailsComponent extends VBox {
 
     @OnInit
     public void init() {
-        subscriber.subscribe(empireApiService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
-                empireDto -> {
-                    if (empireDto.traits() != null) {
-                        for (String traitName : empireDto.traits()) {
-                            subscriber.subscribe(presetsApiService.getTrait(traitName),
-                                    trait -> myTraits.add(trait),
-                                    error -> System.out.println("Error on getting traits: " + error.getMessage())
-                            );
-                        }
-                    }
-                }
-        );
+//        subscriber.subscribe(empireApiService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+//                empireDto -> {
+//                    if (empireDto.traits() != null) {
+//                        for (String traitName : empireDto.traits()) {
+//                            subscriber.subscribe(presetsApiService.getTrait(traitName),
+//                                    trait -> myTraits.add(trait),
+//                                    error -> System.out.println("Error on getting traits: " + error.getMessage())
+//                            );
+//                        }
+//                    }
+//                }, error -> System.out.println("Error on getting empire: " + error.getMessage()
+//        ));
     }
 
     @OnDestroy

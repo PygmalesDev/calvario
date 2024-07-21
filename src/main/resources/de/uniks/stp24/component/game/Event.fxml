@@ -28,7 +28,7 @@
             <StackPane minWidth="265.0" />
         </ScrollPane>
     </VBox>
-   <TextFlow fx:id="descriptionTextFlow" layoutX="501.0" layoutY="501.0" prefHeight="90.0" prefWidth="270.0" />
+   <TextFlow fx:id="descriptionTextFlow" textAlignment="CENTER" layoutX="501.0" layoutY="501.0" prefHeight="90.0" prefWidth="270.0" />
     <stylesheets>
         <URL value="@../../style/event.css" />
     </stylesheets>

@@ -40,9 +40,9 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
     private Pane parent;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    TechnologyService technologyService;
+    public TechnologyService technologyService;
 
     @Inject
     @SubComponent

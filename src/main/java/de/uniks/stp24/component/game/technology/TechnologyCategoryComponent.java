@@ -64,11 +64,11 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @Inject
     App app;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    TechnologyService technologyService;
+    public TechnologyService technologyService;
     @Inject
     @Resource
     @Named("technologiesResourceBundle")
@@ -91,7 +91,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
     private Pane parent;
 
     @Inject
-    ResourcesService resourcesService;
+    public ResourcesService resourcesService;
 
     @Inject
     @SubComponent
@@ -106,7 +106,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     PopupBuilder popupTechResearch = new PopupBuilder();
     private TechnologyExtended technology;
-    private TechnologyOverviewComponent technologyOverviewComponent;
+    public TechnologyOverviewComponent technologyOverviewComponent;
 
 
     @Inject

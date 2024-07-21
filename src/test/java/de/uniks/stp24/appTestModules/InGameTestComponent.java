@@ -1,5 +1,6 @@
 package de.uniks.stp24.appTestModules;
 
+import com.sun.scenario.effect.Effect;
 import de.uniks.stp24.component.game.DistrictComponent;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
@@ -180,12 +181,16 @@ public class InGameTestComponent extends InGameTestInitializer {
 
     SystemDto system;
 
+    Trait traitDto = new Trait("traitId", new EffectDto[]{new EffectDto("variable", 0.5, 1.3, 3)}, 3, new String[]{"conflicts"});
+
     public void initComponents(){
         initializeComponents();
 
         this.islandAttributeStorage.systemUpgradeAttributes = systemUpgrades;
         this.islandAttributeStorage.empireDto = empireDto;
         this.inGameController.overviewSitesComponent.sitesComponent.districtComponentProvider = districtComponentProvider;
+
+
 
         doReturn("testUserID").when(this.tokenStorage).getUserId();
         doReturn("testGameID").when(this.tokenStorage).getGameId();

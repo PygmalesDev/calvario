@@ -73,7 +73,7 @@ public class TechnologyService {
     }
 
     public ObservableList<TechnologyExtended> getResearch(String tag) {
-        ObservableList<TechnologyExtended> unlocked = getAllUnlocked();
+        ObservableList<TechnologyExtended> unlocked = getAllUnlockedAndResearched().getFirst();
         ObservableList<TechnologyExtended> research = FXCollections.observableArrayList();
         for (TechnologyExtended tech : unlocked) {
             for (String techId : tech.requires()) {
@@ -123,7 +123,45 @@ public class TechnologyService {
                                 }
                                 researchList = research;
                                 unlockedAndResearch.add(research);
-                            });
+                            }, error  -> System.out.println("Error after try to get all technologies"));
+                }, error -> System.out.println("Error after try to get empire because of: " + error.getMessage()));
+        return unlockedAndResearch;
+    }
+
+    public ObservableList<ObservableList<TechnologyExtended>> getUnlockedAndResearch(String tag) {
+        ObservableList<TechnologyExtended> unlocked;
+        unlocked = FXCollections.observableArrayList();
+        ObservableList<TechnologyExtended> research;
+        research = FXCollections.observableArrayList();
+        ObservableList<ObservableList<TechnologyExtended>> unlockedAndResearch = FXCollections.observableArrayList();
+        unlockedAndResearch.add(unlocked);
+        unlockedAndResearch.add(research);
+        unlockedList.clear();
+        researchList.clear();
+        subscriber.subscribe(empireApiService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                empire -> {
+                    if (empire.technologies() != null) {
+                        for (String techId : empire.technologies()) {
+                            subscriber.subscribe(getTechnology(techId),
+                                    technology -> {
+                                        if (Arrays.asList(technology.tags()).contains(tag)) {
+                                            unlocked.add(technology);
+                                        }
+                                    }, error -> System.out.println("Error after try to get Technology " + techId + " because: " + error.getMessage()));
+                        }
+                        unlockedList = unlocked;
+                        unlockedAndResearch.add(unlocked);
+                        subscriber.subscribe(getTechnologies(),
+                                techList -> {
+                                    for (TechnologyExtended tech : techList) {
+                                        if (unlocked.stream().noneMatch(technology -> technology.id().equals(tech.id())) && research.stream().noneMatch(techEx -> techEx.id().equals(tech.id())) && Arrays.asList(tech.tags()).contains(tag)) {
+                                            research.add(tech);
+                                        }
+                                    }
+                                    researchList = research;
+                                    unlockedAndResearch.add(research);
+                                }, error -> System.out.println("Error after try to get all technologies"));
+                    }
                 }, error -> System.out.println("Error after try to get empire because of: " + error.getMessage()));
         return unlockedAndResearch;
     }

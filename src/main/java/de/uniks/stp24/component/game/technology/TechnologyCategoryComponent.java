@@ -162,7 +162,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
         currentResearchResourceLabel.setText(String.valueOf(resourcesService.getResourceCount("research")));
         this.technologieCategoryName = category;
 
-        ObservableList<ObservableList<TechnologyExtended>> unlockedAndResearchList = technologyService.getAllUnlockedAndResearched();
+        ObservableList<ObservableList<TechnologyExtended>> unlockedAndResearchList = technologyService.getUnlockedAndResearch(technologieCategoryName);
 
         unlockedTechnologies = unlockedAndResearchList.getFirst();
         researchTechnologies = unlockedAndResearchList.getLast();

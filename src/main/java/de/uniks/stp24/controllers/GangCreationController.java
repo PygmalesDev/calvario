@@ -37,7 +37,6 @@ import static de.uniks.stp24.service.Constants.*;
 @Title("%create.island")
 @Controller
 public class GangCreationController extends BasicController {
-    public Button selectButton1;
     @Param("gameid")
     String gameID;
 

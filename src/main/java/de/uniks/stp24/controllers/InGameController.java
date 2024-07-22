@@ -590,7 +590,7 @@ public class InGameController extends BasicController {
             Island selected = this.islandsService.getIsland(job.system());
             this.islandAttributes.setIsland(selected);
             this.tokenStorage.setIsland(selected);
-            // after the job is done, the isBuilt should be true cause the building is built!
+            // after the job is done, the isBuilt should be BUILT cause the building is built!
             this.showBuildingInformation(job.building(), "", BUILT_STATUS.BUILT);
         });
 

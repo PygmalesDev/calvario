@@ -28,9 +28,6 @@ import org.fulib.fx.controller.Subscriber;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 import static org.mockito.Mockito.spy;
 
 public class IslandOverviewTestInitializer extends ControllerTest {
@@ -45,6 +42,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @Spy
     EventService eventService;
     @Spy
+    final
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
     ResourcesService resourcesService;
@@ -53,6 +51,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @Spy
     ObjectMapper objectMapper;
     @Spy
+    final
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @Spy
     EmpireService empireService;
@@ -169,6 +168,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.inGameController.overviewSitesComponent.buildingsComponent.imageCache = this.imageCache;
         this.inGameController.marketOverviewComponent = this.marketComponent;
+        this.inGameController.marketOverviewComponent.variableService = this.variableService;
         this.coolerBubbleComponent.subscriber = this.subscriber;
         this.inGameController.coolerBubbleComponent = this.coolerBubbleComponent;
 
@@ -178,15 +178,15 @@ public class IslandOverviewTestInitializer extends ControllerTest {
 
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewSitesComponent.islandAttributes = islandAttributeStorage;
-        this.inGameController.overviewUpgradeComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.coolerBubbleComponent.announcementsService = this.announcementsService;
         this.inGameController.selectedIsland = new IslandComponent();
         this.resourcesService.islandAttributes = islandAttributeStorage;
         this.resourcesService.tokenStorage = tokenStorage;
         this.resourcesService.empireService = empireService;
+        this.marketService.empireApiService = empireApiService;
+        this.inGameController.marketOverviewComponent.empireService = this.empireService;
         this.inGameController.selectedIsland.rudderImage = new ImageView();
         this.resourcesService.subscriber = subscriber;
-        this.inGameController.overviewUpgradeComponent.gameSystemsService = gameSystemsApiService;
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.selectedIsland.flagPane = new StackPane();
         this.variableDependencyService.variableService = this.variableService;

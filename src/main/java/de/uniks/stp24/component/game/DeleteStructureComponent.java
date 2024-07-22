@@ -77,7 +77,7 @@ public class DeleteStructureComponent extends VBox{
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
 
-    public Map<String, String> sites = sitesIconPathsMap;
+    public final Map<String, String> sites = sitesIconPathsMap;
     public final Map<String, String> buildings = buildingsIconPathsMap;
     @Inject
     public TokenStorage tokenStorage;
@@ -85,7 +85,7 @@ public class DeleteStructureComponent extends VBox{
     @Inject
     public IslandAttributeStorage islandAttributeStorage;
 
-    Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle, this.imageCache);
+    final Provider<ResourceComponent> resourceComponentProvider = ()-> new ResourceComponent(true, false, true, false, gameResourceBundle, this.imageCache);
 
 
     String structureType;

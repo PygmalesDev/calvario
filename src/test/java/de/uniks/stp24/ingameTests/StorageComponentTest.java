@@ -1,13 +1,12 @@
 package de.uniks.stp24.ingameTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.uniks.stp24.App;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.StorageOverviewComponent;
 import de.uniks.stp24.dto.AggregateItemDto;
 import de.uniks.stp24.dto.AggregateResultDto;
 import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.model.*;
+import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
@@ -26,12 +25,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import java.util.LinkedHashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -50,6 +48,7 @@ public class StorageComponentTest extends ControllerTest {
     @Spy
     ObjectMapper objectMapper;
     @Spy
+    final
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @Spy
     EmpireService empireService;
@@ -64,15 +63,15 @@ public class StorageComponentTest extends ControllerTest {
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
 
-    Map<String, Integer> resources1 = new LinkedHashMap<>() {{
+    final Map<String, Integer> resources1 = new LinkedHashMap<>() {{
         put("energy", 3);
         put("population", 2);
     }};
-    Map<String, Integer> resources2 = new LinkedHashMap<>() {{
+    final Map<String, Integer> resources2 = new LinkedHashMap<>() {{
         put("energy", 4);
         put("population", 4);
     }};
-    Map<String, Integer> resources3 = new LinkedHashMap<>() {{
+    final Map<String, Integer> resources3 = new LinkedHashMap<>() {{
         put("energy", 5);
         put("population", 4);
     }};

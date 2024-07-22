@@ -2,8 +2,8 @@ package de.uniks.stp24.component.menu;
 
 import de.uniks.stp24.model.MemberUser;
 import de.uniks.stp24.service.ImageCache;
-import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.menu.LobbyService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -26,8 +26,6 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     Text usernameText;
     @FXML
     Button kickButton;
-    @FXML
-    HBox userHBox;
     @Inject
     LobbyService lobbyService;
     @Inject
@@ -52,11 +50,11 @@ public class UserComponent extends StackPane implements ReusableItemComponent<Me
     @FXML
     ImageView frameImage;
 
-    Map<String, Integer> avatarMap = new HashMap<>();
+    final Map<String, Integer> avatarMap = new HashMap<>();
 
-    ArrayList<Image> backgroundsList = new ArrayList<>();
-    ArrayList<Image> portraitsList = new ArrayList<>();
-    ArrayList<Image> framesList = new ArrayList<>();
+    final ArrayList<Image> backgroundsList = new ArrayList<>();
+    final ArrayList<Image> portraitsList = new ArrayList<>();
+    final ArrayList<Image> framesList = new ArrayList<>();
 
     @Inject
     public UserComponent(ImageCache imageCache, ResourceBundle resources) {

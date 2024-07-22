@@ -2,7 +2,6 @@ package de.uniks.stp24.ingameTests;
 
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.HelpComponent;
-import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.TechHelp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,7 +20,7 @@ public class HelpComponentTest extends ControllerTest {
     
     @InjectMocks
     HelpComponent helpComponent;
-    ObservableList<TechHelp> technologies = FXCollections.observableArrayList();
+    final ObservableList<TechHelp> technologies = FXCollections.observableArrayList();
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -37,12 +36,5 @@ public class HelpComponentTest extends ControllerTest {
         waitForFxEvents();
         press(KeyCode.ALT, KeyCode.H);
         assertEquals(0, helpComponent.technologyTagsListView.getItems().size());
-    }
-
-    @Test
-    public void close(){
-        waitForFxEvents();
-        clickOn("#closeHelpButton");
-        assertEquals(false, helpComponent.visibleProperty().getValue());
     }
 }

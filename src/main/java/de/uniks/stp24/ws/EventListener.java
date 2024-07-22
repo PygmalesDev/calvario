@@ -72,8 +72,7 @@ public class EventListener {
 
                 final T data = mapper.treeToValue(node.get("data"), type);
                 emitter.onNext(new Event<>(event, data));
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
+            } catch (JsonProcessingException ignored) {
             }
         };
     }
@@ -96,8 +95,7 @@ public class EventListener {
         try {
             final String msg = mapper.writeValueAsString(message);
             endpoint.sendMessage(msg);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        } catch (JsonProcessingException ignored) {
         }
     }
 

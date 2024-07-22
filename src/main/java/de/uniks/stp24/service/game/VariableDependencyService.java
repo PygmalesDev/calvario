@@ -49,20 +49,13 @@ public class VariableDependencyService {
             pop_growth = variableService.systemsTree.getNode(key, "pop_growth").getValue().finalValue();
         }
 
-        switch(key){
-            case "unexplored":
-                next = "explored";
-                break;
-            case "explored":
-                next = "colonized";
-                break;
-            case "colonized":
-                next = "upgraded";
-                break;
-            case "upgraded":
-                next = "developed";
-                break;
-        }
+        next = switch (key) {
+            case "unexplored" -> "explored";
+            case "explored" -> "colonized";
+            case "colonized" -> "upgraded";
+            case "upgraded" -> "developed";
+            default -> next;
+        };
 
         if (variableService.systemsTree.getNode(key, "upgrade_time") != null) {
             upgrade_time = variableService.systemsTree.getNode(key, "upgrade_time").getValue().finalValue();

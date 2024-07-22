@@ -1,22 +1,24 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.EventService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.TimerService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
-import javafx.fxml.FXML;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnKey;
@@ -63,7 +65,7 @@ public class ClockComponent extends AnchorPane {
 
     Game game;
 
-    ImageCache imageCache = new ImageCache();
+    final ImageCache imageCache = new ImageCache();
     @Inject
     public EventService eventService;
     @Inject
@@ -80,6 +82,10 @@ public class ClockComponent extends AnchorPane {
     public Subscriber subscriber;
     @Inject
     public EventListener eventListener;
+    @Inject
+    public InGameService inGameService;
+
+    InGameController inGameController;
 
     private int lastUpdateSeason = -1;
     private String lastUpdateSpeed = "";
@@ -110,9 +116,10 @@ public class ClockComponent extends AnchorPane {
         PropertyChangeListener callHandleEventChanged = this::handleEventChanged;
         eventService.listeners().addPropertyChangeListener(EventService.PROPERTY_EVENT, callHandleEventChanged);
 
-        subscriber.subscribe(gamesApiService.getGame(tokenStorage.getGameId()),
-                gameResult -> game = gameResult,
-                error -> System.out.println("Error: " + error.getMessage())
+        subscriber.subscribe(gamesApiService.getGame(tokenStorage.getGameId()), gameResult -> {
+            this.inGameService.setGameOwnerID(gameResult.owner());
+            game = gameResult;
+            }, error -> System.out.println("Error: " + error.getMessage())
         );
 
         createUpdateSeasonListener();
@@ -198,7 +205,8 @@ public class ClockComponent extends AnchorPane {
                     }
                     timerService.setSpeedLocal(game.speed());
                     timerService.setSeason(game.period());
-                },
+
+                    },
                 error -> System.out.println("Error on getting game: " + error)
         );
 
@@ -245,6 +253,7 @@ public class ClockComponent extends AnchorPane {
                             timerService.reset();
                         }
                         lastUpdateSeason = game.period();
+                        inGameController.updateVariableDependencies();
                     }
                 },
                 error -> System.out.println("Error on Season: " + error.getMessage())
@@ -390,5 +399,9 @@ public class ClockComponent extends AnchorPane {
 
     public void setToggle(boolean visibility) {
         this.flagToggle.setSelected(visibility);
+    }
+
+    public void setInGameController(InGameController inGameController) {
+        this.inGameController = inGameController;
     }
 }

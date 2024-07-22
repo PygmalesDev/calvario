@@ -2,15 +2,11 @@ package de.uniks.stp24.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.component.menu.BubbleComponent;
-import de.uniks.stp24.component.menu.GangComponent;
 import de.uniks.stp24.component.menu.WarningScreenComponent;
-import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.menu.EditAccService;
-import de.uniks.stp24.service.menu.LobbyService;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -26,12 +22,9 @@ import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
-import org.fulib.fx.annotation.param.Param;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import java.util.*;
-import java.util.function.ToDoubleBiFunction;
 
 import static de.uniks.stp24.service.Constants.empireTemplatesEnglish;
 import static de.uniks.stp24.service.Constants.empireTemplatesGerman;
@@ -115,8 +108,8 @@ public class EditAccController extends BasicController {
     @Inject
     BubbleComponent bubbleComponent;
 
-    PopupBuilder popup = new PopupBuilder();
-    Random rand = new Random();
+    final PopupBuilder popup = new PopupBuilder();
+    final Random rand = new Random();
 
     ArrayList<Image> backgroundsList = new ArrayList<>();
     ArrayList<Image> framesList = new ArrayList<>();
@@ -125,12 +118,12 @@ public class EditAccController extends BasicController {
     Map<String, String[]> empireTemplates;
     public Map<String, Integer> avatarMap;
 
-    String resourcesPaths = "/de/uniks/stp24/assets/avatar/";
-    String backgroundFolderPath = "backgrounds/background_";
-    String frameFolderPath = "frames/frame_";
-    String portraitsFolderPath = "portraits/portrait_";
+    final String resourcesPaths = "/de/uniks/stp24/assets/avatar/";
+    final String backgroundFolderPath = "backgrounds/background_";
+    final String frameFolderPath = "frames/frame_";
+    final String portraitsFolderPath = "portraits/portrait_";
 
-    int imagesCount = 9;
+    final int imagesCount = 9;
     int backgroundImageIndex = 0;
     int frameImageIndex = 0;
     int portraitImageIndex = 0;

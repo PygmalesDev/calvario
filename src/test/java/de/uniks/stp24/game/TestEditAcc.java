@@ -6,7 +6,10 @@ import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.component.menu.WarningScreenComponent;
 import de.uniks.stp24.controllers.EditAccController;
 import de.uniks.stp24.model.User;
-import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.ErrorService;
+import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.PopupBuilder;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.menu.EditAccService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.Button;
@@ -40,6 +43,7 @@ public class TestEditAcc extends ControllerTest {
     @Spy
     TokenStorage tokenStorage;
     @Spy
+    final
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
     ObjectMapper objectMapper;
@@ -55,7 +59,7 @@ public class TestEditAcc extends ControllerTest {
     @InjectMocks
     WarningScreenComponent warningScreenComponent;
 
-    Map<String,Integer>  avatarMap2 = new HashMap<>();
+    final Map<String,Integer>  avatarMap2 = new HashMap<>();
 
     @Override
     public void start(Stage stage) throws Exception{

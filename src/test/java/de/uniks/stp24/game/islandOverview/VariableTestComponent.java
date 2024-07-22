@@ -1,6 +1,5 @@
 package de.uniks.stp24.game.islandOverview;
 
-import de.uniks.stp24.component.game.DistrictComponent;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.ws.Event;
@@ -8,7 +7,6 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 
-import javax.inject.Provider;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,22 +15,21 @@ import java.util.Map;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 
 public class VariableTestComponent extends IslandOverviewTestInitializer{
 
-    Map<String, Integer> variablesPresets = new HashMap<>();
+    final Map<String, Integer> variablesPresets = new HashMap<>();
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
 
-    public ArrayList<ExplainedVariableDTO> explainedVariableDTOS = new ArrayList<>();
+    public final ArrayList<ExplainedVariableDTO> explainedVariableDTOS = new ArrayList<>();
 
-    Map<String, Integer> siteSlots = Map.of("test1", 3, "test2", 3, "test3", 4, "test4", 4);
-    Map<String, Integer> sites = Map.of("test1", 2, "test2", 3, "test3", 4, "test4", 4);
-    IslandType myTestIsland = IslandType.valueOf("uninhabitable_0");
-    ArrayList<String> buildings = new ArrayList();
-    List<Island> islands = new ArrayList<>();
-    Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
-    Map<String,List<SeasonComponent>> _private = new HashMap<>();
+    final Map<String, Integer> siteSlots = Map.of("test1", 3, "test2", 3, "test3", 4, "test4", 4);
+    final Map<String, Integer> sites = Map.of("test1", 2, "test2", 3, "test3", 4, "test4", 4);
+    final IslandType myTestIsland = IslandType.valueOf("uninhabitable_0");
+    final ArrayList<String> buildings = new ArrayList();
+    final List<Island> islands = new ArrayList<>();
+    final Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
+    final Map<String,List<SeasonComponent>> _private = new HashMap<>();
 
 
     Island testIsland;
@@ -110,8 +107,6 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
         explainedVariableDTOS.add(explainedVariableDTO3);
 
         doReturn(Observable.just(variablesPresets)).when(inGameService).getVariablesPresets();
-        doReturn(Observable.just(member)).when(lobbyService).getMember(any(), any());
-        doReturn(Observable.just(variablesEffect)).when(inGameService).getVariablesEffects();
         doReturn(Observable.just(jobList)).when(jobsApiService).getEmpireJobs(any(), any());
         doReturn(Observable.just(effectSourceParentDto)).when(empireApiService).getEmpireEffect(any(), any());
         doReturn(Observable.just(explainedVariableDTOS)).when(gameLogicApiService).getVariablesExplanations(any(), any());
@@ -123,7 +118,6 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
         this.inGameController.marketOverviewComponent = this.marketComponent;
         this.marketService.subscriber = this.subscriber;
 
-        when(this.presetsApiService.getVariables()).thenReturn(Observable.just(new HashMap<>()));
         doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
 
         this.islandsService.isles = islands;

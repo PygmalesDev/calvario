@@ -5,6 +5,7 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.*;
 import de.uniks.stp24.component.game.technology.ResearchJobComponent;
 import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
+import de.uniks.stp24.component.game.technology.TechnologyCategorySubComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
@@ -38,6 +39,7 @@ public class InGameTestLoader extends ControllerTest {
     @Spy
     EventService eventService;
     @Spy
+    final
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
     ResourcesService resourcesService;
@@ -139,13 +141,13 @@ public class InGameTestLoader extends ControllerTest {
     @InjectMocks
     protected CoolerBubbleComponent coolerBubbleComponent;
 
-    Provider<ClaimingSiteComponent> claimingComponentProvider = () -> {
+    final Provider<ClaimingSiteComponent> claimingComponentProvider = () -> {
         var component = new ClaimingSiteComponent();
         component.imageCache = this.imageCache;
         return component;
     };
 
-    Provider<JobElementComponent> jobElementComponentProvider = () -> {
+    final Provider<JobElementComponent> jobElementComponentProvider = () -> {
         JobElementComponent comp = new JobElementComponent();
         comp.gameResourceBundle = gameResourceBundle;
         comp.islandsService = islandsService;
@@ -155,7 +157,7 @@ public class InGameTestLoader extends ControllerTest {
         return comp;
     };
 
-    Provider<DistrictComponent> districtComponentProvider = () -> {
+    final Provider<DistrictComponent> districtComponentProvider = () -> {
         DistrictComponent comp = new DistrictComponent();
         comp.islandAttributeStorage = this.islandAttributeStorage;
         comp.tokenStorage = this.tokenStorage;
@@ -163,7 +165,7 @@ public class InGameTestLoader extends ControllerTest {
         return comp;
     };
 
-    Provider<IslandOverviewJobProgressComponent> islandOverviewJobProgressComponentProvider = () -> {
+    final Provider<IslandOverviewJobProgressComponent> islandOverviewJobProgressComponentProvider = () -> {
         IslandOverviewJobProgressComponent comp = new IslandOverviewJobProgressComponent();
         comp.islandAttributes = this.islandAttributeStorage;
         comp.gameResourceBundle = this.gameResourceBundle;
@@ -174,13 +176,17 @@ public class InGameTestLoader extends ControllerTest {
         return comp;
     };
 
-    Provider<MarketSeasonComponent> marketSeasonComponentProvider = () -> {
+    final Provider<MarketSeasonComponent> marketSeasonComponentProvider = () -> {
         MarketSeasonComponent comp = new MarketSeasonComponent();
         comp.gameResourceBundle = this.gameResourceBundle;
         comp.marketService = this.marketService;
         comp.imageCache = this.imageCache;
         return comp;
     };
+
+    final Provider<TechnologyCategorySubComponent> technologyCategorySubComponentProvider = () ->
+            new TechnologyCategorySubComponent(this.technologyCategoryComponent, this.technologyService,
+                    this.app, this.technologiesResourceBundle, this.imageCache);
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -216,6 +222,8 @@ public class InGameTestLoader extends ControllerTest {
         this.coolerBubbleComponent.jobsService = this.jobsService;
         this.coolerBubbleComponent.subscriber = this.subscriber;
 
+        this.inGameController.marketOverviewComponent.variableService = this.variableService;
+
         this.announcementsService.technologiesResourceBundle = this.technologiesResourceBundle;
         this.announcementsService.gameResourceBundle = this.gameResourceBundle;
         this.announcementsService.islandsService = this.islandsService;
@@ -239,6 +247,8 @@ public class InGameTestLoader extends ControllerTest {
         this.islandOverviewJobsComponent.progressPaneProvider = this.islandOverviewJobProgressComponentProvider;
 
         this.overviewUpgradeComponent.jobProgressComponent = this.islandUpgradesJobProgressComponent;
+
+        this.technologyCategoryComponent.provider = this.technologyCategorySubComponentProvider;
     }
 
     protected void setServices() {
@@ -371,7 +381,6 @@ public class InGameTestLoader extends ControllerTest {
         this.technologyService.subscriber = this.subscriber;
 
         this.technologyOverviewComponent.technologiesResourceBundle = this.technologiesResourceBundle;
-
     }
 
     protected void clearStyles() {

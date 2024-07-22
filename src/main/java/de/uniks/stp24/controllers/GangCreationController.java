@@ -1,13 +1,10 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.menu.BubbleComponent;
-import de.uniks.stp24.component.menu.GangComponent;
-import de.uniks.stp24.component.menu.GangDeletionComponent;
-import de.uniks.stp24.component.menu.TraitComponent;
+import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.dto.EffectDto;
-import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Gang;
+import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.SaveLoadService;
@@ -40,6 +37,7 @@ import static de.uniks.stp24.service.Constants.*;
 @Title("%create.island")
 @Controller
 public class GangCreationController extends BasicController {
+    public Button selectButton1;
     @Param("gameid")
     String gameID;
 
@@ -64,9 +62,9 @@ public class GangCreationController extends BasicController {
     public Provider<GangComponent> gangComponentProvider;
     private final ObservableList<Gang> gangs = FXCollections.observableArrayList();
 
-    public Provider<TraitComponent> traitComponentProviderAll = () -> new TraitComponent(this, variablesResourceBundle, true, false);
-    public Provider<TraitComponent> traitComponentProviderChoosen= () -> new TraitComponent(this, variablesResourceBundle, false, true);
-    public Provider<TraitComponent> traitComponentProviderConfirmed= () -> new TraitComponent(this, variablesResourceBundle, false, false);
+    public final Provider<TraitComponent> traitComponentProviderAll = () -> new TraitComponent(this, variablesResourceBundle, true, false);
+    public final Provider<TraitComponent> traitComponentProviderChoosen= () -> new TraitComponent(this, variablesResourceBundle, false, true);
+    public final Provider<TraitComponent> traitComponentProviderConfirmed= () -> new TraitTinyComponent(this, variablesResourceBundle, false, false);
     private final ObservableList<Trait> allTraits = FXCollections.observableArrayList();
     private final ObservableList<Trait> choosenTraits = FXCollections.observableArrayList();
     private final ObservableList<Trait> confirmedTraits = FXCollections.observableArrayList();
@@ -174,28 +172,28 @@ public class GangCreationController extends BasicController {
     int nameIndex = 0;
     int typeIndex = 0;
 
-    Random rand = new Random();
+    final Random rand = new Random();
 
-    ArrayList<String> flagsList = new ArrayList<>();
-    ArrayList<String> portraitsList = new ArrayList<>();
-    ArrayList<String> colorsList = new ArrayList<>();
-    ArrayList<Double> colorsHSVList = new ArrayList<>();
-    String resourcesPaths = "/de/uniks/stp24/assets/";
-    String flagsFolderPath = "flags/flag_";
-    String portraitsFolderPath = "portraits/captain_";
-    String defaultGangName = "Buccaneers";
-    int imagesCount = 16;
+    final ArrayList<String> flagsList = new ArrayList<>();
+    final ArrayList<String> portraitsList = new ArrayList<>();
+    final ArrayList<String> colorsList = new ArrayList<>();
+    final ArrayList<Double> colorsHSVList = new ArrayList<>();
+    final String resourcesPaths = "/de/uniks/stp24/assets/";
+    final String flagsFolderPath = "flags/flag_";
+    final String portraitsFolderPath = "portraits/captain_";
+    final String defaultGangName = "Buccaneers";
+    final int imagesCount = 16;
     int flagImageIndex = 0;
     int portraitImageIndex = 0;
     int colorIndex = 0;
 
     int traitsCost = 0;
-    int traitsLimit = 5;
+    final int traitsLimit = 5;
     private Trait[] traitsPreset;
 
     Map<String, String[]> empireTemplates;
-    PopupBuilder popup = new PopupBuilder();
-    ColorAdjust splashAdjust = new ColorAdjust();
+    final PopupBuilder popup = new PopupBuilder();
+    final ColorAdjust splashAdjust = new ColorAdjust();
 
     @Inject
     public GangCreationController() {
@@ -731,7 +729,7 @@ public class GangCreationController extends BasicController {
                     }
                     type += effect.bonus() + " ";
                 } else if (effect.multiplier() != 0.00) {
-                    type = "*" + effect.multiplier() + " ";
+                    type = "x" + effect.multiplier() + " ";
                 }
                 effectsText.append(type).append(variablesResourceBundle.getString(variable)).append("\n");
             }

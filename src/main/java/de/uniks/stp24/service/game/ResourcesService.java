@@ -1,6 +1,9 @@
 package de.uniks.stp24.service.game;
 
-import de.uniks.stp24.dto.*;
+import de.uniks.stp24.dto.AggregateItemDto;
+import de.uniks.stp24.dto.BuildingDto;
+import de.uniks.stp24.dto.SystemDto;
+import de.uniks.stp24.dto.SystemsDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Resource;
 import de.uniks.stp24.rest.GameSystemsApiService;
@@ -28,7 +31,7 @@ public class ResourcesService {
     @Inject
     public Subscriber subscriber;
 
-    public ArrayList<Runnable> runnables = new ArrayList<>();
+    public final ArrayList<Runnable> runnables = new ArrayList<>();
 
     /**
      * storage for actual resources

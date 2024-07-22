@@ -4,8 +4,6 @@ import de.uniks.stp24.model.Announcement;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Resource;
-import static de.uniks.stp24.service.Constants.*;
-
 import de.uniks.stp24.service.Constants;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,9 +11,12 @@ import javafx.collections.ObservableList;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
+
+import static de.uniks.stp24.service.Constants.*;
 
 public class AnnouncementsService {
     @Inject
@@ -29,7 +30,7 @@ public class AnnouncementsService {
     @Named("technologiesResourceBundle")
     public ResourceBundle technologiesResourceBundle;
 
-    ObservableList<Announcement> announcements = FXCollections.observableArrayList();
+    final ObservableList<Announcement> announcements = FXCollections.observableArrayList();
 
     @Inject
     public AnnouncementsService() {
@@ -49,8 +50,18 @@ public class AnnouncementsService {
 
             switch (job.type()) {
                 case "upgrade" -> {
+                    String nextUpgradeLevel;
+
+                    switch (island.upgrade()) {
+                        case "unexplored" -> nextUpgradeLevel = "explored";
+                        case "explored" -> nextUpgradeLevel = "colonized";
+                        case "colonized" -> nextUpgradeLevel = "upgraded";
+                        case "upgraded" -> nextUpgradeLevel = "developed";
+                        default -> nextUpgradeLevel = "";
+                    }
+
                     message = gameResourceBundle.getString("captain.upgrade.ready")
-                            .replace("{upgradeLevel}", gameResourceBundle.getString(upgradeTranslation.get(island.upgrade())))
+                            .replace("{upgradeLevel}", gameResourceBundle.getString(upgradeTranslation.get(nextUpgradeLevel)))
                             .replace("{islandName}", islandName);
                     forwardMethods.add(jobsService.getJobInspector("island_upgrade"));
                     forwardIcon = "-fx-background-image: url('[PATH]')"
@@ -79,7 +90,7 @@ public class AnnouncementsService {
                 case "technology" -> {
                     message = gameResourceBundle.getString("captain.technology.ready")
                             .replace("{technologyId}", technologiesResourceBundle.getString(job.technology()));
-                    forwardMethods.add(jobsService.getJobInspector("island_jobs_overview"));
+                    forwardMethods.add(jobsService.getJobInspector("technology_overview"));
                     forwardIcon = "-fx-background-image: url('[PATH]')"
                             .replace("[PATH]", "/" + technologyIconMap.get(job.technology()));
                 }
@@ -90,11 +101,12 @@ public class AnnouncementsService {
 
     public void addAnnouncement(Resource resource) {
         String message = gameResourceBundle.getString("captain.debt")
-                .replace("{resourceCount}", String.valueOf(resource.count()))
+                .replace("{resourceCount}", String.valueOf(resource.count() + resource.changePerSeason()))
                 .replace("{resourceId}", gameResourceBundle.getString(resourceTranslation.get(resource.resourceID())));
         ArrayList<Consumer<Jobs.Job>> forwardMethods = new ArrayList<>();
         forwardMethods.add(jobsService.getJobInspector("storage_overview"));
-        String forwardIcon = resourceImagePath.get(resource.resourceID());
+        String forwardIcon = "-fx-background-image: url('[PATH]')"
+                .replace("[PATH]", "/" + resourceImagePath.get(resource.resourceID()));
         announcements.add(new Announcement(message, forwardIcon, forwardMethods, null));
     }
 

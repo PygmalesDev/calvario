@@ -7,12 +7,16 @@ import de.uniks.stp24.component.menu.*;
 import de.uniks.stp24.controllers.LobbyController;
 import de.uniks.stp24.dto.JoinGameDto;
 import de.uniks.stp24.dto.MemberDto;
-import de.uniks.stp24.model.*;
+import de.uniks.stp24.model.Game;
+import de.uniks.stp24.model.GameSettings;
+import de.uniks.stp24.model.MemberUser;
+import de.uniks.stp24.model.User;
 import de.uniks.stp24.rest.AuthApiService;
 import de.uniks.stp24.rest.GameMembersApiService;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.rest.UserApiService;
-import de.uniks.stp24.service.*;
+import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.menu.GamesService;
 import de.uniks.stp24.service.menu.JoinGameService;
 import de.uniks.stp24.service.menu.LobbyService;
@@ -33,7 +37,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javax.inject.Provider;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,6 +70,7 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
     @Spy
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
+    final
     EventListener eventListener = new EventListener(tokenStorage, objectMapper);
     @InjectMocks
     UserComponent userComponent;
@@ -81,7 +85,7 @@ public class TestLobbyControllerAsNewUser extends ControllerTest {
     @InjectMocks
     BubbleComponent bubbleComponent;
 
-    Provider<UserComponent> userComponentProvider = ()-> new UserComponent(imageCache, resources);
+    final Provider<UserComponent> userComponentProvider = ()-> new UserComponent(imageCache, resources);
 
     final Subject<Event<MemberDto>> memberSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();

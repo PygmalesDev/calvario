@@ -2,7 +2,10 @@ package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.*;
+import de.uniks.stp24.dto.ReadEmpireDto;
+import de.uniks.stp24.dto.ShortSystemDto;
+import de.uniks.stp24.dto.SystemDto;
+import de.uniks.stp24.dto.UpdateBuildingDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
@@ -15,6 +18,7 @@ import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
@@ -57,12 +61,8 @@ public class IslandsService extends BasicService {
      */
     @OnInit
     public void createEmpireServices() {
-        empiresInGame.keySet().forEach(id -> {
-            siteManager.put(id,new InfrastructureService());
-            siteManager.get(id).setEmpireID(id);
-        });
+        empiresInGame.keySet().forEach(id -> siteManager.put(id,new InfrastructureService()));
         siteManager.put("noBody", new InfrastructureService());
-        siteManager.get("noBody").setEmpireID("noBody");
     }
 
     public int getSiteManagerSize() {

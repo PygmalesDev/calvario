@@ -3,16 +3,14 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
-import de.uniks.stp24.model.EmpireExtendedDto;
+import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.dto.UpdateEmpireMarketDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.SeasonComponent;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.EmpireService;
-import de.uniks.stp24.service.game.ExplanationService;
-import de.uniks.stp24.service.game.MarketService;
-import de.uniks.stp24.service.game.ResourcesService;
+import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.ws.EventListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,7 +32,10 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 @Component(view = "MarketComponent.fxml")
 public class MarketComponent extends StackPane {
@@ -74,7 +75,7 @@ public class MarketComponent extends StackPane {
     @Inject
     ResourcesService resourcesService;
     @Inject
-    EmpireService empireService;
+    public EmpireService empireService;
     @Inject
     EventListener eventListener;
     @Inject
@@ -88,6 +89,8 @@ public class MarketComponent extends StackPane {
     @Inject
     public ExplanationService explanationService;
     @Inject
+    public VariableService variableService;
+    @Inject
     @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
@@ -95,7 +98,6 @@ public class MarketComponent extends StackPane {
     @Param("empireID")
     String empire;
 
-    private InGameController inGameController;
     private String lastUpdate;
     private String lastSeasonUpdate;
 
@@ -109,7 +111,7 @@ public class MarketComponent extends StackPane {
 
     public Map<String, Double> variables = new HashMap<>();
     public Map<String, Integer> resourceCountMap = new HashMap<>();
-    public Map<String, Double> resourcePriceMap = new HashMap<>();
+    public final Map<String, Double> resourcePriceMap = new HashMap<>();
     public Map<String, Integer> resourceCountMapCopy = new HashMap<>();
 
     @Inject
@@ -127,7 +129,11 @@ public class MarketComponent extends StackPane {
     }
 
     @OnInit
-    public void init() {
+    public void addRunnable() {
+        variableService.addRunnable(this::updateInformation);
+    }
+
+    public void updateInformation() {
         if (!tokenStorage.isSpectator()) {
             loadVariablesAndSetup();
             createResourceListeners();
@@ -139,9 +145,9 @@ public class MarketComponent extends StackPane {
      * Initializes amount of resources, their prices and the market fee.
      */
     private void loadVariablesAndSetup() {
-        subscriber.subscribe(marketService.getVariables(),
+        subscriber.subscribe(variableService.getAllVariables(),
                 res -> {
-                    this.variables = res;
+                    this.variables = variableService.convertVariablesToMap(res);
                     createResourcePriceMap();
                     setMarketFee();
                     createResourceCountMap();
@@ -152,7 +158,7 @@ public class MarketComponent extends StackPane {
     /**
      * Creates ResourceCountMap by fetching data form empire's resources.
      */
-    private void createResourceCountMap() {
+    public void createResourceCountMap() {
         subscriber.subscribe(marketService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 empire -> {
                     resourceCountMap.putAll(empire.resources());
@@ -230,8 +236,8 @@ public class MarketComponent extends StackPane {
      * Sets the market fee.
      */
     private void setMarketFee() {
-        marketFeeLabel.setText(String.valueOf(this.variables.get("empire.market.fee")));
-        this.marketFee = Double.parseDouble(marketFeeLabel.getText());
+        this.marketFee = this.variables.get("empire.market.fee");
+        marketFeeLabel.setText(String.valueOf(marketFee));
     }
 
     /**
@@ -281,8 +287,7 @@ public class MarketComponent extends StackPane {
      * Handles buying an item. Distinction between seasonal and non-seasonal buys.
      */
     public void buyItem() {
-        int numberOfGoods = getNumberOfGoods();
-        resourceAmount = numberOfGoods;
+        resourceAmount = getNumberOfGoods();
         if (everySeasonButton.isSelected()) {
             addSeasonalTransaction("buy", buyingPrice);
         } else {
@@ -370,10 +375,10 @@ public class MarketComponent extends StackPane {
      * Custom ListCell for displaying resources in the ListView.
      */
     public class ResourceCell extends ListCell<Map.Entry<String, Integer>> {
-        private VBox vBox = new VBox();
-        private ImageView imageView = new ImageView();
-        private Text text = new Text();
-        ImageCache imageCache = new ImageCache();
+        private final VBox vBox = new VBox();
+        private final ImageView imageView = new ImageView();
+        private final Text text = new Text();
+        final ImageCache imageCache = new ImageCache();
 
         public ResourceCell() {
             super();
@@ -398,10 +403,12 @@ public class MarketComponent extends StackPane {
                 setGraphic(vBox);
             }
             setOnMouseClicked(event -> {
-                selectedItem = item.getKey();
-                selectedIconImage.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + item.getKey() + ".png"));
-                numberOfGoodsLabel.setText("1");
-                buyingAndSellingPrice(item.getKey());
+                if (Objects.nonNull(item)) {
+                    selectedItem = item.getKey();
+                    selectedIconImage.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + item.getKey() + ".png"));
+                    numberOfGoodsLabel.setText("1");
+                    buyingAndSellingPrice(item.getKey());
+                }
             });
         }
     }
@@ -501,13 +508,6 @@ public class MarketComponent extends StackPane {
             updateResources();
             refreshListview();
         }
-    }
-
-    /**
-     * Sets the in-game controller.
-     */
-    public void setInGameController(InGameController inGameController) {
-        this.inGameController = inGameController;
     }
 
     @OnDestroy

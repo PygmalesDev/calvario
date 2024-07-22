@@ -24,6 +24,7 @@ public class LicensesControllerTest extends ControllerTest {
     BubbleComponent bubbleComponent;
 
     @Spy
+    final
     Subscriber subscriber = spy(Subscriber.class);
 
 

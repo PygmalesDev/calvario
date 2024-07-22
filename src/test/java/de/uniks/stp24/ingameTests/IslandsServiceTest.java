@@ -2,23 +2,28 @@ package de.uniks.stp24.ingameTests;
 
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.IslandComponent;
-import de.uniks.stp24.model.Island;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.dto.Upgrade;
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import io.reactivex.rxjava3.core.Observable;
-import javafx.scene.shape.QuadCurve;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import javafx.scene.shape.Line;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 @ExtendWith(MockitoExtension.class)
 public class IslandsServiceTest extends ControllerTest {
@@ -27,7 +32,7 @@ public class IslandsServiceTest extends ControllerTest {
     @Spy
     IslandComponent islandComponent = spy(IslandComponent.class);
 
-    SystemDto[] systems = new SystemDto[3];
+    final SystemDto[] systems = new SystemDto[3];
     List<IslandComponent> testIsleComps;
     Island island1;
 

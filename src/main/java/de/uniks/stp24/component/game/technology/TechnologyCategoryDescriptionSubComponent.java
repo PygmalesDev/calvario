@@ -15,6 +15,7 @@ import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
+
 import javax.inject.Inject;
 
 @Component(view = "TechnologyCategoryDescription.fxml")
@@ -30,7 +31,7 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
     @Inject
     TechnologyService technologyService;
 
-    ImageCache imageCache = new ImageCache();
+    final ImageCache imageCache = new ImageCache();
 
     @Inject
     Subscriber subscriber;

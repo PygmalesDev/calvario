@@ -6,14 +6,12 @@ import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.VariablesTree;
+import io.reactivex.rxjava3.core.Observable;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @Singleton
 public class VariableService {
@@ -29,15 +27,15 @@ public class VariableService {
     public TechnologyService technologyService;
 
     private InGameController inGameController;
-    private final Map<String, ArrayList<String>> variablesEffects = new HashMap<>();
     public final ArrayList<String> allVariables = new ArrayList<>();
-    public Map<String, ExplainedVariableDTO> data = new HashMap<>();
+    public final Map<String, ExplainedVariableDTO> data = new HashMap<>();
     public VariablesTree<ExplainedVariableDTO> buildingsTree;
     public VariablesTree<ExplainedVariableDTO> districtsTree;
     public VariablesTree<ExplainedVariableDTO> systemsTree;
     public VariablesTree<ExplainedVariableDTO> empireTree;
     public VariablesTree<ExplainedVariableDTO> resourcesTree;
     public VariablesTree<ExplainedVariableDTO> technologiesTree;
+    public ArrayList<Runnable> runnables = new ArrayList<>();
 
 
     @Inject
@@ -46,7 +44,6 @@ public class VariableService {
     }
 
     public void dispose() {
-        variablesEffects.clear();
         allVariables.clear();
         data.clear();
         buildingsTree = null;
@@ -74,15 +71,19 @@ public class VariableService {
 
     public void loadVariablesDataStructure(){
         this.subscriber.subscribe(
-                gameLogicApiService.getVariablesExplanations(inGameController.tokenStorage.getEmpireId(), allVariables),
+                this.getAllVariables(),
                 result -> {
                     for (ExplainedVariableDTO explainedVariableDTO : result) {
                         data.put(explainedVariableDTO.variable(), explainedVariableDTO);
                     }
                     createAllTrees();
-                    inGameController.loadGameAttributes();
+                    runRunnables();
                 },
                 error -> System.out.println("error in loading variable data structure:\n" + error.getMessage()));
+    }
+
+    public Observable<ArrayList<ExplainedVariableDTO>> getAllVariables(){
+        return gameLogicApiService.getVariablesExplanations(inGameController.tokenStorage.getEmpireId(), allVariables);
     }
 
     public void createAllTrees(){
@@ -146,11 +147,23 @@ public class VariableService {
         return null;
     }
 
-    public void setVariablesEffect(Map<String, ArrayList<String>> variablesEffect){
-        this.variablesEffects.putAll(variablesEffect);
-    }
-
     public void setIngameController(InGameController inGameController) {
         this.inGameController = inGameController;
+    }
+
+    public Map<String, Double> convertVariablesToMap(ArrayList<ExplainedVariableDTO> variables) {
+        Map<String, Double> variablesMap = new HashMap<>();
+        for (ExplainedVariableDTO variableDTO : variables) {
+            variablesMap.put(variableDTO.variable(), variableDTO.finalValue());
+        }
+        return variablesMap;
+    }
+
+    public void addRunnable(Runnable func) {
+        runnables.add(func);
+    }
+
+    public void runRunnables() {
+        runnables.forEach(Runnable::run);
     }
 }

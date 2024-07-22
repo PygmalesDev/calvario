@@ -31,6 +31,7 @@ public class EditGameControllerTest extends ControllerTest {
     BrowseGameController browseGameController;
 
     @Spy
+    final
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
     BubbleComponent bubbleComponent;

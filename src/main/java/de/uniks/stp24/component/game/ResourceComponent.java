@@ -35,10 +35,10 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
     @Inject
     ImageCache imageCache;
 
-    boolean showCount;
-    boolean showName;
-    boolean showIcon;
-    boolean showChangePerSeason;
+    final boolean showCount;
+    final boolean showName;
+    final boolean showIcon;
+    final boolean showChangePerSeason;
     private String type = "";
 
     @Inject

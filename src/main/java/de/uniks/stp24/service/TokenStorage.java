@@ -1,13 +1,9 @@
 package de.uniks.stp24.service;
 
-import de.uniks.stp24.model.Empire;
 import de.uniks.stp24.model.Island;
-import de.uniks.stp24.model.Trait;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Singleton
@@ -21,7 +17,6 @@ public class TokenStorage {
     private String empireId;
     private boolean isSpectator;
     private Map<String,Integer> avatarMap;
-    private ArrayList<String> empireTraits = new ArrayList<>();
 
     @Inject
     public TokenStorage() {
@@ -70,14 +65,4 @@ public class TokenStorage {
     public void setIsland (Island island){
         this.island = island;
     }
-
-    public void setEmpireTraits(ArrayList<String> empireTraits){
-        this.empireTraits.addAll(empireTraits);
-    }
-
-    public ArrayList<String> getEmpireTraits(){
-        return this.empireTraits;
-    }
-
-
 }

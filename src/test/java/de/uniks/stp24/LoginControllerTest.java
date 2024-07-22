@@ -2,21 +2,20 @@ package de.uniks.stp24;
 
 import de.uniks.stp24.component.menu.BubbleComponent;
 import de.uniks.stp24.controllers.LoginController;
+import de.uniks.stp24.model.LoginResult;
 import de.uniks.stp24.rest.AuthApiService;
-import de.uniks.stp24.model.*;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.menu.LoginService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import javafx.stage.Stage;
-import org.mockito.stubbing.OngoingStubbing;
 import org.testfx.util.WaitForAsyncUtils;
 
 import java.util.HashMap;
@@ -35,6 +34,7 @@ public class LoginControllerTest extends ControllerTest {
     TokenStorage tokenStorage;
 
     @Spy
+    final
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
     BubbleComponent bubbleComponent;

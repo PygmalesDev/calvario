@@ -2,7 +2,8 @@ package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Game;
-import de.uniks.stp24.model.Jobs.*;
+import de.uniks.stp24.model.Jobs.Job;
+import de.uniks.stp24.model.Jobs.JobDTO;
 import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
@@ -14,7 +15,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 @Singleton
@@ -28,18 +31,18 @@ public class JobsService {
     @Inject
     public EventListener eventListener;
 
-    Map<String, ObservableList<Job>> jobCollections = new HashMap<>();
-    Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();
-    Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
-    Map<String, Consumer<Job>> jobInspectionFunctions = new HashMap<>();
-    Map<String, ArrayList<Consumer<Job>>> loadTypeFunctions = new HashMap<>();
-    ArrayList<Runnable> loadCommonFunctions = new ArrayList<>();
-    ArrayList<Runnable> finishCommonFunctions = new ArrayList<>();
-    ArrayList<Runnable> startCommonFunctions = new ArrayList<>();
-    ArrayList<Runnable> jobCommonUpdates = new ArrayList<>();
-    ArrayList<Consumer<Job>> startCommonConsumers = new ArrayList<>();
-    Map<String, ArrayList<Consumer<Job>>> jobCompletionConsumers = new HashMap<>();
-    ArrayList<Runnable> tickedCommonFunctions = new ArrayList<>();
+    final Map<String, ObservableList<Job>> jobCollections = new HashMap<>();
+    final Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();
+    final Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
+    final Map<String, Consumer<Job>> jobInspectionFunctions = new HashMap<>();
+    final Map<String, ArrayList<Consumer<Job>>> loadTypeFunctions = new HashMap<>();
+    final ArrayList<Runnable> loadCommonFunctions = new ArrayList<>();
+    final ArrayList<Runnable> finishCommonFunctions = new ArrayList<>();
+    final ArrayList<Runnable> startCommonFunctions = new ArrayList<>();
+    final ArrayList<Runnable> jobCommonUpdates = new ArrayList<>();
+    final ArrayList<Consumer<Job>> startCommonConsumers = new ArrayList<>();
+    final Map<String, ArrayList<Consumer<Job>>> jobCompletionConsumers = new HashMap<>();
+    final ArrayList<Runnable> tickedCommonFunctions = new ArrayList<>();
 
     private int period = -1;
 
@@ -96,7 +99,6 @@ public class JobsService {
                 this.tokenStorage.getGameId()), Game.class), game -> {
             if (game.data().period() != this.period) {
                 this.tickedCommonFunctions.forEach(Runnable::run);
-                System.out.println("i ticked!");
                 this.period = game.data().period();
             }
 

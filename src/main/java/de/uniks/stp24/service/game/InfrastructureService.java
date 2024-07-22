@@ -9,16 +9,11 @@ import java.util.Objects;
 
 public class InfrastructureService extends BasicService {
 
-    private String empireID;
     private final Map<String, Integer> siteCapacities = new HashMap<>();
     private final Map<String, Integer> buildingCapacities = new HashMap<>();
 
     @Inject
     public InfrastructureService() {}
-
-    public void setEmpireID(String id) {
-        this.empireID = id;
-    }
 
     public void resetMap() {
         this.siteCapacities.clear();
@@ -50,10 +45,6 @@ public class InfrastructureService extends BasicService {
         } else {
             buildingCapacities.put(key,1);
         }
-    }
-
-    public int getBuildingCapacities(String buildingID) {
-        return getCapacities(buildingCapacities,buildingID);
     }
 
     private int getCapacities(Map<String, Integer> map, String id) {

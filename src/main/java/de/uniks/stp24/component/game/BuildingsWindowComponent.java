@@ -2,7 +2,6 @@ package de.uniks.stp24.component.game;
 
 
 import de.uniks.stp24.controllers.InGameController;
-import static de.uniks.stp24.service.Constants.*;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
@@ -19,6 +18,9 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ResourceBundle;
+
+import static de.uniks.stp24.service.Constants.BUILT_STATUS;
+import static de.uniks.stp24.service.Constants.imagePaths;
 
 @Component(view = "BuildingsWindow.fxml")
 public class BuildingsWindowComponent extends AnchorPane {

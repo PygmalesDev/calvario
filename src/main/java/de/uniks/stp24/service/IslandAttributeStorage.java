@@ -1,6 +1,5 @@
 package de.uniks.stp24.service;
 
-import de.uniks.stp24.dto.BuildingDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.BuildingAttributes;
@@ -28,7 +27,7 @@ public class IslandAttributeStorage {
     public Island island;
     public ArrayList<BuildingAttributes> buildingsAttributes;
     public ArrayList<DistrictAttributes> districtAttributes;
-    public Map<Integer, String> upgradeEffects = new HashMap<>();
+    public final Map<Integer, String> upgradeEffects = new HashMap<>();
 
     @Inject
     @Resource
@@ -104,16 +103,8 @@ public class IslandAttributeStorage {
         };
     }
 
-    public Map<String, Integer> getAvailableResources() {
-        return empireDto.resources();
-    }
-
     public Island getIsland() {
         return this.island;
-    }
-
-    public String[] getTech() {
-        return empireDto.technologies();
     }
 
     public void setBuildingAttributes() {
@@ -209,20 +200,20 @@ public class IslandAttributeStorage {
         return mergedMap;
     }
 
-    public Map<String, Integer> mergeResourceMaps(ArrayList<Map<String, Integer>> maps) {
-        Map<String, Integer> mergedMap = new HashMap<>();
-
-        for (Map<String, Integer> map : maps) {
-            for (Map.Entry<String, Integer> entry : map.entrySet()) {
-                String resourceId = entry.getKey();
-                Integer value = entry.getValue();
-
-                mergedMap.put(resourceId, mergedMap.getOrDefault(resourceId, 0) + value);
-            }
-        }
-
-        return mergedMap;
-    }
+//    public Map<String, Integer> mergeResourceMaps(ArrayList<Map<String, Integer>> maps) {
+//        Map<String, Integer> mergedMap = new HashMap<>();
+//
+//        for (Map<String, Integer> map : maps) {
+//            for (Map.Entry<String, Integer> entry : map.entrySet()) {
+//                String resourceId = entry.getKey();
+//                Integer value = entry.getValue();
+//
+//                mergedMap.put(resourceId, mergedMap.getOrDefault(resourceId, 0) + value);
+//            }
+//        }
+//
+//        return mergedMap;
+//    }
 
     public Map<String, Integer> mergeConsumption(Island island){
         Map<String, Integer> mergedMap = new HashMap<>(getBuildingsConsumption(island));

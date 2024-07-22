@@ -1,7 +1,6 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.dto.ResourceDto;
 import de.uniks.stp24.dto.SeasonalTradeDto;
 import de.uniks.stp24.dto.UpdateEmpireMarketDto;
 import de.uniks.stp24.model.SeasonComponent;
@@ -38,10 +37,6 @@ public class MarketService {
 
     public Observable<Map<String, Double>> getVariables() {
         return this.presetsApiService.getVariables();
-    }
-
-    public Observable<ResourceDto> getResources() {
-        return this.presetsApiService.getResources();
     }
 
     public Observable<EmpireDto> getEmpire(String gameID, String empireID) {

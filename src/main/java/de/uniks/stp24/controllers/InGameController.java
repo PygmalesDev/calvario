@@ -18,7 +18,6 @@ import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -672,7 +671,6 @@ public class InGameController extends BasicController {
                 event -> {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         islandAttributes.setEmpireDto(event.data());
-                        overviewUpgradeComponent.setUpgradeButton();
                         this.lastUpdate = event.data().updatedAt();
                     }
                 },

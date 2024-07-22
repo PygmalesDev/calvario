@@ -11,7 +11,6 @@ import javafx.collections.ObservableList;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
@@ -65,7 +64,7 @@ public class AnnouncementsService {
                             .replace("{islandName}", islandName);
                     forwardMethods.add(jobsService.getJobInspector("island_upgrade"));
                     forwardIcon = "-fx-background-image: url('[PATH]')"
-                            .replace("[PATH]", "/icons/islands/" + island.type() + ".png");
+                            .replace("[PATH]", "/de/uniks/stp24//icons/islands/" + island.type() + ".png");
                 }
                 case "district" -> {
                     message = gameResourceBundle.getString("captain.site.ready")

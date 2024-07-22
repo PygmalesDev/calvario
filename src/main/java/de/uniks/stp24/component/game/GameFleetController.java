@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.model.Fleets.Fleet;
 import de.uniks.stp24.service.game.FleetCoordinationService;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
@@ -13,11 +14,16 @@ public class GameFleetController extends Pane {
     public Circle collisionCircle;
 
     FleetCoordinationService fleetCoordinationService;
+    private Fleet fleet;
 
     @Inject
     public GameFleetController(FleetCoordinationService fleetCoordinationService){
         this.fleetCoordinationService = fleetCoordinationService;
     };
+
+    public void setFleet(Fleet fleet) {
+        this.fleet = fleet;
+    }
 
     public void setActive() {
         System.out.println("triggered!");

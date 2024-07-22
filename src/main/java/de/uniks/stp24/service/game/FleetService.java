@@ -36,14 +36,12 @@ public class FleetService {
     Map<String, ObservableList<Fleet>> empireFleets = new HashMap<>();
     Map<String, ObservableList<Fleet>> islandFleets = new HashMap<>();
     ObservableList<Fleet> gameFleets = FXCollections.observableArrayList();
-    List<Consumer<Fleet>> loadingFinishedConsumers = new ArrayList<>();
+    List<Consumer<Fleet>> fleetCreatedConsumer = new ArrayList<>();
 
     public void loadGameFleets() {
         this.subscriber.subscribe(this.fleetApiService.getGameFleets(this.tokenStorage.getGameId()),
-                readFleetDTOS -> {
-                    readFleetDTOS.stream().map(Fleets::fleetFromReadDTO).forEach(this::addFleetToGroups);
-                    this.gameFleets.forEach(fleet -> this.loadingFinishedConsumers.forEach(func -> func.accept(fleet)));
-                }, error -> System.out.println("Error loading game fleets in the FleetService:\n" + error.getMessage()));
+                readFleetDTOS -> readFleetDTOS.stream().map(Fleets::fleetFromReadDTO).forEach(this::addFleetToGroups),
+                error -> System.out.println("Error loading game fleets in the FleetService:\n" + error.getMessage()));
     }
 
     public void initializeFleetListeners() {
@@ -59,12 +57,13 @@ public class FleetService {
     }
 
     private void addFleetToGroups(Fleet fleet) {
-        System.out.printf("ID: %s\nLOCATION: %s%n", fleet._id(), fleet.location());
         this.gameFleets.add(fleet);
         if (!this.empireFleets.containsKey(fleet._id())) this.empireFleets.put(fleet._id(), FXCollections.observableArrayList());
         this.empireFleets.get(fleet._id()).add(fleet);
         if (!this.islandFleets.containsKey(fleet.location())) this.islandFleets.put(fleet.location(), FXCollections.observableArrayList());
         this.islandFleets.get(fleet.location()).add(fleet);
+
+        this.fleetCreatedConsumer.forEach(func -> func.accept(fleet));
     }
 
     private void updateFleetInGroups(Fleet fleet) {
@@ -79,13 +78,11 @@ public class FleetService {
         this.islandFleets.get(fleet.location()).removeIf(other -> other.equals(fleet));
     }
 
-    public void onFleetLoadingFinished(Consumer<Fleet> func) {
-        this.loadingFinishedConsumers.add(func);
-        System.out.println("Finisher added to fleet service");
+    public void onFleetCreated(Consumer<Fleet> func) {
+        this.fleetCreatedConsumer.add(func);
     }
 
     public Observable<Fleet> createFleet(String gameId, CreateFleetDTO fleet) {
-        System.out.println("I WAS CALLED!");
         return this.fleetApiService.createFleet(gameId, fleet);
     }
 
@@ -99,7 +96,7 @@ public class FleetService {
     }
 
     public void dispose() {
-        this.loadingFinishedConsumers.clear();
+        this.fleetCreatedConsumer.clear();
         this.subscriber.dispose();
         this.empireFleets.clear();
         this.islandFleets.clear();

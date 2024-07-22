@@ -1,0 +1,41 @@
+/*Wars*/
+.warPopUpBackGround{
+    -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/traits_details_background.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}
+
+.defaultButton{
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/button_element.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}
+
+
+/*TextStyles*/
+.baskervilleOldFace {
+    -fx-font-family: "Baskerville Old Face";
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+    -fx-fill: black;
+}
+
+
+.tempusSansITC {
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+    -fx-fill: black;
+}
+
+.javaneseText {
+    -fx-font-family: "Javanese Text";
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+    -fx-fill: black;
+}
+
+
+/*Endings*/

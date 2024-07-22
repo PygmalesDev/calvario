@@ -266,4 +266,10 @@ public class Constants {
             QUEUED,
             NOT_BUILT
     }
+
+    public static final int ISLAND_HEIGHT = 162;
+    public static final int ISLAND_WIDTH = 120;
+
+    public static final int ISLAND_COLLISION_RADIUS = 120;
+    public static final int FLEET_COLLISION_RADIUS = 40;
 }

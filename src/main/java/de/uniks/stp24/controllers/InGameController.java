@@ -345,7 +345,7 @@ public class InGameController extends BasicController {
         this.fleetService.loadGameFleets();
         this.fleetService.initializeFleetListeners();
 
-        this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::teleportFleet);
+        this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::translateFleetToPosition);
     }
 
     @OnKey(code = KeyCode.ESCAPE)

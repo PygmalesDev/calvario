@@ -4,6 +4,7 @@ import de.uniks.stp24.model.Fleets.Fleet;
 import de.uniks.stp24.service.game.FleetCoordinationService;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
+import javafx.scene.transform.Rotate;
 import org.fulib.fx.annotation.controller.Component;
 
 import javax.inject.Inject;
@@ -15,11 +16,17 @@ public class GameFleetController extends Pane {
 
     FleetCoordinationService fleetCoordinationService;
     private Fleet fleet;
+    private final Rotate rotate = new Rotate();
 
     @Inject
     public GameFleetController(FleetCoordinationService fleetCoordinationService){
         this.fleetCoordinationService = fleetCoordinationService;
-    };
+        this.getTransforms().add(rotate);
+    }
+
+    public Rotate getRotation() {
+        return this.rotate;
+    }
 
     public void setFleet(Fleet fleet) {
         this.fleet = fleet;

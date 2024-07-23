@@ -18,7 +18,7 @@
             </HBox>
             <HBox alignment="CENTER" layoutX="-2.0" layoutY="159.0" prefHeight="64.0" prefWidth="450.0">
                <children>
-                  <Button fx:id="closeButton" mnemonicParsing="false" styleClass="defaultButton" stylesheets="@../../style/IngamePopUps.css" text="Button" />
+                  <Button fx:id="closeButton" mnemonicParsing="false" styleClass="defaultButton" stylesheets="@../../style/contactsAndWar.css" text="Button" />
                </children>
             </HBox>
          </children>

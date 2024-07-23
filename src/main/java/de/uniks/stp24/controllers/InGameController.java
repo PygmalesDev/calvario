@@ -18,7 +18,6 @@ import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -146,6 +145,10 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public MarketComponent marketOverviewComponent;
+    @SubComponent
+    @Inject
+    public ContactsComponent contactsOverviewComponent;
+
 
     @SubComponent
     @Inject
@@ -317,7 +320,8 @@ public class InGameController extends BasicController {
                 jobsOverviewComponent,
                 empireOverviewComponent,
                 technologiesComponent,
-                marketOverviewComponent
+                marketOverviewComponent,
+                contactsOverviewComponent
         );
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
         this.createContextMenuButtons();
@@ -368,6 +372,9 @@ public class InGameController extends BasicController {
     public void showMarket() {
         this.toggleContextMenuVisibility(this.marketOverviewComponent);
     }
+
+    @OnKey(code = KeyCode.C, alt = true)
+    public void showContacts() {this.toggleContextMenuVisibility(this.contactsOverviewComponent);}
 
     @OnKey(code = KeyCode.T, alt = true)
     public void showTechnologiesOverview() {
@@ -436,7 +443,8 @@ public class InGameController extends BasicController {
                     new ContextMenuButton("empireOverview", this.empireOverviewComponent),
                     new ContextMenuButton("jobsOverview", this.jobsOverviewComponent),
                     new ContextMenuButton("technologies", this.technologiesComponent),
-                    new ContextMenuButton("marketOverview", this.marketOverviewComponent)
+                    new ContextMenuButton("marketOverview", this.marketOverviewComponent),
+                    new ContextMenuButton("contactsOverview", this.contactsOverviewComponent)
             );
     }
 

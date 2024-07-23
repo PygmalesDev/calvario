@@ -98,7 +98,10 @@ public class TechnologyResearchDetailsComponent extends VBox {
 
     public void setTechnologyInfos(TechnologyExtended technology) {
 
+        costVBox.getChildren().clear();
+
         base.setText("Base: " + technology.cost() * 100);
+        costVBox.getChildren().add(base);
 
         subscriber.subscribe(gameLogicApiService.getTechnologyCostAndTime(tokenStorage.getEmpireId(), "technology.cost", technology.id()),
                 aggregateResultDto -> total.setText("Total: " + aggregateResultDto.total()),

@@ -76,7 +76,7 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
 
     @Inject
     TechnologyOverviewComponent technologyOverviewComponent;
-   ImageCache imageCache = new ImageCache();
+   ImageCache imageCache;
 
    final ObservableList<Effect> description = FXCollections.observableArrayList();
 
@@ -127,6 +127,9 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     public void setItem(@NotNull TechnologyExtended technologyExtended) {
         this.technology = technologyExtended;
         technologyLabel.setText(technologiesResourceBundle.getString(technologyExtended.id()));
+
+        timeLabel.setText("");
+        researchLabel.setText("");
 
         int i = technologyExtended.tags().length;
 

@@ -209,17 +209,10 @@ public class ClockComponent extends AnchorPane {
                     },
                 error -> System.out.println("Error on getting game: " + error)
         );
-
-
-
         timerService.start();
         seasonLabel.setText(timerService.getSeason() + "");
 
         remainingSeasonsLabel.setVisible(false);
-
-//        timerService.stop();
-//        timerService.reset();
-
     }
 
     @OnDestroy

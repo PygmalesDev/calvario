@@ -101,15 +101,13 @@ public class ResearchJobComponent extends AnchorPane {
     @Inject
     App app;
 
-
-
     @Inject
-    public ResearchJobComponent(){
+    public ResearchJobComponent() {
 
     }
 
     @OnRender
-    public void render(){
+    public void render() {
         cancelResearchButton.getStyleClass().clear();
         Image image = new Image("/de/uniks/stp24/assets/buttons/cancel_button.png");
         Image image1 = new Image("de/uniks/stp24/icons/resources/research.png");
@@ -122,7 +120,7 @@ public class ResearchJobComponent extends AnchorPane {
     }
 
     @OnInit
-    public void init(){
+    public void init() {
 
     }
 
@@ -137,7 +135,7 @@ public class ResearchJobComponent extends AnchorPane {
         if (!isTechnologiesListInitialized) {
             for (Jobs.Job jobAlreadyRunning : jobList) {
                 subscriber.subscribe(technologyService.getTechnology(jobAlreadyRunning.technology()), result -> {
-                    if (!technologies.contains(result)){
+                    if (!technologies.contains(result)) {
                         technologies.add(result);
                     }
                     technologyCategoryComponent.showWindowOnStart();
@@ -147,29 +145,29 @@ public class ResearchJobComponent extends AnchorPane {
         }
     }
 
-    public void handleJobsAlreadyRunning(){
+    public void handleJobsAlreadyRunning() {
         initializeJobList();
         initializeTechnologiesList();
     }
 
-    public void handleJobInformation(){
+    public void handleJobInformation() {
         if (Objects.nonNull(technologyCategoryComponent.getTechnology())) {
             for (Jobs.Job job1 : jobList) {
-                if (job1.technology().equals(technologyCategoryComponent.getTechnology().id())){
+                if (job1.technology().equals(technologyCategoryComponent.getTechnology().id())) {
                     subscriber.subscribe(jobsApiService.getJobByID(tokenStorage.getGameId(), tokenStorage.getEmpireId(), job1._id()), currentJob -> {
-                    jobsService.onJobCompletion(currentJob._id(), this::handleJobFinished);
-                    double currentJobTotal = currentJob.total();
-                    int roundedUpTotal = (int) Math.ceil(currentJobTotal);
-                    researchProgressBar.setProgress((double) currentJob.progress() / roundedUpTotal);
-                    researchProgressText.setText(currentJob.progress() + " / " + roundedUpTotal);
-                    this.job = currentJob;
+                        jobsService.onJobCompletion(currentJob._id(), this::handleJobFinished);
+                        double currentJobTotal = currentJob.total();
+                        int roundedUpTotal = (int) Math.ceil(currentJobTotal);
+                        researchProgressBar.setProgress((double) currentJob.progress() / roundedUpTotal);
+                        researchProgressText.setText(currentJob.progress() + " / " + roundedUpTotal);
+                        this.job = currentJob;
                     }, error -> System.out.println("Error trying to get a Job in ResearchComponent"));
                 }
             }
         }
     }
 
-    public void progressHandling(){
+    public void progressHandling() {
         ObservableList<Jobs.Job> newJobList = jobsService.getJobObservableListOfType("technology");
 
         Set<String> existingJobTechnologies = new HashSet<>();
@@ -190,13 +188,14 @@ public class ResearchJobComponent extends AnchorPane {
         this.jobsService.onGameTicked(this::progressHandling);
     }
 
-        public void setEffectListView(){
-        if (technologyCategoryComponent.getTechnology() != null){
+    public void setEffectListView() {
+        if (technologyCategoryComponent.getTechnology() != null) {
             description.clear();
             description.addAll(technologyCategoryComponent.getTechnology().effects());
             technologyEffectsListView.getItems().clear();
             technologyEffectsListView.setItems(description);
-            technologyEffectsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));        }
+            technologyEffectsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
+        }
     }
 
     private void handleJobFinished() {
@@ -208,13 +207,13 @@ public class ResearchJobComponent extends AnchorPane {
 
 
     public void handleJob(TechnologyExtended technology) {
-       setJobDescription(technology);
+        setJobDescription(technology);
         subscriber.subscribe(jobsService.beginJob(Jobs.createTechnologyJob(technology.id())), job1 -> {
             jobList.add(job1);
             this.job = job1;
 
             subscriber.subscribe(technologyService.getTechnology(job.technology()), result -> {
-                if (!technologies.contains(result)){
+                if (!technologies.contains(result)) {
                     technologies.add(result);
                 }
             }, error -> System.out.println("Error in handleJob in ResearchComponent technology: \n" +
@@ -224,7 +223,7 @@ public class ResearchJobComponent extends AnchorPane {
                 error.getMessage()));
     }
 
-    public void setJobDescription(TechnologyExtended technology){
+    public void setJobDescription(TechnologyExtended technology) {
         // Check if there are at least two tags
         if (technology.tags().length > 0) {
             Image image1 = new Image(Constants.technologyIconMap.get(technology.tags()[0]));
@@ -239,11 +238,12 @@ public class ResearchJobComponent extends AnchorPane {
         researchCostText.setText(String.valueOf(cost));
         technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
     }
+
     public void setTechnologyCategoryComponent(TechnologyCategoryComponent technologyCategoryComponent) {
         this.technologyCategoryComponent = technologyCategoryComponent;
     }
 
-    public void removeJob(){
+    public void removeJob() {
         jobList.remove(job);
         technologies.removeIf(technology -> technology.id().equals(job.technology()));
 

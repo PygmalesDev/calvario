@@ -210,7 +210,6 @@ public class TechnologyCategoryComponent extends AnchorPane {
         });
         popupTechResearch.showPopup(researchJobContainer, researchJobComponent);
         researchJobComponent.handleJob(technology);
-//        unShowJobWindow();
     }
 
     public void unShowJobWindow() {

@@ -616,12 +616,6 @@ public class InGameController extends BasicController {
                 overviewSitesComponent.inputIslandName.setText(this.islandAttributes.getIsland().name());
     }
 
-    @OnKey(code = KeyCode.T, alt = true)
-    public void showTechnologies() {
-        this.toggleContextMenuVisibility(this.technologiesComponent);
-        this.technologiesComponent.setVisible(!this.technologiesComponent.isVisible());
-    }
-
     @OnKey(code = KeyCode.SPACE)
     public void resetZoom() {
         scale = 0.65;

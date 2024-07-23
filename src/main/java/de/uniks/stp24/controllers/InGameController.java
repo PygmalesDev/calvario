@@ -1,5 +1,6 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
@@ -11,6 +12,7 @@ import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
@@ -18,6 +20,7 @@ import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -39,6 +42,7 @@ import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -107,6 +111,10 @@ public class InGameController extends BasicController {
 
     @Inject
     public JobsService jobsService;
+    @Inject
+    public FleetService fleetService;
+    @Inject
+    public FleetCoordinationService fleetCoordinationService;
 
     @SubComponent
     @Inject
@@ -149,6 +157,9 @@ public class InGameController extends BasicController {
     @Inject
     public ContactsComponent contactsOverviewComponent;
 
+    @SubComponent
+    @Inject
+    public FleetCreationComponent fleetCreationComponent;
 
     @SubComponent
     @Inject
@@ -228,6 +239,7 @@ public class InGameController extends BasicController {
         pauseMenuComponent.setInGameController(this);
         helpComponent.setInGameController(this);
         clockComponent.setInGameController(this);
+        fleetCoordinationService.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
@@ -242,6 +254,8 @@ public class InGameController extends BasicController {
 
         variableService.initVariables();
         variableService.addRunnable(this::loadGameAttributes);
+
+        this.fleetCoordinationService.setInitialFleetPosition();
 
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
@@ -314,6 +328,9 @@ public class InGameController extends BasicController {
 
         technologiesComponent.setContainer(contextMenuContainer);
 
+        this.group.getChildren().add(this.fleetCreationComponent);
+        this.fleetCreationComponent.setVisible(false);
+
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,
@@ -329,6 +346,11 @@ public class InGameController extends BasicController {
   		this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListeners();
         explanationService.setInGameController(this);
+
+        this.fleetService.loadGameFleets();
+        this.fleetService.initializeFleetListeners();
+
+        this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::teleportFleet);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -496,6 +518,7 @@ public class InGameController extends BasicController {
             isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
             isle.setScaleX(1.25);
             isle.setScaleY(1.25);
+            isle.collisionCircle.setRadius(Constants.ISLAND_COLLISION_RADIUS);
             this.mapGrid.getChildren().add(isle);
         });
 
@@ -538,6 +561,8 @@ public class InGameController extends BasicController {
                         this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
                 showOverview();
                 selected.showUnshowRudder();
+
+                // Show island claiming scroll
             } else if (!this.tokenStorage.isSpectator()) {
                 if (Objects.nonNull(selectedIsland)) selectedIsland.showUnshowRudder();
                 this.overviewSitesComponent.closeOverview();
@@ -552,7 +577,16 @@ public class InGameController extends BasicController {
                     this.islandClaimingComponent.setIslandInformation(selected.island);
                 }
             }
+            // Show fleet creation pane
+            this.fleetCreationComponent.setVisible(true);
+            this.fleetCreationComponent.setIsland(selected.island.id());
+            this.fleetCreationComponent.setLayoutX(selected.getLayoutX()-100);
+            this.fleetCreationComponent.setLayoutY(selected.getLayoutY()+30);
         }
+    }
+
+    public void setFleetOnMap(GameFleetController fleet) {
+        this.mapGrid.getChildren().add(fleet);
     }
 
     @OnRender
@@ -636,6 +670,15 @@ public class InGameController extends BasicController {
         scale = 0.65;
         group.setScaleX(scale);
         group.setScaleY(scale);
+    }
+
+    @OnKey(code = KeyCode.R, control = true)
+    public void setCollisionVisibility() {
+        this.mapGrid.getChildren().forEach(child -> {
+            if (child instanceof IslandComponent island) island.collisionCircle.setVisible(!island.collisionCircle.isVisible());
+            if (child instanceof GameFleetController fleet) fleet.collisionCircle.setVisible(!fleet.collisionCircle.isVisible());
+        });
+
     }
 
     public void resetZoomMouse(@NotNull MouseEvent event) {
@@ -738,6 +781,7 @@ public class InGameController extends BasicController {
                 .removePropertyChangeListener(triple.propertyName(), triple.listener()));
         this.subscriber.dispose();
         this.jobsService.dispose();
+        this.fleetService.dispose();
         this.variableService.dispose();
     }
 }

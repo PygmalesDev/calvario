@@ -1,5 +1,7 @@
 package de.uniks.stp24.model;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -115,6 +117,10 @@ public class Jobs {
         );
     }
 
+    public static TravelJobDTO createTravelJob(ArrayList<String> path, String fleetID) {
+        return new TravelJobDTO(path, fleetID);
+    }
+
     /**
      * Creates a new job from the given job instance. This job has to be initialized using the
      * {@link de.uniks.stp24.service.game.JobsService#beginJob(JobDTO) JobService.beginJob}({@link JobDTO JobDTO}).
@@ -141,6 +147,11 @@ public class Jobs {
         String building,
         String district,
         String technology
+    ) {}
+
+    public record TravelJobDTO(
+            ArrayList<String> path,
+            String fleet
     ) {}
 
     /**

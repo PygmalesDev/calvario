@@ -2,6 +2,7 @@ package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.model.Fleets;
 import de.uniks.stp24.rest.FleetApiService;
+import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
@@ -29,6 +30,8 @@ public class FleetService {
     public FleetApiService fleetApiService;
     @Inject
     public TokenStorage tokenStorage;
+    @Inject
+    public JobsApiService jobsApiService;
 
     @Inject
     public FleetService() {}
@@ -76,6 +79,10 @@ public class FleetService {
         this.gameFleets.removeIf(other -> other.equals(fleet));
         this.empireFleets.get(fleet._id()).removeIf(other -> other.equals(fleet));
         this.islandFleets.get(fleet.location()).removeIf(other -> other.equals(fleet));
+    }
+
+    public void beginTravelJob() {
+
     }
 
     public void onFleetCreated(Consumer<Fleet> func) {

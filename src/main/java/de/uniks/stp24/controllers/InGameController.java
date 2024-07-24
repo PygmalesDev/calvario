@@ -327,6 +327,8 @@ public class InGameController extends BasicController {
         new Draggable.DraggableNode(eventContainer);
         new Draggable.DraggableNode(deleteStructureWarningContainer);
 
+        new Draggable.DraggableNode(overviewContainer, buildingsWindow, buildingProperties, siteProperties);
+
 
         this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListeners();

@@ -34,6 +34,7 @@ public class TechnologyService {
 
     ObservableList<TechnologyExtended> unlockedList = FXCollections.observableArrayList();
     ObservableList<TechnologyExtended> researchList = FXCollections.observableArrayList();
+    List<TechnologyExtended> technologiesList = new ArrayList<>();
 
 
     @Inject
@@ -61,7 +62,7 @@ public class TechnologyService {
         for (TechnologyExtended tech : unlocked) {
             if ((tech.precedes() == null || tech.precedes().length == 0) && unlockedTag.stream().noneMatch(technology -> technology.id().equals(tech.id())) && Arrays.asList(tech.tags()).contains(tag)) {
                 unlockedTag.add(tech);
-            } else if (tech.precedes() != null){
+            } else if (tech.precedes() != null) {
                 for (String pre : tech.precedes()) {
                     if (unlocked.stream().noneMatch(technology -> technology.id().equals(pre)) && Arrays.asList(tech.tags()).contains(tag)) {
                         unlockedTag.add(tech);
@@ -123,7 +124,7 @@ public class TechnologyService {
                                 }
                                 researchList = research;
                                 unlockedAndResearch.add(research);
-                            }, error  -> System.out.println("Error after try to get all technologies"));
+                            }, error -> System.out.println("Error after try to get all technologies"));
                 }, error -> System.out.println("Error after try to get empire because of: " + error.getMessage()));
         return unlockedAndResearch;
     }
@@ -169,16 +170,14 @@ public class TechnologyService {
     public ObservableList<TechnologyExtended> getAllResearch() {
         ObservableList<TechnologyExtended> research = FXCollections.observableArrayList();
         ObservableList<TechnologyExtended> unlocked = getAllUnlocked();
-        subscriber.subscribe(getTechnologies(),
-                technologiesList -> {
-                    research.clear();
-                    for (TechnologyExtended tech : technologiesList) {
-                        if (unlocked.stream().noneMatch(techEx -> techEx.id().equals(tech.id())) && research.stream().noneMatch(techEx -> techEx.id().equals(tech.id()))) {
-                            research.add(tech);
-                        }
-                    }
-                    System.out.println("Research" + research);
-                }, error -> System.out.println("Error after try to get all technologies"));
+        technologiesList = getTechnologiesList();
+        research.clear();
+        for (TechnologyExtended tech : technologiesList) {
+            if (unlocked.stream().noneMatch(techEx -> techEx.id().equals(tech.id())) && research.stream().noneMatch(techEx -> techEx.id().equals(tech.id()))) {
+                research.add(tech);
+            }
+        }
+        System.out.println("Research" + research);
         return research;
     }
 
@@ -188,6 +187,18 @@ public class TechnologyService {
 
     public ObservableList<TechnologyExtended> getResearchList() {
         return researchList;
+    }
+
+    public void initAllTechnologies() {
+        subscriber.subscribe(getTechnologies(),
+                techList -> {
+                    technologiesList.clear();
+                    technologiesList.addAll(techList);
+                }, error -> System.out.println("Error after try to get all technologies"));
+    }
+
+    public List<TechnologyExtended> getTechnologiesList() {
+        return technologiesList;
     }
 
     public Observable<TechnologyExtended> getTechnology(String id) {

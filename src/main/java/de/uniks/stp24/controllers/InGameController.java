@@ -19,7 +19,6 @@ import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -112,6 +111,8 @@ public class InGameController extends BasicController {
 
     @Inject
     public JobsService jobsService;
+    @Inject
+    public TechnologyService technologyService;
 
     @SubComponent
     @Inject
@@ -331,6 +332,8 @@ public class InGameController extends BasicController {
         technologiesComponent.setContainer(technologiesContainer);
         technologiesContainer.setVisible(false);
         technologiesContainer.getChildren().add(technologiesComponent);
+
+        technologyService.initAllTechnologies();
     }
 
     @OnKey(code = KeyCode.ESCAPE)

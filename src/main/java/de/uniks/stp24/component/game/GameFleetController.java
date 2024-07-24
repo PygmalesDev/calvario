@@ -1,6 +1,7 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.model.Fleets.Fleet;
+import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.game.FleetCoordinationService;
 import de.uniks.stp24.service.game.FleetService;
 import javafx.animation.*;
@@ -18,7 +19,6 @@ import java.util.List;
 public class GameFleetController extends Pane {
     public Circle activeCircle;
     public Circle collisionCircle;
-
 
     private final FleetService fleetService;
     private final FleetCoordinationService fleetCoordinationService;
@@ -46,19 +46,14 @@ public class GameFleetController extends Pane {
         this.collisionCircle.setPickOnBounds(true);
     }
 
-
-    public void travelTo(IslandComponent island) {
-
-    }
-
     public void beginTravelAnimation(MouseEvent mouseEvent) {
         this.isTraveling = true;
         this.travelTimeline.stop();
         this.travelTimeline.getKeyFrames().clear();
 
         this.travelTimeline.getKeyFrames().add(new KeyFrame(Duration.seconds(4),
-                new KeyValue(this.layoutXProperty(), mouseEvent.getX()-30, Interpolator.EASE_BOTH),
-                new KeyValue(this.layoutYProperty(), mouseEvent.getY()-30, Interpolator.EASE_BOTH)
+                new KeyValue(this.layoutXProperty(), mouseEvent.getX()-Constants.FLEET_HW, Interpolator.EASE_BOTH),
+                new KeyValue(this.layoutYProperty(), mouseEvent.getY()-Constants.FLEET_HW, Interpolator.EASE_BOTH)
         ));
 
         this.travelTimeline.play();
@@ -71,6 +66,7 @@ public class GameFleetController extends Pane {
         this.travelTimeline.stop();
         this.travelTimeline.getKeyFrames().clear();
 
+        this.setRotate(this.calculateAngle(coordinates.getFirst()));
         this.travelTimeline.getKeyFrames().addAll(coordinates.stream().map(coord -> new KeyFrame(
                 Duration.seconds(this.nextKeyFrameTime()),
                 new KeyValue(this.layoutXProperty(), coord[0], Interpolator.EASE_BOTH),
@@ -88,6 +84,10 @@ public class GameFleetController extends Pane {
 
     private void resetKeyFrameTime() {
         this.keyFrameTime = 4;
+    }
+
+    private double calculateAngle(Double[] toCoords) {
+        return Math.atan2(toCoords[1]-this.getLayoutY(), toCoords[0]-this.getLayoutX()) * 180/Math.PI;
     }
 
     public boolean isCollided(Circle other) {

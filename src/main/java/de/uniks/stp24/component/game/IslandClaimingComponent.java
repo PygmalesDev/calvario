@@ -1,12 +1,15 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.model.Fleets;
+import de.uniks.stp24.model.Fleets.Fleet;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Site;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
+import de.uniks.stp24.service.game.FleetCoordinationService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
 import javafx.collections.FXCollections;
@@ -21,9 +24,11 @@ import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
+import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -61,6 +66,8 @@ public class IslandClaimingComponent extends Pane {
     @FXML
     Text noSitesText;
     @FXML
+    Text fleetInformationText;
+    @FXML
     ListView<Site> sitesListView;
     @FXML
     ListView<de.uniks.stp24.model.Resource> consumeListView;
@@ -77,6 +84,8 @@ public class IslandClaimingComponent extends Pane {
     public IslandsService islandsService;
     @Inject
     public Subscriber subscriber;
+    @Inject
+    public FleetCoordinationService fleetCoordinationService;
     @Inject
     App app;
 
@@ -99,6 +108,11 @@ public class IslandClaimingComponent extends Pane {
 
     @Inject
     public IslandClaimingComponent() {}
+
+    @OnInit
+    public void provideToCoordinationService() {
+        this.fleetCoordinationService.setClaimingComponent(this);
+    }
 
     @OnRender
     public void render() {
@@ -155,22 +169,42 @@ public class IslandClaimingComponent extends Pane {
             this.colonizePane.setVisible(false);
             this.timeText.setText("3");
         }
+
+        this.setFleetInformation(this.fleetCoordinationService.getSelectedFleet());
     }
 
     public void exploreIsland() {
-        this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createIslandUpgradeJob(this.currentIsland.id())), job -> {
-            this.setProgressBarVisibility(true);
-            this.progress = 0;
-            this.islandJob = job;
-            this.jobProgressBar.setProgress(this.progress);
-            this.incrementAmount = (double) 1 /job.total();
-            this.setJobFinishers(job);
-        }, error -> System.out.printf(
-                        """
-                        Creating a new exploration job failed in IslandClaimingComponent
-                        An exception was caught here: %s
-                        """, error.getMessage()));
+        this.fleetCoordinationService.travelToIsland(this.currentIsland);
 
+        /* TODO: This job can be started only after the fleet has reached this island!
+                 Please don't remove (I will be very angry if you do!) */
+//        this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createIslandUpgradeJob(this.currentIsland.id())), job -> {
+//            this.setProgressBarVisibility(true);
+//            this.progress = 0;
+//            this.islandJob = job;
+//            this.jobProgressBar.setProgress(this.progress);
+//            this.incrementAmount = (double) 1 /job.total();
+//            this.setJobFinishers(job);
+//        }, error -> System.out.printf(
+//                        """
+//                        Creating a new exploration job failed in IslandClaimingComponent
+//                        An exception was caught here: %s
+//                        """, error.getMessage()));
+
+    }
+
+    public void setFleetInformation(GameFleetController fleet) {
+        if (Objects.isNull(fleet)) {
+            this.fleetInformationText.setVisible(true);
+            this.fleetInformationText.setText(this.gameResourceBundle.getString("claiming.noFleet"));
+            this.exploreButton.setVisible(false);
+        } else if (false) {
+            // TODO: Check if the fleet has ships for exploring/colonizing
+        } else {
+            this.fleetInformationText.setVisible(false);
+            this.exploreButton.setVisible(true);
+            this.exploreButton.setText(this.gameResourceBundle.getString("claiming.travel"));
+        }
     }
 
     @OnRender

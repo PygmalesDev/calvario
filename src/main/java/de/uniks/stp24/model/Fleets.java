@@ -61,7 +61,9 @@ public class Fleets {
 
     public static CreateFleetDTO createRandomFleet(String islandID) {
         return new CreateFleetDTO("fleet_" + random.nextInt(0, 28390), islandID,
-                Map.of("colonizer", random.nextInt(0, 10), "destroyer", random.nextInt(0, 22)),
+                Map.of("explorer", random.nextInt(3, 20),
+                        "colonizer", random.nextInt(2, 10),
+                        "destroyer", random.nextInt(2, 22)),
                         new HashMap<>(), new HashMap<>(), new EffectSource[]{});
     }
 

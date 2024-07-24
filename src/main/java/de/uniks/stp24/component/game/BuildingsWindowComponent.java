@@ -41,9 +41,9 @@ public class BuildingsWindowComponent extends AnchorPane {
     @FXML
     Button buildingExchange;
     @FXML
-    Button shipyard;
+    Button buildingShipyard;
     @FXML
-    Button stronghold;
+    Button buildingStronghold;
     @FXML
     Button closeWindowButton;
 
@@ -90,8 +90,8 @@ public class BuildingsWindowComponent extends AnchorPane {
                 buildingMine,
                 buildingPowerPlant,
                 buildingExchange,
-                shipyard,
-                stronghold
+                buildingShipyard,
+                buildingStronghold
         };
     }
 

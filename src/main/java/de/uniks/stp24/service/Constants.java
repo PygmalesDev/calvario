@@ -134,7 +134,9 @@ public class Constants {
             "research_lab","building.scoutHub",
             "foundry","building.alloySmeltery",
             "factory","building.chophouse",
-            "refinery","building.coalQuarry"
+            "refinery","building.coalQuarry",
+            "shipyard", "building.shipyard",
+            "stronghold", "building.stronghold"
     );
 
 
@@ -197,7 +199,9 @@ public class Constants {
             Map.entry("farm", "de/uniks/stp24/icons/buildings/farmside.png"),
             Map.entry("mine", "de/uniks/stp24/icons/buildings/resonating_delves.png"),
             Map.entry("power_plant", "de/uniks/stp24/icons/buildings/theurgy_hall.png"),
-            Map.entry("exchange", "de/uniks/stp24/icons/buildings/seaside_hut.png")
+            Map.entry("exchange", "de/uniks/stp24/icons/buildings/seaside_hut.png"),
+            Map.entry("shipyard", "de/uniks/stp24/icons/buildings/shipyard.png"),
+            Map.entry("stronghold", "de/uniks/stp24/icons/buildings/stronghold.png")
     );
 
     public static final Map<String, String> buildingsOnQueueMap = Map.ofEntries(

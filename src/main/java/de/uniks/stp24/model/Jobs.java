@@ -32,8 +32,12 @@ public class Jobs {
              String building,
              String district,
              String technology,
+             String fleet,
+             String ship,
+             LinkedList<String> path,
              Map<String, Integer> cost,
-             JobResult result) {
+             JobResult result
+    ) {
         @Override
         public boolean equals(Object obj) {
             if (obj instanceof Job) return this._id.equals(((Job) obj)._id());
@@ -118,7 +122,7 @@ public class Jobs {
     }
 
     public static TravelJobDTO createTravelJob(ArrayList<String> path, String fleetID) {
-        return new TravelJobDTO(path, fleetID);
+        return new TravelJobDTO("travel", path, fleetID);
     }
 
     /**
@@ -150,6 +154,7 @@ public class Jobs {
     ) {}
 
     public record TravelJobDTO(
+            String type,
             ArrayList<String> path,
             String fleet
     ) {}

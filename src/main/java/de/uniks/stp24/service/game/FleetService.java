@@ -1,6 +1,8 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.model.Fleets;
+import de.uniks.stp24.model.Jobs.Job;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.rest.FleetApiService;
 import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.service.TokenStorage;
@@ -12,10 +14,7 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static de.uniks.stp24.model.Fleets.*;
@@ -81,8 +80,9 @@ public class FleetService {
         this.islandFleets.get(fleet.location()).removeIf(other -> other.equals(fleet));
     }
 
-    public void beginTravelJob() {
-
+    public Observable<Job> beginTravelJob(ArrayList<String> path, String fleetID) {
+        return this.jobsApiService.createTravelJob(this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId(),
+                Jobs.createTravelJob(path, fleetID));
     }
 
     public void onFleetCreated(Consumer<Fleet> func) {

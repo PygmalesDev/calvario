@@ -557,8 +557,6 @@ public class InGameController extends BasicController {
 
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
-            this.fleetCoordinationService.travelToIsland(selected);
-
             tokenStorage.setIsland(selected.getIsland());
             selectedIsland = selected;
             tokenStorage.setIsland(selectedIsland.getIsland());
@@ -786,6 +784,7 @@ public class InGameController extends BasicController {
         this.subscriber.dispose();
         this.jobsService.dispose();
         this.fleetService.dispose();
+        this.fleetCoordinationService.dispose();
         this.variableService.dispose();
     }
 }

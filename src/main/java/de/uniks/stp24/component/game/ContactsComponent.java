@@ -13,6 +13,7 @@ public class ContactsComponent extends StackPane {
     @FXML
     ListView<ContactCell> contactsList;
 
+
     @Inject
     public ContactsComponent(){
 

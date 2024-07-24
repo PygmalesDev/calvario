@@ -177,7 +177,7 @@ public class InGameController extends BasicController {
     @Inject
     public SitePropertiesComponent sitePropertiesComponent;
 
-    List<IslandComponent> islandComponentList;
+    public List<IslandComponent> islandComponentList;
     Map<String, IslandComponent> islandComponentMap;
 
     @Inject

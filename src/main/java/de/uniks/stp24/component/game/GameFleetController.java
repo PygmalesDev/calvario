@@ -14,7 +14,7 @@ public class GameFleetController extends Pane {
     public Circle collisionCircle;
 
     FleetCoordinationService fleetCoordinationService;
-    private Fleet fleet;
+    public Fleet fleet;
 
     @Inject
     public GameFleetController(FleetCoordinationService fleetCoordinationService){
@@ -29,10 +29,6 @@ public class GameFleetController extends Pane {
         System.out.println("triggered!");
         this.activeCircle.setVisible(!this.activeCircle.isVisible());
         this.fleetCoordinationService.setFleet(this);
-    }
-
-    public boolean isCollided(Circle other) {
-        return this.collisionCircle.intersects(other.getLayoutBounds());
     }
 
 }

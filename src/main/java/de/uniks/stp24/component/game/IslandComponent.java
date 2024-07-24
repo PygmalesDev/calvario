@@ -3,9 +3,11 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
+import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.FleetService;
 import de.uniks.stp24.service.game.IslandsService;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
@@ -17,6 +19,7 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnKey;
+import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -44,6 +47,8 @@ public class IslandComponent extends Pane {
     ResourceBundle resource;
     @Inject
     IslandAttributeStorage islandAttributes;
+    @Inject
+    FleetService fleetService;
 
     IslandsService islandsService;
 
@@ -83,7 +88,7 @@ public class IslandComponent extends Pane {
 
     public void applyInfo(Island islandInfo) {
         this.island = islandInfo;
-        this.setId(island.id()+"_instance");
+        this.setId(island.id() + "_instance");
         this.spyglassImage.setVisible(island.upgrade().equals("explored"));
         applyIcon(this.island.type());
     }
@@ -108,7 +113,7 @@ public class IslandComponent extends Pane {
         inGameController.islandsService.keyCodeFlag = selected;
     }
 
-    @OnKey(code = KeyCode.F,alt = true)
+    @OnKey(code = KeyCode.F, alt = true)
     public void showFlagH() {
         if (island.flagIndex() >= 0 && !islandIsSelected) {
             this.flagPane.setVisible(!flagPane.isVisible());
@@ -150,7 +155,7 @@ public class IslandComponent extends Pane {
                 islandIsSelected = true;
             }
         }
-        
+
         if (!inGameController.islandsService.keyCodeFlag) {
             this.flagPane.setVisible(!this.flagPane.isVisible());
         }
@@ -176,7 +181,7 @@ public class IslandComponent extends Pane {
     Reset of componentes for showing informations of current selected island.
      */
 
-    public void reset(){
+    public void reset() {
         inGameController.overviewSitesComponent.resetButtons();
         inGameController.buildingsWindowComponent.setVisible(false);
         inGameController.sitePropertiesComponent.setVisible(false);
@@ -184,7 +189,7 @@ public class IslandComponent extends Pane {
         inGameController.overviewContainer.setVisible(false);
         inGameController.selectedIsland.islandIsSelected = false;
 
-        if(!inGameController.islandsService.keyCodeFlag) {
+        if (!inGameController.islandsService.keyCodeFlag) {
             inGameController.selectedIsland.rudderImage.setVisible(false);
         }
 
@@ -201,11 +206,24 @@ public class IslandComponent extends Pane {
         this.islandsService = islandsService;
     }
 
-    public void hideSpyGlass(){
+    public void hideSpyGlass() {
         this.spyglassImage.setVisible(false);
     }
 
-    public boolean isCollided(Circle other) {
-        return this.collisionCircle.intersects(other.getLayoutBounds());
+    public boolean isCollided(double fleetX, double fleetY, double fleetR) {
+        double x1 = this.getPosX();
+        double y1 = this.getPosY();
+        double r1 = Constants.ISLAND_COLLISION_RADIUS;
+//        System.out.println("island: " + "x: " +x1 +" y: " + y1 + " r: " +r1);
+
+        double x2 = fleetX;
+        double y2 = fleetY;
+        double r2 = fleetR;
+//        System.out.println("fleet: " + "x: " +x2 +" y: " + y2 + " r: " +r2);
+
+        boolean distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)) <= r1 + r2;
+
+        return distance;
     }
+
 }

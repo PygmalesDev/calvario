@@ -53,6 +53,7 @@ public class VariableService {
         empireTree = null;
         resourcesTree = null;
         technologiesTree = null;
+        shipTree = null;
     }
 
     /*

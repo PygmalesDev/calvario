@@ -27,8 +27,8 @@ public class Draggable {
 
         public DraggableNode(final Node eventNode, final Node... dragNodes) {
             this.eventNode = eventNode;
-            this.dragNodes.add(eventNode);
             this.dragNodes.addAll(Arrays.asList(dragNodes));
+            if (!this.dragNodes.contains(eventNode)) this.dragNodes.add(eventNode);
             this.eventNode.addEventHandler(MouseEvent.ANY, this);
         }
 

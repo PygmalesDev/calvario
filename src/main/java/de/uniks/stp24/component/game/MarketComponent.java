@@ -152,7 +152,7 @@ public class MarketComponent extends StackPane {
                                 createResourcePriceMap();
                                 setMarketFee();
                                 createResourceCountMap();
-                            });
+                            }, error -> System.out.println("errorLoadVariableAndSetup:" + error));
                 }, error -> System.out.println("errorLoadVariableAndSetup:" + error)
         );
     }

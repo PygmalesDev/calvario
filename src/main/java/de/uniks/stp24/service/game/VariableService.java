@@ -26,7 +26,7 @@ public class VariableService {
     @Inject
     public TechnologyService technologyService;
 
-    private InGameController inGameController;
+    public InGameController inGameController;
     public final ArrayList<String> allVariables = new ArrayList<>();
     public final Map<String, ExplainedVariableDTO> data = new HashMap<>();
     public VariablesTree<ExplainedVariableDTO> buildingsTree;
@@ -87,6 +87,10 @@ public class VariableService {
                 }, error -> System.out.println("error while loading first half of variables:\n" + error.getMessage()));
     }
 
+    /**
+     * The two function are split because the server can't handle one request that saves all variables at once at the moment (v4.0.0).
+     * If you want to get all variables, please nest the two functions in each other and save the results in the same list.
+     */
     public Observable<ArrayList<ExplainedVariableDTO>> getFirstHalfOfVariables() {
         ArrayList<String> firstHalf = new ArrayList<>(allVariables.subList(0, allVariables.size() / 2));
         return gameLogicApiService.getVariablesExplanations(inGameController.tokenStorage.getEmpireId(), firstHalf);

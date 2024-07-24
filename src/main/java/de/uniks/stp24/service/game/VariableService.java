@@ -35,6 +35,7 @@ public class VariableService {
     public VariablesTree<ExplainedVariableDTO> empireTree;
     public VariablesTree<ExplainedVariableDTO> resourcesTree;
     public VariablesTree<ExplainedVariableDTO> technologiesTree;
+    public VariablesTree<ExplainedVariableDTO> shipTree;
     public ArrayList<Runnable> runnables = new ArrayList<>();
 
 
@@ -65,25 +66,35 @@ public class VariableService {
                     }
                     loadVariablesDataStructure();
                 },
-                error -> System.out.println("error in loading variable presets"));
+                error -> System.out.println("error in loading variable presets:\n" + error.getMessage()));
     }
 
 
-    public void loadVariablesDataStructure(){
-        this.subscriber.subscribe(
-                this.getAllVariables(),
-                result -> {
-                    for (ExplainedVariableDTO explainedVariableDTO : result) {
+    public void loadVariablesDataStructure() {
+        subscriber.subscribe(getFirstHalfOfVariables(),
+                firstHalf -> {
+                    for (ExplainedVariableDTO explainedVariableDTO : firstHalf) {
                         data.put(explainedVariableDTO.variable(), explainedVariableDTO);
                     }
-                    createAllTrees();
-                    runRunnables();
-                },
-                error -> System.out.println("error in loading variable data structure:\n" + error.getMessage()));
+                    subscriber.subscribe(getSecondHalfOfVariables(),
+                            secondHalf -> {
+                                for (ExplainedVariableDTO explainedVariableDTO : secondHalf) {
+                                    data.put(explainedVariableDTO.variable(), explainedVariableDTO);
+                                }
+                                createAllTrees();
+                                runRunnables();
+                            }, error -> System.out.println("error while loading second half of variables:\n" + error.getMessage()));
+                }, error -> System.out.println("error while loading first half of variables:\n" + error.getMessage()));
     }
 
-    public Observable<ArrayList<ExplainedVariableDTO>> getAllVariables(){
-        return gameLogicApiService.getVariablesExplanations(inGameController.tokenStorage.getEmpireId(), allVariables);
+    public Observable<ArrayList<ExplainedVariableDTO>> getFirstHalfOfVariables() {
+        ArrayList<String> firstHalf = new ArrayList<>(allVariables.subList(0, allVariables.size() / 2));
+        return gameLogicApiService.getVariablesExplanations(inGameController.tokenStorage.getEmpireId(), firstHalf);
+    }
+
+    public Observable<ArrayList<ExplainedVariableDTO>> getSecondHalfOfVariables() {
+        ArrayList<String> secondHalf = new ArrayList<>(allVariables.subList(allVariables.size() / 2, allVariables.size()));
+        return gameLogicApiService.getVariablesExplanations(inGameController.tokenStorage.getEmpireId(), secondHalf);
     }
 
     public void createAllTrees(){
@@ -93,6 +104,7 @@ public class VariableService {
         empireTree = new VariablesTree<>("empire");
         technologiesTree = new VariablesTree<>("technologies");
         resourcesTree = new VariablesTree<>("resources");
+        shipTree = new VariablesTree<>("ships");
 
         createTree(buildingsTree);
         createTree(districtsTree);
@@ -100,6 +112,7 @@ public class VariableService {
         createTree(empireTree);
         createTree(technologiesTree);
         createTree(resourcesTree);
+        createTree(shipTree);
     }
 
     /*

@@ -90,6 +90,18 @@ public class FleetCoordinationService {
         this.selectedFleet.beginTravelAnimation(mouseEvent);
     }
 
+    public void travelToIsland(IslandComponent destinationIsland) {
+        if (Objects.isNull(this.selectedFleet)) return;
+        this.selectedFleet.beginTravelAnimation(this.getCoordinatedPath(this.getTravelPath(destinationIsland)));
+    }
+
+    private List<Double[]> getCoordinatedPath(ArrayList<String> islandIDs) {
+        islandIDs.removeFirst();
+        return islandIDs.stream().map(id -> {
+            IslandComponent island = this.islandsService.getIslandComponent(id);
+            return new Double[]{island.getPosX(), island.getPosY()};
+        }).toList();
+    }
 
     public ArrayList<String> getTravelPath(IslandComponent destinationIsland) {
         if (Objects.isNull(this.selectedFleet)) return null;

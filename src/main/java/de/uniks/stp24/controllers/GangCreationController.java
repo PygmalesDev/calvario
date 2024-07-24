@@ -237,6 +237,7 @@ public class GangCreationController extends BasicController {
     @OnRender
     public void render() {
         buttonsPane.setPickOnBounds(false);
+        creationBox.toFront();
         showCreationButton.setText("NEW EMPIRE");
         this.splashAdjust.setBrightness(0.35);
         this.splashAdjust.setContrast(0.0);
@@ -271,7 +272,8 @@ public class GangCreationController extends BasicController {
                         spectatorBox.setVisible(true);
                         spectatorImage.setImage(imageCache.get("icons/spectatorSign.png"));
                     }
-                });
+                },
+                error -> System.out.println("Error while loading Empire from server: " + error));
 
         changeNodesVisibility(false, creationBox, deletePane, editButton, showDeletePaneButton, traitsBox);
 
@@ -623,7 +625,6 @@ public class GangCreationController extends BasicController {
     public void chooseTraits() {
         updateTraitsLists();
         setButtonsDisable(true);
-        changeEditNodes(false, false);
         traitsBox.setVisible(true);
     }
 
@@ -658,7 +659,6 @@ public class GangCreationController extends BasicController {
         bubbleComponent.setCaptainText(resources.getString("pirate.empireScreen.intro"));
         resetTraitsLists();
         setButtonsDisable(false);
-        changeEditNodes(true, false);
         traitsBox.setVisible(false);
     }
 

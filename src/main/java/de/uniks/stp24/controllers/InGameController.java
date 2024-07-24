@@ -343,7 +343,7 @@ public class InGameController extends BasicController {
         this.fleetService.loadGameFleets();
         this.fleetService.initializeFleetListeners();
 
-        this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::travelToMousePosition);
+//        this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::travelToMousePosition);
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -537,7 +537,7 @@ public class InGameController extends BasicController {
 
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
-            this.fleetCoordinationService.getTravelPath(selected);
+            this.fleetCoordinationService.travelToIsland(selected);
 
             tokenStorage.setIsland(selected.getIsland());
             selectedIsland = selected;

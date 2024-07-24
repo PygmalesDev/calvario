@@ -3,10 +3,7 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.model.Fleets.Fleet;
 import de.uniks.stp24.service.game.FleetCoordinationService;
 import de.uniks.stp24.service.game.FleetService;
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
+import javafx.animation.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
@@ -15,7 +12,7 @@ import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
 
 import javax.inject.Inject;
-import java.util.Objects;
+import java.util.List;
 
 @Component(view = "GameFleet.fxml")
 public class GameFleetController extends Pane {
@@ -25,10 +22,11 @@ public class GameFleetController extends Pane {
 
     private final FleetService fleetService;
     private final FleetCoordinationService fleetCoordinationService;
-    private final Timeline travelAnimation = new Timeline();
+    private final Timeline travelTimeline = new Timeline();
     private final Fleet fleet;
     private final Rotate rotate = new Rotate();
     private boolean isTraveling = false;
+    private int keyFrameTime = 0;
 
     @Inject
     public GameFleetController(Fleet fleet, FleetCoordinationService fleetCoordinationService, FleetService fleetService){
@@ -55,15 +53,41 @@ public class GameFleetController extends Pane {
 
     public void beginTravelAnimation(MouseEvent mouseEvent) {
         this.isTraveling = true;
-        this.travelAnimation.stop();
-        this.travelAnimation.getKeyFrames().clear();
+        this.travelTimeline.stop();
+        this.travelTimeline.getKeyFrames().clear();
 
-        this.travelAnimation.getKeyFrames().add(new KeyFrame(Duration.seconds(4),
+        this.travelTimeline.getKeyFrames().add(new KeyFrame(Duration.seconds(4),
                 new KeyValue(this.layoutXProperty(), mouseEvent.getX()-30, Interpolator.EASE_BOTH),
                 new KeyValue(this.layoutYProperty(), mouseEvent.getY()-30, Interpolator.EASE_BOTH)
         ));
 
-        this.travelAnimation.play();
+        this.travelTimeline.play();
+    }
+
+    public void beginTravelAnimation(List<Double[]> coordinates) {
+        this.isTraveling = true;
+
+        this.resetKeyFrameTime();
+        this.travelTimeline.stop();
+        this.travelTimeline.getKeyFrames().clear();
+
+        this.travelTimeline.getKeyFrames().addAll(coordinates.stream().map(coord -> new KeyFrame(
+                Duration.seconds(this.nextKeyFrameTime()),
+                new KeyValue(this.layoutXProperty(), coord[0], Interpolator.EASE_BOTH),
+                new KeyValue(this.layoutYProperty(), coord[1], Interpolator.EASE_BOTH)
+        )).toList());
+
+        this.travelTimeline.play();
+    }
+
+    private int nextKeyFrameTime() {
+        int prevTime = this.keyFrameTime;
+        this.keyFrameTime += 4;
+        return prevTime;
+    }
+
+    private void resetKeyFrameTime() {
+        this.keyFrameTime = 4;
     }
 
     public boolean isCollided(Circle other) {

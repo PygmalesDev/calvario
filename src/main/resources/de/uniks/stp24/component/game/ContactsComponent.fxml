@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Text?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="514.0" prefWidth="325.0" styleClass="contactsBackground" stylesheets="@../../style/contactsAndWar.css" type="StackPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.ContactsComponent">
+   <children>
+      <AnchorPane prefHeight="512.0" prefWidth="314.0" style="-fx-background-color: transparent;">
+         <children>
+            <ListView fx:id="contactsListView" layoutX="25.0" layoutY="70.0" prefHeight="424.0" prefWidth="275.0" style="-fx-background-color: tansparent;" AnchorPane.leftAnchor="25.0" />
+            <Text layoutX="76.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="contactsTitle" text="Contacts" wrappingWidth="204.13671875" />
+            <Button fx:id="closeContactsComponent" layoutX="314.0" layoutY="8.0" mnemonicParsing="false" onAction="#closeContactsComponent" prefHeight="50.0" prefWidth="50.0" styleClass="closeWindowButton" />
+         </children>
+      </AnchorPane>
+   </children>
+</fx:root>

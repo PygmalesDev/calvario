@@ -186,11 +186,11 @@ public class InGameController extends BasicController {
     public IslandAttributeStorage islandAttributes;
     @Inject
     EventListener eventListener;
-
     @Inject
     public InGameController() {
         lastUpdate = "";
     }
+
 
     @Inject
     public GameSystemsApiService gameSystemsApiService;
@@ -198,6 +198,8 @@ public class InGameController extends BasicController {
     public VariableService variableService;
     @Inject
     public LobbyService lobbyService;
+    @Inject
+    public ContactsService contactService;
 
     public IslandComponent selectedIsland;
 
@@ -783,5 +785,6 @@ public class InGameController extends BasicController {
         this.jobsService.dispose();
         this.fleetService.dispose();
         this.variableService.dispose();
+        this.contactService.dispose();
     }
 }

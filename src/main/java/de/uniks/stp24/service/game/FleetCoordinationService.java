@@ -87,7 +87,7 @@ public class FleetCoordinationService {
                 System.out.println("fleetOwnerID" + selectedFleet.fleet.empire());
                 if(Objects.nonNull(islandComponent.getIsland().owner())){
                     if (!islandComponent.getIsland().owner().equals(selectedFleet.fleet.empire())){
-                        System.out.println("Enemy detected");
+                        System.out.println("Enemy  detected");
                         contactsService.addEnemy(islandComponent.getIsland().owner());
                     }
                 }

@@ -45,5 +45,19 @@
     -fx-background-repeat: no-repeat;
 }
 
+.contactsTitle{
+    -fx-font-family: "Baskerville Old Face";
+    -fx-fill: white;
+    -fx-font-size: 58;
+}
+
+
+.closeWindowButton{
+    -fx-background-image: url("/de/uniks/stp24/assets/empireOverview/close_window_button.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}
+
 
 /*Endings*/

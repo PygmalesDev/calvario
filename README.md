@@ -4,7 +4,7 @@ Welcome to **Calvario**, a strategic game inspired by Stellaris, but with a twis
 
 ## Features
 
-- **Real-Time Online Mulitplayer:** Compete against other players in real-time across different worlds!
+- **Real-Time Online Multiplayer:** Compete against other players in real-time across different worlds!
 - **Island Conquest:** Battle against other pirate empires to expand your territory.
 - **Strategic Gameplay:** Manage resources, build fleets, and conquer islands to become the ultimate pirate lord.
 - **Multi-Language Support:** Play in either English or German.
@@ -28,7 +28,13 @@ Initial release with exclusive features:
 
 ### Version 3.0.0 (19.07.2024)
 
-not released yet
+- combine traits to **enhance your empire**
+- use the **market to interchange resources vs. credits** having the option of carry out deals every season
+- introducing **time-based game play** 
+- **research technologies** to improve your island, sites and building
+- **create sites and buildings** on your empire's islands
+- expand your empire **claiming and colonizing new islands**
+- **experience random events**
 
 ## How To Use It
 

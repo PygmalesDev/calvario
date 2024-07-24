@@ -4,6 +4,7 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
+import de.uniks.stp24.controllers.helper.Draggable;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.GameStatus;
@@ -41,10 +42,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static de.uniks.stp24.service.Constants.BUILT_STATUS;
 
@@ -318,10 +316,19 @@ public class InGameController extends BasicController {
                 technologiesComponent,
                 marketOverviewComponent
         );
-        contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
+        contextMenuContainer.getChildren().forEach(child -> {
+            child.setVisible(false);
+            // make every node in contextMenuContainer draggable
+            new Draggable.DraggableNode(child);
+        });
         this.createContextMenuButtons();
 
-  		this.jobsService.loadEmpireJobs();
+        // make pop ups draggable
+        new Draggable.DraggableNode(eventContainer);
+        new Draggable.DraggableNode(deleteStructureWarningContainer);
+
+
+        this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListeners();
         explanationService.setInGameController(this);
     }

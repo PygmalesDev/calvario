@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import java.net.URL?>
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="200.0" styleClass="buildingsOverviewBackground" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.BuildingsWindowComponent">
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="200.0" styleClass="buildingsOverviewBackground" translateY="-20.0" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.BuildingsWindowComponent">
    <Text layoutX="60.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="headerText" text="%buildings" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="40.0">
       <font>
          <Font size="20.0" />
@@ -24,6 +25,8 @@
    <Button fx:id="buildingFoundry" layoutX="100.0" layoutY="165.0" mnemonicParsing="false" onAction="#buildFoundry" prefHeight="60.0" prefWidth="60.0" styleClass="buildingButton" />
    <Button fx:id="buildingFactory" layoutX="35.0" layoutY="210.0" mnemonicParsing="false" onAction="#buildFactory" prefHeight="60.0" prefWidth="60.0" styleClass="buildingButton" />
    <Button fx:id="buildingRefinery" layoutX="100.0" layoutY="210.0" mnemonicParsing="false" onAction="#buildRefinery" prefHeight="60.0" prefWidth="60.0" styleClass="buildingButton" />
+   <Button fx:id="shipyard" layoutX="45.0" layoutY="220.0" mnemonicParsing="false" onAction="#buildShipyard" prefHeight="60.0" prefWidth="60.0" styleClass="buildingButton" translateX="-10.0" translateY="40.0" />
+   <Button fx:id="stronghold" layoutX="110.0" layoutY="220.0" mnemonicParsing="false" onAction="#buildStronghold" prefHeight="60.0" prefWidth="60.0" styleClass="buildingButton" translateX="-10.0" translateY="40.0" />
    <stylesheets>
       <URL value="@../../style/islandOverview.css" />
       <URL value="@../../style/ingameButtons.css" />

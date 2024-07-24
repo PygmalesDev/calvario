@@ -219,7 +219,9 @@ public class Constants {
             Map.entry("farm", "de/uniks/stp24/icons/buildings/jobProgress/farmside_onConstruction.png"),
             Map.entry("refinery", "de/uniks/stp24/icons/buildings/jobProgress/coal_querry_onConstruction.png"),
             Map.entry("research_lab", "de/uniks/stp24/icons/buildings/jobProgress/scout_hub_onConstruction.png"),
-            Map.entry("exchange", "de/uniks/stp24/icons/buildings/jobProgress/seaside_hut_onConstruction.png")
+            Map.entry("exchange", "de/uniks/stp24/icons/buildings/jobProgress/seaside_hut_onConstruction.png"),
+            Map.entry("shipyard", "de/uniks/stp24/icons/buildings/jobProgress/shipyard_onConstruction.png"),
+            Map.entry("stronghold", "de/uniks/stp24/icons/buildings/jobProgress/stronghold_onConstruction.png")
     );
 
     public static final String[] imagePaths = {
@@ -231,6 +233,8 @@ public class Constants {
             "de/uniks/stp24/icons/buildings/resonating_delves.png",
             "de/uniks/stp24/icons/buildings/theurgy_hall.png",
             "de/uniks/stp24/icons/buildings/seaside_hut.png",
+            "de/uniks/stp24/icons/buildings/shipyard.png",
+            "de/uniks/stp24/icons/buildings/stronghold.png"
     };
     public static final Map<String, String> technologyIconMap = Map.ofEntries(
             Map.entry("biology", "de/uniks/stp24/assets/technologies/tags/biology.png"),

@@ -223,6 +223,7 @@ public class InGameTestLoader extends ControllerTest {
         this.coolerBubbleComponent.subscriber = this.subscriber;
 
         this.inGameController.marketOverviewComponent.variableService = this.variableService;
+        this.variableService.inGameController = this.inGameController;
 
         this.announcementsService.technologiesResourceBundle = this.technologiesResourceBundle;
         this.announcementsService.gameResourceBundle = this.gameResourceBundle;

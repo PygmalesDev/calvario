@@ -11,7 +11,6 @@ import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
-import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
@@ -29,6 +28,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
@@ -38,6 +39,8 @@ import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
+
+import static de.uniks.stp24.service.Constants.*;
 
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
@@ -53,8 +56,6 @@ public class InGameController extends BasicController {
     public AnchorPane rootPane;
     @FXML
     Pane gameBackground;
-    @FXML
-    Pane fog;
     @FXML
     StackPane helpWindowContainer;
     @FXML
@@ -168,6 +169,8 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public SitePropertiesComponent sitePropertiesComponent;
+    @Inject
+    public FogOfWar fogOfWar;
 
     List<IslandComponent> islandComponentList;
     Map<String, IslandComponent> islandComponentMap;
@@ -208,6 +211,8 @@ public class InGameController extends BasicController {
     final PopupBuilder popupSiteProperties = new PopupBuilder();
     final PopupBuilder popupDeleteStructure = new PopupBuilder();
     final PopupBuilder popupHelpWindow = new PopupBuilder();
+
+    Shape fog;
 
     final ArrayList<Node> draggables = new ArrayList<>();
 
@@ -485,8 +490,14 @@ public class InGameController extends BasicController {
     public void createMap() {
         this.islandComponentList = islandsService.createIslands(islandsService.getListOfIslands());
         this.islandComponentMap = islandsService.getComponentMap();
-        mapGrid.setMinSize(islandsService.getMapWidth(), islandsService.getMapHeight());
+        double x = islandsService.getMapWidth();
+        double y = islandsService.getMapHeight();
+        mapGrid.setMinSize(x, y);
         islandsService.createLines(this.islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
+
+        fogOfWar.setInGameController(this);
+        fogOfWar.setMapSize(x, y);
+        fogOfWar.init();
 
         group.setScaleX(0.65);
         group.setScaleY(0.65);
@@ -524,13 +535,20 @@ public class InGameController extends BasicController {
                 error -> System.out.println("islands event listener error: " + error)
         );
 
+        int islandCollisionRadius = ISLAND_COLLISION_RADIUS;
+        double islandScale = 1.25;
         this.islandComponentList.forEach(isle -> {
             isle.setInGameController(this);
             isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
-            isle.setScaleX(1.25);
-            isle.setScaleY(1.25);
-            isle.collisionCircle.setRadius(Constants.ISLAND_COLLISION_RADIUS);
+            isle.setScaleX(islandScale);
+            isle.setScaleY(islandScale);
+            isle.collisionCircle.setRadius(islandCollisionRadius);
             this.mapGrid.getChildren().add(isle);
+
+            if (Objects.nonNull(isle.island.owner()) && isle.island.owner().equals(tokenStorage.getEmpireId()))
+                this.updateFog(fogOfWar.subtract(
+                        new Circle(isle.getPosX() + ISLAND_WIDTH/2 * islandScale + 17, isle.getPosY() + ISLAND_HEIGHT/2 * islandScale + 7, islandCollisionRadius * islandScale)
+                ));
         });
 
         mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight()));
@@ -788,5 +806,11 @@ public class InGameController extends BasicController {
         this.fleetService.dispose();
         this.fleetCoordinationService.dispose();
         this.variableService.dispose();
+    }
+
+    public void updateFog(Shape fog) {
+        this.zoomPane.getChildren().remove(this.fog);
+        this.fog = fog;
+        this.zoomPane.getChildren().add(1, this.fog);
     }
 }

@@ -32,6 +32,7 @@
         </padding>
     </HBox>
     <StackPane fx:id="contextMenuContainer" alignment="CENTER_LEFT" prefHeight="550.0" prefWidth="400.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="70.0" />
+   <StackPane fx:id="contactDetailsContainer" prefHeight="500.0" prefWidth="350.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="350.0" AnchorPane.topAnchor="70.0" />
     <StackPane fx:id="deleteStructureWarningContainer" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="250.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="250.0" />
     <Pane fx:id="shadow" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
     <StackPane id="eventContainer" fx:id="eventContainer" layoutX="450.0" layoutY="50.0" style=": ;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />

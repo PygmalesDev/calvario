@@ -7,6 +7,7 @@ import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.SystemDto;
+import de.uniks.stp24.model.Contact;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs;
@@ -72,6 +73,8 @@ public class InGameController extends BasicController {
 
     @FXML
     public StackPane contextMenuContainer;
+    @FXML
+    public StackPane contactDetailsContainer;
     @FXML
     public Group group;
     @FXML
@@ -156,6 +159,9 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public ContactsComponent contactsOverviewComponent;
+    @SubComponent
+    @Inject
+    public ContactDetailsComponent contactDetailsComponent;
 
     @SubComponent
     @Inject
@@ -242,6 +248,8 @@ public class InGameController extends BasicController {
         helpComponent.setInGameController(this);
         clockComponent.setInGameController(this);
         fleetCoordinationService.setInGameController(this);
+        contactsOverviewComponent.setInGameController(this);
+        contactDetailsComponent.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
@@ -342,10 +350,11 @@ public class InGameController extends BasicController {
                 marketOverviewComponent,
                 contactsOverviewComponent
         );
+
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
         this.createContextMenuButtons();
 
-  		this.jobsService.loadEmpireJobs();
+        this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListeners();
         explanationService.setInGameController(this);
 
@@ -353,6 +362,11 @@ public class InGameController extends BasicController {
         this.fleetService.initializeFleetListeners();
 
         this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::teleportFleet);
+
+        contactDetailsContainer.getChildren().add(contactDetailsComponent);
+        contactDetailsContainer.setPickOnBounds(true);
+        contactDetailsContainer.setVisible(false);
+
     }
 
     @OnKey(code = KeyCode.ESCAPE)
@@ -376,7 +390,7 @@ public class InGameController extends BasicController {
             resumeGame();
         }
     }
-    
+
     @OnKey(code = KeyCode.J, alt = true)
     public void showJobsOverview() {
         this.toggleContextMenuVisibility(this.jobsOverviewComponent);
@@ -774,6 +788,15 @@ public class InGameController extends BasicController {
         islandComponentList = null;
         islandComponentMap = null;
         islandsService.removeDataForMap();
+    }
+
+    public void openContactDetails(Contact contact) {
+        contactDetailsComponent.setContactInformation(contact);
+        contactDetailsContainer.setVisible(true);
+    }
+
+    public void closeContractDetails(){
+        contactDetailsComponent.setVisible(false);
     }
 
     @OnDestroy

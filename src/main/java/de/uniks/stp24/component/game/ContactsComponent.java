@@ -1,7 +1,9 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Contact;
+import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.service.game.ContactsService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.FXCollections;
@@ -26,23 +28,38 @@ public class ContactsComponent extends StackPane {
     @Inject
     App app;
     @Inject
-    Provider<ContactCell> contactCellProvider;
-    @Inject
     ContactsService contactsService;
+    @Inject
+    Provider<ContactCell> contactCellProvider;
 
-    public final ObservableList<Contact> contactCells =  FXCollections.observableArrayList();
+    public final ObservableList<Contact> contactCells = FXCollections.observableArrayList();
+    private InGameController inGameController;
 
     @Inject
-    public ContactsComponent(){
+    public ContactsComponent() {
     }
 
-    public void closeContactsComponent(){
-        this.setVisible(false);
+    public void closeContactsComponent() {
+        inGameController.closeComponents();
     }
 
     @OnRender
-    public void render(){
+    public void render() {
         this.contactsListView.setItems(this.contactsService.contactCells);
         this.contactsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.contactCellProvider));
+
+        this.contactsListView.setOnMouseClicked(event -> {
+            Contact contact = this.contactsListView.getSelectionModel().getSelectedItem();
+            inGameController.openContactDetails(contact);
+
+//            applyInputs(gang);
+//            traitsBox.setVisible(false);
+//            changeEditNodes(false, false);
+//            showCreationButton.setVisible(true);
+        });
+    }
+
+    public void setInGameController(InGameController inGameController) {
+        this.inGameController = inGameController;
     }
 }

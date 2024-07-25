@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="350.0" styleClass="contactDetailsBackground" stylesheets="@../../style/contactsAndWar.css" type="StackPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.ContactDetailsComponent">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;">
+         <children>
+            <ImageView fx:id="empireImageView" fitHeight="78.0" fitWidth="106.0" layoutX="52.0" layoutY="64.0" pickOnBounds="true" preserveRatio="true" />
+            <Text fx:id="empireNameText" layoutX="80.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="contactsDetailsTitle" wrappingWidth="256.80340576171875" />
+            <Button fx:id="closeContactDetailComponentButton" layoutX="324.0" layoutY="8.0" mnemonicParsing="false" onAction="#closeContactDetailsComponent" prefHeight="50.0" prefWidth="50.0" styleClass="closeWindowButton" />
+            <Button layoutX="146.0" layoutY="442.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="94.0" styleClass="warButtonDesign" text="Stop War" textFill="WHITE">
+               <font>
+                  <Font size="10.0" />
+               </font>
+            </Button>
+         </children></AnchorPane>
+   </children>
+</fx:root>

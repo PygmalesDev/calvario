@@ -52,6 +52,7 @@
 }
 
 
+
 .closeWindowButton {
     -fx-background-image: url("/de/uniks/stp24/assets/empireOverview/close_window_button.png");
     -fx-background-color: transparent;
@@ -99,6 +100,31 @@
     -fx-background-position: center;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
+}
+
+/*ContactDetails*/
+
+.contactsDetailsTitle {
+    -fx-font-family: "Baskerville Old Face";
+    -fx-fill: white;
+    -fx-font-size: 30;
+}
+
+.contactDetailsBackground {
+    -fx-background-image: url("/de/uniks/stp24/assets/contactsAndWars/Contact_Details_Frame.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}
+
+.warButtonDesign {
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/button_green.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
 }
 
 /*Endings*/

@@ -2,7 +2,6 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Island;
-import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
@@ -57,6 +56,8 @@ public class IslandComponent extends Pane {
 
     public boolean islandIsSelected = false;
 
+    boolean foggy = true;
+
     @Inject
     public IslandComponent() {
         if (this.imageCache == null) this.imageCache = new ImageCache();
@@ -66,13 +67,19 @@ public class IslandComponent extends Pane {
         this.setPickOnBounds(false);
     }
 
-    public void applyIcon(IslandType type) {
-        this.islandImage.setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
+    public void applyIcon() {
+        this.islandImage.setImage(imageCache.get("icons/islands/" + island.type().name() + ".png"));
 
         if (this.island.upgrade().equals("explored"))
             this.spyglassImage.setImage(imageCache.get("/de/uniks/stp24/icons/other/spyglass.png"));
         else // islands with upgrades other than explored
             hideSpyGlass();
+
+        this.foggy = false;
+    }
+
+    public void applyFogIcon() {
+        this.islandImage.setImage(imageCache.get("icons/islands/foggy.png"));
     }
 
     // use our flag images
@@ -85,7 +92,7 @@ public class IslandComponent extends Pane {
         this.island = islandInfo;
         this.setId(island.id()+"_instance");
         this.spyglassImage.setVisible(island.upgrade().equals("explored"));
-        applyIcon(this.island.type());
+        applyIcon();
     }
 
     // round double to have only 2 decimals
@@ -133,26 +140,28 @@ public class IslandComponent extends Pane {
     Logic for showing/unshowing rudder
      */
     public void showUnshowRudder() {
-        if (islandIsSelected) {
-            reset();
-            islandIsSelected = false;
-        } else {
-            if (island.owner() != null) {
-                inGameController.islandsService.islandComponentMap.forEach((id, comp) -> {
-                    if (comp.islandIsSelected) {
-                        comp.rudderImage.setVisible(false);
-                        if (!inGameController.islandsService.keyCodeFlag) {
-                            comp.flagPane.setVisible(!comp.flagPane.isVisible());
+        if (!this.foggy) {
+            if (islandIsSelected) {
+                reset();
+                islandIsSelected = false;
+            } else {
+                if (island.owner() != null) {
+                    inGameController.islandsService.islandComponentMap.forEach((id, comp) -> {
+                        if (comp.islandIsSelected) {
+                            comp.rudderImage.setVisible(false);
+                            if (!inGameController.islandsService.keyCodeFlag) {
+                                comp.flagPane.setVisible(!comp.flagPane.isVisible());
+                            }
+                            comp.islandIsSelected = false;
                         }
-                        comp.islandIsSelected = false;
-                    }
-                });
-                islandIsSelected = true;
+                    });
+                    islandIsSelected = true;
+                }
             }
-        }
-        
-        if (!inGameController.islandsService.keyCodeFlag) {
-            this.flagPane.setVisible(!this.flagPane.isVisible());
+
+            if (!inGameController.islandsService.keyCodeFlag) {
+                this.flagPane.setVisible(!this.flagPane.isVisible());
+            }
         }
     }
 
@@ -203,6 +212,12 @@ public class IslandComponent extends Pane {
 
     public void hideSpyGlass(){
         this.spyglassImage.setVisible(false);
+    }
+
+    public void checkForCollisions() {
+        if (this.foggy) {
+
+        }
     }
 
     public boolean isCollided(Circle other) {

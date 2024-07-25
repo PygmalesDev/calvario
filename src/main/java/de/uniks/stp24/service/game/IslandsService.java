@@ -125,7 +125,8 @@ public class IslandsService extends BasicService {
         double serverOffsetV = minY + 0.5 * heightRange;
         component.setPosition(SCALE_FACTOR * isleDto.posX()*DISTANCE_FACTOR - serverOffsetH + screenOffsetH,
                 SCALE_FACTOR * isleDto.posY()*DISTANCE_FACTOR - serverOffsetV + screenOffSetV);
-        component.applyIcon(isleDto.type());
+        // show the foggy icon for all islands
+        component.applyFogIcon();
         component.setFlagImage(isleDto.flagIndex());
         applyDropShadowToIsland(component);
         return component;

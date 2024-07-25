@@ -57,6 +57,8 @@ public class InGameController extends BasicController {
     @FXML
     Pane gameBackground;
     @FXML
+    Pane connectionsPane;
+    @FXML
     StackPane helpWindowContainer;
     @FXML
     StackPane hintCaptainContainer;
@@ -211,6 +213,9 @@ public class InGameController extends BasicController {
     final PopupBuilder popupSiteProperties = new PopupBuilder();
     final PopupBuilder popupDeleteStructure = new PopupBuilder();
     final PopupBuilder popupHelpWindow = new PopupBuilder();
+
+    int islandCollisionRadius = ISLAND_COLLISION_RADIUS;
+    double islandScale = 1.25;
 
     Shape fog;
 
@@ -493,7 +498,7 @@ public class InGameController extends BasicController {
         double x = islandsService.getMapWidth();
         double y = islandsService.getMapHeight();
         mapGrid.setMinSize(x, y);
-        islandsService.createLines(this.islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
+        islandsService.createLines(this.islandComponentMap).forEach(line -> this.connectionsPane.getChildren().add(line));
 
         fogOfWar.setInGameController(this);
         fogOfWar.setMapSize(x, y);
@@ -512,6 +517,8 @@ public class InGameController extends BasicController {
                     if (Objects.nonNull(updatedIsland.owner())) {
                         // apply drop shadow and flag
                         isle.applyEmpireInfo();
+                        // remove Fog from Island
+                        removeFogFromIsland(isle);
                         // island is already claimed
                         this.islandClaimingContainer.setVisible(false);
                     }
@@ -535,8 +542,6 @@ public class InGameController extends BasicController {
                 error -> System.out.println("islands event listener error: " + error)
         );
 
-        int islandCollisionRadius = ISLAND_COLLISION_RADIUS;
-        double islandScale = 1.25;
         this.islandComponentList.forEach(isle -> {
             isle.setInGameController(this);
             isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
@@ -545,10 +550,9 @@ public class InGameController extends BasicController {
             isle.collisionCircle.setRadius(islandCollisionRadius);
             this.mapGrid.getChildren().add(isle);
 
-            if (Objects.nonNull(isle.island.owner()) && isle.island.owner().equals(tokenStorage.getEmpireId()))
-                this.updateFog(fogOfWar.subtract(
-                        new Circle(isle.getPosX() + ISLAND_WIDTH/2 * islandScale + 17, isle.getPosY() + ISLAND_HEIGHT/2 * islandScale + 7, islandCollisionRadius * islandScale)
-                ));
+            if (Objects.nonNull(isle.island.owner()) && isle.island.owner().equals(tokenStorage.getEmpireId())) {
+                removeFogFromIsland(isle);
+            }
         });
 
         mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight()));
@@ -573,6 +577,15 @@ public class InGameController extends BasicController {
             group.setScaleY(scale);
         });
 
+    }
+
+    private void removeFogFromIsland(IslandComponent isle) {
+        isle.applyIcon();
+        this.updateFog(fogOfWar.subtract(
+                new Circle(isle.getPosX() + ISLAND_WIDTH/2 * islandScale + 17,
+                        isle.getPosY() + ISLAND_HEIGHT/2 * islandScale + 7,
+                        islandCollisionRadius * islandScale)
+        ));
     }
 
     public void showInfo(MouseEvent event) {
@@ -811,6 +824,6 @@ public class InGameController extends BasicController {
     public void updateFog(Shape fog) {
         this.zoomPane.getChildren().remove(this.fog);
         this.fog = fog;
-        this.zoomPane.getChildren().add(1, this.fog);
+        this.zoomPane.getChildren().add(2, this.fog);
     }
 }

@@ -64,7 +64,7 @@ public class AnnouncementsService {
                             .replace("{islandName}", islandName);
                     forwardMethods.add(jobsService.getJobInspector("island_upgrade"));
                     forwardIcon = "-fx-background-image: url('[PATH]')"
-                            .replace("[PATH]", "/de/uniks/stp24/icons/islands/" + island.type() + ".png");
+                            .replace("[PATH]", "/de/uniks/stp24/icons/islands/" + island.type().name() + ".png");
                 }
                 case "district" -> {
                     message = gameResourceBundle.getString("captain.site.ready")

@@ -14,6 +14,7 @@
         <Group fx:id="group" onMouseClicked="#resetZoomMouse">
             <StackPane fx:id="zoomPane" style="-fx-background-color: TRANSPARENT;">
                 <Pane fx:id="gameBackground" prefHeight="0.0" prefWidth="0.0" styleClass="backgroundGame" />
+            <Pane fx:id="connectionsPane" />
                 <Pane fx:id="mapGrid">
                 </Pane>
             </StackPane>

@@ -295,19 +295,19 @@ public class BuildingPropertiesComponent extends AnchorPane {
             Map<String, Integer> resourceMapCost = buildingDto.cost();
             ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(resourceMapCost, buildingCostsListView.getItems(), null, false);
             buildingCostsListView.setItems(resourceListCost);
-        }
 
-        /* Sets infoText for buildings that does not produce anything */
-        if (buildingProducesListView.getItems().isEmpty()) {
-            textInfoPane.setVisible(true);
-            if (buildingDto.id().equals("fortress")) {
-                textInfoLabel.setText(gameResourceBundle.getString("building.stronghold.info"));
-            } else if (buildingDto.id().equals("shipyard")) {
-                textInfoLabel.setText(gameResourceBundle.getString("building.shipyard.info"));
+            /* Sets infoText for buildings that does not produce anything */
+            if (buildingProducesListView.getItems().isEmpty()) {
+                textInfoPane.setVisible(true);
+                if (buildingDto.id().equals("fortress")) {
+                    textInfoLabel.setText(gameResourceBundle.getString("building.stronghold.info"));
+                } else if (buildingDto.id().equals("shipyard")) {
+                    textInfoLabel.setText(gameResourceBundle.getString("building.shipyard.info"));
+                }
+            } else {
+                textInfoPane.setVisible(false);
+                textInfoLabel.setText("");
             }
-        } else {
-            textInfoPane.setVisible(false);
-            textInfoLabel.setText("");
         }
     }
 

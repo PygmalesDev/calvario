@@ -126,6 +126,11 @@ public class OverviewUpgradeComponent extends AnchorPane {
                 this.jobObservableList = this.jobsService.getJobObservableListOfType("upgrade"));
     }
 
+    @OnInit
+    public void addRunnable() {
+        this.resourcesService.setOnResourceUpdates(this::setUpgradeButton);
+    }
+
     @OnRender
     public void render() {
         this.jobsContainer.getChildren().add(this.jobProgressComponent);
@@ -190,7 +195,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
             case CANCEL_JOB -> {
                 this.updateButtonState = true;
                 this.jobsContainer.setVisible(false);
-                this.subscriber.subscribe(this.jobsService.stopJob(this.currentJob._id()), job -> this.setUpgradeButton());
+                this.subscriber.subscribe(this.jobsService.stopJob(this.currentJob._id()));
             }
         }
     }

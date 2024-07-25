@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.game.fleetManager;
 
+import de.uniks.stp24.component.game.technology.TechnologyCategorySubComponent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,6 +10,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnRender;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 @Component(view = "FleetManager.fxml")
 public class FleetManagerComponent extends AnchorPane {
@@ -39,6 +44,13 @@ public class FleetManagerComponent extends AnchorPane {
     @FXML
     public ListView shipsListView;
 
+    public Provider<FleetComponent> provider = () -> new FleetComponent();//this, technologyService, app, technologiesResourceBundle, this.imageCache);
+
+    @Inject
+    public FleetManagerComponent(){}
+
+    @OnRender
+    public void render() {}
 
     public void showFleets(){}
 

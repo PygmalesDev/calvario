@@ -2,6 +2,7 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
@@ -166,6 +167,9 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public SitePropertiesComponent sitePropertiesComponent;
+    @SubComponent
+    @Inject
+    public FleetManagerComponent fleetManagerComponent;
 
     List<IslandComponent> islandComponentList;
     Map<String, IslandComponent> islandComponentMap;
@@ -328,7 +332,8 @@ public class InGameController extends BasicController {
                 jobsOverviewComponent,
                 empireOverviewComponent,
                 technologiesComponent,
-                marketOverviewComponent
+                marketOverviewComponent,
+                fleetManagerComponent
         );
         contextMenuContainer.getChildren().forEach(child -> {
             child.setVisible(false);
@@ -413,6 +418,11 @@ public class InGameController extends BasicController {
         this.toggleContextMenuVisibility(this.technologiesComponent);
     }
 
+    @OnKey(code = KeyCode.F, alt = true)
+    public void showFleetManager() {
+        this.toggleContextMenuVisibility(this.fleetManagerComponent);
+    }
+
     @OnKey(code = KeyCode.H, alt = true)
     public void showHelpOverview() {
         if (this.helpComponent.isVisible()) {
@@ -475,7 +485,8 @@ public class InGameController extends BasicController {
                     new ContextMenuButton("empireOverview", this.empireOverviewComponent),
                     new ContextMenuButton("jobsOverview", this.jobsOverviewComponent),
                     new ContextMenuButton("technologies", this.technologiesComponent),
-                    new ContextMenuButton("marketOverview", this.marketOverviewComponent)
+                    new ContextMenuButton("marketOverview", this.marketOverviewComponent),
+                    new ContextMenuButton("fleetManager", this.fleetManagerComponent)
             );
     }
 

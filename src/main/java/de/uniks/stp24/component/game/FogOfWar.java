@@ -39,10 +39,11 @@ public class FogOfWar {
         this.fog = new Rectangle(0, 0, x, y);
         this.fogImage = new Image("/de/uniks/stp24/assets/backgrounds/fog.png");
         this.fogPattern = new ImagePattern(this.fogImage, 0, 0, this.fogImage.getWidth(), this.fogImage.getHeight(), false);
+        this.fog.setFill(this.fogPattern);
     }
 
     public Shape subtract(Shape shape) {
-        this.fog = Shape.subtract(fog, shape);
+        this.fog = Shape.subtract(this.fog, shape);
         this.fog.setFill(this.fogPattern);
         return fog;
     }

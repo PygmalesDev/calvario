@@ -68,7 +68,6 @@ public class InGameController extends BasicController {
     StackPane eventContainer;
     @FXML
     public HBox contextMenuButtons;
-
     @FXML
     public StackPane contextMenuContainer;
     @FXML
@@ -503,6 +502,7 @@ public class InGameController extends BasicController {
         fogOfWar.setInGameController(this);
         fogOfWar.setMapSize(x, y);
         fogOfWar.init();
+        this.updateFog(fogOfWar.getFog());
 
         group.setScaleX(0.65);
         group.setScaleY(0.65);
@@ -579,13 +579,15 @@ public class InGameController extends BasicController {
 
     }
 
-    private void removeFogFromIsland(IslandComponent isle) {
-        isle.applyIcon();
-        this.updateFog(fogOfWar.subtract(
-                new Circle(isle.getPosX() + ISLAND_WIDTH/2 * islandScale + 17,
-                        isle.getPosY() + ISLAND_HEIGHT/2 * islandScale + 7,
-                        islandCollisionRadius * islandScale)
-        ));
+    public void removeFogFromIsland(IslandComponent isle) {
+        if (isle.foggy) {
+            isle.applyIcon(false);
+            this.updateFog(fogOfWar.subtract(
+                    new Circle(isle.getPosX() + ISLAND_WIDTH / 2 * islandScale + 17,
+                            isle.getPosY() + ISLAND_HEIGHT / 2 * islandScale + 7,
+                            islandCollisionRadius * islandScale)
+            ));
+        }
     }
 
     public void showInfo(MouseEvent event) {
@@ -822,8 +824,8 @@ public class InGameController extends BasicController {
     }
 
     public void updateFog(Shape fog) {
-        this.zoomPane.getChildren().remove(this.fog);
+        zoomPane.getChildren().remove(this.fog);
+        zoomPane.getChildren().add(2, fog);
         this.fog = fog;
-        this.zoomPane.getChildren().add(2, this.fog);
     }
 }

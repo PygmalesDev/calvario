@@ -38,8 +38,8 @@ public class FleetCoordinationService {
     private InGameController inGameController;
     private final Random random = new Random();
 
-    private final double ISLAND_RADIUS_X = (double) Constants.ISLAND_WIDTH/2;
-    private final double ISLAND_RADIUS_Y = ((double) Constants.ISLAND_HEIGHT/2);
+    private final double ISLAND_RADIUS_X = Constants.ISLAND_WIDTH/2;
+    private final double ISLAND_RADIUS_Y = Constants.ISLAND_HEIGHT/2;
 
     @Inject
     public FleetCoordinationService() {
@@ -63,7 +63,7 @@ public class FleetCoordinationService {
 
     public void putFleetOnMap(Fleet fleet) {
         var island = this.islandsService.getIslandComponent(fleet.location());
-        var gameFleet = this.app.initAndRender(new GameFleetController(fleet,this, this.fleetService));
+        var gameFleet = this.app.initAndRender(new GameFleetController(fleet,this, this.fleetService, this.islandsService));
         this.inGameController.setFleetOnMap(gameFleet);
         double angle = (random.nextInt(360)-90)*Math.PI/180;
         gameFleet.setLayoutX(island.getLayoutX() + ISLAND_RADIUS_X + (ISLAND_RADIUS_X+Constants.FLEET_FROM_ISLAND_DISTANCE)*Math.cos(angle));
@@ -102,7 +102,10 @@ public class FleetCoordinationService {
         if (Objects.isNull(this.selectedFleet)) return;
 
         ArrayList<String> path = this.getTravelPath(destinationIsland);
-        this.selectedFleet.beginTravelAnimation(this.getCoordinatedPath(path));
+//        this.selectedFleet.beginTravelAnimation(this.getCoordinatedPath(path));
+        path.removeFirst();
+        this.selectedFleet.beginTravelAnimation(path);
+
 //
 //        this.subscriber.subscribe(this.fleetService.beginTravelJob(path, this.selectedFleet.getFleet()._id()),
 //                job -> {

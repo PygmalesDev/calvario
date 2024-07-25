@@ -4,7 +4,10 @@ import de.uniks.stp24.model.Fleets.Fleet;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.game.FleetCoordinationService;
 import de.uniks.stp24.service.game.FleetService;
+import de.uniks.stp24.service.game.IslandsService;
 import javafx.animation.*;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
@@ -13,6 +16,7 @@ import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
 
 import javax.inject.Inject;
+import java.util.Collection;
 import java.util.List;
 
 @Component(view = "GameFleet.fxml")
@@ -21,6 +25,7 @@ public class GameFleetController extends Pane {
     public Circle collisionCircle;
 
     private final FleetService fleetService;
+    private final IslandsService islandsService;
     private final FleetCoordinationService fleetCoordinationService;
     private final Timeline travelTimeline = new Timeline();
     private final Fleet fleet;
@@ -28,11 +33,15 @@ public class GameFleetController extends Pane {
     private boolean isTraveling = false;
     private int keyFrameTime = 0;
 
+    private final double ISLAND_RADIUS_X = Constants.ISLAND_WIDTH/2;
+    private final double ISLAND_RADIUS_Y = Constants.ISLAND_HEIGHT/2;
+
     @Inject
-    public GameFleetController(Fleet fleet, FleetCoordinationService fleetCoordinationService, FleetService fleetService){
+    public GameFleetController(Fleet fleet, FleetCoordinationService fleetCoordinationService, FleetService fleetService, IslandsService islandsService){
         this.fleet = fleet;
         this.fleetService = fleetService;
         this.fleetCoordinationService = fleetCoordinationService;
+        this.islandsService = islandsService;
         this.getTransforms().add(rotate);
     }
 
@@ -59,19 +68,28 @@ public class GameFleetController extends Pane {
         this.travelTimeline.play();
     }
 
-    public void beginTravelAnimation(List<Double[]> coordinates) {
+    public void beginTravelAnimation(List<String> path) {
         this.isTraveling = true;
 
         this.resetKeyFrameTime();
         this.travelTimeline.stop();
         this.travelTimeline.getKeyFrames().clear();
 
-        this.setRotate(this.calculateAngle(coordinates.getFirst()));
-        this.travelTimeline.getKeyFrames().addAll(coordinates.stream().map(coord -> new KeyFrame(
+//        this.setRotate(this.calculateAngle(coordinates.getFirst()));
+        this.travelTimeline.getKeyFrames().addAll((Collection<? extends KeyFrame>) path.stream().map(islandID -> {
+                IslandComponent islandComponent = this.islandsService.getIslandComponent(islandID);
+                return new KeyFrame(
                 Duration.seconds(this.nextKeyFrameTime()),
-                new KeyValue(this.layoutXProperty(), coord[0], Interpolator.EASE_BOTH),
-                new KeyValue(this.layoutYProperty(), coord[1], Interpolator.EASE_BOTH)
-        )).toList());
+                new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        islandComponent.removeFog();
+                    }
+                },
+                new KeyValue(this.layoutXProperty(), islandComponent.getPosX()+ISLAND_RADIUS_X, Interpolator.EASE_BOTH),
+                new KeyValue(this.layoutYProperty(), islandComponent.getPosY()+ISLAND_RADIUS_Y, Interpolator.EASE_BOTH)
+               );}
+        ).toList());
 
         this.travelTimeline.play();
     }
@@ -87,7 +105,9 @@ public class GameFleetController extends Pane {
     }
 
     private double calculateAngle(Double[] toCoords) {
-        return Math.atan2(toCoords[1]-this.getLayoutY(), toCoords[0]-this.getLayoutX()) * 180/Math.PI;
+        double deltaY = toCoords[1] - this.getLayoutY();
+        double deltaX = toCoords[0] - this.getLayoutX();
+        return Math.asin(deltaY/Math.sqrt(deltaX*deltaX + deltaY*deltaY));
     }
 
     public boolean isCollided(Circle other) {

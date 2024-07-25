@@ -7,6 +7,7 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import javafx.fxml.FXML;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -56,7 +57,7 @@ public class IslandComponent extends Pane {
 
     public boolean islandIsSelected = false;
 
-    boolean foggy = true;
+    public boolean foggy = true;
 
     @Inject
     public IslandComponent() {
@@ -67,19 +68,20 @@ public class IslandComponent extends Pane {
         this.setPickOnBounds(false);
     }
 
-    public void applyIcon() {
+    public void applyIcon(boolean isFoggy) {
         this.islandImage.setImage(imageCache.get("icons/islands/" + island.type().name() + ".png"));
+
+        if (isFoggy)
+            this.islandImage.setBlendMode(BlendMode.LIGHTEN);
+        else
+            this.islandImage.setBlendMode(BlendMode.SRC_OVER);
 
         if (this.island.upgrade().equals("explored"))
             this.spyglassImage.setImage(imageCache.get("/de/uniks/stp24/icons/other/spyglass.png"));
         else // islands with upgrades other than explored
             hideSpyGlass();
 
-        this.foggy = false;
-    }
-
-    public void applyFogIcon() {
-        this.islandImage.setImage(imageCache.get("icons/islands/foggy.png"));
+        this.foggy = isFoggy;
     }
 
     // use our flag images
@@ -92,7 +94,7 @@ public class IslandComponent extends Pane {
         this.island = islandInfo;
         this.setId(island.id()+"_instance");
         this.spyglassImage.setVisible(island.upgrade().equals("explored"));
-        applyIcon();
+        applyIcon(this.foggy);
     }
 
     // round double to have only 2 decimals
@@ -184,7 +186,6 @@ public class IslandComponent extends Pane {
     /*
     Reset of componentes for showing informations of current selected island.
      */
-
     public void reset(){
         inGameController.overviewSitesComponent.resetButtons();
         inGameController.buildingsWindowComponent.setVisible(false);
@@ -214,13 +215,11 @@ public class IslandComponent extends Pane {
         this.spyglassImage.setVisible(false);
     }
 
-    public void checkForCollisions() {
-        if (this.foggy) {
-
-        }
-    }
-
     public boolean isCollided(Circle other) {
         return this.collisionCircle.intersects(other.getLayoutBounds());
+    }
+
+    public void removeFog() {
+        inGameController.removeFogFromIsland(this);
     }
 }

@@ -137,6 +137,7 @@ public class FleetCoordinationService {
             // Calculate the new shortest path for the connected islands
             if (Objects.nonNull(currentIsland)) {
                 String currentIslandID = currentIsland.id;
+                int currentShortestPath = currentIsland.shortestPath;
                 currentIsland.getConnections().forEach((id, dist) -> {
                     // Do nothing if the neighbor was already checked
                     if (visitedIslands.contains(id)) return;
@@ -144,9 +145,9 @@ public class FleetCoordinationService {
                     PathTableEntry connectedIsland = tableEntries.get(id);
                     int prevDist = connectedIsland.getShortestPath();
                     // Do nothing if the neighbor's path is shorter than the new one
-                    if (prevDist != -1 && prevDist < dist + prevDist) return;
+                    if (prevDist != -1 && prevDist < dist + currentShortestPath) return;
 
-                    connectedIsland.setShortestPath(prevDist + dist);
+                    connectedIsland.setShortestPath(currentShortestPath + dist);
                     connectedIsland.setPreviousNode(currentIslandID);
                 });
                 visitedIslands.add(currentIsland.id);

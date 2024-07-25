@@ -13,7 +13,7 @@ public class Main {
         final Map<String, String> getenv = System.getenv();
         SERVER_HOSTNAME = getenv.getOrDefault("SERVER_HOSTNAME", "stpellar.uniks.de");
         SERVER_PORT = Integer.parseInt(getenv.getOrDefault("SERVER_PORT", "443"));
-        SERVER_VERSION = getenv.getOrDefault("SERVER_VERSION", "v3");
+        SERVER_VERSION = getenv.getOrDefault("SERVER_VERSION", "v4");
     }
 
     public static final String WS_URL = (SERVER_PORT == 443 ? "wss" : "ws") + "://" + SERVER_HOSTNAME + ":" + SERVER_PORT + "/ws/" + SERVER_VERSION;

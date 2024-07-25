@@ -89,7 +89,6 @@ public class JobsService {
             switch (result.suffix()) {
                 case "created" -> this.addJobToGroups(job);
                 case "updated" -> this.updateJobInGroups(job);
-                case "deleted" -> this.deleteJobFromGroups(job);
             }
             this.jobCommonUpdates.forEach(Runnable::run);
 
@@ -133,6 +132,8 @@ public class JobsService {
             if (this.jobCollections.get(job.system()).filtered(job1 -> job1.type().equals(job.type())).isEmpty())
                 this.jobCollections.get("collection").add(job);
         }
+
+        if (job.progress() == job.total()) this.deleteJobFromGroups(job);
     }
 
     public void deleteJobFromGroups(@NotNull Job job) {

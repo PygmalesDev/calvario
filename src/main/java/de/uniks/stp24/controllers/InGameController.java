@@ -18,7 +18,6 @@ import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -56,6 +55,8 @@ public class InGameController extends BasicController {
     public AnchorPane rootPane;
     @FXML
     Pane gameBackground;
+    @FXML
+    Pane fog;
     @FXML
     StackPane helpWindowContainer;
     @FXML
@@ -325,6 +326,10 @@ public class InGameController extends BasicController {
   		this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListeners();
         explanationService.setInGameController(this);
+
+        fog.setOnMouseDragged(e -> {
+
+        });
     }
 
     @OnKey(code = KeyCode.ESCAPE)

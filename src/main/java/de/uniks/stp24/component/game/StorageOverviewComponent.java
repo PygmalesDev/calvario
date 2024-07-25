@@ -128,7 +128,7 @@ public class StorageOverviewComponent extends AnchorPane {
                         resourcesService.runnables.forEach(Runnable::run);
                     }
                 },
-                error -> System.out.println("errorEmpireListener"));
+                error -> System.out.println("error in empire update listener:\n" + error.getMessage()));
     }
 
     /**

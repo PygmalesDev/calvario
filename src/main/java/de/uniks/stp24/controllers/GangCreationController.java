@@ -37,7 +37,6 @@ import static de.uniks.stp24.service.Constants.*;
 @Title("%create.island")
 @Controller
 public class GangCreationController extends BasicController {
-    public Button selectButton1;
     @Param("gameid")
     String gameID;
 
@@ -238,6 +237,7 @@ public class GangCreationController extends BasicController {
     @OnRender
     public void render() {
         buttonsPane.setPickOnBounds(false);
+        creationBox.toFront();
         showCreationButton.setText("NEW EMPIRE");
         this.splashAdjust.setBrightness(0.35);
         this.splashAdjust.setContrast(0.0);
@@ -272,7 +272,8 @@ public class GangCreationController extends BasicController {
                         spectatorBox.setVisible(true);
                         spectatorImage.setImage(imageCache.get("icons/spectatorSign.png"));
                     }
-                });
+                },
+                error -> System.out.println("Error while loading Empire from server: " + error));
 
         changeNodesVisibility(false, creationBox, deletePane, editButton, showDeletePaneButton, traitsBox);
 
@@ -348,6 +349,7 @@ public class GangCreationController extends BasicController {
         this.splashAdjust.setHue(colorsHSVList.get(colorIndex));
         confirmedTraits.clear();
         if (Objects.nonNull(gang.traits())) confirmedTraits.setAll(gang.traits());
+        updateTraitsLists();
     }
 
     private void updateTraitLimitText() {
@@ -621,13 +623,17 @@ public class GangCreationController extends BasicController {
     }
 
     public void chooseTraits() {
+        updateTraitsLists();
+        setButtonsDisable(true);
+        traitsBox.setVisible(true);
+    }
+
+    private void updateTraitsLists() {
         resetTraitsLists();
         choosenTraits.setAll(confirmedTraits);
         allTraits.removeAll(choosenTraits);
         choosenTraits.forEach(trait -> traitsCost+=trait.cost());
         updateTraitLimitText();
-        traitsBox.setVisible(true);
-        setButtonsDisable(true);
     }
 
     private void setButtonsDisable(boolean disable) {
@@ -644,18 +650,16 @@ public class GangCreationController extends BasicController {
     }
 
     public void traitsConfirm() {
-        bubbleComponent.setCaptainText(resources.getString("pirate.empireScreen.intro"));
         confirmedTraits.clear();
         confirmedTraits.addAll(choosenTraits);
         traitsReturn();
-        setButtonsDisable(false);
     }
 
     public void traitsReturn() {
         bubbleComponent.setCaptainText(resources.getString("pirate.empireScreen.intro"));
         resetTraitsLists();
-        traitsBox.setVisible(false);
         setButtonsDisable(false);
+        traitsBox.setVisible(false);
     }
 
     public void addTrait(Trait trait) {

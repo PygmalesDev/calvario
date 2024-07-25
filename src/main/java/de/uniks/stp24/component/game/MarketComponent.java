@@ -1,7 +1,6 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.UpdateEmpireMarketDto;
@@ -32,10 +31,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 @Component(view = "MarketComponent.fxml")
 public class MarketComponent extends StackPane {
@@ -145,12 +141,18 @@ public class MarketComponent extends StackPane {
      * Initializes amount of resources, their prices and the market fee.
      */
     private void loadVariablesAndSetup() {
-        subscriber.subscribe(variableService.getAllVariables(),
-                res -> {
-                    this.variables = variableService.convertVariablesToMap(res);
-                    createResourcePriceMap();
-                    setMarketFee();
-                    createResourceCountMap();
+        ArrayList<ExplainedVariableDTO> temp = new ArrayList<>();
+        subscriber.subscribe(variableService.getFirstHalfOfVariables(),
+                firstHalf -> {
+                    temp.addAll(firstHalf);
+                    subscriber.subscribe(variableService.getSecondHalfOfVariables(),
+                            secondHalf -> {
+                                temp.addAll(secondHalf);
+                                this.variables = variableService.convertVariablesToMap(temp);
+                                createResourcePriceMap();
+                                setMarketFee();
+                                createResourceCountMap();
+                            }, error -> System.out.println("errorLoadVariableAndSetup:" + error));
                 }, error -> System.out.println("errorLoadVariableAndSetup:" + error)
         );
     }

@@ -19,6 +19,8 @@ public class ContactCell extends HBox implements ReusableItemComponent<Contact> 
     Text empireNameText;
     @FXML
     ImageView empireFlagImageView;
+
+
     @Inject
     ImageCache imageCache;
 
@@ -33,5 +35,6 @@ public class ContactCell extends HBox implements ReusableItemComponent<Contact> 
         this.contact = contact;
         empireNameText.setText(this.contact.getEmpireName());
         empireFlagImageView.setImage(imageCache.get(this.contact.getEmpireFlag()));
+
     }
 }

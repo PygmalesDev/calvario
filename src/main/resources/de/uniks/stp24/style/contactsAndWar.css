@@ -1,12 +1,12 @@
 /*Wars*/
-.warPopUpBackGround{
+.warPopUpBackGround {
     -fx-background-image: url("/de/uniks/stp24/assets/empireConfiguration/traits_details_background.png");
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
 }
 
-.defaultButton{
+.defaultButton {
     -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/button_element.png");
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
@@ -38,26 +38,67 @@
 }
 
 /*Contacts*/
-.contactsBackground{
+.contactsBackground {
     -fx-background-image: url("/de/uniks/stp24/assets/contactsAndWars/Contacts_Frame.png");
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
 }
 
-.contactsTitle{
+.contactsTitle {
     -fx-font-family: "Baskerville Old Face";
     -fx-fill: white;
     -fx-font-size: 58;
 }
 
 
-.closeWindowButton{
+.closeWindowButton {
     -fx-background-image: url("/de/uniks/stp24/assets/empireOverview/close_window_button.png");
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
 }
 
+.contactListViewStyle {
+    -fx-background-color: transparent;
+}
+
+.contactListViewStyle .list-cell {
+    -fx-background-color: transparent;
+}
+
+.contactListViewStyle .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-max-height: 0;
+}
+
+.contactListViewStyle .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+}
+
+.contactListViewStyle .scroll-bar .thumb {
+    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/scroller.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 90% 30%;
+    -fx-background-repeat: no-repeat;
+}
+
+.contactListViewStyle .scroll-bar .track {
+    -fx-background-color: black;
+    -fx-background-radius: 5;
+}
+
+.contactListViewStyle .corner {
+    -fx-background-color: transparent; /* Versteckt das weiße Quadrat unten rechts */
+}
+
+.cellBackground{
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/jobsOverview/red_frame.png");
+    -fx-background-position: center;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+}
 
 /*Endings*/

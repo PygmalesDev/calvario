@@ -1,0 +1,36 @@
+[ {
+  "name" : "Hideous Captains of Sapphire Reef",
+  "flagIndex" : 2,
+  "flagsPath" : "/de/uniks/stp24/assets/flags/flag_2.png",
+  "portraitIndex" : 16,
+  "portraitsPath" : "/de/uniks/stp24/assets/portraits/captain_16.png",
+  "description" : "In the treacherous domain of the Seven Seas, Hideous Captains of Sapphire Reef stands as the sovereign of plunder, feared for their merciless raids and impenetrable hideouts.",
+  "color" : "#F28500",
+  "colorIndex" : 11,
+  "traits" : [ {
+    "id" : "excavator",
+    "effects" : [ {
+      "variable" : "buildings.mine.production.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.2,
+      "bonus" : 0.0
+    } ],
+    "cost" : 2,
+    "conflicts" : [ "settler", "surface_operator", "claustrophobic", "miner", "pitman" ]
+  }, {
+    "id" : "industrious",
+    "effects" : [ {
+      "variable" : "buildings.farm.production.food",
+      "base" : 0.0,
+      "multiplier" : 1.1,
+      "bonus" : 0.0
+    }, {
+      "variable" : "resources.fuel.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 20.0
+    } ],
+    "cost" : 3,
+    "conflicts" : [ "urban", "gentrified", "agrarian" ]
+  } ]
+} ]

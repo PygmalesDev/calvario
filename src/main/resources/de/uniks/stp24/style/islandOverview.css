@@ -74,6 +74,8 @@
     -fx-background-color: transparent;
 }
 
+
+
 /* explanation details */
 .explanationBackground{
     -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/details_background.png");
@@ -180,7 +182,7 @@
 }
 
 .jobProgressListView .scroll-bar:vertical,
-.sitesScrollPane .scroll-bar:vertical {
+.sitesScrollPane .scroll-bar:vertical{
     -fx-background-image: url("/de/uniks/stp24/icons/other/black_square.png");
     -fx-background-position: center;
     -fx-background-repeat: repeat-y;
@@ -189,7 +191,8 @@
 }
 
 .variableExplanationListView .scroll-bar:vertical,
-.sitesScrollPane .scroll-bar:vertical {
+.sitesScrollPane .scroll-bar:vertical,
+.resourceList .scroll-bar:vertical  {
     -fx-background-image: url("/de/uniks/stp24/icons/other/black_square.png");
     -fx-background-position: center;
     -fx-background-repeat: repeat-y;
@@ -197,7 +200,8 @@
     -fx-background-size: 15% 100%;
 }
 
-.jobProgressListView .virtual-flow .scroll-bar:vertical .thumb {
+.jobProgressListView .virtual-flow .scroll-bar:vertical .thumb,
+.resourceList .virtual-flow .scroll-bar:vertical .thumb {
     -fx-background-position: center;
     -fx-background-repeat: no-repeat;
     -fx-background-color: transparent;
@@ -207,7 +211,9 @@
 .jobProgressListView .scroll-bar:vertical .increment-button,
 .jobProgressListView .scroll-bar:vertical .decrement-button,
 .sitesScrollPane .scroll-bar:vertical .increment-button,
-.sitesScrollPane .scroll-bar:vertical .decrement-button {
+.sitesScrollPane .scroll-bar:vertical .decrement-button,
+.resourceList .scroll-bar:vertical .increment-button,
+.resourceList .scroll-bar:vertical .decrement-button {
     -fx-scale-x: 0;
     -fx-scale-y: 0;
 }

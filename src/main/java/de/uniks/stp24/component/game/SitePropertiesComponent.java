@@ -280,11 +280,11 @@ public class SitePropertiesComponent extends AnchorPane {
     }
 
     private void resourceListGeneration(DistrictAttributes site) {
-        ObservableList<Resource> resourceListPrice = resourcesService.generateResourceList(site.cost(), siteCostsListView.getItems(),null);
+        ObservableList<Resource> resourceListPrice = resourcesService.generateResourceList(site.cost(), siteCostsListView.getItems(),null, false);
         siteCostsListView.setItems(resourceListPrice);
-        ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(site.upkeep(), siteConsumesListView.getItems(), null);
+        ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(site.upkeep(), siteConsumesListView.getItems(), null, false);
         siteConsumesListView.setItems(resourceListUpkeep);
-        ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(site.production(), siteProducesListView.getItems(), null);
+        ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(site.production(), siteProducesListView.getItems(), null, false);
         siteProducesListView.setItems(resourceListProduce);
     }
 

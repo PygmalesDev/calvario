@@ -147,7 +147,7 @@ public class DeleteStructureComponent extends VBox{
         for (Map.Entry<String, Integer> entry : resourceMapCost.entrySet()) {
             halvedResourceMapCost.put(entry.getKey(), entry.getValue() / 2);
         }
-        ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(halvedResourceMapCost, deleteStructureListView.getItems(), null);
+        ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(halvedResourceMapCost, deleteStructureListView.getItems(), null, false);
         deleteStructureListView.setItems(resourceListCost);
     }
     private void resourceListGenerationSite(DistrictAttributes structure) {
@@ -157,7 +157,7 @@ public class DeleteStructureComponent extends VBox{
             for (Map.Entry<String, Integer> entry : resourceMapCost.entrySet()) {
                 halvedResourceMapCost.put(entry.getKey(), entry.getValue() / 2);
             }
-            ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(halvedResourceMapCost, deleteStructureListView.getItems(), null);
+            ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(halvedResourceMapCost, deleteStructureListView.getItems(), null, false);
             deleteStructureListView.setItems(resourceListCost);
         }
     }

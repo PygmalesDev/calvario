@@ -212,7 +212,9 @@ public class Constants {
             Map.entry("farm", "de/uniks/stp24/icons/buildings/jobPause/farmside_onQueue.png"),
             Map.entry("refinery", "de/uniks/stp24/icons/buildings/jobPause/coal_querry_onQueue.png"),
             Map.entry("research_lab", "de/uniks/stp24/icons/buildings/jobPause/scout_hub_onQueue.png"),
-            Map.entry("exchange", "de/uniks/stp24/icons/buildings/jobPause/seaside_hut_onQueue.png")
+            Map.entry("exchange", "de/uniks/stp24/icons/buildings/jobPause/seaside_hut_onQueue.png"),
+            Map.entry("shipyard", "de/uniks/stp24/icons/buildings/jobPause/shipyard_onQueue.png"),
+            Map.entry("fortress", "de/uniks/stp24/icons/buildings/jobPause/stronghold_onQueue.png")
     );
 
     public static final Map<String, String> buildingsJobProgressMap = Map.ofEntries(

@@ -277,17 +277,19 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     //Sets upkeep, production and cost of buildings in listviews
     private void resourceListGeneration(BuildingAttributes buildingDto) {
-        Map<String, Integer> resourceMapUpkeep = buildingDto.upkeep();
-        ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, buildingConsumesListView.getItems(), null);
-        buildingConsumesListView.setItems(resourceListUpkeep);
+        if (Objects.nonNull(buildingDto)) {
+            Map<String, Integer> resourceMapUpkeep = buildingDto.upkeep();
+            ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, buildingConsumesListView.getItems(), null, false);
+            buildingConsumesListView.setItems(resourceListUpkeep);
 
-        Map<String, Integer> resourceMapProduce = buildingDto.production();
-        ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, buildingProducesListView.getItems(), null);
-        buildingProducesListView.setItems(resourceListProduce);
+            Map<String, Integer> resourceMapProduce = buildingDto.production();
+            ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, buildingProducesListView.getItems(), null, false);
+            buildingProducesListView.setItems(resourceListProduce);
 
-        Map<String, Integer> resourceMapCost = buildingDto.cost();
-        ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(resourceMapCost, buildingCostsListView.getItems(), null);
-        buildingCostsListView.setItems(resourceListCost);
+            Map<String, Integer> resourceMapCost = buildingDto.cost();
+            ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(resourceMapCost, buildingCostsListView.getItems(), null, false);
+            buildingCostsListView.setItems(resourceListCost);
+        }
     }
 
     public void onClose() {

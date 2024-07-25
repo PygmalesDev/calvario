@@ -164,7 +164,7 @@ public class BuildingsWindowComponent extends AnchorPane {
     }
 
     public void buildStronghold() {
-        this.buildingToAdd = "stronghold";
+        this.buildingToAdd = "fortress";
         inGameController.showBuildingInformation(buildingToAdd, "", BUILT_STATUS.NOT_BUILT);
     }
 

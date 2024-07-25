@@ -136,7 +136,7 @@ public class Constants {
             "factory","building.chophouse",
             "refinery","building.coalQuarry",
             "shipyard", "building.shipyard",
-            "stronghold", "building.stronghold"
+            "fortress", "building.stronghold"
     );
 
 
@@ -201,7 +201,7 @@ public class Constants {
             Map.entry("power_plant", "de/uniks/stp24/icons/buildings/theurgy_hall.png"),
             Map.entry("exchange", "de/uniks/stp24/icons/buildings/seaside_hut.png"),
             Map.entry("shipyard", "de/uniks/stp24/icons/buildings/shipyard.png"),
-            Map.entry("stronghold", "de/uniks/stp24/icons/buildings/stronghold.png")
+            Map.entry("fortress", "de/uniks/stp24/icons/buildings/stronghold.png")
     );
 
     public static final Map<String, String> buildingsOnQueueMap = Map.ofEntries(
@@ -225,7 +225,7 @@ public class Constants {
             Map.entry("research_lab", "de/uniks/stp24/icons/buildings/jobProgress/scout_hub_onConstruction.png"),
             Map.entry("exchange", "de/uniks/stp24/icons/buildings/jobProgress/seaside_hut_onConstruction.png"),
             Map.entry("shipyard", "de/uniks/stp24/icons/buildings/jobProgress/shipyard_onConstruction.png"),
-            Map.entry("stronghold", "de/uniks/stp24/icons/buildings/jobProgress/stronghold_onConstruction.png")
+            Map.entry("fortress", "de/uniks/stp24/icons/buildings/jobProgress/stronghold_onConstruction.png")
     );
 
     public static final String[] imagePaths = {

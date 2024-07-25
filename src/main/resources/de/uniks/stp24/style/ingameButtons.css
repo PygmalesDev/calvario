@@ -180,3 +180,7 @@
     -fx-pref-width: 25px;
     -fx-pref-height: 25px;
 }
+
+.plainButton {
+    -fx-font-size: 11;
+}

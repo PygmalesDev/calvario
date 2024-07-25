@@ -109,7 +109,7 @@ public class BuildingsWindowComponent extends AnchorPane {
 
     /*
     The following are onAction methods from buttons
-    isBuilt = false cause these are for build new Buildings window
+    isBuilt = NOT_BUILT cause these are for build new Buildings window
      */
     public void buildExchange(){
         this.buildingToAdd = "exchange";

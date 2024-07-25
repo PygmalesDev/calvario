@@ -1,16 +1,17 @@
 package de.uniks.stp24.controllers;
 
+import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
+import de.uniks.stp24.controllers.helper.Draggable;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.SystemDto;
-import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.Island;
-import de.uniks.stp24.model.Jobs;
+import de.uniks.stp24.model.*;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
@@ -41,10 +42,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static de.uniks.stp24.service.Constants.BUILT_STATUS;
 
@@ -109,6 +107,10 @@ public class InGameController extends BasicController {
 
     @Inject
     public JobsService jobsService;
+    @Inject
+    public FleetService fleetService;
+    @Inject
+    public FleetCoordinationService fleetCoordinationService;
 
     @SubComponent
     @Inject
@@ -147,6 +149,9 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public MarketComponent marketOverviewComponent;
+    @SubComponent
+    @Inject
+    public FleetCreationComponent fleetCreationComponent;
 
     @SubComponent
     @Inject
@@ -204,6 +209,7 @@ public class InGameController extends BasicController {
     final PopupBuilder popupDeleteStructure = new PopupBuilder();
     final PopupBuilder popupHelpWindow = new PopupBuilder();
 
+    final ArrayList<Node> draggables = new ArrayList<>();
 
     @OnRender
     public void addSpeechBubble() {
@@ -226,6 +232,7 @@ public class InGameController extends BasicController {
         pauseMenuComponent.setInGameController(this);
         helpComponent.setInGameController(this);
         clockComponent.setInGameController(this);
+        fleetCoordinationService.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
@@ -240,6 +247,8 @@ public class InGameController extends BasicController {
 
         variableService.initVariables();
         variableService.addRunnable(this::loadGameAttributes);
+
+        this.fleetCoordinationService.setInitialFleetPosition();
 
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
@@ -312,6 +321,9 @@ public class InGameController extends BasicController {
 
         technologiesComponent.setContainer(contextMenuContainer);
 
+        this.group.getChildren().add(this.fleetCreationComponent);
+        this.fleetCreationComponent.setVisible(false);
+
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,
@@ -320,17 +332,41 @@ public class InGameController extends BasicController {
                 technologiesComponent,
                 marketOverviewComponent
         );
-        contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
+        contextMenuContainer.getChildren().forEach(child -> {
+            child.setVisible(false);
+            // make every node in contextMenuContainer draggable
+            draggables.add(child);
+        });
         this.createContextMenuButtons();
 
-  		this.jobsService.loadEmpireJobs();
+        // make pop ups draggable
+        draggables.add(eventContainer);
+        draggables.add(deleteStructureWarningContainer);
+
+        draggables.forEach(Draggable.DraggableNode::new);
+
+        // make island overview draggable (the nodes attached to the overview will follow it)
+        draggables.addAll(Arrays.asList(overviewContainer, buildingsWindow, buildingProperties, siteProperties));
+        new Draggable.DraggableNode(overviewContainer, buildingsWindow, buildingProperties, siteProperties);
+
+        this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListeners();
         explanationService.setInGameController(this);
 
-        fog.setOnMouseDragged(e -> {
+        this.fleetService.loadGameFleets();
+        this.fleetService.initializeFleetListeners();
 
-        });
+//        this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::travelToMousePosition);
     }
+
+    @OnKey(code = KeyCode.R, alt = true)
+    public void resetDraggables() {
+        for (Node draggable : draggables) {
+            draggable.setTranslateX(0);
+            draggable.setTranslateY(0);
+        }
+    }
+
 
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
@@ -493,6 +529,7 @@ public class InGameController extends BasicController {
             isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
             isle.setScaleX(1.25);
             isle.setScaleY(1.25);
+            isle.collisionCircle.setRadius(Constants.ISLAND_COLLISION_RADIUS);
             this.mapGrid.getChildren().add(isle);
         });
 
@@ -535,6 +572,8 @@ public class InGameController extends BasicController {
                         this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
                 showOverview();
                 selected.showUnshowRudder();
+
+                // Show island claiming scroll
             } else if (!this.tokenStorage.isSpectator()) {
                 if (Objects.nonNull(selectedIsland)) selectedIsland.showUnshowRudder();
                 this.overviewSitesComponent.closeOverview();
@@ -549,7 +588,16 @@ public class InGameController extends BasicController {
                     this.islandClaimingComponent.setIslandInformation(selected.island);
                 }
             }
+            // Show fleet creation pane
+            this.fleetCreationComponent.setVisible(true);
+            this.fleetCreationComponent.setIsland(selected.island.id());
+            this.fleetCreationComponent.setLayoutX(selected.getLayoutX()-100);
+            this.fleetCreationComponent.setLayoutY(selected.getLayoutY()+30);
         }
+    }
+
+    public void setFleetOnMap(GameFleetController fleet) {
+        this.mapGrid.getChildren().add(fleet);
     }
 
     @OnRender
@@ -596,7 +644,7 @@ public class InGameController extends BasicController {
             Island selected = this.islandsService.getIsland(job.system());
             this.islandAttributes.setIsland(selected);
             this.tokenStorage.setIsland(selected);
-            // after the job is done, the isBuilt should be true cause the building is built!
+            // after the job is done, the isBuilt should be BUILT cause the building is built!
             this.showBuildingInformation(job.building(), "", BUILT_STATUS.BUILT);
         });
 
@@ -622,17 +670,20 @@ public class InGameController extends BasicController {
                 overviewSitesComponent.inputIslandName.setText(this.islandAttributes.getIsland().name());
     }
 
-    @OnKey(code = KeyCode.T, alt = true)
-    public void showTechnologies() {
-        this.toggleContextMenuVisibility(this.technologiesComponent);
-        this.technologiesComponent.setVisible(!this.technologiesComponent.isVisible());
-    }
-
     @OnKey(code = KeyCode.SPACE)
     public void resetZoom() {
         scale = 0.65;
         group.setScaleX(scale);
         group.setScaleY(scale);
+    }
+
+    @OnKey(code = KeyCode.R, control = true)
+    public void setCollisionVisibility() {
+        this.mapGrid.getChildren().forEach(child -> {
+            if (child instanceof IslandComponent island) island.collisionCircle.setVisible(!island.collisionCircle.isVisible());
+            if (child instanceof GameFleetController fleet) fleet.collisionCircle.setVisible(!fleet.collisionCircle.isVisible());
+        });
+
     }
 
     public void resetZoomMouse(@NotNull MouseEvent event) {
@@ -677,7 +728,6 @@ public class InGameController extends BasicController {
                 event -> {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         islandAttributes.setEmpireDto(event.data());
-                        overviewUpgradeComponent.setUpgradeButton();
                         this.lastUpdate = event.data().updatedAt();
                     }
                 },
@@ -735,6 +785,8 @@ public class InGameController extends BasicController {
                 .removePropertyChangeListener(triple.propertyName(), triple.listener()));
         this.subscriber.dispose();
         this.jobsService.dispose();
+        this.fleetService.dispose();
+        this.fleetCoordinationService.dispose();
         this.variableService.dispose();
     }
 }

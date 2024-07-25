@@ -199,15 +199,6 @@ public class SitePropertiesComponent extends AnchorPane {
         }
     }
 
-//    public void updateIslandSites() {
-//        this.subscriber.subscribe(this.gameSystemsApiService.getSystem(this.tokenStorage.getGameId(),
-//                this.tokenStorage.getIsland().id()), result -> {
-//            this.tokenStorage.setIsland(this.islandsService.updateIsland(result));
-//            this.islandAttributeStorage.setIsland(this.islandsService.updateIsland(result));
-//            displayAmountOfSite();
-//        });
-//    }
-
     //Calls handleDeleteStructure in inGameController which shows the deleteWarning popup
     //and calls method in DeleteStructureComponent
     public void destroySite(){
@@ -271,7 +262,7 @@ public class SitePropertiesComponent extends AnchorPane {
         // 2) if island has enough capacity for this building
         if (Objects.nonNull(siteType)) {
             Map<String, Integer> costSite = Objects.requireNonNull(getCertainSite()).cost();
-            int islandJobsInQueue = jobsService.getObservableListForSystem(islandAttributeStorage.getIsland().id()).size();
+            int islandJobsInQueue = jobsService.getStructureJobsInQueueCount(islandAttributeStorage.getIsland().id());
             buildSiteButton.setDisable(!resourcesService.hasEnoughResources(costSite)
             ||
             islandAttributeStorage.getUsedSlots() + islandJobsInQueue >=

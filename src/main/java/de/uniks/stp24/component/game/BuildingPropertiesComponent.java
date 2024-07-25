@@ -207,7 +207,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
         // 1) if empire has enough resources to build this building
         // 2) if island has enough capacity
         if (Objects.nonNull(buildingType)) {
-            int islandJobsInQueue = jobsService.getObservableListForSystem(islandAttributeStorage.getIsland().id()).size();
+            int islandJobsInQueue = jobsService.getStructureJobsInQueueCount(islandAttributeStorage.getIsland().id());
             if (islandAttributeStorage.getUsedSlots() + islandJobsInQueue >=
                     islandAttributeStorage.getIsland().resourceCapacity()) {
                 buyButton.setDisable(true);

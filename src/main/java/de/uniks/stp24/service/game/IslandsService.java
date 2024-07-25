@@ -44,7 +44,7 @@ public class IslandsService extends BasicService {
     private final List<IslandComponent> islandComponentList = new ArrayList<>();
     public final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
     private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();
-    private final Map<String, List<String>> connections = new HashMap<>();
+    private final Map<String, Map<String, Integer>> connections = new HashMap<>();
     public final Map<String, InfrastructureService> siteManager = new HashMap<>();
 
     @Inject
@@ -91,14 +91,13 @@ public class IslandsService extends BasicService {
         subscriber.subscribe(gameSystemsService.getSystems(gameID),
                 dto -> {
                     Arrays.stream(dto).forEach(data -> {
-                        List<String> linkedIsles = new ArrayList<>(data.links().keySet());
+                        connections.put(data._id(), data.links());
                         minX = Math.min(data.x(),minX);
                         minY = Math.min(data.y(),minY);
                         maxX = Math.max(data.x(),maxX);
                         maxY = Math.max(data.y(),maxY);
                         Island tmp = convertToIsland(data);
                         isles.add(tmp);
-                        connections.put(data._id(),linkedIsles);
                     });
                     widthRange = maxX-minX + 1000;
                     heightRange = maxY-minY + 1000;
@@ -147,14 +146,15 @@ public class IslandsService extends BasicService {
         connections.forEach((key, value) -> {
             if (!checked.contains(key)) checked.add(key);
             ArrayList<String> tmp = new ArrayList<>();
-            for (String s : value) {
-                if (!checked.contains(s)) {
-                    tmp.add(s);
-                }
-            }
+            for (String s : value.keySet())
+                if (!checked.contains(s)) tmp.add(s);
             singleConnections.putIfAbsent(key, tmp);
         });
         return singleConnections;
+    }
+
+    public Map<String, Integer> getConnections(String islandID) {
+        return this.connections.get(islandID);
     }
 
     /**
@@ -378,7 +378,7 @@ public class IslandsService extends BasicService {
         // adds a background color to island as same as owner empire color
         if (Objects.nonNull(islandComponent.island.owner())) {
             Color colorWeb = Color.web(getEmpire(islandComponent.island.owner()).color()).brighter();
-            islandComponent.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb) + ", 4.0, 0.88, 0, 0);");}
+            islandComponent.islandImage.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb) + ", 4.0, 0.88, 0, 0);");}
 
     }
 }

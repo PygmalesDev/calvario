@@ -343,6 +343,19 @@ public class JobsService {
         return job.equals(this.getObservableListForSystem(job.system()).getFirst());
     }
 
+    public int getStructureJobsInQueueCount(String systemID) {
+        if (!this.jobCollections.containsKey(systemID))
+            return 0;
+
+        int count = 0;
+        for (Job job : jobCollections.get(systemID)) {
+            if (job.type().equals("building") || job.type().equals("district")) {
+                count++;
+            }
+        }
+        return count;
+    }
+
     /**
      * A clearing method that should be called inside the {@link InGameController#destroy() InGameController.destroy()}
      * to properly dispose of the jobs and functions that were loaded in the service during the game.

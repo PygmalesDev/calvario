@@ -14,6 +14,7 @@ import de.uniks.stp24.service.game.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -55,6 +56,11 @@ public class BuildingPropertiesComponent extends AnchorPane {
     ImageView buildingImage;
     @FXML
     Pane jobProgressPane;
+    @FXML
+    Pane textInfoPane;
+    @FXML
+    Label textInfoLabel;
+
     @Inject
     public JobsService jobsService;
     @Inject
@@ -289,6 +295,19 @@ public class BuildingPropertiesComponent extends AnchorPane {
             Map<String, Integer> resourceMapCost = buildingDto.cost();
             ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(resourceMapCost, buildingCostsListView.getItems(), null, false);
             buildingCostsListView.setItems(resourceListCost);
+        }
+
+        /* Sets infoText for buildings that does not produce anything */
+        if (buildingProducesListView.getItems().isEmpty()) {
+            textInfoPane.setVisible(true);
+            if (buildingDto.id().equals("fortress")) {
+                textInfoLabel.setText(gameResourceBundle.getString("building.stronghold.info"));
+            } else if (buildingDto.id().equals("shipyard")) {
+                textInfoLabel.setText(gameResourceBundle.getString("building.shipyard.info"));
+            }
+        } else {
+            textInfoPane.setVisible(false);
+            textInfoLabel.setText("");
         }
     }
 

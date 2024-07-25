@@ -53,6 +53,7 @@
 
 .tableHeadingText{
     -fx-font-family: "Tempus Sans ITC";
+    -fx-text-fill: black;
     -fx-background-color: "TRANSPARENT";
     -fx-font-weight: none;
     -fx-font-size: 12;

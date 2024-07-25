@@ -9,10 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Draggable {
-    public enum Event {
-        None, DragStart, Drag, DragEnd
-    }
-
     public static final class DraggableNode implements EventHandler<MouseEvent> {
         private double lastMouseX = 0, lastMouseY = 0;
 

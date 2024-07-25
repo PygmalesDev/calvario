@@ -7,9 +7,7 @@ import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.helper.Draggable;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.SystemDto;
-import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.Island;
-import de.uniks.stp24.model.Jobs;
+import de.uniks.stp24.model.*;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
@@ -200,6 +198,7 @@ public class InGameController extends BasicController {
     final PopupBuilder popupDeleteStructure = new PopupBuilder();
     final PopupBuilder popupHelpWindow = new PopupBuilder();
 
+    final ArrayList<Node> draggables = new ArrayList<>();
 
     @OnRender
     public void addSpeechBubble() {
@@ -319,21 +318,33 @@ public class InGameController extends BasicController {
         contextMenuContainer.getChildren().forEach(child -> {
             child.setVisible(false);
             // make every node in contextMenuContainer draggable
-            new Draggable.DraggableNode(child);
+            draggables.add(child);
         });
         this.createContextMenuButtons();
 
         // make pop ups draggable
-        new Draggable.DraggableNode(eventContainer);
-        new Draggable.DraggableNode(deleteStructureWarningContainer);
+        draggables.add(eventContainer);
+        draggables.add(deleteStructureWarningContainer);
 
+        draggables.forEach(Draggable.DraggableNode::new);
+
+        // make island overview draggable (the nodes attached to the overview will follow it)
+        draggables.addAll(Arrays.asList(overviewContainer, buildingsWindow, buildingProperties, siteProperties));
         new Draggable.DraggableNode(overviewContainer, buildingsWindow, buildingProperties, siteProperties);
-
 
         this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListeners();
         explanationService.setInGameController(this);
     }
+
+    @OnKey(code = KeyCode.R, alt = true)
+    public void resetDraggables() {
+        for (Node draggable : draggables) {
+            draggable.setTranslateX(0);
+            draggable.setTranslateY(0);
+        }
+    }
+
 
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {

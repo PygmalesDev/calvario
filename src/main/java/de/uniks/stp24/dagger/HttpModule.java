@@ -111,4 +111,8 @@ public class HttpModule {
     @Singleton
     FleetApiService fleetApiService(Retrofit retrofit) {return retrofit.create(FleetApiService.class);}
 
+    @Provides
+    @Singleton
+    ShipsApiService shipsApiService(Retrofit retrofit) {return retrofit.create(ShipsApiService.class);}
+
 }

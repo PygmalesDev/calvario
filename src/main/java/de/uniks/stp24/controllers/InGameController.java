@@ -103,6 +103,8 @@ public class InGameController extends BasicController {
     public IslandsService islandsService;
     @Inject
     public ExplanationService explanationService;
+    @Inject
+    ShipService shipService;
 
     @Inject
     public JobsService jobsService;
@@ -273,6 +275,7 @@ public class InGameController extends BasicController {
         islandAttributes.setSystemUpgradeAttributes();
         islandAttributes.setBuildingAttributes();
         islandAttributes.setDistrictAttributes();
+        shipService.initShipTypes();
     }
 
     private void handlePauseChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {

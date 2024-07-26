@@ -19,17 +19,25 @@ public class FleetComponent extends VBox implements ReusableItemComponent<Fleet>
     @FXML
     public Label sizeLabel;
 
+    final FleetManagerComponent fleetManagerComponent;
+    Fleet fleet;
+
     @Inject
-    public FleetComponent(){}
+    public FleetComponent(FleetManagerComponent fleetManagerComponent){
+        this.fleetManagerComponent = fleetManagerComponent;
+    }
+
 
 
     public void setItem(Fleet fleet){
-
+        fleetNameLabel.setText(fleet.name());
+        this.fleet = fleet;
     }
 
 
     public void deleteFleet(){}
 
     public void editFleet(){
+        this.fleetManagerComponent.editSelectedFleet(fleet);
     }
 }

@@ -46,4 +46,9 @@ public class Ships {
             Map<String, Integer> cost,
             Map<String, Integer> upkeep
     ){}
+
+    public record BlueprintInFleetDto(
+            String type,
+            int count
+    ){}
 }

@@ -9,7 +9,7 @@ import static de.uniks.stp24.model.Ships.*;
 
 public interface ShipsApiService {
     @GET("games/{game}/fleets/{fleet}/ships")
-    Observable<ArrayList<ReadShipDTO>> getAllShips(@Path("game") String gameID, @Path("fleet") String fleetID);
+    Observable<ReadShipDTO[]> getAllShips(@Path("game") String gameID, @Path("fleet") String fleetID);
 
     @GET("games/{game}/fleets/{fleet}/ships/{id}")
     Observable<Ship> getYourOwnShip(@Path("game") String gameID, @Path("fleet") String fleetID, @Path("id") String shipID);

@@ -45,7 +45,7 @@
                               <Text fx:id="fleetNameText" strokeType="OUTSIDE" strokeWidth="0.0" text="FleetName" />
                            </children>
                         </HBox>
-                        <ListView prefHeight="200.0" prefWidth="200.0" />
+                        <ListView fx:id="blueprintInFleetListView" prefHeight="200.0" prefWidth="200.0" />
                      </children>
                   </VBox>
                </children>

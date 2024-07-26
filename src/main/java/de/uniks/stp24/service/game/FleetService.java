@@ -60,8 +60,10 @@ public class FleetService {
 
     private void addFleetToGroups(Fleet fleet) {
         this.gameFleets.add(fleet);
-        if (!this.empireFleets.containsKey(fleet._id())) this.empireFleets.put(fleet._id(), FXCollections.observableArrayList());
-        this.empireFleets.get(fleet._id()).add(fleet);
+        if (Objects.nonNull(fleet.empire())) {
+            if (!this.empireFleets.containsKey(fleet.empire())) this.empireFleets.put(fleet.empire(), FXCollections.observableArrayList());
+            this.empireFleets.get(fleet.empire()).add(fleet);
+        }
         if (!this.islandFleets.containsKey(fleet.location())) this.islandFleets.put(fleet.location(), FXCollections.observableArrayList());
         this.islandFleets.get(fleet.location()).add(fleet);
 
@@ -98,8 +100,13 @@ public class FleetService {
     }
 
     public ObservableList<Fleet> getFleetsOnIsland(String islandID) {
-        if (!this.islandFleets.containsKey(islandID)) this.empireFleets.put(islandID, FXCollections.observableArrayList());
+        if (!this.islandFleets.containsKey(islandID)) this.islandFleets.put(islandID, FXCollections.observableArrayList());
         return this.islandFleets.get(islandID);
+    }
+
+    public ObservableList<Fleet> getEmpireFleets(String empireID) {
+        if (!this.empireFleets.containsKey(empireID)) this.empireFleets.put(empireID, FXCollections.observableArrayList());
+        return this.empireFleets.get(empireID);
     }
 
     public void dispose() {

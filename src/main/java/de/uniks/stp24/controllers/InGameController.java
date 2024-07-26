@@ -28,8 +28,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
+import javafx.scene.shape.*;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
@@ -215,6 +214,8 @@ public class InGameController extends BasicController {
 
     int islandCollisionRadius = ISLAND_COLLISION_RADIUS;
     double islandScale = 1.25;
+
+    Random random = new Random();
 
     Shape fog;
 
@@ -499,10 +500,9 @@ public class InGameController extends BasicController {
         mapGrid.setMinSize(x, y);
         islandsService.createLines(this.islandComponentMap).forEach(line -> this.connectionsPane.getChildren().add(line));
 
-        fogOfWar.setInGameController(this);
         fogOfWar.setMapSize(x, y);
         fogOfWar.init();
-        this.updateFog(fogOfWar.getFog());
+        this.updateFog();
 
         group.setScaleX(0.65);
         group.setScaleY(0.65);
@@ -582,16 +582,51 @@ public class InGameController extends BasicController {
     public void removeFogFromIsland(IslandComponent isle) {
         if (isle.foggy) {
             isle.applyIcon(false);
-            this.updateFog(fogOfWar.subtract(
-                    new Circle(isle.getPosX() + ISLAND_WIDTH / 2 * islandScale + 17,
+
+//            this.fogOfWar.changeFog(new Circle(isle.getPosX() + ISLAND_WIDTH / 2 * islandScale + 17,
+//                    isle.getPosY() + ISLAND_HEIGHT / 2 * islandScale + 7,
+//                    islandCollisionRadius * islandScale),
+//                    randomizeExtraFog(isle));
+
+            this.fogOfWar.changeFog(new Circle(isle.getPosX() + ISLAND_WIDTH / 2 * islandScale + 17,
                             isle.getPosY() + ISLAND_HEIGHT / 2 * islandScale + 7,
-                            islandCollisionRadius * islandScale)
-            ));
+                            islandCollisionRadius * islandScale),
+                    null);
+
+            this.updateFog();
         }
     }
 
     public void removeFogFromShape(Shape shape) {
-        this.updateFog(fogOfWar.subtract(shape));
+        this.fogOfWar.changeFog(shape, null);
+        this.updateFog();
+    }
+
+    public Shape randomizeExtraFog(IslandComponent isle) {
+        Shape toAddShape = null;
+
+        int count = 50;
+        double radius;
+        double distance;
+        double angle;
+
+        for (int i = 0; i < count; i++) {
+            angle = (random.nextInt(360)-90)*Math.PI/180;
+            radius = random.nextInt(30, 75);
+            distance = random.nextInt(150, 250);
+
+            Circle circle = new Circle(
+                    isle.getPosX() + ISLAND_WIDTH/2 + (ISLAND_WIDTH/2+ distance)*Math.cos(angle),
+                    isle.getPosY() + ISLAND_HEIGHT/2 + (ISLAND_WIDTH/2+ distance)*Math.sin(angle),
+                    radius);
+
+            if (Objects.nonNull(toAddShape))
+                toAddShape = Shape.union(toAddShape, circle);
+            else
+                toAddShape = circle;
+        }
+
+        return toAddShape;
     }
 
     public void showInfo(MouseEvent event) {
@@ -827,9 +862,9 @@ public class InGameController extends BasicController {
         this.variableService.dispose();
     }
 
-    public void updateFog(Shape fog) {
+    public void updateFog() {
         zoomPane.getChildren().remove(this.fog);
-        zoomPane.getChildren().add(2, fog);
-        this.fog = fog;
+        this.fog = fogOfWar.getFog();
+        zoomPane.getChildren().add(2, this.fog);
     }
 }

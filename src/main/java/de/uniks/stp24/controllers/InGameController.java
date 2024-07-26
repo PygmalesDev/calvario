@@ -43,10 +43,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static de.uniks.stp24.service.Constants.BUILT_STATUS;
 

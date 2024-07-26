@@ -1,6 +1,7 @@
 package de.uniks.stp24.component.game.technology;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.ImageCache;
@@ -8,6 +9,7 @@ import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TechnologyService;
+import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,6 +35,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -98,6 +101,9 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @SubComponent
     public ResearchJobComponent researchJobComponent;
 
+    @Inject
+    EventListener eventListener;
+
 
     boolean societyJobRunning = false;
     boolean engineeringJobRunning = false;
@@ -108,13 +114,34 @@ public class TechnologyCategoryComponent extends AnchorPane {
     private TechnologyExtended technology;
     public TechnologyOverviewComponent technologyOverviewComponent;
 
+    public String lastUpdate = "";
 
     @Inject
     public TechnologyCategoryComponent() {
     }
 
+    public void updateTechnologies() {
+        ObservableList<ObservableList<TechnologyExtended>> unlockedAndResearchList = technologyService.getUnlockedAndResearch(technologieCategoryName);
+
+        unlockedTechnologies = unlockedAndResearchList.getFirst();
+        researchTechnologies = unlockedAndResearchList.getLast();
+    }
+
+    public void createEmpireListener() {
+        this.subscriber.subscribe(this.eventListener
+                        .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
+                event -> {
+                    if (!lastUpdate.equals(event.data().updatedAt())) {
+                        System.out.println(Arrays.toString(event.data().technologies()));
+                    }
+                },
+                error -> System.out.println("errorListener: " + error)
+        );
+    }
+
     @OnInit
     public void init() {
+        createEmpireListener();
         researchJobComponent.setTechnologyCategoryComponent(this);
     }
 
@@ -162,10 +189,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
         currentResearchResourceLabel.setText(String.valueOf(resourcesService.getResourceCount("research")));
         this.technologieCategoryName = category;
 
-        ObservableList<ObservableList<TechnologyExtended>> unlockedAndResearchList = technologyService.getUnlockedAndResearch(technologieCategoryName);
-
-        unlockedTechnologies = unlockedAndResearchList.getFirst();
-        researchTechnologies = unlockedAndResearchList.getLast();
+        updateTechnologies();
 
         researchListView.setSelectionModel(null);
         unlockedListView.setSelectionModel(null);

@@ -59,10 +59,6 @@ public class EditAccController extends BasicController {
     @FXML
     HBox editAccHBox;
     @FXML
-    ImageView editIconImageView;
-    @FXML
-    ImageView deleteIconImageView;
-    @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
     VBox cardBackgroundVBox;
@@ -238,7 +234,6 @@ public class EditAccController extends BasicController {
             cancelChangesButton.setVisible(true);
             saveChangesButton.setVisible(true);
             changeUserInfoButton.setStyle("-fx-text-fill: #2B78E4");
-            editIconImageView.setImage(editIconBlueImage);
         } else {
             resetEditing(tokenStorage.getName());
         }
@@ -269,11 +264,6 @@ public class EditAccController extends BasicController {
             return "-fx-text-fill: #CF2A27";
         }, this.warningIsInvisible));
 
-        this.deleteIconImageView.imageProperty().bind(Bindings.createObjectBinding(() -> {
-            if (warningIsInvisible.get())
-                return deleteIconBlackImage;
-            return deleteIconRedImage;
-        }, this.warningIsInvisible));
     }
 
     /**
@@ -309,12 +299,13 @@ public class EditAccController extends BasicController {
         usernameInput.setText(username);
         passwordInput.setText("");
         usernameInput.setEditable(false);
+        usernameInput.setStyle("-fx-text-fill: white");
         passwordInput.setEditable(false);
+        passwordInput.setStyle("-fx-text-fill: white");
         cancelChangesButton.setVisible(false);
         saveChangesButton.setVisible(false);
         changeUserInfoButton.setDisable(false);
-        editIconImageView.setImage(editIconBlackImage);
-        changeUserInfoButton.setStyle("-fx-text-fill: Black");
+        changeUserInfoButton.setStyle("-fx-text-fill: white");
     }
 
     /**

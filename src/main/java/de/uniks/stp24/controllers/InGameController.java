@@ -4,11 +4,10 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
+import de.uniks.stp24.controllers.helper.Draggable;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.SystemDto;
-import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.Island;
-import de.uniks.stp24.model.Jobs;
+import de.uniks.stp24.model.*;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
@@ -205,6 +204,7 @@ public class InGameController extends BasicController {
     final PopupBuilder popupDeleteStructure = new PopupBuilder();
     final PopupBuilder popupHelpWindow = new PopupBuilder();
 
+    final ArrayList<Node> draggables = new ArrayList<>();
 
     @OnRender
     public void addSpeechBubble() {
@@ -319,10 +319,24 @@ public class InGameController extends BasicController {
                 empireOverviewComponent,
                 marketOverviewComponent
         );
-        contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
+        contextMenuContainer.getChildren().forEach(child -> {
+            child.setVisible(false);
+            // make every node in contextMenuContainer draggable
+            draggables.add(child);
+        });
         this.createContextMenuButtons();
 
-  		this.jobsService.loadEmpireJobs();
+        // make pop ups draggable
+        draggables.add(eventContainer);
+        draggables.add(deleteStructureWarningContainer);
+
+        draggables.forEach(Draggable.DraggableNode::new);
+
+        // make island overview draggable (the nodes attached to the overview will follow it)
+        draggables.addAll(Arrays.asList(overviewContainer, buildingsWindow, buildingProperties, siteProperties));
+        new Draggable.DraggableNode(overviewContainer, buildingsWindow, buildingProperties, siteProperties);
+
+        this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListeners();
         explanationService.setInGameController(this);
 
@@ -332,6 +346,15 @@ public class InGameController extends BasicController {
 
         technologyService.initAllTechnologies();
     }
+
+    @OnKey(code = KeyCode.R, alt = true)
+    public void resetDraggables() {
+        for (Node draggable : draggables) {
+            draggable.setTranslateX(0);
+            draggable.setTranslateY(0);
+        }
+    }
+
 
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
@@ -615,7 +638,7 @@ public class InGameController extends BasicController {
             Island selected = this.islandsService.getIsland(job.system());
             this.islandAttributes.setIsland(selected);
             this.tokenStorage.setIsland(selected);
-            // after the job is done, the isBuilt should be true cause the building is built!
+            // after the job is done, the isBuilt should be BUILT cause the building is built!
             this.showBuildingInformation(job.building(), "", BUILT_STATUS.BUILT);
         });
 
@@ -690,7 +713,6 @@ public class InGameController extends BasicController {
                 event -> {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         islandAttributes.setEmpireDto(event.data());
-                        overviewUpgradeComponent.setUpgradeButton();
                         this.lastUpdate = event.data().updatedAt();
                     }
                 },

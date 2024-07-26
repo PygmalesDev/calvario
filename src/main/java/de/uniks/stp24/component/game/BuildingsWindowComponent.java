@@ -41,6 +41,10 @@ public class BuildingsWindowComponent extends AnchorPane {
     @FXML
     Button buildingExchange;
     @FXML
+    Button buildingShipyard;
+    @FXML
+    Button buildingStronghold;
+    @FXML
     Button closeWindowButton;
 
     @Inject
@@ -85,7 +89,9 @@ public class BuildingsWindowComponent extends AnchorPane {
                 buildingFarm,
                 buildingMine,
                 buildingPowerPlant,
-                buildingExchange
+                buildingExchange,
+                buildingShipyard,
+                buildingStronghold
         };
     }
 
@@ -109,7 +115,7 @@ public class BuildingsWindowComponent extends AnchorPane {
 
     /*
     The following are onAction methods from buttons
-    isBuilt = false cause these are for build new Buildings window
+    isBuilt = NOT_BUILT cause these are for build new Buildings window
      */
     public void buildExchange(){
         this.buildingToAdd = "exchange";
@@ -150,6 +156,16 @@ public class BuildingsWindowComponent extends AnchorPane {
     public void buildRefinery(){
         this.buildingToAdd = "refinery";
         inGameController.showBuildingInformation(buildingToAdd, "",  BUILT_STATUS.NOT_BUILT);
+    }
+
+    public void buildShipyard() {
+        this.buildingToAdd = "shipyard";
+        inGameController.showBuildingInformation(buildingToAdd, "", BUILT_STATUS.NOT_BUILT);
+    }
+
+    public void buildStronghold() {
+        this.buildingToAdd = "fortress";
+        inGameController.showBuildingInformation(buildingToAdd, "", BUILT_STATUS.NOT_BUILT);
     }
 
     public void onClose(){

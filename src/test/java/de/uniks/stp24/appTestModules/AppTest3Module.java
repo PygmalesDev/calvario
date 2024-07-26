@@ -170,7 +170,12 @@ public class AppTest3Module extends LobbyTestLoader {
         new Effect("technologies.society.cost_multiplier", 0, 0.9, 0)},
             new String[]{"society"}, 2, null, null);
 
+    protected final ExplainedVariableDTO EXPLAINED_VARIABLE = new ExplainedVariableDTO(
+            "technologies.society.cost_multiplier", 0.9, new ArrayList<>(), 0.9);
+
     protected final ArrayList<TechnologyExtended> TECHNOLOGIES = new ArrayList<>(List.of(TECHNOLOGY));
+
+    protected final ArrayList<ExplainedVariableDTO> EXPLAINED_VARIABLES = new ArrayList<>(List.of(EXPLAINED_VARIABLE));
 
     protected final UpdateEmpireMarketDto MARKET_UPDATE_DTO = new UpdateEmpireMarketDto(
             DEV_RESOURCES, null, null, null);
@@ -281,6 +286,9 @@ public class AppTest3Module extends LobbyTestLoader {
                 .thenReturn(Observable.just(JOBS[3])).thenReturn(Observable.just(JOBS[2]))
                 .thenReturn(Observable.just(JOBS[0])).thenReturn(Observable.just(JOBS[1]))
                 .thenReturn(Observable.just(JOBS[4]));
+
+        when(this.variableService.getFirstHalfOfVariables()).thenReturn(Observable.just(EXPLAINED_VARIABLES));
+        when(this.variableService.getSecondHalfOfVariables()).thenReturn(Observable.just(EXPLAINED_VARIABLES));
 
         doAnswer(inv -> this.app.show(this.gangCreationController)).when(this.app).show(eq("/creation"), any());
         doAnswer(inv -> this.app.show(this.inGameController)).when(this.app).show(eq("/ingame"), any());

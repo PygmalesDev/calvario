@@ -27,12 +27,9 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
     public Label sizeLabel;
     @FXML
     public Button buildShipButton;
-    @Inject
-    ResourcesService resourcesService;
-    @Inject
-    ShipService shipService;
-    @Inject
-    Subscriber subscriber;
+    public final ResourcesService resourcesService;
+    public final ShipService shipService;
+    public final Subscriber subscriber;
     @Inject
     JobsService jobsService;
 
@@ -44,8 +41,11 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
     private boolean updateButtonState = true;
 
     @Inject
-    public ShipTypesOfFleetComponent(FleetManagerComponent fleetManagerComponent){
+    public ShipTypesOfFleetComponent(FleetManagerComponent fleetManagerComponent, ResourcesService resourcesService, ShipService shipService, Subscriber subscriber){
         this.fleetManagerComponent = fleetManagerComponent;
+        this.resourcesService = resourcesService;
+        this.shipService = shipService;
+        this.subscriber = subscriber;
     }
 
     @OnInit
@@ -76,7 +76,11 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
     }
 
     public void buildShip(){
-        //this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createShipJob(fleet._id(),shipType)), job -> )
+        this.subscriber.subscribe(this.shipService.beginShipJob(this.fleet._id(), this.shipType),
+            job->{
+                System.out.println("ship job has started");
+            },
+            error -> System.out.println("Error while trying to create a new ship job in ShipTypesOfFleetComponent:\n" + error.getMessage()));
     }
 
     public void decrementSize(){}
@@ -84,13 +88,7 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
     public void incrementSize(){}
 }
 
-//public void buildSite(){
-//    this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createDistrictJob(
-//            this.tokenStorage.getIsland().id(), this.siteType)), job ->  {
-//        this.setJobsPaneProgress(job);
-//        this.setSiteFinishers(job);
-//    });
-//}
+
 
 //private void setSiteFinishers(Jobs.Job job) {
 //    this.jobsService.onJobDeletion(job._id(), () -> {

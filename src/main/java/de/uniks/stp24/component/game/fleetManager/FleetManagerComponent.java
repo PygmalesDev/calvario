@@ -12,6 +12,7 @@ import de.uniks.stp24.model.Ships.ShipType;
 import de.uniks.stp24.rest.ShipsApiService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.FleetService;
+import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.ShipService;
 import de.uniks.stp24.service.game.VariableService;
 import javafx.collections.FXCollections;
@@ -80,12 +81,14 @@ public class FleetManagerComponent extends AnchorPane {
     ShipService shipService;
     @Inject
     Subscriber subscriber;
+    @Inject
+    ResourcesService resourcesService;
 
     Map<String, Integer> blueprintsInFleetMap = new HashMap<>();
     ObservableList<Fleet> fleets = FXCollections.observableArrayList();;
     public Provider<FleetComponent> fleetComponentProvider = () -> new FleetComponent(this);// technologyService, app, technologiesResourceBundle, this.imageCache);
     ObservableList<Ships.BlueprintInFleetDto> blueprintsInFleetList = FXCollections.observableArrayList();
-    public Provider<ShipTypesOfFleetComponent> shipTypesOfFleetComponentProvider = () -> new ShipTypesOfFleetComponent(this);// technologyService, app, technologiesResourceBundle, this.imageCache);
+    public Provider<ShipTypesOfFleetComponent> shipTypesOfFleetComponentProvider = () -> new ShipTypesOfFleetComponent(this, this.resourcesService, this.shipService,this.subscriber);// technologyService, app, technologiesResourceBundle, this.imageCache);
 
 
 
@@ -136,7 +139,7 @@ public class FleetManagerComponent extends AnchorPane {
                 });
             this.blueprintsInFleetList.clear();
             this.blueprintsInFleetList.addAll(this.blueprintsInFleetMap.entrySet().stream().map(entry ->
-                    new Ships.BlueprintInFleetDto(entry.getKey(), entry.getValue())).toList());
+                    new Ships.BlueprintInFleetDto(entry.getKey(), entry.getValue(), fleet)).toList());
             },
                 error -> System.out.println("Error loading ships of a fleet in FleetManagerComponent:\n" + error.getMessage()));
 

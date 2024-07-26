@@ -12,6 +12,7 @@ import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.BasicService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.menu.LobbyService;
+import de.uniks.stp24.utils.PathTableEntry;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -22,6 +23,9 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
+
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 
 @Singleton
 public class IslandsService extends BasicService {
@@ -44,6 +48,7 @@ public class IslandsService extends BasicService {
     private final List<IslandComponent> islandComponentList = new ArrayList<>();
     public final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
     private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();
+    private final Map<String, List<Double[]>> distancePoints = new HashMap<>();
     private final Map<String, Map<String, Integer>> connections = new HashMap<>();
     public final Map<String, InfrastructureService> siteManager = new HashMap<>();
 
@@ -151,6 +156,38 @@ public class IslandsService extends BasicService {
             singleConnections.putIfAbsent(key, tmp);
         });
         return singleConnections;
+    }
+
+    private void generateDistancePoints() {
+        List<String> islandIDs = this.isles.stream().map(Island::id).toList();
+        List<String> visitedIslands = new ArrayList<>();
+
+        Iterator<String> islandIterator = islandIDs.iterator();
+        String currentID = islandIterator.next();
+
+        while (visitedIslands.size() != islandIDs.size()) {
+            String currentIDCopy = currentID;
+            this.getConnections(currentID).forEach((neighbourID, value) -> {
+                if (!visitedIslands.contains(neighbourID))
+                    this.distancePoints.put(neighbourID, this.generateDistancePoints(currentIDCopy, neighbourID, value));
+            });
+            visitedIslands.add(currentID);
+            currentID = islandIterator.next();
+        }
+
+    }
+
+    private ArrayList<Double[]> generateDistancePoints(String startID, String finishID, int pointsAmount) {
+        IslandComponent startIsland = this.getIslandComponent(startID), endIsland = this.getIslandComponent(finishID);
+        Double[] startCoords = new Double[]{startIsland.getLayoutX(), startIsland.getLayoutY()},
+                 endCoords   = new Double[]{endIsland.getLayoutX(), endIsland.getLayoutY()},
+                 distVector  = new Double[]{endCoords[0]-startCoords[0], endCoords[1]-startCoords[1]},
+                 increment   = new Double[]{distVector[0]/pointsAmount, distVector[1]/pointsAmount};
+        ArrayList<Double[]> distancePoints = new ArrayList<>();
+        for (int i = 1; i <= pointsAmount; i++)
+            distancePoints.add(new Double[]{startCoords[0] + increment[0]*i, startCoords[1] + increment[1]*i});
+
+        return distancePoints;
     }
 
     public Map<String, Integer> getConnections(String islandID) {

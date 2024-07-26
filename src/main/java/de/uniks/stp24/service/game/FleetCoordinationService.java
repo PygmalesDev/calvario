@@ -8,6 +8,7 @@ import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.utils.PathTableEntry;
 import javafx.scene.input.MouseEvent;
 import org.fulib.fx.controller.Subscriber;
 
@@ -136,8 +137,8 @@ public class FleetCoordinationService {
         while (visitedIslands.size() != islandIDs.size()) {
             // Calculate the new shortest path for the connected islands
             if (Objects.nonNull(currentIsland)) {
-                String currentIslandID = currentIsland.id;
-                int currentShortestPath = currentIsland.shortestPath;
+                String currentIslandID = currentIsland.getID();
+                int currentShortestPath = currentIsland.getShortestPath();
                 currentIsland.getConnections().forEach((id, dist) -> {
                     // Do nothing if the neighbor was already checked
                     if (visitedIslands.contains(id)) return;
@@ -150,15 +151,15 @@ public class FleetCoordinationService {
                     connectedIsland.setShortestPath(currentShortestPath + dist);
                     connectedIsland.setPreviousNode(currentIslandID);
                 });
-                visitedIslands.add(currentIsland.id);
+                visitedIslands.add(currentIsland.getID());
             }
 
             // Get entry with the shortest path
             currentIsland = tableEntries.values().stream()
                     // Take only islands with a defined path
-                    .filter(entry -> entry.shortestPath != -1)
+                    .filter(entry -> entry.getShortestPath() != -1)
                     // Take only islands that weren't visited
-                    .filter(entry -> !visitedIslands.contains(entry.id))
+                    .filter(entry -> !visitedIslands.contains(entry.getID()))
                     // Considering previous statements, take island with the shortest path
                     .min(Comparator.comparing(PathTableEntry::getShortestPath)).orElse(null);
         }
@@ -167,52 +168,12 @@ public class FleetCoordinationService {
         ArrayList<String> path = new ArrayList<>();
         currentIsland = tableEntries.get(currentFleet.location());
         while (Objects.nonNull(currentIsland)) {
-            path.add(currentIsland.id);
+            path.add(currentIsland.getID());
             currentIsland = tableEntries.get(currentIsland.getPreviousNode());
         }
 
         return path;
     }
-
-    private static class PathTableEntry {
-        private final Map<String, Integer> connections;
-        private final String id;
-        private int shortestPath;
-        private String previousNode;
-
-        public PathTableEntry(String id, Map<String, Integer> connections) {
-            this.id = id;
-            this.connections = connections;
-            this.shortestPath = -1;
-            this.previousNode = "";
-        }
-
-        public Map<String, Integer> getConnections() {
-            return connections;
-        }
-
-        public int getShortestPath() {
-            return shortestPath;
-        }
-
-        public void setShortestPath(int shortestPath) {
-            this.shortestPath = shortestPath;
-        }
-
-        public String getPreviousNode() {
-            return previousNode;
-        }
-
-        public void setPreviousNode(String previousNode) {
-            this.previousNode = previousNode;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("[X] Entry %s:\t Path: %d\t Previous: %s", id, shortestPath, previousNode);
-        }
-    }
-
     public void dispose() {
         this.subscriber.dispose();
     }

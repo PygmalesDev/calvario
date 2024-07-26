@@ -8,6 +8,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 import javax.inject.Inject;
+import java.util.Objects;
 
 public class FogOfWar {
     @Inject
@@ -19,7 +20,10 @@ public class FogOfWar {
     InGameController inGameController;
     double x, y;
 
-    Shape fog;
+
+    Shape originalFog;
+    Shape currentFog;
+    Shape removedFog;
 
     @Inject
     public FogOfWar() {
@@ -36,19 +40,24 @@ public class FogOfWar {
     }
 
     public void init() {
-        this.fog = new Rectangle(0, 0, x, y);
+        this.originalFog = new Rectangle(0, 0, x, y);
         this.fogImage = new Image("/de/uniks/stp24/assets/backgrounds/fog.png");
         this.fogPattern = new ImagePattern(this.fogImage, 0, 0, this.fogImage.getWidth(), this.fogImage.getHeight(), false);
-        this.fog.setFill(this.fogPattern);
+        this.originalFog.setFill(this.fogPattern);
+        this.currentFog = this.originalFog;
     }
 
-    public Shape subtract(Shape shape) {
-        this.fog = Shape.subtract(this.fog, shape);
-        this.fog.setFill(this.fogPattern);
-        return fog;
+    public Shape subtract(Shape toRemove) {
+        if (Objects.nonNull(this.removedFog))
+            this.removedFog = Shape.union(this.removedFog, toRemove);
+        else
+            this.removedFog = toRemove;
+        this.currentFog = Shape.subtract(this.originalFog, removedFog);
+        this.currentFog.setFill(this.fogPattern);
+        return currentFog;
     }
 
     public Shape getFog() {
-        return fog;
+        return currentFog;
     }
 }

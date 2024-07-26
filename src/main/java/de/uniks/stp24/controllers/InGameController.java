@@ -590,6 +590,10 @@ public class InGameController extends BasicController {
         }
     }
 
+    public void removeFogFromShape(Shape shape) {
+        this.updateFog(fogOfWar.subtract(shape));
+    }
+
     public void showInfo(MouseEvent event) {
         if (event.getSource() instanceof IslandComponent selected) {
             tokenStorage.setIsland(selected.getIsland());

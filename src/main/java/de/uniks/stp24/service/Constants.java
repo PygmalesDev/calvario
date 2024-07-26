@@ -270,7 +270,7 @@ public class Constants {
     public static final double ISLAND_HEIGHT = 162;
     public static final double ISLAND_WIDTH = 70;
     public static final int FLEET_FROM_ISLAND_DISTANCE = 40;
-    public static final int FLEET_HW = 30;
-    public static final int ISLAND_COLLISION_RADIUS = 120;
-    public static final int FLEET_COLLISION_RADIUS = 40;
+    public static final double FLEET_HW = 30;
+    public static final int ISLAND_COLLISION_RADIUS = 150;
+    public static final int FLEET_COLLISION_RADIUS = 80;
 }

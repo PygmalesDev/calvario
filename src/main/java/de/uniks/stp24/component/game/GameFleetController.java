@@ -6,17 +6,15 @@ import de.uniks.stp24.service.game.FleetCoordinationService;
 import de.uniks.stp24.service.game.FleetService;
 import de.uniks.stp24.service.game.IslandsService;
 import javafx.animation.*;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnInit;
 
 import javax.inject.Inject;
-import java.util.Collection;
 import java.util.List;
 
 @Component(view = "GameFleet.fxml")
@@ -43,6 +41,15 @@ public class GameFleetController extends Pane {
         this.fleetCoordinationService = fleetCoordinationService;
         this.islandsService = islandsService;
         this.getTransforms().add(rotate);
+    }
+
+    @OnInit
+    public void init(){
+        travelTimeline.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+            fleetCoordinationService.inGameController.removeFogFromShape(
+                    new Circle(this.getLayoutX() + Constants.FLEET_HW/2 + 10, this.getLayoutY() + Constants.FLEET_HW/2 + 15, collisionCircle.getRadius())
+            );
+        });
     }
 
     public Rotate getRotation() {
@@ -76,16 +83,11 @@ public class GameFleetController extends Pane {
         this.travelTimeline.getKeyFrames().clear();
 
 //        this.setRotate(this.calculateAngle(coordinates.getFirst()));
-        this.travelTimeline.getKeyFrames().addAll((Collection<? extends KeyFrame>) path.stream().map(islandID -> {
+        this.travelTimeline.getKeyFrames().addAll(path.stream().map(islandID -> {
                 IslandComponent islandComponent = this.islandsService.getIslandComponent(islandID);
                 return new KeyFrame(
                 Duration.seconds(this.nextKeyFrameTime()),
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        islandComponent.removeFog();
-                    }
-                },
+                event -> fleetCoordinationService.inGameController.removeFogFromIsland(islandComponent),
                 new KeyValue(this.layoutXProperty(), islandComponent.getPosX()+ISLAND_RADIUS_X, Interpolator.EASE_BOTH),
                 new KeyValue(this.layoutYProperty(), islandComponent.getPosY()+ISLAND_RADIUS_Y, Interpolator.EASE_BOTH)
                );}

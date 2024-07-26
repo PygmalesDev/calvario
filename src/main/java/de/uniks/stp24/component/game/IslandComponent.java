@@ -218,8 +218,4 @@ public class IslandComponent extends Pane {
     public boolean isCollided(Circle other) {
         return this.collisionCircle.intersects(other.getLayoutBounds());
     }
-
-    public void removeFog() {
-        inGameController.removeFogFromIsland(this);
-    }
 }

@@ -3,6 +3,7 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.service.ImageCache;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -42,7 +43,7 @@ public class FogOfWar {
     public void init() {
         this.originalFog = new Rectangle(0, 0, x, y);
         this.fogImage = new Image("/de/uniks/stp24/assets/backgrounds/fog.png");
-        this.fogPattern = new ImagePattern(this.fogImage, 0, 0, this.fogImage.getWidth(), this.fogImage.getHeight(), false);
+        this.fogPattern = new ImagePattern(this.fogImage, 0, 0, this.fogImage.getWidth()*2, this.fogImage.getHeight()*2, false);
         this.originalFog.setFill(this.fogPattern);
         this.currentFog = this.originalFog;
     }
@@ -54,6 +55,12 @@ public class FogOfWar {
             this.removedFog = toRemove;
         this.currentFog = Shape.subtract(this.originalFog, removedFog);
         this.currentFog.setFill(this.fogPattern);
+
+        this.currentFog.setStroke(Color.GRAY);
+        this.currentFog.setStrokeWidth(10);
+//        this.currentFog.
+
+
         return currentFog;
     }
 

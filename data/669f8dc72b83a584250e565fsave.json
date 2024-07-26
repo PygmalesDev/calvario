@@ -1,0 +1,91 @@
+[ {
+  "name" : "Dead Criminals",
+  "flagIndex" : 12,
+  "flagsPath" : "/de/uniks/stp24/assets/flags/flag_12.png",
+  "portraitIndex" : 14,
+  "portraitsPath" : "/de/uniks/stp24/assets/portraits/captain_14.png",
+  "description" : "Legends of the maritime underworld, their name whispered in fear among sailors, as they command the waves with an iron fist wrapped in gold.",
+  "color" : "#C0C0C0",
+  "colorIndex" : 8,
+  "traits" : [ {
+    "id" : "claustrophobic",
+    "effects" : [ {
+      "variable" : "buildings.mine.production.minerals",
+      "base" : 0.0,
+      "multiplier" : 0.7,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.farm.production.food",
+      "base" : 0.0,
+      "multiplier" : 1.06,
+      "bonus" : 0.0
+    } ],
+    "cost" : -3,
+    "conflicts" : [ "miner", "excavator", "pitman", "settler", "surface_operator" ]
+  }, {
+    "id" : "urban",
+    "effects" : [ {
+      "variable" : "buildings.farm.production.food",
+      "base" : 0.0,
+      "multiplier" : 0.95,
+      "bonus" : 0.0
+    } ],
+    "cost" : -1,
+    "conflicts" : [ "agrarian", "industrious", "gentrified" ]
+  }, {
+    "id" : "ecological",
+    "effects" : [ {
+      "variable" : "buildings.power_plant.production.energy",
+      "base" : 0.0,
+      "multiplier" : 0.95,
+      "bonus" : 0.0
+    } ],
+    "cost" : -1,
+    "conflicts" : [ "radioactive", "chernobylian", "tsaristic", "nature_loving", "green" ]
+  }, {
+    "id" : "amateur",
+    "effects" : [ {
+      "variable" : "buildings.research_lab.production.research",
+      "base" : 0.0,
+      "multiplier" : 0.96,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.refinery.production.fuel",
+      "base" : 0.0,
+      "multiplier" : 0.96,
+      "bonus" : 0.0
+    } ],
+    "cost" : -2,
+    "conflicts" : [ "assistant_technician", "technician", "beginner", "dilettante" ]
+  }, {
+    "id" : "proficient",
+    "effects" : [ {
+      "variable" : "buildings.power_plant.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 0.9,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.mine.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 0.9,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.research_lab.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 0.9,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.foundry.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 0.9,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.refinery.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 0.9,
+      "bonus" : 0.0
+    } ],
+    "cost" : 2,
+    "conflicts" : [ "clumsy", "incompetent", "skilled" ]
+  } ]
+} ]

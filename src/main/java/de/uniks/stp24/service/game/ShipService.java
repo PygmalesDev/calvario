@@ -1,6 +1,7 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.model.Fleets;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.rest.FleetApiService;
 import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.rest.ShipsApiService;
@@ -48,6 +49,15 @@ public class ShipService {
         System.out.println(shipTypesAttributes);
     }
 
+    public Map<String, Integer> getNeededResources(String type) {
+        for(ShipType shipType : shipTypesAttributes){
+            if (shipType._id().equals(type)) {
+                return shipType.cost();
+            }
+        }
+        return null;
+    }
+
     //Todo: load all ships
 
     public void initializeShipListeners() {
@@ -84,6 +94,11 @@ public class ShipService {
 
     public Observable<ReadShipDTO[]> getShipsOfFleet(String fleetID){
         return shipsApiService.getAllShips(tokenStorage.getGameId(), fleetID);
+    }
+
+    public Observable<Jobs.Job> beginShipJob(String fleetID, String shipType) {
+        return this.jobsApiService.createShipJob(this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId(),
+                Jobs.createShipJob(fleetID, shipType));
     }
 
 

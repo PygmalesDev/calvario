@@ -61,6 +61,7 @@ public class JobsService {
         this.jobCollections.put("upgrade", FXCollections.observableArrayList());
         this.jobCollections.put("technology", FXCollections.observableArrayList());
         this.jobCollections.put("collection", FXCollections.observableArrayList());
+        this.jobCollections.put("ship", FXCollections.observableArrayList());
 
         this.subscriber.subscribe(this.jobsApiService.getEmpireJobs(
                         this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), jobList -> {
@@ -112,7 +113,7 @@ public class JobsService {
                 this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
             else this.jobCollections.get(job.system()).add(job);
 
-            if (this.jobCollections.get(job.system()).size() == 1)
+            if (this.jobCollections.get(job.system()).size() == 1 || job.type().equals("ship"))
                 this.jobCollections.get("collection").add(job);
         }
 

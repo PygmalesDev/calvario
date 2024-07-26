@@ -49,6 +49,7 @@ public class Ships {
 
     public record BlueprintInFleetDto(
             String type,
-            int count
+            int count,
+            Fleets.Fleet fleet
     ){}
 }

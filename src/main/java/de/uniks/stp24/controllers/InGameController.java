@@ -26,6 +26,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -159,9 +160,9 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public ContactsComponent contactsOverviewComponent;
-    @SubComponent
-    @Inject
-    public ContactDetailsComponent contactDetailsComponent;
+
+    // extract
+
 
     @SubComponent
     @Inject
@@ -248,8 +249,9 @@ public class InGameController extends BasicController {
         helpComponent.setInGameController(this);
         clockComponent.setInGameController(this);
         fleetCoordinationService.setInGameController(this);
-        contactsOverviewComponent.setInGameController(this);
-        contactDetailsComponent.setInGameController(this);
+        // remove this
+//        contactsOverviewComponent.setInGameController(this);
+//        contactDetailsComponent.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
@@ -351,6 +353,9 @@ public class InGameController extends BasicController {
                 contactsOverviewComponent
         );
 
+        // for better control
+        contactsOverviewComponent.setParents(contextMenuContainer, contactDetailsContainer);
+
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
         this.createContextMenuButtons();
 
@@ -363,11 +368,32 @@ public class InGameController extends BasicController {
 
         this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::teleportFleet);
 
-        contactDetailsContainer.getChildren().add(contactDetailsComponent);
+//        contactDetailsContainer.getChildren().add(contactDetailsComponent);
         contactDetailsContainer.setPickOnBounds(true);
         contactDetailsContainer.setVisible(false);
 
+
+        /*
+         * to avoid that the app.refresh() crashes the map
+         * remove after app is entirely developed
+         */
+        rootPane.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.F5) {
+                refreshMap();
+                event.consume();
+                System.out.println("in InGameController cannot be refreshed");
+            }
+        });
+
     }
+
+    private void refreshMap() {
+        System.out.println("hallo");
+        mapGrid.getChildren().clear();
+        createMap();
+    }
+
+
 
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
@@ -790,14 +816,16 @@ public class InGameController extends BasicController {
         islandsService.removeDataForMap();
     }
 
-    public void openContactDetails(Contact contact) {
-        contactDetailsComponent.setContactInformation(contact);
-        contactDetailsContainer.setVisible(true);
-    }
-
-    public void closeContractDetails(){
-        contactDetailsComponent.setVisible(false);
-    }
+    // extrahieren
+//
+//    public void openContactDetails(Contact contact) {
+//        contactDetailsComponent.setContactInformation(contact);
+//        contactDetailsContainer.setVisible(true);
+//    }
+//
+//    public void closeContractDetails(){
+//        contactDetailsContainer.setVisible(false);
+//    }
 
     @OnDestroy
     public void destroy() {

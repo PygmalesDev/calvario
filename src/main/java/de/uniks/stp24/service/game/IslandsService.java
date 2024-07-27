@@ -264,6 +264,9 @@ public class IslandsService extends BasicService {
     public int getAllNumberOfSites(String empireID) {
         return siteManager.get(empireID).getTotalSiteCapacity();
     }
+    public int getAllNumberOfBuildings(String empireID) {
+        return siteManager.get(empireID).getTotalBuildingCapacity();
+    }
 
     public int getNumberOfSites(String empireID, String siteID) {
         int total = 0;

@@ -86,7 +86,7 @@ public class FleetCoordinationService {
                 System.out.println("islandOwnerID" + islandComponent.getIsland().owner());
                 System.out.println("fleetOwnerID" + selectedFleet.fleet.empire());
                 if(Objects.nonNull(islandComponent.getIsland().owner())){
-                    if (!islandComponent.getIsland().owner().equals(selectedFleet.fleet.empire())){
+                    if (!islandComponent.getIsland().owner().equals(selectedFleet.fleet.empire()) && !islandComponent.getIsland().owner().equals(this.tokenStorage.getEmpireId())){
                         System.out.println("Enemy  detected");
                         contactsService.addEnemy(islandComponent.getIsland().owner());
                     }

@@ -1,5 +1,6 @@
 package de.uniks.stp24.service.game;
 
+import de.uniks.stp24.dto.ContactDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.SeasonalTradeDto;
 import de.uniks.stp24.dto.UpdateEmpireMarketDto;
@@ -17,6 +18,7 @@ import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Singleton
 public class MarketService {
@@ -65,12 +67,17 @@ public class MarketService {
     }
 
     public void saveSeasonalTrades() {
-        Map<String, List<SeasonComponent>> _private = new HashMap<>();
-        _private.put("allSeasonalTrades", seasonComponents);
-        SeasonalTradeDto seasonalTradeDto = new SeasonalTradeDto(_private);
-        subscriber.subscribe(saveSeasonalComponents(tokenStorage.getGameId(), tokenStorage.getEmpireId(), seasonalTradeDto),
-                result -> {},
-                error -> System.out.println("errorSaveSeasonalTrades:" + error));
+        subscriber.subscribe(this.empireApiService.getSeasonalTrades(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                seasonalTradeDto->{
+                    if (Objects.nonNull(seasonalTradeDto._private()) && Objects.nonNull(seasonalTradeDto._private().get("allSeasonalTrades"))) {
+
+                        seasonalTradeDto._private().put("allSeasonalTrades", seasonComponents);
+                        subscriber.subscribe(this.empireApiService.saveSeasonalComponents(tokenStorage.getGameId(), tokenStorage.getEmpireId(), seasonalTradeDto));
+                    } else{
+                        subscriber.subscribe(this.empireApiService.saveSeasonalComponents(tokenStorage.getGameId(), tokenStorage.getEmpireId(), new SeasonalTradeDto(Map.of("allSeasonalTrades", seasonComponents))));
+                    }
+                }, error -> System.out.println("errorSaveSeasonalTrades:" + error.getMessage())
+        );
     }
 
     public void dispose() {

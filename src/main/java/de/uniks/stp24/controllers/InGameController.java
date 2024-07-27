@@ -750,6 +750,7 @@ public class InGameController extends BasicController {
                 event -> {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         islandAttributes.setEmpireDto(event.data());
+//                        overviewUpgradeComponent.setUpgradeButton();
                         this.lastUpdate = event.data().updatedAt();
                     }
                 },
@@ -806,7 +807,7 @@ public class InGameController extends BasicController {
     }
 
     public void closeContractDetails(){
-        contactDetailsComponent.setVisible(false);
+        contactDetailsContainer.setVisible(false);
     }
 
     @OnDestroy

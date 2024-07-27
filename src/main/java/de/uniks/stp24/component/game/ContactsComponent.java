@@ -3,22 +3,19 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Contact;
-import de.uniks.stp24.model.Gang;
 import de.uniks.stp24.service.game.ContactsService;
-import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.StackPane;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.Objects;
 
 @Component(view = "ContactsComponent.fxml")
 public class ContactsComponent extends StackPane {
@@ -32,11 +29,16 @@ public class ContactsComponent extends StackPane {
     @Inject
     Provider<ContactCell> contactCellProvider;
 
-    public final ObservableList<Contact> contactCells = FXCollections.observableArrayList();
+    public ObservableList<Contact> contactCells = FXCollections.observableArrayList();
     private InGameController inGameController;
 
     @Inject
     public ContactsComponent() {
+    }
+
+    @OnInit
+    public void init(){
+
     }
 
     public void closeContactsComponent() {
@@ -45,7 +47,9 @@ public class ContactsComponent extends StackPane {
 
     @OnRender
     public void render() {
-        this.contactsListView.setItems(this.contactsService.contactCells);
+        contactsService.loadContacts();
+        this.contactCells = contactsService.contacts;
+        this.contactsListView.setItems(this.contactsService.contacts);
         this.contactsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.contactCellProvider));
 
         this.contactsListView.setOnMouseClicked(event -> {

@@ -1,20 +1,17 @@
 package de.uniks.stp24.service.game;
 
-import de.uniks.stp24.component.game.IslandComponent;
-import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.dto.ContactDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.model.Contact;
-import de.uniks.stp24.model.SeasonComponent;
 import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.ArrayList;
+import java.util.*;
 
 @Singleton
 public class ContactsService {
@@ -25,7 +22,13 @@ public class ContactsService {
     @Inject
     TokenStorage tokenStorage;
 
-    public ObservableList<Contact> contactCells = FXCollections.observableArrayList();
+    @Inject
+    public EmpireApiService empireApiService;
+
+    public final ObservableList<Contact> contacts = FXCollections.observableArrayList();
+
+    List<String> empireIDs = new ArrayList<>();
+
     int flagIndex;
     String empireName;
     final int imagesCount = 16;
@@ -43,36 +46,49 @@ public class ContactsService {
     }
 
     public void addEnemy(String owner) {
-        System.out.println("Adding to contacts");
         Contact contact = new Contact();
-
         ReadEmpireDto empireDto = islandsService.getEmpire(owner);
-
         System.out.println(empireDto);
+
         contact.setEmpireName(empireDto.name());
         contact.setEmpireFlag(flagsList.get(empireDto.flag()));
+        contact.setEmpireID(owner);
 
-        boolean alreadIn = false;
-
-        for (Contact contactCell : contactCells) {
-            if(contactCell.getEmpireName().equals(contact.getEmpireName())) {
-                alreadIn =  true;
-                break;
-            }
+        if(!contacts.stream().map(Contact::getEmpireID).toList().contains(contact.getEmpireID())){
+            empireIDs.add(contact.getEmpireID());
+            contacts.add(contact);
+            saveContacts();
         }
-
-        if(!alreadIn) {
-            contactCells.add(contact);
-        }
-
-        System.out.println("sdfsfadsfsdfsfa ");
-        System.out.println(contact.getEmpireName());
-        System.out.println(contactCells.size());
     }
 
 
     public void dispose(){
         subscriber.dispose();
-        contactCells.clear();
+        contacts.clear();
+    }
+
+    public void saveContacts() {
+        subscriber.subscribe(this.empireApiService.getContacts(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                contactDto->{
+                    if (Objects.nonNull(contactDto._private()) && Objects.nonNull(contactDto._private().get("contacts"))) {
+                        contactDto._private().put("contacts", empireIDs);
+                        subscriber.subscribe(this.empireApiService.saveContacts(tokenStorage.getGameId(), tokenStorage.getEmpireId(), contactDto));
+                    }else {
+                        subscriber.subscribe(this.empireApiService.saveContacts(tokenStorage.getGameId(), tokenStorage.getEmpireId(), new ContactDto(Map.of("contacts", empireIDs))));
+                    }
+                }, error -> System.out.println("errorSaveContacts:" + error.getMessage())
+        );
+    }
+
+
+    public void loadContacts() {
+        subscriber.subscribe(this.empireApiService.getContacts(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                contactDto -> {
+                    this.contacts.clear();
+                    if (Objects.nonNull(contactDto._private()) && Objects.nonNull(contactDto._private().get("contacts"))) {
+                        ((List<String>)contactDto._private().get("contacts")).forEach(this::addEnemy);
+                    }
+                }
+                , error -> System.out.println("errorLoadSeasonalTrades:" + error));
     }
 }

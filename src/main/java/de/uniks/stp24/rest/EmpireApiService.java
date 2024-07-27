@@ -45,5 +45,9 @@ public interface EmpireApiService {
     @GET("games/{game}/empires/{empire}")
     Observable<SeasonalTradeDto> getSeasonalTrades(@Path("game") String game, @Path("empire") String empire);
 
+    @PATCH("games/{game}/empires/{empire}")
+    Observable<UpdateEmpireContactDto> saveContacts(@Path("game") String game, @Path("empire") String empire, @Body ContactDto contactDto);
 
+    @GET("games/{game}/empires/{empire}")
+    Observable<ContactDto> getContacts(@Path("game") String game, @Path("empire") String empire);
 }

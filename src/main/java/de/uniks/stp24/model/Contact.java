@@ -3,6 +3,22 @@ package de.uniks.stp24.model;
 public class Contact {
     String empireFlag;
     String empireName;
+    String empireID;
+
+    public Contact() {
+    }
+
+    public Contact(String empireID) {
+        this.empireID = empireID;
+    }
+
+    public String getEmpireID() {
+        return empireID;
+    }
+
+    public void setEmpireID(String empireID) {
+        this.empireID = empireID;
+    }
 
     public String getEmpireName() {
         return empireName;

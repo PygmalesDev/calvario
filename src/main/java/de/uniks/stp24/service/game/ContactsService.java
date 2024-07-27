@@ -65,7 +65,8 @@ public class ContactsService {
             contactCells.add(contact);
         }
 
-        System.out.println("sdfsfadsfsdfsfa ");
+        System.out.println(islandsService.getAllNumberOfSites(empireDto._id()));
+        System.out.println(islandsService.getAllNumberOfBuildings(empireDto._id()));
         System.out.println(contact.getEmpireName());
         System.out.println(contactCells.size());
     }

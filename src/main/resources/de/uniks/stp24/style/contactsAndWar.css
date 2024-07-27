@@ -48,7 +48,7 @@
 .contactsTitle {
     -fx-font-family: "Baskerville Old Face";
     -fx-fill: white;
-    -fx-font-size: 58;
+    -fx-font-size: 18;
 }
 
 
@@ -83,6 +83,7 @@
     -fx-background-color: transparent;
     -fx-background-size: 90% 30%;
     -fx-background-repeat: no-repeat;
+    -fx-cursor: hand;
 }
 
 .contactListViewStyle .scroll-bar .track {
@@ -107,7 +108,7 @@
 .contactsDetailsTitle {
     -fx-font-family: "Baskerville Old Face";
     -fx-fill: white;
-    -fx-font-size: 30;
+    -fx-font-size: 10;
 }
 
 .contactDetailsBackground {
@@ -125,6 +126,14 @@
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
+}
+
+.popIcon {
+    -fx-background-image: url("/de/uniks/stp24/icons/resources/population.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-fit-to-height: 30;
 }
 
 /*Endings*/

@@ -37,4 +37,8 @@ public class ContactCell extends HBox implements ReusableItemComponent<Contact> 
         empireFlagImageView.setImage(imageCache.get(this.contact.getEmpireFlag()));
 
     }
+
+    public void openDetail() {
+        System.out.println(contact);
+    }
 }

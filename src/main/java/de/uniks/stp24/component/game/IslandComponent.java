@@ -20,6 +20,7 @@ import org.fulib.fx.annotation.event.OnKey;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 
@@ -87,7 +88,9 @@ public class IslandComponent extends Pane {
     // use our flag images
     // by the moment numeration from 0 til 16
     public void setFlagImage(int flag) {
-        if (flag >= 0) this.flagImage.setImage(imageCache.get("assets/flags/flag_" + flag + ".png"));
+        if (!this.foggy) {
+            if (flag >= 0) this.flagImage.setImage(imageCache.get("assets/flags/flag_" + flag + ".png"));
+        }
     }
 
     public void applyInfo(Island islandInfo) {
@@ -113,14 +116,18 @@ public class IslandComponent extends Pane {
 
     // switch the visibility of all flags
     public void showFlag(boolean selected) {
-        this.flagPane.setVisible(selected);
-        inGameController.islandsService.keyCodeFlag = selected;
+        if (!this.foggy) {
+            this.flagPane.setVisible(selected);
+            inGameController.islandsService.keyCodeFlag = selected;
+        }
     }
 
     @OnKey(code = KeyCode.F,alt = true)
     public void showFlagH() {
-        if (island.flagIndex() >= 0 && !islandIsSelected) {
-            this.flagPane.setVisible(!flagPane.isVisible());
+        if (!this.foggy) {
+            if (island.flagIndex() >= 0 && !islandIsSelected) {
+                this.flagPane.setVisible(!flagPane.isVisible());
+            }
         }
     }
 
@@ -129,11 +136,12 @@ public class IslandComponent extends Pane {
     }
 
     public void showRudder() {
-        rudderImage.setVisible(true);
+        if (!this.foggy)
+            rudderImage.setVisible(true);
     }
 
     public void unshowRudder() {
-        if (!islandIsSelected) {
+        if (!this.foggy && !islandIsSelected) {
             rudderImage.setVisible(false);
         }
     }
@@ -202,9 +210,11 @@ public class IslandComponent extends Pane {
     }
 
     public void applyEmpireInfo() {
-        // apply drop shadow and flag for newly colonized systems
-        this.islandsService.applyDropShadowToIsland(this);
-        this.setFlagImage(islandsService.getEmpire(island.owner()).flag());
+        // apply drop shadow and flag for newly colonized systems (if they're not under fog)
+        if (!this.foggy && Objects.nonNull(this.island.owner())) {
+            this.islandsService.applyDropShadowToIsland(this);
+            this.setFlagImage(islandsService.getEmpire(island.owner()).flag());
+        }
     }
 
     public void setIslandService(IslandsService islandsService) {

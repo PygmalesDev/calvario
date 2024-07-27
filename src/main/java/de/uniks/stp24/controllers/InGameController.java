@@ -517,10 +517,12 @@ public class InGameController extends BasicController {
                     if (Objects.nonNull(updatedIsland.owner())) {
                         // apply drop shadow and flag
                         isle.applyEmpireInfo();
-                        // remove Fog from Island
-                        removeFogFromIsland(isle);
-                        // island is already claimed
-                        this.islandClaimingContainer.setVisible(false);
+                        // remove Fog from Island if the island is owned by the player
+                        if (updatedIsland.owner().equals(tokenStorage.getEmpireId())) {
+                            removeFogFromIsland(isle);
+                            // island is already claimed
+                            this.islandClaimingContainer.setVisible(false);
+                        }
                     }
                     // check if the island/upgrade overview is visible for the updated island
                     if (Objects.nonNull(selectedIsland) &&
@@ -582,6 +584,7 @@ public class InGameController extends BasicController {
     public void removeFogFromIsland(IslandComponent isle) {
         if (isle.foggy) {
             isle.applyIcon(false);
+            isle.applyEmpireInfo();
 
 //            this.fogOfWar.changeFog(new Circle(isle.getPosX() + ISLAND_WIDTH / 2 * islandScale + 17,
 //                    isle.getPosY() + ISLAND_HEIGHT / 2 * islandScale + 7,

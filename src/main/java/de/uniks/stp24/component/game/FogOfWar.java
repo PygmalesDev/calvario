@@ -39,8 +39,8 @@ public class FogOfWar {
         this.originalFog = new Rectangle(0, 0, x, y);
         this.fogImage = new Image("/de/uniks/stp24/assets/backgrounds/fog.jpg");
         this.fogPattern = new ImagePattern(this.fogImage, 0, 0, this.fogImage.getWidth()*2, this.fogImage.getHeight()*2, false);
-        this.originalFog.setFill(this.fogPattern);
         this.currentFog = this.originalFog;
+        this.updateFog();
     }
 
     public void changeFog(Shape toRemove, Shape toAdd) {
@@ -50,7 +50,7 @@ public class FogOfWar {
         if (Objects.nonNull(toAdd))
             addToFog(toAdd);
 
-        updateFog();
+        this.updateFog();
     }
 
     private void removeFromFog(Shape toRemove) {
@@ -75,10 +75,10 @@ public class FogOfWar {
             this.currentFog = Shape.union(this.originalFog, this.addedFog);
 
         this.currentFog.setFill(this.fogPattern);
-        ColorAdjust colorAdjust = new ColorAdjust();
-        colorAdjust.setHue(0.5);
-        colorAdjust.setSaturation(1.0);
-        this.currentFog.setEffect(colorAdjust);
+//        ColorAdjust colorAdjust = new ColorAdjust();
+//        colorAdjust.setHue(0.5);
+//        colorAdjust.setSaturation(1.0);
+//        this.currentFog.setEffect(colorAdjust);
     }
 
     public Shape getFog() {

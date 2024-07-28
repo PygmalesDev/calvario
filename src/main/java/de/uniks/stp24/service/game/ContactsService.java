@@ -6,6 +6,7 @@ import de.uniks.stp24.model.Contact;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
@@ -34,8 +35,6 @@ public class ContactsService {
     final ArrayList<String> flagsList = new ArrayList<>();
     final ArrayList<Contact> seenEnemies = new ArrayList<>();
 
-
-    final Map<String, List<String>> otherEmpireIslandsMap = new HashMap<>();
     List<String> hiddenEmpires = new ArrayList<>();
 
 
@@ -58,7 +57,7 @@ public class ContactsService {
             hiddenEmpires.remove(owner);
             System.out.println(empireDto.name());
             contact = new Contact(empireDto);
-            contactCells.add(contact);
+//            contactCells.add(contact);
             seenEnemies.add(contact);
             System.out.println(contact.getEmpireName());
 
@@ -69,18 +68,14 @@ public class ContactsService {
 
         }
         contact.addIsland(islandID);
-        // doesn't work here because after ship translation list will be refreshed! -> needs time
-//        islandsService.refreshListOfColonizedSystems();
-
-//           contact.setEmpireName(empireDto.name());
-//        contact.setEmpireFlag(flagsList.get(empireDto.flag()));
+        if (!contactCells.contains(contact)) contactCells.add(contact);
 
 
 
         System.out.println("contacts :" + contactCells.size());
     }
 
-
+    @OnDestroy
     public void dispose(){
         subscriber.dispose();
         contactCells.clear();

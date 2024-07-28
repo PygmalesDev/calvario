@@ -12,23 +12,31 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.event.OnDestroy;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 @Component(view = "ContactDetailsComponent.fxml")
 public class ContactDetailsComponent extends StackPane {
+    @FXML
     public Label intelText;
+    @FXML
     public Text popText;
+    @FXML
     public Text homeText;
+    @FXML
     public ImageView iconPop;
+    @FXML
     public Text siteText;
+    @FXML
     public Text buildingsText;
+    @FXML
     public ImageView iconHome;
+    @FXML
     public Text strengText;
+    @FXML
     public ImageView iconStreng;
     @FXML
     Button closeContactDetailComponentButton;
@@ -64,14 +72,19 @@ public class ContactDetailsComponent extends StackPane {
 
         this.contact = contact;
         contact.checkIslands();
+        setInfo();
         empireNameText.setText(contact.getEmpireName());
         empireImageView.setImage(imageCache.get(contact.getEmpireFlag()));
         iconPop.setImage(imageCache.get("icons/resources/population.png"));
         iconHome.setImage(imageCache.get("assets/contactsAndWars/home.png"));
         iconStreng.setImage(imageCache.get("assets/contactsAndWars/cannon.png"));
-        popText.setText(resources.getString("pop") + ": " + 10 );
-        siteText.setText(resources.getString("sites") + ": " + islandsService.getAllNumberOfSites(contact.getEmpireID()));
-        buildingsText.setText(resources.getString("buildings") + ": " + islandsService.getAllNumberOfBuildings(contact.getEmpireID()));
+
+        popText.setText(resources.getString("pop") + ": " +
+          contact.getDiscoveredPopulation() + "/" + contact.getEmpirePopulation() );
+        siteText.setText(resources.getString("sites") + ": " +
+          islandsService.getAllNumberOfSites(contact.getEmpireID()));
+        buildingsText.setText(resources.getString("buildings") + ": " +
+          islandsService.getAllNumberOfBuildings(contact.getEmpireID()));
 
 
         System.out.println("applying contact: " + contact.getEmpireName());
@@ -80,16 +93,13 @@ public class ContactDetailsComponent extends StackPane {
     }
 
     public void closeContactDetailsComponent() {
-        System.out.println("close window");
         this.getParent().setVisible(false);
     }
 
-
     public void openDetail(Contact contact) {
         setContactInformation(contact);
-        getInfo();
         this.getParent().setVisible(true);
-        System.out.println(empireNameText.getText());
+        System.out.println("OPEN: ");
 
     }
 
@@ -98,12 +108,15 @@ public class ContactDetailsComponent extends StackPane {
         this.parent.getChildren().add(this);
     }
 
-    private void getInfo() {
+    private void setInfo() {
         contact.setEmpireDtos(islandsService.getDevIsles());
 
     }
 
-
+    @OnDestroy
+    public void removeData(){
+        this.contact = null;
+    }
 
 
 }

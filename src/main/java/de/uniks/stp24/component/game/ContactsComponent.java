@@ -44,6 +44,7 @@ public class ContactsComponent extends StackPane {
     }
 
     public void closeContactsComponent() {
+        this.contactDetailsComponent.setVisible(false);
         this.setVisible(false);
     }
 

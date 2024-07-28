@@ -1,20 +1,19 @@
 package de.uniks.stp24.service.game;
 
-import de.uniks.stp24.component.game.IslandComponent;
-import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
+import de.uniks.stp24.dto.ShortSystemDto;
 import de.uniks.stp24.model.Contact;
-import de.uniks.stp24.model.SeasonComponent;
-import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Singleton
 public class ContactsService {
@@ -33,6 +32,12 @@ public class ContactsService {
     final String resourcesPaths = "/de/uniks/stp24/assets/";
     final String flagsFolderPath = "flags/flag_";
     final ArrayList<String> flagsList = new ArrayList<>();
+    final ArrayList<Contact> seenEnemies = new ArrayList<>();
+
+
+    final Map<String, List<String>> otherEmpireIslandsMap = new HashMap<>();
+    List<String> hiddenEmpires = new ArrayList<>();
+
 
 
     @Inject
@@ -40,35 +45,39 @@ public class ContactsService {
         for (int i = 0; i <= imagesCount; i++) {
             this.flagsList.add(resourcesPaths + flagsFolderPath + i + ".png");
         }
+
     }
 
-    public void addEnemy(String owner) {
-        System.out.println("Adding to contacts");
-        Contact contact = new Contact();
-
+    public void addEnemy(String owner, String islandID) {
+        System.out.println("ISLAND :" + islandID);
+        System.out.println("Adding to contacts?");
+        Contact contact;
         ReadEmpireDto empireDto = islandsService.getEmpire(owner);
-
-        System.out.println(empireDto);
-        contact.setEmpireName(empireDto.name());
-        contact.setEmpireFlag(flagsList.get(empireDto.flag()));
-
-        boolean alreadIn = false;
-
-        for (Contact contactCell : contactCells) {
-            if(contactCell.getEmpireName().equals(contact.getEmpireName())) {
-                alreadIn =  true;
-                break;
-            }
-        }
-
-        if(!alreadIn) {
+        if(tokenStorage.getEmpireId().equals(owner)) return;
+        if(hiddenEmpires.contains(owner)) {
+            hiddenEmpires.remove(owner);
+            System.out.println(empireDto.name());
+            contact = new Contact(empireDto);
             contactCells.add(contact);
-        }
+            seenEnemies.add(contact);
+            System.out.println(contact.getEmpireName());
 
-        System.out.println(islandsService.getAllNumberOfSites(empireDto._id()));
-        System.out.println(islandsService.getAllNumberOfBuildings(empireDto._id()));
-        System.out.println(contact.getEmpireName());
-        System.out.println(contactCells.size());
+        } else {
+            contact = seenEnemies.stream()
+              .filter(element -> element.getEmpireID().equals(owner)).findFirst().get();
+            System.out.println("IN LIST ... " + contact.getEmpireName());
+
+        }
+        contact.addIsland(islandID);
+        // doesn't work here because after ship translation list will be refreshed! -> needs time
+//        islandsService.refreshListOfColonizedSystems();
+
+//           contact.setEmpireName(empireDto.name());
+//        contact.setEmpireFlag(flagsList.get(empireDto.flag()));
+
+
+
+        System.out.println("contacts :" + contactCells.size());
     }
 
 
@@ -76,4 +85,13 @@ public class ContactsService {
         subscriber.dispose();
         contactCells.clear();
     }
+
+    public void setEmpiresInfoContacts(){
+        this.hiddenEmpires = new ArrayList<>(islandsService.getEmpiresID());
+        this.hiddenEmpires.remove(tokenStorage.getEmpireId());
+        System.out.println("not discovered yet " + this.hiddenEmpires);
+
+    }
+
+
 }

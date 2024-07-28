@@ -82,13 +82,16 @@ public class FleetCoordinationService {
         for (IslandComponent islandComponent : inGameController.islandComponentList) {
             if (islandComponent.isCollided(selectedFleet.getLayoutX(), selectedFleet.getLayoutY(), Constants.FLEET_COLLISION_RADIUS)) {
                 System.out.println("------------------------------------------COLLISION-------------------------------------- ");
-                System.out.println("island: " + islandComponent.getPosX() + ", " + islandComponent.getPosY());
+                System.out.println("island: " + islandComponent.getIsland().id() + " at "
+                  + islandComponent.getPosX() + ", " + islandComponent.getPosY());
                 System.out.println("islandOwnerID" + islandComponent.getIsland().owner());
                 System.out.println("fleetOwnerID" + selectedFleet.fleet.empire());
+
                 if(Objects.nonNull(islandComponent.getIsland().owner())){
                     if (!islandComponent.getIsland().owner().equals(selectedFleet.fleet.empire())){
                         System.out.println("Enemy  detected");
-                        contactsService.addEnemy(islandComponent.getIsland().owner());
+                        islandsService.refreshListOfColonizedSystems();
+                        contactsService.addEnemy(islandComponent.getIsland().owner(), islandComponent.getIsland().id());
                     }
                 }
             }

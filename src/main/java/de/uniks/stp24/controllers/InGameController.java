@@ -7,7 +7,6 @@ import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.SystemDto;
-import de.uniks.stp24.model.Contact;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs;
@@ -21,7 +20,6 @@ import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
@@ -44,7 +42,6 @@ import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -277,6 +274,7 @@ public class InGameController extends BasicController {
         }
 
         for (int i = 0; i <= 16; i++) this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
+        contactService.setEmpiresInfoContacts();
     }
 
     /*
@@ -384,6 +382,7 @@ public class InGameController extends BasicController {
                 System.out.println("in InGameController cannot be refreshed");
             }
         });
+
 
     }
 
@@ -551,6 +550,7 @@ public class InGameController extends BasicController {
                             case "jobs" -> overviewSitesComponent.showJobs();
                         }
                     }
+                    islandsService.refreshListOfColonizedSystems();
                 },
                 error -> System.out.println("islands event listener error: " + error)
         );

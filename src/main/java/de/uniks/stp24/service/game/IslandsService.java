@@ -31,6 +31,7 @@ public class IslandsService extends BasicService {
     @Inject
     LobbyService lobbyService;
 
+
     public boolean keyCodeFlag = true;
 
     String gameID;
@@ -231,9 +232,16 @@ public class IslandsService extends BasicService {
                     }
               });
               mapSitesBuildings();
+              System.out.println("...UPDATED ISLANDS...");
+              System.out.println(devIsles.size());
           },
           error -> System.out.printf(
                   "Caught an error while refreshing colonized systems list in Islands Service:\n %s", error.getMessage()));
+    }
+
+    public List<ShortSystemDto> getDevIsles() {
+        System.out.println("devs " + this.devIsles.size());
+        return Collections.unmodifiableList(this.devIsles);
     }
 
     /** after refresh list remap site and buildings (?)
@@ -282,6 +290,10 @@ public class IslandsService extends BasicService {
 
     public Map<String, IslandComponent> getComponentMap() {
         return Collections.unmodifiableMap(this.islandComponentMap);
+    }
+
+    public List<String> getEmpiresID() {
+        return  empiresInGame.keySet().stream().toList();
     }
 
     public ReadEmpireDto getEmpire(String id) {

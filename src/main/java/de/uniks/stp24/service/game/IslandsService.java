@@ -226,12 +226,14 @@ public class IslandsService extends BasicService {
                                 data.capacity(),
                                 data.buildings(),
                                 data.upgrade(),
-                                data.population()
+                                data.population(),
+                                data.health()
                         );
                         devIsles.add(tmp);
                     }
               });
               mapSitesBuildings();
+              //todo remove printouts
               System.out.println("...UPDATED ISLANDS...");
               System.out.println(devIsles.size());
           },
@@ -240,6 +242,7 @@ public class IslandsService extends BasicService {
     }
 
     public List<ShortSystemDto> getDevIsles() {
+        //todo remove printout
         System.out.println("devs " + this.devIsles.size());
         return Collections.unmodifiableList(this.devIsles);
     }
@@ -372,6 +375,8 @@ public class IslandsService extends BasicService {
     }
 
     public Island convertToIsland(SystemDto result) {
+        //todo remove printout
+        System.out.println(result._id() + " -> health: " +  result.health());
         return new Island(result.owner(),
                 Objects.isNull(result.owner()) ? -1 : getEmpire(result.owner()).flag(),
                 result.x(),

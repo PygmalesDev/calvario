@@ -3,9 +3,7 @@ package de.uniks.stp24.model;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.dto.ShortSystemDto;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Contact {
     String empireFlag;
@@ -13,7 +11,8 @@ public class Contact {
     String empireID;
     final List<String> empireIslandsIDs = new ArrayList<>();
     final List<String> discoveredIslands = new ArrayList<>();
-    final List<String> empireDtos = new ArrayList<>();
+    final List<ShortSystemDto> empireDtos = new ArrayList<>();
+    final Map<String, ShortSystemDto> mapEmpireDtos = new HashMap<>();
 
     public Contact(ReadEmpireDto dto) {
         this.empireID = dto._id();
@@ -44,12 +43,17 @@ public class Contact {
         shorts.forEach(
           dto -> {
               if (dto.owner().equals(this.empireID) && !empireIslandsIDs.contains(dto._id())) {
+                  mapEmpireDtos.putIfAbsent(dto._id(),dto);
+                  // are these necessary?
                   empireIslandsIDs.add(dto._id());
+                  empireDtos.add(dto);
+                  System.out.println(dto.health());
               }
           }
         );
         System.out.println("INFO ISLANDS");
-        System.out.println(empireIslandsIDs.size());
+        System.out.println(empireIslandsIDs.size() + " -> " + empireIslandsIDs);
+        System.out.println(empireDtos.size() + " -> " + empireDtos);
     }
 
     public void checkIslands() {
@@ -62,6 +66,19 @@ public class Contact {
                 }
             });
         }
+    }
+
+    public int getEmpirePopulation() {
+        return empireDtos.stream().mapToInt(ShortSystemDto::population).sum();
+    }
+
+    public int getDiscoveredPopulation() {
+        int discPop = 0;
+        for (String id : discoveredIslands) {
+            ShortSystemDto tmp =  mapEmpireDtos.getOrDefault(id,null);
+            if (tmp!=null) discPop+=tmp.population();
+        }
+        return discPop;
     }
 
 }

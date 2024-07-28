@@ -36,9 +36,6 @@ public class ContactsComponent extends StackPane {
     @Inject
     Provider<ContactCell> contactCellProvider;
 
-    public final ObservableList<Contact> contactCells = FXCollections.observableArrayList();
-//    private InGameController inGameController;
-
     @Inject
     public ContactsComponent() {
     }
@@ -55,17 +52,10 @@ public class ContactsComponent extends StackPane {
 
         this.contactsListView.setOnMouseClicked(event -> {
             Contact contact = this.contactsListView.getSelectionModel().getSelectedItem();
-//            contactDetailsComponent.setContactInformation(contact);
+            System.out.println(contact.getEmpireName());
             contactDetailsComponent.openDetail(contact);
+          });
 
-
-
-
-//            applyInputs(gang);
-//            traitsBox.setVisible(false);
-//            changeEditNodes(false, false);
-//            showCreationButton.setVisible(true);
-        });
     }
 
     public void setParents(Pane ownParent,  Pane detailParent) {
@@ -75,8 +65,4 @@ public class ContactsComponent extends StackPane {
 
     }
 
-    //remove
-//    public void setInGameController(InGameController inGameController) {
-//        this.inGameController = inGameController;
-//    }
 }

@@ -3,7 +3,6 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.model.Contact;
 import de.uniks.stp24.service.ImageCache;
 import javafx.fxml.FXML;
-import javafx.scene.control.Cell;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -39,6 +38,6 @@ public class ContactCell extends HBox implements ReusableItemComponent<Contact> 
     }
 
     public void openDetail() {
-        System.out.println(contact);
+        System.out.println("empire: " + empireNameText.getText() );
     }
 }

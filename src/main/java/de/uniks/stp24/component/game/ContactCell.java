@@ -19,7 +19,8 @@ public class ContactCell extends HBox implements ReusableItemComponent<Contact> 
     Text empireNameText;
     @FXML
     ImageView empireFlagImageView;
-
+    @FXML
+    ImageView warSituationIcon;
 
     @Inject
     ImageCache imageCache;
@@ -36,5 +37,16 @@ public class ContactCell extends HBox implements ReusableItemComponent<Contact> 
         empireNameText.setText(this.contact.getEmpireName());
         empireFlagImageView.setImage(imageCache.get(this.contact.getEmpireFlag()));
 
+        contact.atWarWithProperty().addListener((obs, wasAtWar, isAtWar) -> updateWarSituationIcon());
+        updateWarSituationIcon();
     }
+
+    private void updateWarSituationIcon() {
+        if (contact.isAtWarWith()) {
+            warSituationIcon.setImage(imageCache.get("/de/uniks/stp24/assets/contactsAndWars/Contact_War_Icon.png"));
+        } else {
+            warSituationIcon.setImage(imageCache.get("/de/uniks/stp24/assets/contactsAndWars/Contact_Peace_Icon.png"));
+        }
+    }
+
 }

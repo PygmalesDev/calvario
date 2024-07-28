@@ -32,7 +32,6 @@ public class ContactsService {
     int flagIndex;
     String empireName;
     final int imagesCount = 16;
-    int flagImageIndex = 0;
     final String resourcesPaths = "/de/uniks/stp24/assets/";
     final String flagsFolderPath = "flags/flag_";
     final ArrayList<String> flagsList = new ArrayList<>();

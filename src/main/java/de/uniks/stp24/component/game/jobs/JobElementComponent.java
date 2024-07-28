@@ -66,8 +66,9 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
 
         Island island = this.islandsService.getIsland(job.system());
         this.timerText.setText(String.format("%s/%s", job.progress(), (int) job.total()));
-        this.jobNameText.setText(island.name());
-
+        if(island != null) {
+            this.jobNameText.setText(island.name());
+        }
         switch (job.type()) {
             case "building" -> {
                 this.jobImage.setImage(this.imageCache.get("/" + Constants.buildingsIconPathsMap.get(job.building())));

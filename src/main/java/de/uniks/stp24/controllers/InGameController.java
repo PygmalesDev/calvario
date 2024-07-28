@@ -424,6 +424,7 @@ public class InGameController extends BasicController {
     @OnKey(code = KeyCode.F, alt = true)
     public void showFleetManager() {
         this.toggleContextMenuVisibility(this.fleetManagerComponent);
+        this.fleetManagerComponent.showFleets();
     }
 
     @OnKey(code = KeyCode.H, alt = true)

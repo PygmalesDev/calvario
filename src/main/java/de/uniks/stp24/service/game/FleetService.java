@@ -78,7 +78,7 @@ public class FleetService {
 
     private void deleteFleetFromGroups(Fleet fleet) {
         this.gameFleets.removeIf(other -> other.equals(fleet));
-        this.empireFleets.get(fleet._id()).removeIf(other -> other.equals(fleet));
+        this.empireFleets.get(fleet.empire()).removeIf(other -> other.equals(fleet));
         this.islandFleets.get(fleet.location()).removeIf(other -> other.equals(fleet));
     }
 

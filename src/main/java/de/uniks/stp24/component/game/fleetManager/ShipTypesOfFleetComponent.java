@@ -7,6 +7,7 @@ import de.uniks.stp24.model.Ships;
 import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.ShipService;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -39,6 +40,7 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
     private enum BUTTON_STATES {ACTIVE, CANCEL_JOB, INACTIVE}
     private ShipTypesOfFleetComponent.BUTTON_STATES currentButtonState = ShipTypesOfFleetComponent.BUTTON_STATES.ACTIVE;
     private boolean updateButtonState = true;
+    private ObservableList<Jobs.Job> shipJobs;
 
     @Inject
     public ShipTypesOfFleetComponent(FleetManagerComponent fleetManagerComponent, ResourcesService resourcesService, ShipService shipService, Subscriber subscriber){
@@ -68,6 +70,13 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
         }
     }
 
+//    @Inject
+//    public void setShipJobUpdates() {
+//        this.jobsService.onJobsLoadingFinished("ship", this::setShipFinishers);
+//        this.jobsService.onJobsLoadingFinished(() ->
+//                this.shipJobs = this.jobsService.getJobObservableListOfType("ship"));
+//    }
+
     public void setItem(Ships.BlueprintInFleetDto blueprintInFleetDto){
         this.typeLabel.setText(blueprintInFleetDto.type());
         this.sizeLabel.setText(String.valueOf(blueprintInFleetDto.count()));
@@ -76,7 +85,7 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
     }
 
     public void buildShip(){
-        this.subscriber.subscribe(this.shipService.beginShipJob(this.fleet._id(), this.shipType),
+        this.subscriber.subscribe(this.shipService.beginShipJob(this.fleet._id(), this.shipType, this.fleet.location()),
             job->{
                 System.out.println("ship job has started");
             },
@@ -88,17 +97,3 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
     public void incrementSize(){}
 }
 
-
-
-//private void setSiteFinishers(Jobs.Job job) {
-//    this.jobsService.onJobDeletion(job._id(), () -> {
-//        if (Objects.nonNull(this.islandAttributeStorage.getIsland()) &&
-//                job.system().equals(this.islandAttributeStorage.getIsland().id()))
-//            if (job.district().equals(this.siteType)) this.setJobsPaneVisibility(false);
-//    });
-//    this.jobsService.onJobCompletion(job._id(), () -> {
-//        if (Objects.nonNull(this.islandAttributeStorage.getIsland()) &&
-//                job.system().equals(this.islandAttributeStorage.getIsland().id()))
-//            if (job.district().equals(this.siteType)) this.setJobsPaneVisibility(false);
-//    });
-//}

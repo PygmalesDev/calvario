@@ -125,8 +125,8 @@ public class Jobs {
         return new TravelJobDTO("travel", path, fleetID);
     }
 
-    public static ShipJobDTO createShipJob(String fleetID, String shipType){
-        return new ShipJobDTO("ship", fleetID, shipType);
+    public static ShipJobDTO createShipJob(String fleetID, String shipType, String systemID){
+        return new ShipJobDTO("ship", fleetID, shipType, systemID);
     }
 
     /**
@@ -166,7 +166,8 @@ public class Jobs {
     public record ShipJobDTO(
             String type,
             String fleet,
-            String ship
+            String ship,
+            String system
     ) {}
 
     /**

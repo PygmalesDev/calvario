@@ -42,7 +42,7 @@ public class ShipService {
 
     Map<String, ObservableList<Ship>> fleetShips = new HashMap<>();
     ObservableList<Ship> gameShips = FXCollections.observableArrayList();
-    ArrayList<ShipType> shipTypesAttributes;
+    public ArrayList<ShipType> shipTypesAttributes;
 
     public void initShipTypes(){
         shipTypesAttributes = variableDependencyService.createVariableDependencyShipType();
@@ -96,9 +96,9 @@ public class ShipService {
         return shipsApiService.getAllShips(tokenStorage.getGameId(), fleetID);
     }
 
-    public Observable<Jobs.Job> beginShipJob(String fleetID, String shipType) {
+    public Observable<Jobs.Job> beginShipJob(String fleetID, String shipType, String systemID) {
         return this.jobsApiService.createShipJob(this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId(),
-                Jobs.createShipJob(fleetID, shipType));
+                Jobs.createShipJob(fleetID, shipType, systemID));
     }
 
 

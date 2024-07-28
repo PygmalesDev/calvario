@@ -118,7 +118,6 @@ public class VariableService {
         createTree(technologiesTree);
         createTree(resourcesTree);
         createTree(shipTree);
-        shipTree.printPaths();
     }
 
     /*

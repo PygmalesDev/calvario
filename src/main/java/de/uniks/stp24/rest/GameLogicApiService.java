@@ -23,4 +23,8 @@ public interface GameLogicApiService {
     @GET("games/{game}/empires/{empire}/aggregates/{aggregate}/technologies/{id}")
     Observable<AggregateResultDto> getTechnologyCostAndTime(@Path("empire") String empireID, @Path("aggregate") String aggregate, @Path("id") String techID);
 
+
+    // generic allows flexible usage
+    @GET("games/{game}/empires/{empire}/aggregates/{aggregate}")
+    Observable<AggregateResultDto> getAggregate(@Path("empire") String empireID, @Path("aggregate") String aggregate, @Query("system") String systemID);
 }

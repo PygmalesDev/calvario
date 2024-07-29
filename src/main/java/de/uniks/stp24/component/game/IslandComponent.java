@@ -10,6 +10,7 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.FleetService;
 import de.uniks.stp24.service.game.IslandsService;
 import javafx.fxml.FXML;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -19,7 +20,6 @@ import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnKey;
-import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -40,6 +40,10 @@ public class IslandComponent extends Pane {
     ImageView flagImage;
     @FXML
     ImageView spyglassImage;
+    @FXML
+    ProgressBar healthBar;
+    @FXML
+    ProgressBar defenseBar;
     @Inject
     TokenStorage tokenStorage;
     @Inject
@@ -61,6 +65,8 @@ public class IslandComponent extends Pane {
     double x, y;
 
     public boolean islandIsSelected = false;
+
+    private int defense, health, maxHealth, maxDef;
 
     @Inject
     public IslandComponent() {
@@ -226,4 +232,35 @@ public class IslandComponent extends Pane {
         return distance;
     }
 
+    public void setHealth(int health) {
+
+        this.health += health;
+        this.defense += health;
+
+        this.healthBar.setProgress(1.0 * this.health/this.maxHealth);
+    }
+
+    public void setMaxHealth(int maxHealth) {
+        this.maxHealth = maxHealth;
+        this.healthBar.setProgress(1.0 * this.health/this.maxHealth);
+    }
+
+    public void setMaxDefense(int defense) {
+        this.maxDef = defense;
+        this.defenseBar.setProgress(1.0 * this.defense/this.maxDef);
+
+    }
+
+    public int getMaxHealth(){
+        return maxHealth;
+    }
+
+    public int getDefense(){
+        return defense;
+    }
+
+    public void showBars() {
+        this.healthBar.setVisible(!healthBar.visibleProperty().get());
+        this.defenseBar.setVisible(!defenseBar.visibleProperty().get());
+    }
 }

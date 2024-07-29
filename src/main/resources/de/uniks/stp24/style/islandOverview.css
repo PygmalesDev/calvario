@@ -300,5 +300,15 @@
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/upgrade_button_cancel_job.png");
 }
 
+.healthDefense-progress-bar .track{
+    -fx-background-color: transparent;
+    -fx-border-color: green;
+    -fx-border-width: 2px;
+}
+
+.healthDefense-progress-bar .bar {
+    -fx-background-color: green;
+}
+
 
 

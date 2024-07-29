@@ -556,6 +556,7 @@ public class InGameController extends BasicController {
         );
 
         this.islandComponentList.forEach(isle -> {
+            Island tmp = isle.getIsland();
             isle.setInGameController(this);
             isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
             isle.setScaleX(1.25);
@@ -586,6 +587,7 @@ public class InGameController extends BasicController {
             group.setScaleY(scale);
         });
 
+
     }
 
     public void showInfo(MouseEvent event) {
@@ -598,11 +600,21 @@ public class InGameController extends BasicController {
                 this.islandClaimingContainer.setVisible(false);
                 this.sitePropertiesComponent.setVisible(false);
                 this.buildingPropertiesComponent.setVisible(false);
-                if (selected.island.owner().equals(this.tokenStorage.getEmpireId()))
+                // show only for your own islands
+                if (selected.island.owner().equals(this.tokenStorage.getEmpireId())) {
                     this.overviewSitesComponent.jobsComponent.setJobsObservableList(
-                        this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
-                showOverview();
-                selected.showUnshowRudder();
+                      this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
+                    showOverview();
+                    selected.showUnshowRudder();
+                    selected.showBars();
+                    selected.setHealth(10);
+                    islandsService.getSystemAggregate(this.tokenStorage.getEmpireId(), "system.max_health",selected.getIsland().id());
+                    islandsService.getSystemAggregate(this.tokenStorage.getEmpireId(), "system.defense",selected.getIsland().id());
+
+
+
+
+                }
 
                 // Show island claiming scroll
             } else if (!this.tokenStorage.isSpectator()) {

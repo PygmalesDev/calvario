@@ -215,8 +215,6 @@ public class InGameController extends BasicController {
     int islandCollisionRadius = ISLAND_COLLISION_RADIUS;
     double islandScale = 1.25;
 
-    Random random = new Random();
-
     Shape fog;
 
     final ArrayList<Node> draggables = new ArrayList<>();
@@ -586,45 +584,21 @@ public class InGameController extends BasicController {
             isle.applyIcon(false);
             isle.applyEmpireInfo();
 
-            this.fogOfWar.removeShapesFromFog(new Circle(isle.getPosX() + ISLAND_WIDTH / 2 * islandScale + 17,
+            this.removeFog(isle, new Circle(isle.getPosX() + ISLAND_WIDTH / 2 * islandScale + 17,
                     isle.getPosY() + ISLAND_HEIGHT / 2 * islandScale + 7,
-                    islandCollisionRadius),
-                    randomFogAroundIsland(isle));
-
-            this.updateFog();
+                    islandCollisionRadius));
         }
     }
 
-    public void removeFogFromShape(Shape shape) {
-        this.fogOfWar.removeShapesFromFog(shape);
+    public void removeFog(IslandComponent island, Shape... shapes) {
+        this.fogOfWar.removeShapesFromFog(island, shapes);
         this.updateFog();
     }
 
-    public Shape randomFogAroundIsland(IslandComponent isle) {
-        Shape toRemoveShape = null;
-
-        int count = random.nextInt(30, 50);
-        int xRadius;
-        int yRadius;
-        int distance;
-        double angle;
-        Ellipse ellipse;
-
-        for (int i = 0; i < count; i++) {
-            angle = random.nextInt(360)*Math.PI/180;
-            xRadius =  random.nextInt(25, 50);
-            yRadius =  random.nextInt(25, 50);
-            distance =  random.nextInt(125, 150);
-
-            ellipse = new Ellipse(
-                    isle.getPosX() + ISLAND_WIDTH/2 * islandScale + 17 +  distance*Math.cos(angle),
-                    isle.getPosY() + ISLAND_HEIGHT/2 * islandScale + 7 + distance*Math.sin(angle),
-                    xRadius, yRadius);
-
-            toRemoveShape = Objects.nonNull(toRemoveShape) ? Shape.union(toRemoveShape, ellipse) : ellipse;
-        }
-
-        return toRemoveShape;
+    public void updateFog() {
+        zoomPane.getChildren().remove(this.fog);
+        this.fog = fogOfWar.getCurrentFog();
+        zoomPane.getChildren().add(2, this.fog);
     }
 
     public void showInfo(MouseEvent event) {
@@ -858,11 +832,5 @@ public class InGameController extends BasicController {
         this.fleetService.dispose();
         this.fleetCoordinationService.dispose();
         this.variableService.dispose();
-    }
-
-    public void updateFog() {
-        zoomPane.getChildren().remove(this.fog);
-        this.fog = fogOfWar.getFog();
-        zoomPane.getChildren().add(2, this.fog);
     }
 }

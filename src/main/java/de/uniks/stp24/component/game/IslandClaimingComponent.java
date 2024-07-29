@@ -1,10 +1,7 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.model.Fleets;
-import de.uniks.stp24.model.Fleets.Fleet;
 import de.uniks.stp24.model.Island;
-import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Site;
 import de.uniks.stp24.service.ImageCache;
@@ -24,11 +21,9 @@ import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
-import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
-import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -108,11 +103,6 @@ public class IslandClaimingComponent extends Pane {
 
     @Inject
     public IslandClaimingComponent() {}
-
-    @OnInit
-    public void provideToCoordinationService() {
-        this.fleetCoordinationService.setClaimingComponent(this);
-    }
 
     @OnRender
     public void render() {
@@ -204,6 +194,11 @@ public class IslandClaimingComponent extends Pane {
             this.fleetInformationText.setVisible(false);
             this.exploreButton.setVisible(true);
             this.exploreButton.setText(this.gameResourceBundle.getString("claiming.travel"));
+            this.fleetCoordinationService.generateTravelPaths(this.currentIsland);
+            this.timeText.setText(String.valueOf(
+                    this.fleetCoordinationService.getTravelDuration(fleet.getFleet().location(),
+                    this.currentIsland.id())
+                    ));
         }
     }
 

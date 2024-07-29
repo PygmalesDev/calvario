@@ -21,6 +21,7 @@ import de.uniks.stp24.ws.EventListener;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -29,6 +30,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.TextAlignment;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
@@ -45,6 +47,7 @@ import java.beans.PropertyChangeListener;
 import java.util.*;
 
 import static de.uniks.stp24.service.Constants.BUILT_STATUS;
+import static de.uniks.stp24.service.Constants.ISLAND_WIDTH;
 
 @Title("CALVARIO")
 @Controller
@@ -63,6 +66,8 @@ public class InGameController extends BasicController {
     StackPane eventContainer;
     @FXML
     public HBox contextMenuButtons;
+
+    public Pane debugGrid;
 
     @FXML
     public StackPane contextMenuContainer;
@@ -230,7 +235,6 @@ public class InGameController extends BasicController {
         pauseMenuComponent.setInGameController(this);
         helpComponent.setInGameController(this);
         clockComponent.setInGameController(this);
-        fleetCoordinationService.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
@@ -287,6 +291,8 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void render() {
+        fleetCoordinationService.setInGameController(this);
+
         buildingProperties.setMouseTransparent(true);
         buildingProperties.setPickOnBounds(false);
         buildingsWindow.setMouseTransparent(true);
@@ -485,6 +491,18 @@ public class InGameController extends BasicController {
         this.islandComponentMap = islandsService.getComponentMap();
         mapGrid.setMinSize(islandsService.getMapWidth(), islandsService.getMapHeight());
         islandsService.createLines(this.islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
+        islandsService.generateDistancePoints();
+        islandsService.getDistancePoints().forEach((ids, value) -> {
+            var vector2D = value.get(value.size() / 2);
+            Label distLabel = new Label(" "+ islandsService.getDistance(ids[0], ids[1]) + " ");
+            distLabel.setStyle("-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #e43900;" +
+                               "-fx-background-color: white; -fx-background-radius: 10");
+            distLabel.setVisible(false);
+            this.mapGrid.getChildren().add(distLabel);
+            distLabel.setLayoutX(vector2D.x() - 16);
+            distLabel.setLayoutY(vector2D.y() - 16);
+        });
+
 
         group.setScaleX(0.65);
         group.setScaleY(0.65);
@@ -529,11 +547,22 @@ public class InGameController extends BasicController {
             isle.setScaleY(1.25);
             isle.collisionCircle.setRadius(Constants.ISLAND_COLLISION_RADIUS);
             this.mapGrid.getChildren().add(isle);
+
+            Label idLabel = new Label(" ..." + isle.island.id().substring(16) + " ");
+
+            idLabel.setOnMouseClicked(event -> System.out.printf("ISLAND_ID: %s\n", isle.island.id()));
+            idLabel.setTextAlignment(TextAlignment.CENTER);
+            idLabel.setStyle("-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #000000;" +
+                             "-fx-background-color: rgba(104,104,104,0.18); -fx-background-radius: 10;");
+            idLabel.setLayoutX(isle.getLayoutX());
+            idLabel.setLayoutY(isle.getLayoutY()+15);
+            idLabel.setVisible(false);
+            this.mapGrid.getChildren().add(idLabel);
         });
 
         mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight()));
-        mapScrollPane.setVvalue(0.5);
-        mapScrollPane.setHvalue(0.5);
+        mapScrollPane.setVvalue(0.45);
+        mapScrollPane.setHvalue(0.45);
 
         /*
          * zoom function working but not perfect!
@@ -552,7 +581,6 @@ public class InGameController extends BasicController {
             group.setScaleX(scale);
             group.setScaleY(scale);
         });
-
     }
 
     public void showInfo(MouseEvent event) {
@@ -681,7 +709,17 @@ public class InGameController extends BasicController {
             if (child instanceof IslandComponent island) island.collisionCircle.setVisible(!island.collisionCircle.isVisible());
             if (child instanceof GameFleetController fleet) fleet.collisionCircle.setVisible(!fleet.collisionCircle.isVisible());
         });
+    }
 
+    @OnKey(code = KeyCode.D, control = true)
+    public void setIDsVisibility() {
+        this.mapGrid.getChildren().stream().filter(child -> child instanceof Label)
+                .forEach(label -> label.setVisible(!label.isVisible()));
+    }
+
+    @OnKey(code = KeyCode.D, shift = true)
+    public void setDebugVisibility() {
+        this.debugGrid.setVisible(!this.debugGrid.isVisible());
     }
 
     public void resetZoomMouse(@NotNull MouseEvent event) {

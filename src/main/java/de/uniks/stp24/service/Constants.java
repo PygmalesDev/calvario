@@ -267,8 +267,8 @@ public class Constants {
             NOT_BUILT
     }
 
-    public static final int ISLAND_HEIGHT = 162;
-    public static final int ISLAND_WIDTH = 70;
+    public static final double ISLAND_HEIGHT = 162;
+    public static final double ISLAND_WIDTH = 70;
     public static final int FLEET_FROM_ISLAND_DISTANCE = 40;
     public static final int FLEET_HW = 30;
 

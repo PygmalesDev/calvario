@@ -10,9 +10,12 @@ import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.BasicService;
+import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.utils.PathTableEntry;
+import de.uniks.stp24.utils.VectorMath;
+import de.uniks.stp24.utils.VectorMath.Vector2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -23,8 +26,12 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
+import java.util.stream.Collectors;
 
+import static de.uniks.stp24.service.Constants.ISLAND_HEIGHT;
+import static de.uniks.stp24.service.Constants.ISLAND_WIDTH;
 import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 @Singleton
@@ -48,7 +55,7 @@ public class IslandsService extends BasicService {
     private final List<IslandComponent> islandComponentList = new ArrayList<>();
     public final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
     private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();
-    private final Map<String, List<Double[]>> distancePoints = new HashMap<>();
+    private final Map<String[], List<Vector2D>> distancePoints = new HashMap<>();
     private final Map<String, Map<String, Integer>> connections = new HashMap<>();
     public final Map<String, InfrastructureService> siteManager = new HashMap<>();
 
@@ -158,40 +165,49 @@ public class IslandsService extends BasicService {
         return singleConnections;
     }
 
-    private void generateDistancePoints() {
-        List<String> islandIDs = this.isles.stream().map(Island::id).toList();
-        List<String> visitedIslands = new ArrayList<>();
+    public void generateDistancePoints() {
+        List<String> islandIDs = new ArrayList<>(this.isles.stream().map(Island::id).toList());
 
-        Iterator<String> islandIterator = islandIDs.iterator();
-        String currentID = islandIterator.next();
-
-        while (visitedIslands.size() != islandIDs.size()) {
-            String currentIDCopy = currentID;
+        while (!islandIDs.isEmpty()) {
+            String currentID = islandIDs.removeFirst();
             this.getConnections(currentID).forEach((neighbourID, value) -> {
-                if (!visitedIslands.contains(neighbourID))
-                    this.distancePoints.put(neighbourID, this.generateDistancePoints(currentIDCopy, neighbourID, value));
-            });
-            visitedIslands.add(currentID);
-            currentID = islandIterator.next();
+                if (islandIDs.contains(neighbourID))
+                    this.distancePoints.put(new String[]{currentID, neighbourID},
+                            this.generateDistancePoints(currentID, neighbourID, value-1));
+                });
         }
-
     }
 
-    private ArrayList<Double[]> generateDistancePoints(String startID, String finishID, int pointsAmount) {
+    public ArrayList<Vector2D> generateDistancePoints(String startID, String finishID, int pointsAmount) {
         IslandComponent startIsland = this.getIslandComponent(startID), endIsland = this.getIslandComponent(finishID);
-        Double[] startCoords = new Double[]{startIsland.getLayoutX(), startIsland.getLayoutY()},
-                 endCoords   = new Double[]{endIsland.getLayoutX(), endIsland.getLayoutY()},
-                 distVector  = new Double[]{endCoords[0]-startCoords[0], endCoords[1]-startCoords[1]},
-                 increment   = new Double[]{distVector[0]/pointsAmount, distVector[1]/pointsAmount};
-        ArrayList<Double[]> distancePoints = new ArrayList<>();
+        Vector2D startVector = new Vector2D(startIsland.getLayoutX() + ISLAND_WIDTH/2 + 19,  startIsland.getLayoutY() + ISLAND_HEIGHT/2 + 15),
+                 endVector   = new Vector2D(endIsland.getLayoutX()   + ISLAND_WIDTH/2 + 19,  endIsland.getLayoutY()   + ISLAND_HEIGHT/2 + 15),
+                 distVector  = endVector.sub(startVector),
+                 increment   = new Vector2D(distVector.x()/(pointsAmount+1), distVector.y()/(pointsAmount+1));
+
+        ArrayList<Vector2D> distancePoints = new ArrayList<>();
         for (int i = 1; i <= pointsAmount; i++)
-            distancePoints.add(new Double[]{startCoords[0] + increment[0]*i, startCoords[1] + increment[1]*i});
+            distancePoints.add(new Vector2D(startVector).add(increment.x() * i, increment.y() * i));
 
         return distancePoints;
     }
 
+    public int getDistance(String islandID1, String islandID2) {
+        if (Objects.nonNull(this.getConnections(islandID1)))
+            return this.getConnections(islandID1).get(islandID2);
+        else return -1;
+    }
+
     public Map<String, Integer> getConnections(String islandID) {
         return this.connections.get(islandID);
+    }
+
+    public List<Vector2D> getDistancePoints(String startID, String finishID) {
+        return this.distancePoints.get(new String[]{startID, finishID});
+    }
+
+    public Map<String[], List<Vector2D>> getDistancePoints() {
+        return this.distancePoints;
     }
 
     /**

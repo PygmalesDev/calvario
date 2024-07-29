@@ -53,6 +53,7 @@ public class FleetCoordinationService {
             if (this.selectedFleet.equals(fleet)) this.selectedFleet = null;
             else this.selectedFleet = fleet;
         } else this.selectedFleet = fleet;
+        fleet.getFleetInformation();
     }
 
     public void putFleetOnMap(Fleet fleet) {

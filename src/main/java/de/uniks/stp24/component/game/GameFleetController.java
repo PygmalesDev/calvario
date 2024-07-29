@@ -31,4 +31,9 @@ public class GameFleetController extends Pane {
         this.fleetCoordinationService.setFleet(this);
     }
 
+    public void getFleetInformation() {
+        System.out.println(this.fleet.size());
+    }
+
+
 }

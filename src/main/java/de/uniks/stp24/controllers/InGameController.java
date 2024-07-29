@@ -45,10 +45,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static de.uniks.stp24.service.Constants.BUILT_STATUS;
 
@@ -225,6 +222,8 @@ public class InGameController extends BasicController {
     final PopupBuilder popupDeleteStructure = new PopupBuilder();
     final PopupBuilder popupHelpWindow = new PopupBuilder();
 
+    final ArrayList<Node> draggables = new ArrayList<>();
+
 
     @OnRender
     public void addSpeechBubble() {
@@ -353,7 +352,7 @@ public class InGameController extends BasicController {
         // for better control
         contactsOverviewComponent.setParents(contextMenuContainer, contactDetailsContainer);
 
-        contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
+
         contextMenuContainer.getChildren().forEach(child -> {
             child.setVisible(false);
             // make every node in contextMenuContainer draggable

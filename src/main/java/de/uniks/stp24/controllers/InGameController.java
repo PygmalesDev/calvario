@@ -607,7 +607,7 @@ public class InGameController extends BasicController {
             selectedIsland = selected;
             tokenStorage.setIsland(selectedIsland.getIsland());
             islandAttributes.setIsland(selectedIsland.getIsland());
-            if (Objects.nonNull(selected.getIsland().owner())) {
+            if (Objects.nonNull(selected.getIsland().owner()) && !selected.foggy) {
                 this.islandClaimingContainer.setVisible(false);
                 this.sitePropertiesComponent.setVisible(false);
                 this.buildingPropertiesComponent.setVisible(false);

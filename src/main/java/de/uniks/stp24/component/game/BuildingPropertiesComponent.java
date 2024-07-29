@@ -14,6 +14,7 @@ import de.uniks.stp24.service.game.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -55,6 +56,11 @@ public class BuildingPropertiesComponent extends AnchorPane {
     ImageView buildingImage;
     @FXML
     Pane jobProgressPane;
+    @FXML
+    Pane textInfoPane;
+    @FXML
+    Label textInfoLabel;
+
     @Inject
     public JobsService jobsService;
     @Inject
@@ -99,10 +105,11 @@ public class BuildingPropertiesComponent extends AnchorPane {
     final Provider<ResourceComponent> positiveResourceProvider = () -> new ResourceComponent("positive", this.gameResourceBundle, this.imageCache);
 
     @Inject
-    public BuildingPropertiesComponent() {}
+    public BuildingPropertiesComponent() {
+    }
 
     @OnInit
-    public void init(){
+    public void init() {
         buildingsMap = buildingsIconPathsMap;
     }
 
@@ -128,20 +135,19 @@ public class BuildingPropertiesComponent extends AnchorPane {
         resourcesService.setOnResourceUpdates(this::setButtonsDisable);
     }
 
-    public void setInGameController(InGameController inGameController){
+    public void setInGameController(InGameController inGameController) {
         this.inGameController = inGameController;
     }
 
 
-    public void setBuildingType(String buildingType, String jobID, BUILT_STATUS isBuilt){
+    public void setBuildingType(String buildingType, String jobID, BUILT_STATUS isBuilt) {
         this.buildingType = buildingType;
 
         displayInfoBuilding();
 
-
         if (Objects.nonNull(this.buildingJobs))
             this.setJobsPaneProgress(this.buildingJobs.stream().filter(started -> started._id().equals(jobID)
-                        && started.system().equals(this.tokenStorage.getIsland().id())).findFirst().orElse(null));
+                    && started.system().equals(this.tokenStorage.getIsland().id())).findFirst().orElse(null));
 
         switch (isBuilt) {
             case BUILT -> {
@@ -176,8 +182,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
                     this.setJobsPaneVisibility(false);
                     this.destroyButton.setVisible(true);
                     setDestroyButtonDisable();
-                }
-                else this.setJobsPaneProgress(this.currentJob);
+                } else this.setJobsPaneProgress(this.currentJob);
             }
         });
     }
@@ -207,7 +212,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
         // 1) if empire has enough resources to build this building
         // 2) if island has enough capacity
         if (Objects.nonNull(buildingType)) {
-            int islandJobsInQueue = jobsService.getObservableListForSystem(islandAttributeStorage.getIsland().id()).size();
+            int islandJobsInQueue = jobsService.getStructureJobsInQueueCount(islandAttributeStorage.getIsland().id());
             if (islandAttributeStorage.getUsedSlots() + islandJobsInQueue >=
                     islandAttributeStorage.getIsland().resourceCapacity()) {
                 buyButton.setDisable(true);
@@ -225,27 +230,27 @@ public class BuildingPropertiesComponent extends AnchorPane {
             destroyButton.setDisable(false);
     }
 
-    public void destroyBuilding(){
+    public void destroyBuilding() {
         setDestroyButtonDisable();
         setVisible(false);
         inGameController.handleDeleteStructure(buildingType);
     }
 
-    public void buyBuilding(){
+    public void buyBuilding() {
         subscriber.subscribe(resourcesService.getResourcesBuilding(buildingType), result -> {
-            priceOfBuilding = result.cost();
-            if (resourcesService.hasEnoughResources(priceOfBuilding)) {
-                this.subscriber.subscribe(this.jobsService.beginJob(
-                        Jobs.createBuildingJob(this.tokenStorage.getIsland().id(), this.buildingType)), job -> {
-                    this.setJobsPaneProgress(job);
-                    this.updateIslandBuildings();
-                    this.setBuildingJobFinishers(job);
-                },
-                        error -> System.out.println("Error in buyBuilding: " + error));
-                    buyButton.setVisible(false);
+                    priceOfBuilding = result.cost();
+                    if (resourcesService.hasEnoughResources(priceOfBuilding)) {
+                        this.subscriber.subscribe(this.jobsService.beginJob(
+                                        Jobs.createBuildingJob(this.tokenStorage.getIsland().id(), this.buildingType)), job -> {
+                                    this.setJobsPaneProgress(job);
+                                    this.updateIslandBuildings();
+                                    this.setBuildingJobFinishers(job);
+                                },
+                                error -> System.out.println("Error in buyBuilding: " + error));
+                        buyButton.setVisible(false);
 
-            } else buyButton.setDisable(true);
-        },
+                    } else buyButton.setDisable(true);
+                },
                 error -> System.out.println("Error in buyBuilding: " + error));
     }
 
@@ -259,7 +264,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
                         this.inGameController, this.islandAttributeStorage.getIsland().buildings());
                 this.inGameController.setSitePropertiesInvisible();
             }, error -> System.out.println("Error by updating island buildings in BuildingPropertiesComponent:\n"
-            + error.getMessage()));
+                    + error.getMessage()));
         }
     }
 
@@ -278,26 +283,41 @@ public class BuildingPropertiesComponent extends AnchorPane {
 
     //Sets upkeep, production and cost of buildings in listviews
     private void resourceListGeneration(BuildingAttributes buildingDto) {
-        Map<String, Integer> resourceMapUpkeep = buildingDto.upkeep();
-        ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, buildingConsumesListView.getItems(), null);
-        buildingConsumesListView.setItems(resourceListUpkeep);
+        if (Objects.nonNull(buildingDto)) {
+            Map<String, Integer> resourceMapUpkeep = buildingDto.upkeep();
+            ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, buildingConsumesListView.getItems(), null, false);
+            buildingConsumesListView.setItems(resourceListUpkeep);
 
-        Map<String, Integer> resourceMapProduce = buildingDto.production();
-        ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, buildingProducesListView.getItems(), null);
-        buildingProducesListView.setItems(resourceListProduce);
+            Map<String, Integer> resourceMapProduce = buildingDto.production();
+            ObservableList<Resource> resourceListProduce = resourcesService.generateResourceList(resourceMapProduce, buildingProducesListView.getItems(), null, false);
+            buildingProducesListView.setItems(resourceListProduce);
 
-        Map<String, Integer> resourceMapCost = buildingDto.cost();
-        ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(resourceMapCost, buildingCostsListView.getItems(), null);
-        buildingCostsListView.setItems(resourceListCost);
+            Map<String, Integer> resourceMapCost = buildingDto.cost();
+            ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(resourceMapCost, buildingCostsListView.getItems(), null, false);
+            buildingCostsListView.setItems(resourceListCost);
+
+            /* Sets infoText for buildings that does not produce anything */
+            if (buildingProducesListView.getItems().isEmpty()) {
+                textInfoPane.setVisible(true);
+                if (buildingDto.id().equals("fortress")) {
+                    textInfoLabel.setText(gameResourceBundle.getString("building.stronghold.info"));
+                } else if (buildingDto.id().equals("shipyard")) {
+                    textInfoLabel.setText(gameResourceBundle.getString("building.shipyard.info"));
+                }
+            } else {
+                textInfoPane.setVisible(false);
+                textInfoLabel.setText("");
+            }
+        }
     }
 
-    public void onClose(){
+    public void onClose() {
         inGameController.buildingPropertiesComponent.setVisible(false);
     }
 
-    private void setCertainBuilding(){
-        for(BuildingAttributes building: islandAttributeStorage.buildingsAttributes){
-            if(building.id().equals(buildingType)){
+    private void setCertainBuilding() {
+        for (BuildingAttributes building : islandAttributeStorage.buildingsAttributes) {
+            if (building.id().equals(buildingType)) {
                 certainBuilding = building;
                 priceOfBuilding = certainBuilding.cost();
             }

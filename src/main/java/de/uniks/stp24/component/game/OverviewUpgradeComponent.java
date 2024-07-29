@@ -126,6 +126,11 @@ public class OverviewUpgradeComponent extends AnchorPane {
                 this.jobObservableList = this.jobsService.getJobObservableListOfType("upgrade"));
     }
 
+    @OnInit
+    public void addRunnable() {
+        this.resourcesService.setOnResourceUpdates(this::setUpgradeButton);
+    }
+
     @OnRender
     public void render() {
         this.jobsContainer.getChildren().add(this.jobProgressComponent);
@@ -190,7 +195,7 @@ public class OverviewUpgradeComponent extends AnchorPane {
             case CANCEL_JOB -> {
                 this.updateButtonState = true;
                 this.jobsContainer.setVisible(false);
-                this.subscriber.subscribe(this.jobsService.stopJob(this.currentJob._id()), job -> this.setUpgradeButton());
+                this.subscriber.subscribe(this.jobsService.stopJob(this.currentJob._id()));
             }
         }
     }
@@ -198,14 +203,14 @@ public class OverviewUpgradeComponent extends AnchorPane {
     public void setCosts(){
         upgradeCostList.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "systems", islandAttributes.getIsland().upgrade(), "cost"));
         Map<String, Integer> resourceMapCost = islandAttributes.getNeededResources(islandAttributes.getIsland().upgradeLevel());
-        ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(resourceMapCost, upgradeCostList.getItems(), null);
+        ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(resourceMapCost, upgradeCostList.getItems(), null, false);
         upgradeCostList.setItems(resourceListCost);
     }
 
     public void setConsumes(){
         upgradeUpkeepList.setCellFactory(list -> explanationService.addMouseHoverListener(new CustomComponentListCell<>(app, resourceComponentProvider), "systems", islandAttributes.getIsland().upgrade(), "upkeep"));
         Map<String, Integer> resourceMapUpkeep = islandAttributes.getUpkeep(islandAttributes.getIsland().upgradeLevel());
-        ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, upgradeUpkeepList.getItems(), null);
+        ObservableList<Resource> resourceListUpkeep = resourcesService.generateResourceList(resourceMapUpkeep, upgradeUpkeepList.getItems(), null, false);
         upgradeUpkeepList.setItems(resourceListUpkeep);
     }
 

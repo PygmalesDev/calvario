@@ -5,6 +5,7 @@ import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
+import de.uniks.stp24.controllers.helper.Draggable;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.GameStatus;
@@ -190,6 +191,7 @@ public class InGameController extends BasicController {
     public IslandAttributeStorage islandAttributes;
     @Inject
     EventListener eventListener;
+
     @Inject
     public InGameController() {
         lastUpdate = "";
@@ -338,9 +340,6 @@ public class InGameController extends BasicController {
 
         technologiesComponent.setContainer(contextMenuContainer);
 
-        this.group.getChildren().add(this.fleetCreationComponent);
-        this.fleetCreationComponent.setVisible(false);
-
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,
@@ -355,7 +354,22 @@ public class InGameController extends BasicController {
         contactsOverviewComponent.setParents(contextMenuContainer, contactDetailsContainer);
 
         contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
+        contextMenuContainer.getChildren().forEach(child -> {
+            child.setVisible(false);
+            // make every node in contextMenuContainer draggable
+            draggables.add(child);
+        });
         this.createContextMenuButtons();
+
+        // make pop ups draggable
+        draggables.add(eventContainer);
+        draggables.add(deleteStructureWarningContainer);
+
+        draggables.forEach(Draggable.DraggableNode::new);
+
+        // make island overview draggable (the nodes attached to the overview will follow it)
+        draggables.addAll(Arrays.asList(overviewContainer, buildingsWindow, buildingProperties, siteProperties));
+        new Draggable.DraggableNode(overviewContainer, buildingsWindow, buildingProperties, siteProperties);
 
         this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListeners();
@@ -394,6 +408,15 @@ public class InGameController extends BasicController {
 
 
 
+    @OnKey(code = KeyCode.R, alt = true)
+    public void resetDraggables() {
+        for (Node draggable : draggables) {
+            draggable.setTranslateX(0);
+            draggable.setTranslateY(0);
+        }
+    }
+
+
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
         helpComponent.setVisible(false);
@@ -415,7 +438,7 @@ public class InGameController extends BasicController {
             resumeGame();
         }
     }
-
+    
     @OnKey(code = KeyCode.J, alt = true)
     public void showJobsOverview() {
         this.toggleContextMenuVisibility(this.jobsOverviewComponent);
@@ -587,7 +610,6 @@ public class InGameController extends BasicController {
             group.setScaleY(scale);
         });
 
-
     }
 
     public void showInfo(MouseEvent event) {
@@ -687,7 +709,7 @@ public class InGameController extends BasicController {
             Island selected = this.islandsService.getIsland(job.system());
             this.islandAttributes.setIsland(selected);
             this.tokenStorage.setIsland(selected);
-            // after the job is done, the isBuilt should be true cause the building is built!
+            // after the job is done, the isBuilt should be BUILT cause the building is built!
             this.showBuildingInformation(job.building(), "", BUILT_STATUS.BUILT);
         });
 
@@ -711,12 +733,6 @@ public class InGameController extends BasicController {
             // update island name
             if (!this.islandAttributes.getIsland().name().isEmpty())
                 overviewSitesComponent.inputIslandName.setText(this.islandAttributes.getIsland().name());
-    }
-
-    @OnKey(code = KeyCode.T, alt = true)
-    public void showTechnologies() {
-        this.toggleContextMenuVisibility(this.technologiesComponent);
-        this.technologiesComponent.setVisible(!this.technologiesComponent.isVisible());
     }
 
     @OnKey(code = KeyCode.SPACE)
@@ -777,7 +793,6 @@ public class InGameController extends BasicController {
                 event -> {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         islandAttributes.setEmpireDto(event.data());
-                        overviewUpgradeComponent.setUpgradeButton();
                         this.lastUpdate = event.data().updatedAt();
                     }
                 },
@@ -827,17 +842,6 @@ public class InGameController extends BasicController {
         islandComponentMap = null;
         islandsService.removeDataForMap();
     }
-
-    // extrahieren
-//
-//    public void openContactDetails(Contact contact) {
-//        contactDetailsComponent.setContactInformation(contact);
-//        contactDetailsContainer.setVisible(true);
-//    }
-//
-//    public void closeContractDetails(){
-//        contactDetailsContainer.setVisible(false);
-//    }
 
     @OnDestroy
     public void destroy() {

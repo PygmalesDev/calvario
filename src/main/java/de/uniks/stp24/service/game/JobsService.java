@@ -89,7 +89,6 @@ public class JobsService {
             switch (result.suffix()) {
                 case "created" -> this.addJobToGroups(job);
                 case "updated" -> this.updateJobInGroups(job);
-                case "deleted" -> this.deleteJobFromGroups(job);
             }
             this.jobCommonUpdates.forEach(Runnable::run);
 
@@ -133,6 +132,8 @@ public class JobsService {
             if (this.jobCollections.get(job.system()).filtered(job1 -> job1.type().equals(job.type())).isEmpty())
                 this.jobCollections.get("collection").add(job);
         }
+
+        if (job.progress() == job.total()) this.deleteJobFromGroups(job);
     }
 
     public void deleteJobFromGroups(@NotNull Job job) {
@@ -340,6 +341,19 @@ public class JobsService {
     public boolean isCurrentIslandJob(Job job) {
         if (this.getObservableListForSystem(job.system()).isEmpty()) return true;
         return job.equals(this.getObservableListForSystem(job.system()).getFirst());
+    }
+
+    public int getStructureJobsInQueueCount(String systemID) {
+        if (!this.jobCollections.containsKey(systemID))
+            return 0;
+
+        int count = 0;
+        for (Job job : jobCollections.get(systemID)) {
+            if (job.type().equals("building") || job.type().equals("district")) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /**

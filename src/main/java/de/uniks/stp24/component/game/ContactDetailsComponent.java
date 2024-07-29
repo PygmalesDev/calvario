@@ -5,7 +5,6 @@ import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.IslandsService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -21,7 +20,7 @@ import java.util.ResourceBundle;
 @Component(view = "ContactDetailsComponent.fxml")
 public class ContactDetailsComponent extends StackPane {
     @FXML
-    public Label intelText;
+    public Text intelText;
     @FXML
     public Text popText;
     @FXML
@@ -73,6 +72,7 @@ public class ContactDetailsComponent extends StackPane {
         this.contact = contact;
         contact.checkIslands();
         setInfo();
+        intelText.setText("Intel: " + calculateIntel(contact.getIntel()));
         empireNameText.setText(contact.getEmpireName());
         empireImageView.setImage(imageCache.get(contact.getEmpireFlag()));
         iconPop.setImage(imageCache.get("icons/resources/population.png"));
@@ -99,7 +99,7 @@ public class ContactDetailsComponent extends StackPane {
     public void openDetail(Contact contact) {
         setContactInformation(contact);
         this.getParent().setVisible(true);
-        System.out.println("OPEN: ");
+        System.out.println("OPEN DETAILS: ");
 
     }
 
@@ -117,6 +117,16 @@ public class ContactDetailsComponent extends StackPane {
     public void removeData(){
         this.contact = null;
     }
+
+    private String calculateIntel(double value) {
+        if (value == 0) return "none";
+        if (value > 0 && value <=30) return "low";
+        if (value > 30 && value <=60) return "medium";
+        if (value > 60 && value <= 90) return "high";
+        return "exactly";
+    }
+
+
 
 
 }

@@ -49,7 +49,7 @@ public class ContactsService {
 
     public void addEnemy(String owner, String islandID) {
         System.out.println("ISLAND :" + islandID);
-        System.out.println("Adding to contacts?");
+        System.out.println("Adding to contacts? " + owner);
         Contact contact;
         ReadEmpireDto empireDto = islandsService.getEmpire(owner);
         if(tokenStorage.getEmpireId().equals(owner)) return;
@@ -57,7 +57,7 @@ public class ContactsService {
             hiddenEmpires.remove(owner);
             System.out.println(empireDto.name());
             contact = new Contact(empireDto);
-//            contactCells.add(contact);
+            contactCells.add(contact);
             seenEnemies.add(contact);
             System.out.println(contact.getEmpireName());
 
@@ -68,7 +68,6 @@ public class ContactsService {
 
         }
         contact.addIsland(islandID);
-        if (!contactCells.contains(contact)) contactCells.add(contact);
 
 
 

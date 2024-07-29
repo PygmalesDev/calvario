@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -17,13 +16,12 @@
         <Text fx:id="empireNameText" layoutX="80.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="contactsDetailsTitle" wrappingWidth="256.80340576171875" />
        <VBox layoutX="36.0" layoutY="64.0" prefHeight="415.0" prefWidth="301.0" spacing="10.0">
           <padding>
-             <Insets left="50.0" top="45.0" />
+             <Insets left="50.0" top="35.0" />
           </padding>
-          <Label fx:id="intelText" text="Intel:">
-             <padding>
-                <Insets left="130.0" />
-             </padding>
-          </Label>
+          <Text fx:id="intelText" text="Intel:">
+            <VBox.margin>
+               <Insets left="90.0" />
+            </VBox.margin></Text>
           <HBox prefHeight="70.0" prefWidth="275.0">
              <VBox prefHeight="80.0" prefWidth="176.0" spacing="10.0">
                 <padding>
@@ -31,26 +29,41 @@
                 </padding>
                 <Text fx:id="popText" strokeType="OUTSIDE" strokeWidth="0.0" text="Population: " />
                 <Text fx:id="homeText" strokeType="OUTSIDE" strokeWidth="0.0" text="Homeworld:" />
+               <HBox.margin>
+                  <Insets top="5.0" />
+               </HBox.margin>
              </VBox>
              <ImageView fx:id="iconPop" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="popIcon" HBox.hgrow="NEVER">
                 <HBox.margin>
-                   <Insets top="10.0" />
+                   <Insets top="20.0" />
                 </HBox.margin>
              </ImageView>
+            <padding>
+               <Insets top="5.0" />
+            </padding>
           </HBox>
           <HBox prefHeight="70.0" prefWidth="275.0">
-             <VBox prefHeight="100.0" prefWidth="176.0" spacing="10.0">
+             <VBox prefHeight="100.0" prefWidth="176.0" spacing="5.0">
                 <padding>
                    <Insets top="10.0" />
                 </padding>
                 <Text fx:id="siteText" strokeType="OUTSIDE" strokeWidth="0.0" text="Sites:" />
                 <Text fx:id="buildingsText" strokeType="OUTSIDE" strokeWidth="0.0" text="Buildings:" />
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
              </VBox>
              <ImageView fx:id="iconHome" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
                 <HBox.margin>
-                   <Insets top="10.0" />
+                   <Insets top="15.0" />
                 </HBox.margin>
              </ImageView>
+            <VBox.margin>
+               <Insets />
+            </VBox.margin>
+            <padding>
+               <Insets top="5.0" />
+            </padding>
           </HBox>
           <HBox prefHeight="100.0" prefWidth="200.0">
              <VBox prefHeight="100.0" prefWidth="176.0" spacing="30.0">
@@ -59,7 +72,7 @@
                 </padding>
                 <Text fx:id="strengText" strokeType="OUTSIDE" strokeWidth="0.0" text="Streng:">
                   <VBox.margin>
-                     <Insets top="2.0" />
+                     <Insets top="5.0" />
                   </VBox.margin></Text>
              </VBox>
              <ImageView fx:id="iconStreng" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
@@ -67,6 +80,9 @@
                    <Insets top="15.0" />
                 </HBox.margin>
              </ImageView>
+            <VBox.margin>
+               <Insets top="10.0" />
+            </VBox.margin>
           </HBox>
        </VBox>
         <Button fx:id="closeContactDetailComponentButton" layoutX="324.0" layoutY="8.0" mnemonicParsing="false" onAction="#closeContactDetailsComponent" prefHeight="50.0" prefWidth="50.0" styleClass="closeWindowButton" />

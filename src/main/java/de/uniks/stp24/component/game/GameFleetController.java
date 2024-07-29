@@ -47,7 +47,7 @@ public class GameFleetController extends Pane {
     public void init(){
         travelTimeline.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
             fleetCoordinationService.inGameController.removeFogFromShape(
-                    new Circle(this.getLayoutX() + Constants.FLEET_HW/2 + 10, this.getLayoutY() + Constants.FLEET_HW/2 + 15, collisionCircle.getRadius())
+                    new Circle(this.getLayoutX() + Constants.FLEET_HW/2 + 10, this.getLayoutY() + Constants.FLEET_HW/2 + 15, collisionCircle.getRadius()/2)
             );
         });
     }

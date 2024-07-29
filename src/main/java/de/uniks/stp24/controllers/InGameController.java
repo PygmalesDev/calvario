@@ -586,50 +586,45 @@ public class InGameController extends BasicController {
             isle.applyIcon(false);
             isle.applyEmpireInfo();
 
-//            this.fogOfWar.changeFog(new Circle(isle.getPosX() + ISLAND_WIDTH / 2 * islandScale + 17,
-//                    isle.getPosY() + ISLAND_HEIGHT / 2 * islandScale + 7,
-//                    islandCollisionRadius * islandScale),
-//                    randomizeExtraFog(isle));
-
-            this.fogOfWar.changeFog(new Circle(isle.getPosX() + ISLAND_WIDTH / 2 * islandScale + 17,
-                            isle.getPosY() + ISLAND_HEIGHT / 2 * islandScale + 7,
-                            islandCollisionRadius * islandScale),
-                    null);
+            this.fogOfWar.removeShapesFromFog(new Circle(isle.getPosX() + ISLAND_WIDTH / 2 * islandScale + 17,
+                    isle.getPosY() + ISLAND_HEIGHT / 2 * islandScale + 7,
+                    islandCollisionRadius),
+                    randomFogAroundIsland(isle));
 
             this.updateFog();
         }
     }
 
     public void removeFogFromShape(Shape shape) {
-        this.fogOfWar.changeFog(shape, null);
+        this.fogOfWar.removeShapesFromFog(shape);
         this.updateFog();
     }
 
-    public Shape randomizeExtraFog(IslandComponent isle) {
-        Shape toAddShape = null;
+    public Shape randomFogAroundIsland(IslandComponent isle) {
+        Shape toRemoveShape = null;
 
-        int count = 50;
-        double radius;
-        double distance;
+        int count = random.nextInt(30, 50);
+        int xRadius;
+        int yRadius;
+        int distance;
         double angle;
+        Ellipse ellipse;
 
         for (int i = 0; i < count; i++) {
-            angle = (random.nextInt(360)-90)*Math.PI/180;
-            radius = random.nextInt(30, 75);
-            distance = random.nextInt(150, 250);
+            angle = random.nextInt(360)*Math.PI/180;
+            xRadius =  random.nextInt(25, 50);
+            yRadius =  random.nextInt(25, 50);
+            distance =  random.nextInt(125, 150);
 
-            Circle circle = new Circle(
-                    isle.getPosX() + ISLAND_WIDTH/2 + (ISLAND_WIDTH/2+ distance)*Math.cos(angle),
-                    isle.getPosY() + ISLAND_HEIGHT/2 + (ISLAND_WIDTH/2+ distance)*Math.sin(angle),
-                    radius);
+            ellipse = new Ellipse(
+                    isle.getPosX() + ISLAND_WIDTH/2 * islandScale + 17 +  distance*Math.cos(angle),
+                    isle.getPosY() + ISLAND_HEIGHT/2 * islandScale + 7 + distance*Math.sin(angle),
+                    xRadius, yRadius);
 
-            if (Objects.nonNull(toAddShape))
-                toAddShape = Shape.union(toAddShape, circle);
-            else
-                toAddShape = circle;
+            toRemoveShape = Objects.nonNull(toRemoveShape) ? Shape.union(toRemoveShape, ellipse) : ellipse;
         }
 
-        return toAddShape;
+        return toRemoveShape;
     }
 
     public void showInfo(MouseEvent event) {

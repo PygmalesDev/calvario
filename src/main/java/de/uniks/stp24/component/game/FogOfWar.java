@@ -23,7 +23,6 @@ public class FogOfWar {
     Shape originalFog;
     Shape currentFog;
     Shape removedFog;
-    Shape addedFog;
 
     @Inject
     public FogOfWar() {
@@ -43,36 +42,26 @@ public class FogOfWar {
         this.updateFog();
     }
 
-    public void changeFog(Shape toRemove, Shape toAdd) {
-        if (Objects.nonNull(toRemove))
-            removeFromFog(toRemove);
-
-        if (Objects.nonNull(toAdd))
-            addToFog(toAdd);
+    public void removeShapesFromFog(Shape... toRemoves) {
+        for (Shape shape : toRemoves) {
+            this.updateRemovedFog(shape);
+        }
 
         this.updateFog();
     }
 
-    private void removeFromFog(Shape toRemove) {
-        if (Objects.nonNull(this.removedFog))
-            this.removedFog = Shape.union(this.removedFog, toRemove);
-        else
-            this.removedFog = toRemove;
-    }
-
-    private void addToFog(Shape toAdd) {
-        if (Objects.nonNull(this.addedFog))
-            this.addedFog = Shape.union(this.addedFog, toAdd);
-        else
-            this.addedFog = toAdd;
+    private void updateRemovedFog(Shape shape) {
+        if (Objects.nonNull(shape)) {
+            if (Objects.nonNull(this.removedFog))
+                this.removedFog = Shape.union(this.removedFog, shape);
+            else
+                this.removedFog = shape;
+        }
     }
 
     private void updateFog() {
         if (Objects.nonNull(this.removedFog))
             this.currentFog = Shape.subtract(this.originalFog, this.removedFog);
-
-        if (Objects.nonNull(this.addedFog))
-            this.currentFog = Shape.union(this.originalFog, this.addedFog);
 
         this.currentFog.setFill(this.fogPattern);
 //        ColorAdjust colorAdjust = new ColorAdjust();

@@ -232,9 +232,6 @@ public class InGameController extends BasicController {
         empireID = tokenStorage.getEmpireId();
         System.out.printf("GAME ID: %s\nEMPIRE ID: %s\n", gameID, empireID);
 
-        System.out.println("GAME ID " + gameID);
-        System.out.println("EMPIRE ID " + empireID);
-
         GameStatus gameStatus = inGameService.getGameStatus();
         PropertyChangeListener callHandlePauseChanged = this::handlePauseChanged;
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
@@ -251,6 +248,13 @@ public class InGameController extends BasicController {
         }
 
         for (int i = 0; i <= 16; i++) this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
+        subscriber.subscribe(gameSystemsApiService.getSystems(tokenStorage.getGameId()),
+                islands -> {
+                    SystemDto system = islands[0];
+                    Island island = islandsService.getIsland(system._id());
+                    islandAttributes.setIsland(island);
+                    tokenStorage.setIsland(island);
+                });
     }
 
     /*

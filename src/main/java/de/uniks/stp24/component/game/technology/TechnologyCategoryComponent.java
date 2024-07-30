@@ -1,15 +1,14 @@
 package de.uniks.stp24.component.game.technology;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.dto.EmpireDto;
-import de.uniks.stp24.model.Jobs;
+import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TechnologyService;
-import de.uniks.stp24.ws.EventListener;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,7 +34,6 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -91,6 +89,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     ObservableList<TechnologyExtended> unlockedTechnologies = FXCollections.observableArrayList();
     ObservableList<TechnologyExtended> researchTechnologies = FXCollections.observableArrayList();
+    ObservableList<ObservableList<TechnologyExtended>> unlockedAndResearchList = FXCollections.observableArrayList();
 
     private Pane parent;
 
@@ -101,8 +100,6 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @SubComponent
     public ResearchJobComponent researchJobComponent;
 
-    @Inject
-    EventListener eventListener;
 
 
     boolean societyJobRunning = false;
@@ -114,35 +111,42 @@ public class TechnologyCategoryComponent extends AnchorPane {
     private TechnologyExtended technology;
     public TechnologyOverviewComponent technologyOverviewComponent;
 
-    public String lastUpdate = "";
+    @Inject
+    JobsService jobsService;
 
     @Inject
     public TechnologyCategoryComponent() {
     }
 
     public void updateTechnologies() {
-        ObservableList<ObservableList<TechnologyExtended>> unlockedAndResearchList = technologyService.getUnlockedAndResearch(technologieCategoryName);
+        System.out.println("Update Techs");
+        unlockedAndResearchList = technologyService.getUnlockedAndResearch(technologieCategoryName);
+
+        unlockedTechnologies.clear();
+        researchTechnologies.clear();
 
         unlockedTechnologies = unlockedAndResearchList.getFirst();
         researchTechnologies = unlockedAndResearchList.getLast();
-    }
 
-    public void createEmpireListener() {
-        this.subscriber.subscribe(this.eventListener
-                        .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
-                event -> {
-                    if (!lastUpdate.equals(event.data().updatedAt())) {
-                        System.out.println(Arrays.toString(event.data().technologies()));
-                    }
-                },
-                error -> System.out.println("errorListener: " + error)
-        );
+        unlockedListView.setItems(unlockedTechnologies);
+        researchListView.setItems(researchTechnologies);
     }
 
     @OnInit
     public void init() {
-        createEmpireListener();
+//        technologyService.createEmpireListener(this::updateTechnologies);
         researchJobComponent.setTechnologyCategoryComponent(this);
+    }
+
+    @OnInit
+    public void loadJobFinishers() {
+        this.jobsService.onJobsLoadingFinished("technology", job ->
+                this.jobsService.onJobCompletion(job._id(), this::setJobFinisher));
+    }
+
+    public void setJobFinisher(Job job) {
+        updateTechnologies();
+        handleJobCompleted(job);
     }
 
 
@@ -162,6 +166,8 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
         unlockedListView.getItems().clear();
         researchListView.getItems().clear();
+
+        technologyService.getUnlockedAndResearchList().clear();
     }
 
     public void close() {
@@ -263,7 +269,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     }
 
-    public void handleJobCompleted(Jobs.Job job) {
+    public void handleJobCompleted(Job job) {
         switch (job._id()) {
             case "society" -> societyJobRunning = false;
             case "engineering" -> engineeringJobRunning = false;

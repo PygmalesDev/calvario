@@ -23,6 +23,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
@@ -87,15 +88,13 @@ public class ResearchJobComponent extends AnchorPane {
     @Named("technologiesResourceBundle")
     public ResourceBundle technologiesResourceBundle;
 
-    public final ObservableList<Jobs.Job> jobList = FXCollections.observableArrayList();
+    public ObservableList<Jobs.Job> jobList = FXCollections.observableArrayList();
     private TechnologyCategoryComponent technologyCategoryComponent;
 
     public final ObservableList<TechnologyExtended> technologies = FXCollections.observableArrayList();
 
     ObservableList<Effect> description = FXCollections.observableArrayList();
     Provider<TechnologyCategoryDescriptionSubComponent> provider = () -> new TechnologyCategoryDescriptionSubComponent(variablesResourceBundle);
-
-    private boolean isJobListInitialized = false;
     private boolean isTechnologiesListInitialized = false;
 
     @Inject
@@ -124,11 +123,10 @@ public class ResearchJobComponent extends AnchorPane {
 
     }
 
+    @OnInit
     public void initializeJobList() {
-        if (!isJobListInitialized) {
-            jobList.addAll(jobsService.getJobObservableListOfType("technology"));
-            isJobListInitialized = true;
-        }
+        this.jobsService.onJobsLoadingFinished(() ->
+                this.jobList = jobsService.getJobObservableListOfType("technology"));
     }
 
     private void initializeTechnologiesList() {
@@ -190,10 +188,10 @@ public class ResearchJobComponent extends AnchorPane {
 
     public void setEffectListView() {
         if (technologyCategoryComponent.getTechnology() != null) {
-            description.clear();
-            description.addAll(technologyCategoryComponent.getTechnology().effects());
             technologyEffectsListView.getItems().clear();
             technologyEffectsListView.setItems(description);
+            description.clear();
+            description.addAll(technologyCategoryComponent.getTechnology().effects());
             technologyEffectsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
         }
     }
@@ -205,12 +203,19 @@ public class ResearchJobComponent extends AnchorPane {
         setVisible(false);
     }
 
+    @OnInit
+    public void setJobFinishers() {
+        this.jobsService.onJobsLoadingFinished("technology", this.technologyCategoryComponent::handleJobCompleted);
+    }
+
 
     public void handleJob(TechnologyExtended technology) {
         setJobDescription(technology);
         subscriber.subscribe(jobsService.beginJob(Jobs.createTechnologyJob(technology.id())), job1 -> {
             jobList.add(job1);
             this.job = job1;
+
+            this.jobsService.onJobCompletion(job1._id(), this::handleJobFinished);
 
             subscriber.subscribe(technologyService.getTechnology(job.technology()), result -> {
                 if (!technologies.contains(result)) {
@@ -244,12 +249,19 @@ public class ResearchJobComponent extends AnchorPane {
     }
 
     public void removeJob() {
-        jobList.remove(job);
         technologies.removeIf(technology -> technology.id().equals(job.technology()));
 
         subscriber.subscribe(jobsService.stopJob(this.job._id()));
         technologyCategoryComponent.handleJobCompleted(job);
     }
 
+    @OnDestroy
+    public void destroy() {
+        if (subscriber != null) subscriber.dispose();
+        jobList.clear();
+        technologies.clear();
+        description.clear();
+        technologyEffectsListView.getItems().clear();
+    }
 
 }

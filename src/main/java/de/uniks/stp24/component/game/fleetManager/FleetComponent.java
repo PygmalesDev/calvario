@@ -23,12 +23,11 @@ public class FleetComponent extends VBox implements ReusableItemComponent<Fleet>
     public Label sizeLabel;
 
 
-    final TokenStorage tokenStorage;
-    final Subscriber subscriber;
-    final FleetService fleetService;
-    final FleetManagerComponent fleetManagerComponent;
-    //final Subscriber subscriber;
-    Fleet fleet;
+    private final TokenStorage tokenStorage;
+    private final Subscriber subscriber;
+    private final FleetService fleetService;
+    private final FleetManagerComponent fleetManagerComponent;
+    private Fleet fleet;
 
     @Inject
     public FleetComponent(FleetManagerComponent fleetManagerComponent, TokenStorage tokenStorage, Subscriber subscriber, FleetService fleetService){

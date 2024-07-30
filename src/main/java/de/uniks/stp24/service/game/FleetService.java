@@ -72,7 +72,7 @@ public class FleetService {
 
     private void updateFleetInGroups(Fleet fleet) {
         this.gameFleets.replaceAll(old -> old.equals(fleet) ? fleet : old);
-        this.empireFleets.get(fleet._id()).replaceAll(old -> old.equals(fleet) ? fleet : old);
+        this.empireFleets.get(fleet.empire()).replaceAll(old -> old.equals(fleet) ? fleet : old);
         this.islandFleets.get(fleet.location()).replaceAll(old -> old.equals(fleet) ? fleet : old);
     }
 
@@ -107,6 +107,12 @@ public class FleetService {
     public ObservableList<Fleet> getEmpireFleets(String empireID) {
         if (!this.empireFleets.containsKey(empireID)) this.empireFleets.put(empireID, FXCollections.observableArrayList());
         return this.empireFleets.get(empireID);
+    }
+
+    public Observable<Fleet> editSizeOfFleet(String shipTypeID, int count, Fleet fleet){
+        Map<String, Integer> newSize = fleet.size();
+        newSize.put(shipTypeID, count);
+        return this.fleetApiService.patchFleet(this.tokenStorage.getGameId(),fleet._id(), new UpdateFleetDTO(fleet.name(), newSize, fleet._public(), fleet._private(), fleet.effects()));
     }
 
     public void dispose() {

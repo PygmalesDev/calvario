@@ -4,6 +4,7 @@ import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Ships;
 import de.uniks.stp24.model.Ships.ShipType;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -40,19 +41,32 @@ public class BlueprintsComponent extends VBox implements ReusableItemComponent<S
     public ImageView defenseImage;
     @FXML
     public Label defenseLabel;
+    @FXML
+    public Button addBlueprintButton;
+
+    private final FleetManagerComponent fleetManagerComponent;
+    private boolean canBeAddedToFleet;
+    private ShipType shipType;
 
     @Inject
-    public BlueprintsComponent() {}
+    public BlueprintsComponent(FleetManagerComponent fleetManagerComponent, boolean canBeAddedToFleet) {
+        this.fleetManagerComponent = fleetManagerComponent;
+        this.canBeAddedToFleet = canBeAddedToFleet;
+    }
 
     @Override
     public void setItem(@NotNull ShipType shipType) {
-        blueprintTypeLabel.setText(shipType._id());
-        healthLabel.setText(String.valueOf(shipType.health()));
-        timeLabel.setText(String.valueOf(shipType.build_time()));
-        speedLabel.setText(String.valueOf(shipType.speed()));
-        attackLabel.setText(String.valueOf(shipType.attack().get("default")));
-        defenseLabel.setText(String.valueOf(shipType.defense().get("default")));
+        this.shipType = shipType;
+        this.blueprintTypeLabel.setText(shipType._id());
+        this.healthLabel.setText(String.valueOf(shipType.health()));
+        this.timeLabel.setText(String.valueOf(shipType.build_time()));
+        this.speedLabel.setText(String.valueOf(shipType.speed()));
+        this.attackLabel.setText(String.valueOf(shipType.attack().get("default")));
+        this.defenseLabel.setText(String.valueOf(shipType.defense().get("default")));
+        this.addBlueprintButton.setVisible(canBeAddedToFleet);
     }
 
-    public void addBlueprint(){}
+    public void addBlueprint(){
+        this.fleetManagerComponent.addBlueprintToFleet(shipType);
+    }
 }

@@ -15,7 +15,7 @@
             <Insets />
          </HBox.margin>
          <Label fx:id="fleetNameLabel" text="FleetName" />
-         <Button fx:id="editFleetButton" mnemonicParsing="false" onAction="#editFleet" text="e" />
+         <Button fx:id="editFleetButton" mnemonicParsing="false" onAction="#editFleet" text="edit" />
       </HBox>
    </HBox>
    <HBox alignment="CENTER_LEFT" spacing="5.0">
@@ -24,7 +24,7 @@
          <font>
             <Font size="15.0" />
          </font></Label>
-      <Button fx:id="deleteFleetButton" mnemonicParsing="false" onAction="#deleteFleet" prefHeight="25.0" prefWidth="25.0" text="d" />
+      <Button fx:id="deleteFleetButton" mnemonicParsing="false" onAction="#deleteFleet" prefHeight="25.0" prefWidth="50.0" text="d" />
    </HBox>
    <padding>
       <Insets bottom="25.0" left="15.0" right="10.0" top="20.0" />

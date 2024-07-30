@@ -37,7 +37,7 @@
             <Tooltip fx:id="tooltip" anchorLocation="WINDOW_TOP_RIGHT" autoFix="false" consumeAutoHidingEvents="false" contentDisplay="RIGHT" hideOnEscape="false" />
          </tooltip></Label>
       <Button fx:id="changeFleetButton" mnemonicParsing="false" onAction="#changeFleet" text="Change Fleet" />
-      <Button fx:id="deleteShipButton" mnemonicParsing="false" onAction="#deleteShip" prefHeight="25.0" prefWidth="25.0" />
+      <Button fx:id="deleteShipButton" mnemonicParsing="false" onAction="#deleteShip" prefHeight="25.0" prefWidth="50.0" text="d" />
    </HBox>
    <padding>
       <Insets bottom="25.0" left="15.0" right="10.0" top="20.0" />

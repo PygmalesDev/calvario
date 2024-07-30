@@ -17,7 +17,7 @@
    </HBox>
    <HBox alignment="CENTER_RIGHT" spacing="5.0">
       <children>
-         <Button fx:id="buildShipButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#buildShip" text="e" />
+         <Button fx:id="buildShipButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#buildShip" text="build" />
       </children>
    </HBox>
    <padding>

@@ -6,6 +6,7 @@ import de.uniks.stp24.model.EffectSource;
 import de.uniks.stp24.model.Fleets;
 import de.uniks.stp24.model.Fleets.Fleet;
 import de.uniks.stp24.model.Ships;
+import de.uniks.stp24.model.Ships.ReadShipDTO;
 import de.uniks.stp24.model.Ships.Ship;
 import de.uniks.stp24.model.Ships.ShipType;
 import de.uniks.stp24.service.TokenStorage;
@@ -60,11 +61,13 @@ public class FleetManagerComponent extends AnchorPane {
     @FXML
     public VBox shipsVBox;
     @FXML
-    public ListView<Ship> shipsListView;
+    public ListView<ReadShipDTO> shipsListView;
     @FXML
     public VBox selectIslandVBox;
     @FXML
     public Label islandNameLabel;
+    @FXML
+    public VBox infoButtonVBox;
 
     @Inject
     App app;
@@ -96,8 +99,8 @@ public class FleetManagerComponent extends AnchorPane {
 
     public ObservableList<ShipType> blueprints = FXCollections.observableArrayList();
     public Provider<BlueprintsComponent> blueprintsComponentProvider = BlueprintsComponent::new;
-    public ObservableList<Ship> ships = FXCollections.observableArrayList();
-    public Provider<ShipComponent> shipComponentProvider = ShipComponent::new;
+    public ObservableList<ReadShipDTO> ships = FXCollections.observableArrayList();
+    public Provider<ShipComponent> shipComponentProvider = ()-> new ShipComponent(this, this.tokenStorage, this.subscriber, this.shipService);
 
 
 
@@ -120,34 +123,40 @@ public class FleetManagerComponent extends AnchorPane {
         this.blueprintsListView.setCellFactory(list -> new ComponentListCell<>(app,blueprintsComponentProvider));
         this.shipsListView.setItems(ships);
         this.shipsListView.setCellFactory(list -> new ComponentListCell<>(app,shipComponentProvider));
+        //showBlueprints();
 
-        selectIslandVBox.setVisible(false);
-        blueprintsVBox.setVisible(true);
-        fleetsOverviewVBox.setVisible(true);
-        fleetBuilderVBox.setVisible(false);
-        shipsVBox.setVisible(false);
+        this.infoButtonVBox.setVisible(false);
+        this.selectIslandVBox.setVisible(false);
+        this.blueprintsVBox.setVisible(true);
+        this.fleetsOverviewVBox.setVisible(true);
+        this.fleetBuilderVBox.setVisible(false);
+        this.shipsVBox.setVisible(false);
     }
 
     public void showFleets(){
         this.blueprintsInFleetMap.clear();
         this.blueprintsInFleetList.clear();
+        this.ships.clear();
 
-        selectIslandVBox.setVisible(false);
-        fleetsListView.setVisible(true);
-        fleetBuilderVBox.setVisible(false);
+        this.infoButtonVBox.setVisible(false);
+        this.shipsVBox.setVisible(false);
+        this.blueprintsVBox.setVisible(true);
+        this.selectIslandVBox.setVisible(false);
+        this.fleetsListView.setVisible(true);
+        this.fleetBuilderVBox.setVisible(false);
     }
 
     public void showBlueprints(){
-        blueprints.addAll(shipService.shipTypesAttributes);
-        blueprints.filtered(shipType -> shipType.build_time() > 0);
+        this.blueprints.addAll(shipService.shipTypesAttributes);
+        //blueprints.filtered(shipType -> shipType.build_time() > 0);
 
-        shipsVBox.setVisible(false);
-        blueprintsVBox.setVisible(true);
+        this.shipsVBox.setVisible(false);
+        this.blueprintsVBox.setVisible(true);
     }
 
     public void showShips(){
-        shipsVBox.setVisible(true);
-        blueprintsVBox.setVisible(false);
+        this.shipsVBox.setVisible(true);
+        this.blueprintsVBox.setVisible(false);
     }
 
     public void close() {
@@ -155,34 +164,38 @@ public class FleetManagerComponent extends AnchorPane {
     }
 
     public void editSelectedFleet(Fleet fleet) {
+        this.ships.clear();
         this.subscriber.subscribe(this.shipService.getShipsOfFleet(fleet._id()),
-                dto -> {Arrays.stream(dto).forEach(ship -> {
-                    if(!this.blueprintsInFleetMap.containsKey(ship.type())) {
-                        this.blueprintsInFleetMap.put(ship.type(), 1);
-                    } else {
-                        this.blueprintsInFleetMap.compute(ship.type(), (k, currentCount) -> currentCount + 1);
-                    }
-                });
-            this.blueprintsInFleetList.clear();
-            this.blueprintsInFleetList.addAll(this.blueprintsInFleetMap.entrySet().stream().map(entry ->
-                    new Ships.BlueprintInFleetDto(entry.getKey(), entry.getValue(), fleet)).toList());
-            },
-                error -> System.out.println("Error loading ships of a fleet in FleetManagerComponent:\n" + error.getMessage()));
-
+                dto -> {
+                    Arrays.stream(dto).forEach(ship -> {
+                        this.ships.add(ship);
+                        if (!this.blueprintsInFleetMap.containsKey(ship.type())) {
+                            this.blueprintsInFleetMap.put(ship.type(), 1);
+                        } else {
+                            this.blueprintsInFleetMap.compute(ship.type(), (k, currentCount) -> currentCount + 1);
+                        }
+                    });
+                    this.blueprintsInFleetList.clear();
+                    this.blueprintsInFleetList.addAll(this.blueprintsInFleetMap.entrySet().stream().map(entry ->
+                            new Ships.BlueprintInFleetDto(entry.getKey(), entry.getValue(), fleet)).toList());
+                },
+                error -> System.out.println("Error loading ships of a fleet in FleetManagerComponent:\n" + error.getMessage())
+        );
         showBlueprints();
-        fleetNameText.setText(fleet.name());
-        fleetsListView.setVisible(false);
-        fleetBuilderVBox.setVisible(true);
+        this.infoButtonVBox.setVisible(true);
+        this.fleetNameText.setText(fleet.name());
+        this.fleetsListView.setVisible(false);
+        this.fleetBuilderVBox.setVisible(true);
     }
 
     public void showNextIslandName(){
-        islandNameIndex = islandNameIndex + 1 < islandList.size() ? islandNameIndex + 1 : 0;
-        setIslandNameText(islandNameIndex);
+        this.islandNameIndex = this.islandNameIndex + 1 < this.islandList.size() ? this.islandNameIndex + 1 : 0;
+        setIslandNameText(this.islandNameIndex);
     }
 
     public void showLastIslandName(){
-        islandNameIndex = islandNameIndex - 1 >= 0 ? islandNameIndex - 1 : islandList.size() - 1;
-        setIslandNameText(islandNameIndex);
+        this.islandNameIndex = this.islandNameIndex - 1 >= 0 ? this.islandNameIndex - 1 : this.islandList.size() - 1;
+        setIslandNameText(this.islandNameIndex);
     }
 
     public void setIslandNameText(int index){
@@ -193,9 +206,9 @@ public class FleetManagerComponent extends AnchorPane {
         }
     }
 
-    public void createFleet(){
+    public void createFleet() {
         this.selectIslandVBox.setVisible(true);
-        islandList.addAll(islandsService.getDevIsles());
+        this.islandList.addAll(islandsService.getDevIsles());
         this.islandList = islandList.stream()
                 .filter(shortSystemDto -> shortSystemDto.owner().equals(tokenStorage.getEmpireId()))
                 .collect(Collectors.toList());
@@ -204,16 +217,17 @@ public class FleetManagerComponent extends AnchorPane {
         setIslandNameText(0);
     }
 
-    public void confirmIsland(){
+    public void confirmIsland() {
         Fleets.CreateFleetDTO newFleet = new Fleets.CreateFleetDTO("newFleet",
-                islandList.get(islandNameIndex)._id(), Map.of("explorer", 1),
+                this.islandList.get(islandNameIndex)._id(), Map.of("explorer", 1),
                 new HashMap<>(), new HashMap<>(), new EffectSource[]{});
         this.subscriber.subscribe(this.fleetService.createFleet(this.tokenStorage.getGameId(), newFleet),
                 result -> {
                     this.selectIslandVBox.setVisible(false);
                     editSelectedFleet(result);
                 },
-                error -> System.out.println("Error while creating a new fleet in the FleetManagerComponent:\n" + error.getMessage()));
+                error -> System.out.println("Error while creating a new fleet in the FleetManagerComponent:\n" + error.getMessage())
+        );
     }
 
 }

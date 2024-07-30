@@ -52,7 +52,7 @@
                         </VBox>
                      </children>
                   </StackPane>
-                  <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="100.0">
+                  <VBox fx:id="infoButtonVBox" alignment="TOP_CENTER" prefHeight="400.0" prefWidth="100.0">
                      <children>
                         <ImageView fx:id="shipImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                         <Label fx:id="commandLimitLabel" text="Label" />

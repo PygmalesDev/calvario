@@ -38,13 +38,10 @@ public class FleetComponent extends VBox implements ReusableItemComponent<Fleet>
         this.fleetService = fleetService;
     }
 
-
-
     public void setItem(Fleet fleet){
         fleetNameLabel.setText(fleet.name());
         this.fleet = fleet;
     }
-
 
     public void deleteFleet(){
         this.subscriber.subscribe(this.fleetService.deleteFleet(this.tokenStorage.getGameId(), this.fleet._id()),

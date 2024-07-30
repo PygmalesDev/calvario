@@ -101,6 +101,10 @@ public class ShipService {
                 Jobs.createShipJob(fleetID, shipType, systemID));
     }
 
+    public Observable<Ship> deleteShip(ReadShipDTO readShipDTO){
+        return this.shipsApiService.deleteShip(this.tokenStorage.getGameId(),readShipDTO.fleet(), readShipDTO._id());
+    }
+
 
 }
 

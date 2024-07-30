@@ -2,6 +2,7 @@ package de.uniks.stp24.component.game.fleetManager;
 
 import de.uniks.stp24.model.Ships;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.FleetService;
 import de.uniks.stp24.service.game.ShipService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -36,28 +37,37 @@ public class ShipComponent extends VBox implements ReusableItemComponent<ReadShi
     @FXML
     public Label defenseLabel;
 
-    @Inject
-    ShipService shipService;
-    @Inject
-    Subscriber subscriber;
-    @Inject
-    TokenStorage tokenStorage;
+    private final FleetManagerComponent fleetManagerComponent;
+    private final ShipService shipService;
+    private final Subscriber subscriber;
+    private final TokenStorage tokenStorage;
     private ReadShipDTO readShipDTO;
 
 
     @Inject
-    public ShipComponent(){}
+    public ShipComponent(FleetManagerComponent fleetManagerComponent, TokenStorage tokenStorage, Subscriber subscriber, ShipService shipService){
+        this.fleetManagerComponent = fleetManagerComponent;
+        this.subscriber = subscriber;
+        this.tokenStorage = tokenStorage;
+        this.shipService = shipService;
+    }
+
 
     @Override
     public void setItem(ReadShipDTO shipDTO){
         this.readShipDTO = shipDTO;
         blueprintTypeLabel.setText(shipDTO.type());
         healthLabel.setText(String.valueOf(shipDTO.health()));
-        int shipTypeIndex = shipService.shipTypesAttributes.indexOf(shipDTO.type());
-        ShipType shipType = shipService.shipTypesAttributes.get(shipTypeIndex);
-        speedLabel.setText(String.valueOf(shipType.speed()));
-        attackLabel.setText(String.valueOf(shipType.attack().get("default")));
-        defenseLabel.setText(String.valueOf(shipType.defense().get("default")));
+        ShipType currentShipType = null;
+        System.out.println(shipService.shipTypesAttributes);
+        for(ShipType shipType : shipService.shipTypesAttributes){
+            if (shipType._id().equals(shipDTO.type())) {
+                currentShipType = shipType;
+            }
+        }
+        speedLabel.setText(String.valueOf(currentShipType.speed()));
+        attackLabel.setText(String.valueOf(currentShipType.attack().get("default")));
+        defenseLabel.setText(String.valueOf(currentShipType.defense().get("default")));
     }
 
     public void changeFleet(){}

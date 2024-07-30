@@ -330,6 +330,8 @@ public class InGameController extends BasicController {
         });
         this.createContextMenuButtons();
 
+        draggables.add(technologiesContainer);
+
         // make pop ups draggable
         draggables.add(eventContainer);
         draggables.add(deleteStructureWarningContainer);

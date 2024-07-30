@@ -248,7 +248,7 @@ public class InGameController extends BasicController {
         helpComponent.setInGameController(this);
         clockComponent.setInGameController(this);
         fleetCoordinationService.setInGameController(this);
-        // remove this
+        // todo coordinate with Imran to remove this
 //        contactsOverviewComponent.setInGameController(this);
 //        contactDetailsComponent.setInGameController(this);
 
@@ -352,6 +352,7 @@ public class InGameController extends BasicController {
                 contactsOverviewComponent
         );
 
+        // todo coordinate with Imran to use this
         // for better control
         contactsOverviewComponent.setParents(contextMenuContainer, contactDetailsContainer);
 
@@ -382,6 +383,7 @@ public class InGameController extends BasicController {
 
         this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::teleportFleet);
 
+        // todo coordinate with Imran to remove this
 //        contactDetailsContainer.getChildren().add(contactDetailsComponent);
         contactDetailsContainer.setPickOnBounds(true);
         contactDetailsContainer.setVisible(false);
@@ -402,15 +404,17 @@ public class InGameController extends BasicController {
 
     }
 
+    /*
+     * to avoid that the app.refresh() crashes the map
+     * remove after app is entirely developed
+     */
+
     private void refreshMap() {
         System.out.println("hallo");
         mapGrid.getChildren().clear();
         createMap();
         mapGrid.getChildren().addAll(fleetsOnMap);
-
     }
-
-
 
     @OnKey(code = KeyCode.R, alt = true)
     public void resetDraggables() {
@@ -419,7 +423,6 @@ public class InGameController extends BasicController {
             draggable.setTranslateY(0);
         }
     }
-
 
     @OnKey(code = KeyCode.ESCAPE)
     public void keyPressed() {
@@ -748,7 +751,6 @@ public class InGameController extends BasicController {
             if (child instanceof IslandComponent island) island.collisionCircle.setVisible(!island.collisionCircle.isVisible());
             if (child instanceof GameFleetController fleet) fleet.collisionCircle.setVisible(!fleet.collisionCircle.isVisible());
         });
-
     }
 
     public void resetZoomMouse(@NotNull MouseEvent event) {

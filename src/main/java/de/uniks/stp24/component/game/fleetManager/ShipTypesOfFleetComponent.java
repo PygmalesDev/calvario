@@ -4,6 +4,7 @@ import de.uniks.stp24.component.game.OverviewUpgradeComponent;
 import de.uniks.stp24.model.Fleets;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Ships;
+import de.uniks.stp24.service.game.FleetService;
 import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.ShipService;
@@ -20,6 +21,8 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import java.util.Objects;
 
+import static de.uniks.stp24.model.Fleets.*;
+
 @Component(view = "ShipTypesOfFleet.fxml")
 public class ShipTypesOfFleetComponent extends VBox implements ReusableItemComponent<Ships.BlueprintInFleetDto> {
     @FXML
@@ -28,26 +31,29 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
     public Label sizeLabel;
     @FXML
     public Button buildShipButton;
+    @FXML
+    public Button decrementSizeButton;
+
     public final ResourcesService resourcesService;
     public final ShipService shipService;
+    private final FleetService fleetService;
     public final Subscriber subscriber;
-    @Inject
-    JobsService jobsService;
+    private final FleetManagerComponent fleetManagerComponent;
 
-    final FleetManagerComponent fleetManagerComponent;
     private String shipType;
-    private Fleets.Fleet fleet;
+    private Fleet fleet;
     private enum BUTTON_STATES {ACTIVE, CANCEL_JOB, INACTIVE}
     private ShipTypesOfFleetComponent.BUTTON_STATES currentButtonState = ShipTypesOfFleetComponent.BUTTON_STATES.ACTIVE;
     private boolean updateButtonState = true;
     private ObservableList<Jobs.Job> shipJobs;
 
     @Inject
-    public ShipTypesOfFleetComponent(FleetManagerComponent fleetManagerComponent, ResourcesService resourcesService, ShipService shipService, Subscriber subscriber){
+    public ShipTypesOfFleetComponent(FleetManagerComponent fleetManagerComponent, ResourcesService resourcesService, ShipService shipService, Subscriber subscriber, FleetService fleetService){
         this.fleetManagerComponent = fleetManagerComponent;
         this.resourcesService = resourcesService;
         this.shipService = shipService;
         this.subscriber = subscriber;
+        this.fleetService = fleetService;
     }
 
     @OnInit
@@ -79,7 +85,12 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
 
     public void setItem(Ships.BlueprintInFleetDto blueprintInFleetDto){
         this.typeLabel.setText(blueprintInFleetDto.type());
-        this.sizeLabel.setText(String.valueOf(blueprintInFleetDto.count()));
+        System.out.println(blueprintInFleetDto.fleet().size());
+        int plannedSize = 0;
+        if(blueprintInFleetDto.fleet().size().get(blueprintInFleetDto.type()) != null) {
+            plannedSize = blueprintInFleetDto.fleet().size().get(blueprintInFleetDto.type());
+        }
+        this.sizeLabel.setText(blueprintInFleetDto.count() + "/" + plannedSize);
         this.shipType = blueprintInFleetDto.type();
         this.fleet = blueprintInFleetDto.fleet();
     }
@@ -92,8 +103,33 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
             error -> System.out.println("Error while trying to create a new ship job in ShipTypesOfFleetComponent:\n" + error.getMessage()));
     }
 
-    public void decrementSize(){}
+    public void decrementSize(){
+        int newSize = 0;
+        if(fleet.size().get(shipType) != null) {
+            newSize = fleet.size().get(shipType) > 0 ? fleet.size().get(shipType) - 1 : 0;
+        }
+        editSize(newSize);
+    }
 
-    public void incrementSize(){}
+    public void incrementSize(){
+        int newSize = 1;
+        if(fleet.size().get(shipType) != null) {
+           newSize = fleet.size().get(shipType) + 1;
+        }
+        editSize(newSize);
+    }
+
+    public void editSize(int newSize) {
+        this.subscriber.subscribe(this.fleetService.editSizeOfFleet(shipType, newSize, fleet),
+                dto -> {
+                    this.sizeLabel.setText(this.sizeLabel.getText().replaceAll("/.*", "/" + dto.size().get(shipType)));
+                    if (dto.size().get(shipType) == 0) {
+                        decrementSizeButton.setDisable(true);
+                    } else {
+                        decrementSizeButton.setDisable(false);
+                    }
+                },
+                error -> System.out.println("Error while changing planned Size in the ShipTypesOfFleetComponent:\n" + error.getMessage()));
+    }
 }
 

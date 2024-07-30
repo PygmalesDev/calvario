@@ -14,6 +14,7 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -92,7 +93,7 @@ public class FleetManagerComponent extends AnchorPane {
     private Fleet editedFleet;
 
     public Provider<FleetComponent> fleetComponentProvider = () -> new FleetComponent(this, this.tokenStorage, this.subscriber, this.fleetService);// technologyService, app, technologiesResourceBundle, this.imageCache);
-    public Provider<ShipTypesOfFleetComponent> shipTypesOfFleetComponentProvider = () -> new ShipTypesOfFleetComponent(this, this.resourcesService, this.shipService,this.subscriber);// technologyService, app, technologiesResourceBundle, this.imageCache);
+    public Provider<ShipTypesOfFleetComponent> shipTypesOfFleetComponentProvider = () -> new ShipTypesOfFleetComponent(this, this.resourcesService, this.shipService,this.subscriber, this.fleetService);// technologyService, app, technologiesResourceBundle, this.imageCache);
     public Provider<BlueprintsComponent> blueprintsAddableComponentProvider = () -> new BlueprintsComponent(this, true);
     public Provider<BlueprintsComponent> blueprintsNotAddableComponentProvider = () -> new BlueprintsComponent(this, false);
     public Provider<ShipComponent> shipComponentProvider = ()-> new ShipComponent(this, this.tokenStorage, this.subscriber, this.shipService);
@@ -120,7 +121,8 @@ public class FleetManagerComponent extends AnchorPane {
         this.fleetsListView.setCellFactory(list -> new ComponentListCell<>(app, fleetComponentProvider));
         this.blueprintInFleetListView.setItems(blueprintsInFleetList);
         this.blueprintInFleetListView.setCellFactory(list -> new ComponentListCell<>(app,shipTypesOfFleetComponentProvider));
-        this.blueprintsListView.setItems(blueprints);
+        FilteredList<ShipType> filteredBlueprints = new FilteredList<>(blueprints, shipType -> shipType.build_time() > 0);
+        this.blueprintsListView.setItems(filteredBlueprints);
         this.blueprintsListView.setCellFactory(list -> new ComponentListCell<>(app,blueprintsNotAddableComponentProvider));
         this.shipsListView.setItems(ships);
         this.shipsListView.setCellFactory(list -> new ComponentListCell<>(app,shipComponentProvider));
@@ -148,8 +150,8 @@ public class FleetManagerComponent extends AnchorPane {
     }
 
     public void showBlueprints(){
+        this.blueprints.clear();
         this.blueprints.addAll(shipService.shipTypesAttributes);
-        //blueprints.filtered(shipType -> shipType.build_time() > 0);
 
         this.shipsVBox.setVisible(false);
         this.blueprintsVBox.setVisible(true);
@@ -178,23 +180,29 @@ public class FleetManagerComponent extends AnchorPane {
                             this.blueprintsInFleetMap.compute(ship.type(), (k, currentCount) -> currentCount + 1);
                         }
                     });
+                    System.out.println(fleet.size() + "in editSelectedFleet");
+                    fleet.size().entrySet().forEach(entry ->
+                            blueprintsInFleetMap.putIfAbsent(entry.getKey(), 0)
+                    );
                     this.blueprintsInFleetList.clear();
                     this.blueprintsInFleetList.addAll(this.blueprintsInFleetMap.entrySet().stream().map(entry ->
                             new BlueprintInFleetDto(entry.getKey(), entry.getValue(), fleet)).toList());
+                    showBlueprints();
+                    this.infoButtonVBox.setVisible(true);
+                    this.fleetNameText.setText(fleet.name());
+                    this.fleetsListView.setVisible(false);
+                    this.fleetBuilderVBox.setVisible(true);
                 },
                 error -> System.out.println("Error loading ships of a fleet in FleetManagerComponent:\n" + error.getMessage())
         );
-        showBlueprints();
-        this.infoButtonVBox.setVisible(true);
-        this.fleetNameText.setText(fleet.name());
-        this.fleetsListView.setVisible(false);
-        this.fleetBuilderVBox.setVisible(true);
     }
 
-    public void addBlueprintToFleet(ShipType shipType){
-        if(!this.editedFleet.size().containsKey(shipType._id())) {
+    public void addBlueprintToFleet(ShipType shipType) {
+        if (!this.editedFleet.size().containsKey(shipType._id())) {
             this.blueprintsInFleetList.add(new BlueprintInFleetDto(shipType._id(), 0, this.editedFleet));
-            this.subscriber.subscribe(this.fleetService.editSizeOfFleet(shipType._id(), 1, editedFleet), dto -> {
+            this.subscriber.subscribe(this.fleetService.editSizeOfFleet(shipType._id(), 1, editedFleet),
+                    dto -> {
+                        this.blueprintInFleetListView.refresh();
                     },
                     error -> System.out.println("Error while adding a Blueprint to a FleetManagerComponent:\n" + error.getMessage()));
         }

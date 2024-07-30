@@ -8,6 +8,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Polygon?>
 
+<?import javafx.scene.control.ProgressBar?>
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#setActive" prefHeight="60.0" prefWidth="60.0" type="Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.GameFleetController">
    <Circle fx:id="collisionCircle" fill="#ff000040" layoutX="30.0" layoutY="30.0" radius="20.0" stroke="#ffffff80" strokeType="INSIDE" visible="false" />
    <Circle fx:id="activeCircle" fill="#ff2626" layoutX="30.0" layoutY="30.0" radius="30.0" stroke="TRANSPARENT" strokeType="INSIDE" visible="false">
@@ -33,4 +34,5 @@
             </stops>
          </LinearGradient>
       </fill></Polygon>
+   <ProgressBar fx:id="healthBar" layoutX="14.0" layoutY="55.0" progress="1.0" visible="false" />
 </fx:root>

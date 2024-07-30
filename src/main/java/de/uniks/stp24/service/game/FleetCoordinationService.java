@@ -53,7 +53,10 @@ public class FleetCoordinationService {
             if (this.selectedFleet.equals(fleet)) this.selectedFleet = null;
             else this.selectedFleet = fleet;
         } else this.selectedFleet = fleet;
-        fleet.getFleetInformation();
+        if (!fleet.getFleet().size().isEmpty()) {
+            System.out.println("your fleet has these ships: " + fleet.getFleet().size() );
+            fleet.showHealth();
+        }
     }
 
     public void putFleetOnMap(Fleet fleet) {

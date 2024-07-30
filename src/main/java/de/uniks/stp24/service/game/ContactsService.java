@@ -1,7 +1,6 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.dto.ReadEmpireDto;
-import de.uniks.stp24.dto.ShortSystemDto;
 import de.uniks.stp24.model.Contact;
 import de.uniks.stp24.service.TokenStorage;
 import javafx.collections.FXCollections;
@@ -12,9 +11,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Singleton
 public class ContactsService {
@@ -26,14 +23,14 @@ public class ContactsService {
     TokenStorage tokenStorage;
 
     public ObservableList<Contact> contactCells = FXCollections.observableArrayList();
-    int flagIndex;
-    String empireName;
-    final int imagesCount = 16;
-    int flagImageIndex = 0;
-    final String resourcesPaths = "/de/uniks/stp24/assets/";
-    final String flagsFolderPath = "flags/flag_";
-    final ArrayList<String> flagsList = new ArrayList<>();
     final ArrayList<Contact> seenEnemies = new ArrayList<>();
+//    final int imagesCount = 16;
+//    final ArrayList<String> flagsList = new ArrayList<>();
+//    final String flagsFolderPath = "flags/flag_";
+//    final String resourcesPaths = "/de/uniks/stp24/assets/";
+//    int flagIndex;
+//    String empireName;
+//    int flagImageIndex = 0;
 
     List<String> hiddenEmpires = new ArrayList<>();
 
@@ -41,9 +38,9 @@ public class ContactsService {
 
     @Inject
     ContactsService() {
-        for (int i = 0; i <= imagesCount; i++) {
-            this.flagsList.add(resourcesPaths + flagsFolderPath + i + ".png");
-        }
+//        for (int i = 0; i <= imagesCount; i++) {
+//            this.flagsList.add(resourcesPaths + flagsFolderPath + i + ".png");
+//        }
 
     }
 
@@ -80,7 +77,7 @@ public class ContactsService {
         contactCells.clear();
     }
 
-    public void setEmpiresInfoContacts(){
+    public void getEmpiresInGame(){
         this.hiddenEmpires = new ArrayList<>(islandsService.getEmpiresID());
         this.hiddenEmpires.remove(tokenStorage.getEmpireId());
         System.out.println("not discovered yet " + this.hiddenEmpires);

@@ -223,6 +223,7 @@ public class InGameController extends BasicController {
     final PopupBuilder popupHelpWindow = new PopupBuilder();
 
     final ArrayList<Node> draggables = new ArrayList<>();
+    final ArrayList<GameFleetController> fleetsOnMap = new ArrayList<>();
 
 
     @OnRender
@@ -275,7 +276,7 @@ public class InGameController extends BasicController {
         }
 
         for (int i = 0; i <= 16; i++) this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
-        contactService.setEmpiresInfoContacts();
+        contactService.getEmpiresInGame();
     }
 
     /*
@@ -336,6 +337,8 @@ public class InGameController extends BasicController {
         overviewContainer.getChildren().add(overviewUpgradeComponent);
         islandClaimingContainer.getChildren().add(this.islandClaimingComponent);
         islandClaimingContainer.setVisible(false);
+        this.group.getChildren().add(this.fleetCreationComponent);
+        this.fleetCreationComponent.setVisible(false);
 
         technologiesComponent.setContainer(contextMenuContainer);
 
@@ -403,6 +406,8 @@ public class InGameController extends BasicController {
         System.out.println("hallo");
         mapGrid.getChildren().clear();
         createMap();
+        mapGrid.getChildren().addAll(fleetsOnMap);
+
     }
 
 
@@ -631,12 +636,7 @@ public class InGameController extends BasicController {
                     selected.setHealth(10);
                     islandsService.getSystemAggregate(this.tokenStorage.getEmpireId(), "system.max_health",selected.getIsland().id());
                     islandsService.getSystemAggregate(this.tokenStorage.getEmpireId(), "system.defense",selected.getIsland().id());
-
-
-
-
                 }
-
                 // Show island claiming scroll
             } else if (!this.tokenStorage.isSpectator()) {
                 if (Objects.nonNull(selectedIsland)) selectedIsland.showUnshowRudder();
@@ -661,6 +661,7 @@ public class InGameController extends BasicController {
     }
 
     public void setFleetOnMap(GameFleetController fleet) {
+        if(!this.fleetsOnMap.contains(fleet)) this.fleetsOnMap.add(fleet);
         this.mapGrid.getChildren().add(fleet);
     }
 

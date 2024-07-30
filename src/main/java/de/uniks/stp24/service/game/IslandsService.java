@@ -413,7 +413,7 @@ public class IslandsService extends BasicService {
               else if (aggregate.contains("defense")) islandComponentMap.get(system).setMaxDefense(result.total());
               //System.out.println("your max health: " + result.total());
           },
-          error -> System.out.printf("Caught an error while refreshing colonized systems list in Islands Service:\n %s", error.getMessage())
+          error -> System.out.printf("Caught an error while getting health/defense in Islands Service:\n %s", error.getMessage())
         );
     }
 

@@ -52,7 +52,6 @@ public class ContactsComponent extends StackPane {
 
         this.contactsListView.setOnMouseClicked(event -> {
             Contact contact = this.contactsListView.getSelectionModel().getSelectedItem();
-            System.out.println(contact.getEmpireName());
             contactDetailsComponent.openDetail(contact);
           });
 

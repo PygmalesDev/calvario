@@ -86,10 +86,6 @@ public class ContactDetailsComponent extends StackPane {
         buildingsText.setText(resources.getString("buildings") + ": " +
           islandsService.getAllNumberOfBuildings(contact.getEmpireID()));
 
-
-        System.out.println("applying contact: " + contact.getEmpireName());
-
-
     }
 
     public void closeContactDetailsComponent() {
@@ -98,8 +94,9 @@ public class ContactDetailsComponent extends StackPane {
 
     public void openDetail(Contact contact) {
         setContactInformation(contact);
+
         this.getParent().setVisible(true);
-        System.out.println("OPEN DETAILS: ");
+        setVisible(true);
 
     }
 

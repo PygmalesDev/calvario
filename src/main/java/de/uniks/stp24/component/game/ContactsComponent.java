@@ -2,9 +2,8 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.model.Contact;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.ContactsService;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
@@ -34,7 +33,13 @@ public class ContactsComponent extends StackPane {
     @Inject
     ContactsService contactsService;
     @Inject
-    Provider<ContactCell> contactCellProvider;
+    ImageCache imageCache;
+
+    Provider<ContactCell> contactCellProvider = () -> {
+        var cell = new ContactCell(this.imageCache, this.contactDetailsComponent);
+        cell.setOnMouseClicked(event -> contactDetailsComponent.openDetail(cell.getContact()));
+        return cell;
+    };
 
     @Inject
     public ContactsComponent() {
@@ -49,19 +54,12 @@ public class ContactsComponent extends StackPane {
     public void render() {
         this.contactsListView.setItems(this.contactsService.contactCells);
         this.contactsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.contactCellProvider));
-
-        this.contactsListView.setOnMouseClicked(event -> {
-            Contact contact = this.contactsListView.getSelectionModel().getSelectedItem();
-            contactDetailsComponent.openDetail(contact);
-          });
-
     }
 
     public void setParents(Pane ownParent,  Pane detailParent) {
         this.parent = ownParent;
         this.parentDetails = detailParent;
         this.contactDetailsComponent.setParent(detailParent);
-
     }
 
 }

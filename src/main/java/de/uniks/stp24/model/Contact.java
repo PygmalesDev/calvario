@@ -73,12 +73,12 @@ public class Contact {
     }
 
     public int getDiscoveredPopulation() {
-        int discPop = 0;
+        int discoveredPopulation = 0;
         for (String id : discoveredIslands) {
             ShortSystemDto tmp =  mapEmpireDtos.getOrDefault(id,null);
-            if (tmp!=null) discPop+=tmp.population();
+            if (tmp!=null) discoveredPopulation+=tmp.population();
         }
-        return discPop;
+        return discoveredPopulation;
     }
 
     public double getIntel() {

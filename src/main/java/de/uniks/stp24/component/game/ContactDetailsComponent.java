@@ -94,10 +94,8 @@ public class ContactDetailsComponent extends StackPane {
 
     public void openDetail(Contact contact) {
         setContactInformation(contact);
-
         this.getParent().setVisible(true);
         setVisible(true);
-
     }
 
     public void setParent(Pane parent) {
@@ -122,8 +120,5 @@ public class ContactDetailsComponent extends StackPane {
         if (value > 60 && value <= 90) return "high";
         return "exactly";
     }
-
-
-
 
 }

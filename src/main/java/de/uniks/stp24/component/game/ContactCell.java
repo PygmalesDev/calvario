@@ -19,14 +19,15 @@ public class ContactCell extends HBox implements ReusableItemComponent<Contact> 
     @FXML
     ImageView empireFlagImageView;
 
-
-    @Inject
     ImageCache imageCache;
+    ContactDetailsComponent contactDetailsComponent;
 
     private Contact contact;
 
     @Inject
-    public ContactCell() {
+    public ContactCell(ImageCache imageCache, ContactDetailsComponent pane) {
+        this.imageCache = imageCache;
+        this.contactDetailsComponent = pane;
     }
 
     @Override
@@ -34,10 +35,9 @@ public class ContactCell extends HBox implements ReusableItemComponent<Contact> 
         this.contact = contact;
         empireNameText.setText(this.contact.getEmpireName());
         empireFlagImageView.setImage(imageCache.get(this.contact.getEmpireFlag()));
-
     }
 
-    public void openDetail() {
-        System.out.println("empire: " + empireNameText.getText() );
+    public Contact getContact() {
+        return this.contact;
     }
 }

@@ -252,3 +252,82 @@
     -fx-padding: 0;
     -fx-border-width: 0;
 }
+
+.job-research-description-list-view {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-font-size: 14;
+    -fx-pref-height: 65px
+}
+
+.job-research-description-list-view .list-cell {
+    -fx-padding: 2px;
+}
+
+.job-research-description-list-view .list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-image: none;
+}
+
+.job-research-description-list-view .viewport {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.job-research-description-list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+}
+
+/* Stile für die spezifische Scrollbar der ListView mit Klasse 'job-research-description-list-view' */
+.job-research-description-list-view .scroll-bar:vertical .thumb {
+    -fx-background-color: black; /* Farbe der Scroll-Leiste */
+    -fx-background-insets: 0;
+    -fx-background-radius: 2px;
+    -fx-pref-width: 2px;
+    -fx-max-width: 2px
+}
+
+.job-research-description-list-view .scroll-bar:vertical .track {
+    -fx-background-color: transparent; /* Hintergrund der Spur transparent machen */
+}
+
+.job-research-description-list-view .scroll-bar:horizontal .thumb {
+    -fx-background-color: transparent;
+}
+
+.job-research-description-list-view .scroll-bar:vertical,
+.job-research-description-list-view .scroll-bar:horizontal {
+    -fx-pref-width: 2px; /* Breite der vertikalen Scroll-Leiste */
+    -fx-pref-height: 2px; /* Höhe der horizontalen Scroll-Leiste */
+    -fx-background-color: transparent; /* Hintergrund der Scroll-Leiste transparent machen */
+}
+
+.job-research-description-list-view .scroll-bar .increment-button,
+.job-research-description-list-view .scroll-bar .decrement-button,
+.job-research-description-list-view .scroll-bar .increment-arrow,
+.job-research-description-list-view .scroll-bar .decrement-arrow {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-shape: "";
+}
+
+.job-research-description-list-view .scroll-bar .increment-arrow,
+.job-research-description-list-view .scroll-bar .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.job-research-description-list-view .corner {
+    -fx-background-color: transparent;
+    -fx-opacity: 1;
+}
+
+.job-research-description-list-view .viewport {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}

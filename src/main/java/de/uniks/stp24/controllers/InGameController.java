@@ -347,8 +347,6 @@ public class InGameController extends BasicController {
         technologiesComponent.setContainer(technologiesContainer);
         technologiesContainer.setVisible(false);
         technologiesContainer.getChildren().add(technologiesComponent);
-
-        technologyService.initAllTechnologies();
     }
 
     @OnKey(code = KeyCode.R, alt = true)

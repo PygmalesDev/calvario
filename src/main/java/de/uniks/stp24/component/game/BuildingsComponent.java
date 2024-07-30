@@ -67,7 +67,6 @@ public class BuildingsComponent extends AnchorPane {
 
         Island island = this.islandAttributes.getIsland();
 
-
         island.buildings().forEach(building -> this.buildingList.add(new String[]{building, null, ""}));
 
         ObservableList<Jobs.Job> islandJobs = this.jobsService.getObservableListForSystem(island.id()) ;

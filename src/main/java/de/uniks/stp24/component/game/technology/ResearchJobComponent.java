@@ -258,10 +258,6 @@ public class ResearchJobComponent extends AnchorPane {
     @OnDestroy
     public void destroy() {
         if (subscriber != null) subscriber.dispose();
-        jobList.clear();
-        technologies.clear();
-        description.clear();
-        technologyEffectsListView.getItems().clear();
     }
 
 }

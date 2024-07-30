@@ -39,7 +39,7 @@ public class TechnologyService {
     @Inject
     EventListener eventListener;
 
-    String lastUpdate = "";
+    String[] lastUpdate = new String[]{""};
 
     @Inject
     public TechnologyService() {
@@ -49,10 +49,10 @@ public class TechnologyService {
         this.subscriber.subscribe(this.eventListener
                         .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
                 event -> {
-                    if (!lastUpdate.equals(event.data().updatedAt())) {
+                    if (!Arrays.equals(lastUpdate, event.data().technologies())) {
                         System.out.println("Technologies: " + Arrays.toString(event.data().technologies()));
                         runnable.run();
-                        lastUpdate = event.data().updatedAt();
+                        lastUpdate = event.data().technologies();
                     }
                 },
                 error -> System.out.println("errorListener: " + error)
@@ -92,9 +92,7 @@ public class TechnologyService {
                     }
                     unlockedList = unlocked;
                     unlockedAndResearchedList.add(unlocked);
-                    subscriber.subscribe(getTechnologies(),
-                            techList -> {
-                                for (TechnologyExtended tech : techList) {
+                                for (TechnologyExtended tech : technologiesList) {
                                     if (unlocked.stream().noneMatch(technology -> technology.id().equals(tech.id())) && research.stream().noneMatch(techEx -> techEx.id().equals(tech.id()))) {
                                         research.add(tech);
                                     }
@@ -102,7 +100,6 @@ public class TechnologyService {
                                 researchList = research;
                                 unlockedAndResearchedList.add(research);
                             }, error -> System.out.println("Error after try to get all technologies"));
-                }, error -> System.out.println("Error after try to get empire because of: " + error.getMessage()));
         return unlockedAndResearchedList;
     }
 

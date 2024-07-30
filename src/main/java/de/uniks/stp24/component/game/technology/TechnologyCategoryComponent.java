@@ -130,11 +130,20 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
         unlockedListView.setItems(unlockedTechnologies);
         researchListView.setItems(researchTechnologies);
+
+        researchListView.setSelectionModel(null);
+        unlockedListView.setSelectionModel(null);
+
+        unlockedListView.setItems(unlockedTechnologies);
+        researchListView.setItems(researchTechnologies);
+
+        unlockedListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
+        researchListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
     }
 
     @OnInit
     public void init() {
-//        technologyService.createEmpireListener(this::updateTechnologies);
+        technologyService.createEmpireListener(this::updateTechnologies);
         researchJobComponent.setTechnologyCategoryComponent(this);
     }
 
@@ -145,7 +154,6 @@ public class TechnologyCategoryComponent extends AnchorPane {
     }
 
     public void setJobFinisher(Job job) {
-        updateTechnologies();
         handleJobCompleted(job);
     }
 
@@ -196,15 +204,6 @@ public class TechnologyCategoryComponent extends AnchorPane {
         this.technologieCategoryName = category;
 
         updateTechnologies();
-
-        researchListView.setSelectionModel(null);
-        unlockedListView.setSelectionModel(null);
-
-        unlockedListView.setItems(unlockedTechnologies);
-        researchListView.setItems(researchTechnologies);
-
-        unlockedListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
-        researchListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
 
         return this;
     }

@@ -37,7 +37,7 @@ public class TechnologyService {
     ObservableList<ObservableList<TechnologyExtended>> unlockedAndResearchedList = FXCollections.observableArrayList();
     List<TechnologyExtended> technologiesList = new ArrayList<>();
     @Inject
-    EventListener eventListener;
+    public EventListener eventListener;
 
     String[] lastUpdate = new String[]{""};
 

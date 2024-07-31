@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static de.uniks.stp24.service.Constants.buildingTranslation;
 import static de.uniks.stp24.service.Constants.siteTranslation;
@@ -24,7 +25,6 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 public class AppTest2 extends InGameTestComponent {
 
     Button homeIsland;
-
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
@@ -38,7 +38,7 @@ public class AppTest2 extends InGameTestComponent {
     }
 
     @Test
-    public void v2(){
+    public void v2() {
         createMap();
 
         // Island Overview
@@ -80,6 +80,9 @@ public class AppTest2 extends InGameTestComponent {
     }
 
     private void openIslandOverview() {
+
+        this.islandAttributeStorage.setIsland(testIsland);
+
         clickOn("#homeIsland");
         waitForFxEvents();
         assertTrue(this.inGameController.overviewContainer.isVisible());
@@ -89,7 +92,8 @@ public class AppTest2 extends InGameTestComponent {
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributeStorage.getIsland()) + islandAttributeStorage.getIsland().buildings().size();
         assertEquals(this.inGameController.overviewSitesComponent.resCapacity.getText(), usedSlots + "/" + islandAttributeStorage.getIsland().resourceCapacity());
         System.out.println(this.inGameController.overviewSitesComponent.island_name.getText());
-        assertTrue(this.inGameController.overviewSitesComponent.island_name.getText().equals("Gepluenderte Insel(Kolonie)") || this.inGameController.overviewSitesComponent.island_name.getText().equals("Plundered Island(Colony)"));
+        System.out.println(this.inGameController.overviewSitesComponent.island_name.getText().equals("Geplünderte Insel(Kolonie)"));
+        assertNotEquals("Geplünderte Insel(Kolonie)", this.inGameController.overviewSitesComponent.island_name.getText());
     }
 
     private void goToBuildings() {

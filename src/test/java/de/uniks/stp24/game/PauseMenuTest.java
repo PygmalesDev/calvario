@@ -216,6 +216,7 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.technologiesComponent.technologyCategoryComponent.subscriber = this.subscriber;
         this.inGameController.technologiesComponent.technologyService.subscriber = this.subscriber;
         this.inGameController.technologiesComponent.subscriber = this.subscriber;
+        this.technologyService.tokenStorage = this.tokenStorage;
 
         coolerBubbleComponent.subscriber = this.subscriber;
         this.inGameController.coolerBubbleComponent = coolerBubbleComponent;
@@ -254,6 +255,7 @@ public class PauseMenuTest extends ControllerTest {
         this.jobsService.jobsApiService = this.jobsApiService;
         this.jobsService.tokenStorage = this.tokenStorage;
         this.jobsService.eventListener = this.eventListener;
+        this.technologyService.eventListener = this.eventListener;
         this.buildingPropertiesComponent.propertiesJobProgressComponent = this.propertiesJobProgressComponent;
         this.sitePropertiesComponent.siteJobProgress = this.propertiesJobProgressComponent;
 

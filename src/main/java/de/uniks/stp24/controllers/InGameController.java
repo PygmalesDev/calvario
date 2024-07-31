@@ -248,13 +248,7 @@ public class InGameController extends BasicController {
         }
 
         for (int i = 0; i <= 16; i++) this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
-        subscriber.subscribe(gameSystemsApiService.getSystems(tokenStorage.getGameId()),
-                islands -> {
-                    SystemDto system = islands[0];
-                    Island island = islandsService.getIsland(system._id());
-                    islandAttributes.setIsland(island);
-                    tokenStorage.setIsland(island);
-                });
+
     }
 
     /*
@@ -349,6 +343,14 @@ public class InGameController extends BasicController {
         technologiesComponent.setContainer(technologiesContainer);
         technologiesContainer.setVisible(false);
         technologiesContainer.getChildren().add(technologiesComponent);
+
+        subscriber.subscribe(gameSystemsApiService.getSystems(tokenStorage.getGameId()),
+                islands -> {
+                    SystemDto system = islands[0];
+                    Island island = islandsService.getIsland(system._id());
+                    islandAttributes.setIsland(island);
+                    tokenStorage.setIsland(island);
+                }, error -> System.out.println("Error try to get Systems because: " + error.getMessage()));
     }
 
     @OnKey(code = KeyCode.R, alt = true)
@@ -664,7 +666,7 @@ public class InGameController extends BasicController {
             inGameService.showOnly(overviewSitesComponent.sitesContainer, overviewSitesComponent.buildingsComponent);
             overviewSitesComponent.setOverviewSites();
             // update island name
-            if (!this.islandAttributes.getIsland().name().isEmpty())
+            if (Objects.nonNull(this.islandAttributes.getIsland()) && !this.islandAttributes.getIsland().name().isEmpty())
                 overviewSitesComponent.inputIslandName.setText(this.islandAttributes.getIsland().name());
     }
 

@@ -19,7 +19,6 @@ import de.uniks.stp24.dto.AggregateResultDto;
 import de.uniks.stp24.dto.EffectDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.GameStatus;
-import de.uniks.stp24.model.Technology;
 import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.ImageCache;
@@ -29,24 +28,19 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
-import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.controller.Subscriber;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 public class InGameTestInitializer extends ControllerTest {
@@ -237,6 +231,9 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.technologiesComponent.technologyCategoryComponent.subscriber = this.subscriber;
         this.inGameController.technologiesComponent.technologyService.subscriber = this.subscriber;
         this.inGameController.technologiesComponent.subscriber = this.subscriber;
+        this.inGameController.technologyService.eventListener = this.eventListener;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.jobsService = new JobsService();
+        this.technologyService.tokenStorage = this.tokenStorage;
 
         this.inGameController.coolerBubbleComponent = this.coolerBubbleComponent;
         this.inGameController.coolerBubbleComponent.subscriber = this.coolerBubbleComponent.subscriber;
@@ -330,6 +327,7 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.contextMenuButtons = new HBox();
         this.islandsService.tokenStorage = new TokenStorage();
         this.islandsService.gameSystemsService = gameSystemsApiService;
+
     }
 
     public void clearStyleSheets(){

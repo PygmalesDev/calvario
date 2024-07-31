@@ -236,21 +236,23 @@ public class OverviewSitesComponent extends AnchorPane {
     }
 
     public void setOverviewSites() {
-        islandFlag.setStyle("-fx-background-image: url('" + inGameController.flagsPath.get(islandAttributes.getIsland().flagIndex()) +"');" +
-                "-fx-background-size: 100% 100%;" + "-fx-background-repeat: no-repeat;");
-        showBuildings();
+        if (Objects.nonNull(islandAttributes.getIsland())) {
+            islandFlag.setStyle("-fx-background-image: url('" + inGameController.flagsPath.get(islandAttributes.getIsland().flagIndex()) + "');" +
+                    "-fx-background-size: 100% 100%;" + "-fx-background-repeat: no-repeat;");
+            showBuildings();
 
-        this.inputIslandName.setText(this.islandsService.getIslandName(this.islandAttributes.getIsland().id()));
-        this.inputIslandName.setDisable(true);
-        this.isNameEditable = false;
-        this.inputIslandName.setEditable(false);
-        this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
+            this.inputIslandName.setText(this.islandsService.getIslandName(this.islandAttributes.getIsland().id()));
+            this.inputIslandName.setDisable(true);
+            this.isNameEditable = false;
+            this.inputIslandName.setEditable(false);
+            this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
 
-        upgradeButton.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
-        updateResCapacity();
+            upgradeButton.setDisable(!Objects.equals(islandAttributes.getIsland().owner(), inGameController.tokenStorage.getEmpireId()));
+            updateResCapacity();
 
-        island_name.setText(islandAttributes.getIslandTypeTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");
-        crewCapacity.setText(String.valueOf(islandAttributes.getIsland().crewCapacity()));
+            island_name.setText(islandAttributes.getIslandTypeTranslated() + "(" + islandAttributes.getUpgradeTranslation(islandAttributes.getIsland().upgradeLevel()) + ")");
+            crewCapacity.setText(String.valueOf(islandAttributes.getIsland().crewCapacity()));
+        }
     }
 
     public void setIslandName() {

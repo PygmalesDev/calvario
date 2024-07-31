@@ -25,6 +25,8 @@ public class TestButtons extends IslandOverviewTestComponent{
 
     @Test
     public void closeUpgrade() throws Exception {
+
+        islandAttributeStorage.setIsland(testIsland);
         waitForFxEvents();
         Node upgradeButton = lookup("#upgradeButton").query();
         clickOn(upgradeButton);
@@ -46,6 +48,8 @@ public class TestButtons extends IslandOverviewTestComponent{
 
     @Test
     public void goBackFromUpgrades() {
+        islandAttributeStorage.setIsland(testIsland);
+
         waitForFxEvents();
         Node upgradeButton = lookup("#upgradeButton").query();
         clickOn(upgradeButton);

@@ -98,9 +98,9 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
         ArrayList<Jobs.Job> jobList = new ArrayList<>();
         EffectSourceParentDto effectSourceParentDto = new EffectSourceParentDto(new EffectSourceDto[3]);
 
-        ExplainedVariableDTO explainedVariableDTO1 = new ExplainedVariableDTO("buildings.church.build_time", 1, new ArrayList<Sources>(), 1);
-        ExplainedVariableDTO explainedVariableDTO2 = new ExplainedVariableDTO("buildings.church.cost.energy",1, new ArrayList<Sources>(), 1);
-        ExplainedVariableDTO explainedVariableDTO3 = new ExplainedVariableDTO("buildings.church.upkeep.minerals", 1, new ArrayList<Sources>(), 1);
+        ExplainedVariableDTO explainedVariableDTO1 = new ExplainedVariableDTO("buildings.church.build_time", 1, new ArrayList<>(), 1);
+        ExplainedVariableDTO explainedVariableDTO2 = new ExplainedVariableDTO("buildings.church.cost.energy",1, new ArrayList<>(), 1);
+        ExplainedVariableDTO explainedVariableDTO3 = new ExplainedVariableDTO("buildings.church.upkeep.minerals", 1, new ArrayList<>(), 1);
 
         explainedVariableDTOS.add(explainedVariableDTO1);
         explainedVariableDTOS.add(explainedVariableDTO2);
@@ -117,6 +117,9 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
         this.marketComponent.subscriber = this.subscriber;
         this.inGameController.marketOverviewComponent = this.marketComponent;
         this.marketService.subscriber = this.subscriber;
+
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyService.tokenStorage = this.tokenStorage;
+        doReturn(Observable.just(new SystemDto[]{})).when(this.gameSystemsApiService).getSystems(any());
 
         doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
 

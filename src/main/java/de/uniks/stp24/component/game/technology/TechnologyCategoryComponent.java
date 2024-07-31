@@ -112,7 +112,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
     public TechnologyOverviewComponent technologyOverviewComponent;
 
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
 
     @Inject
     public TechnologyCategoryComponent() {
@@ -175,7 +175,9 @@ public class TechnologyCategoryComponent extends AnchorPane {
         unlockedListView.getItems().clear();
         researchListView.getItems().clear();
 
-        technologyService.getUnlockedAndResearchList().clear();
+        if (technologyService.getUnlockedAndResearchList() != null) {
+            technologyService.getUnlockedAndResearchList().clear();
+        }
     }
 
     public void close() {

@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component(view = "Buildings.fxml")
@@ -67,45 +68,47 @@ public class BuildingsComponent extends AnchorPane {
 
         Island island = this.islandAttributes.getIsland();
 
-        island.buildings().forEach(building -> this.buildingList.add(new String[]{building, null, ""}));
+        if (Objects.nonNull(island)) {
+            island.buildings().forEach(building -> this.buildingList.add(new String[]{building, null, ""}));
 
-        ObservableList<Jobs.Job> islandJobs = this.jobsService.getObservableListForSystem(island.id()) ;
-        FilteredList<Jobs.Job> buildingJobs = islandJobs.filtered(job -> job.type().equals("building"));
-        buildingJobs.forEach(job -> {
-                    if (islandJobs.indexOf(job) > 0)
-                        this.buildingList.add(new String[]{job.building(), "on_pause", job._id()});
-                    else this.buildingList.add(new String[]{job.building(), "on_progress", job._id()});
-                });
+            ObservableList<Jobs.Job> islandJobs = this.jobsService.getObservableListForSystem(island.id());
+            FilteredList<Jobs.Job> buildingJobs = islandJobs.filtered(job -> job.type().equals("building"));
+            buildingJobs.forEach(job -> {
+                if (islandJobs.indexOf(job) > 0)
+                    this.buildingList.add(new String[]{job.building(), "on_pause", job._id()});
+                else this.buildingList.add(new String[]{job.building(), "on_progress", job._id()});
+            });
 
-        prev.setVisible(currentPage > 0);
+            prev.setVisible(currentPage > 0);
 
-        int pageCapacity = 8;
-        next.setVisible(this.buildingList.size() >= (currentPage + 1) * pageCapacity);
+            int pageCapacity = 8;
+            next.setVisible(this.buildingList.size() >= (currentPage + 1) * pageCapacity);
 
-        int row = 0;
-        int col = 0;
+            int row = 0;
+            int col = 0;
 
-        for (int i = currentPage * pageCapacity; i < this.buildingList.size(); i++) {
-            String[] buildingType = this.buildingList.get(i);
-            Building building = new Building(this, buildingType[0], islandAttributes,
-                    inGameController, buildingType[1], buildingType[2]);
-            buildings.add(building, col, row);
+            for (int i = currentPage * pageCapacity; i < this.buildingList.size(); i++) {
+                String[] buildingType = this.buildingList.get(i);
+                Building building = new Building(this, buildingType[0], islandAttributes,
+                        inGameController, buildingType[1], buildingType[2]);
+                buildings.add(building, col, row);
 
-            if ((i + 1) % 8 == 0) break;
+                if ((i + 1) % 8 == 0) break;
 
-            col++;
-            if (col >= 4) {
-                col = 0;
-                row++;
-                if (row >= 2) break;
+                col++;
+                if (col >= 4) {
+                    col = 0;
+                    row++;
+                    if (row >= 2) break;
+                }
             }
-        }
 
-        if (!isGridPaneFull(currentPage)) {
-            buildings.add(new Building(this, "buildNewBuilding", islandAttributes, inGameController, null, ""), col, row);
-        } else {
-            next.setMouseTransparent(false);
-            next.setVisible(true);
+            if (!isGridPaneFull(currentPage)) {
+                buildings.add(new Building(this, "buildNewBuilding", islandAttributes, inGameController, null, ""), col, row);
+            } else {
+                next.setMouseTransparent(false);
+                next.setVisible(true);
+            }
         }
     }
 
@@ -135,18 +138,18 @@ public class BuildingsComponent extends AnchorPane {
     }
 
     public void goNextSite() {
-        int size = this.buildingList.size();
-        if (isGridPaneFull(currentPage + 1) || (!isGridPaneFull(currentPage + 1) && size % 8 != 0)) {
-            currentPage = currentPage + 1;
-            setGridPane();
-        } else if(!isGridPaneFull(currentPage + 1) && size % 8 == 0){
-            currentPage = currentPage + 1;
-            buildings.getChildren().clear();
-            buildings.add(new Building(this, "buildNewBuilding", islandAttributes, inGameController,
-                    null, ""), 0, 0);
-            prev.setVisible(true);
-            next.setVisible(false);
-        }
+            int size = this.buildingList.size();
+            if (isGridPaneFull(currentPage + 1) || (!isGridPaneFull(currentPage + 1) && size % 8 != 0)) {
+                currentPage = currentPage + 1;
+                setGridPane();
+            } else if (!isGridPaneFull(currentPage + 1) && size % 8 == 0) {
+                currentPage = currentPage + 1;
+                buildings.getChildren().clear();
+                buildings.add(new Building(this, "buildNewBuilding", islandAttributes, inGameController,
+                        null, ""), 0, 0);
+                prev.setVisible(true);
+                next.setVisible(false);
+            }
     }
 
     public void setInGameController(InGameController inGameController){

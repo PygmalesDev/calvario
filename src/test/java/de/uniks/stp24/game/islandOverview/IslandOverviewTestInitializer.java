@@ -252,6 +252,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.islandsService.tokenStorage = new TokenStorage();
         this.islandsService.gameSystemsService = gameSystemsApiService;
 
+        this.technologyService.eventListener = this.eventListener;
+
     }
 
     public void clearStyleSheets() {

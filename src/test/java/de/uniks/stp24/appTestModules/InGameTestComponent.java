@@ -239,7 +239,8 @@ public class InGameTestComponent extends InGameTestInitializer {
                 null,
                 50,
                 50,
-                "testEmpireID"
+                "testEmpireID",
+          100
         );
 
         this.islandAttributeStorage.setIsland(testIsland);

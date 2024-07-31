@@ -20,15 +20,15 @@ import static de.uniks.stp24.model.Fleets.Fleet;
 @Singleton
 public class FleetCoordinationService {
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
-    FleetService fleetService;
+    public FleetService fleetService;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
-    App app;
+    public App app;
     @Inject
-    ContactsService contactsService;
+    public ContactsService contactsService;
 
     private GameFleetController selectedFleet = null;
     public InGameController inGameController;
@@ -94,6 +94,7 @@ public class FleetCoordinationService {
                 if(Objects.nonNull(islandComponent.getIsland().owner())){
                     if (!islandComponent.getIsland().owner().equals(selectedFleet.fleet.empire())){
                         System.out.println("Enemy  detected");
+                        // maybe remove this since refresh will occur after every tick
                         islandsService.refreshListOfColonizedSystems();
                         contactsService.addEnemy(islandComponent.getIsland().owner(), islandComponent.getIsland().id());
                     }

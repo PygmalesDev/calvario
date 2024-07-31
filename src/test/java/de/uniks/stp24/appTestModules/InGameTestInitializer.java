@@ -90,6 +90,12 @@ public class InGameTestInitializer extends ControllerTest {
     VariableDependencyService variableDependencyService;
     @InjectMocks
     ResearchJobComponent researchJobComponent;
+    @Spy
+    FleetService fleetService;
+    @Spy
+    FleetCoordinationService fleetCoordinationService;
+    @Spy
+    FleetApiService fleetApiService;
 
     @InjectMocks
     IslandUpgradesJobProgressComponent jobProgressComponent;
@@ -145,6 +151,8 @@ public class InGameTestInitializer extends ControllerTest {
     CoolerBubbleComponent coolerBubbleComponent;
     @Mock
     AnnouncementsService announcementsService;
+    @InjectMocks
+    ContactsComponent contactsComponent;
 
     final Provider<MarketSeasonComponent> marketSeasonComponentProvider = () -> {
         MarketSeasonComponent comp = new MarketSeasonComponent();
@@ -249,7 +257,11 @@ public class InGameTestInitializer extends ControllerTest {
 
         this.inGameController.contextMenuButtons = new HBox();
         this.islandsService.tokenStorage = new TokenStorage();
-        this.islandsService.gameSystemsService = gameSystemsApiService;
+        this.islandsService.gameSystemsService = this.gameSystemsApiService;
+        this.inGameController.fleetService = this.fleetService;
+        this.inGameController.fleetCoordinationService = this.fleetCoordinationService;
+
+        this.inGameController.contactsOverviewComponent = this.contactsComponent;
     }
 
     public void clearStyleSheets(){

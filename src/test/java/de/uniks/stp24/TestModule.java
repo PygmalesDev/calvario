@@ -45,6 +45,10 @@ public class TestModule {
         return Mockito.mock(GamesApiService.class);
     }
 
+    @Provides
+    @Singleton
+    FleetApiService fleetApiService() {return Mockito.mock(FleetApiService.class);}
+
     /*
     @Provides
     @Singleton

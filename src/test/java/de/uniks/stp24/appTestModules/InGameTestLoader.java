@@ -1,5 +1,6 @@
 package de.uniks.stp24.appTestModules;
 
+import de.uniks.stp24.App;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.*;
@@ -25,6 +26,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 
+import javax.inject.Inject;
 import javax.inject.Provider;
 
 import static org.mockito.Mockito.spy;
@@ -75,6 +77,14 @@ public class InGameTestLoader extends ControllerTest {
     AnnouncementsService announcementsService;
     @Spy
     GameStatus gameStatus;
+    @Spy
+    FleetService fleetService;
+    @Spy
+    FleetCoordinationService fleetCoordinationService;
+    @Spy
+    FleetApiService fleetApiService;
+    @Spy
+    ContactsService contactsService;
 
     @InjectMocks
     protected MarketService marketService;
@@ -140,6 +150,8 @@ public class InGameTestLoader extends ControllerTest {
     protected JobsService jobsService;
     @InjectMocks
     protected CoolerBubbleComponent coolerBubbleComponent;
+    @InjectMocks
+    protected ContactsComponent contactsComponent;
 
     final Provider<ClaimingSiteComponent> claimingComponentProvider = () -> {
         var component = new ClaimingSiteComponent();
@@ -214,6 +226,7 @@ public class InGameTestLoader extends ControllerTest {
         this.inGameController.eventComponent = this.eventComponent;
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.helpComponent = this.helpComponent;
+        this.inGameController.contactsOverviewComponent = this.contactsComponent;
 
         this.coolerBubbleComponent.announcementsService = this.announcementsService;
         this.coolerBubbleComponent.gameResourceBundle = this.gameResourceBundle;
@@ -250,6 +263,12 @@ public class InGameTestLoader extends ControllerTest {
         this.overviewUpgradeComponent.jobProgressComponent = this.islandUpgradesJobProgressComponent;
 
         this.technologyCategoryComponent.provider = this.technologyCategorySubComponentProvider;
+
+        this.fleetService.subscriber = this.subscriber;
+        this.fleetService.eventListener = this.eventListener;
+        this.fleetService.fleetApiService = this.fleetApiService;
+        this.fleetService.tokenStorage = this.tokenStorage;
+
     }
 
     protected void setServices() {
@@ -262,6 +281,8 @@ public class InGameTestLoader extends ControllerTest {
         this.inGameController.lobbyService = this.lobbyService;
         this.inGameController.jobsService = this.jobsService;
         this.inGameController.subscriber = this.subscriber;
+        this.inGameController.fleetService = this.fleetService;
+        this.inGameController.fleetCoordinationService = this.fleetCoordinationService;
 
         this.islandClaimingComponent.componentProvider = this.claimingComponentProvider;
         this.islandClaimingComponent.islandAttributes = this.islandAttributeStorage;
@@ -382,6 +403,12 @@ public class InGameTestLoader extends ControllerTest {
         this.technologyService.subscriber = this.subscriber;
 
         this.technologyOverviewComponent.technologiesResourceBundle = this.technologiesResourceBundle;
+
+        this.fleetCoordinationService.tokenStorage = this.tokenStorage;
+        this.fleetCoordinationService.fleetService = this.fleetService;
+        this.fleetCoordinationService.islandsService = this.islandsService;
+        this.fleetCoordinationService.app = this.app;
+        this.fleetCoordinationService.contactsService = this.contactsService;
     }
 
     protected void clearStyles() {

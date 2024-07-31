@@ -59,6 +59,8 @@ public class FleetService {
     }
 
     private void addFleetToGroups(Fleet fleet) {
+        //Todo: remove print
+        //System.out.println(fleet._id() + ": " + fleet.size() + " size of new added fleet");
         this.gameFleets.add(fleet);
         if (Objects.nonNull(fleet.empire())) {
             if (!this.empireFleets.containsKey(fleet.empire())) this.empireFleets.put(fleet.empire(), FXCollections.observableArrayList());

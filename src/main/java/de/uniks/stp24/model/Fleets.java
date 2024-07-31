@@ -34,6 +34,7 @@ public class Fleets {
             String empire,
             String name,
             String location,
+            Map<String, Integer> size,
             Map<String, Object> _public
     ) {}
 
@@ -55,7 +56,7 @@ public class Fleets {
     ) {}
 
     public static Fleet fleetFromReadDTO(ReadFleetDTO dto) {
-        return new Fleet(dto.createdAt, dto.updatedAt, dto._id, dto.game, dto.empire, dto.name, dto.location, new HashMap<>(),
+        return new Fleet(dto.createdAt, dto.updatedAt, dto._id, dto.game, dto.empire, dto.name, dto.location, dto.size,
                 dto._public, null, null);
     }
 

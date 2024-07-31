@@ -101,6 +101,9 @@ public class VariableDependencyService {
     }
 
 
+    /*
+    Logic for making attributes of ships dependent from Variables
+     */
     public ArrayList<ShipType> createVariableDependencyShipType(){
         ArrayList<ShipType> shipTypesAttributes = new ArrayList<>();
         for (VariablesTree.Node<ExplainedVariableDTO> shipTypeNode : variableService.shipTree.getRoot().getChildren()) {

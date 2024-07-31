@@ -180,6 +180,7 @@ public class FleetManagerComponent extends AnchorPane {
                             this.blueprintsInFleetMap.compute(ship.type(), (k, currentCount) -> currentCount + 1);
                         }
                     });
+                    //Todo: remove print
                     System.out.println(fleet.size() + "in editSelectedFleet");
                     fleet.size().entrySet().forEach(entry ->
                             blueprintsInFleetMap.putIfAbsent(entry.getKey(), 0)

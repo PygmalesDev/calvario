@@ -46,7 +46,8 @@ public class ShipService {
 
     public void initShipTypes(){
         shipTypesAttributes = variableDependencyService.createVariableDependencyShipType();
-        System.out.println(shipTypesAttributes);
+        //Todo: remove print
+        //System.out.println(shipTypesAttributes);
     }
 
     public Map<String, Integer> getNeededResources(String type) {

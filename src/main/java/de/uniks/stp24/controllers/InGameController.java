@@ -410,7 +410,6 @@ public class InGameController extends BasicController {
      */
 
     private void refreshMap() {
-        System.out.println("hallo");
         mapGrid.getChildren().clear();
         createMap();
         mapGrid.getChildren().addAll(fleetsOnMap);
@@ -580,7 +579,9 @@ public class InGameController extends BasicController {
                             case "jobs" -> overviewSitesComponent.showJobs();
                         }
                     }
-                    islandsService.refreshListOfColonizedSystems();
+                    // method run more than once!
+                    System.out.println("event listener island service");
+//                    islandsService.refreshListOfColonizedSystems();
                 },
                 error -> System.out.println("islands event listener error: " + error)
         );

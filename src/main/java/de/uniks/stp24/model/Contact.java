@@ -83,6 +83,6 @@ public class Contact {
 
     public double getIntel() {
         if(empireDtos.isEmpty()) return 0;
-        return 100.0 * empireIslandsIDs.size()/empireDtos.size();
+        return 100.0 * discoveredIslands.size()/empireDtos.size();
     }
 }

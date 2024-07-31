@@ -1,8 +1,6 @@
 package de.uniks.stp24.service.game;
 
-import de.uniks.stp24.model.Fleets;
 import de.uniks.stp24.model.Jobs;
-import de.uniks.stp24.rest.FleetApiService;
 import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.rest.ShipsApiService;
 import de.uniks.stp24.service.TokenStorage;
@@ -15,10 +13,11 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
+import static de.uniks.stp24.model.Fleets.*;
 import static de.uniks.stp24.model.Ships.*;
 
 @Singleton
@@ -40,15 +39,13 @@ public class ShipService {
     public ShipService(){}
 
 
-//    Map<String, ObservableList<Ship>> fleetShips = new HashMap<>();
-//    ObservableList<Ship> gameShips = FXCollections.observableArrayList();
-    ObservableList<ReadShipDTO> shipsOfselectedFleet = FXCollections.observableArrayList();
+    ObservableList<ReadShipDTO> shipsInSelectedFleet = FXCollections.observableArrayList();
+    public Map<String, Integer> blueprintsInFleetMap = new HashMap<>();
+    public ObservableList<BlueprintInFleetDto> blueprintsInFleetList = FXCollections.observableArrayList();
     public ArrayList<ShipType> shipTypesAttributes;
 
     public void initShipTypes(){
         shipTypesAttributes = variableDependencyService.createVariableDependencyShipType();
-        //Todo: remove print
-        //System.out.println(shipTypesAttributes);
     }
 
     public Map<String, Integer> getNeededResources(String type) {
@@ -60,12 +57,34 @@ public class ShipService {
         return null;
     }
 
-    public void setShipList(ObservableList<ReadShipDTO> ships){
-        this.shipsOfselectedFleet = ships;
+    public void initializeFleetEdition(ReadShipDTO[] dto, Fleet fleet){
+        Arrays.stream(dto).forEach(ship -> {
+            this.shipsInSelectedFleet.add(ship);
+            if (!this.blueprintsInFleetMap.containsKey(ship.type())) {
+                this.blueprintsInFleetMap.put(ship.type(), 1);
+            } else {
+                this.blueprintsInFleetMap.compute(ship.type(), (k, currentCount) -> currentCount + 1);
+            }
+        });
+        fleet.size().forEach((key, value) -> blueprintsInFleetMap.putIfAbsent(key, 0));
+        this.blueprintsInFleetList.addAll(this.blueprintsInFleetMap.entrySet().stream().map(entry ->
+                new BlueprintInFleetDto(entry.getKey(), entry.getValue(), fleet)).toList());
+        initializeShipListeners(fleet._id());
     }
 
-    public void clearShipList(){
-        this.shipsOfselectedFleet.clear();
+    public ObservableList<ReadShipDTO> getShipsInSelectedFleet(){
+        return this.shipsInSelectedFleet;
+    }
+
+    public ObservableList<BlueprintInFleetDto> getBlueprintsInSelectedFleet(){
+        return this.blueprintsInFleetList;
+    }
+
+    public void clearEditedFleetInfos(){
+        this.blueprintsInFleetMap.clear();
+        this.shipsInSelectedFleet.clear();
+        this.blueprintsInFleetList.clear();
+        this.subscriber.dispose();
     }
 
     public void initializeShipListeners(String fleetID) {
@@ -80,33 +99,28 @@ public class ShipService {
         }, error-> System.out.println("Error initializing shipListener in ShipService :\n" + error.getMessage()));
     }
 
-    public void removeShipListener(){
-        this.subscriber.dispose();
-    }
-
     private void deleteShipFromGroups(ReadShipDTO ship) {
-        this.shipsOfselectedFleet.removeIf(other -> other.equals(ship));
-//        this.gameShips.removeIf(other -> other.equals(ship));
-//        this.fleetShips.get(ship._id()).removeIf(other -> other.equals(ship));
+        this.shipsInSelectedFleet.removeIf(other -> other.equals(ship));
+        replaceBlueprintByType(ship.type(), -1);
     }
 
     private void updateShipInGroups(ReadShipDTO ship) {
-        this.shipsOfselectedFleet.replaceAll(old -> old.equals(ship) ? ship : old);
-//        this.gameShips.replaceAll(old -> old.equals(ship) ? ship : old);
-//        this.fleetShips.get(ship._id()).replaceAll(old -> old.equals(ship) ? ship : old);
+        this.shipsInSelectedFleet.replaceAll(old -> old.equals(ship) ? ship : old);
     }
 
     private void addShipToGroups(ReadShipDTO ship) {
-        this.shipsOfselectedFleet.add(ship);
-//       this.gameShips.add(ship);
-//       if(Objects.nonNull(ship.fleet())){
-//           if (!this.fleetShips.containsKey(ship.fleet())) {
-//               this.fleetShips.put(ship.fleet(), FXCollections.observableArrayList());
-//           }
-//           this.fleetShips.get(ship.fleet()).add(ship);
-//       }
+        this.shipsInSelectedFleet.add(ship);
+        replaceBlueprintByType(ship.type(), 1);
     }
 
+    public void replaceBlueprintByType(String type, int diff) {
+        for (int i = 0; i < blueprintsInFleetList.size(); i++) {
+            BlueprintInFleetDto blueprint = blueprintsInFleetList.get(i);
+            if (blueprint.type().equals(type)) {
+                blueprintsInFleetList.set(i, new BlueprintInFleetDto(blueprint.type(), blueprint.count() + diff, blueprint.fleet()));
+            }
+        }
+    }
 
     public Observable<ReadShipDTO[]> getShipsOfFleet(String fleetID){
         return shipsApiService.getAllShips(tokenStorage.getGameId(), fleetID);
@@ -120,7 +134,6 @@ public class ShipService {
     public Observable<Ship> deleteShip(ReadShipDTO readShipDTO){
         return this.shipsApiService.deleteShip(this.tokenStorage.getGameId(),readShipDTO.fleet(), readShipDTO._id());
     }
-
 
 }
 

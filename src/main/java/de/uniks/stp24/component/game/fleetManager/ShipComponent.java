@@ -1,8 +1,5 @@
 package de.uniks.stp24.component.game.fleetManager;
 
-import de.uniks.stp24.model.Ships;
-import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.FleetService;
 import de.uniks.stp24.service.game.ShipService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -14,7 +11,8 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 
-import static de.uniks.stp24.model.Ships.*;
+import static de.uniks.stp24.model.Ships.ReadShipDTO;
+import static de.uniks.stp24.model.Ships.ShipType;
 
 @Component(view = "Ship.fxml")
 public class ShipComponent extends VBox implements ReusableItemComponent<ReadShipDTO> {
@@ -40,15 +38,13 @@ public class ShipComponent extends VBox implements ReusableItemComponent<ReadShi
     private final FleetManagerComponent fleetManagerComponent;
     private final ShipService shipService;
     private final Subscriber subscriber;
-    private final TokenStorage tokenStorage;
     private ReadShipDTO readShipDTO;
 
 
     @Inject
-    public ShipComponent(FleetManagerComponent fleetManagerComponent, TokenStorage tokenStorage, Subscriber subscriber, ShipService shipService){
+    public ShipComponent(FleetManagerComponent fleetManagerComponent, Subscriber subscriber, ShipService shipService){
         this.fleetManagerComponent = fleetManagerComponent;
         this.subscriber = subscriber;
-        this.tokenStorage = tokenStorage;
         this.shipService = shipService;
     }
 
@@ -59,12 +55,12 @@ public class ShipComponent extends VBox implements ReusableItemComponent<ReadShi
         blueprintTypeLabel.setText(shipDTO.type());
         healthLabel.setText(String.valueOf(shipDTO.health()));
         ShipType currentShipType = null;
-        System.out.println(shipService.shipTypesAttributes);
         for(ShipType shipType : shipService.shipTypesAttributes){
             if (shipType._id().equals(shipDTO.type())) {
                 currentShipType = shipType;
             }
         }
+        assert currentShipType != null;
         speedLabel.setText(String.valueOf(currentShipType.speed()));
         attackLabel.setText(String.valueOf(currentShipType.attack().get("default")));
         defenseLabel.setText(String.valueOf(currentShipType.defense().get("default")));
@@ -74,7 +70,8 @@ public class ShipComponent extends VBox implements ReusableItemComponent<ReadShi
 
     public void deleteShip(){
         this.subscriber.subscribe(this.shipService.deleteShip(readShipDTO),
-                result -> {},
+                result -> {
+                },
                 error -> System.out.println("Error while deleting a ship in the ShipComponent:\n" + error.getMessage()));
     }
 }

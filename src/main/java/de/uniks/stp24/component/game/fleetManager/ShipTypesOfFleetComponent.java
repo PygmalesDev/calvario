@@ -1,11 +1,8 @@
 package de.uniks.stp24.component.game.fleetManager;
 
-import de.uniks.stp24.component.game.OverviewUpgradeComponent;
-import de.uniks.stp24.model.Fleets;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Ships;
 import de.uniks.stp24.service.game.FleetService;
-import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.ShipService;
 import javafx.collections.ObservableList;
@@ -21,7 +18,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import java.util.Objects;
 
-import static de.uniks.stp24.model.Fleets.*;
+import static de.uniks.stp24.model.Fleets.Fleet;
 
 @Component(view = "ShipTypesOfFleet.fxml")
 public class ShipTypesOfFleetComponent extends VBox implements ReusableItemComponent<Ships.BlueprintInFleetDto> {
@@ -76,16 +73,8 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
         }
     }
 
-//    @Inject
-//    public void setShipJobUpdates() {
-//        this.jobsService.onJobsLoadingFinished("ship", this::setShipFinishers);
-//        this.jobsService.onJobsLoadingFinished(() ->
-//                this.shipJobs = this.jobsService.getJobObservableListOfType("ship"));
-//    }
-
     public void setItem(Ships.BlueprintInFleetDto blueprintInFleetDto){
         this.typeLabel.setText(blueprintInFleetDto.type());
-        System.out.println(blueprintInFleetDto.fleet().size());
         int plannedSize = 0;
         if(blueprintInFleetDto.fleet().size().get(blueprintInFleetDto.type()) != null) {
             plannedSize = blueprintInFleetDto.fleet().size().get(blueprintInFleetDto.type());

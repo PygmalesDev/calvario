@@ -1,7 +1,5 @@
 package de.uniks.stp24.component.game.fleetManager;
 
-import de.uniks.stp24.model.Jobs;
-import de.uniks.stp24.model.Ships;
 import de.uniks.stp24.model.Ships.ShipType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -45,7 +43,7 @@ public class BlueprintsComponent extends VBox implements ReusableItemComponent<S
     public Button addBlueprintButton;
 
     private final FleetManagerComponent fleetManagerComponent;
-    private boolean canBeAddedToFleet;
+    private final boolean canBeAddedToFleet;
     private ShipType shipType;
 
     @Inject

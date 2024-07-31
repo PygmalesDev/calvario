@@ -425,7 +425,7 @@ public class GangCreationController extends BasicController {
 
         Empire empire = new Empire(gang.name(), gang.description(), gang.color(),
                 gang.flagIndex() % this.flagsList.size(), gang.portraitIndex() % this.portraitsList.size(),
-                gangsTraits, "uninhabitable_0");
+                gangsTraits, "regular");
 
         patchEmpire(empire);
     }

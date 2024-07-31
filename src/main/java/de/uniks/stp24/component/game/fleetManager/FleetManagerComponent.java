@@ -24,6 +24,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
@@ -104,15 +105,8 @@ public class FleetManagerComponent extends AnchorPane {
     public ObservableList<ShipType> blueprints = FXCollections.observableArrayList();
     public ObservableList<ReadShipDTO> ships = FXCollections.observableArrayList();
 
-
-
     @Inject
     public FleetManagerComponent(){}
-
-    @OnInit
-    public void init(){
-
-    }
 
     @OnRender
     public void render() {
@@ -126,14 +120,13 @@ public class FleetManagerComponent extends AnchorPane {
         this.blueprintsListView.setCellFactory(list -> new ComponentListCell<>(app,blueprintsNotAddableComponentProvider));
         this.shipsListView.setItems(ships);
         this.shipsListView.setCellFactory(list -> new ComponentListCell<>(app,shipComponentProvider));
-        //showBlueprints();
 
-        this.infoButtonVBox.setVisible(false);
-        this.selectIslandVBox.setVisible(false);
-        this.blueprintsVBox.setVisible(true);
-        this.fleetsOverviewVBox.setVisible(true);
-        this.fleetBuilderVBox.setVisible(false);
-        this.shipsVBox.setVisible(false);
+//        this.infoButtonVBox.setVisible(false);
+//        this.selectIslandVBox.setVisible(false);
+//        this.blueprintsVBox.setVisible(true);
+//        this.fleetsOverviewVBox.setVisible(true);
+//        this.fleetBuilderVBox.setVisible(false);
+//        this.shipsVBox.setVisible(false);
     }
 
     public void showFleets(){
@@ -141,9 +134,9 @@ public class FleetManagerComponent extends AnchorPane {
         this.blueprintsInFleetList.clear();
         this.ships.clear();
         this.blueprintsListView.setCellFactory(list -> new ComponentListCell<>(app,blueprintsNotAddableComponentProvider));
+        showBlueprints();
+        removeEditedFleetInformation();
         this.infoButtonVBox.setVisible(false);
-        this.shipsVBox.setVisible(false);
-        this.blueprintsVBox.setVisible(true);
         this.selectIslandVBox.setVisible(false);
         this.fleetsListView.setVisible(true);
         this.fleetBuilderVBox.setVisible(false);
@@ -152,7 +145,6 @@ public class FleetManagerComponent extends AnchorPane {
     public void showBlueprints(){
         this.blueprints.clear();
         this.blueprints.addAll(shipService.shipTypesAttributes);
-
         this.shipsVBox.setVisible(false);
         this.blueprintsVBox.setVisible(true);
     }
@@ -160,6 +152,12 @@ public class FleetManagerComponent extends AnchorPane {
     public void showShips(){
         this.shipsVBox.setVisible(true);
         this.blueprintsVBox.setVisible(false);
+    }
+
+    public void removeEditedFleetInformation(){
+        this.shipService.removeShipListener();
+        this.shipService.clearShipList();
+        this.editedFleet = null;
     }
 
     public void close() {
@@ -182,6 +180,8 @@ public class FleetManagerComponent extends AnchorPane {
                     });
                     //Todo: remove print
                     System.out.println(fleet.size() + "in editSelectedFleet");
+                    this.shipService.setShipList(ships);
+                    this.shipService.initializeShipListeners(fleet._id());
                     fleet.size().entrySet().forEach(entry ->
                             blueprintsInFleetMap.putIfAbsent(entry.getKey(), 0)
                     );
@@ -240,7 +240,7 @@ public class FleetManagerComponent extends AnchorPane {
     public void confirmIsland() {
         //Todo: random fleetName
         Fleets.CreateFleetDTO newFleet = new Fleets.CreateFleetDTO("newFleet",
-                this.islandList.get(islandNameIndex)._id(), Map.of("explorer", 0),
+                this.islandList.get(islandNameIndex)._id(), new HashMap<>(),
                 new HashMap<>(), new HashMap<>(), new EffectSource[]{});
         this.subscriber.subscribe(this.fleetService.createFleet(this.tokenStorage.getGameId(), newFleet),
                 result -> {
@@ -249,6 +249,11 @@ public class FleetManagerComponent extends AnchorPane {
                 },
                 error -> System.out.println("Error while creating a new fleet in the FleetManagerComponent:\n" + error.getMessage())
         );
+    }
+
+    @OnDestroy
+    public void destroy(){
+        this.subscriber.dispose();
     }
 
 

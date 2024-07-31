@@ -40,8 +40,9 @@ public class ShipService {
     public ShipService(){}
 
 
-    Map<String, ObservableList<Ship>> fleetShips = new HashMap<>();
-    ObservableList<Ship> gameShips = FXCollections.observableArrayList();
+//    Map<String, ObservableList<Ship>> fleetShips = new HashMap<>();
+//    ObservableList<Ship> gameShips = FXCollections.observableArrayList();
+    ObservableList<ReadShipDTO> shipsOfselectedFleet = FXCollections.observableArrayList();
     public ArrayList<ShipType> shipTypesAttributes;
 
     public void initShipTypes(){
@@ -59,39 +60,53 @@ public class ShipService {
         return null;
     }
 
-    //Todo: load all ships
+    public void setShipList(ObservableList<ReadShipDTO> ships){
+        this.shipsOfselectedFleet = ships;
+    }
 
-    public void initializeShipListeners() {
-        this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.ships.*.*", this.tokenStorage.getGameId()),
+    public void clearShipList(){
+        this.shipsOfselectedFleet.clear();
+    }
+
+    public void initializeShipListeners(String fleetID) {
+        this.subscriber.subscribe(this.eventListener.listen("games." + this.tokenStorage.getGameId() + ".fleets." + fleetID + ".ships.*.*",
                 Ship.class), event -> {
-            Ship ship = event.data();
+            ReadShipDTO ship = readShipDTOFromShip(event.data());
             switch (event.suffix()) {
                 case "created" -> this.addShipToGroups(ship);
                 case "updated" -> this.updateShipInGroups(ship);
                 case "deleted" -> this.deleteShipFromGroups(ship);
             }
-        });
+        }, error-> System.out.println("Error initializing shipListener in ShipService :\n" + error.getMessage()));
     }
 
-    private void deleteShipFromGroups(Ship ship) {
-        this.gameShips.removeIf(other -> other.equals(ship));
-        this.fleetShips.get(ship._id()).removeIf(other -> other.equals(ship));
+    public void removeShipListener(){
+        this.subscriber.dispose();
     }
 
-    private void updateShipInGroups(Ship ship) {
-        this.gameShips.replaceAll(old -> old.equals(ship) ? ship : old);
-        this.fleetShips.get(ship._id()).replaceAll(old -> old.equals(ship) ? ship : old);
+    private void deleteShipFromGroups(ReadShipDTO ship) {
+        this.shipsOfselectedFleet.removeIf(other -> other.equals(ship));
+//        this.gameShips.removeIf(other -> other.equals(ship));
+//        this.fleetShips.get(ship._id()).removeIf(other -> other.equals(ship));
     }
 
-    private void addShipToGroups(Ship ship) {
-       this.gameShips.add(ship);
-       if(Objects.nonNull(ship.fleet())){
-           if (!this.fleetShips.containsKey(ship.fleet())) {
-               this.fleetShips.put(ship.fleet(), FXCollections.observableArrayList());
-           }
-           this.fleetShips.get(ship.fleet()).add(ship);
-       }
+    private void updateShipInGroups(ReadShipDTO ship) {
+        this.shipsOfselectedFleet.replaceAll(old -> old.equals(ship) ? ship : old);
+//        this.gameShips.replaceAll(old -> old.equals(ship) ? ship : old);
+//        this.fleetShips.get(ship._id()).replaceAll(old -> old.equals(ship) ? ship : old);
     }
+
+    private void addShipToGroups(ReadShipDTO ship) {
+        this.shipsOfselectedFleet.add(ship);
+//       this.gameShips.add(ship);
+//       if(Objects.nonNull(ship.fleet())){
+//           if (!this.fleetShips.containsKey(ship.fleet())) {
+//               this.fleetShips.put(ship.fleet(), FXCollections.observableArrayList());
+//           }
+//           this.fleetShips.get(ship.fleet()).add(ship);
+//       }
+    }
+
 
     public Observable<ReadShipDTO[]> getShipsOfFleet(String fleetID){
         return shipsApiService.getAllShips(tokenStorage.getGameId(), fleetID);

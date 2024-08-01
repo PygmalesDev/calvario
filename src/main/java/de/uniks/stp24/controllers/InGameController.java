@@ -361,6 +361,7 @@ public class InGameController extends BasicController {
 
         this.fleetService.loadGameFleets();
         this.fleetService.initializeFleetListeners();
+        this.fleetService.initializeShipListener();
 
 //        this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::travelToMousePosition);
     }

@@ -39,10 +39,12 @@ public class ShipService {
     public ShipService(){}
 
 
-    ObservableList<ReadShipDTO> shipsInSelectedFleet = FXCollections.observableArrayList();
+    public ObservableList<ReadShipDTO> shipsInSelectedFleet = FXCollections.observableArrayList();
     public Map<String, Integer> blueprintsInFleetMap = new HashMap<>();
     public ObservableList<BlueprintInFleetDto> blueprintsInFleetList = FXCollections.observableArrayList();
     public ArrayList<ShipType> shipTypesAttributes;
+    private String lastShipUpdate = "";
+
 
     public void initShipTypes(){
         shipTypesAttributes = variableDependencyService.createVariableDependencyShipType();
@@ -66,7 +68,11 @@ public class ShipService {
                 this.blueprintsInFleetMap.compute(ship.type(), (k, currentCount) -> currentCount + 1);
             }
         });
-        fleet.size().forEach((key, value) -> blueprintsInFleetMap.putIfAbsent(key, 0));
+        fleet.size().forEach((key, value) -> {
+            if (value != 0) {
+                blueprintsInFleetMap.putIfAbsent(key, 0);
+            }
+        });
         this.blueprintsInFleetList.addAll(this.blueprintsInFleetMap.entrySet().stream().map(entry ->
                 new BlueprintInFleetDto(entry.getKey(), entry.getValue(), fleet)).toList());
         initializeShipListeners(fleet._id());
@@ -91,10 +97,15 @@ public class ShipService {
         this.subscriber.subscribe(this.eventListener.listen("games." + this.tokenStorage.getGameId() + ".fleets." + fleetID + ".ships.*.*",
                 Ship.class), event -> {
             ReadShipDTO ship = readShipDTOFromShip(event.data());
-            switch (event.suffix()) {
-                case "created" -> this.addShipToGroups(ship);
-                case "updated" -> this.updateShipInGroups(ship);
-                case "deleted" -> this.deleteShipFromGroups(ship);
+            if (!ship.updatedAt().equals(lastShipUpdate)) {
+                //Todo: remove print
+                System.out.println("ship listener in shipService " + event.suffix());
+                switch (event.suffix()) {
+                    case "created" -> this.addShipToGroups(ship);
+                    case "updated" -> this.updateShipInGroups(ship);
+                    case "deleted" -> this.deleteShipFromGroups(ship);
+                }
+                lastShipUpdate = ship.updatedAt();
             }
         }, error-> System.out.println("Error initializing shipListener in ShipService :\n" + error.getMessage()));
     }
@@ -114,16 +125,24 @@ public class ShipService {
     }
 
     public void replaceBlueprintByType(String type, int diff) {
-        for (int i = 0; i < blueprintsInFleetList.size(); i++) {
-            BlueprintInFleetDto blueprint = blueprintsInFleetList.get(i);
+        for (int i = 0; i < this.blueprintsInFleetList.size(); i++) {
+            BlueprintInFleetDto blueprint = this.blueprintsInFleetList.get(i);
             if (blueprint.type().equals(type)) {
-                blueprintsInFleetList.set(i, new BlueprintInFleetDto(blueprint.type(), blueprint.count() + diff, blueprint.fleet()));
+                this.blueprintsInFleetList.set(i, new BlueprintInFleetDto(blueprint.type(), blueprint.count() + diff, blueprint.fleet()));
             }
         }
     }
 
+    public void addBlueprintToFleet(BlueprintInFleetDto blueprintInFleetDto){
+        this.blueprintsInFleetList.add(blueprintInFleetDto);
+    }
+
+    public void removeBlueprintFromFleet(BlueprintInFleetDto blueprintInFleetDto){
+        this.blueprintsInFleetList.removeIf(other -> other.equals(blueprintInFleetDto));
+    }
+
     public Observable<ReadShipDTO[]> getShipsOfFleet(String fleetID){
-        return shipsApiService.getAllShips(tokenStorage.getGameId(), fleetID);
+        return this.shipsApiService.getAllShips(tokenStorage.getGameId(), fleetID);
     }
 
     public Observable<Jobs.Job> beginShipJob(String fleetID, String shipType, String systemID) {
@@ -138,7 +157,6 @@ public class ShipService {
     public Observable<Ship> changeFleetOfShip(String newFleetID, ReadShipDTO readShipDTO){
         return this.shipsApiService.patchShip(this.tokenStorage.getGameId(), readShipDTO.fleet(), readShipDTO._id(), new UpdateShipDTO(newFleetID, readShipDTO._public(), new HashMap<>()));
     }
-
 }
 
 

@@ -12,7 +12,7 @@ public interface FleetApiService {
     Observable<Fleet> createFleet(@Path("game") String gameID, @Body CreateFleetDTO fleet);
 
     @GET("games/{game}/fleets")
-    Observable<ArrayList<ReadFleetDTO>> getGameFleets(@Path("game") String gameID);
+    Observable<ArrayList<ReadFleetDTO>> getGameFleets(@Path("game") String gameID, @Query("ships") boolean ships);
 
     @GET("games/{game}/fleets")
     Observable<ArrayList<ReadFleetDTO>> getEmpireFleets(@Path("game") String gameID, @Query("empire") String empireID);

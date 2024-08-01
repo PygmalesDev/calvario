@@ -133,6 +133,7 @@ public class FleetManagerComponent extends AnchorPane {
     public void showFleets() {
         this.blueprintsListView.setCellFactory(list -> new ComponentListCell<>(app, blueprintsNotAddableComponentProvider));
         showBlueprints();
+        this.fleetsListView.refresh();
         this.shipService.clearEditedFleetInfos();
         this.infoButtonVBox.setVisible(false);
         this.selectIslandVBox.setVisible(false);
@@ -177,10 +178,11 @@ public class FleetManagerComponent extends AnchorPane {
     }
 
     public void addBlueprintToFleet(ShipType shipType) {
-        if (!this.editedFleet.size().containsKey(shipType._id())) {
-            this.blueprintsInFleetList.add(new BlueprintInFleetDto(shipType._id(), 0, this.editedFleet));
+        if ((!this.editedFleet.size().containsKey(shipType._id())) || (this.editedFleet.size().get(shipType._id()) == 0)){ // && this.shipService.checkNumberOfShipsOfTypeInFleet(shipType._id()))) {
             this.subscriber.subscribe(this.fleetService.editSizeOfFleet(shipType._id(), 1, editedFleet),
-                    dto -> this.blueprintInFleetListView.refresh(),
+                    dto -> {
+                        this.shipService.addBlueprintToFleet(new BlueprintInFleetDto(shipType._id(), 0, this.editedFleet));
+                    },
                     error -> System.out.println("Error while adding a Blueprint to a FleetManagerComponent:\n" + error.getMessage()));
         }
     }
@@ -196,18 +198,17 @@ public class FleetManagerComponent extends AnchorPane {
     }
 
     public void setIslandNameText(int index) {
-        if (islandList.get(index).buildings().contains("shipyard")) {
-            this.islandNameLabel.setText(islandList.get(index).name() + " (has shipyard)");
-        } else {
-            this.islandNameLabel.setText(islandList.get(index).name());
-        }
+        int numberOfShipyards = (int) this.islandList.get(index).buildings().stream()
+                .filter("shipyard"::equals)
+                .count();
+        this.islandNameLabel.setText(islandList.get(index).name() + " (has " + numberOfShipyards + " shipyard)");
     }
 
     public void createFleet() {
         this.selectIslandVBox.setVisible(true);
         this.islandList.addAll(islandsService.getDevIsles());
         this.islandList = islandList.stream()
-                .filter(shortSystemDto -> shortSystemDto.owner().equals(tokenStorage.getEmpireId()))
+                .filter(shortSystemDto -> shortSystemDto.owner().equals(tokenStorage.getEmpireId()) && shortSystemDto.buildings().contains("shipyard"))
                 .collect(Collectors.toList());
         this.islandNameIndex = 0;
         setIslandNameText(0);
@@ -255,6 +256,7 @@ public class FleetManagerComponent extends AnchorPane {
         subscriber.subscribe(this.shipService.changeFleetOfShip(fleetsOnIslandList.get(fleetNameIndex)._id(), readShipDTOFleetChange),
                 ship -> {
                     this.shipService.deleteShipFromGroups(this.readShipDTOFleetChange);
+                    this.fleetService.adaptShipCount(this.readShipDTOFleetChange.fleet(), -1);
                     this.selectNewFleetVBox.setVisible(false);
                 },
                 error -> System.out.println("Error while changing the fleet of a ship in the FleetManagerComponent:\n" + error.getMessage()));

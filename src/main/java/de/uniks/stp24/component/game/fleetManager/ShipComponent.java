@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.game.fleetManager;
 
+import de.uniks.stp24.service.game.FleetService;
 import de.uniks.stp24.service.game.ShipService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -37,15 +38,17 @@ public class ShipComponent extends VBox implements ReusableItemComponent<ReadShi
 
     private final FleetManagerComponent fleetManagerComponent;
     private final ShipService shipService;
+    private final FleetService fleetService;
     private final Subscriber subscriber;
     private ReadShipDTO readShipDTO;
 
 
     @Inject
-    public ShipComponent(FleetManagerComponent fleetManagerComponent, Subscriber subscriber, ShipService shipService){
+    public ShipComponent(FleetManagerComponent fleetManagerComponent, Subscriber subscriber, ShipService shipService, FleetService fleetService){
         this.fleetManagerComponent = fleetManagerComponent;
         this.subscriber = subscriber;
         this.shipService = shipService;
+        this.fleetService = fleetService;
     }
 
 
@@ -72,7 +75,10 @@ public class ShipComponent extends VBox implements ReusableItemComponent<ReadShi
 
     public void deleteShip(){
         this.subscriber.subscribe(this.shipService.deleteShip(readShipDTO),
-                result -> {},
+                result -> {
+                    this.fleetManagerComponent.blueprintInFleetListView.refresh();
+                    //this.fleetManagerComponent.setCommandLimit(fleetService.getFleet(result.fleet()));
+                },
                 error -> System.out.println("Error while deleting a ship in the ShipComponent:\n" + error.getMessage()));
     }
 }

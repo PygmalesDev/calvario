@@ -44,6 +44,8 @@ public class FleetService {
     ObservableList<Fleet> gameFleets = FXCollections.observableArrayList();
     List<Consumer<Fleet>> fleetCreatedConsumer = new ArrayList<>();
     private String lastShipUpdate = "";
+    private String lastShipCreation = "";
+    private String lastShipDeletion= "";
 
     public void loadGameFleets() {
         this.subscriber.subscribe(this.fleetApiService.getGameFleets(this.tokenStorage.getGameId(), true),
@@ -68,20 +70,27 @@ public class FleetService {
         });
     }
 
-    public void initializeShipListener(){
+    public void initializeShipListener() {
         this.subscriber.subscribe(this.eventListener.listen("games." + this.tokenStorage.getGameId() + ".fleets.*.ships.*.*",
                 Ship.class), event -> {
             ReadShipDTO ship = readShipDTOFromShip(event.data());
-            if (!ship.updatedAt().equals(lastShipUpdate)) {
-                //Todo: remove print
-                System.out.println("ship listener in fleetService " + event.suffix());
-                switch (event.suffix()) {
-                    case "created", "updated" -> adaptShipCount(ship.fleet(), 1);
-                    case "deleted" -> adaptShipCount(ship.fleet(), -1);
+            //Todo: remove print
+            System.out.println("ship listener in fleetService " + event.suffix());
+            switch (event.suffix()) {
+                case "created" -> {
+                    if (!ship._id().equals(this.lastShipCreation)) {
+                        adaptShipCount(ship.fleet(), 1);
+                        this.lastShipCreation = ship._id();
+                    }
                 }
-                lastShipUpdate = ship.updatedAt();
+                case "deleted" -> {
+                    if (!ship._id().equals(this.lastShipDeletion)) {
+                        adaptShipCount(ship.fleet(), -1);
+                        this.lastShipDeletion = ship._id();
+                    }
+                }
             }
-        }, error-> System.out.println("Error initializing shipListener in ShipService :\n" + error.getMessage()));
+        }, error -> System.out.println("Error initializing shipListener in ShipService :\n" + error.getMessage()));
     }
 
     public void adaptShipCount(String fleetID, int increment) {
@@ -141,6 +150,10 @@ public class FleetService {
     public ObservableList<Fleet> getEmpireFleets(String empireID) {
         if (!this.empireFleets.containsKey(empireID)) this.empireFleets.put(empireID, FXCollections.observableArrayList());
         return this.empireFleets.get(empireID);
+    }
+
+    public Fleet getFleet(String fleetID){
+        return this.gameFleets.filtered(fleet -> fleet._id().equals(fleetID)).getFirst();
     }
 
     public Observable<Fleet> editSizeOfFleet(String shipTypeID, int count, Fleet fleet){

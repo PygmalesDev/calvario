@@ -44,6 +44,8 @@ public class ShipService {
     public ObservableList<BlueprintInFleetDto> blueprintsInFleetList = FXCollections.observableArrayList();
     public ArrayList<ShipType> shipTypesAttributes;
     private String lastShipUpdate = "";
+    private String lastShipCreation = "";
+    private String lastShipDeletion= "";
 
 
     public void initShipTypes(){
@@ -97,16 +99,23 @@ public class ShipService {
         this.subscriber.subscribe(this.eventListener.listen("games." + this.tokenStorage.getGameId() + ".fleets." + fleetID + ".ships.*.*",
                 Ship.class), event -> {
             ReadShipDTO ship = readShipDTOFromShip(event.data());
-            if (!ship.updatedAt().equals(lastShipUpdate)) {
+
                 //Todo: remove print
                 System.out.println("ship listener in shipService " + event.suffix());
                 switch (event.suffix()) {
-                    case "created" -> this.addShipToGroups(ship);
-                    case "updated" -> this.updateShipInGroups(ship);
-                    case "deleted" -> this.deleteShipFromGroups(ship);
+                    case "created" -> {if (!ship._id().equals(this.lastShipCreation)){
+                        this.addShipToGroups(ship);
+                        this.lastShipCreation = ship._id();
+                    }}
+                    case "updated" -> {if (!ship.updatedAt().equals(this.lastShipUpdate)){
+                        this.updateShipInGroups(ship);
+                        this.lastShipUpdate = ship.updatedAt();
+                    }}
+                    case "deleted" -> {if (!ship._id().equals(this.lastShipDeletion)) {
+                        this.lastShipDeletion = ship._id();
+                        this.deleteShipFromGroups(ship);
+                    }}
                 }
-                lastShipUpdate = ship.updatedAt();
-            }
         }, error-> System.out.println("Error initializing shipListener in ShipService :\n" + error.getMessage()));
     }
 

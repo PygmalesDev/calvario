@@ -103,7 +103,7 @@ public class FleetManagerComponent extends AnchorPane {
     public Provider<ShipTypesOfFleetComponent> shipTypesOfFleetComponentProvider = () -> new ShipTypesOfFleetComponent(this, this.resourcesService, this.shipService, this.subscriber, this.fleetService);
     public Provider<BlueprintsComponent> blueprintsAddableComponentProvider = () -> new BlueprintsComponent(this, true);
     public Provider<BlueprintsComponent> blueprintsNotAddableComponentProvider = () -> new BlueprintsComponent(this, false);
-    public Provider<ShipComponent> shipComponentProvider = () -> new ShipComponent(this, this.subscriber, this.shipService);
+    public Provider<ShipComponent> shipComponentProvider = () -> new ShipComponent(this, this.subscriber, this.shipService, this.fleetService);
 
     public ObservableList<BlueprintInFleetDto> blueprintsInFleetList = FXCollections.observableArrayList();
     public ObservableList<Fleet> fleets = FXCollections.observableArrayList();
@@ -165,7 +165,7 @@ public class FleetManagerComponent extends AnchorPane {
         this.subscriber.subscribe(this.shipService.getShipsOfFleet(fleet._id()),
                 dto -> {
                     this.shipService.initializeFleetEdition(dto, editedFleet);
-                    showShips();
+                    showBlueprints();
                     setIslandName(fleet);
                     setCommandLimit(fleet);
                     this.infoButtonVBox.setVisible(true);
@@ -182,6 +182,7 @@ public class FleetManagerComponent extends AnchorPane {
             this.subscriber.subscribe(this.fleetService.editSizeOfFleet(shipType._id(), 1, editedFleet),
                     dto -> {
                         this.shipService.addBlueprintToFleet(new BlueprintInFleetDto(shipType._id(), 0, this.editedFleet));
+                        this.setCommandLimit(dto);
                     },
                     error -> System.out.println("Error while adding a Blueprint to a FleetManagerComponent:\n" + error.getMessage()));
         }
@@ -229,7 +230,7 @@ public class FleetManagerComponent extends AnchorPane {
     }
 
     public void setCommandLimit(Fleet fleet) {
-        this.commandLimitLabel.setText(String.valueOf(fleet.size().values().stream().mapToInt(Integer::intValue).sum()));
+        this.commandLimitLabel.setText("Command Limit \n" + ships.size() + " / " + fleet.size().values().stream().mapToInt(Integer::intValue).sum());
     }
 
     public void setIslandName(Fleet fleet) {

@@ -33,7 +33,7 @@
                   <Insets top="5.0" />
                </HBox.margin>
              </VBox>
-             <ImageView fx:id="iconPop" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="popIcon" HBox.hgrow="NEVER">
+             <ImageView fx:id="populationIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" styleClass="popIcon" HBox.hgrow="NEVER">
                 <HBox.margin>
                    <Insets top="20.0" />
                 </HBox.margin>
@@ -53,7 +53,7 @@
                   <Insets />
                </HBox.margin>
              </VBox>
-             <ImageView fx:id="iconHome" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
+             <ImageView fx:id="homeIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
                 <HBox.margin>
                    <Insets top="15.0" />
                 </HBox.margin>
@@ -75,7 +75,7 @@
                      <Insets top="5.0" />
                   </VBox.margin></Text>
              </VBox>
-             <ImageView fx:id="iconStreng" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
+             <ImageView fx:id="strengthIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
                 <HBox.margin>
                    <Insets top="15.0" />
                 </HBox.margin>

@@ -61,7 +61,7 @@ public class ContactsService {
         } else {
             contact = seenEnemies.stream()
               .filter(element -> element.getEmpireID().equals(owner)).findFirst().get();
-            System.out.println("IN LIST ... " + contact.getEmpireName());
+            System.out.println("ALREADY IN LIST ... " + contact.getEmpireName());
 
         }
         contact.addIsland(islandID);

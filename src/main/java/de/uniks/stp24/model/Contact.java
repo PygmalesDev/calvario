@@ -47,7 +47,7 @@ public class Contact {
                   // are these necessary?
                   empireIslandsIDs.add(dto._id());
                   empireDtos.add(dto);
-                  System.out.println(dto.health());
+                  System.out.println("health of this " + dto.health());
               }
           }
         );

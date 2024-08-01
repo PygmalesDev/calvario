@@ -1,5 +1,6 @@
 package de.uniks.stp24.service.game;
 
+import de.uniks.stp24.dto.ContactDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.model.Contact;
 import de.uniks.stp24.service.TokenStorage;
@@ -10,9 +11,7 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Singleton
 public class ContactsService {
@@ -26,6 +25,7 @@ public class ContactsService {
     public ObservableList<Contact> contactCells = FXCollections.observableArrayList();
     final ArrayList<Contact> seenEnemies = new ArrayList<>();
     List<String> hiddenEmpires = new ArrayList<>();
+    ContactDto savedContacts;
 
     @Inject
     ContactsService() {
@@ -55,6 +55,7 @@ public class ContactsService {
 
         contact.addIsland(islandID);
         contact.setGameOwner(tokenStorage.getEmpireId());
+        saveContacts();
 
         System.out.println(Objects.nonNull(contact.getPane()) && contact.getPane().visibleProperty().get());
         // in case that a contact detail component is open and you go to another island from same contact
@@ -68,6 +69,9 @@ public class ContactsService {
     public void dispose(){
         subscriber.dispose();
         contactCells.clear();
+        seenEnemies.clear();
+        System.out.println("saved info");
+        loadContacts();
     }
 
     public void getEmpiresInGame(){
@@ -75,6 +79,41 @@ public class ContactsService {
         this.hiddenEmpires.remove(tokenStorage.getEmpireId());
         System.out.println("not discovered yet " + this.hiddenEmpires);
 
+    }
+
+    //todo save on server!
+    public void saveContacts() {
+        Map<String, Object> tmp = new HashMap<>();
+        for (Contact enemy : seenEnemies) {
+            tmp.put(enemy.getEmpireID(), enemy.getDiscoveredIslands());
+            tmp.put(enemy.getEmpireID().substring(18), false);
+        }
+        savedContacts = new ContactDto(tmp);
+    }
+
+    public void loadContacts() {
+        //subscribe....
+        Map<String,Object> loaded = savedContacts._private();
+        if (!loaded.isEmpty()) {
+            Map<String, List<String>> tmp = new HashMap<>();
+            for (String key : loaded.keySet()) {
+                System.out.println(loaded.get(key).getClass());
+                if (loaded.get(key) instanceof List<?> value ) {
+                    tmp.put(key,(List<String>) value);
+                } else if (loaded.get(key) instanceof Boolean bool ) {
+                    System.out.println( key + " -> not " + !bool);
+                }
+            }
+            System.out.println("loaded data " + tmp);
+        }
+    }
+
+    public void recreateContacts(Map<String, List<String>> data) {
+        if (data.isEmpty()) return;
+        getEmpiresInGame();
+        for (String key : data.keySet()) {
+            data.get(key).forEach(id -> this.addEnemy(key,id));
+        }
     }
 
 }

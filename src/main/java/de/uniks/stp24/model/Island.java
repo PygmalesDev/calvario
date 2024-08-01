@@ -17,6 +17,7 @@ public record Island(
   ArrayList<String> buildings,
   String id,
   String upgrade,
-  String name
+  String name,
+  int health
 ) {
 }

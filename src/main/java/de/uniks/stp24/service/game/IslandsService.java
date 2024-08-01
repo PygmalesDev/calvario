@@ -235,7 +235,7 @@ public class IslandsService extends BasicService {
               });
               mapSitesBuildings();
               //todo remove printouts
-              System.out.println("...UPDATED ISLANDS...");
+              System.out.println("...UPDATING ISLANDS...FOUND...");
               System.out.println(devIsles.size());
           },
           error -> System.out.printf(
@@ -378,8 +378,7 @@ public class IslandsService extends BasicService {
     }
 
     public Island convertToIsland(SystemDto result) {
-        //todo remove printout
-        System.out.println(result._id() + " -> health: " + result.health());
+        
         return new Island(result.owner(),
           Objects.isNull(result.owner()) ? -1 : getEmpire(result.owner()).flag(),
           result.x(),
@@ -393,7 +392,8 @@ public class IslandsService extends BasicService {
           result.buildings(),
           result._id(),
           result.upgrade().toString(),
-          Objects.isNull(result.name()) ? "Uncharted Island" : result.name()
+          Objects.isNull(result.name()) ? "Uncharted Island" : result.name(),
+          result.health()
         );
     }
 
@@ -411,7 +411,6 @@ public class IslandsService extends BasicService {
           result -> {
               if (aggregate.contains("max_health")) islandComponentMap.get(system).setMaxHealth(result.total());
               else if (aggregate.contains("defense")) islandComponentMap.get(system).setMaxDefense(result.total());
-              //System.out.println("your max health: " + result.total());
           },
           error -> System.out.printf("Caught an error while getting health/defense in Islands Service:\n %s", error.getMessage())
         );

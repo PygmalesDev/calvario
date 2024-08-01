@@ -26,17 +26,17 @@ public class ContactDetailsComponent extends StackPane {
     @FXML
     public Text homeText;
     @FXML
-    public ImageView iconPop;
+    public ImageView populationIcon;
     @FXML
     public Text siteText;
     @FXML
     public Text buildingsText;
     @FXML
-    public ImageView iconHome;
+    public ImageView homeIcon;
     @FXML
     public Text strengText;
     @FXML
-    public ImageView iconStreng;
+    public ImageView strengthIcon;
     @FXML
     Button closeContactDetailComponentButton;
     @FXML
@@ -61,9 +61,9 @@ public class ContactDetailsComponent extends StackPane {
 
     @Inject
     public ContactDetailsComponent() {
-        this.iconPop = new ImageView();
-        this.iconHome = new ImageView();
-        this.iconStreng = new ImageView();
+        this.populationIcon = new ImageView();
+        this.homeIcon = new ImageView();
+        this.strengthIcon = new ImageView();
 
     }
 
@@ -75,10 +75,9 @@ public class ContactDetailsComponent extends StackPane {
         intelText.setText("Intel: " + calculateIntel(contact.getIntel()));
         empireNameText.setText(contact.getEmpireName());
         empireImageView.setImage(imageCache.get(contact.getEmpireFlag()));
-        iconPop.setImage(imageCache.get("icons/resources/population.png"));
-        iconHome.setImage(imageCache.get("assets/contactsAndWars/home.png"));
-        iconStreng.setImage(imageCache.get("assets/contactsAndWars/cannon.png"));
-
+        populationIcon.setImage(imageCache.get("icons/resources/population.png"));
+        homeIcon.setImage(imageCache.get("assets/contactsAndWars/home.png"));
+        strengthIcon.setImage(imageCache.get("assets/contactsAndWars/cannon.png"));
         popText.setText(resources.getString("pop") + ": " +
           contact.getDiscoveredPopulation() + "/" + contact.getEmpirePopulation() );
         siteText.setText(resources.getString("sites") + ": " +

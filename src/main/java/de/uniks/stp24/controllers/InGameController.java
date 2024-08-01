@@ -557,6 +557,7 @@ public class InGameController extends BasicController {
                     IslandComponent isle = islandsService.getIslandComponent(event.data()._id());
                     Island updatedIsland = islandsService.convertToIsland(event.data());
                     isle.applyInfo(updatedIsland);
+                    isle.getDefenceAndHealth(this.empireID);
                     if (Objects.nonNull(updatedIsland.owner())) {
                         // apply drop shadow and flag
                         isle.applyEmpireInfo();
@@ -594,6 +595,7 @@ public class InGameController extends BasicController {
             isle.setScaleY(1.25);
             isle.collisionCircle.setRadius(Constants.ISLAND_COLLISION_RADIUS);
             this.mapGrid.getChildren().add(isle);
+            isle.getDefenceAndHealth(this.empireID);
         });
 
         mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight()));
@@ -626,6 +628,7 @@ public class InGameController extends BasicController {
             selectedIsland = selected;
             tokenStorage.setIsland(selectedIsland.getIsland());
             islandAttributes.setIsland(selectedIsland.getIsland());
+
             if (Objects.nonNull(selected.getIsland().owner())) {
                 this.islandClaimingContainer.setVisible(false);
                 this.sitePropertiesComponent.setVisible(false);
@@ -636,11 +639,10 @@ public class InGameController extends BasicController {
                       this.jobsService.getObservableListForSystem(this.tokenStorage.getIsland().id()));
                     showOverview();
                     selected.showUnshowRudder();
-                    selected.showBars();
-                    selected.setHealth(10);
-                    islandsService.getSystemAggregate(this.tokenStorage.getEmpireId(), "system.max_health",selected.getIsland().id());
-                    islandsService.getSystemAggregate(this.tokenStorage.getEmpireId(), "system.defense",selected.getIsland().id());
+                    selected.getDefenceAndHealth(this.empireID);
+//                    selected.showDefenseAndHealth();
                 }
+                selected.showDefenseAndHealth();
                 // Show island claiming scroll
             } else if (!this.tokenStorage.isSpectator()) {
                 if (Objects.nonNull(selectedIsland)) selectedIsland.showUnshowRudder();

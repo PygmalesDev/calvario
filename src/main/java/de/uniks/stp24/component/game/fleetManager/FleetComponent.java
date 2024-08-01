@@ -38,7 +38,9 @@ public class FleetComponent extends VBox implements ReusableItemComponent<Fleet>
     }
 
     public void setItem(Fleet fleet){
-        fleetNameLabel.setText(fleet.name());
+        this.fleetNameLabel.setText(fleet.name());
+        //Todo: print real number of ships in fleet instead of x
+        this.sizeLabel.setText("x / "  + fleet.size().values().stream().mapToInt(Integer::intValue).sum());
         this.fleet = fleet;
     }
 

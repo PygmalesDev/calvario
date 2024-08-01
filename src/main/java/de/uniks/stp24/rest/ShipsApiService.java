@@ -18,7 +18,7 @@ public interface ShipsApiService {
     Observable<Ship> getOtherPlayersShip(@Path("game") String gameID, @Path("fleet") String fleetID, @Path("id") String shipID);
 
     @PATCH("games/{game}/fleets/{fleet}/ships/{id}")
-    Observable<Ship> patchShip(@Path("game") String gameID, @Path("fleet") String fleetID, @Path("id") String shipID);
+    Observable<Ship> patchShip(@Path("game") String gameID, @Path("fleet") String fleetID, @Path("id") String shipID, @Body UpdateShipDTO updateShipDTO);
 
     @DELETE("games/{game}/fleets/{fleet}/ships/{id}")
     Observable<Ship> deleteShip(@Path("game") String gameID, @Path("fleet") String fleetID, @Path("id") String shipID);

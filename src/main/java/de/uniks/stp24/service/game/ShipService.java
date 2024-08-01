@@ -99,7 +99,7 @@ public class ShipService {
         }, error-> System.out.println("Error initializing shipListener in ShipService :\n" + error.getMessage()));
     }
 
-    private void deleteShipFromGroups(ReadShipDTO ship) {
+    public void deleteShipFromGroups(ReadShipDTO ship) {
         this.shipsInSelectedFleet.removeIf(other -> other.equals(ship));
         replaceBlueprintByType(ship.type(), -1);
     }
@@ -133,6 +133,10 @@ public class ShipService {
 
     public Observable<Ship> deleteShip(ReadShipDTO readShipDTO){
         return this.shipsApiService.deleteShip(this.tokenStorage.getGameId(),readShipDTO.fleet(), readShipDTO._id());
+    }
+
+    public Observable<Ship> changeFleetOfShip(String newFleetID, ReadShipDTO readShipDTO){
+        return this.shipsApiService.patchShip(this.tokenStorage.getGameId(), readShipDTO.fleet(), readShipDTO._id(), new UpdateShipDTO(newFleetID, readShipDTO._public(), new HashMap<>()));
     }
 
 }

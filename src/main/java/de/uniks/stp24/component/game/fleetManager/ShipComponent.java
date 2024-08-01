@@ -66,12 +66,13 @@ public class ShipComponent extends VBox implements ReusableItemComponent<ReadShi
         defenseLabel.setText(String.valueOf(currentShipType.defense().get("default")));
     }
 
-    public void changeFleet(){}
+    public void changeFleet(){
+        this.fleetManagerComponent.changeFleetOfShip(readShipDTO);
+    }
 
     public void deleteShip(){
         this.subscriber.subscribe(this.shipService.deleteShip(readShipDTO),
-                result -> {
-                },
+                result -> {},
                 error -> System.out.println("Error while deleting a ship in the ShipComponent:\n" + error.getMessage()));
     }
 }

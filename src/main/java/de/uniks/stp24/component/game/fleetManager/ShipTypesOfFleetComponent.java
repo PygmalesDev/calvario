@@ -112,10 +112,11 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
         this.subscriber.subscribe(this.fleetService.editSizeOfFleet(shipType, newSize, fleet),
                 dto -> {
                     this.sizeLabel.setText(this.sizeLabel.getText().replaceAll("/.*", "/" + dto.size().get(shipType)));
+                    this.fleetManagerComponent.setCommandLimit(dto);
                     if (dto.size().get(shipType) == 0) {
-                        decrementSizeButton.setDisable(true);
+                        this.decrementSizeButton.setDisable(true);
                     } else {
-                        decrementSizeButton.setDisable(false);
+                        this.decrementSizeButton.setDisable(false);
                     }
                 },
                 error -> System.out.println("Error while changing planned Size in the ShipTypesOfFleetComponent:\n" + error.getMessage()));

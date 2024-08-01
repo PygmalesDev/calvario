@@ -101,6 +101,19 @@
                <Button fx:id="confirmIslandButton" mnemonicParsing="false" onAction="#confirmIsland" text="Confirm" />
             </children>
          </VBox>
+         <VBox fx:id="selectNewFleetVBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: red;">
+            <children>
+               <Label text="Choose a fleet" />
+               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <children>
+                     <Button mnemonicParsing="false" onAction="#showLastFleetName" text="&lt;" />
+                     <Label fx:id="newFleetOfShipNameLabel" text="Label" />
+                     <Button mnemonicParsing="false" onAction="#showNextFleetName" text="&gt;" />
+                  </children>
+               </HBox>
+               <Button mnemonicParsing="false" onAction="#confirmFleetChange" text="Confirm" />
+            </children>
+         </VBox>
       </children>
    </StackPane>
 </fx:root>

@@ -69,15 +69,15 @@ public class JobsTestComponent extends ControllerTest {
     protected final Island ISLAND_1 = new Island(this.EMPIRE_ID, 0, 0, 0,
             IslandType.agriculture, 3, 12, 0,
             Map.of("energy", 3), null,
-            null, this.SYSTEM_ID_1, "unexplored", this.SYSTEM_NAME_1);
+            null, this.SYSTEM_ID_1, "unexplored", this.SYSTEM_NAME_1, 100);
     protected final Island ISLAND_UNEXP = new Island(this.EMPIRE_ID, 0, 0, 0,
             IslandType.agriculture, 3, 12, 0,
             Map.of("energy", 3), null,
-            null, "ISLAND_UNEXP", "unexplored", this.SYSTEM_NAME_1);
+            null, "ISLAND_UNEXP", "unexplored", this.SYSTEM_NAME_1, 100);
     protected final Island ISLAND_EXP = new Island(this.EMPIRE_ID, 0, 0, 0,
             IslandType.agriculture, 3, 24, 0,
             Map.of("energy", 3), null,
-            null, "ISLAND_EXP", "explored", this.SYSTEM_NAME_1);
+            null, "ISLAND_EXP", "explored", this.SYSTEM_NAME_1, 100);
 
     protected final Map<String, Integer> inspectorCalls = new HashMap<>();
 

@@ -37,7 +37,10 @@ public class ContactsComponent extends StackPane {
 
     Provider<ContactCell> contactCellProvider = () -> {
         var cell = new ContactCell(this.imageCache, this.contactDetailsComponent);
-        cell.setOnMouseClicked(event -> contactDetailsComponent.openDetail(cell.getContact()));
+        cell.setOnMouseClicked(event -> {
+            cell.getContact().setPane(this.contactDetailsComponent);
+            contactDetailsComponent.openDetail(cell.getContact());
+        });
         return cell;
     };
 
@@ -46,7 +49,7 @@ public class ContactsComponent extends StackPane {
     }
 
     public void closeContactsComponent() {
-        this.contactDetailsComponent.setVisible(false);
+        this.contactDetailsComponent.closeContactDetailsComponent();
         this.setVisible(false);
     }
 
@@ -54,6 +57,7 @@ public class ContactsComponent extends StackPane {
     public void render() {
         this.contactsListView.setItems(this.contactsService.contactCells);
         this.contactsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.contactCellProvider));
+
     }
 
     public void setParents(Pane ownParent,  Pane detailParent) {

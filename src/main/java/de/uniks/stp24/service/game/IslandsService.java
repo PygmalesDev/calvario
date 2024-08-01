@@ -3,6 +3,7 @@ package de.uniks.stp24.service.game;
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
+import de.uniks.stp24.model.Contact;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameLogicApiService;
@@ -414,6 +415,12 @@ public class IslandsService extends BasicService {
           },
           error -> System.out.printf("Caught an error while getting health/defense in Islands Service:\n %s", error.getMessage())
         );
+    }
+
+    public void getEnemyStrength(String ownEmpire, String enemyID, Contact contact) {
+        this.subscriber.subscribe(gameLogicApiService.getCompare(ownEmpire,"empire.compare.military",enemyID),
+          result -> contact.setStrength(result.total()),
+          error -> System.out.printf("Caught an error while comparing strength in Islands Service:\n %s", error.getMessage()));
     }
 
 }

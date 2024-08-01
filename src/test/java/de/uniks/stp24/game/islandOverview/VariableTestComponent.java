@@ -64,7 +64,8 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
                 buildings,
                 "1",
                 "explored",
-                "TestIsland1"
+                "TestIsland1",
+          100
         );
 
         this.islandAttributeStorage.setIsland(testIsland);

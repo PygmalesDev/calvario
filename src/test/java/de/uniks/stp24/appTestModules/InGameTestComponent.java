@@ -218,7 +218,8 @@ public class InGameTestComponent extends InGameTestInitializer {
                 buildings,
                 "1",
                 "explored",
-                "TestIsland1"
+                "TestIsland1",
+          100
         );
 
         tokenStorage.setIsland(testIsland);

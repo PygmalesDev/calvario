@@ -72,6 +72,7 @@ public class ContactDetailsComponent extends StackPane {
         this.contact = contact;
         contact.checkIslands();
         setInfo();
+//        intelText.setText("this isle " + contact.getAtIsland().substring(20));
         intelText.setText("Intel: " + calculateIntel(contact.getIntel()));
         empireNameText.setText(contact.getEmpireName());
         empireImageView.setImage(imageCache.get(contact.getEmpireFlag()));
@@ -79,22 +80,30 @@ public class ContactDetailsComponent extends StackPane {
         homeIcon.setImage(imageCache.get("assets/contactsAndWars/home.png"));
         strengthIcon.setImage(imageCache.get("assets/contactsAndWars/cannon.png"));
         popText.setText(resources.getString("pop") + ": " +
-          contact.getDiscoveredPopulation() + "/" + contact.getEmpirePopulation() );
+//          contact.getStatsAtLocation().get("pop") + "/" +
+          contact.getDiscoveryStats().get("pop") );
         siteText.setText(resources.getString("sites") + ": " +
-          islandsService.getAllNumberOfSites(contact.getEmpireID()));
+//          contact.getStatsAtLocation().get("sites") + "/" +
+//          islandsService.getAllNumberOfSites(contact.getEmpireID()));
+          contact.getDiscoveryStats().get("sites"));
         buildingsText.setText(resources.getString("buildings") + ": " +
-          islandsService.getAllNumberOfBuildings(contact.getEmpireID()));
+//          contact.getStatsAtLocation().get("buildings") + "/" +
+//          islandsService.getAllNumberOfBuildings(contact.getEmpireID()));
+          contact.getDiscoveryStats().get("buildings"));
+
+        calculateStrength();
 
     }
 
     public void closeContactDetailsComponent() {
-        this.getParent().setVisible(false);
+        this.getParent().visibleProperty().setValue(false);
+        visibleProperty().setValue(false);
     }
 
     public void openDetail(Contact contact) {
         setContactInformation(contact);
-        this.getParent().setVisible(true);
-        setVisible(true);
+        this.getParent().visibleProperty().setValue(true);
+        visibleProperty().setValue(true);
     }
 
     public void setParent(Pane parent) {
@@ -104,7 +113,6 @@ public class ContactDetailsComponent extends StackPane {
 
     private void setInfo() {
         contact.setEmpireDtos(islandsService.getDevIsles());
-
     }
 
     @OnDestroy
@@ -120,4 +128,18 @@ public class ContactDetailsComponent extends StackPane {
         return "exactly";
     }
 
+    private void calculateStrength(){
+        islandsService.getEnemyStrength(contact.getGameOwner(), contact.getEmpireID(), this.contact);
+    }
+
+    public void calculateStrength(double value) {
+        String text = "";
+        if (value > 2.0) text = "mighty";
+        if (value < 2.0 && value > 1.0) text = "very strong";
+        if (value < 1.0 && value > 0.0) text = "strong";
+        if (value < 0.0 && value > -1.0) text = "weak";
+        if (value < -1.0 && value > -2.0) text = "very weak";
+        this.strengText.setText("Str: " + text);
+
+    }
 }

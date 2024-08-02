@@ -102,7 +102,7 @@ public class ResourcesService {
     /**
      * Updates the ObservableList which shows the count and change per season of a resource
      */
-    public ObservableList<Resource> generateResourceList(Map<String, Integer> resourceMap, ObservableList<Resource> oldResourceList, AggregateItemDto[] aggregateItems) {
+    public ObservableList<Resource> generateResourceList(Map<String, Integer> resourceMap, ObservableList<Resource> oldResourceList, AggregateItemDto[] aggregateItems , boolean requireChangePerSeason) {
         int i = 0;
         ObservableList<Resource> resourceList = FXCollections.observableArrayList();
         if (Objects.nonNull(resourceMap)) {
@@ -110,7 +110,7 @@ public class ResourcesService {
                 String resourceID = entry.getKey();
                 int count = entry.getValue();
                 int changeProSeason = 0;
-                if (!oldResourceList.isEmpty() && oldResourceList.size() >= 2) {
+                if (requireChangePerSeason && !oldResourceList.isEmpty() && oldResourceList.size() >= 2) {
                     changeProSeason = oldResourceList.get(i).changePerSeason();
                 }
                 if (Objects.nonNull(aggregateItems)) {

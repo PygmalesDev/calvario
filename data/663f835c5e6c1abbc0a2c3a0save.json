@@ -1,0 +1,261 @@
+[ {
+  "name" : "Amateur Charlatans",
+  "flagIndex" : 11,
+  "flagsPath" : "/de/uniks/stp24/assets/flags/flag_11.png",
+  "portraitIndex" : 13,
+  "portraitsPath" : "/de/uniks/stp24/assets/portraits/captain_13.png",
+  "description" : "A shadowy syndicate of swashbucklers, their flag bearing the skull and crossed cutlasses, symbolizing their merciless pursuit of riches.",
+  "color" : "#008080",
+  "colorIndex" : 13,
+  "traits" : [ {
+    "id" : "radioactive",
+    "effects" : [ {
+      "variable" : "buildings.power_plant.production.energy",
+      "base" : 0.0,
+      "multiplier" : 1.1,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.farm.production.food",
+      "base" : 0.0,
+      "multiplier" : 0.97,
+      "bonus" : 0.0
+    } ],
+    "cost" : 1,
+    "conflicts" : [ "ecological", "nature_loving", "green", "chernobylian", "tsaristic" ]
+  }, {
+    "id" : "dumb",
+    "effects" : [ {
+      "variable" : "buildings.research_lab.production.research",
+      "base" : 0.0,
+      "multiplier" : 0.95,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.foundry.production.alloys",
+      "base" : 0.0,
+      "multiplier" : 1.005,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.refinery.production.fuel",
+      "base" : 0.0,
+      "multiplier" : 1.005,
+      "bonus" : 0.0
+    } ],
+    "cost" : -1,
+    "conflicts" : [ "smart", "intelligent" ]
+  }, {
+    "id" : "incompetent",
+    "effects" : [ {
+      "variable" : "buildings.power_plant.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.2,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.mine.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.2,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.research_lab.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.2,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.foundry.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.2,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.refinery.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.2,
+      "bonus" : 0.0
+    } ],
+    "cost" : -4,
+    "conflicts" : [ "proficient", "skilled" ]
+  }, {
+    "id" : "unprepared",
+    "effects" : [ {
+      "variable" : "resources.credits.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : -200.0
+    }, {
+      "variable" : "resources.energy.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : -20.0
+    }, {
+      "variable" : "resources.minerals.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : -20.0
+    }, {
+      "variable" : "resources.food.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : -20.0
+    }, {
+      "variable" : "resources.fuel.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : -4.0
+    }, {
+      "variable" : "resources.research.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : -4.0
+    }, {
+      "variable" : "resources.alloys.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : -4.0
+    }, {
+      "variable" : "resources.consumer_goods.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : -4.0
+    } ],
+    "cost" : -1,
+    "conflicts" : [ "prepared" ]
+  }, {
+    "id" : "pitman",
+    "effects" : [ {
+      "variable" : "buildings.mine.production.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.3,
+      "bonus" : 0.0
+    } ],
+    "cost" : 3,
+    "conflicts" : [ "settler", "surface_operator", "claustrophobic", "miner", "excavator" ]
+  } ]
+}, {
+  "name" : "Dead Criminals of Red Sanctuary",
+  "flagIndex" : 15,
+  "flagsPath" : "/de/uniks/stp24/assets/flags/flag_15.png",
+  "portraitIndex" : 11,
+  "portraitsPath" : "/de/uniks/stp24/assets/portraits/captain_11.png",
+  "description" : "A ruthless pirate cartel Dead Criminals of Red Sanctuary, known for their cutthroat tactics and insatiable greed on the high seas.",
+  "color" : "#FFD700",
+  "colorIndex" : 7,
+  "traits" : [ {
+    "id" : "radioactive",
+    "effects" : [ {
+      "variable" : "buildings.power_plant.production.energy",
+      "base" : 0.0,
+      "multiplier" : 1.1,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.farm.production.food",
+      "base" : 0.0,
+      "multiplier" : 0.97,
+      "bonus" : 0.0
+    } ],
+    "cost" : 1,
+    "conflicts" : [ "ecological", "nature_loving", "green", "chernobylian", "tsaristic" ]
+  }, {
+    "id" : "incompetent",
+    "effects" : [ {
+      "variable" : "buildings.power_plant.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.2,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.mine.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.2,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.research_lab.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.2,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.foundry.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.2,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.refinery.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.2,
+      "bonus" : 0.0
+    } ],
+    "cost" : -4,
+    "conflicts" : [ "proficient", "skilled" ]
+  }, {
+    "id" : "surface_operator",
+    "effects" : [ {
+      "variable" : "buildings.mine.production.minerals",
+      "base" : 0.0,
+      "multiplier" : 0.8,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.farm.production.food",
+      "base" : 0.0,
+      "multiplier" : 1.04,
+      "bonus" : 0.0
+    } ],
+    "cost" : -2,
+    "conflicts" : [ "miner", "excavator", "pitman", "settler", "claustrophobic" ]
+  }, {
+    "id" : "amateur",
+    "effects" : [ {
+      "variable" : "buildings.research_lab.production.research",
+      "base" : 0.0,
+      "multiplier" : 0.96,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.refinery.production.fuel",
+      "base" : 0.0,
+      "multiplier" : 0.96,
+      "bonus" : 0.0
+    } ],
+    "cost" : -2,
+    "conflicts" : [ "assistant_technician", "technician", "beginner", "dilettante" ]
+  }, {
+    "id" : "__dev__",
+    "effects" : [ {
+      "variable" : "resources.credits.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.energy.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.minerals.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.food.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.fuel.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.research.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.alloys.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.consumer_goods.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    } ],
+    "cost" : 0,
+    "conflicts" : null
+  } ]
+} ]

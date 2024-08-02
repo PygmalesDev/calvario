@@ -13,6 +13,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -30,6 +34,7 @@ import org.fulib.fx.constructs.listview.ComponentListCell;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.*;
 
 import static de.uniks.stp24.service.Constants.*;
@@ -176,7 +181,7 @@ public class GangCreationController extends BasicController {
     final ArrayList<String> flagsList = new ArrayList<>();
     final ArrayList<String> portraitsList = new ArrayList<>();
     final ArrayList<String> colorsList = new ArrayList<>();
-    final ArrayList<Double> colorsHSVList = new ArrayList<>();
+    final ArrayList<String> homeSystems = new ArrayList<>();
     final String resourcesPaths = "/de/uniks/stp24/assets/";
     final String flagsFolderPath = "flags/flag_";
     final String portraitsFolderPath = "portraits/captain_";
@@ -210,7 +215,7 @@ public class GangCreationController extends BasicController {
         this.gangDeletionComponent.setGangCreationController(this);
 
         this.colorsList.addAll(Arrays.asList(colorsArray));
-        this.colorsHSVList.addAll(Arrays.asList(colorsHSV));
+        this.homeSystems.addAll(Arrays.asList("regular", "energy", "mining", "agriculture", "ancient_technology", "ancient_industry", "ancient_military"));
         for (int i = 0; i <= imagesCount; i++) {
             this.flagsList.add(resourcesPaths + flagsFolderPath + i + ".png");
             this.portraitsList.add(resourcesPaths + portraitsFolderPath + i + ".png");
@@ -239,10 +244,6 @@ public class GangCreationController extends BasicController {
         buttonsPane.setPickOnBounds(false);
         creationBox.toFront();
         showCreationButton.setText("NEW EMPIRE");
-        this.splashAdjust.setBrightness(0.35);
-        this.splashAdjust.setContrast(0.0);
-        this.splashAdjust.setHue(-0.31);
-        this.splashAdjust.setSaturation(1.0);
         this.splashImageView.setEffect(this.splashAdjust);
 
         subscriber.subscribe(lobbyService.getMember(gameID, tokenStorage.getUserId()),
@@ -346,10 +347,19 @@ public class GangCreationController extends BasicController {
         portraitImage.setImage(imageCache.get(portraitsList.get(portraitImageIndex)));
         gangDescriptionText.setText(gang.description());
         colorIndex = gang.colorIndex() % colorsList.size();
-        this.splashAdjust.setHue(colorsHSVList.get(colorIndex));
+        applyEmpireColor();
         confirmedTraits.clear();
         if (Objects.nonNull(gang.traits())) confirmedTraits.setAll(gang.traits());
         updateTraitsLists();
+    }
+
+    private void applyEmpireColor() {
+        String hexCode = colorsList.get(colorIndex);
+        Color color = java.awt.Color.decode(hexCode);
+        float[] floats = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+        this.splashAdjust.setHue(floats[0]*2-1);
+        this.splashAdjust.setSaturation(floats[1]);
+        this.splashAdjust.setBrightness(floats[2]);
     }
 
     private void updateTraitLimitText() {
@@ -406,6 +416,7 @@ public class GangCreationController extends BasicController {
         flagImageIndex = flagImageIndex % flagsList.size();
         portraitImageIndex = portraitImageIndex % portraitsList.size();
         colorIndex = colorIndex % colorsList.size();
+        applyEmpireColor();
         ArrayList<Trait> gangsTraits = new ArrayList<>(confirmedTraits);
         return new Gang(gangName, flagImageIndex, flagsList.get(flagImageIndex), portraitImageIndex, portraitsList.get(portraitImageIndex), gangDescriptionText.getText(), colorsList.get(colorIndex), colorIndex, gangsTraits);
     }
@@ -423,9 +434,11 @@ public class GangCreationController extends BasicController {
             gangsTraits.add(chosen.id());
         }
 
+        String homeSystem = this.homeSystems.get(rand.nextInt(0, homeSystems.size()));
+
         Empire empire = new Empire(gang.name(), gang.description(), gang.color(),
                 gang.flagIndex() % this.flagsList.size(), gang.portraitIndex() % this.portraitsList.size(),
-                gangsTraits, "uninhabitable_0");
+                gangsTraits, homeSystem);
 
         patchEmpire(empire);
     }
@@ -493,9 +506,9 @@ public class GangCreationController extends BasicController {
         flagImageIndex = 0;
         portraitImageIndex = 0;
         colorIndex = 0;
+        applyEmpireColor();
         flagImage.setImage(imageCache.get(flagsList.get(flagImageIndex)));
         portraitImage.setImage(imageCache.get(portraitsList.get(portraitImageIndex)));
-        this.splashAdjust.setHue(colorsHSVList.get(colorIndex));
         gangNameText.setText("");
         gangDescriptionText.setText("");
         confirmedTraits.clear();
@@ -513,12 +526,12 @@ public class GangCreationController extends BasicController {
 
     public void showLastColor() {
         colorIndex = colorIndex - 1 >= 0 ? colorIndex - 1 : colorsList.size() - 1;
-        this.splashAdjust.setHue(colorsHSVList.get(colorIndex));
+        applyEmpireColor();
     }
 
     public void showNextColor() {
         colorIndex = colorIndex + 1 < colorsList.size() ? colorIndex + 1 : 0;
-        this.splashAdjust.setHue(colorsHSVList.get(colorIndex));
+        applyEmpireColor();
     }
 
     public void showLastPortrait() {
@@ -571,7 +584,7 @@ public class GangCreationController extends BasicController {
 
         if (!lockColor) {
             colorIndex = rand.nextInt(0, colorsList.size());
-            this.splashAdjust.setHue(colorsHSVList.get(colorIndex));
+            applyEmpireColor();
         }
 
         if (!lockTraits) {

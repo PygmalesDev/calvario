@@ -13,12 +13,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
@@ -31,6 +34,7 @@ import org.fulib.fx.constructs.listview.ComponentListCell;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.awt.*;
 import java.util.*;
 
 import static de.uniks.stp24.service.Constants.*;
@@ -350,8 +354,12 @@ public class GangCreationController extends BasicController {
     }
 
     private void applyEmpireColor() {
-        this.splashAdjust.setHue((Color.web(colorsList.get(this.colorIndex)).getHue()/360)*2-1);
-        this.splashAdjust.setSaturation(1);
+        String hexCode = colorsList.get(colorIndex);
+        Color color = java.awt.Color.decode(hexCode);
+        float[] floats = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+        this.splashAdjust.setHue(floats[0]*2-1);
+        this.splashAdjust.setSaturation(floats[1]);
+        this.splashAdjust.setBrightness(floats[2]);
     }
 
     private void updateTraitLimitText() {

@@ -513,6 +513,7 @@ public class InGameController extends BasicController {
 
     public void closeComponents() {
         this.contextMenuContainer.getChildren().forEach(child -> child.setVisible(false));
+        this.contactsOverviewComponent.closeContactsComponent();
     }
 
     public void resumeGame() {

@@ -17,6 +17,7 @@ import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
+import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -29,6 +30,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.*;
+import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
@@ -213,9 +215,10 @@ public class InGameController extends BasicController {
     final PopupBuilder popupHelpWindow = new PopupBuilder();
 
     int islandCollisionRadius = ISLAND_COLLISION_RADIUS;
-    double islandScale = 1.25;
 
+    FadeTransition fadeTransition;
     Shape fog;
+    Shape islandFog;
 
     final ArrayList<Node> draggables = new ArrayList<>();
 
@@ -545,13 +548,13 @@ public class InGameController extends BasicController {
         this.islandComponentList.forEach(isle -> {
             isle.setInGameController(this);
             isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
-            isle.setScaleX(islandScale);
-            isle.setScaleY(islandScale);
+            isle.setScaleX(ISLAND_SCALE);
+            isle.setScaleY(ISLAND_SCALE);
             isle.collisionCircle.setRadius(islandCollisionRadius);
             this.mapGrid.getChildren().add(isle);
 
             if (Objects.nonNull(isle.island.owner()) && isle.island.owner().equals(tokenStorage.getEmpireId())) {
-                removeFogFromIsland(isle);
+                removeFog(false, isle);
             }
         });
 
@@ -577,28 +580,6 @@ public class InGameController extends BasicController {
             group.setScaleY(scale);
         });
 
-    }
-
-    public void removeFogFromIsland(IslandComponent isle) {
-        if (isle.foggy) {
-            isle.applyIcon(false);
-            isle.applyEmpireInfo();
-
-            this.removeFog(isle, new Circle(isle.getPosX() + ISLAND_WIDTH / 2 * islandScale + 17,
-                    isle.getPosY() + ISLAND_HEIGHT / 2 * islandScale + 7,
-                    islandCollisionRadius));
-        }
-    }
-
-    public void removeFog(IslandComponent island, Shape... shapes) {
-        this.fogOfWar.removeShapesFromFog(island, shapes);
-        this.updateFog();
-    }
-
-    public void updateFog() {
-        zoomPane.getChildren().remove(this.fog);
-        this.fog = fogOfWar.getCurrentFog();
-        zoomPane.getChildren().add(2, this.fog);
     }
 
     public void showInfo(MouseEvent event) {
@@ -832,5 +813,49 @@ public class InGameController extends BasicController {
         this.fleetService.dispose();
         this.fleetCoordinationService.dispose();
         this.variableService.dispose();
+    }
+
+
+    // FOG OF WAR //
+    @OnInit
+    public void initFog() {
+        fadeTransition = new FadeTransition(Duration.millis(1000));
+        fadeTransition.setFromValue(1);
+        fadeTransition.setToValue(0);
+        fadeTransition.setCycleCount(0);
+        fadeTransition.setAutoReverse(false);
+    }
+
+    public void removeFogFromIsland(IslandComponent isle) {
+        if (isle.foggy) {
+            System.out.println(isle.island.id());
+            isle.applyIcon(false);
+            isle.applyEmpireInfo();
+            this.removeFog(true, isle);
+        }
+    }
+
+    public void removeFog(boolean animate, IslandComponent island, Shape... shapes) {
+        this.fogOfWar.removeShapesFromFog(island, shapes);
+        if (animate) this.updateFogAnimated();
+        else this.updateFog();
+    }
+
+    public void updateFogAnimated() {
+        this.islandFog = this.fogOfWar.getIslandFog();
+        fadeTransition.setNode(this.islandFog);
+        zoomPane.getChildren().remove(this.islandFog);
+        zoomPane.getChildren().add(3, this.islandFog);
+        fadeTransition.setOnFinished(event -> {
+            this.updateFog();
+            zoomPane.getChildren().remove(this.islandFog);
+        });
+        fadeTransition.play();
+    }
+
+    public void updateFog() {
+        zoomPane.getChildren().remove(this.fog);
+        this.fog = fogOfWar.getCurrentFog();
+        zoomPane.getChildren().add(2, this.fog);
     }
 }

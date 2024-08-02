@@ -3,6 +3,7 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.service.ImageCache;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -11,9 +12,7 @@ import javax.inject.Inject;
 import java.util.Objects;
 import java.util.Random;
 
-import static de.uniks.stp24.service.Constants.ISLAND_HEIGHT;
-import static de.uniks.stp24.service.Constants.ISLAND_WIDTH;
-
+import static de.uniks.stp24.service.Constants.*;
 
 public class FogOfWar {
     @Inject
@@ -23,14 +22,14 @@ public class FogOfWar {
     ImagePattern fogPattern;
 
     double x, y;
-    double islandScale = 1.25;
 
     Random random = new Random();
-
 
     Shape originalFog;
     Shape currentFog;
     Shape removedFog;
+    Shape prevRemovedFog;
+    Shape islandFog;
 
     @Inject
     public FogOfWar() {
@@ -47,29 +46,41 @@ public class FogOfWar {
         this.fogImage = new Image("/de/uniks/stp24/assets/backgrounds/fog.jpg");
         this.fogPattern = new ImagePattern(this.fogImage, 0, 0, this.fogImage.getWidth()*2, this.fogImage.getHeight()*2, false);
         this.currentFog = this.originalFog;
-        this.updateFog();
+        this.updateFog(null);
     }
 
     public void removeShapesFromFog(IslandComponent island, Shape... toRemoves) {
+        this.islandFog = null;
         for (Shape shape : toRemoves) this.updateRemovedFog(shape);
-        if (Objects.nonNull(island)) this.updateRemovedFog(this.randomFogAroundIsland(island));
-        this.updateFog();
+        if (Objects.nonNull(island)) {
+            this.updateRemovedFog(new Circle(island.getPosX() + X_OFFSET, island.getPosY() + Y_OFFSET, ISLAND_COLLISION_RADIUS));
+            this.updateRemovedFog(this.randomFogAroundIsland(island));
+        }
+        this.updateFog(island);
     }
 
     private void updateRemovedFog(Shape shape) {
-        if (Objects.nonNull(shape))
+        if (Objects.nonNull(shape)) {
             this.removedFog = Objects.nonNull(this.removedFog) ? Shape.union(this.removedFog, shape) : shape;
+//            this.islandFog = Objects.nonNull(this.islandFog) ? Shape.union(this.islandFog, shape) : shape;
+        }
     }
 
-    private void updateFog() {
+    private void updateFog(IslandComponent island) {
         if (Objects.nonNull(this.removedFog))
             this.currentFog = Shape.subtract(this.originalFog, this.removedFog);
 
+        if (Objects.nonNull(island)) {
+            this.islandFog = new Circle(island.getLayoutX() + X_OFFSET, island.getLayoutY() + Y_OFFSET, 300);
+            if (Objects.nonNull(this.prevRemovedFog))
+                this.islandFog = Shape.subtract(this.islandFog, this.prevRemovedFog);
+            this.islandFog.setFill(this.fogPattern);
+            this.islandFog.setTranslateX(island.getLayoutX() - x/2 + X_OFFSET);
+            this.islandFog.setTranslateY(island.getLayoutY() - y/2 + Y_OFFSET);
+        }
+
         this.currentFog.setFill(this.fogPattern);
-//        ColorAdjust colorAdjust = new ColorAdjust();
-//        colorAdjust.setHue(0.5);
-//        colorAdjust.setSaturation(1.0);
-//        this.currentFog.setEffect(colorAdjust);
+        this.prevRemovedFog = this.removedFog;
     }
 
     public Shape randomFogAroundIsland(IslandComponent island) {
@@ -88,13 +99,18 @@ public class FogOfWar {
             yRadius =  random.nextInt(25, 50);
             distance =  random.nextInt(125, 150);
             ellipse = new Ellipse(
-                    island.getPosX() + ISLAND_WIDTH/2 * islandScale + 17 +  distance*Math.cos(angle),
-                    island.getPosY() + ISLAND_HEIGHT/2 * islandScale + 7 + distance*Math.sin(angle),
+                    island.getPosX() + ISLAND_WIDTH/2 * ISLAND_SCALE + 17 +  distance*Math.cos(angle),
+                    island.getPosY() + ISLAND_HEIGHT/2 * ISLAND_SCALE + 7 + distance*Math.sin(angle),
                     xRadius, yRadius);
             toRemoveShape = Objects.nonNull(toRemoveShape) ? Shape.union(toRemoveShape, ellipse) : ellipse;
         }
 
+        this.islandFog = Objects.nonNull(this.islandFog) ? Shape.union(this.islandFog, toRemoveShape) : toRemoveShape;
         return toRemoveShape;
+    }
+
+    public Shape getIslandFog() {
+        return this.islandFog;
     }
 
     public Shape getCurrentFog() {

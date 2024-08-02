@@ -45,11 +45,9 @@ public class GameFleetController extends Pane {
 
     @OnInit
     public void init(){
-        travelTimeline.currentTimeProperty().addListener((observable, oldValue, newValue) -> {
-            fleetCoordinationService.inGameController.removeFog(null,
-                    new Circle(this.getLayoutX() + Constants.FLEET_HW/2 + 10, this.getLayoutY() + Constants.FLEET_HW/2 + 15, collisionCircle.getRadius()/2)
-            );
-        });
+        travelTimeline.currentTimeProperty().addListener((observable, oldValue, newValue) -> fleetCoordinationService.inGameController.removeFog(false, null,
+                new Circle(this.getLayoutX() + Constants.FLEET_HW/2 + 10, this.getLayoutY() + Constants.FLEET_HW/2 + 15, collisionCircle.getRadius()/2)
+        ));
     }
 
     public Rotate getRotation() {

@@ -279,4 +279,7 @@ public class Constants {
     public static final double FLEET_HW = 30;
     public static final int ISLAND_COLLISION_RADIUS = 150;
     public static final int FLEET_COLLISION_RADIUS = 80;
+    public static final double ISLAND_SCALE = 1.25;
+    public static final double X_OFFSET = ISLAND_WIDTH/2 * ISLAND_SCALE + 17;
+    public static final double Y_OFFSET = ISLAND_HEIGHT/2 * ISLAND_SCALE + 7;
 }

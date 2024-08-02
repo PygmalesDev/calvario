@@ -22,13 +22,13 @@ public class ContactCell extends HBox implements ReusableItemComponent<Contact> 
     @FXML
     ImageView warSituationIcon;
 
-    @Inject
     ImageCache imageCache;
 
     private Contact contact;
 
     @Inject
-    public ContactCell() {
+    public ContactCell(ImageCache imageCache) {
+        this.imageCache = imageCache;
     }
 
     @Override
@@ -49,4 +49,7 @@ public class ContactCell extends HBox implements ReusableItemComponent<Contact> 
         }
     }
 
+    public Contact getContact() {
+        return contact;
+    }
 }

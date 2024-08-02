@@ -88,6 +88,6 @@ public class ContactsService {
                         ((List<String>)contactDto._private().get("contacts")).forEach(this::addEnemy);
                     }
                 }
-                , error -> System.out.println("errorLoadSeasonalTrades:" + error));
+                , error -> System.out.println("errrorLaodContacts:" + error.getMessage()));
     }
 }

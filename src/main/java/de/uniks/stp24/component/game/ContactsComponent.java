@@ -4,6 +4,7 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.WarDto;
 import de.uniks.stp24.model.Contact;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.ContactsService;
 import de.uniks.stp24.service.game.WarService;
@@ -37,7 +38,14 @@ public class ContactsComponent extends StackPane {
     @Inject
     TokenStorage tokenStorage;
     @Inject
-    Provider<ContactCell> contactCellProvider;
+    ImageCache imageCache;
+
+    Provider<ContactCell> contactCellProvider = () -> {
+        var cell = new ContactCell(this.imageCache);
+        cell.setOnMouseClicked(event -> this.inGameController.openContactDetails(cell.getContact()));
+
+        return cell;
+    };
 
     public ObservableList<Contact> contactCells = FXCollections.observableArrayList();
     public ObservableList<WarDto> wars = FXCollections.observableArrayList();
@@ -49,13 +57,13 @@ public class ContactsComponent extends StackPane {
     }
 
     @OnInit
-    public void init(){
+    public void init() {
         loadEmpireWars();
     }
 
     private void loadEmpireWars() {
-        subscriber.subscribe(warService.getWars(tokenStorage.getGameId(),tokenStorage.getEmpireId()),
-                warDtos-> {
+        subscriber.subscribe(warService.getWars(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                warDtos -> {
                     this.wars.clear();
                     System.out.println(warDtos);
                     this.wars.addAll(warDtos);
@@ -72,10 +80,6 @@ public class ContactsComponent extends StackPane {
         this.contactCells = contactsService.contacts;
         this.contactsListView.setItems(this.contactsService.contacts);
         this.contactsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.contactCellProvider));
-        this.contactsListView.setOnMouseClicked(event -> {
-            Contact contact = this.contactsListView.getSelectionModel().getSelectedItem();
-            inGameController.openContactDetails(contact);
-        });
     }
 
     public void setInGameController(InGameController inGameController) {

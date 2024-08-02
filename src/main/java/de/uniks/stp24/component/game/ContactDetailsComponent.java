@@ -66,7 +66,6 @@ public class ContactDetailsComponent extends StackPane {
     @OnInit
     public void init() {
         createWarListener();
-
     }
 
     private void createWarListener() {
@@ -74,9 +73,18 @@ public class ContactDetailsComponent extends StackPane {
                         "games." + tokenStorage.getGameId() + ".wars.*.*", WarDto.class),
                 event -> Platform.runLater(() -> {
                     switch (event.suffix()) {
-                        case "created" -> wars.add(event.data());
-                        case "update" -> wars.replaceAll(w -> w._id().equals(event.data()._id()) ? event.data() : w);
-                        case "deleted" -> wars.removeIf(w -> w._id().equals(event.data()._id()));
+                        case "created" -> {
+                            wars.add(event.data());
+                            setWarMessagePopup(event.suffix());
+                        }
+                        case "update" -> {
+                            wars.replaceAll(w -> w._id().equals(event.data()._id()) ? event.data() : w);
+                            setWarMessagePopup(event.suffix());
+                        }
+                        case "deleted" -> {
+                            wars.removeIf(w -> w._id().equals(event.data()._id()));
+                            setWarMessagePopup(event.suffix());
+                        }
                     }
                 }),
                 error -> System.out.println("createWarListener error: " + error.getMessage())
@@ -111,7 +119,6 @@ public class ContactDetailsComponent extends StackPane {
                 });
     }
 
-
     public void closeContactDetailsComponent() {
         inGameController.closeContractDetails();
     }
@@ -133,8 +140,6 @@ public class ContactDetailsComponent extends StackPane {
         }
     }
 
-
-
     private void toggleWarState() {
         updateWarButtonText();
         contact.setAtWarWith(warButton.isSelected());
@@ -142,9 +147,9 @@ public class ContactDetailsComponent extends StackPane {
     }
 
     private void warSetUp() {
-        if(contact.isAtWarWith()){
+        if (contact.isAtWarWith()) {
             startWar();
-        }else {
+        } else {
             stopWar();
         }
     }
@@ -152,16 +157,18 @@ public class ContactDetailsComponent extends StackPane {
     private void startWar() {
         subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 empireDto -> {
+                    System.out.println("initiating war");
                     String defenderID = contact.getEmpireID();
                     String attackerID = empireDto._id();
-                    String attackerName = empireDto.name();
                     String defenderName = contact.getEmpireName();
-                    String warName = defenderName + " vs. " + attackerName;
+                    String attackerName = empireDto.name();
+                    String warName = attackerName + " vs. " + defenderName;
                     CreateWarDto createWarDto = new CreateWarDto(attackerID, defenderID, warName);
+                    System.out.println(createWarDto);
                     subscriber.subscribe(warService.createWar(tokenStorage.getGameId(), createWarDto),
                             result -> {
                             },
-                            error -> System.out.println("Error: " + error.getMessage()));
+                            error -> System.out.println("Error: " + "1" + error.getMessage()));
                 });
     }
 
@@ -169,7 +176,6 @@ public class ContactDetailsComponent extends StackPane {
         subscriber.subscribe(warService.getWars(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 warDtos -> {
                     for (WarDto warDto : warDtos) {
-                        System.out.println("contact.getEmpireID: "+contact.getEmpireID());
                         System.out.println(warDto);
                         if (contact.getEmpireID().equals(warDto.defender())) {
                             subscriber.subscribe(warService.deleteWar(tokenStorage.getGameId(), warDto._id()),
@@ -181,7 +187,9 @@ public class ContactDetailsComponent extends StackPane {
                 });
     }
 
-    private void loadContacts() {
+    private void setWarMessagePopup(String messageType) {
+    }
 
+    private void loadContacts() {
     }
 }

@@ -214,12 +214,10 @@ public class IslandComponent extends Pane {
         double x1 = this.getPosX();
         double y1 = this.getPosY();
         double r1 = Constants.ISLAND_COLLISION_RADIUS;
-//        System.out.println("island: " + "x: " +x1 +" y: " + y1 + " r: " +r1);
 
         double x2 = fleetX;
         double y2 = fleetY;
         double r2 = fleetR;
-//        System.out.println("fleet: " + "x: " +x2 +" y: " + y2 + " r: " +r2);
 
         boolean distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)) <= r1 + r2;
 

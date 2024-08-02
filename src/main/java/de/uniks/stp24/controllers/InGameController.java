@@ -59,6 +59,8 @@ public class InGameController extends BasicController {
     @FXML
     StackPane hintCaptainContainer;
     @FXML
+    StackPane warContainer;
+    @FXML
     public Pane shadow;
     @FXML
     StackPane eventContainer;
@@ -176,6 +178,9 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public SitePropertiesComponent sitePropertiesComponent;
+    @SubComponent
+    @Inject
+    public WarComponent warComponent;
 
     public List<IslandComponent> islandComponentList;
     Map<String, IslandComponent> islandComponentMap;
@@ -218,6 +223,8 @@ public class InGameController extends BasicController {
     final PopupBuilder popupSiteProperties = new PopupBuilder();
     final PopupBuilder popupDeleteStructure = new PopupBuilder();
     final PopupBuilder popupHelpWindow = new PopupBuilder();
+    final PopupBuilder popupWarMessage = new PopupBuilder();
+
 
     final ArrayList<Node> draggables = new ArrayList<>();
 
@@ -727,6 +734,10 @@ public class InGameController extends BasicController {
         popupDeleteStructure.setBlur(buildingProperties, buildingsWindow);
         popupBuildingProperties.setBlur(mapScrollPane, siteProperties);
         deleteStructureComponent.handleDeleteStructure(buildingType);
+    }
+
+    public void showWarMessage(String messageType){
+        popupWarMessage.showPopup(warContainer, warComponent);
     }
 
     public void updateAmountSitesGrid() {

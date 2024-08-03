@@ -87,9 +87,10 @@ public class IslandsService extends BasicService {
      * and retrieve island information when starting or rejoining a game
      */
     public void retrieveIslands(String gameID) {
+        this.gameID = gameID;
         resetVariables();
         createEmpireServices();
-        this.gameID = gameID;
+        refreshListOfColonizedSystems();
         subscriber.subscribe(gameSystemsService.getSystems(gameID),
           dto -> {
               Arrays.stream(dto).forEach(data -> {
@@ -105,7 +106,6 @@ public class IslandsService extends BasicService {
               widthRange = maxX - minX + 1000;
               heightRange = maxY - minY + 1000;
               this.app.show("/ingame");
-              refreshListOfColonizedSystems();
           },
           error -> System.out.println("Error while retrieving islands in the IslandsService:\n" + error.getMessage()));
     }
@@ -193,7 +193,6 @@ public class IslandsService extends BasicService {
                 IslandComponent isle2 = idToComponent.get(neighbour);
                 endX = isle2.getPosX() + 60;
                 endY = isle2.getPosY() + 100;
-
                 Line tmp = new Line(startX, startY, endX, endY);
                 tmp.getStyleClass().add("connection");
                 linesInMap.add(tmp);
@@ -379,7 +378,6 @@ public class IslandsService extends BasicService {
     }
 
     public Island convertToIsland(SystemDto result) {
-        
         return new Island(result.owner(),
           Objects.isNull(result.owner()) ? -1 : getEmpire(result.owner()).flag(),
           result.x(),
@@ -398,15 +396,15 @@ public class IslandsService extends BasicService {
         );
     }
 
+    // adds a background color to island as same as owner empire color
     public void applyDropShadowToIsland(IslandComponent islandComponent) {
-        // adds a background color to island as same as owner empire color
         if (Objects.nonNull(islandComponent.island.owner())) {
             Color colorWeb = Color.web(getEmpire(islandComponent.island.owner()).color()).brighter();
             islandComponent.islandImage.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb) + ", 4.0, 0.88, 0, 0);");
         }
-
     }
 
+    // used to get value of maxHealth or defense for own islands
     public void getSystemAggregate(String empire, String aggregate, String system) {
         this.subscriber.subscribe(gameLogicApiService.getAggregate(empire, aggregate, system),
           result -> {

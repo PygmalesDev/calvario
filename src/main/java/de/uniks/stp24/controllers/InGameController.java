@@ -276,7 +276,6 @@ public class InGameController extends BasicController {
         }
 
         for (int i = 0; i <= 16; i++) this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
-        contactService.getEmpiresInGame();
     }
 
     /*
@@ -306,7 +305,7 @@ public class InGameController extends BasicController {
         }
     }
 
-    @OnRender
+    @OnRender(2)
     public void render() {
         buildingProperties.setMouseTransparent(true);
         buildingProperties.setPickOnBounds(false);
@@ -400,7 +399,8 @@ public class InGameController extends BasicController {
                 System.out.println("in InGameController cannot be refreshed");
             }
         });
-
+        System.out.println("end of render. devs?  " + islandsService.getDevIsles().size() );
+        contactService.getEmpiresInGame();
 
     }
 
@@ -581,9 +581,6 @@ public class InGameController extends BasicController {
                             case "jobs" -> overviewSitesComponent.showJobs();
                         }
                     }
-                    // method run more than once!
-                    System.out.println("event listener island service");
-//                    islandsService.refreshListOfColonizedSystems();
                 },
                 error -> System.out.println("islands event listener error: " + error)
         );
@@ -620,7 +617,6 @@ public class InGameController extends BasicController {
             group.setScaleX(scale);
             group.setScaleY(scale);
         });
-
     }
 
     public void showInfo(MouseEvent event) {

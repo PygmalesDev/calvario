@@ -419,7 +419,8 @@ public class MarketComponent extends StackPane {
 
     @OnRender
     public void render() {
-        loadSeasonalTrades();
+        System.out.println("LOAD FROM SEASONAL SHOULD BE MODIFIED");
+        //loadSeasonalTrades();
     }
 
     /**
@@ -533,10 +534,13 @@ public class MarketComponent extends StackPane {
                 seasonalTradeDto -> {
                     if (Objects.nonNull(seasonalTradeDto._private()))
                         this.seasonComponents.addAll(seasonalTradeDto._private().get("allSeasonalTrades"));
-
-                    this.seasonalTradesListView.setItems(this.seasonComponents);
-                    this.seasonalTradesListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.marketSeasonComponentProvider));
-                    this.marketService.setSeasonComponents(this.seasonComponents);
+                    if (!this.seasonComponents.isEmpty()) {
+                        this.seasonalTradesListView.setItems(this.seasonComponents);
+                        this.seasonalTradesListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.marketSeasonComponentProvider));
+                        this.marketService.setSeasonComponents(this.seasonComponents);
+                    } else {
+                        System.out.println("no seasonal trades!!!");
+                    }
                 }
                 , error -> System.out.println("errorLoadSeasonalTrades:" + error));
     }

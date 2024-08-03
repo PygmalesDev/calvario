@@ -19,34 +19,33 @@ public class ContactsService {
     @Inject
     public IslandsService islandsService;
     @Inject
+    public EmpireApiService empireApiService;
+    @Inject
     public Subscriber subscriber;
     @Inject
     TokenStorage tokenStorage;
-    @Inject
-    public EmpireApiService empireApiService;
 
     public ObservableList<Contact> contactCells = FXCollections.observableArrayList();
     final ArrayList<Contact> seenEnemies = new ArrayList<>();
     List<String> hiddenEmpires = new ArrayList<>();
-    EmpirePrivateDto savedContacts;
     private String gameID;
-    private String ownerID;
+    private String gameOwnerID;
 
     @Inject
     ContactsService() {
     }
 
-    public void addEnemy(String owner, String islandID) {
+    public void addEnemy(String enemy, String islandID) {
         //todo remove printouts
         System.out.println("ISLAND :" + islandID);
-        System.out.println("Adding to contacts? " + owner);
+        System.out.println("Adding to contacts? " + enemy);
         Contact contact;
-        ReadEmpireDto empireDto = islandsService.getEmpire(owner);
+        ReadEmpireDto empireDto = islandsService.getEmpire(enemy);
         // if enemy's ID == game owner's ID do nothing
-        if(tokenStorage.getEmpireId().equals(owner)) return;
-        // if not check if already discovered -> add or search it
-        if(hiddenEmpires.contains(owner)) {
-            hiddenEmpires.remove(owner);
+        if(tokenStorage.getEmpireId().equals(enemy)) return;
+        // if not, check if already discovered -> add or search it
+        if(hiddenEmpires.contains(enemy)) {
+            hiddenEmpires.remove(enemy);
             System.out.println(empireDto.name());
             contact = new Contact(empireDto);
             contactCells.add(contact);
@@ -54,16 +53,16 @@ public class ContactsService {
             System.out.println(contact.getEmpireName());
         } else {
             contact = seenEnemies.stream()
-              .filter(element -> element.getEmpireID().equals(owner)).findFirst().get();
+              .filter(element -> element.getEmpireID().equals(enemy)).findFirst().get();
             System.out.println("ALREADY IN LIST ... " + contact.getEmpireName());
         }
 
         contact.addIsland(islandID);
-        contact.setGameOwner(tokenStorage.getEmpireId());
+        contact.setGameOwner(gameOwnerID);
         saveContacts();
 
         System.out.println(Objects.nonNull(contact.getPane()) && contact.getPane().visibleProperty().get());
-        // in case that a contact detail component is open and you go to another island from same contact
+        // in case that a contact detail component is open, and you go to another island from same contact
         // the view will be updated
         if (Objects.nonNull(contact.getPane()) && contact.getPane().visibleProperty().get()) contact.getPane().setContactInformation(contact);
 
@@ -71,7 +70,7 @@ public class ContactsService {
     }
 
     @OnDestroy
-    public void dispose(){
+    public void dispose() {
         System.out.println("saved info of " + this.gameID);
         saveContacts();
         subscriber.dispose();
@@ -81,86 +80,71 @@ public class ContactsService {
 //        if(Objects.nonNull(savedContacts) && Objects.nonNull(savedContacts._private())) loadContacts();
     }
 
-    public void getEmpiresInGame(){
+    public void getEmpiresInGame() {
         this.gameID = tokenStorage.getGameId();
-        this.ownerID = tokenStorage.getEmpireId();
+        this.gameOwnerID = tokenStorage.getEmpireId();
         this.hiddenEmpires = new ArrayList<>(islandsService.getEmpiresID());
-        this.hiddenEmpires.remove(this.ownerID);
+        this.hiddenEmpires.remove(this.gameOwnerID);
         System.out.println("game " + this.gameID + ". Enemies not discovered yet " + this.hiddenEmpires);
-//        loadContactsData();
+        loadContactsData();
     }
+
+    // todo save on server!
+    // after talking with other devs: the empireID in a game is clearly
+    // that means that my Empire in game 1 has another empireID as in game 2
+    // for warStatus must be additionally a character or word at end
 
     private Map<String, Object> mapContacts(Map<String, Object> map) {
         Map<String, Object> tmp = map.isEmpty() ? new HashMap<>() : map;
         for (Contact enemy : seenEnemies) {
-            tmp.put(this.gameID+enemy.getEmpireID(), enemy.getDiscoveredIslands());
-            tmp.put(this.gameID+enemy.getEmpireID()+"warStatus", false); //
+            tmp.put(enemy.getEmpireID(), enemy.getDiscoveredIslands());
         }
         return tmp;
     }
 
-    // todo save on server!
-    // I think it's necessary to use as key a concat form gameid+empireid
-    // for warStatus must be additionally a character or word at end
-    // this way is clearly to which game the contact does belong
     public void saveContacts() {
-        this.subscriber.subscribe(this.empireApiService.getPrivate(this.gameID, this.ownerID),
+        this.subscriber.subscribe(this.empireApiService.getPrivate(this.gameID, this.gameOwnerID),
           result -> {
               final Map<String, Object> newPrivate = new HashMap<>(
                 mapContacts(Objects.nonNull(result._private()) ?
-                result._private() : new HashMap<>()));
-              System.out.println(newPrivate);
-            subscriber.subscribe(this.empireApiService.savePrivate(this.gameID, this.ownerID,new EmpirePrivateDto(newPrivate)),
-              saved -> System.out.println(saved._private()),
-              error -> System.out.println("error while saving contacts....") );
+                  result._private() : new HashMap<>()));
+              subscriber.subscribe(this.empireApiService.savePrivate(this.gameID, this.gameOwnerID,new EmpirePrivateDto(newPrivate)),
+                saved -> System.out.println(saved._private()),
+                error -> System.out.println("error while saving contacts....") );
           },
           error -> System.out.println("error while saving contacts")
-
         );
-        /*Map<String, Object> tmp = new HashMap<>();
-        for (Contact enemy : seenEnemies) {
-            tmp.put(this.gameID+enemy.getEmpireID(), enemy.getDiscoveredIslands());
-            tmp.put(this.gameID+enemy.getEmpireID()+"warStatus", false); //
-        }
-        savedContacts = new EmpirePrivateDto(tmp);*/
     }
 
-    public void loadContactsData(){
-        this.subscriber.subscribe(this.empireApiService.getPrivate(this.gameID,this.ownerID),
-          result -> {},
-          error -> {});
+    //todo retrieve data from server
+    public void loadContactsData() {
+        this.subscriber.subscribe(this.empireApiService.getPrivate(this.gameID,this.gameOwnerID),
+          result -> {
+            System.out.println(result);
+            loadContacts(result._private());},
+          error -> System.out.println("error while loading contacts"));
     }
 
-    public void loadContacts() {
-        //subscribe....
-        Map<String,Object> loaded = savedContacts._private(); // assign correct map
-        boolean matchGame;
-        int length = gameID.length();
-        if (!loaded.isEmpty()) {
+    public void loadContacts(Map<String, Object> map) {
+        if (!map.isEmpty()) {
             Map<String, List<String>> tmp = new HashMap<>();
-            for (String key : loaded.keySet()) {
-                System.out.println(loaded.get(key).getClass());
-                System.out.println(key.substring(0, length));
-                System.out.println(key.substring(length));
-                matchGame = key.substring(0, length).equals(gameID);
-                if (matchGame && loaded.get(key) instanceof List<?> value ) {
-                    tmp.put(key.substring(length,2 * length),(List<String>) value);
-                } else if (key.substring(0, length).equals(gameID) && loaded.get(key) instanceof Boolean bool ) {
-                    System.out.println( key.substring(length,2 * length) + " -> not " + !bool);
+            for (String key : map.keySet()) {
+                System.out.println(key + " -> " + map.get(key).getClass());
+                if (map.get(key) instanceof List<?> value ) {
+                    tmp.put(key,(List<String>) value);
                 }
             }
+
             System.out.println("loaded data " + tmp);
+            recreateContacts(tmp);
         }
     }
 
     public void recreateContacts(Map<String, List<String>> data) {
         if (data.isEmpty()) return;
-        getEmpiresInGame();
         for (String key : data.keySet()) {
             data.get(key).forEach(id -> this.addEnemy(key,id));
         }
     }
 
-
-    public void infoEmpire(){}
 }

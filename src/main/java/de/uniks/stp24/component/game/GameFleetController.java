@@ -85,7 +85,7 @@ public class GameFleetController extends Pane {
                 IslandComponent islandComponent = this.islandsService.getIslandComponent(islandID);
                 return new KeyFrame(
                 Duration.seconds(this.nextKeyFrameTime()),
-                event -> fleetCoordinationService.inGameController.removeFogFromIsland(islandComponent),
+                event -> fleetCoordinationService.inGameController.removeFogFromIsland(true, islandComponent),
                 new KeyValue(this.layoutXProperty(), islandComponent.getPosX()+ISLAND_RADIUS_X, Interpolator.EASE_BOTH),
                 new KeyValue(this.layoutYProperty(), islandComponent.getPosY()+ISLAND_RADIUS_Y, Interpolator.EASE_BOTH)
                );}

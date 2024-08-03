@@ -520,7 +520,7 @@ public class InGameController extends BasicController {
                         isle.applyEmpireInfo();
                         // remove Fog from Island if the island is owned by the player
                         if (updatedIsland.owner().equals(tokenStorage.getEmpireId())) {
-                            removeFogFromIsland(isle);
+                            removeFogFromIsland(true, isle);
                             // island is already claimed
                             this.islandClaimingContainer.setVisible(false);
                         }
@@ -554,7 +554,7 @@ public class InGameController extends BasicController {
             this.mapGrid.getChildren().add(isle);
 
             if (Objects.nonNull(isle.island.owner()) && isle.island.owner().equals(tokenStorage.getEmpireId())) {
-                removeFog(false, isle);
+                removeFogFromIsland(false, isle);
             }
         });
 
@@ -826,12 +826,12 @@ public class InGameController extends BasicController {
         fadeTransition.setAutoReverse(false);
     }
 
-    public void removeFogFromIsland(IslandComponent isle) {
+    public void removeFogFromIsland(boolean animate, IslandComponent isle) {
         if (isle.foggy) {
-            System.out.println(isle.island.id());
             isle.applyIcon(false);
             isle.applyEmpireInfo();
-            this.removeFog(true, isle);
+            System.out.println(isle.island.id());
+            this.removeFog(animate, isle);
         }
     }
 

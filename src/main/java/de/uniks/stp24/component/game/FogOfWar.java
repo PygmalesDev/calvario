@@ -60,10 +60,9 @@ public class FogOfWar {
     }
 
     private void updateRemovedFog(Shape shape) {
-        if (Objects.nonNull(shape)) {
+        if (Objects.nonNull(shape))
             this.removedFog = Objects.nonNull(this.removedFog) ? Shape.union(this.removedFog, shape) : shape;
-//            this.islandFog = Objects.nonNull(this.islandFog) ? Shape.union(this.islandFog, shape) : shape;
-        }
+
     }
 
     private void updateFog(IslandComponent island) {
@@ -71,7 +70,7 @@ public class FogOfWar {
             this.currentFog = Shape.subtract(this.originalFog, this.removedFog);
 
         if (Objects.nonNull(island)) {
-            this.islandFog = new Circle(island.getLayoutX() + X_OFFSET, island.getLayoutY() + Y_OFFSET, 300);
+            this.islandFog = new Circle(island.getLayoutX() + X_OFFSET, island.getLayoutY() + Y_OFFSET, ISLAND_COLLISION_RADIUS*1.75);
             if (Objects.nonNull(this.prevRemovedFog))
                 this.islandFog = Shape.subtract(this.islandFog, this.prevRemovedFog);
             this.islandFog.setFill(this.fogPattern);
@@ -105,7 +104,6 @@ public class FogOfWar {
             toRemoveShape = Objects.nonNull(toRemoveShape) ? Shape.union(toRemoveShape, ellipse) : ellipse;
         }
 
-        this.islandFog = Objects.nonNull(this.islandFog) ? Shape.union(this.islandFog, toRemoveShape) : toRemoveShape;
         return toRemoveShape;
     }
 

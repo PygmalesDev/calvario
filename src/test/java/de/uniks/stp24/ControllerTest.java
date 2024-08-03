@@ -1,6 +1,7 @@
 package de.uniks.stp24;
 
 import de.uniks.stp24.service.PrefService;
+import de.uniks.stp24.service.game.ContactsService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.utils.ResponseConstants;
 import javafx.stage.Stage;
@@ -38,6 +39,9 @@ public class ControllerTest extends ApplicationTest {
 
     protected Stage stage;
     protected TestComponent testComponent;
+
+    @Spy
+    public final ContactsService contactsService = Mockito.spy(ContactsService.class);
 
     @Override
     public void start(Stage stage) throws Exception {

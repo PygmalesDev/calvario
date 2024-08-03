@@ -37,7 +37,7 @@ public class Contact {
 
     public void addIsland(String id) {
         this.atIsland = id;
-        System.out.println("now at " + id.substring(20));
+        System.out.println("now at " + id);
     if (!discoveredIslands.contains(id)) System.out.println(discoveredIslands.add(id));
     }
 
@@ -128,4 +128,5 @@ public class Contact {
         System.out.println(value);
        this.pane.calculateStrength(value);
     }
+
 }

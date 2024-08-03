@@ -23,13 +23,13 @@ public class ContactsService {
     @Inject
     public Subscriber subscriber;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
 
     public ObservableList<Contact> contactCells = FXCollections.observableArrayList();
-    final ArrayList<Contact> seenEnemies = new ArrayList<>();
-    List<String> hiddenEmpires = new ArrayList<>();
-    private String gameID;
-    private String gameOwnerID;
+    public final ArrayList<Contact> seenEnemies = new ArrayList<>();
+    public List<String> hiddenEmpires = new ArrayList<>();
+    public String gameID;
+    public String gameOwnerID;
 
     @Inject
     ContactsService() {
@@ -71,13 +71,10 @@ public class ContactsService {
 
     @OnDestroy
     public void dispose() {
-        System.out.println("saved info of " + this.gameID);
-        saveContacts();
         subscriber.dispose();
         contactCells.clear();
         seenEnemies.clear();
-//        this.gameID = null;
-//        if(Objects.nonNull(savedContacts) && Objects.nonNull(savedContacts._private())) loadContacts();
+            this.gameID = null;
     }
 
     public void getEmpiresInGame() {

@@ -29,12 +29,9 @@ import static org.mockito.Mockito.spy;
 public class IslandsServiceTest extends ControllerTest {
     @Spy
     GameSystemsApiService gameSystemsApiService;
-    @Spy
-    IslandComponent islandComponent = spy(IslandComponent.class);
 
     final SystemDto[] systems = new SystemDto[3];
     List<IslandComponent> testIsleComps;
-    Island island1;
 
     @Override
     public void start(Stage stage) throws Exception{

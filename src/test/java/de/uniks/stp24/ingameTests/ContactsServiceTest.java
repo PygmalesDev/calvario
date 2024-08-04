@@ -35,6 +35,8 @@ public class ContactsServiceTest extends ControllerTest {
 
     final EmpirePrivateDto emptyPrivateDto = new EmpirePrivateDto(new HashMap<>());
     EmpirePrivateDto empirePrivateDto;
+    EmpirePrivateDto falsePrivateDto;
+    ReadEmpireDto enemy;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -44,7 +46,7 @@ public class ContactsServiceTest extends ControllerTest {
         contactsService.subscriber = new Subscriber();
         contactsService.tokenStorage = tokenStorage;
 
-        ReadEmpireDto enemy = new ReadEmpireDto("today", "today", "empire1", "game1",
+        enemy = new ReadEmpireDto("today", "today", "empire1", "game1",
           "user1", "brotherhood", "no description", "color", 1, 1, "enemySystem");
 
         ReadEmpireDto player = new ReadEmpireDto("today", "today", "gameOwner", "game1",
@@ -62,7 +64,10 @@ public class ContactsServiceTest extends ControllerTest {
         Object list = new ArrayList<>(listOfIsles);
         Map<String,Object> mapPrivate = new HashMap<>();
         mapPrivate.put("empire1", list);
+        Map<String,Object> falsePrivate = new HashMap<>();
+        falsePrivate.put("emp",false);
         empirePrivateDto = new EmpirePrivateDto(mapPrivate);
+        falsePrivateDto = new EmpirePrivateDto(falsePrivate);
 
     }
 
@@ -86,7 +91,6 @@ public class ContactsServiceTest extends ControllerTest {
     @Test
     public void loadDataTest() {
         doReturn(Observable.just(empirePrivateDto)).when(empireApiService).getPrivate(any(),any());
-
         assertTrue(contactsService.seenEnemies.isEmpty());
         contactsService.getEmpiresInGame();
         sleep(100);
@@ -95,6 +99,18 @@ public class ContactsServiceTest extends ControllerTest {
         assertEquals(1, contact.getDiscoveredIslands().size());
         assertTrue(contact.getDiscoveredIslands().contains("isleNr1"));
         assertFalse(contact.getDiscoveredIslands().contains("isleNr2"));
+
+    }
+    @Test
+    public void loadFalseDataTest() {
+        doReturn(Observable.just(falsePrivateDto)).when(empireApiService).getPrivate(any(),any());
+
+        assertTrue(contactsService.seenEnemies.isEmpty());
+        contactsService.getEmpiresInGame();
+
+        sleep(100);
+        assertEquals(0, contactsService.seenEnemies.size());
+        contactsService.addEnemy("empire1","isleNr1");
 
     }
 

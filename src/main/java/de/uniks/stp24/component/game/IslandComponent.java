@@ -119,7 +119,6 @@ public class IslandComponent extends Pane {
             islandsService.getSystemAggregate(island.owner(), "system.defense", island.id());
         }
         setHealth(island.health());
-        System.out.println("health: " + this.health + " maxHealth " + this.maxHealth + " def " + this.maxDef);
     }
 
     // round double to have only 2 decimals
@@ -225,8 +224,8 @@ public class IslandComponent extends Pane {
         inGameController.selectedIsland = null;
     }
 
+    // apply drop shadow and flag for newly colonized systems
     public void applyEmpireInfo() {
-        // apply drop shadow and flag for newly colonized systems
         this.islandsService.applyDropShadowToIsland(this);
         this.setFlagImage(islandsService.getEmpire(island.owner()).flag());
     }
@@ -243,7 +242,6 @@ public class IslandComponent extends Pane {
         double x1 = this.getPosX();
         double y1 = this.getPosY();
         double r1 = Constants.ISLAND_COLLISION_RADIUS;
-//        System.out.println("island: " + "x: " +x1 +" y: " + y1 + " r: " +r1);
 
         return  Math.sqrt(Math.pow(fleetX - x1, 2) + Math.pow(fleetY - y1, 2)) <= r1 + fleetR;
     }
@@ -263,12 +261,15 @@ public class IslandComponent extends Pane {
         this.defenseBar.setText(this.maxDef != 0 ? this.maxDef + "" : "???");
     }
 
+    // determine if the 'stats' should be shown ->
     private void updateHealthBar() {
+        this.statsVisibility.setValue(this.health < this.maxHealth);
         this.healthBar.setText(this.health + (this.maxHealth != 0 ? "/" + this.maxHealth : ""));
     }
 
 
     public void showDefenseAndHealth() {
+        System.out.println("your health " + this.health + "/" + this.maxHealth);
         this.statsVisibility.setValue(!this.statsVisibility.get());
     }
 

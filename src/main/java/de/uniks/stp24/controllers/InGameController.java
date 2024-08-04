@@ -637,7 +637,6 @@ public class InGameController extends BasicController {
                     showOverview();
                     selected.showUnshowRudder();
                     selected.getDefenceAndHealth(this.empireID);
-//                    selected.showDefenseAndHealth();
                 }
                 selected.showDefenseAndHealth();
                 // Show island claiming scroll

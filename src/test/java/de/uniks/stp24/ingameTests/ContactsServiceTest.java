@@ -82,8 +82,10 @@ public class ContactsServiceTest extends ControllerTest {
         assertTrue(contactsService.seenEnemies.isEmpty());
         assertEquals("gameOwner", contactsService.gameOwnerID);
         assertEquals("game1", contactsService.gameID);
+
         contactsService.addEnemy("empire1","isleNr1");
         assertEquals(1, contactsService.seenEnemies.size());
+
         contactsService.addEnemy("empire1", "isleNr2");
         assertEquals(1, contactsService.seenEnemies.size());
     }

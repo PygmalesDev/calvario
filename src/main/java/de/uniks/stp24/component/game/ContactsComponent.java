@@ -19,7 +19,7 @@ import javax.inject.Provider;
 @Component(view = "ContactsComponent.fxml")
 public class ContactsComponent extends StackPane {
     @FXML
-    ListView<Contact> contactsListView;
+    public ListView<Contact> contactsListView;
 
     @SubComponent
     @Inject
@@ -29,13 +29,13 @@ public class ContactsComponent extends StackPane {
     public Pane parentDetails;
 
     @Inject
-    App app;
+    public App app;
     @Inject
-    ContactsService contactsService;
+    public ContactsService contactsService;
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
 
-    Provider<ContactCell> contactCellProvider = () -> {
+    public Provider<ContactCell> contactCellProvider = () -> {
         var cell = new ContactCell(this.imageCache, this.contactDetailsComponent);
         cell.setOnMouseClicked(event -> {
             cell.getContact().setPane(this.contactDetailsComponent);

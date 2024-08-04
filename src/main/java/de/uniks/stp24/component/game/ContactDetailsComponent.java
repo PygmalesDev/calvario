@@ -47,16 +47,16 @@ public class ContactDetailsComponent extends StackPane {
     public Pane parent;
 
     @Inject
-    ImageCache imageCache;
+    public ImageCache imageCache;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
 
     @Inject
     @Resource
     @Named("gameResourceBundle")
     public ResourceBundle resources;
 
-    private Contact contact;
+    public Contact contact;
 
 
     @Inject
@@ -134,11 +134,11 @@ public class ContactDetailsComponent extends StackPane {
 
     public void calculateStrength(double value) {
         String text = "";
-        if (value > 2.0) text = "mighty";
-        if (value < 2.0 && value > 1.0) text = "very strong";
-        if (value < 1.0 && value > 0.0) text = "strong";
-        if (value < 0.0 && value > -1.0) text = "weak";
-        if (value < -1.0 && value > -2.0) text = "very weak";
+        if (value > 2.1) text = "mighty";
+        if (value < 2.1 && value > 1.1) text = "very strong";
+        if (value < 1.1 && value > 0.1) text = "strong";
+        if (value < 0.1 && value > -1.1) text = "weak";
+        if (value < -1.1 && value > -2.1) text = "very weak"; System.out.println(text);
         this.strengText.setText("Str: " + text);
 
     }

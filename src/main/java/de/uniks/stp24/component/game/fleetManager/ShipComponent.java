@@ -77,7 +77,7 @@ public class ShipComponent extends VBox implements ReusableItemComponent<ReadShi
         this.subscriber.subscribe(this.shipService.deleteShip(readShipDTO),
                 result -> {
                     this.fleetManagerComponent.blueprintInFleetListView.refresh();
-                    //this.fleetManagerComponent.setCommandLimit(fleetService.getFleet(result.fleet()));
+                    this.fleetManagerComponent.setCommandLimit(this.fleetService.getFleet(result.fleet()), true);
                 },
                 error -> System.out.println("Error while deleting a ship in the ShipComponent:\n" + error.getMessage()));
     }

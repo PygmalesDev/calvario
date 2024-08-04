@@ -84,6 +84,9 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
                 this.jobImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/other/upgrade_job.png"));
                 this.jobTypeText.setText(this.gameResourceBundle.getString("jobs."+island.upgrade()));
             }
+//            case "ship" -> {
+//                this.jobTypeText.setText();
+//            }
         }
     }
 

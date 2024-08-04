@@ -75,7 +75,11 @@ public class FleetService {
                 Ship.class), event -> {
             ReadShipDTO ship = readShipDTOFromShip(event.data());
             //Todo: remove print
-            System.out.println("ship listener in fleetService " + event.suffix());
+            if (!event.data().updatedAt().equals(lastShipUpdate)) {
+                System.out.println("ship listener in fleetService " + event.suffix());
+                lastShipUpdate = event.data().updatedAt();
+                System.out.println(ship + " updated ship");
+            }
             switch (event.suffix()) {
                 case "created" -> {
                     if (!ship._id().equals(this.lastShipCreation)) {
@@ -114,9 +118,12 @@ public class FleetService {
         //Todo: remove print
         System.out.println(this.empireFleets.get(fleet.empire()) + " before update");
         this.gameFleets.replaceAll(old -> old.equals(fleet) ? fleet : old);
-        this.empireFleets.get(fleet.empire()).replaceAll(old -> old.equals(fleet) ? fleet : old);
+        if(fleet.empire() != null) {
+            this.empireFleets.get(fleet.empire()).replaceAll(old -> old.equals(fleet) ? fleet : old);
+        }
         this.islandFleets.get(fleet.location()).replaceAll(old -> old.equals(fleet) ? fleet : old);
         System.out.println(this.empireFleets.get(fleet.empire()) + " after update");
+        System.out.println(Arrays.toString(fleet.effects()));
     }
 
     private void deleteFleetFromGroups(Fleet fleet) {

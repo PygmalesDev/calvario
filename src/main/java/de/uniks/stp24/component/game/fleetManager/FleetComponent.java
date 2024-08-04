@@ -4,6 +4,7 @@ import de.uniks.stp24.model.Fleets.Fleet;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.FleetService;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -21,7 +22,10 @@ public class FleetComponent extends VBox implements ReusableItemComponent<Fleet>
     public ImageView fleetImageview;
     @FXML
     public Label sizeLabel;
-
+    @FXML
+    public Button editFleetButton;
+    @FXML
+    public Button deleteFleetButton;
 
     private final TokenStorage tokenStorage;
     private final Subscriber subscriber;
@@ -37,10 +41,15 @@ public class FleetComponent extends VBox implements ReusableItemComponent<Fleet>
         this.fleetService = fleetService;
     }
 
+    @Override
     public void setItem(Fleet fleet){
+        this.fleet = fleet;
+        System.out.println("deleteFleetButton_" + fleet._id());
+        this.deleteFleetButton.setId("deleteFleetButton_" + fleet._id());
+        this.editFleetButton.setId("editFleetButton_"  + fleet._id());
+
         this.fleetNameLabel.setText(fleet.name());
         this.sizeLabel.setText(fleet.ships() + " / "  + fleet.size().values().stream().mapToInt(Integer::intValue).sum());
-        this.fleet = fleet;
     }
 
     public void deleteFleet(){

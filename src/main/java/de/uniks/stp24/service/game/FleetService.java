@@ -57,15 +57,16 @@ public class FleetService {
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.fleets.*.*", this.tokenStorage.getGameId()),
                 Fleet.class), event -> {
             Fleet fleet = event.data();
-            //Todo: remove print
-            System.out.println("fleet listener in fleetService " + event.suffix());
             switch (event.suffix()) {
                 case "created" -> this.addFleetToGroups(fleet);
                 case "updated" -> {
                     Fleet oldFleet = this.gameFleets.filtered(fleetDto -> fleetDto._id().equals(fleet._id())).getFirst();
                     this.updateFleetInGroups(new Fleet(fleet.createdAt(), fleet.updatedAt(), fleet._id(), fleet.game(), fleet.empire(), fleet.name(), fleet.location(), oldFleet.ships(), fleet.size(), fleet._public(), fleet._private(), fleet.effects()));
                 }
-                case "deleted" -> this.deleteFleetFromGroups(fleet);
+                case "deleted" -> {
+                    System.out.println("deleted");
+                    this.deleteFleetFromGroups(fleet);
+                }
             }
         });
     }

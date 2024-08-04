@@ -25,13 +25,13 @@ public class NewFleetComponent extends VBox {
     public Label islandNameLabel;
 
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
-    FleetService fleetService;
+    public FleetService fleetService;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
 
     private FleetManagerComponent fleetManagerComponent;
 

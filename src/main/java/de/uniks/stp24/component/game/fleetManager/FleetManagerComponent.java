@@ -76,7 +76,7 @@ public class FleetManagerComponent extends AnchorPane {
     @Inject
     TokenStorage tokenStorage;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
     @Inject
     VariableService variableService;
     @Inject
@@ -87,15 +87,13 @@ public class FleetManagerComponent extends AnchorPane {
     ResourcesService resourcesService;
     @Inject
     IslandsService islandsService;
-    @Inject
-    JobsService jobService;
 
     @SubComponent
     @Inject
-    NewFleetComponent newFleetComponent;
+    public NewFleetComponent newFleetComponent;
     @SubComponent
     @Inject
-    ChangeFleetComponent changeFleetComponent;
+    public ChangeFleetComponent changeFleetComponent;
 
 
     private Fleet editedFleet;
@@ -217,7 +215,7 @@ public class FleetManagerComponent extends AnchorPane {
             this.islandLabel.setText(island.name() + "\nNot your island!");
         } else {
             int numberOfShipyards = island.buildings().stream().filter("shipyard"::equals).toList().size();
-            int numberOfShipJobs = this.jobService.getObservableListForSystem(this.editedFleet.location()).filtered(job -> job.type().equals("ship")).size();
+            int numberOfShipJobs = this.jobsService.getObservableListForSystem(this.editedFleet.location()).filtered(job -> job.type().equals("ship")).size();
             if(shipJobStarted){
                 numberOfShipJobs += 1;
             }
@@ -232,7 +230,7 @@ public class FleetManagerComponent extends AnchorPane {
             setIslandName(false);
             System.out.println("ship job was finished and everything should be updated");
         });
-        this.jobService.onJobDeletion(job._id(), ()  -> {
+        this.jobsService.onJobDeletion(job._id(), ()  -> {
             setIslandName(false);
             System.out.println("ship job was deleted and everything should be updated");
         });

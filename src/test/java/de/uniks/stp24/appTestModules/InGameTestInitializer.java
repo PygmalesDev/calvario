@@ -2,7 +2,11 @@ package de.uniks.stp24.appTestModules;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
+import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
+import de.uniks.stp24.component.game.fleetManager.NewFleetComponent;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
@@ -88,9 +92,17 @@ public class InGameTestInitializer extends ControllerTest {
     GameLogicApiService gameLogicApiService;
     @Spy
     VariableDependencyService variableDependencyService;
+    @Spy
+    FleetCoordinationService fleetCoordinationService;
+    @Spy
+    FleetService fleetService;
+    @Spy
+    ShipService shipService;
+    @Spy
+    FleetApiService fleetApiService;
+
     @InjectMocks
     ResearchJobComponent researchJobComponent;
-
     @InjectMocks
     IslandUpgradesJobProgressComponent jobProgressComponent;
     @InjectMocks
@@ -143,6 +155,15 @@ public class InGameTestInitializer extends ControllerTest {
     protected MarketComponent marketComponent;
     @InjectMocks
     CoolerBubbleComponent coolerBubbleComponent;
+    @InjectMocks
+    FleetManagerComponent fleetManagerComponent;
+    @InjectMocks
+    FleetCreationComponent fleetCreationComponent;
+    @InjectMocks
+    NewFleetComponent newFleetComponent;
+    @InjectMocks
+    ChangeFleetComponent changeFleetComponent;
+
     @Mock
     AnnouncementsService announcementsService;
 
@@ -250,6 +271,17 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.contextMenuButtons = new HBox();
         this.islandsService.tokenStorage = new TokenStorage();
         this.islandsService.gameSystemsService = gameSystemsApiService;
+
+        this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
+        this.inGameController.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
+        this.inGameController.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
+        this.inGameController.fleetCreationComponent = this.fleetCreationComponent;
+        this.fleetCoordinationService.fleetService = this.fleetService;
+        this.fleetCoordinationService.tokenStorage = this.tokenStorage;
+        this.fleetService.tokenStorage = this.tokenStorage;
+        this.fleetService.fleetApiService = this.fleetApiService;
+        this.fleetService.subscriber = this.subscriber;
+        this.fleetCoordinationService.subscriber = this.subscriber;
     }
 
     public void clearStyleSheets(){

@@ -7,13 +7,11 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 
 public class VariableTestComponent extends IslandOverviewTestInitializer{
@@ -37,19 +35,19 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
         initializeComponents();
 
         doReturn("testUserID").when(this.tokenStorage).getUserId();
-        doReturn("testGameID").when(this.tokenStorage).getGameId();
+        doReturn("123456").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
 
         // Mock getEmpire
-        doReturn(Observable.just(new EmpireDto("a", "a", "testEmpireID", "testGameID", "testUserID", "testEmpire",
+        doReturn(Observable.just(new EmpireDto("a", "a", "testEmpireID", "123456", "testUserID", "testEmpire",
                 "a", "a", 1, 2, "a", new String[]{"1"}, cost,
                 null))).when(this.empireService).getEmpire(any(), any());
 
-        doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", 2, 1, true, 1, 1, null))).when(gamesApiService).getGame(any());
-        doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
-        doReturn(Observable.just(new Event<>("games.testGameID.ticked", new Game("a", "a", "testGameID", "gameName", "gameOwner", 2, 1, true, 1, 1, null))))
-                .when(this.eventListener).listen("games.testGameID.ticked", Game.class);
+        doReturn(Observable.just(new Game("a", "a", "123456", "gameName", "gameOwner", 2, 1, true, 1, 1, null))).when(gamesApiService).getGame(any());
+        doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.123456.empires.testEmpireID.updated"), eq(EmpireDto.class));
+        doReturn(Observable.just(new Event<>("games.123456.ticked", new Game("a", "a", "123456", "gameName", "gameOwner", 2, 1, true, 1, 1, null))))
+                .when(this.eventListener).listen("games.123456.ticked", Game.class);
         testIsland = new Island(
                 "testEmpireID",
                 1,
@@ -121,7 +119,16 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
         doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
 
         this.islandsService.isles = islands;
+        this.mockFleets();
         this.app.show(this.inGameController);
        clearStyleSheets();
+    }
+
+    private void mockFleets(){
+        // Mock get Fleets and ships
+        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", 4, new HashMap<>(), new HashMap<>())));
+        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456",true);
+        doNothing().when(this.fleetService).initializeFleetListeners();
+        doNothing().when(this.fleetService).initializeShipListener();
     }
 }

@@ -2,7 +2,11 @@ package de.uniks.stp24.game.islandOverview;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
+import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
+import de.uniks.stp24.component.game.fleetManager.NewFleetComponent;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
@@ -26,7 +30,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import org.fulib.fx.controller.Subscriber;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Spy;
+
+import java.util.Random;
 
 import static org.mockito.Mockito.spy;
 
@@ -81,6 +88,14 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     VariableDependencyService variableDependencyService;
     @Spy
     MarketService marketService;
+    @Spy
+    FleetService fleetService;
+    @Spy
+    ShipService shipService;
+    @Spy
+    FleetCoordinationService fleetCoordinationService;
+    @Spy
+    FleetApiService fleetApiService;
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
@@ -132,20 +147,24 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     PropertiesJobProgressComponent siteJobProgress;
     @InjectMocks
     IslandClaimingComponent islandClaimingComponent;
-
     @InjectMocks
     TechnologyOverviewComponent technologyOverviewComponent;
-
     @InjectMocks
     TechnologyCategoryComponent technologyCategoryComponent;
-
     @InjectMocks
     ResearchJobComponent researchJobComponent;
     @InjectMocks
     IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
-
     @InjectMocks
     MarketComponent marketComponent;
+    @InjectMocks
+    FleetManagerComponent fleetManagerComponent;
+    @InjectMocks
+    FleetCreationComponent fleetCreationComponent;
+    @InjectMocks
+    NewFleetComponent newFleetComponent;
+    @InjectMocks
+    ChangeFleetComponent changeFleetComponent;
 
 
     public void initializeComponents() {
@@ -227,6 +246,16 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.islandsService.tokenStorage = new TokenStorage();
         this.islandsService.gameSystemsService = gameSystemsApiService;
 
+        this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
+        this.inGameController.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
+        this.inGameController.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
+        this.inGameController.fleetCreationComponent = this.fleetCreationComponent;
+        this.fleetCoordinationService.fleetService = this.fleetService;
+        this.fleetCoordinationService.tokenStorage = this.tokenStorage;
+        this.fleetService.tokenStorage = this.tokenStorage;
+        this.fleetService.fleetApiService = this.fleetApiService;
+        this.fleetService.subscriber = this.subscriber;
+        this.fleetCoordinationService.subscriber = this.subscriber;
     }
 
     public void clearStyleSheets() {

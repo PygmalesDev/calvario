@@ -23,20 +23,20 @@ import static java.util.stream.Collectors.toMap;
 @Singleton
 public class FleetCoordinationService {
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
-    FleetService fleetService;
+    public FleetService fleetService;
     @Inject
     IslandsService islandsService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
     App app;
 
     private IslandClaimingComponent claimingComponent;
     private GameFleetController selectedFleet;
     private InGameController inGameController;
-    private final Random random = new Random();
+    public final Random random = new Random();
 
     private final double ISLAND_RADIUS_X = (double) Constants.ISLAND_WIDTH/2;
     private final double ISLAND_RADIUS_Y = ((double) Constants.ISLAND_HEIGHT/2);
@@ -48,7 +48,6 @@ public class FleetCoordinationService {
     public void setInitialFleetPosition() {
         this.fleetService.onFleetCreated(this::putFleetOnMap);
         this.random.setSeed(Integer.parseInt(tokenStorage.getGameId().substring(0, 4), 16));
-
     }
 
     public void setFleet(GameFleetController fleet) {

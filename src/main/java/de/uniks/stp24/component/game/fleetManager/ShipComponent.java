@@ -55,26 +55,26 @@ public class ShipComponent extends VBox implements ReusableItemComponent<ReadShi
     @Override
     public void setItem(ReadShipDTO shipDTO){
         this.readShipDTO = shipDTO;
-        blueprintTypeLabel.setText(shipDTO.type());
-        healthLabel.setText(String.valueOf(shipDTO.health()));
+        this.blueprintTypeLabel.setText(shipDTO.type());
+        this.healthLabel.setText(String.valueOf(shipDTO.health()));
         ShipType currentShipType = null;
-        for(ShipType shipType : shipService.shipTypesAttributes){
+        for(ShipType shipType : this.shipService.shipTypesAttributes){
             if (shipType._id().equals(shipDTO.type())) {
                 currentShipType = shipType;
             }
         }
         assert currentShipType != null;
-        speedLabel.setText(String.valueOf(currentShipType.speed()));
-        attackLabel.setText(String.valueOf(currentShipType.attack().get("default")));
-        defenseLabel.setText(String.valueOf(currentShipType.defense().get("default")));
+        this.speedLabel.setText(String.valueOf(currentShipType.speed()));
+        this.attackLabel.setText(String.valueOf(currentShipType.attack().get("default")));
+        this.defenseLabel.setText(String.valueOf(currentShipType.defense().get("default")));
     }
 
     public void changeFleet(){
-        this.fleetManagerComponent.changeFleetOfShip(readShipDTO);
+        this.fleetManagerComponent.changeFleetComponent.changeFleetOfShip(this.readShipDTO);
     }
 
     public void deleteShip(){
-        this.subscriber.subscribe(this.shipService.deleteShip(readShipDTO),
+        this.subscriber.subscribe(this.shipService.deleteShip(this.readShipDTO),
                 result -> {
                     this.fleetManagerComponent.blueprintInFleetListView.refresh();
                     this.fleetManagerComponent.setCommandLimit(this.fleetService.getFleet(result.fleet()), true);

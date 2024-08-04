@@ -1,6 +1,5 @@
 package de.uniks.stp24.component.game.fleetManager;
 
-import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Ships;
 import de.uniks.stp24.service.game.*;
@@ -16,8 +15,6 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.Objects;
-
-import static de.uniks.stp24.model.Fleets.Fleet;
 
 @Component(view = "ShipTypesOfFleet.fxml")
 public class ShipTypesOfFleetComponent extends VBox implements ReusableItemComponent<Ships.BlueprintInFleetDto> {
@@ -71,9 +68,9 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
                     this.buildShipButton.setDisable(true);
                 }
             }
-            int numberOfShipJobs = jobService.getObservableListForSystem(blueprintInFleetDto.fleet().location()).filtered(job -> job.type().equals("ship")).size();
-            int numberOfShipYards = (int) islandsService.getIslandComponent(blueprintInFleetDto.fleet().location()).getIsland().buildings().stream()
-                    .filter("shipyard"::equals).count();
+            int numberOfShipJobs = shipJobsOnIsland();
+            int numberOfShipYards = this.islandsService.getIslandComponent(blueprintInFleetDto.fleet().location()).getIsland().buildings().stream()
+                    .filter("shipyard"::equals).toList().size();
             if(numberOfShipJobs >= numberOfShipYards){
                 this.buildShipButton.setDisable(true);
             }
@@ -97,12 +94,19 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
         this.setBuildButton();
     }
 
+    public int shipJobsOnIsland(){
+        return this.jobService.getObservableListForSystem(blueprintInFleetDto.fleet().location()).filtered(job -> job.type().equals("ship")).size();
+    }
+
     public void buildShip() {
+        int shipJobsBeforeStart = shipJobsOnIsland();
         this.subscriber.subscribe(this.shipService.beginShipJob(this.blueprintInFleetDto.fleet()._id(), this.blueprintInFleetDto.type(), this.blueprintInFleetDto.fleet().location()),
                 job -> {
                     //Todo: remove print
                     System.out.println("ship job has started");
                     this.fleetManagerComponent.setShipFinisher(job);
+                    int shipJobsAfterStart = shipJobsOnIsland();
+                    this.fleetManagerComponent.setIslandName(shipJobsAfterStart == shipJobsBeforeStart);
                 },
                 error -> System.out.println("Error while trying to create a new ship job in ShipTypesOfFleetComponent:\n" + error.getMessage()));
     }

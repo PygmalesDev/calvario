@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Text?>
 
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../../../style/ingameButtons.css" type="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.fleetManager.FleetManagerComponent">
-   <StackPane layoutX="-20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+   <StackPane fx:id="fleetManagerStackPane" layoutX="-20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
          <VBox fx:id="fleetManagerBox" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" styleClass="technologiesCategoryBackground">
             <HBox>
@@ -87,32 +87,6 @@
                   <Insets top="50.0" />
                </padding>
             </HBox>
-         </VBox>
-         <VBox fx:id="selectIslandVBox" alignment="CENTER" maxHeight="-Infinity" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: yellow;">
-            <children>
-               <Label text="Choose an island" />
-               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                  <children>
-                     <Button mnemonicParsing="false" onAction="#showLastIslandName" text="&lt;" />
-                     <Label fx:id="islandNameLabel" text="islandName" />
-                     <Button mnemonicParsing="false" onAction="#showNextIslandName" text="&gt;" />
-                  </children>
-               </HBox>
-               <Button fx:id="confirmIslandButton" mnemonicParsing="false" onAction="#confirmIsland" text="Confirm" />
-            </children>
-         </VBox>
-         <VBox fx:id="selectNewFleetVBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: red;">
-            <children>
-               <Label text="Choose a fleet" />
-               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                  <children>
-                     <Button mnemonicParsing="false" onAction="#showLastFleetName" text="&lt;" />
-                     <Label fx:id="newFleetOfShipNameLabel" text="Label" />
-                     <Button mnemonicParsing="false" onAction="#showNextFleetName" text="&gt;" />
-                  </children>
-               </HBox>
-               <Button mnemonicParsing="false" onAction="#confirmFleetChange" text="Confirm" />
-            </children>
          </VBox>
       </children>
    </StackPane>

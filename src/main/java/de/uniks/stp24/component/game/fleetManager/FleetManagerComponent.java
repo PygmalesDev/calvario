@@ -1,11 +1,8 @@
 package de.uniks.stp24.component.game.fleetManager;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.dto.ShortSystemDto;
-import de.uniks.stp24.model.EffectSource;
-import de.uniks.stp24.model.Fleets;
 import de.uniks.stp24.model.Fleets.Fleet;
-import de.uniks.stp24.model.Jobs;
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Ships.BlueprintInFleetDto;
 import de.uniks.stp24.model.Ships.ReadShipDTO;
 import de.uniks.stp24.model.Ships.ShipType;
@@ -20,9 +17,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
@@ -31,10 +30,8 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import static de.uniks.stp24.model.Jobs.Job;
 
 @Component(view = "FleetManager.fxml")
 public class FleetManagerComponent extends AnchorPane {
@@ -67,15 +64,10 @@ public class FleetManagerComponent extends AnchorPane {
     @FXML
     public ListView<ReadShipDTO> shipsListView;
     @FXML
-    public VBox selectIslandVBox;
-    @FXML
-    public Label islandNameLabel;
-    @FXML
     public VBox infoButtonVBox;
     @FXML
-    public Label newFleetOfShipNameLabel;
-    @FXML
-    public VBox selectNewFleetVBox;
+    public StackPane fleetManagerStackPane;
+
 
     @Inject
     App app;
@@ -95,13 +87,18 @@ public class FleetManagerComponent extends AnchorPane {
     ResourcesService resourcesService;
     @Inject
     IslandsService islandsService;
+    @Inject
+    JobsService jobService;
 
-    private int fleetNameIndex = 0;
-    private int islandNameIndex = 0;
-    private List<ShortSystemDto> islandList = new ArrayList<>();
-    private List<Fleet> fleetsOnIslandList = new ArrayList<>();
+    @SubComponent
+    @Inject
+    NewFleetComponent newFleetComponent;
+    @SubComponent
+    @Inject
+    ChangeFleetComponent changeFleetComponent;
+
+
     private Fleet editedFleet;
-    private ReadShipDTO readShipDTOFleetChange;
 
     public Provider<FleetComponent> fleetComponentProvider = () -> new FleetComponent(this, this.tokenStorage, this.subscriber, this.fleetService);
     public Provider<ShipTypesOfFleetComponent> shipTypesOfFleetComponentProvider = () -> new ShipTypesOfFleetComponent(this, this.resourcesService, this.shipService, this.subscriber, this.fleetService);
@@ -121,6 +118,8 @@ public class FleetManagerComponent extends AnchorPane {
     @OnInit
     public void init(){
         this.jobsService.onJobsLoadingFinished("ship", this::setShipFinisher);
+        this.newFleetComponent.setFleetManager(this);
+        this.changeFleetComponent.setFleetManager(this);
     }
 
     @OnRender
@@ -128,15 +127,21 @@ public class FleetManagerComponent extends AnchorPane {
         this.fleets = this.fleetService.getEmpireFleets(this.tokenStorage.getEmpireId());
         this.ships = this.shipService.getShipsInSelectedFleet();
         this.blueprintsInFleetList = this.shipService.getBlueprintsInSelectedFleet();
+        FilteredList<ShipType> filteredBlueprints = new FilteredList<>(blueprints, shipType -> shipType.build_time() > 0);
+
         this.fleetsListView.setItems(fleets);
         this.fleetsListView.setCellFactory(list -> new ComponentListCell<>(app, fleetComponentProvider));
         this.blueprintInFleetListView.setItems(blueprintsInFleetList);
         this.blueprintInFleetListView.setCellFactory(list -> new ComponentListCell<>(app, shipTypesOfFleetComponentProvider));
-        FilteredList<ShipType> filteredBlueprints = new FilteredList<>(blueprints, shipType -> shipType.build_time() > 0);
         this.blueprintsListView.setItems(filteredBlueprints);
         this.blueprintsListView.setCellFactory(list -> new ComponentListCell<>(app, blueprintsNotAddableComponentProvider));
         this.shipsListView.setItems(ships);
         this.shipsListView.setCellFactory(list -> new ComponentListCell<>(app, shipComponentProvider));
+
+        this.fleetManagerStackPane.getChildren().add(this.newFleetComponent);
+        this.fleetManagerStackPane.getChildren().add(this.changeFleetComponent);
+        this.newFleetComponent.setVisible(false);
+        this.changeFleetComponent.setVisible(false);
     }
 
     public void showFleets() {
@@ -145,8 +150,6 @@ public class FleetManagerComponent extends AnchorPane {
         this.fleetsListView.refresh();
         this.shipService.clearEditedFleetInfos();
         this.infoButtonVBox.setVisible(false);
-        this.selectIslandVBox.setVisible(false);
-        this.selectNewFleetVBox.setVisible(false);
         this.fleetsListView.setVisible(true);
         this.fleetBuilderVBox.setVisible(false);
     }
@@ -163,7 +166,6 @@ public class FleetManagerComponent extends AnchorPane {
         this.blueprintsVBox.setVisible(false);
     }
 
-
     public void close() {
         this.setVisible(false);
     }
@@ -175,7 +177,7 @@ public class FleetManagerComponent extends AnchorPane {
                 dto -> {
                     this.shipService.initializeFleetEdition(dto, editedFleet);
                     showBlueprints();
-                    setIslandName(fleet);
+                    setIslandName(false);
                     setCommandLimit(fleet,false);
                     this.infoButtonVBox.setVisible(true);
                     this.fleetNameText.setText(fleet.name());
@@ -197,47 +199,6 @@ public class FleetManagerComponent extends AnchorPane {
         }
     }
 
-    public void showNextIslandName() {
-        this.islandNameIndex = this.islandNameIndex + 1 < this.islandList.size() ? this.islandNameIndex + 1 : 0;
-        setIslandNameText(this.islandNameIndex);
-    }
-
-    public void showLastIslandName() {
-        this.islandNameIndex = this.islandNameIndex - 1 >= 0 ? this.islandNameIndex - 1 : this.islandList.size() - 1;
-        setIslandNameText(this.islandNameIndex);
-    }
-
-    public void setIslandNameText(int index) {
-        int numberOfShipyards = (int) this.islandList.get(index).buildings().stream()
-                .filter("shipyard"::equals)
-                .count();
-        this.islandNameLabel.setText(islandList.get(index).name() + " (has " + numberOfShipyards + " shipyard)");
-    }
-
-    public void createFleet() {
-        this.selectIslandVBox.setVisible(true);
-        this.islandList.addAll(islandsService.getDevIsles());
-        this.islandList = islandList.stream()
-                .filter(shortSystemDto -> shortSystemDto.owner().equals(tokenStorage.getEmpireId()) && shortSystemDto.buildings().contains("shipyard"))
-                .collect(Collectors.toList());
-        this.islandNameIndex = 0;
-        setIslandNameText(0);
-    }
-
-    public void confirmIsland() {
-        //Todo: random fleetName
-        Fleets.CreateFleetDTO newFleet = new Fleets.CreateFleetDTO("newFleet",
-                this.islandList.get(islandNameIndex)._id(), new HashMap<>(),
-                new HashMap<>(), new HashMap<>(), new EffectSource[]{});
-        this.subscriber.subscribe(this.fleetService.createFleet(this.tokenStorage.getGameId(), newFleet),
-                result -> {
-                    this.selectIslandVBox.setVisible(false);
-                    showFleets();
-                },
-                error -> System.out.println("Error while creating a new fleet in the FleetManagerComponent:\n" + error.getMessage())
-        );
-    }
-
     public void setCommandLimit(Fleet fleet, boolean shipDeleted) {
         int numberOfShips = ships.size();
         System.out.println(fleet.ships() + " fleet ships");
@@ -248,53 +209,37 @@ public class FleetManagerComponent extends AnchorPane {
         this.commandLimitLabel.setText("Command Limit \n" + numberOfShips + " / " + fleet.size().values().stream().mapToInt(Integer::intValue).sum());
     }
 
-    public void setIslandName(Fleet fleet) {
-        List<ShortSystemDto> systemList = islandsService.getDevIsles().stream().filter(shortSystemDto -> shortSystemDto._id().equals(fleet.location()))
-                .toList();
-        if (systemList.isEmpty()) {
+    public void setIslandName(boolean shipJobStarted) {
+        Island island = islandsService.getIslandComponent(this.editedFleet.location()).getIsland();
+        if (island.owner().isEmpty()) {
             this.islandLabel.setText("Unknown Seas");
+        } else if (!island.owner().equals(this.tokenStorage.getEmpireId())) {
+            this.islandLabel.setText(island.name() + "\nNot your island!");
         } else {
-            this.islandLabel.setText(systemList.getFirst().name());
+            int numberOfShipyards = island.buildings().stream().filter("shipyard"::equals).toList().size();
+            int numberOfShipJobs = this.jobService.getObservableListForSystem(this.editedFleet.location()).filtered(job -> job.type().equals("ship")).size();
+            if(shipJobStarted){
+                numberOfShipJobs += 1;
+            }
+            this.islandLabel.setText(island.name() + "\n" + numberOfShipJobs + " / " + numberOfShipyards + " shipyards occupied");
         }
     }
 
-    public void showLastFleetName() {
-        this.fleetNameIndex = this.fleetNameIndex - 1 >= 0 ? this.fleetNameIndex - 1 : this.fleetsOnIslandList.size() - 1;
-        this.newFleetOfShipNameLabel.setText(fleetsOnIslandList.get(fleetNameIndex).name());
-    }
-
-    public void showNextFleetName() {
-        this.fleetNameIndex = this.fleetNameIndex + 1 < this.fleetsOnIslandList.size() ? this.fleetNameIndex + 1 : 0;
-        this.newFleetOfShipNameLabel.setText(fleetsOnIslandList.get(fleetNameIndex).name());
-    }
-
-    public void confirmFleetChange() {
-        subscriber.subscribe(this.shipService.changeFleetOfShip(fleetsOnIslandList.get(fleetNameIndex)._id(), readShipDTOFleetChange),
-                ship -> {
-                    this.shipService.deleteShipFromGroups(this.readShipDTOFleetChange);
-                    this.fleetService.adaptShipCount(this.readShipDTOFleetChange.fleet(), -1);
-                    this.fleetService.adaptShipCount(ship.fleet(),1);
-                    this.selectNewFleetVBox.setVisible(false);
-                },
-                error -> System.out.println("Error while changing the fleet of a ship in the FleetManagerComponent:\n" + error.getMessage()));
-    }
-
-    public void changeFleetOfShip(ReadShipDTO readShipDTO) {
-        this.fleetsOnIslandList = this.fleetService.getFleetsOnIsland(this.editedFleet.location()).stream()
-                .filter(fleetDto -> !fleetDto._id().equals(editedFleet._id()) && fleetDto.empire().equals(editedFleet.empire()))
-                .collect(Collectors.toList());
-        this.fleetNameIndex = 0;
-        this.readShipDTOFleetChange = readShipDTO;
-        this.newFleetOfShipNameLabel.setText(fleetsOnIslandList.getFirst().name());
-        this.selectNewFleetVBox.setVisible(true);
-    }
-
-    public void setShipFinisher(Jobs.Job job){
-        this.jobsService.onJobCompletion(job._id(), event -> {
+    public void setShipFinisher(Job job){
+        this.jobsService.onJobCompletion(job._id(), ()  -> {
             this.blueprintInFleetListView.refresh();
             setCommandLimit(this.fleetService.getFleet(job.fleet()), false);
+            setIslandName(false);
             System.out.println("ship job was finished and everything should be updated");
         });
+        this.jobService.onJobDeletion(job._id(), ()  -> {
+            setIslandName(false);
+            System.out.println("ship job was deleted and everything should be updated");
+        });
+    }
+
+    public void createFleet() {
+        this.newFleetComponent.createNewFleet();
     }
 
     @OnDestroy

@@ -118,7 +118,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
         this.jobsService.onJobsLoadingFinished("building", this::setBuildingJobFinishers);
         this.jobsService.onJobsLoadingFinished(() ->
                 this.buildingJobs = this.jobsService.getJobObservableListOfType("building"));
-//{{{        this.jobsService.onJobCommonFinish(this::updateIslandBuildings);}}}
+        this.jobsService.onJobCommonFinish(this::updateIslandBuildings);
     }
 
     @OnRender
@@ -226,8 +226,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
     private void setDestroyButtonDisable() {
-        if (Objects.nonNull(tokenStorage.getIsland()) &&
-                tokenStorage.getIsland().buildings().contains(buildingType))
+        if (islandAttributeStorage.getIsland().buildings().contains(buildingType))
             destroyButton.setDisable(false);
     }
 

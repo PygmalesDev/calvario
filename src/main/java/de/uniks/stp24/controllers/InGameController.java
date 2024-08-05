@@ -819,7 +819,7 @@ public class InGameController extends BasicController {
     // FOG OF WAR //
     @OnInit
     public void initFog() {
-        fadeTransition = new FadeTransition(Duration.millis(1000));
+        fadeTransition = new FadeTransition(Duration.millis(1500));
         fadeTransition.setFromValue(1);
         fadeTransition.setToValue(0);
         fadeTransition.setCycleCount(0);

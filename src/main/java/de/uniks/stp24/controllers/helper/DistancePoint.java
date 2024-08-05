@@ -5,7 +5,7 @@ import javafx.geometry.Point2D;
 import java.util.Objects;
 
 public class DistancePoint extends Point2D {
-    private final Point2D prev;
+    private DistancePoint prev;
 
     public DistancePoint(double v, double v1, DistancePoint prev) {
         super(v, v1);
@@ -21,7 +21,11 @@ public class DistancePoint extends Point2D {
         return Objects.nonNull(prev) ? this.distance(prev) : -1;
     }
 
-    public Point2D getPrev() {
+    public DistancePoint getPrev() {
         return prev;
+    }
+
+    public void setPrev(DistancePoint prev) {
+        this.prev = prev;
     }
 }

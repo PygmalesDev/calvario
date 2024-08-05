@@ -74,8 +74,8 @@ public class GameFleetController extends Pane {
 
     public DistancePoint getCurrentLocation() {
         return new DistancePoint(
-                this.getLayoutX(),
-                this.getLayoutY(),
+                this.getLayoutX()  + FLEET_HW,
+                this.getLayoutY() + FLEET_HW,
                 null
         );
     }

@@ -1,6 +1,7 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.dto.UpdateEmpireMarketDto;
@@ -460,10 +461,10 @@ public class MarketComponent extends StackPane {
     private void performSeasonalTrades() {
         for (SeasonComponent seasonalTrade : seasonComponents) {
             if (seasonalTrade.isPlaying()) {
-                if ("buy".equals(seasonalTrade.getTransActionTypeText())) {
-                    performSeasonalBuy(seasonalTrade.getResourceType(), seasonalTrade.getResourceAmount());
-                } else if ("sell".equals(seasonalTrade.getTransActionTypeText())) {
-                    performSeasonalSell(seasonalTrade.getResourceType(), seasonalTrade.getResourceAmount());
+                if ("buy".equals(seasonalTrade.transActionTypeText())) {
+                    performSeasonalBuy(seasonalTrade.resourceType(), seasonalTrade.resourceAmount());
+                } else if ("sell".equals(seasonalTrade.transActionTypeText())) {
+                    performSeasonalSell(seasonalTrade.resourceType(), seasonalTrade.resourceAmount());
                 }
             }
         }
@@ -532,15 +533,15 @@ public class MarketComponent extends StackPane {
     public void loadSeasonalTrades() {
         subscriber.subscribe(marketService.getSeasonalTrades(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 seasonalTradeDto -> {
-                    if (Objects.nonNull(seasonalTradeDto._private()))
-                        this.seasonComponents.addAll(seasonalTradeDto._private().get("allSeasonalTrades"));
-                    if (!this.seasonComponents.isEmpty()) {
-                        this.seasonalTradesListView.setItems(this.seasonComponents);
-                        this.seasonalTradesListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.marketSeasonComponentProvider));
-                        this.marketService.setSeasonComponents(this.seasonComponents);
-                    } else {
-                        System.out.println("no seasonal trades!!!");
+                    this.seasonComponents.clear();
+                    if (Objects.nonNull(seasonalTradeDto._private()) && Objects.nonNull(seasonalTradeDto._private().get("allSeasonalTrades"))) {
+                        this.seasonComponents.addAll(((List<Object>) seasonalTradeDto._private().get("allSeasonalTrades")).stream().map(
+                                obj -> (SeasonComponent) obj
+                        ).toList());
                     }
+                    this.seasonalTradesListView.setItems(this.seasonComponents);
+                    this.seasonalTradesListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.marketSeasonComponentProvider));
+                    this.marketService.setSeasonComponents(this.seasonComponents);
                 }
                 , error -> System.out.println("errorLoadSeasonalTrades:" + error));
     }

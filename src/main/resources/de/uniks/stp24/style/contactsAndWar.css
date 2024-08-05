@@ -11,8 +11,18 @@
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-font-size: 16px;
+    -fx-font-weight: normal;
+    -fx-fill: white;
+
 }
 
+.warTitle {
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-fill: red;
+    -fx-font-size: 30;
+}
 
 /*TextStyles*/
 .baskervilleOldFace {
@@ -119,12 +129,25 @@
 }
 
 .warButtonDesign {
-    -fx-background-image: url("/de/uniks/stp24/assets/market/buttons/button_green.png");
+    -fx-background-image: url("/de/uniks/stp24/assets/contactsAndWars/red_button_element.png");
     -fx-background-color: transparent;
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-padding: 0;
+    -fx-text-fill: white;
+    -fx-border-width: 0;
+    -fx-font-size: 12;
+}
+
+.warButtonDesign:selected {
+    -fx-background-image: url("/de/uniks/stp24/assets/contactsAndWars/green_button_element.png");
+    -fx-background-color: transparent;
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-text-fill: white;
     -fx-border-width: 0;
 }
 

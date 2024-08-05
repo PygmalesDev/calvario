@@ -11,6 +11,7 @@ import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs;
+import de.uniks.stp24.model.*;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.Constants;
@@ -60,6 +61,8 @@ public class InGameController extends BasicController {
     StackPane helpWindowContainer;
     @FXML
     StackPane hintCaptainContainer;
+    @FXML
+    StackPane warContainer;
     @FXML
     public Pane shadow;
     @FXML
@@ -178,6 +181,9 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public SitePropertiesComponent sitePropertiesComponent;
+    @SubComponent
+    @Inject
+    public WarComponent warComponent;
 
     public List<IslandComponent> islandComponentList;
     Map<String, IslandComponent> islandComponentMap;
@@ -221,6 +227,8 @@ public class InGameController extends BasicController {
     final PopupBuilder popupSiteProperties = new PopupBuilder();
     final PopupBuilder popupDeleteStructure = new PopupBuilder();
     final PopupBuilder popupHelpWindow = new PopupBuilder();
+    final PopupBuilder popupWarMessage = new PopupBuilder();
+
 
     final ArrayList<Node> draggables = new ArrayList<>();
     final ArrayList<GameFleetController> fleetsOnMap = new ArrayList<>();
@@ -317,6 +325,11 @@ public class InGameController extends BasicController {
         helpComponent.setVisible(false);
         helpComponent.setMouseTransparent(true);
 
+        warContainer.setVisible(false);
+        warContainer.setPickOnBounds(false);
+        warComponent.setVisible(false);
+        warComponent.setMouseTransparent(false);
+
         pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
         eventComponent.setParent(shadow, eventContainer);
@@ -354,8 +367,6 @@ public class InGameController extends BasicController {
         // todo coordinate with Imran to use this
         // for better control
         contactsOverviewComponent.setParents(contextMenuContainer, contactDetailsContainer);
-
-
         contextMenuContainer.getChildren().forEach(child -> {
             child.setVisible(false);
             // make every node in contextMenuContainer draggable
@@ -773,6 +784,11 @@ public class InGameController extends BasicController {
         deleteStructureComponent.handleDeleteStructure(buildingType);
     }
 
+    public void showWarMessage(String messageType){
+        warComponent.setText();
+        popupWarMessage.showPopup(warContainer, warComponent);
+    }
+
     public void updateAmountSitesGrid() {
         sitePropertiesComponent.displayAmountOfSite();
     }
@@ -794,6 +810,7 @@ public class InGameController extends BasicController {
                 event -> {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
                         islandAttributes.setEmpireDto(event.data());
+//                        overviewUpgradeComponent.setUpgradeButton();
                         this.lastUpdate = event.data().updatedAt();
                     }
                 },
@@ -843,6 +860,15 @@ public class InGameController extends BasicController {
         islandComponentMap = null;
         islandsService.removeDataForMap();
     }
+
+    /*public void openContactDetails(Contact contact) {
+        contactDetailsComponent.setContactInformation(contact);
+        contactDetailsContainer.setVisible(true);
+    }
+
+    public void closeContractDetails(){
+        contactDetailsContainer.setVisible(false);
+    }*/
 
     @OnDestroy
     public void destroy() {

@@ -1,17 +1,18 @@
 package de.uniks.stp24.service.game;
 
-import de.uniks.stp24.dto.CreateWarDto;
-import de.uniks.stp24.dto.UpdateWarDto;
-import de.uniks.stp24.dto.WarDto;
+import de.uniks.stp24.dto.*;
 import de.uniks.stp24.rest.WarsApiService;
 import io.reactivex.rxjava3.core.Observable;
-
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
+@Singleton
 public class WarService {
+
     @Inject
     public  WarsApiService warsApiService;
+
 
     @Inject
     public WarService(){
@@ -37,4 +38,5 @@ public class WarService {
     public Observable<WarDto> deleteWar(String gameID, String warID) {
         return this.warsApiService.deleteWar(gameID, warID);
     }
+
 }

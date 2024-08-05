@@ -6,6 +6,7 @@ import dagger.Provides;
 import de.uniks.stp24.Main;
 import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.WarService;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -111,5 +112,10 @@ public class HttpModule {
     @Provides
     @Singleton
     FleetApiService fleetApiService(Retrofit retrofit) {return retrofit.create(FleetApiService.class);}
+
+    @Provides
+    @Singleton
+    WarsApiService warsApiService(Retrofit retrofit) {return retrofit.create(WarsApiService.class);}
+
 
 }

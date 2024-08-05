@@ -9,5 +9,6 @@
    <AnchorPane prefHeight="45.0" prefWidth="276.0">
       <Text fx:id="empireNameText" layoutX="70.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="176.80341339111328" />
       <ImageView fx:id="empireFlagImageView" fitHeight="45.0" fitWidth="56.0" layoutX="14.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="warSituationIcon" fitHeight="30.0" fitWidth="30.0" layoutX="214.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true" />
    </AnchorPane>
 </fx:root>

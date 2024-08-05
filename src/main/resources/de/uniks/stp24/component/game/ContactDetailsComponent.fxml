@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -91,5 +92,14 @@
                 <Font size="10.0" />
             </font>
         </Button>
+        <ToggleButton fx:id="warButton" layoutX="146.0" layoutY="442.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="94.0" styleClass="warButtonDesign">
+            <font>
+                <Font size="10.0" />
+            </font>
+        </ToggleButton>
+        <Text fx:id="warStateText" layoutX="122.0" layoutY="405.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="141.33331298828125">
+        <font>
+            <Font size="9.0" />
+        </font>
     </AnchorPane>
 </fx:root>

@@ -5,6 +5,8 @@ import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.dto.ShortSystemDto;
 
 import java.util.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 public class Contact {
     String empireFlag;
@@ -26,7 +28,18 @@ public class Contact {
     }
 
     public String getEmpireID() { return this.empireID;}
+    private BooleanProperty atWarWith = new SimpleBooleanProperty(false);
 
+//    public Contact() {
+//    }
+//    public Contact(String empireID) {
+//        this.empireID = empireID;
+//    }
+
+
+    public void setEmpireID(String empireID) {
+        this.empireID = empireID;
+    }
     public String getEmpireName() {
         return this.empireName;
     }
@@ -44,6 +57,7 @@ public class Contact {
     public List<String> getDiscoveredIslands() {
         return Collections.unmodifiableList(this.discoveredIslands);
     }
+
 
     public void setEmpireDtos(List<ShortSystemDto> shorts) {
 //        System.out.println(shorts);
@@ -129,4 +143,15 @@ public class Contact {
        this.pane.calculateStrength(value);
     }
 
-}
+
+    public boolean isAtWarWith() {
+        return atWarWith.get();
+    }
+
+    public void setAtWarWith(boolean atWar) {
+        this.atWarWith.set(atWar);
+    }
+
+    public BooleanProperty atWarWithProperty() {
+        return atWarWith;
+    }

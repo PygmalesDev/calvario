@@ -111,6 +111,7 @@ public class TechnologyResearchDetailsComponent extends VBox {
                     }
                     total.setText("Total: " + aggregateResultDto.total());
                     costVBox.getChildren().addAll(nodes);
+                    if (costVBox.getChildren().isEmpty()) costVBox.setStyle("-fx-padding: 0 0 0 0");
                 },
                 error -> System.out.println("Error try to get costs of " + technology.id() + " because: " + error.getMessage()));
     }

@@ -830,7 +830,6 @@ public class InGameController extends BasicController {
         if (isle.foggy) {
             isle.applyIcon(false);
             isle.applyEmpireInfo();
-            System.out.println(isle.island.id());
             this.removeFog(animate, isle);
         }
     }

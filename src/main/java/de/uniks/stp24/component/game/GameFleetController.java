@@ -1,5 +1,7 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.controllers.helper.DistancePoint;
+import de.uniks.stp24.model.DistrictAttributes;
 import de.uniks.stp24.model.Fleets.Fleet;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.game.FleetCoordinationService;
@@ -7,6 +9,7 @@ import de.uniks.stp24.service.game.FleetService;
 import de.uniks.stp24.utils.VectorMath;
 import de.uniks.stp24.utils.VectorMath.Vector2D;
 import javafx.animation.*;
+import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
@@ -15,6 +18,7 @@ import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
 
 import javax.inject.Inject;
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
@@ -28,27 +32,20 @@ public class GameFleetController extends Pane {
 
     private final FleetService fleetService;
     private final FleetCoordinationService fleetCoordinationService;
+    private DistancePoint currentPoint;
     private final Timeline travelTimeline = new Timeline();
-    private final Fleet fleet;
     private final Rotate rotate = new Rotate();
-    private final int TRAVEL_DURATION = 2;
-    private boolean isTraveling = false;
-    private int keyFrameTime = 0;
+    private final Fleet fleet;
 
     @Inject
     public GameFleetController(Fleet fleet, FleetCoordinationService fleetCoordinationService, FleetService fleetService){
         this.fleet = fleet;
         this.fleetService = fleetService;
         this.fleetCoordinationService = fleetCoordinationService;
-        this.getTransforms().add(rotate);
     }
 
     public void setEmpireColor(String color) {
         this.colorPane.setStyle(this.colorPane.getStyle().replace("white", color));
-    }
-
-    public Rotate getRotation() {
-        return this.rotate;
     }
 
     public void setActive() {
@@ -57,63 +54,30 @@ public class GameFleetController extends Pane {
         this.collisionCircle.setPickOnBounds(true);
     }
 
-    public void beginTravelAnimation(MouseEvent mouseEvent) {
-        this.isTraveling = true;
+    public void travelToPoint(List<KeyFrame> keyFrame, DistancePoint currentPoint) {
         this.travelTimeline.stop();
         this.travelTimeline.getKeyFrames().clear();
+        this.currentPoint = currentPoint;
 
-        this.travelTimeline.getKeyFrames().add(new KeyFrame(Duration.seconds(4),
-                new KeyValue(this.layoutXProperty(), mouseEvent.getX()- FLEET_HW, Interpolator.EASE_BOTH),
-                new KeyValue(this.layoutYProperty(), mouseEvent.getY()- FLEET_HW, Interpolator.EASE_BOTH)
-        ));
-
+        this.travelTimeline.getKeyFrames().addAll(keyFrame);
         this.travelTimeline.play();
     }
 
-    public void beginTravelAnimation(List<Vector2D> coordinates) {
-        this.isTraveling = true;
-
-        this.resetKeyFrameTime();
+    public void stopTravel() {
         this.travelTimeline.stop();
         this.travelTimeline.getKeyFrames().clear();
-
-        this.setRotate(this.calculateAngle(coordinates.getFirst()));
-
-        /*
-         TODO: For now, travel duration is equal to the duration of a single season on the maximum tick speed
-         Duration should be calculated as a product of the slowest ship's speed and current tick speed
-         eg.: speed * {60, 30, 20}seconds.
-
-         Find a way to connect the property change listener from timer service with this method,
-         so that when the tick speed changes, the travel path will be recalculated based on the
-         new timer speed.
-
-         If the game is paused, the ship should stop!
-       */
-
-        this.travelTimeline.getKeyFrames().addAll(coordinates.stream().map(vector2D -> new KeyFrame(
-                Duration.seconds(this.nextKeyFrameTime()),
-                new KeyValue(this.layoutXProperty(), vector2D.x()-FLEET_HW, Interpolator.EASE_BOTH),
-                new KeyValue(this.layoutYProperty(), vector2D.y()-FLEET_HW, Interpolator.EASE_BOTH)
-        )).toList());
-
-        this.travelTimeline.play();
     }
 
-    private int nextKeyFrameTime() {
-        int prevTime = this.keyFrameTime;
-        this.keyFrameTime += TRAVEL_DURATION;
-        return prevTime;
+    public DistancePoint getCurrentPoint() {
+        return this.currentPoint;
     }
 
-    private void resetKeyFrameTime() {
-        this.keyFrameTime = TRAVEL_DURATION;
-    }
-
-    private double calculateAngle(Vector2D toCoords) {
-        Vector2D deltaVec = new Vector2D(toCoords).sub(this.getLayoutX(), this.getLayoutY());
-//        return Math.asin(deltaVec.y()/deltaVec.length()) * 180.0/Math.PI + 45;
-        return Math.atan2(deltaVec.y() -this.getLayoutY(), deltaVec.x()-this.getLayoutX()) * 180/Math.PI + 45;
+    public DistancePoint getCurrentLocation() {
+        return new DistancePoint(
+                this.getLayoutX(),
+                this.getLayoutY(),
+                null
+        );
     }
 
     public boolean isCollided(Circle other) {
@@ -122,5 +86,13 @@ public class GameFleetController extends Pane {
 
     public Fleet getFleet() {
         return fleet;
+    }
+
+    public void setStartingPoint() {
+        this.colorPane.getTransforms().add(rotate);
+    }
+
+    public Rotate getFleetRotate() {
+        return this.rotate;
     }
 }

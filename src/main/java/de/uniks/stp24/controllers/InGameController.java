@@ -252,6 +252,8 @@ public class InGameController extends BasicController {
 
         this.fleetCoordinationService.setInitialFleetPosition();
 
+
+
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
                     result -> islandAttributes.setEmpireDto(result),
@@ -493,16 +495,15 @@ public class InGameController extends BasicController {
         islandsService.createLines(this.islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
         islandsService.generateDistancePoints();
         islandsService.getDistancePoints().forEach((ids, value) -> {
-            var vector2D = value.get(value.size() / 2);
+            var point = value.get(value.size() / 2);
             Label distLabel = new Label(" "+ islandsService.getDistance(ids[0], ids[1]) + " ");
             distLabel.setStyle("-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #e43900;" +
                                "-fx-background-color: white; -fx-background-radius: 10");
             distLabel.setVisible(false);
             this.mapGrid.getChildren().add(distLabel);
-            distLabel.setLayoutX(vector2D.x() - 16);
-            distLabel.setLayoutY(vector2D.y() - 16);
+            distLabel.setLayoutX(point.getX() - 16);
+            distLabel.setLayoutY(point.getY() - 16);
         });
-
 
         group.setScaleX(0.65);
         group.setScaleY(0.65);

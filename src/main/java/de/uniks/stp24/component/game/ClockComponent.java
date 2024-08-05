@@ -101,14 +101,13 @@ public class ClockComponent extends AnchorPane {
 
     @OnInit
     public void init() {
+        timerService.onLoadingFinished(this::setSeasonLabelSize);
+        timerService.start();
 
         gameId = tokenStorage.getGameId();
 
         PropertyChangeListener callHandleSpeedChanged = this::handleSpeedChanged;
         timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_SPEED, callHandleSpeedChanged);
-
-        PropertyChangeListener callHandleSeasonChanged = this::handleSeasonChanged;
-        timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_SEASON, callHandleSeasonChanged);
 
         PropertyChangeListener callHandleRemainingSeasons = this::handleRemainingSeasonChanged;
         eventService.listeners().addPropertyChangeListener(EventService.PROPERTY_REMAININGSEASONS, callHandleRemainingSeasons);
@@ -211,9 +210,8 @@ public class ClockComponent extends AnchorPane {
         );
 
         setSeasonLabelSize();
+        timerService.onGameTicked(this::setSeasonLabelSize);
 
-        timerService.start();
-        seasonLabel.setText(timerService.getSeason() + "");
 
         remainingSeasonsLabel.setVisible(false);
 
@@ -224,20 +222,11 @@ public class ClockComponent extends AnchorPane {
 
     @OnDestroy
     public void destroy() {
+        subscriber.dispose();
 
         timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_SPEED, this::handleSpeedChanged);
-        timerService.listeners().removePropertyChangeListener(TimerService.PROPERTY_SEASON, this::handleSeasonChanged);
         timerService.stop();
-
-        if (subscriber != null) {
-            subscriber.dispose();
-        }
-
-        if (timerService.subscriber != null) {
-            timerService.subscriber.dispose();
-        }
-
-        timerService.stop();
+        timerService.dispose();
     }
 
 /////////////---------------------------------------WS-EventListeners---------------------------------//////////////
@@ -292,8 +281,7 @@ public class ClockComponent extends AnchorPane {
     public void pauseClock() {
         if (timerService.isRunning()) {
             subscriber.subscribe(timerService.setSpeed(gameId, 0),
-                    result -> {
-                    },
+                    result -> {},
                     error -> System.out.println("Error on pause: " + error)
             );
             timerService.stop();
@@ -320,19 +308,13 @@ public class ClockComponent extends AnchorPane {
 
     // Set size of seasonLabel in case of long season number
     private void setSeasonLabelSize() {
-        if (timerService.getSeason() < 10 && !updateSeasonLabel) {
-            updateSeasonLabel = true;
-            seasonLabel.setStyle("-fx-font-size: 25px;");
-        } else {
-            if (timerService.getSeason() < 100 && !updateSeasonLabel) {
-                updateSeasonLabel = true;
-                seasonLabel.setStyle("-fx-font-size: 20px;");
-            }
-            if (timerService.getSeason() > 999 && !updateSeasonLabel) {
-                updateSeasonLabel = true;
-                seasonLabel.setStyle("-fx-font-size: 18px;");
-            }
-        }
+        int season = this.timerService.getServerSeasons();
+
+        if (season < 10 && !updateSeasonLabel) seasonLabel.setStyle("-fx-font-size: 25px;");
+        if (season < 100 && !updateSeasonLabel) seasonLabel.setStyle("-fx-font-size: 20px;");
+        if (season > 999 && !updateSeasonLabel) seasonLabel.setStyle("-fx-font-size: 18px;");
+
+        seasonLabel.setText(season + "");
     }
 
     public void changingSpeed(int speed) {
@@ -341,8 +323,7 @@ public class ClockComponent extends AnchorPane {
         }
         timerService.setSpeedLocal(speed);
         subscriber.subscribe(timerService.setSpeed(gameId, speed),
-                result -> {
-                },
+                result -> {},
                 error -> System.out.println("Error when changing speed: " + error)
         );
     }
@@ -369,24 +350,14 @@ public class ClockComponent extends AnchorPane {
                 // Delete event on Server
                 eventService.setEvent(null);
                 subscriber.subscribe(eventService.sendEffect(),
-                        result -> {
-                        },
-                        error -> {
-                        }
+                        result -> {},
+                        error -> {}
                 );
                 randomEventButton.setVisible(false);
                 remainingSeasonsLabel.setVisible(false);
             } else {
                 Platform.runLater(() -> remainingSeasonsLabel.setText(String.valueOf(remainingSeasons)));
             }
-        }
-    }
-
-    private void handleSeasonChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
-        if (Objects.nonNull(propertyChangeEvent.getNewValue())) {
-            int season = (int) propertyChangeEvent.getNewValue();
-            setSeasonLabelSize();
-            Platform.runLater(() -> seasonLabel.setText(String.valueOf(season)));
         }
     }
 

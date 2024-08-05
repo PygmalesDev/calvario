@@ -21,6 +21,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -29,7 +30,10 @@ import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
+
+import java.util.ResourceBundle;
 
 import static de.uniks.stp24.model.Jobs.Job;
 
@@ -98,13 +102,18 @@ public class FleetManagerComponent extends AnchorPane {
     @Inject
     public BlueprintsDetailsComponent blueprintsDetailsComponent;
 
+    @Inject
+    @Resource
+    @Named("gameResourceBundle")
+    public ResourceBundle gameResourceBundle;
+
 
     private Fleet editedFleet;
 
     public Provider<FleetComponent> fleetComponentProvider = () -> new FleetComponent(this, this.tokenStorage, this.subscriber, this.fleetService);
     public Provider<ShipTypesOfFleetComponent> shipTypesOfFleetComponentProvider = () -> new ShipTypesOfFleetComponent(this, this.resourcesService, this.shipService, this.subscriber, this.fleetService);
-    public Provider<BlueprintsComponent> blueprintsAddableComponentProvider = () -> new BlueprintsComponent(this, true, this.blueprintsDetailsComponent);
-    public Provider<BlueprintsComponent> blueprintsNotAddableComponentProvider = () -> new BlueprintsComponent(this, false, this.blueprintsDetailsComponent);
+    public Provider<BlueprintsComponent> blueprintsAddableComponentProvider = () -> new BlueprintsComponent(this, true, this.blueprintsDetailsComponent, gameResourceBundle);
+    public Provider<BlueprintsComponent> blueprintsNotAddableComponentProvider = () -> new BlueprintsComponent(this, false, this.blueprintsDetailsComponent, gameResourceBundle);
     public Provider<ShipComponent> shipComponentProvider = () -> new ShipComponent(this, this.subscriber, this.shipService, this.fleetService);
 
     public ObservableList<BlueprintInFleetDto> blueprintsInFleetList = FXCollections.observableArrayList();

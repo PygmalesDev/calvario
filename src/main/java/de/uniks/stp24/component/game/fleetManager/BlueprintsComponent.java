@@ -16,6 +16,7 @@ import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
+import java.util.ResourceBundle;
 
 @Component(view = "Blueprints.fxml")
 public class BlueprintsComponent extends VBox implements ReusableItemComponent<ShipType> {
@@ -57,6 +58,8 @@ public class BlueprintsComponent extends VBox implements ReusableItemComponent<S
     @Inject
     ImageCache imageCache = new ImageCache();
 
+    public ResourceBundle gameResourceBundle;
+
     private final FleetManagerComponent fleetManagerComponent;
     private final boolean canBeAddedToFleet;
     private ShipType shipType;
@@ -64,15 +67,15 @@ public class BlueprintsComponent extends VBox implements ReusableItemComponent<S
     public BlueprintsDetailsComponent blueprintDetailsComponent;
 
     @Inject
-    public BlueprintsComponent(FleetManagerComponent fleetManagerComponent, boolean canBeAddedToFleet, BlueprintsDetailsComponent blueprintDetailsComponent) {
+    public BlueprintsComponent(FleetManagerComponent fleetManagerComponent, boolean canBeAddedToFleet, BlueprintsDetailsComponent blueprintDetailsComponent, ResourceBundle resourceBundle) {
         this.fleetManagerComponent = fleetManagerComponent;
         this.canBeAddedToFleet = canBeAddedToFleet;
         this.blueprintDetailsComponent = blueprintDetailsComponent;
+        this.gameResourceBundle = resourceBundle;
     }
 
     @OnRender
     public void render() {
-        System.out.println("Render details");
         Tooltip details = new Tooltip();
         details.setShowDelay(Duration.ZERO);
         details.setShowDuration(Duration.INDEFINITE);
@@ -97,7 +100,7 @@ public class BlueprintsComponent extends VBox implements ReusableItemComponent<S
     @Override
     public void setItem(@NotNull ShipType shipType) {
         this.shipType = shipType;
-        this.blueprintTypeLabel.setText(shipType._id());
+        this.blueprintTypeLabel.setText(gameResourceBundle.getString("ship." + shipType._id()));
         this.healthLabel.setText(String.valueOf(shipType.health()));
         this.timeLabel.setText(String.valueOf(shipType.build_time()));
         this.speedLabel.setText(String.valueOf(shipType.speed()));

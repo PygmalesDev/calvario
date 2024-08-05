@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root alignment="TOP_CENTER" prefHeight="150.0" prefWidth="250.0" type="VBox" xmlns="http://javafx.com/javafx/21"
-         xmlns:fx="http://javafx.com/fxml/1"
-         fx:controller="de.uniks.stp24.component.game.fleetManager.BlueprintsDetailsComponent">
+<fx:root alignment="TOP_CENTER" prefHeight="150.0" prefWidth="250.0" type="VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.fleetManager.BlueprintsDetailsComponent">
     <Label fx:id="shipType" text="ShipType" textAlignment="CENTER">
         <font>
-            <Font size="15.0"/>
+            <Font size="15.0" />
         </font>
     </Label>
+    <HBox prefHeight="100.0" prefWidth="200.0">
+        <Label text="%consumes"/>
+        <Label text="%damage"/>
+    </HBox>
+    <HBox prefHeight="100.0" prefWidth="200.0">
+        <ListView prefHeight="200.0" prefWidth="200.0"/>
+        <ListView prefHeight="200.0" prefWidth="200.0"/>
+    </HBox>
 </fx:root>

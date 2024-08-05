@@ -46,7 +46,7 @@ public class ContactsComponent extends StackPane {
     @Inject
     public ContactsService contactsService;
 
-
+    @Inject
     public ImageCache imageCache;
     @Inject
     WarService warService;
@@ -102,8 +102,8 @@ public class ContactsComponent extends StackPane {
     @OnRender
     public void render() {
 //        contactsService.loadContacts(); // in ContactsService
-        this.contactCells = contactsService.contacts;
-        this.contactsListView.setItems(this.contactsService.contacts);
+        this.contactCells = contactsService.contactCells;
+        this.contactsListView.setItems(this.contactsService.contactCells);
         this.contactsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.contactCellProvider));
     }
 

@@ -21,6 +21,7 @@ public class ContactCell extends HBox implements ReusableItemComponent<Contact> 
     @FXML
     ImageView warSituationIcon;
 
+    @Inject
     ImageCache imageCache;
     ContactDetailsComponent contactDetailsComponent;
 

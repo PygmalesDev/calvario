@@ -24,10 +24,13 @@ public class Contact {
     public Contact(ReadEmpireDto dto) {
         this.empireID = dto._id();
         this.empireName = dto.name();
-        this.empireFlag = "assets/flags/flag_"+dto.flag()+".png";
+        this.empireFlag = "assets/flags/flag_" + dto.flag() + ".png";
     }
 
-    public String getEmpireID() { return this.empireID;}
+    public String getEmpireID() {
+        return this.empireID;
+    }
+
     private BooleanProperty atWarWith = new SimpleBooleanProperty(false);
 
 //    public Contact() {
@@ -40,6 +43,7 @@ public class Contact {
     public void setEmpireID(String empireID) {
         this.empireID = empireID;
     }
+
     public String getEmpireName() {
         return this.empireName;
     }
@@ -51,7 +55,7 @@ public class Contact {
     public void addIsland(String id) {
         this.atIsland = id;
         System.out.println("now at " + id);
-    if (!discoveredIslands.contains(id)) System.out.println(discoveredIslands.add(id));
+        if (!discoveredIslands.contains(id)) System.out.println(discoveredIslands.add(id));
     }
 
     public List<String> getDiscoveredIslands() {
@@ -64,7 +68,7 @@ public class Contact {
         shorts.forEach(
           dto -> {
               if (dto.owner().equals(this.empireID) && !empireIslandsIDs.contains(dto._id())) {
-                  mapEmpireDtos.putIfAbsent(dto._id(),dto);
+                  mapEmpireDtos.putIfAbsent(dto._id(), dto);
                   // are these necessary?
                   empireIslandsIDs.add(dto._id());
                   empireDtos.add(dto);
@@ -89,13 +93,13 @@ public class Contact {
         }
     }
 
-    public Map<String, Integer> getDiscoveryStats(){
+    public Map<String, Integer> getDiscoveryStats() {
         int discoveredPopulation = 0;
         int discoveredSites = 0;
         int discoveredBuildings = 0;
         for (String id : discoveredIslands) {
-            ShortSystemDto tmp =  mapEmpireDtos.getOrDefault(id,null);
-            if (tmp!=null) {
+            ShortSystemDto tmp = mapEmpireDtos.getOrDefault(id, null);
+            if (tmp != null) {
                 discoveredPopulation += tmp.population();
                 discoveredSites += tmp.districts().values().stream().mapToInt(Integer::intValue).sum();
                 discoveredBuildings += tmp.buildings().size();
@@ -107,15 +111,15 @@ public class Contact {
     }
 
     public Map<String, Integer> getStatsAtLocation() {
-        ShortSystemDto tmp =  mapEmpireDtos.getOrDefault(this.atIsland,null);
-        return Map.of("pop" , tmp.population(),
-          "sites",  tmp.districts().values().stream().mapToInt(Integer::intValue).sum(),
+        ShortSystemDto tmp = mapEmpireDtos.getOrDefault(this.atIsland, null);
+        return Map.of("pop", tmp.population(),
+          "sites", tmp.districts().values().stream().mapToInt(Integer::intValue).sum(),
           "buildings", tmp.buildings().size());
     }
 
     public double getIntel() {
-        if(empireDtos.isEmpty()) return 0;
-        return 100.0 * discoveredIslands.size()/empireDtos.size();
+        if (empireDtos.isEmpty()) return 0;
+        return 100.0 * discoveredIslands.size() / empireDtos.size();
     }
 
     public String getAtIsland() {
@@ -140,7 +144,7 @@ public class Contact {
 
     public void setStrength(double value) {
         System.out.println(value);
-       this.pane.calculateStrength(value);
+        this.pane.calculateStrength(value);
     }
 
 
@@ -155,3 +159,4 @@ public class Contact {
     public BooleanProperty atWarWithProperty() {
         return atWarWith;
     }
+}

@@ -119,7 +119,6 @@ public class TechnologyCategoryComponent extends AnchorPane {
     }
 
     public void updateTechnologies() {
-        System.out.println("Update Techs");
         unlockedAndResearchList = technologyService.getUnlockedAndResearch(technologieCategoryName);
 
         unlockedTechnologies.clear();

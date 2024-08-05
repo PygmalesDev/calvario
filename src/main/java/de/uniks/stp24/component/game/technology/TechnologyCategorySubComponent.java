@@ -128,8 +128,19 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
         this.technology = technologyExtended;
         technologyLabel.setText(technologiesResourceBundle.getString(technologyExtended.id()));
 
-        timeLabel.setText("");
-        researchLabel.setText("");
+        if (technologyService.getUnlockedList().stream().anyMatch(tech -> tech.id().equals(technology.id()))) {
+            researchHBox.getChildren().removeAll(researchLabel, timeImage, timeLabel, researchButton, researchImage);
+        } else {
+            /* get Time and Costs of Technology only if it isn't unlocked yet */
+            subscriber.subscribe(technologyService.getTechnologyTimeAndCost(tokenStorage.getEmpireId(), "technology.cost", technology.id()),
+                    aggregateResultDto -> researchLabel.setText(String.valueOf(aggregateResultDto.total())),
+                    error -> System.out.println("Error after try to get cost of technology " + technology.id() + " reason: " + error.getMessage() + " with empire id: " + tokenStorage.getEmpireId())
+            );
+            subscriber.subscribe(technologyService.getTechnologyTimeAndCost(tokenStorage.getEmpireId(), "technology.time", technology.id()),
+                    aggregateResultDto -> timeLabel.setText(String.valueOf(aggregateResultDto.total())),
+                    error -> System.out.println("Error after ty to get time of technology " + technology.id() + " reason: " + error.getMessage())
+            );
+        }
 
         int i = technologyExtended.tags().length;
 
@@ -141,18 +152,6 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
         }
         if (i > 2 && technologyExtended.tags()[2] != null) {
             tagImage3.setImage(imageCache.get("assets/technologies/tags/" + technologyExtended.tags()[2] + ".png"));
-        }
-
-        if (technologyService.getUnlockedList().stream().anyMatch(tech -> tech.id().equals(technology.id()))) {
-            researchHBox.getChildren().removeAll(researchLabel, timeImage, timeLabel, researchButton, researchImage);
-        } else {
-            /* get Time and Costs of Technology only if it isn't unlocked yet */
-            subscriber.subscribe(technologyService.getTechnologyTimeAndCost(tokenStorage.getEmpireId(), "technology.cost", technology.id()),
-                    aggregateResultDto -> researchLabel.setText(String.valueOf(aggregateResultDto.total())),
-                    error -> System.out.println("Error after try to get cost of technology " + technology.id() + " reason: " + error.getMessage() + " with empire id: " + tokenStorage.getEmpireId()));
-            subscriber.subscribe(technologyService.getTechnologyTimeAndCost(tokenStorage.getEmpireId(), "technology.time", technology.id()),
-                    aggregateResultDto -> timeLabel.setText(String.valueOf(aggregateResultDto.total())),
-                    error -> System.out.println("Error after ty to get time of technology " + technology.id() + " reason: " + error.getMessage()));
         }
 
         descriptionListView.getItems().clear();

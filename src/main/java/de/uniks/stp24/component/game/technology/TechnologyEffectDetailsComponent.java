@@ -68,7 +68,6 @@ public class TechnologyEffectDetailsComponent extends VBox {
     }
 
     public void setTechnologyInfos(TechnologyExtended technology) {
-        System.out.println("event");
         effectVBox.getChildren().clear();
         effectTitleVBox.setStyle("-fx-font-size: 20px");
         effectVBox.getChildren().add(effectTitleVBox);

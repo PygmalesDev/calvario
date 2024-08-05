@@ -318,6 +318,11 @@ public class InGameController extends BasicController {
         helpComponent.setVisible(false);
         helpComponent.setMouseTransparent(true);
 
+        warContainer.setVisible(false);
+        warContainer.setPickOnBounds(false);
+        warComponent.setVisible(false);
+        warComponent.setMouseTransparent(false);
+
         pauseMenuContainer.setMouseTransparent(true);
         pauseMenuContainer.setVisible(false);
         eventComponent.setParent(shadow, eventContainer);
@@ -737,6 +742,7 @@ public class InGameController extends BasicController {
     }
 
     public void showWarMessage(String messageType){
+        warComponent.setText();
         popupWarMessage.showPopup(warContainer, warComponent);
     }
 

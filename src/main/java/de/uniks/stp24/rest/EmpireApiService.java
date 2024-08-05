@@ -50,4 +50,14 @@ public interface EmpireApiService {
 
     @GET("games/{game}/empires/{empire}")
     Observable<ContactDto> getContacts(@Path("game") String game, @Path("empire") String empire);
+
+    //TODO Use privates instead of seaonsalTrades and Contacts
+
+    @PATCH("games/{game}/empires/{empire}")
+    Observable<UpdateEmpireContactDto> savePrivate(@Path("game") String game, @Path("empire") String empire, @Body ContactDto contactDto);
+
+    @GET("games/{game}/empires/{empire}")
+    Observable<ContactDto> getPrivate(@Path("game") String game, @Path("empire") String empire);
+
+
 }

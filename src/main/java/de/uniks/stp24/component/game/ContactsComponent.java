@@ -43,7 +43,6 @@ public class ContactsComponent extends StackPane {
     Provider<ContactCell> contactCellProvider = () -> {
         var cell = new ContactCell(this.imageCache);
         cell.setOnMouseClicked(event -> this.inGameController.openContactDetails(cell.getContact()));
-
         return cell;
     };
 

@@ -70,7 +70,6 @@ public class MarketService {
         subscriber.subscribe(this.empireApiService.getSeasonalTrades(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 seasonalTradeDto->{
                     if (Objects.nonNull(seasonalTradeDto._private()) && Objects.nonNull(seasonalTradeDto._private().get("allSeasonalTrades"))) {
-
                         seasonalTradeDto._private().put("allSeasonalTrades", seasonComponents);
                         subscriber.subscribe(this.empireApiService.saveSeasonalComponents(tokenStorage.getGameId(), tokenStorage.getEmpireId(), seasonalTradeDto));
                     } else{

@@ -1,12 +1,12 @@
 package de.uniks.stp24.component.game;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.CreateWarDto;
 import de.uniks.stp24.dto.WarDto;
 import de.uniks.stp24.model.Contact;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.ContactsService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.WarService;
 import de.uniks.stp24.ws.EventListener;
@@ -27,7 +27,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 
 @Component(view = "ContactDetailsComponent.fxml")
-public class ContactDetailsComponent extends StackPane {
+public class  ContactDetailsComponent extends StackPane {
     @FXML
     Button closeContactDetailComponentButton;
     @FXML
@@ -51,6 +51,8 @@ public class ContactDetailsComponent extends StackPane {
     EventListener eventListener;
     @Inject
     EmpireService empireService;
+    @Inject
+    ContactsService contactsService;
 
     private InGameController inGameController;
     private Contact contact;
@@ -74,16 +76,14 @@ public class ContactDetailsComponent extends StackPane {
                 event -> Platform.runLater(() -> {
                     switch (event.suffix()) {
                         case "created" -> {
+                            String attackerID = event.data().attacker();
                             wars.add(event.data());
-                            setWarMessagePopup(event.suffix());
-                        }
-                        case "update" -> {
-                            wars.replaceAll(w -> w._id().equals(event.data()._id()) ? event.data() : w);
-                            setWarMessagePopup(event.suffix());
+                            setWarMessagePopup(event.suffix(), attackerID);
                         }
                         case "deleted" -> {
+                            String attackerID = event.data().attacker();
                             wars.removeIf(w -> w._id().equals(event.data()._id()));
-                            setWarMessagePopup(event.suffix());
+                            setWarMessagePopup(event.suffix(), attackerID);
                         }
                     }
                 }),
@@ -187,7 +187,27 @@ public class ContactDetailsComponent extends StackPane {
                 });
     }
 
-    private void setWarMessagePopup(String messageType) {
+    private void setWarMessagePopup(String messageType, String attackerID) {
+        subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(),attackerID),
+                empireDto -> {
+                    String attackerName = empireDto.name();
+                    if(messageType.equals("created")){
+                        contactsService.setDeclaring(true);
+                        contactsService.addEnemyAfterDeclaration(attackerID);
+                    }
+                    else if(messageType.equals("deleted")){
+                        contactsService.setDeclaring(false);
+                    }
+                    if(!attackerID.equals(tokenStorage.getEmpireId())){
+                        contactsService.setAttacker(attackerName);
+                        contactsService.declaringToDefenderCheck(attackerID);
+                        if (contactsService.isDeclaringToDefender()) {
+                            System.out.println("here 1");
+                            inGameController.showWarMessage(messageType);
+                        }
+                    }
+                });
+
     }
 
     private void loadContacts() {

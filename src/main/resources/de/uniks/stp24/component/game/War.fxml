@@ -9,13 +9,14 @@
    <children>
       <HBox alignment="CENTER" layoutY="59.0" prefHeight="100.0" prefWidth="450.0">
          <children>
-            <Text fx:id="warText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="221.47002911567688" />
+            <Text fx:id="warText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="tempusSansITC" text="Text" wrappingWidth="352.13659405708313" />
          </children>
       </HBox>
       <HBox alignment="CENTER" layoutX="-2.0" layoutY="159.0" prefHeight="64.0" prefWidth="450.0">
          <children>
-            <Button fx:id="closeButton" mnemonicParsing="false" styleClass="defaultButton" stylesheets="@../../style/contactsAndWar.css" text="Button" />
+            <Button fx:id="closeButton" mnemonicParsing="false" onAction="#close" prefHeight="35.0" prefWidth="149.0" styleClass="defaultButton" stylesheets="@../../style/contactsAndWar.css" text="Close" textFill="WHITE" />
          </children>
       </HBox>
+      <Text layoutX="142.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="warTitle" text="WAR" textAlignment="CENTER" wrappingWidth="149.33333333333348" />
    </children>
 </fx:root>

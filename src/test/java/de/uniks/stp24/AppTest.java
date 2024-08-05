@@ -233,7 +233,7 @@ public class AppTest extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
         verifyThat(window("ENTER GAME"), WindowMatchers.isShowing());
         WaitForAsyncUtils.waitForFxEvents();
-        lookup("#backgroundAnchorPane").queryAs(AnchorPane.class).getStylesheets().clear();
+//        lookup("#backgroundAnchorPane").queryAs(AnchorPane.class).getStylesheets().clear();
     }
 
     private void selectEmpire(){

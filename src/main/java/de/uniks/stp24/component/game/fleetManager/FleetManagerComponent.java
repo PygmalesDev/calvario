@@ -94,14 +94,17 @@ public class FleetManagerComponent extends AnchorPane {
     @SubComponent
     @Inject
     public ChangeFleetComponent changeFleetComponent;
+    @SubComponent
+    @Inject
+    public BlueprintsDetailsComponent blueprintsDetailsComponent;
 
 
     private Fleet editedFleet;
 
     public Provider<FleetComponent> fleetComponentProvider = () -> new FleetComponent(this, this.tokenStorage, this.subscriber, this.fleetService);
     public Provider<ShipTypesOfFleetComponent> shipTypesOfFleetComponentProvider = () -> new ShipTypesOfFleetComponent(this, this.resourcesService, this.shipService, this.subscriber, this.fleetService);
-    public Provider<BlueprintsComponent> blueprintsAddableComponentProvider = () -> new BlueprintsComponent(this, true);
-    public Provider<BlueprintsComponent> blueprintsNotAddableComponentProvider = () -> new BlueprintsComponent(this, false);
+    public Provider<BlueprintsComponent> blueprintsAddableComponentProvider = () -> new BlueprintsComponent(this, true, this.blueprintsDetailsComponent);
+    public Provider<BlueprintsComponent> blueprintsNotAddableComponentProvider = () -> new BlueprintsComponent(this, false, this.blueprintsDetailsComponent);
     public Provider<ShipComponent> shipComponentProvider = () -> new ShipComponent(this, this.subscriber, this.shipService, this.fleetService);
 
     public ObservableList<BlueprintInFleetDto> blueprintsInFleetList = FXCollections.observableArrayList();

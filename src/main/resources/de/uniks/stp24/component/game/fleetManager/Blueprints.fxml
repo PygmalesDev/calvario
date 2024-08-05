@@ -60,7 +60,13 @@
                 <Font size="15.0" />
             </font>
         </Label>
-        <Button fx:id="addBlueprintButton" maxHeight="20.0" maxWidth="20.0" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onAction="#addBlueprint" prefHeight="20.0" prefWidth="20.0" />
+        <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets right="10.0"/>
+            </padding>
+            <Button fx:id="addBlueprintButton" maxHeight="23.0" maxWidth="23.0" minHeight="23.0" minWidth="23.0"
+                    mnemonicParsing="false" onAction="#addBlueprint" prefHeight="23.0" prefWidth="23.0"/>
+        </HBox>
     </HBox>
     <padding>
         <Insets bottom="25.0" left="15.0" right="10.0" top="20.0" />

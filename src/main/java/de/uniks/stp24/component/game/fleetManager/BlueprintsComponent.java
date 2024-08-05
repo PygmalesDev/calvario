@@ -5,9 +5,11 @@ import de.uniks.stp24.service.ImageCache;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
@@ -59,14 +61,30 @@ public class BlueprintsComponent extends VBox implements ReusableItemComponent<S
     private final boolean canBeAddedToFleet;
     private ShipType shipType;
 
+    public BlueprintsDetailsComponent blueprintDetailsComponent;
+
     @Inject
-    public BlueprintsComponent(FleetManagerComponent fleetManagerComponent, boolean canBeAddedToFleet) {
+    public BlueprintsComponent(FleetManagerComponent fleetManagerComponent, boolean canBeAddedToFleet, BlueprintsDetailsComponent blueprintDetailsComponent) {
         this.fleetManagerComponent = fleetManagerComponent;
         this.canBeAddedToFleet = canBeAddedToFleet;
+        this.blueprintDetailsComponent = blueprintDetailsComponent;
     }
 
     @OnRender
     public void render() {
+        System.out.println("Render details");
+        Tooltip details = new Tooltip();
+        details.setShowDelay(Duration.ZERO);
+        details.setShowDuration(Duration.INDEFINITE);
+        Tooltip.install(blueprintHBox, details);
+
+        details.setOnShowing(e -> {
+            details.setGraphic(blueprintDetailsComponent);
+            blueprintDetailsComponent.showBlueprintDetails(shipType);
+        });
+
+        details.setOnHiding(e -> details.setGraphic(null));
+
         healthImage.setImage(imageCache.get("icons/ships/health.png"));
         timeImage.setImage(imageCache.get("icons/ships/stopwatch.png"));
         speedImage.setImage(imageCache.get("icons/ships/windy.png"));
@@ -90,7 +108,7 @@ public class BlueprintsComponent extends VBox implements ReusableItemComponent<S
         this.addBlueprintButton.setDisable(!canBeAddedToFleet);
     }
 
-    public void addBlueprint(){
+    public void addBlueprint() {
         this.fleetManagerComponent.addBlueprintToFleet(shipType);
     }
 }

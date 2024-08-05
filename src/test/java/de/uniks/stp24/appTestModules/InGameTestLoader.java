@@ -3,6 +3,7 @@ package de.uniks.stp24.appTestModules;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.fleetManager.BlueprintsDetailsComponent;
 import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
 import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
 import de.uniks.stp24.component.game.fleetManager.NewFleetComponent;
@@ -161,6 +162,8 @@ public class InGameTestLoader extends ControllerTest {
     protected NewFleetComponent newFleetComponent;
     @InjectMocks
     protected ChangeFleetComponent changeFleetComponent;
+    @InjectMocks
+    protected BlueprintsDetailsComponent blueprintsDetailsComponent;
     @InjectMocks
     protected TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
     @InjectMocks

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.fleetManager.BlueprintsDetailsComponent;
 import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
 import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
 import de.uniks.stp24.component.game.fleetManager.NewFleetComponent;
@@ -175,19 +176,12 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     ChangeFleetComponent changeFleetComponent;
     @InjectMocks
+    BlueprintsDetailsComponent blueprintsDetailsComponent;
+    @InjectMocks
     TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
     @InjectMocks
     TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
 
-
-    @Spy
-    JobsApiService jobsApiService;
-    @Spy
-    TechnologyService technologyService;
-    @Spy
-    MarketService marketService;
-    @Spy
-    AnnouncementsService announcementsService;
     @Spy
     GameLogicApiService gameLogicApiService;
 
@@ -297,6 +291,7 @@ public class PauseMenuTest extends ControllerTest {
         this.fleetService.fleetApiService = this.fleetApiService;
         this.fleetService.subscriber = this.subscriber;
         this.fleetCoordinationService.subscriber = this.subscriber;
+        this.fleetManagerComponent.blueprintsDetailsComponent = this.blueprintsDetailsComponent;
 
         lenient().doReturn("gameOwner").when(this.tokenStorage).getUserId();
         lenient().doReturn("123456").when(this.tokenStorage).getGameId();

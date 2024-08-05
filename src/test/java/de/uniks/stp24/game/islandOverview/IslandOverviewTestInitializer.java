@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.fleetManager.BlueprintsDetailsComponent;
 import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
 import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
 import de.uniks.stp24.component.game.fleetManager.NewFleetComponent;
@@ -172,6 +173,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     NewFleetComponent newFleetComponent;
     @InjectMocks
     ChangeFleetComponent changeFleetComponent;
+    @InjectMocks
+    BlueprintsDetailsComponent blueprintsDetailsComponent;
 
 
     public void initializeComponents() {
@@ -286,6 +289,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.fleetService.fleetApiService = this.fleetApiService;
         this.fleetService.subscriber = this.subscriber;
         this.fleetCoordinationService.subscriber = this.subscriber;
+        this.fleetManagerComponent.blueprintsDetailsComponent = this.blueprintsDetailsComponent;
     }
 
     public void clearStyleSheets() {

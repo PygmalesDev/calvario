@@ -291,6 +291,8 @@ public class AppTest3Module extends LobbyTestLoader {
         this.technologyService.eventListener = this.eventListener;
         this.technologyCategoryComponent.jobsService = this.jobsService;
 
+        this.fleetManagerComponent.blueprintsDetailsComponent = blueprintsDetailsComponent;
+
         doAnswer(inv -> this.app.show(this.gangCreationController)).when(this.app).show(eq("/creation"), any());
         doAnswer(inv -> this.app.show(this.inGameController)).when(this.app).show(eq("/ingame"), any());
         doAnswer(inv -> this.app.show(this.lobbyController)).when(this.app).show(eq("/lobby"), any());

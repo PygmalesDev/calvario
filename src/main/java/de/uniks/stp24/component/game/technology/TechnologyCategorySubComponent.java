@@ -66,19 +66,19 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     @FXML
     public Tooltip researchLabelTooltip;
 
-    Subscriber subscriber;
+    public Subscriber subscriber;
 
-   final App app;
+    final App app;
 
     TechnologyExtended technology;
 
-   final TechnologyService technologyService;
+    final TechnologyService technologyService;
 
     @Inject
     TechnologyOverviewComponent technologyOverviewComponent;
-   ImageCache imageCache;
+    ImageCache imageCache;
 
-   final ObservableList<Effect> description = FXCollections.observableArrayList();
+    final ObservableList<Effect> description = FXCollections.observableArrayList();
 
     @Inject
     @Named("gameResourceBundle")
@@ -94,7 +94,7 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
 
     public TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
 
-   final Provider<TechnologyCategoryDescriptionSubComponent> provider = () -> new TechnologyCategoryDescriptionSubComponent(variablesResourceBundle);
+    final Provider<TechnologyCategoryDescriptionSubComponent> provider = () -> new TechnologyCategoryDescriptionSubComponent(variablesResourceBundle);
 
     /**
      * This class is for the components of the listView in the technology category
@@ -125,16 +125,20 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
      */
     @Override
     public void setItem(@NotNull TechnologyExtended technologyExtended) {
+        researchLabel.setVisible(true);
+        timeLabel.setVisible(true);
+
         this.technology = technologyExtended;
         technologyLabel.setText(technologiesResourceBundle.getString(technologyExtended.id()));
 
         if (technologyService.getUnlockedList().stream().anyMatch(tech -> tech.id().equals(technology.id()))) {
             researchHBox.getChildren().removeAll(researchLabel, timeImage, timeLabel, researchButton, researchImage);
         } else {
+            if (subscriber.isDisposed()) System.out.println("Subscriber disposed!? ");
             /* get Time and Costs of Technology only if it isn't unlocked yet */
             subscriber.subscribe(technologyService.getTechnologyTimeAndCost(tokenStorage.getEmpireId(), "technology.cost", technology.id()),
                     aggregateResultDto -> researchLabel.setText(String.valueOf(aggregateResultDto.total())),
-                    error -> System.out.println("Error after try to get cost of technology " + technology.id() + " reason: " + error.getMessage() + " with empire id: " + tokenStorage.getEmpireId())
+                    error -> System.out.println("Error after try to get cost of technology " + technology.id() + " reason: " + error.getMessage())
             );
             subscriber.subscribe(technologyService.getTechnologyTimeAndCost(tokenStorage.getEmpireId(), "technology.time", technology.id()),
                     aggregateResultDto -> timeLabel.setText(String.valueOf(aggregateResultDto.total())),
@@ -209,6 +213,8 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
             technologyEffectDetailsComponent.clear();
             technologyEffectDetailsComponent.destroy();
         });
+
+        technologyResearchDetailsComponent.setCategory(this);
     }
 
     public void researchClicked() {
@@ -217,7 +223,6 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
 
     @OnDestroy
     public void destroy() {
-        if (subscriber != null) subscriber.dispose();
         description.clear();
         descriptionListView.getItems().clear();
     }

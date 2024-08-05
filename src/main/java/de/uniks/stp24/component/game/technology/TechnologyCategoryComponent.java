@@ -169,9 +169,6 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     @OnDestroy
     public void destroy() {
-        if (subscriber != null) {
-            subscriber.dispose();
-        }
         unlockedTechnologies.clear();
         researchTechnologies.clear();
 

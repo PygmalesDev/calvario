@@ -250,15 +250,17 @@ public class ResearchJobComponent extends AnchorPane {
     }
 
     public void removeJob() {
-        technologies.removeIf(technology -> technology.id().equals(job.technology()));
+        if (this.job != null && this.job._id() != null) {
+            technologies.removeIf(technology -> technology.id().equals(job.technology()));
 
-        subscriber.subscribe(jobsService.stopJob(this.job._id()), result -> {}, error -> {});
-        technologyCategoryComponent.handleJobCompleted(job);
+            subscriber.subscribe(jobsService.stopJob(this.job._id()), result -> {}, error -> {});
+            technologyCategoryComponent.handleJobCompleted(job);
+        }
     }
 
     @OnDestroy
     public void destroy() {
-        if (subscriber != null) subscriber.dispose();
+
     }
 
 }

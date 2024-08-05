@@ -59,6 +59,8 @@ public class TechnologyResearchDetailsComponent extends VBox {
 
     public TechnologyExtended technology;
 
+    public TechnologyCategorySubComponent categoryComponent;
+
     @Inject
     public TechnologyResearchDetailsComponent() {
 
@@ -111,5 +113,9 @@ public class TechnologyResearchDetailsComponent extends VBox {
                     costVBox.getChildren().addAll(nodes);
                 },
                 error -> System.out.println("Error try to get costs of " + technology.id() + " because: " + error.getMessage()));
+    }
+
+    public void setCategory(TechnologyCategorySubComponent categoryComponent) {
+        this.categoryComponent = categoryComponent;
     }
 }

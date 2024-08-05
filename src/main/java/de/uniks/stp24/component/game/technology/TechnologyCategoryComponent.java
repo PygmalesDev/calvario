@@ -143,7 +143,10 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     @OnInit
     public void init() {
-        technologyService.createEmpireListener(this::updateTechnologies);
+        technologyService.createTechnologyListener(() -> {
+            updateTechnologies();
+            researchJobComponent.removeJob();
+        });
         researchJobComponent.setTechnologyCategoryComponent(this);
     }
 

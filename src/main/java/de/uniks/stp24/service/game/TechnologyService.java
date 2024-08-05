@@ -45,7 +45,7 @@ public class TechnologyService {
     public TechnologyService() {
     }
 
-    public void createEmpireListener(Runnable runnable) {
+    public void createTechnologyListener(Runnable runnable) {
         this.subscriber.subscribe(this.eventListener
                         .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
                 event -> {

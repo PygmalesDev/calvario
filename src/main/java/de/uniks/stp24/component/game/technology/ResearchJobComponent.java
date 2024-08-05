@@ -137,7 +137,7 @@ public class ResearchJobComponent extends AnchorPane {
                         technologies.add(result);
                     }
                     technologyCategoryComponent.showWindowOnStart();
-                });
+                }, error -> System.out.println("Error trying to get a Technology in ResearchComponent"));
             }
             isTechnologiesListInitialized = true;
         }
@@ -201,6 +201,7 @@ public class ResearchJobComponent extends AnchorPane {
         technologies.removeIf(technologyExtended -> technologyExtended.id().equals(job.technology()));
         technologyCategoryComponent.handleJobCompleted(job);
         setVisible(false);
+        System.out.println("Job finished");
     }
 
     @OnInit
@@ -251,7 +252,7 @@ public class ResearchJobComponent extends AnchorPane {
     public void removeJob() {
         technologies.removeIf(technology -> technology.id().equals(job.technology()));
 
-        subscriber.subscribe(jobsService.stopJob(this.job._id()));
+        subscriber.subscribe(jobsService.stopJob(this.job._id()), result -> {}, error -> {});
         technologyCategoryComponent.handleJobCompleted(job);
     }
 

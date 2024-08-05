@@ -18,7 +18,6 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.scene.Node;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.AnchorPane;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.stubbing.Answer;
@@ -241,7 +240,6 @@ public class AppTest extends ControllerTest {
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#backButton");
         WaitForAsyncUtils.waitForFxEvents();
-        lookup("#backgroundAnchorPane").queryAs(AnchorPane.class).getStylesheets().clear();
     }
 
     private void startAGame() {

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<fx:root type="VBox" alignment="CENTER" maxHeight="-Infinity" prefHeight="200.0" prefWidth="300.0"
+      style="-fx-background-color: yellow;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="de.uniks.stp24.component.game.fleetManager.NewFleetComponent">
+   <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="200.0">
+      <Button mnemonicParsing="false" onAction="#close" text="close"/>
+   </HBox>
+   <Label text="Choose an island"/>
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <Button mnemonicParsing="false" onAction="#showLastIslandName" text="&lt;"/>
+      <Label fx:id="islandNameLabel" text="islandName"/>
+      <Button mnemonicParsing="false" onAction="#showNextIslandName" text="&gt;"/>
+   </HBox>
+   <Button fx:id="confirmIslandButton" mnemonicParsing="false" onAction="#confirmIsland" text="Confirm"/>
+</fx:root>

@@ -62,8 +62,10 @@ public class IslandOverviewJobsComponent extends AnchorPane {
     public void setTextVisibility() {
         this.jobsService.onJobCommonStart(() -> this.noJobText.setVisible(false));
         this.jobsService.onJobCommonFinish(() -> {
-            if (this.jobsService.getObservableListForSystem(this.islandAttributes.getIsland().id()).isEmpty())
-                this.noJobText.setVisible(true);
+            if (Objects.nonNull(this.islandAttributes.getIsland())) {
+                if (this.jobsService.getObservableListForSystem(this.islandAttributes.getIsland().id()).isEmpty())
+                    this.noJobText.setVisible(true);
+            }
         });
     }
 

@@ -30,4 +30,8 @@ public interface JobsApiService {
     Observable<Job> createTravelJob(@Path("game") String gameID, @Path("empire") String empireID,
                                     @Body Jobs.TravelJobDTO travelJobDTO);
 
+    @POST("games/{game}/empires/{empire}/jobs")
+    Observable<Job> createShipJob(@Path("game") String gameID, @Path("empire") String empireID,
+                                    @Body Jobs.ShipJobDTO shipJobDTO);
+
 }

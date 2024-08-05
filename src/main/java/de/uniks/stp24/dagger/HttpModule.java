@@ -14,6 +14,7 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import javax.inject.Singleton;
+import java.util.Objects;
 
 @Module
 public class HttpModule {
@@ -110,5 +111,9 @@ public class HttpModule {
     @Provides
     @Singleton
     FleetApiService fleetApiService(Retrofit retrofit) {return retrofit.create(FleetApiService.class);}
+
+    @Provides
+    @Singleton
+    ShipsApiService shipsApiService(Retrofit retrofit) {return retrofit.create(ShipsApiService.class);}
 
 }

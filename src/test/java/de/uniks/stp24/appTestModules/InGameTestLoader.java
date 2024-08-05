@@ -1,7 +1,11 @@
 package de.uniks.stp24.appTestModules;
 
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
+import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
+import de.uniks.stp24.component.game.fleetManager.NewFleetComponent;
 import de.uniks.stp24.component.game.jobs.*;
 import de.uniks.stp24.component.game.technology.ResearchJobComponent;
 import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
@@ -75,6 +79,14 @@ public class InGameTestLoader extends ControllerTest {
     AnnouncementsService announcementsService;
     @Spy
     GameStatus gameStatus;
+    @Spy
+    FleetCoordinationService fleetCoordinationService;
+    @Spy
+    FleetService fleetService;
+    @Spy
+    ShipService shipService;
+    @Spy
+    FleetApiService fleetApiService;
 
     @InjectMocks
     protected MarketService marketService;
@@ -140,6 +152,14 @@ public class InGameTestLoader extends ControllerTest {
     protected JobsService jobsService;
     @InjectMocks
     protected CoolerBubbleComponent coolerBubbleComponent;
+    @InjectMocks
+    protected FleetManagerComponent fleetManagerComponent;
+    @InjectMocks
+    protected FleetCreationComponent fleetCreationComponent;
+    @InjectMocks
+    protected NewFleetComponent newFleetComponent;
+    @InjectMocks
+    protected ChangeFleetComponent changeFleetComponent;
 
     final Provider<ClaimingSiteComponent> claimingComponentProvider = () -> {
         var component = new ClaimingSiteComponent();
@@ -250,6 +270,13 @@ public class InGameTestLoader extends ControllerTest {
         this.overviewUpgradeComponent.jobProgressComponent = this.islandUpgradesJobProgressComponent;
 
         this.technologyCategoryComponent.provider = this.technologyCategorySubComponentProvider;
+
+
+        this.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
+        this.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
+        this.fleetManagerComponent.jobsService = this.jobsService;
+        this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
+        this.inGameController.fleetCreationComponent = this.fleetCreationComponent;
     }
 
     protected void setServices() {
@@ -382,6 +409,13 @@ public class InGameTestLoader extends ControllerTest {
         this.technologyService.subscriber = this.subscriber;
 
         this.technologyOverviewComponent.technologiesResourceBundle = this.technologiesResourceBundle;
+
+        this.fleetCoordinationService.fleetService = this.fleetService;
+        this.fleetCoordinationService.tokenStorage = this.tokenStorage;
+        this.fleetService.tokenStorage = this.tokenStorage;
+        this.fleetService.fleetApiService = this.fleetApiService;
+        this.fleetService.subscriber = this.subscriber;
+        this.fleetCoordinationService.subscriber = this.subscriber;
     }
 
     protected void clearStyles() {

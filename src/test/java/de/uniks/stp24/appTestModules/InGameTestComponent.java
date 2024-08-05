@@ -17,6 +17,7 @@ import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
@@ -82,7 +83,7 @@ public class InGameTestComponent extends InGameTestInitializer {
             null,
             null,
             "testEmpireID",
-            "testGameID",
+            "123456",
             "testUserID",
             null,
             null,
@@ -99,7 +100,7 @@ public class InGameTestComponent extends InGameTestInitializer {
             null,
             null,
             "testEmpireID",
-            "testGameID",
+            "123456",
             "testUserID",
             null,
             null,
@@ -187,17 +188,23 @@ public class InGameTestComponent extends InGameTestInitializer {
         this.inGameController.overviewSitesComponent.sitesComponent.districtComponentProvider = districtComponentProvider;
 
         doReturn("testUserID").when(this.tokenStorage).getUserId();
-        doReturn("testGameID").when(this.tokenStorage).getGameId();
+        doReturn("123456").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
 
         // Mock getEmpire
         doReturn(Observable.just(empireDto)).when(this.empireService).getEmpire(any(), any());
-        doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", 2, 1, true, 1, 1, null))).when(gamesApiService).getGame(any());
-        doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
+        doReturn(Observable.just(new Game("a", "a", "123456", "gameName", "gameOwner", 2, 1, true, 1, 1, null))).when(gamesApiService).getGame(any());
+        doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.123456.empires.testEmpireID.updated"), eq(EmpireDto.class));
 
         // Mock getResourceAggregates
         doReturn(Observable.just(aggregateResult)).when(this.empireService).getResourceAggregates(any(), any());
+
+        // Mock get Fleets and ships
+        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", 4, new HashMap<>(), new HashMap<>())));
+        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456",true);
+        doNothing().when(this.fleetService).initializeFleetListeners();
+        doNothing().when(this.fleetService).initializeShipListener();
 
         buildings.add("refinery");
         buildings.add("farm");
@@ -227,7 +234,7 @@ public class InGameTestComponent extends InGameTestInitializer {
                 "",
                 "",
                 "systemID",
-                "testGameID",
+                "123456",
                 "agriculture",
                 "name",
                 siteSlots,

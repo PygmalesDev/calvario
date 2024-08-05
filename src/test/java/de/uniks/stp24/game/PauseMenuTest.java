@@ -2,7 +2,11 @@ package de.uniks.stp24.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
+import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
+import de.uniks.stp24.component.game.fleetManager.NewFleetComponent;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
@@ -31,9 +35,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
@@ -90,6 +92,22 @@ public class PauseMenuTest extends ControllerTest {
     EmpireService empireService;
     @Spy
     ExplanationService explanationService;
+    @Spy
+    JobsApiService jobsApiService;
+    @Spy
+    TechnologyService technologyService;
+    @Spy
+    MarketService marketService;
+    @Spy
+    AnnouncementsService announcementsService;
+    @Spy
+    FleetCoordinationService fleetCoordinationService;
+    @Spy
+    FleetService fleetService;
+    @Spy
+    ShipService shipService;
+    @Spy
+    FleetApiService fleetApiService;
 
     @InjectMocks
     ClockComponent clockComponent;
@@ -128,54 +146,36 @@ public class PauseMenuTest extends ControllerTest {
     IslandOverviewJobsComponent islandOverviewJobsComponent;
     @InjectMocks
     IslandClaimingComponent islandClaimingComponent;
-
     @InjectMocks
     DetailsComponent detailsComponent;
-
     @InjectMocks
     SitesComponent sitesComponent;
-
     @InjectMocks
     BuildingsComponent buildingsComponent;
-
     @InjectMocks
     DeleteStructureComponent deleteStructureComponent;
-
     @InjectMocks
     EmpireOverviewComponent empireOverviewComponent;
-
     @InjectMocks
     HelpComponent helpComponent;
-
     @InjectMocks
     MarketComponent marketComponent;
-
-    /*
-    @Spy
-    public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
-
-     */
-
     @InjectMocks
     PropertiesJobProgressComponent propertiesJobProgressComponent;
-
     @InjectMocks
     TechnologyOverviewComponent technologyOverviewComponent;
-
     @InjectMocks
     TechnologyCategoryComponent technologyCategoryComponent;
     @InjectMocks
     ResearchJobComponent researchJobComponent;
-
-    @Spy
-    JobsApiService jobsApiService;
-    @Spy
-    TechnologyService technologyService;
-    @Spy
-    MarketService marketService;
-    @Spy
-    AnnouncementsService announcementsService;
-
+    @InjectMocks
+    FleetManagerComponent fleetManagerComponent;
+    @InjectMocks
+    FleetCreationComponent fleetCreationComponent;
+    @InjectMocks
+    NewFleetComponent newFleetComponent;
+    @InjectMocks
+    ChangeFleetComponent changeFleetComponent;
     @InjectMocks
     InGameController inGameController;
 
@@ -248,6 +248,21 @@ public class PauseMenuTest extends ControllerTest {
 
         this.marketComponent.marketService = this.marketService;
 
+        this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
+        this.inGameController.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
+        this.inGameController.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
+        this.inGameController.fleetCreationComponent = this.fleetCreationComponent;
+        this.fleetCoordinationService.fleetService = this.fleetService;
+        this.fleetCoordinationService.tokenStorage = this.tokenStorage;
+        this.fleetService.tokenStorage = this.tokenStorage;
+        this.fleetService.fleetApiService = this.fleetApiService;
+        this.fleetService.subscriber = this.subscriber;
+        this.fleetCoordinationService.subscriber = this.subscriber;
+
+        lenient().doReturn("gameOwner").when(this.tokenStorage).getUserId();
+        lenient().doReturn("123456").when(this.tokenStorage).getGameId();
+        lenient().doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
+
         doReturn(null).when(this.imageCache).get(any());
         doReturn(Observable.empty()).when(this.empireApiService).getEmpireEffect(any(), any());
         doReturn(Observable.empty()).when(this.jobsApiService).getEmpireJobs(any(), any());
@@ -258,10 +273,15 @@ public class PauseMenuTest extends ControllerTest {
         Map<String,List<SeasonComponent>> _private = new HashMap<>();
 
         doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());
-        doReturn(Observable.just(new Game("a","a","gameId", "gameName", "gameOwner", 2, 0,true,1,1,null ))).when(gamesApiService).getGame(any());
+        doReturn(Observable.just(new Game("a","a","123456", "gameName", "gameOwner", 2, 0,true,1,1,null ))).when(gamesApiService).getGame(any());
 
         doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
 
+        // Mock get Fleets and ships
+        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", 4, new HashMap<>(), new HashMap<>())));
+        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456",true);
+        doNothing().when(this.fleetService).initializeFleetListeners();
+        doNothing().when(this.fleetService).initializeShipListener();
 
 
 

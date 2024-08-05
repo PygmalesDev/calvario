@@ -62,6 +62,7 @@ public class WarComponent extends AnchorPane {
 
     public void showWarMessage(String messageType){
         setText();
+        System.out.println("wo ist mein Popup" + this);
 //        popupWarMessage.showPopup(parent, this);
         parent.setVisible(true);
         setVisible(true);
@@ -71,6 +72,8 @@ public class WarComponent extends AnchorPane {
 
     public void setParent(StackPane parent) {
         this.parent = parent;
+        parent.getChildren().add(this);
+
     }
 
 }

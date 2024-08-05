@@ -110,7 +110,6 @@ public class  ContactDetailsComponent extends StackPane {
         this.populationIcon = new ImageView();
         this.homeIcon = new ImageView();
         this.strengthIcon = new ImageView();
-
     }
 
     @OnInit
@@ -317,11 +316,17 @@ public class  ContactDetailsComponent extends StackPane {
                   contactsService.setAttacker(attackerName);
                   contactsService.declaringToDefenderCheck(attackerID);
                   if (contactsService.isDeclaringToDefender()) {
-                      System.out.println("here 1");
+                      System.out.println("war declared to you");
+                      System.out.println(warComponent);
+                      warComponent.setVisible(true);
                       warComponent.showWarMessage(messageType);
                   }
               }
           });
 
+    }
+
+    public void setWarComponent(WarComponent warComponent) {
+        this.warComponent = warComponent;
     }
 }

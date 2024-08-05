@@ -194,7 +194,7 @@ public class ContactsService {
         this.hiddenEmpires = new ArrayList<>(islandsService.getEmpiresID());
         this.hiddenEmpires.remove(this.gameOwnerID);
         System.out.println("game " + this.gameID + ". Enemies not discovered yet " + this.hiddenEmpires);
-//        loadContactsData();
+        loadContactsData();
     }
 
     // todo save on server!

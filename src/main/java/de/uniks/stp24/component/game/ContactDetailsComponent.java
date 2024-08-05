@@ -28,6 +28,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
+import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.controller.Subscriber;
@@ -66,6 +67,10 @@ public class  ContactDetailsComponent extends StackPane {
     ToggleButton warButton;
     @FXML
     Text warStateText;
+
+    @SubComponent
+    @Inject
+    WarComponent warComponent;
 
 
     public Pane parent;
@@ -313,7 +318,7 @@ public class  ContactDetailsComponent extends StackPane {
                   contactsService.declaringToDefenderCheck(attackerID);
                   if (contactsService.isDeclaringToDefender()) {
                       System.out.println("here 1");
-                      inGameController.showWarMessage(messageType);
+                      warComponent.showWarMessage(messageType);
                   }
               }
           });

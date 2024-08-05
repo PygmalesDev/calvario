@@ -29,6 +29,7 @@ public class WarComponent extends AnchorPane {
     ContactsService contactsService;
 
     private ContactDetailsComponent contactDetailsComponent;
+    private StackPane parent;
 
     @Inject
     public WarComponent() {
@@ -55,7 +56,21 @@ public class WarComponent extends AnchorPane {
     }
 
     public void close() {
+        parent.setVisible(false);
         setVisible(false);
+    }
+
+    public void showWarMessage(String messageType){
+        setText();
+//        popupWarMessage.showPopup(parent, this);
+        parent.setVisible(true);
+        setVisible(true);
+
+    }
+
+
+    public void setParent(StackPane parent) {
+        this.parent = parent;
     }
 
 }

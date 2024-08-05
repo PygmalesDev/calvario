@@ -367,6 +367,7 @@ public class InGameController extends BasicController {
         // todo coordinate with Imran to use this
         // for better control
         contactsOverviewComponent.setParents(contextMenuContainer, contactDetailsContainer);
+        warComponent.setParent(warContainer);
         contextMenuContainer.getChildren().forEach(child -> {
             child.setVisible(false);
             // make every node in contextMenuContainer draggable

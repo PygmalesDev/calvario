@@ -204,9 +204,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
     public TechnologyCategoryComponent setCategory(String category) {
         currentResearchResourceLabel.setText(String.valueOf(resourcesService.getResourceCount("research")));
         this.technologieCategoryName = category;
-
         updateTechnologies();
-
         return this;
     }
 

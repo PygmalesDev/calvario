@@ -60,21 +60,6 @@ public class TechnologyService {
         this.subscriber.subscribe(() -> System.out.println("event listener stopped!"));
     }
 
-    public ObservableList<TechnologyExtended> getAllUnlocked() {
-        ObservableList<TechnologyExtended> unlocked = FXCollections.observableArrayList();
-        subscriber.subscribe(empireApiService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
-                empire -> {
-                    unlocked.clear();
-                    if (empire.technologies() != null) {
-                        for (String techId : empire.technologies()) {
-                            subscriber.subscribe(getTechnology(techId),
-                                    unlocked::add, error -> System.out.println("Error after try to get Technology " + techId + " because: " + error.getMessage()));
-                        }
-                    }
-                }, error -> System.out.println("Error after try to get empire because of: " + error.getMessage()));
-        return unlocked;
-    }
-
     public ObservableList<ObservableList<TechnologyExtended>> getAllUnlockedAndResearched() {
         ObservableList<TechnologyExtended> unlocked = FXCollections.observableArrayList();
         ObservableList<TechnologyExtended> research = FXCollections.observableArrayList();
@@ -116,6 +101,7 @@ public class TechnologyService {
         subscriber.subscribe(empireApiService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 empire -> {
                     if (empire.technologies() != null) {
+                        lastUpdate = empire.technologies();
                         for (String techId : empire.technologies()) {
                             subscriber.subscribe(getTechnology(techId),
                                     technology -> {
@@ -162,7 +148,8 @@ public class TechnologyService {
                 techList -> {
                     technologiesList.clear();
                     technologiesList.addAll(techList);
-                }, error -> System.out.println("Error after try to get all technologies"));
+                }, error -> System.out.println("Error after try to get all technologies")
+        );
     }
 
     public List<TechnologyExtended> getTechnologiesList() {

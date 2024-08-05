@@ -155,13 +155,6 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
                     error -> System.out.println("Error after ty to get time of technology " + technology.id() + " reason: " + error.getMessage()));
         }
 
-        technologyResearchDetailsComponent.setTechnologyInfos(technology);
-        technologyEffectDetailsComponent.setTechnologyInfos(technology);
-
-        showEffectTooltip.setGraphic(technologyEffectDetailsComponent);
-        showEffectTooltip.setShowDelay(Duration.ZERO);
-        showEffectTooltip.setShowDuration(Duration.INDEFINITE);
-
         descriptionListView.getItems().clear();
         if (technology.effects().length != 0) {
             description.addAll(technology.effects());
@@ -188,12 +181,35 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
         timeImage.setImage(imageCache.get("icons/time.png"));
         researchImage.setImage(imageCache.get("icons/resources/research.png"));
 
+        showEffectTooltip.setGraphic(technologyEffectDetailsComponent);
+        showEffectTooltip.setShowDelay(Duration.ZERO);
+        showEffectTooltip.setShowDuration(Duration.INDEFINITE);
+
         researchLabelTooltip.setGraphic(technologyResearchDetailsComponent);
         researchLabelTooltip.setShowDelay(Duration.ZERO);
         researchLabelTooltip.setShowDuration(Duration.INDEFINITE);
 
-        technologyEffectDetailsComponent.setTechnology(technology);
-        technologyResearchDetailsComponent.initTraits();
+        researchLabelTooltip.setOnShowing(event -> {
+            researchLabelTooltip.setGraphic(technologyResearchDetailsComponent);
+            technologyResearchDetailsComponent.setTechnologyInfos(technology);
+        });
+
+        showEffectTooltip.setOnShowing(event -> {
+            showEffectTooltip.setGraphic(technologyEffectDetailsComponent);
+            technologyEffectDetailsComponent.setTechnologyInfos(technology);
+        });
+
+        researchLabelTooltip.setOnHiding(event -> {
+            researchLabelTooltip.setGraphic(null);
+            technologyResearchDetailsComponent.clear();
+            technologyResearchDetailsComponent.destroy();
+        });
+
+        showEffectTooltip.setOnHiding(event -> {
+            showEffectTooltip.setGraphic(null);
+            technologyEffectDetailsComponent.clear();
+            technologyEffectDetailsComponent.destroy();
+        });
     }
 
     public void researchClicked() {

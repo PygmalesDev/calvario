@@ -77,10 +77,10 @@ public class ContactsServiceTest extends ControllerTest {
         doNothing().when(contactsService).saveContacts();
         assertTrue(contactsService.hiddenEmpires.isEmpty());
         assertNull(contactsService.gameID);
-        assertNull(contactsService.gameOwnerID);
+        assertNull(contactsService.myOwnEmpireID);
         contactsService.getEmpiresInGame();
         assertTrue(contactsService.seenEnemies.isEmpty());
-        assertEquals("gameOwner", contactsService.gameOwnerID);
+        assertEquals("gameOwner", contactsService.myOwnEmpireID);
         assertEquals("game1", contactsService.gameID);
 
         contactsService.addEnemy("empire1","isleNr1");

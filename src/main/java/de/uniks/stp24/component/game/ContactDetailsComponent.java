@@ -1,21 +1,16 @@
 package de.uniks.stp24.component.game;
 
-
 import de.uniks.stp24.model.Contact;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.game.IslandsService;
 
-import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.CreateWarDto;
 import de.uniks.stp24.dto.WarDto;
-import de.uniks.stp24.model.Contact;
-import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.ContactsService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.WarService;
 import de.uniks.stp24.ws.EventListener;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -98,12 +93,9 @@ public class  ContactDetailsComponent extends StackPane {
     @Inject
     ContactsService contactsService;
 
-    private InGameController inGameController;
     private Contact contact;
     private final ObservableList<WarDto> wars = FXCollections.observableArrayList();
 
-    //TODO Check this information when opening the controller.
-    //TODO Close ContactComponent and contactDetailsComponent at the same time
 
     @Inject
     public ContactDetailsComponent() {
@@ -120,20 +112,23 @@ public class  ContactDetailsComponent extends StackPane {
     private void createWarListener() {
         this.subscriber.subscribe(this.eventListener.listen(
             "games." + tokenStorage.getGameId() + ".wars.*.*", WarDto.class),
-          event -> Platform.runLater(() -> {
-              switch (event.suffix()) {
+          event -> {
+            switch (event.suffix()) {
                   case "created" -> {
+                      System.out.println("detailscomponent" + " war created");
                       String attackerID = event.data().attacker();
                       wars.add(event.data());
                       setWarMessagePopup(event.suffix(), attackerID);
                   }
                   case "deleted" -> {
+                      System.out.println("detailscomponent" + " war deleted");
                       String attackerID = event.data().attacker();
                       wars.removeIf(w -> w._id().equals(event.data()._id()));
                       setWarMessagePopup(event.suffix(), attackerID);
                   }
-              }
-          }),
+                  default -> {System.out.println("detailscomponent" + " war updated");}
+            }
+          },
           error -> System.out.println("createWarListener error: " + error.getMessage())
         );
     }
@@ -143,23 +138,20 @@ public class  ContactDetailsComponent extends StackPane {
         this.contact = contact;
         contact.checkIslands();
         setInfo();
-//        intelText.setText("this isle " + contact.getAtIsland().substring(20));
         intelText.setText("Intel: " + calculateIntel(contact.getIntel()));
         empireNameText.setText(contact.getEmpireName());
         empireImageView.setImage(imageCache.get(contact.getEmpireFlag()));
         populationIcon.setImage(imageCache.get("icons/resources/population.png"));
         homeIcon.setImage(imageCache.get("assets/contactsAndWars/home.png"));
         strengthIcon.setImage(imageCache.get("assets/contactsAndWars/cannon.png"));
+
         popText.setText(resources.getString("pop") + ": " +
-//          contact.getStatsAtLocation().get("pop") + "/" +
           contact.getDiscoveryStats().get("pop"));
+
         siteText.setText(resources.getString("sites") + ": " +
-//          contact.getStatsAtLocation().get("sites") + "/" +
-//          islandsService.getAllNumberOfSites(contact.getEmpireID()));
           contact.getDiscoveryStats().get("sites"));
+
         buildingsText.setText(resources.getString("buildings") + ": " +
-//          contact.getStatsAtLocation().get("buildings") + "/" +
-//          islandsService.getAllNumberOfBuildings(contact.getEmpireID()));
           contact.getDiscoveryStats().get("buildings"));
 
         calculateStrength();
@@ -222,7 +214,8 @@ public class  ContactDetailsComponent extends StackPane {
     }
 
     private void calculateStrength() {
-        islandsService.getEnemyStrength(contact.getGameOwner(), contact.getEmpireID(), this.contact);
+        System.out.println("compare me: " + contact.getMyOwnId() + " with " + contact.getEmpireID());
+        islandsService.getEnemyStrength(contact.getMyOwnId(), contact.getEmpireID(), this.contact);
     }
 
     public void calculateStrength(double value) {
@@ -232,15 +225,11 @@ public class  ContactDetailsComponent extends StackPane {
         if (value < 1.1 && value > 0.1) text = "strong";
         if (value < 0.1 && value > -1.1) text = "weak";
         if (value < -1.1 && value > -2.1) text = "very weak";
+        if (value < -2.1) text = "dust";
         System.out.println(text);
         this.strengText.setText("Str: " + text);
 
     }
-
-
-//    public void setInGameController(InGameController inGameController) {
-//        this.inGameController = inGameController;
-//    }
 
     private void updateWarButtonText() {
         warStateText.setStyle("-fx-font-size: 12px;");
@@ -317,7 +306,7 @@ public class  ContactDetailsComponent extends StackPane {
                   contactsService.declaringToDefenderCheck(attackerID);
                   if (contactsService.isDeclaringToDefender()) {
                       System.out.println("war declared to you");
-                      System.out.println(warComponent);
+                      warComponent.getParent().setVisible(true);
                       warComponent.setVisible(true);
                       warComponent.showWarMessage(messageType);
                   }

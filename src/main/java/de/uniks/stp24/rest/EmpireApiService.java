@@ -42,9 +42,6 @@ public interface EmpireApiService {
     //TODO Use privates instead of seaonsalTrades
 
     @PATCH("games/{game}/empires/{empire}")
-    Observable<EmpirePrivateDto> savePrivate(@Path("game") String game, @Path("empire") String empire, @Body EmpirePrivateDto privateDto);
-
-    @PATCH("games/{game}/empires/{empire}")
     Observable<UpdateEmpireMarketDto> saveSeasonalComponents(@Path("game") String game, @Path("empire") String empire, @Body SeasonalTradeDto seasonalTradeDto);
 
     @GET("games/{game}/empires/{empire}")
@@ -52,4 +49,7 @@ public interface EmpireApiService {
 
     @GET("games/{game}/empires/{empire}")
     Observable<EmpirePrivateDto> getPrivate(@Path("game") String game, @Path("empire") String empire);
+
+    @PATCH("games/{game}/empires/{empire}")
+    Observable<EmpirePrivateDto> savePrivate(@Path("game") String game, @Path("empire") String empire, @Body EmpirePrivateDto privateDto);
 }

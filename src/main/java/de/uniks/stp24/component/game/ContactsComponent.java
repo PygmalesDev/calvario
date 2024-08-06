@@ -64,17 +64,8 @@ public class ContactsComponent extends StackPane {
         return cell;
     };
 
-
-   /* Provider<ContactCell> contactCellProvider = () -> {
-        var cell = new ContactCell(this.imageCache);
-        cell.setOnMouseClicked(event -> this.inGameController.openContactDetails(cell.getContact()));
-        return cell;
-    };*/
-
     public ObservableList<Contact> contactCells = FXCollections.observableArrayList();
     public ObservableList<WarDto> wars = FXCollections.observableArrayList();
-
-    private InGameController inGameController;
 
     @Inject
     public ContactsComponent() {
@@ -91,7 +82,8 @@ public class ContactsComponent extends StackPane {
                     this.wars.clear();
                     System.out.println(warDtos);
                     this.wars.addAll(warDtos);
-                });
+                }
+        );
     }
 
     public void closeContactsComponent() {
@@ -101,7 +93,6 @@ public class ContactsComponent extends StackPane {
 
     @OnRender
     public void render() {
-//        contactsService.loadContacts(); // in ContactsService
         this.contactCells = contactsService.contactCells;
         this.contactsListView.setItems(this.contactsService.contactCells);
         this.contactsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.contactCellProvider));

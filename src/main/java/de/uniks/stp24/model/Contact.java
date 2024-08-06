@@ -13,7 +13,7 @@ public class Contact {
     String empireName;
     String empireID;
     String atIsland;
-    String gameOwner;
+    String myOwnId;
     final List<String> empireIslandsIDs = new ArrayList<>();
     final List<String> discoveredIslands = new ArrayList<>();
     final List<ShortSystemDto> empireDtos = new ArrayList<>();
@@ -33,13 +33,6 @@ public class Contact {
 
     private BooleanProperty atWarWith = new SimpleBooleanProperty(false);
 
-//    public Contact() {
-//    }
-//    public Contact(String empireID) {
-//        this.empireID = empireID;
-//    }
-
-
     public void setEmpireID(String empireID) {
         this.empireID = empireID;
     }
@@ -54,8 +47,8 @@ public class Contact {
 
     public void addIsland(String id) {
         this.atIsland = id;
-        System.out.println("now at " + id);
-        if (!discoveredIslands.contains(id)) System.out.println(discoveredIslands.add(id));
+//        System.out.println("now at " + id);
+        if (!discoveredIslands.contains(id)) discoveredIslands.add(id);
     }
 
     public List<String> getDiscoveredIslands() {
@@ -72,13 +65,10 @@ public class Contact {
                   // are these necessary?
                   empireIslandsIDs.add(dto._id());
                   empireDtos.add(dto);
-                  System.out.println("health of this " + dto.health());
               }
           }
         );
-        System.out.println("INFO ISLANDS");
-        System.out.println(empireIslandsIDs.size() + " -> " + empireIslandsIDs);
-//        System.out.println(empireDtos.size() + " -> " + empireDtos);
+        System.out.println("INFO ISLANDS DTOS = " + empireIslandsIDs.size());
     }
 
     public void checkIslands() {
@@ -134,19 +124,17 @@ public class Contact {
         return this.pane;
     }
 
-    public void setGameOwner(String gameOwner) {
-        this.gameOwner = gameOwner;
+    public void setMyOwnId(String gameOwner) {
+        this.myOwnId = gameOwner;
     }
 
-    public String getGameOwner() {
-        return this.gameOwner;
+    public String getMyOwnId() {
+        return this.myOwnId;
     }
 
     public void setStrength(double value) {
-        System.out.println(value);
         this.pane.calculateStrength(value);
     }
-
 
     public boolean isAtWarWith() {
         return atWarWith.get();

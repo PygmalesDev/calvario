@@ -1,7 +1,6 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.dto.EmpirePrivateDto;
-import de.uniks.stp24.dto.ContactDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.dto.WarDto;
 import de.uniks.stp24.model.Contact;
@@ -31,25 +30,16 @@ public class ContactsService {
     public final ArrayList<Contact> seenEnemies = new ArrayList<>();
     public List<String> hiddenEmpires = new ArrayList<>();
     public String gameID;
-    public String gameOwnerID;
-
+    public String myOwnEmpireID;
 
     @Inject
     public WarService warService;
-        //todo contacts - > contactsCells
-//    public final ObservableList<Contact> contacts = FXCollections.observableArrayList();
 
     List<String> empireIDs = new ArrayList<>();
 
-    int flagIndex;
-    String empireName;
     String attacker;
     boolean declaring;
     boolean declaringToDefender;
-    final int imagesCount = 16;
-    final String resourcesPaths = "/de/uniks/stp24/assets/";
-    final String flagsFolderPath = "flags/flag_";
-    final ArrayList<String> flagsList = new ArrayList<>();
 
 
     @Inject
@@ -59,8 +49,7 @@ public class ContactsService {
 
     public void addEnemy(String enemy, String islandID) {
         //todo remove printouts
-        System.out.println("ISLAND :" + islandID);
-        System.out.println("Adding to contacts? " + enemy);
+        System.out.println("ISLAND :" + islandID + " Adding to contacts? " + enemy);
         Contact contact;
         ReadEmpireDto empireDto = islandsService.getEmpire(enemy);
         // if enemy's ID == game owner's ID do nothing
@@ -68,11 +57,11 @@ public class ContactsService {
         // if not, check if already discovered -> add or search it
         if(hiddenEmpires.contains(enemy)) {
             hiddenEmpires.remove(enemy);
-            System.out.println(empireDto.name());
+//            System.out.println(empireDto.name());
             contact = new Contact(empireDto);
             contactCells.add(contact);
             seenEnemies.add(contact);
-            System.out.println(contact.getEmpireName());
+//            System.out.println(contact.getEmpireName());
         } else {
             contact = seenEnemies.stream()
               .filter(element -> element.getEmpireID().equals(enemy)).findFirst().get();
@@ -80,15 +69,15 @@ public class ContactsService {
         }
 
         contact.addIsland(islandID);
-        contact.setGameOwner(gameOwnerID);
+        contact.setMyOwnId(myOwnEmpireID);
         saveContacts();
 
-        System.out.println(Objects.nonNull(contact.getPane()) && contact.getPane().visibleProperty().get());
+//        System.out.println(Objects.nonNull(contact.getPane()) && contact.getPane().visibleProperty().get());
         // in case that a contact detail component is open, and you go to another island from same contact
         // the view will be updated
         if (Objects.nonNull(contact.getPane()) && contact.getPane().visibleProperty().get()) contact.getPane().setContactInformation(contact);
 
-        System.out.println("contacts you've seen: " + contactCells.size());
+//        System.out.println("contacts you've seen: " + contactCells.size());
 
         //check
 //        if(!contacts.stream().map(Contact::getEmpireID).toList().contains(contact.getEmpireID()) && !contact.getEmpireID().equals(tokenStorage.getEmpireId())){
@@ -140,7 +129,7 @@ public class ContactsService {
                     if(warDtos.size() <= 0){
                         System.out.println("A");
                         setDeclaringToDefender(true);
-                    }else {
+                    } else {
                         warDtos.sort(Comparator.comparing(WarDto::createAt).reversed());
                         WarDto latestWar = warDtos.getFirst();
                         setDeclaringToDefender(latestWar.defender().equals(tokenStorage.getEmpireId()));
@@ -190,17 +179,12 @@ public class ContactsService {
 
     public void getEmpiresInGame() {
         this.gameID = tokenStorage.getGameId();
-        this.gameOwnerID = tokenStorage.getEmpireId();
+        this.myOwnEmpireID = tokenStorage.getEmpireId();
         this.hiddenEmpires = new ArrayList<>(islandsService.getEmpiresID());
-        this.hiddenEmpires.remove(this.gameOwnerID);
+        this.hiddenEmpires.remove(this.myOwnEmpireID);
         System.out.println("game " + this.gameID + ". Enemies not discovered yet " + this.hiddenEmpires);
         loadContactsData();
     }
-
-    // todo save on server!
-    // after talking with other devs: the empireID in a game is clearly
-    // that means that my Empire in game 1 has another empireID as in game 2
-    // for warStatus must be additionally a character or word at end
 
     private Map<String, Object> mapContacts(Map<String, Object> map) {
         Map<String, Object> tmp = map.isEmpty() ? new HashMap<>() : map;
@@ -211,13 +195,13 @@ public class ContactsService {
     }
 
     public void saveContacts() {
-        this.subscriber.subscribe(this.empireApiService.getPrivate(this.gameID, this.gameOwnerID),
+        this.subscriber.subscribe(this.empireApiService.getPrivate(this.gameID, this.myOwnEmpireID),
           result -> {
               final Map<String, Object> newPrivate = new HashMap<>(
                 mapContacts(Objects.nonNull(result._private()) ?
                   result._private() : new HashMap<>()));
-              subscriber.subscribe(this.empireApiService.savePrivate(this.gameID, this.gameOwnerID,new EmpirePrivateDto(newPrivate)),
-                saved -> System.out.println(saved._private()),
+              subscriber.subscribe(this.empireApiService.savePrivate(this.gameID, this.myOwnEmpireID,new EmpirePrivateDto(newPrivate)),
+                saved -> { },
                 error -> System.out.println("error while saving contacts....") );
           },
           error -> System.out.println("error while saving contacts")
@@ -226,9 +210,9 @@ public class ContactsService {
 
     //todo retrieve data from server
     public void loadContactsData() {
-        this.subscriber.subscribe(this.empireApiService.getPrivate(this.gameID,this.gameOwnerID),
+        this.subscriber.subscribe(this.empireApiService.getPrivate(this.gameID,this.myOwnEmpireID),
           result -> {
-            System.out.println(result);
+//            System.out.println(result);
             loadContacts(result._private());},
           error -> System.out.println("error while loading contacts"));
     }
@@ -237,12 +221,10 @@ public class ContactsService {
         if (!map.isEmpty()) {
             Map<String, List<String>> tmp = new HashMap<>();
             for (String key : map.keySet()) {
-                System.out.println(key + " -> " + map.get(key).getClass());
-                if (map.get(key) instanceof List<?> value ) {
+                if (hiddenEmpires.contains(key) && map.get(key) instanceof List<?> value ) {
                     tmp.put(key,(List<String>) value);
                 }
             }
-
             System.out.println("loaded data " + tmp);
             recreateContacts(tmp);
         }
@@ -254,5 +236,7 @@ public class ContactsService {
             data.get(key).forEach(id -> this.addEnemy(key,id));
         }
     }
+
+
 
 }

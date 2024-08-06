@@ -106,10 +106,10 @@ public class  ContactDetailsComponent extends StackPane {
 
     @OnInit
     public void init() {
-        createWarListener();
+//        createWarListener();
     }
 
-    private void createWarListener() {
+   /* private void createWarListener() {
         this.subscriber.subscribe(this.eventListener.listen(
             "games." + tokenStorage.getGameId() + ".wars.*.*", WarDto.class),
           event -> {
@@ -118,6 +118,7 @@ public class  ContactDetailsComponent extends StackPane {
                       System.out.println("detailscomponent" + " war created");
                       String attackerID = event.data().attacker();
                       wars.add(event.data());
+                      // todo resolve this call
                       setWarMessagePopup(event.suffix(), attackerID);
                   }
                   case "deleted" -> {
@@ -131,7 +132,7 @@ public class  ContactDetailsComponent extends StackPane {
           },
           error -> System.out.println("createWarListener error: " + error.getMessage())
         );
-    }
+    }*/
 
     public void setContactInformation(Contact contact) {
 
@@ -162,22 +163,15 @@ public class  ContactDetailsComponent extends StackPane {
     }
 
     public void checkWarSituation() {
-        subscriber.subscribe(warService.getWars(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
-          warDtos -> {
-              if (!warDtos.isEmpty()) {
-                  for (WarDto warDto : warDtos) {
-                      if (contact.getEmpireID().equals(warDto.defender()) || contact.getEmpireID().equals(warDto.attacker())) {
-                          contact.setAtWarWith(true);
-                          warButton.setSelected(true);
-                          updateWarButtonText();
-                          return;
-                      }
-                  }
-              }
-              contact.setAtWarWith(false);
-              warButton.setSelected(false);
-              updateWarButtonText();
-          });
+        boolean attacker = contactsService.attacker(contact.getEmpireID());
+        boolean defender = contactsService.defender(contact.getEmpireID());
+        System.out.println("checking war for " + contact.getEmpireID() + " was ");
+        System.out.println("attacker: " + attacker + " defender: " + defender );
+        contact.setAtWarWith(attacker||defender);
+        warButton.setSelected(attacker||defender);
+        warButton.setDisable(attacker);
+        updateWarButtonText();
+
     }
 
     public void closeContactDetailsComponent() {
@@ -252,46 +246,13 @@ public class  ContactDetailsComponent extends StackPane {
 
     private void warSetUp() {
         if (contact.isAtWarWith()) {
-            startWar();
+            contactsService.startWarWith(contact.getEmpireID());
         } else {
-            stopWar();
+            contactsService.stopWarWith(contact.getEmpireID());
         }
     }
 
-    private void startWar() {
-        subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
-          empireDto -> {
-              System.out.println("initiating war");
-              String defenderID = contact.getEmpireID();
-              String attackerID = empireDto._id();
-              String defenderName = contact.getEmpireName();
-              String attackerName = empireDto.name();
-              String warName = attackerName + " vs. " + defenderName;
-              CreateWarDto createWarDto = new CreateWarDto(attackerID, defenderID, warName);
-              System.out.println(createWarDto);
-              subscriber.subscribe(warService.createWar(tokenStorage.getGameId(), createWarDto),
-                result -> {
-                },
-                error -> System.out.println("Error: " + "1" + error.getMessage()));
-          });
-    }
-
-    private void stopWar() {
-        subscriber.subscribe(warService.getWars(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
-          warDtos -> {
-              for (WarDto warDto : warDtos) {
-                  System.out.println(warDto);
-                  if (contact.getEmpireID().equals(warDto.defender())) {
-                      subscriber.subscribe(warService.deleteWar(tokenStorage.getGameId(), warDto._id()),
-                        result -> {
-                        },
-                        error -> System.out.println("Error: " + error.getMessage()));
-                  }
-              }
-          });
-    }
-
-    private void setWarMessagePopup(String messageType, String attackerID) {
+    public void setWarMessagePopup(String messageType, String attackerID) {
         subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), attackerID),
           empireDto -> {
               String attackerName = empireDto.name();

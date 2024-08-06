@@ -369,6 +369,7 @@ public class InGameController extends BasicController {
         contactsOverviewComponent.setParents(contextMenuContainer, contactDetailsContainer);
         contactsOverviewComponent.contactDetailsComponent.setWarComponent(warComponent);
         warComponent.setParent(warContainer);
+        contactService.setContactOverview(contactsOverviewComponent);
 
         contextMenuContainer.getChildren().forEach(child -> {
             child.setVisible(false);

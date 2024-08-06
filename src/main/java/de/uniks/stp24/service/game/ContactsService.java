@@ -1,11 +1,14 @@
 package de.uniks.stp24.service.game;
 
+import de.uniks.stp24.component.game.ContactsComponent;
+import de.uniks.stp24.dto.CreateWarDto;
 import de.uniks.stp24.dto.EmpirePrivateDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.dto.WarDto;
 import de.uniks.stp24.model.Contact;
 import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.ws.EventListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -25,12 +28,16 @@ public class ContactsService {
     public Subscriber subscriber;
     @Inject
     public TokenStorage tokenStorage;
+    @Inject
+    EventListener eventListener;
 
     public ObservableList<Contact> contactCells = FXCollections.observableArrayList();
     public final ArrayList<Contact> seenEnemies = new ArrayList<>();
     public List<String> hiddenEmpires = new ArrayList<>();
     public String gameID;
     public String myOwnEmpireID;
+    Map<String, WarDto> warsOnProcess = new HashMap<>();
+    private final ObservableList<WarDto> warsInThisGame = FXCollections.observableArrayList();
 
     @Inject
     public WarService warService;
@@ -41,9 +48,20 @@ public class ContactsService {
     boolean declaring;
     boolean declaringToDefender;
 
+    ContactsComponent contactsComponent;
+
 
     @Inject
     ContactsService() {
+
+    }
+
+    @OnDestroy
+    public void dispose() {
+        subscriber.dispose();
+        contactCells.clear();
+        seenEnemies.clear();
+        this.gameID = null;
     }
 
 
@@ -87,25 +105,6 @@ public class ContactsService {
 //        }
     }
 
-    @OnDestroy
-    public void dispose() {
-        subscriber.dispose();
-        contactCells.clear();
-        seenEnemies.clear();
-            this.gameID = null;}
-
-//    public void addEnemyAfterCollision(String owner) {
-////        Contact contact = new Contact();
-////        ReadEmpireDto empireDto = islandsService.getEmpire(owner);
-//
-//
-//        if(!contacts.stream().map(Contact::getEmpireID).toList().contains(contact.getEmpireID()) && !contact.getEmpireID().equals(tokenStorage.getEmpireId())){
-//            empireIDs.add(contact.getEmpireID());
-//            contacts.add(contact);
-//            saveContacts();
-//        }
-//    }
-
     public void addEnemyAfterDeclaration(String attackID) {
         Contact contact;
         ReadEmpireDto empireDto = islandsService.getEmpire(attackID);
@@ -139,20 +138,6 @@ public class ContactsService {
     }
 
 
-
-
-//
-//    public void loadContacts() {
-//        subscriber.subscribe(this.empireApiService.getContacts(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
-//                contactDto -> {
-//                    this.contacts.clear();
-//                    if (Objects.nonNull(contactDto._private()) && Objects.nonNull(contactDto._private().get("contacts"))) {
-//                        ((List<String>)contactDto._private().get("contacts")).forEach(this::addEnemyAfterCollision);
-//                    }
-//                }
-//                , error -> System.out.println("errorLaodContacts:" + error.getMessage()));
-//    }
-
     public boolean isDeclaring() {
         return declaring;
     }
@@ -184,6 +169,7 @@ public class ContactsService {
         this.hiddenEmpires.remove(this.myOwnEmpireID);
         System.out.println("game " + this.gameID + ". Enemies not discovered yet " + this.hiddenEmpires);
         loadContactsData();
+        createWarListener();
     }
 
     private Map<String, Object> mapContacts(Map<String, Object> map) {
@@ -238,5 +224,61 @@ public class ContactsService {
     }
 
 
+    public void createWarListener() {
+        this.subscriber.subscribe(this.eventListener
+          .listen("games." + tokenStorage.getGameId() + ".wars.*.*", WarDto.class),
+          event -> {
+            switch (event.suffix()) {
+                case "created" -> {
+                    System.out.println("contact war!");
+                    warsInThisGame.add(event.data());
+                }
+                case "deleted" -> {
+                    System.out.println("contact peace!");
+                    warsInThisGame.removeIf(w -> w._id().equals(event.data()._id()));
+                }
+                default -> System.out.println("contact still war!");
+            }
+              this.contactsComponent.contactDetailsComponent.checkWarSituation();
+              this.contactsComponent.contactDetailsComponent.setWarMessagePopup(event.suffix(), event.data().attacker());
+            System.out.println(event.data().attacker() + " and " + event.data().defender());
+          },
+          error -> System.out.println("createWarListener error: " + error.getMessage())
+        );
+    }
+
+    public void startWarWith(String enemyID) {
+        CreateWarDto warDto = new CreateWarDto(myOwnEmpireID,enemyID,"");
+        this.subscriber.subscribe(this.warService.createWar(gameID,warDto),
+          result -> warsOnProcess.put(enemyID,result),
+          error -> System.out.println("couldn't create war"));
+    }
+
+    public void stopWarWith(String enemyID) {
+        String warId = warsOnProcess.get(enemyID)._id();
+        this.subscriber.subscribe(this.warService.deleteWar(gameID,warId),
+          result -> warsOnProcess.remove(enemyID),
+          error -> System.out.println("couldn't stop war"));
+    }
+
+    public void setContactOverview(ContactsComponent contactsOverviewComponent) {
+        this.contactsComponent = contactsOverviewComponent;
+    }
+
+    public boolean attacker(String empireID) {
+        System.out.println(" wars : " + warsInThisGame.size());
+        return warsInThisGame.stream()
+          .anyMatch(warDto -> (myOwnEmpireID.equals(warDto.defender()) && empireID.equals(warDto.attacker())));
+    }
+
+    public boolean defender(String empireID) {
+        System.out.println(" wars : " + warsInThisGame.size());
+        return warsInThisGame.stream()
+          .anyMatch(warDto -> (empireID.equals(warDto.defender()) && myOwnEmpireID.equals(warDto.attacker())));
+    }
+
+    public void addWarInformation(List<WarDto> dto) {
+        this.warsInThisGame.addAll(dto);
+    }
 
 }

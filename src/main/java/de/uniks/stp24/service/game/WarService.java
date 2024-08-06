@@ -22,7 +22,7 @@ public class WarService {
 
     }
 
-    public Observable<CreateWarDto> createWar(String gameID, CreateWarDto createWarDto) {
+    public Observable<WarDto> createWar(String gameID, CreateWarDto createWarDto) {
         return this.warsApiService.createWar(gameID, createWarDto);
     }
 

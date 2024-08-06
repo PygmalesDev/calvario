@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface WarsApiService {
     @POST("games/{game}/wars")
-    Observable<CreateWarDto> createWar(@Path("game") String gameID, @Body CreateWarDto createWarDto);
+    Observable<WarDto> createWar(@Path("game") String gameID, @Body CreateWarDto createWarDto);
 
     @GET("games/{game}/wars")
     Observable<List<WarDto>> getWars(@Path("game") String gameID, @Query("empire")  String empireID);

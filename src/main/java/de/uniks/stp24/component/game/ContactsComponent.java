@@ -28,6 +28,7 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Objects;
 
 @Component(view = "ContactsComponent.fxml")
 public class ContactsComponent extends StackPane {
@@ -37,6 +38,7 @@ public class ContactsComponent extends StackPane {
     @SubComponent
     @Inject
     public ContactDetailsComponent contactDetailsComponent;
+
 
     public Pane parent;
     public Pane parentDetails;
@@ -82,6 +84,7 @@ public class ContactsComponent extends StackPane {
                     this.wars.clear();
                     System.out.println(warDtos);
                     this.wars.addAll(warDtos);
+                    contactsService.addWarInformation(warDtos);
                 }
         );
     }
@@ -103,5 +106,7 @@ public class ContactsComponent extends StackPane {
         this.parentDetails = detailParent;
         this.contactDetailsComponent.setParent(detailParent);
     }
+
+
 
 }

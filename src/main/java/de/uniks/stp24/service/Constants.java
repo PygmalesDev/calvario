@@ -10,10 +10,6 @@ public class Constants {
             "#40E0D0", "#FF00FF", "#FFD700", "#C0C0C0", "#4B0082",
             "#36454F", "#F28500", "#E6E6FA", "#008080", "#800000", "#808000"};
 
-    public static final Double[] colorsHSV = new Double[]{
-            0.93, 0.2, -0.22, 0.5, -0.91, -0.03, 0.67, -0.72, -1.00, 0.53, 0.13, -0.82, 0.33, 0.00, -1.00, -0.67
-    };
-
     // Folder
     public static final String DATA_FOLDER_NAME = "data";
     public static final String EVENT_FOLDER_NAME = "src/main/resources/de/uniks/stp24/data/";
@@ -126,20 +122,6 @@ public class Constants {
             "ancient_refinery", "site.coalmine"
     );
 
-    public static final Map<String, String> buildingTranslation = Map.of(
-            "exchange", "building.seaside",
-            "power_plant","building.theurgy",
-            "mine","building.resonatingDelves",
-            "farm","building.farmside",
-            "research_lab","building.scoutHub",
-            "foundry","building.alloySmeltery",
-            "factory","building.chophouse",
-            "refinery","building.coalQuarry",
-            "shipyard", "building.shipyard",
-            "fortress", "building.stronghold"
-    );
-
-
     public static final Map<String, String> islandTranslation = Map.ofEntries(
             Map.entry("uninhabitable_0", "island.plundered"),
             Map.entry("uninhabitable_1", "island.breezy"),
@@ -189,6 +171,19 @@ public class Constants {
             Map.entry("ancient_foundry", "de/uniks/stp24/icons/sites/expedition_site.png"),
             Map.entry("ancient_factory", "de/uniks/stp24/icons/sites/merchant_site.png"),
             Map.entry("ancient_refinery", "de/uniks/stp24/icons/sites/coalmine_site.png")
+    );
+
+    public static final Map<String, String> buildingTranslation = Map.of(
+            "exchange", "building.seaside",
+            "power_plant","building.theurgy",
+            "mine","building.resonatingDelves",
+            "farm","building.farmside",
+            "research_lab","building.scoutHub",
+            "foundry","building.alloySmeltery",
+            "factory","building.chophouse",
+            "refinery","building.coalQuarry",
+            "shipyard", "building.shipyard",
+            "fortress", "building.stronghold"
     );
 
     public static final Map<String, String> buildingsIconPathsMap = Map.ofEntries(

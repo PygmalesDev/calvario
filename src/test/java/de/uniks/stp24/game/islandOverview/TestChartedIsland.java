@@ -31,6 +31,7 @@ public class TestChartedIsland extends IslandOverviewTestComponent{
     @Test
     public void testOwnedIsland() {
         doReturn(readEmpireDto).when(islandsService).getEmpire(any());
+        islandAttributeStorage.setIsland(testIsland);
 
         //Open island overview of owned Island
         waitForFxEvents();
@@ -123,8 +124,7 @@ public class TestChartedIsland extends IslandOverviewTestComponent{
         Node prev = lookup("#prev").query();
         Node next = lookup("#next").query();
 
-        ArrayList<Node> buildingNodes = new ArrayList<>();
-        buildingNodes.addAll(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
+        ArrayList<Node> buildingNodes = new ArrayList<>(this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building"));
 
         int oldValue = this.inGameController.overviewSitesComponent.buildingsComponent.buildings.lookupAll("#building").size();
         clickOn(buildingNodes.getLast());

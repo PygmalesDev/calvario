@@ -134,7 +134,6 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
         if (technologyService.getUnlockedList().stream().anyMatch(tech -> tech.id().equals(technology.id()))) {
             researchHBox.getChildren().removeAll(researchLabel, timeImage, timeLabel, researchButton, researchImage);
         } else {
-            if (subscriber.isDisposed()) System.out.println("Subscriber disposed!? ");
             /* get Time and Costs of Technology only if it isn't unlocked yet */
             subscriber.subscribe(technologyService.getTechnologyTimeAndCost(tokenStorage.getEmpireId(), "technology.cost", technology.id()),
                     aggregateResultDto -> researchLabel.setText(String.valueOf(aggregateResultDto.total())),

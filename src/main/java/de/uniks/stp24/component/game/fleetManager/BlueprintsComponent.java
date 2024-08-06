@@ -94,7 +94,7 @@ public class BlueprintsComponent extends VBox implements ReusableItemComponent<S
         attackImage.setImage(imageCache.get("icons/ships/sword.png"));
         defenseImage.setImage(imageCache.get("icons/ships/shield.png"));
         resourceImage1.setImage(imageCache.get("icons/resources/energy.png"));
-        resourceImage2.setImage(imageCache.get("icons/resources/minerals.png"));
+        resourceImage2.setImage(imageCache.get("icons/resources/alloys.png"));
     }
 
     @Override

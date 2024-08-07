@@ -38,6 +38,10 @@ public class ContactsComponent extends StackPane {
     @SubComponent
     @Inject
     public ContactDetailsComponent contactDetailsComponent;
+    @SubComponent
+    @Inject
+    WarComponent warComponent;
+
 
 
     public Pane parent;
@@ -105,6 +109,10 @@ public class ContactsComponent extends StackPane {
         this.parent = ownParent;
         this.parentDetails = detailParent;
         this.contactDetailsComponent.setParent(detailParent);
+    }
+
+    public void setWarComponent(WarComponent warComponent){
+        this.warComponent = warComponent;
     }
 
 

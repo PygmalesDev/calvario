@@ -30,6 +30,8 @@ public class ContactsService {
     public TokenStorage tokenStorage;
     @Inject
     EventListener eventListener;
+    @Inject
+    public WarService warService;
 
     public ObservableList<Contact> contactCells = FXCollections.observableArrayList();
     public final ArrayList<Contact> seenEnemies = new ArrayList<>();
@@ -39,10 +41,6 @@ public class ContactsService {
     Map<String, WarDto> warsOnProcess = new HashMap<>();
     private final ObservableList<WarDto> warsInThisGame = FXCollections.observableArrayList();
 
-    @Inject
-    public WarService warService;
-
-    List<String> empireIDs = new ArrayList<>();
 
     String attacker;
     boolean declaring;
@@ -65,8 +63,8 @@ public class ContactsService {
     }
 
 
+    // add enemy after discovered an island of his empire
     public void addEnemy(String enemy, String islandID) {
-        //todo remove printouts
         System.out.println("ISLAND :" + islandID + " Adding to contacts? " + enemy);
         Contact contact;
         ReadEmpireDto empireDto = islandsService.getEmpire(enemy);
@@ -75,11 +73,9 @@ public class ContactsService {
         // if not, check if already discovered -> add or search it
         if(hiddenEmpires.contains(enemy)) {
             hiddenEmpires.remove(enemy);
-//            System.out.println(empireDto.name());
             contact = new Contact(empireDto);
             contactCells.add(contact);
             seenEnemies.add(contact);
-//            System.out.println(contact.getEmpireName());
         } else {
             contact = seenEnemies.stream()
               .filter(element -> element.getEmpireID().equals(enemy)).findFirst().get();
@@ -90,14 +86,11 @@ public class ContactsService {
         contact.setMyOwnId(myOwnEmpireID);
         saveContacts();
 
-//        System.out.println(Objects.nonNull(contact.getPane()) && contact.getPane().visibleProperty().get());
         // in case that a contact detail component is open, and you go to another island from same contact
         // the view will be updated
         if (Objects.nonNull(contact.getPane()) && contact.getPane().visibleProperty().get()) contact.getPane().setContactInformation(contact);
 
-//        System.out.println("contacts you've seen: " + contactCells.size());
-
-        //check
+        // for what was this check
 //        if(!contacts.stream().map(Contact::getEmpireID).toList().contains(contact.getEmpireID()) && !contact.getEmpireID().equals(tokenStorage.getEmpireId())){
 //            empireIDs.add(contact.getEmpireID());
 //            contacts.add(contact);
@@ -105,19 +98,17 @@ public class ContactsService {
 //        }
     }
 
-    public void addEnemyAfterDeclaration(String attackID) {
-        Contact contact;
-        ReadEmpireDto empireDto = islandsService.getEmpire(attackID);
-        contact = new Contact(empireDto);
-        declaringToDefenderCheck(attackID);
+    public void addEnemyAfterDeclaration(String enemy) {
+        ReadEmpireDto empireDto = islandsService.getEmpire(enemy);
+        Contact contact = new Contact(empireDto);
+        declaringToDefenderCheck(enemy);
+        hiddenEmpires.remove(enemy);
+        contactCells.add(contact);
+        seenEnemies.add(contact);
+        contact.setMyOwnId(myOwnEmpireID);
+        saveContacts();
 
-        boolean alreadyInContacts = contactCells.stream().map(Contact::getEmpireID).toList().contains(contact.getEmpireID());
-        boolean ownContactID = contact.getEmpireID().equals(tokenStorage.getEmpireId());
-        if(!alreadyInContacts && !ownContactID && isDeclaringToDefender()){
-            empireIDs.add(contact.getEmpireID());
-            contactCells.add(contact);
-            saveContacts();
-        }
+        System.out.println("enemy added after war declaration");
     }
 
     public void declaringToDefenderCheck(String attackID) {
@@ -186,7 +177,7 @@ public class ContactsService {
               final Map<String, Object> newPrivate = new HashMap<>(
                 mapContacts(Objects.nonNull(result._private()) ?
                   result._private() : new HashMap<>()));
-              subscriber.subscribe(this.empireApiService.savePrivate(this.gameID, this.myOwnEmpireID,new EmpirePrivateDto(newPrivate)),
+              subscriber.subscribe(this.empireApiService.savePrivate(this.gameID, this.myOwnEmpireID,new EmpirePrivateDto(new HashMap<>())),
                 saved -> { },
                 error -> System.out.println("error while saving contacts....") );
           },
@@ -194,7 +185,6 @@ public class ContactsService {
         );
     }
 
-    //todo retrieve data from server
     public void loadContactsData() {
         this.subscriber.subscribe(this.empireApiService.getPrivate(this.gameID,this.myOwnEmpireID),
           result -> {
@@ -207,8 +197,10 @@ public class ContactsService {
         if (!map.isEmpty()) {
             Map<String, List<String>> tmp = new HashMap<>();
             for (String key : map.keySet()) {
+                System.out.println("contact loaded has " + map.get(key).getClass());
                 if (hiddenEmpires.contains(key) && map.get(key) instanceof List<?> value ) {
-                    tmp.put(key,(List<String>) value);
+                    System.out.println(value.isEmpty());
+                    tmp.put(key,value.isEmpty() ? new ArrayList<String>() : (ArrayList<String>) value);
                 }
             }
             System.out.println("loaded data " + tmp);
@@ -219,10 +211,10 @@ public class ContactsService {
     public void recreateContacts(Map<String, List<String>> data) {
         if (data.isEmpty()) return;
         for (String key : data.keySet()) {
-            data.get(key).forEach(id -> this.addEnemy(key,id));
+            if (data.get(key).isEmpty()) this.addEnemyAfterDeclaration(key);
+            else data.get(key).forEach(id -> this.addEnemy(key, id));
         }
     }
-
 
     public void createWarListener() {
         this.subscriber.subscribe(this.eventListener
@@ -239,8 +231,16 @@ public class ContactsService {
                 }
                 default -> System.out.println("contact still war!");
             }
-              this.contactsComponent.contactDetailsComponent.checkWarSituation();
-              this.contactsComponent.contactDetailsComponent.setWarMessagePopup(event.suffix(), event.data().attacker());
+              System.out.println("att -> " + event.data().attacker() + " def -> " + event.data().defender());
+              System.out.println("already seen? " + !hiddenEmpires.contains(event.data().attacker()));
+            if (hiddenEmpires.contains(event.data().attacker())) addEnemyAfterDeclaration(event.data().attacker());
+            this.contactsComponent.contactDetailsComponent.checkWarSituation();
+              System.out.println(Objects
+                .nonNull(
+                  islandsService.getEmpire(event.data().attacker()).name()));
+            String attackerName = islandsService.getEmpire(event.data().attacker()).name();
+              System.out.println(attackerName);
+            this.contactsComponent.contactDetailsComponent.setWarMessagePopup(event.suffix(), attackerName, event.data().attacker());
             System.out.println(event.data().attacker() + " and " + event.data().defender());
           },
           error -> System.out.println("createWarListener error: " + error.getMessage())

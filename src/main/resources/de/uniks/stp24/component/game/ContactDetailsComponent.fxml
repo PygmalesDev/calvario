@@ -87,7 +87,7 @@
           </HBox>
        </VBox>
         <Button fx:id="closeContactDetailComponentButton" layoutX="324.0" layoutY="8.0" mnemonicParsing="false" onAction="#closeContactDetailsComponent" prefHeight="50.0" prefWidth="50.0" styleClass="closeWindowButton" />
-        <Button layoutX="146.0" layoutY="442.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="94.0" styleClass="warButtonDesign" text="War" textFill="WHITE">
+        <Button layoutX="146.0" layoutY="442.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="94.0" styleClass="warButtonDesign" textFill="WHITE">
             <font>
                 <Font size="10.0" />
             </font>

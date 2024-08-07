@@ -367,6 +367,7 @@ public class InGameController extends BasicController {
         // todo coordinate with Imran to use this
         // for better control
         contactsOverviewComponent.setParents(contextMenuContainer, contactDetailsContainer);
+//        contactsOverviewComponent.setWarComponent(warComponent);
         contactsOverviewComponent.contactDetailsComponent.setWarComponent(warComponent);
         warComponent.setParent(warContainer);
         contactService.setContactOverview(contactsOverviewComponent);

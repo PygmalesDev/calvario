@@ -30,6 +30,7 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component(view = "ContactDetailsComponent.fxml")
@@ -118,7 +119,6 @@ public class  ContactDetailsComponent extends StackPane {
                       System.out.println("detailscomponent" + " war created");
                       String attackerID = event.data().attacker();
                       wars.add(event.data());
-                      // todo resolve this call
                       setWarMessagePopup(event.suffix(), attackerID);
                   }
                   case "deleted" -> {
@@ -163,6 +163,7 @@ public class  ContactDetailsComponent extends StackPane {
     }
 
     public void checkWarSituation() {
+        if (Objects.isNull(this.contact)) return;
         boolean attacker = contactsService.attacker(contact.getEmpireID());
         boolean defender = contactsService.defender(contact.getEmpireID());
         System.out.println("checking war for " + contact.getEmpireID() + " was ");
@@ -236,6 +237,9 @@ public class  ContactDetailsComponent extends StackPane {
             warStateText.setFill(Color.WHITE);
             warStateText.setText("You are at peace with " + contact.getEmpireName());
         }
+        if (warButton.isDisabled()) {
+            warButton.setText("");
+        }
     }
 
     private void toggleWarState() {
@@ -252,28 +256,24 @@ public class  ContactDetailsComponent extends StackPane {
         }
     }
 
-    public void setWarMessagePopup(String messageType, String attackerID) {
-        subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), attackerID),
-          empireDto -> {
-              String attackerName = empireDto.name();
-              if (messageType.equals("created")) {
-                  contactsService.setDeclaring(true);
-                  contactsService.addEnemyAfterDeclaration(attackerID);
-              } else if (messageType.equals("deleted")) {
-                  contactsService.setDeclaring(false);
-              }
-              if (!attackerID.equals(tokenStorage.getEmpireId())) {
-                  contactsService.setAttacker(attackerName);
-                  contactsService.declaringToDefenderCheck(attackerID);
-                  if (contactsService.isDeclaringToDefender()) {
-                      System.out.println("war declared to you");
-                      warComponent.getParent().setVisible(true);
-                      warComponent.setVisible(true);
-                      warComponent.showWarMessage(messageType);
-                  }
-              }
-          });
+    public void setWarMessagePopup(String messageType, String attackerName, String attackerID) {
+        if (messageType.equals("created")) {
+            contactsService.setDeclaring(true);
+        } else if (messageType.equals("deleted")) {
+            contactsService.setDeclaring(false);
+        }
 
+        if (!attackerID.equals(tokenStorage.getEmpireId())) {
+
+            contactsService.setAttacker(attackerName);
+            contactsService.declaringToDefenderCheck(attackerID);
+            if (contactsService.isDeclaringToDefender()) {
+                System.out.println("war declared to you");
+                warComponent.getParent().setVisible(true);
+                warComponent.setVisible(true);
+                warComponent.showWarMessage(messageType);
+            }
+        }
     }
 
     public void setWarComponent(WarComponent warComponent) {

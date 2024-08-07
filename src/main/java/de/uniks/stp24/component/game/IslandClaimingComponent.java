@@ -194,7 +194,9 @@ public class IslandClaimingComponent extends Pane {
             this.fleetInformationText.setVisible(false);
             this.exploreButton.setVisible(true);
             this.exploreButton.setText(this.gameResourceBundle.getString("claiming.travel"));
-            this.fleetCoordinationService.generateTravelPaths(this.currentIsland);
+            this.fleetCoordinationService.generateTravelPaths(
+                    this.islandsService.getIsland(this.fleetCoordinationService.getSelectedFleet().getFleet().location()),
+                    this.currentIsland);
             this.timeText.setText(String.valueOf(
                     this.fleetCoordinationService.getTravelDuration(fleet.getFleet().location(),
                     this.currentIsland.id())

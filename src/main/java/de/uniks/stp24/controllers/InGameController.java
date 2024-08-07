@@ -300,6 +300,10 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void render() {
+        this.jobsService.loadEmpireJobs();
+        this.jobsService.initializeJobsListeners();
+
+        explanationService.setInGameController(this);
         fleetCoordinationService.setInGameController(this);
 
         buildingProperties.setMouseTransparent(true);
@@ -363,9 +367,7 @@ public class InGameController extends BasicController {
         draggables.addAll(Arrays.asList(overviewContainer, buildingsWindow, buildingProperties, siteProperties));
         new Draggable.DraggableNode(overviewContainer, buildingsWindow, buildingProperties, siteProperties);
 
-        this.jobsService.loadEmpireJobs();
-        this.jobsService.initializeJobsListeners();
-        explanationService.setInGameController(this);
+
 
         this.fleetService.loadGameFleets();
         this.fleetService.initializeFleetListeners();
@@ -637,10 +639,6 @@ public class InGameController extends BasicController {
             this.fleetCreationComponent.setLayoutX(selected.getLayoutX()-100);
             this.fleetCreationComponent.setLayoutY(selected.getLayoutY()+30);
         }
-    }
-
-    public void setFleetOnMap(GameFleetController fleet) {
-        this.mapGrid.getChildren().add(fleet);
     }
 
     @OnRender

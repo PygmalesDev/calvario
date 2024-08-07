@@ -87,7 +87,6 @@ public class JobsService {
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.empires.*.jobs.*.*",
                 this.tokenStorage.getGameId()), Job.class), result -> {
             Job job = result.data();
-            System.out.println("someone called");
 
             switch (result.suffix()) {
                 case "created" -> this.addJobToGroups(job);

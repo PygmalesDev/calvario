@@ -95,4 +95,8 @@ public class GameFleetController extends Pane {
     public Rotate getFleetRotate() {
         return this.rotate;
     }
+
+    public void setCurrentPoint(DistancePoint currentPoint) {
+        this.currentPoint = currentPoint;
+    }
 }

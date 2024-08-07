@@ -43,13 +43,12 @@ public class WarComponent extends AnchorPane {
 
     @OnRender
     public void render() {
-        setText();
     }
 
-    public void setText() {
-        if (contactsService.isDeclaring()) {
+    public void setText(String msg) {
+        if (msg.equals("created")) {
             warText.setText("The " + contactsService.getAttacker() + " have started a war against you!");
-        } else {
+        } else  if (msg.equals("deleted")) {
             warText.setText("The " + contactsService.getAttacker() + " have stopped the war against you!");
         }
         contactsService.setDeclaring(false);
@@ -61,7 +60,7 @@ public class WarComponent extends AnchorPane {
     }
 
     public void showWarMessage(String messageType){
-        setText();
+        setText(messageType);
         System.out.println("wo ist mein Popup " + this);
 //        popupWarMessage.showPopup(parent, this);
         parent.setVisible(true);

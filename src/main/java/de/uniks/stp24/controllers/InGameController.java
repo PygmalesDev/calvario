@@ -789,11 +789,6 @@ public class InGameController extends BasicController {
         deleteStructureComponent.handleDeleteStructure(buildingType);
     }
 
-    public void showWarMessage(String messageType){
-        warComponent.setText();
-        popupWarMessage.showPopup(warContainer, warComponent);
-    }
-
     public void updateAmountSitesGrid() {
         sitePropertiesComponent.displayAmountOfSite();
     }

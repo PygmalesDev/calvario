@@ -59,21 +59,23 @@ public class ContactsService {
         subscriber.dispose();
         contactCells.clear();
         seenEnemies.clear();
+        warsOnProcess.clear();
+        warsInThisGame.clear();
         this.gameID = null;
     }
 
 
     // add enemy after discovered an island of his empire
     public void addEnemy(String enemy, String islandID) {
-        System.out.println("ISLAND :" + islandID + " Adding to contacts? " + enemy);
         Contact contact;
         ReadEmpireDto empireDto = islandsService.getEmpire(enemy);
         // if enemy's ID == game owner's ID do nothing
         if (tokenStorage.getEmpireId().equals(enemy)) return;
         // if not, check if already discovered -> add or search it
         if (hiddenEmpires.contains(enemy)) {
-            hiddenEmpires.remove(enemy);
             contact = new Contact(empireDto);
+            contact.setMyOwnId(myOwnEmpireID);
+            hiddenEmpires.remove(enemy);
             contactCells.add(contact);
             seenEnemies.add(contact);
         } else {
@@ -85,35 +87,45 @@ public class ContactsService {
         contact.addIsland(islandID);
         contact.setMyOwnId(myOwnEmpireID);
         saveContacts();
+        checkIfInvolveInWarWith(contact);
 
         // in case that a contact detail component is open, and you go to another island from same contact
         // the view will be updated
         if (Objects.nonNull(contact.getPane()) && contact.getPane().visibleProperty().get())
             contact.getPane().setContactInformation(contact);
+    }
 
-        // for what was this check
-//        if(!contacts.stream().map(Contact::getEmpireID).toList().contains(contact.getEmpireID()) && !contact.getEmpireID().equals(tokenStorage.getEmpireId())){
-//            empireIDs.add(contact.getEmpireID());
-//            contacts.add(contact);
-
-//        }
+    public void addEnemyInPeace(String enemy) {
+        ReadEmpireDto dto = islandsService.getEmpire(enemy);
+        Contact contact = new Contact(dto);
+        contact.setMyOwnId(myOwnEmpireID);
+        hiddenEmpires.remove(dto._id());
+        contactCells.add(contact);
+        seenEnemies.add(contact);
+        checkIfInvolveInWarWith(contact);
+        saveContacts();
     }
 
     public void addEnemyAfterDeclaration(String enemy) {
-        declaringToDefenderCheck(enemy);
-
-        if (declaringToDefender) {
-            ReadEmpireDto empireDto = islandsService.getEmpire(enemy);
-            Contact contact = new Contact(empireDto);
-            contact.setMyOwnId(myOwnEmpireID);
+        Contact contact;
+        ReadEmpireDto empireDto = islandsService.getEmpire(enemy);
+        if (attacker(enemy) || defender(enemy)) {
             declaringToDefenderCheck(enemy);
+            contact = new Contact(empireDto);
+            contact.setMyOwnId(myOwnEmpireID);
             hiddenEmpires.remove(enemy);
             contactCells.add(contact);
             seenEnemies.add(contact);
             saveContacts();
-
+            contact.setAtWarWith(true);
             System.out.println("enemy added after war declaration");
         }
+    }
+
+    public void checkIfInvolveInWarWith(Contact contact) {
+        if (Objects.isNull(contact)) return ;
+        contact.setAtWarWith(attacker(contact.getEmpireID()) || defender(contact.getEmpireID()));
+
     }
 
     public void declaringToDefenderCheck(String attackID) {
@@ -123,7 +135,7 @@ public class ContactsService {
                 warsFromAttacker.add(warDto);
             }
         }
-        if (warsFromAttacker.size() <= 0) {
+        if (warsFromAttacker.isEmpty()) {
             setDeclaringToDefender(true);
         } else {
             warsFromAttacker.sort(Comparator.comparing(WarDto::createAt).reversed());
@@ -163,7 +175,6 @@ public class ContactsService {
         this.myOwnEmpireID = tokenStorage.getEmpireId();
         this.hiddenEmpires = new ArrayList<>(islandsService.getEmpiresID());
         this.hiddenEmpires.remove(this.myOwnEmpireID);
-        System.out.println("game " + this.gameID + ". Enemies not discovered yet " + this.hiddenEmpires);
         loadContactsData();
         createWarListener();
     }
@@ -182,7 +193,7 @@ public class ContactsService {
                     final Map<String, Object> newPrivate = new HashMap<>(
                             mapContacts(Objects.nonNull(result._private()) ?
                                     result._private() : new HashMap<>()));
-                    subscriber.subscribe(this.empireApiService.savePrivate(this.gameID, this.myOwnEmpireID, new EmpirePrivateDto(new HashMap<>())),
+                    subscriber.subscribe(this.empireApiService.savePrivate(this.gameID, this.myOwnEmpireID, new EmpirePrivateDto(newPrivate)),
                             saved -> {
                             },
                             error -> System.out.println("error while saving contacts...."));
@@ -193,10 +204,7 @@ public class ContactsService {
 
     public void loadContactsData() {
         this.subscriber.subscribe(this.empireApiService.getPrivate(this.gameID, this.myOwnEmpireID),
-                result -> {
-//            System.out.println(result);
-                    loadContacts(result._private());
-                },
+                result -> loadContacts(result._private()),
                 error -> System.out.println("error while loading contacts"));
     }
 
@@ -204,13 +212,10 @@ public class ContactsService {
         if (!map.isEmpty()) {
             Map<String, List<String>> tmp = new HashMap<>();
             for (String key : map.keySet()) {
-                System.out.println("contact loaded has " + map.get(key).getClass());
                 if (hiddenEmpires.contains(key) && map.get(key) instanceof List<?> value) {
-                    System.out.println(value.isEmpty());
-                    tmp.put(key, value.isEmpty() ? new ArrayList<String>() : (ArrayList<String>) value);
+                    tmp.put(key, value.isEmpty() ? new ArrayList<>() : (ArrayList<String>) value);
                 }
             }
-            System.out.println("loaded data " + tmp);
             recreateContacts(tmp);
         }
     }
@@ -218,7 +223,7 @@ public class ContactsService {
     public void recreateContacts(Map<String, List<String>> data) {
         if (data.isEmpty()) return;
         for (String key : data.keySet()) {
-            if (data.get(key).isEmpty()) this.addEnemyAfterDeclaration(key);
+            if (data.get(key).isEmpty()) this.addEnemyInPeace(key);
             else data.get(key).forEach(id -> this.addEnemy(key, id));
         }
     }
@@ -248,8 +253,6 @@ public class ContactsService {
                     this.contactsComponent.contactDetailsComponent.checkWarSituation();
 
                     System.out.println(event.data().attacker() + " and " + event.data().defender());
-
-//                    this.contactsComponent.contactDetailsComponent.setWarMessagePopup(event.suffix(), attackerName, event.data().attacker());
                 },
                 error -> System.out.println("createWarListener error: " + error.getMessage())
         );
@@ -274,13 +277,11 @@ public class ContactsService {
     }
 
     public boolean attacker(String empireID) {
-        System.out.println(" wars : " + warsInThisGame.size());
         return warsInThisGame.stream()
                 .anyMatch(warDto -> (myOwnEmpireID.equals(warDto.defender()) && empireID.equals(warDto.attacker())));
     }
 
     public boolean defender(String empireID) {
-        System.out.println(" wars : " + warsInThisGame.size());
         return warsInThisGame.stream()
                 .anyMatch(warDto -> (empireID.equals(warDto.defender()) && myOwnEmpireID.equals(warDto.attacker())));
     }
@@ -288,6 +289,10 @@ public class ContactsService {
 
     public void addWarInformation(List<WarDto> dto) {
         this.warsInThisGame.addAll(dto);
+        for (WarDto w : dto) {
+            if (w.attacker().equals(myOwnEmpireID)) warsOnProcess.put(w.defender(),w);
+            if (w.defender().equals(myOwnEmpireID)) warsOnProcess.put(w.attacker(),w);
+        }
     }
 
 }

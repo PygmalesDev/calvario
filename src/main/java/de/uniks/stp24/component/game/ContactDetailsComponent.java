@@ -257,13 +257,7 @@ public class ContactDetailsComponent extends StackPane {
     }
 
     public void setWarMessagePopup(String messageType, String attackerName, String myOwnEmpireID, WarDto warDto) {
-        System.out.println("pop up " + myOwnEmpireID);
-        System.out.println("popup defender " + myOwnEmpireID.equals(warDto.defender()));
 
-        System.out.println(warDto);
-
-
-        contactsService.declaringToDefenderCheck(warDto.attacker());
 //        if (contactsService.isDeclaringToDefender()) {
         if (myOwnEmpireID.equals(warDto.defender())) {
             contactsService.setAttacker(attackerName);

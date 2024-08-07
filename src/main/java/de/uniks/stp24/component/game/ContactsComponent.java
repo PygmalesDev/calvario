@@ -38,11 +38,6 @@ public class ContactsComponent extends StackPane {
     @SubComponent
     @Inject
     public ContactDetailsComponent contactDetailsComponent;
-    @SubComponent
-    @Inject
-    WarComponent warComponent;
-
-
 
     public Pane parent;
     public Pane parentDetails;
@@ -89,6 +84,7 @@ public class ContactsComponent extends StackPane {
                     System.out.println(warDtos);
                     this.wars.addAll(warDtos);
                     contactsService.addWarInformation(warDtos);
+                    System.out.println("LOAD WARS");
                 }
         );
     }
@@ -110,11 +106,6 @@ public class ContactsComponent extends StackPane {
         this.parentDetails = detailParent;
         this.contactDetailsComponent.setParent(detailParent);
     }
-
-    public void setWarComponent(WarComponent warComponent){
-        this.warComponent = warComponent;
-    }
-
 
 
 }

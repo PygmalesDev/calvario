@@ -47,7 +47,6 @@ public class Contact {
 
     public void addIsland(String id) {
         this.atIsland = id;
-//        System.out.println("now at " + id);
         if (!discoveredIslands.contains(id)) discoveredIslands.add(id);
     }
 

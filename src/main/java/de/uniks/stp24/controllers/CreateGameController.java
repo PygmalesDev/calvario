@@ -134,7 +134,7 @@ public class CreateGameController extends BasicController {
     public void initializeMaxMembersTextField() {
         maxMembersTextField.setTextFormatter(new TextFormatter<>(change -> {
             String newText = change.getControlNewText();
-            if (newText.matches("[1-4]?")) {
+            if (newText.matches("([1-9]|[1-4][0-9]|50)?")) {
                 return change;
             }
             return null;

@@ -34,7 +34,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component(view = "ContactDetailsComponent.fxml")
-public class  ContactDetailsComponent extends StackPane {
+public class ContactDetailsComponent extends StackPane {
     @FXML
     public Text intelText;
     @FXML
@@ -147,13 +147,13 @@ public class  ContactDetailsComponent extends StackPane {
         strengthIcon.setImage(imageCache.get("assets/contactsAndWars/cannon.png"));
 
         popText.setText(resources.getString("pop") + ": " +
-          contact.getDiscoveryStats().get("pop"));
+                contact.getDiscoveryStats().get("pop"));
 
         siteText.setText(resources.getString("sites") + ": " +
-          contact.getDiscoveryStats().get("sites"));
+                contact.getDiscoveryStats().get("sites"));
 
         buildingsText.setText(resources.getString("buildings") + ": " +
-          contact.getDiscoveryStats().get("buildings"));
+                contact.getDiscoveryStats().get("buildings"));
 
         calculateStrength();
 
@@ -167,9 +167,9 @@ public class  ContactDetailsComponent extends StackPane {
         boolean attacker = contactsService.attacker(contact.getEmpireID());
         boolean defender = contactsService.defender(contact.getEmpireID());
         System.out.println("checking war for " + contact.getEmpireID() + " was ");
-        System.out.println("attacker: " + attacker + " defender: " + defender );
-        contact.setAtWarWith(attacker||defender);
-        warButton.setSelected(attacker||defender);
+        System.out.println("attacker: " + attacker + " defender: " + defender);
+        contact.setAtWarWith(attacker || defender);
+        warButton.setSelected(attacker || defender);
         warButton.setDisable(attacker);
         updateWarButtonText();
 
@@ -262,17 +262,12 @@ public class  ContactDetailsComponent extends StackPane {
         } else if (messageType.equals("deleted")) {
             contactsService.setDeclaring(false);
         }
-
-        if (!attackerID.equals(tokenStorage.getEmpireId())) {
-
+        if (contactsService.defender(attackerID)) {
             contactsService.setAttacker(attackerName);
-            contactsService.declaringToDefenderCheck(attackerID);
-            if (contactsService.isDeclaringToDefender()) {
-                System.out.println("war declared to you");
-                warComponent.getParent().setVisible(true);
-                warComponent.setVisible(true);
-                warComponent.showWarMessage(messageType);
-            }
+            warComponent.getParent().setVisible(true);
+            warComponent.setVisible(true);
+            warComponent.showWarMessage(messageType);
+
         }
     }
 

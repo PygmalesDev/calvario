@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -8,15 +9,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<fx:root maxWidth="290.0" prefWidth="290.0" spacing="5.0" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.fleetManager.BlueprintsComponent">
+<fx:root maxWidth="280.0" prefWidth="280.0" spacing="5.0" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.fleetManager.BlueprintsComponent">
     <HBox>
         <HBox spacing="5.0" HBox.hgrow="ALWAYS">
             <HBox.margin>
                 <Insets />
             </HBox.margin>
-            <Label fx:id="blueprintTypeLabel" text="Type">
+            <Label fx:id="blueprintTypeLabel" prefWidth="65.0" text="Type">
             <font>
-               <Font size="15.0" />
+               <Font size="14.0" />
             </font></Label>
             <ImageView fx:id="healthImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
             <Label fx:id="healthLabel">
@@ -43,7 +44,7 @@
             </font>
         </Label>
         <ImageView fx:id="defenseImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
-        <Label fx:id="defenseLabel" minHeight="25.0" minWidth="25.0" textAlignment="CENTER">
+        <Label fx:id="defenseLabel" textAlignment="CENTER">
             <font>
                 <Font size="15.0" />
             </font>
@@ -55,20 +56,26 @@
             </font>
         </Label>
         <ImageView fx:id="resourceImage2" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
-        <Label fx:id="resourceLabel2" minHeight="25.0" minWidth="25.0" textAlignment="CENTER">
+        <Label fx:id="resourceLabel2" textAlignment="CENTER">
             <font>
                 <Font size="15.0" />
             </font>
         </Label>
         <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
             <padding>
-                <Insets right="10.0"/>
+                <Insets right="10.0" />
             </padding>
-            <Button fx:id="addBlueprintButton" maxHeight="23.0" maxWidth="23.0" minHeight="23.0" minWidth="23.0"
-                    mnemonicParsing="false" onAction="#addBlueprint" prefHeight="23.0" prefWidth="23.0"/>
+            <Button fx:id="addBlueprintButton" maxHeight="23.0" maxWidth="23.0" minHeight="23.0" minWidth="23.0" mnemonicParsing="false" onAction="#addBlueprint" prefHeight="23.0" prefWidth="23.0" styleClass="blueprint-sub-component-button" />
         </HBox>
+      <padding>
+         <Insets left="10.0" />
+      </padding>
     </HBox>
     <padding>
-        <Insets bottom="25.0" left="15.0" right="10.0" top="20.0" />
+        <Insets bottom="18.0" left="10.0" top="14.0" />
     </padding>
+    <stylesheets>
+        <URL value="@../../../style/ingameButtons.css" />
+        <URL value="@../../../style/fleetManager.css" />
+    </stylesheets>
 </fx:root>

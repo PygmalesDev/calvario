@@ -204,13 +204,11 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
         researchLabelTooltip.setOnHiding(event -> {
             researchLabelTooltip.setGraphic(null);
             technologyResearchDetailsComponent.clear();
-            technologyResearchDetailsComponent.destroy();
         });
 
         showEffectTooltip.setOnHiding(event -> {
             showEffectTooltip.setGraphic(null);
             technologyEffectDetailsComponent.clear();
-            technologyEffectDetailsComponent.destroy();
         });
 
         technologyResearchDetailsComponent.setCategory(this);

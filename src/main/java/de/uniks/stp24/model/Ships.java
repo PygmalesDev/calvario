@@ -1,6 +1,5 @@
 package de.uniks.stp24.model;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class Ships {
@@ -40,13 +39,13 @@ public class Ships {
 
     public record ShipType(
             String _id,
-            int build_time,
-            int health,
-            int speed,
+            double build_time,
+            double health,
+            double speed,
             Map<String, Integer> attack,
             Map<String, Integer> defense,
             Map<String, Integer> cost,
-            Map<String, Integer> upkeep
+            Map<String, Double> upkeep
     ){}
 
     public record BlueprintInFleetDto(

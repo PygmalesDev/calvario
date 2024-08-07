@@ -75,7 +75,7 @@ public class BlueprintsDetailsComponent extends VBox {
         damage.getItems().setAll(attackList);
 
         consumed.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
-        ObservableList<de.uniks.stp24.model.Resource> resources = resourcesService.generateResourceList(shipType.upkeep(), consumed.getItems(), null, false);
+        ObservableList<de.uniks.stp24.model.Resource> resources = resourcesService.generateResourceListForDouble(shipType.upkeep(), consumed.getItems(), null, false);
         consumed.setItems(resources);
 
     }

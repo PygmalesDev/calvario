@@ -118,21 +118,21 @@ public class VariableDependencyService {
         double build_time = variableService.shipTree.getNode(id, "build_time").getValue().finalValue();
         double health = variableService.shipTree.getNode(id, "health").getValue().finalValue();
         double speed = variableService.shipTree.getNode(id, "speed").getValue().finalValue();
-        Map<String, Double> attack = new HashMap<>();
-        Map<String, Double> defense = new HashMap<>();
+        Map<String, Integer> attack = new HashMap<>();
+        Map<String, Integer> defense = new HashMap<>();
 
         if(variableService.shipTree.getNode(id, "attack") != null) {
             for (VariablesTree.Node<ExplainedVariableDTO> attackNodes : variableService.shipTree.getNode(id, "attack").getChildren()) {
-                attack.put(attackNodes.getKey(), attackNodes.getValue().finalValue());
+                attack.put(attackNodes.getKey(), (int) attackNodes.getValue().finalValue());
             }
         }
 
         for (VariablesTree.Node<ExplainedVariableDTO> defenseNodes : variableService.shipTree.getNode(id, "defense").getChildren()) {
-            defense.put(defenseNodes.getKey(),defenseNodes.getValue().finalValue());
+            defense.put(defenseNodes.getKey(), (int) defenseNodes.getValue().finalValue());
         }
         Map<String, Integer> cost = castMapToInteger(createResourceMap(variableService.shipTree.getNode(id, "cost").getChildren()));
-        Map<String, Integer> upkeep = castMapToInteger(createResourceMap(variableService.shipTree.getNode(id, "upkeep").getChildren()));
-        return new ShipType(id, (int) build_time, (int) health, (int) speed, castMapToInteger(attack), castMapToInteger(defense), cost, upkeep);
+        Map<String, Double> upkeep = createResourceMap(variableService.shipTree.getNode(id, "upkeep").getChildren());
+        return new ShipType(id, build_time, health, speed, attack, defense, cost, upkeep);
     }
 
     /*

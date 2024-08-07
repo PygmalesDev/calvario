@@ -24,11 +24,11 @@ public class ChangeFleetComponent extends VBox {
     public Label newFleetOfShipNameLabel;
 
     @Inject
-    ShipService shipService;
+    public ShipService shipService;
     @Inject
-    FleetService fleetService;
+    public FleetService fleetService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
 
     private FleetManagerComponent fleetManagerComponent;
 

@@ -44,7 +44,6 @@ public class FleetComponent extends VBox implements ReusableItemComponent<Fleet>
     @Override
     public void setItem(Fleet fleet){
         this.fleet = fleet;
-        System.out.println("deleteFleetButton_" + fleet._id());
         this.deleteFleetButton.setId("deleteFleetButton_" + fleet._id());
         this.editFleetButton.setId("editFleetButton_"  + fleet._id());
 

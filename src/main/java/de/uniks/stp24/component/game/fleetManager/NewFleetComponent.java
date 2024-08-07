@@ -7,6 +7,7 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.FleetService;
 import de.uniks.stp24.service.game.IslandsService;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
@@ -23,6 +24,12 @@ import java.util.stream.Collectors;
 public class NewFleetComponent extends VBox {
     @FXML
     public Label islandNameLabel;
+    @FXML
+    public Button confirmIslandButton;
+    @FXML
+    public Button lastIslandButton;
+    @FXML
+    public Button nextIslandButton;
 
     @Inject
     public IslandsService islandsService;
@@ -33,10 +40,11 @@ public class NewFleetComponent extends VBox {
     @Inject
     public Subscriber subscriber;
 
+
     private FleetManagerComponent fleetManagerComponent;
 
-    private int islandNameIndex = 0;
-    private List<ShortSystemDto> islandList = new ArrayList<>();
+    public int islandNameIndex = 0;
+    public List<ShortSystemDto> islandList = new ArrayList<>();
 
     @Inject
     public NewFleetComponent() {

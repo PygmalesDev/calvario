@@ -43,7 +43,6 @@ public class FleetService {
     Map<String, ObservableList<Fleet>> islandFleets = new HashMap<>();
     ObservableList<Fleet> gameFleets = FXCollections.observableArrayList();
     List<Consumer<Fleet>> fleetCreatedConsumer = new ArrayList<>();
-    private String lastShipUpdate = "";
     private String lastShipCreation = "";
     private String lastShipDeletion= "";
 
@@ -61,12 +60,10 @@ public class FleetService {
                 case "created" -> this.addFleetToGroups(fleet);
                 case "updated" -> {
                     Fleet oldFleet = this.gameFleets.filtered(fleetDto -> fleetDto._id().equals(fleet._id())).getFirst();
-                    this.updateFleetInGroups(new Fleet(fleet.createdAt(), fleet.updatedAt(), fleet._id(), fleet.game(), fleet.empire(), fleet.name(), fleet.location(), oldFleet.ships(), fleet.size(), fleet._public(), fleet._private(), fleet.effects()));
+                    this.updateFleetInGroups(new Fleet(fleet.createdAt(), fleet.updatedAt(), fleet._id(), fleet.game(),
+                            fleet.empire(), fleet.name(), fleet.location(), oldFleet.ships(), fleet.size(), fleet._public(), fleet._private(), fleet.effects()));
                 }
-                case "deleted" -> {
-                    System.out.println("deleted");
-                    this.deleteFleetFromGroups(fleet);
-                }
+                case "deleted" -> this.deleteFleetFromGroups(fleet);
             }
         });
     }
@@ -75,12 +72,6 @@ public class FleetService {
         this.subscriber.subscribe(this.eventListener.listen("games." + this.tokenStorage.getGameId() + ".fleets.*.ships.*.*",
                 Ship.class), event -> {
             ReadShipDTO ship = readShipDTOFromShip(event.data());
-            //Todo: remove print
-            if (!event.data().updatedAt().equals(lastShipUpdate)) {
-                System.out.println("ship listener in fleetService " + event.suffix());
-                lastShipUpdate = event.data().updatedAt();
-                System.out.println(ship + " updated ship");
-            }
             switch (event.suffix()) {
                 case "created" -> {
                     if (!ship._id().equals(this.lastShipCreation)) {
@@ -100,7 +91,9 @@ public class FleetService {
 
     public void adaptShipCount(String fleetID, int increment) {
         Fleet oldFleet = this.gameFleets.filtered(fleet -> fleet._id().equals(fleetID)).getFirst();
-        this.updateFleetInGroups(new Fleet(oldFleet.createdAt(), oldFleet.updatedAt(), oldFleet._id(), oldFleet.game(), oldFleet.empire(), oldFleet.name(), oldFleet.location(), oldFleet.ships() + increment, oldFleet.size(), oldFleet._public(), oldFleet._private(), oldFleet.effects()));
+        this.updateFleetInGroups(new Fleet(oldFleet.createdAt(), oldFleet.updatedAt(), oldFleet._id(), oldFleet.game(),
+                oldFleet.empire(), oldFleet.name(), oldFleet.location(), oldFleet.ships() + increment,
+                oldFleet.size(), oldFleet._public(), oldFleet._private(), oldFleet.effects()));
     }
 
     private void addFleetToGroups(Fleet fleet) {
@@ -116,15 +109,11 @@ public class FleetService {
     }
 
     private void updateFleetInGroups(Fleet fleet) {
-        //Todo: remove print
-        System.out.println(this.empireFleets.get(fleet.empire()) + " before update");
         this.gameFleets.replaceAll(old -> old.equals(fleet) ? fleet : old);
         if(fleet.empire() != null) {
             this.empireFleets.get(fleet.empire()).replaceAll(old -> old.equals(fleet) ? fleet : old);
         }
         this.islandFleets.get(fleet.location()).replaceAll(old -> old.equals(fleet) ? fleet : old);
-        System.out.println(this.empireFleets.get(fleet.empire()) + " after update");
-        System.out.println(Arrays.toString(fleet.effects()));
     }
 
     private void deleteFleetFromGroups(Fleet fleet) {
@@ -164,10 +153,11 @@ public class FleetService {
         return this.gameFleets.filtered(fleet -> fleet._id().equals(fleetID)).getFirst();
     }
 
-    public Observable<Fleet> editSizeOfFleet(String shipTypeID, int count, Fleet fleet){
+    public Observable<Fleet> editSizeOfFleet(String shipTypeID, int plannedShips, Fleet fleet){
         Map<String, Integer> newSize = fleet.size();
-        newSize.put(shipTypeID, count);
-        return this.fleetApiService.patchFleet(this.tokenStorage.getGameId(),fleet._id(), new UpdateFleetDTO(fleet.name(), newSize, fleet._public(), fleet._private(), fleet.effects()));
+        newSize.put(shipTypeID, plannedShips);
+        return this.fleetApiService.patchFleet(this.tokenStorage.getGameId(),fleet._id(),
+                new UpdateFleetDTO(fleet.name(), newSize, fleet._public(), fleet._private(), fleet.effects()));
     }
 
     public void dispose() {

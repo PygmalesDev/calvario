@@ -36,9 +36,6 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
     private final FleetManagerComponent fleetManagerComponent;
 
     private Ships.BlueprintInFleetDto blueprintInFleetDto;
-    private enum BUTTON_STATES {ACTIVE, CANCEL_JOB, INACTIVE}
-    private ShipTypesOfFleetComponent.BUTTON_STATES currentButtonState = ShipTypesOfFleetComponent.BUTTON_STATES.ACTIVE;
-    private boolean updateButtonState = true;
     private ObservableList<Job> shipJobs;
 
     @Inject
@@ -58,23 +55,20 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
     }
 
     public void setBuildButton() {
-        if (this.updateButtonState) {
-            if (Objects.nonNull(shipService.getNeededResources(blueprintInFleetDto.type()))) {
-                if (resourcesService.hasEnoughResources(shipService.getNeededResources(blueprintInFleetDto.type()))) {
-                    this.currentButtonState = ShipTypesOfFleetComponent.BUTTON_STATES.ACTIVE;
-                    this.buildShipButton.setDisable(false);
-                } else {
-                    this.currentButtonState = ShipTypesOfFleetComponent.BUTTON_STATES.INACTIVE;
-                    this.buildShipButton.setDisable(true);
-                }
-            }
-            int numberOfShipJobs = shipJobsOnIsland();
-            int numberOfShipYards = this.islandsService.getIslandComponent(blueprintInFleetDto.fleet().location()).getIsland().buildings().stream()
-                    .filter("shipyard"::equals).toList().size();
-            if(numberOfShipJobs >= numberOfShipYards){
+        if (Objects.nonNull(shipService.getNeededResources(blueprintInFleetDto.type()))) {
+            if (resourcesService.hasEnoughResources(shipService.getNeededResources(blueprintInFleetDto.type()))) {
+                this.buildShipButton.setDisable(false);
+            } else {
                 this.buildShipButton.setDisable(true);
             }
         }
+        int numberOfShipJobs = shipJobsOnIsland();
+        int numberOfShipYards = this.islandsService.getIslandComponent(blueprintInFleetDto.fleet().location()).getIsland().buildings().stream()
+                .filter("shipyard"::equals).toList().size();
+        if (numberOfShipJobs >= numberOfShipYards) {
+            this.buildShipButton.setDisable(true);
+        }
+
     }
 
     public void setItem(Ships.BlueprintInFleetDto blueprintInFleetDto){
@@ -102,8 +96,6 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
         int shipJobsBeforeStart = shipJobsOnIsland();
         this.subscriber.subscribe(this.shipService.beginShipJob(this.blueprintInFleetDto.fleet()._id(), this.blueprintInFleetDto.type(), this.blueprintInFleetDto.fleet().location()),
                 job -> {
-                    //Todo: remove print
-                    System.out.println("ship job has started");
                     this.fleetManagerComponent.setShipFinisher(job);
                     int shipJobsAfterStart = shipJobsOnIsland();
                     this.fleetManagerComponent.setIslandName(shipJobsAfterStart == shipJobsBeforeStart);
@@ -131,7 +123,8 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
     public void editSize(int newSize) {
         this.subscriber.subscribe(this.fleetService.editSizeOfFleet(this.blueprintInFleetDto.type(), newSize, this.blueprintInFleetDto.fleet()),
                 dto -> {
-                    this.sizeLabel.setText(this.sizeLabel.getText().replaceAll("/.*", "/" + dto.size().get(this.blueprintInFleetDto.type())));
+                    this.sizeLabel.setText(this.sizeLabel.getText().replaceAll("/.*", "/" + dto.size()
+                            .get(this.blueprintInFleetDto.type())));
                     this.fleetManagerComponent.setCommandLimit(dto,false);
                     this.decrementSizeButton.setDisable(false);
                     if (dto.size().get(this.blueprintInFleetDto.type()) == 0) {

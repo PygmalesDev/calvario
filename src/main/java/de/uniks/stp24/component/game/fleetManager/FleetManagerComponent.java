@@ -67,6 +67,12 @@ public class FleetManagerComponent extends AnchorPane {
     public VBox infoButtonVBox;
     @FXML
     public StackPane fleetManagerStackPane;
+    @FXML
+    public Button closeFleetManagerButton;
+    @FXML
+    public Button createFleetButton;
+    @FXML
+    public Button showFleetsButton;
 
 
     @Inject
@@ -148,7 +154,7 @@ public class FleetManagerComponent extends AnchorPane {
         this.fleetsListView.refresh();
         this.shipService.clearEditedFleetInfos();
         this.infoButtonVBox.setVisible(false);
-        this.fleetsListView.setVisible(true);
+        this.fleetsOverviewVBox.setVisible(true);
         this.fleetBuilderVBox.setVisible(false);
     }
 
@@ -179,7 +185,7 @@ public class FleetManagerComponent extends AnchorPane {
                     setCommandLimit(fleet,false);
                     this.infoButtonVBox.setVisible(true);
                     this.fleetNameText.setText(fleet.name());
-                    this.fleetsListView.setVisible(false);
+                    this.fleetsOverviewVBox.setVisible(false);
                     this.fleetBuilderVBox.setVisible(true);
                 },
                 error -> System.out.println("Error loading ships of a fleet in FleetManagerComponent:\n" + error.getMessage())
@@ -187,7 +193,7 @@ public class FleetManagerComponent extends AnchorPane {
     }
 
     public void addBlueprintToFleet(ShipType shipType) {
-        if ((!this.editedFleet.size().containsKey(shipType._id())) || (this.editedFleet.size().get(shipType._id()) == 0)){ // && this.shipService.checkNumberOfShipsOfTypeInFleet(shipType._id()))) {
+        if ((!this.editedFleet.size().containsKey(shipType._id())) || (this.editedFleet.size().get(shipType._id()) == 0)){
             this.subscriber.subscribe(this.fleetService.editSizeOfFleet(shipType._id(), 1, editedFleet),
                     dto -> {
                         this.shipService.addBlueprintToFleet(new BlueprintInFleetDto(shipType._id(), 0, this.editedFleet));
@@ -199,12 +205,11 @@ public class FleetManagerComponent extends AnchorPane {
 
     public void setCommandLimit(Fleet fleet, boolean shipDeleted) {
         int numberOfShips = ships.size();
-        System.out.println(fleet.ships() + " fleet ships");
-        System.out.println(editedFleet.ships() + " edited fleet ships");
         if(shipDeleted && ships.size() == fleet.ships()) {
             numberOfShips = ships.size() - 1;
         }
-        this.commandLimitLabel.setText("Command Limit \n" + numberOfShips + " / " + fleet.size().values().stream().mapToInt(Integer::intValue).sum());
+        this.commandLimitLabel.setText("Command Limit \n" + numberOfShips + " / "
+                + fleet.size().values().stream().mapToInt(Integer::intValue).sum());
     }
 
     public void setIslandName(boolean shipJobStarted) {
@@ -215,7 +220,8 @@ public class FleetManagerComponent extends AnchorPane {
             this.islandLabel.setText(island.name() + "\nNot your island!");
         } else {
             int numberOfShipyards = island.buildings().stream().filter("shipyard"::equals).toList().size();
-            int numberOfShipJobs = this.jobsService.getObservableListForSystem(this.editedFleet.location()).filtered(job -> job.type().equals("ship")).size();
+            int numberOfShipJobs = this.jobsService.getObservableListForSystem(this.editedFleet.location())
+                    .filtered(job -> job.type().equals("ship")).size();
             if(shipJobStarted){
                 numberOfShipJobs += 1;
             }
@@ -228,11 +234,9 @@ public class FleetManagerComponent extends AnchorPane {
             this.blueprintInFleetListView.refresh();
             setCommandLimit(this.fleetService.getFleet(job.fleet()), false);
             setIslandName(false);
-            System.out.println("ship job was finished and everything should be updated");
         });
         this.jobsService.onJobDeletion(job._id(), ()  -> {
             setIslandName(false);
-            System.out.println("ship job was deleted and everything should be updated");
         });
     }
 

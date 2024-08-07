@@ -9,6 +9,7 @@ import de.uniks.stp24.controllers.helper.DistancePoint;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.service.Constants;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.utils.PathEntry;
 import de.uniks.stp24.utils.PathTableEntry;
@@ -41,9 +42,11 @@ public class FleetCoordinationService {
     @Inject
     TokenStorage tokenStorage;
     @Inject
-    FleetService fleetService;
+    public FleetService fleetService;
     @Inject
     IslandsService islandsService;
+    @Inject
+    public ImageCache imageCache;
     @Inject
     Subscriber subscriber;
     @Inject
@@ -79,20 +82,28 @@ public class FleetCoordinationService {
 
     public void setFleet(GameFleetController fleet) {
         if (Objects.nonNull(this.selectedFleet)) {
-            this.selectedFleet.activeCircle.setVisible(false);
+            this.selectedFleet.toggleActive();
             if (this.selectedFleet.equals(fleet)) this.selectedFleet = null;
-            else this.selectedFleet = fleet;
-        } else this.selectedFleet = fleet;
+            else {
+                this.selectedFleet = fleet;
+                fleet.toggleActive();
+            }
+        } else {
+            this.selectedFleet = fleet;
+            fleet.toggleActive();
+        }
 
         if (this.claimingComponent.getParent().isVisible())
             this.claimingComponent.setFleetInformation(this.selectedFleet);
     }
 
     public void putFleetOnMap(Fleet fleet) {
-        var gameFleet = this.app.initAndRender(new GameFleetController(fleet,this, this.fleetService));
+        var gameFleet = this.app.initAndRender(new GameFleetController(fleet,this));
 
         if (Objects.nonNull(fleet.empire()))
-            gameFleet.setEmpireColor(this.islandsService.getEmpire(fleet.empire()).color());
+            gameFleet.renderWithColor(this.islandsService.getEmpire(fleet.empire()).color());
+        else gameFleet.renderWithColor("white");
+
         this.mapGrid.add(gameFleet);
         this.selectedFleet = gameFleet;
 
@@ -106,17 +117,15 @@ public class FleetCoordinationService {
             );
             PathEntry entry = this.getPathEntry(travelJob.path().getFirst(), travelJob.path().getLast());
             List<DistancePoint> distancePoints = this.createCoordinatedPath(entry, travelJob.path().getFirst());
-
-            System.out.println(travelJob.progress());
-            System.out.println(travelJob.total());
-            System.out.println(distancePoints.size());
-
             for (int i = 0; i < travelJob.progress()-1; i++) distancePoints.removeFirst();
             DistancePoint location = distancePoints.removeFirst();
 
             gameFleet.setCurrentPoint(distancePoints.removeFirst());
             gameFleet.setLayoutX(location.getX());
             gameFleet.setLayoutY(location.getY());
+            this.selectedFleet.setRotate(this.getDirectionalAngle(
+                    gameFleet.getCurrentPoint().getPrev(),
+                    gameFleet.getCurrentPoint()));
             this.processSpeedChanged(gameFleet);
         } else {
             // Otherwise put fleet near the island on which it is located
@@ -164,12 +173,15 @@ public class FleetCoordinationService {
                 this.coordinatedPaths.get(fleet).removeFirst());
     }
 
+    private double getDirectionalAngle(DistancePoint prevPoint, DistancePoint nextPoint) {
+        Point2D delta = nextPoint.subtract(prevPoint);
+        return Math.atan2(delta.getY(), delta.getX())*180/Math.PI+90;
+    }
+
     private List<KeyFrame> createTravelKeyFrames(GameFleetController fleet, DistancePoint nextPoint) {
-        System.out.printf("New rotation angle: %3.2f\n",nextPoint.getPrev().angle(nextPoint)*360);
-        System.out.printf("Previous rotation angle: %3.2f\n",fleet.rotateProperty().getValue());
         return List.of(
                 new KeyFrame(Duration.seconds(ROTATE_DURATION),
-                        new KeyValue(fleet.rotateProperty(), nextPoint.getPrev().angle(nextPoint)*360, Interpolator.EASE_BOTH),
+                        new KeyValue(fleet.rotateProperty(), getDirectionalAngle(nextPoint.getPrev(), nextPoint), Interpolator.EASE_BOTH),
                         new KeyValue(fleet.layoutXProperty(), nextPoint.getPrev().getX()-FLEET_HW, Interpolator.EASE_BOTH),
                         new KeyValue(fleet.layoutYProperty(), nextPoint.getPrev().getY()-FLEET_HW, Interpolator.EASE_BOTH)),
 

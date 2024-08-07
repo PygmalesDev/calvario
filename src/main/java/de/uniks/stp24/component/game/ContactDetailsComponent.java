@@ -256,13 +256,16 @@ public class ContactDetailsComponent extends StackPane {
         }
     }
 
-    public void setWarMessagePopup(String messageType, String attackerName, String attackerID) {
-        if (messageType.equals("created")) {
-            contactsService.setDeclaring(true);
-        } else if (messageType.equals("deleted")) {
-            contactsService.setDeclaring(false);
-        }
-        if (contactsService.defender(attackerID)) {
+    public void setWarMessagePopup(String messageType, String attackerName, String myOwnEmpireID, WarDto warDto) {
+        System.out.println("pop up " + myOwnEmpireID);
+        System.out.println("popup defender " + myOwnEmpireID.equals(warDto.defender()));
+
+        System.out.println(warDto);
+
+
+        contactsService.declaringToDefenderCheck(warDto.attacker());
+//        if (contactsService.isDeclaringToDefender()) {
+        if (myOwnEmpireID.equals(warDto.defender())) {
             contactsService.setAttacker(attackerName);
             warComponent.getParent().setVisible(true);
             warComponent.setVisible(true);

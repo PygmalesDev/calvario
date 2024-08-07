@@ -105,11 +105,11 @@ public class ContactsService {
         if (declaringToDefender) {
             ReadEmpireDto empireDto = islandsService.getEmpire(enemy);
             Contact contact = new Contact(empireDto);
+            contact.setMyOwnId(myOwnEmpireID);
             declaringToDefenderCheck(enemy);
             hiddenEmpires.remove(enemy);
             contactCells.add(contact);
             seenEnemies.add(contact);
-            contact.setMyOwnId(myOwnEmpireID);
             saveContacts();
 
             System.out.println("enemy added after war declaration");
@@ -227,12 +227,14 @@ public class ContactsService {
         this.subscriber.subscribe(this.eventListener
                         .listen("games." + tokenStorage.getGameId() + ".wars.*.*", WarDto.class),
                 event -> {
+                    String attackerName = islandsService.getEmpire(event.data().attacker()).name();
                     switch (event.suffix()) {
                         case "created" -> {
                             System.out.println("contact war!");
                             warsInThisGame.add(event.data());
-                            if (hiddenEmpires.contains(event.data().attacker()))
+                            if (hiddenEmpires.contains(event.data().attacker())) {
                                 addEnemyAfterDeclaration(event.data().attacker());
+                            }
                         }
                         case "deleted" -> {
                             System.out.println("contact peace!");
@@ -242,14 +244,12 @@ public class ContactsService {
                     }
                     System.out.println("att -> " + event.data().attacker() + " def -> " + event.data().defender());
                     System.out.println("already seen? " + !hiddenEmpires.contains(event.data().attacker()));
+                    this.contactsComponent.contactDetailsComponent.setWarMessagePopup(event.suffix(), attackerName, myOwnEmpireID, event.data());
                     this.contactsComponent.contactDetailsComponent.checkWarSituation();
-                    System.out.println(Objects
-                            .nonNull(
-                                    islandsService.getEmpire(event.data().attacker()).name()));
-                    String attackerName = islandsService.getEmpire(event.data().attacker()).name();
-                    System.out.println(attackerName);
-                    this.contactsComponent.contactDetailsComponent.setWarMessagePopup(event.suffix(), attackerName, event.data().attacker());
+
                     System.out.println(event.data().attacker() + " and " + event.data().defender());
+
+//                    this.contactsComponent.contactDetailsComponent.setWarMessagePopup(event.suffix(), attackerName, event.data().attacker());
                 },
                 error -> System.out.println("createWarListener error: " + error.getMessage())
         );
@@ -284,6 +284,7 @@ public class ContactsService {
         return warsInThisGame.stream()
                 .anyMatch(warDto -> (empireID.equals(warDto.defender()) && myOwnEmpireID.equals(warDto.attacker())));
     }
+
 
     public void addWarInformation(List<WarDto> dto) {
         this.warsInThisGame.addAll(dto);

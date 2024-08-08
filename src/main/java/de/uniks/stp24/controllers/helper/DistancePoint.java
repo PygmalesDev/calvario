@@ -9,20 +9,24 @@ import static de.uniks.stp24.service.Constants.*;
 
 public class DistancePoint extends Point2D {
     private DistancePoint prev;
+    private final POINT_TYPE pointType;
 
-    public DistancePoint(double v, double v1, DistancePoint prev) {
+    public DistancePoint(double v, double v1, POINT_TYPE type, DistancePoint prev) {
         super(v, v1);
         this.prev = prev;
+        this.pointType = type;
     }
 
     public DistancePoint(IslandComponent island, DistancePoint prev) {
-        super(island.getLayoutX() + ISLAND_RADIUS_X + FLEET_HW, island.getLayoutY() + ISLAND_RADIUS_Y + FLEET_HW);
+        super(island.getLayoutX() - FLEET_HW, island.getLayoutY() - FLEET_HW);
         this.prev = prev;
+        this.pointType = POINT_TYPE.ISLAND;
     }
 
-    public DistancePoint(DistancePoint other) {
+    public DistancePoint(DistancePoint other, DistancePoint prev) {
         super(other.getX(), other.getY());
-        this.prev = other.prev;
+        this.prev = prev;
+        this.pointType = POINT_TYPE.ISLAND;
     }
 
     public double getDistance() {
@@ -35,5 +39,9 @@ public class DistancePoint extends Point2D {
 
     public void setPrev(DistancePoint prev) {
         this.prev = prev;
+    }
+
+    public POINT_TYPE getType() {
+        return pointType;
     }
 }

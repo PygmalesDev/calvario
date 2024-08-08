@@ -2,7 +2,10 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.helper.DistancePoint;
 import de.uniks.stp24.model.Fleets.Fleet;
+import de.uniks.stp24.service.Constants;
+import de.uniks.stp24.service.Constants.POINT_TYPE;
 import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.FleetCoordinationService;
 import de.uniks.stp24.service.game.FleetService;
 import javafx.animation.*;
@@ -28,12 +31,13 @@ public class GameFleetController extends Pane {
 
     private final DropShadow selectedDropShadow;
     private final FleetService fleetService;
+    private final TokenStorage tokenStorage;
     private final ImageCache imageCache;
     private final FleetCoordinationService fleetCoordinationService;
     private DistancePoint currentPoint;
     private final Timeline travelTimeline = new Timeline();
     private final Rotate rotate = new Rotate();
-    private final Fleet fleet;
+    private Fleet fleet;
 
     @Inject
     public GameFleetController(Fleet fleet, FleetCoordinationService fleetCoordinationService){
@@ -41,6 +45,7 @@ public class GameFleetController extends Pane {
         this.fleetService = fleetCoordinationService.fleetService;
         this.imageCache = fleetCoordinationService.imageCache;
         this.fleetCoordinationService = fleetCoordinationService;
+        this.tokenStorage = fleetCoordinationService.tokenStorage;
 
         this.selectedDropShadow = new DropShadow();
         this.selectedDropShadow.setHeight(20);
@@ -57,7 +62,8 @@ public class GameFleetController extends Pane {
     }
 
     public void select() {
-        this.fleetCoordinationService.setFleet(this);
+        if (Objects.nonNull(this.fleet.empire()) && this.fleet.empire().equals(this.tokenStorage.getEmpireId()))
+            this.fleetCoordinationService.setFleet(this);
     }
 
     public void toggleActive() {
@@ -87,6 +93,7 @@ public class GameFleetController extends Pane {
         return new DistancePoint(
                 this.getLayoutX()  + FLEET_HW,
                 this.getLayoutY() + FLEET_HW,
+                POINT_TYPE.FLEET,
                 null
         );
     }
@@ -109,5 +116,9 @@ public class GameFleetController extends Pane {
 
     public void setCurrentPoint(DistancePoint currentPoint) {
         this.currentPoint = currentPoint;
+    }
+
+    public void setFleet(Fleet fleet) {
+        this.fleet = fleet;
     }
 }

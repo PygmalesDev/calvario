@@ -199,8 +199,6 @@ public class FleetManagerComponent extends AnchorPane {
 
     public void setCommandLimit(Fleet fleet, boolean shipDeleted) {
         int numberOfShips = ships.size();
-        System.out.println(fleet.ships() + " fleet ships");
-        System.out.println(editedFleet.ships() + " edited fleet ships");
         if(shipDeleted && ships.size() == fleet.ships()) {
             numberOfShips = ships.size() - 1;
         }
@@ -209,7 +207,7 @@ public class FleetManagerComponent extends AnchorPane {
 
     public void setIslandName(boolean shipJobStarted) {
         Island island = islandsService.getIslandComponent(this.editedFleet.location()).getIsland();
-        if (island.owner().isEmpty()) {
+        if (island.owner() == null || island.owner().isEmpty()) {
             this.islandLabel.setText("Unknown Seas");
         } else if (!island.owner().equals(this.tokenStorage.getEmpireId())) {
             this.islandLabel.setText(island.name() + "\nNot your island!");
@@ -228,12 +226,8 @@ public class FleetManagerComponent extends AnchorPane {
             this.blueprintInFleetListView.refresh();
             setCommandLimit(this.fleetService.getFleet(job.fleet()), false);
             setIslandName(false);
-            System.out.println("ship job was finished and everything should be updated");
         });
-        this.jobsService.onJobDeletion(job._id(), ()  -> {
-            setIslandName(false);
-            System.out.println("ship job was deleted and everything should be updated");
-        });
+        this.jobsService.onJobDeletion(job._id(), () -> setIslandName(false));
     }
 
     public void createFleet() {

@@ -18,6 +18,7 @@ import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 @Singleton
@@ -109,13 +110,16 @@ public class JobsService {
     public void addJobToGroups(@NotNull Job job) {
         this.jobCollections.get(job.type()).add(job);
 
-        if (!job.type().equals("technology") && !job.type().equals("travel")) {
-            if (!this.jobCollections.containsKey(job.system()))
-                this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
-            else this.jobCollections.get(job.system()).add(job);
+        if (!job.type().equals("technology")) {
+            if (Objects.nonNull(job.system())) {
+                if (!this.jobCollections.containsKey(job.system()))
+                    this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
+                else this.jobCollections.get(job.system()).add(job);
+            }
 
-            if (this.jobCollections.get(job.system()).size() == 1 || job.type().equals("ship"))
+            if (job.type().equals("ship") || job.type().equals("travel") || this.jobCollections.get(job.system()).size() == 1)
                 this.jobCollections.get("collection").add(job);
+
         }
 
         this.startCommonFunctions.forEach(Runnable::run);
@@ -126,13 +130,15 @@ public class JobsService {
         this.jobCollections.get(job.type()).replaceAll(other -> other.equals(job) ? job : other);
         this.jobCollections.get("collection").replaceAll(other -> other.equals(job) ? job : other);
 
-        if (!job.type().equals("technology") && !job.type().equals("travel")) {
-            if (!this.jobCollections.containsKey(job.system()))
-                this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
-            else this.jobCollections.get(job.system()).replaceAll(other -> other.equals(job) ? job : other);
+        if (!job.type().equals("technology")) {
+            if (Objects.nonNull(job.system())) {
+                if (!this.jobCollections.containsKey(job.system()))
+                    this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
+                else this.jobCollections.get(job.system()).replaceAll(other -> other.equals(job) ? job : other);
 
-            if (this.jobCollections.get(job.system()).filtered(job1 -> job1.type().equals(job.type())).isEmpty())
-                this.jobCollections.get("collection").add(job);
+                if (this.jobCollections.get(job.system()).filtered(job1 -> job1.type().equals(job.type())).isEmpty())
+                    this.jobCollections.get("collection").add(job);
+            }
         }
 
         if (job.progress() == job.total()) this.deleteJobFromGroups(job);
@@ -142,12 +148,14 @@ public class JobsService {
         this.jobCollections.get(job.type()).removeIf(other -> other._id().equals(job._id()));
         this.jobCollections.get("collection").removeIf(other -> other._id().equals(job._id()));
 
-        if (!job.type().equals("technology") && !job.type().equals("travel")) {
-            this.jobCollections.get(job.system()).removeIf(other -> other._id().equals(job._id()));
+        if (!job.type().equals("technology")) {
+            if (Objects.nonNull(job.system())) {
+                this.jobCollections.get(job.system()).removeIf(other -> other._id().equals(job._id()));
 
-            ObservableList<Job> systemJobs = this.jobCollections.get(job.system());
-            if (!systemJobs.isEmpty() && !this.jobCollections.get("collection").contains(systemJobs.getFirst()))
-                this.jobCollections.get("collection").add(systemJobs.getFirst());
+                ObservableList<Job> systemJobs = this.jobCollections.get(job.system());
+                if (!systemJobs.isEmpty() && !this.jobCollections.get("collection").contains(systemJobs.getFirst()))
+                    this.jobCollections.get("collection").add(systemJobs.getFirst());
+            }
         }
 
         if (this.jobCompletionFunctions.containsKey(job._id()))

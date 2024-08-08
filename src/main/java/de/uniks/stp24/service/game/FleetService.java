@@ -43,6 +43,7 @@ public class FleetService {
     Map<String, ObservableList<Fleet>> islandFleets = new HashMap<>();
     ObservableList<Fleet> gameFleets = FXCollections.observableArrayList();
     List<Consumer<Fleet>> fleetCreatedConsumer = new ArrayList<>();
+    List<Consumer<Fleet>> fleetDestroyedConsumer = new ArrayList<>();
     List<Runnable> fleetLoadingFinishedConsumer = new ArrayList<>();
     private String lastShipUpdate = "";
     private String lastShipCreation = "";
@@ -144,6 +145,8 @@ public class FleetService {
         this.gameFleets.removeIf(other -> other.equals(fleet));
         this.empireFleets.get(fleet.empire()).removeIf(other -> other.equals(fleet));
         this.islandFleets.get(fleet.location()).removeIf(other -> other.equals(fleet));
+
+        this.fleetDestroyedConsumer.forEach(func -> func.accept(fleet));
     }
 
     public Observable<Job> beginTravelJob(ArrayList<String> path, String fleetID) {
@@ -153,6 +156,10 @@ public class FleetService {
 
     public void onFleetCreated(Consumer<Fleet> func) {
         this.fleetCreatedConsumer.add(func);
+    }
+
+    public void onFleetDestroyed(Consumer<Fleet> func) {
+        this.fleetDestroyedConsumer.add(func);
     }
 
     public void onLoadingFinished(Runnable func) {
@@ -194,6 +201,7 @@ public class FleetService {
     public void dispose() {
         this.fleetCreatedConsumer.clear();
         this.fleetLoadingFinishedConsumer.clear();
+        this.fleetDestroyedConsumer.clear();
         this.loadingFinished = false;
         this.subscriber.dispose();
         this.empireFleets.clear();

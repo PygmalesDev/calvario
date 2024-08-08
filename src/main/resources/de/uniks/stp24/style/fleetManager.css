@@ -150,3 +150,50 @@ Label {
     -fx-padding: 0;
     -fx-border-width: 0;
 }
+
+.fleet-delete-button {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/delete_button.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.fleet-edit-button {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/change_islandName.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.fleet-manager-middle-label {
+    -fx-font-family: 'Tempus Sans ITC';
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/button_element.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.fleet-manager-middle-button {
+    -fx-font-family: 'Tempus Sans ITC';
+    -fx-font-size: 22;
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/button_element.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-pref-widht: 130;
+    -fx-pref-height: 50;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}

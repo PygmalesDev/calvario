@@ -6,6 +6,7 @@ import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Ships.BlueprintInFleetDto;
 import de.uniks.stp24.model.Ships.ReadShipDTO;
 import de.uniks.stp24.model.Ships.ShipType;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.*;
 import javafx.collections.FXCollections;
@@ -48,7 +49,7 @@ public class FleetManagerComponent extends AnchorPane {
     @FXML
     public VBox fleetBuilderVBox;
     @FXML
-    public Text fleetNameText;
+    public Label fleetNameText;
     @FXML
     public ImageView shipImageView;
     @FXML
@@ -71,6 +72,8 @@ public class FleetManagerComponent extends AnchorPane {
     public VBox infoButtonVBox;
     @FXML
     public StackPane fleetManagerStackPane;
+    @FXML
+    public Button createFleetButton;
 
 
     @Inject
@@ -107,6 +110,8 @@ public class FleetManagerComponent extends AnchorPane {
     @Named("gameResourceBundle")
     public ResourceBundle gameResourceBundle;
 
+    @Inject
+    ImageCache imageCache = new ImageCache();
 
     private Fleet editedFleet;
 
@@ -134,6 +139,12 @@ public class FleetManagerComponent extends AnchorPane {
 
     @OnRender
     public void render() {
+
+        blueprintInFleetListView.setSelectionModel(null);
+        fleetsListView.setSelectionModel(null);
+        blueprintsListView.setSelectionModel(null);
+        shipsListView.setSelectionModel(null);
+
         this.fleets = this.fleetService.getEmpireFleets(this.tokenStorage.getEmpireId());
         this.ships = this.shipService.getShipsInSelectedFleet();
         this.blueprintsInFleetList = this.shipService.getBlueprintsInSelectedFleet();
@@ -159,7 +170,16 @@ public class FleetManagerComponent extends AnchorPane {
         showBlueprints();
         this.fleetsListView.refresh();
         this.shipService.clearEditedFleetInfos();
-        this.infoButtonVBox.setVisible(false);
+        shipImageView.setImage(imageCache.get("icons/ships/ship_Image_With_Frame1.png"));
+
+        commandLimitLabel.setVisible(false);
+        islandLabel.setVisible(false);
+        blueprintButton.setVisible(false);
+        shipsButton.setVisible(false);
+        createFleetButton.setVisible(true);
+
+        this.fleetNameText.setText("Fleets");
+
         this.fleetsListView.setVisible(true);
         this.fleetBuilderVBox.setVisible(false);
     }
@@ -185,11 +205,19 @@ public class FleetManagerComponent extends AnchorPane {
         this.editedFleet = fleet;
         this.subscriber.subscribe(this.shipService.getShipsOfFleet(fleet._id()),
                 dto -> {
+                    createFleetButton.setVisible(false);
+
                     this.shipService.initializeFleetEdition(dto, editedFleet);
                     showBlueprints();
                     setIslandName(false);
                     setCommandLimit(fleet,false);
-                    this.infoButtonVBox.setVisible(true);
+                    shipImageView.setImage(imageCache.get("icons/ships/ship_Image_With_Frame2.png"));
+
+                    commandLimitLabel.setVisible(true);
+                    islandLabel.setVisible(true);
+                    blueprintButton.setVisible(true);
+                    shipsButton.setVisible(true);
+
                     this.fleetNameText.setText(fleet.name());
                     this.fleetsListView.setVisible(false);
                     this.fleetBuilderVBox.setVisible(true);

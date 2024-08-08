@@ -108,7 +108,7 @@ public class BlueprintsComponent extends VBox implements ReusableItemComponent<S
         this.defenseLabel.setText(String.valueOf(shipType.defense().get("default")));
         resourceLabel1.setText(String.valueOf(shipType.cost().get("alloys")));
         resourceLabel2.setText(String.valueOf(shipType.cost().get("energy")));
-        this.addBlueprintButton.setDisable(!canBeAddedToFleet);
+        this.addBlueprintButton.setVisible(canBeAddedToFleet);
     }
 
     public void addBlueprint() {

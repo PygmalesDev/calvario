@@ -29,7 +29,7 @@ public class ContactsService {
     @Inject
     public TokenStorage tokenStorage;
     @Inject
-    EventListener eventListener;
+    public EventListener eventListener;
     @Inject
     public WarService warService;
 
@@ -38,15 +38,15 @@ public class ContactsService {
     public List<String> hiddenEmpires = new ArrayList<>();
     public String gameID;
     public String myOwnEmpireID;
-    Map<String, WarDto> warsOnProcess = new HashMap<>();
-    private final ObservableList<WarDto> warsInThisGame = FXCollections.observableArrayList();
+    public Map<String, WarDto> warsOnProcess = new HashMap<>();
+    public final ObservableList<WarDto> warsInThisGame = FXCollections.observableArrayList();
 
 
     String attacker;
     boolean declaring;
     boolean declaringToDefender;
 
-    ContactsComponent contactsComponent;
+    public ContactsComponent contactsComponent;
 
 
     @Inject
@@ -125,7 +125,6 @@ public class ContactsService {
     public void checkIfInvolveInWarWith(Contact contact) {
         if (Objects.isNull(contact)) return ;
         contact.setAtWarWith(attacker(contact.getEmpireID()) || defender(contact.getEmpireID()));
-
     }
 
     public void declaringToDefenderCheck(String attackID) {
@@ -235,17 +234,13 @@ public class ContactsService {
                     String attackerName = islandsService.getEmpire(event.data().attacker()).name();
                     switch (event.suffix()) {
                         case "created" -> {
-                            System.out.println("contact war!");
                             warsInThisGame.add(event.data());
                             if (hiddenEmpires.contains(event.data().attacker())) {
                                 addEnemyAfterDeclaration(event.data().attacker());
                             }
                         }
-                        case "deleted" -> {
-                            System.out.println("contact peace!");
-                            warsInThisGame.removeIf(w -> w._id().equals(event.data()._id()));
-                        }
-                        default -> System.out.println("contact still war!");
+                        case "deleted" -> warsInThisGame.removeIf(w -> w._id().equals(event.data()._id()));
+                        default -> { }
                     }
                     System.out.println("att -> " + event.data().attacker() + " def -> " + event.data().defender());
                     System.out.println("already seen? " + !hiddenEmpires.contains(event.data().attacker()));

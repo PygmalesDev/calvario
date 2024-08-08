@@ -137,6 +137,10 @@ public class TestModule {
     @Singleton
     PresetsApiService presetsApiService(){return Mockito.mock(PresetsApiService.class);}
 
+    @Provides
+    @Singleton
+    WarsApiService warsApiService(){return Mockito.mock(WarsApiService.class);}
+
 }
 
 

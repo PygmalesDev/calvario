@@ -50,11 +50,11 @@ public class ContactsComponent extends StackPane {
     @Inject
     public ImageCache imageCache;
     @Inject
-    WarService warService;
+    public WarService warService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
 
     public Provider<ContactCell> contactCellProvider = () -> {
         var cell = new ContactCell(this.imageCache, this.contactDetailsComponent);
@@ -77,7 +77,7 @@ public class ContactsComponent extends StackPane {
         loadEmpireWars();
     }
 
-    private void loadEmpireWars() {
+    public void loadEmpireWars() {
         subscriber.subscribe(warService.getWars(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 warDtos -> {
                     this.wars.clear();

@@ -32,7 +32,7 @@ public class FleetCoordinationService {
 
     private GameFleetController selectedFleet = null;
     public InGameController inGameController;
-    private final Random random = new Random();
+    public final Random random = new Random();
 
     private final double ISLAND_RADIUS_X = (double) Constants.ISLAND_WIDTH / 2;
     private final double ISLAND_RADIUS_Y = ((double) Constants.ISLAND_HEIGHT / 2);
@@ -44,7 +44,6 @@ public class FleetCoordinationService {
     public void setInitialFleetPosition() {
         this.fleetService.onFleetCreated(this::putFleetOnMap);
         this.random.setSeed(Integer.parseInt(tokenStorage.getGameId().substring(0, 4), 16));
-
     }
 
     public void setFleet(GameFleetController fleet) {

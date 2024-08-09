@@ -14,10 +14,6 @@ public class WarService {
     public  WarsApiService warsApiService;
 
     @Inject
-    public IslandsService islandsService;
-
-
-    @Inject
     public WarService(){
 
     }

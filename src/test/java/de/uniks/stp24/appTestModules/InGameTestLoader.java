@@ -85,6 +85,8 @@ public class InGameTestLoader extends ControllerTest {
     FleetApiService fleetApiService;
     @Spy
     ContactsService contactsService;
+    @Spy
+    WarService warService;
 
     @InjectMocks
     protected MarketService marketService;
@@ -152,6 +154,10 @@ public class InGameTestLoader extends ControllerTest {
     protected CoolerBubbleComponent coolerBubbleComponent;
     @InjectMocks
     protected ContactsComponent contactsComponent;
+    @InjectMocks
+    protected ContactDetailsComponent contactDetailsComponent;
+    @InjectMocks
+    protected WarComponent warComponent;
 
     final Provider<ClaimingSiteComponent> claimingComponentProvider = () -> {
         var component = new ClaimingSiteComponent();
@@ -227,6 +233,7 @@ public class InGameTestLoader extends ControllerTest {
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.helpComponent = this.helpComponent;
         this.inGameController.contactsOverviewComponent = this.contactsComponent;
+        this.inGameController.warComponent = this.warComponent;
 
         this.coolerBubbleComponent.announcementsService = this.announcementsService;
         this.coolerBubbleComponent.gameResourceBundle = this.gameResourceBundle;
@@ -283,6 +290,7 @@ public class InGameTestLoader extends ControllerTest {
         this.inGameController.subscriber = this.subscriber;
         this.inGameController.fleetService = this.fleetService;
         this.inGameController.fleetCoordinationService = this.fleetCoordinationService;
+        this.inGameController.contactService = this.contactsService;
 
         this.islandClaimingComponent.componentProvider = this.claimingComponentProvider;
         this.islandClaimingComponent.islandAttributes = this.islandAttributeStorage;
@@ -409,6 +417,20 @@ public class InGameTestLoader extends ControllerTest {
         this.fleetCoordinationService.islandsService = this.islandsService;
         this.fleetCoordinationService.app = this.app;
         this.fleetCoordinationService.contactsService = this.contactsService;
+
+        this.contactsComponent.app = this.app;
+        this.contactsComponent.contactsService = this.contactsService;
+        this.contactsComponent.imageCache = this.imageCache;
+        this.contactsComponent.warService = this.warService;
+        this.contactsComponent.tokenStorage = this.tokenStorage;
+        this.contactsComponent.subscriber = new Subscriber();
+        this.contactsComponent.contactDetailsComponent = this.contactDetailsComponent;
+
+        this.contactsComponent.contactDetailsComponent.islandsService = this.islandsService;
+        this.contactsComponent.contactDetailsComponent.imageCache = this.imageCache;
+        this.contactsComponent.contactDetailsComponent.resources = this.gameResourceBundle;
+        this.contactsComponent.contactDetailsComponent.warComponent = this.warComponent;
+        this.contactsComponent.contactDetailsComponent.contactsService = this.contactsService;
     }
 
     protected void clearStyles() {

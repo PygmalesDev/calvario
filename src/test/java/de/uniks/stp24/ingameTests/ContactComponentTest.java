@@ -1,18 +1,23 @@
 package de.uniks.stp24.ingameTests;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.ContactCell;
 import de.uniks.stp24.component.game.ContactDetailsComponent;
 import de.uniks.stp24.component.game.ContactsComponent;
+import de.uniks.stp24.component.game.WarComponent;
 import de.uniks.stp24.component.game.jobs.JobElementComponent;
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.Contact;
 import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.GameLogicApiService;
+import de.uniks.stp24.rest.WarsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.ContactsService;
 import de.uniks.stp24.service.game.IslandsService;
+import de.uniks.stp24.service.game.WarService;
+import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -42,10 +47,14 @@ public class ContactComponentTest extends ControllerTest {
 
     @InjectMocks
     ContactsComponent contactsComponent;
+    @InjectMocks
+    WarComponent warComponent;
     @Spy
     ContactDetailsComponent contactDetailsComponent;
     @Spy
     ImageCache imageCache;
+    @Spy
+    ObjectMapper objectMapper;
 
     // for ContactsService
 
@@ -57,12 +66,19 @@ public class ContactComponentTest extends ControllerTest {
     TokenStorage tokenStorage;
     @Spy
     GameLogicApiService gameLogicApiService;
+    @Spy
+    WarService warService;
+    @Spy
+    WarsApiService warsApiService;
+    @Spy
+    final de.uniks.stp24.ws.EventListener eventListener = new EventListener(tokenStorage, objectMapper);
 
 
     final EmpirePrivateDto emptyPrivateDto = new EmpirePrivateDto(new HashMap<>());
     EmpirePrivateDto empirePrivateDto;
     EmpirePrivateDto falsePrivateDto;
     ReadEmpireDto enemy;
+    List<WarDto> warDtoList = new ArrayList<>();
 
 
 
@@ -73,15 +89,20 @@ public class ContactComponentTest extends ControllerTest {
         contactsComponent.contactsService = contactsService;
         contactsComponent.imageCache = imageCache;
         contactsComponent.contactDetailsComponent = contactDetailsComponent;
+        contactsComponent.subscriber = new Subscriber();
 
         contactsService.islandsService = islandsService;
         contactsService.empireApiService = empireApiService;
         contactsService.subscriber = new Subscriber();
         contactsService.tokenStorage = tokenStorage;
+        contactsService.warService = warService;
+        contactsService.warService.warsApiService = warsApiService;
 
         contactDetailsComponent.islandsService = islandsService;
         contactDetailsComponent.imageCache = imageCache;
         contactDetailsComponent.resources = gameResourceBundle;
+        contactDetailsComponent.warComponent = warComponent;
+        contactDetailsComponent.contactsService = contactsService;
 
         islandsService.gameLogicApiService = gameLogicApiService;
         islandsService.subscriber = new Subscriber();
@@ -99,6 +120,8 @@ public class ContactComponentTest extends ControllerTest {
         doReturn("game1").when(tokenStorage).getGameId();
         doReturn("gameOwner").when(tokenStorage).getEmpireId();
         doReturn(enemy).when(islandsService).getEmpire(any());
+        doReturn(Observable.just(warDtoList)).when(warService).getWars(any(),any());
+        doNothing().when(contactsService).createWarListener();
 
         ArrayList<String> listOfIsles = new ArrayList<>();
         listOfIsles.add("isleNr1");
@@ -125,6 +148,9 @@ public class ContactComponentTest extends ControllerTest {
         contactDetailsComponent.setParent(contactsComponent);
         app.show(this.contactsComponent);
         contactsComponent.getStylesheets().clear();
+
+        doNothing().when(contactDetailsComponent).updateWarButtonText();
+        doNothing().when(contactDetailsComponent).checkWarSituation();
     }
 
     @Test
@@ -133,24 +159,24 @@ public class ContactComponentTest extends ControllerTest {
 
         doNothing().when(contactsService).saveContacts();
         contactsService.getEmpiresInGame();
+        sleep(1000);
         contactsService.addEnemy("empire1","isleNr1");
-
+        waitForFxEvents();
         Contact cont = contactsComponent.contactsListView.getItems().getFirst();
         cont.setPane(contactDetailsComponent);
-        sleep(3000);
-
+        sleep(1000);
         app.show(contactDetailsComponent);
+//        contactDetailsComponent.setVisible(true);
         contactDetailsComponent.getStylesheets().clear();
+
         waitForFxEvents();
+        sleep(1000);
         contactDetailsComponent.setContactInformation(cont);
         waitForFxEvents();
-//        System.out.println("hallo " + cont.getStrength());
-//        sleep(1000);
-//        contactDetailsComponent.calculateStrength(cont.getStrength());
         sleep(1000);
         System.out.println(contactDetailsComponent.strengText.getText());
-//        assertTrue()
-    sleep(10000);
+
+
     }
 
 

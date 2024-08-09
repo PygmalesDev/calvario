@@ -31,7 +31,7 @@ public class Contact {
         return this.empireID;
     }
 
-    private BooleanProperty atWarWith = new SimpleBooleanProperty(false);
+    public BooleanProperty atWarWith = new SimpleBooleanProperty(false);
 
     public void setEmpireID(String empireID) {
         this.empireID = empireID;

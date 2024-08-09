@@ -100,9 +100,9 @@ public class ContactsService {
         Contact contact = new Contact(dto);
         contact.setMyOwnId(myOwnEmpireID);
         hiddenEmpires.remove(dto._id());
-        contactCells.add(contact);
         seenEnemies.add(contact);
         checkIfInvolveInWarWith(contact);
+        contactCells.add(contact);
         saveContacts();
     }
 
@@ -114,10 +114,10 @@ public class ContactsService {
             contact = new Contact(empireDto);
             contact.setMyOwnId(myOwnEmpireID);
             hiddenEmpires.remove(enemy);
+            contact.setAtWarWith(true);
             contactCells.add(contact);
             seenEnemies.add(contact);
             saveContacts();
-            contact.setAtWarWith(true);
             System.out.println("enemy added after war declaration");
         }
     }
@@ -244,8 +244,8 @@ public class ContactsService {
                     }
                     System.out.println("att -> " + event.data().attacker() + " def -> " + event.data().defender());
                     System.out.println("already seen? " + !hiddenEmpires.contains(event.data().attacker()));
-                    this.contactsComponent.contactDetailsComponent.setWarMessagePopup(event.suffix(), attackerName, myOwnEmpireID, event.data());
                     this.contactsComponent.contactDetailsComponent.checkWarSituation();
+                    this.contactsComponent.contactDetailsComponent.setWarMessagePopup(event.suffix(), attackerName, myOwnEmpireID, event.data());
 
                     System.out.println(event.data().attacker() + " and " + event.data().defender());
                 },

@@ -66,7 +66,7 @@ public class ContactDetailsComponent extends StackPane {
 
     @SubComponent
     @Inject
-    WarComponent warComponent;
+    public WarComponent warComponent;
 
 
     public Pane parent;
@@ -92,7 +92,7 @@ public class ContactDetailsComponent extends StackPane {
     @Inject
     EmpireService empireService;
     @Inject
-    ContactsService contactsService;
+    public ContactsService contactsService;
 
     private Contact contact;
     private final ObservableList<WarDto> wars = FXCollections.observableArrayList();
@@ -107,32 +107,7 @@ public class ContactDetailsComponent extends StackPane {
 
     @OnInit
     public void init() {
-//        createWarListener();
     }
-
-   /* private void createWarListener() {
-        this.subscriber.subscribe(this.eventListener.listen(
-            "games." + tokenStorage.getGameId() + ".wars.*.*", WarDto.class),
-          event -> {
-            switch (event.suffix()) {
-                  case "created" -> {
-                      System.out.println("detailscomponent" + " war created");
-                      String attackerID = event.data().attacker();
-                      wars.add(event.data());
-                      setWarMessagePopup(event.suffix(), attackerID);
-                  }
-                  case "deleted" -> {
-                      System.out.println("detailscomponent" + " war deleted");
-                      String attackerID = event.data().attacker();
-                      wars.removeIf(w -> w._id().equals(event.data()._id()));
-                      setWarMessagePopup(event.suffix(), attackerID);
-                  }
-                  default -> {System.out.println("detailscomponent" + " war updated");}
-            }
-          },
-          error -> System.out.println("createWarListener error: " + error.getMessage())
-        );
-    }*/
 
     public void setContactInformation(Contact contact) {
 
@@ -168,6 +143,7 @@ public class ContactDetailsComponent extends StackPane {
         boolean defender = contactsService.defender(contact.getEmpireID());
         System.out.println("checking war for " + contact.getEmpireID() + " was ");
         System.out.println("attacker: " + attacker + " defender: " + defender);
+        contact.setAtWarWith(!contact.atWarWith.get());
         contact.setAtWarWith(attacker || defender);
         warButton.setSelected(attacker || defender);
         warButton.setDisable(attacker);
@@ -208,7 +184,7 @@ public class ContactDetailsComponent extends StackPane {
         return "exactly";
     }
 
-    private void calculateStrength() {
+    public void calculateStrength() {
         System.out.println("compare me: " + contact.getMyOwnId() + " with " + contact.getEmpireID());
         islandsService.getEnemyStrength(contact.getMyOwnId(), contact.getEmpireID(), this.contact);
     }
@@ -226,7 +202,7 @@ public class ContactDetailsComponent extends StackPane {
 
     }
 
-    private void updateWarButtonText() {
+    public void updateWarButtonText() {
         warStateText.setStyle("-fx-font-size: 12px;");
         if (warButton.isSelected()) {
             warButton.setText("Stop war");

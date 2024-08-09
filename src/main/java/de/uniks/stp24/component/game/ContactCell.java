@@ -25,7 +25,7 @@ public class ContactCell extends HBox implements ReusableItemComponent<Contact> 
     ImageCache imageCache;
     ContactDetailsComponent contactDetailsComponent;
 
-    private Contact contact;
+    public Contact contact;
 
     @Inject
     public ContactCell(ImageCache imageCache, ContactDetailsComponent pane) {
@@ -38,6 +38,8 @@ public class ContactCell extends HBox implements ReusableItemComponent<Contact> 
         this.contact = contact;
         empireNameText.setText(this.contact.getEmpireName());
         empireFlagImageView.setImage(imageCache.get(this.contact.getEmpireFlag()));
+        contact.atWarWithProperty().addListener((obs, wasAtWar, isAtWar) -> updateWarSituationIcon());
+        updateWarSituationIcon();
     }
 
     public Contact getContact() {
@@ -45,7 +47,7 @@ public class ContactCell extends HBox implements ReusableItemComponent<Contact> 
 
     }
 
-    private void updateWarSituationIcon() {
+    public void updateWarSituationIcon() {
         if (contact.isAtWarWith()) {
             warSituationIcon.setImage(imageCache.get("/de/uniks/stp24/assets/contactsAndWars/Contact_War_Icon.png"));
         } else {

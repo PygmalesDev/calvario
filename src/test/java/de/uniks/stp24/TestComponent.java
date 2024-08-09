@@ -40,6 +40,7 @@ public interface TestComponent extends MainComponent {
     JobsApiService jobsApiService();
     ImageCache imageCache();
     WarsApiService warsApiService();
+    FleetApiService fleetApiService();
 
     @Component.Builder
     interface Builder extends MainComponent.Builder {

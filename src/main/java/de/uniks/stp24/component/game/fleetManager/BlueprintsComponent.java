@@ -3,11 +3,11 @@ package de.uniks.stp24.component.game.fleetManager;
 import de.uniks.stp24.model.Ships.ShipType;
 import de.uniks.stp24.service.ImageCache;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
@@ -54,6 +54,8 @@ public class BlueprintsComponent extends VBox implements ReusableItemComponent<S
     public Label resourceLabel2;
     @FXML
     public Button addBlueprintButton;
+    @FXML
+    public Button infoButton;
 
     @Inject
     ImageCache imageCache = new ImageCache();
@@ -77,13 +79,23 @@ public class BlueprintsComponent extends VBox implements ReusableItemComponent<S
     @OnRender
     public void render() {
         Tooltip details = new Tooltip();
+
+        details.getStyleClass().add("details-tooltip");
         details.setShowDelay(Duration.ZERO);
         details.setShowDuration(Duration.INDEFINITE);
-        Tooltip.install(blueprintHBox, details);
+        Tooltip.install(infoButton, details);
+
+        addEventFilter(ScrollEvent.SCROLL, event -> {
+            if (details.isShowing()) {
+                forwardScrollEvent(blueprintDetailsComponent.damage, event);
+                event.consume();
+            }
+        });
 
         details.setOnShowing(e -> {
             details.setGraphic(blueprintDetailsComponent);
             blueprintDetailsComponent.showBlueprintDetails(shipType);
+            fleetManagerComponent.blueprintsListView.setStyle("-fx-opacity: 1");
         });
 
         details.setOnHiding(e -> details.setGraphic(null));
@@ -95,6 +107,28 @@ public class BlueprintsComponent extends VBox implements ReusableItemComponent<S
         defenseImage.setImage(imageCache.get("icons/ships/shield.png"));
         resourceImage1.setImage(imageCache.get("icons/resources/energy.png"));
         resourceImage2.setImage(imageCache.get("icons/resources/alloys.png"));
+    }
+
+    private void forwardScrollEvent(ListView<?> targetListView, ScrollEvent event) {
+        ScrollBar verticalScrollBar = (ScrollBar) targetListView.lookup(".scroll-bar:vertical");
+
+        if (verticalScrollBar != null) {
+            // Adjust the ScrollBar value based on the scroll delta
+            double deltaY = event.getDeltaY();
+            double newValue = verticalScrollBar.getValue() - deltaY;
+
+            // Ensure newValue is within the bounds
+            double min = verticalScrollBar.getMin();
+            double max = verticalScrollBar.getMax();
+
+            if (newValue < min) {
+                newValue = min;
+            } else if (newValue > max) {
+                newValue = max;
+            }
+
+            verticalScrollBar.setValue(newValue);
+        }
     }
 
     @Override

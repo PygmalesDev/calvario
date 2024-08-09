@@ -249,3 +249,109 @@ Label {
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/build_button.png");
     -fx-background-size: 100% 100%;
 }
+
+/*.tooltip-background {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/pause_menu_background.png");*/
+/*    -fx-background-size: 100% 100%;*/
+/*}*/
+
+.tooltip-list-view .list-cell,
+.tooltip-list-view {
+    -fx-background-color: transparent;
+    -fx-background-image: none
+}
+
+.tooltip-list-view .list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-image: none;
+}
+
+
+
+.tooltip {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/pause_menu_background.png");
+    -fx-background-size: 100% 100%;
+}
+
+.tooltip-title {
+    -fx-font-family: 'Tempus Sans ITC';
+    -fx-font-size: 15;
+}
+
+.tooltip-subtitle {
+    -fx-font-family: 'Tempus Sans ITC';
+    -fx-font-size: 13;
+    -fx-opacity: 1;
+    text-decoration: underline;
+}
+
+.list-view * {
+    -fx-font-size: 13;
+    -fx-text-fill: black;
+}
+
+.tooltip-list-view .virtual-flow .scroll-bar:vertical .thumb {
+    -fx-background-color: transparent;
+    -fx-background-size: auto;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-min-height: 20px;
+    -fx-min-width: 20px;
+    -fx-pref-width: 20px;
+    -fx-pref-height: 20px;
+    -fx-background-image: url("/de/uniks/stp24/icons/scroller.png");
+}
+
+.tooltip-list-view .scroll-bar:vertical .increment-button .increment-arrow,
+.tooltip-list-view .scroll-bar .decrement-button .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+}
+
+.tooltip-list-view {
+    -fx-background-color: transparent;
+}
+
+.tooltip-list-view .scroll-bar .thumb,
+.tooltip-list-view .scroll-bar:horizontal,
+.tooltip-list-view .scroll-bar:horizontal .decrement-arrow,
+.tooltip-list-view .scroll-bar:horizontal .increment-arrow,
+.tooltip-list-view .scroll-bar:horizontal .decrement-button,
+.tooltip-list-view .scroll-bar:horizontal .increment-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+
+.tooltip-list-view .corner {
+    -fx-background-color: transparent;
+}
+
+.tooltip-list-view .scroll-bar:vertical {
+    -fx-background-color: black;
+    -fx-background-radius: 5px;
+    -fx-pref-width: 15px;
+    -fx-max-width: 15px
+}
+
+.tooltip-list-view .list-cell {
+    -fx-padding: 0 0 0 0;
+}
+
+.details-tooltip {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/pause_menu_background.png");
+    -fx-background-size: 100% 100%;
+}
+
+.info-button {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/icons/information-button2.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}

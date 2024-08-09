@@ -56,16 +56,6 @@
     -fx-border-width: 0;
 }
 
-.technologiesActualResearchBackground {
-    -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/technologies_actualResearch_background.png");
-    -fx-background-size: contain;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-padding: 0;
-    -fx-border-width: 0;
-}
-
 .technologyCategoriesLabel {
     -fx-font-family: "Tempus Sans ITC";
 }
@@ -79,18 +69,6 @@
     -fx-font-family: "Tempus Sans ITC";
     -fx-font-weight: bold;
 }
-
-/*.technology-list {*/
-/*    -fx-background-color: transparent;*/
-/*}*/
-
-/*.technology-list .list-cell {*/
-/*    -fx-background-color: transparent;*/
-/*    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/red_frame.png");*/
-/*    -fx-background-size: 100% 100%;*/
-/*    -fx-background-repeat: no-repeat;*/
-/*    -fx-background-position: center;*/
-/*}*/
 
 .technologies-list-view .virtual-flow .scroll-bar:vertical .thumb {
     -fx-background-color: transparent;
@@ -117,16 +95,6 @@
 
 }
 
-/*.list-view .list-cell:empty {*/
-/*    -fx-background-color: transparent;*/
-/*    -fx-border-color: transparent;*/
-/*    -fx-background-image: none;*/
-/*}*/
-
-/*.description-list .list-cell {*/
-/*}*/
-
-/* Stil für die äußere ListView */
 .technologies-list-view {
     -fx-background-color: transparent;
 }
@@ -147,21 +115,59 @@
     -fx-font-size: 14;
 }
 
+.description-list-view .list-cell {
+    -fx-pref-height: 45px;
+    -fx-alignment: TOP_LEFT;
+}
+
 .description-list-view .list-cell:empty {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-background-image: none;
 }
+
+.description-list-view .viewport {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
 .technologies-list-view .list-cell:empty {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-background-image: none;
 }
 
-/* Hover-Effekt für die Zellen in der inneren ListView */
 .description-list-view .list-cell {
     -fx-background-color: transparent;
     -fx-background-image: none;
+}
+
+.description-list-view .scroll-bar:horizontal .thumb {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+}
+
+.description-list-view .scroll-bar:horizontal .increment-button,
+.description-list-view .scroll-bar:horizontal .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+}
+
+.description-list-view .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-max-height: 0;
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.description-list-view .corner {
+    -fx-background-color: transparent;
+    -fx-opacity: 1;
+ }
+
+.description-list-view .viewport {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
 }
 
 .research-tooltip {
@@ -182,18 +188,14 @@
     -fx-font-size: 16;
 }
 
-.technologyName {
-    -fx-font-family: "Tempus Sans ITC";
+.technologiesActualResearchBackground {
     -fx-background-color: transparent;
-    -fx-font-weight: none;
-    -fx-font-size: 22;
-}
-
-.researchDescription {
-    -fx-font-family: "Tempus Sans ITC";
-    -fx-background-color: transparent;
-    -fx-font-weight: none;
-    -fx-font-size: 14;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/technologies_actualResearch_background.png");
+    -fx-background-size: contain;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
 }
 
 .researchHeadLine {
@@ -203,15 +205,129 @@
     -fx-font-size: 30;
 }
 
+.technologyName {
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-background-color: transparent;
+    -fx-font-weight: none;
+    -fx-font-size: 22;
+}
 
 .description-tooltip {
     -fx-opacity: 1;
     -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/details_background.png");
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/technology_effects_background.png");
     -fx-background-size: 100% 100%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
 
 .technology-description-label {
+}
+
+.effect-details-tooltip {
+    -fx-opacity: 1;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/technology_effects_background.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.effect-details-title {
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 25;
+}
+
+.effect-details-elements {
+    -fx-font-family: "Blackadder ITC";
+    -fx-font-size: 18;
+}
+
+#backButton {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/arrow_left.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.job-research-description-list-view {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-font-size: 14;
+    -fx-pref-height: 65px
+}
+
+.job-research-description-list-view .list-cell {
+    -fx-padding: 2px;
+}
+
+.job-research-description-list-view .list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-image: none;
+}
+
+.job-research-description-list-view .viewport {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.job-research-description-list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-background-image: none;
+}
+
+/* Stile für die spezifische Scrollbar der ListView mit Klasse 'job-research-description-list-view' */
+.job-research-description-list-view .scroll-bar:vertical .thumb {
+    -fx-background-color: black; /* Farbe der Scroll-Leiste */
+    -fx-background-insets: 0;
+    -fx-background-radius: 2px;
+    -fx-pref-width: 2px;
+    -fx-max-width: 2px
+}
+
+.job-research-description-list-view .scroll-bar:vertical .track {
+    -fx-background-color: transparent; /* Hintergrund der Spur transparent machen */
+}
+
+.job-research-description-list-view .scroll-bar:horizontal .thumb {
+    -fx-background-color: transparent;
+}
+
+.job-research-description-list-view .scroll-bar:vertical,
+.job-research-description-list-view .scroll-bar:horizontal {
+    -fx-pref-width: 2px; /* Breite der vertikalen Scroll-Leiste */
+    -fx-pref-height: 2px; /* Höhe der horizontalen Scroll-Leiste */
+    -fx-background-color: transparent; /* Hintergrund der Scroll-Leiste transparent machen */
+}
+
+.job-research-description-list-view .scroll-bar .increment-button,
+.job-research-description-list-view .scroll-bar .decrement-button,
+.job-research-description-list-view .scroll-bar .increment-arrow,
+.job-research-description-list-view .scroll-bar .decrement-arrow {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-shape: "";
+}
+
+.job-research-description-list-view .scroll-bar .increment-arrow,
+.job-research-description-list-view .scroll-bar .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.job-research-description-list-view .corner {
+    -fx-background-color: transparent;
+    -fx-opacity: 1;
+}
+
+.job-research-description-list-view .viewport {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
 }

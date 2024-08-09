@@ -226,7 +226,7 @@ public class BuildingPropertiesComponent extends AnchorPane {
     }
 
     private void setDestroyButtonDisable() {
-        if (tokenStorage.getIsland().buildings().contains(buildingType))
+        if (islandAttributeStorage.getIsland().buildings().contains(buildingType))
             destroyButton.setDisable(false);
     }
 

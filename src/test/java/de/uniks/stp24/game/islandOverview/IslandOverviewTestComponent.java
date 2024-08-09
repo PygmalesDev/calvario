@@ -7,6 +7,7 @@ import de.uniks.stp24.ws.Event;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Provider;
 import java.util.ArrayList;
@@ -199,6 +200,23 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
                 "TestIsland1"
         );
 
+        SystemDto system = new SystemDto("testGameID",
+                "testSystemID",
+                "testSystemName",
+                "testSystemOwner",
+                "agriculture",
+                "system",
+                null,
+                null,
+                20,
+                null,
+                Upgrade.colonized,
+                2,
+                null,
+                2,
+                2,
+                "owner");
+
         this.islandAttributeStorage.setIsland(testIsland);
 
         Map<String, Integer> variablesPresets = new HashMap<>();
@@ -250,6 +268,11 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
         this.marketComponent.subscriber = this.subscriber;
         this.inGameController.marketOverviewComponent = this.marketComponent;
         this.marketService.subscriber = this.subscriber;
+
+        this.technologyService.subscriber = new Subscriber();
+        this.technologyService.tokenStorage = this.tokenStorage;
+
+        doReturn(Observable.just(new SystemDto[]{system})).when(gameSystemsApiService).getSystems(any());
 
         this.app.show(this.inGameController);
         clearStyleSheets();

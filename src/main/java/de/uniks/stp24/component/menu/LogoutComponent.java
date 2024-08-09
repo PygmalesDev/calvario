@@ -6,11 +6,13 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.service.menu.BrowseGameService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.controller.Subscriber;
 
@@ -49,10 +51,11 @@ public class LogoutComponent extends VBox {
 
     @OnRender
     public void render() {
-        logoutWindow.setStyle("-fx-background-color: white;");
+        logoutWindow.setStyle("-fx-background-color: transparent;");
         warningText.setText(resources.getString("you.will.be.logged.out"));
     }
 
+    @OnKey(code = KeyCode.ENTER)
     public void logout() {
         this.subscriber.subscribe(browseGameService.logout(""));
         this.getParent().setVisible(false);

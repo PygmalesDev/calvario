@@ -17,6 +17,7 @@ import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
+import java.util.ResourceBundle;
 
 @Component(view = "TechnologyCategoryDescription.fxml")
 public class TechnologyCategoryDescriptionSubComponent extends HBox implements ReusableItemComponent<Effect> {
@@ -36,9 +37,11 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
     @Inject
     Subscriber subscriber;
 
-    @Inject
-    public TechnologyCategoryDescriptionSubComponent() {
+    ResourceBundle variablesResourceBundle;
 
+    @Inject
+    public TechnologyCategoryDescriptionSubComponent(ResourceBundle variablesResourceBundle) {
+        this.variablesResourceBundle = variablesResourceBundle;
     }
 
     @OnRender
@@ -60,11 +63,21 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
 
     @Override
     public void setItem(@NotNull Effect effect) {
+        descriptionLabel.setStyle("-fx-opacity: 1");
+        setEffect(effect);
+        setImage();
+        setDescriptionLabel();
+    }
+
+    public void setEffect(Effect effect) {
         this.effect = effect;
-        String variable = this.effect.variable();
+    }
+
+    public void setImage() {
+        String variable = effect.variable();
 
         /*
-         * Iterate through all resources and checks if effect variable contains a resource
+         * Iterate through all possible paths that technologies can affect
          */
         for (String key : Constants.resourceTranslation.keySet()) {
             if (variable.contains(key)) {
@@ -73,12 +86,12 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
             } else if (variable.contains("pop")) {
                 resourceImage.setImage(imageCache.get("icons/resources/population.png"));
                 break;
+            } else if (variable.contains("market.fee")) {
+                resourceImage.setImage(imageCache.get("assets/market/market_fee.png"));
+                break;
             }
         }
 
-        /*
-         * If variable doesn't affect a resource, it must be a technology
-         */
         if (resourceImage.getImage() == null) {
             for (String tech : Constants.technologyTranslation.values()) {
                 if (variable.contains(tech)) {
@@ -88,6 +101,52 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
             }
         }
 
-        descriptionLabel.setText(effect.variable());
+        if (resourceImage.getImage() == null && variable.contains("systems")) {
+            for (String island : Constants.islandTranslation.keySet()) {
+                if (variable.contains(island)) {
+                    resourceImage.setImage(imageCache.get("icons/islands/" + island + ".png"));
+                    break;
+                }
+            }
+            if (resourceImage.getImage() == null) {
+                for (String upgrade : Constants.upgradeTranslation.keySet()) {
+                    if (variable.contains(upgrade)) {
+                        resourceImage.setImage(imageCache.get("icons/islands/regular.png"));
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (resourceImage.getImage() == null && variable.contains("buildings")) {
+            for (String building : Constants.buildingTranslation.keySet()) {
+                if (variable.contains(building)) {
+                    resourceImage.setImage(imageCache.get(Constants.buildingsIconPathsMap.get(building).replace("de/uniks/stp24/", "")));
+                    break;
+                }
+            }
+        }
+
+        if (resourceImage.getImage() == null && variable.contains("district")) {
+            for (String district : Constants.siteTranslation.keySet()) {
+                if (variable.contains(district)) {
+                    resourceImage.setImage(imageCache.get(Constants.sitesIconPathsMap.get(district).replace("de/uniks/stp24/", "")));
+                    break;
+                }
+            }
+        }
+
+    }
+
+    public void setDescriptionLabel() {
+
+        if (effect.multiplier() != 1 && effect.multiplier() != 0) {
+            descriptionLabel.setText(String.format("%+d", (int) ((effect.multiplier() * 100.0) - 100)) + " % "
+                    + variablesResourceBundle.getString(effect.variable()));
+        }
+
+        if (effect.base() != 0) {
+            descriptionLabel.setText(String.format("%+d", (int) effect.base()) + " " + variablesResourceBundle.getString(effect.variable()));
+        }
     }
 }

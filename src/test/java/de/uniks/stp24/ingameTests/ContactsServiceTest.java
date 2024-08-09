@@ -11,6 +11,7 @@ import de.uniks.stp24.dto.WarDto;
 import de.uniks.stp24.model.Contact;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.rest.EmpireApiService;
+import de.uniks.stp24.rest.WarsApiService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.WarService;
@@ -54,6 +55,8 @@ public class ContactsServiceTest extends ControllerTest {
     ContactsComponent contactsComponent;
     @Spy
     ContactDetailsComponent contactDetailsComponent;
+    @Spy
+    WarsApiService warsApiService;
 
     final EmpirePrivateDto emptyPrivateDto = new EmpirePrivateDto(new HashMap<>());
     EmpirePrivateDto empirePrivateDto, falsePrivateDto;
@@ -74,6 +77,10 @@ public class ContactsServiceTest extends ControllerTest {
         contactsService.warService = warService;
         contactsService.eventListener = eventListener;
         contactsService.contactsComponent = contactsComponent;
+        contactsService.contactsComponent.tokenStorage = tokenStorage;
+        contactsService.contactsComponent.warService = warService;
+        contactsService.contactsComponent.subscriber = new Subscriber();
+        contactsService.contactsComponent.warService.warsApiService = warsApiService;
         contactsService.contactsComponent.contactDetailsComponent = contactDetailsComponent;
 
 
@@ -113,6 +120,7 @@ public class ContactsServiceTest extends ControllerTest {
 
         warDtoList.add(meAsDef);
         warDtoList.add(meAsAtt);
+        doNothing().when(contactsComponent).loadEmpireWars();
     }
 
     @Test
@@ -163,7 +171,9 @@ public class ContactsServiceTest extends ControllerTest {
 //        contactsService.addEnemyAfterDeclaration("empire2");
         assertTrue(contactsService.attacker("empire2"));
 
+        sleep(100);
         contactsService.addEnemyAfterDeclaration("empire1");
+        sleep(100);
         assertTrue(contactsService.defender("empire1"));
 
         System.out.println(contactsService.warsOnProcess.size());

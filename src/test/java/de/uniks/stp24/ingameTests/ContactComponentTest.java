@@ -97,6 +97,7 @@ public class ContactComponentTest extends ControllerTest {
         contactsService.tokenStorage = tokenStorage;
         contactsService.warService = warService;
         contactsService.warService.warsApiService = warsApiService;
+        contactsService.contactsComponent = contactsComponent;
 
         contactDetailsComponent.islandsService = islandsService;
         contactDetailsComponent.imageCache = imageCache;

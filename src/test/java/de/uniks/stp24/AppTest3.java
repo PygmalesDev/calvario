@@ -29,7 +29,7 @@ public class AppTest3 extends AppTest3Module {
 
         this.showTip();
         this.performMarketTrades();
-//        this.performSeasonalTrades();
+        this.performSeasonalTrades();
         this.beginSiteJob();
         this.beginBuildingJob();
         this.beginIslandUpgrade();
@@ -171,22 +171,22 @@ public class AppTest3 extends AppTest3Module {
         assertEquals("999999997", lookup("#minerals_marketGoods").queryText().getText());
     }
 
-    /*public void performSeasonalTrades() {
+    public void performSeasonalTrades() {
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#everySeasonButton");
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#buyButton");
         WaitForAsyncUtils.waitForFxEvents();
-        assertTrue(lookup("#seasonalTradesListView").queryListView().getItems().isEmpty());
+        assertFalse(lookup("#seasonalTradesListView").queryListView().getItems().isEmpty());
         clickOn("#playControlsButton");
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#cancelTradesButton");
         WaitForAsyncUtils.waitForFxEvents();
-        assertTrue(lookup("#seasonalTradesListView").queryListView().getItems().isEmpty());
+        assertFalse(lookup("#seasonalTradesListView").queryListView().getItems().isEmpty());
         clickOn("#closeMarketOverviewButton");
         WaitForAsyncUtils.waitForFxEvents();
         assertFalse(this.marketComponent.isVisible());
-    }*/
+    }
 
     public void beginTechnologyJob() {
         WaitForAsyncUtils.waitForFxEvents();

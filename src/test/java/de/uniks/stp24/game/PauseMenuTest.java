@@ -262,9 +262,6 @@ public class PauseMenuTest extends ControllerTest {
 
         doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
 
-
-
-
         this.inGameController.variableService.subscriber = this.subscriber;
         //this.inGameController.variableExplanationComponent = this.variableExplanationComponent;
         this.explanationService.app = this.app;

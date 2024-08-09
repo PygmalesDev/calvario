@@ -16,6 +16,7 @@ import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 
 public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
@@ -60,7 +61,7 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
             null,
             null,
             "testEmpireID",
-            "testGameID",
+            "123456",
             "testUserID",
             null,
             null,
@@ -77,7 +78,7 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
             null,
             null,
             "testEmpireID",
-            "testGameID",
+            "123456",
             "testUserID",
             null,
             null,
@@ -164,16 +165,16 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
         this.inGameController.overviewSitesComponent.sitesComponent.districtComponentProvider = districtComponentProvider;
 
         doReturn("testUserID").when(this.tokenStorage).getUserId();
-        doReturn("testGameID").when(this.tokenStorage).getGameId();
+        doReturn("123456").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
 
         // Mock getEmpire
-        doReturn(Observable.just(new EmpireDto("a", "a", "testEmpireID", "testGameID", "testUserID", "testEmpire",
+        doReturn(Observable.just(new EmpireDto("a", "a", "testEmpireID", "123456", "testUserID", "testEmpire",
                 "a", "a", 1, 2, "a", new String[]{"1"}, cost,
                 null))).when(this.empireService).getEmpire(any(), any());
-        doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", 2, 1, true, 1, 1, null))).when(gamesApiService).getGame(any());
-        doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
+        doReturn(Observable.just(new Game("a", "a", "123456", "gameName", "gameOwner", 2, 1, true, 1, 1, null))).when(gamesApiService).getGame(any());
+        doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.123456.empires.testEmpireID.updated"), eq(EmpireDto.class));
 
         buildings.add("testBuilding1");
         buildings.add("testBuilding2");
@@ -251,6 +252,10 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
         this.marketComponent.subscriber = this.subscriber;
         this.inGameController.marketOverviewComponent = this.marketComponent;
         this.marketService.subscriber = this.subscriber;
+
+        doNothing().when(fleetService).loadGameFleets();
+        doNothing().when(fleetService).initializeFleetListeners();
+        doNothing().when(contactsComponent).loadEmpireWars();
 
         this.app.show(this.inGameController);
         clearStyleSheets();

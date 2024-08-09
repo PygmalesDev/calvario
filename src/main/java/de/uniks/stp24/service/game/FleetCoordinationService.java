@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 import static de.uniks.stp24.model.Fleets.Fleet;
 import static de.uniks.stp24.service.Constants.*;
@@ -48,17 +49,18 @@ public class FleetCoordinationService {
     @Inject
     public ImageCache imageCache;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
     App app;
 
+    public final Random random = new Random();
     private IslandClaimingComponent claimingComponent;
     private GameFleetController selectedFleet;
     private ObservableList<Node> mapGrid;
-    private final Random random = new Random();
     private final List<PathEntry> pathEntries = new ArrayList<>();
     private final Map<GameFleetController, List<DistancePoint>> coordinatedPaths = new HashMap<>();
     private ObservableList<Job> travelJobs = FXCollections.observableArrayList();
+    private List<Consumer<Fleet>> onFleetSelectedConsumers = new ArrayList<>();
 
     private final int ROTATE_DURATION = 2;
 
@@ -127,8 +129,7 @@ public class FleetCoordinationService {
             fleet.toggleActive();
         }
 
-        if (this.claimingComponent.getParent().isVisible())
-            this.claimingComponent.setFleetInformation(this.getSelectedFleet());
+        this.onFleetSelectedConsumers.forEach(func -> func.accept(this.getSelectedFleet()));
     }
 
     private void deleteFleetFromMap(Fleet fleet) {
@@ -432,10 +433,15 @@ public class FleetCoordinationService {
         return (int) Math.ceil((double) entry.getDistance()/5);
     }
 
+    public void onFleetSelected(Consumer<Fleet> func) {
+        this.onFleetSelectedConsumers.add(func);
+    }
+
     public void dispose() {
         this.selectedFleet = null;
         this.subscriber.dispose();
         this.coordinatedPaths.clear();
         this.pathEntries.clear();
+        this.onFleetSelectedConsumers.clear();
     }
 }

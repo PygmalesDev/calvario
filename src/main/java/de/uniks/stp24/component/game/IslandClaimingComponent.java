@@ -267,8 +267,9 @@ public class IslandClaimingComponent extends Pane {
         });
 
         this.jobsService.onJobsLoadingFinished("upgrade", this::setJobFinishers);
-        this.jobsService.onJobsLoadingFinished("travel", job -> this.setClaimingInformation());
-        this.jobsService.onGameTicked(this::incrementProgress);
+            this.jobsService.onGameTicked(this::incrementProgress);
+
+        this.fleetCoordinationService.onFleetSelected(this::setFleetInformation);
     }
 
     private void setJobFinishers(Job job) {

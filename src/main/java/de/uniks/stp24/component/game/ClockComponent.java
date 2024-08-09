@@ -109,9 +109,6 @@ public class ClockComponent extends AnchorPane {
         PropertyChangeListener callHandleSpeedChanged = this::handleSpeedChanged;
         timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_SPEED, callHandleSpeedChanged);
 
-        PropertyChangeListener callHandleSeasonChanged = this::handleSeasonChanged;
-        timerService.listeners().addPropertyChangeListener(TimerService.PROPERTY_SEASON, callHandleSeasonChanged);
-
         PropertyChangeListener callHandleRemainingSeasons = this::handleRemainingSeasonChanged;
         eventService.listeners().addPropertyChangeListener(EventService.PROPERTY_REMAININGSEASONS, callHandleRemainingSeasons);
 

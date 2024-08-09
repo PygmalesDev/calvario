@@ -101,6 +101,8 @@ public class PauseMenuTest extends ControllerTest {
     @Spy
     FleetCoordinationService fleetCoordinationService;
     @Spy
+    GameLogicApiService gameLogicApiService;
+    @Spy
     FleetService fleetService;
     @Spy
     ShipService shipService;
@@ -176,6 +178,10 @@ public class PauseMenuTest extends ControllerTest {
     ChangeFleetComponent changeFleetComponent;
     @InjectMocks
     InGameController inGameController;
+    @InjectMocks
+    TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+    @InjectMocks
+    TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
 
     @InjectMocks
     IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;

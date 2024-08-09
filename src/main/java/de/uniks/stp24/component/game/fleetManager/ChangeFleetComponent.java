@@ -4,6 +4,7 @@ import de.uniks.stp24.model.Fleets.Fleet;
 import de.uniks.stp24.service.game.FleetService;
 import de.uniks.stp24.service.game.ShipService;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
@@ -22,6 +23,12 @@ import static de.uniks.stp24.model.Ships.Ship;
 public class ChangeFleetComponent extends VBox {
     @FXML
     public Label newFleetOfShipNameLabel;
+    @FXML
+    public Button showLastFleetButton;
+    @FXML
+    public Button showNextFleetButton;
+    @FXML
+    public Button confirmFleetChangeButton;
 
     @Inject
     public ShipService shipService;
@@ -33,7 +40,7 @@ public class ChangeFleetComponent extends VBox {
     private FleetManagerComponent fleetManagerComponent;
 
     private int fleetNameIndex = 0;
-    private List<Fleet> fleetsOnIslandList = new ArrayList<>();
+    public List<Fleet> fleetsOnIslandList = new ArrayList<>();
     private ReadShipDTO readShipDTO;
 
     @Inject
@@ -58,6 +65,7 @@ public class ChangeFleetComponent extends VBox {
         this.newFleetOfShipNameLabel.setText(fleetsOnIslandList.get(fleetNameIndex).name());
     }
 
+    /** Change fleet of a ship and add planned size for this shipType of the new fleet to be at least one */
     public void confirmFleetChange() {
         this.subscriber.subscribe(this.shipService.changeFleetOfShip(fleetsOnIslandList.get(fleetNameIndex)._id(), readShipDTO),
                 ship -> {
@@ -69,11 +77,10 @@ public class ChangeFleetComponent extends VBox {
                     } else {
                         finishFleetChange(ship);
                     }
-
-                },
-                error -> System.out.println("Error while changing the fleet of a ship in the ChangeFleetComponent:\n" + error.getMessage()));
+                }, error -> System.out.println("Error while changing the fleet of a ship in the ChangeFleetComponent:\n" + error.getMessage()));
     }
 
+    /** Update ships of the old and the new fleet of the ship **/
     private void finishFleetChange(Ship ship) {
         this.shipService.deleteShipFromGroups(this.readShipDTO);
         this.fleetService.adaptShipCount(this.readShipDTO.fleet(), -1);
@@ -83,6 +90,7 @@ public class ChangeFleetComponent extends VBox {
         this.close();
     }
 
+    /** Get all fleets of the empire at this system which are different to the currently edited fleet **/
     public void changeFleetOfShip(ReadShipDTO readShipDTO) {
         Fleet editedFleet = this.fleetService.getFleet(readShipDTO.fleet());
         this.fleetsOnIslandList = this.fleetService.getFleetsOnIsland(editedFleet.location()).stream()

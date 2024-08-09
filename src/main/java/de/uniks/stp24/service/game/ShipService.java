@@ -61,6 +61,11 @@ public class ShipService {
         return null;
     }
 
+    /**
+     * Initializes the shipsList and blueprintsInFleetList with given data of the fleet
+     * @param dto: all ships of the edited fleet
+     * @param fleet: currently edited fleet
+     */
     public void initializeFleetEdition(ReadShipDTO[] dto, Fleet fleet){
         Arrays.stream(dto).forEach(ship -> {
             this.shipsInSelectedFleet.add(ship);

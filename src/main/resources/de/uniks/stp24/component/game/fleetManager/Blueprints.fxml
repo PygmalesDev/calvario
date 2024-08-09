@@ -37,7 +37,7 @@
             <Font size="15.0" />
          </font>
          <tooltip>
-            <Tooltip fx:id="tooltip" anchorLocation="WINDOW_TOP_RIGHT" autoFix="false" consumeAutoHidingEvents="false" contentDisplay="RIGHT" hideOnEscape="false" />
+            <Tooltip anchorLocation="WINDOW_TOP_RIGHT" autoFix="false" consumeAutoHidingEvents="false" contentDisplay="RIGHT" hideOnEscape="false" />
          </tooltip></Label>
       <ListView prefHeight="30.0" prefWidth="70.0" />
       <Button fx:id="addBlueprintButton" mnemonicParsing="false" onAction="#addBlueprint" prefHeight="25.0" prefWidth="40.0" text="add" />

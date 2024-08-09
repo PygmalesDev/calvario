@@ -13,67 +13,71 @@
 <?import javafx.scene.text.Text?>
 
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../../../style/ingameButtons.css" type="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.fleetManager.FleetManagerComponent">
-   <StackPane fx:id="fleetManagerStackPane" layoutX="-20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-              AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="900.0"
-            prefHeight="600.0" prefWidth="900.0" styleClass="technologiesCategoryBackground">
-         <HBox>
-            <HBox alignment="CENTER" prefWidth="800.0" translateX="-20.0" translateY="10.0">
-               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="technologieText"
-                     text="Fleet Manager" translateY="2.0">
+   <StackPane fx:id="fleetManagerStackPane" layoutX="-20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="900.0" prefHeight="600.0" prefWidth="900.0" styleClass="technologiesCategoryBackground">
+         <HBox alignment="CENTER">
+            <HBox alignment="CENTER" prefWidth="800.0">
+               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="technologieText" text="Fleet Manager" translateY="2.0">
                   <font>
-                     <Font size="35.0"/>
+                     <Font size="35.0" />
                   </font>
                </Text>
+               <padding>
+                  <Insets left="50.0" />
+               </padding>
             </HBox>
-            <VBox alignment="TOP_RIGHT" prefHeight="50.0" prefWidth="325.0" HBox.hgrow="ALWAYS">
-               <Button fx:id="closeFleetManagerButton" minHeight="50.0" minWidth="50.0" mnemonicParsing="false"
-                       onAction="#close" styleClass="closeButton"/>
+            <VBox alignment="TOP_RIGHT" prefHeight="50.0" prefWidth="50.0" HBox.hgrow="ALWAYS">
+               <Button fx:id="closeFleetManagerButton" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#close" styleClass="closeButton" />
             </VBox>
          </HBox>
-         <HBox alignment="TOP_CENTER" prefHeight="450.0" prefWidth="900.0" spacing="50.0">
-            <padding>
-               <Insets top="50.0"/>
-            </padding>
-            <StackPane prefHeight="150.0" prefWidth="300.0">
-               <VBox fx:id="fleetsOverviewVBox" prefHeight="200.0" prefWidth="300.0">
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fleets"/>
-                  <ListView fx:id="fleetsListView" prefHeight="200.0" prefWidth="200.0"/>
-                  <Button fx:id="createFleetButton" mnemonicParsing="false" onAction="#createFleet"
-                          text="Create Fleet"/>
-               </VBox>
-               <VBox fx:id="fleetBuilderVBox" prefHeight="400.0" prefWidth="300.0">
-                  <HBox prefHeight="100.0" prefWidth="200.0">
-                     <Button fx:id="showFleetsButton" mnemonicParsing="false" onAction="#showFleets"
-                             text="back"/>
-                     <Text fx:id="fleetNameText" strokeType="OUTSIDE" strokeWidth="0.0" text="FleetName"/>
-                  </HBox>
-                  <ListView fx:id="blueprintInFleetListView" prefHeight="200.0" prefWidth="200.0"/>
-               </VBox>
-            </StackPane>
-            <VBox fx:id="infoButtonVBox" alignment="TOP_CENTER" prefHeight="400.0" prefWidth="100.0">
-               <ImageView fx:id="shipImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true"
-                          preserveRatio="true"/>
-               <Label fx:id="commandLimitLabel" text="Label"/>
-               <Label fx:id="islandLabel" text="Label"/>
-               <Button fx:id="shipsButton" mnemonicParsing="false" onAction="#showShips" text="Ships"/>
-               <Button fx:id="blueprintButton" mnemonicParsing="false" onAction="#showBlueprints"
-                       text="Blueprints"/>
-            </VBox>
-            <StackPane prefHeight="150.0" prefWidth="300.0">
-               <VBox fx:id="blueprintsVBox" prefHeight="200.0" prefWidth="100.0">
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Blueprints"/>
-                  <ListView fx:id="blueprintsListView" prefHeight="200.0" prefWidth="200.0"/>
-               </VBox>
-               <VBox fx:id="shipsVBox" prefHeight="200.0" prefWidth="100.0">
-                  <HBox prefHeight="100.0" prefWidth="200.0">
-                     <Button mnemonicParsing="false" onAction="#showBlueprints" text="back"/>
-                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ships"/>
-                  </HBox>
-                  <ListView fx:id="shipsListView" prefHeight="200.0" prefWidth="200.0"/>
-               </VBox>
-            </StackPane>
-         </HBox>
+         <VBox>
+            <children>
+               <HBox alignment="TOP_CENTER" prefHeight="450.0" prefWidth="900.0" spacing="50.0">
+                  <padding>
+                     <Insets top="50.0" />
+                  </padding>
+                  <StackPane prefHeight="150.0" prefWidth="300.0">
+                     <VBox fx:id="fleetsOverviewVBox" prefHeight="200.0" prefWidth="300.0">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fleets" />
+                        <ListView fx:id="fleetsListView" prefHeight="200.0" prefWidth="200.0" />
+                        <Button fx:id="createFleetButton" mnemonicParsing="false" onAction="#createFleet" text="Create Fleet" />
+                     </VBox>
+                     <VBox fx:id="fleetBuilderVBox" prefHeight="400.0" prefWidth="300.0">
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <Button fx:id="showFleetsButton" mnemonicParsing="false" onAction="#showFleets" text="back" />
+                           <Text fx:id="fleetNameText" strokeType="OUTSIDE" strokeWidth="0.0" text="FleetName" />
+                        </HBox>
+                        <ListView fx:id="blueprintInFleetListView" prefHeight="200.0" prefWidth="200.0" />
+                     </VBox>
+                  </StackPane>
+                  <VBox fx:id="infoButtonVBox" alignment="TOP_CENTER" prefHeight="400.0" prefWidth="100.0">
+                     <ImageView fx:id="shipImageView" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                     <Label fx:id="commandLimitLabel" text="Label" />
+                     <Label fx:id="islandLabel" text="Label" />
+                     <Button fx:id="shipsButton" mnemonicParsing="false" onAction="#showShips" text="Ships" />
+                     <Button fx:id="blueprintButton" mnemonicParsing="false" onAction="#showBlueprints" text="Blueprints" />
+                  </VBox>
+                  <StackPane prefHeight="150.0" prefWidth="300.0">
+                     <VBox fx:id="blueprintsVBox" prefHeight="200.0" prefWidth="100.0">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Blueprints" />
+                        <ListView fx:id="blueprintsListView" prefHeight="200.0" prefWidth="200.0" />
+                     </VBox>
+                     <VBox fx:id="shipsVBox" prefHeight="200.0" prefWidth="100.0">
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <Button mnemonicParsing="false" onAction="#showBlueprints" text="back" />
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ships" />
+                        </HBox>
+                        <ListView fx:id="shipsListView" prefHeight="350.0" prefWidth="200.0" />
+                     </VBox>
+                  </StackPane>
+               </HBox>
+               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <children>
+                     <Label fx:id="buildShipErrorLabel" text="Label" />
+                  </children>
+               </HBox>
+            </children>
+         </VBox>
       </VBox>
    </StackPane>
 </fx:root>

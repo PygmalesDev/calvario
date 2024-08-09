@@ -83,7 +83,10 @@ public class TestFleetManager extends ControllerTest {
     final Subject<Event<Fleet>> FLEET_SUBJECT = BehaviorSubject.create();
 
     protected final List<ReadFleetDTO> FLEETS = new ArrayList<>(Arrays.asList(
-            new ReadFleetDTO("a", "a", FLEET_ID, GAME_ID, EMPIRE_ID, "fleetName1", LOCATION, 2, new HashMap<>(), new HashMap<>()),
+            new ReadFleetDTO("a", "a", FLEET_ID, GAME_ID, EMPIRE_ID, "fleetName1", LOCATION, 3, new HashMap<>(Map.of(
+                    "explorer", 1,
+                    "colonizer", 2
+            )), new HashMap<>()),
             new ReadFleetDTO("a", "a", "fleetID2", GAME_ID, EMPIRE_ID, "fleetName2", LOCATION, 4, new HashMap<>(), new HashMap<>()),
             new ReadFleetDTO("a", "a", "fleetID3", GAME_ID, EMPIRE_ID, "fleetName3", LOCATION, 1, new HashMap<>(), new HashMap<>()),
             new ReadFleetDTO("a", "a", "fleetID4", GAME_ID, EMPIRE_ID, "fleetName4", "somewhereElse", 4, new HashMap<>(), new HashMap<>()),
@@ -91,6 +94,7 @@ public class TestFleetManager extends ControllerTest {
     ));
 
     protected final List<ShipType> BLUEPRINTS = new ArrayList<>(Arrays.asList(
+            new ShipType("fighter",4,100,5, new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>()),
             new ShipType("explorer",4,100,5, new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>()),
             new ShipType("colonizer",4,100,5, new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>()),
             new ShipType("interceptor",0,100,5, new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>())
@@ -105,7 +109,7 @@ public class TestFleetManager extends ControllerTest {
 
     protected final ReadShipDTO[] SHIPS = new ReadShipDTO[]{
             new ReadShipDTO("a","a","shipID1", GAME_ID, EMPIRE_ID, FLEET_ID, "explorer", 4,4, null),
-            new ReadShipDTO("a","a","shipID2", GAME_ID, EMPIRE_ID, FLEET_ID, "explorer", 4,4, null),
+            new ReadShipDTO("a","a","shipID2", GAME_ID, EMPIRE_ID, FLEET_ID, "colonizer", 4,4, null),
             new ReadShipDTO("a","a","shipID3", GAME_ID, EMPIRE_ID, FLEET_ID, "colonizer", 4,4, null)
     };
 
@@ -142,6 +146,9 @@ public class TestFleetManager extends ControllerTest {
         // Mock ship types
         this.shipService.shipTypesAttributes = (ArrayList<ShipType>) BLUEPRINTS;
 
+        // Mock Islands
+        doReturn(ISLANDS).when(this.islandsService).getDevIsles();
+
         this.app.show(this.fleetManagerComponent);
     }
 
@@ -162,7 +169,7 @@ public class TestFleetManager extends ControllerTest {
 
         waitForFxEvents();
         assertEquals(4, fleetManagerComponent.fleets.size());
-        assertEquals(2, fleetManagerComponent.blueprintsListView.getItems().size());
+        assertEquals(3, fleetManagerComponent.blueprintsListView.getItems().size());
         clickOn("#deleteFleetButton_fleetID2");
         waitForFxEvents();
         FLEET_SUBJECT.onNext(new Event<>("games." + GAME_ID + ".fleets.*.deleted", fleet2));
@@ -175,7 +182,6 @@ public class TestFleetManager extends ControllerTest {
         final Fleet fleet6 = new Fleet("a", "a", "fleetID6", GAME_ID, EMPIRE_ID, "fleetName5",
                 LOCATION, 1, new HashMap<>(), new HashMap<>(), new HashMap<>(), null);
         //final CreateFleetDTO fleet5_created = new CreateFleetDTO("newFleet", LOCATION, new HashMap<>(), new HashMap<>(), new HashMap<>(), null);
-        doReturn(ISLANDS).when(this.islandsService).getDevIsles();
         when(this.fleetApiService.createFleet(any(), any())).thenReturn(Observable.just(fleet6));
 
         waitForFxEvents();
@@ -203,10 +209,22 @@ public class TestFleetManager extends ControllerTest {
 
     @Test
     public void editFleet(){
+        final Fleet[] modFleets = new Fleet[]{
+                new Fleet("a", "b", FLEET_ID, GAME_ID, EMPIRE_ID, "fleetName1", LOCATION, 3, new HashMap<>(Map.of("explorer",2, "colonizer",2)), new HashMap<>(), new HashMap<>(), null),
+                new Fleet("a", "c", FLEET_ID, GAME_ID, EMPIRE_ID, "fleetName1", LOCATION, 3, new HashMap<>(Map.of("explorer",1, "colonizer",2)), new HashMap<>(), new HashMap<>(), null),
+                new Fleet("a", "c", FLEET_ID, GAME_ID, EMPIRE_ID, "fleetName1", LOCATION, 3, new HashMap<>(Map.of("explorer",1, "colonizer",2, "fighter",1)), new HashMap<>(), new HashMap<>(), null),
+                new Fleet("a", "c", FLEET_ID, GAME_ID, EMPIRE_ID, "fleetName1", LOCATION, 2, new HashMap<>(Map.of("explorer",0, "colonizer",2, "fighter",1)), new HashMap<>(), new HashMap<>(), null)
+
+        };
+        final Ship ship = new Ship("a","a","shipID1", GAME_ID, EMPIRE_ID, FLEET_ID, "explorer", 4,4, null, null);
+        when(this.shipsApiService.deleteShip(any(),any(),any())).thenReturn(Observable.just(ship));
         when(this.shipsApiService.getAllShips(any(),any())).thenReturn(Observable.just(SHIPS));
         when(this.eventListener.listen("games." + GAME_ID + ".fleets." + FLEET_ID + ".ships.*.*", Ship.class)).thenReturn(SHIP_SUBJECT);
-        //when(islandsService.getIslandComponent(any())).thenReturn(new Island(EMPIRE_ID, 1,1,
-              //  1,null, 10,4,3, null, null, new ArrayList<>(Collections.singleton("shipyard")), "islandID1","homeIsland",null));
+        when(this.fleetApiService.patchFleet(any(),any(),any()))
+                .thenReturn(Observable.just(modFleets[0]))
+                .thenReturn(Observable.just(modFleets[1]))
+                .thenReturn(Observable.just(modFleets[2]))
+                .thenReturn(Observable.just(modFleets[3]));
 
 
         waitForFxEvents();
@@ -216,6 +234,52 @@ public class TestFleetManager extends ControllerTest {
         assertFalse(fleetManagerComponent.fleetsOverviewVBox.isVisible());
         assertTrue(fleetManagerComponent.fleetBuilderVBox.isVisible());
         assertEquals(2, fleetManagerComponent.blueprintsInFleetList.size());
+        assertEquals(3, fleetManagerComponent.blueprintsListView.getItems().size());
+
+        // increment planned size:
+        clickOn("#incrementSizeButton_explorer");
+        FLEET_SUBJECT.onNext(new Event<>("games." + GAME_ID + ".fleets.*.updated", modFleets[0]));
+        waitForFxEvents();
+        assertEquals("Command Limit \n3 / 4", fleetManagerComponent.commandLimitLabel.getText());
+
+        // decrement planned size:
+        clickOn("#decrementSizeButton_explorer");
+        FLEET_SUBJECT.onNext(new Event<>("games." + GAME_ID + ".fleets.*.updated", modFleets[1]));
+        waitForFxEvents();
+        assertEquals("Command Limit \n3 / 3", fleetManagerComponent.commandLimitLabel.getText());
+
+        // add blueprint:
+        clickOn("#addBlueprintButton_fighter");
+        FLEET_SUBJECT.onNext(new Event<>("games." + GAME_ID + ".fleets.*.updated", modFleets[2]));
+        waitForFxEvents();
+        assertEquals(3, fleetManagerComponent.blueprintsInFleetList.size());
+
+        // show ships
+        clickOn("#shipsButton");
+        waitForFxEvents();
+        assertTrue( fleetManagerComponent.shipsVBox.isVisible());
+        assertEquals(3, fleetManagerComponent.ships.size());
+
+        // delete ship
+        clickOn("#deleteShipButton");
+
+        SHIP_SUBJECT.onNext(new Event<>("games." + GAME_ID + ".fleets." + FLEET_ID + ".ships.*.deleted", ship));
+        waitForFxEvents();
+        assertEquals(2, fleetManagerComponent.ships.size());
+
+        // remove blueprint
+        FLEET_SUBJECT.onNext(new Event<>("games." + GAME_ID + ".fleets.*.updated", modFleets[3]));
+        fleetManagerComponent.blueprintInFleetListView.refresh();
+        waitForFxEvents();
+        clickOn("#decrementSizeButton_explorer");
+        waitForFxEvents();
+        assertEquals(2, fleetManagerComponent.blueprintsInFleetList.size());
     }
+
+    @Test
+    public void editShips() {
+
+    }
+
 
 }

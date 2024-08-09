@@ -94,8 +94,7 @@ public class NewFleetComponent extends VBox {
                 result -> {
                     close();
                     this.fleetManagerComponent.showFleets();
-                },
-                error -> System.out.println("Error while creating a new fleet in the NewFleetComponent:\n" + error.getMessage())
+                }, error -> System.out.println("Error while creating a new fleet in the NewFleetComponent:\n" + error.getMessage())
         );
     }
 

@@ -80,6 +80,7 @@ public class FleetService {
                     }
                 }
                 case "deleted" -> {
+                    System.out.println("deleted fleetService");
                     if (!ship._id().equals(this.lastShipDeletion)) {
                         adaptShipCount(ship.fleet(), -1);
                         this.lastShipDeletion = ship._id();

@@ -54,6 +54,8 @@ public class BlueprintsComponent extends VBox implements ReusableItemComponent<S
 
     @Override
     public void setItem(@NotNull ShipType shipType) {
+        this.addBlueprintButton.setId("addBlueprintButton_" + shipType._id());
+
         this.shipType = shipType;
         this.blueprintTypeLabel.setText(shipType._id());
         this.healthLabel.setText(String.valueOf(shipType.health()));

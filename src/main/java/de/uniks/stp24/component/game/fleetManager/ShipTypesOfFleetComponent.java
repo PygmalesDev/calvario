@@ -1,7 +1,9 @@
 package de.uniks.stp24.component.game.fleetManager;
 
+import de.uniks.stp24.dto.ShortSystemDto;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Ships;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,6 +16,7 @@ import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Objects;
 
 @Component(view = "ShipTypesOfFleet.fxml")
@@ -26,6 +29,8 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
     public Button buildShipButton;
     @FXML
     public Button decrementSizeButton;
+    @FXML
+    public Button incrementSizeButton;
 
     public final ResourcesService resourcesService;
     public final ShipService shipService;
@@ -33,6 +38,7 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
     public final Subscriber subscriber;
     public final JobsService jobService;
     public final IslandsService islandsService;
+    private final TokenStorage tokenStorage;
     private final FleetManagerComponent fleetManagerComponent;
 
     private Ships.BlueprintInFleetDto blueprintInFleetDto;
@@ -47,60 +53,71 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
         this.fleetService = fleetService;
         this.islandsService = fleetManagerComponent.islandsService;
         this.jobService = fleetManagerComponent.jobsService;
-    }
-
-    @OnInit
-    public void addRunnable() {
-        this.resourcesService.setOnResourceUpdates(this::setBuildButton);
-    }
-
-    public void setBuildButton() {
-        if (Objects.nonNull(shipService.getNeededResources(blueprintInFleetDto.type()))) {
-            if (resourcesService.hasEnoughResources(shipService.getNeededResources(blueprintInFleetDto.type()))) {
-                this.buildShipButton.setDisable(false);
-            } else {
-                this.buildShipButton.setDisable(true);
-            }
-        }
-        int numberOfShipJobs = shipJobsOnIsland();
-        int numberOfShipYards = this.islandsService.getIslandComponent(blueprintInFleetDto.fleet().location()).getIsland().buildings().stream()
-                .filter("shipyard"::equals).toList().size();
-        if (numberOfShipJobs >= numberOfShipYards) {
-            this.buildShipButton.setDisable(true);
-        }
-
+        this.tokenStorage = fleetManagerComponent.tokenStorage;
     }
 
     public void setItem(Ships.BlueprintInFleetDto blueprintInFleetDto){
+        this.incrementSizeButton.setId("incrementSizeButton_" + blueprintInFleetDto.type());
+        this.decrementSizeButton.setId("decrementSizeButton_" + blueprintInFleetDto.type());
+        this.blueprintInFleetDto = blueprintInFleetDto;
+
         this.typeLabel.setText(blueprintInFleetDto.type());
         int plannedSize = 0;
         if(blueprintInFleetDto.fleet().size().get(blueprintInFleetDto.type()) != null) {
             plannedSize = blueprintInFleetDto.fleet().size().get(blueprintInFleetDto.type());
         }
         this.sizeLabel.setText(blueprintInFleetDto.count() + "/" + plannedSize);
-        this.blueprintInFleetDto = blueprintInFleetDto;
         if (blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) == 0){
             this.decrementSizeButton.setDisable(true);
         }
-        if(blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) == 1 && this.blueprintInFleetDto.count() != 0) {
+        if(blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) == this.blueprintInFleetDto.count()) {
             this.decrementSizeButton.setDisable(true);
         }
-        this.setBuildButton();
     }
 
     public int shipJobsOnIsland(){
         return this.jobService.getObservableListForSystem(blueprintInFleetDto.fleet().location()).filtered(job -> job.type().equals("ship")).size();
     }
 
+    private boolean buildIsPossible(){
+        boolean buildIsPossible = true;
+        if (!this.resourcesService.hasEnoughResources(shipService.getNeededResources(blueprintInFleetDto.type()))) {
+            this.fleetManagerComponent.setErrorLabel("resources");
+        }
+        if(blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) == this.blueprintInFleetDto.count()){
+            this.fleetManagerComponent.setErrorLabel("plannedSize");
+            buildIsPossible = false;
+        }
+        int numberOfShipJobs = shipJobsOnIsland();
+        List<ShortSystemDto> islands = islandsService.getDevIsles().stream().filter(island -> island._id().equals(this.blueprintInFleetDto.fleet().location())).toList();
+        if(islands.isEmpty()){
+            this.fleetManagerComponent.setErrorLabel("wilderness");
+            buildIsPossible = false;
+        } else if (!islands.getFirst().owner().equals(this.tokenStorage.getEmpireId())) {
+            this.fleetManagerComponent.setErrorLabel("enemiesIsland");
+            buildIsPossible = false;
+        } else {
+            int numberOfShipYards = this.islandsService.getIslandComponent(blueprintInFleetDto.fleet().location()).getIsland().buildings().stream()
+                    .filter("shipyard"::equals).toList().size();
+            if (numberOfShipJobs >= numberOfShipYards) {
+                this.fleetManagerComponent.setErrorLabel("shipyard");
+                buildIsPossible = false;
+            }
+        }
+        return buildIsPossible;
+    }
+
     public void buildShip() {
-        int shipJobsBeforeStart = shipJobsOnIsland();
-        this.subscriber.subscribe(this.shipService.beginShipJob(this.blueprintInFleetDto.fleet()._id(), this.blueprintInFleetDto.type(), this.blueprintInFleetDto.fleet().location()),
-                job -> {
-                    this.fleetManagerComponent.setShipFinisher(job);
-                    int shipJobsAfterStart = shipJobsOnIsland();
-                    this.fleetManagerComponent.setIslandName(shipJobsAfterStart == shipJobsBeforeStart);
-                },
-                error -> System.out.println("Error while trying to create a new ship job in ShipTypesOfFleetComponent:\n" + error.getMessage()));
+        if(buildIsPossible()) {
+            int shipJobsBeforeStart = shipJobsOnIsland();
+            this.subscriber.subscribe(this.shipService.beginShipJob(this.blueprintInFleetDto.fleet()._id(), this.blueprintInFleetDto.type(), this.blueprintInFleetDto.fleet().location()),
+                    job -> {
+                        this.fleetManagerComponent.setShipFinisher(job);
+                        this.fleetManagerComponent.setErrorLabel("successful");
+                        int shipJobsAfterStart = shipJobsOnIsland();
+                        this.fleetManagerComponent.setIslandName(shipJobsAfterStart == shipJobsBeforeStart);
+                    }, error -> System.out.println("Error while trying to create a new ship job in ShipTypesOfFleetComponent:\n" + error.getMessage()));
+        }
     }
 
 
@@ -133,11 +150,9 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
                             this.shipService.removeBlueprintFromFleet(blueprintInFleetDto);
                         }
                     }
-                    if (dto.size().get(this.blueprintInFleetDto.type()) == 1 && this.blueprintInFleetDto.count() != 0) {
+                    if (dto.size().get(this.blueprintInFleetDto.type()) == this.blueprintInFleetDto.count())
                         this.decrementSizeButton.setDisable(true);
-                    }
-                },
-                error -> System.out.println("Error while changing planned Size in the ShipTypesOfFleetComponent:\n" + error.getMessage()));
+                }, error -> System.out.println("Error while changing planned Size in the ShipTypesOfFleetComponent:\n" + error.getMessage()));
     }
 }
 

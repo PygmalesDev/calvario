@@ -3,6 +3,7 @@ package de.uniks.stp24.component.game.fleetManager;
 import de.uniks.stp24.service.game.FleetService;
 import de.uniks.stp24.service.game.ShipService;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -35,6 +36,8 @@ public class ShipComponent extends VBox implements ReusableItemComponent<ReadShi
     public ImageView defenseImage;
     @FXML
     public Label defenseLabel;
+    @FXML
+    public Button deleteShipButton;
 
     private final FleetManagerComponent fleetManagerComponent;
     private final ShipService shipService;
@@ -78,7 +81,6 @@ public class ShipComponent extends VBox implements ReusableItemComponent<ReadShi
                 result -> {
                     this.fleetManagerComponent.blueprintInFleetListView.refresh();
                     this.fleetManagerComponent.setCommandLimit(this.fleetService.getFleet(result.fleet()), true);
-                },
-                error -> System.out.println("Error while deleting a ship in the ShipComponent:\n" + error.getMessage()));
+                }, error -> System.out.println("Error while deleting a ship in the ShipComponent:\n" + error.getMessage()));
     }
 }

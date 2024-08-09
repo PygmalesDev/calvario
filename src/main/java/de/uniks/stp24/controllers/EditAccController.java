@@ -326,7 +326,8 @@ public class EditAccController extends BasicController {
         // warning screen opens
         popup.showPopup(warningScreenContainer, warningScreen);
         popup.setBlur(editAccVBoxLeftToBlur, editAccVBoxRightToBlur);
-        warningScreen.setWarning(resources.getString("warning.deleteAccount") + tokenStorage.getName() + ".");
+        warningScreen.setWarning(resources.getString("warning.deleteAccount"));
+        warningScreen.setUserName(tokenStorage.getName());
     }
 
     /**

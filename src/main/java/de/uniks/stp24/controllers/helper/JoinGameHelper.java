@@ -54,6 +54,7 @@ public class JoinGameHelper extends BasicController {
 
             islandsService.retrieveIslands(gameId, sleep);
         }, error -> System.out.println(error.getMessage()));
+
     }
 
     private void startGame(String gameId, String empireId, boolean isSpectator) {

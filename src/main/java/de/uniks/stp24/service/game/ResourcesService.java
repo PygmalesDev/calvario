@@ -109,7 +109,7 @@ public class ResourcesService {
             for (Map.Entry<String, Integer> entry : resourceMap.entrySet()) {
                 String resourceID = entry.getKey();
                 int count = entry.getValue();
-                int changeProSeason = 0;
+                double changeProSeason = 0;
                 if (requireChangePerSeason && !oldResourceList.isEmpty() && oldResourceList.size() >= 2) {
                     changeProSeason = oldResourceList.get(i).changePerSeason();
                 }

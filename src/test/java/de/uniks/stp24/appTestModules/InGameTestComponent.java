@@ -299,7 +299,7 @@ public class InGameTestComponent extends InGameTestInitializer {
         doReturn(testIsland).when(tokenStorage).getIsland();
         doReturn(Observable.empty()).when(gameSystemsApiService).updateIsland(any(), any(), any());
         doReturn(FXCollections.observableArrayList()).when(announcementsService).getAnnouncements();
-        doReturn(Observable.empty()).when(marketService).getSeasonalTrades(any(), any());
+//        doReturn(Observable.empty()).when(marketService).getSeasonalTrades(any(), any());
 
         this.inGameController.buildingPropertiesComponent.certainBuilding = buildingPreset1;
         doNothing().when(contactsService).loadContactsData();
@@ -308,7 +308,7 @@ public class InGameTestComponent extends InGameTestInitializer {
         doReturn(Observable.just(new ArrayList<WarDto>())).when(warService).getWars(any(),any());
 
         ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", new HashMap<>())));
-        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456");//,true);
+//        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456");//,true);
         doNothing().when(this.fleetService).initializeFleetListeners();
         doNothing().when(this.fleetService).onFleetCreated(any());
         doNothing().when(this.fleetService).loadGameFleets();

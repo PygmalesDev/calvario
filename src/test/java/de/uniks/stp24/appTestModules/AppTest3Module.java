@@ -7,6 +7,7 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.stage.Stage;
+import org.glassfish.grizzly.http.server.accesslog.AccessLogProbe;
 
 import java.util.*;
 
@@ -290,7 +291,11 @@ public class AppTest3Module extends LobbyTestLoader {
         doAnswer(inv -> this.app.show(this.inGameController)).when(this.app).show(eq("/ingame"), any());
         doAnswer(inv -> this.app.show(this.lobbyController)).when(this.app).show(eq("/lobby"), any());
 
-        doNothing().when(this.contactsComponent).loadEmpireWars();
+        doReturn(Observable.empty()).when(gameLogicApiService).getAggregate(any(),any(),any());
+        doReturn(Observable.empty()).when(warService).getWars(any(),any());
+        doNothing().when(contactsService).loadContactsData();
+        doNothing().when(contactsService).createWarListener();
+
     }
 
     private void loadUnloadableData() {

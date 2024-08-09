@@ -84,8 +84,8 @@ public class InGameTestLoader extends ControllerTest {
     FleetCoordinationService fleetCoordinationService;
     @Spy
     FleetApiService fleetApiService;
-    @Spy
-    ContactsService contactsService;
+//    @Spy
+//    ContactsService contactsService;
     @Spy
     WarService warService;
     @Spy
@@ -434,6 +434,7 @@ public class InGameTestLoader extends ControllerTest {
         this.contactsService.empireApiService = this.empireApiService;
         this.contactsService.subscriber = new Subscriber();
         this.contactsService.islandsService = this.islandsService;
+        this.contactsService.islandsService.gameLogicApiService = this.gameLogicApiService;
         this.contactsService.contactsComponent = this.contactsComponent;
         this.contactsService.contactsComponent.contactDetailsComponent = this.contactDetailsComponent;
         this.inGameController.contactsOverviewComponent.contactDetailsComponent.warComponent = this.warComponent;

@@ -197,3 +197,55 @@ Label {
     -fx-padding: 0;
     -fx-border-width: 0;
 }
+
+.fleet-manager-error-label {
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-text-fill: red;
+    -fx-font-size: 20;
+}
+
+.change-fleet-button {
+    -fx-font-family: 'Tempus Sans ITC';
+    -fx-font-size: 13;
+    -fx-text-fill: white;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 100% 100%;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/blue_button_element.png");
+    -fx-padding: 0px 0px 2px 0px;
+    -fx-pref-height: 30;
+    -fx-pref-width: 86;
+}
+
+.build-button {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/delete_button.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.fleet-increment-button {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/add.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+}
+
+.fleet-decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/minus.png");
+    -fx-background-size: 100% 100%;
+}
+
+.green-build-button {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/build_button.png");
+    -fx-background-size: 100% 100%;
+}

@@ -11,35 +11,53 @@
 
 <fx:root maxWidth="290.0" prefWidth="290.0" spacing="5.0" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.fleetManager.ShipComponent">
    <HBox>
-      <HBox HBox.hgrow="ALWAYS">
+      <HBox spacing="5.0" HBox.hgrow="ALWAYS">
          <HBox.margin>
             <Insets />
          </HBox.margin>
-         <Label fx:id="blueprintTypeLabel" text="Type" />
-         <ImageView fx:id="healthImage" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-         <Label fx:id="healthLabel" text="Label" />
-         <ImageView fx:id="speedImage" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-         <Label fx:id="speedLabel" text="Label" />
+         <Label fx:id="blueprintTypeLabel" prefWidth="65.0" text="Type">
+            <font>
+               <Font size="14.0" />
+            </font></Label>
+         <ImageView fx:id="healthImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+         <Label fx:id="healthLabel" prefWidth="34.0">
+            <font>
+               <Font size="15.0" />
+            </font></Label>
+         <ImageView fx:id="speedImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+         <Label fx:id="speedLabel" prefWidth="34.0">
+            <font>
+               <Font size="15.0" />
+            </font></Label>
       </HBox>
    </HBox>
    <HBox alignment="CENTER_LEFT" spacing="5.0">
-      <ImageView fx:id="attackImage" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="attackLabel" text="Label">
+      <ImageView fx:id="attackImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="attackLabel" prefWidth="34.0">
          <font>
             <Font size="15.0" />
          </font></Label>
-      <ImageView fx:id="defenseImage" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-      <Label fx:id="defenseLabel" minHeight="25.0" minWidth="25.0" text="Label" textAlignment="CENTER">
+      <ImageView fx:id="defenseImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="defenseLabel" minHeight="25.0" minWidth="25.0" prefWidth="34.0" textAlignment="CENTER">
          <font>
             <Font size="15.0" />
          </font>
          <tooltip>
             <Tooltip fx:id="tooltip" anchorLocation="WINDOW_TOP_RIGHT" autoFix="false" consumeAutoHidingEvents="false" contentDisplay="RIGHT" hideOnEscape="false" />
          </tooltip></Label>
-      <Button fx:id="changeFleetButton" mnemonicParsing="false" onAction="#changeFleet" text="Change Fleet" />
-      <Button fx:id="deleteShipButton" mnemonicParsing="false" onAction="#deleteShip" prefHeight="25.0" prefWidth="50.0" text="d" />
+      <Button fx:id="changeFleetButton" mnemonicParsing="false" onAction="#changeFleet" prefHeight="30.0" styleClass="change-fleet-button" text="Change Fleet">
+         <HBox.margin>
+            <Insets right="10.0" />
+         </HBox.margin></Button>
+      <Button fx:id="deleteShipButton" mnemonicParsing="false" onAction="#deleteShip" prefHeight="30.0" prefWidth="30.0" styleClass="build-button" />
+      <VBox.margin>
+         <Insets />
+      </VBox.margin>
+      <padding>
+         <Insets left="8.0" />
+      </padding>
    </HBox>
    <padding>
-      <Insets bottom="25.0" left="15.0" right="10.0" top="20.0" />
+      <Insets bottom="15.0" left="8.0" top="14.0" />
    </padding>
 </fx:root>

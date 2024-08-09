@@ -11,13 +11,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
-import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Objects;
+import java.util.ResourceBundle;
 
 @Component(view = "ShipTypesOfFleet.fxml")
 public class ShipTypesOfFleetComponent extends VBox implements ReusableItemComponent<Ships.BlueprintInFleetDto> {
@@ -40,12 +39,13 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
     public final IslandsService islandsService;
     private final TokenStorage tokenStorage;
     private final FleetManagerComponent fleetManagerComponent;
+    private final ResourceBundle gameResourceBundle;
 
     private Ships.BlueprintInFleetDto blueprintInFleetDto;
     private ObservableList<Job> shipJobs;
 
     @Inject
-    public ShipTypesOfFleetComponent(FleetManagerComponent fleetManagerComponent, ResourcesService resourcesService, ShipService shipService, Subscriber subscriber, FleetService fleetService){
+    public ShipTypesOfFleetComponent(FleetManagerComponent fleetManagerComponent, ResourcesService resourcesService, ShipService shipService, Subscriber subscriber, FleetService fleetService, ResourceBundle gameResourceBundle){
         this.fleetManagerComponent = fleetManagerComponent;
         this.resourcesService = resourcesService;
         this.shipService = shipService;
@@ -54,6 +54,7 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
         this.islandsService = fleetManagerComponent.islandsService;
         this.jobService = fleetManagerComponent.jobsService;
         this.tokenStorage = fleetManagerComponent.tokenStorage;
+        this.gameResourceBundle = gameResourceBundle;
     }
 
     public void setItem(Ships.BlueprintInFleetDto blueprintInFleetDto){
@@ -61,7 +62,7 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
         this.decrementSizeButton.setId("decrementSizeButton_" + blueprintInFleetDto.type());
         this.blueprintInFleetDto = blueprintInFleetDto;
 
-        this.typeLabel.setText(blueprintInFleetDto.type());
+        this.typeLabel.setText(gameResourceBundle.getString("ship." + blueprintInFleetDto.type()));
         int plannedSize = 0;
         if(blueprintInFleetDto.fleet().size().get(blueprintInFleetDto.type()) != null) {
             plannedSize = blueprintInFleetDto.fleet().size().get(blueprintInFleetDto.type());

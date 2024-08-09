@@ -38,8 +38,8 @@ public class FleetCoordinationService {
     private InGameController inGameController;
     public final Random random = new Random();
 
-    private final double ISLAND_RADIUS_X = (double) Constants.ISLAND_WIDTH/2;
-    private final double ISLAND_RADIUS_Y = ((double) Constants.ISLAND_HEIGHT/2);
+    private final double ISLAND_RADIUS_X = (double) Constants.ISLAND_WIDTH / 2;
+    private final double ISLAND_RADIUS_Y = ((double) Constants.ISLAND_HEIGHT / 2);
 
     @Inject
     public FleetCoordinationService() {
@@ -62,11 +62,11 @@ public class FleetCoordinationService {
 
     public void putFleetOnMap(Fleet fleet) {
         var island = this.islandsService.getIslandComponent(fleet.location());
-        var gameFleet = this.app.initAndRender(new GameFleetController(fleet,this, this.fleetService));
+        var gameFleet = this.app.initAndRender(new GameFleetController(fleet, this, this.fleetService));
         this.inGameController.setFleetOnMap(gameFleet);
-        double angle = (random.nextInt(360)-90)*Math.PI/180;
-        gameFleet.setLayoutX(island.getLayoutX() + ISLAND_RADIUS_X + (ISLAND_RADIUS_X+Constants.FLEET_FROM_ISLAND_DISTANCE)*Math.cos(angle));
-        gameFleet.setLayoutY(island.getLayoutY() + ISLAND_RADIUS_Y + (ISLAND_RADIUS_X+ Constants.FLEET_FROM_ISLAND_DISTANCE)*Math.sin(angle));
+        double angle = (random.nextInt(360) - 90) * Math.PI / 180;
+        gameFleet.setLayoutX(island.getLayoutX() + ISLAND_RADIUS_X + (ISLAND_RADIUS_X + Constants.FLEET_FROM_ISLAND_DISTANCE) * Math.cos(angle));
+        gameFleet.setLayoutY(island.getLayoutY() + ISLAND_RADIUS_Y + (ISLAND_RADIUS_X + Constants.FLEET_FROM_ISLAND_DISTANCE) * Math.sin(angle));
         gameFleet.collisionCircle.setRadius(Constants.FLEET_COLLISION_RADIUS);
     }
 
@@ -84,8 +84,8 @@ public class FleetCoordinationService {
 
     public void teleportFleet(MouseEvent mouseEvent) {
         if (Objects.nonNull(this.selectedFleet)) {
-            this.selectedFleet.setLayoutX(mouseEvent.getX()-Constants.FLEET_HW);
-            this.selectedFleet.setLayoutY(mouseEvent.getY()-Constants.FLEET_HW);
+            this.selectedFleet.setLayoutX(mouseEvent.getX() - Constants.FLEET_HW);
+            this.selectedFleet.setLayoutY(mouseEvent.getY() - Constants.FLEET_HW);
         }
     }
 
@@ -116,7 +116,7 @@ public class FleetCoordinationService {
         islandIDs.removeFirst();
         return islandIDs.stream().map(id -> {
             IslandComponent island = this.islandsService.getIslandComponent(id);
-            return new Double[]{island.getPosX()+ISLAND_RADIUS_X, island.getPosY()+ISLAND_RADIUS_Y};
+            return new Double[]{island.getPosX() + ISLAND_RADIUS_X, island.getPosY() + ISLAND_RADIUS_Y};
         }).toList();
     }
 

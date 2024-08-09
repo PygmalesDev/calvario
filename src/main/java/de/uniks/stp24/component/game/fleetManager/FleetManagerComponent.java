@@ -83,6 +83,8 @@ public class FleetManagerComponent extends AnchorPane {
     public Button showFleetsButton;
     @FXML
     public Label buildShipErrorLabel;
+    @FXML
+    public Label shipLabel;
 
 
     @Inject
@@ -126,10 +128,10 @@ public class FleetManagerComponent extends AnchorPane {
     private FadeTransition transition;
 
     public Provider<FleetComponent> fleetComponentProvider = () -> new FleetComponent(this, this.tokenStorage, this.subscriber, this.fleetService);
-    public Provider<ShipTypesOfFleetComponent> shipTypesOfFleetComponentProvider = () -> new ShipTypesOfFleetComponent(this, this.resourcesService, this.shipService, this.subscriber, this.fleetService);
+    public Provider<ShipTypesOfFleetComponent> shipTypesOfFleetComponentProvider = () -> new ShipTypesOfFleetComponent(this, this.resourcesService, this.shipService, this.subscriber, this.fleetService, this.gameResourceBundle);
     public Provider<BlueprintsComponent> blueprintsAddableComponentProvider = () -> new BlueprintsComponent(this, true, this.blueprintsDetailsComponent, gameResourceBundle);
     public Provider<BlueprintsComponent> blueprintsNotAddableComponentProvider = () -> new BlueprintsComponent(this, false, this.blueprintsDetailsComponent, gameResourceBundle);
-    public Provider<ShipComponent> shipComponentProvider = () -> new ShipComponent(this, this.subscriber, this.shipService, this.fleetService);
+    public Provider<ShipComponent> shipComponentProvider = () -> new ShipComponent(this, this.subscriber, this.shipService, this.fleetService, this.imageCache, gameResourceBundle);
 
     public ObservableList<BlueprintInFleetDto> blueprintsInFleetList = FXCollections.observableArrayList();
     public ObservableList<Fleet> fleets = FXCollections.observableArrayList();
@@ -197,15 +199,17 @@ public class FleetManagerComponent extends AnchorPane {
     }
 
     public void showBlueprints() {
+        this.shipLabel.setText("Blueprints");
         this.blueprints.clear();
         this.blueprints.addAll(shipService.shipTypesAttributes);
         this.shipsVBox.setVisible(false);
-        this.blueprintsVBox.setVisible(true);
+        this.blueprintsListView.setVisible(true);
     }
 
     public void showShips() {
+        this.shipLabel.setText("Ships");
         this.shipsVBox.setVisible(true);
-        this.blueprintsVBox.setVisible(false);
+        this.blueprintsListView.setVisible(false);
     }
 
     public void close() {
@@ -255,7 +259,7 @@ public class FleetManagerComponent extends AnchorPane {
         if(shipDeleted && ships.size() == fleet.ships()) {
             numberOfShips = ships.size() - 1;
         }
-        this.commandLimitLabel.setText("Command Limit \n" + numberOfShips + " / "
+        this.commandLimitLabel.setText("Command Limit \n" + numberOfShips + "/"
                 + fleet.size().values().stream().mapToInt(Integer::intValue).sum());
     }
 

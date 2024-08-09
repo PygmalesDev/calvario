@@ -19,8 +19,6 @@ public class AppTest3 extends AppTest3Module {
     public void start(Stage stage) throws Exception {
         super.start(stage);
 
-
-
         this.app.show(this.lobbyController);
     }
 
@@ -30,6 +28,8 @@ public class AppTest3 extends AppTest3Module {
         this.loadGame();
 
         this.showTip();
+        this.performMarketTrades();
+        this.performSeasonalTrades();
         this.beginSiteJob();
         this.beginBuildingJob();
         this.beginIslandUpgrade();
@@ -38,8 +38,6 @@ public class AppTest3 extends AppTest3Module {
         this.beginIslandClaiming();
         this.beginTechnologyJob();
         this.showHelpWindow();
-        this.performMarketTrades();
-        this.performSeasonalTrades();
     }
 
     public void selectTraits() {

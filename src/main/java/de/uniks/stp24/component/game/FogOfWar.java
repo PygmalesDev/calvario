@@ -1,22 +1,30 @@
 package de.uniks.stp24.component.game;
 
-import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.dto.FogDto;
+import de.uniks.stp24.rest.EmpireApiService;
+import de.uniks.stp24.service.TokenStorage;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 import static de.uniks.stp24.service.Constants.*;
 
 public class FogOfWar {
     @Inject
-    ImageCache imageCache;
+    Subscriber subscriber;
+
+    @Inject
+    EmpireApiService empireApiService;
+
+    @Inject
+    TokenStorage tokenStorage;
 
     Image fogImage;
     ImagePattern fogPattern;
@@ -31,6 +39,8 @@ public class FogOfWar {
     Shape prevRemovedFog;
     Shape islandFog;
 
+    String gameID, empireID;
+
     @Inject
     public FogOfWar() {
 
@@ -42,11 +52,23 @@ public class FogOfWar {
     }
 
     public void init() {
+        this.gameID = tokenStorage.getGameId();
+        this.empireID = tokenStorage.getEmpireId();
+
         this.originalFog = new Rectangle(0, 0, x, y);
+        this.currentFog = originalFog;
         this.fogImage = new Image("/de/uniks/stp24/assets/backgrounds/fog.jpg");
         this.fogPattern = new ImagePattern(this.fogImage, 0, 0, this.fogImage.getWidth()*2, this.fogImage.getHeight()*2, false);
-        this.currentFog = this.originalFog;
-        this.updateFog(null);
+        subscriber.subscribe(this.empireApiService.getFog(gameID, empireID),
+                result -> {
+                    Map<String, Shape> fogMap = result._private();
+                    if (Objects.nonNull(fogMap)) {
+                        this.removedFog = fogMap.get("fog");
+                    }
+                    this.updateFog(null);
+                },
+                error -> System.out.println("Error with getting fog! " + error.getMessage())
+        );
     }
 
     public void removeShapesFromFog(IslandComponent island, Shape... toRemoves) {
@@ -113,5 +135,13 @@ public class FogOfWar {
 
     public Shape getCurrentFog() {
         return this.currentFog;
+    }
+
+    public void saveFog() {
+        Map<String, Shape> fogMap = new HashMap<>();
+        fogMap.put("fog", removedFog);
+        subscriber.subscribe(this.empireApiService.saveFog(gameID, empireID, new FogDto(fogMap)),
+                result -> {},
+                error -> System.out.println("Error with saving fog! " + error.getMessage()));
     }
 }

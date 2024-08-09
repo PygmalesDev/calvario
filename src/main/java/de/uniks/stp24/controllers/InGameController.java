@@ -857,4 +857,9 @@ public class InGameController extends BasicController {
         this.fog = fogOfWar.getCurrentFog();
         zoomPane.getChildren().add(2, this.fog);
     }
+
+    @OnDestroy
+    public void saveFog() {
+        fogOfWar.saveFog();
+    }
 }

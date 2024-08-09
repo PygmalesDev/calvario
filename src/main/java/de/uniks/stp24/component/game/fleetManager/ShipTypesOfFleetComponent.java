@@ -79,7 +79,7 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
         if (!this.resourcesService.hasEnoughResources(shipService.getNeededResources(blueprintInFleetDto.type()))) {
             this.fleetManagerComponent.setErrorLabel("resources");
         }
-        if(blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) == this.blueprintInFleetDto.count()){
+        if(blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) <= this.blueprintInFleetDto.count()){
             this.fleetManagerComponent.setErrorLabel("plannedSize");
             buildIsPossible = false;
         }

@@ -258,9 +258,9 @@ public class FleetManagerComponent extends AnchorPane {
      */
     public void setShipFinisher(Job job){
         this.jobsService.onJobCompletion(job._id(), ()  -> {
-            this.blueprintInFleetListView.refresh();
             setCommandLimit(this.fleetService.getFleet(editedFleet._id()), false);
             setIslandName(false);
+            this.blueprintInFleetListView.refresh();
         });
         this.jobsService.onJobDeletion(job._id(), ()  -> setIslandName(false));
     }

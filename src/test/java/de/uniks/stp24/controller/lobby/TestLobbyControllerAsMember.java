@@ -315,7 +315,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
 
         doAnswer(show-> {app.show("/ingame");
             return null;
-        }).when(this.islandsService).retrieveIslands(any());
+        }).when(this.islandsService).retrieveIslands(any(), any());
 
         doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", "testGameID",
                 "testMemberUnoID","testGame","a","a",1, 2, "a")})).when(this.empireService).getEmpires(any());
@@ -347,7 +347,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
 
         doAnswer(show-> {app.show("/ingame");
             return null;
-        }).when(this.islandsService).retrieveIslands(any());
+        }).when(this.islandsService).retrieveIslands(any(),any());
 
         doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", "testGameID",
                 "testGameHostID","testGame","a","a",1, 2, "a")})).when(this.empireService).getEmpires(any());

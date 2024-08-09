@@ -184,7 +184,7 @@ public class TestLobbyControllerAsHost extends ControllerTest {
         doAnswer(show -> {
             app.show("/ingame");
             return null;
-        }).when(this.islandsService).retrieveIslands(any());
+        }).when(this.islandsService).retrieveIslands(any(), any());
 
         doReturn(Observable.just(new MemberDto(false, "testGameHostID", testEmpire, "88888888")))
                 .when(this.lobbyService).getMember(any(), any());

@@ -117,7 +117,7 @@ public class TestEnterGame extends ControllerTest {
         doReturn(null).when(this.app).show("/ingame");
         doAnswer(show-> {app.show("/ingame");
             return null;
-        }).when(this.islandsService).retrieveIslands(any());
+        }).when(this.islandsService).retrieveIslands(any(), any());
 
         app.show(browseGameController);
     }

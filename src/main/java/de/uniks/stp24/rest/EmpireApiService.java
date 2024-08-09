@@ -46,10 +46,10 @@ public interface EmpireApiService {
     Observable<SeasonalTradeDto> getSeasonalTrades(@Path("game") String game, @Path("empire") String empire);
 
     @PATCH("games/{game}/empires/{empire}")
-    Observable<UpdateEmpireMarketDto> saveFog(@Path("game") String game, @Path("empire") String empire, @Body FogDto fogDto);
+    Observable<UpdateEmpireMarketDto> savePrivate(@Path("game") String game, @Path("empire") String empire, @Body EmpirePrivate empirePrivate);
 
     @GET("games/{game}/empires/{empire}")
-    Observable<FogDto> getFog(@Path("game") String game, @Path("empire") String empire);
+    Observable<EmpirePrivate> getPrivate(@Path("game") String game, @Path("empire") String empire);
 
 
 }

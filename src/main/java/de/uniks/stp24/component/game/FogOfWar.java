@@ -1,7 +1,7 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.FogDto;
+import de.uniks.stp24.dto.EmpirePrivate;
 import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
@@ -83,11 +83,12 @@ public class FogOfWar {
         this.solarColorAdjust.setContrast(-0.75);
         this.solarColorAdjust.setSaturation(-1);
 
-        subscriber.subscribe(this.empireApiService.getFog(gameID, empireID),
+        subscriber.subscribe(this.empireApiService.getPrivate(gameID, empireID),
                 result -> {
-                    Map<String, ArrayList<String>> fogMap = result._private();
-                    if (Objects.nonNull(fogMap)) {
-                        this.recreateFog(fogMap.get("fog"));
+                    Map<String, Object> privateMap = result._private();
+                    if (Objects.nonNull(privateMap) && privateMap.containsKey("fog")) {
+                        ArrayList<String> islandIDs = (ArrayList<String>) privateMap.get("fog");
+                        this.recreateFog(islandIDs);
                     }
                     this.updateFog(null);
                 },
@@ -179,11 +180,17 @@ public class FogOfWar {
     }
 
     public void saveFog() {
-        Map<String, ArrayList<String>> fogMap = new HashMap<>();
-        fogMap.put("fog", exploredIslands);
-        subscriber.subscribe(this.empireApiService.saveFog(gameID, empireID, new FogDto(fogMap)),
-                result -> {},
-                error -> System.out.println("Error with saving fog! " + error.getMessage()));
+        this.subscriber.subscribe(this.empireApiService.getPrivate(this.gameID, this.empireID),
+                result -> {
+                    final Map<String, Object> newPrivateMap = Objects.nonNull(result._private()) ?
+                                    result._private() : new HashMap<>();
+                    newPrivateMap.put("fog", exploredIslands);
+                    subscriber.subscribe(this.empireApiService.savePrivate(this.gameID, this.empireID, new EmpirePrivate(newPrivateMap)),
+                            saved -> {},
+                            error -> System.out.println("error while saving fog: " + error.getMessage()));
+                },
+                error -> System.out.println("error while getting fog: " + error.getMessage())
+        );
     }
 
     public void setIsNight(boolean isNight) {

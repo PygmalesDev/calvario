@@ -11,7 +11,7 @@
    <VBox fx:id="technologieCategoryBox" alignment="TOP_CENTER" layoutX="210.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="700.0" minWidth="900.0" prefHeight="700.0" prefWidth="900.0" styleClass="technologiesCategoryBackground" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <HBox>
          <VBox HBox.hgrow="ALWAYS">
-            <Button mnemonicParsing="false" onAction="#goBack" prefHeight="50.0" prefWidth="50.0" styleClass="leftTriangleButton" translateX="18.0" translateY="85.0" />
+            <Button mnemonicParsing="false" onAction="#goBack" prefHeight="50.0" prefWidth="50.0" id="backButton" translateX="18.0" translateY="85.0" />
          </VBox>
          <HBox alignment="CENTER" translateX="-20.0" translateY="10.0">
             <ImageView fx:id="technologyImage" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />

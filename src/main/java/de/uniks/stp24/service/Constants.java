@@ -122,20 +122,6 @@ public class Constants {
             "ancient_refinery", "site.coalmine"
     );
 
-    public static final Map<String, String> buildingTranslation = Map.of(
-            "exchange", "building.seaside",
-            "power_plant","building.theurgy",
-            "mine","building.resonatingDelves",
-            "farm","building.farmside",
-            "research_lab","building.scoutHub",
-            "foundry","building.alloySmeltery",
-            "factory","building.chophouse",
-            "refinery","building.coalQuarry",
-            "shipyard", "building.shipyard",
-            "fortress", "building.stronghold"
-    );
-
-
     public static final Map<String, String> islandTranslation = Map.ofEntries(
             Map.entry("uninhabitable_0", "island.plundered"),
             Map.entry("uninhabitable_1", "island.breezy"),
@@ -185,6 +171,19 @@ public class Constants {
             Map.entry("ancient_foundry", "de/uniks/stp24/icons/sites/expedition_site.png"),
             Map.entry("ancient_factory", "de/uniks/stp24/icons/sites/merchant_site.png"),
             Map.entry("ancient_refinery", "de/uniks/stp24/icons/sites/coalmine_site.png")
+    );
+
+    public static final Map<String, String> buildingTranslation = Map.of(
+            "exchange", "building.seaside",
+            "power_plant","building.theurgy",
+            "mine","building.resonatingDelves",
+            "farm","building.farmside",
+            "research_lab","building.scoutHub",
+            "foundry","building.alloySmeltery",
+            "factory","building.chophouse",
+            "refinery","building.coalQuarry",
+            "shipyard", "building.shipyard",
+            "fortress", "building.stronghold"
     );
 
     public static final Map<String, String> buildingsIconPathsMap = Map.ofEntries(

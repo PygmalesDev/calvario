@@ -20,7 +20,7 @@ public interface GameLogicApiService {
     @GET("games/{gameID}/empires/{empireID}/variables/{variable}")
     Observable<ExplainedVariable> getVariable(@Path("gameID") String gameID, @Path("empireID") String empireID, @Path("variable") String variable);
 
-    @GET("games/{game}/empires/{empire}/aggregates/{aggregate}/technologies/{id}")
-    Observable<AggregateResultDto> getTechnologyCostAndTime(@Path("empire") String empireID, @Path("aggregate") String aggregate, @Path("id") String techID);
+    @GET("games/{game}/empires/{empire}/aggregates/{aggregate}")
+    Observable<AggregateResultDto> getTechnologyCostAndTime(@Path("empire") String empireID, @Path("aggregate") String aggregate, @Query("technology") String techID);
 
 }

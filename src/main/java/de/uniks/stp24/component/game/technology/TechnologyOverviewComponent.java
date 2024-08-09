@@ -39,9 +39,11 @@ public class TechnologyOverviewComponent extends AnchorPane {
     public Button marineSienceButton;
 
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    TechnologyService technologyService;
+    public TechnologyService technologyService;
+
+    private Pane parent;
 
     @Inject
     @SubComponent
@@ -80,7 +82,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
     }
 
     public void close() {
-        this.setVisible(false);
+        parent.setVisible(false);
     }
 
     public void showWindow(){
@@ -177,9 +179,9 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
     }
 
-
     public void setContainer(@NotNull Pane parent) {
         parent.getChildren().add(technologyCategoryComponent);
+        this.parent = parent;
         technologyCategoryComponent.setContainer(parent);
         technologyCategoryComponent.setVisible(false);
     }

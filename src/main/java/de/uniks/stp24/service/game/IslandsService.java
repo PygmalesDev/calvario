@@ -12,6 +12,7 @@ import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.BasicService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.menu.LobbyService;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -126,7 +127,7 @@ public class IslandsService extends BasicService {
         component.setPosition(SCALE_FACTOR * isleDto.posX()*DISTANCE_FACTOR - serverOffsetH + screenOffsetH,
                 SCALE_FACTOR * isleDto.posY()*DISTANCE_FACTOR - serverOffsetV + screenOffSetV);
         // all Islands are foggy at first
-        component.applyIcon(true);
+        component.applyIcon(true, BlendMode.LIGHTEN);
         component.setFlagImage(isleDto.flagIndex());
 //        applyDropShadowToIsland(component);
         return component;

@@ -17,11 +17,13 @@ import de.uniks.stp24.service.PopupBuilder;
 import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
-import javafx.animation.FadeTransition;
+import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -219,6 +221,10 @@ public class InGameController extends BasicController {
     FadeTransition fadeTransition;
     Shape fog;
     Shape islandFog;
+    ColorAdjust solarColorAdjust;
+    ColorAdjust dayColorAdjust;
+    Timeline solarTimeLine;
+    Timeline dayTimeLine;
 
     final ArrayList<Node> draggables = new ArrayList<>();
 
@@ -320,6 +326,7 @@ public class InGameController extends BasicController {
         shadow.setVisible(false);
         eventComponent.setClockComponent(clockComponent);
         eventComponent.setBackground(gameBackground);
+        eventComponent.setInGameController(this);
 
         pauseMenuContainer.getChildren().add(pauseMenuComponent);
 
@@ -502,8 +509,7 @@ public class InGameController extends BasicController {
         islandsService.createLines(this.islandComponentMap).forEach(line -> this.connectionsPane.getChildren().add(line));
 
         fogOfWar.setMapSize(x, y);
-        fogOfWar.init();
-        this.updateFog();
+        fogOfWar.init(this);
 
         group.setScaleX(0.65);
         group.setScaleY(0.65);
@@ -819,17 +825,40 @@ public class InGameController extends BasicController {
     // FOG OF WAR //
     @OnInit
     public void initFog() {
-        fadeTransition = new FadeTransition(Duration.millis(1500));
+        fadeTransition = new FadeTransition(Duration.millis(2000));
         fadeTransition.setFromValue(1);
         fadeTransition.setToValue(0);
         fadeTransition.setCycleCount(0);
         fadeTransition.setAutoReverse(false);
+
+        this.solarColorAdjust = new ColorAdjust();
+        this.solarColorAdjust.setBrightness(-0.75);
+        this.solarColorAdjust.setContrast(-0.75);
+        this.solarColorAdjust.setSaturation(-1);
+
+        this.dayColorAdjust = new ColorAdjust();
+
+        solarTimeLine = new Timeline(new KeyFrame(
+                Duration.seconds(7),
+                new KeyValue(this.dayColorAdjust.contrastProperty(), this.solarColorAdjust.getContrast(), Interpolator.EASE_BOTH),
+                new KeyValue(this.dayColorAdjust.brightnessProperty(), this.solarColorAdjust.getBrightness(), Interpolator.EASE_BOTH),
+                new KeyValue(this.dayColorAdjust.saturationProperty(), this.solarColorAdjust.getSaturation(), Interpolator.EASE_BOTH)
+        ));
+        solarTimeLine.setCycleCount(1);
+        solarTimeLine.setAutoReverse(false);
+
+        dayTimeLine = new Timeline(new KeyFrame(
+                Duration.seconds(3),
+                new KeyValue(this.solarColorAdjust.contrastProperty(), this.dayColorAdjust.getContrast(), Interpolator.EASE_BOTH),
+                new KeyValue(this.solarColorAdjust.brightnessProperty(), this.dayColorAdjust.getBrightness(), Interpolator.EASE_BOTH),
+                new KeyValue(this.solarColorAdjust.saturationProperty(), this.dayColorAdjust.getSaturation(), Interpolator.EASE_BOTH)
+        ));
+        dayTimeLine.setCycleCount(1);
+        dayTimeLine.setAutoReverse(false);
     }
 
     public void removeFogFromIsland(boolean animate, IslandComponent isle) {
         if (isle.foggy) {
-            isle.applyIcon(false);
-            isle.applyEmpireInfo();
             this.removeFog(animate, isle);
         }
     }
@@ -844,10 +873,10 @@ public class InGameController extends BasicController {
         this.islandFog = this.fogOfWar.getIslandFog();
         fadeTransition.setNode(this.islandFog);
         zoomPane.getChildren().remove(this.islandFog);
-        zoomPane.getChildren().add(3, this.islandFog);
+        zoomPane.getChildren().add(2, this.islandFog);
         fadeTransition.setOnFinished(event -> {
-            this.updateFog();
             zoomPane.getChildren().remove(this.islandFog);
+            this.updateFog();
         });
         fadeTransition.play();
     }
@@ -856,6 +885,36 @@ public class InGameController extends BasicController {
         zoomPane.getChildren().remove(this.fog);
         this.fog = fogOfWar.getCurrentFog();
         zoomPane.getChildren().add(2, this.fog);
+    }
+
+    public void darkenFog() {
+        solarTimeLine.stop();
+        this.zoomPane.getChildren().get(2).setEffect(dayColorAdjust);
+        solarTimeLine.setOnFinished(event -> darkenFogNotAnimated());
+        solarTimeLine.play();
+    }
+
+    public void darkenFogNotAnimated() {
+        this.fogOfWar.setIsNight(true);
+        this.islandComponentList.forEach(isle -> isle.changeBlendMode(BlendMode.MULTIPLY));
+        this.dayColorAdjust = new ColorAdjust();
+        this.zoomPane.getChildren().get(2).setEffect(solarColorAdjust);
+    }
+
+    public void brightenFog() {
+        dayTimeLine.stop();
+        this.zoomPane.getChildren().get(2).setEffect(solarColorAdjust);
+        dayTimeLine.setOnFinished(event -> brightenFogNotAnimated());
+        dayTimeLine.play();
+    }
+
+    public void brightenFogNotAnimated() {
+        this.fogOfWar.setIsNight(false);
+        this.islandComponentList.forEach(isle -> isle.changeBlendMode(BlendMode.LIGHTEN));
+        this.solarColorAdjust.setBrightness(-0.75);
+        this.solarColorAdjust.setContrast(-0.75);
+        this.solarColorAdjust.setSaturation(-1);
+        this.zoomPane.getChildren().get(2).setEffect(dayColorAdjust);
     }
 
     @OnDestroy

@@ -282,4 +282,6 @@ public class Constants {
     public static final double ISLAND_SCALE = 1.25;
     public static final double X_OFFSET = ISLAND_WIDTH/2 * ISLAND_SCALE + 17;
     public static final double Y_OFFSET = ISLAND_HEIGHT/2 * ISLAND_SCALE + 7;
+    public static final double FOG_X_OFFSET = ISLAND_WIDTH/2 * 1.75 + 17;
+    public static final double FOG_Y_OFFSET = ISLAND_HEIGHT/2 * 1.75 + 7;
 }

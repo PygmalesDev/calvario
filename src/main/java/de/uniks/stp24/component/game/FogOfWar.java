@@ -1,8 +1,12 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.FogDto;
 import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.IslandsService;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -26,6 +30,11 @@ public class FogOfWar {
     @Inject
     TokenStorage tokenStorage;
 
+    @Inject
+    IslandsService islandsService;
+
+    InGameController inGameController;
+
     Image fogImage;
     ImagePattern fogPattern;
 
@@ -39,6 +48,13 @@ public class FogOfWar {
     Shape prevRemovedFog;
     Shape islandFog;
 
+    boolean night = false;
+
+    ColorAdjust solarColorAdjust = new ColorAdjust();
+    private boolean isNight = false;
+
+    ArrayList<String> exploredIslands = new ArrayList<>();
+
     String gameID, empireID;
 
     @Inject
@@ -51,19 +67,27 @@ public class FogOfWar {
         this.y = mapHeight;
     }
 
-    public void init() {
+    public void init(InGameController inGameController) {
+        this.inGameController = inGameController;
         this.gameID = tokenStorage.getGameId();
         this.empireID = tokenStorage.getEmpireId();
 
         this.originalFog = new Rectangle(0, 0, x, y);
         this.currentFog = originalFog;
+
         this.fogImage = new Image("/de/uniks/stp24/assets/backgrounds/fog.jpg");
         this.fogPattern = new ImagePattern(this.fogImage, 0, 0, this.fogImage.getWidth()*2, this.fogImage.getHeight()*2, false);
+
+        this.solarColorAdjust = new ColorAdjust();
+        this.solarColorAdjust.setBrightness(-0.75);
+        this.solarColorAdjust.setContrast(-0.75);
+        this.solarColorAdjust.setSaturation(-1);
+
         subscriber.subscribe(this.empireApiService.getFog(gameID, empireID),
                 result -> {
-                    Map<String, Shape> fogMap = result._private();
+                    Map<String, ArrayList<String>> fogMap = result._private();
                     if (Objects.nonNull(fogMap)) {
-                        this.removedFog = fogMap.get("fog");
+                        this.recreateFog(fogMap.get("fog"));
                     }
                     this.updateFog(null);
                 },
@@ -71,14 +95,29 @@ public class FogOfWar {
         );
     }
 
+    private void recreateFog(ArrayList<String> islandIDs) {
+        for (String islandID : islandIDs) {
+            this.removeFogFromIsland(this.islandsService.getIslandComponent(islandID));
+        }
+        this.updateFog(null);
+        this.inGameController.updateFog();
+    }
+
     public void removeShapesFromFog(IslandComponent island, Shape... toRemoves) {
         this.islandFog = null;
         for (Shape shape : toRemoves) this.updateRemovedFog(shape);
+        this.removeFogFromIsland(island);
+        this.updateFog(island);
+    }
+
+    private void removeFogFromIsland(IslandComponent island) {
         if (Objects.nonNull(island)) {
+            this.exploredIslands.add(island.island.id());
+            island.applyIcon(false, night?BlendMode.MULTIPLY:BlendMode.LIGHTEN);
+            island.applyEmpireInfo();
             this.updateRemovedFog(new Circle(island.getPosX() + X_OFFSET, island.getPosY() + Y_OFFSET, ISLAND_COLLISION_RADIUS));
             this.updateRemovedFog(this.randomFogAroundIsland(island));
         }
-        this.updateFog(island);
     }
 
     private void updateRemovedFog(Shape shape) {
@@ -92,15 +131,17 @@ public class FogOfWar {
             this.currentFog = Shape.subtract(this.originalFog, this.removedFog);
 
         if (Objects.nonNull(island)) {
-            this.islandFog = new Circle(island.getLayoutX() + X_OFFSET, island.getLayoutY() + Y_OFFSET, ISLAND_COLLISION_RADIUS*1.75);
+            this.islandFog = new Circle(island.getLayoutX() + FOG_X_OFFSET, island.getLayoutY() + FOG_Y_OFFSET, ISLAND_COLLISION_RADIUS*1.75);
             if (Objects.nonNull(this.prevRemovedFog))
                 this.islandFog = Shape.subtract(this.islandFog, this.prevRemovedFog);
             this.islandFog.setFill(this.fogPattern);
-            this.islandFog.setTranslateX(island.getLayoutX() - x/2 + X_OFFSET);
-            this.islandFog.setTranslateY(island.getLayoutY() - y/2 + Y_OFFSET);
+            if (isNight) this.islandFog.setEffect(solarColorAdjust);
+            this.islandFog.setTranslateX(island.getLayoutX() - x/2 + FOG_X_OFFSET);
+            this.islandFog.setTranslateY(island.getLayoutY() - y/2 + FOG_Y_OFFSET);
         }
 
         this.currentFog.setFill(this.fogPattern);
+        if (isNight) this.currentFog.setEffect(solarColorAdjust);
         this.prevRemovedFog = this.removedFog;
     }
 
@@ -138,10 +179,14 @@ public class FogOfWar {
     }
 
     public void saveFog() {
-        Map<String, Shape> fogMap = new HashMap<>();
-        fogMap.put("fog", removedFog);
+        Map<String, ArrayList<String>> fogMap = new HashMap<>();
+        fogMap.put("fog", exploredIslands);
         subscriber.subscribe(this.empireApiService.saveFog(gameID, empireID, new FogDto(fogMap)),
                 result -> {},
                 error -> System.out.println("Error with saving fog! " + error.getMessage()));
+    }
+
+    public void setIsNight(boolean isNight) {
+        this.isNight = isNight;
     }
 }

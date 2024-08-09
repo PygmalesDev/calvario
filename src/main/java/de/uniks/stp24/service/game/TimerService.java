@@ -100,7 +100,7 @@ public class TimerService {
 
                 countdown++;
 
-                if ((countdown % (60 / speed) == 0) && (Objects.equals(game.owner(), tokenStorage.getUserId()))) {
+                if ((countdown % (30 / speed) == 0) && (Objects.equals(game.owner(), tokenStorage.getUserId()))) {
                     subscriber.subscribe(gamesApiService.updateSeason(tokenStorage.getGameId(), new UpdateSpeedDto(speed), true),
                             gameResult -> {
                                 setSeason(game.period());

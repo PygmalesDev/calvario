@@ -69,21 +69,28 @@ public class IslandComponent extends Pane {
         this.setPickOnBounds(false);
     }
 
-    public void applyIcon(boolean isFoggy) {
+    public void applyIcon(boolean isFoggy, BlendMode blendMode) {
         this.islandImage.setImage(imageCache.get("icons/islands/" + island.type().name() + ".png"));
 
+        this.foggy = isFoggy;
+
         if (isFoggy)
-            this.islandImage.setBlendMode(BlendMode.LIGHTEN);
+            this.changeBlendMode(blendMode);
         else
-            this.islandImage.setBlendMode(BlendMode.SRC_OVER);
+            this.islandImage.setBlendMode((BlendMode.SRC_OVER));
 
         if (this.island.upgrade().equals("explored"))
             this.spyglassImage.setImage(imageCache.get("/de/uniks/stp24/icons/other/spyglass.png"));
         else // islands with upgrades other than explored
             hideSpyGlass();
 
-        this.foggy = isFoggy;
     }
+
+    public void changeBlendMode(BlendMode blendMode) {
+        if (this.foggy)
+            this.islandImage.setBlendMode(blendMode);
+    }
+
 
     // use our flag images
     // by the moment numeration from 0 til 16
@@ -97,7 +104,7 @@ public class IslandComponent extends Pane {
         this.island = islandInfo;
         this.setId(island.id()+"_instance");
         this.spyglassImage.setVisible(island.upgrade().equals("explored"));
-        applyIcon(this.foggy);
+        applyIcon(this.foggy, BlendMode.LIGHTEN);
     }
 
     // round double to have only 2 decimals

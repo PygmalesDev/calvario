@@ -1,6 +1,7 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.EffectSourceDto;
 import de.uniks.stp24.dto.EffectSourceParentDto;
 import de.uniks.stp24.model.Game;
@@ -97,10 +98,11 @@ public class EventComponent extends AnchorPane {
 
     ColorAdjust fadeAdjust;
     ColorAdjust unfadeAdjust;
-    ColorAdjust brightenAdjsut;
+    ColorAdjust brightenAdjust;
     Timeline nightTimeLine;
     Timeline dayTimeLine;
     boolean isDay = true;
+    private InGameController inGameController;
 
     @Inject
     public EventComponent() {
@@ -134,6 +136,7 @@ public class EventComponent extends AnchorPane {
                         if (activeEvent != null && !eventOccured) {
                             eventOccured = true;
                             if (activeEvent.effects()[0].id().equals("solarEclipse") && isDay) {
+                                this.inGameController.darkenFog();
                                 changeToNight();
                             }
                             subscriber.subscribe(eventService.sendEffect(),
@@ -144,6 +147,7 @@ public class EventComponent extends AnchorPane {
                         } else if (activeEvent == null) {
                             eventOccured = false;
                             if (!isDay) {
+                                this.inGameController.brightenFog();
                                 changeToDay();
                             }
                         }
@@ -174,8 +178,8 @@ public class EventComponent extends AnchorPane {
         unfadeAdjust = new ColorAdjust();
         unfadeAdjust.setBrightness(0);
 
-        brightenAdjsut = new ColorAdjust();
-        brightenAdjsut.setBrightness(0);
+        brightenAdjust = new ColorAdjust();
+        brightenAdjust.setBrightness(0);
 
         nightTimeLine = new Timeline(
                 new KeyFrame(Duration.seconds(0),
@@ -201,6 +205,7 @@ public class EventComponent extends AnchorPane {
                         if (Objects.nonNull(activeEvent)) {
                             eventOccured = true;
                             if (effect.id().equals("solarEclipse") && isDay) {
+                                inGameController.darkenFogNotAnimated();
                                 changeToNightNotAnimated();
                             }
                             eventService.setEvent(activeEvent);
@@ -307,7 +312,7 @@ public class EventComponent extends AnchorPane {
         gameBackground.setEffect(fadeAdjust);
 
         nightTimeLine.setOnFinished(event -> {
-            gameBackground.setEffect(brightenAdjsut);
+            gameBackground.setEffect(brightenAdjust);
             changeToNightNotAnimated();
         });
 
@@ -325,7 +330,7 @@ public class EventComponent extends AnchorPane {
         gameBackground.setEffect(unfadeAdjust);
 
         dayTimeLine.setOnFinished(event -> {
-            gameBackground.setEffect(brightenAdjsut);
+            gameBackground.setEffect(brightenAdjust);
             changeToDayNotAnimated();
         });
 
@@ -339,5 +344,9 @@ public class EventComponent extends AnchorPane {
 
     public void setBackground(Pane gameBackground) {
         this.gameBackground = gameBackground;
+    }
+
+    public void setInGameController(InGameController inGameController) {
+        this.inGameController = inGameController;
     }
 }

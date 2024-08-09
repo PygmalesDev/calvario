@@ -7,6 +7,7 @@ import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.ContactsService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;

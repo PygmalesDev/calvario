@@ -31,7 +31,8 @@ public class FleetService {
     public TokenStorage tokenStorage;
 
     @Inject
-    public FleetService() {}
+    public FleetService() {
+    }
 
     Map<String, ObservableList<Fleet>> empireFleets = new HashMap<>();
     Map<String, ObservableList<Fleet>> islandFleets = new HashMap<>();

@@ -35,6 +35,7 @@ public class AppTest2 extends InGameTestComponent {
         inGameController.overviewSitesComponent.imagePane.getStylesheets().clear();
         inGameController.overviewSitesComponent.islandFlag.getStylesheets().clear();
         inGameController.empireOverviewComponent.getStylesheets().clear();
+
     }
 
     @Test

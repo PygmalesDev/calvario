@@ -46,7 +46,6 @@ public class ContactsComponent extends StackPane {
     public App app;
     @Inject
     public ContactsService contactsService;
-
     @Inject
     public ImageCache imageCache;
     @Inject
@@ -70,11 +69,7 @@ public class ContactsComponent extends StackPane {
 
     @Inject
     public ContactsComponent() {
-    }
 
-    @OnInit
-    public void init() {
-        loadEmpireWars();
     }
 
     public void loadEmpireWars() {

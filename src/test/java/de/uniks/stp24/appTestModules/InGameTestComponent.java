@@ -180,6 +180,8 @@ public class InGameTestComponent extends InGameTestInitializer {
 
     SystemDto system;
 
+
+
     public void initComponents(){
         initializeComponents();
 
@@ -300,9 +302,17 @@ public class InGameTestComponent extends InGameTestInitializer {
         doReturn(Observable.empty()).when(marketService).getSeasonalTrades(any(), any());
 
         this.inGameController.buildingPropertiesComponent.certainBuilding = buildingPreset1;
-//        doNothing().when(contactsComponent).loadEmpireWars();
+        doNothing().when(contactsService).loadContactsData();
+        doNothing().when(contactsService).createWarListener();
 //        doNothing().when(contactsComponent).init();
         doReturn(Observable.just(new ArrayList<WarDto>())).when(warService).getWars(any(),any());
+
+        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", new HashMap<>())));
+        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456");//,true);
+        doNothing().when(this.fleetService).initializeFleetListeners();
+        doNothing().when(this.fleetService).onFleetCreated(any());
+        doNothing().when(this.fleetService).loadGameFleets();
+//        doNothing().when(this.fleetService).initializeShipListener();
 
 
         this.app.show(this.inGameController);

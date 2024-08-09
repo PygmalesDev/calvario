@@ -5,6 +5,7 @@ import dagger.Provides;
 import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.ContactsService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.menu.CreateGameService;
@@ -140,6 +141,7 @@ public class TestModule {
     @Provides
     @Singleton
     FleetApiService fleetApiService(){return Mockito.mock(FleetApiService.class);}
+
 }
 
 

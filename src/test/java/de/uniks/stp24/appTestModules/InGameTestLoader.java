@@ -2,6 +2,7 @@ package de.uniks.stp24.appTestModules;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.*;
 import de.uniks.stp24.component.game.technology.ResearchJobComponent;
@@ -87,6 +88,8 @@ public class InGameTestLoader extends ControllerTest {
     ContactsService contactsService;
     @Spy
     WarService warService;
+    @Spy
+    WarsApiService warsApiService;
 
     @InjectMocks
     protected MarketService marketService;
@@ -152,6 +155,8 @@ public class InGameTestLoader extends ControllerTest {
     protected JobsService jobsService;
     @InjectMocks
     protected CoolerBubbleComponent coolerBubbleComponent;
+    @InjectMocks
+    protected FleetCreationComponent fleetCreationComponent;
     @InjectMocks
     protected ContactsComponent contactsComponent;
     @InjectMocks
@@ -233,6 +238,7 @@ public class InGameTestLoader extends ControllerTest {
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.helpComponent = this.helpComponent;
         this.inGameController.contactsOverviewComponent = this.contactsComponent;
+        this.inGameController.contactsOverviewComponent.warService = this.warService;
         this.inGameController.warComponent = this.warComponent;
 
         this.coolerBubbleComponent.announcementsService = this.announcementsService;
@@ -271,10 +277,11 @@ public class InGameTestLoader extends ControllerTest {
 
         this.technologyCategoryComponent.provider = this.technologyCategorySubComponentProvider;
 
-        this.fleetService.subscriber = this.subscriber;
-        this.fleetService.eventListener = this.eventListener;
-        this.fleetService.fleetApiService = this.fleetApiService;
-        this.fleetService.tokenStorage = this.tokenStorage;
+        this.inGameController.fleetCreationComponent = this.fleetCreationComponent;
+
+        this.contactsComponent.imageCache = this.imageCache;
+        this.contactsComponent.tokenStorage = this.tokenStorage;
+        this.contactsComponent.subscriber = new Subscriber();
 
     }
 
@@ -290,6 +297,7 @@ public class InGameTestLoader extends ControllerTest {
         this.inGameController.subscriber = this.subscriber;
         this.inGameController.fleetService = this.fleetService;
         this.inGameController.fleetCoordinationService = this.fleetCoordinationService;
+        this.inGameController.fleetCoordinationService.fleetService = this.fleetService;
         this.inGameController.contactService = this.contactsService;
 
         this.islandClaimingComponent.componentProvider = this.claimingComponentProvider;
@@ -413,24 +421,25 @@ public class InGameTestLoader extends ControllerTest {
         this.technologyOverviewComponent.technologiesResourceBundle = this.technologiesResourceBundle;
 
         this.fleetCoordinationService.tokenStorage = this.tokenStorage;
-        this.fleetCoordinationService.fleetService = this.fleetService;
         this.fleetCoordinationService.islandsService = this.islandsService;
         this.fleetCoordinationService.app = this.app;
         this.fleetCoordinationService.contactsService = this.contactsService;
 
-        this.contactsComponent.app = this.app;
-        this.contactsComponent.contactsService = this.contactsService;
-        this.contactsComponent.imageCache = this.imageCache;
-        this.contactsComponent.warService = this.warService;
-        this.contactsComponent.tokenStorage = this.tokenStorage;
-        this.contactsComponent.subscriber = new Subscriber();
-        this.contactsComponent.contactDetailsComponent = this.contactDetailsComponent;
+        this.fleetService.tokenStorage = this.tokenStorage;
+        this.fleetService.subscriber = new Subscriber();
+        this.fleetService.fleetApiService = this.fleetApiService;
 
-        this.contactsComponent.contactDetailsComponent.islandsService = this.islandsService;
-        this.contactsComponent.contactDetailsComponent.imageCache = this.imageCache;
-        this.contactsComponent.contactDetailsComponent.resources = this.gameResourceBundle;
-        this.contactsComponent.contactDetailsComponent.warComponent = this.warComponent;
-        this.contactsComponent.contactDetailsComponent.contactsService = this.contactsService;
+        this.contactsService.tokenStorage = this.tokenStorage;
+        this.contactsService.warService = this.warService;
+        this.contactsService.empireApiService = this.empireApiService;
+        this.contactsService.subscriber = new Subscriber();
+        this.contactsService.islandsService = this.islandsService;
+        this.contactsService.contactsComponent = this.contactsComponent;
+        this.contactsService.contactsComponent.contactDetailsComponent = this.contactDetailsComponent;
+        this.inGameController.contactsOverviewComponent.contactDetailsComponent.warComponent = this.warComponent;
+
+        this.warService.warsApiService = this.warsApiService;
+
     }
 
     protected void clearStyles() {

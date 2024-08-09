@@ -274,7 +274,8 @@ public class InGameController extends BasicController {
         variableService.initVariables();
         variableService.addRunnable(this::loadGameAttributes);
 
-        this.fleetCoordinationService.setInitialFleetPosition();
+
+//        this.fleetCoordinationService.setInitialFleetPosition();
 
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
@@ -392,6 +393,7 @@ public class InGameController extends BasicController {
         this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListeners();
         explanationService.setInGameController(this);
+
 
         this.fleetService.loadGameFleets();
         this.fleetService.initializeFleetListeners();
@@ -558,7 +560,7 @@ public class InGameController extends BasicController {
     }
 
     @OnRender
-    public void createMap() {
+    public void createMap() { this.fleetCoordinationService.setInitialFleetPosition();
         this.islandComponentList = islandsService.createIslands(islandsService.getListOfIslands());
         this.islandComponentMap = islandsService.getComponentMap();
         mapGrid.setMinSize(islandsService.getMapWidth(), islandsService.getMapHeight());

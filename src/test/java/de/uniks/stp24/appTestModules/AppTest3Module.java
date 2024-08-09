@@ -289,6 +289,8 @@ public class AppTest3Module extends LobbyTestLoader {
         doAnswer(inv -> this.app.show(this.gangCreationController)).when(this.app).show(eq("/creation"), any());
         doAnswer(inv -> this.app.show(this.inGameController)).when(this.app).show(eq("/ingame"), any());
         doAnswer(inv -> this.app.show(this.lobbyController)).when(this.app).show(eq("/lobby"), any());
+
+        doNothing().when(this.contactsComponent).loadEmpireWars();
     }
 
     private void loadUnloadableData() {
@@ -306,6 +308,8 @@ public class AppTest3Module extends LobbyTestLoader {
         ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", new HashMap<>())));
         doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456");//,true);
         doNothing().when(this.fleetService).initializeFleetListeners();
+        doNothing().when(this.fleetService).onFleetCreated(any());
+        doNothing().when(this.fleetService).loadGameFleets();
 //        doNothing().when(this.fleetService).initializeShipListener();
     }
 

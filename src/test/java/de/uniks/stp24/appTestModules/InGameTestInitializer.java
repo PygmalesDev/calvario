@@ -2,6 +2,7 @@ package de.uniks.stp24.appTestModules;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
@@ -96,6 +97,12 @@ public class InGameTestInitializer extends ControllerTest {
     FleetCoordinationService fleetCoordinationService;
     @Spy
     FleetApiService fleetApiService;
+//    @Spy
+//    ContactsService contactsService;
+    @Spy
+    WarService warService;
+    @Spy
+    WarsApiService warsApiService;
 
     @InjectMocks
     IslandUpgradesJobProgressComponent jobProgressComponent;
@@ -152,7 +159,13 @@ public class InGameTestInitializer extends ControllerTest {
     @Mock
     AnnouncementsService announcementsService;
     @InjectMocks
+    FleetCreationComponent fleetCreationComponent;
+    @InjectMocks
     ContactsComponent contactsComponent;
+    @InjectMocks
+    ContactDetailsComponent contactDetailsComponent;
+    @InjectMocks
+    WarComponent warComponent;
 
     final Provider<MarketSeasonComponent> marketSeasonComponentProvider = () -> {
         MarketSeasonComponent comp = new MarketSeasonComponent();
@@ -258,10 +271,28 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.contextMenuButtons = new HBox();
         this.islandsService.tokenStorage = new TokenStorage();
         this.islandsService.gameSystemsService = this.gameSystemsApiService;
+
+        this.inGameController.fleetCreationComponent = this.fleetCreationComponent;
         this.inGameController.fleetService = this.fleetService;
         this.inGameController.fleetCoordinationService = this.fleetCoordinationService;
+        this.inGameController.fleetService.tokenStorage = this.tokenStorage;
+        this.inGameController.fleetService.fleetApiService = this.fleetApiService;
+        this.inGameController.fleetService.subscriber = this.subscriber;
 
         this.inGameController.contactsOverviewComponent = this.contactsComponent;
+        this.inGameController.contactsOverviewComponent.warService = this.warService;
+        this.inGameController.contactsOverviewComponent.warService.warsApiService = this.warsApiService;
+        this.inGameController.contactsOverviewComponent.contactDetailsComponent = this.contactDetailsComponent;
+        this.inGameController.contactsOverviewComponent.contactDetailsComponent.warComponent = this.warComponent;
+        this.inGameController.warComponent = this.warComponent;
+        this.inGameController.contactService.tokenStorage = this.tokenStorage;
+        this.inGameController.contactService.islandsService = this.islandsService;
+        this.inGameController.contactService.empireApiService = this.empireApiService;
+        this.inGameController.contactService.subscriber = this.subscriber;
+
+        this.inGameController.fleetCoordinationService.fleetService = fleetService;
+        this.inGameController.fleetCoordinationService.tokenStorage = tokenStorage;
+
     }
 
     public void clearStyleSheets(){

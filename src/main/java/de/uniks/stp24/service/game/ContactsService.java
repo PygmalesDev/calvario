@@ -169,7 +169,7 @@ public class ContactsService {
 
     }
 
-    public void getEmpiresInGame() {
+    public void getEmpiresInGame() {contactsComponent.loadEmpireWars();
         this.gameID = tokenStorage.getGameId();
         this.myOwnEmpireID = tokenStorage.getEmpireId();
         this.hiddenEmpires = new ArrayList<>(islandsService.getEmpiresID());

@@ -42,6 +42,7 @@ public class FleetCoordinationService {
     }
 
     public void setInitialFleetPosition() {
+        System.out.println(fleetService);
         this.fleetService.onFleetCreated(this::putFleetOnMap);
         this.random.setSeed(Integer.parseInt(tokenStorage.getGameId().substring(0, 4), 16));
     }

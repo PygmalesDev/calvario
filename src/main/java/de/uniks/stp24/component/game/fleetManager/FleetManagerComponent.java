@@ -3,7 +3,6 @@ package de.uniks.stp24.component.game.fleetManager;
 import de.uniks.stp24.App;
 import de.uniks.stp24.dto.ShortSystemDto;
 import de.uniks.stp24.model.Fleets.Fleet;
-import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Ships.BlueprintInFleetDto;
 import de.uniks.stp24.model.Ships.ReadShipDTO;
 import de.uniks.stp24.model.Ships.ShipType;
@@ -22,7 +21,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
@@ -85,8 +83,6 @@ public class FleetManagerComponent extends AnchorPane {
     public Button showFleetsButton;
     @FXML
     public Label buildShipErrorLabel;
-    @FXML
-    public Button createFleetButton;
 
 
     @Inject

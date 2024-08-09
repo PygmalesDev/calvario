@@ -198,7 +198,7 @@ public class ContactDetailsComponent extends StackPane {
         if (value < -1.1 && value > -2.1) text = "very weak";
         if (value < -2.1) text = "dust";
         System.out.println(text);
-        this.strengText.setText("Str: " + text);
+        this.strengText.setText("Strength: " + text);
 
     }
 

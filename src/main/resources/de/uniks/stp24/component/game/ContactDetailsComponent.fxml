@@ -67,20 +67,21 @@
             </padding>
           </HBox>
           <HBox prefHeight="100.0" prefWidth="200.0">
-             <VBox prefHeight="100.0" prefWidth="176.0" spacing="30.0">
-                <padding>
-                   <Insets top="10.0" />
-                </padding>
-                <Text fx:id="strengText" strokeType="OUTSIDE" strokeWidth="0.0" text="Streng:">
-                  <VBox.margin>
-                     <Insets top="5.0" />
-                  </VBox.margin></Text>
-             </VBox>
-             <ImageView fx:id="strengthIcon" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
-                <HBox.margin>
-                   <Insets top="15.0" />
-                </HBox.margin>
-             </ImageView>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                   <VBox prefHeight="100.0" prefWidth="211.0" spacing="30.0">
+                      <padding>
+                         <Insets top="10.0" />
+                      </padding>
+                      <Text fx:id="strengText" strokeType="OUTSIDE" strokeWidth="0.0" text="Strength:">
+                        <VBox.margin>
+                           <Insets top="5.0" />
+                        </VBox.margin>
+                     </Text>
+                   </VBox>
+                   <ImageView fx:id="strengthIcon" fitHeight="30.0" fitWidth="30.0" layoutX="174.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </AnchorPane>
             <VBox.margin>
                <Insets top="10.0" />
             </VBox.margin>

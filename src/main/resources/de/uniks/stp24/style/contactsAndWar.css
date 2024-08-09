@@ -21,7 +21,7 @@
 .warTitle {
     -fx-font-family: "Tempus Sans ITC";
     -fx-fill: red;
-    -fx-font-size: 30;
+    -fx-font-size: 40;
 }
 
 /*TextStyles*/
@@ -33,11 +33,25 @@
 }
 
 
-.tempusSansITC {
+.tempusSansITCWarText {
     -fx-font-family: "Tempus Sans ITC";
     -fx-font-size: 16px;
     -fx-font-weight: normal;
     -fx-fill: black;
+}
+
+.tempusSansITC {
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-font-size: 23px;
+    -fx-font-weight: normal;
+    -fx-fill: black;
+}
+
+.tempusSansITCRed {
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-font-size: 23px;
+    -fx-font-weight: normal;
+    -fx-fill: red;
 }
 
 .javaneseText {
@@ -58,7 +72,7 @@
 .contactsTitle {
     -fx-font-family: "Baskerville Old Face";
     -fx-fill: white;
-    -fx-font-size: 18;
+    -fx-font-size: 58;
 }
 
 
@@ -118,7 +132,7 @@
 .contactsDetailsTitle {
     -fx-font-family: "Baskerville Old Face";
     -fx-fill: white;
-    -fx-font-size: 10;
+    -fx-font-size: 25;
 }
 
 .contactDetailsBackground {

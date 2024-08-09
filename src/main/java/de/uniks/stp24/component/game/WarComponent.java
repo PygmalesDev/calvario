@@ -1,5 +1,6 @@
 package de.uniks.stp24.component.game;
 
+import de.uniks.stp24.dto.WarDto;
 import de.uniks.stp24.service.game.ContactsService;
 import de.uniks.stp24.service.game.WarService;
 import javafx.fxml.FXML;
@@ -22,10 +23,6 @@ public class WarComponent extends AnchorPane {
     @FXML
     Text warText;
     @Inject
-    Subscriber subscriber;
-    @Inject
-    WarService warService;
-    @Inject
     ContactsService contactsService;
 
     private ContactDetailsComponent contactDetailsComponent;
@@ -36,44 +33,24 @@ public class WarComponent extends AnchorPane {
 
     }
 
-    @OnInit
-    public void init() {
-
-    }
-
-    @OnRender
-    public void render() {
-    }
-
-    public void setText(String msg) {
-        if (msg.equals("created")) {
-            warText.setText("The " + contactsService.getAttacker() + " have started a war against you!");
-        } else  if (msg.equals("deleted")) {
-            warText.setText("The " + contactsService.getAttacker() + " have stopped the war against you!");
-        }
-        contactsService.setDeclaring(false);
-    }
-
     public void close() {
         parent.setVisible(false);
         setVisible(false);
     }
 
-    public void showWarMessage(String messageType){
-        setText(messageType);
-        System.out.println("wo ist mein Popup " + this);
-//        popupWarMessage.showPopup(parent, this);
+    public void showWarMessage(String msg, String attacker) {
+        String text = "The " + attacker + " have" + (
+          msg.equals("created") ? " started" : " stopped"
+          ) + " the against you";
+        warText.setText(text);
         parent.setVisible(true);
         setVisible(true);
-
     }
-
 
     public void setParent(StackPane parent) {
         this.parent = parent;
         this.parent.setVisible(true);
         parent.getChildren().add(this);
-
     }
 
 }

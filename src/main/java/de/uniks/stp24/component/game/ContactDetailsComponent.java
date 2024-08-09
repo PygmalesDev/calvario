@@ -233,14 +233,12 @@ public class ContactDetailsComponent extends StackPane {
     }
 
     public void setWarMessagePopup(String messageType, String attackerName, String myOwnEmpireID, WarDto warDto) {
-
-//        if (contactsService.isDeclaringToDefender()) {
+        if (messageType.equals("updated")) return;
         if (myOwnEmpireID.equals(warDto.defender())) {
             contactsService.setAttacker(attackerName);
             warComponent.getParent().setVisible(true);
             warComponent.setVisible(true);
-            warComponent.showWarMessage(messageType);
-
+            warComponent.showWarMessage(messageType, attackerName);
         }
     }
 

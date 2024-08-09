@@ -216,6 +216,11 @@ public class FleetManagerComponent extends AnchorPane {
         this.setVisible(false);
     }
 
+    /**
+     * Load all ships of the fleet and set editedFleet, the fleet name, the island name and the command limit
+     * Initialize the fleet edition in the ship Service (see description there)
+     * @param fleet: currently edited fleet
+     */
     public void editSelectedFleet(Fleet fleet) {
         this.buildShipErrorLabel.setVisible(false);
         this.blueprintsListView.setCellFactory(list -> new ComponentListCell<>(app, blueprintsAddableComponentProvider));
@@ -242,6 +247,10 @@ public class FleetManagerComponent extends AnchorPane {
         );
     }
 
+    /**
+     * If a blueprint is not already contained in a fleet, it will be added with one planned ship of this type
+     * @param shipType: type of the blueprint
+     */
     public void addBlueprintToFleet(ShipType shipType) {
         if ((!this.editedFleet.size().containsKey(shipType._id())) || (this.editedFleet.size().get(shipType._id()) == 0)){
             this.subscriber.subscribe(this.fleetService.editSizeOfFleet(shipType._id(), 1, editedFleet),
@@ -252,6 +261,10 @@ public class FleetManagerComponent extends AnchorPane {
         }
     }
 
+    /**
+     * @param fleet: currently edited fleet
+     * @param shipDeleted: to avoid timing issues when a ship was deleted - the eventListener in shipService is sometimes slower than the call of this method
+     */
     public void setCommandLimit(Fleet fleet, boolean shipDeleted) {
         int numberOfShips = ships.size();
         System.out.println(fleet.ships() + " fleet ships");
@@ -263,6 +276,10 @@ public class FleetManagerComponent extends AnchorPane {
                 + fleet.size().values().stream().mapToInt(Integer::intValue).sum());
     }
 
+    /**
+     * Checks if the current island of the edited fleet belongs to the empire and in this case counts the number of shipyards on this island.
+     * @param shipJobStarted: to avoid timing issues when a ship job has been started - eventListener in JobService is sometimes slower than the call of this method
+     */
     public void setIslandName(boolean shipJobStarted) {
         List<ShortSystemDto> islands = islandsService.getDevIsles().stream().filter(island -> island._id().equals(this.editedFleet.location())).toList();
         if(islands.isEmpty()){
@@ -273,18 +290,20 @@ public class FleetManagerComponent extends AnchorPane {
             int numberOfShipyards = islands.getFirst().buildings().stream().filter("shipyard"::equals).toList().size();
             int numberOfShipJobs = this.jobsService.getObservableListForSystem(this.editedFleet.location())
                     .filtered(job -> job.type().equals("ship")).size();
-            if(shipJobStarted){
-                numberOfShipJobs += 1;
-            }
+            if(shipJobStarted) numberOfShipJobs += 1;
             this.islandLabel.setText(islands.getFirst().name() + "\n" + numberOfShipJobs + " / " + numberOfShipyards + " shipyards occupied");
         }
     }
 
+    /**
+     * Defines the events when a ship job was finished or deleted
+     * @param job: ship building job
+     */
     public void setShipFinisher(Job job){
         this.jobsService.onJobCompletion(job._id(), ()  -> {
-            this.blueprintInFleetListView.refresh();
             setCommandLimit(this.fleetService.getFleet(editedFleet._id()), false);
             setIslandName(false);
+            this.blueprintInFleetListView.refresh();
         });
         this.jobsService.onJobDeletion(job._id(), ()  -> setIslandName(false));
     }
@@ -293,6 +312,10 @@ public class FleetManagerComponent extends AnchorPane {
         this.newFleetComponent.createNewFleet();
     }
 
+    /**
+     * Depending on the reason why a ship can't be built the errorLabel is set. It disappears after 5s.
+     * @param error: reason why a ship can't be built
+     */
     public void setErrorLabel(String error){
         this.transition.stop();
         this.buildShipErrorLabel.setVisible(true);

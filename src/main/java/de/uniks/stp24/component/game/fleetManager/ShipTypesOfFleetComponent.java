@@ -1,11 +1,9 @@
 package de.uniks.stp24.component.game.fleetManager;
 
 import de.uniks.stp24.dto.ShortSystemDto;
-import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Ships;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.*;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -42,7 +40,6 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
     private final ResourceBundle gameResourceBundle;
 
     private Ships.BlueprintInFleetDto blueprintInFleetDto;
-    private ObservableList<Job> shipJobs;
 
     @Inject
     public ShipTypesOfFleetComponent(FleetManagerComponent fleetManagerComponent, ResourcesService resourcesService, ShipService shipService, Subscriber subscriber, FleetService fleetService, ResourceBundle gameResourceBundle){
@@ -71,7 +68,7 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
         if (blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) == 0){
             this.decrementSizeButton.setDisable(true);
         }
-        if(blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) == this.blueprintInFleetDto.count()) {
+        if(blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) <= this.blueprintInFleetDto.count()) {
             this.decrementSizeButton.setDisable(true);
         }
     }
@@ -85,7 +82,7 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
         if (!this.resourcesService.hasEnoughResources(shipService.getNeededResources(blueprintInFleetDto.type()))) {
             this.fleetManagerComponent.setErrorLabel("resources");
         }
-        if(blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) == this.blueprintInFleetDto.count()){
+        if(blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) <= this.blueprintInFleetDto.count()){
             this.fleetManagerComponent.setErrorLabel("plannedSize");
             buildIsPossible = false;
         }
@@ -98,7 +95,7 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
             this.fleetManagerComponent.setErrorLabel("enemiesIsland");
             buildIsPossible = false;
         } else {
-            int numberOfShipYards = this.islandsService.getIslandComponent(blueprintInFleetDto.fleet().location()).getIsland().buildings().stream()
+            int numberOfShipYards = islands.getFirst().buildings().stream()
                     .filter("shipyard"::equals).toList().size();
             if (numberOfShipJobs >= numberOfShipYards) {
                 this.fleetManagerComponent.setErrorLabel("shipyard");
@@ -138,6 +135,13 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
         editSize(newSize);
     }
 
+    /**
+     * Planned size is changed: sizeLabel and command limit are updated
+     * The decrement button is disabled if - there are 0 planned ships
+     *                                     - number of planned ships <= real ships of this blueprint
+     * If the planned size is 0 and there are no real ships the blueprint is removed
+     * @param newSize: new planned size of ships of this type
+     */
     public void editSize(int newSize) {
         this.subscriber.subscribe(this.fleetService.editSizeOfFleet(this.blueprintInFleetDto.type(), newSize, this.blueprintInFleetDto.fleet()),
                 dto -> {
@@ -151,7 +155,7 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
                             this.shipService.removeBlueprintFromFleet(blueprintInFleetDto);
                         }
                     }
-                    if (dto.size().get(this.blueprintInFleetDto.type()) == this.blueprintInFleetDto.count())
+                    if (dto.size().get(this.blueprintInFleetDto.type()) <= this.blueprintInFleetDto.count())
                         this.decrementSizeButton.setDisable(true);
                 }, error -> System.out.println("Error while changing planned Size in the ShipTypesOfFleetComponent:\n" + error.getMessage()));
     }

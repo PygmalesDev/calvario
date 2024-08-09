@@ -85,6 +85,7 @@ public class NewFleetComponent extends VBox {
         setIslandNameText(0);
     }
 
+    /** Creation of a new fleet at the chosen island **/
     public void confirmIsland() {
         //Todo: random fleetName
         Fleets.CreateFleetDTO newFleet = new Fleets.CreateFleetDTO("newFleet",

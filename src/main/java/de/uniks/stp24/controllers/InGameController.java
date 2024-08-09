@@ -113,11 +113,11 @@ public class InGameController extends BasicController {
     @Inject
     public JobsService jobsService;
     @Inject
+    public TechnologyService technologyService;
+    @Inject
     public FleetService fleetService;
     @Inject
     public FleetCoordinationService fleetCoordinationService;
-    @Inject
-    public TechnologyService technologyService;
 
     @SubComponent
     @Inject
@@ -329,8 +329,8 @@ public class InGameController extends BasicController {
         islandClaimingContainer.getChildren().add(this.islandClaimingComponent);
         islandClaimingContainer.setVisible(false);
 
-        this.group.getChildren().add(this.fleetCreationComponent);
         this.fleetCreationComponent.setVisible(false);
+        this.group.getChildren().add(this.fleetCreationComponent);
 
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
@@ -366,8 +366,6 @@ public class InGameController extends BasicController {
         this.fleetService.loadGameFleets();
         this.fleetService.initializeFleetListeners();
         this.fleetService.initializeShipListener();
-
-//        this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::travelToMousePosition);
 
         technologiesComponent.setContainer(technologiesContainer);
         technologiesContainer.setVisible(false);

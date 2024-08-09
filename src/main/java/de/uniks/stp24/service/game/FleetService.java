@@ -1,9 +1,8 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.model.Fleets;
-import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Jobs;
-import de.uniks.stp24.model.Ships;
+import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Ships.ReadShipDTO;
 import de.uniks.stp24.model.Ships.Ship;
 import de.uniks.stp24.rest.FleetApiService;
@@ -80,7 +79,6 @@ public class FleetService {
                     }
                 }
                 case "deleted" -> {
-                    System.out.println("deleted fleetService");
                     if (!ship._id().equals(this.lastShipDeletion)) {
                         adaptShipCount(ship.fleet(), -1);
                         this.lastShipDeletion = ship._id();

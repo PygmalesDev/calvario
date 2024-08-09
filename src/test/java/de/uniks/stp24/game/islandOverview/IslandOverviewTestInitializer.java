@@ -173,8 +173,6 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     NewFleetComponent newFleetComponent;
     @InjectMocks
     ChangeFleetComponent changeFleetComponent;
-    @InjectMocks
-    BlueprintsDetailsComponent blueprintsDetailsComponent;
 
 
     public void initializeComponents() {
@@ -290,6 +288,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.fleetService.subscriber = this.subscriber;
         this.fleetCoordinationService.subscriber = this.subscriber;
         this.fleetManagerComponent.blueprintsDetailsComponent = this.blueprintsDetailsComponent;
+        this.technologyService.eventListener = this.eventListener;
+
     }
 
     public void clearStyleSheets() {

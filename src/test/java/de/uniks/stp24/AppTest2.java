@@ -91,8 +91,6 @@ public class AppTest2 extends InGameTestComponent {
         assertEquals(this.inGameController.overviewSitesComponent.crewCapacity.getText(), String.valueOf(20));
         int usedSlots = sitesComponent.getTotalSiteSlots(islandAttributeStorage.getIsland()) + islandAttributeStorage.getIsland().buildings().size();
         assertEquals(this.inGameController.overviewSitesComponent.resCapacity.getText(), usedSlots + "/" + islandAttributeStorage.getIsland().resourceCapacity());
-        System.out.println(this.inGameController.overviewSitesComponent.island_name.getText());
-        System.out.println(this.inGameController.overviewSitesComponent.island_name.getText().equals("Geplünderte Insel(Kolonie)"));
         assertNotEquals("Geplünderte Insel(Kolonie)", this.inGameController.overviewSitesComponent.island_name.getText());
     }
 

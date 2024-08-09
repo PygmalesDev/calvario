@@ -5,21 +5,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root type="VBox" fx:id="selectNewFleetVBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: red;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent">
-   <children>
-      <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="200.0">
-         <children>
-            <Button mnemonicParsing="false" onAction="#close" text="close" />
-         </children>
-      </HBox>
-      <Label text="Choose a fleet" />
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <Button mnemonicParsing="false" onAction="#showLastFleetName" text="&lt;" />
-            <Label fx:id="newFleetOfShipNameLabel" text="Label" />
-            <Button mnemonicParsing="false" onAction="#showNextFleetName" text="&gt;" />
-         </children>
-      </HBox>
-      <Button mnemonicParsing="false" onAction="#confirmFleetChange" text="Confirm" />
-   </children>
+<fx:root type="VBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="200.0" prefWidth="300.0"
+         style="-fx-background-color: red;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent">
+   <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="200.0">
+      <Button mnemonicParsing="false" onAction="#close" text="close"/>
+   </HBox>
+   <Label text="Choose a fleet"/>
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <Button fx:id="showLastFleetButton" mnemonicParsing="false" onAction="#showLastFleetName" text="&lt;"/>
+      <Label fx:id="newFleetOfShipNameLabel" text="Label"/>
+      <Button fx:id="showNextFleetButton" mnemonicParsing="false" onAction="#showNextFleetName" text="&gt;"/>
+   </HBox>
+   <Button fx:id="confirmFleetChangeButton" mnemonicParsing="false" onAction="#confirmFleetChange" text="Confirm"/>
 </fx:root>

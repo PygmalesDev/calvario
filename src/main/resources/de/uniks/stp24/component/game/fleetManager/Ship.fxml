@@ -43,7 +43,7 @@
             <Font size="15.0" />
          </font>
          <tooltip>
-            <Tooltip fx:id="tooltip" anchorLocation="WINDOW_TOP_RIGHT" autoFix="false" consumeAutoHidingEvents="false" contentDisplay="RIGHT" hideOnEscape="false" />
+            <Tooltip anchorLocation="WINDOW_TOP_RIGHT" autoFix="false" consumeAutoHidingEvents="false" contentDisplay="RIGHT" hideOnEscape="false" />
          </tooltip></Label>
       <Button fx:id="changeFleetButton" mnemonicParsing="false" onAction="#changeFleet" prefHeight="30.0" styleClass="change-fleet-button" text="Change Fleet">
          <HBox.margin>

@@ -42,6 +42,8 @@ public class ShipComponent extends VBox implements ReusableItemComponent<ReadShi
     public Label defenseLabel;
     @FXML
     public Button deleteShipButton;
+    @FXML
+    public Button changeFleetButton;
 
     private final FleetManagerComponent fleetManagerComponent;
     private final ShipService shipService;

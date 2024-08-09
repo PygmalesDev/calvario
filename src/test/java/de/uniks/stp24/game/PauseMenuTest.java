@@ -168,6 +168,14 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     ResearchJobComponent researchJobComponent;
     @InjectMocks
+    TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+    @InjectMocks
+    TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
+
+    @Spy
+    GameLogicApiService gameLogicApiService;
+
+    @InjectMocks
     FleetManagerComponent fleetManagerComponent;
     @InjectMocks
     FleetCreationComponent fleetCreationComponent;

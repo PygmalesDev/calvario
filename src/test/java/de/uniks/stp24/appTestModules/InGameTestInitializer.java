@@ -353,6 +353,8 @@ public class InGameTestInitializer extends ControllerTest {
         this.islandsService.tokenStorage = new TokenStorage();
         this.islandsService.gameSystemsService = gameSystemsApiService;
 
+<<<<<<<<< Temporary merge branch 1
+=========
         this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
         this.inGameController.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
         this.inGameController.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;

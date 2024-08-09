@@ -7,6 +7,7 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.FleetService;
 import de.uniks.stp24.service.game.IslandsService;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import org.fulib.fx.annotation.controller.Component;
@@ -23,20 +24,27 @@ import java.util.stream.Collectors;
 public class NewFleetComponent extends VBox {
     @FXML
     public Label islandNameLabel;
+    @FXML
+    public Button confirmIslandButton;
+    @FXML
+    public Button lastIslandButton;
+    @FXML
+    public Button nextIslandButton;
 
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
-    FleetService fleetService;
+    public FleetService fleetService;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
+
 
     private FleetManagerComponent fleetManagerComponent;
 
-    private int islandNameIndex = 0;
-    private List<ShortSystemDto> islandList = new ArrayList<>();
+    public int islandNameIndex = 0;
+    public List<ShortSystemDto> islandList = new ArrayList<>();
 
     @Inject
     public NewFleetComponent() {
@@ -86,8 +94,7 @@ public class NewFleetComponent extends VBox {
                 result -> {
                     close();
                     this.fleetManagerComponent.showFleets();
-                },
-                error -> System.out.println("Error while creating a new fleet in the NewFleetComponent:\n" + error.getMessage())
+                }, error -> System.out.println("Error while creating a new fleet in the NewFleetComponent:\n" + error.getMessage())
         );
     }
 

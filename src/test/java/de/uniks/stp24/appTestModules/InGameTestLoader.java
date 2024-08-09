@@ -45,7 +45,6 @@ public class InGameTestLoader extends ControllerTest {
     @Spy
     EventService eventService;
     @Spy
-    final
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
     ResourcesService resourcesService;

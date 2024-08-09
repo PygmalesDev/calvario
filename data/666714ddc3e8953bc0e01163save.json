@@ -82,5 +82,50 @@
     } ],
     "cost" : 2,
     "conflicts" : [ "clumsy", "incompetent", "skilled" ]
+  }, {
+    "id" : "__dev__",
+    "effects" : [ {
+      "variable" : "resources.credits.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.energy.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.minerals.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.food.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.fuel.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.research.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.alloys.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.consumer_goods.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    } ],
+    "cost" : 0,
+    "conflicts" : null
   } ]
 } ]

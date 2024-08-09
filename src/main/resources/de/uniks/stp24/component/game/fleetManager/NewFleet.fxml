@@ -13,9 +13,9 @@
    </HBox>
    <Label text="Choose an island"/>
    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-      <Button mnemonicParsing="false" onAction="#showLastIslandName" text="&lt;"/>
+      <Button fx:id="lastIslandButton" mnemonicParsing="false" onAction="#showLastIslandName" text="&lt;"/>
       <Label fx:id="islandNameLabel" text="islandName"/>
-      <Button mnemonicParsing="false" onAction="#showNextIslandName" text="&gt;"/>
+      <Button fx:id="nextIslandButton" mnemonicParsing="false" onAction="#showNextIslandName" text="&gt;"/>
    </HBox>
    <Button fx:id="confirmIslandButton" mnemonicParsing="false" onAction="#confirmIsland" text="Confirm"/>
 </fx:root>

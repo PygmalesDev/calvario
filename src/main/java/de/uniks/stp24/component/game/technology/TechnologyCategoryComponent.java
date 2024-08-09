@@ -1,10 +1,12 @@
 package de.uniks.stp24.component.game.technology;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.model.Jobs;
+import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.PopupBuilder;
+import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.game.ResourcesService;
 import de.uniks.stp24.service.game.TechnologyService;
 import javafx.application.Platform;
@@ -63,32 +65,42 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @Inject
     App app;
     @Inject
-    TechnologyService technologyService;
+    public TokenStorage tokenStorage;
+    @Inject
+    public Subscriber subscriber;
+    @Inject
+    public TechnologyService technologyService;
     @Inject
     @Resource
     @Named("technologiesResourceBundle")
     public ResourceBundle technologiesResourceBundle;
+    @Inject
+    @Named("variablesResourceBundle")
+    public ResourceBundle variablesResourceBundle;
+    @SubComponent
+    @Inject
+    public TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+    @SubComponent
+    @Inject
+    public TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
+    final ImageCache imageCache = new ImageCache();
 
-    public Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this, technologyService, app, technologiesResourceBundle, this.imageCache);
+    public Provider<TechnologyCategorySubComponent> provider = () -> new TechnologyCategorySubComponent(this, technologyService, app, technologiesResourceBundle, tokenStorage, subscriber, variablesResourceBundle, technologyEffectDetailsComponent, technologyResearchDetailsComponent, imageCache);
 
     ObservableList<TechnologyExtended> unlockedTechnologies = FXCollections.observableArrayList();
     ObservableList<TechnologyExtended> researchTechnologies = FXCollections.observableArrayList();
+    ObservableList<ObservableList<TechnologyExtended>> unlockedAndResearchList = FXCollections.observableArrayList();
 
     private Pane parent;
 
-
-
     @Inject
-    ResourcesService resourcesService;
-
-    @Inject
-    Subscriber subscriber;
+    public ResourcesService resourcesService;
 
     @Inject
     @SubComponent
     public ResearchJobComponent researchJobComponent;
 
-    final ImageCache imageCache = new ImageCache();
+
 
     boolean societyJobRunning = false;
     boolean engineeringJobRunning = false;
@@ -97,17 +109,54 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     final PopupBuilder popupTechResearch = new PopupBuilder();
     private TechnologyExtended technology;
-    private TechnologyOverviewComponent technologyOverviewComponent;
+    public TechnologyOverviewComponent technologyOverviewComponent;
 
-
+    @Inject
+    public JobsService jobsService;
 
     @Inject
     public TechnologyCategoryComponent() {
     }
 
+    public void updateTechnologies() {
+        unlockedAndResearchList = technologyService.getUnlockedAndResearch(technologieCategoryName);
+
+        unlockedTechnologies.clear();
+        researchTechnologies.clear();
+
+        unlockedTechnologies = unlockedAndResearchList.getFirst();
+        researchTechnologies = unlockedAndResearchList.getLast();
+
+        unlockedListView.setItems(unlockedTechnologies);
+        researchListView.setItems(researchTechnologies);
+
+        researchListView.setSelectionModel(null);
+        unlockedListView.setSelectionModel(null);
+
+        unlockedListView.setItems(unlockedTechnologies);
+        researchListView.setItems(researchTechnologies);
+
+        unlockedListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
+        researchListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
+    }
+
     @OnInit
     public void init() {
+        technologyService.createTechnologyListener(() -> {
+            updateTechnologies();
+            researchJobComponent.removeJob();
+        });
         researchJobComponent.setTechnologyCategoryComponent(this);
+    }
+
+    @OnInit
+    public void loadJobFinishers() {
+        this.jobsService.onJobsLoadingFinished("technology", job ->
+                this.jobsService.onJobCompletion(job._id(), this::setJobFinisher));
+    }
+
+    public void setJobFinisher(Job job) {
+        handleJobCompleted(job);
     }
 
 
@@ -119,18 +168,19 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     @OnDestroy
     public void destroy() {
-        if (subscriber != null) {
-            subscriber.dispose();
-        }
         unlockedTechnologies.clear();
         researchTechnologies.clear();
 
         unlockedListView.getItems().clear();
         researchListView.getItems().clear();
+
+        if (technologyService.getUnlockedAndResearchList() != null) {
+            technologyService.getUnlockedAndResearchList().clear();
+        }
     }
 
     public void close() {
-        this.setVisible(false);
+        this.parent.setVisible(false);
     }
 
     /**
@@ -153,19 +203,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
     public TechnologyCategoryComponent setCategory(String category) {
         currentResearchResourceLabel.setText(String.valueOf(resourcesService.getResourceCount("research")));
         this.technologieCategoryName = category;
-
-        unlockedTechnologies = technologyService.getUnlockedTechnologies(technologieCategoryName);
-        researchTechnologies = technologyService.getResearchTechnologies(technologieCategoryName);
-
-        researchListView.setSelectionModel(null);
-        unlockedListView.setSelectionModel(null);
-
-        unlockedListView.setItems(unlockedTechnologies);
-        researchListView.setItems(researchTechnologies);
-
-        unlockedListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
-        researchListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
-
+        updateTechnologies();
         return this;
     }
 
@@ -182,11 +220,11 @@ public class TechnologyCategoryComponent extends AnchorPane {
         researchJobComponent.setEffectListView();
     }
 
-    public TechnologyExtended getTechnology(){
+    public TechnologyExtended getTechnology() {
         return technology;
     }
 
-    public void setTechnology(TechnologyExtended technology){
+    public void setTechnology(TechnologyExtended technology) {
         this.technology = technology;
     }
 
@@ -200,10 +238,13 @@ public class TechnologyCategoryComponent extends AnchorPane {
         });
         popupTechResearch.showPopup(researchJobContainer, researchJobComponent);
         researchJobComponent.handleJob(technology);
-//        unShowJobWindow();
     }
 
-    public void unShowJobWindow(){
+    public void unShowJobWindow() {
+        setMouseTransparency();
+    }
+
+    private void setMouseTransparency() {
         researchJobContainer.setMouseTransparent(true);
         researchJobComponent.setMouseTransparent(true);
         researchLeftVBox.setVisible(true);
@@ -226,24 +267,13 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
     }
 
-    public void handleJobCompleted(Jobs.Job job){
+    public void handleJobCompleted(Job job) {
         switch (job._id()) {
             case "society" -> societyJobRunning = false;
             case "engineering" -> engineeringJobRunning = false;
             case "physics" -> physicsJobRunning = false;
         }
-
-
-
-        researchJobContainer.setMouseTransparent(true);
-        researchJobComponent.setMouseTransparent(true);
-        researchLeftVBox.setVisible(true);
-        researchJobContainer.setVisible(false);
-        researchJobComponent.setVisible(false);
-        Platform.runLater(() -> {
-            technologieCategoryBox.getStyleClass().clear();
-            technologieCategoryBox.getStyleClass().add("technologiesCategoryBackground");
-        });
+        setMouseTransparency();
     }
 
 

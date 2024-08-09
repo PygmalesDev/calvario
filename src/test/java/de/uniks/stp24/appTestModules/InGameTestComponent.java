@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Provider;
 import java.util.*;
@@ -38,7 +39,7 @@ public class InGameTestComponent extends InGameTestInitializer {
     final Map<String, Integer> sites = Map.of("energy", 2, "city", 3, "mining", 4, "research", 4);
 
     final IslandType myTestIsland = IslandType.valueOf("uninhabitable_0");
-    final ArrayList<String> buildings = new ArrayList();
+    final ArrayList<String> buildings = new ArrayList<>();
     final List<Island> islands = new ArrayList<>();
 
     final Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
@@ -176,12 +177,33 @@ public class InGameTestComponent extends InGameTestInitializer {
 
     final SystemUpgrades systemUpgrades = new SystemUpgrades(unexplored, explored, colonized, upgraded, developed);
 
-    Island testIsland;
+    public Island testIsland;
 
-    SystemDto system;
+    SystemDto system = new SystemDto(
+            "",
+            "",
+            "systemID",
+            "testGameID",
+            "agriculture",
+            "name",
+            siteSlots,
+            sites,
+            25,
+            buildings,
+            Upgrade.explored,
+            20,
+            null,
+            50,
+            50,
+            "testEmpireID"
+    );
+
+    Trait traitDto = new Trait("traitId", new EffectDto[]{new EffectDto("variable", 0.5, 1.3, 3)}, 3, new String[]{"conflicts"});
 
     public void initComponents(){
         initializeComponents();
+
+        this.inGameController.subscriber = new Subscriber();
 
         this.islandAttributeStorage.systemUpgradeAttributes = systemUpgrades;
         this.islandAttributeStorage.empireDto = empireDto;
@@ -199,6 +221,8 @@ public class InGameTestComponent extends InGameTestInitializer {
 
         // Mock getResourceAggregates
         doReturn(Observable.just(aggregateResult)).when(this.empireService).getResourceAggregates(any(), any());
+        doReturn(Observable.just(new SystemDto[]{system})).when(this.gameSystemsApiService).getSystems(any());
+
 
         // Mock get Fleets and ships
         ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", 4, new HashMap<>(), new HashMap<>())));

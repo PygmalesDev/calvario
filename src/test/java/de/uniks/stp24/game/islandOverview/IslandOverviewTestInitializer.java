@@ -11,9 +11,7 @@ import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
-import de.uniks.stp24.component.game.technology.ResearchJobComponent;
-import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
-import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
+import de.uniks.stp24.component.game.technology.*;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.GameStatus;
@@ -149,8 +147,16 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     IslandClaimingComponent islandClaimingComponent;
     @InjectMocks
     TechnologyOverviewComponent technologyOverviewComponent;
+
     @InjectMocks
     TechnologyCategoryComponent technologyCategoryComponent;
+
+    @InjectMocks
+    TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+
+    @InjectMocks
+    TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
+
     @InjectMocks
     ResearchJobComponent researchJobComponent;
     @InjectMocks
@@ -168,6 +174,27 @@ public class IslandOverviewTestInitializer extends ControllerTest {
 
 
     public void initializeComponents() {
+        this.inGameController.technologiesComponent = this.technologyOverviewComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.researchJobComponent = this.researchJobComponent;
+        this.inGameController.technologiesComponent.technologyService = this.technologyService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyService = this.technologyService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent = this.technologyResearchDetailsComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyEffectDetailsComponent = this.technologyEffectDetailsComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.resourcesService = this.resourcesService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.resourcesService.subscriber = this.subscriber;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyOverviewComponent = this.technologyOverviewComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.tokenStorage = this.tokenStorage;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.presetsApiService = this.presetsApiService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.technologyService = this.technologyService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.empireApiService = this.empireApiService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.gameLogicApiService = this.gameLogicApiService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.tokenStorage = this.tokenStorage;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.subscriber = this.subscriber;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.subscriber = this.subscriber;
+        this.inGameController.technologiesComponent.technologyService.subscriber = this.subscriber;
+        this.inGameController.technologiesComponent.subscriber = this.subscriber;
+
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
@@ -256,6 +283,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.fleetService.fleetApiService = this.fleetApiService;
         this.fleetService.subscriber = this.subscriber;
         this.fleetCoordinationService.subscriber = this.subscriber;
+        this.technologyService.eventListener = this.eventListener;
+
     }
 
     public void clearStyleSheets() {

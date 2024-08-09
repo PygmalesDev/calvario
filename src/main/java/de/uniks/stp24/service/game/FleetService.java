@@ -64,8 +64,6 @@ public class FleetService {
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.fleets.*.*", this.tokenStorage.getGameId()),
                 Fleet.class), event -> {
             Fleet fleet = event.data();
-            //Todo: remove print
-            System.out.println("fleet listener in fleetService " + event.suffix());
             switch (event.suffix()) {
                 case "created" -> this.addFleetToGroups(fleet);
                 case "updated" -> {
@@ -81,11 +79,8 @@ public class FleetService {
         this.subscriber.subscribe(this.eventListener.listen("games." + this.tokenStorage.getGameId() + ".fleets.*.ships.*.*",
                 Ship.class), event -> {
             ReadShipDTO ship = readShipDTOFromShip(event.data());
-            //Todo: remove print
             if (!event.data().updatedAt().equals(lastShipUpdate)) {
-                System.out.println("ship listener in fleetService " + event.suffix());
                 lastShipUpdate = event.data().updatedAt();
-                System.out.println(ship + " updated ship");
             }
             switch (event.suffix()) {
                 case "created" -> {
@@ -122,23 +117,20 @@ public class FleetService {
     }
 
     private void updateFleetInGroups(Fleet fleet) {
-        //Todo: remove print
-        System.out.println(this.empireFleets.get(fleet.empire()) + " before update");
         this.gameFleets.replaceAll(old -> old.equals(fleet) ? fleet : old);
         if (Objects.nonNull(fleet.empire()))
             this.empireFleets.get(fleet.empire()).replaceAll(old -> old.equals(fleet) ? fleet : old);
 
-        if (Objects.nonNull(fleet.location())) {
-            if (!this.islandFleets.containsKey(fleet.location()))
-                this.islandFleets.put(fleet.location(), FXCollections.observableArrayList(fleet));
+        if (!this.islandFleets.containsKey(fleet.location())) {
+            this.islandFleets.get(fleet.location()).removeIf(old ->
+                    old.equals(fleet) && !old.location().equals(fleet.location()));
+
+            this.islandFleets.put(fleet.location(), FXCollections.observableArrayList(fleet));
 
             this.islandFleets.get(fleet.location()).replaceAll(old -> old.equals(fleet) ? fleet : old);
-            this.islandFleets.get(fleet.location()).removeIf(old -> old.equals(fleet) &&
-                    !old.location().equals(fleet.location()));
         }
 
-        System.out.println(this.empireFleets.get(fleet.empire()) + " after update");
-        System.out.println(Arrays.toString(fleet.effects()));
+
     }
 
     private void deleteFleetFromGroups(Fleet fleet) {

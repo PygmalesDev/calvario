@@ -128,7 +128,7 @@ public class FleetCoordinationService {
         }
 
         if (this.claimingComponent.getParent().isVisible())
-            this.claimingComponent.setFleetInformation(this.selectedFleet);
+            this.claimingComponent.setFleetInformation(this.getSelectedFleet());
     }
 
     private void deleteFleetFromMap(Fleet fleet) {
@@ -153,10 +153,7 @@ public class FleetCoordinationService {
         if (jobOptional.isPresent() && jobOptional.get().progress() != jobOptional.get().total()) {
             // If fleet had a travel job, put fleet on the corresponding travel progress location and continue the travel
             Job travelJob = jobOptional.get();
-            this.generateTravelPaths(
-                    this.islandsService.getIsland(travelJob.path().getFirst()),
-                    this.islandsService.getIsland(travelJob.path().getLast())
-            );
+            this.generateTravelPaths(travelJob.path().getFirst(), travelJob.path().getLast());
             PathEntry entry = this.getPathEntry(travelJob.path().getFirst(), travelJob.path().getLast());
             List<DistancePoint> distancePoints = this.createCoordinatedPath(entry, travelJob.path().getFirst());
             for (int i = 0; i < travelJob.progress()-1; i++) distancePoints.removeFirst();
@@ -199,8 +196,11 @@ public class FleetCoordinationService {
         this.timerService.onSpeedChanged(this::processSpeedChanged);
     }
 
-    public GameFleetController getSelectedFleet() {
-        return selectedFleet;
+    public Fleet getSelectedFleet() {
+        if (Objects.nonNull(this.selectedFleet)) {
+            return this.selectedFleet.getFleet();
+        }
+        return null;
     }
 
     private void processSpeedChanged() {
@@ -340,11 +340,9 @@ public class FleetCoordinationService {
         return coordinatedPath;
     }
 
-    public void generateTravelPaths(Island startIsland, Island destinationIsland) {
+    public void generateTravelPaths(String startLocation, String endLocation) {
         // Find the shortest path using Dijkstra's algorithm
         if (Objects.isNull(this.selectedFleet)) return;
-        String startLocation = startIsland.id();
-        String endLocation = destinationIsland.id();
 
         // Return the travel path if it already was computed
         PathEntry calculatedPath = this.getPathEntry(startLocation, endLocation);

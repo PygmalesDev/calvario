@@ -1,23 +1,24 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
+import de.uniks.stp24.model.Fleets.Fleet;
 import de.uniks.stp24.model.Island;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Jobs.Job;
+import de.uniks.stp24.model.Ships;
+import de.uniks.stp24.model.Ships.ReadShipDTO;
 import de.uniks.stp24.model.Site;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
-import de.uniks.stp24.service.game.FleetCoordinationService;
-import de.uniks.stp24.service.game.IslandsService;
-import de.uniks.stp24.service.game.JobsService;
+import de.uniks.stp24.service.game.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -28,14 +29,17 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static de.uniks.stp24.service.Constants.islandTranslation;
 
 @Component(view = "IslandClaiming.fxml")
 public class IslandClaimingComponent extends Pane {
     public Button closeClaimingButton;
+    @FXML
+    SplitPane travelButtonControlPane;
+    @FXML
+    SplitPane exploreButtonControlPane;
     @FXML
     Text islandTypeText;
     @FXML
@@ -53,6 +57,8 @@ public class IslandClaimingComponent extends Pane {
     @FXML
     Button exploreButton;
     @FXML
+    Button travelButton;
+    @FXML
     Button cancelJobButton;
     @FXML
     ProgressBar jobProgressBar;
@@ -60,8 +66,6 @@ public class IslandClaimingComponent extends Pane {
     Pane colonizePane;
     @FXML
     Text noSitesText;
-    @FXML
-    Text fleetInformationText;
     @FXML
     ListView<Site> sitesListView;
     @FXML
@@ -82,6 +86,10 @@ public class IslandClaimingComponent extends Pane {
     @Inject
     public FleetCoordinationService fleetCoordinationService;
     @Inject
+    public FleetService fleetService;
+    @Inject
+    public ShipService shipService;
+    @Inject
     App app;
 
     @Inject
@@ -92,7 +100,8 @@ public class IslandClaimingComponent extends Pane {
     @Inject
     public Provider<ClaimingSiteComponent> componentProvider;
     final Provider<ResourceComponent> negativeResourceProvider = () -> new ResourceComponent("negative", gameResourceBundle, this.imageCache);
-    private ObservableList<Job> upgradeJobs;
+    private ObservableList<Job> upgradeJobs = FXCollections.observableArrayList();
+    private ObservableList<Job> travelJobs = FXCollections.observableArrayList();
     private final ObservableList<Site> siteObservableList = FXCollections.observableArrayList();
     private final ObservableList<de.uniks.stp24.model.Resource> consumeObservableList = FXCollections.observableArrayList();
     private final ObservableList<de.uniks.stp24.model.Resource> costsObservableList = FXCollections.observableArrayList();
@@ -101,13 +110,27 @@ public class IslandClaimingComponent extends Pane {
     private double incrementAmount;
     private double progress;
 
+    private final Tooltip travelTooltip = new Tooltip();
+    private final Tooltip claimingTooltip = new Tooltip();
+    private final Duration TOOLTIP_ANIMATION_DURATION = Duration.seconds(0.1);
+
     @Inject
     public IslandClaimingComponent() {}
 
     @OnRender
     public void render() {
-        this.jobsService.onJobsLoadingFinished(() ->
-                this.upgradeJobs = this.jobsService.getJobObservableListOfType("upgrade"));
+        this.travelTooltip.setShowDelay(TOOLTIP_ANIMATION_DURATION);
+        this.claimingTooltip.setShowDelay(TOOLTIP_ANIMATION_DURATION);
+        this.travelTooltip.setHideDelay(TOOLTIP_ANIMATION_DURATION);
+        this.claimingTooltip.setHideDelay(TOOLTIP_ANIMATION_DURATION);
+
+        this.travelTooltip.getStyleClass().add("controlTooltip");
+        this.claimingTooltip.getStyleClass().add("controlTooltip");
+        this.travelTooltip.setPrefWidth(20);
+        this.claimingTooltip.setPrefWidth(20);
+
+        this.travelButtonControlPane.setTooltip(this.travelTooltip);
+        this.exploreButtonControlPane.setTooltip(this.claimingTooltip);
 
         this.timerImage.setImage(this.imageCache.get("/de/uniks/stp24/assets/other/time.png"));
         this.capacityImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/islands/capacity_icon.png"));
@@ -120,15 +143,6 @@ public class IslandClaimingComponent extends Pane {
         this.islandTypeText.setText(this.gameResourceBundle.getString(islandTranslation.get(island.type().toString())));
         this.capacityText.setText(String.valueOf(island.resourceCapacity()));
         this.colonizersText.setText(String.valueOf(island.crewCapacity()));
-
-        this.islandJob = this.upgradeJobs.stream()
-                .filter(job -> job.system().equals(this.currentIsland.id())).findFirst().orElse(null);
-        if (Objects.nonNull(this.islandJob)) {
-            this.setProgressBarVisibility(true);
-            this.progress = this.islandJob.progress();
-            this.incrementAmount = (double) 1 / this.islandJob.total();
-            this.jobProgressBar.setProgress(this.progress * this.incrementAmount);
-        } else this.setProgressBarVisibility(false);
 
         if (this.currentIsland.upgrade().equals("explored")) {
             this.siteObservableList.clear();
@@ -161,52 +175,99 @@ public class IslandClaimingComponent extends Pane {
         }
 
         this.setFleetInformation(this.fleetCoordinationService.getSelectedFleet());
+        this.setClaimingInformation();
     }
 
     public void exploreIsland() {
-        this.fleetCoordinationService.travelToIsland(this.currentIsland);
-
-        /* TODO: This job can be started only after the fleet has reached this island!
-                 Please don't remove (I will be very angry if you do!) */
-//        this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createIslandUpgradeJob(this.currentIsland.id())), job -> {
-//            this.setProgressBarVisibility(true);
-//            this.progress = 0;
-//            this.islandJob = job;
-//            this.jobProgressBar.setProgress(this.progress);
-//            this.incrementAmount = (double) 1 /job.total();
-//            this.setJobFinishers(job);
-//        }, error -> System.out.printf(
-//                        """
-//                        Creating a new exploration job failed in IslandClaimingComponent
-//                        An exception was caught here: %s
-//                        """, error.getMessage()));
-
+        this.subscriber.subscribe(this.jobsService.beginJob(Jobs.createIslandUpgradeJob(this.currentIsland.id())),
+                job -> {
+            this.refreshJobProgressBar(job);
+            this.setJobFinishers(job);
+        }, error -> System.out.printf("Caught an error while trying to initialize a new island upgrade job in" +
+                        "the IslandClaimingComponent:\n%s", error.getMessage()));
     }
 
-    public void setFleetInformation(GameFleetController fleet) {
-        if (Objects.isNull(fleet)) {
-            this.fleetInformationText.setVisible(true);
-            this.fleetInformationText.setText(this.gameResourceBundle.getString("claiming.noFleet"));
-            this.exploreButton.setVisible(false);
-        } else if (false) {
-            // TODO: Check if the fleet has ships for exploring/colonizing
-        } else {
-            this.fleetInformationText.setVisible(false);
-            this.exploreButton.setVisible(true);
-            this.exploreButton.setText(this.gameResourceBundle.getString("claiming.travel"));
-            this.fleetCoordinationService.generateTravelPaths(
-                    this.islandsService.getIsland(this.fleetCoordinationService.getSelectedFleet().getFleet().location()),
-                    this.currentIsland);
-            this.timeText.setText(String.valueOf(
-                    this.fleetCoordinationService.getTravelDuration(fleet.getFleet().location(),
-                    this.currentIsland.id())
-                    ));
+    private void refreshJobProgressBar(Job job) {
+        this.islandJob = job;
+        this.progress = job.progress();
+        this.incrementAmount = 1/job.total();
+        this.jobProgressBar.setProgress(this.progress*this.incrementAmount);
+        this.setProgressBarVisibility(true);
+    }
+
+
+    public void setClaimingInformation() {
+        this.setProgressBarVisibility(false);
+        this.exploreButton.setDisable(true);
+        this.exploreButtonControlPane.setTooltip(this.claimingTooltip);
+
+        // Check whether the island is being upgraded
+        Optional<Job> upgradeJob = this.upgradeJobs.stream().filter(job ->
+                job.system().equals(this.currentIsland.id())).findFirst();
+        if (upgradeJob.isPresent()) {
+            this.refreshJobProgressBar(upgradeJob.get());
+            return;
         }
+
+        // Check if the island has enough ships of corresponding type to begin the claiming
+        String requiredShipType = this.currentIsland.upgrade().equals("unexplored") ? "explorer" : "colonizer";
+        ObservableList<Fleet> fleetsOnIsland = this.fleetService.getFleetsOnIsland(this.currentIsland.id());
+        if (!fleetsOnIsland.isEmpty()) {
+            fleetsOnIsland.forEach(fleet ->
+                this.subscriber.subscribe(this.shipService.getShipsOfFleet(fleet._id()),
+                        result -> Arrays.stream(result)
+                            .map(ReadShipDTO::type)
+                            .filter(type -> type.equals(requiredShipType)).findFirst()
+                            .map(type -> {
+                                this.exploreButton.setDisable(false);
+                                this.exploreButtonControlPane.setTooltip(null);
+                                return type;
+                            }).orElseGet(() -> {
+                                this.claimingTooltip.setText("No fleets possess a ship of type " + requiredShipType);
+                                return "";
+                            }),
+                        error -> System.out.printf("Caught an error while trying to retrieve ships for" +
+                                              "fleets in the IslandClaimingComponent:\n%s", error.getMessage())
+                ));
+        } else this.claimingTooltip.setText("No fleets of your empire are near this island");
+    }
+
+    public void setFleetInformation(Fleet fleet) {
+        this.travelButton.setDisable(true);
+        this.travelButtonControlPane.setTooltip(this.travelTooltip);
+        this.timeText.setText("??");
+
+        if (Objects.nonNull(fleet)) {
+            if (!this.currentIsland.id().equals(fleet.location())) {
+                this.fleetCoordinationService.generateTravelPaths(fleet.location(), this.currentIsland.id());
+                this.timeText.setText(""+this.fleetCoordinationService.getTravelDuration(fleet.location(), this.currentIsland.id()));
+                if (this.travelJobs.filtered(job -> job.fleet().equals(fleet._id())).isEmpty()) {
+                    this.subscriber.subscribe(this.shipService.getShipsOfFleet(fleet._id()), result -> {
+                        if (result.length != 0) {
+                            this.travelButton.setDisable(false);
+                            this.travelButtonControlPane.setTooltip(null);
+                        }
+                        else this.travelTooltip.setText("This fleet has no ships for travel!");
+                    }, error -> System.out.printf("Caught an error while trying to retrieve ships " +
+                                                  "of the fleet in IslandClaimingComponent:\n %s", error.getMessage()));
+                } else this.travelTooltip.setText("This fleet is already traveling! Stop it's travel and try again!");
+            } else this.travelTooltip.setText("The fleet is already parked on this island!");
+        } else this.travelTooltip.setText("Select the fleet first!");
+    }
+
+    public void travelToIsland() {
+        this.fleetCoordinationService.travelToIsland(this.currentIsland);
     }
 
     @OnRender
     public void setJobUpdates() {
+        this.jobsService.onJobsLoadingFinished(() -> {
+            this.upgradeJobs = this.jobsService.getJobObservableListOfType("upgrade");
+            this.travelJobs = this.jobsService.getJobObservableListOfType("travel");
+        });
+
         this.jobsService.onJobsLoadingFinished("upgrade", this::setJobFinishers);
+        this.jobsService.onJobsLoadingFinished("travel", job -> this.setClaimingInformation());
         this.jobsService.onGameTicked(this::incrementProgress);
     }
 

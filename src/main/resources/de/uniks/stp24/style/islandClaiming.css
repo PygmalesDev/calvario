@@ -65,3 +65,19 @@
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
 }
+
+.controlPane {
+    -fx-background-color: transparent;
+}
+
+.controlTooltip {
+    -fx-font-family: "Tempus Sans ITC";
+    -fx-font-size: 12;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+    -fx-text-fill: black;
+
+    -fx-content-display: center;
+    -fx-background-color: transparent;
+    -fx-graphic: url("/de/uniks/stp24/assets/backgrounds/island_claiming_tooltip.png");
+}

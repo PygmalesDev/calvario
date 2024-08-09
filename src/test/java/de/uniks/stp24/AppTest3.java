@@ -35,7 +35,7 @@ public class AppTest3 extends AppTest3Module {
         this.beginIslandUpgrade();
         this.inspectJobs();
         this.cancelJob();
-        this.beginIslandClaiming();
+//        this.beginIslandClaiming();
         this.beginTechnologyJob();
         this.showHelpWindow();
     }

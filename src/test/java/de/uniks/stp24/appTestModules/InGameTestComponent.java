@@ -17,6 +17,7 @@ import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
@@ -82,7 +83,7 @@ public class InGameTestComponent extends InGameTestInitializer {
             null,
             null,
             "testEmpireID",
-            "testGameID",
+            "123456",
             "testUserID",
             null,
             null,
@@ -187,14 +188,14 @@ public class InGameTestComponent extends InGameTestInitializer {
         this.inGameController.overviewSitesComponent.sitesComponent.districtComponentProvider = districtComponentProvider;
 
         doReturn("testUserID").when(this.tokenStorage).getUserId();
-        doReturn("testGameID").when(this.tokenStorage).getGameId();
+        doReturn("123456").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
         doReturn(gameStatus).when(this.inGameService).getGameStatus();
 
         // Mock getEmpire
         doReturn(Observable.just(empireDto)).when(this.empireService).getEmpire(any(), any());
-        doReturn(Observable.just(new Game("a", "a", "testGameID", "gameName", "gameOwner", 2, 1, true, 1, 1, null))).when(gamesApiService).getGame(any());
-        doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.testGameID.empires.testEmpireID.updated"), eq(EmpireDto.class));
+        doReturn(Observable.just(new Game("a", "a", "123456", "gameName", "gameOwner", 2, 1, true, 1, 1, null))).when(gamesApiService).getGame(any());
+        doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.123456.empires.testEmpireID.updated"), eq(EmpireDto.class));
 
         // Mock getResourceAggregates
         doReturn(Observable.just(aggregateResult)).when(this.empireService).getResourceAggregates(any(), any());
@@ -228,7 +229,7 @@ public class InGameTestComponent extends InGameTestInitializer {
                 "",
                 "",
                 "systemID",
-                "testGameID",
+                "123456",
                 "agriculture",
                 "name",
                 siteSlots,
@@ -299,9 +300,14 @@ public class InGameTestComponent extends InGameTestInitializer {
         doReturn(Observable.empty()).when(marketService).getSeasonalTrades(any(), any());
 
         this.inGameController.buildingPropertiesComponent.certainBuilding = buildingPreset1;
+//        doNothing().when(contactsComponent).loadEmpireWars();
+//        doNothing().when(contactsComponent).init();
+        doReturn(Observable.just(new ArrayList<WarDto>())).when(warService).getWars(any(),any());
+
 
         this.app.show(this.inGameController);
         clearStyleSheets();
+
     }
 
     protected void createMap() {

@@ -363,10 +363,6 @@ public class InGameController extends BasicController {
                 contactsOverviewComponent
         );
 
-        contactsOverviewComponent.setParents(contextMenuContainer, contactDetailsContainer);
-        contactsOverviewComponent.contactDetailsComponent.setWarComponent(warComponent);
-        warComponent.setParent(warContainer);
-        contactService.setContactOverview(contactsOverviewComponent);
 
         contextMenuContainer.getChildren().forEach(child -> {
             child.setVisible(false);
@@ -387,10 +383,14 @@ public class InGameController extends BasicController {
         draggables.addAll(Arrays.asList(overviewContainer, buildingsWindow, buildingProperties, siteProperties));
         new Draggable.DraggableNode(overviewContainer, buildingsWindow, buildingProperties, siteProperties);
 
+        contactsOverviewComponent.setParents(contextMenuContainer, contactDetailsContainer);
+        contactsOverviewComponent.contactDetailsComponent.setWarComponent(warComponent);
+        warComponent.setParent(warContainer);
+        contactService.setContactOverview(contactsOverviewComponent);
         this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListeners();
         explanationService.setInGameController(this);
-      
+
         technologiesComponent.setContainer(technologiesContainer);
         technologiesContainer.setVisible(false);
         technologiesContainer.getChildren().add(technologiesComponent);

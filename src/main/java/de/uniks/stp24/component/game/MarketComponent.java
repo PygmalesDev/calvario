@@ -421,7 +421,7 @@ public class MarketComponent extends StackPane {
     @OnRender
     public void render() {
         System.out.println("LOAD FROM SEASONAL SHOULD BE MODIFIED");
-        loadSeasonalTrades();
+//        loadSeasonalTrades();
     }
 
     /**

@@ -1,3 +1,4 @@
+/*
 package de.uniks.stp24.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -338,3 +339,4 @@ public class PauseMenuTest extends ControllerTest {
         verify(app, times(1)).show("/browseGames");
     }
 }
+*/

@@ -107,13 +107,17 @@ public class InGameTestInitializer extends ControllerTest {
     FleetCoordinationService fleetCoordinationService;
     @Spy
     FleetApiService fleetApiService;
-//    @Spy
-//    ContactsService contactsService;
+    //    @Spy
+    //    ContactsService contactsService;
     @Spy
     WarService warService;
     @Spy
     WarsApiService warsApiService;
 
+    @InjectMocks
+    TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+    @InjectMocks
+    TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
     @InjectMocks
     IslandUpgradesJobProgressComponent jobProgressComponent;
     @InjectMocks
@@ -166,10 +170,6 @@ public class InGameTestInitializer extends ControllerTest {
     protected MarketComponent marketComponent;
     @InjectMocks
     CoolerBubbleComponent coolerBubbleComponent;
-    @InjectMocks
-    TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
-    @InjectMocks
-    TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
     @Mock
     AnnouncementsService announcementsService;
     @InjectMocks
@@ -243,18 +243,18 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.technologiesComponent.technologyCategoryComponent.resourcesService.subscriber = this.subscriber;
         this.inGameController.technologiesComponent.technologyCategoryComponent.technologyOverviewComponent = this.technologyOverviewComponent;
         this.inGameController.technologiesComponent.technologyCategoryComponent.tokenStorage = this.tokenStorage;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.presetsApiService = this.presetsApiService;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.technologyService = this.technologyService;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.empireApiService = this.empireApiService;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.gameLogicApiService = this.gameLogicApiService;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.tokenStorage = this.tokenStorage;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.subscriber = this.subscriber;
         this.inGameController.technologiesComponent.technologyCategoryComponent.subscriber = this.subscriber;
         this.inGameController.technologiesComponent.technologyService.subscriber = this.subscriber;
         this.inGameController.technologiesComponent.subscriber = this.subscriber;
         this.inGameController.technologyService.eventListener = this.eventListener;
         this.inGameController.technologiesComponent.technologyCategoryComponent.jobsService = new JobsService();
         this.technologyService.tokenStorage = this.tokenStorage;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.presetsApiService = this.presetsApiService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.technologyService = this.technologyService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.empireApiService = this.empireApiService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.gameLogicApiService = this.gameLogicApiService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.tokenStorage = this.tokenStorage;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.subscriber = this.subscriber;
 
         this.inGameController.coolerBubbleComponent = this.coolerBubbleComponent;
         this.inGameController.coolerBubbleComponent.subscriber = this.coolerBubbleComponent.subscriber;

@@ -214,7 +214,8 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
                 null,
                 2,
                 2,
-                "owner");
+                "owner",
+          100);
 
         this.islandAttributeStorage.setIsland(testIsland);
 

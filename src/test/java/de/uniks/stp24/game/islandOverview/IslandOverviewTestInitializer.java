@@ -152,10 +152,6 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @InjectMocks
     TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
 
-
-    @InjectMocks
-    TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
-
     @InjectMocks
     TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
 

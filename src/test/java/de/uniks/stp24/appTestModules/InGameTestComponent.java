@@ -195,7 +195,8 @@ public class InGameTestComponent extends InGameTestInitializer {
             null,
             50,
             50,
-            "testEmpireID"
+            "testEmpireID",
+      100
     );
 
     Trait traitDto = new Trait("traitId", new EffectDto[]{new EffectDto("variable", 0.5, 1.3, 3)}, 3, new String[]{"conflicts"});

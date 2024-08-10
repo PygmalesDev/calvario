@@ -7,7 +7,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
@@ -79,7 +78,6 @@ public class BlueprintsComponent extends VBox implements ReusableItemComponent<S
     @OnRender
     public void render() {
         Tooltip details = new Tooltip();
-
         details.getStyleClass().add("details-tooltip");
         details.setShowDelay(Duration.ZERO);
         details.setShowDuration(Duration.INDEFINITE);

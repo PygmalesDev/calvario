@@ -29,10 +29,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import org.fulib.fx.controller.Subscriber;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Spy;
 
-import java.util.Random;
 
 import static org.mockito.Mockito.spy;
 
@@ -173,6 +171,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     NewFleetComponent newFleetComponent;
     @InjectMocks
     ChangeFleetComponent changeFleetComponent;
+    @InjectMocks
+    private BlueprintsDetailsComponent blueprintsDetailsComponent;
 
 
     public void initializeComponents() {

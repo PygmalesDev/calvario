@@ -2,6 +2,7 @@ package de.uniks.stp24.ingameTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.game.fleetManager.BlueprintsDetailsComponent;
 import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
 import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
 import de.uniks.stp24.component.game.fleetManager.NewFleetComponent;
@@ -71,6 +72,8 @@ public class TestFleetManager extends ControllerTest {
     NewFleetComponent newFleetComponent;
     @InjectMocks
     ChangeFleetComponent changeFleetComponent;
+    @InjectMocks
+    BlueprintsDetailsComponent blueprintsDetailsComponent;
 
     protected final String
             GAME_ID = "123456",
@@ -132,6 +135,7 @@ public class TestFleetManager extends ControllerTest {
         this.shipService.tokenStorage = this.tokenStorage;
         this.fleetManagerComponent.variableService = this.variableService;
         this.fleetManagerComponent.jobsService = this.jobsService;
+        this.fleetManagerComponent.blueprintsDetailsComponent = this.blueprintsDetailsComponent;
 
         // Mock TokenStorage
         doReturn("123456").when(this.tokenStorage).getGameId();
@@ -233,7 +237,7 @@ public class TestFleetManager extends ControllerTest {
         clickOn("#editFleetButton_fleetID1");
         waitForFxEvents();
         assertTrue(fleetManagerComponent.blueprintsVBox.isVisible());
-        assertFalse(fleetManagerComponent.fleetsOverviewVBox.isVisible());
+        assertTrue(fleetManagerComponent.fleetsOverviewVBox.isVisible());
         assertTrue(fleetManagerComponent.fleetBuilderVBox.isVisible());
         assertEquals(2, fleetManagerComponent.blueprintsInFleetList.size());
         assertEquals(3, fleetManagerComponent.blueprintsListView.getItems().size());
@@ -242,13 +246,13 @@ public class TestFleetManager extends ControllerTest {
         clickOn("#incrementSizeButton_explorer");
         FLEET_SUBJECT.onNext(new Event<>("games." + GAME_ID + ".fleets.*.updated", modFleets[0]));
         waitForFxEvents();
-        assertEquals("Command Limit \n3 / 4", fleetManagerComponent.commandLimitLabel.getText());
+        assertEquals("Command Limit \n3/4", fleetManagerComponent.commandLimitLabel.getText());
 
         // decrement planned size:
         clickOn("#decrementSizeButton_explorer");
         FLEET_SUBJECT.onNext(new Event<>("games." + GAME_ID + ".fleets.*.updated", modFleets[1]));
         waitForFxEvents();
-        assertEquals("Command Limit \n3 / 3", fleetManagerComponent.commandLimitLabel.getText());
+        assertEquals("Command Limit \n3/3", fleetManagerComponent.commandLimitLabel.getText());
 
         // add blueprint:
         clickOn("#addBlueprintButton_fighter");
@@ -406,7 +410,7 @@ public class TestFleetManager extends ControllerTest {
         clickOn("#editFleetButton_fleetID1");
         waitForFxEvents();
         assertTrue(fleetManagerComponent.blueprintsVBox.isVisible());
-        assertFalse(fleetManagerComponent.fleetsOverviewVBox.isVisible());
+        assertTrue(fleetManagerComponent.fleetsOverviewVBox.isVisible());
         assertTrue(fleetManagerComponent.fleetBuilderVBox.isVisible());
         assertEquals(2, fleetManagerComponent.blueprintsInFleetList.size());
         assertEquals(3, fleetManagerComponent.blueprintsListView.getItems().size());

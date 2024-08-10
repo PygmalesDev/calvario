@@ -185,13 +185,6 @@ public class PauseMenuTest extends ControllerTest {
     ChangeFleetComponent changeFleetComponent;
     @InjectMocks
     BlueprintsDetailsComponent blueprintsDetailsComponent;
-    @InjectMocks
-    TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
-    @InjectMocks
-    TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
-
-    @Spy
-    GameLogicApiService gameLogicApiService;
 
     @InjectMocks
     InGameController inGameController;

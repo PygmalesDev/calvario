@@ -7,10 +7,7 @@ import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
 import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
 import de.uniks.stp24.component.game.fleetManager.NewFleetComponent;
 import de.uniks.stp24.component.game.jobs.*;
-import de.uniks.stp24.component.game.technology.ResearchJobComponent;
-import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
-import de.uniks.stp24.component.game.technology.TechnologyCategorySubComponent;
-import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
+import de.uniks.stp24.component.game.technology.*;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.GameStatus;
@@ -155,11 +152,13 @@ public class InGameTestLoader extends ControllerTest {
     @InjectMocks
     protected FleetManagerComponent fleetManagerComponent;
     @InjectMocks
-    protected FleetCreationComponent fleetCreationComponent;
-    @InjectMocks
     protected NewFleetComponent newFleetComponent;
     @InjectMocks
     protected ChangeFleetComponent changeFleetComponent;
+    @InjectMocks
+    protected TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+    @InjectMocks
+    protected TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
 
     final Provider<ClaimingSiteComponent> claimingComponentProvider = () -> {
         var component = new ClaimingSiteComponent();
@@ -206,7 +205,8 @@ public class InGameTestLoader extends ControllerTest {
 
     final Provider<TechnologyCategorySubComponent> technologyCategorySubComponentProvider = () ->
             new TechnologyCategorySubComponent(this.technologyCategoryComponent, this.technologyService,
-                    this.app, this.technologiesResourceBundle, this.imageCache);
+                    this.app, this.technologiesResourceBundle, this.tokenStorage, this.subscriber, this.variablesResourceBundle, this.technologyEffectDetailsComponent,
+                    this.technologyResearchDetailsComponent, this.imageCache);
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -276,7 +276,6 @@ public class InGameTestLoader extends ControllerTest {
         this.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
         this.fleetManagerComponent.jobsService = this.jobsService;
         this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
-        this.inGameController.fleetCreationComponent = this.fleetCreationComponent;
     }
 
     protected void setServices() {

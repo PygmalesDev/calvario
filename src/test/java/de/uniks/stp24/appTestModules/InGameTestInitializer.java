@@ -158,8 +158,6 @@ public class InGameTestInitializer extends ControllerTest {
     @InjectMocks
     FleetManagerComponent fleetManagerComponent;
     @InjectMocks
-    FleetCreationComponent fleetCreationComponent;
-    @InjectMocks
     NewFleetComponent newFleetComponent;
     @InjectMocks
     ChangeFleetComponent changeFleetComponent;
@@ -275,7 +273,6 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
         this.inGameController.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
         this.inGameController.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
-        this.inGameController.fleetCreationComponent = this.fleetCreationComponent;
         this.fleetCoordinationService.fleetService = this.fleetService;
         this.fleetCoordinationService.tokenStorage = this.tokenStorage;
         this.fleetService.tokenStorage = this.tokenStorage;

@@ -2,7 +2,6 @@ package de.uniks.stp24.game.islandOverview;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
 import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
@@ -23,6 +22,7 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -70,7 +70,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     GameMembersApiService gameMembersApiService;
     @Spy
     EmpireApiService empireApiService;
-    @Spy
+    @Mock
     JobsService jobsService;
     @Spy
     JobsApiService jobsApiService;
@@ -78,7 +78,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     ExplanationService explanationService;
     @Spy
     TechnologyService technologyService;
-    @Spy
+    @Mock
     TimerService timerService;
     @Spy
     GameLogicApiService gameLogicApiService;
@@ -86,11 +86,11 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     VariableDependencyService variableDependencyService;
     @Spy
     MarketService marketService;
-    @Spy
+    @Mock
     FleetService fleetService;
-    @Spy
+    @Mock
     ShipService shipService;
-    @Spy
+    @Mock
     FleetCoordinationService fleetCoordinationService;
     @Spy
     FleetApiService fleetApiService;
@@ -149,6 +149,11 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     TechnologyOverviewComponent technologyOverviewComponent;
 
     @InjectMocks
+    Tooltip travelTooltip = new Tooltip("");
+    @InjectMocks
+    Tooltip claimingTooltip = new Tooltip("");
+
+    @InjectMocks
     TechnologyCategoryComponent technologyCategoryComponent;
 
     @InjectMocks
@@ -166,11 +171,11 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @InjectMocks
     FleetManagerComponent fleetManagerComponent;
     @InjectMocks
-    FleetCreationComponent fleetCreationComponent;
-    @InjectMocks
     NewFleetComponent newFleetComponent;
     @InjectMocks
     ChangeFleetComponent changeFleetComponent;
+    @InjectMocks
+    IslandTravelComponent islandTravelComponent;
 
 
     public void initializeComponents() {
@@ -202,6 +207,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = this.eventComponent;
         this.inGameController.eventService = this.eventService;
+        this.inGameController.islandTravelComponent = this.islandTravelComponent;
         this.clockComponent.eventService = this.eventService;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameService.setGameStatus(gameStatus);
@@ -276,7 +282,6 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
         this.inGameController.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
         this.inGameController.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
-        this.inGameController.fleetCreationComponent = this.fleetCreationComponent;
         this.fleetCoordinationService.fleetService = this.fleetService;
         this.fleetCoordinationService.tokenStorage = this.tokenStorage;
         this.fleetService.tokenStorage = this.tokenStorage;

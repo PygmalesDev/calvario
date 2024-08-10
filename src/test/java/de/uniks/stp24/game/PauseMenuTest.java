@@ -2,7 +2,6 @@ package de.uniks.stp24.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
 import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
@@ -171,8 +170,6 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     FleetManagerComponent fleetManagerComponent;
     @InjectMocks
-    FleetCreationComponent fleetCreationComponent;
-    @InjectMocks
     NewFleetComponent newFleetComponent;
     @InjectMocks
     ChangeFleetComponent changeFleetComponent;
@@ -279,7 +276,6 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
         this.inGameController.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
         this.inGameController.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
-        this.inGameController.fleetCreationComponent = this.fleetCreationComponent;
         this.fleetCoordinationService.fleetService = this.fleetService;
         this.fleetCoordinationService.tokenStorage = this.tokenStorage;
         this.fleetService.tokenStorage = this.tokenStorage;
@@ -297,7 +293,6 @@ public class PauseMenuTest extends ControllerTest {
 
         inGameService.setGameStatus(gameStatus);
         inGameService.setTimerService(timerService);
-        Map<String, Integer> variablesMarket = new HashMap<>();
         Map<String,List<SeasonComponent>> _private = new HashMap<>();
 
         doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());

@@ -129,7 +129,7 @@ public class EventComponent extends AnchorPane {
                         .listen("games." + tokenStorage.getGameId() + ".ticked", Game.class),
                 event -> {
                     if (!Objects.equals(lastUpdate, event.data().updatedAt())) {
-                        eventService.setNextEventTimer(eventService.getNextEventTimer()-1);
+                        eventService.setNextEventTimer(eventService.getNextEventTimer() - 1);
                         EffectSourceParentDto activeEvent = eventService.getEvent();
                         if (activeEvent != null && !eventOccured) {
                             eventOccured = true;
@@ -137,7 +137,8 @@ public class EventComponent extends AnchorPane {
                                 changeToNight();
                             }
                             subscriber.subscribe(eventService.sendEffect(),
-                                    result -> {},
+                                    result -> {
+                                    },
                                     error -> System.out.println("Error beim Senden von Effect: " + error));
                             setRandomEventInfos(activeEvent);
                             show();
@@ -150,7 +151,7 @@ public class EventComponent extends AnchorPane {
                         lastUpdate = event.data().updatedAt();
                     }
                 },
-                error -> System.out.println("Error bei Season: " + error.getMessage())
+                error -> System.out.println("Error on Season: " + error.getMessage())
         );
     }
 

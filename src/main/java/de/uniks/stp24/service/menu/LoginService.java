@@ -6,6 +6,7 @@ import de.uniks.stp24.model.LoginResult;
 import de.uniks.stp24.rest.AuthApiService;
 import de.uniks.stp24.service.PrefService;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.TechnologyService;
 import io.reactivex.rxjava3.core.Observable;
 
 import javax.inject.Inject;
@@ -17,6 +18,8 @@ public class LoginService {
     TokenStorage tokenStorage;
     @Inject
     PrefService prefService;
+    @Inject
+    TechnologyService technologyService;
 
     @Inject
     public LoginService() {
@@ -31,6 +34,7 @@ public class LoginService {
                     tokenStorage.setAvatar(loginResult.avatar());
                     prefService.setRefreshToken(loginResult.refreshToken());
                     tokenStorage.setAvatarMap(loginResult._public());
+                    technologyService.initAllTechnologies();
                 });
     }
 

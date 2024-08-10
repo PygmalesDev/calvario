@@ -233,6 +233,8 @@ public class AppTest3Module extends LobbyTestLoader {
     }
 
     private void initializeApiMocks() {
+
+        doReturn(Observable.just(RESOURCE_AGGREGATES)).when(this.gameLogicApiService).getTechnologyCostAndTime(any(), any(), any());
         doReturn(null).when(this.imageCache).get(any());
         doNothing().when(this.saveLoadService).saveGang(any());
 
@@ -286,6 +288,9 @@ public class AppTest3Module extends LobbyTestLoader {
 
         when(this.variableService.getFirstHalfOfVariables()).thenReturn(Observable.just(EXPLAINED_VARIABLES));
         when(this.variableService.getSecondHalfOfVariables()).thenReturn(Observable.just(EXPLAINED_VARIABLES));
+
+        this.technologyService.eventListener = this.eventListener;
+        this.technologyCategoryComponent.jobsService = this.jobsService;
 
         doAnswer(inv -> this.app.show(this.gangCreationController)).when(this.app).show(eq("/creation"), any());
         doAnswer(inv -> this.app.show(this.inGameController)).when(this.app).show(eq("/ingame"), any());

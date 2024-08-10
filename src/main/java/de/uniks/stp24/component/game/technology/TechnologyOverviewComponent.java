@@ -43,6 +43,8 @@ public class TechnologyOverviewComponent extends AnchorPane {
     @Inject
     public TechnologyService technologyService;
 
+    private Pane parent;
+
     @Inject
     @SubComponent
     public TechnologyCategoryComponent technologyCategoryComponent;
@@ -80,7 +82,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
     }
 
     public void close() {
-        this.setVisible(false);
+        parent.setVisible(false);
     }
 
     public void showWindow(){
@@ -177,9 +179,9 @@ public class TechnologyOverviewComponent extends AnchorPane {
 
     }
 
-
     public void setContainer(@NotNull Pane parent) {
         parent.getChildren().add(technologyCategoryComponent);
+        this.parent = parent;
         technologyCategoryComponent.setContainer(parent);
         technologyCategoryComponent.setVisible(false);
     }

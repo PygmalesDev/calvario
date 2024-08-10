@@ -2,6 +2,8 @@ package de.uniks.stp24.ingameTests;
 
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.HelpComponent;
+import de.uniks.stp24.controllers.InGameController;
+import de.uniks.stp24.game.islandOverview.IslandOverviewTestComponent;
 import de.uniks.stp24.model.TechHelp;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,14 +18,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(MockitoExtension.class)
-public class HelpComponentTest extends ControllerTest {
+public class HelpComponentTest extends IslandOverviewTestComponent {
     
     @InjectMocks
     HelpComponent helpComponent;
     final ObservableList<TechHelp> technologies = FXCollections.observableArrayList();
 
+    @InjectMocks
+    InGameController inGameController;
+
     @Override
     public void start(Stage stage) throws Exception {
+
         super.start(stage);
         technologies.add(new TechHelp("test1", "test1"));
         helpComponent.technologies = technologies;

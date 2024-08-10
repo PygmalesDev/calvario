@@ -88,10 +88,12 @@ public class SitesComponent extends Pane {
     }
 
 
-    public int getTotalSiteSlots(Island island){
+    public int getTotalSiteSlots(Island island) {
         int totalSiteSlots = 0;
-        for (Map.Entry<String, Integer> entry : island.sites().entrySet()) {
-            totalSiteSlots = totalSiteSlots + entry.getValue();
+        if (Objects.nonNull(island)) {
+            for (Map.Entry<String, Integer> entry : island.sites().entrySet()) {
+                totalSiteSlots = totalSiteSlots + entry.getValue();
+            }
         }
         return totalSiteSlots;
     }

@@ -1,11 +1,13 @@
 package de.uniks.stp24.service.game;
 
+import de.uniks.stp24.dto.AggregateResultDto;
 import de.uniks.stp24.dto.EmpireDto;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.rest.EmpireApiService;
+import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.PresetsApiService;
-import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,133 +25,135 @@ public class TechnologyService {
     @Inject
     public EmpireApiService empireApiService;
     @Inject
+    public GameLogicApiService gameLogicApiService;
+    @Inject
     public Subscriber subscriber;
 
     @Inject
     public TokenStorage tokenStorage;
 
-    List<TechnologyExtended> technologies;
+    ObservableList<TechnologyExtended> unlockedList = FXCollections.observableArrayList();
+    ObservableList<TechnologyExtended> researchList = FXCollections.observableArrayList();
+    ObservableList<ObservableList<TechnologyExtended>> unlockedAndResearchedList = FXCollections.observableArrayList();
+    List<TechnologyExtended> technologiesList = new ArrayList<>();
+    @Inject
+    public EventListener eventListener;
 
-    Observable<ArrayList<TechnologyExtended>> temp;
-    final Set<TechnologyExtended> allUnlockedTechnologiesSet = new HashSet<>();
-
-    final ObservableList<TechnologyExtended> unlockedTechnologiesList = FXCollections.observableArrayList();
-
-    ObservableList<TechnologyExtended> allUnlockedTechnologiesList = FXCollections.observableArrayList();
+    String[] lastUpdate = new String[]{""};
 
     @Inject
     public TechnologyService() {
     }
 
-    public ObservableList<TechnologyExtended> getAllUnlockedTechnologies(String tag) {
-        temp = getTechnologies();
-
-        subscriber.subscribe(empireApiService.getEmpiresDtos(tokenStorage.getGameId()),
-                empireDtos -> {
-                    for (EmpireDto empireDto : empireDtos) {
-                        if (empireDto.user().equals(tokenStorage.getUserId()) && empireDto.technologies() != null) {
-                            for (String technology : empireDto.technologies()) {
-
-                                subscriber.subscribe(getTechnology(technology),
-                                        technologyExtended -> {
-                                            ArrayList<String> tempTags = new ArrayList<>(Arrays.asList(technologyExtended.tags()));
-                                            if (tempTags.contains(tag)) {
-                                                allUnlockedTechnologiesSet.add(technologyExtended);
-                                            }
-                                        }
-                                );
-
-                            }
-                        }
+    public void createTechnologyListener(Runnable runnable) {
+        this.subscriber.subscribe(this.eventListener
+                        .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
+                event -> {
+                    if (!Arrays.equals(lastUpdate, event.data().technologies())) {
+                        System.out.println("Technologies: " + Arrays.toString(event.data().technologies()));
+                        runnable.run();
+                        lastUpdate = event.data().technologies();
                     }
                 },
-                error -> System.out.println("Error when getting all unlocked Technologies: " + error)
+                error -> System.out.println("errorListener: " + error)
         );
-        allUnlockedTechnologiesList = FXCollections.observableArrayList(allUnlockedTechnologiesSet);
-        return allUnlockedTechnologiesList;
+        this.subscriber.subscribe(() -> System.out.println("event listener stopped!"));
     }
 
-    public ObservableList<TechnologyExtended> getAllResearchTechnologies(String tag) {
-        ObservableList<TechnologyExtended> research = FXCollections.observableArrayList();
-        ObservableList<TechnologyExtended> unlocked = getAllUnlockedTechnologies(tag);
-
-        technologies = temp.blockingFirst();
-        for (TechnologyExtended technology : technologies) {
-            if (!unlocked.contains(technology) && Arrays.asList(technology.tags()).contains(tag)) {
-                research.add(technology);
-            }
-        }
-        return research;
-    }
-
-    /**
-     * iterate tru all unlocked Technologies independent of the tag and check if any of
-     * their precedes are in temp, if yes add them in unlockedTechnologiesList
-     *
-     * @return unlocked Technologies without precedes that are also unlocked
-     */
-    public ObservableList<TechnologyExtended> getUnlockedTechnologies(String tag) {
-        List<TechnologyExtended> tempUnlocked = getAllUnlockedTechnologies(tag);
-        unlockedTechnologiesList.clear();
-        for (TechnologyExtended technology : tempUnlocked) {
-            for (String t : technology.precedes()) {
-
-                if (tempUnlocked.stream().noneMatch(tech -> tech.id().equals(t))) {
-                    unlockedTechnologiesList.add(technology);
-                }
-            }
-        }
-        return unlockedTechnologiesList;
-    }
-
-    /**
-     * iterate tru all research Technologies and check their requirements
-     * if all requirements are not in temp, add them in researchTechnologiesList
-     *
-     * @return research Technologies without requirements that are not unlocked
-     */
-    public ObservableList<TechnologyExtended> getResearchTechnologies(String tag) {
-        List<TechnologyExtended> tempResearch = getResearchTechnologies();
-        List<TechnologyExtended> tempUnlocked = getUnlockedTechnologies();
-        ObservableList<TechnologyExtended> researchTechnologiesList = FXCollections.observableArrayList();
-
-        for (TechnologyExtended technology : tempResearch) {
-            boolean add = true;
-            if (technology.requires() != null && !Arrays.asList(technology.requires()).isEmpty() && Arrays.asList(technology.tags()).contains(tag)) {
-                for (String t : technology.requires()) {
-                    if (tempUnlocked.stream().noneMatch(tech -> tech.id().equals(t))) {
-                        add = false;
-                        break;
-                    }
-                }
-            }
-            if (add && (Arrays.asList(technology.tags()).contains(tag)) && researchTechnologiesList.stream().noneMatch(tech -> tech.id().equals(technology.id()))) {
-                researchTechnologiesList.add(technology);
-            }
-        }
-        return researchTechnologiesList;
-    }
-
-    /**
-     * get all unlocked Technologies independent of the tag
-     */
-    public ObservableList<TechnologyExtended> getUnlockedTechnologies() {
+    public ObservableList<ObservableList<TechnologyExtended>> getAllUnlockedAndResearched() {
         ObservableList<TechnologyExtended> unlocked = FXCollections.observableArrayList();
-        for (String tag : Constants.technologyTranslation.keySet()) {
-            unlocked.addAll(getUnlockedTechnologies(tag));
-        }
-        return unlocked;
+        ObservableList<TechnologyExtended> research = FXCollections.observableArrayList();
+        unlockedAndResearchedList.add(unlocked);
+        unlockedAndResearchedList.add(research);
+        unlockedList.clear();
+        researchList.clear();
+        subscriber.subscribe(empireApiService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                empire -> {
+                    if (empire.technologies() != null) {
+                        for (String techId : empire.technologies()) {
+                            subscriber.subscribe(getTechnology(techId),
+                                    unlocked::add, error -> System.out.println("Error after try to get Technology " + techId + " because: " + error.getMessage()));
+                        }
+                    }
+                    unlockedList = unlocked;
+                    unlockedAndResearchedList.add(unlocked);
+                                for (TechnologyExtended tech : technologiesList) {
+                                    if (unlocked.stream().noneMatch(technology -> technology.id().equals(tech.id())) && research.stream().noneMatch(techEx -> techEx.id().equals(tech.id()))) {
+                                        research.add(tech);
+                                    }
+                                }
+                                researchList = research;
+                                unlockedAndResearchedList.add(research);
+                            }, error -> System.out.println("Error after try to get all technologies"));
+        return unlockedAndResearchedList;
     }
 
-    /**
-     * get all research Technologies independent of the tag
-     */
-    public ObservableList<TechnologyExtended> getResearchTechnologies() {
-        ObservableList<TechnologyExtended> research = FXCollections.observableArrayList();
-        for (String tag : Constants.technologyTranslation.values()) {
-            research.addAll(getAllResearchTechnologies(tag));
-        }
-        return research;
+    public ObservableList<ObservableList<TechnologyExtended>> getUnlockedAndResearch(String tag) {
+        ObservableList<TechnologyExtended> unlocked;
+        unlocked = FXCollections.observableArrayList();
+        ObservableList<TechnologyExtended> research;
+        research = FXCollections.observableArrayList();
+        ObservableList<ObservableList<TechnologyExtended>> unlockedAndResearch = FXCollections.observableArrayList();
+        unlockedAndResearch.add(unlocked);
+        unlockedAndResearch.add(research);
+        unlockedList.clear();
+        researchList.clear();
+        subscriber.subscribe(empireApiService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                empire -> {
+                    if (empire.technologies() != null) {
+                        lastUpdate = empire.technologies();
+                        for (String techId : empire.technologies()) {
+                            subscriber.subscribe(getTechnology(techId),
+                                    technology -> {
+                                        if (Arrays.asList(technology.tags()).contains(tag)) {
+                                            unlocked.add(technology);
+                                        }
+                                    }, error -> System.out.println("Error after try to get Technology " + techId + " because: " + error.getMessage()));
+                        }
+                        unlockedList = unlocked;
+                        unlockedAndResearch.add(unlocked);
+                        subscriber.subscribe(getTechnologies(),
+                                techList -> {
+                                    for (TechnologyExtended tech : techList) {
+                                        if (unlocked.stream().noneMatch(technology -> technology.id().equals(tech.id())) && Arrays.asList(tech.tags()).contains(tag)) {
+                                            if (tech.requires() == null || tech.requires().length == 0) {
+                                                research.add(tech);
+                                            } else if (Arrays.stream(tech.requires()).allMatch(techId -> unlocked.stream().anyMatch(technology -> technology.id().equals(techId)))) {
+                                                research.add(tech);
+                                            }
+                                        }
+                                    }
+                                    researchList = research;
+                                    unlockedAndResearch.add(research);
+                                }, error -> System.out.println("Error after try to get all technologies"));
+                    }
+                }, error -> System.out.println("Error after try to get empire because of: " + error.getMessage()));
+        return unlockedAndResearch;
+    }
+
+    public ObservableList<ObservableList<TechnologyExtended>> getUnlockedAndResearchList() {
+        return unlockedAndResearchedList;
+    }
+
+    public ObservableList<TechnologyExtended> getUnlockedList() {
+        return unlockedList;
+    }
+
+    public ObservableList<TechnologyExtended> getResearchList() {
+        return researchList;
+    }
+
+    public void initAllTechnologies() {
+        subscriber.subscribe(getTechnologies(),
+                techList -> {
+                    technologiesList.clear();
+                    technologiesList.addAll(techList);
+                }, error -> System.out.println("Error after try to get all technologies")
+        );
+    }
+
+    public List<TechnologyExtended> getTechnologiesList() {
+        return technologiesList;
     }
 
     public Observable<TechnologyExtended> getTechnology(String id) {
@@ -160,4 +164,7 @@ public class TechnologyService {
         return presetsApiService.getTechnologies();
     }
 
+    public Observable<AggregateResultDto> getTechnologyTimeAndCost(String empireID, String aggregate, String techID) {
+        return gameLogicApiService.getTechnologyCostAndTime(empireID, aggregate, techID);
+    }
 }

@@ -4,6 +4,7 @@ import de.uniks.stp24.App;
 import de.uniks.stp24.model.Effect;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.TechnologyService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,21 +18,24 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
+import org.fulib.fx.controller.Subscriber;
 import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.ResourceBundle;
 
 @Component(view = "TechnologyCategorySubComponent.fxml")
 public class TechnologyCategorySubComponent extends VBox implements ReusableItemComponent<TechnologyExtended> {
     private final TechnologyCategoryComponent technologyCategoryComponent;
-    private final ResourceBundle technologiesResourceBundle;
+
     @FXML
     public ImageView tagImage3;
     @FXML
@@ -56,33 +60,61 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
     @FXML
     public Label technologyLabel;
     @FXML
-    public Tooltip tooltip;
+    public Label showEffectLabel;
+    @FXML
+    public Tooltip showEffectTooltip;
+    @FXML
+    public Tooltip researchLabelTooltip;
+
+    public Subscriber subscriber;
 
     final App app;
 
     TechnologyExtended technology;
 
     final TechnologyService technologyService;
-    
+
     @Inject
     TechnologyOverviewComponent technologyOverviewComponent;
-    @Inject
-    public ImageCache imageCache;
+    ImageCache imageCache;
 
     final ObservableList<Effect> description = FXCollections.observableArrayList();
 
-    final Provider<TechnologyCategoryDescriptionSubComponent> provider = TechnologyCategoryDescriptionSubComponent::new;
+    @Inject
+    @Named("gameResourceBundle")
+    public ResourceBundle gameResourceBundle;
+
+    public ResourceBundle variablesResourceBundle;
+
+    @Resource
+    public final ResourceBundle technologiesResourceBundle;
+    TokenStorage tokenStorage;
+
+    public TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+
+    public TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
+
+    final Provider<TechnologyCategoryDescriptionSubComponent> provider = () -> new TechnologyCategoryDescriptionSubComponent(variablesResourceBundle);
 
     /**
      * This class is for the components of the listView in the technology category
      */
     @Inject
     public TechnologyCategorySubComponent(TechnologyCategoryComponent technologyCategoryComponent, TechnologyService technologyService,
-                                          App app, ResourceBundle technologiesResourceBundle, ImageCache imageCache) {
+                                          App app, ResourceBundle technologiesResourceBundle, TokenStorage tokenStorage,
+                                          Subscriber subscriber, ResourceBundle variablesResourceBundle,
+                                          TechnologyEffectDetailsComponent technologyEffectDetailsComponent,
+                                          TechnologyResearchDetailsComponent technologyResearchDetailsComponent, ImageCache imageCache) {
+
         this.technologyCategoryComponent = technologyCategoryComponent;
         this.technologyService = technologyService;
         this.app = app;
         this.technologiesResourceBundle = technologiesResourceBundle;
+        this.variablesResourceBundle = variablesResourceBundle;
+        this.tokenStorage = tokenStorage;
+        this.subscriber = subscriber;
+        this.technologyEffectDetailsComponent = technologyEffectDetailsComponent;
+        this.technologyResearchDetailsComponent = technologyResearchDetailsComponent;
         this.imageCache = imageCache;
     }
 
@@ -93,8 +125,26 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
      */
     @Override
     public void setItem(@NotNull TechnologyExtended technologyExtended) {
+        researchLabel.setVisible(true);
+        timeLabel.setVisible(true);
+
         this.technology = technologyExtended;
         technologyLabel.setText(technologiesResourceBundle.getString(technologyExtended.id()));
+
+        if (technologyService.getUnlockedList().stream().anyMatch(tech -> tech.id().equals(technology.id()))) {
+            researchHBox.getChildren().removeAll(researchLabel, timeImage, timeLabel, researchButton, researchImage);
+        } else {
+            if (subscriber.isDisposed()) System.out.println("Subscriber disposed!? ");
+            /* get Time and Costs of Technology only if it isn't unlocked yet */
+            subscriber.subscribe(technologyService.getTechnologyTimeAndCost(tokenStorage.getEmpireId(), "technology.cost", technology.id()),
+                    aggregateResultDto -> researchLabel.setText(String.valueOf(aggregateResultDto.total())),
+                    error -> System.out.println("Error after try to get cost of technology " + technology.id() + " reason: " + error.getMessage())
+            );
+            subscriber.subscribe(technologyService.getTechnologyTimeAndCost(tokenStorage.getEmpireId(), "technology.time", technology.id()),
+                    aggregateResultDto -> timeLabel.setText(String.valueOf(aggregateResultDto.total())),
+                    error -> System.out.println("Error after ty to get time of technology " + technology.id() + " reason: " + error.getMessage())
+            );
+        }
 
         int i = technologyExtended.tags().length;
 
@@ -108,15 +158,21 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
             tagImage3.setImage(imageCache.get("assets/technologies/tags/" + technologyExtended.tags()[2] + ".png"));
         }
 
-        //technologyResearchDetailsComponent.setTechnologyInfos(technology);
+        descriptionListView.getItems().clear();
+        if (technology.effects().length != 0) {
+            description.addAll(technology.effects());
+            descriptionListView.setItems(description);
+            descriptionListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
+        }
 
-        researchLabel.setText(String.valueOf(technologyExtended.cost()));
-
-        description.addAll(technologyExtended.effects());
-        descriptionListView.setItems(description);
-        descriptionListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.provider));
+        if (technology.effects().length > 1) {
+            showEffectLabel.setVisible(true);
+            showEffectLabel.setMouseTransparent(false);
+        } else {
+            showEffectLabel.setVisible(false);
+            showEffectLabel.setMouseTransparent(true);
+        }
     }
-
 
     @OnInit
     public void init() {
@@ -128,19 +184,42 @@ public class TechnologyCategorySubComponent extends VBox implements ReusableItem
         timeImage.setImage(imageCache.get("icons/time.png"));
         researchImage.setImage(imageCache.get("icons/resources/research.png"));
 
-        //tooltip.setGraphic(technologyResearchDetailsComponent);
-        tooltip.setShowDelay(Duration.ZERO);
-        tooltip.setShowDuration(Duration.INDEFINITE);
+        showEffectTooltip.setGraphic(technologyEffectDetailsComponent);
+        showEffectTooltip.setShowDelay(Duration.ZERO);
+        showEffectTooltip.setShowDuration(Duration.INDEFINITE);
 
-        tooltip.setX(tooltip.getX() - 200);
+        researchLabelTooltip.setGraphic(technologyResearchDetailsComponent);
+        researchLabelTooltip.setShowDelay(Duration.ZERO);
+        researchLabelTooltip.setShowDuration(Duration.INDEFINITE);
 
+        researchLabelTooltip.setOnShowing(event -> {
+            researchLabelTooltip.setGraphic(technologyResearchDetailsComponent);
+            technologyResearchDetailsComponent.setTechnologyInfos(technology);
+        });
+
+        showEffectTooltip.setOnShowing(event -> {
+            showEffectTooltip.setGraphic(technologyEffectDetailsComponent);
+            technologyEffectDetailsComponent.setTechnologyInfos(technology);
+        });
+
+        researchLabelTooltip.setOnHiding(event -> {
+            researchLabelTooltip.setGraphic(null);
+            technologyResearchDetailsComponent.clear();
+            technologyResearchDetailsComponent.destroy();
+        });
+
+        showEffectTooltip.setOnHiding(event -> {
+            showEffectTooltip.setGraphic(null);
+            technologyEffectDetailsComponent.clear();
+            technologyEffectDetailsComponent.destroy();
+        });
+
+        technologyResearchDetailsComponent.setCategory(this);
     }
 
-    public void researchClicked(){
+    public void researchClicked() {
         technologyCategoryComponent.showResearchComponent(technology);
     }
-
-
 
     @OnDestroy
     public void destroy() {

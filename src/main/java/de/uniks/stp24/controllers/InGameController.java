@@ -232,7 +232,6 @@ public class InGameController extends BasicController {
     final PopupBuilder popupSiteProperties = new PopupBuilder();
     final PopupBuilder popupDeleteStructure = new PopupBuilder();
     final PopupBuilder popupHelpWindow = new PopupBuilder();
-    final PopupBuilder popupWarMessage = new PopupBuilder();
 
 
     final ArrayList<Node> draggables = new ArrayList<>();
@@ -256,7 +255,6 @@ public class InGameController extends BasicController {
         deleteStructureComponent.setInGameController(this);
         empireOverviewComponent.setInGameController(this);
         variableService.setIngameController(this);
-	    	pauseMenuComponent.setInGameController(this);
         pauseMenuComponent.setInGameController(this);
         helpComponent.setInGameController(this);
         clockComponent.setInGameController(this);
@@ -354,16 +352,15 @@ public class InGameController extends BasicController {
         this.group.getChildren().add(this.fleetCreationComponent);
         this.fleetCreationComponent.setVisible(false);
 
+        technologiesComponent.setContainer(contextMenuContainer);
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,
                 jobsOverviewComponent,
-                empireOverviewComponent,
+                empireOverviewComponent, technologiesComponent,
                 marketOverviewComponent,
                 contactsOverviewComponent
         );
-
-
         contextMenuContainer.getChildren().forEach(child -> {
             child.setVisible(false);
             // make every node in contextMenuContainer draggable
@@ -371,7 +368,6 @@ public class InGameController extends BasicController {
         });
         this.createContextMenuButtons();
 
-        draggables.add(technologiesContainer);
 
         // make pop ups draggable
         draggables.add(eventContainer);
@@ -391,9 +387,9 @@ public class InGameController extends BasicController {
         this.jobsService.initializeJobsListeners();
         explanationService.setInGameController(this);
 
-        technologiesComponent.setContainer(technologiesContainer);
-        technologiesContainer.setVisible(false);
-        technologiesContainer.getChildren().add(technologiesComponent);
+//        technologiesComponent.setContainer(technologiesContainer);
+//        technologiesContainer.setVisible(false);
+//        technologiesContainer.getChildren().add(technologiesComponent);
 
         subscriber.subscribe(gameSystemsApiService.getSystems(tokenStorage.getGameId()),
                 islands -> {
@@ -570,9 +566,9 @@ public class InGameController extends BasicController {
                     new ContextMenuButton("storageOverview", this.storageOverviewComponent),
                     new ContextMenuButton("empireOverview", this.empireOverviewComponent),
                     new ContextMenuButton("jobsOverview", this.jobsOverviewComponent),
-                    // new ContextMenuButton("technologies", this.technologiesComponent),
-                    // new ContextMenuButton("marketOverview", this.marketOverviewComponent),
-                    new ContextMenuButton("contactsOverview", this.contactsOverviewComponent)
+                    new ContextMenuButton("marketOverview", this.marketOverviewComponent),
+                    new ContextMenuButton("contactsOverview", this.contactsOverviewComponent),
+              new ContextMenuButton("technologies",this.technologiesContainer)
             );
     }
 
@@ -631,14 +627,17 @@ public class InGameController extends BasicController {
             isle.getDefenceAndHealth(this.empireID);
         });
 
-        Platform.runLater(() -> {
+       /* Platform.runLater(() -> {
             Button showTechnologiesButton = new Button();
             showTechnologiesButton.setId("showTechnologiesButton");
             showTechnologiesButton.setOnAction(event -> showTechnologies());
             showTechnologiesButton.setId("technologiesButton");
             showTechnologiesButton.getStyleClass().add("technologiesButton");
-            contextMenuButtons.getChildren().addAll(showTechnologiesButton, new ContextMenuButton("marketOverview", marketOverviewComponent));
-        });
+            contextMenuButtons.getChildren().addAll(showTechnologiesButton);//,
+//
+//              new ContextMenuButton("marketOverview", this.marketOverviewComponent),
+//              new ContextMenuButton("contactsOverview", this.contactsOverviewComponent));
+        });*/
 
         mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight()));
         mapScrollPane.setVvalue(0.5);

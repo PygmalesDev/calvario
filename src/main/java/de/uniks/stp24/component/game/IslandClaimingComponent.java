@@ -233,6 +233,8 @@ public class IslandClaimingComponent extends Pane {
     }
 
     public void setFleetInformation(Fleet fleet) {
+        if (Objects.isNull(this.currentIsland)) return;
+
         this.travelButton.setDisable(true);
         this.travelButtonControlPane.setTooltip(this.travelTooltip);
         this.timeText.setText("??");
@@ -240,7 +242,14 @@ public class IslandClaimingComponent extends Pane {
         if (Objects.nonNull(fleet)) {
             if (!this.currentIsland.id().equals(fleet.location())) {
                 this.fleetCoordinationService.generateTravelPaths(fleet.location(), this.currentIsland.id());
-                this.timeText.setText(""+this.fleetCoordinationService.getTravelDuration(fleet.location(), this.currentIsland.id()));
+
+                this.subscriber.subscribe(this.shipService.getShipsOfFleet(fleet._id()), dtos -> {
+                    int speed = this.shipService.getFleetSpeed(dtos);
+                    this.timeText.setText(""+this.fleetCoordinationService.getTravelDuration(
+                            fleet.location(), this.currentIsland.id(), speed));
+                }, error -> System.out.printf("Caught an error while trying to get travel duration int the" +
+                        "IslandClaimingComponent:\n%s", error.getMessage()));
+
                 if (this.travelJobs.filtered(job -> job.fleet().equals(fleet._id())).isEmpty()) {
                     this.subscriber.subscribe(this.shipService.getShipsOfFleet(fleet._id()), result -> {
                         if (result.length != 0) {
@@ -256,7 +265,8 @@ public class IslandClaimingComponent extends Pane {
     }
 
     public void travelToIsland() {
-        this.fleetCoordinationService.travelToIsland(this.currentIsland);
+        this.fleetCoordinationService.travelToIsland(this.currentIsland.id());
+        this.travelButton.setDisable(true);
     }
 
     @OnRender

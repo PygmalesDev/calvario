@@ -1,6 +1,5 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
@@ -142,6 +141,9 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
+    @SubComponent
+    @Inject
+    public IslandTravelComponent islandTravelComponent;
 
     @SubComponent
     @Inject
@@ -161,9 +163,6 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public MarketComponent marketOverviewComponent;
-    @SubComponent
-    @Inject
-    public FleetCreationComponent fleetCreationComponent;
 
     @SubComponent
     @Inject
@@ -262,8 +261,6 @@ public class InGameController extends BasicController {
 
         this.fleetCoordinationService.setInitialFleetPosition();
 
-
-
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
                     result -> islandAttributes.setEmpireDto(result),
@@ -343,9 +340,6 @@ public class InGameController extends BasicController {
 
         technologiesComponent.setContainer(contextMenuContainer);
 
-        this.group.getChildren().add(this.fleetCreationComponent);
-        this.fleetCreationComponent.setVisible(false);
-
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,
@@ -374,7 +368,8 @@ public class InGameController extends BasicController {
         draggables.addAll(Arrays.asList(overviewContainer, buildingsWindow, buildingProperties, siteProperties));
         new Draggable.DraggableNode(overviewContainer, buildingsWindow, buildingProperties, siteProperties);
 
-
+        this.group.getChildren().add(this.islandTravelComponent);
+        this.islandTravelComponent.setVisible(false);
 
         this.fleetService.loadGameFleets();
         this.fleetService.initializeFleetListeners();
@@ -656,8 +651,15 @@ public class InGameController extends BasicController {
                 showOverview();
                 selected.showUnshowRudder();
 
+                this.islandTravelComponent.setVisible(true);
+                this.islandTravelComponent.setIslandInformation(selected.island);
+
+                this.islandTravelComponent.setLayoutX(selected.getLayoutX()-100);
+                this.islandTravelComponent.setLayoutY(selected.getLayoutY()+80);
+
                 // Show island claiming scroll
             } else if (!this.tokenStorage.isSpectator()) {
+                this.islandTravelComponent.setVisible(false);
                 if (Objects.nonNull(selectedIsland)) selectedIsland.showUnshowRudder();
                 this.overviewSitesComponent.closeOverview();
                 if (this.islandClaimingContainer.getLayoutX()+80 == selected.getLayoutX() &&
@@ -671,11 +673,6 @@ public class InGameController extends BasicController {
                     this.islandClaimingComponent.setIslandInformation(selected.island);
                 }
             }
-            // Show fleet creation pane
-            this.fleetCreationComponent.setVisible(true);
-            this.fleetCreationComponent.setIsland(selected.island.id());
-            this.fleetCreationComponent.setLayoutX(selected.getLayoutX()-100);
-            this.fleetCreationComponent.setLayoutY(selected.getLayoutY()+30);
         }
     }
 

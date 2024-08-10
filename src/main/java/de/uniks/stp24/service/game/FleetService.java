@@ -3,7 +3,6 @@ package de.uniks.stp24.service.game;
 import de.uniks.stp24.model.Fleets;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Jobs;
-import de.uniks.stp24.model.Ships;
 import de.uniks.stp24.model.Ships.ReadShipDTO;
 import de.uniks.stp24.model.Ships.Ship;
 import de.uniks.stp24.rest.FleetApiService;
@@ -42,9 +41,10 @@ public class FleetService {
     Map<String, ObservableList<Fleet>> empireFleets = new HashMap<>();
     Map<String, ObservableList<Fleet>> islandFleets = new HashMap<>();
     ObservableList<Fleet> gameFleets = FXCollections.observableArrayList();
-    List<Consumer<Fleet>> fleetCreatedConsumer = new ArrayList<>();
-    List<Consumer<Fleet>> fleetDestroyedConsumer = new ArrayList<>();
-    List<Runnable> fleetLoadingFinishedConsumer = new ArrayList<>();
+    List<Consumer<Fleet>> fleetCreatedConsumers = new ArrayList<>();
+    List<Consumer<Fleet>> fleetDestroyedConsumers = new ArrayList<>();
+    List<Runnable> fleetLoadingFinishedConsumers = new ArrayList<>();
+    List<Consumer<Fleet>> fleetLocationChangedConsumers = new ArrayList<>();
     private String lastShipUpdate = "";
     private String lastShipCreation = "";
     private String lastShipDeletion= "";
@@ -55,7 +55,7 @@ public class FleetService {
                 readFleetDTOS -> {
                     readFleetDTOS.stream().map(Fleets::fleetFromReadDTO).forEach(this::addFleetToGroups);
                     this.loadingFinished = true;
-                    this.fleetLoadingFinishedConsumer.forEach(Runnable::run);
+                    this.fleetLoadingFinishedConsumers.forEach(Runnable::run);
                 },
                 error -> System.out.println("Error loading game fleets in the FleetService:\n" + error.getMessage()));
     }
@@ -68,7 +68,9 @@ public class FleetService {
                 case "created" -> this.addFleetToGroups(fleet);
                 case "updated" -> {
                     Fleet oldFleet = this.gameFleets.filtered(fleetDto -> fleetDto._id().equals(fleet._id())).getFirst();
-                    this.updateFleetInGroups(new Fleet(fleet.createdAt(), fleet.updatedAt(), fleet._id(), fleet.game(), fleet.empire(), fleet.name(), fleet.location(), oldFleet.ships(), fleet.size(), fleet._public(), fleet._private(), fleet.effects()));
+                    this.updateFleetInGroups(oldFleet,
+                            new Fleet(fleet.createdAt(), fleet.updatedAt(), fleet._id(), fleet.game(), fleet.empire(), fleet.name(),
+                                    fleet.location(), oldFleet.ships(), oldFleet.shipDTOs(), fleet.size(), fleet._public(), fleet._private(), fleet.effects()));
                 }
                 case "deleted" -> this.deleteFleetFromGroups(fleet);
             }
@@ -101,7 +103,9 @@ public class FleetService {
 
     public void adaptShipCount(String fleetID, int increment) {
         Fleet oldFleet = this.gameFleets.filtered(fleet -> fleet._id().equals(fleetID)).getFirst();
-        this.updateFleetInGroups(new Fleet(oldFleet.createdAt(), oldFleet.updatedAt(), oldFleet._id(), oldFleet.game(), oldFleet.empire(), oldFleet.name(), oldFleet.location(), oldFleet.ships() + increment, oldFleet.size(), oldFleet._public(), oldFleet._private(), oldFleet.effects()));
+        this.updateFleetInGroups(oldFleet,
+                new Fleet(oldFleet.createdAt(), oldFleet.updatedAt(), oldFleet._id(), oldFleet.game(), oldFleet.empire(),
+                        oldFleet.name(), oldFleet.location(), oldFleet.ships() + increment, oldFleet.shipDTOs(), oldFleet.size(), oldFleet._public(), oldFleet._private(), oldFleet.effects()));
     }
 
     private void addFleetToGroups(Fleet fleet) {
@@ -113,23 +117,26 @@ public class FleetService {
         if (!this.islandFleets.containsKey(fleet.location())) this.islandFleets.put(fleet.location(), FXCollections.observableArrayList());
         this.islandFleets.get(fleet.location()).add(fleet);
 
-        if (this.loadingFinished) this.fleetCreatedConsumer.forEach(func -> func.accept(fleet));
+        if (this.loadingFinished) this.fleetCreatedConsumers.forEach(func -> func.accept(fleet));
     }
 
-    private void updateFleetInGroups(Fleet fleet) {
+    private void updateFleetInGroups(Fleet oldFleet, Fleet fleet) {
         this.gameFleets.replaceAll(old -> old.equals(fleet) ? fleet : old);
         if (Objects.nonNull(fleet.empire()))
             this.empireFleets.get(fleet.empire()).replaceAll(old -> old.equals(fleet) ? fleet : old);
 
-        if (!this.islandFleets.containsKey(fleet.location())) {
-            this.islandFleets.get(fleet.location()).removeIf(old ->
+        if (Objects.nonNull(oldFleet) && !fleet.location().equals(oldFleet.location())) {
+            this.islandFleets.get(oldFleet.location()).removeIf(old ->
                     old.equals(fleet) && !old.location().equals(fleet.location()));
 
-            this.islandFleets.put(fleet.location(), FXCollections.observableArrayList(fleet));
+            if (!this.islandFleets.containsKey(fleet.location()))
+                this.islandFleets.put(fleet.location(), FXCollections.observableArrayList());
+            this.islandFleets.get(fleet.location()).add(fleet);
 
+            this.fleetLocationChangedConsumers.forEach(func -> func.accept(fleet));
+        } else {
             this.islandFleets.get(fleet.location()).replaceAll(old -> old.equals(fleet) ? fleet : old);
         }
-
 
     }
 
@@ -138,7 +145,7 @@ public class FleetService {
         this.empireFleets.get(fleet.empire()).removeIf(other -> other.equals(fleet));
         this.islandFleets.get(fleet.location()).removeIf(other -> other.equals(fleet));
 
-        this.fleetDestroyedConsumer.forEach(func -> func.accept(fleet));
+        this.fleetDestroyedConsumers.forEach(func -> func.accept(fleet));
     }
 
     public Observable<Job> beginTravelJob(ArrayList<String> path, String fleetID) {
@@ -147,15 +154,19 @@ public class FleetService {
     }
 
     public void onFleetCreated(Consumer<Fleet> func) {
-        this.fleetCreatedConsumer.add(func);
+        this.fleetCreatedConsumers.add(func);
     }
 
     public void onFleetDestroyed(Consumer<Fleet> func) {
-        this.fleetDestroyedConsumer.add(func);
+        this.fleetDestroyedConsumers.add(func);
     }
 
     public void onLoadingFinished(Runnable func) {
-        this.fleetLoadingFinishedConsumer.add(func);
+        this.fleetLoadingFinishedConsumers.add(func);
+    }
+
+    public void onFleetLocationChanged(Consumer<Fleet> func) {
+        this.fleetLocationChangedConsumers.add(func);
     }
 
     public ObservableList<Fleet> getGameFleets() {
@@ -191,9 +202,10 @@ public class FleetService {
     }
 
     public void dispose() {
-        this.fleetCreatedConsumer.clear();
-        this.fleetLoadingFinishedConsumer.clear();
-        this.fleetDestroyedConsumer.clear();
+        this.fleetCreatedConsumers.clear();
+        this.fleetLoadingFinishedConsumers.clear();
+        this.fleetDestroyedConsumers.clear();
+        this.fleetLocationChangedConsumers.clear();
         this.loadingFinished = false;
         this.subscriber.dispose();
         this.empireFleets.clear();

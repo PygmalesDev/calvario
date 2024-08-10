@@ -2,7 +2,6 @@ package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.GameFleetController;
-import de.uniks.stp24.component.game.IslandClaimingComponent;
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.controllers.helper.DistancePoint;
@@ -34,6 +33,10 @@ import static de.uniks.stp24.service.Constants.*;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
+/**
+ * A service that coordinates fleets position on the map and their traveling paths.
+ * Contains methods for path generation and saving, as well as animation processing.
+ */
 @Singleton
 public class FleetCoordinationService {
     @Inject
@@ -51,16 +54,18 @@ public class FleetCoordinationService {
     @Inject
     public Subscriber subscriber;
     @Inject
+    public ShipService shipService;
+    @Inject
     App app;
 
     public final Random random = new Random();
-    private IslandClaimingComponent claimingComponent;
     private GameFleetController selectedFleet;
     private ObservableList<Node> mapGrid;
     private final List<PathEntry> pathEntries = new ArrayList<>();
     private final Map<GameFleetController, List<DistancePoint>> coordinatedPaths = new HashMap<>();
     private ObservableList<Job> travelJobs = FXCollections.observableArrayList();
-    private List<Consumer<Fleet>> onFleetSelectedConsumers = new ArrayList<>();
+    private final List<Consumer<Fleet>> onFleetSelectedConsumers = new ArrayList<>();
+    private final List<GameFleetController> enemyFleets = new ArrayList<>();
 
     private final int ROTATE_DURATION = 2;
 
@@ -84,6 +89,7 @@ public class FleetCoordinationService {
 
         this.fleetService.onFleetCreated(this::putFleetOnMap);
         this.fleetService.onFleetDestroyed(this::deleteFleetFromMap);
+        this.fleetService.onFleetLocationChanged(this::processTravelForEnemyFleets);
     }
 
     private void setOnJobDeletion(Job job) {
@@ -143,9 +149,10 @@ public class FleetCoordinationService {
     public void putFleetOnMap(Fleet fleet) {
         var gameFleet = this.app.initAndRender(new GameFleetController(fleet,this));
 
-        if (Objects.nonNull(fleet.empire()))
+        if (Objects.nonNull(fleet.empire())) {
             gameFleet.renderWithColor(this.islandsService.getEmpire(fleet.empire()).color());
-        else gameFleet.renderWithColor("white");
+            if (!fleet.empire().equals(this.tokenStorage.getEmpireId())) this.enemyFleets.add(gameFleet);
+        } else gameFleet.renderWithColor("white");
 
         this.mapGrid.add(gameFleet);
         this.selectedFleet = gameFleet;
@@ -156,17 +163,22 @@ public class FleetCoordinationService {
             Job travelJob = jobOptional.get();
             this.generateTravelPaths(travelJob.path().getFirst(), travelJob.path().getLast());
             PathEntry entry = this.getPathEntry(travelJob.path().getFirst(), travelJob.path().getLast());
-            List<DistancePoint> distancePoints = this.createCoordinatedPath(entry, travelJob.path().getFirst());
-            for (int i = 0; i < travelJob.progress()-1; i++) distancePoints.removeFirst();
-            DistancePoint location = distancePoints.removeFirst();
+            this.subscriber.subscribe(this.shipService.getShipsOfFleet(fleet._id()), dtos -> {
+                int speed = this.shipService.getFleetSpeed(dtos);
+                List<DistancePoint> distancePoints = this.createCoordinatedPath(entry, travelJob.path().getFirst(), speed);
+                for (int i = 0; i < travelJob.progress()-1; i++) distancePoints.removeFirst();
+                DistancePoint location = distancePoints.removeFirst();
 
-            gameFleet.setCurrentPoint(distancePoints.removeFirst());
-            gameFleet.setLayoutX(location.getX());
-            gameFleet.setLayoutY(location.getY());
-            this.selectedFleet.setRotate(this.getDirectionalAngle(
-                    gameFleet.getCurrentPoint().getPrev(),
-                    gameFleet.getCurrentPoint()));
-            this.processSpeedChanged(gameFleet);
+                gameFleet.setCurrentPoint(distancePoints.removeFirst());
+                gameFleet.setLayoutX(location.getX());
+                gameFleet.setLayoutY(location.getY());
+                this.selectedFleet.setRotate(this.getDirectionalAngle(
+                        gameFleet.getCurrentPoint().getPrev(),
+                        gameFleet.getCurrentPoint()));
+                this.processSpeedChanged(gameFleet);
+                this.selectedFleet = null;
+            }, error -> System.out.printf("Caught and error while trying to generate travel paths for the fleets" +
+                    "with travel jobs in FleetCoordinationService:\n%s", error.getMessage()));
         } else {
             // Otherwise put fleet near the island on which it is located
             var island = this.islandsService.getIslandComponent(fleet.location());
@@ -175,8 +187,8 @@ public class FleetCoordinationService {
             gameFleet.setLayoutY(parkingPoint.getY());
             gameFleet.setStartingPoint();
             gameFleet.collisionCircle.setRadius(Constants.FLEET_COLLISION_RADIUS);
+            this.selectedFleet = null;
         }
-        this.selectedFleet = null;
     }
 
     private DistancePoint findParkingPoint(DistancePoint islandPoint) {
@@ -190,7 +202,6 @@ public class FleetCoordinationService {
     }
 
     public void setInGameController(InGameController inGameController) {
-        this.claimingComponent = inGameController.islandClaimingComponent;
         this.mapGrid = inGameController.mapGrid.getChildren();
 
         this.timerService.onGameTicked(this::processTravel);
@@ -216,18 +227,18 @@ public class FleetCoordinationService {
     private void processTravel() {
         this.coordinatedPaths.forEach((fleet, points) -> {
             if (!points.isEmpty())
-                fleet.travelToPoint(this.createTravelKeyFrames(fleet, points.getFirst()), points.removeFirst());
+                fleet.travelToPoint(this.createTravelKeyFrames(fleet, points.getFirst(), 60), points.removeFirst());
         });
     }
 
     private void processTravel(GameFleetController fleet) {
-        fleet.travelToPoint(this.createTravelKeyFrames(fleet, this.coordinatedPaths.get(fleet).getFirst()),
+        fleet.travelToPoint(this.createTravelKeyFrames(fleet, this.coordinatedPaths.get(fleet).getFirst(), 60),
                 this.coordinatedPaths.get(fleet).removeFirst());
     }
 
     private void processFinish(GameFleetController fleet, IslandComponent finishIsland) {
         DistancePoint endPoint = new DistancePoint(finishIsland, fleet.getCurrentPoint());
-        fleet.travelToPoint(this.createTravelKeyFrames(fleet, endPoint), endPoint);
+        fleet.travelToPoint(this.createTravelKeyFrames(fleet, endPoint, 60), endPoint);
     }
 
     private void processReturn(GameFleetController fleet) {
@@ -242,18 +253,32 @@ public class FleetCoordinationService {
         fleet.travelToPoint(this.createReturnKeyFrames(fleet, prevIslandPoint), prevIslandPoint);
     }
 
+    private void processTravelForEnemyFleets(Fleet fleet) {
+        if (!fleet.empire().equals(this.tokenStorage.getEmpireId())) {
+            this.enemyFleets.stream().filter(gameFleet -> gameFleet.getFleet().equals(fleet))
+                    .findFirst().map(gameFleet -> {
+                        DistancePoint destination = this.findParkingPoint(new DistancePoint(
+                                this.islandsService.getIslandComponent(fleet.location()),
+                                gameFleet.getCurrentLocation()));
+                        gameFleet.travelToPoint(this.createTravelKeyFrames(gameFleet, destination, 24), destination);
+                        gameFleet.setFleet(fleet);
+                        return gameFleet;
+                    }).orElseThrow();
+        }
+    }
+
     private double getDirectionalAngle(DistancePoint prevPoint, DistancePoint nextPoint) {
         Point2D delta = nextPoint.subtract(prevPoint);
         return Math.atan2(delta.getY(), delta.getX())*180/Math.PI+90;
     }
 
-    private List<KeyFrame> createTravelKeyFrames(GameFleetController fleet, DistancePoint nextPoint) {
+    private List<KeyFrame> createTravelKeyFrames(GameFleetController fleet, DistancePoint nextPoint, double speed) {
         return List.of(
                 new KeyFrame(Duration.seconds(ROTATE_DURATION),
                         new KeyValue(fleet.rotateProperty(), getDirectionalAngle(nextPoint.getPrev(), nextPoint), Interpolator.EASE_BOTH),
                         new KeyValue(fleet.layoutXProperty(), nextPoint.getPrev().getX()-FLEET_HW, Interpolator.EASE_BOTH),
                         new KeyValue(fleet.layoutYProperty(), nextPoint.getPrev().getY()-FLEET_HW, Interpolator.EASE_BOTH)),
-                new KeyFrame(Duration.seconds((60/ (double) this.timerService.getServerSpeed())-ROTATE_DURATION),
+                new KeyFrame(Duration.seconds((speed/ (double) this.timerService.getServerSpeed())-ROTATE_DURATION),
                         new KeyValue(fleet.layoutXProperty(), nextPoint.getX()-FLEET_HW, Interpolator.LINEAR),
                         new KeyValue(fleet.layoutYProperty(), nextPoint.getY()-FLEET_HW, Interpolator.LINEAR))
         );
@@ -286,35 +311,37 @@ public class FleetCoordinationService {
                         new KeyValue(fleet.layoutYProperty(), parkingPoint.getY(), Interpolator.LINEAR)));
     }
 
-    public void travelToIsland(Island destinationIsland) {
+    public void travelToIsland(String destinationIslandID) {
         if (Objects.isNull(this.selectedFleet)) return;
 
         // The path entry should be generated at this point!
-        PathEntry entry = this.getPathEntry(this.selectedFleet.getFleet().location(), destinationIsland.id());
-        this.createCoordinatedPath(entry, this.selectedFleet.getFleet().location());
+        PathEntry entry = this.getPathEntry(this.selectedFleet.getFleet().location(), destinationIslandID);
+        this.subscriber.subscribe(this.shipService.getShipsOfFleet(this.selectedFleet.getFleet()._id()), dtos -> {
+            int speed = this.shipService.getFleetSpeed(dtos);
+            this.createCoordinatedPath(entry, this.selectedFleet.getFleet().location(), speed);
 
-        this.subscriber.subscribe(this.fleetService.beginTravelJob(entry.getPathFromLocation(
-                this.selectedFleet.getFleet().location()), this.selectedFleet.getFleet()._id()),
-                job -> {
-                    this.processTravel(this.selectedFleet);
-                    this.setOnJobDeletion(job);
-                    this.setOnJobCompletion(job);
-                },
-                error -> System.out.println("Caught an exception while trying to create a new travel job in the" +
-                        "FleetCoordinationService:\n" + error.getMessage()));
+            this.subscriber.subscribe(this.fleetService.beginTravelJob(entry.getPathFromLocation(
+                            this.selectedFleet.getFleet().location()), this.selectedFleet.getFleet()._id()), job -> {
+                        this.processTravel(this.selectedFleet);
+                        this.setOnJobDeletion(job);
+                        this.setOnJobCompletion(job);
+                    }, error -> System.out.println("Caught an exception while trying to create a new travel job in the" +
+                            "FleetCoordinationService:\n" + error.getMessage()));
+        }, error -> System.out.printf("Caught an error while trying to get fleet speed in FleetCoordinationService:\n%s",
+                error.getMessage()));
     }
 
-    private List<DistancePoint> createCoordinatedPath(PathEntry pathEntry, String startingLocation) {
+    private List<DistancePoint> createCoordinatedPath(PathEntry pathEntry, String startingLocation, int speed) {
         ArrayList<String> path = pathEntry.getPathFromLocation(startingLocation);
         List<DistancePoint> coordinatedPath = new ArrayList<>();
         IslandComponent island = this.islandsService.getIslandComponent(path.getFirst());
 
         // Get the needed total number of points that need to be put between the islands
-        byte interPoints = (byte) (this.getTravelDuration(pathEntry) - (path.size()-1));
+        byte interPoints = (byte) (this.getTravelDuration(pathEntry, speed) - (path.size()-1));
         // Get the number of points that should be put between two islands
         byte pointAlloc  = (byte) (interPoints/(path.size()-1));
 
-        coordinatedPath.add(new DistancePoint(island, null));
+        coordinatedPath.add(this.findParkingPoint(new DistancePoint(island, null)));
 
         // Put the intermediate points first, then the island location
         for (int i = 0; i < path.size()-2; i++) {
@@ -424,13 +451,12 @@ public class FleetCoordinationService {
      * @param endIslandID ID of the second island
      * @return Rounded number of the seasons needed for this travel
      */
-    public int getTravelDuration(String startIslandID, String endIslandID) {
-        //TODO: Get the speed of the slowest ship in the fleet from some other service!
-        return (int) Math.ceil((double) this.getPathEntry(startIslandID, endIslandID).getDistance()/5);
+    public int getTravelDuration(String startIslandID, String endIslandID, int speed) {
+        return this.getTravelDuration(this.getPathEntry(startIslandID, endIslandID), speed);
     }
 
-    public int getTravelDuration(PathEntry entry) {
-        return (int) Math.ceil((double) entry.getDistance()/5);
+    public int getTravelDuration(PathEntry entry, int speed) {
+        return (int) Math.ceil((double) entry.getDistance()/speed);
     }
 
     public void onFleetSelected(Consumer<Fleet> func) {
@@ -441,6 +467,7 @@ public class FleetCoordinationService {
         this.selectedFleet = null;
         this.subscriber.dispose();
         this.coordinatedPaths.clear();
+        this.enemyFleets.clear();
         this.pathEntries.clear();
         this.onFleetSelectedConsumers.clear();
     }

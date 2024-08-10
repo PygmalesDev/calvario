@@ -9,10 +9,7 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 
 import javax.inject.Provider;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -253,12 +250,21 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
         this.inGameController.marketOverviewComponent = this.marketComponent;
         this.marketService.subscriber = this.subscriber;
 
-        doNothing().when(fleetService).loadGameFleets();
-        doNothing().when(fleetService).initializeFleetListeners();
-        doNothing().when(contactsComponent).loadEmpireWars();
+        this.mockFleets();
 
         this.app.show(this.inGameController);
         clearStyleSheets();
+    }
+
+    private void mockFleets(){
+        // Mock get Fleets and ships
+        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", new HashMap<>())));
+        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456");
+        doNothing().when(this.fleetService).initializeFleetListeners();
+        doNothing().when(contactsService).loadContactsData();
+        doNothing().when(contactsService).createWarListener();
+//        doNothing().when(contactsComponent).init();
+        doReturn(Observable.just(new ArrayList<WarDto>())).when(warService).getWars(any(),any());
     }
 
 }

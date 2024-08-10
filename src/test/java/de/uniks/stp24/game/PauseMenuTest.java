@@ -31,9 +31,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
@@ -150,11 +148,11 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     MarketComponent marketComponent;
 
-    /*
     @Spy
     public ResourceBundle gameResourceBundle = ResourceBundle.getBundle("de/uniks/stp24/lang/game", Locale.ROOT);
 
-     */
+
+
 
     @InjectMocks
     PropertiesJobProgressComponent propertiesJobProgressComponent;

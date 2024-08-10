@@ -39,9 +39,9 @@ public class TechnologyOverviewComponent extends AnchorPane {
     public Button marineSienceButton;
 
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    TechnologyService technologyService;
+    public TechnologyService technologyService;
 
     @Inject
     @SubComponent

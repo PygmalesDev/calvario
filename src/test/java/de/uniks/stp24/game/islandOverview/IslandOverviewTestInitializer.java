@@ -2,6 +2,7 @@ package de.uniks.stp24.game.islandOverview;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
+import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
@@ -10,6 +11,7 @@ import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
 import de.uniks.stp24.component.game.technology.ResearchJobComponent;
 import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
+import de.uniks.stp24.component.game.technology.TechnologyResearchDetailsComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.GameStatus;
@@ -81,6 +83,18 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     VariableDependencyService variableDependencyService;
     @Spy
     MarketService marketService;
+    @Spy
+    FleetService fleetService;
+    @Spy
+    FleetCoordinationService fleetCoordinationService;
+    @Spy
+    FleetApiService fleetApiService;
+//    @Spy
+//    ContactsService contactsService;
+    @Spy
+    WarService warService;
+    @Spy
+    WarsApiService warsApiService;
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
@@ -134,10 +148,13 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     IslandClaimingComponent islandClaimingComponent;
 
     @InjectMocks
-    TechnologyOverviewComponent technologyOverviewComponent;
+    public TechnologyOverviewComponent technologyOverviewComponent;
 
     @InjectMocks
     TechnologyCategoryComponent technologyCategoryComponent;
+    @InjectMocks
+    TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+
 
     @InjectMocks
     ResearchJobComponent researchJobComponent;
@@ -146,9 +163,28 @@ public class IslandOverviewTestInitializer extends ControllerTest {
 
     @InjectMocks
     MarketComponent marketComponent;
+    @InjectMocks
+    ContactsComponent contactsComponent;
+    @InjectMocks
+    ContactDetailsComponent contactDetailsComponent;
+    @InjectMocks
+    WarComponent warComponent;
+    @InjectMocks
+    FleetCreationComponent fleetCreationComponent;
 
 
     public void initializeComponents() {
+        this.inGameController.technologiesComponent = this.technologyOverviewComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.researchJobComponent = this.researchJobComponent;
+        this.inGameController.technologiesComponent.technologyService = this.technologyService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyService = this.technologyService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.resourcesService = this.resourcesService;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.resourcesService.subscriber = this.subscriber;
+        this.inGameController.technologiesComponent.technologyCategoryComponent.subscriber = this.subscriber;
+        this.inGameController.technologiesComponent.technologyService.subscriber = this.subscriber;
+        this.inGameController.technologiesComponent.subscriber = this.subscriber;
+
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
@@ -226,6 +262,26 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.contextMenuButtons = new HBox();
         this.islandsService.tokenStorage = new TokenStorage();
         this.islandsService.gameSystemsService = gameSystemsApiService;
+
+        this.inGameController.fleetCreationComponent = this.fleetCreationComponent;
+        this.fleetCoordinationService.fleetService = this.fleetService;
+        this.fleetCoordinationService.tokenStorage = this.tokenStorage;
+        this.fleetService.tokenStorage = this.tokenStorage;
+        this.fleetService.fleetApiService = this.fleetApiService;
+        this.fleetService.subscriber = new Subscriber();
+
+        this.inGameController.contactsOverviewComponent = this.contactsComponent;
+        this.inGameController.contactsOverviewComponent.warService = this.warService;
+        this.inGameController.contactsOverviewComponent.warService.warsApiService = this.warsApiService;
+        this.inGameController.contactsOverviewComponent.contactDetailsComponent = this.contactDetailsComponent;
+        this.inGameController.contactsOverviewComponent.contactDetailsComponent.warComponent = this.warComponent;
+        this.inGameController.warComponent = this.warComponent;
+        this.inGameController.contactService.tokenStorage = this.tokenStorage;
+        this.inGameController.contactService.islandsService = this.islandsService;
+        this.inGameController.contactService.empireApiService = this.empireApiService;
+        this.inGameController.contactService.subscriber = this.subscriber;
+
+
 
     }
 

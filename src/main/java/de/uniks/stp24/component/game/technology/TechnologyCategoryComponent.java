@@ -63,7 +63,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
     @Inject
     App app;
     @Inject
-    TechnologyService technologyService;
+    public TechnologyService technologyService;
     @Inject
     @Resource
     @Named("technologiesResourceBundle")
@@ -79,10 +79,10 @@ public class TechnologyCategoryComponent extends AnchorPane {
 
 
     @Inject
-    ResourcesService resourcesService;
+    public ResourcesService resourcesService;
 
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
 
     @Inject
     @SubComponent

@@ -42,49 +42,48 @@
     </HBox>
     <HBox fx:id="blueprintHBox" alignment="CENTER_LEFT" spacing="6.0" VBox.vgrow="ALWAYS">
         <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-            <children>
-                <ImageView fx:id="attackImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                    <HBox.margin>
-                        <Insets right="2.0" />
-                    </HBox.margin>
-                </ImageView>
-                <Label fx:id="attackLabel" prefWidth="34.0">
-                    <font>
-                        <Font size="15.0" />
-                    </font>
-                </Label>
-                <ImageView fx:id="defenseImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                    <HBox.margin>
-                        <Insets right="2.0" />
-                    </HBox.margin>
-                </ImageView>
-                <Label fx:id="defenseLabel" prefWidth="34.0" textAlignment="CENTER">
-                    <font>
-                        <Font size="15.0" />
-                    </font>
-                </Label>
-                <ImageView fx:id="resourceImage1" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                    <HBox.margin>
-                        <Insets right="2.0" />
-                    </HBox.margin>
-                </ImageView>
-                <Label fx:id="resourceLabel1" prefWidth="34.0">
-                    <font>
-                        <Font size="15.0" />
-                    </font>
-                </Label>
-                <ImageView fx:id="resourceImage2" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                    <HBox.margin>
-                        <Insets right="2.0" />
-                    </HBox.margin>
-                </ImageView>
-                <Label fx:id="resourceLabel2" prefWidth="34.0" textAlignment="CENTER">
-                    <font>
-                        <Font size="15.0" />
-                    </font>
-                </Label>
-            <Button fx:id="infoButton" maxHeight="18.0" maxWidth="18.0" minHeight="18.0" minWidth="18.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="18.0" styleClass="info-button" />
-            </children>
+            <ImageView fx:id="attackImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                <HBox.margin>
+                    <Insets right="2.0"/>
+                </HBox.margin>
+            </ImageView>
+            <Label fx:id="attackLabel" prefWidth="34.0">
+                <font>
+                    <Font size="15.0"/>
+                </font>
+            </Label>
+            <ImageView fx:id="defenseImage" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                <HBox.margin>
+                    <Insets right="2.0"/>
+                </HBox.margin>
+            </ImageView>
+            <Label fx:id="defenseLabel" prefWidth="34.0" textAlignment="CENTER">
+                <font>
+                    <Font size="15.0"/>
+                </font>
+            </Label>
+            <ImageView fx:id="resourceImage1" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                <HBox.margin>
+                    <Insets right="2.0"/>
+                </HBox.margin>
+            </ImageView>
+            <Label fx:id="resourceLabel1" prefWidth="34.0">
+                <font>
+                    <Font size="15.0"/>
+                </font>
+            </Label>
+            <ImageView fx:id="resourceImage2" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                <HBox.margin>
+                    <Insets right="2.0"/>
+                </HBox.margin>
+            </ImageView>
+            <Label fx:id="resourceLabel2" prefWidth="34.0" textAlignment="CENTER">
+                <font>
+                    <Font size="15.0"/>
+                </font>
+            </Label>
+            <Button fx:id="infoButton" maxHeight="18.0" maxWidth="18.0" minHeight="18.0" minWidth="18.0"
+                    mnemonicParsing="false" prefHeight="18.0" prefWidth="18.0" styleClass="info-button"/>
         </HBox>
         <HBox alignment="CENTER_RIGHT" fillHeight="false" HBox.hgrow="NEVER">
             <padding>

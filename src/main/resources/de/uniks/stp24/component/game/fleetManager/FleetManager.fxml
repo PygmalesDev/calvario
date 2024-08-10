@@ -15,7 +15,7 @@
 
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1000.0" type="AnchorPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.fleetManager.FleetManagerComponent">
     <StackPane fx:id="fleetManagerStackPane" layoutX="-20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <VBox fx:id="fleetManagerBox" alignment="TOP_CENTER" styleClass="fleet-manager-background">
+        <VBox alignment="TOP_CENTER" styleClass="fleet-manager-background">
             <HBox fillHeight="false" translateY="50.0">
                 <HBox alignment="CENTER" prefWidth="800.0" HBox.hgrow="ALWAYS">
                     <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="fleet-manager-title" text="Fleet Manager" translateX="30.0" translateY="-10.0">

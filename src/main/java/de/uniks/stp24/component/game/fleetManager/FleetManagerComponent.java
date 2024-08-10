@@ -122,7 +122,7 @@ public class FleetManagerComponent extends AnchorPane {
     public ResourceBundle gameResourceBundle;
 
     @Inject
-    ImageCache imageCache = new ImageCache();
+    public ImageCache imageCache = new ImageCache();
 
     private Fleet editedFleet;
     private FadeTransition transition;
@@ -267,8 +267,6 @@ public class FleetManagerComponent extends AnchorPane {
      */
     public void setCommandLimit(Fleet fleet, boolean shipDeleted) {
         int numberOfShips = ships.size();
-        System.out.println(fleet.ships() + " fleet ships");
-        System.out.println(editedFleet.ships() + " edited fleet ships");
         if(shipDeleted && ships.size() == fleet.ships()) {
             numberOfShips = ships.size() - 1;
         }

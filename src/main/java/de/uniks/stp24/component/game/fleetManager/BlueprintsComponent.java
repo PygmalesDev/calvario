@@ -145,7 +145,5 @@ public class BlueprintsComponent extends VBox implements ReusableItemComponent<S
         this.addBlueprintButton.setVisible(canBeAddedToFleet);
     }
 
-    public void addBlueprint() {
-        this.fleetManagerComponent.addBlueprintToFleet(shipType);
-    }
+    public void addBlueprint() {this.fleetManagerComponent.addBlueprintToFleet(shipType);}
 }

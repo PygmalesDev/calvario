@@ -347,6 +347,10 @@ public class IslandsService extends BasicService {
         return "MissingNo.";
     }
 
+    public List<ShortSystemDto> getDevIsles(){
+        return Collections.unmodifiableList(this.devIsles);
+    }
+
     @OnDestroy
     public void destroy() {
         this.subscriber.dispose();

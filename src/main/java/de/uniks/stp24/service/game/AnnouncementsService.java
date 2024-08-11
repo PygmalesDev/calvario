@@ -23,6 +23,8 @@ public class AnnouncementsService {
     @Inject
     public IslandsService islandsService;
     @Inject
+    public FleetService fleetService;
+    @Inject
     @Named("gameResourceBundle")
     public ResourceBundle gameResourceBundle;
     @Inject
@@ -92,6 +94,11 @@ public class AnnouncementsService {
                     forwardMethods.add(jobsService.getJobInspector("technology_overview"));
                     forwardIcon = "-fx-background-image: url('[PATH]')"
                             .replace("[PATH]", "/" + technologyIconMap.get(job.technology()));
+                }
+                case "ship" -> {
+                    message = gameResourceBundle.getString("captain.ship.ready")
+                            .replace("{shipType}", gameResourceBundle.getString("ship." + job.ship()))
+                            .replace("{fleetName}", fleetService.getFleet(job.fleet()).name());
                 }
             }
             announcements.addFirst(new Announcement(message, forwardIcon, forwardMethods, job));

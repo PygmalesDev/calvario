@@ -50,7 +50,6 @@ public class TechnologyService {
                         .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
                 event -> {
                     if (!Arrays.equals(lastUpdate, event.data().technologies())) {
-                        System.out.println("Technologies: " + Arrays.toString(event.data().technologies()));
                         runnable.run();
                         lastUpdate = event.data().technologies();
                     }

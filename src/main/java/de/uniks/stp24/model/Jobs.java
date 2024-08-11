@@ -125,6 +125,10 @@ public class Jobs {
         return new TravelJobDTO("travel", path, fleetID);
     }
 
+    public static ShipJobDTO createShipJob(String fleetID, String shipType, String systemID){
+        return new ShipJobDTO("ship", fleetID, shipType, systemID);
+    }
+
     /**
      * Creates a new job from the given job instance. This job has to be initialized using the
      * {@link de.uniks.stp24.service.game.JobsService#beginJob(JobDTO) JobService.beginJob}({@link JobDTO JobDTO}).
@@ -157,6 +161,13 @@ public class Jobs {
             String type,
             ArrayList<String> path,
             String fleet
+    ) {}
+
+    public record ShipJobDTO(
+            String type,
+            String fleet,
+            String ship,
+            String system
     ) {}
 
     /**

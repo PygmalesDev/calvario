@@ -37,7 +37,7 @@ public class HttpModule {
                 final Response response = chain.proceed(chain.request());
                 if (response.code() >= 300) {
                     System.err.println(chain.request());
-                    System.err.println(Objects.requireNonNull(response.body()).string());
+                    System.out.println(response.body().string());
                 }
                 return response;
             }).build();
@@ -111,5 +111,9 @@ public class HttpModule {
     @Provides
     @Singleton
     FleetApiService fleetApiService(Retrofit retrofit) {return retrofit.create(FleetApiService.class);}
+
+    @Provides
+    @Singleton
+    ShipsApiService shipsApiService(Retrofit retrofit) {return retrofit.create(ShipsApiService.class);}
 
 }

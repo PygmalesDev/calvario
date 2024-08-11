@@ -2,6 +2,7 @@ package de.uniks.stp24.controllers;
 
 import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
@@ -11,6 +12,7 @@ import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
@@ -113,6 +115,8 @@ public class InGameController extends BasicController {
     public IslandsService islandsService;
     @Inject
     public ExplanationService explanationService;
+    @Inject
+    ShipService shipService;
 
     @Inject
     public JobsService jobsService;
@@ -122,6 +126,10 @@ public class InGameController extends BasicController {
     public FleetCoordinationService fleetCoordinationService;
     @Inject
     public TechnologyService technologyService;
+    @Inject
+    public FleetService fleetService;
+    @Inject
+    public FleetCoordinationService fleetCoordinationService;
 
     @SubComponent
     @Inject
@@ -179,6 +187,9 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public SitePropertiesComponent sitePropertiesComponent;
+    @SubComponent
+    @Inject
+    public FleetManagerComponent fleetManagerComponent;
     @Inject
     public FogOfWar fogOfWar;
 
@@ -293,6 +304,7 @@ public class InGameController extends BasicController {
         islandAttributes.setSystemUpgradeAttributes();
         islandAttributes.setBuildingAttributes();
         islandAttributes.setDistrictAttributes();
+        shipService.initShipTypes();
     }
 
     private void handlePauseChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
@@ -342,17 +354,16 @@ public class InGameController extends BasicController {
         islandClaimingContainer.getChildren().add(this.islandClaimingComponent);
         islandClaimingContainer.setVisible(false);
 
-        technologiesComponent.setContainer(contextMenuContainer);
-
-        this.group.getChildren().add(this.fleetCreationComponent);
         this.fleetCreationComponent.setVisible(false);
+        this.group.getChildren().add(this.fleetCreationComponent);
 
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,
                 jobsOverviewComponent,
                 empireOverviewComponent,
-                marketOverviewComponent
+                marketOverviewComponent,
+                fleetManagerComponent
         );
         contextMenuContainer.getChildren().forEach(child -> {
             child.setVisible(false);
@@ -376,6 +387,10 @@ public class InGameController extends BasicController {
         this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListeners();
         explanationService.setInGameController(this);
+
+        this.fleetService.loadGameFleets();
+        this.fleetService.initializeFleetListeners();
+        this.fleetService.initializeShipListener();
 
         technologiesComponent.setContainer(technologiesContainer);
         technologiesContainer.setVisible(false);
@@ -451,6 +466,12 @@ public class InGameController extends BasicController {
         this.toggleContextMenuVisibility(this.technologiesComponent);
     }
 
+    @OnKey(code = KeyCode.F, alt = true)
+    public void showFleetManager() {
+        this.toggleContextMenuVisibility(this.fleetManagerComponent);
+        this.fleetManagerComponent.showFleets();
+    }
+
     @OnKey(code = KeyCode.H, alt = true)
     public void showHelpOverview() {
         if (this.helpComponent.isVisible()) {
@@ -522,8 +543,7 @@ public class InGameController extends BasicController {
             this.contextMenuButtons.getChildren().addAll(
                     new ContextMenuButton("storageOverview", this.storageOverviewComponent),
                     new ContextMenuButton("empireOverview", this.empireOverviewComponent),
-                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent)
-            );
+                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent));
     }
 
     @OnRender
@@ -597,7 +617,7 @@ public class InGameController extends BasicController {
             showTechnologiesButton.setOnAction(event -> showTechnologies());
             showTechnologiesButton.setId("technologiesButton");
             showTechnologiesButton.getStyleClass().add("technologiesButton");
-            contextMenuButtons.getChildren().addAll(showTechnologiesButton, new ContextMenuButton("marketOverview", marketOverviewComponent));
+            contextMenuButtons.getChildren().addAll(showTechnologiesButton, new ContextMenuButton("marketOverview", marketOverviewComponent), new ContextMenuButton("fleetManager", fleetManagerComponent));
         });
 
         mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight()));

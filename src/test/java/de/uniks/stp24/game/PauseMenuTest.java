@@ -273,6 +273,11 @@ public class PauseMenuTest extends ControllerTest {
         this.variableService.inGameService = this.inGameService;
         this.inGameController.variableService = this.variableService;
 
+        this.inGameController.fogOfWar.tokenStorage = this.tokenStorage;
+        this.inGameController.fogOfWar.subscriber = this.subscriber;
+        this.inGameController.fogOfWar.islandsService = this.islandsService;
+        this.inGameController.fogOfWar.empireApiService = this.empireApiService;
+
         this.inGameService.presetsApiService = this.presetsApiService;
         this.marketService.presetsApiService = this.presetsApiService;
 
@@ -303,6 +308,8 @@ public class PauseMenuTest extends ControllerTest {
         doReturn(null).when(this.imageCache).get(any());
         doReturn(Observable.empty()).when(this.empireApiService).getEmpireEffect(any(), any());
         doReturn(Observable.empty()).when(this.jobsApiService).getEmpireJobs(any(), any());
+
+        doReturn(Observable.empty()).when(empireApiService).getPrivate(any(), any());
 
         inGameService.setGameStatus(gameStatus);
         inGameService.setTimerService(timerService);

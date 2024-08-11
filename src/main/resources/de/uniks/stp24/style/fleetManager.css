@@ -35,7 +35,6 @@ Label {
     -fx-text-fill: white;
     -fx-font-size: 24;
     -fx-opacity: 1;
-
 }
 
 .fleet-manager-background {
@@ -204,19 +203,6 @@ Label {
     -fx-font-size: 20;
 }
 
-.change-fleet-button {
-    -fx-font-family: 'Tempus Sans ITC';
-    -fx-font-size: 13;
-    -fx-text-fill: white;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-background-size: 100% 100%;
-    -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/assets/buttons/blue_button_element.png");
-    -fx-padding: 0px 0px 2px 0px;
-    -fx-pref-height: 30;
-    -fx-pref-width: 86;
-}
 
 .build-button {
     -fx-background-color: transparent;
@@ -354,4 +340,99 @@ Label {
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
+}
+
+.change-fleet-button {
+    -fx-font-family: 'Tempus Sans ITC';
+    -fx-font-size: 13;
+    -fx-text-fill: white;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 100% 100%;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/blue_button_element.png");
+    -fx-padding: 0px 0px 2px 0px;
+    -fx-pref-height: 30;
+    -fx-pref-width: 86;
+}
+
+.popup-background {
+    -fx-pref-width: 400;
+    -fx-pref-height: 225;
+    -fx-max-width: 400;
+    -fx-max-height: 225;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/deletion_window.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100% 100%;
+    -fx-background-position: center;
+}
+
+.popup-confirm-button {
+    -fx-font-family: 'Tempus Sans ITC';
+    -fx-font-size: 13;
+    -fx-text-fill: white;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 100% 100%;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/blue_button_element.png");
+    -fx-padding: 0px 0px 2px 0px;
+    -fx-pref-height: 30;
+    -fx-pref-width: 86;
+}
+
+.popup-text {
+    -fx-font-size: 21;
+}
+
+.popup-increment-button {
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 100% 100%;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/minimal_arrow_right.png");
+
+    -fx-max-heigt: 35px;
+    -fx-max-width: 16px;
+    -fx-min-height: 35px;
+    -fx-min-width: 16px;
+}
+
+.popup-decrement-button {
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 100% 100%;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/minimal_arrow_left.png");
+
+    -fx-max-heigt: 35px;
+    -fx-max-width: 16px;
+    -fx-min-height: 35px;
+    -fx-min-width: 16px;
+}
+
+.close-button {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/close_window_button.png");
+    -fx-background-size: 100% 100%;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-pref-width: 30px;
+    -fx-pref-height: 30px;
+    -fx-translate-x: -8px;
+    -fx-translate-y: -5px;
+}
+
+.popup-info-box {
+    -fx-translate-y: -20px;
+    -fx-translate-x: -15px;
+}
+
+.popup-control-box {
+    -fx-padding: 5px 10px 5px 10px;
+    -fx-border-width: 2px;
+    -fx-border-color: black;
 }

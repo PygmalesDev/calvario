@@ -72,7 +72,7 @@ public class NewFleetComponent extends VBox {
         int numberOfShipyards = (int) this.islandList.get(index).buildings().stream()
                 .filter("shipyard"::equals)
                 .count();
-        this.islandNameLabel.setText(islandList.get(index).name() + " (has " + numberOfShipyards + " shipyard)");
+        this.islandNameLabel.setText(islandList.get(index).name() + "\n(has " + numberOfShipyards + " shipyard)");
     }
 
     public void createNewFleet() {

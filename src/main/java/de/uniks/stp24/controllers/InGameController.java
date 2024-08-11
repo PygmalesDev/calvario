@@ -536,6 +536,7 @@ public class InGameController extends BasicController {
                     if (Objects.nonNull(updatedIsland.owner())) {
                         // apply drop shadow and flag
                         isle.applyEmpireInfo();
+                        this.islandsService.updateIsles(updatedIsland);
                         // island is already claimed
                         this.islandClaimingContainer.setVisible(false);
                     }
@@ -651,10 +652,10 @@ public class InGameController extends BasicController {
             if (selected.upgrade().equals("unexplored") || selected.upgrade().equals("explored")) return;
 
             this.tokenStorage.setIsland(selected);
+            this.islandAttributes.setIsland(selected);
             this.overviewSitesComponent.jobsComponent.setJobsObservableList(
                     this.jobsService.getObservableListForSystem(job.system()));
 
-            this.islandAttributes.setIsland(selected);
             selectedIsland = this.islandsService.getIslandComponent(job.system());
             if (Objects.nonNull(selected.owner())) {
                 showOverview();

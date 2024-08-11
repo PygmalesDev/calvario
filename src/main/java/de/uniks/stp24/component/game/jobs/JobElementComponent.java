@@ -4,8 +4,10 @@ import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
+import de.uniks.stp24.service.game.FleetService;
 import de.uniks.stp24.service.game.IslandsService;
 import de.uniks.stp24.service.game.JobsService;
+import de.uniks.stp24.service.game.TechnologyService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
@@ -46,11 +48,20 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
     public JobsService jobsService;
     @Inject
     public Subscriber subscriber;
+    @Inject
+    public FleetService fleetService;
+    @Inject
+    public TechnologyService technologyService;
 
     @Inject
     @Resource
     @Named("gameResourceBundle")
     public ResourceBundle gameResourceBundle;
+
+    @Inject
+    @Named("technologiesResourceBundle")
+    public ResourceBundle technologiesResourceBundle;
+
     private Job job;
 
     @Inject
@@ -82,11 +93,23 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
             }
             case "upgrade" -> {
                 this.jobImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/other/upgrade_job.png"));
-                this.jobTypeText.setText(this.gameResourceBundle.getString("jobs."+island.upgrade()));
+                assert island != null;
+                this.jobTypeText.setText(this.gameResourceBundle.getString("jobs." + island.upgrade()));
             }
-//            case "ship" -> {
-//                this.jobTypeText.setText();
-//            }
+            case "ship" -> {
+                this.jobImage.setImage(this.imageCache.get("/" + Constants.shipIconMap.get(job.ship())));
+                this.jobTypeText.setText(this.gameResourceBundle.getString("ship." + job.ship()) + " - " + this.fleetService.getFleet(job.fleet()).name());
+            }
+            case "technology" -> {
+                this.jobNameText.setText(this.gameResourceBundle.getString("technologies." + this.technologyService.getTechnologyCategory(job.technology())));
+                this.jobImage.setImage(this.imageCache.get("assets/technologies/categories/" + this.technologyService.getTechnologyCategory(job.technology()) + ".png"));
+                this.jobTypeText.setText(this.technologiesResourceBundle.getString(job.technology()));
+            }
+            case "travel" -> {
+                this.jobNameText.setText(this.fleetService.getFleet(job.fleet()).name());
+                this.jobImage.setImage(this.imageCache.get("icons/ships/ship_Image_With_Frame1.png"));
+                this.jobTypeText.setText(this.islandsService.getIsland(job.path().getFirst()).name() + " -> " + this.islandsService.getIsland(job.path().getLast()).name());
+            }
         }
     }
 

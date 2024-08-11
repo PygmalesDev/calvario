@@ -2,6 +2,7 @@ package de.uniks.stp24.component.game.jobs;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.ResourceComponent;
+import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
@@ -9,6 +10,7 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.game.JobsService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -84,7 +86,10 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
         this.infoJobButton.setId("jobProgressInspectionButton_" + job._id());
 
         ObservableList<Job> systemJobs = this.jobsService.getObservableListForSystem(job.system());
-        if (systemJobs.indexOf(job) != 0) {
+        FilteredList<Job> filteredJobs = systemJobs.filtered(systemJob -> !systemJob.type().equals("ship"));
+        this.jobProgressBar.setVisible(true);
+        this.jobTimeRemaining.setVisible(true);
+        if (filteredJobs.indexOf(job) != 0 && !job.type().equals("ship")) {
             this.jobProgressBar.setVisible(false);
             this.jobTimeRemaining.setVisible(false);
         }
@@ -115,6 +120,7 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
                 this.jobDescriptionText.setText(this.gameResourceBundle.getString("jobs."+
                         this.islandAttributes.getIsland().upgrade()));
             }
+            // Todo
         }
     }
 

@@ -19,4 +19,8 @@ public record Island(
   String upgrade,
   String name
 ) {
+    public boolean equals(final Object o) {
+        if (o instanceof Island island) return this.id.equals(island.id);
+        return false;
+    }
 }

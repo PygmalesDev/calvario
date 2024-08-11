@@ -158,7 +158,7 @@ public class EmpireOverviewComponent extends StackPane {
         }
 
         for (Island island : islandList) {
-            IslandComponent islandComponent = new IslandComponent();
+            IslandComponent islandComponent = new IslandComponent(this.islandsService);
             islandComponent.applyInfo(island);
             islandComponent.setInGameController(inGameController);
             if (Objects.nonNull(island.owner()) && island.owner().equals(empireID)) {

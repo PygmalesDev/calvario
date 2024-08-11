@@ -96,3 +96,15 @@
     -fx-background-size: 100% 100%;
     -fx-background-image: url("/de/uniks/stp24/icons/buttons/lupe.png");
 }
+
+.jobsOverviewButton {
+    -fx-font-size: 10;
+    -fx-font-family: "Baskerville";
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/button_element.png");
+    -fx-background-size: 100% 100%;
+    -fx-pref-width: 70;
+    -fx-pref-height: 25;
+}

@@ -254,6 +254,23 @@ public class Constants {
             Map.entry("state" , "de/uniks/stp24/assets/technologies/tags/state.png")
     );
 
+    public static final Map<String, String> shipIconMap = Map.ofEntries(
+            Map.entry("explorer", "de/uniks/stp24/icons/ships/ship_Image_1.png"),
+            Map.entry("colonizer" , "de/uniks/stp24/icons/ships/ship_Image_1.png"),
+            Map.entry("interceptor" , "de/uniks/stp24/icons/ships/ship_Image_1.png"),
+            Map.entry("fighter" , "de/uniks/stp24/icons/ships/ship_Galley.png"),
+            Map.entry("corvette" , "de/uniks/stp24/icons/ships/buccaneer.png"),
+            Map.entry("bomber" , "de/uniks/stp24/icons/ships/ship_Image_1.png"),
+            Map.entry("frigate" , "de/uniks/stp24/icons/ships/ship_Image_1.png"),
+            Map.entry("destroyer" , "de/uniks/stp24/icons/ships/ship_Marauder.png"),
+            Map.entry("cruiser" , "de/uniks/stp24/icons/ships/ship_Image_2.png"),
+            Map.entry("vanguard" , "de/uniks/stp24/icons/ships/ship_Image_2.png"),
+            Map.entry("sentinel" , "de/uniks/stp24/icons/ships/ship_Image_2.png"),
+            Map.entry("battleship" , "de/uniks/stp24/icons/ships/ship_Image_2.png"),
+            Map.entry("carrier" , "de/uniks/stp24/icons/ships/ship_Image_2.png"),
+            Map.entry("dreadnought" , "de/uniks/stp24/icons/ships/leviathan.png")
+    );
+
     // Sea Backgrounds
     public static final String NIGHT = "-fx-background-image: url('/de/uniks/stp24/assets/backgrounds/eclipse_seamless.png')";
     public static final String DAY = "-fx-background-image: url('/de/uniks/stp24/assets/backgrounds/sea_seamless.png')";

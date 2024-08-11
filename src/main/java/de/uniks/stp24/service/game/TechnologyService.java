@@ -151,8 +151,14 @@ public class TechnologyService {
         );
     }
 
-    public List<TechnologyExtended> getTechnologiesList() {
-        return technologiesList;
+    public String getTechnologyCategory(String technology) {
+        TechnologyExtended technologyExtended = this.technologiesList.stream().filter(tech -> tech.id().equals(technology)).toList().getFirst();
+        for (String tag : technologyExtended.tags()) {
+            if(tag.equals("society") || tag.equals("engineering") || tag.equals("physics")){
+                return tag;
+            }
+        }
+        return null;
     }
 
     public Observable<TechnologyExtended> getTechnology(String id) {

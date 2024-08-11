@@ -63,6 +63,7 @@ public class JobsService {
         this.jobCollections.put("technology", FXCollections.observableArrayList());
         this.jobCollections.put("collection", FXCollections.observableArrayList());
         this.jobCollections.put("ship", FXCollections.observableArrayList());
+        this.jobCollections.put("travel", FXCollections.observableArrayList());
 
         this.subscriber.subscribe(this.jobsApiService.getEmpireJobs(
                         this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), jobList -> {
@@ -115,7 +116,7 @@ public class JobsService {
                 this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
             else this.jobCollections.get(job.system()).add(job);
 
-            if (this.jobCollections.get(job.system()).size() == 1 || job.type().equals("ship"))
+            if (!(job.type().equals("travel") || job.type().equals("ship") || job.type().equals("technology")))
                 this.jobCollections.get("collection").add(job);
 //        }
 
@@ -132,8 +133,8 @@ public class JobsService {
                 this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
             else this.jobCollections.get(job.system()).replaceAll(other -> other.equals(job) ? job : other);
 
-            if (this.jobCollections.get(job.system()).filtered(job1 -> job1.type().equals(job.type())).isEmpty())
-                this.jobCollections.get("collection").add(job);
+//            if (this.jobCollections.get(job.system()).filtered(job1 -> job1.type().equals(job.type())).isEmpty())
+//                this.jobCollections.get("collection").add(job);
         }
 
         if (job.progress() == job.total()) this.deleteJobFromGroups(job);
@@ -147,8 +148,8 @@ public class JobsService {
             this.jobCollections.get(job.system()).removeIf(other -> other._id().equals(job._id()));
 
             ObservableList<Job> systemJobs = this.jobCollections.get(job.system());
-            if (!systemJobs.isEmpty() && !this.jobCollections.get("collection").contains(systemJobs.getFirst()))
-                this.jobCollections.get("collection").add(systemJobs.getFirst());
+//            if (!systemJobs.isEmpty() && !this.jobCollections.get("collection").contains(systemJobs.getFirst()))
+//                this.jobCollections.get("collection").add(systemJobs.getFirst());
         }
 
         if (this.jobCompletionFunctions.containsKey(job._id()))

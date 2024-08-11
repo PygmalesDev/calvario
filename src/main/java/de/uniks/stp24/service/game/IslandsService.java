@@ -165,10 +165,10 @@ public class IslandsService extends BasicService {
         list.forEach(
           island -> {
               IslandComponent tmp = createIslandPaneFromDto(island,
-                app.initAndRender(new IslandComponent()));
+                app.initAndRender(new IslandComponent(this)));
               tmp.setLayoutX(tmp.getPosX());
               tmp.setLayoutY(tmp.getPosY());
-              tmp.setIslandService(this);
+              //tmp.setIslandService(this);
               islandComponentList.add(tmp);
               islandComponentMap.put(island.id(), tmp);
           }
@@ -345,8 +345,8 @@ public class IslandsService extends BasicService {
         return "MissingNo.";
     }
 
-    public List<ShortSystemDto> getDevIsles(){
-        return Collections.unmodifiableList(this.devIsles);
+    public List<Island> getIsles(){
+        return Collections.unmodifiableList(this.isles);
     }
 
     @OnDestroy
@@ -384,5 +384,9 @@ public class IslandsService extends BasicService {
             Color colorWeb = Color.web(getEmpire(islandComponent.island.owner()).color()).brighter();
             islandComponent.islandImage.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb) + ", 4.0, 0.88, 0, 0);");}
 
+    }
+
+    public  void updateIsles(Island island){
+        this.isles.replaceAll(old -> old.equals(island) ? island : old);
     }
 }

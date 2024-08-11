@@ -22,16 +22,16 @@ import static de.uniks.stp24.service.Constants.*;
 
 public class FogOfWar {
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
 
     @Inject
-    EmpireApiService empireApiService;
+    public EmpireApiService empireApiService;
 
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
 
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
 
     InGameController inGameController;
 

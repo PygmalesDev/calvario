@@ -277,6 +277,8 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
         this.technologyService.subscriber = new Subscriber();
         this.technologyService.tokenStorage = this.tokenStorage;
 
+        doReturn(Observable.empty()).when(empireApiService).getPrivate(any(), any());
+
         doReturn(Observable.just(new SystemDto[]{system})).when(gameSystemsApiService).getSystems(any());
 
         this.app.show(this.inGameController);

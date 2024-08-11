@@ -107,6 +107,8 @@ public class PauseMenuTest extends ControllerTest {
     ShipService shipService;
     @Spy
     FleetApiService fleetApiService;
+    @Spy
+    FogOfWar fogOfWar;
 
     @InjectMocks
     ClockComponent clockComponent;

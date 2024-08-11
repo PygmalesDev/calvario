@@ -12,7 +12,6 @@ import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
-import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
@@ -126,10 +125,6 @@ public class InGameController extends BasicController {
     public FleetCoordinationService fleetCoordinationService;
     @Inject
     public TechnologyService technologyService;
-    @Inject
-    public FleetService fleetService;
-    @Inject
-    public FleetCoordinationService fleetCoordinationService;
 
     @SubComponent
     @Inject

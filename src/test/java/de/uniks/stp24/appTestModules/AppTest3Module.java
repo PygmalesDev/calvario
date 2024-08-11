@@ -288,6 +288,8 @@ public class AppTest3Module extends LobbyTestLoader {
         when(this.variableService.getFirstHalfOfVariables()).thenReturn(Observable.just(EXPLAINED_VARIABLES));
         when(this.variableService.getSecondHalfOfVariables()).thenReturn(Observable.just(EXPLAINED_VARIABLES));
 
+        when(this.empireApiService.getPrivate(any(), any())).thenReturn(Observable.empty());
+
         this.technologyService.eventListener = this.eventListener;
         this.technologyCategoryComponent.jobsService = this.jobsService;
 

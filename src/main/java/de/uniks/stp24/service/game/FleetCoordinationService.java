@@ -35,7 +35,7 @@ public class FleetCoordinationService {
 
     private IslandClaimingComponent claimingComponent;
     private GameFleetController selectedFleet;
-    private InGameController inGameController;
+    public InGameController inGameController;
     public final Random random = new Random();
 
     private final double ISLAND_RADIUS_X = Constants.ISLAND_WIDTH/2;

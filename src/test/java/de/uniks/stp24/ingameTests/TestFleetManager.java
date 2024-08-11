@@ -189,13 +189,13 @@ public class TestFleetManager extends ControllerTest {
         waitForFxEvents();
         assertTrue(fleetManagerComponent.newFleetComponent.isVisible());
         assertEquals(2, fleetManagerComponent.newFleetComponent.islandList.size());
-        assertEquals("homeIsland (has 1 shipyard)", fleetManagerComponent.newFleetComponent.islandNameLabel.getText());
+        assertEquals("homeIsland\n(has 1 shipyard)", fleetManagerComponent.newFleetComponent.islandNameLabel.getText());
         clickOn("#lastIslandButton");
         waitForFxEvents();
-        assertEquals("island2 (has 1 shipyard)", fleetManagerComponent.newFleetComponent.islandNameLabel.getText());
+        assertEquals("island2\n(has 1 shipyard)", fleetManagerComponent.newFleetComponent.islandNameLabel.getText());
         clickOn("#nextIslandButton");
         waitForFxEvents();
-        assertEquals("homeIsland (has 1 shipyard)", fleetManagerComponent.newFleetComponent.islandNameLabel.getText());
+        assertEquals("homeIsland\n(has 1 shipyard)", fleetManagerComponent.newFleetComponent.islandNameLabel.getText());
 
         clickOn("#confirmIslandButton");
         waitForFxEvents();

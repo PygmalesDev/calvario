@@ -1,7 +1,6 @@
 package de.uniks.stp24.appTestModules;
 
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
 import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
@@ -159,6 +158,9 @@ public class InGameTestLoader extends ControllerTest {
     protected TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
     @InjectMocks
     protected TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
+    @InjectMocks
+    protected IslandTravelComponent islandTravelComponent;
+
 
     final Provider<ClaimingSiteComponent> claimingComponentProvider = () -> {
         var component = new ClaimingSiteComponent();
@@ -229,6 +231,8 @@ public class InGameTestLoader extends ControllerTest {
         this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
         this.inGameController.coolerBubbleComponent = this.coolerBubbleComponent;
         this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
+        this.inGameController.islandTravelComponent = this.islandTravelComponent;
+        this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
         this.inGameController.marketOverviewComponent = this.marketComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.eventComponent = this.eventComponent;
@@ -252,6 +256,9 @@ public class InGameTestLoader extends ControllerTest {
 
         this.technologyOverviewComponent.technologyCategoryComponent = this.technologyCategoryComponent;
 
+        this.technologyCategoryComponent.technologyResearchDetailsComponent = this.technologyResearchDetailsComponent;
+        this.technologyCategoryComponent.technologyEffectDetailsComponent = this.technologyEffectDetailsComponent;
+        this.technologyCategoryComponent.provider = this.technologyCategorySubComponentProvider;
         this.technologyCategoryComponent.researchJobComponent = this.researchJobComponent;
 
         this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
@@ -269,13 +276,8 @@ public class InGameTestLoader extends ControllerTest {
 
         this.overviewUpgradeComponent.jobProgressComponent = this.islandUpgradesJobProgressComponent;
 
-        this.technologyCategoryComponent.provider = this.technologyCategorySubComponentProvider;
-
-
-        this.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
         this.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
-        this.fleetManagerComponent.jobsService = this.jobsService;
-        this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
+        this.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
     }
 
     protected void setServices() {
@@ -287,22 +289,22 @@ public class InGameTestLoader extends ControllerTest {
         this.inGameController.eventService = this.eventService;
         this.inGameController.lobbyService = this.lobbyService;
         this.inGameController.jobsService = this.jobsService;
-        this.inGameController.subscriber = this.subscriber;
+        this.inGameController.subscriber = new Subscriber();
 
         this.islandClaimingComponent.componentProvider = this.claimingComponentProvider;
         this.islandClaimingComponent.islandAttributes = this.islandAttributeStorage;
         this.islandClaimingComponent.islandsService = this.islandsService;
         this.islandClaimingComponent.jobsService = this.jobsService;
         this.islandClaimingComponent.imageCache = this.imageCache;
-        this.islandClaimingComponent.subscriber = this.subscriber;
+        this.islandClaimingComponent.subscriber = new Subscriber();
 
         this.variableService.technologyService = this.technologyService;
         this.variableService.inGameService = this.inGameService;
-        this.variableService.subscriber = this.subscriber;
+        this.variableService.subscriber = new Subscriber();
 
         this.islandsService.gameSystemsService = this.gameSystemsApiService;
         this.islandsService.tokenStorage = this.tokenStorage;
-        this.islandsService.subscriber = this.subscriber;
+        this.islandsService.subscriber = new Subscriber();
         this.islandsService.app = this.app;
 
         this.inGameService.presetsApiService = this.presetsApiService;
@@ -318,14 +320,14 @@ public class InGameTestLoader extends ControllerTest {
         this.resourcesService.islandAttributes = this.islandAttributeStorage;
         this.resourcesService.empireService = this.empireService;
         this.resourcesService.tokenStorage = this.tokenStorage;
-        this.resourcesService.subscriber = this.subscriber;
+        this.resourcesService.subscriber = new Subscriber();
 
         this.explanationService.variablesResourceBundle = this.variablesResourceBundle;
         this.explanationService.gameResourceBundle = this.gameResourceBundle;
         this.explanationService.variableService = this.variableService;
         this.explanationService.app = this.app;
 
-        this.clockComponent.subscriber = this.subscriber;
+        this.clockComponent.subscriber = new Subscriber();
 
         this.islandOverviewJobsComponent.progressPaneProvider = this.islandOverviewJobProgressComponentProvider;
         this.islandOverviewJobsComponent.islandAttributes = this.islandAttributeStorage;
@@ -340,40 +342,41 @@ public class InGameTestLoader extends ControllerTest {
         this.buildingPropertiesComponent.resourcesService = this.resourcesService;
         this.buildingPropertiesComponent.islandsService = this.islandsService;
         this.buildingPropertiesComponent.jobsService = this.jobsService;
-        this.buildingPropertiesComponent.subscriber = this.subscriber;
+        this.buildingPropertiesComponent.subscriber = new Subscriber();
         this.buildingPropertiesComponent.imageCache = this.imageCache;
         this.buildingPropertiesComponent.app = this.app;
 
         this.timerService.gamesApiService = this.gamesApiService;
         this.timerService.tokenStorage = this.tokenStorage;
-        this.timerService.subscriber = this.subscriber;
+        this.timerService.subscriber = new Subscriber();
 
         this.eventComponent.tokenStorage = this.tokenStorage;
-        this.eventComponent.subscriber = this.subscriber;
+        this.eventComponent.subscriber = new Subscriber();
 
         this.eventService.empireApiService = this.empireApiService;
         this.eventService.tokenStorage = this.tokenStorage;
-        this.eventService.subscriber = this.subscriber;
+        this.eventService.subscriber = new Subscriber();
 
         this.jobsService.jobsApiService = this.jobsApiService;
         this.jobsService.tokenStorage = this.tokenStorage;
-        this.jobsService.subscriber = this.subscriber;
+        this.jobsService.subscriber = new Subscriber();
 
         this.storageOverviewComponent.resourcesService = this.resourcesService;
         this.storageOverviewComponent.empireService = this.empireService;
         this.storageOverviewComponent.tokenStorage = this.tokenStorage;
-        this.storageOverviewComponent.subscriber = this.subscriber;
+        this.storageOverviewComponent.subscriber = new Subscriber();
 
         this.marketService.presetsApiService = this.presetsApiService;
         this.marketService.empireApiService = this.empireApiService;
-        this.marketService.subscriber = this.subscriber;
+        this.marketService.subscriber = new Subscriber();
 
         this.marketComponent.marketSeasonComponentProvider = this.marketSeasonComponentProvider;
         this.marketComponent.explanationService = this.explanationService;
         this.marketComponent.presetsApiService = this.presetsApiService;
+        this.marketComponent.variableService = this.variableService;
         this.marketComponent.marketService = this.marketService;
         this.marketComponent.tokenStorage = this.tokenStorage;
-        this.marketComponent.subscriber = this.subscriber;
+        this.marketComponent.subscriber = new Subscriber();
         this.marketComponent.imageCache = this.imageCache;
 
         this.sitesComponent.districtComponentProvider = this.districtComponentProvider;
@@ -390,7 +393,7 @@ public class InGameTestLoader extends ControllerTest {
         this.sitePropertiesComponent.gameResourceBundle = this.gameResourceBundle;
         this.sitePropertiesComponent.resourcesService = this.resourcesService;
         this.sitePropertiesComponent.jobsService = this.jobsService;
-        this.sitePropertiesComponent.subscriber = this.subscriber;
+        this.sitePropertiesComponent.subscriber = new Subscriber();
         this.sitePropertiesComponent.imageCache = this.imageCache;
         this.sitePropertiesComponent.app = this.app;
 
@@ -400,21 +403,45 @@ public class InGameTestLoader extends ControllerTest {
 
         this.siteJobProgress.jobsService = this.jobsService;
 
+        this.timerService.eventListener = this.eventListener;
+
         this.jobsOverviewComponent.jobsService = this.jobsService;
 
         this.technologyService.presetsApiService = this.presetsApiService;
         this.technologyService.empireApiService = this.empireApiService;
         this.technologyService.tokenStorage = this.tokenStorage;
-        this.technologyService.subscriber = this.subscriber;
+        this.technologyService.subscriber = new Subscriber();
 
         this.technologyOverviewComponent.technologiesResourceBundle = this.technologiesResourceBundle;
 
+        this.fleetCoordinationService.islandsService = this.islandsService;
         this.fleetCoordinationService.fleetService = this.fleetService;
+        this.fleetCoordinationService.timerService = this.timerService;
         this.fleetCoordinationService.tokenStorage = this.tokenStorage;
-        this.fleetService.tokenStorage = this.tokenStorage;
+        this.fleetCoordinationService.shipService = this.shipService;
+        this.fleetCoordinationService.jobsService = this.jobsService;
+        this.fleetCoordinationService.subscriber = new Subscriber();
+        this.fleetCoordinationService.imageCache = this.imageCache;
+        this.fleetCoordinationService.app = this.app;
+
         this.fleetService.fleetApiService = this.fleetApiService;
-        this.fleetService.subscriber = this.subscriber;
-        this.fleetCoordinationService.subscriber = this.subscriber;
+        this.fleetService.tokenStorage = this.tokenStorage;
+        this.fleetService.subscriber = new Subscriber();
+
+        this.islandTravelComponent.fleetService = this.fleetService;
+        this.islandTravelComponent.jobsService = this.jobsService;
+        this.islandTravelComponent.shipService = this.shipService;
+        this.islandTravelComponent.subscriber = new Subscriber();
+
+        this.fleetManagerComponent.resourcesService = this.resourcesService;
+        this.fleetManagerComponent.variableService = this.variableService;
+        this.fleetManagerComponent.islandsService = this.islandsService;
+        this.fleetManagerComponent.tokenStorage = this.tokenStorage;
+        this.fleetManagerComponent.fleetService = this.fleetService;
+        this.fleetManagerComponent.shipService = this.shipService;
+        this.fleetManagerComponent.jobsService = this.jobsService;
+        this.fleetManagerComponent.subscriber = new Subscriber();
+        this.fleetManagerComponent.app = this.app;
     }
 
     protected void clearStyles() {

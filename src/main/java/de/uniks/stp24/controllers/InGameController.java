@@ -183,7 +183,7 @@ public class InGameController extends BasicController {
     @Inject
     public FleetManagerComponent fleetManagerComponent;
 
-    List<IslandComponent> islandComponentList;
+    List<IslandComponent> islandComponentList = new ArrayList<>();
     Map<String, IslandComponent> islandComponentMap;
 
     @Inject

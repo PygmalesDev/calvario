@@ -40,15 +40,15 @@ import static java.util.stream.Collectors.toMap;
 @Singleton
 public class FleetCoordinationService {
     @Inject
-    TimerService timerService;
+    public TimerService timerService;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
     @Inject
     public TokenStorage tokenStorage;
     @Inject
     public FleetService fleetService;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
     public ImageCache imageCache;
     @Inject
@@ -56,7 +56,7 @@ public class FleetCoordinationService {
     @Inject
     public ShipService shipService;
     @Inject
-    App app;
+    public App app;
 
     public final Random random = new Random();
     private GameFleetController selectedFleet;
@@ -187,7 +187,6 @@ public class FleetCoordinationService {
             gameFleet.setLayoutY(parkingPoint.getY());
             gameFleet.setStartingPoint();
             gameFleet.collisionCircle.setRadius(Constants.FLEET_COLLISION_RADIUS);
-            this.selectedFleet = null;
         }
     }
 

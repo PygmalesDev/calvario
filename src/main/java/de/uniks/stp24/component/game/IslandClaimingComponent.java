@@ -5,7 +5,6 @@ import de.uniks.stp24.model.Fleets.Fleet;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Jobs.Job;
-import de.uniks.stp24.model.Ships;
 import de.uniks.stp24.model.Ships.ReadShipDTO;
 import de.uniks.stp24.model.Site;
 import de.uniks.stp24.service.ImageCache;
@@ -72,6 +71,11 @@ public class IslandClaimingComponent extends Pane {
     ListView<de.uniks.stp24.model.Resource> consumeListView;
     @FXML
     ListView<de.uniks.stp24.model.Resource> costsListView;
+    @FXML
+    Tooltip travelTooltip;
+    @FXML
+    Tooltip claimingTooltip;
+
 
     @Inject
     public IslandAttributeStorage islandAttributes;
@@ -110,12 +114,11 @@ public class IslandClaimingComponent extends Pane {
     private double incrementAmount;
     private double progress;
 
-    private final Tooltip travelTooltip = new Tooltip();
-    private final Tooltip claimingTooltip = new Tooltip();
     private final Duration TOOLTIP_ANIMATION_DURATION = Duration.seconds(0.1);
 
     @Inject
     public IslandClaimingComponent() {}
+
 
     @OnRender
     public void render() {
@@ -123,11 +126,6 @@ public class IslandClaimingComponent extends Pane {
         this.claimingTooltip.setShowDelay(TOOLTIP_ANIMATION_DURATION);
         this.travelTooltip.setHideDelay(TOOLTIP_ANIMATION_DURATION);
         this.claimingTooltip.setHideDelay(TOOLTIP_ANIMATION_DURATION);
-
-        this.travelTooltip.getStyleClass().add("controlTooltip");
-        this.claimingTooltip.getStyleClass().add("controlTooltip");
-        this.travelTooltip.setPrefWidth(20);
-        this.claimingTooltip.setPrefWidth(20);
 
         this.travelButtonControlPane.setTooltip(this.travelTooltip);
         this.exploreButtonControlPane.setTooltip(this.claimingTooltip);

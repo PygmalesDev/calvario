@@ -2,6 +2,7 @@ package de.uniks.stp24.appTestModules;
 
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
+import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.ws.Event;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
@@ -15,7 +16,7 @@ import static org.mockito.Mockito.*;
 public class AppTest3Module extends LobbyTestLoader {
 
     protected final String
-            GAME_ID = "123456",
+            GAME_ID = "ABCDABCDABCDABCD",
             EMPIRE_ID = "testEmpireID",
             USER_ID = "testUserID";
 
@@ -42,13 +43,13 @@ public class AppTest3Module extends LobbyTestLoader {
             Map.of("energy", 30));
 
     protected final String[] JOB_EVENT_PATHS = new String[]{
-            "games.123456.empires.testEmpireID.jobs.jobClaimingID_1.",
-            "games.123456.empires.testEmpireID.jobs.jobClaimingID_2.",
-            "games.123456.empires.testEmpireID.jobs.jobBuildingID.",
-            "games.123456.empires.testEmpireID.jobs.jobSiteID."
+            "games.ABCDABCDABCDABCD.empires.testEmpireID.jobs.jobClaimingID_1.",
+            "games.ABCDABCDABCDABCD.empires.testEmpireID.jobs.jobClaimingID_2.",
+            "games.ABCDABCDABCDABCD.empires.testEmpireID.jobs.jobBuildingID.",
+            "games.ABCDABCDABCDABCD.empires.testEmpireID.jobs.jobSiteID."
     };
 
-    protected final String JOB_EVENT_PATH = "games.123456.empires.testEmpireID.jobs.*.";
+    protected final String JOB_EVENT_PATH = "games.ABCDABCDABCDABCD.empires.testEmpireID.jobs.*.";
 
     protected final GameStatus GAME_STATUS = new GameStatus();
 
@@ -145,20 +146,20 @@ public class AppTest3Module extends LobbyTestLoader {
             Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
             "colonized", 13, Map.of("islandID_2", 3, "islandID_3", 3), 50, 50, EMPIRE_ID);
 
-    protected final Jobs.Job[] JOBS = new Jobs.Job[]{
-            new Jobs.Job("0", "0",
+    protected final Job[] JOBS = new Job[]{
+            new Job("0", "0",
                     "jobClaimingID_1", 0, 3, GAME_ID, EMPIRE_ID, "islandID_2", 0,
                     "upgrade", null, null, null,"","",new LinkedList<>(), new HashMap<>(), null),
-            new Jobs.Job("0", "0",
+            new Job("0", "0",
                     "jobClaimingID_2", 0, 12, GAME_ID, EMPIRE_ID, "islandID_3", 0,
                     "upgrade", null, null, null,"","",new LinkedList<>(), new HashMap<>(), null),
-            new Jobs.Job("0", "0",
+            new Job("0", "0",
                     "jobBuildingID", 0, 12, GAME_ID, EMPIRE_ID, "islandID_1", 0,
                     "building", "refinery", null, null,"","",new LinkedList<>(), new HashMap<>(), null),
-            new Jobs.Job("0", "0",
+            new Job("0", "0",
                     "jobSiteID", 0, 12, GAME_ID, EMPIRE_ID, "islandID_1", 0,
                     "district", null, "energy", null,"","",new LinkedList<>(), new HashMap<>(), null),
-            new Jobs.Job("0", "0",
+            new Job("0", "0",
                     "jobTechnologyID", 0, 12, GAME_ID, EMPIRE_ID, "islandID_1", 0,
                     "technology", null, null, "society","","",new LinkedList<>(), new HashMap<>(), null)
     };
@@ -198,7 +199,7 @@ public class AppTest3Module extends LobbyTestLoader {
     protected final Subject<Event<Game>> GAME_SUBJECT = BehaviorSubject.create();
     protected final Subject<Event<SystemDto>> SYSTEMDTO_SUBJECT = BehaviorSubject.create();
     protected final Subject<Event<EmpireDto>> EMPIRE_SUBJECT = BehaviorSubject.create();
-    protected final Subject<Event<Jobs.Job>> JOB_SUBJECT = BehaviorSubject.create();
+    protected final Subject<Event<Job>> JOB_SUBJECT = BehaviorSubject.create();
 
     protected int gameTicks = 0;
 
@@ -224,15 +225,10 @@ public class AppTest3Module extends LobbyTestLoader {
         doReturn(SYSTEMDTO_SUBJECT).when(this.eventListener)
                 .listen(String.format("games.%s.systems.%s.updated", GAME_ID, "*"),  SystemDto.class);
 
-        when(this.eventListener.listen(JOB_EVENT_PATH + "*", Jobs.Job.class)).thenReturn(JOB_SUBJECT);
-        when(this.eventListener.listen(JOB_EVENT_PATHS[0] + "*", Jobs.Job.class)).thenReturn(JOB_SUBJECT);
-        when(this.eventListener.listen(JOB_EVENT_PATHS[1] + "*", Jobs.Job.class)).thenReturn(JOB_SUBJECT);
-        when(this.eventListener.listen(JOB_EVENT_PATHS[2] + "*", Jobs.Job.class)).thenReturn(JOB_SUBJECT);
-        when(this.eventListener.listen(JOB_EVENT_PATHS[3] + "*", Jobs.Job.class)).thenReturn(JOB_SUBJECT);
+        when(this.eventListener.listen(JOB_EVENT_PATH + "*", Job.class)).thenReturn(JOB_SUBJECT);
     }
 
     private void initializeApiMocks() {
-
         doReturn(Observable.just(RESOURCE_AGGREGATES)).when(this.gameLogicApiService).getTechnologyCostAndTime(any(), any(), any());
         doReturn(null).when(this.imageCache).get(any());
         doNothing().when(this.saveLoadService).saveGang(any());
@@ -308,8 +304,8 @@ public class AppTest3Module extends LobbyTestLoader {
 
     private void mockFleets(){
         // Mock get Fleets and ships
-        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", 4, new HashMap<>(), new HashMap<>())));
-        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456",true);
+        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "ABCDABCDABCDABCD", "testEmpireID", "fleetName", "fleetLocation", 4, new HashMap<>(), new HashMap<>())));
+        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("ABCDABCDABCDABCD",true);
         doNothing().when(this.fleetService).initializeFleetListeners();
         doNothing().when(this.fleetService).initializeShipListener();
     }

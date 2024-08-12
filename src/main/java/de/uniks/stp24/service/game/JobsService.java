@@ -85,8 +85,8 @@ public class JobsService {
      * {@link #loadEmpireJobs() loadEmpireJobs} method.
      */
     public void initializeJobsListeners() {
-        this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.empires.*.jobs.*.*",
-                this.tokenStorage.getGameId()), Job.class), result -> {
+        this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.empires.%s.jobs.*.*",
+                this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), Job.class), result -> {
             Job job = result.data();
 
             switch (result.suffix()) {

@@ -25,22 +25,23 @@ public class IslandTravelComponent extends Pane {
     SplitPane travelButtonControlPane;
     @FXML
     Button travelButton;
+    @FXML
+    Tooltip travelTooltip;
 
     private String islandID = "";
 
-    private final Tooltip travelTooltip = new Tooltip();
     private final Duration TOOLTIP_ANIMATION_DURATION = Duration.seconds(0.1);
 
     @Inject
-    FleetCoordinationService fleetCoordinationService;
+    public FleetCoordinationService fleetCoordinationService;
     @Inject
-    FleetService fleetService;
+    public FleetService fleetService;
     @Inject
-    JobsService jobsService;
+    public JobsService jobsService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    ShipService shipService;
+    public ShipService shipService;
 
     @Inject
     public IslandTravelComponent() {
@@ -55,7 +56,6 @@ public class IslandTravelComponent extends Pane {
     public void setOnFleetSelected() {
         this.travelTooltip.setHideDelay(TOOLTIP_ANIMATION_DURATION);
         this.travelTooltip.setShowDelay(TOOLTIP_ANIMATION_DURATION);
-        this.travelTooltip.getStyleClass().add("controlTooltip");
 
         this.fleetCoordinationService.onFleetSelected(this::setTravelInformation);
     }

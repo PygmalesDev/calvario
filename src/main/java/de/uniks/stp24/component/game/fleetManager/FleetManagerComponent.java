@@ -70,23 +70,23 @@ public class FleetManagerComponent extends AnchorPane {
 
 
     @Inject
-    App app;
+    public App app;
     @Inject
-    FleetService fleetService;
+    public FleetService fleetService;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
     public JobsService jobsService;
     @Inject
-    VariableService variableService;
+    public VariableService variableService;
     @Inject
-    ShipService shipService;
+    public ShipService shipService;
     @Inject
-    Subscriber subscriber;
+    public Subscriber subscriber;
     @Inject
-    ResourcesService resourcesService;
+    public ResourcesService resourcesService;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
 
     @SubComponent
     @Inject

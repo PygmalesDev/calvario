@@ -22,7 +22,7 @@ public class TimerService {
     @Inject
     public GamesApiService gamesApiService;
     @Inject
-    EventListener eventListener;
+    public EventListener eventListener;
     @Inject
     public Subscriber subscriber;
     @Inject

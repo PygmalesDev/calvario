@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
@@ -32,6 +33,9 @@
                </effect>
             </Button>
          </items>
+         <tooltip>
+            <Tooltip fx:id="claimingTooltip" prefWidth="20.0" styleClass="controlTooltip" textAlignment="CENTER" wrapText="true" />
+         </tooltip>
       </SplitPane>
       <ProgressBar fx:id="jobProgressBar" layoutX="116.0" layoutY="88.0" prefHeight="18.0" prefWidth="85.0" progress="0.0" styleClass="jobProgressBar">
          <opaqueInsets>
@@ -52,6 +56,9 @@
                </effect>
             </Button>
          </items>
+         <tooltip>
+            <Tooltip fx:id="travelTooltip" prefWidth="20.0" styleClass="controlTooltip" textAlignment="CENTER" wrapText="true" />
+         </tooltip>
       </SplitPane>
    </Pane>
    <Pane fx:id="colonizePane" layoutX="264.0" layoutY="16.0" prefHeight="307.0" prefWidth="223.0" styleClass="papyrusBackgroundExplored">

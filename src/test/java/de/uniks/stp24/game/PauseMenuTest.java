@@ -182,6 +182,8 @@ public class PauseMenuTest extends ControllerTest {
 
     @InjectMocks
     IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
+    @InjectMocks
+    IslandTravelComponent islandTravelComponent;
 
     @InjectMocks
     CoolerBubbleComponent coolerBubbleComponent;
@@ -214,6 +216,12 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.technologiesComponent.subscriber = this.subscriber;
         this.technologyService.tokenStorage = this.tokenStorage;
 
+        this.inGameController.islandTravelComponent = this.islandTravelComponent;
+        this.islandTravelComponent.jobsService = this.jobsService;
+        this.islandTravelComponent.subscriber = this.subscriber;
+        this.islandTravelComponent.fleetService = this.fleetService;
+        this.islandTravelComponent.shipService = this.shipService;
+
         coolerBubbleComponent.subscriber = this.subscriber;
         this.inGameController.coolerBubbleComponent = coolerBubbleComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
@@ -237,7 +245,6 @@ public class PauseMenuTest extends ControllerTest {
         this.overviewUpgradeComponent.jobProgressComponent = islandUpgradesJobProgressComponent;
         this.overviewUpgradeComponent.jobsService = this.jobsService;
         this.overviewUpgradeComponent.islandAttributes = this.islandAttributeStorage;
-
 
         this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
         this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
@@ -276,12 +283,19 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
         this.inGameController.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
         this.inGameController.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
-        this.fleetCoordinationService.fleetService = this.fleetService;
-        this.fleetCoordinationService.tokenStorage = this.tokenStorage;
+
         this.fleetService.tokenStorage = this.tokenStorage;
         this.fleetService.fleetApiService = this.fleetApiService;
         this.fleetService.subscriber = this.subscriber;
+
         this.fleetCoordinationService.subscriber = this.subscriber;
+        this.fleetCoordinationService.jobsService = this.jobsService;
+        this.fleetCoordinationService.timerService = this.timerService;
+        this.fleetCoordinationService.fleetService = this.fleetService;
+        this.fleetCoordinationService.tokenStorage = this.tokenStorage;
+        this.fleetCoordinationService.shipService = this.shipService;
+        this.fleetCoordinationService.imageCache = this.imageCache;
+        this.fleetCoordinationService.islandsService = this.islandsService;
 
         lenient().doReturn("gameOwner").when(this.tokenStorage).getUserId();
         lenient().doReturn("123456").when(this.tokenStorage).getGameId();

@@ -2,7 +2,6 @@ package de.uniks.stp24.game.islandOverview;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.fleetManager.BlueprintsDetailsComponent;
 import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
@@ -166,8 +165,6 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @InjectMocks
     FleetManagerComponent fleetManagerComponent;
     @InjectMocks
-    FleetCreationComponent fleetCreationComponent;
-    @InjectMocks
     NewFleetComponent newFleetComponent;
     @InjectMocks
     ChangeFleetComponent changeFleetComponent;
@@ -280,7 +277,6 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
         this.inGameController.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
         this.inGameController.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
-        this.inGameController.fleetCreationComponent = this.fleetCreationComponent;
         this.fleetCoordinationService.fleetService = this.fleetService;
         this.fleetCoordinationService.tokenStorage = this.tokenStorage;
         this.fleetService.tokenStorage = this.tokenStorage;

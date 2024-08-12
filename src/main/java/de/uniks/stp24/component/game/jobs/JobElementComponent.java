@@ -75,6 +75,7 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
         this.jobCancelButton.setId("jobElementDeleteButton_" + job._id());
         this.inspectionButton.setId("jobElementInspectionButton_" + job._id());
 
+        this.inspectionButton.setVisible(true);
         Island island = this.islandsService.getIsland(job.system());
         this.timerText.setText(String.format("%s/%s", job.progress(), (int) job.total()));
         if(island != null) {
@@ -106,6 +107,7 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
                 this.jobTypeText.setText(this.technologiesResourceBundle.getString(job.technology()));
             }
             case "travel" -> {
+                this.inspectionButton.setVisible(false);
                 this.jobNameText.setText(this.fleetService.getFleet(job.fleet()).name());
                 this.jobImage.setImage(this.imageCache.get("icons/ships/ship_Image_With_Frame1.png"));
                 this.jobTypeText.setText(this.islandsService.getIsland(job.path().getFirst()).name() + " -> " + this.islandsService.getIsland(job.path().getLast()).name());
@@ -118,7 +120,11 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
     }
 
     public void showJobOverview() {
-        this.jobsService.getJobInspector("island_jobs_overview").accept(job);
+        if(job.type().equals("technology")) {
+            this.jobsService.getJobInspector("technology_overview").accept(job);
+        } else {
+            this.jobsService.getJobInspector("island_jobs_overview").accept(job);
+        }
     }
 
     @OnDestroy

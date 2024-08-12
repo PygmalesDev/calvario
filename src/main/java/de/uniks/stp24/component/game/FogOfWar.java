@@ -203,7 +203,6 @@ public class FogOfWar {
     }
 
     public void saveFog() {
-        System.out.println(this.exploredPaths.size());
         this.subscriber.subscribe(this.empireApiService.getPrivate(this.gameID, this.empireID),
                 result -> {
                     final Map<String, Object> newPrivateMap = Objects.nonNull(result._private()) ?

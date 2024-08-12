@@ -1,6 +1,5 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
@@ -12,7 +11,6 @@ import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
-import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
@@ -156,9 +154,6 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public MarketComponent marketOverviewComponent;
-    @SubComponent
-    @Inject
-    public FleetCreationComponent fleetCreationComponent;
 
     @SubComponent
     @Inject
@@ -329,8 +324,6 @@ public class InGameController extends BasicController {
         islandClaimingContainer.getChildren().add(this.islandClaimingComponent);
         islandClaimingContainer.setVisible(false);
 
-        this.fleetCreationComponent.setVisible(false);
-        this.group.getChildren().add(this.fleetCreationComponent);
 
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
@@ -589,15 +582,6 @@ public class InGameController extends BasicController {
                 error -> System.out.println("islands event listener error: " + error)
         );
 
-//        this.islandComponentList.forEach(isle -> {
-//            isle.setInGameController(this);
-//            isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
-//            isle.setScaleX(1.25);
-//            isle.setScaleY(1.25);
-//            isle.collisionCircle.setRadius(Constants.ISLAND_COLLISION_RADIUS);
-//            this.mapGrid.getChildren().add(isle);
-//        });
-
         Platform.runLater(() -> {
             Button showTechnologiesButton = new Button();
             showTechnologiesButton.setId("showTechnologiesButton");
@@ -606,29 +590,6 @@ public class InGameController extends BasicController {
             showTechnologiesButton.getStyleClass().add("technologiesButton");
             contextMenuButtons.getChildren().addAll(showTechnologiesButton, new ContextMenuButton("marketOverview", marketOverviewComponent), new ContextMenuButton("fleetManager", fleetManagerComponent));
         });
-
-//        mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight()));
-//        mapScrollPane.setVvalue(0.5);
-//        mapScrollPane.setHvalue(0.5);
-//
-//        /*
-//         * zoom function working but not perfect!
-//         * it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
-//         */
-//        mapGrid.setOnScroll(event -> {
-//            if (event.isShiftDown() && (event.getDeltaY() > 0 || event.getDeltaX() > 0)) {
-//                scale += 0.1;
-//                scale = Math.min(scale, 3);
-//                event.consume();
-//            } else if (event.isShiftDown() && (event.getDeltaY() < 0 || event.getDeltaX() < 0)) {
-//                scale -= 0.1;
-//                scale = Math.max(scale, 0.35);
-//                event.consume();
-//            }
-//            group.setScaleX(scale);
-//            group.setScaleY(scale);
-//        });
-
     }
 
     public void showInfo(MouseEvent event) {
@@ -662,11 +623,6 @@ public class InGameController extends BasicController {
                     this.islandClaimingComponent.setIslandInformation(selected.island);
                 }
             }
-            // Show fleet creation pane
-            this.fleetCreationComponent.setVisible(true);
-            this.fleetCreationComponent.setIsland(selected.island.id());
-            this.fleetCreationComponent.setLayoutX(selected.getLayoutX()-100);
-            this.fleetCreationComponent.setLayoutY(selected.getLayoutY()+30);
         }
     }
 

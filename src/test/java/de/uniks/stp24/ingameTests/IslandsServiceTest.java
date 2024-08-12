@@ -65,7 +65,7 @@ public class IslandsServiceTest extends ControllerTest {
     @Test
     public void createIslandData(){
         assertEquals(0,islandsService.getListOfIslands().size());
-        islandsService.retrieveIslands("game1");
+        islandsService.retrieveIslands("game1", false);
         gameSystemsApiService.getSystems("game1");
 
         List<Island> testIsles = islandsService.getListOfIslands();

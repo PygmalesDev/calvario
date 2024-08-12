@@ -456,11 +456,6 @@ public class InGameController extends BasicController {
         this.toggleContextMenuVisibility(this.marketOverviewComponent);
     }
 
-    @OnKey(code = KeyCode.T, alt = true)
-    public void showTechnologiesOverview() {
-        this.toggleContextMenuVisibility(this.technologiesComponent);
-    }
-
     @OnKey(code = KeyCode.F, alt = true)
     public void showFleetManager() {
         this.toggleContextMenuVisibility(this.fleetManagerComponent);
@@ -733,7 +728,7 @@ public class InGameController extends BasicController {
         this.jobsService.setJobInspector("storage_overview", (Jobs.Job job) -> showStorageOverview());
 
         this.jobsService.setJobInspector("technology_overview", (Jobs.Job job) ->
-                showTechnologiesOverview()
+                showTechnologies()
         );
 
     }

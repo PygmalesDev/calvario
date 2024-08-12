@@ -119,9 +119,8 @@ public class FogOfWar {
     }
 
     private void recreateIslandFog(ArrayList<String> islandIDs) {
-        for (String islandID : islandIDs) {
+        for (String islandID : islandIDs)
             this.removeFogFromIsland(this.islandsService.getIslandComponent(islandID));
-        }
     }
 
     public void removeShapesFromFog(IslandComponent island, Shape... toRemoves) {

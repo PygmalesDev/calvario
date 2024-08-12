@@ -213,6 +213,7 @@ public class ResearchJobComponent extends AnchorPane {
             this.job = job1;
 
             this.jobsService.onJobCompletion(job1._id(), this::handleJobFinished);
+            this.jobsService.onJobDeletion(job1._id(), this::handleJobFinished);
 
             subscriber.subscribe(technologyService.getTechnology(job.technology()), result -> {
                 if (!technologies.contains(result)) {

@@ -110,5 +110,5 @@
 }
 
 .jobsOverviewButton:selected {
-    -fx-background-image: url("/de/uniks/stp24/assets/buttons/jobOverviewCurrentTabButton.png");
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/button_job_selected.png");
 }

@@ -227,7 +227,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewSitesComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.coolerBubbleComponent.announcementsService = this.announcementsService;
-        this.inGameController.selectedIsland = new IslandComponent();
+        this.inGameController.selectedIsland = new IslandComponent(this.islandsService);
         this.resourcesService.islandAttributes = islandAttributeStorage;
         this.resourcesService.tokenStorage = tokenStorage;
         this.resourcesService.empireService = empireService;

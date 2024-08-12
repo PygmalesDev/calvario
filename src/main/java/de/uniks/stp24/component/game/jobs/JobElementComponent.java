@@ -113,7 +113,7 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
                 this.inspectionButton.setVisible(false);
                 this.jobNameText.setText(this.fleetService.getFleet(job.fleet()).name());
                 this.jobImage.setImage(this.imageCache.get("icons/ships/ship_Image_With_Frame1.png"));
-                this.jobTypeText.setText(this.islandsService.getIsland(job.path().getFirst()).name() + " -> " + this.islandsService.getIsland(job.path().getLast()).name());
+                this.jobTypeText.setText(this.gameResourceBundle.getString("travelling.to") + " " + this.islandsService.getIsland(job.path().getLast()).name());
             }
         }
     }

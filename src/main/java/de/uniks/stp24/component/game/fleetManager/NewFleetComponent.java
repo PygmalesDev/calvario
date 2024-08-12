@@ -83,7 +83,6 @@ public class NewFleetComponent extends VBox {
     public void createNewFleet() {
         this.setVisible(true);
         this.islandList.addAll(this.islandsService.getIsles());
-        System.out.println(islandList.size());
         this.islandList = this.islandList.stream()
                 .filter(shortSystemDto -> shortSystemDto.owner() != null && shortSystemDto.owner().equals(this.tokenStorage.getEmpireId()) && shortSystemDto.buildings().contains("shipyard"))
                 .collect(Collectors.toList());

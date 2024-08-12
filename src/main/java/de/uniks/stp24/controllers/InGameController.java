@@ -1,6 +1,5 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
@@ -12,7 +11,6 @@ import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
-import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
@@ -156,9 +154,6 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public MarketComponent marketOverviewComponent;
-    @SubComponent
-    @Inject
-    public FleetCreationComponent fleetCreationComponent;
 
     @SubComponent
     @Inject
@@ -329,8 +324,6 @@ public class InGameController extends BasicController {
         islandClaimingContainer.getChildren().add(this.islandClaimingComponent);
         islandClaimingContainer.setVisible(false);
 
-        this.fleetCreationComponent.setVisible(false);
-        this.group.getChildren().add(this.fleetCreationComponent);
 
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
@@ -630,11 +623,6 @@ public class InGameController extends BasicController {
                     this.islandClaimingComponent.setIslandInformation(selected.island);
                 }
             }
-            // Show fleet creation pane
-            this.fleetCreationComponent.setVisible(true);
-            this.fleetCreationComponent.setIsland(selected.island.id());
-            this.fleetCreationComponent.setLayoutX(selected.getLayoutX()-100);
-            this.fleetCreationComponent.setLayoutY(selected.getLayoutY()+30);
         }
     }
 

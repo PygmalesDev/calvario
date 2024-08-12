@@ -84,10 +84,19 @@ public class IslandsService extends BasicService {
      * this method will be used when changing from lobby to ingame
      * and retrieve island information when starting or rejoining a game
      */
-    public void retrieveIslands(String gameID) {
+    public void retrieveIslands(String gameID, boolean sleep) {
+        if (sleep) {
+            try {
+                // give server enough time to init owner
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                System.out.println("I couldn't sleep :(");
+            }
+        }
+        this.gameID = gameID;
         resetVariables();
         createEmpireServices();
-        this.gameID = gameID;
+        refreshListOfColonizedSystems();
         subscriber.subscribe(gameSystemsService.getSystems(gameID),
                 dto -> {
                     Arrays.stream(dto).forEach(data -> {
@@ -103,7 +112,6 @@ public class IslandsService extends BasicService {
                     widthRange = maxX-minX + 1000;
                     heightRange = maxY-minY + 1000;
                     this.app.show("/ingame");
-                    refreshListOfColonizedSystems();
                 },
                 error -> System.out.println("Error while retrieving islands in the IslandsService:\n"+error.getMessage()));
     }

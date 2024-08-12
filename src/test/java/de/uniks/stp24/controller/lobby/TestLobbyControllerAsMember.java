@@ -4,6 +4,7 @@ package de.uniks.stp24.controller.lobby;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.menu.*;
+import de.uniks.stp24.controllers.LoadingScreenController;
 import de.uniks.stp24.controllers.LobbyController;
 import de.uniks.stp24.controllers.helper.JoinGameHelper;
 import de.uniks.stp24.dto.JoinGameDto;
@@ -82,6 +83,8 @@ public class TestLobbyControllerAsMember extends ControllerTest {
     @InjectMocks
     JoinGameHelper joinGameHelper;
     @InjectMocks
+    LoadingScreenController loadingScreenController;
+    @InjectMocks
     UserComponent userComponent;
     @InjectMocks
     EnterGameComponent enterGameComponent;
@@ -114,6 +117,10 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         this.lobbyController.userComponent = this.userComponent;
         this.lobbyController.userComponentProvider = this.userComponentProvider;
         this.lobbyController.joinGameHelper = this.joinGameHelper;
+        this.loadingScreenController.empireService = this.empireService;
+        this.loadingScreenController.islandsService = this.islandsService;
+        this.loadingScreenController.subscriber = this.subscriber;
+
 
         // Mock getting userID
         doReturn("testMemberUnoID").when(this.tokenStorage).getUserId();
@@ -312,10 +319,11 @@ public class TestLobbyControllerAsMember extends ControllerTest {
         Empire testEmpire = new Empire("testEmpire", "a","a", 1,  1, null, "a");
 
         doReturn(null).when(this.app).show("/ingame");
+        doReturn(null).when(this.app).show("/loading-screen");
 
         doAnswer(show-> {app.show("/ingame");
             return null;
-        }).when(this.islandsService).retrieveIslands(any());
+        }).when(this.islandsService).retrieveIslands(any(), anyBoolean());
 
         doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", "testGameID",
                 "testMemberUnoID","testGame","a","a",1, 2, "a")})).when(this.empireService).getEmpires(any());
@@ -347,7 +355,7 @@ public class TestLobbyControllerAsMember extends ControllerTest {
 
         doAnswer(show-> {app.show("/ingame");
             return null;
-        }).when(this.islandsService).retrieveIslands(any());
+        }).when(this.islandsService).retrieveIslands(any(),anyBoolean());
 
         doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", "testGameID",
                 "testGameHostID","testGame","a","a",1, 2, "a")})).when(this.empireService).getEmpires(any());

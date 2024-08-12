@@ -38,11 +38,11 @@ public class JoinGameHelper extends BasicController {
     public JoinGameHelper() {
     }
 
-    /**
-     * Go through all empires of the game and save the empireId and gameId for the user
-     * If there is no empire which belongs to the user, the user is a spectator.
-     */
-    public void joinGame(String gameId) {
+    public void joinGame(String gameId, boolean sleep) {
+        app.show("/loading-screen");
+
+        // Go through all empires of the game and save the empireId and gameId for the user
+        // If there is no empire which belongs to the user, the user is a spectator.
         subscriber.subscribe(empireService.getEmpires(gameId), dto -> {
             for (ReadEmpireDto data : dto) {
                 islandsService.saveEmpire(data._id(), data);
@@ -52,8 +52,8 @@ public class JoinGameHelper extends BasicController {
             if (tokenStorage.getEmpireId() == null)
                 startGame(gameId, null, true);
 
-            islandsService.retrieveIslands(gameId);
-        }, error -> System.out.println("Error in JoinGame: " + error.getMessage()));
+            islandsService.retrieveIslands(gameId, sleep);
+        }, error -> System.out.println(error.getMessage()));
 
     }
 
@@ -61,7 +61,6 @@ public class JoinGameHelper extends BasicController {
         this.tokenStorage.setGameId(gameId);
         this.tokenStorage.setEmpireId(empireId);
         this.tokenStorage.setIsSpectator(isSpectator);
-
     }
 
     @OnDestroy

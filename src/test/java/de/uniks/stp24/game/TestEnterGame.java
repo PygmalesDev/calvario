@@ -7,6 +7,7 @@ import de.uniks.stp24.component.menu.GameComponent;
 import de.uniks.stp24.component.menu.LogoutComponent;
 import de.uniks.stp24.component.menu.WarningComponent;
 import de.uniks.stp24.controllers.BrowseGameController;
+import de.uniks.stp24.controllers.LoadingScreenController;
 import de.uniks.stp24.controllers.helper.JoinGameHelper;
 import de.uniks.stp24.dto.MemberDto;
 import de.uniks.stp24.dto.ReadEmpireDto;
@@ -80,6 +81,8 @@ public class TestEnterGame extends ControllerTest {
     @InjectMocks
     JoinGameHelper joinGameHelper;
     @InjectMocks
+    LoadingScreenController loadingScreenController;
+    @InjectMocks
     LogoutComponent logoutComponent;
     @InjectMocks
     BubbleComponent bubbleComponent;
@@ -103,6 +106,9 @@ public class TestEnterGame extends ControllerTest {
         browseGameController.warningComponent = warningComponent;
         browseGameController.joinGameHelper = joinGameHelper;
         lobbyService.gameMembersApiService = gameMembersApiService;
+        loadingScreenController.empireService = this.empireService;
+        this.loadingScreenController.islandsService = this.islandsService;
+        this.loadingScreenController.subscriber = this.subscriber;
 
         doReturn(Observable.just(List.of(
                 game1, game2, game3
@@ -113,11 +119,12 @@ public class TestEnterGame extends ControllerTest {
         // Mock userId
         doReturn("testUserID").when(this.tokenStorage).getUserId();
 
+        doReturn(null).when(this.app).show("/loading-screen");
         // Mock show ingame
         doReturn(null).when(this.app).show("/ingame");
         doAnswer(show-> {app.show("/ingame");
             return null;
-        }).when(this.islandsService).retrieveIslands(any());
+        }).when(this.islandsService).retrieveIslands(any(), anyBoolean());
 
         app.show(browseGameController);
     }
@@ -193,6 +200,7 @@ public class TestEnterGame extends ControllerTest {
         doReturn(Observable.just(new ReadEmpireDto[]{new ReadEmpireDto("1","a","testEmpireID", "game1Id",
                 "testHost1","testEmpire","a","a",1, 2, "a")
         })).when(this.empireService).getEmpires(any());
+
 
         // Mock the requested member of the game (the user without an empire, not the host)
         when(this.lobbyService.getMember(any(),any()))

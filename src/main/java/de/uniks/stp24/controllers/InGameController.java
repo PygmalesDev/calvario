@@ -11,7 +11,6 @@ import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
-import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
@@ -32,7 +31,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.TextAlignment;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
@@ -49,7 +47,6 @@ import java.beans.PropertyChangeListener;
 import java.util.*;
 
 import static de.uniks.stp24.service.Constants.BUILT_STATUS;
-import static de.uniks.stp24.service.Constants.ISLAND_WIDTH;
 
 @Title("CALVARIO")
 @Controller

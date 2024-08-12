@@ -11,9 +11,7 @@ import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.jobs.PropertiesJobProgressComponent;
-import de.uniks.stp24.component.game.technology.ResearchJobComponent;
-import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
-import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
+import de.uniks.stp24.component.game.technology.*;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.GameStatus;
@@ -161,6 +159,12 @@ public class InGameTestInitializer extends ControllerTest {
     NewFleetComponent newFleetComponent;
     @InjectMocks
     ChangeFleetComponent changeFleetComponent;
+    @InjectMocks
+    IslandTravelComponent islandTravelComponent;
+    @InjectMocks
+    TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+    @InjectMocks
+    TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
 
     @Mock
     AnnouncementsService announcementsService;
@@ -224,6 +228,7 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.selectedIsland.flagPane = new StackPane();
         this.variableDependencyService.variableService = this.variableService;
         this.inGameController.overviewUpgradeComponent.jobProgressComponent = this.jobProgressComponent;
+        this.inGameController.islandTravelComponent = this.islandTravelComponent;
 
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.variableService = this.variableService;
@@ -262,6 +267,9 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.eventComponent = this.eventComponent;
         this.resourcesService.gameSystemsApiService = this.gameSystemsApiService;
 
+        this.technologyCategoryComponent.technologyResearchDetailsComponent = this.technologyResearchDetailsComponent;
+        this.technologyCategoryComponent.technologyEffectDetailsComponent = this.technologyEffectDetailsComponent;
+
         this.marketService.presetsApiService = this.presetsApiService;
         this.marketService.empireApiService = this.empireApiService;
         this.marketService.subscriber = this.subscriber;
@@ -279,6 +287,12 @@ public class InGameTestInitializer extends ControllerTest {
         this.fleetService.fleetApiService = this.fleetApiService;
         this.fleetService.subscriber = this.subscriber;
         this.fleetCoordinationService.subscriber = this.subscriber;
+        this.fleetCoordinationService.jobsService = this.jobsService;
+        this.fleetCoordinationService.shipService = this.shipService;
+        this.fleetCoordinationService.timerService = this.timerService;
+
+        this.timerService.subscriber = this.subscriber;
+        this.timerService.eventListener = this.eventListener;
     }
 
     public void clearStyleSheets(){

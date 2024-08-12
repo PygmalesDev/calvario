@@ -22,7 +22,6 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -78,7 +77,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     ExplanationService explanationService;
     @Spy
     TechnologyService technologyService;
-    @Mock
+    @Spy
     TimerService timerService;
     @Spy
     GameLogicApiService gameLogicApiService;
@@ -149,11 +148,6 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     TechnologyOverviewComponent technologyOverviewComponent;
 
     @InjectMocks
-    Tooltip travelTooltip = new Tooltip("");
-    @InjectMocks
-    Tooltip claimingTooltip = new Tooltip("");
-
-    @InjectMocks
     TechnologyCategoryComponent technologyCategoryComponent;
 
     @InjectMocks
@@ -199,6 +193,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.technologiesComponent.technologyCategoryComponent.subscriber = this.subscriber;
         this.inGameController.technologiesComponent.technologyService.subscriber = this.subscriber;
         this.inGameController.technologiesComponent.subscriber = this.subscriber;
+        this.inGameController.fleetCoordinationService = this.fleetCoordinationService;
 
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
@@ -289,6 +284,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.fleetService.subscriber = this.subscriber;
         this.fleetCoordinationService.subscriber = this.subscriber;
         this.technologyService.eventListener = this.eventListener;
+
+        this.timerService.eventListener = this.eventListener;
 
     }
 

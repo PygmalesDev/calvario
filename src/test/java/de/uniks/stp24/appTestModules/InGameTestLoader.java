@@ -407,6 +407,7 @@ public class InGameTestLoader extends ControllerTest {
 
         this.jobsOverviewComponent.jobsService = this.jobsService;
 
+        this.technologyService.gameLogicApiService = this.gameLogicApiService;
         this.technologyService.presetsApiService = this.presetsApiService;
         this.technologyService.empireApiService = this.empireApiService;
         this.technologyService.tokenStorage = this.tokenStorage;
@@ -428,6 +429,7 @@ public class InGameTestLoader extends ControllerTest {
         this.fleetService.tokenStorage = this.tokenStorage;
         this.fleetService.subscriber = new Subscriber();
 
+        this.islandTravelComponent.fleetCoordinationService = this.fleetCoordinationService;
         this.islandTravelComponent.fleetService = this.fleetService;
         this.islandTravelComponent.jobsService = this.jobsService;
         this.islandTravelComponent.shipService = this.shipService;

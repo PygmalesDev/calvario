@@ -305,7 +305,7 @@ public class AppTest3Module extends LobbyTestLoader {
 
     private void mockFleets(){
         // Mock get Fleets and ships
-        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "ABCDABCDABCDABCD", "testEmpireID", "fleetName", "fleetLocation", 4, new HashMap<>(), new HashMap<>())));
+        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "ABCDABCDABCDABCD", "testEmpireID", "fleetName", "islandID_1", 4, new HashMap<>(), new HashMap<>())));
         doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("ABCDABCDABCDABCD",true);
         doNothing().when(this.fleetService).initializeFleetListeners();
         doNothing().when(this.fleetService).initializeShipListener();

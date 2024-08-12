@@ -216,7 +216,7 @@ public class LobbyController extends BasicController {
                     buttonsSetDisability(true);
                     if (event.data().started()) {
                         subscriber.subscribe(lobbyService.getMember(this.gameID, this.tokenStorage.getUserId()),
-                                memberDto -> this.joinGameHelper.joinGame(this.gameID),
+                                memberDto -> this.joinGameHelper.joinGame(this.gameID, true),
                                 this::errorMsg);
                     }
                 }, error -> {

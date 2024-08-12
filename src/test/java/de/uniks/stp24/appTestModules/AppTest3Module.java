@@ -245,8 +245,9 @@ public class AppTest3Module extends LobbyTestLoader {
 
         when(this.inGameService.getGameStatus()).thenReturn(GAME_STATUS);
 
-        doAnswer(inv -> {this.joinGameHelper.joinGame(GAME_ID);return Observable.just(RESULT_DTO);})
+        doAnswer(inv -> {this.joinGameHelper.joinGame(GAME_ID, false);return Observable.just(RESULT_DTO);})
                 .when(this.gamesApiService).startGame(any(), any());
+
         when(this.gamesApiService.getGame(any())).thenReturn(Observable.just(GAME));
 
         when(this.empireApiService.getSeasonalTrades(any(), any())).thenReturn(Observable.just(new SeasonalTradeDto(new HashMap<>())));

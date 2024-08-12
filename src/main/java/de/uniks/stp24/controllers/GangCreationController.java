@@ -356,10 +356,10 @@ public class GangCreationController extends BasicController {
     private void applyEmpireColor() {
         String hexCode = colorsList.get(colorIndex);
         Color color = java.awt.Color.decode(hexCode);
-        float[] floats = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
-        this.splashAdjust.setHue(floats[0]*2-1);
-        this.splashAdjust.setSaturation(floats[1]);
-        this.splashAdjust.setBrightness(floats[2]);
+        float[] colors = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
+        this.splashAdjust.setHue(colors[0]*2-1);
+        this.splashAdjust.setSaturation(colors[1]);
+        this.splashAdjust.setBrightness(colors[2]);
     }
 
     private void updateTraitLimitText() {

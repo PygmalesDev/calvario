@@ -108,3 +108,7 @@
     -fx-pref-width: 70;
     -fx-pref-height: 25;
 }
+
+.jobsOverviewButton:selected {
+    -fx-background-image: url("/de/uniks/stp24/assets/buttons/jobOverviewCurrentTabButton.png");
+}

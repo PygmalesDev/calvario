@@ -120,7 +120,10 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
                 this.jobDescriptionText.setText(this.gameResourceBundle.getString("jobs."+
                         this.islandAttributes.getIsland().upgrade()));
             }
-            // Todo
+            case "ship" -> {
+                this.jobImage.setImage(this.imageCache.get("/" + Constants.shipIconMap.get(job.ship())));
+                this.jobDescriptionText.setText(this.gameResourceBundle.getString("ship." + job.ship()));
+            }
         }
     }
 

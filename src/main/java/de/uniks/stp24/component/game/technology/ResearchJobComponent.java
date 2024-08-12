@@ -176,8 +176,6 @@ public class ResearchJobComponent extends AnchorPane {
                 uniqueJobList.add(newJob);
             }
         }
-        jobList.clear();
-        jobList.addAll(uniqueJobList);
 
         this.handleJobInformation();
     }
@@ -197,7 +195,6 @@ public class ResearchJobComponent extends AnchorPane {
     }
 
     private void handleJobFinished() {
-        jobList.remove(job);
         technologies.removeIf(technologyExtended -> technologyExtended.id().equals(job.technology()));
         technologyCategoryComponent.handleJobCompleted(job);
         setVisible(false);
@@ -213,7 +210,6 @@ public class ResearchJobComponent extends AnchorPane {
     public void handleJob(TechnologyExtended technology) {
         setJobDescription(technology);
         subscriber.subscribe(jobsService.beginJob(Jobs.createTechnologyJob(technology.id())), job1 -> {
-            jobList.add(job1);
             this.job = job1;
 
             this.jobsService.onJobCompletion(job1._id(), this::handleJobFinished);

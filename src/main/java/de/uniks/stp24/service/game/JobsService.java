@@ -111,7 +111,7 @@ public class JobsService {
     public void addJobToGroups(@NotNull Job job) {
         this.jobCollections.get(job.type()).add(job);
 
-//        if (!job.type().equals("technology")) {
+        //        if (!job.type().equals("technology")) {
             if (!this.jobCollections.containsKey(job.system()))
                 this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
             else this.jobCollections.get(job.system()).add(job);

@@ -93,6 +93,9 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
                         Constants.siteTranslation.get(job.district())) + " Site");
             }
             case "upgrade" -> {
+                if (island.upgrade().equals("unexplored") || island.upgrade().equals("explored")) {
+                    this.inspectionButton.setVisible(false);
+                }
                 this.jobImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/other/upgrade_job.png"));
                 assert island != null;
                 this.jobTypeText.setText(this.gameResourceBundle.getString("jobs." + island.upgrade()));
@@ -103,7 +106,7 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
             }
             case "technology" -> {
                 this.jobNameText.setText(this.gameResourceBundle.getString("technologies." + this.technologyService.getTechnologyCategory(job.technology())));
-                this.jobImage.setImage(this.imageCache.get("assets/technologies/categories/" + this.technologyService.getTechnologyCategory(job.technology()) + ".png"));
+                this.jobImage.setImage(this.imageCache.get("assets/technologies/tags/" + this.technologyService.getTechnologyCategory(job.technology()) + ".png"));
                 this.jobTypeText.setText(this.technologiesResourceBundle.getString(job.technology()));
             }
             case "travel" -> {

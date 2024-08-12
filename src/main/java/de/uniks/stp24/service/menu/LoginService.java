@@ -51,6 +51,7 @@ public class LoginService {
                     if (rememberMe) {
                         prefService.setRefreshToken(loginResult.refreshToken());
                     }
+                    technologyService.initAllTechnologies();
                 });
     }
 

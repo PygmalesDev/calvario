@@ -948,7 +948,8 @@ public class InGameController extends BasicController {
 
     public void darkenFogNotAnimated() {
         this.fogOfWar.setIsNight(true);
-        this.islandComponentList.forEach(isle -> isle.changeBlendMode(BlendMode.MULTIPLY));
+        if (!tokenStorage.isSpectator())
+            this.islandComponentList.forEach(isle -> isle.changeBlendMode(BlendMode.MULTIPLY));
         this.dayColorAdjust = new ColorAdjust();
         this.zoomPane.getChildren().get(2).setEffect(solarColorAdjust);
     }
@@ -962,7 +963,8 @@ public class InGameController extends BasicController {
 
     public void brightenFogNotAnimated() {
         this.fogOfWar.setIsNight(false);
-        this.islandComponentList.forEach(isle -> isle.changeBlendMode(BlendMode.LIGHTEN));
+        if (!tokenStorage.isSpectator())
+            this.islandComponentList.forEach(isle -> isle.changeBlendMode(BlendMode.LIGHTEN));
         this.solarColorAdjust.setBrightness(-0.75);
         this.solarColorAdjust.setContrast(-0.75);
         this.solarColorAdjust.setSaturation(-1);

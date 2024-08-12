@@ -70,7 +70,7 @@ public class FleetService {
                     Fleet oldFleet = this.gameFleets.filtered(fleetDto -> fleetDto._id().equals(fleet._id())).getFirst();
                     this.updateFleetInGroups(oldFleet,
                             new Fleet(fleet.createdAt(), fleet.updatedAt(), fleet._id(), fleet.game(), fleet.empire(), fleet.name(),
-                                    fleet.location(), oldFleet.ships(), oldFleet.shipDTOs(), fleet.size(), fleet._public(), fleet._private(), fleet.effects()));
+                                    fleet.location(), oldFleet.ships(), fleet.size(), fleet._public(), fleet._private(), fleet.effects()));
                 }
                 case "deleted" -> this.deleteFleetFromGroups(fleet);
             }
@@ -105,7 +105,7 @@ public class FleetService {
         Fleet oldFleet = this.gameFleets.filtered(fleet -> fleet._id().equals(fleetID)).getFirst();
         this.updateFleetInGroups(oldFleet,
                 new Fleet(oldFleet.createdAt(), oldFleet.updatedAt(), oldFleet._id(), oldFleet.game(), oldFleet.empire(),
-                        oldFleet.name(), oldFleet.location(), oldFleet.ships() + increment, oldFleet.shipDTOs(), oldFleet.size(), oldFleet._public(), oldFleet._private(), oldFleet.effects()));
+                        oldFleet.name(), oldFleet.location(), oldFleet.ships() + increment, oldFleet.size(), oldFleet._public(), oldFleet._private(), oldFleet.effects()));
     }
 
     private void addFleetToGroups(Fleet fleet) {

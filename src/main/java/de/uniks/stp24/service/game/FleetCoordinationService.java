@@ -177,7 +177,7 @@ public class FleetCoordinationService {
                         gameFleet.getCurrentPoint()));
                 this.processSpeedChanged(gameFleet);
                 this.selectedFleet = null;
-            }, error -> System.out.printf("Caught and error while trying to generate travel paths for the fleets" +
+            }, error -> System.out.printf("Caught and error while trying to generate travel paths for the fleets " +
                     "with travel jobs in FleetCoordinationService:\n%s", error.getMessage()));
         } else {
             // Otherwise put fleet near the island on which it is located

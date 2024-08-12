@@ -16,7 +16,6 @@ public class Fleets {
           String name,
           String location,
           int ships,
-          List<ReadShipDTO> shipDTOs,
           Map<String, Integer> size,
           Map<String, Object> _public,
           Map<String, Object> _private,
@@ -60,15 +59,6 @@ public class Fleets {
 
     public static Fleet fleetFromReadDTO(ReadFleetDTO dto) {
         return new Fleet(dto.createdAt, dto.updatedAt, dto._id, dto.game, dto.empire, dto.name, dto.location, dto.ships,
-                new ArrayList<>(), dto.size, dto._public, null, null);
+                dto.size, dto._public, null, null);
     }
-
-    public static CreateFleetDTO createRandomFleet(String islandID) {
-        return new CreateFleetDTO("fleet_" + random.nextInt(0, 28390), islandID,
-                Map.of("explorer", random.nextInt(3, 20),
-                        "colonizer", random.nextInt(2, 10),
-                        "destroyer", random.nextInt(2, 22)),
-                        new HashMap<>(), new HashMap<>(), new EffectSource[]{});
-    }
-
 }

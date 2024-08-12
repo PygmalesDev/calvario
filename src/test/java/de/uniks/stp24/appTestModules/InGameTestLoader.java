@@ -39,7 +39,7 @@ public class InGameTestLoader extends ControllerTest {
     @Spy
     EventService eventService;
     @Spy
-    ShipsApiService shipsApiService;
+    protected ShipsApiService shipsApiService;
     @Spy
     Subscriber subscriber;
     @Spy
@@ -61,7 +61,7 @@ public class InGameTestLoader extends ControllerTest {
     @Spy
     EmpireApiService empireApiService;
     @Spy
-    JobsApiService jobsApiService;
+    protected JobsApiService jobsApiService;
     @Spy
     ExplanationService explanationService;
     @Spy
@@ -77,7 +77,7 @@ public class InGameTestLoader extends ControllerTest {
     @Spy
     GameStatus gameStatus;
     @Spy
-    FleetCoordinationService fleetCoordinationService;
+    protected FleetCoordinationService fleetCoordinationService;
     @Spy
     FleetService fleetService;
     @Spy
@@ -410,13 +410,17 @@ public class InGameTestLoader extends ControllerTest {
 
         this.technologyService.gameLogicApiService = this.gameLogicApiService;
         this.technologyService.presetsApiService = this.presetsApiService;
+
         this.technologyService.empireApiService = this.empireApiService;
+        this.technologyService.eventListener = this.eventListener;
         this.technologyService.tokenStorage = this.tokenStorage;
         this.technologyService.subscriber = new Subscriber();
 
         this.variableDependencyService.variableService = this.variableService;
 
         this.technologyOverviewComponent.technologiesResourceBundle = this.technologiesResourceBundle;
+        this.technologyCategoryComponent.jobsService = this.jobsService;
+
 
         this.fleetCoordinationService.islandsService = this.islandsService;
         this.fleetCoordinationService.fleetService = this.fleetService;
@@ -433,6 +437,7 @@ public class InGameTestLoader extends ControllerTest {
         this.fleetService.eventListener = this.eventListener;
         this.fleetService.tokenStorage = this.tokenStorage;
         this.fleetService.subscriber = new Subscriber();
+
 
         this.islandTravelComponent.fleetCoordinationService = this.fleetCoordinationService;
         this.islandTravelComponent.fleetService = this.fleetService;

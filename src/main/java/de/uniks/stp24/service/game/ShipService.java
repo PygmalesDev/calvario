@@ -55,8 +55,8 @@ public class ShipService {
     }
 
     public int getFleetSpeed(ReadShipDTO[] ships) {
-       return Arrays.stream(ships).toList().stream()
-                .map(Ships.ReadShipDTO::type)
+        return Arrays.stream(ships).toList().stream()
+                .map(ReadShipDTO::type)
                 .collect(Collectors.toSet()).stream()
                 .map(type -> this.shipSpeeds.get(type))
                 .mapToInt(v -> v)
@@ -110,10 +110,7 @@ public class ShipService {
         this.subscriber.subscribe(this.eventListener.listen("games." + this.tokenStorage.getGameId() + ".fleets." + fleetID + ".ships.*.*",
                 Ship.class), event -> {
             ReadShipDTO ship = readShipDTOFromShip(event.data());
-
-                //Todo: remove print
-                System.out.println("ship listener in shipService " + event.suffix());
-                switch (event.suffix()) {
+             switch (event.suffix()) {
                     case "created" -> {if (!ship._id().equals(this.lastShipCreation)){
                         this.addShipToGroups(ship);
                         this.lastShipCreation = ship._id();

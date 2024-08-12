@@ -35,8 +35,6 @@ public class AppTest3 extends AppTest3Module {
         this.beginIslandUpgrade();
         this.inspectJobs();
         this.cancelJob();
-        //Todo: needs to be changed with fleet movement
-        //this.beginIslandClaiming();
         this.beginTechnologyJob();
         this.showHelpWindow();
     }

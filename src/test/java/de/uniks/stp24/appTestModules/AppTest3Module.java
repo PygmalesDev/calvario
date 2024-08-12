@@ -2,7 +2,14 @@ package de.uniks.stp24.appTestModules;
 
 import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.*;
+import de.uniks.stp24.model.Fleets.Fleet;
+import de.uniks.stp24.model.Fleets.ReadFleetDTO;
 import de.uniks.stp24.model.Jobs.Job;
+import de.uniks.stp24.model.Jobs.JobDTO;
+import de.uniks.stp24.model.Jobs.TravelJobDTO;
+import de.uniks.stp24.model.Ships.ReadShipDTO;
+import de.uniks.stp24.model.Ships.Ship;
+import de.uniks.stp24.model.Ships.ShipType;
 import de.uniks.stp24.ws.Event;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
@@ -132,10 +139,10 @@ public class AppTest3Module extends LobbyTestLoader {
     protected final SystemDto[] GAME_SYSTEMS = new SystemDto[]{
             new SystemDto("0", "0", "islandID_1", GAME_ID, "regular", "TestIslandOne",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
-                    Upgrade.colonized, 13, Map.of("islandID_2", 3, "islandID_3", 3), 50, 50, EMPIRE_ID),
+                    Upgrade.colonized, 13, Map.of("islandID_2", 20, "islandID_3", 20), 50, 50, EMPIRE_ID),
             new SystemDto("0", "0", "islandID_2", GAME_ID, "regular", "TestIslandTwo",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
-                    Upgrade.unexplored, 13, Map.of("islandID_1", 3, "islandID_3", 3), 63, 52, null),
+                    Upgrade.unexplored, 13, Map.of("islandID_1", 20, "islandID_3", 20), 63, 52, null),
             new SystemDto("0", "0", "islandID_3", GAME_ID, "regular", "TestIslandThree",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
                     Upgrade.explored, 13, Map.of("islandID_1", 3, "islandID_2", 3), 55, 62, null)
@@ -163,6 +170,26 @@ public class AppTest3Module extends LobbyTestLoader {
                     "jobTechnologyID", 0, 12, GAME_ID, EMPIRE_ID, "islandID_1", 0,
                     "technology", null, null, "society","","",new LinkedList<>(), new HashMap<>(), null)
     };
+
+    protected final Job[] TRAVEL_JOBS = new Job[] {
+            new Job("0", "0",
+                    "travelJobID_1", 0, 10, GAME_ID, EMPIRE_ID, null, 0,
+                    "travel", null, null, null, "fleetID", null,
+                    new LinkedList<>(List.of("islandID_1", "islandID_2")), new HashMap<>(), null)
+    };
+
+    protected final ArrayList<ReadFleetDTO> FLEETS = new ArrayList<>(List.of(new ReadFleetDTO("a", "a",
+            "fleetID", GAME_ID, EMPIRE_ID, "fleetName", GAME_SYSTEMS[0]._id(), 4, new HashMap<>(), new HashMap<>())));
+
+    protected final ReadShipDTO[] FLEET_SHIPS = new ReadShipDTO[]{
+            new ReadShipDTO("a", "b", "testShipID1", GAME_ID, EMPIRE_ID, "fleetID",
+                    "explorer", 10, 10, new HashMap<>())
+    };
+
+    protected final ArrayList<ShipType> SHIP_TYPES = new ArrayList<>(List.of(
+            new ShipType("explorer", 2, 2, 5, new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>())
+    ));
+
 
     protected final TechnologyExtended TECHNOLOGY = new TechnologyExtended("society", new Effect[]{
         new Effect("technologies.society.cost_multiplier", 0, 0.9, 0)},
@@ -200,6 +227,8 @@ public class AppTest3Module extends LobbyTestLoader {
     protected final Subject<Event<SystemDto>> SYSTEMDTO_SUBJECT = BehaviorSubject.create();
     protected final Subject<Event<EmpireDto>> EMPIRE_SUBJECT = BehaviorSubject.create();
     protected final Subject<Event<Job>> JOB_SUBJECT = BehaviorSubject.create();
+    protected final Subject<Event<Fleet>> FLEET_SUBJECT = BehaviorSubject.create();
+    protected final Subject<Event<Ship>> SHIP_SUBJECT = BehaviorSubject.create();
 
     protected int gameTicks = 0;
 
@@ -224,6 +253,10 @@ public class AppTest3Module extends LobbyTestLoader {
                 .listen("games." + GAME_ID + ".empires." + EMPIRE_ID + ".updated", EmpireDto.class);
         doReturn(SYSTEMDTO_SUBJECT).when(this.eventListener)
                 .listen(String.format("games.%s.systems.%s.updated", GAME_ID, "*"),  SystemDto.class);
+        doReturn(FLEET_SUBJECT).when(this.eventListener)
+                .listen(String.format("games.%s.fleets.*.*", GAME_ID), Fleet.class);
+        doReturn(SHIP_SUBJECT).when(this.eventListener)
+                .listen("games." + GAME_ID + ".fleets.*.ships.*.*", Ship.class);
 
         when(this.eventListener.listen(JOB_EVENT_PATH + "*", Job.class)).thenReturn(JOB_SUBJECT);
     }
@@ -277,10 +310,13 @@ public class AppTest3Module extends LobbyTestLoader {
 
         when(this.jobsApiService.deleteJob(anyString(), anyString(), any())).thenReturn(Observable.just(JOBS[3]));
         when(this.jobsApiService.getEmpireJobs(any(), any())).thenReturn(Observable.just(new ArrayList<>()));
-        when(this.jobsApiService.createNewJob(anyString(), anyString(), any(Jobs.JobDTO.class)))
+        when(this.jobsApiService.createNewJob(anyString(), anyString(), any(JobDTO.class)))
                 .thenReturn(Observable.just(JOBS[3])).thenReturn(Observable.just(JOBS[2]))
                 .thenReturn(Observable.just(JOBS[0])).thenReturn(Observable.just(JOBS[1]))
                 .thenReturn(Observable.just(JOBS[4]));
+
+        when(this.jobsApiService.createTravelJob(anyString(), anyString(), any(TravelJobDTO.class)))
+                .thenReturn(Observable.just(TRAVEL_JOBS[0]));
 
         when(this.variableService.getFirstHalfOfVariables()).thenReturn(Observable.just(EXPLAINED_VARIABLES));
         when(this.variableService.getSecondHalfOfVariables()).thenReturn(Observable.just(EXPLAINED_VARIABLES));
@@ -304,11 +340,13 @@ public class AppTest3Module extends LobbyTestLoader {
     }
 
     private void mockFleets(){
-        // Mock get Fleets and ships
-        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "ABCDABCDABCDABCD", "testEmpireID", "fleetName", "islandID_1", 4, new HashMap<>(), new HashMap<>())));
-        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("ABCDABCDABCDABCD",true);
-        doNothing().when(this.fleetService).initializeFleetListeners();
-        doNothing().when(this.fleetService).initializeShipListener();
+        this.shipService.shipSpeeds = Map.of("explorer", 5);
+        doReturn(SHIP_TYPES).when(this.variableDependencyService).createVariableDependencyShipType();
+
+        when(this.fleetApiService.getGameFleets(any(), eq(true))).thenReturn(Observable.just(FLEETS));
+        when(this.shipsApiService.getAllShips(any(), any())).thenReturn(Observable.empty());
+        when(this.shipsApiService.getAllShips(any(), eq("fleetID"))).thenReturn(Observable.just(FLEET_SHIPS));
+
     }
 
     protected Event<Game> tickGame() {

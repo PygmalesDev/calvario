@@ -245,7 +245,7 @@ public class IslandClaimingComponent extends Pane {
                     int speed = this.shipService.getFleetSpeed(dtos);
                     this.timeText.setText(""+this.fleetCoordinationService.getTravelDuration(
                             fleet.location(), this.currentIsland.id(), speed));
-                }, error -> System.out.printf("Caught an error while trying to get travel duration int the" +
+                }, error -> System.out.printf("Caught an error while trying to get travel duration in the " +
                         "IslandClaimingComponent:\n%s", error.getMessage()));
 
                 if (this.travelJobs.filtered(job -> job.fleet().equals(fleet._id())).isEmpty()) {

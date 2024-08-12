@@ -39,8 +39,9 @@ public class InGameTestLoader extends ControllerTest {
     @Spy
     EventService eventService;
     @Spy
-    final
-    Subscriber subscriber = spy(Subscriber.class);
+    ShipsApiService shipsApiService;
+    @Spy
+    Subscriber subscriber;
     @Spy
     ResourcesService resourcesService;
     @Spy
@@ -413,6 +414,8 @@ public class InGameTestLoader extends ControllerTest {
         this.technologyService.tokenStorage = this.tokenStorage;
         this.technologyService.subscriber = new Subscriber();
 
+        this.variableDependencyService.variableService = this.variableService;
+
         this.technologyOverviewComponent.technologiesResourceBundle = this.technologiesResourceBundle;
 
         this.fleetCoordinationService.islandsService = this.islandsService;
@@ -426,6 +429,8 @@ public class InGameTestLoader extends ControllerTest {
         this.fleetCoordinationService.app = this.app;
 
         this.fleetService.fleetApiService = this.fleetApiService;
+        this.fleetService.jobsApiService = this.jobsApiService;
+        this.fleetService.eventListener = this.eventListener;
         this.fleetService.tokenStorage = this.tokenStorage;
         this.fleetService.subscriber = new Subscriber();
 
@@ -444,6 +449,12 @@ public class InGameTestLoader extends ControllerTest {
         this.fleetManagerComponent.jobsService = this.jobsService;
         this.fleetManagerComponent.subscriber = new Subscriber();
         this.fleetManagerComponent.app = this.app;
+
+        this.shipService.variableDependencyService = this.variableDependencyService;
+        this.shipService.shipsApiService = this.shipsApiService;
+        this.shipService.eventListener = this.eventListener;
+        this.shipService.tokenStorage = this.tokenStorage;
+        this.shipService.subscriber = new Subscriber();
     }
 
     protected void clearStyles() {

@@ -51,6 +51,8 @@ public class GameFleetController extends Pane {
         this.selectedDropShadow.setHeight(20);
         this.selectedDropShadow.setWidth(20);
         this.selectedDropShadow.setSpread(0.9);
+
+        this.setId("ingameFleet_" + fleet._id());
     }
 
     public void renderWithColor(String color) {

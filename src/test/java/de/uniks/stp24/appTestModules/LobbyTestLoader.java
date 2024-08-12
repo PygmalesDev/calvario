@@ -26,7 +26,7 @@ public class LobbyTestLoader extends InGameTestLoader {
     SaveLoadService saveLoadService;
 
     @InjectMocks
-    JoinGameHelper joinGameHelper;
+    protected JoinGameHelper joinGameHelper;
     @InjectMocks
     LobbyService lobbyService;
     @InjectMocks

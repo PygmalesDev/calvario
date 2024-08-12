@@ -628,7 +628,8 @@ public class InGameController extends BasicController {
                 error -> System.out.println("islands event listener error: " + error)
         );
 
-        Platform.runLater(() -> {
+        if (!tokenStorage.isSpectator())
+            Platform.runLater(() -> {
             Button showTechnologiesButton = new Button();
             showTechnologiesButton.setId("showTechnologiesButton");
             showTechnologiesButton.setOnAction(event -> showTechnologies());

@@ -113,7 +113,7 @@ public class FogOfWar {
 
     private void recreatePathFog(ArrayList<CircleShape> circles) {
         for (CircleShape circle : circles) {
-            Circle c = new Circle(circle.xPos(), circle.yPos(), circle.radius());
+            Circle c = new Circle(circle.xPos(), circle.yPos(), 40);
             this.updateRemovedFog(c, false);
         }
     }
@@ -143,10 +143,8 @@ public class FogOfWar {
 
     private void updateRemovedFog(Shape shape, boolean isIsland) {
         if (Objects.nonNull(shape)) {
-            if (!isIsland && shape instanceof Circle circle) {
-                System.out.println("here PATH");
-                this.exploredPaths.add(new CircleShape(circle.getCenterX(), circle.getCenterY(), circle.getRadius()));
-            }
+            if (!isIsland && shape instanceof Circle circle)
+                this.exploredPaths.add(new CircleShape(circle.getCenterX(), circle.getCenterY()));
             this.removedFog = Objects.nonNull(this.removedFog) ? Shape.union(this.removedFog, shape) : shape;
         }
 
@@ -211,7 +209,7 @@ public class FogOfWar {
                     final Map<String, Object> newPrivateMap = Objects.nonNull(result._private()) ?
                                     result._private() : new HashMap<>();
                     newPrivateMap.put("islandFog", this.exploredIslands);
-                    // newPrivateMap.put("pathFog", this.exploredPaths);
+//                    newPrivateMap.put("pathFog", this.exploredPaths);
                     subscriber.subscribe(this.empireApiService.savePrivate(this.gameID, this.empireID, new EmpirePrivate(newPrivateMap)),
                             saved -> {},
                             error -> System.out.println("error while saving fog: " + error.getMessage()));

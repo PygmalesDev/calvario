@@ -16,10 +16,9 @@ public class Main {
         SERVER_VERSION = getenv.getOrDefault("SERVER_VERSION", "v4");
     }
 
-//    public static final String WS_URL = (SERVER_PORT == 443 ? "wss" : "ws") + "://" + SERVER_HOSTNAME + ":" + SERVER_PORT + "/ws/" + SERVER_VERSION;
-//    public static final String API_URL = (SERVER_PORT == 443 ? "https" : "http") + "://" + SERVER_HOSTNAME + ":" + SERVER_PORT + "/api/" + SERVER_VERSION;
-    public static final String WS_URL = "ws://localhost:3000/ws/v4";
-    public static final String API_URL = "http://localhost:3000/api/v4";
+    public static final String WS_URL = (SERVER_PORT == 443 ? "wss" : "ws") + "://" + SERVER_HOSTNAME + ":" + SERVER_PORT + "/ws/" + SERVER_VERSION;
+    public static final String API_URL = (SERVER_PORT == 443 ? "https" : "http") + "://" + SERVER_HOSTNAME + ":" + SERVER_PORT + "/api/" + SERVER_VERSION;
+
     public static void main(String[] args) {
         System.setProperty("java.protocol.handler.pkgs","com.github.robtimus.net.protocol");
         Application.launch(App.class, args);

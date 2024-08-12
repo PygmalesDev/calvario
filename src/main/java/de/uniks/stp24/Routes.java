@@ -78,6 +78,10 @@ public class Routes {
     @Inject
     Provider<LoginController> login;
 
+    @Route("loading-screen")
+    @Inject
+    Provider<LoadingScreenController> loadingScreen;
+
 
     @Inject
     public Routes() {

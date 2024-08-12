@@ -526,6 +526,36 @@ public class InGameController extends BasicController {
         group.setScaleX(0.65);
         group.setScaleY(0.65);
 
+        this.islandComponentList.forEach(isle -> {
+            isle.setInGameController(this);
+            isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
+            isle.setScaleX(1.25);
+            isle.setScaleY(1.25);
+            this.mapGrid.getChildren().add(isle);
+        });
+
+        mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight()));
+        mapScrollPane.setVvalue(0.5);
+        mapScrollPane.setHvalue(0.5);
+
+        /*
+         * zoom function working but not perfect!
+         * it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
+         */
+        mapGrid.setOnScroll(event -> {
+            if (event.isShiftDown() && (event.getDeltaY() > 0 || event.getDeltaX() > 0)) {
+                scale += 0.1;
+                scale = Math.min(scale, 3);
+                event.consume();
+            } else if (event.isShiftDown() && (event.getDeltaY() < 0 || event.getDeltaX() < 0)) {
+                scale -= 0.1;
+                scale = Math.max(scale, 0.35);
+                event.consume();
+            }
+            group.setScaleX(scale);
+            group.setScaleY(scale);
+        });
+
         // Event Listener for Island changes
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.systems.%s.updated",
                         tokenStorage.getGameId(), "*"), SystemDto.class),
@@ -559,14 +589,14 @@ public class InGameController extends BasicController {
                 error -> System.out.println("islands event listener error: " + error)
         );
 
-        this.islandComponentList.forEach(isle -> {
-            isle.setInGameController(this);
-            isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
-            isle.setScaleX(1.25);
-            isle.setScaleY(1.25);
-            isle.collisionCircle.setRadius(Constants.ISLAND_COLLISION_RADIUS);
-            this.mapGrid.getChildren().add(isle);
-        });
+//        this.islandComponentList.forEach(isle -> {
+//            isle.setInGameController(this);
+//            isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
+//            isle.setScaleX(1.25);
+//            isle.setScaleY(1.25);
+//            isle.collisionCircle.setRadius(Constants.ISLAND_COLLISION_RADIUS);
+//            this.mapGrid.getChildren().add(isle);
+//        });
 
         Platform.runLater(() -> {
             Button showTechnologiesButton = new Button();
@@ -577,27 +607,27 @@ public class InGameController extends BasicController {
             contextMenuButtons.getChildren().addAll(showTechnologiesButton, new ContextMenuButton("marketOverview", marketOverviewComponent), new ContextMenuButton("fleetManager", fleetManagerComponent));
         });
 
-        mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight()));
-        mapScrollPane.setVvalue(0.5);
-        mapScrollPane.setHvalue(0.5);
-
-        /*
-         * zoom function working but not perfect!
-         * it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
-         */
-        mapGrid.setOnScroll(event -> {
-            if (event.isShiftDown() && (event.getDeltaY() > 0 || event.getDeltaX() > 0)) {
-                scale += 0.1;
-                scale = Math.min(scale, 3);
-                event.consume();
-            } else if (event.isShiftDown() && (event.getDeltaY() < 0 || event.getDeltaX() < 0)) {
-                scale -= 0.1;
-                scale = Math.max(scale, 0.35);
-                event.consume();
-            }
-            group.setScaleX(scale);
-            group.setScaleY(scale);
-        });
+//        mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight()));
+//        mapScrollPane.setVvalue(0.5);
+//        mapScrollPane.setHvalue(0.5);
+//
+//        /*
+//         * zoom function working but not perfect!
+//         * it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
+//         */
+//        mapGrid.setOnScroll(event -> {
+//            if (event.isShiftDown() && (event.getDeltaY() > 0 || event.getDeltaX() > 0)) {
+//                scale += 0.1;
+//                scale = Math.min(scale, 3);
+//                event.consume();
+//            } else if (event.isShiftDown() && (event.getDeltaY() < 0 || event.getDeltaX() < 0)) {
+//                scale -= 0.1;
+//                scale = Math.max(scale, 0.35);
+//                event.consume();
+//            }
+//            group.setScaleX(scale);
+//            group.setScaleY(scale);
+//        });
 
     }
 

@@ -19,8 +19,6 @@ public class AppTest3 extends AppTest3Module {
     public void start(Stage stage) throws Exception {
         super.start(stage);
 
-
-
         this.app.show(this.lobbyController);
     }
 

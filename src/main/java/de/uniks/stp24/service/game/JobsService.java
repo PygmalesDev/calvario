@@ -109,16 +109,16 @@ public class JobsService {
     }
 
     public void addJobToGroups(@NotNull Job job) {
-        this.jobCollections.get(job.type()).add(job);
+        if (!job.type().equals("technology")) {
+            this.jobCollections.get(job.type()).add(job);
+        }
 
-        //        if (!job.type().equals("technology")) {
-            if (!this.jobCollections.containsKey(job.system()))
-                this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
-            else this.jobCollections.get(job.system()).add(job);
+        if (!this.jobCollections.containsKey(job.system()))
+            this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
+        else this.jobCollections.get(job.system()).add(job);
 
-            if (!(job.type().equals("travel") || job.type().equals("ship") || job.type().equals("technology")))
-                this.jobCollections.get("collection").add(job);
-//        }
+        if (!(job.type().equals("travel") || job.type().equals("ship") || job.type().equals("technology")))
+            this.jobCollections.get("collection").add(job);
 
         this.startCommonFunctions.forEach(Runnable::run);
         this.startCommonConsumers.forEach(func -> func.accept(job));
@@ -146,10 +146,6 @@ public class JobsService {
 
         if (!job.type().equals("technology")) {
             this.jobCollections.get(job.system()).removeIf(other -> other._id().equals(job._id()));
-
-            ObservableList<Job> systemJobs = this.jobCollections.get(job.system());
-//            if (!systemJobs.isEmpty() && !this.jobCollections.get("collection").contains(systemJobs.getFirst()))
-//                this.jobCollections.get("collection").add(systemJobs.getFirst());
         }
 
         if (this.jobCompletionFunctions.containsKey(job._id()))
@@ -236,8 +232,7 @@ public class JobsService {
      * Provides a {@link Consumer<String> Consumer}<{@link String}> lambda functions that should only be executed after
      * the initial job loading is completed. <p>
      * Provide this method with {@link #getJobObservableListOfType(String) getJobObservableListOfType},
-     * {@link #getObservableListForSystem(String) getObservableListForSystem} or {@link #getObservableJobCollection()
-     * getObservableJobCollection} inside a method annotated with {@link org.fulib.fx.annotation.event.OnInit @OnInit}
+     * {@link #getObservableListForSystem(String) getObservableListForSystem} or  inside a method annotated with {@link org.fulib.fx.annotation.event.OnInit @OnInit}
      * inside your {@link org.fulib.fx.annotation.controller.Controller Controller} to receive an {@link ObservableList}
      * with loaded jobs. <p>
      * Name the parameter inside the consumer function as a <i>jobID</i>: {@code (jobID) -> yourFunction(jobID)}.
@@ -328,19 +323,6 @@ public class JobsService {
         return this.jobCollections.get(systemID);
     }
 
-    /**
-     * Returns an {@link ObservableList ObservableList}<{@link Job Job}> containing all jobs that run in the player's
-     * empire that will be dynamically updated upon starting, editing or deleting jobCollections. <p>
-     * To receive a list prefilled with jobs right after the loading of the
-     * {@link org.fulib.fx.annotation.controller.Controller Controller} is done, provide this function within the
-     * {@link #onJobsLoadingFinished(Runnable) onJobsLoadingFinished}.
-     *
-     * @return {@link ObservableList ObservableList}<{@link Job Job}> with all jobs that are currently running within
-     * the empire
-     */
-    public ObservableList<Job> getObservableJobCollection() {
-        return this.getJobObservableListOfType("collection");
-    }
 
     public void setJobInspector(String inspectorID, Consumer<Job> func) {
         this.jobInspectionFunctions.put(inspectorID, func);

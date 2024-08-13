@@ -76,6 +76,7 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
         this.inspectionButton.setId("jobElementInspectionButton_" + job._id());
 
         this.inspectionButton.setVisible(true);
+        this.jobCancelButton.setVisible(true);
         Island island = this.islandsService.getIsland(job.system());
         this.timerText.setText(String.format("%s/%s", job.progress(), (int) job.total()));
         if(island != null) {
@@ -93,11 +94,11 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
                         Constants.siteTranslation.get(job.district())) + " Site");
             }
             case "upgrade" -> {
+                assert island != null;
                 if (island.upgrade().equals("unexplored") || island.upgrade().equals("explored")) {
                     this.inspectionButton.setVisible(false);
                 }
                 this.jobImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/other/upgrade_job.png"));
-                assert island != null;
                 this.jobTypeText.setText(this.gameResourceBundle.getString("jobs." + island.upgrade()));
             }
             case "ship" -> {
@@ -105,6 +106,7 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
                 this.jobTypeText.setText(this.gameResourceBundle.getString("ship." + job.ship()) + " - " + this.fleetService.getFleet(job.fleet()).name());
             }
             case "technology" -> {
+                this.jobCancelButton.setVisible(false);
                 this.jobNameText.setText(this.gameResourceBundle.getString("technologies." + this.technologyService.getTechnologyCategory(job.technology())));
                 this.jobImage.setImage(this.imageCache.get("assets/technologies/tags/" + this.technologyService.getTechnologyCategory(job.technology()) + ".png"));
                 this.jobTypeText.setText(this.technologiesResourceBundle.getString(job.technology()));
@@ -113,7 +115,8 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
                 this.inspectionButton.setVisible(false);
                 this.jobNameText.setText(this.fleetService.getFleet(job.fleet()).name());
                 this.jobImage.setImage(this.imageCache.get("icons/ships/ship_Image_With_Frame1.png"));
-                this.jobTypeText.setText(this.gameResourceBundle.getString("travelling.to") + " " + this.islandsService.getIsland(job.path().getLast()).name());
+                String islandName = (this.islandsService.getIsland(job.path().getLast()).name() != null ? this.islandsService.getIsland(job.path().getLast()).name() : "");
+                this.jobTypeText.setText(this.gameResourceBundle.getString("travelling.to") + " " + islandName);
             }
         }
     }

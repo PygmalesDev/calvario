@@ -1,6 +1,5 @@
 package de.uniks.stp24.component.game.fleetManager;
 
-import de.uniks.stp24.dto.ShortSystemDto;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Ships;
 import de.uniks.stp24.service.TokenStorage;
@@ -83,6 +82,7 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
         boolean buildIsPossible = true;
         if (!this.resourcesService.hasEnoughResources(shipService.getNeededResources(blueprintInFleetDto.type()))) {
             this.fleetManagerComponent.setErrorLabel("resources");
+            buildIsPossible = false;
         }
         if(blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) <= this.blueprintInFleetDto.count()){
             this.fleetManagerComponent.setErrorLabel("plannedSize");

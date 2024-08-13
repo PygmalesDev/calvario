@@ -33,6 +33,8 @@ public class AppTest3Module extends IngameModule {
         doAnswer(inv -> {this.joinGameHelper.joinGame(GAME_ID, false);return Observable.just(RESULT_DTO);})
                 .when(this.gamesApiService).startGame(any(), any());
 
+        when(this.shipsApiService.getAllShips(any(), eq("testFleetID_1"))).thenReturn(Observable.just(FLEET_SHIPS_1));
+
         when(this.presetsApiService.getVariablesEffects()).thenReturn(Observable.just(new HashMap<>()));
         when(this.presetsApiService.getVariables()).thenReturn(Observable.just(MARKET_VARIABLES));
         when(this.presetsApiService.getTechnology(any())).thenReturn(Observable.just(TECHNOLOGY));

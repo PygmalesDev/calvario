@@ -2,7 +2,6 @@ package de.uniks.stp24.component.game.jobs;
 
 import de.uniks.stp24.App;
 import de.uniks.stp24.component.game.ResourceComponent;
-import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
@@ -103,6 +102,7 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
         this.costsListView.setItems(this.resourceObservableList);
         this.costsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.negativeResourceProvider));
         this.costsListView.setMouseTransparent(true);
+        this.infoJobButton.setVisible(true);
 
         switch (job.type()) {
             case "building" -> {
@@ -123,6 +123,7 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
             case "ship" -> {
                 this.jobImage.setImage(this.imageCache.get("/" + Constants.shipIconMap.get(job.ship())));
                 this.jobDescriptionText.setText(this.gameResourceBundle.getString("ship." + job.ship()));
+                this.infoJobButton.setVisible(false);
             }
         }
     }

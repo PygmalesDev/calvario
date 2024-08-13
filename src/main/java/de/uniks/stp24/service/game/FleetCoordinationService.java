@@ -13,7 +13,6 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import java.util.*;
 
 import static de.uniks.stp24.model.Fleets.Fleet;

@@ -1,10 +1,7 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.model.Fleets;
-import de.uniks.stp24.model.Fleets.Fleet;
 import de.uniks.stp24.model.Island;
-import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Site;
 import de.uniks.stp24.service.ImageCache;
@@ -28,7 +25,6 @@ import org.fulib.fx.annotation.event.OnInit;
 import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
-import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Inject;
 import javax.inject.Named;

@@ -1,7 +1,6 @@
 package de.uniks.stp24.component.game.fleetManager;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.dto.ShortSystemDto;
 import de.uniks.stp24.model.Fleets.Fleet;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Ships.BlueprintInFleetDto;
@@ -35,10 +34,8 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-
-import java.util.ResourceBundle;
-
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static de.uniks.stp24.model.Jobs.Job;
 

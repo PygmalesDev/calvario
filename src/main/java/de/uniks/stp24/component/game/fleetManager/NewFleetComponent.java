@@ -1,6 +1,5 @@
 package de.uniks.stp24.component.game.fleetManager;
 
-import de.uniks.stp24.dto.ShortSystemDto;
 import de.uniks.stp24.model.EffectSource;
 import de.uniks.stp24.model.Fleets;
 import de.uniks.stp24.model.Island;

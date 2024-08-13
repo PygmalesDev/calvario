@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import static de.uniks.stp24.model.Fleets.*;
+import static de.uniks.stp24.model.Fleets.Fleet;
 import static de.uniks.stp24.model.Ships.*;
 
 @Singleton

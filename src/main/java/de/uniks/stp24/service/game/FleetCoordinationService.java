@@ -155,6 +155,7 @@ public class FleetCoordinationService {
         } else gameFleet.renderWithColor("white");
 
         this.mapGrid.add(gameFleet);
+        this.selectedFleet = gameFleet;
 
         Optional<Job> jobOptional = this.travelJobs.stream().filter(job -> job.fleet().equals(fleet._id())).findFirst();
         if (jobOptional.isPresent() && jobOptional.get().progress() != jobOptional.get().total()) {
@@ -175,6 +176,7 @@ public class FleetCoordinationService {
                         gameFleet.getCurrentPoint().getPrev(),
                         gameFleet.getCurrentPoint()));
                 this.processSpeedChanged(gameFleet);
+                this.selectedFleet = null;
             }, error -> System.out.printf("Caught and error while trying to generate travel paths for the fleets " +
                     "with travel jobs in FleetCoordinationService:\n%s", error.getMessage()));
         } else {

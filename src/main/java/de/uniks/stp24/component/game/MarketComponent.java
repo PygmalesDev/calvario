@@ -11,8 +11,12 @@ import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.ws.EventListener;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -20,6 +24,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnInit;
@@ -27,6 +32,7 @@ import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.annotation.param.Param;
 import org.fulib.fx.constructs.listview.ComponentListCell;
 import org.fulib.fx.controller.Subscriber;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -419,7 +425,61 @@ public class MarketComponent extends StackPane {
 
     @OnRender
     public void render() {
+
         loadSeasonalTrades();
+
+        // Create a Timeline for repeated action
+        Timeline sellTimeline = new Timeline(new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                // This code is called repeatedly while the button is held down
+                sellItem();
+            }
+        }));
+        Timeline incrementTimeline = new Timeline(new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                incrementAmount();
+            }
+        }));
+        Timeline decrementTimeline = new Timeline(new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                decrementAmount();
+            }
+        }));
+        Timeline buyTimeline = new Timeline(new KeyFrame(Duration.millis(100), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                buyItem();
+            }
+        }));
+        incrementTimeline.setCycleCount(Timeline.INDEFINITE);
+        decrementTimeline.setCycleCount(Timeline.INDEFINITE);
+        sellTimeline.setCycleCount(Timeline.INDEFINITE);
+        buyTimeline.setCycleCount(Timeline.INDEFINITE);
+
+        // Set up the button event handlers
+        setEvent(sellTimeline, buyTimeline, sellButton, buyButton);
+        setEvent(incrementTimeline, decrementTimeline, incrementNumberOfGoods, decrementNumberOfGoods);
+    }
+
+    private void setEvent(Timeline timelineInc, Timeline timelineDec, @NotNull Button buttonInc, @NotNull Button buttonDec) {
+        // Start the timeline when the button is pressed
+        buttonInc.setOnMousePressed(event -> {
+            timelineInc.playFromStart();
+        });
+        // Stop the timeline when the button is released
+        buttonInc.setOnMouseReleased(event -> {
+            timelineInc.stop();
+        });
+
+        buttonDec.setOnMousePressed(event -> {
+            timelineDec.playFromStart();
+        });
+        buttonDec.setOnMouseReleased(event -> {
+            timelineDec.stop();
+        });
     }
 
     /**

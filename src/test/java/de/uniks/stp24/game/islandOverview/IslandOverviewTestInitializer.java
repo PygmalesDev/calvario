@@ -3,6 +3,10 @@ package de.uniks.stp24.game.islandOverview;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.fleetManager.BlueprintsDetailsComponent;
+import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
+import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
+import de.uniks.stp24.component.game.fleetManager.NewFleetComponent;
 import de.uniks.stp24.component.game.jobs.IslandOverviewJobsComponent;
 import de.uniks.stp24.component.game.jobs.IslandUpgradesJobProgressComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
@@ -25,6 +29,7 @@ import javafx.scene.layout.StackPane;
 import org.fulib.fx.controller.Subscriber;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
+
 
 import static org.mockito.Mockito.spy;
 
@@ -79,6 +84,14 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     VariableDependencyService variableDependencyService;
     @Spy
     MarketService marketService;
+    @Spy
+    FleetService fleetService;
+    @Spy
+    ShipService shipService;
+    @Spy
+    FleetCoordinationService fleetCoordinationService;
+    @Spy
+    FleetApiService fleetApiService;
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
@@ -130,7 +143,6 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     PropertiesJobProgressComponent siteJobProgress;
     @InjectMocks
     IslandClaimingComponent islandClaimingComponent;
-
     @InjectMocks
     public TechnologyOverviewComponent technologyOverviewComponent;
 
@@ -150,6 +162,14 @@ public class IslandOverviewTestInitializer extends ControllerTest {
 
     @InjectMocks
     MarketComponent marketComponent;
+    @InjectMocks
+    FleetManagerComponent fleetManagerComponent;
+    @InjectMocks
+    NewFleetComponent newFleetComponent;
+    @InjectMocks
+    ChangeFleetComponent changeFleetComponent;
+    @InjectMocks
+    private BlueprintsDetailsComponent blueprintsDetailsComponent;
 
 
     public void initializeComponents() {
@@ -252,6 +272,18 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.islandsService.tokenStorage = new TokenStorage();
         this.islandsService.gameSystemsService = gameSystemsApiService;
 
+        this.technologyService.eventListener = this.eventListener;
+
+        this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
+        this.inGameController.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
+        this.inGameController.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
+        this.fleetCoordinationService.fleetService = this.fleetService;
+        this.fleetCoordinationService.tokenStorage = this.tokenStorage;
+        this.fleetService.tokenStorage = this.tokenStorage;
+        this.fleetService.fleetApiService = this.fleetApiService;
+        this.fleetService.subscriber = this.subscriber;
+        this.fleetCoordinationService.subscriber = this.subscriber;
+        this.fleetManagerComponent.blueprintsDetailsComponent = this.blueprintsDetailsComponent;
         this.technologyService.eventListener = this.eventListener;
 
     }

@@ -8,17 +8,14 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.mockito.Mockito.*;
 
 public class AppTest3Module extends LobbyTestLoader {
 
     protected final String
-            GAME_ID = "testGameID",
+            GAME_ID = "123456",
             EMPIRE_ID = "testEmpireID",
             USER_ID = "testUserID";
 
@@ -45,13 +42,13 @@ public class AppTest3Module extends LobbyTestLoader {
             Map.of("energy", 30));
 
     protected final String[] JOB_EVENT_PATHS = new String[]{
-            "games.testGameID.empires.testEmpireID.jobs.jobClaimingID_1.",
-            "games.testGameID.empires.testEmpireID.jobs.jobClaimingID_2.",
-            "games.testGameID.empires.testEmpireID.jobs.jobBuildingID.",
-            "games.testGameID.empires.testEmpireID.jobs.jobSiteID."
+            "games.123456.empires.testEmpireID.jobs.jobClaimingID_1.",
+            "games.123456.empires.testEmpireID.jobs.jobClaimingID_2.",
+            "games.123456.empires.testEmpireID.jobs.jobBuildingID.",
+            "games.123456.empires.testEmpireID.jobs.jobSiteID."
     };
 
-    protected final String JOB_EVENT_PATH = "games.testGameID.empires.testEmpireID.jobs.*.";
+    protected final String JOB_EVENT_PATH = "games.123456.empires.testEmpireID.jobs.*.";
 
     protected final GameStatus GAME_STATUS = new GameStatus();
 
@@ -151,19 +148,19 @@ public class AppTest3Module extends LobbyTestLoader {
     protected final Jobs.Job[] JOBS = new Jobs.Job[]{
             new Jobs.Job("0", "0",
                     "jobClaimingID_1", 0, 3, GAME_ID, EMPIRE_ID, "islandID_2", 0,
-                    "upgrade", null, null, null, new HashMap<>(), null),
+                    "upgrade", null, null, null,"","",new LinkedList<>(), new HashMap<>(), null),
             new Jobs.Job("0", "0",
                     "jobClaimingID_2", 0, 12, GAME_ID, EMPIRE_ID, "islandID_3", 0,
-                    "upgrade", null, null, null, new HashMap<>(), null),
+                    "upgrade", null, null, null,"","",new LinkedList<>(), new HashMap<>(), null),
             new Jobs.Job("0", "0",
                     "jobBuildingID", 0, 12, GAME_ID, EMPIRE_ID, "islandID_1", 0,
-                    "building", "refinery", null, null, new HashMap<>(), null),
+                    "building", "refinery", null, null,"","",new LinkedList<>(), new HashMap<>(), null),
             new Jobs.Job("0", "0",
                     "jobSiteID", 0, 12, GAME_ID, EMPIRE_ID, "islandID_1", 0,
-                    "district", null, "energy", null, new HashMap<>(), null),
+                    "district", null, "energy", null,"","",new LinkedList<>(), new HashMap<>(), null),
             new Jobs.Job("0", "0",
                     "jobTechnologyID", 0, 12, GAME_ID, EMPIRE_ID, "islandID_1", 0,
-                    "technology", null, null, "society", new HashMap<>(), null)
+                    "technology", null, null, "society","","",new LinkedList<>(), new HashMap<>(), null)
     };
 
     protected final TechnologyExtended TECHNOLOGY = new TechnologyExtended("society", new Effect[]{
@@ -212,6 +209,7 @@ public class AppTest3Module extends LobbyTestLoader {
         this.initializeApiMocks();
         this.initializeEventListenerMocks();
         this.loadUnloadableData();
+        this.mockFleets();
     }
 
     private void initializeEventListenerMocks() {
@@ -294,6 +292,8 @@ public class AppTest3Module extends LobbyTestLoader {
         this.technologyService.eventListener = this.eventListener;
         this.technologyCategoryComponent.jobsService = this.jobsService;
 
+        this.fleetManagerComponent.blueprintsDetailsComponent = blueprintsDetailsComponent;
+
         doAnswer(inv -> this.app.show(this.gangCreationController)).when(this.app).show(eq("/creation"), any());
         doAnswer(inv -> this.app.show(this.inGameController)).when(this.app).show(eq("/ingame"), any());
         doAnswer(inv -> this.app.show(this.lobbyController)).when(this.app).show(eq("/lobby"), any());
@@ -307,6 +307,14 @@ public class AppTest3Module extends LobbyTestLoader {
                 BUILDING_DTO.id(), BUILDING_DTO.build_time(), BUILDING_DTO.cost(), BUILDING_DTO.upkeep(),
                 BUILDING_DTO.production())));
         this.islandAttributeStorage.districtAttributes = new ArrayList<>(List.of(DISTRICT_ATTRIBUTES));
+    }
+
+    private void mockFleets(){
+        // Mock get Fleets and ships
+        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", 4, new HashMap<>(), new HashMap<>())));
+        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456",true);
+        doNothing().when(this.fleetService).initializeFleetListeners();
+        doNothing().when(this.fleetService).initializeShipListener();
     }
 
     protected Event<Game> tickGame() {

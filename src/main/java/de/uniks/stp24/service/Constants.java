@@ -251,7 +251,9 @@ public class Constants {
             Map.entry("propulsion" , "de/uniks/stp24/assets/technologies/tags/propulsion.png"),
             Map.entry("rare" , "de/uniks/stp24/assets/technologies/tags/rare.png"),
             Map.entry("society" , "de/uniks/stp24/assets/technologies/tags/society.png"),
-            Map.entry("state" , "de/uniks/stp24/assets/technologies/tags/state.png")
+            Map.entry("state" , "de/uniks/stp24/assets/technologies/tags/state.png"),
+            Map.entry("weaponry", "de/uniks/stp24/assets/technologies/tags/weaponry.png"),
+            Map.entry("shipmaking", "de/uniks/stp24/assets/technologies/tags/shipmaking.png")
     );
 
     // Sea Backgrounds
@@ -271,4 +273,12 @@ public class Constants {
             QUEUED,
             NOT_BUILT
     }
+
+    public static final int ISLAND_HEIGHT = 162;
+    public static final int ISLAND_WIDTH = 70;
+    public static final int FLEET_FROM_ISLAND_DISTANCE = 40;
+    public static final int FLEET_HW = 30;
+
+    public static final int ISLAND_COLLISION_RADIUS = 120;
+    public static final int FLEET_COLLISION_RADIUS = 40;
 }

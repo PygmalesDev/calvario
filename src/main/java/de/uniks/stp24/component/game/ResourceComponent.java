@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 import static de.uniks.stp24.service.Constants.resourceTranslation;
@@ -75,9 +76,9 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
 
         countText.setVisible(showCount);
         switch (type) {
-            case "positive" -> countText.setText("+" + resource.count());
-            case "negative" -> countText.setText("-" + resource.count());
-            default -> countText.setText("x" + resource.count());
+            case "positive" -> countText.setText("+" + formatNumber(resource.count()));
+            case "negative" -> countText.setText("-" + formatNumber(resource.count()));
+            default -> countText.setText("x" + formatNumber(resource.count()));
         }
 
         if (showIcon) {
@@ -93,7 +94,7 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
             } else {
                 String sign;
                 sign = (resource.changePerSeason() > 0) ? "+" : "";
-                changePerSeasonText.setText(sign + resource.changePerSeason());
+                changePerSeasonText.setText(sign + Math.round(resource.changePerSeason() * 1000.0) / 1000.0);
                 changePerSeasonText.setVisible(true);
             }
         } else {
@@ -101,4 +102,31 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
         }
     }
 
+    public String formatNumber(double number) {
+        return refactorNumber(number, gameResourceBundle);
+    }
+
+    @NotNull
+    public static String refactorNumber(double number, ResourceBundle gameResourceBundle) {
+        DecimalFormat decimalFormat = new DecimalFormat("#.###");
+        String suffix;
+        double value;
+        if (number >= 1_000_000_000_000.0) {  // trillion
+            suffix = " " + gameResourceBundle.getString("number.trillion");
+            value = number / 1_000_000_000_000.0;
+        } else if (number >= 1_000_000_000.0) {  // billion
+            suffix = " " + gameResourceBundle.getString("number.billion");
+            value = number / 1_000_000_000.0;
+        } else if (number >= 1_000_000.0) {  // a million
+            suffix = " " + gameResourceBundle.getString("number.million");
+            value = number / 1_000_000.0;
+        } else if (number >= 1_000.0) {  // a thousand
+            suffix = " " + gameResourceBundle.getString("number.thousand");
+            value = number / 1_000.0;
+        } else {
+            suffix = "";
+            value = number;
+        }
+        return decimalFormat.format(value) + suffix;
+    }
 }

@@ -15,8 +15,12 @@ import javafx.collections.ObservableList;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
+import java.text.DecimalFormat;
 import java.util.*;
+
+import static de.uniks.stp24.component.game.ResourceComponent.refactorNumber;
 
 @Singleton
 public class ResourcesService {
@@ -30,6 +34,10 @@ public class ResourcesService {
     public TokenStorage tokenStorage;
     @Inject
     public Subscriber subscriber;
+
+    @Named("gameResourceBundle")
+    @Inject
+    ResourceBundle gameResourceBundle;
 
     public final ArrayList<Runnable> runnables = new ArrayList<>();
 
@@ -179,5 +187,9 @@ public class ResourcesService {
         String resourceID = aggregateItemDto.variable().replace("resources.", "").replace(".periodic", "");
         int resourceCount = getResourceCount(resourceID);
         return new Resource(resourceID, resourceCount, aggregateItemDto.subtotal());
+    }
+
+    public String formatNumber(double number) {
+        return refactorNumber(number, gameResourceBundle);
     }
 }

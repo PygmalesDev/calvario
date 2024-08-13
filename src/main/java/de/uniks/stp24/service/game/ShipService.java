@@ -42,7 +42,7 @@ public class ShipService {
     public Map<String, Integer> blueprintsInFleetMap = new HashMap<>();
     public ObservableList<BlueprintInFleetDto> blueprintsInFleetList = FXCollections.observableArrayList();
     public ArrayList<ShipType> shipTypesAttributes;
-    public Map<String, Integer> shipSpeeds;
+    public Map<String, Double> shipSpeeds;
     private String lastShipUpdate = "";
     private String lastShipCreation = "";
     private String lastShipDeletion= "";
@@ -54,11 +54,11 @@ public class ShipService {
     }
 
     public int getFleetSpeed(ReadShipDTO[] ships) {
-        return Arrays.stream(ships).toList().stream()
+        return (int) Arrays.stream(ships).toList().stream()
                 .map(ReadShipDTO::type)
                 .collect(Collectors.toSet()).stream()
                 .map(type -> this.shipSpeeds.get(type))
-                .mapToInt(v -> v)
+                .mapToDouble(v -> v)
                 .min().orElse(5);
     }
 

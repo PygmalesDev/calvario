@@ -132,9 +132,7 @@ public class JobsService {
                 if (!this.jobCollections.containsKey(job.system()))
                     this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
                 else this.jobCollections.get(job.system()).replaceAll(other -> other.equals(job) ? job : other);
-
-//            if (this.jobCollections.get(job.system()).filtered(job1 -> job1.type().equals(job.type())).isEmpty())
-//                this.jobCollections.get("collection").add(job);
+            }
         }
 
         if (job.progress() == job.total()) this.deleteJobFromGroups(job);

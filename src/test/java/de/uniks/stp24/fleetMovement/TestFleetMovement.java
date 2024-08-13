@@ -41,7 +41,7 @@ public class TestFleetMovement extends FleetMovementModule {
         JOB_SUBJECT.onNext(progressJob(JOB_EVENT_PATHS[5] + "updated", TRAVEL_JOBS[1], 4));
 
         WaitForAsyncUtils.waitForFxEvents();
-
+        clickOn("#travelJobsButton");
         clickOn("#jobElementDeleteButton_travelJobID_1");
         JOB_SUBJECT.onNext(new Event<>(JOB_EVENT_PATHS[4] + "deleted", TRAVEL_JOBS[0]));
 

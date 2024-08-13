@@ -278,7 +278,7 @@ public class FleetManagerComponent extends AnchorPane {
      */
     public void setIslandName(boolean shipJobStarted) {
         List<Island> islands = islandsService.getIsles().stream().filter(island -> island.id().equals(this.editedFleet.location())).toList();
-        if(islands.isEmpty()){
+        if(islands.isEmpty() || islands.getFirst().owner() == null){
             this.islandLabel.setText(this.gameResourceBundle.getString("unknown.seas"));
         } else if (!islands.getFirst().owner().equals(this.tokenStorage.getEmpireId())) {
             this.islandLabel.setText(islands.getFirst().name() + "\n" + this.gameResourceBundle.getString("not.your.island"));

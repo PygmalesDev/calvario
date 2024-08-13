@@ -3,6 +3,7 @@ package de.uniks.stp24.appTestModules;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.fleetManager.BlueprintsDetailsComponent;
 import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
 import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
 import de.uniks.stp24.component.game.fleetManager.NewFleetComponent;
@@ -164,6 +165,8 @@ public class InGameTestInitializer extends ControllerTest {
     TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
     @InjectMocks
     TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
+    @InjectMocks
+    BlueprintsDetailsComponent blueprintsDetailsComponent;
 
     @Mock
     AnnouncementsService announcementsService;
@@ -217,7 +220,7 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewSitesComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewUpgradeComponent.islandAttributes = islandAttributeStorage;
-        this.inGameController.selectedIsland = new IslandComponent();
+        this.inGameController.selectedIsland = new IslandComponent(this.islandsService);
         this.resourcesService.islandAttributes = islandAttributeStorage;
         this.resourcesService.tokenStorage = tokenStorage;
         this.resourcesService.empireService = empireService;
@@ -278,6 +281,7 @@ public class InGameTestInitializer extends ControllerTest {
         this.islandsService.gameSystemsService = gameSystemsApiService;
 
         this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
+        this.inGameController.fleetManagerComponent.blueprintsDetailsComponent = this.blueprintsDetailsComponent;
         this.inGameController.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
         this.inGameController.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
         this.fleetCoordinationService.fleetService = this.fleetService;

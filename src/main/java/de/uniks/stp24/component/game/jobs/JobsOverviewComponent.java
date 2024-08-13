@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
@@ -22,6 +23,8 @@ import java.util.ResourceBundle;
 
 @Component(view = "JobsOverview.fxml")
 public class JobsOverviewComponent extends AnchorPane {
+    @FXML
+    public ToggleButton travelJobsButton;
     @FXML
     ListView<Job> jobsListView;
     @FXML

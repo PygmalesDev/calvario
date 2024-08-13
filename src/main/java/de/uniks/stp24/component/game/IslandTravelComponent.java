@@ -72,7 +72,7 @@ public class IslandTravelComponent extends Pane {
         this.travelButton.setDisable(true);
         this.travelButtonControlPane.setTooltip(this.travelTooltip);
 
-        if (this.isVisible()) {
+        if (Objects.nonNull(fleet)) {
             if (!this.islandID.equals(fleet.location())) {
                 this.fleetCoordinationService.generateTravelPaths(fleet.location(), this.islandID);
                 if (this.jobsService.getJobObservableListOfType("travel")

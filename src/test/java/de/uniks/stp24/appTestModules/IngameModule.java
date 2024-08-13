@@ -364,7 +364,7 @@ public class IngameModule extends LobbyTestLoader {
                 BUILDING_DTO.id(), BUILDING_DTO.build_time(), BUILDING_DTO.cost(), BUILDING_DTO.upkeep(),
                 BUILDING_DTO.production())));
         this.islandAttributeStorage.districtAttributes = new ArrayList<>(List.of(DISTRICT_ATTRIBUTES));
-        this.shipService.shipSpeeds = Map.of("explorer", 10, "colonizer", 2);
+        this.shipService.shipSpeeds = Map.of("explorer", 10.0, "colonizer", 2.0);
     }
 
     protected Event<Game> tickGame(int speed) {

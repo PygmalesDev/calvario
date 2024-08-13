@@ -2,6 +2,10 @@ package de.uniks.stp24.appTestModules;
 
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.fleetManager.BlueprintsDetailsComponent;
+import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
+import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
+import de.uniks.stp24.component.game.fleetManager.NewFleetComponent;
 import de.uniks.stp24.component.game.jobs.*;
 import de.uniks.stp24.component.game.technology.*;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
@@ -175,6 +179,7 @@ public class InGameTestLoader extends ControllerTest {
         comp.jobsService = jobsService;
         comp.imageCache = imageCache;
         comp.subscriber = subscriber;
+        comp.fleetService = this.fleetService;
         return comp;
     };
 
@@ -281,6 +286,7 @@ public class InGameTestLoader extends ControllerTest {
 
         this.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
         this.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
+        this.fleetManagerComponent.blueprintsDetailsComponent = this.blueprintsDetailsComponent;
         this.fleetManagerComponent.jobsService = this.jobsService;
         this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
     }

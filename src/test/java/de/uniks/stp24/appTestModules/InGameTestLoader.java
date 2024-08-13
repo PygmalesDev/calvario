@@ -2,6 +2,10 @@ package de.uniks.stp24.appTestModules;
 
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.fleetManager.BlueprintsDetailsComponent;
+import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
+import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
+import de.uniks.stp24.component.game.fleetManager.NewFleetComponent;
 import de.uniks.stp24.component.game.jobs.*;
 import de.uniks.stp24.component.game.technology.*;
 import de.uniks.stp24.component.game.technology.ResearchJobComponent;
@@ -40,7 +44,6 @@ public class InGameTestLoader extends ControllerTest {
     @Spy
     EventService eventService;
     @Spy
-    final
     Subscriber subscriber = spy(Subscriber.class);
     @Spy
     ResourcesService resourcesService;
@@ -76,6 +79,14 @@ public class InGameTestLoader extends ControllerTest {
     AnnouncementsService announcementsService;
     @Spy
     GameStatus gameStatus;
+    @Spy
+    FleetCoordinationService fleetCoordinationService;
+    @Spy
+    FleetService fleetService;
+    @Spy
+    ShipService shipService;
+    @Spy
+    FleetApiService fleetApiService;
 
     @InjectMocks
     protected MarketService marketService;
@@ -141,6 +152,14 @@ public class InGameTestLoader extends ControllerTest {
     protected JobsService jobsService;
     @InjectMocks
     protected CoolerBubbleComponent coolerBubbleComponent;
+    @InjectMocks
+    protected FleetManagerComponent fleetManagerComponent;
+    @InjectMocks
+    protected NewFleetComponent newFleetComponent;
+    @InjectMocks
+    protected ChangeFleetComponent changeFleetComponent;
+    @InjectMocks
+    protected BlueprintsDetailsComponent blueprintsDetailsComponent;
     @InjectMocks
     protected TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
     @InjectMocks
@@ -231,6 +250,7 @@ public class InGameTestLoader extends ControllerTest {
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
+        this.inGameController.technologiesComponent = this.technologyOverviewComponent;
         this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
@@ -278,6 +298,12 @@ public class InGameTestLoader extends ControllerTest {
         this.overviewUpgradeComponent.jobProgressComponent = this.islandUpgradesJobProgressComponent;
 
         this.technologyCategoryComponent.provider = this.technologyCategorySubComponentProvider;
+
+
+        this.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
+        this.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
+        this.fleetManagerComponent.jobsService = this.jobsService;
+        this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
     }
 
     protected void setServices() {
@@ -410,6 +436,13 @@ public class InGameTestLoader extends ControllerTest {
         this.technologyService.subscriber = this.subscriber;
 
         this.technologyOverviewComponent.technologiesResourceBundle = this.technologiesResourceBundle;
+
+        this.fleetCoordinationService.fleetService = this.fleetService;
+        this.fleetCoordinationService.tokenStorage = this.tokenStorage;
+        this.fleetService.tokenStorage = this.tokenStorage;
+        this.fleetService.fleetApiService = this.fleetApiService;
+        this.fleetService.subscriber = this.subscriber;
+        this.fleetCoordinationService.subscriber = this.subscriber;
     }
 
     protected void clearStyles() {

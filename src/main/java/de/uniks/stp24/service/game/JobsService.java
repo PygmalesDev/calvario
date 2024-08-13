@@ -62,6 +62,7 @@ public class JobsService {
         this.jobCollections.put("upgrade", FXCollections.observableArrayList());
         this.jobCollections.put("technology", FXCollections.observableArrayList());
         this.jobCollections.put("collection", FXCollections.observableArrayList());
+        this.jobCollections.put("ship", FXCollections.observableArrayList());
 
         this.subscriber.subscribe(this.jobsApiService.getEmpireJobs(
                         this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), jobList -> {
@@ -109,14 +110,14 @@ public class JobsService {
     public void addJobToGroups(@NotNull Job job) {
         this.jobCollections.get(job.type()).add(job);
 
-        if (!job.type().equals("technology")) {
+//        if (!job.type().equals("technology")) {
             if (!this.jobCollections.containsKey(job.system()))
                 this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
             else this.jobCollections.get(job.system()).add(job);
 
-            if (this.jobCollections.get(job.system()).size() == 1)
+            if (this.jobCollections.get(job.system()).size() == 1 || job.type().equals("ship"))
                 this.jobCollections.get("collection").add(job);
-        }
+//        }
 
         this.startCommonFunctions.forEach(Runnable::run);
         this.startCommonConsumers.forEach(func -> func.accept(job));

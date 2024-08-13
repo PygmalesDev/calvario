@@ -1,5 +1,7 @@
 package de.uniks.stp24.service;
 
+import de.uniks.stp24.dto.ExplainedVariableDTO;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,26 +102,26 @@ public class VariablesTree<T> {
     /*
    Method to print all paths from root
     */
-//    public void printPaths() {
-//        List<String> currentPath = new ArrayList<>();
-//        traverseAndPrint(root, currentPath);
-//    }
+    public void printPaths() {
+        List<String> currentPath = new ArrayList<>();
+        traverseAndPrint(root, currentPath);
+    }
 
-//    private void traverseAndPrint(Node<T> node, List<String> currentPath) {
-//        if (node == null) {
-//            return;
-//        }
-//
-//        currentPath.add(node.getKey());
-//
-//        if (node.getChildren().isEmpty()) {
-//            ExplainedVariableDTO tmp = (ExplainedVariableDTO) node.value;
-//            System.out.println(String.join(" -> ", currentPath) + " => " + tmp.finalValue());
-//        } else {
-//            for (Node<T> child : node.getChildren()) {
-//                traverseAndPrint(child, new ArrayList<>(currentPath));
-//            }
-//        }
-//    }
+    private void traverseAndPrint(Node<T> node, List<String> currentPath) {
+        if (node == null) {
+            return;
+        }
+
+        currentPath.add(node.getKey());
+
+        if (node.getChildren().isEmpty()) {
+            ExplainedVariableDTO tmp = (ExplainedVariableDTO) node.value;
+            System.out.println(String.join(" -> ", currentPath) + " => " + tmp.finalValue());
+        } else {
+            for (Node<T> child : node.getChildren()) {
+                traverseAndPrint(child, new ArrayList<>(currentPath));
+            }
+        }
+    }
 
 }

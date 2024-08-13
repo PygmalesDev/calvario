@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Circle;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.controller.Resource;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -28,9 +29,10 @@ public class IslandComponent extends Pane {
     @FXML
     public ImageView rudderImage;
     @FXML
-    ImageView islandImage;
+    public ImageView islandImage;
     @FXML
     public StackPane flagPane;
+    public Circle collisionCircle;
     @FXML
     ImageView flagImage;
     @FXML
@@ -201,5 +203,9 @@ public class IslandComponent extends Pane {
 
     public void hideSpyGlass(){
         this.spyglassImage.setVisible(false);
+    }
+
+    public boolean isCollided(Circle other) {
+        return this.collisionCircle.intersects(other.getLayoutBounds());
     }
 }

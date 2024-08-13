@@ -4,11 +4,15 @@ import de.uniks.stp24.dto.ShortSystemDto;
 import de.uniks.stp24.model.Ships;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnRender;
 import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 
@@ -52,6 +56,21 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
         this.jobService = fleetManagerComponent.jobsService;
         this.tokenStorage = fleetManagerComponent.tokenStorage;
         this.gameResourceBundle = gameResourceBundle;
+    }
+
+    @OnRender
+    public void render() {
+        Timeline incTimeline = new Timeline(new KeyFrame(Duration.millis(100), actionEvent -> incrementSize()));
+        incTimeline.setCycleCount(Timeline.INDEFINITE);
+
+        Timeline decTimeline = new Timeline(new KeyFrame(Duration.millis(100), actionEvent -> decrementSize()));
+        decTimeline.setCycleCount(Timeline.INDEFINITE);
+
+        incrementSizeButton.setOnMousePressed(e -> incTimeline.playFromStart());
+        incrementSizeButton.setOnMouseReleased(e -> incTimeline.stop());
+
+        decrementSizeButton.setOnMousePressed(e -> decTimeline.playFromStart());
+        decrementSizeButton.setOnMouseReleased(e -> decTimeline.stop());
     }
 
     public void setItem(Ships.BlueprintInFleetDto blueprintInFleetDto){

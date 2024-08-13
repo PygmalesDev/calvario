@@ -291,8 +291,16 @@ public class Constants {
             NOT_BUILT
     }
 
-    public static final int ISLAND_HEIGHT = 162;
-    public static final int ISLAND_WIDTH = 70;
+    public enum POINT_TYPE {
+        ISLAND,
+        INTER,
+        FLEET
+    }
+
+    public static final double ISLAND_HEIGHT = 162;
+    public static final double ISLAND_WIDTH = 70;
+    public static final double ISLAND_RADIUS_X = ISLAND_WIDTH/2;
+    public static final double ISLAND_RADIUS_Y = ISLAND_HEIGHT/2;
     public static final int FLEET_FROM_ISLAND_DISTANCE = 40;
     public static final int FLEET_HW = 30;
 

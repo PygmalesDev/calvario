@@ -18,6 +18,7 @@ import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 @Singleton
@@ -47,8 +48,7 @@ public class JobsService {
     private int period = -1;
 
     @Inject
-    public JobsService() {
-    }
+    public JobsService() {}
 
     /**
      * Loads jobCollections started by the player's empire upon entering the game. <p>
@@ -86,17 +86,16 @@ public class JobsService {
      */
     public void initializeJobsListeners() {
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.empires.%s.jobs.*.*",
-                        this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), Job.class),
-                result -> {
-                    Job job = result.data();
+                this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), Job.class), result -> {
+            Job job = result.data();
 
-                    switch (result.suffix()) {
-                        case "created" -> this.addJobToGroups(job);
-                        case "updated" -> this.updateJobInGroups(job);
-                    }
-                    this.jobCommonUpdates.forEach(Runnable::run);
+            switch (result.suffix()) {
+                case "created" -> this.addJobToGroups(job);
+                case "updated" -> this.updateJobInGroups(job);
+            }
+            this.jobCommonUpdates.forEach(Runnable::run);
 
-                }, error -> System.out.print("JobsService: Failed to receive job updates. \n" + error.getMessage()));
+            }, error -> System.out.print("JobsService: Failed to receive job updates. \n" + error.getMessage()));
 
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.ticked",
                 this.tokenStorage.getGameId()), Game.class), game -> {
@@ -129,9 +128,10 @@ public class JobsService {
         this.jobCollections.get("collection").replaceAll(other -> other.equals(job) ? job : other);
 
         if (!job.type().equals("technology")) {
-            if (!this.jobCollections.containsKey(job.system()))
-                this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
-            else this.jobCollections.get(job.system()).replaceAll(other -> other.equals(job) ? job : other);
+            if (Objects.nonNull(job.system())) {
+                if (!this.jobCollections.containsKey(job.system()))
+                    this.jobCollections.put(job.system(), FXCollections.observableArrayList(job));
+                else this.jobCollections.get(job.system()).replaceAll(other -> other.equals(job) ? job : other);
 
 //            if (this.jobCollections.get(job.system()).filtered(job1 -> job1.type().equals(job.type())).isEmpty())
 //                this.jobCollections.get("collection").add(job);
@@ -145,7 +145,13 @@ public class JobsService {
         this.jobCollections.get("collection").removeIf(other -> other._id().equals(job._id()));
 
         if (!job.type().equals("technology")) {
-            this.jobCollections.get(job.system()).removeIf(other -> other._id().equals(job._id()));
+            if (Objects.nonNull(job.system())) {
+                this.jobCollections.get(job.system()).removeIf(other -> other._id().equals(job._id()));
+
+                ObservableList<Job> systemJobs = this.jobCollections.get(job.system());
+                if (!systemJobs.isEmpty() && !this.jobCollections.get("collection").contains(systemJobs.getFirst()))
+                    this.jobCollections.get("collection").add(systemJobs.getFirst());
+            }
         }
 
         if (this.jobCompletionFunctions.containsKey(job._id()))
@@ -166,7 +172,6 @@ public class JobsService {
     /**
      * A method to define further common functions that should be executed when a job of any type
      * is started. It is possible to add more than one function on the job start.
-     *
      * @param func {@link Runnable runnable } lambda function that will be executed after any job starts
      */
     public void onJobCommonStart(Runnable func) {
@@ -189,9 +194,8 @@ public class JobsService {
      * A method used to define the further execution result of a job. It's useful if you need to execute
      * some methods that lay within other classes.
      * It is possible to add more than one function on the job completion.
-     *
      * @param jobID ID of the job after completion of which the function will be executed
-     * @param func  the execution function
+     * @param func the execution function
      */
     public void onJobDeletion(String jobID, Runnable func) {
         if (!this.jobDeletionFunctions.containsKey(jobID))
@@ -204,9 +208,8 @@ public class JobsService {
      * job is completed. It's useful if you need to execute some methods that lay within other classes.
      * The execution function will be deleted after the job is completed.
      * It is possible to add more than one function on the job completion.
-     *
      * @param jobID ID of the job after completion of which the function will be executed
-     * @param func  the execution function
+     * @param func the execution function
      */
     public void onJobCompletion(String jobID, Runnable func) {
         if (!this.jobCompletionFunctions.containsKey(jobID))
@@ -234,9 +237,8 @@ public class JobsService {
      * Provide this method with {@link #getJobObservableListOfType(String) getJobObservableListOfType},
      * {@link #getObservableListForSystem(String) getObservableListForSystem} or  inside a method annotated with {@link org.fulib.fx.annotation.event.OnInit @OnInit}
      * inside your {@link org.fulib.fx.annotation.controller.Controller Controller} to receive an {@link ObservableList}
-     * with loaded jobs. <p>
-     * Name the parameter inside the consumer function as a <i>jobID</i>: {@code (jobID) -> yourFunction(jobID)}.
-     *
+     *  with loaded jobs. <p>
+     *  Name the parameter inside the consumer function as a <i>jobID</i>: {@code (jobID) -> yourFunction(jobID)}.
      * @param func the function that has to be executed after the job loading process is finished
      */
     public void onJobsLoadingFinished(String jobType, Consumer<Job> func) {
@@ -248,7 +250,6 @@ public class JobsService {
     /**
      * Provides {@link Runnable Runnable} lambda functions that should only be executed after
      * the initial job loading is completed.
-     *
      * @param func the function that has to be executed after the job loading process is finished
      */
     public void onJobsLoadingFinished(Runnable func) {
@@ -258,7 +259,6 @@ public class JobsService {
     /**
      * Begins a new job from given {@link JobDTO JobDTO}. Use the static methods of the
      * {@link de.uniks.stp24.model.Jobs Jobs} class to create a new JobDTO of a specific type.
-     *
      * @param jobDTO DTO containing a request type
      * @return {@link Job Job} class containing the {@link de.uniks.stp24.model.Jobs JobResult} of starting the job
      */
@@ -269,7 +269,6 @@ public class JobsService {
     /**
      * Stops the job of the given id. If the job is not completed, the resources for its initializing will be returned
      * to the empire.
-     *
      * @param jobID ID of the job that needs to be stopped
      * @return {@link Job Job} class containing the result of stopping the job.
      */
@@ -284,7 +283,6 @@ public class JobsService {
     /**
      * Stops the given job. If the job is not completed, the resources for its initializing will be returned
      * to the empire.
-     *
      * @param job Job as a class that needs to be stopped
      * @return {@link Job Job} class containing the result of stopping the job.
      */
@@ -298,7 +296,6 @@ public class JobsService {
      * To receive a list prefilled with jobs right after the loading of the
      * {@link org.fulib.fx.annotation.controller.Controller Controller} is done, provide this function within the
      * {@link #onJobsLoadingFinished(Runnable) onJobsLoadingFinished}.
-     *
      * @param jobType type of the jobs
      * @return {@link ObservableList ObservableList}<{@link Job Job}> filtered for a specific job type
      */
@@ -312,7 +309,6 @@ public class JobsService {
      * To receive a list prefilled with jobs right after the loading of the
      * {@link org.fulib.fx.annotation.controller.Controller Controller} is done, provide this function within the
      * {@link #onJobsLoadingFinished(Runnable) onJobsLoadingFinished}.
-     *
      * @param systemID ID of the island
      * @return {@link ObservableList ObservableList}<{@link Job Job}> with jobs of type <i>building</i>,
      * <i>district</i> and <i>upgrade</i> filtered for a specific island
@@ -331,8 +327,7 @@ public class JobsService {
     public Consumer<Job> getJobInspector(String inspectorID) {
         if (this.jobInspectionFunctions.containsKey(inspectorID))
             return this.jobInspectionFunctions.get(inspectorID);
-        else
-            System.out.printf("Job Service: the inspection function is not found for a given inspector ID: %s!\n", inspectorID);
+        else System.out.printf("Job Service: the inspection function is not found for a given inspector ID: %s!\n", inspectorID);
         return null;
     }
 

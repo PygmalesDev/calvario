@@ -86,7 +86,7 @@ public class FleetManagerComponent extends AnchorPane {
 
 
     @Inject
-    App app;
+    public App app;
     @Inject
     public FleetService fleetService;
     @Inject

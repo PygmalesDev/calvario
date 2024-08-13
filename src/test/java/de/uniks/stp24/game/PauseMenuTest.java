@@ -3,7 +3,6 @@ package de.uniks.stp24.game;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.*;
-import de.uniks.stp24.component.game.fleetManager.BlueprintsDetailsComponent;
 import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
 import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
 import de.uniks.stp24.component.game.fleetManager.NewFleetComponent;
@@ -101,6 +100,8 @@ public class PauseMenuTest extends ControllerTest {
     @Spy
     FleetCoordinationService fleetCoordinationService;
     @Spy
+    GameLogicApiService gameLogicApiService;
+    @Spy
     FleetService fleetService;
     @Spy
     ShipService shipService;
@@ -167,27 +168,22 @@ public class PauseMenuTest extends ControllerTest {
     @InjectMocks
     ResearchJobComponent researchJobComponent;
     @InjectMocks
-    TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
-    @InjectMocks
-    TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
-
-    @Spy
-    GameLogicApiService gameLogicApiService;
-
-    @InjectMocks
     FleetManagerComponent fleetManagerComponent;
     @InjectMocks
     NewFleetComponent newFleetComponent;
     @InjectMocks
     ChangeFleetComponent changeFleetComponent;
     @InjectMocks
-    BlueprintsDetailsComponent blueprintsDetailsComponent;
-
-    @InjectMocks
     InGameController inGameController;
+    @InjectMocks
+    TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+    @InjectMocks
+    TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
 
     @InjectMocks
     IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
+    @InjectMocks
+    IslandTravelComponent islandTravelComponent;
 
     @InjectMocks
     CoolerBubbleComponent coolerBubbleComponent;
@@ -220,6 +216,12 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.technologiesComponent.subscriber = this.subscriber;
         this.technologyService.tokenStorage = this.tokenStorage;
 
+        this.inGameController.islandTravelComponent = this.islandTravelComponent;
+        this.islandTravelComponent.jobsService = this.jobsService;
+        this.islandTravelComponent.subscriber = this.subscriber;
+        this.islandTravelComponent.fleetService = this.fleetService;
+        this.islandTravelComponent.shipService = this.shipService;
+
         coolerBubbleComponent.subscriber = this.subscriber;
         this.inGameController.coolerBubbleComponent = coolerBubbleComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
@@ -243,7 +245,6 @@ public class PauseMenuTest extends ControllerTest {
         this.overviewUpgradeComponent.jobProgressComponent = islandUpgradesJobProgressComponent;
         this.overviewUpgradeComponent.jobsService = this.jobsService;
         this.overviewUpgradeComponent.islandAttributes = this.islandAttributeStorage;
-
 
         this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
         this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
@@ -282,13 +283,19 @@ public class PauseMenuTest extends ControllerTest {
         this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
         this.inGameController.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
         this.inGameController.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
-        this.fleetCoordinationService.fleetService = this.fleetService;
-        this.fleetCoordinationService.tokenStorage = this.tokenStorage;
+
         this.fleetService.tokenStorage = this.tokenStorage;
         this.fleetService.fleetApiService = this.fleetApiService;
         this.fleetService.subscriber = this.subscriber;
+
         this.fleetCoordinationService.subscriber = this.subscriber;
-        this.fleetManagerComponent.blueprintsDetailsComponent = this.blueprintsDetailsComponent;
+        this.fleetCoordinationService.jobsService = this.jobsService;
+        this.fleetCoordinationService.timerService = this.timerService;
+        this.fleetCoordinationService.fleetService = this.fleetService;
+        this.fleetCoordinationService.tokenStorage = this.tokenStorage;
+        this.fleetCoordinationService.shipService = this.shipService;
+        this.fleetCoordinationService.imageCache = this.imageCache;
+        this.fleetCoordinationService.islandsService = this.islandsService;
 
         lenient().doReturn("gameOwner").when(this.tokenStorage).getUserId();
         lenient().doReturn("123456").when(this.tokenStorage).getGameId();
@@ -300,7 +307,6 @@ public class PauseMenuTest extends ControllerTest {
 
         inGameService.setGameStatus(gameStatus);
         inGameService.setTimerService(timerService);
-        Map<String, Integer> variablesMarket = new HashMap<>();
         Map<String,List<SeasonComponent>> _private = new HashMap<>();
 
         doReturn(Observable.just(new EmpireDto("a","b","c", "a","a","a","a","a",1, 2, "a", new String[]{"1"}, Map.of("energy",3) , null))).when(this.empireService).getEmpire(any(),any());

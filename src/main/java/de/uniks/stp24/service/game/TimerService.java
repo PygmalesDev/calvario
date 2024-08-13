@@ -6,52 +6,93 @@ import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.rest.GamesApiService;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.beans.PropertyChangeSupport;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 @Singleton
 public class TimerService {
+    @Inject
+    GameStatus gameStatus;
+    @Inject
+    public GamesApiService gamesApiService;
+    @Inject
+    public EventListener eventListener;
+    @Inject
+    public Subscriber subscriber;
+    @Inject
+    public TokenStorage tokenStorage;
 
+    private Timer timer = new Timer();
     protected PropertyChangeSupport listeners;
     public static final String PROPERTY_COUNTDOWN = "countdown";
     public static final String PROPERTY_SPEED = "speed";
     public static final String PROPERTY_SEASON = "season";
     public static final String PROPERTY_SHOWEVENT = "showEvent";
     private volatile boolean showEvent = false;
+    private volatile boolean isRunning = false;
+    private int countdown = 0, season, speed;
 
-    @Inject
-    GameStatus gameStatus;
-    @Inject
-    public GamesApiService gamesApiService;
-    @Inject
-    public Subscriber subscriber;
-
-    @Inject
-    public TokenStorage tokenStorage;
+    private final List<Runnable> periodFunctions = new ArrayList<>();
+    private final List<Runnable> speedFunctions = new ArrayList<>();
+    private final List<Runnable> onLoadingFinishedFunctions = new ArrayList<>();
+    private int listenerPeriod = -1, listenerSpeed = 0;
 
     public Game game;
-
-    Timer timer = new Timer();
-    int countdown = 0;
-    int season;
-    int speed;
-    private volatile boolean isRunning = false;
-
 
     @Inject
     public TimerService() {
 
     }
 
-    public void setShowEvent(boolean showEvent) {
+    public void dispose() {
+        this.subscriber.dispose();
+        this.periodFunctions.clear();
+        this.speedFunctions.clear();
+    }
 
+    public void initializeGameTickListener() {
+        this.subscriber.subscribe(this.eventListener.listen(String.format(
+                "games.%s.updated", this.tokenStorage.getGameId()), Game.class), result -> {
+            Game data = result.data();
+            if (this.listenerPeriod != data.period()) {
+                this.listenerPeriod = data.period();
+                periodFunctions.forEach(Runnable::run);
+            }
+            if (this.listenerSpeed != data.speed()) {
+                this.listenerSpeed = data.speed();
+                speedFunctions.forEach(Runnable::run);
+            }
+        }, error -> System.out.println("Caught an exception in the gameTickListener in the TimerService:\n" + error.getMessage()));
+    }
+
+    // getSpeed method doesn't update the speed when I set it to 0 and the service breaks when I try to change it lol
+    public int getServerSpeed() {
+        return this.listenerSpeed;
+    }
+
+    public int getServerSeasons() {
+        return this.listenerPeriod;
+    }
+
+    public void onGameTicked(Runnable func) {
+        this.periodFunctions.add(func);
+    }
+
+    public void onLoadingFinished(Runnable func) {
+        this.onLoadingFinishedFunctions.add(func);
+    }
+
+    public void onSpeedChanged(Runnable func) {
+        this.speedFunctions.add(func);
+    }
+
+    public void setShowEvent(boolean showEvent) {
         if (showEvent == this.showEvent) {
             return;
         }
@@ -81,7 +122,13 @@ public class TimerService {
         }
 
         subscriber.subscribe(gamesApiService.getGame(tokenStorage.getGameId()),
-                gameResult -> game = gameResult,
+                gameResult -> {
+                    game = gameResult;
+                    listenerSpeed = gameResult.speed();
+                    listenerPeriod = gameResult.period();
+                    this.onLoadingFinishedFunctions.forEach(Runnable::run);
+                    this.initializeGameTickListener();
+                },
                 error -> System.out.println("Error: " + error.getMessage())
         );
 

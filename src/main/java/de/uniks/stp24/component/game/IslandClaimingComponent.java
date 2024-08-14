@@ -239,7 +239,7 @@ public class IslandClaimingComponent extends Pane {
 
         if (Objects.nonNull(fleet)) {
             if (!this.currentIsland.id().equals(fleet.location())) {
-                this.fleetCoordinationService.generateTravelPaths(fleet.location(), this.currentIsland.id());
+                this.fleetCoordinationService.generateTravelPaths(fleet.location(), this.currentIsland.id(), fleet);
 
                 this.subscriber.subscribe(this.shipService.getShipsOfFleet(fleet._id()), dtos -> {
                     int speed = this.shipService.getFleetSpeed(dtos);
@@ -263,7 +263,8 @@ public class IslandClaimingComponent extends Pane {
     }
 
     public void travelToIsland() {
-        this.fleetCoordinationService.travelToIsland(this.currentIsland.id());
+        this.fleetCoordinationService.travelToIsland(this.currentIsland.id(),
+                this.fleetCoordinationService.getSelectedFleetInstance());
         this.travelButton.setDisable(true);
     }
 

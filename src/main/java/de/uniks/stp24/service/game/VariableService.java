@@ -182,6 +182,7 @@ public class VariableService {
     }
 
     public void runRunnables() {
+
         runnables.forEach(Runnable::run);
     }
 }

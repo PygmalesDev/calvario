@@ -68,7 +68,7 @@ public class TimerService {
                 this.listenerSpeed = data.speed();
                 speedFunctions.forEach(Runnable::run);
             }
-        }, error -> System.out.println("Caught an exception in the gameTickListener in the TimerService:\n" + error.getMessage()));
+        }, Throwable::printStackTrace);
     }
 
     // getSpeed method doesn't update the speed when I set it to 0 and the service breaks when I try to change it lol

@@ -62,7 +62,8 @@ public class IslandTravelComponent extends Pane {
     }
 
     public void travelToIsland() {
-        this.fleetCoordinationService.travelToIsland(this.islandID);
+        this.fleetCoordinationService.travelToIsland(this.islandID,
+                this.fleetCoordinationService.getSelectedFleetInstance());
         this.travelButton.setDisable(true);
     }
 
@@ -74,7 +75,7 @@ public class IslandTravelComponent extends Pane {
 
         if (Objects.nonNull(fleet)) {
             if (!this.islandID.equals(fleet.location())) {
-                this.fleetCoordinationService.generateTravelPaths(fleet.location(), this.islandID);
+                this.fleetCoordinationService.generateTravelPaths(fleet.location(), this.islandID, fleet);
                 if (this.jobsService.getJobObservableListOfType("travel")
                         .filtered(job -> job.fleet().equals(fleet._id())).isEmpty()) {
                     this.subscriber.subscribe(this.shipService.getShipsOfFleet(fleet._id()), result -> {

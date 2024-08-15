@@ -215,7 +215,7 @@ ToggleButton:hover{
     -fx-pref-height: 75px;
 }
 
-.rememberMe {
+/*.rememberMe {
     -fx-font-family: "PT Serif";
     -fx-font-size: 24;
     -fx-font-weight: bold;
@@ -238,7 +238,7 @@ ToggleButton:hover{
 .rememberMe:selected .mark {
     -fx-background-color: #bf9000;
     -fx-border-color: #5d5454;
-}
+}*/
 
 .backButton{
     -fx-font-family: "PT Serif";
@@ -260,7 +260,7 @@ ToggleButton:hover{
     -fx-font-size: 20;
 }
 
-.licensesButton{
+/*.licensesButton{
     -fx-font-family: "PT Serif";
     -fx-font-size: 24;
     -fx-font-weight: bold;
@@ -271,7 +271,7 @@ ToggleButton:hover{
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
-}
+}*/
 
 .license-back-button {
     -fx-font-family: "Stencil";

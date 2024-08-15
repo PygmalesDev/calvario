@@ -327,7 +327,6 @@ public class InGameController extends BasicController {
         this.jobsService.initializeJobsListeners();
 
         explanationService.setInGameController(this);
-        fleetCoordinationService.setInGameController(this);
 
         buildingProperties.setMouseTransparent(true);
         buildingProperties.setPickOnBounds(false);

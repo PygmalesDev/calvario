@@ -2,7 +2,6 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.helper.DistancePoint;
 import de.uniks.stp24.model.Fleets.Fleet;
-import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.Constants.POINT_TYPE;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;

@@ -84,8 +84,7 @@ public class FleetCoordinationService {
             });
         });
 
-        this.fleetService.onLoadingFinished(() ->
-                this.fleetService.getGameFleets().forEach(this::putFleetOnMap));
+        this.fleetService.onLoadingFinished(() -> this.fleetService.getGameFleets().forEach(this::putFleetOnMap));
 
         this.fleetService.onFleetCreated(this::putFleetOnMap);
         this.fleetService.onFleetDestroyed(this::deleteFleetFromMap);

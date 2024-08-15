@@ -167,8 +167,8 @@ public class FogOfWar {
             yRadius =  random.nextInt(25, 50);
             distance =  random.nextInt(125, 150);
             ellipse = new Ellipse(
-                    island.getPosX() + ISLAND_WIDTH/2 * ISLAND_SCALE + 17 +  distance*Math.cos(angle),
-                    island.getPosY() + ISLAND_HEIGHT/2 * ISLAND_SCALE + 7 + distance*Math.sin(angle),
+                    island.getPosX() + X_OFFSET +  distance*Math.cos(angle),
+                    island.getPosY() + Y_OFFSET + distance*Math.sin(angle),
                     xRadius, yRadius);
             toRemoveShape = Objects.nonNull(toRemoveShape) ? Shape.union(toRemoveShape, ellipse) : ellipse;
         }

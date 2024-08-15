@@ -203,8 +203,8 @@ public class FleetCoordinationService {
     private DistancePoint findParkingPoint(DistancePoint islandPoint) {
         double angle = (random.nextInt(360)-90)*Math.PI/180;
         return new DistancePoint(
-                islandPoint.getX() + ISLAND_RADIUS_X + (ISLAND_RADIUS_X + FLEET_FROM_ISLAND_DISTANCE)*Math.cos(angle),
-                islandPoint.getY() + ISLAND_RADIUS_Y + (ISLAND_RADIUS_X + FLEET_FROM_ISLAND_DISTANCE)*Math.sin(angle),
+                islandPoint.getX() + (FLEET_FROM_ISLAND_DISTANCE)*Math.cos(angle),
+                islandPoint.getY() + ( FLEET_FROM_ISLAND_DISTANCE)*Math.sin(angle),
                 POINT_TYPE.ISLAND,
                 islandPoint.getPrev()
         );
@@ -212,7 +212,6 @@ public class FleetCoordinationService {
 
     public void setInGameController(InGameController inGameController) {
         this.mapGrid = inGameController.mapGrid.getChildren();
-
         this.timerService.onGameTicked(this::processTravel);
         this.timerService.onSpeedChanged(this::processSpeedChanged);
     }

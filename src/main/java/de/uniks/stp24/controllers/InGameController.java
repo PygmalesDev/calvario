@@ -65,7 +65,7 @@ public class InGameController extends BasicController {
     @FXML
     Pane gameBackground;
     @FXML
-    Pane connectionsPane;
+    Pane fogPane;
     @FXML
     StackPane helpWindowContainer;
     @FXML
@@ -263,7 +263,6 @@ public class InGameController extends BasicController {
         pauseMenuComponent.setInGameController(this);
         helpComponent.setInGameController(this);
         clockComponent.setInGameController(this);
-        fleetCoordinationService.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
@@ -321,6 +320,7 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void render() {
+        fleetCoordinationService.setInGameController(this);
         this.fleetCoordinationService.setJobFinishers();
 
         this.jobsService.loadEmpireJobs();
@@ -574,17 +574,18 @@ public class InGameController extends BasicController {
         group.setScaleX(0.65);
         group.setScaleY(0.65);
 
+        fogPane.setPickOnBounds(false);
+
         this.islandComponentList.forEach(isle -> {
             isle.setInGameController(this);
             isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
             isle.setScaleX(ISLAND_SCALE);
             isle.setScaleY(ISLAND_SCALE);
             isle.collisionCircle.setRadius(islandCollisionRadius);
-            this.mapGrid.getChildren().add(isle);
+            this.fogPane.getChildren().add(isle);
 
-            if (Objects.nonNull(isle.island.owner()) && isle.island.owner().equals(tokenStorage.getEmpireId())) {
+            if (Objects.nonNull(isle.island.owner()) && isle.island.owner().equals(tokenStorage.getEmpireId()))
                 removeFogFromIsland(false, isle);
-            }
         });
 
         mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight()));
@@ -941,9 +942,8 @@ public class InGameController extends BasicController {
     }
 
     public void removeFogFromIsland(boolean animate, IslandComponent isle) {
-        if (isle.foggy) {
+        if (isle.foggy)
             this.removeFog(animate, isle);
-        }
     }
 
     public void removeFog(boolean animate, IslandComponent island, Shape... shapes) {

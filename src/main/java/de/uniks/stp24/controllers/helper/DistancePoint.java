@@ -16,7 +16,7 @@ public class DistancePoint extends Point2D {
     }
 
     public DistancePoint(IslandComponent island, DistancePoint prev) {
-        super(island.getLayoutX() + FLEET_HW, island.getLayoutY() + FLEET_HW);
+        super(island.getPosX() + ISLAND_WIDTH/2, island.getPosY() + ISLAND_HEIGHT/2);
         this.prev = prev;
         this.pointType = POINT_TYPE.ISLAND;
     }

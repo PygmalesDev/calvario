@@ -14,9 +14,9 @@
         <Group fx:id="group" onMouseClicked="#resetZoomMouse">
             <StackPane fx:id="zoomPane" style="-fx-background-color: TRANSPARENT;">
                 <Pane fx:id="gameBackground" prefHeight="0.0" prefWidth="0.0" styleClass="backgroundGame" />
-            <Pane fx:id="connectionsPane" />
                 <Pane fx:id="mapGrid">
                 </Pane>
+            <Pane fx:id="fogPane" />
             <Pane fx:id="debugGrid" pickOnBounds="false" prefHeight="200.0" prefWidth="200.0" visible="false" />
             </StackPane>
             <StackPane fx:id="islandClaimingContainer" prefHeight="150.0" prefWidth="200.0" />

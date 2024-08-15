@@ -59,8 +59,6 @@ public class GameFleetController extends Pane {
 
         this.travelTimeline.setOnFinished(event -> {
             if (this.currentPoint.getType().equals(POINT_TYPE.ISLAND)){
-                System.out.println( this.currentPoint.islandComponent);
-                System.out.println(this.currentPoint);
                 this.travelTimeline.currentTimeProperty().removeListener(this::listnerMethod);
                 this.fleetCoordinationService.inGameController.removeFogFromIsland(true, this.currentPoint.islandComponent);
                 travelTimeline.currentTimeProperty().addListener(this::listnerMethod);

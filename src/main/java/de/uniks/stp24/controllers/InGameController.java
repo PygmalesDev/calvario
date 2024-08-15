@@ -257,7 +257,6 @@ public class InGameController extends BasicController {
         buildingPropertiesComponent.setInGameController(this);
         sitePropertiesComponent.setInGameController(this);
         deleteStructureComponent.setInGameController(this);
-        empireOverviewComponent.setInGameController(this);
         variableService.setIngameController(this);
         pauseMenuComponent.setInGameController(this);
         helpComponent.setInGameController(this);
@@ -277,7 +276,10 @@ public class InGameController extends BasicController {
 
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
-                    result -> islandAttributes.setEmpireDto(result),
+                    result -> {
+                        islandAttributes.setEmpireDto(result);
+                        islandAttributes.setIsland(islandsService.getIsland(result.homeSystem()));
+                    },
                     error -> System.out.println("error in getEmpire in inGame"));
             createEmpireListener();
         }
@@ -407,7 +409,6 @@ public class InGameController extends BasicController {
                 islands -> {
                     SystemDto system = islands[0];
                     Island island = islandsService.getIsland(system._id());
-                    islandAttributes.setIsland(island);
                     tokenStorage.setIsland(island);
                 }, error -> System.out.println("Error try to get Systems because: " + error.getMessage()));
 
@@ -639,6 +640,7 @@ public class InGameController extends BasicController {
                         // apply drop shadow and flag
                         isle.applyEmpireInfo();
                         this.islandsService.updateIsles(updatedIsland);
+                        this.empireOverviewComponent.updateIslandList(updatedIsland);
                         // island is already claimed
                         this.islandClaimingContainer.setVisible(false);
                     }

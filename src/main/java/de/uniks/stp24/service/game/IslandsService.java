@@ -205,10 +205,6 @@ public class IslandsService extends BasicService {
         return this.connections.get(islandID);
     }
 
-    public List<Point2D> getDistancePoints(String startID, String finishID) {
-        return this.distancePoints.get(new String[]{startID, finishID});
-    }
-
     public Map<String[], List<Point2D>> getDistancePoints() {
         return this.distancePoints;
     }
@@ -483,8 +479,6 @@ public class IslandsService extends BasicService {
           error -> System.out.printf("Caught an error while comparing strength in Islands Service:\n %s", error.getMessage()));
     }
 
-    public  void updateIsles(Island island){
-        this.isles.replaceAll(old -> old.equals(island) ? island : old);
-    }
-    
+    public  void updateIsles(Island island){this.isles.replaceAll(old -> old.equals(island) ? island : old);}
+
 }

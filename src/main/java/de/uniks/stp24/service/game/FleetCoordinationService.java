@@ -40,6 +40,8 @@ import static java.util.stream.Collectors.toMap;
 @Singleton
 public class FleetCoordinationService {
     @Inject
+    public TimerService timerService;
+    @Inject
     public TokenStorage tokenStorage;
     @Inject
     public FleetService fleetService;
@@ -69,7 +71,6 @@ public class FleetCoordinationService {
     private final int ROTATE_DURATION = 2;
 //    private final double ISLAND_RADIUS_X = (double) Constants.ISLAND_WIDTH / 2;
 //    private final double ISLAND_RADIUS_Y = ((double) Constants.ISLAND_HEIGHT / 2);
-    public TimerService timerService;
 
     @Inject
     public FleetCoordinationService() {
@@ -220,6 +221,7 @@ public class FleetCoordinationService {
         this.mapGrid = inGameController.mapGrid.getChildren();
         this.timerService.onGameTicked(this::processTravel);
         this.timerService.onSpeedChanged(this::processSpeedChanged);
+        this.timerService.onGameTicked(() -> islandsService.refreshListOfColonizedSystems());
     }
 
     public Fleet getSelectedFleet() {

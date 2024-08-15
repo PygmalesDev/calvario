@@ -357,9 +357,7 @@ public class InGameController extends BasicController {
         overviewContainer.getChildren().add(overviewUpgradeComponent);
         islandClaimingContainer.getChildren().add(this.islandClaimingComponent);
         islandClaimingContainer.setVisible(false);
-        technologiesComponent.setContainer(technologiesContainer);
-        technologiesContainer.setVisible(false);
-        technologiesContainer.getChildren().add(technologiesComponent);
+
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,
@@ -386,14 +384,13 @@ public class InGameController extends BasicController {
         draggables.addAll(Arrays.asList(overviewContainer, buildingsWindow, buildingProperties, siteProperties));
         new Draggable.DraggableNode(overviewContainer, buildingsWindow, buildingProperties, siteProperties);
 
+        this.group.getChildren().add(this.islandTravelComponent);
+        this.islandTravelComponent.setVisible(false);
+
         contactsOverviewComponent.setParents(contextMenuContainer, contactDetailsContainer);
         contactsOverviewComponent.contactDetailsComponent.setWarComponent(warComponent);
         warComponent.setParent(warContainer);
         contactService.setContactOverview(contactsOverviewComponent);
-        this.jobsService.loadEmpireJobs();
-        this.jobsService.initializeJobsListeners();
-        this.group.getChildren().add(this.islandTravelComponent);
-        this.islandTravelComponent.setVisible(false);
 
         this.fleetService.loadGameFleets();
         this.fleetService.initializeFleetListeners();
@@ -401,6 +398,10 @@ public class InGameController extends BasicController {
 
 //        this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::travelToMousePosition);
         explanationService.setInGameController(this);
+
+        technologiesComponent.setContainer(technologiesContainer);
+        technologiesContainer.setVisible(false);
+        technologiesContainer.getChildren().add(technologiesComponent);
 
         subscriber.subscribe(gameSystemsApiService.getSystems(tokenStorage.getGameId()),
                 islands -> {
@@ -910,6 +911,7 @@ public class InGameController extends BasicController {
         islandComponentMap = null;
         islandsService.removeDataForMap();
     }
+
 
     @OnDestroy
     public void destroy() {

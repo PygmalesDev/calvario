@@ -2,7 +2,6 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.dto.EmpirePrivate;
-import de.uniks.stp24.model.CircleShape;
 import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.IslandsService;
@@ -55,7 +54,6 @@ public class FogOfWar {
     private boolean isNight = false;
 
     ArrayList<String> exploredIslands = new ArrayList<>();
-    ArrayList<CircleShape> exploredPaths = new ArrayList<>();
 
     String gameID, empireID;
 
@@ -94,10 +92,6 @@ public class FogOfWar {
                             ArrayList<String> islandIDs = (ArrayList<String>) privateMap.get("islandFog");
                             this.recreateIslandFog(islandIDs);
                         }
-//                        if (privateMap.containsKey("pathFog")) {
-//                            ArrayList<CircleShape> circles = (ArrayList<CircleShape>) privateMap.get("pathFog");
-//                            this.recreatePathFog(circles);
-//                        }
                     }
                     this.updateFog(null);
                     this.inGameController.updateFog();
@@ -111,13 +105,6 @@ public class FogOfWar {
         }
     }
 
-    private void recreatePathFog(ArrayList<CircleShape> circles) {
-        for (CircleShape circle : circles) {
-            Circle c = new Circle(circle.xPos(), circle.yPos(), 40);
-            this.updateRemovedFog(c, false);
-        }
-    }
-
     private void recreateIslandFog(ArrayList<String> islandIDs) {
         for (String islandID : islandIDs)
             this.removeFogFromIsland(this.islandsService.getIslandComponent(islandID));
@@ -125,7 +112,7 @@ public class FogOfWar {
 
     public void removeShapesFromFog(IslandComponent island, Shape... toRemoves) {
         this.islandFog = null;
-        for (Shape shape : toRemoves) this.updateRemovedFog(shape, false);
+        for (Shape shape : toRemoves) this.updateRemovedFog(shape);
         this.removeFogFromIsland(island);
         this.updateFog(island);
     }
@@ -135,18 +122,14 @@ public class FogOfWar {
             this.exploredIslands.add(island.island.id());
             island.applyIcon(false, night?BlendMode.MULTIPLY:BlendMode.LIGHTEN);
             island.applyEmpireInfo();
-            this.updateRemovedFog(new Circle(island.getPosX() + X_OFFSET, island.getPosY() + Y_OFFSET, ISLAND_COLLISION_RADIUS), true);
-            this.updateRemovedFog(this.randomFogAroundIsland(island), true);
+            this.updateRemovedFog(new Circle(island.getPosX() + X_OFFSET, island.getPosY() + Y_OFFSET, ISLAND_COLLISION_RADIUS));
+            this.updateRemovedFog(this.randomFogAroundIsland(island));
         }
     }
 
-    private void updateRemovedFog(Shape shape, boolean isIsland) {
-        if (Objects.nonNull(shape)) {
-            if (!isIsland && shape instanceof Circle circle)
-                this.exploredPaths.add(new CircleShape(circle.getCenterX(), circle.getCenterY()));
+    private void updateRemovedFog(Shape shape) {
+        if (Objects.nonNull(shape))
             this.removedFog = Objects.nonNull(this.removedFog) ? Shape.union(this.removedFog, shape) : shape;
-        }
-
     }
 
     private void updateFog(IslandComponent island) {
@@ -207,7 +190,6 @@ public class FogOfWar {
                     final Map<String, Object> newPrivateMap = Objects.nonNull(result._private()) ?
                                     result._private() : new HashMap<>();
                     newPrivateMap.put("islandFog", this.exploredIslands);
-//                    newPrivateMap.put("pathFog", this.exploredPaths);
                     subscriber.subscribe(this.empireApiService.savePrivate(this.gameID, this.empireID, new EmpirePrivate(newPrivateMap)),
                             saved -> {},
                             error -> System.out.println("error while saving fog: " + error.getMessage()));

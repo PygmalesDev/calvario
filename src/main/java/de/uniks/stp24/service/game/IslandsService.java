@@ -10,12 +10,8 @@ import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.BasicService;
-import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.menu.LobbyService;
-import de.uniks.stp24.utils.PathTableEntry;
-import de.uniks.stp24.utils.VectorMath;
-import de.uniks.stp24.utils.VectorMath.Vector2D;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -27,13 +23,9 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static de.uniks.stp24.service.Constants.ISLAND_HEIGHT;
 import static de.uniks.stp24.service.Constants.ISLAND_WIDTH;
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 @Singleton
 public class IslandsService extends BasicService {
@@ -209,10 +201,6 @@ public class IslandsService extends BasicService {
 
     public Map<String, Integer> getConnections(String islandID) {
         return this.connections.get(islandID);
-    }
-
-    public List<Point2D> getDistancePoints(String startID, String finishID) {
-        return this.distancePoints.get(new String[]{startID, finishID});
     }
 
     public Map<String[], List<Point2D>> getDistancePoints() {
@@ -448,7 +436,5 @@ public class IslandsService extends BasicService {
 
     }
 
-    public  void updateIsles(Island island){
-        this.isles.replaceAll(old -> old.equals(island) ? island : old);
-    }
+    public  void updateIsles(Island island){this.isles.replaceAll(old -> old.equals(island) ? island : old);}
 }

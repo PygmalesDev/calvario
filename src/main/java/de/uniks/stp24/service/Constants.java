@@ -251,7 +251,26 @@ public class Constants {
             Map.entry("propulsion" , "de/uniks/stp24/assets/technologies/tags/propulsion.png"),
             Map.entry("rare" , "de/uniks/stp24/assets/technologies/tags/rare.png"),
             Map.entry("society" , "de/uniks/stp24/assets/technologies/tags/society.png"),
-            Map.entry("state" , "de/uniks/stp24/assets/technologies/tags/state.png")
+            Map.entry("state" , "de/uniks/stp24/assets/technologies/tags/state.png"),
+            Map.entry("weaponry", "de/uniks/stp24/assets/technologies/tags/weaponry.png"),
+            Map.entry("shipmaking", "de/uniks/stp24/assets/technologies/tags/shipmaking.png")
+    );
+
+    public static final Map<String, String> shipIconMap = Map.ofEntries(
+            Map.entry("explorer", "de/uniks/stp24/icons/ships/ship_Image_1.png"),
+            Map.entry("colonizer" , "de/uniks/stp24/icons/ships/ship_Image_1.png"),
+            Map.entry("interceptor" , "de/uniks/stp24/icons/ships/ship_Image_1.png"),
+            Map.entry("fighter" , "de/uniks/stp24/icons/ships/ship_Galley.png"),
+            Map.entry("corvette" , "de/uniks/stp24/icons/ships/buccaneer.png"),
+            Map.entry("bomber" , "de/uniks/stp24/icons/ships/ship_Image_1.png"),
+            Map.entry("frigate" , "de/uniks/stp24/icons/ships/ship_Image_1.png"),
+            Map.entry("destroyer" , "de/uniks/stp24/icons/ships/ship_Marauder.png"),
+            Map.entry("cruiser" , "de/uniks/stp24/icons/ships/ship_Image_2.png"),
+            Map.entry("vanguard" , "de/uniks/stp24/icons/ships/ship_Image_2.png"),
+            Map.entry("sentinel" , "de/uniks/stp24/icons/ships/ship_Image_2.png"),
+            Map.entry("battleship" , "de/uniks/stp24/icons/ships/ship_Image_2.png"),
+            Map.entry("carrier" , "de/uniks/stp24/icons/ships/ship_Image_2.png"),
+            Map.entry("dreadnought" , "de/uniks/stp24/icons/ships/leviathan.png")
     );
 
     // Sea Backgrounds
@@ -272,8 +291,18 @@ public class Constants {
             NOT_BUILT
     }
 
-    public static final int ISLAND_HEIGHT = 162;
-    public static final int ISLAND_WIDTH = 120;
+    public enum POINT_TYPE {
+        ISLAND,
+        INTER,
+        FLEET
+    }
+
+    public static final double ISLAND_HEIGHT = 162;
+    public static final double ISLAND_WIDTH = 70;
+    public static final double ISLAND_RADIUS_X = ISLAND_WIDTH/2;
+    public static final double ISLAND_RADIUS_Y = ISLAND_HEIGHT/2;
+    public static final int FLEET_FROM_ISLAND_DISTANCE = 40;
+    public static final int FLEET_HW = 30;
 
     public static final int ISLAND_COLLISION_RADIUS = 120;
     public static final int FLEET_COLLISION_RADIUS = 40;

@@ -7,6 +7,7 @@ import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.ContactsService;
 import de.uniks.stp24.service.game.EmpireService;
+import de.uniks.stp24.service.game.FleetService;
 import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.service.menu.CreateGameService;
 import de.uniks.stp24.service.menu.EditGameService;
@@ -137,6 +138,10 @@ public class TestModule {
     @Provides
     @Singleton
     WarsApiService warsApiService(){return Mockito.mock(WarsApiService.class);}
+
+    @Provides
+    @Singleton
+    ShipsApiService shipsApiService(){return Mockito.mock(ShipsApiService.class);}
 
     @Provides
     @Singleton

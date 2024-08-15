@@ -39,6 +39,8 @@ public interface TestComponent extends MainComponent {
     PresetsApiService presetsApiService();
     JobsService jobsService();
     JobsApiService jobsApiService();
+    ShipsApiService shipsApiService();
+    FleetApiService fleetApiService();
     ImageCache imageCache();
     WarsApiService warsApiService();
     FleetApiService fleetApiService();

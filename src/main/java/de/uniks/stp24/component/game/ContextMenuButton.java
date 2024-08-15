@@ -1,6 +1,6 @@
 package de.uniks.stp24.component.game;
 
-import javafx.geometry.Pos;
+import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
@@ -29,6 +29,10 @@ public class ContextMenuButton extends Button {
                         .filter(node -> !node.equals(contextNode))
                         .forEach(node -> node.setVisible(false));
                 contextNode.setVisible(!contextNode.isVisible());
+                if(buttonID.equals("fleetManager")){
+                    FleetManagerComponent fleetManagerComponent = (FleetManagerComponent) contextNode;
+                    fleetManagerComponent.showFleets();
+                }
             });
         }
     }

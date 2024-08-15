@@ -101,7 +101,7 @@ public class InGameTestComponent extends InGameTestInitializer {
             null,
             null,
             "testEmpireID",
-            "testGameID",
+            "123456",
             "testUserID",
             null,
             null,
@@ -226,6 +226,12 @@ public class InGameTestComponent extends InGameTestInitializer {
         doReturn(Observable.just(aggregateResult)).when(this.empireService).getResourceAggregates(any(), any());
         doReturn(Observable.just(new SystemDto[]{system})).when(this.gameSystemsApiService).getSystems(any());
 
+
+        // Mock get Fleets and ships
+        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", 4, new HashMap<>(), new HashMap<>())));
+        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456",true);
+        doNothing().when(this.fleetService).initializeFleetListeners();
+        doNothing().when(this.fleetService).initializeShipListener();
 
         buildings.add("refinery");
         buildings.add("farm");

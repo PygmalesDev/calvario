@@ -10,6 +10,7 @@ import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.FleetCoordinationService;
 import de.uniks.stp24.service.game.JobsService;
 import de.uniks.stp24.ws.Event;
 import de.uniks.stp24.ws.EventListener;
@@ -22,10 +23,7 @@ import org.fulib.fx.controller.Subscriber;
 import org.mockito.InjectMocks;
 import org.mockito.Spy;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
@@ -46,6 +44,8 @@ public class JobsTestComponent extends ControllerTest {
     Subscriber subscriber;
     @Spy
     JobsApiService jobsApiService;
+    @Spy
+    FleetCoordinationService fleetCoordinationService;
 
     @InjectMocks
     JobsService jobsService;
@@ -87,25 +87,25 @@ public class JobsTestComponent extends ControllerTest {
         this.jobsList.addAll(List.of(
                 new Job("0", "0", "jobID_1", 0, 10,
                 this.GAME_ID, this.EMPIRE_ID, this.SYSTEM_ID_1, 0, "building", "farm",
-                null, null, Map.of("energy", 100), null),
+                null, null,"","",new LinkedList<>(), Map.of("energy", 100), null),
                 new Job("0", "0", "jobID_2", 0, 10,
                         this.GAME_ID, this.EMPIRE_ID, this.SYSTEM_ID_1, 0, "building", "refinery",
-                        null, null, Map.of("energy", 30), null),
+                        null, null,"","",new LinkedList<>(), Map.of("energy", 30), null),
                 new Job("0", "0", "jobID_3", 0, 10,
                         this.GAME_ID, this.EMPIRE_ID, this.SYSTEM_ID_1, 0, "district", null,
-                        "energy", null, Map.of("energy", 30), null),
+                        "energy", null,"","",new LinkedList<>(), Map.of("energy", 30), null),
                 new Job("0", "0", "jobID_4", 0, 10,
                         this.GAME_ID, this.EMPIRE_ID, this.SYSTEM_ID_1, 0, "upgrade", null,
-                        null, null, Map.of("energy", 30), null),
+                        null, null,"","",new LinkedList<>(), Map.of("energy", 30), null),
                 new Job("0", "0", "jobID_5", 0, 6,
                         this.GAME_ID, this.EMPIRE_ID, this.SYSTEM_ID_2, 0, "district", null,
-                        "energy", null, Map.of("energy", 200), null),
+                        "energy", null,"","",new LinkedList<>(), Map.of("energy", 200), null),
                 new Job("0", "0", "jobID_6", 0, 6,
                         this.GAME_ID, this.EMPIRE_ID, this.SYSTEM_ID_3, 0, "district", null,
-                        "ancient_foundry", null, Map.of("energy", 200), null),
+                        "ancient_foundry", null,"","",new LinkedList<>(), Map.of("energy", 200), null),
                 new Job("0", "0", "jobID_7", 0, 6,
                         this.GAME_ID, this.EMPIRE_ID, this.SYSTEM_ID_4, 0, "upgrade", null,
-                        null, null, Map.of("energy", 200), null)));
+                        null, null,"","",new LinkedList<>(), Map.of("energy", 200), null)));
 
         this.initMocks();
         this.mockJobInspectors();
@@ -137,7 +137,7 @@ public class JobsTestComponent extends ControllerTest {
                     this.GAME_ID, this.EMPIRE_ID, jobID),
                     new Job("0", "0", jobID, 0, 10,
                             this.GAME_ID, this.EMPIRE_ID, this.SYSTEM_ID_4, 0, "building", "farm",
-                            null, null, Map.of("energy", 100), null)));
+                            null, null,"","",new LinkedList<>(), Map.of("energy", 100), null)));
 
             case UPDATED -> this.JOB_SUBJECT.onNext(new Event<>(String.format("games.%s.empires.%s.jobs.%s.updated",
                     this.GAME_ID, this.EMPIRE_ID, jobID),
@@ -177,7 +177,7 @@ public class JobsTestComponent extends ControllerTest {
         Job job = this.jobsList.stream().filter(job2 -> job2._id().equals(jobID)).toList().getFirst();
         Job updatedJob = new Job(job.createdAt(), "1", job._id(), job.progress()+1, job.total(), job.game(),
                 job.empire(), job.system(), job.priority(), job.type(), job.building(), job.district(), job.technology(),
-                job.cost(), job.result());
+                job.fleet(), job.ship(), job.path(), job.cost(), job.result());
         Platform.runLater(() -> this.jobsService.updateJobInGroups(updatedJob));
     }
 

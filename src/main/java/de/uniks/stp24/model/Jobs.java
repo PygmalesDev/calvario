@@ -1,5 +1,7 @@
 package de.uniks.stp24.model;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -30,8 +32,12 @@ public class Jobs {
              String building,
              String district,
              String technology,
+             String fleet,
+             String ship,
+             LinkedList<String> path,
              Map<String, Integer> cost,
-             JobResult result) {
+             JobResult result
+    ) {
         @Override
         public boolean equals(Object obj) {
             if (obj instanceof Job) return this._id.equals(((Job) obj)._id());
@@ -115,6 +121,14 @@ public class Jobs {
         );
     }
 
+    public static TravelJobDTO createTravelJob(ArrayList<String> path, String fleetID) {
+        return new TravelJobDTO("travel", path, fleetID);
+    }
+
+    public static ShipJobDTO createShipJob(String fleetID, String shipType, String systemID){
+        return new ShipJobDTO("ship", fleetID, shipType, systemID);
+    }
+
     /**
      * Creates a new job from the given job instance. This job has to be initialized using the
      * {@link de.uniks.stp24.service.game.JobsService#beginJob(JobDTO) JobService.beginJob}({@link JobDTO JobDTO}).
@@ -141,6 +155,19 @@ public class Jobs {
         String building,
         String district,
         String technology
+    ) {}
+
+    public record TravelJobDTO(
+            String type,
+            ArrayList<String> path,
+            String fleet
+    ) {}
+
+    public record ShipJobDTO(
+            String type,
+            String fleet,
+            String ship,
+            String system
     ) {}
 
     /**

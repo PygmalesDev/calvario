@@ -1,7 +1,7 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
 import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
@@ -14,7 +14,6 @@ import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.model.*;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
-import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.InGameService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.PopupBuilder;
@@ -26,6 +25,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -74,6 +74,8 @@ public class InGameController extends BasicController {
     @FXML
     public HBox contextMenuButtons;
 
+    public Pane debugGrid;
+
     @FXML
     public StackPane contextMenuContainer;
     @FXML
@@ -114,14 +116,17 @@ public class InGameController extends BasicController {
     public IslandsService islandsService;
     @Inject
     public ExplanationService explanationService;
+    @Inject
+    ShipService shipService;
 
     @Inject
     public JobsService jobsService;
     @Inject
+    public TechnologyService technologyService;
+    @Inject
     public FleetService fleetService;
     @Inject
     public FleetCoordinationService fleetCoordinationService;
-    public TechnologyService technologyService;
 
     @SubComponent
     @Inject
@@ -141,6 +146,9 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public StorageOverviewComponent storageOverviewComponent;
+    @SubComponent
+    @Inject
+    public IslandTravelComponent islandTravelComponent;
 
     @SubComponent
     @Inject
@@ -164,9 +172,6 @@ public class InGameController extends BasicController {
     @Inject
     public ContactsComponent contactsOverviewComponent;
 
-    @SubComponent
-    @Inject
-    public FleetCreationComponent fleetCreationComponent;
 
     @SubComponent
     @Inject
@@ -186,6 +191,8 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public WarComponent warComponent;
+    @Inject
+    public FleetManagerComponent fleetManagerComponent;
 
     public List<IslandComponent> islandComponentList;
     Map<String, IslandComponent> islandComponentMap;
@@ -255,7 +262,6 @@ public class InGameController extends BasicController {
         pauseMenuComponent.setInGameController(this);
         helpComponent.setInGameController(this);
         clockComponent.setInGameController(this);
-        fleetCoordinationService.setInGameController(this);
 
         gameID = tokenStorage.getGameId();
         empireID = tokenStorage.getEmpireId();
@@ -266,10 +272,8 @@ public class InGameController extends BasicController {
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_PAUSED"));
 
-        variableService.initVariables();
         variableService.addRunnable(this::loadGameAttributes);
-
-        this.fleetCoordinationService.setInitialFleetPosition();
+        variableService.initVariables();
 
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
@@ -279,7 +283,6 @@ public class InGameController extends BasicController {
         }
 
         for (int i = 0; i <= 16; i++) this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
-
     }
 
     /*
@@ -290,6 +293,7 @@ public class InGameController extends BasicController {
     }
 
     public void loadGameAttributes() {
+        shipService.initShipTypes();
         islandAttributes.setSystemUpgradeAttributes();
         islandAttributes.setBuildingAttributes();
         islandAttributes.setDistrictAttributes();
@@ -311,6 +315,14 @@ public class InGameController extends BasicController {
 
     @OnRender(2)
     public void render() {
+        this.fleetCoordinationService.setJobFinishers();
+
+        this.jobsService.loadEmpireJobs();
+        this.jobsService.initializeJobsListeners();
+
+        explanationService.setInGameController(this);
+        fleetCoordinationService.setInGameController(this);
+
         buildingProperties.setMouseTransparent(true);
         buildingProperties.setPickOnBounds(false);
         buildingsWindow.setMouseTransparent(true);
@@ -345,9 +357,6 @@ public class InGameController extends BasicController {
         overviewContainer.getChildren().add(overviewUpgradeComponent);
         islandClaimingContainer.getChildren().add(this.islandClaimingComponent);
         islandClaimingContainer.setVisible(false);
-        this.group.getChildren().add(this.fleetCreationComponent);
-        this.fleetCreationComponent.setVisible(false);
-
         technologiesComponent.setContainer(technologiesContainer);
         technologiesContainer.setVisible(false);
         technologiesContainer.getChildren().add(technologiesComponent);
@@ -357,7 +366,8 @@ public class InGameController extends BasicController {
                 jobsOverviewComponent,
                 empireOverviewComponent,
                 marketOverviewComponent,
-          contactsOverviewComponent
+                contactsOverviewComponent,
+                fleetManagerComponent
         );
         contextMenuContainer.getChildren().forEach(child -> {
             child.setVisible(false);
@@ -382,6 +392,14 @@ public class InGameController extends BasicController {
         contactService.setContactOverview(contactsOverviewComponent);
         this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListeners();
+        this.group.getChildren().add(this.islandTravelComponent);
+        this.islandTravelComponent.setVisible(false);
+
+        this.fleetService.loadGameFleets();
+        this.fleetService.initializeFleetListeners();
+        this.fleetService.initializeShipListener();
+
+//        this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::travelToMousePosition);
         explanationService.setInGameController(this);
 
         subscriber.subscribe(gameSystemsApiService.getSystems(tokenStorage.getGameId()),
@@ -392,14 +410,8 @@ public class InGameController extends BasicController {
                     tokenStorage.setIsland(island);
                 }, error -> System.out.println("Error try to get Systems because: " + error.getMessage()));
 
-        this.fleetService.loadGameFleets();
-        this.fleetService.initializeFleetListeners();
-
-        this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::teleportFleet);
-
         contactDetailsContainer.setPickOnBounds(true);
         contactDetailsContainer.setVisible(false);
-
 
         /*
          * to avoid that the app.refresh() crashes the map
@@ -488,6 +500,12 @@ public class InGameController extends BasicController {
         technologiesContainer.getChildren().getLast().setVisible(true);
     }
 
+    @OnKey(code = KeyCode.F, alt = true)
+    public void showFleetManager() {
+        this.toggleContextMenuVisibility(this.fleetManagerComponent);
+        this.fleetManagerComponent.showFleets();
+    }
+
     @OnKey(code = KeyCode.H, alt = true)
     public void showHelpOverview() {
         if (this.helpComponent.isVisible()) {
@@ -551,10 +569,9 @@ public class InGameController extends BasicController {
     private void createContextMenuButtons() {
         if (!tokenStorage.isSpectator())
             this.contextMenuButtons.getChildren().addAll(
-                new ContextMenuButton("storageOverview", this.storageOverviewComponent),
-                new ContextMenuButton("empireOverview", this.empireOverviewComponent),
-                new ContextMenuButton("jobsOverview", this.jobsOverviewComponent)
-            );
+                    new ContextMenuButton("storageOverview", this.storageOverviewComponent),
+                    new ContextMenuButton("empireOverview", this.empireOverviewComponent),
+                    new ContextMenuButton("jobsOverview", this.jobsOverviewComponent));
     }
 
     @OnRender
@@ -563,43 +580,20 @@ public class InGameController extends BasicController {
         this.islandComponentMap = islandsService.getComponentMap();
         mapGrid.setMinSize(islandsService.getMapWidth(), islandsService.getMapHeight());
         islandsService.createLines(this.islandComponentMap).forEach(line -> this.mapGrid.getChildren().add(line));
+        islandsService.generateDistancePoints();
+        islandsService.getDistancePoints().forEach((ids, value) -> {
+            var point = value.get(value.size() / 2);
+            Label distLabel = new Label(" "+ islandsService.getDistance(ids[0], ids[1]) + " ");
+            distLabel.setStyle("-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #e43900;" +
+                               "-fx-background-color: white; -fx-background-radius: 10");
+            distLabel.setVisible(false);
+            this.mapGrid.getChildren().add(distLabel);
+            distLabel.setLayoutX(point.getX() - 16);
+            distLabel.setLayoutY(point.getY() - 16);
+        });
 
         group.setScaleX(0.65);
         group.setScaleY(0.65);
-
-        // Event Listener for Island changes
-        this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.systems.%s.updated",
-                        tokenStorage.getGameId(), "*"), SystemDto.class),
-                event -> {
-                    IslandComponent isle = islandsService.getIslandComponent(event.data()._id());
-                    Island updatedIsland = islandsService.convertToIsland(event.data());
-                    isle.applyInfo(updatedIsland);
-                    isle.getDefenceAndHealth(this.empireID);
-                    if (Objects.nonNull(updatedIsland.owner())) {
-                        // apply drop shadow and flag
-                        isle.applyEmpireInfo();
-                        // island is already claimed
-                        this.islandClaimingContainer.setVisible(false);
-                    }
-                    // check if the island/upgrade overview is visible for the updated island
-                    if (Objects.nonNull(selectedIsland) &&
-                            updatedIsland.id().equals(selectedIsland.island.id()) &&
-                            (overviewSitesComponent.isVisible() || overviewUpgradeComponent.isVisible())) {
-                        islandAttributes.setIsland(updatedIsland);
-                        String shownPage = overviewSitesComponent.getShownPage();
-                        // open the island overview again with updated information
-                        showOverview();
-                        switch (shownPage) {
-                            case "upgrade" -> overviewSitesComponent.showUpgrades();
-                            case "details" -> overviewSitesComponent.showDetails();
-                            case "buildings" -> overviewSitesComponent.showBuildings();
-                            case "sites" -> overviewSitesComponent.showSites();
-                            case "jobs" -> overviewSitesComponent.showJobs();
-                        }
-                    }
-                },
-                error -> System.out.println("islands event listener error: " + error)
-        );
 
         this.islandComponentList.forEach(isle -> {
             Island tmp = isle.getIsland();
@@ -607,20 +601,8 @@ public class InGameController extends BasicController {
             isle.addEventHandler(MouseEvent.MOUSE_CLICKED, this::showInfo);
             isle.setScaleX(1.25);
             isle.setScaleY(1.25);
-            isle.collisionCircle.setRadius(Constants.ISLAND_COLLISION_RADIUS);
             this.mapGrid.getChildren().add(isle);
             isle.getDefenceAndHealth(this.empireID);
-        });
-
-        Platform.runLater(() -> {
-            Button showTechnologiesButton = new Button();
-            showTechnologiesButton.setId("showTechnologiesButton");
-            showTechnologiesButton.setOnAction(event -> showTechnologies());
-            showTechnologiesButton.setId("technologiesButton");
-            showTechnologiesButton.getStyleClass().add("technologiesButton");
-            contextMenuButtons.getChildren().addAll(showTechnologiesButton,
-              new ContextMenuButton("marketOverview", this.marketOverviewComponent),
-              new ContextMenuButton("contactsOverview", this.contactsOverviewComponent));
         });
 
         mapScrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> zoomPane.setPrefSize(newValue.getWidth(), newValue.getHeight()));
@@ -644,6 +626,52 @@ public class InGameController extends BasicController {
             group.setScaleX(scale);
             group.setScaleY(scale);
         });
+
+        // Event Listener for Island changes
+        this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.systems.%s.updated",
+                        tokenStorage.getGameId(), "*"), SystemDto.class),
+                event -> {
+                    IslandComponent isle = islandsService.getIslandComponent(event.data()._id());
+                    Island updatedIsland = islandsService.convertToIsland(event.data());
+                    isle.applyInfo(updatedIsland);
+                    if (Objects.nonNull(updatedIsland.owner())) {
+                        // apply drop shadow and flag
+                        isle.applyEmpireInfo();
+                        this.islandsService.updateIsles(updatedIsland);
+                        // island is already claimed
+                        this.islandClaimingContainer.setVisible(false);
+                    }
+                    // check if the island/upgrade overview is visible for the updated island
+                    if (Objects.nonNull(selectedIsland) &&
+                            updatedIsland.id().equals(selectedIsland.island.id()) &&
+                            (overviewSitesComponent.isVisible() || overviewUpgradeComponent.isVisible())) {
+                        islandAttributes.setIsland(updatedIsland);
+                        String shownPage = overviewSitesComponent.getShownPage();
+                        // open the island overview again with updated information
+                        showOverview();
+                        switch (shownPage) {
+                            case "upgrade" -> overviewSitesComponent.showUpgrades();
+                            case "details" -> overviewSitesComponent.showDetails();
+                            case "buildings" -> overviewSitesComponent.showBuildings();
+                            case "sites" -> overviewSitesComponent.showSites();
+                            case "jobs" -> overviewSitesComponent.showJobs();
+                        }
+                    }
+                },
+                error -> System.out.println("islands event listener error: " + error)
+        );
+
+        Platform.runLater(() -> {
+            Button showTechnologiesButton = new Button();
+            showTechnologiesButton.setId("showTechnologiesButton");
+            showTechnologiesButton.setOnAction(event -> showTechnologies());
+            showTechnologiesButton.setId("technologiesButton");
+            showTechnologiesButton.getStyleClass().add("technologiesButton");
+            contextMenuButtons.getChildren().addAll(showTechnologiesButton,
+              new ContextMenuButton("marketOverview", this.marketOverviewComponent),
+              new ContextMenuButton("contactsOverview", this.contactsOverviewComponent),
+              new ContextMenuButton("fleetManager", fleetManagerComponent));
+        });
     }
 
     public void showInfo(MouseEvent event) {
@@ -666,8 +694,16 @@ public class InGameController extends BasicController {
                     selected.getDefenceAndHealth(this.empireID);
                 }
                 selected.showDefenseAndHealth();
+
+                this.islandTravelComponent.setVisible(true);
+                this.islandTravelComponent.setIslandInformation(selected.island);
+
+                this.islandTravelComponent.setLayoutX(selected.getLayoutX()-100);
+                this.islandTravelComponent.setLayoutY(selected.getLayoutY()+80);
+
                 // Show island claiming scroll
             } else if (!this.tokenStorage.isSpectator()) {
+                this.islandTravelComponent.setVisible(false);
                 if (Objects.nonNull(selectedIsland)) selectedIsland.showUnshowRudder();
                 this.overviewSitesComponent.closeOverview();
                 if (this.islandClaimingContainer.getLayoutX()+80 == selected.getLayoutX() &&
@@ -681,18 +717,9 @@ public class InGameController extends BasicController {
                     this.islandClaimingComponent.setIslandInformation(selected.island);
                 }
             }
-            // Show fleet creation pane
-            this.fleetCreationComponent.setVisible(true);
-            this.fleetCreationComponent.setIsland(selected.island.id());
-            this.fleetCreationComponent.setLayoutX(selected.getLayoutX()-100);
-            this.fleetCreationComponent.setLayoutY(selected.getLayoutY()+30);
         }
     }
 
-    public void setFleetOnMap(GameFleetController fleet) {
-        if(!this.fleetsOnMap.contains(fleet)) this.fleetsOnMap.add(fleet);
-        this.mapGrid.getChildren().add(fleet);
-    }
 
     @OnRender
     public void setJobInspectors() {
@@ -777,6 +804,17 @@ public class InGameController extends BasicController {
             if (child instanceof IslandComponent island) island.collisionCircle.setVisible(!island.collisionCircle.isVisible());
             if (child instanceof GameFleetController fleet) fleet.collisionCircle.setVisible(!fleet.collisionCircle.isVisible());
         });
+    }
+
+    @OnKey(code = KeyCode.D, control = true)
+    public void setIDsVisibility() {
+        this.mapGrid.getChildren().stream().filter(child -> child instanceof Label)
+                .forEach(label -> label.setVisible(!label.isVisible()));
+    }
+
+    @OnKey(code = KeyCode.D, shift = true)
+    public void setDebugVisibility() {
+        this.debugGrid.setVisible(!this.debugGrid.isVisible());
     }
 
     public void resetZoomMouse(@NotNull MouseEvent event) {
@@ -873,15 +911,6 @@ public class InGameController extends BasicController {
         islandsService.removeDataForMap();
     }
 
-    /*public void openContactDetails(Contact contact) {
-        contactDetailsComponent.setContactInformation(contact);
-        contactDetailsContainer.setVisible(true);
-    }
-
-    public void closeContractDetails(){
-        contactDetailsContainer.setVisible(false);
-    }*/
-
     @OnDestroy
     public void destroy() {
         removeIslands();
@@ -890,6 +919,7 @@ public class InGameController extends BasicController {
         this.subscriber.dispose();
         this.jobsService.dispose();
         this.fleetService.dispose();
+        this.fleetCoordinationService.dispose();
         this.variableService.dispose();
         this.contactService.dispose();
     }

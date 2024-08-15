@@ -109,14 +109,36 @@ public class ResourcesService {
             for (Map.Entry<String, Integer> entry : resourceMap.entrySet()) {
                 String resourceID = entry.getKey();
                 int count = entry.getValue();
-                double changeProSeason = 0;
+                double changePerSeason = 0;
                 if (requireChangePerSeason && !oldResourceList.isEmpty() && oldResourceList.size() >= 2) {
-                    changeProSeason = oldResourceList.get(i).changePerSeason();
+                    changePerSeason = oldResourceList.get(i).changePerSeason();
                 }
                 if (Objects.nonNull(aggregateItems)) {
-                    changeProSeason = aggregateItems[i].subtotal();
+                    changePerSeason = aggregateItems[i].subtotal();
                 }
-                Resource resource = new Resource(resourceID, count, changeProSeason);
+                Resource resource = new Resource(resourceID, count, Math.round(changePerSeason * 10000.0) / 10000.0);
+                resourceList.add(resource);
+                i++;
+            }
+        }
+        return resourceList;
+    }
+
+    public ObservableList<Resource> generateResourceListForDouble(Map<String, Double> resourceMap, ObservableList<Resource> oldResourceList, AggregateItemDto[] aggregateItems , boolean requireChangePerSeason) {
+        int i = 0;
+        ObservableList<Resource> resourceList = FXCollections.observableArrayList();
+        if (Objects.nonNull(resourceMap)) {
+            for (Map.Entry<String, Double> entry : resourceMap.entrySet()) {
+                String resourceID = entry.getKey();
+                double count = entry.getValue();
+                double changePerSeason = 0;
+                if (requireChangePerSeason && !oldResourceList.isEmpty() && oldResourceList.size() >= 2) {
+                    changePerSeason = oldResourceList.get(i).changePerSeason();
+                }
+                if (Objects.nonNull(aggregateItems)) {
+                    changePerSeason = aggregateItems[i].subtotal();
+                }
+                Resource resource = new Resource(resourceID, count, changePerSeason);
                 resourceList.add(resource);
                 i++;
             }

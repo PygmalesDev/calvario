@@ -6,7 +6,6 @@ import dagger.Provides;
 import de.uniks.stp24.Main;
 import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.TokenStorage;
-import de.uniks.stp24.service.game.WarService;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -15,7 +14,6 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import javax.inject.Singleton;
-import java.util.Objects;
 
 @Module
 public class HttpModule {
@@ -38,7 +36,7 @@ public class HttpModule {
                 final Response response = chain.proceed(chain.request());
                 if (response.code() >= 300) {
                     System.err.println(chain.request());
-                    System.err.println(Objects.requireNonNull(response.body()).string());
+                    System.out.println(response.body().string());
                 }
                 return response;
             }).build();
@@ -117,5 +115,8 @@ public class HttpModule {
     @Singleton
     WarsApiService warsApiService(Retrofit retrofit) {return retrofit.create(WarsApiService.class);}
 
+    @Provides
+    @Singleton
+    ShipsApiService shipsApiService(Retrofit retrofit) {return retrofit.create(ShipsApiService.class);}
 
 }

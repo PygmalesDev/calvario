@@ -12,6 +12,7 @@ import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -29,6 +30,8 @@ import static org.mockito.Mockito.spy;
 public class IslandsServiceTest extends ControllerTest {
     @Spy
     GameSystemsApiService gameSystemsApiService;
+    @InjectMocks
+    IslandComponent islandComponent; //= spy(IslandComponent.class);
 
     final SystemDto[] systems = new SystemDto[3];
     List<IslandComponent> testIsleComps;
@@ -62,7 +65,7 @@ public class IslandsServiceTest extends ControllerTest {
     @Test
     public void createIslandData(){
         assertEquals(0,islandsService.getListOfIslands().size());
-        islandsService.retrieveIslands("game1");
+        islandsService.retrieveIslands("game1", false);
         gameSystemsApiService.getSystems("game1");
 
         List<Island> testIsles = islandsService.getListOfIslands();

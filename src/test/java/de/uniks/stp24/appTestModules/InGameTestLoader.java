@@ -1,15 +1,13 @@
 package de.uniks.stp24.appTestModules;
 
-import de.uniks.stp24.App;
 import de.uniks.stp24.ControllerTest;
-import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
+import de.uniks.stp24.component.game.fleetManager.BlueprintsDetailsComponent;
+import de.uniks.stp24.component.game.fleetManager.ChangeFleetComponent;
+import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
+import de.uniks.stp24.component.game.fleetManager.NewFleetComponent;
 import de.uniks.stp24.component.game.jobs.*;
 import de.uniks.stp24.component.game.technology.*;
-import de.uniks.stp24.component.game.technology.ResearchJobComponent;
-import de.uniks.stp24.component.game.technology.TechnologyCategoryComponent;
-import de.uniks.stp24.component.game.technology.TechnologyCategorySubComponent;
-import de.uniks.stp24.component.game.technology.TechnologyOverviewComponent;
 import de.uniks.stp24.component.menu.PauseMenuComponent;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.GameStatus;
@@ -28,10 +26,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 
-import javax.inject.Inject;
 import javax.inject.Provider;
-
-import static org.mockito.Mockito.spy;
 
 public class InGameTestLoader extends ControllerTest {
     @Spy
@@ -43,8 +38,9 @@ public class InGameTestLoader extends ControllerTest {
     @Spy
     EventService eventService;
     @Spy
-    final
-    Subscriber subscriber = spy(Subscriber.class);
+    protected ShipsApiService shipsApiService;
+    @Spy
+    Subscriber subscriber;
     @Spy
     ResourcesService resourcesService;
     @Spy
@@ -64,7 +60,7 @@ public class InGameTestLoader extends ControllerTest {
     @Spy
     EmpireApiService empireApiService;
     @Spy
-    JobsApiService jobsApiService;
+    protected JobsApiService jobsApiService;
     @Spy
     ExplanationService explanationService;
     @Spy
@@ -80,13 +76,13 @@ public class InGameTestLoader extends ControllerTest {
     @Spy
     GameStatus gameStatus;
     @Spy
-    FleetService fleetService;
-    @Spy
     FleetCoordinationService fleetCoordinationService;
     @Spy
+    FleetService fleetService;
+    @Spy
+    ShipService shipService;
+    @Spy
     FleetApiService fleetApiService;
-//    @Spy
-//    ContactsService contactsService;
     @Spy
     WarService warService;
     @Spy
@@ -156,8 +152,7 @@ public class InGameTestLoader extends ControllerTest {
     protected JobsService jobsService;
     @InjectMocks
     protected CoolerBubbleComponent coolerBubbleComponent;
-    @InjectMocks
-    protected FleetCreationComponent fleetCreationComponent;
+
     @InjectMocks
     protected ContactsComponent contactsComponent;
     @InjectMocks
@@ -166,9 +161,19 @@ public class InGameTestLoader extends ControllerTest {
     protected WarComponent warComponent;
 
     @InjectMocks
+    protected FleetManagerComponent fleetManagerComponent;
+    @InjectMocks
+    protected NewFleetComponent newFleetComponent;
+    @InjectMocks
+    protected ChangeFleetComponent changeFleetComponent;
+    @InjectMocks
+    protected BlueprintsDetailsComponent blueprintsDetailsComponent;
+    @InjectMocks
     protected TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
     @InjectMocks
     protected TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
+    @InjectMocks
+    protected IslandTravelComponent islandTravelComponent;
 
 
 
@@ -185,6 +190,7 @@ public class InGameTestLoader extends ControllerTest {
         comp.jobsService = jobsService;
         comp.imageCache = imageCache;
         comp.subscriber = subscriber;
+        comp.fleetService = this.fleetService;
         return comp;
     };
 
@@ -229,39 +235,42 @@ public class InGameTestLoader extends ControllerTest {
     }
 
     protected void setControllers() {
-        this.inGameController.technologiesComponent = this.technologyOverviewComponent;
-        this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.researchJobComponent = this.researchJobComponent;
-        this.inGameController.technologiesComponent.technologyService = this.technologyService;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyService = this.technologyService;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyEffectDetailsComponent = this.technologyEffectDetailsComponent;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent = this.technologyResearchDetailsComponent;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.resourcesService = this.resourcesService;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.resourcesService.subscriber = this.subscriber;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyOverviewComponent = this.technologyOverviewComponent;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.tokenStorage = this.tokenStorage;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.subscriber = this.subscriber;
-        this.inGameController.technologiesComponent.technologyService.subscriber = this.subscriber;
-        this.inGameController.technologiesComponent.subscriber = this.subscriber;
-        this.technologyService.gameLogicApiService = this.gameLogicApiService;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.presetsApiService = this.presetsApiService;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.technologyService = this.technologyService;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.empireApiService = this.empireApiService;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.gameLogicApiService = this.gameLogicApiService;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.tokenStorage = this.tokenStorage;
-        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.subscriber = this.subscriber;
+//        this.inGameController.technologiesComponent = this.technologyOverviewComponent;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.researchJobComponent = this.researchJobComponent;
+//        this.inGameController.technologiesComponent.technologyService = this.technologyService;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyService = this.technologyService;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyEffectDetailsComponent = this.technologyEffectDetailsComponent;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent = this.technologyResearchDetailsComponent;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.resourcesService = this.resourcesService;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.resourcesService.subscriber = this.subscriber;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyOverviewComponent = this.technologyOverviewComponent;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.tokenStorage = this.tokenStorage;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.subscriber = this.subscriber;
+//        this.inGameController.technologiesComponent.technologyService.subscriber = this.subscriber;
+//        this.inGameController.technologiesComponent.subscriber = this.subscriber;
+//        this.technologyService.gameLogicApiService = this.gameLogicApiService;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.presetsApiService = this.presetsApiService;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.technologyService = this.technologyService;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.empireApiService = this.empireApiService;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.gameLogicApiService = this.gameLogicApiService;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.tokenStorage = this.tokenStorage;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.subscriber = this.subscriber;
 
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.overviewUpgradeComponent = this.overviewUpgradeComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
         this.inGameController.deleteStructureComponent = this.deleteStructureComponent;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
+        this.inGameController.technologiesComponent = this.technologyOverviewComponent;
         this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
         this.inGameController.empireOverviewComponent = this.empireOverviewComponent;
         this.inGameController.sitePropertiesComponent = this.sitePropertiesComponent;
         this.inGameController.overviewSitesComponent = this.overviewSitesComponent;
         this.inGameController.coolerBubbleComponent = this.coolerBubbleComponent;
         this.inGameController.jobsOverviewComponent = this.jobsOverviewComponent;
+        this.inGameController.islandTravelComponent = this.islandTravelComponent;
+        this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
         this.inGameController.marketOverviewComponent = this.marketComponent;
         this.inGameController.pauseMenuComponent = this.pauseMenuComponent;
         this.inGameController.eventComponent = this.eventComponent;
@@ -286,6 +295,11 @@ public class InGameTestLoader extends ControllerTest {
         this.announcementsService.islandsService = this.islandsService;
         this.announcementsService.jobsService = this.jobsService;
 
+        this.technologyOverviewComponent.technologyCategoryComponent = this.technologyCategoryComponent;
+
+        this.technologyCategoryComponent.technologyResearchDetailsComponent = this.technologyResearchDetailsComponent;
+        this.technologyCategoryComponent.technologyEffectDetailsComponent = this.technologyEffectDetailsComponent;
+        this.technologyCategoryComponent.researchJobComponent = this.researchJobComponent;
         this.overviewSitesComponent.jobsComponent = this.islandOverviewJobsComponent;
         this.overviewSitesComponent.buildingsComponent = this.buildingsComponent;
         this.overviewSitesComponent.detailsComponent = this.detailsComponent;
@@ -303,12 +317,15 @@ public class InGameTestLoader extends ControllerTest {
 
         this.technologyCategoryComponent.provider = this.technologyCategorySubComponentProvider;
 
-        this.inGameController.fleetCreationComponent = this.fleetCreationComponent;
-
         this.contactsComponent.imageCache = this.imageCache;
         this.contactsComponent.tokenStorage = this.tokenStorage;
         this.contactsComponent.subscriber = new Subscriber();
 
+
+        this.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
+        this.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
+        this.fleetManagerComponent.blueprintsDetailsComponent = this.blueprintsDetailsComponent;
+        this.fleetManagerComponent.jobsService = this.jobsService;
     }
 
     protected void setServices() {
@@ -320,26 +337,25 @@ public class InGameTestLoader extends ControllerTest {
         this.inGameController.eventService = this.eventService;
         this.inGameController.lobbyService = this.lobbyService;
         this.inGameController.jobsService = this.jobsService;
-        this.inGameController.subscriber = this.subscriber;
         this.inGameController.fleetService = this.fleetService;
         this.inGameController.fleetCoordinationService = this.fleetCoordinationService;
         this.inGameController.fleetCoordinationService.fleetService = this.fleetService;
         this.inGameController.contactService = this.contactsService;
-
+        this.inGameController.subscriber = new Subscriber();
         this.islandClaimingComponent.componentProvider = this.claimingComponentProvider;
         this.islandClaimingComponent.islandAttributes = this.islandAttributeStorage;
         this.islandClaimingComponent.islandsService = this.islandsService;
         this.islandClaimingComponent.jobsService = this.jobsService;
         this.islandClaimingComponent.imageCache = this.imageCache;
-        this.islandClaimingComponent.subscriber = this.subscriber;
+        this.islandClaimingComponent.subscriber = new Subscriber();
 
         this.variableService.technologyService = this.technologyService;
         this.variableService.inGameService = this.inGameService;
-        this.variableService.subscriber = this.subscriber;
+        this.variableService.subscriber = new Subscriber();
 
         this.islandsService.gameSystemsService = this.gameSystemsApiService;
         this.islandsService.tokenStorage = this.tokenStorage;
-        this.islandsService.subscriber = this.subscriber;
+        this.islandsService.subscriber = new Subscriber();
         this.islandsService.app = this.app;
 
         this.inGameService.presetsApiService = this.presetsApiService;
@@ -355,14 +371,14 @@ public class InGameTestLoader extends ControllerTest {
         this.resourcesService.islandAttributes = this.islandAttributeStorage;
         this.resourcesService.empireService = this.empireService;
         this.resourcesService.tokenStorage = this.tokenStorage;
-        this.resourcesService.subscriber = this.subscriber;
+        this.resourcesService.subscriber = new Subscriber();
 
         this.explanationService.variablesResourceBundle = this.variablesResourceBundle;
         this.explanationService.gameResourceBundle = this.gameResourceBundle;
         this.explanationService.variableService = this.variableService;
         this.explanationService.app = this.app;
 
-        this.clockComponent.subscriber = this.subscriber;
+        this.clockComponent.subscriber = new Subscriber();
 
         this.islandOverviewJobsComponent.progressPaneProvider = this.islandOverviewJobProgressComponentProvider;
         this.islandOverviewJobsComponent.islandAttributes = this.islandAttributeStorage;
@@ -377,40 +393,41 @@ public class InGameTestLoader extends ControllerTest {
         this.buildingPropertiesComponent.resourcesService = this.resourcesService;
         this.buildingPropertiesComponent.islandsService = this.islandsService;
         this.buildingPropertiesComponent.jobsService = this.jobsService;
-        this.buildingPropertiesComponent.subscriber = this.subscriber;
+        this.buildingPropertiesComponent.subscriber = new Subscriber();
         this.buildingPropertiesComponent.imageCache = this.imageCache;
         this.buildingPropertiesComponent.app = this.app;
 
         this.timerService.gamesApiService = this.gamesApiService;
         this.timerService.tokenStorage = this.tokenStorage;
-        this.timerService.subscriber = this.subscriber;
+        this.timerService.subscriber = new Subscriber();
 
         this.eventComponent.tokenStorage = this.tokenStorage;
-        this.eventComponent.subscriber = this.subscriber;
+        this.eventComponent.subscriber = new Subscriber();
 
         this.eventService.empireApiService = this.empireApiService;
         this.eventService.tokenStorage = this.tokenStorage;
-        this.eventService.subscriber = this.subscriber;
+        this.eventService.subscriber = new Subscriber();
 
         this.jobsService.jobsApiService = this.jobsApiService;
         this.jobsService.tokenStorage = this.tokenStorage;
-        this.jobsService.subscriber = this.subscriber;
+        this.jobsService.subscriber = new Subscriber();
 
         this.storageOverviewComponent.resourcesService = this.resourcesService;
         this.storageOverviewComponent.empireService = this.empireService;
         this.storageOverviewComponent.tokenStorage = this.tokenStorage;
-        this.storageOverviewComponent.subscriber = this.subscriber;
+        this.storageOverviewComponent.subscriber = new Subscriber();
 
         this.marketService.presetsApiService = this.presetsApiService;
         this.marketService.empireApiService = this.empireApiService;
-        this.marketService.subscriber = this.subscriber;
+        this.marketService.subscriber = new Subscriber();
 
         this.marketComponent.marketSeasonComponentProvider = this.marketSeasonComponentProvider;
         this.marketComponent.explanationService = this.explanationService;
         this.marketComponent.presetsApiService = this.presetsApiService;
+        this.marketComponent.variableService = this.variableService;
         this.marketComponent.marketService = this.marketService;
         this.marketComponent.tokenStorage = this.tokenStorage;
-        this.marketComponent.subscriber = this.subscriber;
+        this.marketComponent.subscriber = new Subscriber();
         this.marketComponent.imageCache = this.imageCache;
 
         this.sitesComponent.districtComponentProvider = this.districtComponentProvider;
@@ -427,7 +444,7 @@ public class InGameTestLoader extends ControllerTest {
         this.sitePropertiesComponent.gameResourceBundle = this.gameResourceBundle;
         this.sitePropertiesComponent.resourcesService = this.resourcesService;
         this.sitePropertiesComponent.jobsService = this.jobsService;
-        this.sitePropertiesComponent.subscriber = this.subscriber;
+        this.sitePropertiesComponent.subscriber = new Subscriber();
         this.sitePropertiesComponent.imageCache = this.imageCache;
         this.sitePropertiesComponent.app = this.app;
 
@@ -437,18 +454,22 @@ public class InGameTestLoader extends ControllerTest {
 
         this.siteJobProgress.jobsService = this.jobsService;
 
+        this.timerService.eventListener = this.eventListener;
+
         this.jobsOverviewComponent.jobsService = this.jobsService;
 
+        this.technologyService.gameLogicApiService = this.gameLogicApiService;
         this.technologyService.presetsApiService = this.presetsApiService;
+
         this.technologyService.empireApiService = this.empireApiService;
+        this.technologyService.eventListener = this.eventListener;
         this.technologyService.tokenStorage = this.tokenStorage;
-        this.technologyService.subscriber = this.subscriber;
+        this.technologyService.subscriber = new Subscriber();
+
+        this.variableDependencyService.variableService = this.variableService;
 
         this.technologyOverviewComponent.technologiesResourceBundle = this.technologiesResourceBundle;
 
-        this.fleetCoordinationService.tokenStorage = this.tokenStorage;
-        this.fleetCoordinationService.islandsService = this.islandsService;
-        this.fleetCoordinationService.app = this.app;
         this.fleetCoordinationService.contactsService = this.contactsService;
 
         this.fleetService.tokenStorage = this.tokenStorage;
@@ -467,6 +488,44 @@ public class InGameTestLoader extends ControllerTest {
 
         this.warService.warsApiService = this.warsApiService;
 
+        this.technologyCategoryComponent.jobsService = this.jobsService;
+
+
+        this.fleetCoordinationService.islandsService = this.islandsService;
+        this.fleetCoordinationService.timerService = this.timerService;
+        this.fleetCoordinationService.tokenStorage = this.tokenStorage;
+        this.fleetCoordinationService.shipService = this.shipService;
+        this.fleetCoordinationService.jobsService = this.jobsService;
+        this.fleetCoordinationService.subscriber = new Subscriber();
+        this.fleetCoordinationService.imageCache = this.imageCache;
+        this.fleetCoordinationService.app = this.app;
+
+        this.fleetService.jobsApiService = this.jobsApiService;
+        this.fleetService.eventListener = this.eventListener;
+        this.fleetService.subscriber = new Subscriber();
+
+
+        this.islandTravelComponent.fleetCoordinationService = this.fleetCoordinationService;
+        this.islandTravelComponent.fleetService = this.fleetService;
+        this.islandTravelComponent.jobsService = this.jobsService;
+        this.islandTravelComponent.shipService = this.shipService;
+        this.islandTravelComponent.subscriber = new Subscriber();
+
+        this.fleetManagerComponent.resourcesService = this.resourcesService;
+        this.fleetManagerComponent.variableService = this.variableService;
+        this.fleetManagerComponent.islandsService = this.islandsService;
+        this.fleetManagerComponent.tokenStorage = this.tokenStorage;
+        this.fleetManagerComponent.fleetService = this.fleetService;
+        this.fleetManagerComponent.shipService = this.shipService;
+        this.fleetManagerComponent.jobsService = this.jobsService;
+        this.fleetManagerComponent.subscriber = new Subscriber();
+        this.fleetManagerComponent.app = this.app;
+
+        this.shipService.variableDependencyService = this.variableDependencyService;
+        this.shipService.shipsApiService = this.shipsApiService;
+        this.shipService.eventListener = this.eventListener;
+        this.shipService.tokenStorage = this.tokenStorage;
+        this.shipService.subscriber = new Subscriber();
     }
 
     protected void clearStyles() {

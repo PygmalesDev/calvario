@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static de.uniks.stp24.model.Ships.ShipType;
+
 @Singleton
 public class VariableDependencyService {
     @Inject
@@ -99,6 +101,41 @@ public class VariableDependencyService {
             production = castMapToInteger(createResourceMap(variableService.buildingsTree.getNode(id, "production").getChildren()));
         }
         return new BuildingAttributes(id, build_time, cost, upkeep, production);
+    }
+
+
+    /*
+    Logic for making attributes of ships dependent from Variables
+     */
+    public ArrayList<ShipType> createVariableDependencyShipType(){
+        ArrayList<ShipType> shipTypesAttributes = new ArrayList<>();
+        for (VariablesTree.Node<ExplainedVariableDTO> shipTypeNode : variableService.shipTree.getRoot().getChildren()) {
+            shipTypesAttributes.add(shipTypeDependencyHandler(shipTypeNode));
+        }
+        return shipTypesAttributes;
+    }
+
+
+    private ShipType shipTypeDependencyHandler(VariablesTree.Node<ExplainedVariableDTO> shipTypeNode) {
+        String id = shipTypeNode.getKey();
+        double build_time = variableService.shipTree.getNode(id, "build_time").getValue().finalValue();
+        double health = variableService.shipTree.getNode(id, "health").getValue().finalValue();
+        double speed = variableService.shipTree.getNode(id, "speed").getValue().finalValue();
+        Map<String, Integer> attack = new HashMap<>();
+        Map<String, Integer> defense = new HashMap<>();
+
+        if(variableService.shipTree.getNode(id, "attack") != null) {
+            for (VariablesTree.Node<ExplainedVariableDTO> attackNodes : variableService.shipTree.getNode(id, "attack").getChildren()) {
+                attack.put(attackNodes.getKey(), (int) attackNodes.getValue().finalValue());
+            }
+        }
+
+        for (VariablesTree.Node<ExplainedVariableDTO> defenseNodes : variableService.shipTree.getNode(id, "defense").getChildren()) {
+            defense.put(defenseNodes.getKey(), (int) defenseNodes.getValue().finalValue());
+        }
+        Map<String, Integer> cost = castMapToInteger(createResourceMap(variableService.shipTree.getNode(id, "cost").getChildren()));
+        Map<String, Double> upkeep = createResourceMap(variableService.shipTree.getNode(id, "upkeep").getChildren());
+        return new ShipType(id, build_time, health, speed, attack, defense, cost, upkeep);
     }
 
     /*

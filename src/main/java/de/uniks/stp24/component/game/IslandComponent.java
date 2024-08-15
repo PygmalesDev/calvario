@@ -79,7 +79,8 @@ public class IslandComponent extends Pane {
     BooleanProperty statsVisibility = new SimpleBooleanProperty(false);
 
     @Inject
-    public IslandComponent() {
+    public IslandComponent(IslandsService islandsService) {
+        this.islandsService = islandsService;
         if (this.imageCache == null) this.imageCache = new ImageCache();
         this.islandImage = new ImageView();
         this.flagImage = new ImageView();

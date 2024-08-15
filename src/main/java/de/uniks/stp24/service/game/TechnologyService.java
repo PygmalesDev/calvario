@@ -15,7 +15,9 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Singleton
 public class TechnologyService {
@@ -50,7 +52,6 @@ public class TechnologyService {
                         .listen("games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
                 event -> {
                     if (!Arrays.equals(lastUpdate, event.data().technologies())) {
-                        System.out.println("Technologies: " + Arrays.toString(event.data().technologies()));
                         runnable.run();
                         lastUpdate = event.data().technologies();
                     }
@@ -152,8 +153,14 @@ public class TechnologyService {
         );
     }
 
-    public List<TechnologyExtended> getTechnologiesList() {
-        return technologiesList;
+    public String getTechnologyCategory(String technology) {
+        TechnologyExtended technologyExtended = this.technologiesList.stream().filter(tech -> tech.id().equals(technology)).toList().getFirst();
+        for (String tag : technologyExtended.tags()) {
+            if(tag.equals("society") || tag.equals("engineering") || tag.equals("physics")){
+                return tag;
+            }
+        }
+        return null;
     }
 
     public Observable<TechnologyExtended> getTechnology(String id) {

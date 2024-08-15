@@ -1,8 +1,8 @@
 package de.uniks.stp24.model;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import de.uniks.stp24.model.Ships.ReadShipDTO;
+
+import java.util.*;
 
 public class Fleets {
     private static final Random random = new Random();
@@ -15,6 +15,7 @@ public class Fleets {
           String empire,
           String name,
           String location,
+          int ships,
           Map<String, Integer> size,
           Map<String, Object> _public,
           Map<String, Object> _private,
@@ -34,6 +35,8 @@ public class Fleets {
             String empire,
             String name,
             String location,
+            int ships,
+            Map<String, Integer> size,
             Map<String, Object> _public
     ) {}
 
@@ -55,14 +58,7 @@ public class Fleets {
     ) {}
 
     public static Fleet fleetFromReadDTO(ReadFleetDTO dto) {
-        return new Fleet(dto.createdAt, dto.updatedAt, dto._id, dto.game, dto.empire, dto.name, dto.location, new HashMap<>(),
-                dto._public, null, null);
+        return new Fleet(dto.createdAt, dto.updatedAt, dto._id, dto.game, dto.empire, dto.name, dto.location, dto.ships,
+                dto.size, dto._public, null, null);
     }
-
-    public static CreateFleetDTO createRandomFleet(String islandID) {
-        return new CreateFleetDTO("fleet_" + random.nextInt(0, 28390), islandID,
-                Map.of("colonizer", random.nextInt(0, 10), "destroyer", random.nextInt(0, 22)),
-                        new HashMap<>(), new HashMap<>(), new EffectSource[]{});
-    }
-
 }

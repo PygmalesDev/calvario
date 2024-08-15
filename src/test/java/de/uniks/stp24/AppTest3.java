@@ -1,6 +1,7 @@
 package de.uniks.stp24;
 
 import de.uniks.stp24.appTestModules.AppTest3Module;
+import de.uniks.stp24.appTestModules.IngameModule;
 import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.ws.Event;
 import javafx.scene.control.ListView;
@@ -19,8 +20,6 @@ public class AppTest3 extends AppTest3Module {
     public void start(Stage stage) throws Exception {
         super.start(stage);
 
-
-
         this.app.show(this.lobbyController);
     }
 
@@ -37,7 +36,6 @@ public class AppTest3 extends AppTest3Module {
         this.beginIslandUpgrade();
         this.inspectJobs();
         this.cancelJob();
-//        this.beginIslandClaiming();
         this.beginTechnologyJob();
         this.showHelpWindow();
     }
@@ -80,6 +78,7 @@ public class AppTest3 extends AppTest3Module {
     }
 
     public void beginSiteJob() {
+        clickOn("#ingameFleet_testFleetID_1");
         clickOn("#jobsOverviewButton");
         WaitForAsyncUtils.waitForFxEvents();
         assertTrue(this.jobsOverviewComponent.isVisible());
@@ -134,21 +133,6 @@ public class AppTest3 extends AppTest3Module {
         JOB_SUBJECT.onNext(new Event<>(JOB_EVENT_PATHS[3] + "deleted", JOBS[3]));
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#closeOverviewButton");
-    }
-
-    public void beginIslandClaiming() {
-        WaitForAsyncUtils.waitForFxEvents();
-        clickOn("#islandID_2_instance");
-        WaitForAsyncUtils.waitForFxEvents();
-        clickOn("#exploreButton");
-        JOB_SUBJECT.onNext(new Event<>(JOB_EVENT_PATHS[0] + "created", JOBS[0]));
-        clickOn("#islandID_2_instance");
-        WaitForAsyncUtils.waitForFxEvents();
-        clickOn("#islandID_3_instance");
-        WaitForAsyncUtils.waitForFxEvents();
-        clickOn("#exploreButton");
-        JOB_SUBJECT.onNext(new Event<>(JOB_EVENT_PATHS[1] + "created", JOBS[1]));
-        clickOn("#closeClaimingButton");
     }
 
     public void performMarketTrades() {
@@ -206,7 +190,7 @@ public class AppTest3 extends AppTest3Module {
     }
 
     public void showTip() {
-        GAME_SUBJECT.onNext(this.tickGame());
+        GAME_SUBJECT.onNext(this.tickGame(0));
         WaitForAsyncUtils.waitForFxEvents();
         assertTrue(this.coolerBubbleComponent.isVisible());
         clickOn("#nextButton");

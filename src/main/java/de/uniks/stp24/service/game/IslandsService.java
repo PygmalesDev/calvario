@@ -11,6 +11,7 @@ import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.BasicService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.menu.LobbyService;
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -22,6 +23,9 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
 
+import static de.uniks.stp24.service.Constants.ISLAND_HEIGHT;
+import static de.uniks.stp24.service.Constants.ISLAND_WIDTH;
+
 @Singleton
 public class IslandsService extends BasicService {
 
@@ -31,7 +35,7 @@ public class IslandsService extends BasicService {
     public GameLogicApiService gameLogicApiService;
     @Inject
     LobbyService lobbyService;
-
+    
 
     public boolean keyCodeFlag = true;
 
@@ -46,7 +50,8 @@ public class IslandsService extends BasicService {
     private final List<IslandComponent> islandComponentList = new ArrayList<>();
     public final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
     private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();
-    private final Map<String, List<String>> connections = new HashMap<>();
+    private final Map<String[], List<Point2D>> distancePoints = new HashMap<>();
+    private final Map<String, Map<String, Integer>> connections = new HashMap<>();
     public final Map<String, InfrastructureService> siteManager = new HashMap<>();
 
     @Inject
@@ -86,28 +91,35 @@ public class IslandsService extends BasicService {
      * this method will be used when changing from lobby to ingame
      * and retrieve island information when starting or rejoining a game
      */
-    public void retrieveIslands(String gameID) {
+    public void retrieveIslands(String gameID, boolean sleep) {
+        if (sleep) {
+            try {
+                // give server enough time to init owner
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                System.out.println("I couldn't sleep :(");
+            }
+        }
         this.gameID = gameID;
         resetVariables();
         createEmpireServices();
         refreshListOfColonizedSystems();
         subscriber.subscribe(gameSystemsService.getSystems(gameID),
-          dto -> {
-              Arrays.stream(dto).forEach(data -> {
-                  List<String> linkedIsles = new ArrayList<>(data.links().keySet());
-                  minX = Math.min(data.x(), minX);
-                  minY = Math.min(data.y(), minY);
-                  maxX = Math.max(data.x(), maxX);
-                  maxY = Math.max(data.y(), maxY);
-                  Island tmp = convertToIsland(data);
-                  isles.add(tmp);
-                  connections.put(data._id(), linkedIsles);
-              });
-              widthRange = maxX - minX + 1000;
-              heightRange = maxY - minY + 1000;
-              this.app.show("/ingame");
-          },
-          error -> System.out.println("Error while retrieving islands in the IslandsService:\n" + error.getMessage()));
+                dto -> {
+                    Arrays.stream(dto).forEach(data -> {
+                        connections.put(data._id(), data.links());
+                        minX = Math.min(data.x(),minX);
+                        minY = Math.min(data.y(),minY);
+                        maxX = Math.max(data.x(),maxX);
+                        maxY = Math.max(data.y(),maxY);
+                        Island tmp = convertToIsland(data);
+                        isles.add(tmp);
+                    });
+                    widthRange = maxX-minX + 1000;
+                    heightRange = maxY-minY + 1000;
+                    this.app.show("/ingame");
+                },
+                error -> System.out.println("Error while retrieving islands in the IslandsService:\n"+error.getMessage()));
     }
 
     /**
@@ -149,14 +161,56 @@ public class IslandsService extends BasicService {
         connections.forEach((key, value) -> {
             if (!checked.contains(key)) checked.add(key);
             ArrayList<String> tmp = new ArrayList<>();
-            for (String s : value) {
-                if (!checked.contains(s)) {
-                    tmp.add(s);
-                }
-            }
+            for (String s : value.keySet())
+                if (!checked.contains(s)) tmp.add(s);
             singleConnections.putIfAbsent(key, tmp);
         });
         return singleConnections;
+    }
+
+    public void generateDistancePoints() {
+        List<String> islandIDs = new ArrayList<>(this.isles.stream().map(Island::id).toList());
+
+        while (!islandIDs.isEmpty()) {
+            String currentID = islandIDs.removeFirst();
+            this.getConnections(currentID).forEach((neighbourID, value) -> {
+                if (islandIDs.contains(neighbourID))
+                    this.distancePoints.put(new String[]{currentID, neighbourID},
+                            this.generateDistancePoints(currentID, neighbourID, value-1));
+                });
+        }
+    }
+
+    public ArrayList<Point2D> generateDistancePoints(String startID, String finishID, int pointsAmount) {
+        IslandComponent startIsland = this.getIslandComponent(startID), endIsland = this.getIslandComponent(finishID);
+        Point2D  startVector = new Point2D(startIsland.getLayoutX() + ISLAND_WIDTH/2 + 19,  startIsland.getLayoutY() + ISLAND_HEIGHT/2 + 15),
+                 endVector   = new Point2D(endIsland.getLayoutX()   + ISLAND_WIDTH/2 + 19,  endIsland.getLayoutY()   + ISLAND_HEIGHT/2 + 15),
+                 distVector  = endVector.subtract(startVector),
+                 increment   = new Point2D(distVector.getX()/(pointsAmount+1), distVector.getY()/(pointsAmount+1));
+
+        ArrayList<Point2D> distancePoints = new ArrayList<>();
+        for (int i = 1; i <= pointsAmount; i++)
+            distancePoints.add(new Point2D(startVector.getX(), startVector.getY()).add(increment.getX() * i, increment.getY() * i));
+
+        return distancePoints;
+    }
+
+    public int getDistance(String islandID1, String islandID2) {
+        if (Objects.nonNull(this.getConnections(islandID1)))
+            return this.getConnections(islandID1).get(islandID2);
+        else return -1;
+    }
+
+    public Map<String, Integer> getConnections(String islandID) {
+        return this.connections.get(islandID);
+    }
+
+    public List<Point2D> getDistancePoints(String startID, String finishID) {
+        return this.distancePoints.get(new String[]{startID, finishID});
+    }
+
+    public Map<String[], List<Point2D>> getDistancePoints() {
+        return this.distancePoints;
     }
 
     /**
@@ -167,10 +221,10 @@ public class IslandsService extends BasicService {
         list.forEach(
           island -> {
               IslandComponent tmp = createIslandPaneFromDto(island,
-                app.initAndRender(new IslandComponent()));
+                app.initAndRender(new IslandComponent(this)));
               tmp.setLayoutX(tmp.getPosX());
               tmp.setLayoutY(tmp.getPosY());
-              tmp.setIslandService(this);
+              //tmp.setIslandService(this);
               islandComponentList.add(tmp);
               islandComponentMap.put(island.id(), tmp);
           }
@@ -294,6 +348,10 @@ public class IslandsService extends BasicService {
         return Collections.unmodifiableList(this.isles);
     }
 
+    public List<IslandComponent> getIslandComponentList() {
+        return islandComponentList;
+    }
+
     public Map<String, IslandComponent> getComponentMap() {
         return Collections.unmodifiableMap(this.islandComponentMap);
     }
@@ -366,6 +424,10 @@ public class IslandsService extends BasicService {
         return "MissingNo.";
     }
 
+    public List<Island> getIsles(){
+        return Collections.unmodifiableList(this.isles);
+    }
+
     @OnDestroy
     public void destroy() {
         this.subscriber.dispose();
@@ -421,4 +483,8 @@ public class IslandsService extends BasicService {
           error -> System.out.printf("Caught an error while comparing strength in Islands Service:\n %s", error.getMessage()));
     }
 
+    public  void updateIsles(Island island){
+        this.isles.replaceAll(old -> old.equals(island) ? island : old);
+    }
+    
 }

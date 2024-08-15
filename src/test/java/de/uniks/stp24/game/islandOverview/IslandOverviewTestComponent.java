@@ -7,6 +7,7 @@ import de.uniks.stp24.ws.Event;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import javafx.collections.FXCollections;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Provider;
@@ -16,6 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 
 public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
 
@@ -245,9 +247,15 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
         EffectSourceParentDto effectSourceParentDto = new EffectSourceParentDto(new EffectSourceDto[3]);
 
         doReturn(Observable.just(variablesPresets)).when(inGameService).getVariablesPresets();
-        doReturn(Observable.just(jobList)).when(jobsApiService).getEmpireJobs(any(), any());
         doReturn(Observable.just(effectSourceParentDto)).when(empireApiService).getEmpireEffect(any(), any());
         doReturn(Observable.empty()).when(marketService).getSeasonalTrades(any(), any());
+        doReturn(FXCollections.observableArrayList()).when(this.jobsService).getObservableListForSystem(any());
+
+//        doAnswer(event -> {
+//            this.fleetService.onFleetCreated(fleet -> this.fleetCoordinationService.putFleetOnMap(fleet));
+//            this.fleetCoordinationService.random.setSeed(4);
+//            return null;
+//        }).when(this.inGameController.fleetCoordinationService).setInitialFleetPosition();
 
         buildingAttributes.add(buildingPreset1);
         buildingAttributes.add(buildingPreset2);
@@ -268,7 +276,6 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
         this.marketComponent.subscriber = this.subscriber;
         this.inGameController.marketOverviewComponent = this.marketComponent;
         this.marketService.subscriber = this.subscriber;
-
 
         this.mockFleets();
 
@@ -291,6 +298,8 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
         doNothing().when(contactsService).createWarListener();
 //        doNothing().when(contactsComponent).init();
         doReturn(Observable.just(new ArrayList<WarDto>())).when(warService).getWars(any(),any());
+        doNothing().when(this.fleetService).initializeFleetListeners();
+        doNothing().when(this.fleetService).initializeShipListener();
     }
 
 }

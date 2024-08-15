@@ -1,6 +1,8 @@
 package de.uniks.stp24.rest;
 
 import de.uniks.stp24.dto.ResourceDto;
+import de.uniks.stp24.model.Ships;
+import de.uniks.stp24.model.Ships.ShipType;
 import de.uniks.stp24.model.SystemUpgrades;
 import de.uniks.stp24.model.TechnologyExtended;
 import de.uniks.stp24.model.Trait;
@@ -37,6 +39,9 @@ public interface PresetsApiService {
 
     @GET("presets/variables")
     Observable<Map<String, Double>> getVariables();
+
+    @GET("presets/ships")
+    Observable<Map<String, ShipType>> getShipPresets();
 
     @GET("presets/resources")
     Observable<ResourceDto> getResources();

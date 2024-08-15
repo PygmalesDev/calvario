@@ -9,6 +9,7 @@ import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.game.JobsService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -84,7 +85,10 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
         this.infoJobButton.setId("jobProgressInspectionButton_" + job._id());
 
         ObservableList<Job> systemJobs = this.jobsService.getObservableListForSystem(job.system());
-        if (systemJobs.indexOf(job) != 0) {
+        FilteredList<Job> filteredJobs = systemJobs.filtered(systemJob -> !systemJob.type().equals("ship"));
+        this.jobProgressBar.setVisible(true);
+        this.jobTimeRemaining.setVisible(true);
+        if (filteredJobs.indexOf(job) != 0 && !job.type().equals("ship")) {
             this.jobProgressBar.setVisible(false);
             this.jobTimeRemaining.setVisible(false);
         }
@@ -98,6 +102,7 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
         this.costsListView.setItems(this.resourceObservableList);
         this.costsListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.negativeResourceProvider));
         this.costsListView.setMouseTransparent(true);
+        this.infoJobButton.setVisible(true);
 
         switch (job.type()) {
             case "building" -> {
@@ -114,6 +119,11 @@ public class IslandOverviewJobProgressComponent extends Pane implements Reusable
                 this.jobImage.setImage(this.imageCache.get("/de/uniks/stp24/icons/other/upgrade_job.png"));
                 this.jobDescriptionText.setText(this.gameResourceBundle.getString("jobs."+
                         this.islandAttributes.getIsland().upgrade()));
+            }
+            case "ship" -> {
+                this.jobImage.setImage(this.imageCache.get("/" + Constants.shipIconMap.get(job.ship())));
+                this.jobDescriptionText.setText(this.gameResourceBundle.getString("ship." + job.ship()));
+                this.infoJobButton.setVisible(false);
             }
         }
     }

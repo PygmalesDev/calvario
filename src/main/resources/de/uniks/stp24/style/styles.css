@@ -842,6 +842,13 @@ ToggleButton:hover{
     -fx-fill: transparent;
 }
 
+.connectionPath {
+    -fx-stroke: rgba(255, 0, 0, 0.66);
+    -fx-stroke-dash-array: 0.5 12;
+    -fx-stroke-width: 8;
+    -fx-fill: transparent;
+}
+
 /*********************************** hint bubble *****************************************************/
 .hintText {
     -fx-font-family: "PT Serif";

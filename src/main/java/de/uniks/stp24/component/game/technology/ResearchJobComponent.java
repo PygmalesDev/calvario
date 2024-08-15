@@ -155,7 +155,7 @@ public class ResearchJobComponent extends AnchorPane {
                     subscriber.subscribe(jobsApiService.getJobByID(tokenStorage.getGameId(), tokenStorage.getEmpireId(), job1._id()), currentJob -> {
                         jobsService.onJobCompletion(currentJob._id(), this::handleJobFinished);
                         double currentJobTotal = currentJob.total();
-                        int roundedUpTotal = (int) Math.ceil(currentJobTotal);
+                        int roundedUpTotal = (int) currentJobTotal;
                         researchProgressBar.setProgress((double) currentJob.progress() / roundedUpTotal);
                         researchProgressText.setText(currentJob.progress() + " / " + roundedUpTotal);
                         this.job = currentJob;
@@ -197,11 +197,12 @@ public class ResearchJobComponent extends AnchorPane {
     }
 
     private void handleJobFinished() {
-        jobList.remove(job);
-        technologies.removeIf(technologyExtended -> technologyExtended.id().equals(job.technology()));
-        technologyCategoryComponent.handleJobCompleted(job);
-        setVisible(false);
-        System.out.println("Job finished");
+        if(this.isVisible()) {
+            jobList.remove(job);
+            technologies.removeIf(technologyExtended -> technologyExtended.id().equals(job.technology()));
+            technologyCategoryComponent.handleJobCompleted(job);
+            setVisible(false);
+        }
     }
 
     @OnInit
@@ -213,8 +214,8 @@ public class ResearchJobComponent extends AnchorPane {
     public void handleJob(TechnologyExtended technology) {
         setJobDescription(technology);
         subscriber.subscribe(jobsService.beginJob(Jobs.createTechnologyJob(technology.id())), job1 -> {
-            jobList.add(job1);
             this.job = job1;
+            this.jobList.add(job1);
 
             this.jobsService.onJobCompletion(job1._id(), this::handleJobFinished);
 

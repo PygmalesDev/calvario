@@ -58,7 +58,8 @@ public class IslandComponent extends Pane {
     public boolean islandIsSelected = false;
 
     @Inject
-    public IslandComponent() {
+    public IslandComponent(IslandsService islandsService) {
+        this.islandsService = islandsService;
         if (this.imageCache == null) this.imageCache = new ImageCache();
         this.islandImage = new ImageView();
         this.flagImage = new ImageView();

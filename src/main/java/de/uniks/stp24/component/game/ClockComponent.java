@@ -239,8 +239,8 @@ public class ClockComponent extends AnchorPane {
                         }
                         lastUpdateSeason = game.period();
                         inGameController.updateVariableDependencies();
-                        System.out.println("season");
-                        islandsService.refreshListOfColonizedSystems();
+//                        System.out.println("season");
+//                        islandsService.refreshListOfColonizedSystems();
                     }
                 },
                 error -> System.out.println("Error on Season: " + error.getMessage())

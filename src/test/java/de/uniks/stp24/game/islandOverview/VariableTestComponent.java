@@ -133,8 +133,8 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
 
     private void mockFleets(){
         // Mock get Fleets and ships
-        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", new HashMap<>())));
-        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456");
+        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", 4, new HashMap<>(), new HashMap<>())));
+//        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456");
         doNothing().when(this.fleetService).initializeFleetListeners();
         doNothing().when(contactsService).loadContactsData();
         doNothing().when(contactsService).createWarListener();

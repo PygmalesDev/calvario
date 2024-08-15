@@ -338,7 +338,7 @@ public class InGameTestComponent extends InGameTestInitializer {
 //        doNothing().when(contactsComponent).init();
         doReturn(Observable.just(new ArrayList<WarDto>())).when(warService).getWars(any(),any());
 
-        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", new HashMap<>())));
+//        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", new HashMap<>() ,new HashMap<>())));
 //        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456");//,true);
         doNothing().when(this.fleetService).initializeFleetListeners();
         doNothing().when(this.fleetService).onFleetCreated(any());

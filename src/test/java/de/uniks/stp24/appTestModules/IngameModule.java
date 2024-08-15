@@ -151,23 +151,23 @@ public class IngameModule extends LobbyTestLoader {
     protected final SystemDto[] GAME_SYSTEMS = new SystemDto[]{
             new SystemDto("0", "0", "islandID_1", GAME_ID, "regular", "TestIslandOne",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
-                    Upgrade.colonized, 13, Map.of("islandID_2", 20, "islandID_3", 20), 50, 50, EMPIRE_ID),
+                    Upgrade.colonized, 13, Map.of("islandID_2", 20, "islandID_3", 20), 50, 50, EMPIRE_ID, 100),
 
             new SystemDto("0", "0", "islandID_2", GAME_ID, "regular", "TestIslandTwo",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
-                    Upgrade.unexplored, 13, Map.of("islandID_1", 20, "islandID_3", 20, "islandID_4", 20), 63, 52, null),
+                    Upgrade.unexplored, 13, Map.of("islandID_1", 20, "islandID_3", 20, "islandID_4", 20), 63, 52, null, 100),
 
             new SystemDto("0", "0", "islandID_3", GAME_ID, "regular", "TestIslandThree",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
-                    Upgrade.explored, 13, Map.of("islandID_1", 20, "islandID_2", 20), 55, 62, null),
+                    Upgrade.explored, 13, Map.of("islandID_1", 20, "islandID_2", 20), 55, 62, null, 100),
 
             new SystemDto("0", "0", "islandID_4", GAME_ID, "regular", "TestIslandFour",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
-                    Upgrade.explored, 13, Map.of("islandID_2", 20, "islandID_5", 20), 74, 45, null),
+                    Upgrade.explored, 13, Map.of("islandID_2", 20, "islandID_5", 20), 74, 45, null, 100),
 
             new SystemDto("0", "0", "islandID_5", GAME_ID, "regular", "TestIslandFive",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
-                    Upgrade.explored, 13, Map.of("islandID_4", 20), 85, 62, null)
+                    Upgrade.explored, 13, Map.of("islandID_4", 20), 85, 62, null, 100)
     };
 
     protected final CreateSystemsDto CREATE_SYSTEM_DTO = new CreateSystemsDto(

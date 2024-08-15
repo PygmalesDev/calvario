@@ -108,6 +108,8 @@ public class JobsService {
     }
 
     public void addJobToGroups(@NotNull Job job) {
+        if (job.progress() == job.total()) return;
+
         if (!job.type().equals("technology")) {
             this.jobCollections.get(job.type()).add(job);
         }

@@ -252,10 +252,8 @@ public class InGameController extends BasicController {
         gameStatus.listeners().addPropertyChangeListener(GameStatus.PROPERTY_PAUSED, callHandlePauseChanged);
         this.gameListenerTriple.add(new GameListenerTriple(gameStatus, callHandlePauseChanged, "PROPERTY_PAUSED"));
 
-        variableService.initVariables();
         variableService.addRunnable(this::loadGameAttributes);
-
-        this.fleetCoordinationService.setInitialFleetPosition();
+        variableService.initVariables();
 
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
@@ -268,7 +266,6 @@ public class InGameController extends BasicController {
         }
 
         for (int i = 0; i <= 16; i++) this.flagsPath.add(resourcesPaths + flagsFolderPath + i + ".png");
-
     }
 
     /*
@@ -279,10 +276,10 @@ public class InGameController extends BasicController {
     }
 
     public void loadGameAttributes() {
+        shipService.initShipTypes();
         islandAttributes.setSystemUpgradeAttributes();
         islandAttributes.setBuildingAttributes();
         islandAttributes.setDistrictAttributes();
-        shipService.initShipTypes();
     }
 
     private void handlePauseChanged(@NotNull PropertyChangeEvent propertyChangeEvent) {
@@ -301,6 +298,8 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void render() {
+        this.fleetCoordinationService.setJobFinishers();
+
         this.jobsService.loadEmpireJobs();
         this.jobsService.initializeJobsListeners();
 

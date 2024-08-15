@@ -54,11 +54,13 @@ public class ShipService {
     }
 
     public int getFleetSpeed(ReadShipDTO[] ships) {
+        if (Objects.isNull(this.shipSpeeds)) return 5;
+
         return (int) Arrays.stream(ships).toList().stream()
                 .map(ReadShipDTO::type)
                 .collect(Collectors.toSet()).stream()
                 .map(type -> this.shipSpeeds.get(type))
-                .mapToDouble(v -> v)
+                .mapToDouble(v -> (Objects.isNull(v)) ? 5.0f : v)
                 .min().orElse(5);
     }
 

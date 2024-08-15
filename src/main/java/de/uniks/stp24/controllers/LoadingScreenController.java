@@ -13,7 +13,6 @@ import org.fulib.fx.annotation.controller.Title;
 import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
-
 import java.util.Random;
 
 @Title("CALVARIO")

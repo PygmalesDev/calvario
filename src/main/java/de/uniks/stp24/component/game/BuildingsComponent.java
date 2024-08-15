@@ -74,7 +74,7 @@ public class BuildingsComponent extends AnchorPane {
             ObservableList<Jobs.Job> islandJobs = this.jobsService.getObservableListForSystem(island.id());
             FilteredList<Jobs.Job> buildingJobs = islandJobs.filtered(job -> job.type().equals("building"));
             buildingJobs.forEach(job -> {
-                if (islandJobs.indexOf(job) > 0)
+                if (islandJobs.stream().filter(islandJob -> !islandJob.type().equals("ship")).toList().indexOf(job) > 0)
                     this.buildingList.add(new String[]{job.building(), "on_pause", job._id()});
                 else this.buildingList.add(new String[]{job.building(), "on_progress", job._id()});
             });

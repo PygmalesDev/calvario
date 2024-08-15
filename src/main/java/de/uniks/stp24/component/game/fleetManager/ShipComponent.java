@@ -14,7 +14,6 @@ import org.fulib.fx.constructs.listview.ReusableItemComponent;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
-
 import java.util.ResourceBundle;
 
 import static de.uniks.stp24.model.Ships.ReadShipDTO;

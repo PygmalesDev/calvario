@@ -1,6 +1,6 @@
 package de.uniks.stp24.component.game.fleetManager;
 
-import de.uniks.stp24.dto.ShortSystemDto;
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Ships;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.*;
@@ -65,6 +65,7 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
             plannedSize = blueprintInFleetDto.fleet().size().get(blueprintInFleetDto.type());
         }
         this.sizeLabel.setText(blueprintInFleetDto.count() + "/" + plannedSize);
+        this.decrementSizeButton.setDisable(false);
         if (blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) == 0){
             this.decrementSizeButton.setDisable(true);
         }
@@ -81,13 +82,14 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
         boolean buildIsPossible = true;
         if (!this.resourcesService.hasEnoughResources(shipService.getNeededResources(blueprintInFleetDto.type()))) {
             this.fleetManagerComponent.setErrorLabel("resources");
+            buildIsPossible = false;
         }
         if(blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) <= this.blueprintInFleetDto.count()){
             this.fleetManagerComponent.setErrorLabel("plannedSize");
             buildIsPossible = false;
         }
         int numberOfShipJobs = shipJobsOnIsland();
-        List<ShortSystemDto> islands = islandsService.getDevIsles().stream().filter(island -> island._id().equals(this.blueprintInFleetDto.fleet().location())).toList();
+        List<Island> islands = islandsService.getIsles().stream().filter(island -> island.id().equals(this.blueprintInFleetDto.fleet().location())).toList();
         if(islands.isEmpty()){
             this.fleetManagerComponent.setErrorLabel("wilderness");
             buildIsPossible = false;

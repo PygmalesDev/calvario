@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.fleetManager.*;
 import de.uniks.stp24.dto.ShortSystemDto;
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.rest.FleetApiService;
 import de.uniks.stp24.rest.JobsApiService;
@@ -93,12 +94,12 @@ public class TestFleetManager extends ControllerTest {
             new ShipType("interceptor",0,100,5, new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>())
            ));
 
-    protected final List<ShortSystemDto> ISLANDS = new ArrayList<>(Arrays.asList(
-            new ShortSystemDto(EMPIRE_ID,LOCATION,"regular","homeIsland",new HashMap<>(), new HashMap<>(), 4, new ArrayList<>(Collections.singleton("shipyard")),null,10),
-            new ShortSystemDto(EMPIRE_ID,"islandID2","regular","island2",new HashMap<>(), new HashMap<>(), 4, new ArrayList<>(Collections.singleton("shipyard")),null,10),
-            new ShortSystemDto(EMPIRE_ID,"islandID3","regular","island3",new HashMap<>(), new HashMap<>(), 4, new ArrayList<>(Collections.singleton("farm")),null,10 ),
-            new ShortSystemDto("otherEmpire","islandID4","regular","island4",new HashMap<>(), new HashMap<>(), 4, new ArrayList<>(Collections.singleton("shipyard")),null,10)
-    ));
+    protected final List<Island> ISLANDS = new ArrayList<>(Arrays.asList(
+            new Island(EMPIRE_ID,1,1,1,null,10,10,3,new HashMap<>(),new HashMap<>(), new ArrayList<>(Collections.singleton("shipyard")),"homeIsland","upgraded",LOCATION),
+            new Island(EMPIRE_ID,1,1,1,null,10,10,3,new HashMap<>(),new HashMap<>(), new ArrayList<>(Collections.singleton("shipyard")),"islandID2","upgraded","island2"),
+            new Island(EMPIRE_ID,1,1,1,null,10,10,3,new HashMap<>(),new HashMap<>(),  new ArrayList<>(Collections.singleton("farm")),"islandID3","upgraded","island3"),
+            new Island("enemy",1,1,1,null,10,10,3,new HashMap<>(),new HashMap<>(), new ArrayList<>(Collections.singleton("shipyard")),"islandID4","upgraded","island4")
+ ));
 
     protected final ReadShipDTO[] SHIPS = new ReadShipDTO[]{
             new ReadShipDTO("a","a","shipID1", GAME_ID, EMPIRE_ID, FLEET_ID, "explorer", 4,4, null),
@@ -146,7 +147,7 @@ public class TestFleetManager extends ControllerTest {
         this.shipService.shipTypesAttributes = (ArrayList<ShipType>) BLUEPRINTS;
 
         // Mock Islands
-        doReturn(ISLANDS).when(this.islandsService).getDevIsles();
+        doReturn(ISLANDS).when(this.islandsService).getIsles();
 
         this.app.show(this.fleetManagerComponent);
     }
@@ -189,13 +190,13 @@ public class TestFleetManager extends ControllerTest {
         waitForFxEvents();
         assertTrue(fleetManagerComponent.newFleetComponent.isVisible());
         assertEquals(2, fleetManagerComponent.newFleetComponent.islandList.size());
-        assertEquals("homeIsland\n(has 1 shipyard)", fleetManagerComponent.newFleetComponent.islandNameLabel.getText());
+        assertEquals("homeIsland (1 " + this.gameResourceBundle.getString("building.shipyard") + ")", fleetManagerComponent.newFleetComponent.islandNameLabel.getText());
         clickOn("#lastIslandButton");
         waitForFxEvents();
-        assertEquals("island2\n(has 1 shipyard)", fleetManagerComponent.newFleetComponent.islandNameLabel.getText());
+        assertEquals("island2 (1 " + this.gameResourceBundle.getString("building.shipyard") + ")", fleetManagerComponent.newFleetComponent.islandNameLabel.getText());
         clickOn("#nextIslandButton");
         waitForFxEvents();
-        assertEquals("homeIsland\n(has 1 shipyard)", fleetManagerComponent.newFleetComponent.islandNameLabel.getText());
+        assertEquals("homeIsland (1 " + this.gameResourceBundle.getString("building.shipyard") + ")", fleetManagerComponent.newFleetComponent.islandNameLabel.getText());
 
         clickOn("#confirmIslandButton");
         waitForFxEvents();
@@ -321,50 +322,50 @@ public class TestFleetManager extends ControllerTest {
 
     @Test
     public void buildShipOnWrongIsland(){
-        final ShortSystemDto[] ISLAND = new ShortSystemDto[]{
-                new ShortSystemDto(EMPIRE_ID, LOCATION, "regular", "homeIsland", new HashMap<>(), new HashMap<>(), 4, new ArrayList<>(Collections.singleton("farm")), null, 10),
-                new ShortSystemDto("enemySystem", LOCATION, "regular", "homeIsland", new HashMap<>(), new HashMap<>(), 4, new ArrayList<>(Collections.singleton("shipyard")), null, 10)
+        final Island[] ISLAND = new Island[]{
+                new Island(EMPIRE_ID, 1, 1, 1, null, 10, 10, 3, new HashMap<>(), new HashMap<>(), new ArrayList<>(Collections.singleton("farm")), "homeIsland", "upgraded", LOCATION),
+                new Island("enemy", 1, 1, 1, null, 10, 10, 3, new HashMap<>(), new HashMap<>(), new ArrayList<>(Collections.singleton("shipyard")), "homeIsland", "upgraded", LOCATION),
         };
         when(this.eventListener.listen("games." + GAME_ID + ".fleets." + FLEET_ID + ".ships.*.*", Ship.class)).thenReturn(SHIP_SUBJECT);
         when(this.shipsApiService.getAllShips(any(),any())).thenReturn(Observable.just(SHIPS));
         doReturn(true).when(this.resourcesService).hasEnoughResources(any());
-        doReturn(Collections.singletonList(ISLAND[0])).when(this.islandsService).getDevIsles();
+        doReturn(Collections.singletonList(ISLAND[0])).when(this.islandsService).getIsles();
 
         // No shipyard on the island
         waitForFxEvents();
         clickOn("#editFleetButton_fleetID1");
         waitForFxEvents();
-        assertEquals("homeIsland\n0 / 0 shipyards occupied", fleetManagerComponent.islandLabel.getText());
+        assertEquals("homeIsland\n0 / 0 " + this.gameResourceBundle.getString("shipyards.occupied"), fleetManagerComponent.islandLabel.getText());
         clickOn("#buildShipButton");
         waitForFxEvents();
-        assertEquals("All your shipyards are occupied!", fleetManagerComponent.buildShipErrorLabel.getText());
+        assertEquals(this.gameResourceBundle.getString("buildShipError.shipyard"), fleetManagerComponent.buildShipErrorLabel.getText());
         clickOn("#showFleetsButton");
         waitForFxEvents();
 
         // Enemies Island
-        doReturn(Collections.singletonList(ISLAND[1])).when(this.islandsService).getDevIsles();
+        doReturn(Collections.singletonList(ISLAND[1])).when(this.islandsService).getIsles();
 
         waitForFxEvents();
         clickOn("#editFleetButton_fleetID1");
         waitForFxEvents();
-        assertEquals("homeIsland\nNot your island!", fleetManagerComponent.islandLabel.getText());
+        assertEquals("homeIsland\n" + this.gameResourceBundle.getString("not.your.island"), fleetManagerComponent.islandLabel.getText());
         clickOn("#buildShipButton");
         waitForFxEvents();
-        assertEquals("You don't own this island!", fleetManagerComponent.buildShipErrorLabel.getText());
+        assertEquals(this.gameResourceBundle.getString("not.your.island"), fleetManagerComponent.buildShipErrorLabel.getText());
         clickOn("#showFleetsButton");
         waitForFxEvents();
 
         // Island don't belong to anyone
         List<ShortSystemDto> systemList = new ArrayList<>();
-        doReturn(systemList).when(this.islandsService).getDevIsles();
+        doReturn(systemList).when(this.islandsService).getIsles();
 
         waitForFxEvents();
         clickOn("#editFleetButton_fleetID1");
         waitForFxEvents();
-        assertEquals("Unknown Seas", fleetManagerComponent.islandLabel.getText());
+        assertEquals(this.gameResourceBundle.getString("unknown.seas"), fleetManagerComponent.islandLabel.getText());
         clickOn("#buildShipButton");
         waitForFxEvents();
-        assertEquals("You don't own this island!", fleetManagerComponent.buildShipErrorLabel.getText());
+        assertEquals(this.gameResourceBundle.getString("not.your.island"), fleetManagerComponent.buildShipErrorLabel.getText());
         clickOn("#showFleetsButton");
     }
 

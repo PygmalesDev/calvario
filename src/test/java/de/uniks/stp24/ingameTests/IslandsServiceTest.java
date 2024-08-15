@@ -13,6 +13,7 @@ import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -31,9 +32,9 @@ public class IslandsServiceTest extends ControllerTest {
     @Spy
     GameSystemsApiService gameSystemsApiService;
     @Spy
-    IslandComponent islandComponent = spy(IslandComponent.class);
-    @Spy
     TokenStorage tokenStorage;
+    @InjectMocks
+    IslandComponent islandComponent; //= spy(IslandComponent.class);
 
     final SystemDto[] systems = new SystemDto[3];
     List<IslandComponent> testIsleComps;

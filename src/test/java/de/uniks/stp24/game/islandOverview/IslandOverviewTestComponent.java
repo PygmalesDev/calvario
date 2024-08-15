@@ -7,6 +7,7 @@ import de.uniks.stp24.ws.Event;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import javafx.collections.FXCollections;
 import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Provider;
@@ -243,15 +244,15 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
         EffectSourceParentDto effectSourceParentDto = new EffectSourceParentDto(new EffectSourceDto[3]);
 
         doReturn(Observable.just(variablesPresets)).when(inGameService).getVariablesPresets();
-        doReturn(Observable.just(jobList)).when(jobsApiService).getEmpireJobs(any(), any());
         doReturn(Observable.just(effectSourceParentDto)).when(empireApiService).getEmpireEffect(any(), any());
         doReturn(Observable.empty()).when(marketService).getSeasonalTrades(any(), any());
+        doReturn(FXCollections.observableArrayList()).when(this.jobsService).getObservableListForSystem(any());
 
-        doAnswer(event -> {
-            this.fleetService.onFleetCreated(fleet -> this.fleetCoordinationService.putFleetOnMap(fleet));
-            this.fleetCoordinationService.random.setSeed(4);
-            return null;
-        }).when(this.inGameController.fleetCoordinationService).setInitialFleetPosition();
+//        doAnswer(event -> {
+//            this.fleetService.onFleetCreated(fleet -> this.fleetCoordinationService.putFleetOnMap(fleet));
+//            this.fleetCoordinationService.random.setSeed(4);
+//            return null;
+//        }).when(this.inGameController.fleetCoordinationService).setInitialFleetPosition();
 
         buildingAttributes.add(buildingPreset1);
         buildingAttributes.add(buildingPreset2);
@@ -288,7 +289,6 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
     private void mockFleets(){
         // Mock get Fleets and ships
         ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", 4, new HashMap<>(), new HashMap<>())));
-        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456",true);
         doNothing().when(this.fleetService).initializeFleetListeners();
         doNothing().when(this.fleetService).initializeShipListener();
     }

@@ -1,7 +1,6 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;

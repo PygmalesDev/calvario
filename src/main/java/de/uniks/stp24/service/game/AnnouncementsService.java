@@ -100,6 +100,11 @@ public class AnnouncementsService {
                             .replace("{shipType}", gameResourceBundle.getString("ship." + job.ship()))
                             .replace("{fleetName}", fleetService.getFleet(job.fleet()).name());
                 }
+                case "travel" -> {
+                    message = gameResourceBundle.getString("captain.travel.ready")
+                            .replace("{islandName}", this.islandsService.getIsland(job.path().getLast()).name())
+                            .replace("{fleetName}", fleetService.getFleet(job.fleet()).name());
+                }
             }
             announcements.addFirst(new Announcement(message, forwardIcon, forwardMethods, job));
         }

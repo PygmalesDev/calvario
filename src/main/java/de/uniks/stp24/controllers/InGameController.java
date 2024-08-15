@@ -1,6 +1,5 @@
 package de.uniks.stp24.controllers;
 
-import de.uniks.stp24.component.dev.FleetCreationComponent;
 import de.uniks.stp24.component.game.*;
 import de.uniks.stp24.component.game.fleetManager.FleetManagerComponent;
 import de.uniks.stp24.component.game.jobs.JobsOverviewComponent;
@@ -170,9 +169,6 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public MarketComponent marketOverviewComponent;
-    @SubComponent
-    @Inject
-    public FleetCreationComponent fleetCreationComponent;
 
     @SubComponent
     @Inject
@@ -281,8 +277,6 @@ public class InGameController extends BasicController {
         variableService.addRunnable(this::loadGameAttributes);
         variableService.initVariables();
 
-        this.fleetCoordinationService.setInitialFleetPosition();
-
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
                     result -> {
@@ -365,9 +359,6 @@ public class InGameController extends BasicController {
         overviewContainer.getChildren().add(overviewUpgradeComponent);
         islandClaimingContainer.getChildren().add(this.islandClaimingComponent);
         islandClaimingContainer.setVisible(false);
-
-        this.fleetCreationComponent.setVisible(false);
-        this.group.getChildren().add(this.fleetCreationComponent);
 
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
@@ -709,16 +700,7 @@ public class InGameController extends BasicController {
                     this.islandClaimingComponent.setIslandInformation(selected.island);
                 }
             }
-            // Show fleet creation pane
-            this.fleetCreationComponent.setVisible(true);
-            this.fleetCreationComponent.setIsland(selected.island.id());
-            this.fleetCreationComponent.setLayoutX(selected.getLayoutX()-100);
-            this.fleetCreationComponent.setLayoutY(selected.getLayoutY()+30);
         }
-    }
-
-    public void setFleetOnMap(GameFleetController fleet) {
-        this.mapGrid.getChildren().add(fleet);
     }
 
     @OnRender

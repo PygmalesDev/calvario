@@ -65,7 +65,7 @@ public class InGameController extends BasicController {
     @FXML
     Pane gameBackground;
     @FXML
-    Pane fogPane;
+    public Pane fogPane;
     @FXML
     StackPane helpWindowContainer;
     @FXML
@@ -320,7 +320,9 @@ public class InGameController extends BasicController {
 
     @OnRender
     public void render() {
-        fleetCoordinationService.setInGameController(this);
+        fogPane.setPickOnBounds(false);
+
+        this.fleetCoordinationService.setInGameController(this);
         this.fleetCoordinationService.setJobFinishers();
 
         this.jobsService.loadEmpireJobs();
@@ -396,10 +398,6 @@ public class InGameController extends BasicController {
 //        this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::travelToMousePosition);
         explanationService.setInGameController(this);
 
-        this.fleetService.loadGameFleets();
-        this.fleetService.initializeFleetListeners();
-        this.fleetService.initializeShipListener();
-
         technologiesComponent.setContainer(technologiesContainer);
         technologiesContainer.setVisible(false);
         technologiesContainer.getChildren().add(technologiesComponent);
@@ -410,9 +408,6 @@ public class InGameController extends BasicController {
                     Island island = islandsService.getIsland(system._id());
                     tokenStorage.setIsland(island);
                 }, error -> System.out.println("Error try to get Systems because: " + error.getMessage()));
-
-        this.fleetService.loadGameFleets();
-        this.fleetService.initializeFleetListeners();
 
 //        this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::travelToMousePosition);
     }
@@ -572,8 +567,6 @@ public class InGameController extends BasicController {
 
         group.setScaleX(0.65);
         group.setScaleY(0.65);
-
-        fogPane.setPickOnBounds(false);
 
         this.islandComponentList.forEach(isle -> {
             isle.setInGameController(this);
@@ -940,15 +933,17 @@ public class InGameController extends BasicController {
         dayTimeLine.setAutoReverse(false);
     }
 
-    public void removeFogFromIsland(boolean animate, IslandComponent isle) {
-        if (isle.foggy)
-            this.removeFog(animate, isle);
+    public void removeFogFromIsland(boolean animate, IslandComponent island) {
+        if (island.foggy) {
+            this.fogOfWar.removeFogFromIsland(island);
+            if (animate) this.updateFogAnimated();
+            else this.updateFog();
+        }
     }
 
-    public void removeFog(boolean animate, IslandComponent island, Shape... shapes) {
-        this.fogOfWar.removeShapesFromFog(island, shapes);
-        if (animate) this.updateFogAnimated();
-        else this.updateFog();
+    public void removeFogFromShape(Shape shape) {
+        this.fogOfWar.removeShapesFromFog(shape);
+        this.updateFog();
     }
 
     public void updateFogAnimated() {

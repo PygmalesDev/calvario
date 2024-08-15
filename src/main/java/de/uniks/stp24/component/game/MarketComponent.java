@@ -537,7 +537,7 @@ public class MarketComponent extends StackPane {
                     this.seasonalTradesListView.setItems(this.seasonComponents);
                     this.seasonalTradesListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.marketSeasonComponentProvider));
                     this.marketService.setSeasonComponents(this.seasonComponents);
-                }
-                , error -> System.out.println("errorLoadSeasonalTrades:" + error));
+                },
+                Throwable::printStackTrace);
     }
 }

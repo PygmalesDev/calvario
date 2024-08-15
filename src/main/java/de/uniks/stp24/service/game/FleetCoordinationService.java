@@ -68,6 +68,7 @@ public class FleetCoordinationService {
     private final List<GameFleetController> enemyFleets = new ArrayList<>();
 
     private final int ROTATE_DURATION = 2;
+    public InGameController inGameController;
 
     @Inject
     public FleetCoordinationService() {
@@ -168,7 +169,7 @@ public class FleetCoordinationService {
 
     private Job putFleetNearIsland(Fleet fleet) {
         GameFleetController gameFleet = this.createFleetInstance(fleet);
-        var island = this.islandsService.getIslandComponent(fleet.location());
+        IslandComponent island = this.islandsService.getIslandComponent(fleet.location());
         DistancePoint parkingPoint = this.findParkingPoint(new DistancePoint(island, null));
         gameFleet.setLayoutX(parkingPoint.getX());
         gameFleet.setLayoutY(parkingPoint.getY());
@@ -210,6 +211,7 @@ public class FleetCoordinationService {
     }
 
     public void setInGameController(InGameController inGameController) {
+        this.inGameController = inGameController;
         this.mapGrid = inGameController.mapGrid.getChildren();
         this.timerService.onGameTicked(this::processTravel);
         this.timerService.onSpeedChanged(this::processSpeedChanged);
@@ -352,33 +354,33 @@ public class FleetCoordinationService {
         IslandComponent island = this.islandsService.getIslandComponent(path.getFirst());
 
         // Get the needed total number of points that need to be put between the islands
-        int interPoints;
-        int islandAmount = path.size()-1;
-        if (travelDuration == -1) interPoints = this.getTravelDuration(pathEntry, speed) - islandAmount;
-        else interPoints = travelDuration - islandAmount;
+        byte interPoints;
+        if (travelDuration == -1) interPoints = (byte) (this.getTravelDuration(pathEntry, speed) - (path.size() - 1));
+        else interPoints = (byte) (travelDuration - (path.size()-1));
         // Get the number of points that should be put between two islands
-        int pointAlloc  = interPoints/islandAmount;
+        byte pointAlloc  = (byte) (interPoints/(path.size()-1));
 
         coordinatedPath.add(this.findParkingPoint(new DistancePoint(island, null)));
 
-        this.islandsService.generateDistancePoints(path.getFirst(), path.get(1),
-                pointAlloc*(1 + interPoints-(islandAmount-1))).forEach(point ->
-                coordinatedPath.add(new DistancePoint(point.getX(), point.getY(), POINT_TYPE.INTER, coordinatedPath.getLast())));
-
-        island = this.islandsService.getIslandComponent(path.get(1));
-        coordinatedPath.add(this.findParkingPoint(new DistancePoint(island, coordinatedPath.getLast())));
-
         // Put the intermediate points first, then the island location
-        for (int i = 1; i < path.size()-1; i++) {
+        for (int i = 0; i < path.size()-2; i++) {
             // Intermediate points
             this.islandsService.generateDistancePoints(path.get(i), path.get(i+1), pointAlloc)
                     .forEach(point -> coordinatedPath.add(new DistancePoint(point.getX(), point.getY(),
-                                      POINT_TYPE.INTER, coordinatedPath.getLast())));
+                            POINT_TYPE.INTER, coordinatedPath.getLast())));
 
             // Island location
             island = this.islandsService.getIslandComponent(path.get(i+1));
             coordinatedPath.add(this.findParkingPoint(new DistancePoint(island, coordinatedPath.getLast())));
         }
+
+        // Fill the remaining path with points that were not allocated
+        this.islandsService.generateDistancePoints(path.get(path.size()-2), path.getLast(), interPoints-pointAlloc*(path.size()-2))
+                .forEach(point -> coordinatedPath.add(new DistancePoint(point.getX(), point.getY(),
+                        POINT_TYPE.INTER, coordinatedPath.getLast())));
+
+        island = this.islandsService.getIslandComponent(path.getLast());
+        coordinatedPath.add(this.findParkingPoint(new DistancePoint(island, coordinatedPath.getLast())));
 
         coordinatedPath.removeFirst();
         this.coordinatedPaths.put(gameFleet, coordinatedPath);

@@ -110,20 +110,25 @@ public class FogOfWar {
             this.removeFogFromIsland(this.islandsService.getIslandComponent(islandID));
     }
 
-    public void removeShapesFromFog(IslandComponent island, Shape... toRemoves) {
+    public void removeShapesFromFog(Shape shape) {
         this.islandFog = null;
-        for (Shape shape : toRemoves) this.updateRemovedFog(shape);
-        this.removeFogFromIsland(island);
-        this.updateFog(island);
+        Shape tmp;
+        if (Objects.nonNull(this.removedFog))
+            tmp = Shape.union(this.removedFog, shape);
+        else
+            tmp = shape;
+        this.currentFog = Shape.subtract(this.originalFog, tmp);
+        this.setPattern();
     }
 
-    private void removeFogFromIsland(IslandComponent island) {
+    public void removeFogFromIsland(IslandComponent island) {
         if (Objects.nonNull(island)) {
             this.exploredIslands.add(island.island.id());
             island.applyIcon(false, night?BlendMode.MULTIPLY:BlendMode.LIGHTEN);
             island.applyEmpireInfo();
             this.updateRemovedFog(new Circle(island.getPosX() + X_OFFSET, island.getPosY() + Y_OFFSET, ISLAND_COLLISION_RADIUS));
             this.updateRemovedFog(this.randomFogAroundIsland(island));
+            this.updateFog(island);
         }
     }
 
@@ -146,6 +151,10 @@ public class FogOfWar {
             this.islandFog.setTranslateY(island.getLayoutY() - y/2 + FOG_Y_OFFSET);
         }
 
+        setPattern();
+    }
+
+    private void setPattern() {
         this.currentFog.setFill(this.fogPattern);
         if (isNight) this.currentFog.setEffect(solarColorAdjust);
         this.prevRemovedFog = this.removedFog;

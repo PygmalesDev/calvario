@@ -8,12 +8,14 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.FleetCoordinationService;
 import de.uniks.stp24.service.game.FleetService;
 import javafx.animation.*;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.transform.Rotate;
+import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
 
 import javax.inject.Inject;
@@ -52,6 +54,25 @@ public class GameFleetController extends Pane {
         this.selectedDropShadow.setSpread(0.9);
 
         this.setId("ingameFleet_" + fleet._id());
+
+        travelTimeline.currentTimeProperty().addListener(this::listnerMethod);
+
+        this.travelTimeline.setOnFinished(event -> {
+            if (this.currentPoint.getType().equals(POINT_TYPE.ISLAND)){
+                System.out.println( this.currentPoint.islandComponent);
+                System.out.println(this.currentPoint);
+                this.travelTimeline.currentTimeProperty().removeListener(this::listnerMethod);
+                this.fleetCoordinationService.inGameController.removeFogFromIsland(true, this.currentPoint.islandComponent);
+                travelTimeline.currentTimeProperty().addListener(this::listnerMethod);
+            }
+        });
+    }
+
+    private void listnerMethod(ObservableValue<? extends Duration> observableValue, Duration duration, Duration duration1) {
+        fleetCoordinationService.inGameController.removeFogFromShape(new Circle(this.getLayoutX() + FLEET_HW/2 + 10,
+                this.getLayoutY() + FLEET_HW/2 + 15,
+                collisionCircle.getRadius()*1.3)
+        );
     }
 
     public void renderWithColor(String color) {

@@ -11,7 +11,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 public class Contact {
     String empireFlag;
     String empireName;
-    String empireID;
+    public String empireID;
     String atIsland;
     String myOwnId;
     final List<String> empireIslandsIDs = new ArrayList<>();

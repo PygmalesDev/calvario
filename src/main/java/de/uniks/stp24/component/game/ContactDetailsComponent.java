@@ -138,6 +138,7 @@ public class ContactDetailsComponent extends StackPane {
     }
 
     public void checkWarSituation() {
+        System.out.println(this.contact);
         if (Objects.isNull(this.contact)) return;
         boolean attacker = contactsService.attacker(contact.getEmpireID());
         boolean defender = contactsService.defender(contact.getEmpireID());
@@ -148,6 +149,7 @@ public class ContactDetailsComponent extends StackPane {
         warButton.setSelected(attacker || defender);
         warButton.setDisable(attacker);
         updateWarButtonText();
+        System.out.println("at war ? " + contact.atWarWith.get());
 
     }
 
@@ -197,22 +199,15 @@ public class ContactDetailsComponent extends StackPane {
         if (value < 0.1 && value > -1.1) text = "weak";
         if (value < -1.1 && value > -2.1) text = "very weak";
         if (value < -2.1) text = "dust";
-        System.out.println(text);
         this.strengText.setText("Strength: " + text);
 
     }
 
     public void updateWarButtonText() {
         warStateText.setStyle("-fx-font-size: 12px;");
-        if (warButton.isSelected()) {
-            warButton.setText("Stop war");
-            warStateText.setFill(Color.WHITE);
-            warStateText.setText("You are at war with " + contact.getEmpireName());
-        } else {
-            warButton.setText("Start war");
-            warStateText.setFill(Color.WHITE);
-            warStateText.setText("You are at peace with " + contact.getEmpireName());
-        }
+        warStateText.setFill(Color.WHITE);
+        warButton.setText((warButton.isSelected() ? "Stop" : "Start") + " war" );
+        warStateText.setText("You are at " + (warButton.isSelected() ? "war" : "peace") +  " with " + contact.getEmpireName());
         if (warButton.isDisabled()) {
             warButton.setText("");
         }
@@ -230,6 +225,10 @@ public class ContactDetailsComponent extends StackPane {
         } else {
             contactsService.stopWarWith(contact.getEmpireID());
         }
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 
     public void setWarMessagePopup(String messageType, String attackerName, String myOwnEmpireID, WarDto warDto) {

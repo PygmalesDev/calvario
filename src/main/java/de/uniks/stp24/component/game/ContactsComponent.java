@@ -73,13 +73,12 @@ public class ContactsComponent extends StackPane {
     }
 
     public void loadEmpireWars() {
+        System.out.println("HALLO!!");
         subscriber.subscribe(warService.getWars(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                 warDtos -> {
                     this.wars.clear();
-                    System.out.println(warDtos);
                     this.wars.addAll(warDtos);
                     contactsService.addWarInformation(warDtos);
-                    System.out.println("LOAD WARS");
                 }
         );
     }

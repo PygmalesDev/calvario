@@ -16,10 +16,10 @@ public class FleetMovementModule extends IngameModule {
 
         when(this.jobsApiService.getEmpireJobs(any(), any())).thenReturn(Observable.just(new ArrayList<>(List.of(TRAVEL_JOBS[1]))));
 
-        when(this.jobsApiService.createTravelJob(anyString(), anyString(), any(Jobs.TravelJobDTO.class)))
-                .thenReturn(Observable.just(TRAVEL_JOBS[0]));
         when(this.jobsApiService.deleteJob(any(), any(), any()))
                 .thenReturn(Observable.just(TRAVEL_JOBS[0]));
+
+        when(this.empireApiService.getPrivate(any(), any())).thenReturn(Observable.empty());
 
         when(this.shipsApiService.getAllShips(any(), eq("testFleetID_1"))).thenReturn(Observable.just(FLEET_SHIPS_1));
         when(this.shipsApiService.getAllShips(any(), eq("testFleetID_2"))).thenReturn(Observable.just(FLEET_SHIPS_2));

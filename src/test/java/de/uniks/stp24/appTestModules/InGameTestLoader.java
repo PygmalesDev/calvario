@@ -85,6 +85,8 @@ public class InGameTestLoader extends ControllerTest {
     ShipService shipService;
     @Spy
     FleetApiService fleetApiService;
+    @Spy
+    FogOfWar fogOfWar;
 
     @InjectMocks
     protected MarketService marketService;
@@ -250,6 +252,11 @@ public class InGameTestLoader extends ControllerTest {
         this.coolerBubbleComponent.tokenStorage = this.tokenStorage;
         this.coolerBubbleComponent.jobsService = this.jobsService;
         this.coolerBubbleComponent.subscriber = this.subscriber;
+
+        this.inGameController.fogOfWar.tokenStorage = this.tokenStorage;
+        this.inGameController.fogOfWar.subscriber = this.subscriber;
+        this.inGameController.fogOfWar.islandsService = this.islandsService;
+        this.inGameController.fogOfWar.empireApiService = this.empireApiService;
 
         this.inGameController.marketOverviewComponent.variableService = this.variableService;
         this.variableService.inGameController = this.inGameController;

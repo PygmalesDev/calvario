@@ -13,6 +13,7 @@ import de.uniks.stp24.service.BasicService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.geometry.Point2D;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -138,9 +139,13 @@ public class IslandsService extends BasicService {
         double serverOffsetV = minY + 0.5 * heightRange;
         component.setPosition(SCALE_FACTOR * isleDto.posX()*DISTANCE_FACTOR - serverOffsetH + screenOffsetH,
                 SCALE_FACTOR * isleDto.posY()*DISTANCE_FACTOR - serverOffsetV + screenOffSetV);
-        component.applyIcon(isleDto.type());
+        // all Islands are foggy at first if player is not spectator
+        if (!tokenStorage.isSpectator())
+            component.applyIcon(true, BlendMode.LIGHTEN);
+        else
+            component.applyIcon(false, BlendMode.SRC_OVER);
         component.setFlagImage(isleDto.flagIndex());
-        applyDropShadowToIsland(component);
+//        applyDropShadowToIsland(component);
         return component;
     }
 
@@ -432,8 +437,8 @@ public class IslandsService extends BasicService {
         // adds a background color to island as same as owner empire color
         if (Objects.nonNull(islandComponent.island.owner())) {
             Color colorWeb = Color.web(getEmpire(islandComponent.island.owner()).color()).brighter();
-            islandComponent.islandImage.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb) + ", 4.0, 0.88, 0, 0);");}
-
+            islandComponent.islandImage.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb) + ", 4.0, 0.88, 0, 0);");
+        }
     }
 
     public  void updateIsles(Island island){this.isles.replaceAll(old -> old.equals(island) ? island : old);}

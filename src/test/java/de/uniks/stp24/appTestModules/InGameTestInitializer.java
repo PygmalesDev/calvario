@@ -23,6 +23,7 @@ import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.*;
 import de.uniks.stp24.service.menu.LobbyService;
 import de.uniks.stp24.ws.EventListener;
+import javafx.beans.Observable;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -32,7 +33,6 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 
 import javax.inject.Provider;
-
 import static org.mockito.Mockito.spy;
 
 public class InGameTestInitializer extends ControllerTest {
@@ -98,6 +98,8 @@ public class InGameTestInitializer extends ControllerTest {
     ShipService shipService;
     @Spy
     FleetApiService fleetApiService;
+    @Spy
+    FogOfWar fogOfWar;
 
     @InjectMocks
     ResearchJobComponent researchJobComponent;
@@ -267,6 +269,12 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.overviewUpgradeComponent.explanationService.variableService.technologyService.presetsApiService = this.presetsApiService;
         this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
         this.inGameController.eventComponent = this.eventComponent;
+
+        this.inGameController.fogOfWar.tokenStorage = this.tokenStorage;
+        this.inGameController.fogOfWar.subscriber = this.subscriber;
+        this.inGameController.fogOfWar.islandsService = this.islandsService;
+        this.inGameController.fogOfWar.empireApiService = this.empireApiService;
+
         this.resourcesService.gameSystemsApiService = this.gameSystemsApiService;
 
         this.technologyCategoryComponent.technologyResearchDetailsComponent = this.technologyResearchDetailsComponent;

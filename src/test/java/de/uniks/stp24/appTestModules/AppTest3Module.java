@@ -60,6 +60,7 @@ public class AppTest3Module extends IngameModule {
         when(this.empireApiService.saveSeasonalComponents(any(), any(), any())).thenReturn(Observable.just(MARKET_UPDATE_DTO));
         when(this.empireApiService.updateEmpireMarket(any(), any(), any())).thenReturn(Observable.just(MARKET_UPDATE_DTO));
         when(this.empireApiService.getEmpiresDtos(anyString())).thenReturn(Observable.just(new EmpireDto[]{EMPIRE_DTO}));
+        when(this.empireApiService.getPrivate(any(), any())).thenReturn(Observable.empty());
 
         when(this.jobsApiService.deleteJob(anyString(), anyString(), any())).thenReturn(Observable.just(JOBS[3]));
 

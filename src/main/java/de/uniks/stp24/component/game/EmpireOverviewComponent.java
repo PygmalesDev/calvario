@@ -90,12 +90,14 @@ public class EmpireOverviewComponent extends StackPane {
      */
     @OnInit
     public void initEmpireList() {
-        String gameID = tokenStorage.getGameId();
-        empireID = tokenStorage.getEmpireId();
-        this.ownIslands = this.islands.filtered(empireIsland -> empireIsland.owner() != null && empireIsland.owner().equals(empireID));
-        this.subscriber.subscribe(this.empireService.getEmpire(gameID, empireID),
-                this::empireTraits,
-                error -> System.out.println("Error in EmpireOverviewComponent on initEmpireList:\n" + error.getMessage()));
+        if (!this.tokenStorage.isSpectator()) {
+            String gameID = tokenStorage.getGameId();
+            empireID = tokenStorage.getEmpireId();
+            this.ownIslands = this.islands.filtered(empireIsland -> empireIsland.owner() != null && empireIsland.owner().equals(empireID));
+            this.subscriber.subscribe(this.empireService.getEmpire(gameID, empireID),
+                    this::empireTraits,
+                    error -> System.out.println("Error in EmpireOverviewComponent on initEmpireList:\n" + error.getMessage()));
+        }
     }
 
     /**

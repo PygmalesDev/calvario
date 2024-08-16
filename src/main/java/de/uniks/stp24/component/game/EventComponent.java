@@ -193,7 +193,7 @@ public class EventComponent extends AnchorPane {
                 ));
         dayTimeLine.setCycleCount(1);
         dayTimeLine.setAutoReverse(false);
-
+        if (this.tokenStorage.isSpectator()) return;
         subscriber.subscribe(empireApiService.getEmpireEffect(gameId, tokenStorage.getEmpireId()),
                 event -> {
                     if (event.effects().length > 0) {

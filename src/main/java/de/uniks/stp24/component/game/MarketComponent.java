@@ -141,6 +141,7 @@ public class MarketComponent extends StackPane {
      * Initializes amount of resources, their prices and the market fee.
      */
     private void loadVariablesAndSetup() {
+        if(this.tokenStorage.isSpectator()) return;
         ArrayList<ExplainedVariableDTO> temp = new ArrayList<>();
         subscriber.subscribe(variableService.getFirstHalfOfVariables(),
                 firstHalf -> {
@@ -419,7 +420,7 @@ public class MarketComponent extends StackPane {
 
     @OnRender
     public void render() {
-        loadSeasonalTrades();
+        if (!this.tokenStorage.isSpectator()) loadSeasonalTrades();
     }
 
     /**

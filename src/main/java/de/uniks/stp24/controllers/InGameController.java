@@ -934,7 +934,7 @@ public class InGameController extends BasicController {
     }
 
     public void removeFogFromIsland(boolean animate, IslandComponent island) {
-        if (island.foggy) {
+        if (Objects.nonNull(island) && island.foggy) {
             this.fogOfWar.removeFogFromIsland(island);
             if (animate) this.updateFogAnimated();
             else this.updateFog();

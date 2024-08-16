@@ -78,13 +78,17 @@ public class IslandComponent extends Pane {
 
         if (isFoggy)
             this.changeBlendMode(blendMode);
-        else
-            this.islandImage.setBlendMode((BlendMode.SRC_OVER));
+        else {
+            if (Objects.nonNull(this.islandImage))
+                this.islandImage.setBlendMode((BlendMode.SRC_OVER));
+        }
 
-        if (this.island.upgrade().equals("explored"))
-            this.spyglassImage.setImage(imageCache.get("/de/uniks/stp24/icons/other/spyglass.png"));
-        else // islands with upgrades other than explored
-            hideSpyGlass();
+        if (Objects.nonNull(this.spyglassImage)) {
+            if (this.island.upgrade().equals("explored"))
+                this.spyglassImage.setImage(imageCache.get("/de/uniks/stp24/icons/other/spyglass.png"));
+            else // islands with upgrades other than explored
+                hideSpyGlass();
+        }
 
     }
 

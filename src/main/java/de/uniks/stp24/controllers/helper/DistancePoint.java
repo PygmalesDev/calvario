@@ -8,6 +8,7 @@ import static de.uniks.stp24.service.Constants.*;
 public class DistancePoint extends Point2D {
     private final DistancePoint prev;
     private final POINT_TYPE pointType;
+    public boolean ownFleet = true;
     public IslandComponent islandComponent;
 
     public DistancePoint(double v, double v1, POINT_TYPE type, DistancePoint prev) {

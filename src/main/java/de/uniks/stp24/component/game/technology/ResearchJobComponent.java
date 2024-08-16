@@ -240,7 +240,7 @@ public class ResearchJobComponent extends AnchorPane {
             technologyTagImage2.setImage(image2);
         }
 
-        int cost = technology.cost() * 100;
+        double cost = technology.cost() * 100;
         researchCostText.setText(String.valueOf(cost));
         technologyNameText.setText(technologiesResourceBundle.getString(technology.id()));
     }

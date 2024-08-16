@@ -7,8 +7,8 @@ public record UpgradeStatus(
         String next,
         double upgrade_time,
         double pop_growth,
-        Map<String, Integer> cost,
-        Map<String, Integer> upkeep,
+        Map<String, Double> cost,
+        Map<String, Double> upkeep,
         double capacity_multiplier
 ) {
 }

@@ -52,7 +52,7 @@ public class ShipService {
         shipTypesAttributes = variableDependencyService.createVariableDependencyShipType();
     }
 
-    public Map<String, Integer> getNeededResources(String type) {
+    public Map<String, Double> getNeededResources(String type) {
         for(ShipType shipType : shipTypesAttributes){
             if (shipType._id().equals(type)) {
                 return shipType.cost();
@@ -72,7 +72,7 @@ public class ShipService {
             if (!this.blueprintsInFleetMap.containsKey(ship.type())) {
                 this.blueprintsInFleetMap.put(ship.type(), 1);
             } else {
-                this.blueprintsInFleetMap.compute(ship.type(), (k, currentCount) -> currentCount + 1);
+                this.blueprintsInFleetMap.compute(ship.type(), (k, currentCount) -> currentCount == null ? 1 : currentCount + 1);
             }
         });
         fleet.size().forEach((key, value) -> {

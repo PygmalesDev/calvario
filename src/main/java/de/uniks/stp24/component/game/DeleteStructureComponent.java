@@ -142,24 +142,24 @@ public class DeleteStructureComponent extends VBox{
     }
 
     private void resourceListGenerationBuilding(BuildingAttributes structure) {
-        Map<String, Integer> resourceMapCost = structure.cost();
-        Map<String, Integer> halvedResourceMapCost = new HashMap<>();
-        for (Map.Entry<String, Integer> entry : resourceMapCost.entrySet()) {
+        Map<String, Double> resourceMapCost = structure.cost();
+        Map<String, Double> halvedResourceMapCost = new HashMap<>();
+        listGenerateHelper(resourceMapCost, halvedResourceMapCost);
+    }
+    private void resourceListGenerationSite(DistrictAttributes structure) {
+        Map<String, Double> resourceMapCost = structure.cost();
+        Map<String, Double> halvedResourceMapCost = new HashMap<>();
+        if (Objects.nonNull(resourceMapCost)) {
+            listGenerateHelper(resourceMapCost, halvedResourceMapCost);
+        }
+    }
+
+    private void listGenerateHelper(Map<String, Double> resourceMapCost, Map<String, Double> halvedResourceMapCost) {
+        for (Map.Entry<String, Double> entry : resourceMapCost.entrySet()) {
             halvedResourceMapCost.put(entry.getKey(), entry.getValue() / 2);
         }
         ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(halvedResourceMapCost, deleteStructureListView.getItems(), null, false);
         deleteStructureListView.setItems(resourceListCost);
-    }
-    private void resourceListGenerationSite(DistrictAttributes structure) {
-        Map<String, Integer> resourceMapCost = structure.cost();
-        Map<String, Integer> halvedResourceMapCost = new HashMap<>();
-        if (Objects.nonNull(resourceMapCost)) {
-            for (Map.Entry<String, Integer> entry : resourceMapCost.entrySet()) {
-                halvedResourceMapCost.put(entry.getKey(), entry.getValue() / 2);
-            }
-            ObservableList<Resource> resourceListCost = resourcesService.generateResourceList(halvedResourceMapCost, deleteStructureListView.getItems(), null, false);
-            deleteStructureListView.setItems(resourceListCost);
-        }
     }
 
     public void onCancel(){

@@ -17,10 +17,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-import java.text.DecimalFormat;
 import java.util.*;
-
-import static de.uniks.stp24.component.game.ResourceComponent.refactorNumber;
 
 @Singleton
 public class ResourcesService {
@@ -44,13 +41,13 @@ public class ResourcesService {
     /**
      * storage for actual resources
      */
-    private Map<String, Integer> currentResources = new HashMap<>();
+    private Map<String, Double> currentResources = new HashMap<>();
 
     @Inject
     public ResourcesService() {
     }
 
-    public int getResourceCount(String resourceId) {
+    public double getResourceCount(String resourceId) {
         if (currentResources.containsKey(resourceId))
             return currentResources.get(resourceId);
         return 0;
@@ -103,20 +100,20 @@ public class ResourcesService {
     }
 
     // made a new method in order to prevent currentResources being overwritten in generateResourceList
-    public void setCurrentResources(Map<String, Integer> resourceMap) {
+    public void setCurrentResources(Map<String, Double> resourceMap) {
         currentResources = resourceMap;
     }
 
     /**
      * Updates the ObservableList which shows the count and change per season of a resource
      */
-    public ObservableList<Resource> generateResourceList(Map<String, Integer> resourceMap, ObservableList<Resource> oldResourceList, AggregateItemDto[] aggregateItems , boolean requireChangePerSeason) {
+    public ObservableList<Resource> generateResourceList(Map<String, Double> resourceMap, ObservableList<Resource> oldResourceList, AggregateItemDto[] aggregateItems , boolean requireChangePerSeason) {
         int i = 0;
         ObservableList<Resource> resourceList = FXCollections.observableArrayList();
         if (Objects.nonNull(resourceMap)) {
-            for (Map.Entry<String, Integer> entry : resourceMap.entrySet()) {
+            for (Map.Entry<String, Double> entry : resourceMap.entrySet()) {
                 String resourceID = entry.getKey();
-                int count = entry.getValue();
+                double count = entry.getValue();
                 double changePerSeason = 0;
                 if (requireChangePerSeason && !oldResourceList.isEmpty() && oldResourceList.size() >= 2) {
                     changePerSeason = oldResourceList.get(i).changePerSeason();
@@ -124,7 +121,7 @@ public class ResourcesService {
                 if (Objects.nonNull(aggregateItems)) {
                     changePerSeason = aggregateItems[i].subtotal();
                 }
-                Resource resource = new Resource(resourceID, count, Math.round(changePerSeason * 10000.0) / 10000.0);
+                Resource resource = new Resource(resourceID, count, Math.round(changePerSeason * 1000.0) / 1000.0);
                 resourceList.add(resource);
                 i++;
             }
@@ -154,7 +151,7 @@ public class ResourcesService {
         return resourceList;
     }
 
-    public boolean hasEnoughResources(Map<String, Integer> neededResources) {
+    public boolean hasEnoughResources(Map<String, Double> neededResources) {
         if (currentResources.isEmpty()) {
             this.subscriber.subscribe(empireService.getEmpire(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
                     result -> {
@@ -165,10 +162,10 @@ public class ResourcesService {
         }
 
         if (Objects.nonNull(neededResources)) {
-            for (Map.Entry<String, Integer> entry : neededResources.entrySet()) {
+            for (Map.Entry<String, Double> entry : neededResources.entrySet()) {
                 String res = entry.getKey();
-                int neededAmount = entry.getValue();
-                int availableAmount = currentResources.get(res);
+                double neededAmount = entry.getValue();
+                double availableAmount = currentResources.get(res);
                 if (availableAmount < neededAmount) {
                     return false;
                 }
@@ -185,11 +182,7 @@ public class ResourcesService {
 
     public Resource aggregateItemDtoToResource(AggregateItemDto aggregateItemDto) {
         String resourceID = aggregateItemDto.variable().replace("resources.", "").replace(".periodic", "");
-        int resourceCount = getResourceCount(resourceID);
+        double resourceCount = getResourceCount(resourceID);
         return new Resource(resourceID, resourceCount, aggregateItemDto.subtotal());
-    }
-
-    public String formatNumber(double number) {
-        return refactorNumber(number, gameResourceBundle);
     }
 }

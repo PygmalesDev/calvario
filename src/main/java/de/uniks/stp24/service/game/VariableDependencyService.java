@@ -40,8 +40,8 @@ public class VariableDependencyService {
         String next = null;
         double upgrade_time = 0;
         double pop_growth = 0;
-        Map<String, Integer> cost = new HashMap<>();
-        Map<String, Integer> upkeep = new HashMap<>();
+        Map<String, Double> cost = new HashMap<>();
+        Map<String, Double> upkeep = new HashMap<>();
         double capacity_multiplier = 0;
 
         if (variableService.systemsTree.getNode(key, "pop_growth") != null) {
@@ -61,11 +61,11 @@ public class VariableDependencyService {
         }
 
         if (variableService.systemsTree.getNode(key, "cost") != null) {
-            cost = castMapToInteger(createResourceMap(variableService.systemsTree.getNode(key, "cost").getChildren()));
+            cost = createResourceMap(variableService.systemsTree.getNode(key, "cost").getChildren());
         }
 
         if (variableService.systemsTree.getNode(key, "upkeep") != null) {
-            upkeep = castMapToInteger(createResourceMap(variableService.systemsTree.getNode(key, "upkeep").getChildren()));
+            upkeep = createResourceMap(variableService.systemsTree.getNode(key, "upkeep").getChildren());
         }
 
         if (variableService.systemsTree.getNode(key, "capacity_multiplier") != null) {
@@ -90,12 +90,12 @@ public class VariableDependencyService {
     private BuildingAttributes buildingDependencyHandler(VariablesTree.Node<ExplainedVariableDTO> buildingNode) {
         String id = buildingNode.getKey();
         double build_time = variableService.buildingsTree.getNode(id, "build_time").getValue().finalValue();
-        Map<String, Integer> cost = castMapToInteger(createResourceMap(variableService.buildingsTree.getNode(id, "cost").getChildren()));
-        Map<String, Integer> upkeep = castMapToInteger(createResourceMap(variableService.buildingsTree.getNode(id, "upkeep").getChildren()));
-        Map<String, Integer> production = new HashMap<>();
+        Map<String, Double> cost = createResourceMap(variableService.buildingsTree.getNode(id, "cost").getChildren());
+        Map<String, Double> upkeep = createResourceMap(variableService.buildingsTree.getNode(id, "upkeep").getChildren());
+        Map<String, Double> production = new HashMap<>();
 
         if (variableService.buildingsTree.getNode(id, "production") != null) {
-            production = castMapToInteger(createResourceMap(variableService.buildingsTree.getNode(id, "production").getChildren()));
+            production = createResourceMap(variableService.buildingsTree.getNode(id, "production").getChildren());
         }
         return new BuildingAttributes(id, build_time, cost, upkeep, production);
     }
@@ -130,7 +130,7 @@ public class VariableDependencyService {
         for (VariablesTree.Node<ExplainedVariableDTO> defenseNodes : variableService.shipTree.getNode(id, "defense").getChildren()) {
             defense.put(defenseNodes.getKey(), (int) defenseNodes.getValue().finalValue());
         }
-        Map<String, Integer> cost = castMapToInteger(createResourceMap(variableService.shipTree.getNode(id, "cost").getChildren()));
+        Map<String, Double> cost = createResourceMap(variableService.shipTree.getNode(id, "cost").getChildren());
         Map<String, Double> upkeep = createResourceMap(variableService.shipTree.getNode(id, "upkeep").getChildren());
         return new ShipType(id, build_time, health, speed, attack, defense, cost, upkeep);
     }
@@ -151,14 +151,14 @@ public class VariableDependencyService {
         String id = districtNode.getKey();
         double build_time = variableService.districtsTree.getNode(id, "build_time").getValue().finalValue();
 
-        Map<String, Integer> chance = new HashMap<>();
+        Map<String, Double> chance = new HashMap<>();
         if(variableService.districtsTree.getNode(id, "chance") != null){
-            chance = castMapToInteger(createResourceMap(variableService.districtsTree.getNode(id, "chance").getChildren()));
+            chance = createResourceMap(variableService.districtsTree.getNode(id, "chance").getChildren());
         }
 
-        Map<String, Integer> cost = castMapToInteger(createResourceMap(variableService.districtsTree.getNode(id, "cost").getChildren()));
-        Map<String, Integer> upkeep = castMapToInteger(createResourceMap(variableService.districtsTree.getNode(id, "upkeep").getChildren()));
-        Map<String, Integer> production = castMapToInteger(createResourceMap(variableService.districtsTree.getNode(id, "production").getChildren()));
+        Map<String, Double> cost = createResourceMap(variableService.districtsTree.getNode(id, "cost").getChildren());
+        Map<String, Double> upkeep = createResourceMap(variableService.districtsTree.getNode(id, "upkeep").getChildren());
+        Map<String, Double> production = createResourceMap(variableService.districtsTree.getNode(id, "production").getChildren());
 
         return new DistrictAttributes(id, build_time, chance, cost, upkeep, production);
     }
@@ -167,14 +167,6 @@ public class VariableDependencyService {
         Map<String, Double> result = new HashMap<>();
         for (VariablesTree.Node<ExplainedVariableDTO> node : children) {
             result.put(node.getKey(), node.getValue().finalValue());
-        }
-        return result;
-    }
-
-    private Map<String, Integer> castMapToInteger(Map<String, Double> map) {
-        Map<String, Integer> result = new HashMap<>();
-        for (Map.Entry<String, Double> entry : map.entrySet()) {
-            result.put(entry.getKey(), entry.getValue().intValue());
         }
         return result;
     }

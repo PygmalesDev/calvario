@@ -3,11 +3,11 @@ package de.uniks.stp24.model;
 public class SeasonComponent {
     String transActionTypeText;
     String resourceType;
-    int resourceAmount;
-    int moneyAmount;
+    double resourceAmount;
+    double moneyAmount;
     boolean isPlaying;
 
-    public SeasonComponent(String transActionTypeText, String resourceType, int resourceAmount, int moneyAmount, boolean isPlaying) {
+    public SeasonComponent(String transActionTypeText, String resourceType, double resourceAmount, double moneyAmount, boolean isPlaying) {
         this.transActionTypeText = transActionTypeText;
         this.resourceType = resourceType;
         this.resourceAmount = resourceAmount;
@@ -23,11 +23,11 @@ public class SeasonComponent {
         return resourceType;
     }
 
-    public int getResourceAmount() {
+    public double getResourceAmount() {
         return resourceAmount;
     }
 
-    public int getMoneyAmount() {
+    public double getMoneyAmount() {
         return moneyAmount;
     }
 

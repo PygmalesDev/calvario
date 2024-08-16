@@ -363,7 +363,7 @@ public class IngameModule extends LobbyTestLoader {
 
         when(this.gameLogicApiService.getAggregate(any(),any(),any())).thenReturn(Observable.just(HEALTH_DEF_DTO));
         when(this.warService.getWars(any(),any())).thenReturn(Observable.just(EMPTY_WARDTO_LIST));
-        when(this.empireApiService.getPrivate(any(),any())).thenReturn(Observable.just(new EmpirePrivateDto(new HashMap<>())));
+        when(this.empireApiService.getPrivate(any(),any())).thenReturn(Observable.just(new EmpirePrivate(new HashMap<>())));
 
     }
 

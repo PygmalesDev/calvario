@@ -16,6 +16,13 @@ public class DistancePoint extends Point2D {
         this.pointType = type;
     }
 
+    public DistancePoint(double v, double v1, POINT_TYPE type, IslandComponent island, DistancePoint prev) {
+        super(v, v1);
+        this.islandComponent = island;
+        this.prev = prev;
+        this.pointType = type;
+    }
+
     public DistancePoint(IslandComponent island, DistancePoint prev) {
         super(island.getPosX() + ISLAND_WIDTH/2, island.getPosY() + ISLAND_HEIGHT/2);
         this.islandComponent = island;

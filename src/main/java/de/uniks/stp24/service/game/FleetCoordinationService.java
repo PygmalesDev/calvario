@@ -206,6 +206,7 @@ public class FleetCoordinationService {
                 islandPoint.getX() + (FLEET_FROM_ISLAND_DISTANCE)*Math.cos(angle),
                 islandPoint.getY() + ( FLEET_FROM_ISLAND_DISTANCE)*Math.sin(angle),
                 POINT_TYPE.ISLAND,
+                islandPoint.islandComponent,
                 islandPoint.getPrev()
         );
     }

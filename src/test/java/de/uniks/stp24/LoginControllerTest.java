@@ -5,6 +5,7 @@ import de.uniks.stp24.controllers.LoginController;
 import de.uniks.stp24.model.LoginResult;
 import de.uniks.stp24.rest.AuthApiService;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.TechnologyService;
 import de.uniks.stp24.service.menu.LoginService;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.CheckBox;
@@ -32,6 +33,8 @@ public class LoginControllerTest extends ControllerTest {
     AuthApiService authApiService;
     @Spy
     TokenStorage tokenStorage;
+    @Spy
+    TechnologyService technologyService;
 
     @Spy
     final
@@ -48,7 +51,9 @@ public class LoginControllerTest extends ControllerTest {
     public void start(Stage stage) throws Exception{
         super.start(stage);
 
+        this.loginService.technologyService = this.technologyService;
         this.loginController.loginService = this.loginService;
+        this.loginController.tokenStorage = this.tokenStorage;
         bubbleComponent.subscriber = this.subscriber;
 
 
@@ -65,6 +70,7 @@ public class LoginControllerTest extends ControllerTest {
         when(authApiService.login(any()))
                 .thenReturn(Observable.just(new LoginResult("1", "a", "b", _public, "c", "d")));
         doReturn(null).when(app).show("/browseGames");
+        doNothing().when(technologyService).initAllTechnologies();
 
         // Start:
         // Alice has started the game STPellar. She sees the Log in screen.

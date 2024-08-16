@@ -1,8 +1,8 @@
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.dto.*;
 import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.dto.ExplainedVariableDTO;
 import de.uniks.stp24.dto.UpdateEmpireMarketDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.SeasonComponent;

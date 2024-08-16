@@ -1,7 +1,10 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.dto.ExplainedVariableDTO;
-import de.uniks.stp24.model.*;
+import de.uniks.stp24.model.BuildingAttributes;
+import de.uniks.stp24.model.DistrictAttributes;
+import de.uniks.stp24.model.SystemUpgrades;
+import de.uniks.stp24.model.UpgradeStatus;
 import de.uniks.stp24.service.VariablesTree;
 
 import javax.inject.Inject;
@@ -11,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static de.uniks.stp24.model.Ships.*;
+import static de.uniks.stp24.model.Ships.ShipType;
 
 @Singleton
 public class VariableDependencyService {

@@ -361,7 +361,6 @@ public class IngameModule extends LobbyTestLoader {
         doAnswer(inv -> this.app.show(this.inGameController)).when(this.app).show(eq("/ingame"), any());
         doAnswer(inv -> this.app.show(this.lobbyController)).when(this.app).show(eq("/lobby"), any());
 
-        when(this.gameLogicApiService.getAggregate(any(),any(),any())).thenReturn(Observable.just(HEALTH_DEF_DTO));
         when(this.warService.getWars(any(),any())).thenReturn(Observable.just(EMPTY_WARDTO_LIST));
         when(this.empireApiService.getPrivate(any(),any())).thenReturn(Observable.just(new EmpirePrivate(new HashMap<>())));
 

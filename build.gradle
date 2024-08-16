@@ -145,5 +145,5 @@ test {
     }
 
     minHeapSize = "128m" // initial heap size
-    maxHeapSize = "4512m" // maximum heap size
+    maxHeapSize = "6512m" // maximum heap size
 }

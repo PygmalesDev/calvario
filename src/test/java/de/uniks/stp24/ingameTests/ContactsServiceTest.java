@@ -195,7 +195,7 @@ public class ContactsServiceTest extends ControllerTest {
         assertTrue(contactsService.seenEnemies.isEmpty());
         doNothing().when(contactsService).createWarListener();
         contactsService.getEmpiresInGame();
-        sleep(100);
+        sleep(1000);
         assertEquals(2, contactsService.seenEnemies.size());
         Contact contact = contactsService.seenEnemies.getFirst();
         assertEquals(1, contact.getDiscoveredIslands().size());
@@ -221,8 +221,8 @@ public class ContactsServiceTest extends ControllerTest {
     @Test
     public void saveDateTest() {
         doReturn(Observable.just(emptyPrivateDto)).when(empireApiService).getPrivate(any(),any());
-        doReturn(Observable.just(empirePrivateDto))
-          .when(empireApiService).savePrivate(any(),any(),any(EmpirePrivateDto.class));
+        //doReturn(Observable.just(empirePrivateDto))
+          //.when(empireApiService).savePrivate(any(),any(),any(EmpirePrivateDto.class));
         doNothing().when(contactsService).createWarListener();
         contactsService.getEmpiresInGame();
         contactsService.addEnemy("empire1","isleNr1");

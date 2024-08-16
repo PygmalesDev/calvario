@@ -200,6 +200,7 @@ public class InGameController extends BasicController {
     @SubComponent
     @Inject
     public WarComponent warComponent;
+    @SubComponent
     @Inject
     public FleetManagerComponent fleetManagerComponent;
     @Inject
@@ -383,7 +384,6 @@ public class InGameController extends BasicController {
         overviewContainer.getChildren().add(overviewUpgradeComponent);
         islandClaimingContainer.getChildren().add(this.islandClaimingComponent);
         islandClaimingContainer.setVisible(false);
-
         contextMenuContainer.setPickOnBounds(false);
         contextMenuContainer.getChildren().addAll(
                 storageOverviewComponent,

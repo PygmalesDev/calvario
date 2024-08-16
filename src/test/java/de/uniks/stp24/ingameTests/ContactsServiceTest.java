@@ -82,6 +82,7 @@ public class ContactsServiceTest extends ControllerTest {
         contactsService.contactsComponent.subscriber = new Subscriber();
         contactsService.contactsComponent.warService.warsApiService = warsApiService;
         contactsService.contactsComponent.contactDetailsComponent = contactDetailsComponent;
+        contactsService.contactsComponent.contactDetailsComponent.contactsService = contactsService;
 
 
         enemy2 = new ReadEmpireDto("today", "today", "empire2", GAME_ID,
@@ -128,6 +129,7 @@ public class ContactsServiceTest extends ControllerTest {
         doReturn(Observable.just(emptyPrivateDto)).when(empireApiService).getPrivate(any(),any());
         doNothing().when(contactsService).saveContacts();
         doNothing().when(contactsService).createWarListener();
+        doNothing().when(contactDetailsComponent).checkWarSituation();
         assertTrue(contactsService.hiddenEmpires.isEmpty());
         assertNull(contactsService.gameID);
         assertNull(contactsService.myOwnEmpireID);

@@ -12,6 +12,8 @@ import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.BasicService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.menu.LobbyService;
+import javafx.geometry.Point2D;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -22,6 +24,9 @@ import org.jetbrains.annotations.NotNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
+
+import static de.uniks.stp24.service.Constants.ISLAND_HEIGHT;
+import static de.uniks.stp24.service.Constants.ISLAND_WIDTH;
 
 @Singleton
 public class IslandsService extends BasicService {
@@ -44,6 +49,7 @@ public class IslandsService extends BasicService {
     private final List<IslandComponent> islandComponentList = new ArrayList<>();
     public final Map<String, IslandComponent> islandComponentMap = new HashMap<>();
     private final Map<String, ReadEmpireDto> empiresInGame = new HashMap<>();
+    private final Map<String[], List<Point2D>> distancePoints = new HashMap<>();
     private final Map<String, Map<String, Integer>> connections = new HashMap<>();
     public final Map<String, InfrastructureService> siteManager = new HashMap<>();
 
@@ -133,9 +139,13 @@ public class IslandsService extends BasicService {
         double serverOffsetV = minY + 0.5 * heightRange;
         component.setPosition(SCALE_FACTOR * isleDto.posX()*DISTANCE_FACTOR - serverOffsetH + screenOffsetH,
                 SCALE_FACTOR * isleDto.posY()*DISTANCE_FACTOR - serverOffsetV + screenOffSetV);
-        component.applyIcon(isleDto.type());
+        // all Islands are foggy at first if player is not spectator
+        if (!tokenStorage.isSpectator())
+            component.applyIcon(true, BlendMode.LIGHTEN);
+        else
+            component.applyIcon(false, BlendMode.SRC_OVER);
         component.setFlagImage(isleDto.flagIndex());
-        applyDropShadowToIsland(component);
+//        applyDropShadowToIsland(component);
         return component;
     }
 
@@ -161,8 +171,45 @@ public class IslandsService extends BasicService {
         return singleConnections;
     }
 
+    public void generateDistancePoints() {
+        List<String> islandIDs = new ArrayList<>(this.isles.stream().map(Island::id).toList());
+
+        while (!islandIDs.isEmpty()) {
+            String currentID = islandIDs.removeFirst();
+            this.getConnections(currentID).forEach((neighbourID, value) -> {
+                if (islandIDs.contains(neighbourID))
+                    this.distancePoints.put(new String[]{currentID, neighbourID},
+                            this.generateDistancePoints(currentID, neighbourID, value-1));
+                });
+        }
+    }
+
+    public ArrayList<Point2D> generateDistancePoints(String startID, String finishID, int pointsAmount) {
+        IslandComponent startIsland = this.getIslandComponent(startID), endIsland = this.getIslandComponent(finishID);
+        Point2D  startVector = new Point2D(startIsland.getLayoutX() + ISLAND_WIDTH/2 + 19,  startIsland.getLayoutY() + ISLAND_HEIGHT/2 + 15),
+                 endVector   = new Point2D(endIsland.getLayoutX()   + ISLAND_WIDTH/2 + 19,  endIsland.getLayoutY()   + ISLAND_HEIGHT/2 + 15),
+                 distVector  = endVector.subtract(startVector),
+                 increment   = new Point2D(distVector.getX()/(pointsAmount+1), distVector.getY()/(pointsAmount+1));
+
+        ArrayList<Point2D> distancePoints = new ArrayList<>();
+        for (int i = 1; i <= pointsAmount; i++)
+            distancePoints.add(new Point2D(startVector.getX(), startVector.getY()).add(increment.getX() * i, increment.getY() * i));
+
+        return distancePoints;
+    }
+
+    public int getDistance(String islandID1, String islandID2) {
+        if (Objects.nonNull(this.getConnections(islandID1)))
+            return this.getConnections(islandID1).get(islandID2);
+        else return -1;
+    }
+
     public Map<String, Integer> getConnections(String islandID) {
         return this.connections.get(islandID);
+    }
+
+    public Map<String[], List<Point2D>> getDistancePoints() {
+        return this.distancePoints;
     }
 
     /**
@@ -173,10 +220,10 @@ public class IslandsService extends BasicService {
         list.forEach(
           island -> {
               IslandComponent tmp = createIslandPaneFromDto(island,
-                app.initAndRender(new IslandComponent()));
+                app.initAndRender(new IslandComponent(this)));
               tmp.setLayoutX(tmp.getPosX());
               tmp.setLayoutY(tmp.getPosY());
-              tmp.setIslandService(this);
+              //tmp.setIslandService(this);
               islandComponentList.add(tmp);
               islandComponentMap.put(island.id(), tmp);
           }
@@ -353,8 +400,8 @@ public class IslandsService extends BasicService {
         return "MissingNo.";
     }
 
-    public List<ShortSystemDto> getDevIsles(){
-        return Collections.unmodifiableList(this.devIsles);
+    public List<Island> getIsles(){
+        return Collections.unmodifiableList(this.isles);
     }
 
     @OnDestroy
@@ -390,7 +437,9 @@ public class IslandsService extends BasicService {
         // adds a background color to island as same as owner empire color
         if (Objects.nonNull(islandComponent.island.owner())) {
             Color colorWeb = Color.web(getEmpire(islandComponent.island.owner()).color()).brighter();
-            islandComponent.islandImage.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb) + ", 4.0, 0.88, 0, 0);");}
-
+            islandComponent.islandImage.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb) + ", 4.0, 0.88, 0, 0);");
+        }
     }
+
+    public  void updateIsles(Island island){this.isles.replaceAll(old -> old.equals(island) ? island : old);}
 }

@@ -3,8 +3,6 @@ package de.uniks.stp24.rest;
 import io.reactivex.rxjava3.core.Observable;
 import retrofit2.http.*;
 
-import java.util.ArrayList;
-
 import static de.uniks.stp24.model.Ships.*;
 
 public interface ShipsApiService {

@@ -1,8 +1,8 @@
 package de.uniks.stp24.component.game.fleetManager;
 
 import de.uniks.stp24.App;
-import de.uniks.stp24.dto.ShortSystemDto;
 import de.uniks.stp24.model.Fleets.Fleet;
+import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Ships.BlueprintInFleetDto;
 import de.uniks.stp24.model.Ships.ReadShipDTO;
 import de.uniks.stp24.model.Ships.ShipType;
@@ -34,10 +34,8 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
-
-import java.util.ResourceBundle;
-
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static de.uniks.stp24.model.Jobs.Job;
 
@@ -88,7 +86,7 @@ public class FleetManagerComponent extends AnchorPane {
 
 
     @Inject
-    App app;
+    public App app;
     @Inject
     public FleetService fleetService;
     @Inject
@@ -270,7 +268,7 @@ public class FleetManagerComponent extends AnchorPane {
         if(shipDeleted && ships.size() == fleet.ships()) {
             numberOfShips = ships.size() - 1;
         }
-        this.commandLimitLabel.setText("Command Limit \n" + numberOfShips + "/"
+        this.commandLimitLabel.setText(this.gameResourceBundle.getString("command.limit") + " \n" + numberOfShips + "/"
                 + fleet.size().values().stream().mapToInt(Integer::intValue).sum());
     }
 
@@ -279,17 +277,17 @@ public class FleetManagerComponent extends AnchorPane {
      * @param shipJobStarted: to avoid timing issues when a ship job has been started - eventListener in JobService is sometimes slower than the call of this method
      */
     public void setIslandName(boolean shipJobStarted) {
-        List<ShortSystemDto> islands = islandsService.getDevIsles().stream().filter(island -> island._id().equals(this.editedFleet.location())).toList();
-        if(islands.isEmpty()){
-            this.islandLabel.setText("Unknown Seas");
+        List<Island> islands = islandsService.getIsles().stream().filter(island -> island.id().equals(this.editedFleet.location())).toList();
+        if(islands.isEmpty() || islands.getFirst().owner() == null){
+            this.islandLabel.setText(this.gameResourceBundle.getString("unknown.seas"));
         } else if (!islands.getFirst().owner().equals(this.tokenStorage.getEmpireId())) {
-            this.islandLabel.setText(islands.getFirst().name() + "\nNot your island!");
+            this.islandLabel.setText(islands.getFirst().name() + "\n" + this.gameResourceBundle.getString("not.your.island"));
         } else {
             int numberOfShipyards = islands.getFirst().buildings().stream().filter("shipyard"::equals).toList().size();
             int numberOfShipJobs = this.jobsService.getObservableListForSystem(this.editedFleet.location())
                     .filtered(job -> job.type().equals("ship")).size();
             if(shipJobStarted) numberOfShipJobs += 1;
-            this.islandLabel.setText(islands.getFirst().name() + "\n" + numberOfShipJobs + " / " + numberOfShipyards + " shipyards occupied");
+            this.islandLabel.setText(islands.getFirst().name() + "\n" + numberOfShipJobs + " / " + numberOfShipyards + " " + this.gameResourceBundle.getString("shipyards.occupied"));
         }
     }
 
@@ -303,7 +301,9 @@ public class FleetManagerComponent extends AnchorPane {
             setIslandName(false);
             this.blueprintInFleetListView.refresh();
         });
-        this.jobsService.onJobDeletion(job._id(), ()  -> setIslandName(false));
+        this.jobsService.onJobDeletion(job._id(), ()  -> {
+            if(this.isVisible())  setIslandName(false);
+        });
     }
 
     public void createFleet() {
@@ -321,11 +321,11 @@ public class FleetManagerComponent extends AnchorPane {
         this.transition.setToValue(0);
         this.transition.play();
         switch (error) {
-            case "resources" -> this.buildShipErrorLabel.setText("You don't have enough resources!");
-            case "shipyard" -> this.buildShipErrorLabel.setText("All your shipyards are occupied!");
-            case "plannedSize" -> this.buildShipErrorLabel.setText("You have already built all planned ships!");
-            case "successful" -> this.buildShipErrorLabel.setText("The construction of your new ship has started!");
-            case "wilderness", "enemiesIsland" -> this.buildShipErrorLabel.setText("You don't own this island!");
+            case "resources" -> this.buildShipErrorLabel.setText(this.gameResourceBundle.getString("buildShipError.resources"));
+            case "shipyard" -> this.buildShipErrorLabel.setText(this.gameResourceBundle.getString("buildShipError.shipyard"));
+            case "plannedSize" -> this.buildShipErrorLabel.setText(this.gameResourceBundle.getString("buildShipError.plannedSize"));
+            case "successful" -> this.buildShipErrorLabel.setText(this.gameResourceBundle.getString("buildShipError.successful"));
+            case "wilderness", "enemiesIsland" -> this.buildShipErrorLabel.setText(this.gameResourceBundle.getString("not.your.island"));
         }
     }
 

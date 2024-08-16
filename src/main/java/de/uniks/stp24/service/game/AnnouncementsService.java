@@ -66,7 +66,7 @@ public class AnnouncementsService {
                             .replace("{islandName}", islandName);
                     forwardMethods.add(jobsService.getJobInspector("island_upgrade"));
                     forwardIcon = "-fx-background-image: url('[PATH]')"
-                            .replace("[PATH]", "/de/uniks/stp24/icons/islands/" + island.type() + ".png");
+                            .replace("[PATH]", "/de/uniks/stp24/icons/islands/" + island.type().name() + ".png");
                 }
                 case "district" -> {
                     message = gameResourceBundle.getString("captain.site.ready")
@@ -98,6 +98,11 @@ public class AnnouncementsService {
                 case "ship" -> {
                     message = gameResourceBundle.getString("captain.ship.ready")
                             .replace("{shipType}", gameResourceBundle.getString("ship." + job.ship()))
+                            .replace("{fleetName}", fleetService.getFleet(job.fleet()).name());
+                }
+                case "travel" -> {
+                    message = gameResourceBundle.getString("captain.travel.ready")
+                            .replace("{islandName}", this.islandsService.getIsland(job.path().getLast()).name())
                             .replace("{fleetName}", fleetService.getFleet(job.fleet()).name());
                 }
             }

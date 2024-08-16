@@ -12,12 +12,11 @@ import org.fulib.fx.controller.Subscriber;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static de.uniks.stp24.model.Fleets.*;
+import static de.uniks.stp24.model.Fleets.Fleet;
 import static de.uniks.stp24.model.Ships.*;
 
 @Singleton
@@ -43,6 +42,7 @@ public class ShipService {
     public Map<String, Integer> blueprintsInFleetMap = new HashMap<>();
     public ObservableList<BlueprintInFleetDto> blueprintsInFleetList = FXCollections.observableArrayList();
     public ArrayList<ShipType> shipTypesAttributes;
+    public Map<String, Double> shipSpeeds;
     private String lastShipUpdate = "";
     private String lastShipCreation = "";
     private String lastShipDeletion= "";
@@ -50,6 +50,18 @@ public class ShipService {
 
     public void initShipTypes(){
         shipTypesAttributes = variableDependencyService.createVariableDependencyShipType();
+        shipSpeeds = shipTypesAttributes.stream().collect(Collectors.toMap(ShipType::_id, ShipType::speed));
+    }
+
+    public int getFleetSpeed(ReadShipDTO[] ships) {
+        if (Objects.isNull(this.shipSpeeds)) return 5;
+
+        return (int) Arrays.stream(ships).toList().stream()
+                .map(ReadShipDTO::type)
+                .collect(Collectors.toSet()).stream()
+                .map(type -> this.shipSpeeds.get(type))
+                .mapToDouble(v -> (Objects.isNull(v)) ? 5.0f : v)
+                .min().orElse(5);
     }
 
     public Map<String, Double> getNeededResources(String type) {

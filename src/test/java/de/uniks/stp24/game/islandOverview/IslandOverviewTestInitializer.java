@@ -28,8 +28,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import org.fulib.fx.controller.Subscriber;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Spy;
 
+import java.util.Random;
 
 import static org.mockito.Mockito.spy;
 
@@ -68,7 +70,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     GameMembersApiService gameMembersApiService;
     @Spy
     EmpireApiService empireApiService;
-    @Spy
+    @Mock
     JobsService jobsService;
     @Spy
     JobsApiService jobsApiService;
@@ -84,14 +86,16 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     VariableDependencyService variableDependencyService;
     @Spy
     MarketService marketService;
-    @Spy
+    @Mock
     FleetService fleetService;
-    @Spy
+    @Mock
     ShipService shipService;
-    @Spy
+    @Mock
     FleetCoordinationService fleetCoordinationService;
     @Spy
     FleetApiService fleetApiService;
+    @Spy
+    FogOfWar fogOfWar;
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
@@ -144,7 +148,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @InjectMocks
     IslandClaimingComponent islandClaimingComponent;
     @InjectMocks
-    public TechnologyOverviewComponent technologyOverviewComponent;
+    TechnologyOverviewComponent technologyOverviewComponent;
 
     @InjectMocks
     TechnologyCategoryComponent technologyCategoryComponent;
@@ -159,7 +163,6 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     ResearchJobComponent researchJobComponent;
     @InjectMocks
     IslandUpgradesJobProgressComponent islandUpgradesJobProgressComponent;
-
     @InjectMocks
     MarketComponent marketComponent;
     @InjectMocks
@@ -169,7 +172,9 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @InjectMocks
     ChangeFleetComponent changeFleetComponent;
     @InjectMocks
-    private BlueprintsDetailsComponent blueprintsDetailsComponent;
+    IslandTravelComponent islandTravelComponent;
+    @InjectMocks
+    BlueprintsDetailsComponent blueprintsDetailsComponent;
 
 
     public void initializeComponents() {
@@ -193,6 +198,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.technologiesComponent.technologyCategoryComponent.subscriber = this.subscriber;
         this.inGameController.technologiesComponent.technologyService.subscriber = this.subscriber;
         this.inGameController.technologiesComponent.subscriber = this.subscriber;
+        this.inGameController.fleetCoordinationService = this.fleetCoordinationService;
 
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
         this.inGameController.buildingsWindowComponent = this.buildingsWindowComponent;
@@ -201,6 +207,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.clockComponent = this.clockComponent;
         this.inGameController.eventComponent = this.eventComponent;
         this.inGameController.eventService = this.eventService;
+        this.inGameController.islandTravelComponent = this.islandTravelComponent;
         this.clockComponent.eventService = this.eventService;
         this.inGameController.storageOverviewComponent = this.storageOverviewComponent;
         this.inGameService.setGameStatus(gameStatus);
@@ -224,7 +231,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.overviewSitesComponent.buildingsComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.overviewSitesComponent.islandAttributes = islandAttributeStorage;
         this.inGameController.coolerBubbleComponent.announcementsService = this.announcementsService;
-        this.inGameController.selectedIsland = new IslandComponent();
+        this.inGameController.selectedIsland = new IslandComponent(this.islandsService);
         this.resourcesService.islandAttributes = islandAttributeStorage;
         this.resourcesService.tokenStorage = tokenStorage;
         this.resourcesService.empireService = empireService;
@@ -272,9 +279,15 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.islandsService.tokenStorage = new TokenStorage();
         this.islandsService.gameSystemsService = gameSystemsApiService;
 
+        this.inGameController.fogOfWar.tokenStorage = this.tokenStorage;
+        this.inGameController.fogOfWar.subscriber = this.subscriber;
+        this.inGameController.fogOfWar.islandsService = this.islandsService;
+        this.inGameController.fogOfWar.empireApiService = this.empireApiService;
+
         this.technologyService.eventListener = this.eventListener;
 
         this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
+        this.inGameController.fleetManagerComponent.blueprintsDetailsComponent = this.blueprintsDetailsComponent;
         this.inGameController.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
         this.inGameController.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
         this.fleetCoordinationService.fleetService = this.fleetService;
@@ -283,8 +296,9 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.fleetService.fleetApiService = this.fleetApiService;
         this.fleetService.subscriber = this.subscriber;
         this.fleetCoordinationService.subscriber = this.subscriber;
-        this.fleetManagerComponent.blueprintsDetailsComponent = this.blueprintsDetailsComponent;
         this.technologyService.eventListener = this.eventListener;
+
+        this.timerService.eventListener = this.eventListener;
 
     }
 

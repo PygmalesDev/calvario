@@ -15,11 +15,11 @@ public class LoginService {
     @Inject
     AuthApiService authApiService;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
     @Inject
     PrefService prefService;
     @Inject
-    TechnologyService technologyService;
+    public TechnologyService technologyService;
 
     @Inject
     public LoginService() {
@@ -51,6 +51,7 @@ public class LoginService {
                     if (rememberMe) {
                         prefService.setRefreshToken(loginResult.refreshToken());
                     }
+                    technologyService.initAllTechnologies();
                 });
     }
 

@@ -63,7 +63,7 @@ public class TestJobsOverview extends JobsTestComponent {
     @Test
     public void testInitializingOverview() {
         // Assert that only the running island jobs are shown
-        assertEquals(4, this.jobs.size());
+        assertEquals(7, this.jobs.size());
     }
 
     @Test
@@ -73,12 +73,12 @@ public class TestJobsOverview extends JobsTestComponent {
 
         // Test deleting a job from an island that has more jobs in the queue
         String jobID = this.jobs.get(0)._id();
-
+        assertEquals(7, this.jobs.size());
         clickOn("#jobElementDeleteButton_" + jobID);
         this.deleteInternally(jobID);
         WaitForAsyncUtils.waitForFxEvents();
 
-        assertEquals(4, this.jobs.size());
+        assertEquals(6, this.jobs.size());
 
         // Test deleting a job from an island with a single job
         jobID = this.jobs.get(2)._id();
@@ -87,7 +87,7 @@ public class TestJobsOverview extends JobsTestComponent {
         this.deleteInternally(jobID);
         WaitForAsyncUtils.waitForFxEvents();
 
-        assertEquals(3, this.jobs.size());
+        assertEquals(5, this.jobs.size());
     }
 
     @Test

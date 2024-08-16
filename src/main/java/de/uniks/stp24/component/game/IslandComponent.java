@@ -71,7 +71,8 @@ public class IslandComponent extends Pane {
     }
 
     public void applyIcon(boolean isFoggy, BlendMode blendMode) {
-        this.islandImage.setImage(imageCache.get("icons/islands/" + island.type().name() + ".png"));
+        if (Objects.nonNull(this.islandImage))
+            this.islandImage.setImage(imageCache.get("icons/islands/" + island.type().name() + ".png"));
 
         this.foggy = isFoggy;
 

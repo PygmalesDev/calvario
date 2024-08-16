@@ -108,6 +108,9 @@ public class ResourceComponent extends HBox implements ReusableItemComponent<Res
 
     @NotNull
     public static String refactorNumber(double number, ResourceBundle gameResourceBundle) {
+        if (gameResourceBundle == null) {
+            return String.valueOf(number);
+        }
         DecimalFormat decimalFormat = new DecimalFormat("#.###");
         String suffix;
         double value;

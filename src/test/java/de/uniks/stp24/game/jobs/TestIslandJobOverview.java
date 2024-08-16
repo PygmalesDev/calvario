@@ -109,7 +109,9 @@ public class TestIslandJobOverview extends JobsTestComponent {
         WaitForAsyncUtils.waitForFxEvents();
         doReturn(this.ISLAND_1).when(this.islandAttributeStorage).getIsland();
 
-        this.jobs.forEach(job -> this.deleteInternally(job._id()));
+        for (Jobs.Job job : this.jobs) {
+            this.deleteInternally(job._id());
+        }
         WaitForAsyncUtils.waitForFxEvents();
 
         assertTrue(lookup("#noJobText").queryText().isVisible());

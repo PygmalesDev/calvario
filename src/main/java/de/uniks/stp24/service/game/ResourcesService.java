@@ -17,7 +17,6 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-import java.text.DecimalFormat;
 import java.util.*;
 
 import static de.uniks.stp24.component.game.ResourceComponent.refactorNumber;

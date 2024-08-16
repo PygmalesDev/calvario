@@ -1,7 +1,6 @@
 package de.uniks.stp24;
 
 import de.uniks.stp24.appTestModules.AppTest3Module;
-import de.uniks.stp24.appTestModules.IngameModule;
 import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.ws.Event;
 import javafx.scene.control.ListView;
@@ -183,8 +182,6 @@ public class AppTest3 extends AppTest3Module {
         clickOn("#technologiesButton");
         assertTrue(this.technologyOverviewComponent.isVisible());
         clickOn("#crewRelationsButton");
-        WaitForAsyncUtils.waitForFxEvents();
-        clickOn("#researchButton");
         WaitForAsyncUtils.waitForFxEvents();
         clickOn("#closeCategoryButton");
     }

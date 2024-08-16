@@ -89,13 +89,14 @@ public class FleetService {
                     }
                 }
                 case "deleted" -> {
-                    if (!ship._id().equals(this.lastShipDeletion)) {
+                    if (!ship._id().equals(this.lastShipDeletion) && gameFleets.contains(ship.fleet())) {
                         adaptShipCount(ship.fleet(), -1);
                         this.lastShipDeletion = ship._id();
                     }
                 }
             }
-        }, error -> System.out.println("Error initializing shipListener in ShipService :\n" + error.getMessage()));
+        }, //error -> System.out.println("Error initializing shipListener in FleetService :\n" + error.getMessage()));
+                Throwable::printStackTrace);
     }
 
     public void adaptShipCount(String fleetID, int increment) {

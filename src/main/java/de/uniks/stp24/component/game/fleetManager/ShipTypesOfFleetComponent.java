@@ -66,11 +66,15 @@ public class ShipTypesOfFleetComponent extends VBox implements ReusableItemCompo
         }
         this.sizeLabel.setText(blueprintInFleetDto.count() + "/" + plannedSize);
         this.decrementSizeButton.setDisable(false);
-        if (blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) == 0){
-            this.decrementSizeButton.setDisable(true);
-        }
-        if(blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) <= this.blueprintInFleetDto.count()) {
-            this.decrementSizeButton.setDisable(true);
+        if(blueprintInFleetDto.fleet().size().containsKey(this.blueprintInFleetDto.type())) {
+            if (blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) == 0) {
+                this.decrementSizeButton.setDisable(true);
+            }
+            if (blueprintInFleetDto.fleet().size().get(this.blueprintInFleetDto.type()) <= this.blueprintInFleetDto.count()) {
+                this.decrementSizeButton.setDisable(true);
+            }
+        } else {
+            this.incrementSize();
         }
     }
 

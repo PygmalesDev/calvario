@@ -16,6 +16,8 @@ import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.BeforeEach;
@@ -166,6 +168,8 @@ public class TestFleetManager extends ControllerTest {
         final Fleet fleet2 = new Fleet("a", "a", "fleetID2", GAME_ID, EMPIRE_ID, "fleetName3",
                 LOCATION, 1, new HashMap<>(), new HashMap<>(), new HashMap<>(), null);
         when(this.fleetApiService.deleteFleet(any(),any())).thenReturn(Observable.just(fleet2));
+        final ObservableList<Jobs.Job> jobs = FXCollections.observableArrayList();
+        doReturn(jobs).when(jobsService).getJobObservableListOfType(any());
 
         waitForFxEvents();
         assertEquals(4, fleetManagerComponent.fleets.size());

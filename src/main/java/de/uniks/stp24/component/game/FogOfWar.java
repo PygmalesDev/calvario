@@ -111,14 +111,9 @@ public class FogOfWar {
     }
 
     public void removeShapesFromFog(Shape shape) {
-        this.islandFog = null;
-        Shape tmp;
-        if (Objects.nonNull(this.removedFog))
-            tmp = Shape.union(this.removedFog, shape);
-        else
-            tmp = shape;
-        this.currentFog = Shape.subtract(this.originalFog, tmp);
-        this.setPattern();
+        this.updateRemovedFog(shape);
+        this.updateFog(null);
+
     }
 
     public void removeFogFromIsland(IslandComponent island) {

@@ -1,6 +1,7 @@
 package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.dto.EmpireDto;
+import de.uniks.stp24.dto.EmpirePrivate;
 import de.uniks.stp24.dto.SeasonalTradeDto;
 import de.uniks.stp24.dto.UpdateEmpireMarketDto;
 import de.uniks.stp24.model.SeasonComponent;
@@ -17,6 +18,7 @@ import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Singleton
 public class MarketService {
@@ -65,12 +67,17 @@ public class MarketService {
     }
 
     public void saveSeasonalTrades() {
-        Map<String, List<SeasonComponent>> _private = new HashMap<>();
-        _private.put("allSeasonalTrades", seasonComponents);
-        SeasonalTradeDto seasonalTradeDto = new SeasonalTradeDto(_private);
-        subscriber.subscribe(saveSeasonalComponents(tokenStorage.getGameId(), tokenStorage.getEmpireId(), seasonalTradeDto),
-                result -> {},
-                error -> System.out.println("errorSaveSeasonalTrades:" + error));
+        this.subscriber.subscribe(this.empireApiService.getPrivate(this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()),
+                result -> {
+                    final Map<String, Object> newPrivateMap = Objects.nonNull(result._private()) ?
+                            result._private() : new HashMap<>();
+                    newPrivateMap.put("allSeasonalTrades", this.seasonComponents);
+                    subscriber.subscribe(this.empireApiService.savePrivate(this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId(), new EmpirePrivate(newPrivateMap)),
+                            saved -> {},
+                            error -> System.out.println("error while saving fog: " + error.getMessage()));
+                },
+                error -> System.out.println("error while getting fog: " + error.getMessage())
+        );
     }
 
     public void dispose() {

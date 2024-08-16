@@ -6,6 +6,7 @@ import de.uniks.stp24.dto.ExplainedVariableDTO;
 import de.uniks.stp24.dto.UpdateEmpireMarketDto;
 import de.uniks.stp24.model.Game;
 import de.uniks.stp24.model.SeasonComponent;
+import de.uniks.stp24.rest.EmpireApiService;
 import de.uniks.stp24.rest.PresetsApiService;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
@@ -90,6 +91,8 @@ public class MarketComponent extends StackPane {
     @org.fulib.fx.annotation.controller.Resource
     @Named("gameResourceBundle")
     ResourceBundle gameResourceBundle;
+    @Inject
+    EmpireApiService empireApiService;
 
     @Param("empireID")
     String empire;
@@ -116,7 +119,7 @@ public class MarketComponent extends StackPane {
         marketSeasonComponent.marketService = this.marketService;
         return marketSeasonComponent;
     };
-    public final ObservableList<SeasonComponent> seasonComponents = FXCollections.observableArrayList();
+    public ObservableList<SeasonComponent> seasonComponents = FXCollections.observableArrayList();
 
     @Inject
     public MarketComponent() {
@@ -529,15 +532,21 @@ public class MarketComponent extends StackPane {
      * Loads seasonal trades from the server.
      */
     public void loadSeasonalTrades() {
-        subscriber.subscribe(marketService.getSeasonalTrades(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
-                seasonalTradeDto -> {
-                    if (Objects.nonNull(seasonalTradeDto._private()))
-                        this.seasonComponents.addAll(seasonalTradeDto._private().get("allSeasonalTrades"));
+        if (!tokenStorage.isSpectator()) {
+            subscriber.subscribe(this.empireApiService.getPrivate(tokenStorage.getGameId(), tokenStorage.getEmpireId()),
+                    result -> {
+                        Map<String, Object> privateMap = result._private();
+                        if (Objects.nonNull(privateMap)) {
+                            if (privateMap.containsKey("allSeasonalTrades")) {
+                                this.seasonComponents = (ObservableList<SeasonComponent>) privateMap.get("islandFog");
+                                this.seasonalTradesListView.setItems(this.seasonComponents);
+                                this.seasonalTradesListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.marketSeasonComponentProvider));
+                                this.marketService.setSeasonComponents(this.seasonComponents);
+                            }
+                        }
 
-                    this.seasonalTradesListView.setItems(this.seasonComponents);
-                    this.seasonalTradesListView.setCellFactory(list -> new ComponentListCell<>(this.app, this.marketSeasonComponentProvider));
-                    this.marketService.setSeasonComponents(this.seasonComponents);
-                },
-                Throwable::printStackTrace);
+                    },
+                    error -> System.out.println("Error in Market! " + error.getMessage()));
+        }
     }
 }

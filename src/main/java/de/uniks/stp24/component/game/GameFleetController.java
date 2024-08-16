@@ -17,6 +17,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnDestroy;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -55,18 +56,20 @@ public class GameFleetController extends Pane {
 
         this.setId("ingameFleet_" + fleet._id());
 
-        travelTimeline.currentTimeProperty().addListener(this::listnerMethod);
+        travelTimeline.currentTimeProperty().addListener(this::listenerTimeMethod);
 
-        this.travelTimeline.setOnFinished(event -> {
-            if (this.currentPoint.getType().equals(POINT_TYPE.ISLAND)){
-                this.travelTimeline.currentTimeProperty().removeListener(this::listnerMethod);
-                this.fleetCoordinationService.inGameController.removeFogFromIsland(true, this.currentPoint.islandComponent);
-                travelTimeline.currentTimeProperty().addListener(this::listnerMethod);
-            }
-        });
+        this.travelTimeline.statusProperty().addListener(this::listenerStatusMethod);
     }
 
-    private void listnerMethod(ObservableValue<? extends Duration> observableValue, Duration duration, Duration duration1) {
+    private void listenerStatusMethod(ObservableValue<? extends Animation.Status> observableValue, Animation.Status status, Animation.Status status1) {
+        if (status1.equals(Animation.Status.STOPPED) && this.currentPoint.getType().equals(POINT_TYPE.ISLAND)){
+//            this.travelTimeline.currentTimeProperty().removeListener(this::listenerTimeMethod);
+            this.fleetCoordinationService.inGameController.removeFogFromIsland(true, this.currentPoint.islandComponent);
+//            travelTimeline.currentTimeProperty().addListener(this::listenerTimeMethod);
+        }
+    }
+
+    private void listenerTimeMethod(ObservableValue<? extends Duration> observableValue, Duration duration, Duration duration1) {
         fleetCoordinationService.inGameController.removeFogFromShape(new Circle(this.getLayoutX() + FLEET_HW/2 + 10,
                 this.getLayoutY() + FLEET_HW/2 + 15,
                 collisionCircle.getRadius()*1.3)
@@ -140,5 +143,12 @@ public class GameFleetController extends Pane {
 
     public void setFleet(Fleet fleet) {
         this.fleet = fleet;
+    }
+
+    @OnDestroy
+    public void onDestroy(){
+        this.travelTimeline.statusProperty().removeListener(this::listenerStatusMethod);
+        this.travelTimeline.currentTimeProperty().removeListener(this::listenerTimeMethod);
+        this.travelTimeline.stop();
     }
 }

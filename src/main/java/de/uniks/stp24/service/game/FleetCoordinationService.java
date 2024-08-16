@@ -254,7 +254,7 @@ public class FleetCoordinationService {
     }
 
     private void processFinish(GameFleetController fleet, IslandComponent finishIsland) {
-        DistancePoint endPoint = new DistancePoint(finishIsland, fleet.getCurrentPoint());
+        DistancePoint endPoint = this.findParkingPoint(new DistancePoint(finishIsland, fleet.getCurrentPoint()));
         fleet.travelToPoint(this.createTravelKeyFrames(fleet, endPoint, 60), endPoint);
     }
 

@@ -190,9 +190,9 @@ public class InGameTestInitializer extends ControllerTest {
         return comp;
     };
 
-    Map<String, Integer> empireResourceStorage = new LinkedHashMap<>() {{
-        put("energy", 100);
-        put("fuel", 50);
+    Map<String, Double> empireResourceStorage = new LinkedHashMap<>() {{
+        put("energy", 100.0);
+        put("fuel", 50.0);
     }};
 
 

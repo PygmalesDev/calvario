@@ -63,17 +63,17 @@ public class StorageComponentTest extends ControllerTest {
     final Subject<Event<EmpireDto>> empireDtoSubject = BehaviorSubject.create();
     final Subject<Event<Game>> gameSubject = BehaviorSubject.create();
 
-    final Map<String, Integer> resources1 = new LinkedHashMap<>() {{
-        put("energy", 3);
-        put("population", 2);
+    final Map<String, Double> resources1 = new LinkedHashMap<>() {{
+        put("energy", 3.0);
+        put("population", 2.0);
     }};
-    final Map<String, Integer> resources2 = new LinkedHashMap<>() {{
-        put("energy", 4);
-        put("population", 4);
+    final Map<String, Double> resources2 = new LinkedHashMap<>() {{
+        put("energy", 4.0);
+        put("population", 4.0);
     }};
-    final Map<String, Integer> resources3 = new LinkedHashMap<>() {{
-        put("energy", 5);
-        put("population", 4);
+    final Map<String, Double> resources3 = new LinkedHashMap<>() {{
+        put("energy", 5.0);
+        put("population", 4.0);
     }};
 
 

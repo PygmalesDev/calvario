@@ -12,7 +12,6 @@ import org.testfx.framework.junit5.ApplicationTest;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
 /**

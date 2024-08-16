@@ -21,6 +21,8 @@ public class IslandClaimingModule extends IngameModule {
 
         when(this.jobsApiService.getEmpireJobs(any(), any())).thenReturn(Observable.just(new ArrayList<>()));
 
+        when(empireApiService.getPrivate(any(), any())).thenReturn(Observable.empty());
+
         when(this.shipsApiService.getAllShips(any(), eq("testFleetID_3"))).thenReturn(Observable.just(FLEET_SHIPS_3));
 
         when(this.jobsApiService.createNewJob(any(), any(), any())).thenReturn(Observable.just(setJobProgress(0)));

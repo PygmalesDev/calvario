@@ -81,7 +81,7 @@ public class EventService {
             setNextEvent();
             return tmp;
         }
-        // if no event can occur (or already occured)
+        // if no event can occur (or already occurred)
         return event;
     }
 

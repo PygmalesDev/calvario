@@ -122,10 +122,13 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
 
         doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
 
+        doReturn(Observable.empty()).when(empireApiService).getPrivate(any(), any());
+
+
         this.islandsService.isles = islands;
         this.mockFleets();
         this.app.show(this.inGameController);
-       clearStyleSheets();
+        clearStyleSheets();
     }
 
     private void mockFleets(){

@@ -299,11 +299,13 @@ public class Constants {
 
     public static final double ISLAND_HEIGHT = 162;
     public static final double ISLAND_WIDTH = 70;
-    public static final double ISLAND_RADIUS_X = ISLAND_WIDTH/2;
-    public static final double ISLAND_RADIUS_Y = ISLAND_HEIGHT/2;
-    public static final int FLEET_FROM_ISLAND_DISTANCE = 40;
-    public static final int FLEET_HW = 30;
-
-    public static final int ISLAND_COLLISION_RADIUS = 120;
-    public static final int FLEET_COLLISION_RADIUS = 40;
+    public static final double FLEET_HW = 30;
+    public static final double FLEET_FROM_ISLAND_DISTANCE = FLEET_HW + ISLAND_WIDTH/2 + 30;
+    public static final int ISLAND_COLLISION_RADIUS = 150;
+    public static final int FLEET_COLLISION_RADIUS = 80;
+    public static final double ISLAND_SCALE = 1.25;
+    public static final double X_OFFSET = ISLAND_WIDTH/2 * ISLAND_SCALE + 17;
+    public static final double Y_OFFSET = ISLAND_HEIGHT/2 * ISLAND_SCALE + 7;
+    public static final double FOG_X_OFFSET = ISLAND_WIDTH/2 * 1.75 + 17;
+    public static final double FOG_Y_OFFSET = ISLAND_HEIGHT/2 * 1.75 + 7;
 }

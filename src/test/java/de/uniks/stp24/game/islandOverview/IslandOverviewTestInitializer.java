@@ -94,6 +94,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     FleetCoordinationService fleetCoordinationService;
     @Spy
     FleetApiService fleetApiService;
+    @Spy
+    FogOfWar fogOfWar;
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
@@ -276,6 +278,13 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.contextMenuButtons = new HBox();
         this.islandsService.tokenStorage = new TokenStorage();
         this.islandsService.gameSystemsService = gameSystemsApiService;
+
+        this.inGameController.fogOfWar.tokenStorage = this.tokenStorage;
+        this.inGameController.fogOfWar.subscriber = this.subscriber;
+        this.inGameController.fogOfWar.islandsService = this.islandsService;
+        this.inGameController.fogOfWar.empireApiService = this.empireApiService;
+
+        this.technologyService.eventListener = this.eventListener;
 
         this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
         this.inGameController.fleetManagerComponent.blueprintsDetailsComponent = this.blueprintsDetailsComponent;

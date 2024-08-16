@@ -37,6 +37,8 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.*;
 
+import static de.uniks.stp24.component.game.ResourceComponent.refactorNumber;
+
 @Component(view = "MarketComponent.fxml")
 public class MarketComponent extends StackPane {
     @FXML
@@ -181,7 +183,7 @@ public class MarketComponent extends StackPane {
      */
     private void setCreditCount() {
         userCredits = resourceCountMap.get("credits");
-        userCreditsLabel.setText(String.valueOf(userCredits));
+        userCreditsLabel.setText(refactorNumber(userCredits, gameResourceBundle));
     }
 
     /**
@@ -284,8 +286,8 @@ public class MarketComponent extends StackPane {
         this.sellingPrice = (int) Math.round((resourcePriceMap.get(resource) * numberOfGoods) * (1 - this.marketFee));
         this.buyingPrice = (int) Math.round((resourcePriceMap.get(resource) * numberOfGoods) * (1 + this.marketFee));
 
-        buyingPriceLabel.setText(String.valueOf(buyingPrice));
-        sellingPriceLabel.setText(String.valueOf(sellingPrice));
+        buyingPriceLabel.setText(refactorNumber(buyingPrice, gameResourceBundle));
+        sellingPriceLabel.setText(refactorNumber(sellingPrice, gameResourceBundle));
         buttonLogic();
     }
 
@@ -300,7 +302,7 @@ public class MarketComponent extends StackPane {
             noPurchase = true;
             resourceCountMapCopy = new HashMap<>(resourceCountMap);
             userCredits -= buyingPrice;
-            userCreditsLabel.setText(String.valueOf(userCredits));
+            userCreditsLabel.setText(refactorNumber(userCredits, gameResourceBundle));
             double result = resourceCountMap.get(selectedItem) + resourceAmount;
             resourceCountMap.put(selectedItem, result);
             updateResources();
@@ -321,7 +323,7 @@ public class MarketComponent extends StackPane {
             resourceCountMapCopy = new HashMap<>(resourceCountMap);
 
             userCredits += sellingPrice;
-            userCreditsLabel.setText(String.valueOf(userCredits));
+            userCreditsLabel.setText(refactorNumber(userCredits, gameResourceBundle));
             resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
             updateResources();
             refreshListview();
@@ -404,7 +406,7 @@ public class MarketComponent extends StackPane {
                 imageView.setImage(imageCache.get("/de/uniks/stp24/assets/market/buttons/" + item.getKey() + ".png"));
                 imageView.setFitWidth(35);
                 imageView.setFitHeight(35);
-                text.setText(String.valueOf(item.getValue()));
+                text.setText(refactorNumber(item.getValue(), gameResourceBundle));
                 text.setId(item.getKey() + "_marketGoods");
                 setGraphic(vBox);
             }
@@ -495,7 +497,7 @@ public class MarketComponent extends StackPane {
                 }
             }
         }
-        userCreditsLabel.setText(String.valueOf(userCredits));
+        userCreditsLabel.setText(refactorNumber(userCredits, gameResourceBundle));
     }
 
     /**

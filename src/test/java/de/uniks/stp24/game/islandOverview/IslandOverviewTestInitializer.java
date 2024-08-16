@@ -87,12 +87,6 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @Spy
     MarketService marketService;
 
-//    @Spy
-//    FleetService fleetService;
-//    @Spy
-//    FleetCoordinationService fleetCoordinationService;
-//    @Spy
-//    FleetApiService fleetApiService;
     @Spy
     WarService warService;
     @Spy
@@ -313,11 +307,13 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.contactService.islandsService = this.islandsService;
         this.inGameController.contactService.empireApiService = this.empireApiService;
         this.inGameController.contactService.subscriber = this.subscriber;
+        this.inGameController.contactService.eventListener = this.eventListener;
 
         this.fleetService.subscriber = this.subscriber;
         this.fleetCoordinationService.subscriber = this.subscriber;
         this.technologyService.eventListener = this.eventListener;
 
+        this.timerService.subscriber = this.subscriber;
         this.timerService.eventListener = this.eventListener;
     }
 

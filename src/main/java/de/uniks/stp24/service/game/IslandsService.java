@@ -118,8 +118,7 @@ public class IslandsService extends BasicService {
                     widthRange = maxX-minX + 1000;
                     heightRange = maxY-minY + 1000;
                     this.app.show("/ingame");
-                },
-                error -> System.out.println("Error while retrieving islands in the IslandsService:\n"+error.getMessage()));
+                }, Throwable::printStackTrace);
     }
 
     /**

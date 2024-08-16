@@ -315,7 +315,7 @@ public class InGameController extends BasicController {
         }
     }
 
-    @OnRender(2)
+    @OnRender
     public void render() {
         this.fleetCoordinationService.setJobFinishers();
 
@@ -366,8 +366,8 @@ public class InGameController extends BasicController {
                 jobsOverviewComponent,
                 empireOverviewComponent,
                 marketOverviewComponent,
-                contactsOverviewComponent,
-                fleetManagerComponent
+                fleetManagerComponent,
+                contactsOverviewComponent
         );
         contextMenuContainer.getChildren().forEach(child -> {
             child.setVisible(false);
@@ -672,8 +672,8 @@ public class InGameController extends BasicController {
             showTechnologiesButton.getStyleClass().add("technologiesButton");
             contextMenuButtons.getChildren().addAll(showTechnologiesButton,
               new ContextMenuButton("marketOverview", this.marketOverviewComponent),
-              new ContextMenuButton("contactsOverview", this.contactsOverviewComponent),
-              new ContextMenuButton("fleetManager", fleetManagerComponent));
+              new ContextMenuButton("fleetManager", fleetManagerComponent),
+              new ContextMenuButton("contactsOverview", this.contactsOverviewComponent));
         });
     }
 

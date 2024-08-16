@@ -294,8 +294,12 @@ public class IngameModule extends LobbyTestLoader {
     protected final Subject<Event<Job>> JOB_SUBJECT = BehaviorSubject.create();
     protected final Subject<Event<Fleet>> FLEET_SUBJECT = BehaviorSubject.create();
     protected final Subject<Event<Ship>> SHIP_SUBJECT = BehaviorSubject.create();
+    protected final Subject<Event<WarDto>> WAR_SUBJECT = BehaviorSubject.create();
 
     protected int gameTicks = 0;
+
+    protected final AggregateResultDto HEALTH_DEF_DTO = new AggregateResultDto(200,null);
+    protected final List<WarDto> EMPTY_WARDTO_LIST = new ArrayList<>();
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -321,6 +325,8 @@ public class IngameModule extends LobbyTestLoader {
                 .listen("games." + GAME_ID + ".fleets.*.ships.*.*", Ship.class);
 
         when(this.eventListener.listen(JOB_EVENT_PATH + "*", Job.class)).thenReturn(JOB_SUBJECT);
+        when(this.eventListener.listen("games." + GAME_ID + ".wars.*.*", WarDto.class)).thenReturn(WAR_SUBJECT);
+
     }
 
     protected void initializeApiMocks() {
@@ -354,6 +360,11 @@ public class IngameModule extends LobbyTestLoader {
         doAnswer(inv -> this.app.show(this.gangCreationController)).when(this.app).show(eq("/creation"), any());
         doAnswer(inv -> this.app.show(this.inGameController)).when(this.app).show(eq("/ingame"), any());
         doAnswer(inv -> this.app.show(this.lobbyController)).when(this.app).show(eq("/lobby"), any());
+
+        when(this.gameLogicApiService.getAggregate(any(),any(),any())).thenReturn(Observable.just(HEALTH_DEF_DTO));
+        when(this.warService.getWars(any(),any())).thenReturn(Observable.just(EMPTY_WARDTO_LIST));
+        when(this.empireApiService.getPrivate(any(),any())).thenReturn(Observable.just(new EmpirePrivateDto(new HashMap<>())));
+
     }
 
     private void loadUnloadableData() {
@@ -366,6 +377,8 @@ public class IngameModule extends LobbyTestLoader {
         this.islandAttributeStorage.districtAttributes = new ArrayList<>(List.of(DISTRICT_ATTRIBUTES));
         this.shipService.shipSpeeds = Map.of("explorer", 10.0, "colonizer", 2.0);
     }
+
+
 
     protected Event<Game> tickGame(int speed) {
         return new Event<>("games." + GAME_ID + ".ticked",

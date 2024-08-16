@@ -279,6 +279,7 @@ public class InGameTestLoader extends ControllerTest {
         this.inGameController.contactsOverviewComponent = this.contactsComponent;
         this.inGameController.contactsOverviewComponent.warService = this.warService;
         this.inGameController.warComponent = this.warComponent;
+        this.inGameController.contactsOverviewComponent.contactDetailsComponent = this.contactDetailsComponent;
 
         this.coolerBubbleComponent.announcementsService = this.announcementsService;
         this.coolerBubbleComponent.gameResourceBundle = this.gameResourceBundle;
@@ -473,13 +474,13 @@ public class InGameTestLoader extends ControllerTest {
         this.fleetCoordinationService.contactsService = this.contactsService;
 
         this.fleetService.tokenStorage = this.tokenStorage;
-        this.fleetService.subscriber = new Subscriber();
         this.fleetService.fleetApiService = this.fleetApiService;
 
         this.contactsService.tokenStorage = this.tokenStorage;
         this.contactsService.warService = this.warService;
         this.contactsService.empireApiService = this.empireApiService;
         this.contactsService.subscriber = new Subscriber();
+        this.contactsService.eventListener = this.eventListener;
         this.contactsService.islandsService = this.islandsService;
         this.contactsService.islandsService.gameLogicApiService = this.gameLogicApiService;
         this.contactsService.contactsComponent = this.contactsComponent;

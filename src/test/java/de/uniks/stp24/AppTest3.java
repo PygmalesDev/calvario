@@ -75,6 +75,8 @@ public class AppTest3 extends AppTest3Module {
         WaitForAsyncUtils.waitForFxEvents();
         MEMBER_DTO_SUBJECT.onNext(new Event<>("games." + GAME_ID + ".members.*.updated", MEMBER_DTO2));
         clickOn("#startJourneyButton");
+        WaitForAsyncUtils.waitForFxEvents();
+        sleep(2000);
     }
 
     public void beginSiteJob() {

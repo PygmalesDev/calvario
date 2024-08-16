@@ -229,8 +229,6 @@ public class InGameTestComponent extends InGameTestInitializer {
 
         // Mock get Fleets and ships
         ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", 4, new HashMap<>(), new HashMap<>())));
-        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456",true);
-        doNothing().when(this.fleetService).initializeFleetListeners();
         doNothing().when(this.fleetService).initializeShipListener();
 
         buildings.add("refinery");

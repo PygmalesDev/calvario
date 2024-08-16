@@ -131,12 +131,13 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
 //        when(this.empireApiService.getPrivate(any(),any())).thenReturn(Observable.just(new EmpirePrivateDto(new HashMap<>())));
 
 
+        doReturn(Observable.empty()).when(empireApiService).getPrivate(any(), any());
 
-        this.mockFleets();
+
         this.islandsService.isles = islands;
         this.mockFleets();
         this.app.show(this.inGameController);
-       clearStyleSheets();
+        clearStyleSheets();
     }
 
     private void mockFleets(){

@@ -12,6 +12,7 @@ import de.uniks.stp24.service.BasicService;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.geometry.Point2D;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import org.fulib.fx.annotation.event.OnDestroy;
@@ -137,11 +138,15 @@ public class IslandsService extends BasicService {
         double screenOffSetV = heightRange * (SCALE_FACTOR + 2) / 2.0 - 25;
         double serverOffsetH = minX + 0.5 * widthRange;
         double serverOffsetV = minY + 0.5 * heightRange;
-        component.setPosition(SCALE_FACTOR * isleDto.posX() * DISTANCE_FACTOR - serverOffsetH + screenOffsetH,
-          SCALE_FACTOR * isleDto.posY() * DISTANCE_FACTOR - serverOffsetV + screenOffSetV);
-        component.applyIcon(isleDto.type());
+        component.setPosition(SCALE_FACTOR * isleDto.posX()*DISTANCE_FACTOR - serverOffsetH + screenOffsetH,
+                SCALE_FACTOR * isleDto.posY()*DISTANCE_FACTOR - serverOffsetV + screenOffSetV);
+        // all Islands are foggy at first if player is not spectator
+        if (!tokenStorage.isSpectator())
+            component.applyIcon(true, BlendMode.LIGHTEN);
+        else
+            component.applyIcon(false, BlendMode.SRC_OVER);
         component.setFlagImage(isleDto.flagIndex());
-        applyDropShadowToIsland(component);
+//        applyDropShadowToIsland(component);
         return component;
     }
 
@@ -476,6 +481,7 @@ public class IslandsService extends BasicService {
         this.subscriber.subscribe(gameLogicApiService.getCompare(ownEmpire,"empire.compare.military",enemyID),
           result -> contact.setStrength(result.total()),
           error -> System.out.printf("Caught an error while comparing strength in Islands Service:\n %s", error.getMessage()));
+
     }
 
     public  void updateIsles(Island island){this.isles.replaceAll(old -> old.equals(island) ? island : old);}

@@ -7,6 +7,7 @@ import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.dto.Upgrade;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.rest.GameSystemsApiService;
+import de.uniks.stp24.service.TokenStorage;
 import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
@@ -30,6 +31,8 @@ import static org.mockito.Mockito.spy;
 public class IslandsServiceTest extends ControllerTest {
     @Spy
     GameSystemsApiService gameSystemsApiService;
+    @Spy
+    TokenStorage tokenStorage;
     @InjectMocks
     IslandComponent islandComponent; //= spy(IslandComponent.class);
 
@@ -41,6 +44,7 @@ public class IslandsServiceTest extends ControllerTest {
         super.start(stage);
         this.islandsService.app = this.app;
         islandsService.gameSystemsService = this.gameSystemsApiService;
+        islandsService.tokenStorage = this.tokenStorage;
         doReturn(null).when(this.app).show("/ingame");
         islandsService.saveEmpire("empire",new ReadEmpireDto("a","b","empire","game1","user1","name",
                 "description","#FFDDEE",2,3,"home"));

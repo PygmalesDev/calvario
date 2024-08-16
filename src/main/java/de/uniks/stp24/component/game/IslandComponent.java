@@ -12,6 +12,7 @@ import de.uniks.stp24.service.game.IslandsService;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -77,6 +78,7 @@ public class IslandComponent extends Pane {
 
     private int health, maxHealth, maxDef;
     BooleanProperty statsVisibility = new SimpleBooleanProperty(false);
+    public boolean foggy = true;
 
     @Inject
     public IslandComponent(IslandsService islandsService) {
@@ -90,27 +92,47 @@ public class IslandComponent extends Pane {
         this.setPickOnBounds(false);
     }
 
-    public void applyIcon(IslandType type) {
-        this.islandImage.setImage(imageCache.get("icons/islands/" + type.name() + ".png"));
-        this.defenseIcon.setImage(imageCache.get("assets/contactsAndWars/shield.png"));
-        this.healthIcon.setImage(imageCache.get("assets/contactsAndWars/health.png"));
-        if (this.island.upgrade().equals("explored"))
-            this.spyglassImage.setImage(imageCache.get("/de/uniks/stp24/icons/other/spyglass.png"));
-        else // islands with upgrades other than explored
-            hideSpyGlass();
+    public void applyIcon(boolean isFoggy, BlendMode blendMode) {
+        if (Objects.nonNull(this.islandImage))
+            this.islandImage.setImage(imageCache.get("icons/islands/" + island.type().name() + ".png"));
+
+        this.foggy = isFoggy;
+
+        if (isFoggy)
+            this.changeBlendMode(blendMode);
+        else {
+            if (Objects.nonNull(this.islandImage))
+                this.islandImage.setBlendMode((BlendMode.SRC_OVER));
+        }
+
+        if (Objects.nonNull(this.spyglassImage)) {
+            if (this.island.upgrade().equals("explored"))
+                this.spyglassImage.setImage(imageCache.get("/de/uniks/stp24/icons/other/spyglass.png"));
+            else // islands with upgrades other than explored
+                hideSpyGlass();
+        }
+
     }
+
+    public void changeBlendMode(BlendMode blendMode) {
+        if (this.foggy)
+            this.islandImage.setBlendMode(blendMode);
+    }
+
 
     // use our flag images
     // by the moment numeration from 0 til 16
     public void setFlagImage(int flag) {
-        if (flag >= 0) this.flagImage.setImage(imageCache.get("assets/flags/flag_" + flag + ".png"));
+        if (!this.foggy) {
+            if (flag >= 0) this.flagImage.setImage(imageCache.get("assets/flags/flag_" + flag + ".png"));
+        }
     }
 
     public void applyInfo(Island islandInfo) {
         this.island = islandInfo;
         this.setId(island.id() + "_instance");
         this.spyglassImage.setVisible(island.upgrade().equals("explored"));
-        applyIcon(this.island.type());
+        applyIcon(this.foggy, BlendMode.LIGHTEN);
     }
 
     // retrieve information for game owner's islands
@@ -138,14 +160,18 @@ public class IslandComponent extends Pane {
 
     // switch the visibility of all flags
     public void showFlag(boolean selected) {
-        this.flagPane.setVisible(selected);
-        inGameController.islandsService.keyCodeFlag = selected;
+        if (!this.foggy) {
+            this.flagPane.setVisible(selected);
+            inGameController.islandsService.keyCodeFlag = selected;
+        }
     }
 
     @OnKey(code = KeyCode.F, alt = true)
     public void showFlagH() {
-        if (island.flagIndex() >= 0 && !islandIsSelected) {
-            this.flagPane.setVisible(!flagPane.isVisible());
+        if (!this.foggy) {
+            if (island.flagIndex() >= 0 && !islandIsSelected) {
+                this.flagPane.setVisible(!flagPane.isVisible());
+            }
         }
     }
 
@@ -154,11 +180,12 @@ public class IslandComponent extends Pane {
     }
 
     public void showRudder() {
-        rudderImage.setVisible(true);
+        if (!this.foggy)
+            rudderImage.setVisible(true);
     }
 
     public void unshowRudder() {
-        if (!islandIsSelected) {
+        if (!this.foggy && !islandIsSelected) {
             rudderImage.setVisible(false);
         }
     }
@@ -167,26 +194,28 @@ public class IslandComponent extends Pane {
     Logic for showing/unshowing rudder
      */
     public void showUnshowRudder() {
-        if (islandIsSelected) {
-            reset();
-            islandIsSelected = false;
-        } else {
-            if (island.owner() != null) {
-                inGameController.islandsService.islandComponentMap.forEach((id, comp) -> {
-                    if (comp.islandIsSelected) {
-                        comp.rudderImage.setVisible(false);
-                        if (!inGameController.islandsService.keyCodeFlag) {
-                            comp.flagPane.setVisible(!comp.flagPane.isVisible());
+        if (!this.foggy) {
+            if (islandIsSelected) {
+                reset();
+                islandIsSelected = false;
+            } else {
+                if (island.owner() != null) {
+                    inGameController.islandsService.islandComponentMap.forEach((id, comp) -> {
+                        if (comp.islandIsSelected) {
+                            comp.rudderImage.setVisible(false);
+                            if (!inGameController.islandsService.keyCodeFlag) {
+                                comp.flagPane.setVisible(!comp.flagPane.isVisible());
+                            }
+                            comp.islandIsSelected = false;
                         }
-                        comp.islandIsSelected = false;
-                    }
-                });
-                islandIsSelected = true;
+                    });
+                    islandIsSelected = true;
+                }
             }
-        }
 
-        if (!inGameController.islandsService.keyCodeFlag) {
-            this.flagPane.setVisible(!this.flagPane.isVisible());
+            if (!inGameController.islandsService.keyCodeFlag) {
+                this.flagPane.setVisible(!this.flagPane.isVisible());
+            }
         }
     }
 
@@ -209,8 +238,7 @@ public class IslandComponent extends Pane {
     /*
     Reset of components for showing information of current selected island.
      */
-
-    public void reset() {
+    public void reset(){
         inGameController.overviewSitesComponent.resetButtons();
         inGameController.buildingsWindowComponent.setVisible(false);
         inGameController.sitePropertiesComponent.setVisible(false);
@@ -227,8 +255,11 @@ public class IslandComponent extends Pane {
 
     // apply drop shadow and flag for newly colonized systems
     public void applyEmpireInfo() {
-        this.islandsService.applyDropShadowToIsland(this);
-        this.setFlagImage(islandsService.getEmpire(island.owner()).flag());
+        // apply drop shadow and flag for newly colonized systems (if they're not under fog)
+        if (!this.foggy && Objects.nonNull(this.island.owner())) {
+            this.islandsService.applyDropShadowToIsland(this);
+            this.setFlagImage(islandsService.getEmpire(island.owner()).flag());
+        }
     }
 
     public void setIslandService(IslandsService islandsService) {

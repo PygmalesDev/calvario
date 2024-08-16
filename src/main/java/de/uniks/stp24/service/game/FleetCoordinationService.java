@@ -69,8 +69,7 @@ public class FleetCoordinationService {
     private final List<GameFleetController> enemyFleets = new ArrayList<>();
 
     private final int ROTATE_DURATION = 2;
-//    private final double ISLAND_RADIUS_X = (double) Constants.ISLAND_WIDTH / 2;
-//    private final double ISLAND_RADIUS_Y = ((double) Constants.ISLAND_HEIGHT / 2);
+    public InGameController inGameController;
 
     @Inject
     public FleetCoordinationService() {
@@ -87,8 +86,7 @@ public class FleetCoordinationService {
             });
         });
 
-        this.fleetService.onLoadingFinished(() ->
-                this.fleetService.getGameFleets().forEach(this::putFleetOnMap));
+        this.fleetService.onLoadingFinished(() -> this.fleetService.getGameFleets().forEach(this::putFleetOnMap));
 
         this.fleetService.onFleetCreated(this::putFleetOnMap);
         this.fleetService.onFleetDestroyed(this::deleteFleetFromMap);
@@ -176,12 +174,12 @@ public class FleetCoordinationService {
 
     private Job putFleetNearIsland(Fleet fleet) {
         GameFleetController gameFleet = this.createFleetInstance(fleet);
-        var island = this.islandsService.getIslandComponent(fleet.location());
-            DistancePoint parkingPoint = this.findParkingPoint(new DistancePoint(island, null));
-            gameFleet.setLayoutX(parkingPoint.getX());
-            gameFleet.setLayoutY(parkingPoint.getY());
-            gameFleet.setStartingPoint();
-            gameFleet.collisionCircle.setRadius(Constants.FLEET_COLLISION_RADIUS);
+        IslandComponent island = this.islandsService.getIslandComponent(fleet.location());
+        DistancePoint parkingPoint = this.findParkingPoint(new DistancePoint(island, null));
+        gameFleet.setLayoutX(parkingPoint.getX());
+        gameFleet.setLayoutY(parkingPoint.getY());
+        gameFleet.setStartingPoint();
+        gameFleet.collisionCircle.setRadius(Constants.FLEET_COLLISION_RADIUS);
         return null;
     }
 
@@ -210,14 +208,16 @@ public class FleetCoordinationService {
     private DistancePoint findParkingPoint(DistancePoint islandPoint) {
         double angle = (random.nextInt(360)-90)*Math.PI/180;
         return new DistancePoint(
-                islandPoint.getX() + ISLAND_RADIUS_X + (ISLAND_RADIUS_X + FLEET_FROM_ISLAND_DISTANCE)*Math.cos(angle),
-                islandPoint.getY() + ISLAND_RADIUS_Y + (ISLAND_RADIUS_X + FLEET_FROM_ISLAND_DISTANCE)*Math.sin(angle),
+                islandPoint.getX() + (FLEET_FROM_ISLAND_DISTANCE)*Math.cos(angle),
+                islandPoint.getY() + ( FLEET_FROM_ISLAND_DISTANCE)*Math.sin(angle),
                 POINT_TYPE.ISLAND,
+                islandPoint.islandComponent,
                 islandPoint.getPrev()
         );
     }
 
     public void setInGameController(InGameController inGameController) {
+        this.inGameController = inGameController;
         this.mapGrid = inGameController.mapGrid.getChildren();
         this.timerService.onGameTicked(this::processTravel);
         this.timerService.onSpeedChanged(this::processSpeedChanged);
@@ -260,7 +260,7 @@ public class FleetCoordinationService {
     }
 
     private void processFinish(GameFleetController fleet, IslandComponent finishIsland) {
-        DistancePoint endPoint = new DistancePoint(finishIsland, fleet.getCurrentPoint());
+        DistancePoint endPoint = this.findParkingPoint(new DistancePoint(finishIsland, fleet.getCurrentPoint()));
         fleet.travelToPoint(this.createTravelKeyFrames(fleet, endPoint, 60), endPoint);
     }
 
@@ -361,33 +361,33 @@ public class FleetCoordinationService {
         IslandComponent island = this.islandsService.getIslandComponent(path.getFirst());
 
         // Get the needed total number of points that need to be put between the islands
-        int interPoints;
-        int islandAmount = path.size()-1;
-        if (travelDuration == -1) interPoints = this.getTravelDuration(pathEntry, speed) - islandAmount;
-        else interPoints = travelDuration - islandAmount;
+        byte interPoints;
+        if (travelDuration == -1) interPoints = (byte) (this.getTravelDuration(pathEntry, speed) - (path.size() - 1));
+        else interPoints = (byte) (travelDuration - (path.size()-1));
         // Get the number of points that should be put between two islands
-        int pointAlloc  = interPoints/islandAmount;
+        byte pointAlloc  = (byte) (interPoints/(path.size()-1));
 
         coordinatedPath.add(this.findParkingPoint(new DistancePoint(island, null)));
 
-        this.islandsService.generateDistancePoints(path.getFirst(), path.get(1),
-                pointAlloc*(1 + interPoints-(islandAmount-1))).forEach(point ->
-                coordinatedPath.add(new DistancePoint(point.getX(), point.getY(), POINT_TYPE.INTER, coordinatedPath.getLast())));
-
-        island = this.islandsService.getIslandComponent(path.get(1));
-        coordinatedPath.add(this.findParkingPoint(new DistancePoint(island, coordinatedPath.getLast())));
-
         // Put the intermediate points first, then the island location
-        for (int i = 1; i < path.size()-1; i++) {
+        for (int i = 0; i < path.size()-2; i++) {
             // Intermediate points
             this.islandsService.generateDistancePoints(path.get(i), path.get(i+1), pointAlloc)
                     .forEach(point -> coordinatedPath.add(new DistancePoint(point.getX(), point.getY(),
-                                      POINT_TYPE.INTER, coordinatedPath.getLast())));
+                            POINT_TYPE.INTER, coordinatedPath.getLast())));
 
             // Island location
             island = this.islandsService.getIslandComponent(path.get(i+1));
             coordinatedPath.add(this.findParkingPoint(new DistancePoint(island, coordinatedPath.getLast())));
         }
+
+        // Fill the remaining path with points that were not allocated
+        this.islandsService.generateDistancePoints(path.get(path.size()-2), path.getLast(), interPoints-pointAlloc*(path.size()-2))
+                .forEach(point -> coordinatedPath.add(new DistancePoint(point.getX(), point.getY(),
+                        POINT_TYPE.INTER, coordinatedPath.getLast())));
+
+        island = this.islandsService.getIslandComponent(path.getLast());
+        coordinatedPath.add(this.findParkingPoint(new DistancePoint(island, coordinatedPath.getLast())));
 
         coordinatedPath.removeFirst();
         this.coordinatedPaths.put(gameFleet, coordinatedPath);

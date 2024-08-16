@@ -2,7 +2,6 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.helper.DistancePoint;
 import de.uniks.stp24.model.Fleets.Fleet;
-import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.Constants.POINT_TYPE;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
@@ -11,13 +10,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ProgressBar;
 import de.uniks.stp24.service.game.FleetService;
 import javafx.animation.*;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.transform.Rotate;
+import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
+import org.fulib.fx.annotation.event.OnDestroy;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Objects;
@@ -60,11 +62,30 @@ public class GameFleetController extends Pane {
         this.selectedDropShadow.setSpread(0.9);
 
         this.setId("ingameFleet_" + fleet._id());
-        this.travelTimeline.setOnFinished(event -> {
-            if (this.currentPoint.getType().equals(POINT_TYPE.ISLAND)){
-                this.fleetCoordinationService.monitorFleetCollisions();
-            }
-        });
+       // this.travelTimeline.setOnFinished(event -> {
+       //     if (this.currentPoint.getType().equals(POINT_TYPE.ISLAND)){
+       //         this.fleetCoordinationService.monitorFleetCollisions();
+       //     }
+       // });
+
+        travelTimeline.currentTimeProperty().addListener(this::listenerTimeMethod);
+
+        this.travelTimeline.statusProperty().addListener(this::listenerStatusMethod);
+    }
+
+    private void listenerStatusMethod(ObservableValue<? extends Animation.Status> observableValue, Animation.Status status, Animation.Status status1) {
+        if (status1.equals(Animation.Status.STOPPED) && this.currentPoint.getType().equals(POINT_TYPE.ISLAND)){
+//            this.travelTimeline.currentTimeProperty().removeListener(this::listenerTimeMethod);
+            this.fleetCoordinationService.inGameController.removeFogFromIsland(true, this.currentPoint.islandComponent);
+//            travelTimeline.currentTimeProperty().addListener(this::listenerTimeMethod);
+        }
+    }
+
+    private void listenerTimeMethod(ObservableValue<? extends Duration> observableValue, Duration duration, Duration duration1) {
+        fleetCoordinationService.inGameController.removeFogFromShape(new Circle(this.getLayoutX() + FLEET_HW/2 + 10,
+                this.getLayoutY() + FLEET_HW/2 + 15,
+                collisionCircle.getRadius()*1.3)
+        );
     }
 
     public void renderWithColor(String color) {
@@ -131,5 +152,12 @@ public class GameFleetController extends Pane {
 
     public void setFleet(Fleet fleet) {
         this.fleet = fleet;
+    }
+
+    @OnDestroy
+    public void onDestroy(){
+        this.travelTimeline.statusProperty().removeListener(this::listenerStatusMethod);
+        this.travelTimeline.currentTimeProperty().removeListener(this::listenerTimeMethod);
+        this.travelTimeline.stop();
     }
 }

@@ -330,6 +330,8 @@ public class InGameTestComponent extends InGameTestInitializer {
         doReturn(FXCollections.observableArrayList()).when(announcementsService).getAnnouncements();
         doReturn(Observable.empty()).when(marketService).getSeasonalTrades(any(), any());
 
+        doReturn(Observable.empty()).when(empireApiService).getPrivate(any(), any());
+
         this.inGameController.buildingPropertiesComponent.certainBuilding = buildingPreset1;
         doNothing().when(contactsService).loadContactsData();
         doNothing().when(contactsService).createWarListener();

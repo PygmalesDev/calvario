@@ -1,3 +1,4 @@
+
 package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.App;

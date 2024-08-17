@@ -19,6 +19,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.*;
 
+import static de.uniks.stp24.component.game.ResourceComponent.refactorNumber;
+
 @Singleton
 public class ResourcesService {
  	@Inject
@@ -184,5 +186,9 @@ public class ResourcesService {
         String resourceID = aggregateItemDto.variable().replace("resources.", "").replace(".periodic", "");
         double resourceCount = getResourceCount(resourceID);
         return new Resource(resourceID, resourceCount, aggregateItemDto.subtotal());
+    }
+
+    public String formatNumber(double number) {
+        return refactorNumber(number, gameResourceBundle);
     }
 }

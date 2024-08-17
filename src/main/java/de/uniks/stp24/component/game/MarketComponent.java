@@ -18,6 +18,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -431,13 +433,11 @@ public class MarketComponent extends StackPane {
         loadSeasonalTrades();
 
         // Create a Timeline for repeated action
-        Timeline sellTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> {
-            // This code is called repeatedly while the button is held down
-            sellItem();
-        }));
         Timeline incrementTimeline = new Timeline(new KeyFrame(Duration.millis(100), actionEvent -> incrementAmount()));
         Timeline decrementTimeline = new Timeline(new KeyFrame(Duration.millis(100), actionEvent -> decrementAmount()));
+        Timeline sellTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> sellItem()));
         Timeline buyTimeline = new Timeline(new KeyFrame(Duration.millis(100), actionEvent -> buyItem()));
+
         incrementTimeline.setCycleCount(Timeline.INDEFINITE);
         decrementTimeline.setCycleCount(Timeline.INDEFINITE);
         sellTimeline.setCycleCount(Timeline.INDEFINITE);

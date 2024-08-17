@@ -93,6 +93,7 @@ public class ChangeFleetComponent extends VBox {
     /** Get all fleets of the empire at this system which are different to the currently edited fleet **/
     public void changeFleetOfShip(ReadShipDTO readShipDTO) {
         Fleet editedFleet = this.fleetService.getFleet(readShipDTO.fleet());
+
         this.fleetsOnIslandList = this.fleetService.getFleetsOnIsland(editedFleet.location()).stream()
                 .filter(fleetDto -> !fleetDto._id().equals(editedFleet._id()) && fleetDto.empire().equals(editedFleet.empire()))
                 .collect(Collectors.toList());

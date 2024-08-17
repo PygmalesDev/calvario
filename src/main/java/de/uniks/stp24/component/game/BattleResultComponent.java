@@ -60,10 +60,10 @@ public class BattleResultComponent extends Pane {
         if (battleEntry.getAttacker().equals(this.tokenStorage.getEmpireId())) {
             battleEntry.getShipsLostByAttacker().forEach((type, count) ->
                     this.youLostBox.getChildren().add(new Label(
-                            count+"x"+gameResourceBundle.getString("ship." + type))));
+                            count+"x "+gameResourceBundle.getString("ship." + type))));
             battleEntry.getShipsLostByDefender().forEach((type, count) ->
                     this.theyLostBox.getChildren().add(new Label(
-                            count+"x"+gameResourceBundle.getString("ship." + type))));
+                            count+"x "+gameResourceBundle.getString("ship." + type))));
         } else {
             battleEntry.getShipsLostByDefender().forEach((type, count) ->
                     this.youLostBox.getChildren().add(new Label(

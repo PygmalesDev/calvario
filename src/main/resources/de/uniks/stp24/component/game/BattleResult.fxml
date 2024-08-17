@@ -16,8 +16,8 @@
             <Text fx:id="coloredText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
          </children>
       </TextFlow>
-      <VBox fx:id="theyLostBox" layoutX="25.0" layoutY="27.0" prefHeight="200.0" prefWidth="100.0" />
-      <VBox fx:id="youLostBox" layoutX="371.0" layoutY="27.0" prefHeight="200.0" prefWidth="100.0" />
+      <VBox fx:id="theyLostBox" layoutX="25.0" layoutY="110.0" prefHeight="117.0" prefWidth="100.0" />
+      <VBox fx:id="youLostBox" layoutX="371.0" layoutY="110.0" prefHeight="117.0" prefWidth="100.0" />
       <Button fx:id="closeResultButton" layoutX="445.0" layoutY="14.0" mnemonicParsing="false" onAction="#close" />
       <ImageView fx:id="resultImageView" fitHeight="100.0" fitWidth="100.0" layoutX="205.0" layoutY="105.0" pickOnBounds="true" preserveRatio="true" />
    </children>

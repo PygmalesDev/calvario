@@ -43,6 +43,7 @@ public class ContactsService {
     public final ObservableList<WarDto> warsInThisGame = FXCollections.observableArrayList();
 
     private Consumer<WarDto> onWarDeletedConsumer;
+    private Consumer<WarDto> onWarCreatedRunnable;
 
     String attacker;
     boolean declaring;
@@ -218,6 +219,10 @@ public class ContactsService {
         this.onWarDeletedConsumer = func;
     }
 
+    public void onWarCreated(Consumer<WarDto> func) {
+        this.onWarCreatedRunnable = func;
+    }
+
     public void loadContacts(Map<String, Object> map) {
         if (!map.isEmpty()) {
             Map<String, List<String>> tmp = new HashMap<>();
@@ -246,6 +251,7 @@ public class ContactsService {
                     switch (event.suffix()) {
                         case "created" -> {
                             warsInThisGame.add(event.data());
+                            this.onWarCreatedRunnable.accept(event.data());
                             if (hiddenEmpires.contains(event.data().attacker())) {
                                 addEnemyAfterDeclaration(event.data().attacker());
                             }
@@ -266,7 +272,7 @@ public class ContactsService {
                     this.contactsComponent.contactDetailsComponent.setWarMessagePopup(event.suffix(), attackerName, myOwnEmpireID, event.data());
 
                 },
-                error -> System.out.println("createWarListener error: " + error.getMessage())
+                Throwable::printStackTrace
         );
     }
 

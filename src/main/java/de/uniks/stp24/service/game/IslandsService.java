@@ -293,9 +293,6 @@ public class IslandsService extends BasicService {
                   }
               });
               mapSitesBuildings();
-              //todo remove printouts
-              System.out.println("...UPDATING ISLANDS...FOUND...");
-              System.out.println(devIsles.size());
           },
           error -> System.out.printf(
             "Caught an error while refreshing colonized systems list in Islands Service:\n %s", error.getMessage()));

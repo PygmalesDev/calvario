@@ -86,8 +86,8 @@ public class BattleEntry {
 
     public BattleEntry addShip(Ship ship) {
         if (ship.empire().equals(this.attacker))
-            this.addShipsLostByAttacker(ship._id());
-        else this.addShipsLostByDefender(ship._id());
+            this.addShipsLostByAttacker(ship.type());
+        else this.addShipsLostByDefender(ship.type());
 
         return this;
     }

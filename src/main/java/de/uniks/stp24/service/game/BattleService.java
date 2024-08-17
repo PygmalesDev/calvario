@@ -43,6 +43,7 @@ public class BattleService {
         this.fleetService.onShipDestroyed(this::addDestroyedShip);
         this.fleetService.onFleetDestroyed(this::checkBattleConditionOnFleetDestroyed);
         this.contactsService.onWarDeleted(this::checkBattleConditionOnWarFinished);
+        this.contactsService.onWarCreated(this::createBattlesOnWarBegin);
     }
 
     public void checkFleetPosition(Fleet fleet) {
@@ -62,17 +63,23 @@ public class BattleService {
             otherFleets.stream().map(Fleet::empire).collect(Collectors.toSet()).forEach(empireID -> {
                 if (Objects.nonNull(empireID)) {
                     if (isBattleStarted(fleet.empire(), empireID, location.id(), BATTLE_TYPE.EMPIRES)) {
-                        battles.add(new BattleEntry(fleet.empire(), location.owner(), location.id()));
+                        battles.add(new BattleEntry(fleet.empire(), empireID, location.id()));
                         islandComponent.toggleSableVisibility(true);
                     }
                 } else {
                     if (isBattleStarted(fleet.empire(), null, location.id(), BATTLE_TYPE.WILD)) {
+                        System.out.println("CREATED WILD BATTLE");
                         battles.add(new BattleEntry(fleet.empire(), location.id()));
                         islandComponent.toggleSableVisibility(true);
                     }
                 }
             });
         }
+    }
+
+    public void createBattlesOnWarBegin(WarDto warDto) {
+        this.fleetService.getEmpireFleets(warDto.attacker()).forEach(this::checkFleetPosition);
+        this.fleetService.getEmpireFleets(warDto.defender()).forEach(this::checkFleetPosition);
     }
 
     public void addDestroyedShip(Ship ship) {
@@ -87,11 +94,8 @@ public class BattleService {
                     // TODO: PROVIDE TO WEBJAW fleetName has left the battle on islandName?
 
                     if (this.fleetService.getFleetsOnIsland(oldFleet.location())
-                            .filtered(other -> oldFleet.empire().equals(other.empire())).isEmpty()) {
-                        this.battles.remove(battleEntry);
-                        this.islandsService.getIslandComponent(battleEntry.getLocation())
-                                .toggleSableVisibility(false);
-                    }
+                            .filtered(other -> oldFleet.empire().equals(other.empire())).isEmpty())
+                        this.deleteBattle(battleEntry);
 
                     return battleEntry;
                 });
@@ -100,10 +104,11 @@ public class BattleService {
     private void checkBattleConditionOnWarFinished(WarDto warDto) {
         this.battles.stream()
                 .filter(battleEntry -> battleEntry.equals(warDto.attacker(), warDto.defender()))
-                .forEach(this.battles::remove);
+                .toList().forEach(this::deleteBattle);
     }
 
     public void checkBattleConditionOnIslandClaimed(String islandID) {
+        System.out.println("\t\tISLAND BATTLE FINISHED");
         this.battles.stream().filter(battleEntry -> battleEntry.getLocation().equals(islandID))
                 .findFirst().map(this::finishBattle);
     }
@@ -128,11 +133,14 @@ public class BattleService {
                 });
     }
 
-    private BattleEntry finishBattle(BattleEntry battleEntry) {
+    private void deleteBattle(BattleEntry battleEntry) {
         this.battles.remove(battleEntry);
         this.islandsService.getIslandComponent(battleEntry.getLocation())
                 .toggleSableVisibility(false);
+    }
 
+    private BattleEntry finishBattle(BattleEntry battleEntry) {
+        this.deleteBattle(battleEntry);
         this.battleResultComponent.setInfo(battleEntry);
 
         return battleEntry;

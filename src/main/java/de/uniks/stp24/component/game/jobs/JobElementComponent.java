@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 @Component(view = "JobElement.fxml")
@@ -103,7 +104,8 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
             }
             case "ship" -> {
                 this.jobImage.setImage(this.imageCache.get("/" + Constants.shipIconMap.get(job.ship())));
-                this.jobTypeText.setText(this.gameResourceBundle.getString("ship." + job.ship()) + " - " + this.fleetService.getFleet(job.fleet()).name());
+                this.jobTypeText.setText(this.gameResourceBundle.getString("ship." + job.ship()) + " - "
+                        + this.fleetService.getFleet(job.fleet()).name());
             }
             case "technology" -> {
                 this.jobCancelButton.setVisible(false);
@@ -113,10 +115,13 @@ public class JobElementComponent extends Pane implements ReusableItemComponent<J
             }
             case "travel" -> {
                 this.inspectionButton.setVisible(false);
-                this.jobNameText.setText(this.fleetService.getFleet(job.fleet()).name());
-                this.jobImage.setImage(this.imageCache.get("icons/ships/ship_Image_With_Frame1.png"));
-                String islandName = (this.islandsService.getIsland(job.path().getLast()).name() != null ? this.islandsService.getIsland(job.path().getLast()).name() : "");
-                this.jobTypeText.setText(this.gameResourceBundle.getString("travelling.to") + " " + islandName);
+                if (Objects.nonNull(this.fleetService.getFleet(job.fleet()))) {
+                    this.jobNameText.setText(this.fleetService.getFleet(job.fleet()).name());
+                    this.jobImage.setImage(this.imageCache.get("icons/ships/ship_Image_With_Frame1.png"));
+                    String islandName = (this.islandsService.getIsland(job.path().getLast()).name() != null ?
+                            this.islandsService.getIsland(job.path().getLast()).name() : "");
+                    this.jobTypeText.setText(this.gameResourceBundle.getString("travelling.to") + " " + islandName);
+                }
             }
         }
     }

@@ -145,6 +145,9 @@ public class FleetManagerComponent extends AnchorPane {
         this.jobsService.onJobsLoadingFinished("ship", this::setShipFinisher);
         this.newFleetComponent.setFleetManager(this);
         this.changeFleetComponent.setFleetManager(this);
+        this.fleetService.onFleetDestroyed(fleet -> {
+            if (this.blueprintInFleetListView.isVisible() && this.editedFleet.equals(fleet)) this.showFleets();
+        });
     }
 
     @OnRender
@@ -213,6 +216,7 @@ public class FleetManagerComponent extends AnchorPane {
     }
 
     public void close() {
+        this.shipService.clearEditedFleetInfos();
         this.setVisible(false);
     }
 

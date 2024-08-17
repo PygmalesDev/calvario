@@ -144,6 +144,9 @@ public class FleetCoordinationService {
     }
 
     private void deleteFleetFromMap(Fleet fleet) {
+        if (Objects.nonNull(this.selectedFleet) && fleet.equals(this.selectedFleet.getFleet()))
+            this.selectedFleet = null;
+
         this.mapGrid.removeIf(node -> {
             if (node instanceof GameFleetController fleetController)
                 return (fleetController.getFleet().equals(fleet));
@@ -501,8 +504,8 @@ public class FleetCoordinationService {
     public void monitorFleetCollisions(GameFleetController fleet) {
         for (IslandComponent islandComponent : islandsService.getIslandComponentList()) {
             if (islandComponent.isCollided(fleet.getLayoutX(), fleet.getLayoutY(), Constants.FLEET_COLLISION_RADIUS)) {
-                if(Objects.nonNull(islandComponent.getIsland().owner())){
-                    if (!islandComponent.getIsland().owner().equals(selectedFleet.getFleet().empire()) &&
+                if(Objects.nonNull(islandComponent.getIsland().owner())) {
+                    if (!islandComponent.getIsland().owner().equals(fleet.getFleet().empire()) &&
                             !islandComponent.getIsland().owner().equals(this.tokenStorage.getEmpireId())){
                         islandsService.refreshListOfColonizedSystems();
                         contactsService.addEnemy(islandComponent.getIsland().owner(), islandComponent.getIsland().id());

@@ -34,6 +34,8 @@ public class FleetService {
     public TokenStorage tokenStorage;
     @Inject
     public JobsApiService jobsApiService;
+    @Inject
+    public JobsService jobsService;
 
     @Inject
     public FleetService() {
@@ -101,14 +103,18 @@ public class FleetService {
                     }
                 }
             }
-        }, error -> System.out.println("Error initializing shipListener in ShipService :\n" + error.getMessage()));
+        }, Throwable::printStackTrace);
     }
 
     public void adaptShipCount(String fleetID, int increment) {
-        Fleet oldFleet = this.gameFleets.filtered(fleet -> fleet._id().equals(fleetID)).getFirst();
-        this.updateFleetInGroups(oldFleet,
-                new Fleet(oldFleet.createdAt(), oldFleet.updatedAt(), oldFleet._id(), oldFleet.game(), oldFleet.empire(),
-                        oldFleet.name(), oldFleet.location(), oldFleet.ships() + increment, oldFleet.size(), oldFleet._public(), oldFleet._private(), oldFleet.effects()));
+        Optional<Fleet> oldFleetOpt = this.gameFleets.stream().filter(fleet -> fleet._id().equals(fleetID)).findFirst();
+        if (oldFleetOpt.isPresent()) {
+            Fleet oldFleet = oldFleetOpt.get();
+            this.updateFleetInGroups(oldFleet,
+                    new Fleet(oldFleet.createdAt(), oldFleet.updatedAt(), oldFleet._id(), oldFleet.game(), oldFleet.empire(),
+                            oldFleet.name(), oldFleet.location(), oldFleet.ships() + increment, oldFleet.size(),
+                            oldFleet._public(), oldFleet._private(), oldFleet.effects()));
+        }
     }
 
     private void addFleetToGroups(Fleet fleet) {
@@ -145,6 +151,17 @@ public class FleetService {
     }
 
     private void deleteFleetFromGroups(Fleet fleet) {
+        this.jobsService.getJobObservableListOfType("travel").stream().filter(job ->
+                job.fleet().equals(fleet._id())).findFirst().map(job -> {
+                    this.subscriber.subscribe(this.jobsService.stopJob(job._id()), result -> {},
+                            Throwable::printStackTrace);
+                    return job;
+        });
+        this.jobsService.getJobObservableListOfType("ship").stream().filter(job ->
+                job.fleet().equals(fleet._id())).toList().forEach(job ->
+            this.subscriber.subscribe(this.jobsService.stopJob(job._id()), result -> {},
+                    Throwable::printStackTrace));
+
         this.gameFleets.removeIf(other -> other.equals(fleet));
         this.empireFleets.get(fleet.empire()).removeIf(other -> other.equals(fleet));
         this.islandFleets.get(fleet.location()).removeIf(other -> other.equals(fleet));
@@ -208,8 +225,9 @@ public class FleetService {
         return this.empireFleets.get(empireID);
     }
 
-    public Fleet getFleet(String fleetID){
-        return this.gameFleets.filtered(fleet -> fleet._id().equals(fleetID)).getFirst();
+    public Fleet getFleet(String fleetID) {
+        return this.gameFleets.stream().filter(fleet -> fleet._id().equals(fleetID))
+                .findFirst().orElse(null);
     }
 
     public Observable<Fleet> editSizeOfFleet(String shipTypeID, int plannedShips, Fleet fleet){

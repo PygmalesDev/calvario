@@ -408,6 +408,7 @@ public class InGameController extends BasicController {
         });
         this.createContextMenuButtons();
 
+        this.battleResultContainer.setVisible(false);
         this.battleResultContainer.setPickOnBounds(false);
 
         // make pop ups draggable
@@ -431,8 +432,8 @@ public class InGameController extends BasicController {
         contactService.setContactOverview(contactsOverviewComponent);
 
         this.fleetService.loadGameFleets();
-        this.fleetService.initializeFleetListeners();
         this.fleetService.initializeShipListener();
+        this.fleetService.initializeFleetListeners();
 
 //        this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::travelToMousePosition);
         explanationService.setInGameController(this);
@@ -676,10 +677,13 @@ public class InGameController extends BasicController {
                         tokenStorage.getGameId(), "*"), SystemDto.class),
                 event -> {
                     IslandComponent isle = islandsService.getIslandComponent(event.data()._id());
+                    Island oldIsland = isle.getIsland();
                     Island updatedIsland = islandsService.convertToIsland(event.data());
                     isle.applyInfo(updatedIsland);
+
                     if (Objects.nonNull(updatedIsland.owner())) {
-                        if (!isle.island.owner().equals(event.data().owner()))
+
+                        if (Objects.nonNull(oldIsland.owner()) && !oldIsland.owner().equals(event.data().owner()))
                             this.battleService.checkBattleConditionOnIslandClaimed(isle.island.id());
 
                         // apply drop shadow and flag

@@ -178,7 +178,6 @@ public class FleetManagerComponent extends AnchorPane {
     }
 
     public void showFleets() {
-        this.blueprintsListView.setCellFactory(list -> new ComponentListCell<>(app, blueprintsNotAddableComponentProvider));
         showBlueprints();
         this.fleetsListView.refresh();
         this.shipService.clearEditedFleetInfos();
@@ -199,7 +198,10 @@ public class FleetManagerComponent extends AnchorPane {
     public void showBlueprints() {
         this.shipLabel.setText("Blueprints");
         this.blueprints.clear();
+        System.out.println(shipService.shipTypesAttributes);
         this.blueprints.addAll(shipService.shipTypesAttributes);
+        this.blueprintsListView.setCellFactory(list -> new ComponentListCell<>(app, blueprintsNotAddableComponentProvider));
+
         this.shipsVBox.setVisible(false);
         this.blueprintsListView.setVisible(true);
     }

@@ -151,23 +151,23 @@ public class IngameModule extends LobbyTestLoader {
     protected final SystemDto[] GAME_SYSTEMS = new SystemDto[]{
             new SystemDto("0", "0", "islandID_1", GAME_ID, "regular", "TestIslandOne",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
-                    Upgrade.colonized, 13, Map.of("islandID_2", 20, "islandID_3", 20), 50, 50, EMPIRE_ID),
+                    Upgrade.colonized, 13, Map.of("islandID_2", 20, "islandID_3", 20), 50, 50, EMPIRE_ID, 100),
 
             new SystemDto("0", "0", "islandID_2", GAME_ID, "regular", "TestIslandTwo",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
-                    Upgrade.unexplored, 13, Map.of("islandID_1", 20, "islandID_3", 20, "islandID_4", 20), 63, 52, null),
+                    Upgrade.unexplored, 13, Map.of("islandID_1", 20, "islandID_3", 20, "islandID_4", 20), 63, 52, null, 100),
 
             new SystemDto("0", "0", "islandID_3", GAME_ID, "regular", "TestIslandThree",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
-                    Upgrade.explored, 13, Map.of("islandID_1", 20, "islandID_2", 20), 55, 62, null),
+                    Upgrade.explored, 13, Map.of("islandID_1", 20, "islandID_2", 20), 55, 62, null, 100),
 
             new SystemDto("0", "0", "islandID_4", GAME_ID, "regular", "TestIslandFour",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
-                    Upgrade.explored, 13, Map.of("islandID_2", 20, "islandID_5", 20), 74, 45, null),
+                    Upgrade.explored, 13, Map.of("islandID_2", 20, "islandID_5", 20), 74, 45, null, 100),
 
             new SystemDto("0", "0", "islandID_5", GAME_ID, "regular", "TestIslandFive",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
-                    Upgrade.explored, 13, Map.of("islandID_4", 20), 85, 62, null)
+                    Upgrade.explored, 13, Map.of("islandID_4", 20), 85, 62, null, 100)
     };
 
     protected final CreateSystemsDto CREATE_SYSTEM_DTO = new CreateSystemsDto(
@@ -294,8 +294,12 @@ public class IngameModule extends LobbyTestLoader {
     protected final Subject<Event<Job>> JOB_SUBJECT = BehaviorSubject.create();
     protected final Subject<Event<Fleet>> FLEET_SUBJECT = BehaviorSubject.create();
     protected final Subject<Event<Ship>> SHIP_SUBJECT = BehaviorSubject.create();
+    protected final Subject<Event<WarDto>> WAR_SUBJECT = BehaviorSubject.create();
 
     protected int gameTicks = 0;
+
+    protected final AggregateResultDto HEALTH_DEF_DTO = new AggregateResultDto(200,null);
+    protected final List<WarDto> EMPTY_WARDTO_LIST = new ArrayList<>();
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -321,6 +325,8 @@ public class IngameModule extends LobbyTestLoader {
                 .listen("games." + GAME_ID + ".fleets.*.ships.*.*", Ship.class);
 
         when(this.eventListener.listen(JOB_EVENT_PATH + "*", Job.class)).thenReturn(JOB_SUBJECT);
+        when(this.eventListener.listen("games." + GAME_ID + ".wars.*.*", WarDto.class)).thenReturn(WAR_SUBJECT);
+
     }
 
     protected void initializeApiMocks() {
@@ -354,6 +360,10 @@ public class IngameModule extends LobbyTestLoader {
         doAnswer(inv -> this.app.show(this.gangCreationController)).when(this.app).show(eq("/creation"), any());
         doAnswer(inv -> this.app.show(this.inGameController)).when(this.app).show(eq("/ingame"), any());
         doAnswer(inv -> this.app.show(this.lobbyController)).when(this.app).show(eq("/lobby"), any());
+
+        when(this.warService.getWars(any(),any())).thenReturn(Observable.just(EMPTY_WARDTO_LIST));
+        when(this.empireApiService.getPrivate(any(),any())).thenReturn(Observable.just(new EmpirePrivate(new HashMap<>())));
+//        when(this.gameLogicApiService.getAggregate(any(),any(),any())).thenReturn(Observable.just(HEALTH_DEF_DTO));
     }
 
     private void loadUnloadableData() {
@@ -366,6 +376,8 @@ public class IngameModule extends LobbyTestLoader {
         this.islandAttributeStorage.districtAttributes = new ArrayList<>(List.of(DISTRICT_ATTRIBUTES));
         this.shipService.shipSpeeds = Map.of("explorer", 10.0, "colonizer", 2.0);
     }
+
+
 
     protected Event<Game> tickGame(int speed) {
         return new Event<>("games." + GAME_ID + ".ticked",

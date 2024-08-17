@@ -195,10 +195,13 @@ public class InGameTestComponent extends InGameTestInitializer {
             null,
             50,
             50,
-            "testEmpireID"
+            "testEmpireID",
+      100
     );
 
     Trait traitDto = new Trait("traitId", new EffectDto[]{new EffectDto("variable", 0.5, 1.3, 3)}, 3, new String[]{"conflicts"});
+
+
 
     public void initComponents(){
         initializeComponents();
@@ -226,8 +229,6 @@ public class InGameTestComponent extends InGameTestInitializer {
 
         // Mock get Fleets and ships
         ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", 4, new HashMap<>(), new HashMap<>())));
-        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456",true);
-        doNothing().when(this.fleetService).initializeFleetListeners();
         doNothing().when(this.fleetService).initializeShipListener();
 
         buildings.add("refinery");
@@ -249,7 +250,8 @@ public class InGameTestComponent extends InGameTestInitializer {
                 buildings,
                 "1",
                 "explored",
-                "TestIsland1"
+                "TestIsland1",
+          100
         );
 
         tokenStorage.setIsland(testIsland);
@@ -270,7 +272,8 @@ public class InGameTestComponent extends InGameTestInitializer {
                 null,
                 50,
                 50,
-                "testEmpireID"
+                "testEmpireID",
+          100
         );
 
         this.islandAttributeStorage.setIsland(testIsland);
@@ -330,9 +333,22 @@ public class InGameTestComponent extends InGameTestInitializer {
         doReturn(Observable.empty()).when(empireApiService).getPrivate(any(), any());
 
         this.inGameController.buildingPropertiesComponent.certainBuilding = buildingPreset1;
+        doNothing().when(contactsService).loadContactsData();
+        doNothing().when(contactsService).createWarListener();
+//        doNothing().when(contactsComponent).init();
+        doReturn(Observable.just(new ArrayList<WarDto>())).when(warService).getWars(any(),any());
+
+//        ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", new HashMap<>() ,new HashMap<>())));
+//        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456");//,true);
+        doNothing().when(this.fleetService).initializeFleetListeners();
+        doNothing().when(this.fleetService).onFleetCreated(any());
+        doNothing().when(this.fleetService).loadGameFleets();
+//        doNothing().when(this.fleetService).initializeShipListener();
+
 
         this.app.show(this.inGameController);
         clearStyleSheets();
+
     }
 
     protected void createMap() {

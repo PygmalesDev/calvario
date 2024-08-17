@@ -82,6 +82,7 @@ public class TechnologyOverviewComponent extends AnchorPane {
     }
 
     public void close() {
+        this.setVisible(false);
         parent.setVisible(false);
     }
 
@@ -89,13 +90,13 @@ public class TechnologyOverviewComponent extends AnchorPane {
         outerLoop:
         for (TechnologyExtended technology : technologyCategoryComponent.researchJobComponent.technologies) {
             for (String tag : technology.tags()) {
-                if (Objects.equals(tag, "engineering") && technologyCategoryComponent.technologieCategoryName.equals("engineering")){
+                if (Objects.equals(tag, "engineering") && technologyCategoryComponent.technologyCategoryName.equals("engineering")){
                     initialJobDescriptionHandling(technology);
                     break outerLoop;
-                } else if (Objects.equals(tag, "society") && technologyCategoryComponent.technologieCategoryName.equals("society")) {
+                } else if (Objects.equals(tag, "society") && technologyCategoryComponent.technologyCategoryName.equals("society")) {
                     initialJobDescriptionHandling(technology);
                     break outerLoop;
-                } else if (Objects.equals(tag, "physics") && technologyCategoryComponent.technologieCategoryName.equals("physics")) {
+                } else if (Objects.equals(tag, "physics") && technologyCategoryComponent.technologyCategoryName.equals("physics")) {
                     initialJobDescriptionHandling(technology);
                     break outerLoop;
                 } else {
@@ -190,16 +191,18 @@ public class TechnologyOverviewComponent extends AnchorPane {
      * First Child: TechnologyCategoryComponent
      * Second Child: TechnologyOverviewComponent
      */
-    public void show(@NotNull TechnologyCategoryComponent technologieCategory) {
-        setCategoryInfos(technologieCategory);
-        technologieCategory.setVisible(true);
+    public void show(@NotNull TechnologyCategoryComponent technologyCategory) {
+        setCategoryInfos(technologyCategory);
         this.setVisible(false);
+        technologyCategory.setVisible(true);
+        System.out.println(parent.getChildren().size());
+        System.out.println("show " + technologyCategory.technologyCategoryName);
 
     }
 
-    public void setCategoryInfos(@NotNull TechnologyCategoryComponent technologieCategory) {
-        technologieCategory.technologyImage.setImage(technologieCategory.imageCache.get("assets/technologies/categories/" +technologieCategory.technologieCategoryName + ".png"));
-        String technologyKey = technologieCategory.technologieCategoryName.replace("_", ".");
-        technologieCategory.technologyNameText.setText(technologiesResourceBundle.getString("technologies." + technologyKey));
+    public void setCategoryInfos(@NotNull TechnologyCategoryComponent technologyCategory) {
+        technologyCategory.technologyImage.setImage(technologyCategory.imageCache.get("assets/technologies/categories/" +technologyCategory.technologyCategoryName + ".png"));
+        String technologyKey = technologyCategory.technologyCategoryName.replace("_", ".");
+        technologyCategory.technologyNameText.setText(technologiesResourceBundle.getString("technologies." + technologyKey));
     }
 }

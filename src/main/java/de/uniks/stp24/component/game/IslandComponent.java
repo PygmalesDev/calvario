@@ -33,7 +33,6 @@ import java.util.ResourceBundle;
 
 
 @Component(view = "IslandComponent.fxml")
-@Singleton
 public class IslandComponent extends Pane {
     @FXML
     public ImageView rudderImage;
@@ -86,7 +85,7 @@ public class IslandComponent extends Pane {
     @Inject
     public IslandComponent(IslandsService islandsService) {
         this.islandsService = islandsService;
-        if (this.imageCache == null) this.imageCache = new ImageCache();
+        this.imageCache = islandsService.imageCache;
         this.islandImage = new ImageView();
         this.flagImage = new ImageView();
         this.spyglassImage = new ImageView();
@@ -95,12 +94,14 @@ public class IslandComponent extends Pane {
         this.setPickOnBounds(false);
     }
 
+    public void render() {
+        this.sableImage.setImage(this.imageCache.get("/de/uniks/stp24/assets/other/war_icon.png"));
+        this.sableImage.setVisible(false);
+    }
+
     public void applyIcon(boolean isFoggy, BlendMode blendMode) {
         if (Objects.nonNull(this.islandImage))
             this.islandImage.setImage(imageCache.get("icons/islands/" + island.type().name() + ".png"));
-
-        this.sableImage.setImage(this.imageCache.get("/de/uniks/stp24/assets/other/war_icon.png"));
-        this.sableImage.setVisible(false);
 
         this.foggy = isFoggy;
 
@@ -127,6 +128,7 @@ public class IslandComponent extends Pane {
 
     public void toggleSableVisibility(boolean isVisible) {
         this.sableImage.setVisible(isVisible);
+        System.out.println("\t SABLE VISIBLE? " + this.sableImage.isVisible());
     }
 
 
@@ -142,6 +144,7 @@ public class IslandComponent extends Pane {
         this.island = islandInfo;
         this.setId(island.id() + "_instance");
         this.spyglassImage.setVisible(island.upgrade().equals("explored"));
+
         applyIcon(this.foggy, BlendMode.LIGHTEN);
     }
 
@@ -311,7 +314,6 @@ public class IslandComponent extends Pane {
 
 
     public void showDefenseAndHealth() {
-        System.out.println("your health " + this.health + "/" + this.maxHealth);
         this.statsVisibility.setValue(!this.statsVisibility.get());
     }
 

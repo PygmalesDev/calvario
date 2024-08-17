@@ -62,22 +62,14 @@ public class GameFleetController extends Pane {
         this.selectedDropShadow.setSpread(0.9);
 
         this.setId("ingameFleet_" + fleet._id());
-       // this.travelTimeline.setOnFinished(event -> {
-       //     if (this.currentPoint.getType().equals(POINT_TYPE.ISLAND)){
-       //         this.fleetCoordinationService.monitorFleetCollisions();
-       //     }
-       // });
-
         travelTimeline.currentTimeProperty().addListener(this::listenerTimeMethod);
-
         this.travelTimeline.statusProperty().addListener(this::listenerStatusMethod);
     }
 
     private void listenerStatusMethod(ObservableValue<? extends Animation.Status> observableValue, Animation.Status status, Animation.Status status1) {
         if (status1.equals(Animation.Status.STOPPED) && this.currentPoint.getType().equals(POINT_TYPE.ISLAND)){
-//            this.travelTimeline.currentTimeProperty().removeListener(this::listenerTimeMethod);
+            this.fleetCoordinationService.monitorFleetCollisions(this);
             this.fleetCoordinationService.inGameController.removeFogFromIsland(true, this.currentPoint.islandComponent);
-//            travelTimeline.currentTimeProperty().addListener(this::listenerTimeMethod);
         }
     }
 

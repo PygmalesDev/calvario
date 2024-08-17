@@ -17,6 +17,7 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
+import java.util.function.Consumer;
 
 @Singleton
 public class ContactsService {
@@ -41,6 +42,7 @@ public class ContactsService {
     public Map<String, WarDto> warsOnProcess = new HashMap<>();
     public final ObservableList<WarDto> warsInThisGame = FXCollections.observableArrayList();
 
+    private Consumer<WarDto> onWarDeletedConsumer;
 
     String attacker;
     boolean declaring;
@@ -63,7 +65,6 @@ public class ContactsService {
         warsInThisGame.clear();
         this.gameID = null;
     }
-
 
     // add enemy after discovered an island of his empire
     public void addEnemy(String enemy, String islandID) {
@@ -213,6 +214,10 @@ public class ContactsService {
                 error -> System.out.println("error while loading contacts"));
     }
 
+    public void onWarDeleted(Consumer<WarDto> func) {
+        this.onWarDeletedConsumer = func;
+    }
+
     public void loadContacts(Map<String, Object> map) {
         if (!map.isEmpty()) {
             Map<String, List<String>> tmp = new HashMap<>();
@@ -245,7 +250,10 @@ public class ContactsService {
                                 addEnemyAfterDeclaration(event.data().attacker());
                             }
                         }
-                        case "deleted" -> warsInThisGame.removeIf(w -> w._id().equals(event.data()._id()));
+                        case "deleted" -> {
+                            warsInThisGame.removeIf(w -> w._id().equals(event.data()._id()));
+                            this.onWarDeletedConsumer.accept(event.data());
+                        }
                         default -> { }
                     }
 
@@ -295,12 +303,9 @@ public class ContactsService {
     public void addWarInformation(List<WarDto> dto) {
         this.warsInThisGame.addAll(dto);
         for (WarDto w : dto) {
-            System.out.println(dto);
             if (w.attacker().equals(myOwnEmpireID)) warsOnProcess.put(w.defender(),w);
             if (w.defender().equals(myOwnEmpireID)) warsOnProcess.put(w.attacker(),w);
         }
-        System.out.println("wars on process " + warsOnProcess.size());
-        System.out.println("wars in game " + warsInThisGame.size());
     }
 
     public boolean areAtWar(String empire1, String empire2) {

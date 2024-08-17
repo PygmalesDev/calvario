@@ -9,6 +9,7 @@ import de.uniks.stp24.model.IslandType;
 import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.BasicService;
+import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
 import de.uniks.stp24.service.menu.LobbyService;
 import javafx.geometry.Point2D;
@@ -36,6 +37,8 @@ public class IslandsService extends BasicService {
     public GameLogicApiService gameLogicApiService;
     @Inject
     LobbyService lobbyService;
+    @Inject
+    public ImageCache imageCache;
     
 
     public boolean keyCodeFlag = true;
@@ -222,6 +225,8 @@ public class IslandsService extends BasicService {
           island -> {
               IslandComponent tmp = createIslandPaneFromDto(island,
                 app.initAndRender(new IslandComponent(this)));
+
+              tmp.render();
               tmp.setLayoutX(tmp.getPosX());
               tmp.setLayoutY(tmp.getPosY());
               //tmp.setIslandService(this);

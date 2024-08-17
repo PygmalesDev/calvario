@@ -11,7 +11,6 @@ import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs;
-import de.uniks.stp24.model.*;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
@@ -136,6 +135,8 @@ public class InGameController extends BasicController {
     public FleetCoordinationService fleetCoordinationService;
     @Inject
     public TechnologyService technologyService;
+    @Inject
+    public BattleResultComponent battleResultComponent;
 
     @SubComponent
     @Inject
@@ -296,7 +297,7 @@ public class InGameController extends BasicController {
 
         variableService.addRunnable(this::loadGameAttributes);
         variableService.initVariables();
-        battleService.setFleetLocationUpdates();
+        battleService.setBattleConditionUpdates();
 
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
@@ -419,6 +420,8 @@ public class InGameController extends BasicController {
         contactsOverviewComponent.setParents(contextMenuContainer, contactDetailsContainer);
         contactsOverviewComponent.contactDetailsComponent.setWarComponent(warComponent);
         warComponent.setParent(warContainer);
+        warContainer.getChildren().add(battleResultComponent);
+        battleService.setBattleResultComponent(battleResultComponent);
         contactService.setContactOverview(contactsOverviewComponent);
 
         this.fleetService.loadGameFleets();
@@ -453,7 +456,6 @@ public class InGameController extends BasicController {
                 System.out.println("in InGameController cannot be refreshed");
             }
         });
-        System.out.println("end of render. devs?  " + islandsService.getDevIsles().size() );
         contactService.getEmpiresInGame();
 
     }
@@ -671,6 +673,8 @@ public class InGameController extends BasicController {
                     Island updatedIsland = islandsService.convertToIsland(event.data());
                     isle.applyInfo(updatedIsland);
                     if (Objects.nonNull(updatedIsland.owner())) {
+                        this.battleService.checkBattleConditionOnIslandClaimed(isle.island.id());
+
                         // apply drop shadow and flag
                         isle.applyEmpireInfo();
                         this.islandsService.updateIsles(updatedIsland);

@@ -326,7 +326,7 @@ public class IngameModule extends LobbyTestLoader {
 
         when(this.eventListener.listen(JOB_EVENT_PATH + "*", Job.class)).thenReturn(JOB_SUBJECT);
         when(this.eventListener.listen("games." + GAME_ID + ".wars.*.*", WarDto.class)).thenReturn(WAR_SUBJECT);
-
+        when(this.gameLogicApiService.getAggregate(any(),any(),any())).thenReturn(Observable.just(HEALTH_DEF_DTO));
     }
 
     protected void initializeApiMocks() {

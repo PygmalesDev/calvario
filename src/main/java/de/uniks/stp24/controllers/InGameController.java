@@ -205,6 +205,8 @@ public class InGameController extends BasicController {
     public FleetManagerComponent fleetManagerComponent;
     @Inject
     public FogOfWar fogOfWar;
+    @Inject
+    public BattleService battleService;
 
     public List<IslandComponent> islandComponentList;
     Map<String, IslandComponent> islandComponentMap;
@@ -294,6 +296,7 @@ public class InGameController extends BasicController {
 
         variableService.addRunnable(this::loadGameAttributes);
         variableService.initVariables();
+        battleService.setFleetLocationUpdates();
 
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),

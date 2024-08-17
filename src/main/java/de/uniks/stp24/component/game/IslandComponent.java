@@ -3,6 +3,7 @@ package de.uniks.stp24.component.game;
 import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
+import de.uniks.stp24.model.TechHelp;
 import de.uniks.stp24.service.Constants;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -53,6 +54,8 @@ public class IslandComponent extends Pane {
     ImageView healthIcon;
     @FXML
     ImageView defenseIcon;
+    @FXML
+    ImageView sableImage;
 
     @Inject
     TokenStorage tokenStorage;
@@ -96,6 +99,9 @@ public class IslandComponent extends Pane {
         if (Objects.nonNull(this.islandImage))
             this.islandImage.setImage(imageCache.get("icons/islands/" + island.type().name() + ".png"));
 
+        this.sableImage.setImage(this.imageCache.get("/de/uniks/stp24/assets/other/war_icon.png"));
+        this.sableImage.setVisible(false);
+
         this.foggy = isFoggy;
 
         if (isFoggy)
@@ -117,6 +123,10 @@ public class IslandComponent extends Pane {
     public void changeBlendMode(BlendMode blendMode) {
         if (this.foggy)
             this.islandImage.setBlendMode(blendMode);
+    }
+
+    public void toggleSableVisibility(boolean isVisible) {
+        this.sableImage.setVisible(isVisible);
     }
 
 

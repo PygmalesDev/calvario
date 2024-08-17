@@ -37,4 +37,5 @@
          <Image url="@../../assets/contactsAndWars/shield.png" />
       </image>
    </ImageView>
+   <ImageView fx:id="sableImage" fitHeight="100.0" fitWidth="100.0" layoutX="10.0" layoutY="-100.0" pickOnBounds="true" preserveRatio="true" />
 </fx:root>

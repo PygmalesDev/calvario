@@ -303,4 +303,14 @@ public class ContactsService {
         System.out.println("wars in game " + warsInThisGame.size());
     }
 
+    public boolean areAtWar(String empire1, String empire2) {
+        for (WarDto warDto : warsInThisGame) {
+            if (warDto.attacker().equals(empire1) && warDto.defender().equals(empire2) ||
+                    warDto.attacker().equals(empire2) && warDto.defender().equals(empire1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

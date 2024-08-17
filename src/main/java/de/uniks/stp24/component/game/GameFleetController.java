@@ -6,6 +6,8 @@ import de.uniks.stp24.service.Constants.POINT_TYPE;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.FleetCoordinationService;
+import javafx.fxml.FXML;
+import javafx.scene.control.ProgressBar;
 import de.uniks.stp24.service.game.FleetService;
 import javafx.animation.*;
 import javafx.beans.value.ObservableValue;
@@ -18,19 +20,23 @@ import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
-
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Objects;
 
 import static de.uniks.stp24.service.Constants.FLEET_HW;
 
+
 @Component(view = "GameFleet.fxml")
 public class GameFleetController extends Pane {
     public Circle collisionCircle;
+
+    @FXML
+    public ProgressBar healthBar;
+
+    private double fleetHealth;
     public Circle empireCircle;
     public ImageView fleetImage;
-
     private final DropShadow selectedDropShadow;
     private final FleetService fleetService;
     private final TokenStorage tokenStorage;
@@ -39,8 +45,8 @@ public class GameFleetController extends Pane {
     private DistancePoint currentPoint;
     private final Timeline travelTimeline = new Timeline();
     private final Rotate rotate = new Rotate();
-    private Fleet fleet;
     private boolean ownFleet;
+    public Fleet fleet;
 
     @Inject
     public GameFleetController(Fleet fleet, FleetCoordinationService fleetCoordinationService){
@@ -56,6 +62,11 @@ public class GameFleetController extends Pane {
         this.selectedDropShadow.setSpread(0.9);
 
         this.setId("ingameFleet_" + fleet._id());
+       // this.travelTimeline.setOnFinished(event -> {
+       //     if (this.currentPoint.getType().equals(POINT_TYPE.ISLAND)){
+       //         this.fleetCoordinationService.monitorFleetCollisions();
+       //     }
+       // });
 
         this.travelTimeline.currentTimeProperty().addListener(this::listenerTimeMethod);
 
@@ -123,13 +134,10 @@ public class GameFleetController extends Pane {
         );
     }
 
-    public boolean isCollided(Circle other) {
-        return this.collisionCircle.intersects(other.getLayoutBounds());
+    public Fleet getFleet() {
+        return this.fleet;
     }
 
-    public Fleet getFleet() {
-        return fleet;
-    }
 
     public void setStartingPoint() {
         this.fleetImage.getTransforms().add(rotate);

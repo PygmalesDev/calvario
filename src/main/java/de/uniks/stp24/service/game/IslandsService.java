@@ -2,12 +2,11 @@ package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.component.game.IslandComponent;
 import de.uniks.stp24.controllers.InGameController;
-import de.uniks.stp24.dto.ReadEmpireDto;
-import de.uniks.stp24.dto.ShortSystemDto;
-import de.uniks.stp24.dto.SystemDto;
-import de.uniks.stp24.dto.UpdateBuildingDto;
+import de.uniks.stp24.dto.*;
+import de.uniks.stp24.model.Contact;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.IslandType;
+import de.uniks.stp24.rest.GameLogicApiService;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.BasicService;
 import de.uniks.stp24.service.IslandAttributeStorage;
@@ -34,7 +33,10 @@ public class IslandsService extends BasicService {
     @Inject
     public GameSystemsApiService gameSystemsService;
     @Inject
+    public GameLogicApiService gameLogicApiService;
+    @Inject
     LobbyService lobbyService;
+    
 
     public boolean keyCodeFlag = true;
 
@@ -67,7 +69,7 @@ public class IslandsService extends BasicService {
      */
     @OnInit
     public void createEmpireServices() {
-        empiresInGame.keySet().forEach(id -> siteManager.put(id,new InfrastructureService()));
+        empiresInGame.keySet().forEach(id -> siteManager.put(id, new InfrastructureService()));
         siteManager.put("noBody", new InfrastructureService());
     }
 
@@ -75,10 +77,10 @@ public class IslandsService extends BasicService {
         return siteManager.size();
     }
 
-   
+
     public void setFlag(boolean selected) {
         islandComponentMap.forEach((id, comp) -> {
-            if(selected) comp.showFlag(true);
+            if (selected) comp.showFlag(true);
             else if (!comp.islandIsSelected) {
                 comp.showFlag(false);
                 keyCodeFlag = false;
@@ -117,8 +119,7 @@ public class IslandsService extends BasicService {
                     widthRange = maxX-minX + 1000;
                     heightRange = maxY-minY + 1000;
                     this.app.show("/ingame");
-                },
-                error -> System.out.println("Error while retrieving islands in the IslandsService:\n"+error.getMessage()));
+                }, Throwable::printStackTrace);
     }
 
     /**
@@ -246,7 +247,6 @@ public class IslandsService extends BasicService {
                 IslandComponent isle2 = idToComponent.get(neighbour);
                 endX = isle2.getPosX() + 60;
                 endY = isle2.getPosY() + 100;
-
                 Line tmp = new Line(startX, startY, endX, endY);
                 tmp.getStyleClass().add("connection");
                 linesInMap.add(tmp);
@@ -264,43 +264,55 @@ public class IslandsService extends BasicService {
         heightRange = 0.0;
     }
 
-    /** method should retrieve frequently updated information
+    /**
+     * method should retrieve frequently updated information
      */
     public void refreshListOfColonizedSystems() {
         devIsles.clear();
         subscriber.subscribe(gameSystemsService.getSystems(this.gameID), dto -> {
               Arrays.stream(dto).forEach(data -> {
-                    if(Objects.nonNull(data.owner())) {
-                        ShortSystemDto tmp = new ShortSystemDto(data.owner(),
-                                data._id(),
-                                data.type(),
-                                Objects.isNull(data.name()) ? "Uncharted Island" : data.name(),
-                                data.districtSlots(),
-                                data.districts(),
-                                data.capacity(),
-                                data.buildings(),
-                                data.upgrade(),
-                                data.population()
-                        );
-                        devIsles.add(tmp);
-                    }
+                  if (Objects.nonNull(data.owner())) {
+                      ShortSystemDto tmp = new ShortSystemDto(data.owner(),
+                        data._id(),
+                        data.type(),
+                        Objects.isNull(data.name()) ? "Uncharted Island" : data.name(),
+                        data.districtSlots(),
+                        data.districts(),
+                        data.capacity(),
+                        data.buildings(),
+                        data.upgrade(),
+                        data.population(),
+                        data.health()
+                      );
+                      devIsles.add(tmp);
+                  }
               });
               mapSitesBuildings();
+              //todo remove printouts
+              System.out.println("...UPDATING ISLANDS...FOUND...");
+              System.out.println(devIsles.size());
           },
           error -> System.out.printf(
-                  "Caught an error while refreshing colonized systems list in Islands Service:\n %s", error.getMessage()));
+            "Caught an error while refreshing colonized systems list in Islands Service:\n %s", error.getMessage()));
     }
 
-    /** after refresh list remap site and buildings (?)
+    public List<ShortSystemDto> getDevIsles() {
+        //todo remove printout
+        System.out.println("devs " + this.devIsles.size());
+        return Collections.unmodifiableList(this.devIsles);
+    }
+
+    /**
+     * after refresh list remap site and buildings (?)
      * building's information is in an array
-     * */
+     */
     public void mapSitesBuildings() {
-        siteManager.forEach((id,manager) -> manager.resetMap());
+        siteManager.forEach((id, manager) -> manager.resetMap());
         for (ShortSystemDto dto : this.devIsles) {
             if (Objects.nonNull(dto.districts())) {
                 dto.districts().forEach((k, v) -> siteManager.get(dto.owner()).putOrUpdateSiteInfo(k, v));
             }
-            if (Objects.nonNull(dto.buildings())){
+            if (Objects.nonNull(dto.buildings())) {
                 dto.buildings()
                   .forEach(building -> siteManager.get(dto.owner()).putOrUpdateBuildingInfo(building));
             }
@@ -320,6 +332,10 @@ public class IslandsService extends BasicService {
         return siteManager.get(empireID).getTotalSiteCapacity();
     }
 
+    public int getAllNumberOfBuildings(String empireID) {
+        return siteManager.get(empireID).getTotalBuildingCapacity();
+    }
+
     public int getNumberOfSites(String empireID, String siteID) {
         int total = 0;
         if (empiresInGame.containsKey(empireID)) {
@@ -332,8 +348,16 @@ public class IslandsService extends BasicService {
         return Collections.unmodifiableList(this.isles);
     }
 
+    public List<IslandComponent> getIslandComponentList() {
+        return islandComponentList;
+    }
+
     public Map<String, IslandComponent> getComponentMap() {
         return Collections.unmodifiableMap(this.islandComponentMap);
+    }
+
+    public List<String> getEmpiresID() {
+        return empiresInGame.keySet().stream().toList();
     }
 
     public ReadEmpireDto getEmpire(String id) {
@@ -349,8 +373,8 @@ public class IslandsService extends BasicService {
      */
     private @NotNull String colorToRGB(Color color) {
         return "rgb(" + (int) (color.getRed() * 255) + "," +
-                (int) (color.getGreen() * 255) + "," +
-                (int) (color.getBlue() * 255) + ")";
+          (int) (color.getGreen() * 255) + "," +
+          (int) (color.getBlue() * 255) + ")";
     }
 
     public void removeDataForMap() {
@@ -364,11 +388,11 @@ public class IslandsService extends BasicService {
         this.siteManager.clear();
     }
 
-    public void updateIslandBuildings(IslandAttributeStorage islandAttributes, InGameController inGameController, ArrayList<String> buildings){
+    public void updateIslandBuildings(IslandAttributeStorage islandAttributes, InGameController inGameController, ArrayList<String> buildings) {
         if (Objects.nonNull(inGameController.selectedIsland) && Objects.nonNull(islandAttributes.getIsland())) {
             this.subscriber.subscribe(gameSystemsService.updateBuildings(
-                    tokenStorage.getGameId(), islandAttributes.getIsland().id(),
-                    new UpdateBuildingDto(buildings)), result -> {
+              tokenStorage.getGameId(), islandAttributes.getIsland().id(),
+              new UpdateBuildingDto(buildings)), result -> {
 
                 islandAttributes.getIsland().buildings().clear();
                 islandAttributes.getIsland().buildings().addAll(result.buildings());
@@ -381,14 +405,14 @@ public class IslandsService extends BasicService {
 
     public Island getIsland(String islandID) {
         return this.isles.stream()
-                .filter(isle -> isle.id().equals(islandID))
-                .findFirst().orElse(null);
+          .filter(isle -> isle.id().equals(islandID))
+          .findFirst().orElse(null);
     }
 
     public IslandComponent getIslandComponent(String islandID) {
         return this.islandComponentList.stream().filter(islandComponent ->
-                islandComponent.island.id().equals(islandID))
-                .findFirst().orElse(null);
+            islandComponent.island.id().equals(islandID))
+          .findFirst().orElse(null);
     }
 
     public String getIslandName(String islandID) {
@@ -417,29 +441,49 @@ public class IslandsService extends BasicService {
 
     public Island convertToIsland(SystemDto result) {
         return new Island(result.owner(),
-                Objects.isNull(result.owner()) ? -1 : getEmpire(result.owner()).flag(),
-                result.x(),
-                result.y(),
-                IslandType.valueOf(result.type()),
-                result.population(),
-                result.capacity(),
-                result.upgrade().ordinal(),
-                result.districtSlots(),
-                result.districts(),
-                result.buildings(),
-                result._id(),
-                result.upgrade().toString(),
-                Objects.isNull(result.name()) ? "Uncharted Island" : result.name()
+          Objects.isNull(result.owner()) ? -1 : getEmpire(result.owner()).flag(),
+          result.x(),
+          result.y(),
+          IslandType.valueOf(result.type()),
+          result.population(),
+          result.capacity(),
+          result.upgrade().ordinal(),
+          result.districtSlots(),
+          result.districts(),
+          result.buildings(),
+          result._id(),
+          result.upgrade().toString(),
+          Objects.isNull(result.name()) ? "Uncharted Island" : result.name(),
+          result.health()
         );
     }
 
+    // adds a background color to island as same as owner empire color
     public void applyDropShadowToIsland(IslandComponent islandComponent) {
-        // adds a background color to island as same as owner empire color
         if (Objects.nonNull(islandComponent.island.owner())) {
             Color colorWeb = Color.web(getEmpire(islandComponent.island.owner()).color()).brighter();
             islandComponent.islandImage.setStyle("-fx-effect: dropshadow(gaussian," + colorToRGB(colorWeb) + ", 4.0, 0.88, 0, 0);");
         }
     }
 
+    // used to get value of maxHealth or defense for own islands
+    public void getSystemAggregate(String empire, String aggregate, String system) {
+        this.subscriber.subscribe(gameLogicApiService.getAggregate(empire, aggregate, system),
+          result -> {
+              if (aggregate.contains("max_health")) islandComponentMap.get(system).setMaxHealth(result.total());
+              else if (aggregate.contains("defense")) islandComponentMap.get(system).setMaxDefense(result.total());
+          },
+          error -> System.out.printf("Caught an error while getting health/defense in Islands Service:\n %s", error.getMessage())
+        );
+    }
+
+    public void getEnemyStrength(String ownEmpire, String enemyID, Contact contact) {
+        this.subscriber.subscribe(gameLogicApiService.getCompare(ownEmpire,"empire.compare.military",enemyID),
+          result -> contact.setStrength(result.total()),
+          error -> System.out.printf("Caught an error while comparing strength in Islands Service:\n %s", error.getMessage()));
+
+    }
+
     public  void updateIsles(Island island){this.isles.replaceAll(old -> old.equals(island) ? island : old);}
+
 }

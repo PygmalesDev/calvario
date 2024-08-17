@@ -17,7 +17,8 @@ public record Island(
   ArrayList<String> buildings,
   String id,
   String upgrade,
-  String name
+  String name,
+  int health
 ) {
     public boolean equals(final Object o) {
         if (o instanceof Island island) return this.id.equals(island.id);

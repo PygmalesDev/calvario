@@ -13,6 +13,7 @@ public record ShortSystemDto(
   int capacity,
   ArrayList<String> buildings,
   Upgrade upgrade,
-  int population
+  int population,
+  int health
 ) {
 }

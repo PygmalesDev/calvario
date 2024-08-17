@@ -86,6 +86,11 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     VariableDependencyService variableDependencyService;
     @Spy
     MarketService marketService;
+
+    @Spy
+    WarService warService;
+    @Spy
+    WarsApiService warsApiService;
     @Mock
     FleetService fleetService;
     @Mock
@@ -96,6 +101,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     FleetApiService fleetApiService;
     @Spy
     FogOfWar fogOfWar;
+
 
     @InjectMocks
     PauseMenuComponent pauseMenuComponent;
@@ -152,7 +158,6 @@ public class IslandOverviewTestInitializer extends ControllerTest {
 
     @InjectMocks
     TechnologyCategoryComponent technologyCategoryComponent;
-
     @InjectMocks
     TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
 
@@ -166,6 +171,12 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @InjectMocks
     MarketComponent marketComponent;
     @InjectMocks
+    ContactsComponent contactsComponent;
+    @InjectMocks
+    ContactDetailsComponent contactDetailsComponent;
+    @InjectMocks
+    WarComponent warComponent;
+    @InjectMocks
     FleetManagerComponent fleetManagerComponent;
     @InjectMocks
     NewFleetComponent newFleetComponent;
@@ -176,13 +187,13 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     @InjectMocks
     BlueprintsDetailsComponent blueprintsDetailsComponent;
 
-
     public void initializeComponents() {
         this.inGameController.technologiesComponent = this.technologyOverviewComponent;
         this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
         this.inGameController.technologiesComponent.technologyCategoryComponent.researchJobComponent = this.researchJobComponent;
         this.inGameController.technologiesComponent.technologyService = this.technologyService;
         this.inGameController.technologiesComponent.technologyCategoryComponent.technologyService = this.technologyService;
+
         this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent = this.technologyResearchDetailsComponent;
         this.inGameController.technologiesComponent.technologyCategoryComponent.technologyEffectDetailsComponent = this.technologyEffectDetailsComponent;
         this.inGameController.technologiesComponent.technologyCategoryComponent.resourcesService = this.resourcesService;
@@ -195,6 +206,7 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.gameLogicApiService = this.gameLogicApiService;
         this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.tokenStorage = this.tokenStorage;
         this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.subscriber = this.subscriber;
+
         this.inGameController.technologiesComponent.technologyCategoryComponent.subscriber = this.subscriber;
         this.inGameController.technologiesComponent.technologyService.subscriber = this.subscriber;
         this.inGameController.technologiesComponent.subscriber = this.subscriber;
@@ -294,12 +306,24 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.fleetCoordinationService.tokenStorage = this.tokenStorage;
         this.fleetService.tokenStorage = this.tokenStorage;
         this.fleetService.fleetApiService = this.fleetApiService;
+        this.inGameController.contactsOverviewComponent = this.contactsComponent;
+        this.inGameController.contactsOverviewComponent.warService = this.warService;
+        this.inGameController.contactsOverviewComponent.warService.warsApiService = this.warsApiService;
+        this.inGameController.contactsOverviewComponent.contactDetailsComponent = this.contactDetailsComponent;
+        this.inGameController.contactsOverviewComponent.contactDetailsComponent.warComponent = this.warComponent;
+        this.inGameController.warComponent = this.warComponent;
+        this.inGameController.contactService.tokenStorage = this.tokenStorage;
+        this.inGameController.contactService.islandsService = this.islandsService;
+        this.inGameController.contactService.empireApiService = this.empireApiService;
+        this.inGameController.contactService.subscriber = this.subscriber;
+        this.inGameController.contactService.eventListener = this.eventListener;
+
         this.fleetService.subscriber = this.subscriber;
         this.fleetCoordinationService.subscriber = this.subscriber;
         this.technologyService.eventListener = this.eventListener;
 
+        this.timerService.subscriber = this.subscriber;
         this.timerService.eventListener = this.eventListener;
-
     }
 
     public void clearStyleSheets() {

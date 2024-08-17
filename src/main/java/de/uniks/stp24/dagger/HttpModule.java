@@ -113,6 +113,10 @@ public class HttpModule {
 
     @Provides
     @Singleton
+    WarsApiService warsApiService(Retrofit retrofit) {return retrofit.create(WarsApiService.class);}
+
+    @Provides
+    @Singleton
     ShipsApiService shipsApiService(Retrofit retrofit) {return retrofit.create(ShipsApiService.class);}
 
 }

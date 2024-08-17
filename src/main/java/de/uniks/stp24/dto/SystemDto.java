@@ -19,6 +19,7 @@ public record SystemDto(
   Map<String,Integer> links,
   double x,
   double y,
-  String owner
+  String owner,
+  int health
 ) {
 }

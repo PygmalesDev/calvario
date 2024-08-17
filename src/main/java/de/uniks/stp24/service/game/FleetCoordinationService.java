@@ -42,22 +42,23 @@ public class FleetCoordinationService {
     @Inject
     public TimerService timerService;
     @Inject
-    public JobsService jobsService;
-    @Inject
     public TokenStorage tokenStorage;
     @Inject
     public FleetService fleetService;
     @Inject
     public IslandsService islandsService;
     @Inject
+    public App app;
+    @Inject
+    public ContactsService contactsService;
+    @Inject
+    public JobsService jobsService;
+    @Inject
     public ImageCache imageCache;
     @Inject
     public Subscriber subscriber;
     @Inject
     public ShipService shipService;
-    @Inject
-    public App app;
-
     public final Random random = new Random();
     private GameFleetController selectedFleet;
     private ObservableList<Node> mapGrid;
@@ -120,6 +121,7 @@ public class FleetCoordinationService {
         return  this.coordinatedPaths.keySet().stream()
                 .filter(gameFleet -> gameFleet.getFleet()._id().equals(fleetID))
                 .findFirst();
+
     }
 
     public void setFleet(GameFleetController fleet) {
@@ -133,8 +135,11 @@ public class FleetCoordinationService {
         } else {
             this.selectedFleet = fleet;
             fleet.toggleActive();
+//            if (!fleet.getFleet().size().isEmpty()) {
+//            System.out.println("your fleet has these ships: " + fleet.getFleet().size() );
+//            fleet.showHealth();
+//        }
         }
-
         this.onFleetSelectedConsumers.forEach(func -> func.accept(this.getSelectedFleet()));
     }
 
@@ -216,6 +221,7 @@ public class FleetCoordinationService {
         this.mapGrid = inGameController.mapGrid.getChildren();
         this.timerService.onGameTicked(this::processTravel);
         this.timerService.onSpeedChanged(this::processSpeedChanged);
+        this.timerService.onGameTicked(() -> islandsService.refreshListOfColonizedSystems());
     }
 
     public Fleet getSelectedFleet() {
@@ -490,5 +496,26 @@ public class FleetCoordinationService {
         this.enemyFleets.clear();
         this.pathEntries.clear();
         this.onFleetSelectedConsumers.clear();
+    }
+
+    public void monitorFleetCollisions() {
+        for (IslandComponent islandComponent : islandsService.getIslandComponentList()) {
+            if (islandComponent.isCollided(selectedFleet.getLayoutX(), selectedFleet.getLayoutY(), Constants.FLEET_COLLISION_RADIUS)) {
+                System.out.println("------------------------------------------COLLISION-------------------------------------- ");
+                System.out.println("island: " + islandComponent.getIsland().id() + " at "
+                  + islandComponent.getPosX() + ", " + islandComponent.getPosY());
+                System.out.println("islandOwnerID" + islandComponent.getIsland().owner());
+                System.out.println("fleetOwnerID" + selectedFleet.getFleet().empire());
+
+                if(Objects.nonNull(islandComponent.getIsland().owner())){
+                    if (!islandComponent.getIsland().owner().equals(selectedFleet.getFleet().empire()) && !islandComponent.getIsland().owner().equals(this.tokenStorage.getEmpireId())){
+                        System.out.println("Enemy  detected");
+                        islandsService.refreshListOfColonizedSystems();
+                        contactsService.addEnemy(islandComponent.getIsland().owner(), islandComponent.getIsland().id());
+//                        battleService.startBattle(tokenStorage.getEmpireId(), islandComponent.getIsland().owner(), islandComponent.island.id());
+                    }
+                }
+            }
+        }
     }
 }

@@ -15,8 +15,9 @@ import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
 
 public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
 
@@ -196,7 +197,8 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
                 buildings,
                 "1",
                 "explored",
-                "TestIsland1"
+                "TestIsland1",
+          100
         );
 
         SystemDto system = new SystemDto("testGameID",
@@ -214,7 +216,8 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
                 null,
                 2,
                 2,
-                "owner");
+                "owner",
+          100);
 
         this.islandAttributeStorage.setIsland(testIsland);
 
@@ -275,12 +278,14 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
         this.marketService.subscriber = this.subscriber;
 
         this.mockFleets();
+
         this.technologyService.subscriber = new Subscriber();
         this.technologyService.tokenStorage = this.tokenStorage;
 
         doReturn(Observable.empty()).when(empireApiService).getPrivate(any(), any());
 
         doReturn(Observable.just(new SystemDto[]{system})).when(gameSystemsApiService).getSystems(any());
+
 
         this.app.show(this.inGameController);
         clearStyleSheets();
@@ -289,6 +294,12 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
     private void mockFleets(){
         // Mock get Fleets and ships
         ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", 4, new HashMap<>(), new HashMap<>())));
+//        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456");
+//        doNothing().when(this.fleetService).initializeFleetListeners();
+        doNothing().when(contactsService).loadContactsData();
+        doNothing().when(contactsService).createWarListener();
+//        doNothing().when(contactsComponent).init();
+        doReturn(Observable.just(new ArrayList<WarDto>())).when(warService).getWars(any(),any());
         doNothing().when(this.fleetService).initializeFleetListeners();
         doNothing().when(this.fleetService).initializeShipListener();
     }

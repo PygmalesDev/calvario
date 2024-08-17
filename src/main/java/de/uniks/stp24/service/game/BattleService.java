@@ -20,13 +20,13 @@ import java.util.stream.Collectors;
 @Singleton
 public class BattleService {
     @Inject
-    FleetService fleetService;
+    public FleetService fleetService;
     @Inject
-    IslandsService islandsService;
+    public IslandsService islandsService;
     @Inject
-    ContactsService contactsService;
+    public ContactsService contactsService;
     @Inject
-    TokenStorage tokenStorage;
+    public TokenStorage tokenStorage;
 
     BattleResultComponent battleResultComponent;
 
@@ -87,6 +87,7 @@ public class BattleService {
 
                     if (this.fleetService.getFleetsOnIsland(oldFleet.location())
                             .filtered(other -> oldFleet.empire().equals(other.empire())).isEmpty() &&
+                             Objects.nonNull(this.islandsService.getIsland(oldFleet.location()).owner()) &&
                     !this.islandsService.getIsland(oldFleet.location()).owner().equals(oldFleet.empire()))
                         this.deleteBattle(battleEntry);
 
@@ -122,8 +123,7 @@ public class BattleService {
                         } else
                             battleEntry.setWinner(this.tokenStorage.getEmpireId());
 
-                        if (Objects.isNull(this.islandsService.getIsland(battleEntry.getLocation()).owner()))
-                            finishBattle(battleEntry);
+                        finishBattle(battleEntry);
                     }
                     return battleEntry;
                 });

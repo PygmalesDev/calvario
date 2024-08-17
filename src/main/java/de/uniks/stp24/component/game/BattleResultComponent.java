@@ -46,6 +46,10 @@ public class BattleResultComponent extends Pane {
 
     public void setInfo(BattleEntry battleEntry) {
         this.setVisible(true);
+
+        this.youLostBox.getChildren().clear();
+        this.theyLostBox.getChildren().clear();
+
         String empireID = this.tokenStorage.getEmpireId();
 
         switch (battleEntry.getBattleType()) {

@@ -251,7 +251,8 @@ public class ContactsService {
                     switch (event.suffix()) {
                         case "created" -> {
                             warsInThisGame.add(event.data());
-                            this.onWarCreatedRunnable.accept(event.data());
+                            if (Objects.nonNull(this.onWarCreatedRunnable))
+                                this.onWarCreatedRunnable.accept(event.data());
                             if (hiddenEmpires.contains(event.data().attacker())) {
                                 addEnemyAfterDeclaration(event.data().attacker());
                             }

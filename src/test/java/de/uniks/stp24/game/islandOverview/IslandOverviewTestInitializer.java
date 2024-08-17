@@ -86,6 +86,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     VariableDependencyService variableDependencyService;
     @Spy
     MarketService marketService;
+    @Spy
+    BattleService battleService;
 
     @Spy
     WarService warService;
@@ -155,6 +157,8 @@ public class IslandOverviewTestInitializer extends ControllerTest {
     IslandClaimingComponent islandClaimingComponent;
     @InjectMocks
     TechnologyOverviewComponent technologyOverviewComponent;
+    @InjectMocks
+    BattleResultComponent battleResultComponent;
 
     @InjectMocks
     TechnologyCategoryComponent technologyCategoryComponent;
@@ -284,12 +288,19 @@ public class IslandOverviewTestInitializer extends ControllerTest {
         this.inGameController.islandClaimingComponent = this.islandClaimingComponent;
         this.inGameController.eventComponent = this.eventComponent;
         this.inGameController.technologiesComponent = this.technologyOverviewComponent;
+        this.inGameController.battleResultComponent = battleResultComponent;
         this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
         this.technologyCategoryComponent.researchJobComponent = researchJobComponent;
 
         this.inGameController.contextMenuButtons = new HBox();
         this.islandsService.tokenStorage = new TokenStorage();
         this.islandsService.gameSystemsService = gameSystemsApiService;
+        this.islandsService.imageCache = this.imageCache;
+
+        this.battleService.fleetService = this.fleetService;
+        this.battleService.islandsService = this.islandsService;
+        this.battleService.contactsService = this.contactsService;
+        this.battleService.tokenStorage = this.tokenStorage;
 
         this.inGameController.fogOfWar.tokenStorage = this.tokenStorage;
         this.inGameController.fogOfWar.subscriber = this.subscriber;

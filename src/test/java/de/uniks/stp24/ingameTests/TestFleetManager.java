@@ -16,6 +16,7 @@ import de.uniks.stp24.ws.EventListener;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
 import io.reactivex.rxjava3.subjects.Subject;
+import javafx.collections.FXCollections;
 import javafx.stage.Stage;
 import org.fulib.fx.controller.Subscriber;
 import org.junit.jupiter.api.BeforeEach;
@@ -136,6 +137,7 @@ public class TestFleetManager extends ControllerTest {
         doReturn("123456").when(this.tokenStorage).getGameId();
         doReturn("testEmpireID").when(this.tokenStorage).getEmpireId();
 
+
         // Mock fleet and ship listener
         when(this.eventListener.listen("games." + GAME_ID + ".fleets.*.*", Fleet.class)).thenReturn(FLEET_SUBJECT);
         when(this.eventListener.listen("games." + GAME_ID + ".fleets.*.ships.*.*", Ship.class)).thenReturn(SHIP_SUBJECT);
@@ -166,6 +168,8 @@ public class TestFleetManager extends ControllerTest {
         final Fleet fleet2 = new Fleet("a", "a", "fleetID2", GAME_ID, EMPIRE_ID, "fleetName3",
                 LOCATION, 1, new HashMap<>(), new HashMap<>(), new HashMap<>(), null);
         when(this.fleetApiService.deleteFleet(any(),any())).thenReturn(Observable.just(fleet2));
+        this.jobsService.jobCollections.put("travel", FXCollections.observableArrayList());
+        this.jobsService.jobCollections.put("ship", FXCollections.observableArrayList());
 
         waitForFxEvents();
         assertEquals(4, fleetManagerComponent.fleets.size());
@@ -288,6 +292,7 @@ public class TestFleetManager extends ControllerTest {
         };
                 Jobs.Job shipJob = new Jobs.Job("a","a", "shipJobID", 0, 4, GAME_ID, EMPIRE_ID, LOCATION, 1, "ship", "", "", "", FLEET_ID, "newShipID", null, Map.of("energy", 4), null);
         when(this.jobsApiService.createShipJob(any(),any(),any())).thenReturn(Observable.just(shipJob));
+
         when(this.fleetApiService.patchFleet(any(),any(),any())).thenReturn(Observable.just(modFleets[0]));
         doReturn(false).when(this.resourcesService).hasEnoughResources(any());
         when(this.shipsApiService.getAllShips(any(),any())).thenReturn(Observable.just(SHIPS));

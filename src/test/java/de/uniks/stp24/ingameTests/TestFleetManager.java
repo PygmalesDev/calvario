@@ -97,10 +97,10 @@ public class TestFleetManager extends ControllerTest {
            ));
 
     protected final List<Island> ISLANDS = new ArrayList<>(Arrays.asList(
-            new Island(EMPIRE_ID,1,1,1,null,10,10,3,new HashMap<>(),new HashMap<>(), new ArrayList<>(Collections.singleton("shipyard")),"homeIsland","upgraded",LOCATION),
-            new Island(EMPIRE_ID,1,1,1,null,10,10,3,new HashMap<>(),new HashMap<>(), new ArrayList<>(Collections.singleton("shipyard")),"islandID2","upgraded","island2"),
-            new Island(EMPIRE_ID,1,1,1,null,10,10,3,new HashMap<>(),new HashMap<>(),  new ArrayList<>(Collections.singleton("farm")),"islandID3","upgraded","island3"),
-            new Island("enemy",1,1,1,null,10,10,3,new HashMap<>(),new HashMap<>(), new ArrayList<>(Collections.singleton("shipyard")),"islandID4","upgraded","island4")
+            new Island(EMPIRE_ID,1,1,1,null,10,10,3,new HashMap<>(),new HashMap<>(), new ArrayList<>(Collections.singleton("shipyard")),"homeIsland","upgraded",LOCATION, 100),
+            new Island(EMPIRE_ID,1,1,1,null,10,10,3,new HashMap<>(),new HashMap<>(), new ArrayList<>(Collections.singleton("shipyard")),"islandID2","upgraded","island2", 100),
+            new Island(EMPIRE_ID,1,1,1,null,10,10,3,new HashMap<>(),new HashMap<>(),  new ArrayList<>(Collections.singleton("farm")),"islandID3","upgraded","island3", 100),
+            new Island("enemy",1,1,1,null,10,10,3,new HashMap<>(),new HashMap<>(), new ArrayList<>(Collections.singleton("shipyard")),"islandID4","upgraded","island4", 100)
  ));
 
     protected final ReadShipDTO[] SHIPS = new ReadShipDTO[]{
@@ -327,8 +327,8 @@ public class TestFleetManager extends ControllerTest {
     @Test
     public void buildShipOnWrongIsland(){
         final Island[] ISLAND = new Island[]{
-                new Island(EMPIRE_ID, 1, 1, 1, null, 10, 10, 3, new HashMap<>(), new HashMap<>(), new ArrayList<>(Collections.singleton("farm")), "homeIsland", "upgraded", LOCATION),
-                new Island("enemy", 1, 1, 1, null, 10, 10, 3, new HashMap<>(), new HashMap<>(), new ArrayList<>(Collections.singleton("shipyard")), "homeIsland", "upgraded", LOCATION),
+                new Island(EMPIRE_ID, 1, 1, 1, null, 10, 10, 3, new HashMap<>(), new HashMap<>(), new ArrayList<>(Collections.singleton("farm")), "homeIsland", "upgraded", LOCATION, 100),
+                new Island("enemy", 1, 1, 1, null, 10, 10, 3, new HashMap<>(), new HashMap<>(), new ArrayList<>(Collections.singleton("shipyard")), "homeIsland", "upgraded", LOCATION, 100),
         };
         when(this.eventListener.listen("games." + GAME_ID + ".fleets." + FLEET_ID + ".ships.*.*", Ship.class)).thenReturn(SHIP_SUBJECT);
         when(this.shipsApiService.getAllShips(any(),any())).thenReturn(Observable.just(SHIPS));

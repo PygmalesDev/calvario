@@ -36,7 +36,8 @@ public class FleetService {
     public JobsApiService jobsApiService;
 
     @Inject
-    public FleetService() {}
+    public FleetService() {
+    }
 
     Map<String, ObservableList<Fleet>> empireFleets = new HashMap<>();
     Map<String, ObservableList<Fleet>> islandFleets = new HashMap<>();

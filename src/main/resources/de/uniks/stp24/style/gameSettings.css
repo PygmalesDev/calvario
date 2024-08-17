@@ -73,7 +73,7 @@ Label {
     -fx-max-height: 45;
     -fx-max-width: 95;
     -fx-font-family: 'Stencil';
-    -fx-padding: 0 0 0 0;
+    -fx-padding: 3px 3px 3px 3px;
 }
 
 .return-button {
@@ -83,10 +83,12 @@ Label {
     -fx-background-repeat: no-repeat;
     -fx-text-fill: white;
     -fx-font-size: 16;
+    -fx-min-height: 45;
+    -fx-min-width: 95;
     -fx-pref-height: 45;
     -fx-pref-width: 95;
     -fx-max-height: 45;
     -fx-max-width: 95;
     -fx-font-family: 'Stencil';
-    -fx-padding: 0 7px 0 0;
+    -fx-padding: 3px 10px 3px 3px;
 }

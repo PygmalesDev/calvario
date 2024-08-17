@@ -71,22 +71,7 @@ public class EditGameController extends BasicController {
         initializeMaxMembersTextField();
         this.controlResponses = responseConstants.respEditGame;
 
-        editMapSizeTextfield.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                editMapSizeTextfield.setText(newValue.replaceAll("\\D", ""));
-            }
-            // Prüfen, ob die Zahl unter 200 liegt
-            else if (!newValue.isEmpty()) {
-                try {
-                    int number = Integer.parseInt(newValue);
-                    if (number > 200) {
-                        editMapSizeTextfield.setText(oldValue);  // Wenn die Zahl >= 200 ist, bleibt der alte Wert bestehen
-                    }
-                } catch (NumberFormatException e) {
-                    editMapSizeTextfield.setText(oldValue);  // Falls eine ungültige Zahl eingegeben wurde, alten Wert setzen
-                }
-            }
-        });
+        CreateGameController.initializeMapSizeTextField(editMapSizeTextfield);
     }
 
     @OnRender

@@ -104,7 +104,7 @@ public class DetailsComponent extends AnchorPane {
         for (Map.Entry<String, Integer> entry : totalProduction.entrySet()) {
             resImages.get(i).setImage(this.imageCache.get("/"+resourceImagePath.get(entry.getKey())));
             resInf.get(i).setText("+" + entry.getValue());
-            i ++;
+            i++;
         }
         title.setText("     " + gameResourceBundle.getString("total.production"));
     }
@@ -121,7 +121,7 @@ public class DetailsComponent extends AnchorPane {
     }
 
     public void setResLists(){
-        ImageView[] images = {res1Pic, res2Pic, res3Pic, res4Pic, res5Pic, res6Pic, res7Pic, res7Pic, res8Pic, res9Pic};
+        ImageView[] images = {res1Pic, res2Pic, res3Pic, res4Pic, res5Pic, res6Pic, res7Pic, res8Pic, res9Pic};
         resImages.addAll(List.of(images));
 
         Text[] amounts = {amount1, amount2, amount3, amount4, amount5, amount6, amount7, amount8, amount9};

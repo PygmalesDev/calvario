@@ -136,6 +136,10 @@ public class TechnologyCategoryDescriptionSubComponent extends HBox implements R
             }
         }
 
+        if (resourceImage.getImage() == null && variable.contains("ship")) {
+            resourceImage.setImage(imageCache.get("assets/technologies/tags/engineering.png"));
+        }
+
     }
 
     public void setDescriptionLabel() {

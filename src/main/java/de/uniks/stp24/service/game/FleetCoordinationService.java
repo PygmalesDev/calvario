@@ -498,22 +498,20 @@ public class FleetCoordinationService {
         this.onFleetSelectedConsumers.clear();
     }
 
-    public void monitorFleetCollisions() {
-        for (IslandComponent islandComponent : islandsService.getIslandComponentList()) {
-            if (islandComponent.isCollided(selectedFleet.getLayoutX(), selectedFleet.getLayoutY(), Constants.FLEET_COLLISION_RADIUS)) {
-                System.out.println("------------------------------------------COLLISION-------------------------------------- ");
-                System.out.println("island: " + islandComponent.getIsland().id() + " at "
-                  + islandComponent.getPosX() + ", " + islandComponent.getPosY());
-                System.out.println("islandOwnerID" + islandComponent.getIsland().owner());
-                System.out.println("fleetOwnerID" + selectedFleet.getFleet().empire());
+    public void monitorFleetCollisions(IslandComponent islandComponent) {
+        if (islandComponent.isCollided(selectedFleet.getLayoutX(), selectedFleet.getLayoutY(), Constants.FLEET_COLLISION_RADIUS)) {
+            System.out.println("------------------------------------------COLLISION-------------------------------------- ");
+            System.out.println("island: " + islandComponent.getIsland().id() + " at "
+              + islandComponent.getPosX() + ", " + islandComponent.getPosY());
+            System.out.println("islandOwnerID" + islandComponent.getIsland().owner());
+            System.out.println("fleetOwnerID" + selectedFleet.getFleet().empire());
 
-                if(Objects.nonNull(islandComponent.getIsland().owner())){
-                    if (!islandComponent.getIsland().owner().equals(selectedFleet.getFleet().empire()) && !islandComponent.getIsland().owner().equals(this.tokenStorage.getEmpireId())){
-                        System.out.println("Enemy  detected");
-                        islandsService.refreshListOfColonizedSystems();
-                        contactsService.addEnemy(islandComponent.getIsland().owner(), islandComponent.getIsland().id());
+            if(Objects.nonNull(islandComponent.getIsland().owner())){
+                if (!islandComponent.getIsland().owner().equals(selectedFleet.getFleet().empire()) && !islandComponent.getIsland().owner().equals(this.tokenStorage.getEmpireId())){
+                    System.out.println("Enemy  detected");
+                    islandsService.refreshListOfColonizedSystems();
+                    contactsService.addEnemy(islandComponent.getIsland().owner(), islandComponent.getIsland().id());
 //                        battleService.startBattle(tokenStorage.getEmpireId(), islandComponent.getIsland().owner(), islandComponent.island.id());
-                    }
                 }
             }
         }

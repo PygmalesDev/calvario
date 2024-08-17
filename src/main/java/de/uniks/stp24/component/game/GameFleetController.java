@@ -70,8 +70,10 @@ public class GameFleetController extends Pane {
 
     private void listenerStatusMethod(ObservableValue<? extends Animation.Status> observableValue, Animation.Status status, Animation.Status status1) {
         if (status1.equals(Animation.Status.STOPPED) && this.currentPoint.getType().equals(POINT_TYPE.ISLAND) &&
-        this.ownFleet)
+        this.ownFleet) {
             this.fleetCoordinationService.inGameController.removeFogFromIsland(true, this.currentPoint.islandComponent);
+            this.fleetCoordinationService.monitorFleetCollisions(this.currentPoint.islandComponent);
+        }
     }
 
     private void listenerTimeMethod(ObservableValue<? extends Duration> observableValue, Duration duration, Duration duration1) {

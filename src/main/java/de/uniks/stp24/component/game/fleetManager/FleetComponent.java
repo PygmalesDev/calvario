@@ -4,6 +4,7 @@ import de.uniks.stp24.model.Fleets.Fleet;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.FleetService;
+import de.uniks.stp24.service.game.JobsService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -36,6 +37,7 @@ public class FleetComponent extends VBox implements ReusableItemComponent<Fleet>
     private final Subscriber subscriber;
     private final FleetService fleetService;
     private final FleetManagerComponent fleetManagerComponent;
+    private final JobsService jobsService;
     private Fleet fleet;
 
     @Inject
@@ -44,6 +46,7 @@ public class FleetComponent extends VBox implements ReusableItemComponent<Fleet>
         this.subscriber = subscriber;
         this.tokenStorage = tokenStorage;
         this.fleetService = fleetService;
+        this.jobsService = fleetManagerComponent.jobsService;
     }
 
     @Override
@@ -57,9 +60,15 @@ public class FleetComponent extends VBox implements ReusableItemComponent<Fleet>
     }
 
     public void deleteFleet(){
-        this.subscriber.subscribe(this.fleetService.deleteFleet(this.tokenStorage.getGameId(), this.fleet._id()),
-                result -> {},
-                error -> System.out.println("Error while deleting a fleet in the FleetComponent:\n" + error.getMessage()));
+        int jobCount = this.jobsService.getJobObservableListOfType("ship").stream().filter(job -> job.fleet().equals(this.fleet._id())).toList().size();
+        jobCount += this.jobsService.getJobObservableListOfType("travel").stream().filter(job -> job.fleet().equals(this.fleet._id())).toList().size();
+        jobCount += this.jobsService.getJobObservableListOfType("upgrade").stream().filter(job -> job.fleet() != null && job.fleet().equals(this.fleet._id())).toList().size();
+        if(jobCount == 0) {
+            this.subscriber.subscribe(this.fleetService.deleteFleet(this.tokenStorage.getGameId(), this.fleet._id()),
+                    result -> {
+                    },
+                    error -> System.out.println("Error while deleting a fleet in the FleetComponent:\n" + error.getMessage()));
+        }
     }
 
     public void editFleet(){

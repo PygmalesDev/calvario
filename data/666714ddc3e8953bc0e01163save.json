@@ -128,4 +128,149 @@
     "cost" : 0,
     "conflicts" : null
   } ]
+}, {
+  "name" : "Famous Buccaneers",
+  "flagIndex" : 7,
+  "flagsPath" : "/de/uniks/stp24/assets/flags/flag_7.png",
+  "portraitIndex" : 3,
+  "portraitsPath" : "/de/uniks/stp24/assets/portraits/captain_3.png",
+  "description" : "Under the black flag of Famous Buccaneers, pirates unite in a fierce brotherhood, seeking fortune and infamy across the boundless expanse of the ocean.",
+  "color" : "#800000",
+  "colorIndex" : 14,
+  "traits" : [ {
+    "id" : "surface_operator",
+    "effects" : [ {
+      "variable" : "buildings.mine.production.minerals",
+      "base" : 0.0,
+      "multiplier" : 0.8,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.farm.production.food",
+      "base" : 0.0,
+      "multiplier" : 1.04,
+      "bonus" : 0.0
+    } ],
+    "cost" : -2,
+    "conflicts" : [ "miner", "excavator", "pitman", "settler", "claustrophobic" ]
+  }, {
+    "id" : "clumsy",
+    "effects" : [ {
+      "variable" : "buildings.power_plant.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.1,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.mine.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.1,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.exchange.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.1,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.foundry.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.1,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.refinery.cost.minerals",
+      "base" : 0.0,
+      "multiplier" : 1.1,
+      "bonus" : 0.0
+    } ],
+    "cost" : -2,
+    "conflicts" : [ "proficient", "skilled", "incompetent" ]
+  }, {
+    "id" : "agrarian",
+    "effects" : [ {
+      "variable" : "resources.food.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 200.0
+    }, {
+      "variable" : "resources.energy.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : -20.0
+    }, {
+      "variable" : "buildings.farm.production.food",
+      "base" : 0.0,
+      "multiplier" : 1.05,
+      "bonus" : 0.0
+    } ],
+    "cost" : 1,
+    "conflicts" : [ "urban", "gentrified", "industrious" ]
+  }, {
+    "id" : "technician",
+    "effects" : [ {
+      "variable" : "resources.energy.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 300.0
+    }, {
+      "variable" : "buildings.research_lab.production.research",
+      "base" : 0.0,
+      "multiplier" : 1.1,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.mine.production.minerals",
+      "base" : 0.0,
+      "multiplier" : 0.99,
+      "bonus" : 0.0
+    }, {
+      "variable" : "buildings.foundry.production.alloys",
+      "base" : 0.0,
+      "multiplier" : 0.99,
+      "bonus" : 0.0
+    } ],
+    "cost" : 2,
+    "conflicts" : [ "beginner", "amateur", "assistant_technician", "dilettante" ]
+  }, {
+    "id" : "__dev__",
+    "effects" : [ {
+      "variable" : "resources.credits.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.energy.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.minerals.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.food.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.fuel.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.research.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.alloys.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    }, {
+      "variable" : "resources.consumer_goods.starting",
+      "base" : 0.0,
+      "multiplier" : 0.0,
+      "bonus" : 1.0E9
+    } ],
+    "cost" : 0,
+    "conflicts" : null
+  } ]
 } ]

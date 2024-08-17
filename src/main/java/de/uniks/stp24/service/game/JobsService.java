@@ -64,7 +64,7 @@ public class JobsService {
         this.jobCollections.put("collection", FXCollections.observableArrayList());
         this.jobCollections.put("ship", FXCollections.observableArrayList());
         this.jobCollections.put("travel", FXCollections.observableArrayList());
-
+        if(this.tokenStorage.isSpectator()) return;
         this.subscriber.subscribe(this.jobsApiService.getEmpireJobs(
                         this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), jobList -> {
                     jobList.forEach(this::addJobToGroups);
@@ -85,6 +85,7 @@ public class JobsService {
      * {@link #loadEmpireJobs() loadEmpireJobs} method.
      */
     public void initializeJobsListeners() {
+        if(this.tokenStorage.isSpectator()) return;
         this.subscriber.subscribe(this.eventListener.listen(String.format("games.%s.empires.%s.jobs.*.*",
                 this.tokenStorage.getGameId(), this.tokenStorage.getEmpireId()), Job.class), result -> {
             Job job = result.data();

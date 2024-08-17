@@ -110,22 +110,6 @@ ToggleButton:hover{
 }
 
 
-.languageButton:selected {
-    -fx-font-family: "PT Serif";
-    -fx-font-size: 20;
-    -fx-font-weight: bold;
-    -fx-background-color: #BF9000;
-    -fx-text-fill: WHITE;
-}
-
-.languageButton {
-    -fx-font-family: "PT Serif";
-    -fx-font-size: 20;
-    -fx-font-weight: bold;
-    -fx-background-color: #FFD966;
-    -fx-text-fill: BLACK;
-}
-
 .deleteAndSaveButton{
     -fx-font-family: "PT Serif";
     -fx-font-size: 20;
@@ -231,19 +215,7 @@ ToggleButton:hover{
     -fx-pref-height: 75px;
 }
 
-.eyeButton{
-    -fx-background-image: url("/de/uniks/stp24/icons/eye.png");
-    -fx-background-color: transparent;
-    -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-padding: 0;
-    -fx-border-width: 0;
-    -fx-pref-width: 25px;
-    -fx-pref-height: 25px;
-}
-
-.rememberMe {
+/*.rememberMe {
     -fx-font-family: "PT Serif";
     -fx-font-size: 24;
     -fx-font-weight: bold;
@@ -266,7 +238,7 @@ ToggleButton:hover{
 .rememberMe:selected .mark {
     -fx-background-color: #bf9000;
     -fx-border-color: #5d5454;
-}
+}*/
 
 .backButton{
     -fx-font-family: "PT Serif";
@@ -288,7 +260,7 @@ ToggleButton:hover{
     -fx-font-size: 20;
 }
 
-.licensesButton{
+/*.licensesButton{
     -fx-font-family: "PT Serif";
     -fx-font-size: 24;
     -fx-font-weight: bold;
@@ -299,7 +271,7 @@ ToggleButton:hover{
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
-}
+}*/
 
 .license-back-button {
     -fx-font-family: "Stencil";

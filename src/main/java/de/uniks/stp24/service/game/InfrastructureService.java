@@ -47,6 +47,10 @@ public class InfrastructureService extends BasicService {
         }
     }
 
+    public int getTotalBuildingCapacity() {
+        return getTotalCapacity(buildingCapacities);    }
+
+
     private int getCapacities(Map<String, Integer> map, String id) {
         int capacity = 0 ;
         for (String key : map.keySet()) {

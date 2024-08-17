@@ -55,20 +55,21 @@ public class MarketSeasonComponent extends HBox implements ReusableItemComponent
     @Override
     public void setItem(@NotNull SeasonComponent seasonComponent) {
         this.seasonComponent = seasonComponent;
-        resourceTypeImageView.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + this.seasonComponent.getResourceType() + ".png"));
-        if (this.seasonComponent.getTransActionTypeText().equals("buy")) {
+        resourceTypeImageView.setImage(imageCache.get("/de/uniks/stp24/icons/resources/" + this.seasonComponent.resourceType() + ".png"));
+        if (this.seasonComponent.transActionTypeText().equals("buy")) {
             transActionTypeText.setText("Buy");
-            resourceAmountText.setText("+" + this.seasonComponent.getResourceAmount());
-            moneyAmountText.setText("-" + this.seasonComponent.getMoneyAmount());
+            resourceAmountText.setText("+" + this.seasonComponent.resourceAmount());
+            moneyAmountText.setText("-" + this.seasonComponent.moneyAmount());
         } else {
             transActionTypeText.setText("Sell");
-            int sellAmount = this.seasonComponent.getResourceAmount() * -1;
-            moneyAmountText.setText("+" + this.seasonComponent.getMoneyAmount());
+            int sellAmount = this.seasonComponent.resourceAmount() * -1;
+            moneyAmountText.setText("+" + this.seasonComponent.moneyAmount());
             resourceAmountText.setText("-" + sellAmount);
         }
 
         playControlsButton.setSelected(this.seasonComponent.isPlaying());
-        playControlsButton.setOnAction(event -> this.seasonComponent.setPlaying(playControlsButton.isSelected()));
+        playControlsButton.setOnAction(event -> this.seasonComponent = new SeasonComponent(
+                this.seasonComponent.transActionTypeText(), this.seasonComponent.resourceType(), this.seasonComponent.resourceAmount(), this.seasonComponent.moneyAmount(), playControlsButton.isSelected()));
 
         cancelTradesButton.setOnAction(event -> marketService.cancelSeasonalTrade(this.seasonComponent));
     }

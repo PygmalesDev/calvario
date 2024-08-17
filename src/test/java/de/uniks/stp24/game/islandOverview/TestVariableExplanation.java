@@ -1,6 +1,7 @@
 package de.uniks.stp24.game.islandOverview;
 
 import de.uniks.stp24.dto.ExplainedVariableDTO;
+import io.reactivex.rxjava3.core.Observable;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,8 +11,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TestVariableExplanation extends VariableTestComponent{
@@ -50,6 +50,7 @@ public class TestVariableExplanation extends VariableTestComponent{
 
     @Test
     public void variableDependencies(){
+
         verify(variableDependencyService, times(2)).createVariableDependencyUpgrades();
         verify(variableDependencyService, times(2)).createVariableDependencyBuildings();
         verify(variableDependencyService, times(2)).createVariableDependencyDistricts();

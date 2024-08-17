@@ -5,6 +5,7 @@ import dagger.Provides;
 import de.uniks.stp24.rest.*;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
+import de.uniks.stp24.service.game.ContactsService;
 import de.uniks.stp24.service.game.EmpireService;
 import de.uniks.stp24.service.game.FleetService;
 import de.uniks.stp24.service.game.JobsService;
@@ -46,7 +47,7 @@ public class TestModule {
         return Mockito.mock(GamesApiService.class);
     }
 
-    /*
+        /*
     @Provides
     @Singleton
     GameLogicApiService gameLogicApiService() {
@@ -133,6 +134,10 @@ public class TestModule {
     @Provides
     @Singleton
     PresetsApiService presetsApiService(){return Mockito.mock(PresetsApiService.class);}
+
+    @Provides
+    @Singleton
+    WarsApiService warsApiService(){return Mockito.mock(WarsApiService.class);}
 
     @Provides
     @Singleton

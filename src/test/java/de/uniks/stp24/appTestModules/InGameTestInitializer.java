@@ -103,6 +103,15 @@ public class InGameTestInitializer extends ControllerTest {
 
     @InjectMocks
     ResearchJobComponent researchJobComponent;
+    @Spy
+    WarService warService;
+    @Spy
+    WarsApiService warsApiService;
+
+    @InjectMocks
+    TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
+    @InjectMocks
+    TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
     @InjectMocks
     IslandUpgradesJobProgressComponent jobProgressComponent;
     @InjectMocks
@@ -164,14 +173,15 @@ public class InGameTestInitializer extends ControllerTest {
     @InjectMocks
     IslandTravelComponent islandTravelComponent;
     @InjectMocks
-    TechnologyResearchDetailsComponent technologyResearchDetailsComponent;
-    @InjectMocks
-    TechnologyEffectDetailsComponent technologyEffectDetailsComponent;
-    @InjectMocks
     BlueprintsDetailsComponent blueprintsDetailsComponent;
-
     @Mock
     AnnouncementsService announcementsService;
+    @InjectMocks
+    ContactsComponent contactsComponent;
+    @InjectMocks
+    ContactDetailsComponent contactDetailsComponent;
+    @InjectMocks
+    WarComponent warComponent;
 
     final Provider<MarketSeasonComponent> marketSeasonComponentProvider = () -> {
         MarketSeasonComponent comp = new MarketSeasonComponent();
@@ -185,6 +195,28 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.technologiesComponent = this.technologyOverviewComponent;
         this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
         this.inGameController.technologiesComponent.technologyCategoryComponent.researchJobComponent = this.researchJobComponent;
+
+//        this.inGameController.technologiesComponent.technologyService = this.technologyService;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyService = this.technologyService;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent = this.technologyResearchDetailsComponent;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyEffectDetailsComponent = this.technologyEffectDetailsComponent;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.resourcesService = this.resourcesService;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.resourcesService.subscriber = this.subscriber;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyOverviewComponent = this.technologyOverviewComponent;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.tokenStorage = this.tokenStorage;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.subscriber = this.subscriber;
+//        this.inGameController.technologiesComponent.technologyService.subscriber = this.subscriber;
+//        this.inGameController.technologiesComponent.subscriber = this.subscriber;
+//        this.inGameController.technologyService.eventListener = this.eventListener;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.jobsService = new JobsService();
+//        this.technologyService.tokenStorage = this.tokenStorage;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.presetsApiService = this.presetsApiService;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.technologyService = this.technologyService;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.empireApiService = this.empireApiService;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.gameLogicApiService = this.gameLogicApiService;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.tokenStorage = this.tokenStorage;
+//        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyResearchDetailsComponent.subscriber = this.subscriber;
+
         this.inGameController.coolerBubbleComponent = this.coolerBubbleComponent;
         this.inGameController.coolerBubbleComponent.subscriber = this.coolerBubbleComponent.subscriber;
         this.inGameController.buildingPropertiesComponent = this.buildingPropertiesComponent;
@@ -286,17 +318,32 @@ public class InGameTestInitializer extends ControllerTest {
 
         this.inGameController.contextMenuButtons = new HBox();
         this.islandsService.tokenStorage = new TokenStorage();
-        this.islandsService.gameSystemsService = gameSystemsApiService;
+        this.islandsService.gameSystemsService = this.gameSystemsApiService;
+
+        this.inGameController.fleetService = this.fleetService;
+        this.inGameController.fleetCoordinationService = this.fleetCoordinationService;
+        this.inGameController.fleetService.tokenStorage = this.tokenStorage;
+        this.inGameController.fleetService.fleetApiService = this.fleetApiService;
+        this.inGameController.fleetService.subscriber = this.subscriber;
+
+        this.inGameController.contactsOverviewComponent = this.contactsComponent;
+        this.inGameController.contactsOverviewComponent.warService = this.warService;
+        this.inGameController.contactsOverviewComponent.warService.warsApiService = this.warsApiService;
+        this.inGameController.contactsOverviewComponent.contactDetailsComponent = this.contactDetailsComponent;
+        this.inGameController.contactsOverviewComponent.contactDetailsComponent.warComponent = this.warComponent;
+        this.inGameController.warComponent = this.warComponent;
+        this.inGameController.contactService.tokenStorage = this.tokenStorage;
+        this.inGameController.contactService.islandsService = this.islandsService;
+        this.inGameController.contactService.empireApiService = this.empireApiService;
+        this.inGameController.contactService.subscriber = this.subscriber;
+
+        this.inGameController.fleetCoordinationService.fleetService = fleetService;
+        this.inGameController.fleetCoordinationService.tokenStorage = tokenStorage;
 
         this.inGameController.fleetManagerComponent = this.fleetManagerComponent;
         this.inGameController.fleetManagerComponent.blueprintsDetailsComponent = this.blueprintsDetailsComponent;
         this.inGameController.fleetManagerComponent.newFleetComponent = this.newFleetComponent;
         this.inGameController.fleetManagerComponent.changeFleetComponent = this.changeFleetComponent;
-        this.fleetCoordinationService.fleetService = this.fleetService;
-        this.fleetCoordinationService.tokenStorage = this.tokenStorage;
-        this.fleetService.tokenStorage = this.tokenStorage;
-        this.fleetService.fleetApiService = this.fleetApiService;
-        this.fleetService.subscriber = this.subscriber;
         this.fleetCoordinationService.subscriber = this.subscriber;
         this.fleetCoordinationService.jobsService = this.jobsService;
         this.fleetCoordinationService.shipService = this.shipService;

@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Text?>
 
 <fx:root onMouseEntered="#showRudder" onMouseExited="#unshowRudder" prefHeight="162.0" prefWidth="120.0" type="Pane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.uniks.stp24.component.game.IslandComponent">
    <Circle fx:id="collisionCircle" cache="true" fill="#ff000080" layoutX="60.0" layoutY="102.0" radius="60.0" stroke="#ffffff80" strokeType="INSIDE" visible="false" />
@@ -25,5 +26,15 @@
             </color>
          </DropShadow>
       </effect>
+   </ImageView>
+   <Text fx:id="healthBar" fill="LIME" layoutX="10.0" layoutY="179.0" styleClass="healthText" visible="false" />
+   <ImageView fx:id="healthIcon" fitHeight="20.0" fitWidth="20.0" layoutX="-12.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true" visible="false">
+
+   </ImageView>
+   <Text fx:id="defenseBar" layoutX="10.0" layoutY="205.0" visible="false" />
+   <ImageView fx:id="defenseIcon" fitHeight="20.0" fitWidth="20.0" layoutX="-12.0" layoutY="188.0" pickOnBounds="true" preserveRatio="true" visible="false">
+      <image>
+         <Image url="@../../assets/contactsAndWars/shield.png" />
+      </image>
    </ImageView>
 </fx:root>

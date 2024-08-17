@@ -307,5 +307,13 @@
     -fx-background-image: url("/de/uniks/stp24/assets/buttons/upgrade_button_cancel_job.png");
 }
 
+.healthText{
+    /*-fx-font-family: "Tempus Sans ITC";*/
+    -fx-text-fill: lime;
+    -fx-background-color: "lime";
+    -fx-font-weight: none;
+    -fx-font-size: 18;
+}
+
 
 

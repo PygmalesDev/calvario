@@ -679,7 +679,8 @@ public class InGameController extends BasicController {
                     Island updatedIsland = islandsService.convertToIsland(event.data());
                     isle.applyInfo(updatedIsland);
                     if (Objects.nonNull(updatedIsland.owner())) {
-                        this.battleService.checkBattleConditionOnIslandClaimed(isle.island.id());
+                        if (!isle.island.owner().equals(event.data().owner()))
+                            this.battleService.checkBattleConditionOnIslandClaimed(isle.island.id());
 
                         // apply drop shadow and flag
                         isle.applyEmpireInfo();

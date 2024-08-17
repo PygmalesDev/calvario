@@ -646,7 +646,7 @@ public class InGameController extends BasicController {
          * zoom function working but not perfect!
          * it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
          */
-        mapGrid.setOnScroll(event -> {
+        zoomPane.setOnScroll(event -> {
             if (event.isShiftDown() && (event.getDeltaY() > 0 || event.getDeltaX() > 0)) {
                 scale += 0.1;
                 scale = Math.min(scale, 3);

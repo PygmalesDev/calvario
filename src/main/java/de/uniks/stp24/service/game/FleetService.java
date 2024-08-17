@@ -81,7 +81,7 @@ public class FleetService {
                 }
                 case "deleted" -> this.deleteFleetFromGroups(fleet);
             }
-        }, error -> System.out.println("Caught an error in the fleet listener in the FleetService:\n" + error.getMessage()));
+        }, Throwable::printStackTrace);
     }
 
     public void initializeShipListener() {

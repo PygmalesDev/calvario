@@ -2,7 +2,6 @@ package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.component.game.BattleResultComponent;
 import de.uniks.stp24.component.game.IslandComponent;
-import de.uniks.stp24.controllers.InGameController;
 import de.uniks.stp24.controllers.helper.BattleEntry;
 import de.uniks.stp24.controllers.helper.BattleEntry.BATTLE_TYPE;
 import de.uniks.stp24.dto.WarDto;
@@ -53,25 +52,18 @@ public class BattleService {
         Island location = islandComponent.island;
 
         if (Objects.nonNull(location.owner())) {
-            if (isBattleStarted(fleet.empire(), location.owner(), location.id(), BATTLE_TYPE.EMPIRES)) {
-                battles.add(new BattleEntry(fleet.empire(), location.owner(), location.id()));
-                islandComponent.toggleSableVisibility(true);
-            }
+            if (isNoneBattleStarted(fleet.empire(), location.owner(), location.id(), BATTLE_TYPE.EMPIRES))
+                this.createBattle(fleet.empire(), location.owner(), location.id(), islandComponent);
         } else {
             List<Fleet> otherFleets = this.fleetService.getFleetsOnIsland(location.id()).stream()
                     .filter(other -> Objects.isNull(other.empire()) || !other.empire().equals(fleet.empire())).toList();
             otherFleets.stream().map(Fleet::empire).collect(Collectors.toSet()).forEach(empireID -> {
                 if (Objects.nonNull(empireID)) {
-                    if (isBattleStarted(fleet.empire(), empireID, location.id(), BATTLE_TYPE.EMPIRES)) {
-                        battles.add(new BattleEntry(fleet.empire(), empireID, location.id()));
-                        islandComponent.toggleSableVisibility(true);
-                    }
+                    if (isNoneBattleStarted(fleet.empire(), empireID, location.id(), BATTLE_TYPE.EMPIRES))
+                        this.createBattle(fleet.empire(), empireID, location.id(), islandComponent);
                 } else {
-                    if (isBattleStarted(fleet.empire(), null, location.id(), BATTLE_TYPE.WILD)) {
-                        System.out.println("CREATED WILD BATTLE");
-                        battles.add(new BattleEntry(fleet.empire(), location.id()));
-                        islandComponent.toggleSableVisibility(true);
-                    }
+                    if (isNoneBattleStarted(fleet.empire(), location.id(), BATTLE_TYPE.WILD))
+                        this.createBattle(fleet.empire(), null, location.id(), islandComponent);
                 }
             });
         }
@@ -94,7 +86,8 @@ public class BattleService {
                     // TODO: PROVIDE TO WEBJAW fleetName has left the battle on islandName?
 
                     if (this.fleetService.getFleetsOnIsland(oldFleet.location())
-                            .filtered(other -> oldFleet.empire().equals(other.empire())).isEmpty())
+                            .filtered(other -> oldFleet.empire().equals(other.empire())).isEmpty() &&
+                    !this.islandsService.getIsland(oldFleet.location()).owner().equals(oldFleet.empire()))
                         this.deleteBattle(battleEntry);
 
                     return battleEntry;
@@ -107,17 +100,20 @@ public class BattleService {
                 .toList().forEach(this::deleteBattle);
     }
 
-    public void checkBattleConditionOnIslandClaimed(String islandID) {
-        System.out.println("\t\tISLAND BATTLE FINISHED");
-        this.battles.stream().filter(battleEntry -> battleEntry.getLocation().equals(islandID))
-                .findFirst().map(this::finishBattle);
+    public void checkBattleConditionOnIslandClaimed(Island island) {
+        this.battles.stream().filter(battleEntry -> battleEntry.getLocation().equals(island.id()))
+                .findFirst().map(battleEntry -> {
+                    battleEntry.setWinner(island.owner());
+                    this.finishBattle(battleEntry);
+                    return battleEntry;
+                });
     }
 
     public void checkBattleConditionOnFleetDestroyed(Fleet fleet) {
         this.battles.stream().filter(battleEntry -> isInBattle(battleEntry, fleet.empire(), fleet.location()))
                 .findFirst().map(battleEntry -> {
                     if (this.fleetService.getFleetsOnIsland(fleet.location()).filtered(other ->
-                            other.empire().equals(fleet.empire())).isEmpty()) {
+                            Objects.nonNull(other.empire()) && other.empire().equals(fleet.empire())).isEmpty()) {
 
                         if (this.tokenStorage.getEmpireId().equals(fleet.empire())) {
                             if (this.tokenStorage.getEmpireId().equals(battleEntry.getDefender()))
@@ -133,15 +129,29 @@ public class BattleService {
                 });
     }
 
+    private void createBattle(String empireID1, String empireID2, String location, IslandComponent comp) {
+        BattleEntry entry;
+        if (Objects.isNull(empireID2))
+            entry = new BattleEntry(empireID1, location);
+        else entry = new BattleEntry(empireID1, empireID2, location);
+
+        if (entry.containsEmpire(this.tokenStorage.getEmpireId()))
+            comp.toggleSableVisibility(true);
+
+        this.battles.add(entry);
+    }
+
     private void deleteBattle(BattleEntry battleEntry) {
         this.battles.remove(battleEntry);
-        this.islandsService.getIslandComponent(battleEntry.getLocation())
+        if (battleEntry.containsEmpire(this.tokenStorage.getEmpireId()))
+            this.islandsService.getIslandComponent(battleEntry.getLocation())
                 .toggleSableVisibility(false);
     }
 
     private BattleEntry finishBattle(BattleEntry battleEntry) {
         this.deleteBattle(battleEntry);
-        this.battleResultComponent.setInfo(battleEntry);
+        if (battleEntry.containsEmpire(this.tokenStorage.getEmpireId()))
+            this.battleResultComponent.setInfo(battleEntry);
 
         return battleEntry;
     }
@@ -151,7 +161,11 @@ public class BattleService {
         battleEntry.getLocation().equals(locationID);
     }
 
-    private boolean isBattleStarted(String attackerID, String defenderID, String locationID, BATTLE_TYPE battleType) {
+    private boolean isNoneBattleStarted(String attackerID, String locationID, BATTLE_TYPE battleType) {
+        return battles.stream().noneMatch(battle -> battle.equals(locationID, null, attackerID, battleType));
+    }
+
+    private boolean isNoneBattleStarted(String attackerID, String defenderID, String locationID, BATTLE_TYPE battleType) {
         return contactsService.areAtWar(attackerID, defenderID) &&
                 battles.stream().noneMatch(battle -> battle.equals(locationID, defenderID, attackerID, battleType));
     }

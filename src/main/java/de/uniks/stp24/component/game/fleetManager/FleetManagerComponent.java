@@ -35,6 +35,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static de.uniks.stp24.model.Jobs.Job;
@@ -146,7 +147,7 @@ public class FleetManagerComponent extends AnchorPane {
         this.newFleetComponent.setFleetManager(this);
         this.changeFleetComponent.setFleetManager(this);
         this.fleetService.onFleetDestroyed(fleet -> {
-            if (this.blueprintInFleetListView.isVisible() && this.editedFleet.equals(fleet)) this.showFleets();
+            if (Objects.nonNull(this.editedFleet) && this.editedFleet.equals(fleet)) this.showFleets();
         });
     }
 

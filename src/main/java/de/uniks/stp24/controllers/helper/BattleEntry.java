@@ -1,6 +1,5 @@
 package de.uniks.stp24.controllers.helper;
 
-import de.uniks.stp24.model.Ships;
 import de.uniks.stp24.model.Ships.Ship;
 
 import java.util.HashMap;
@@ -12,6 +11,8 @@ public class BattleEntry {
         WILD
     }
 
+    private final BATTLE_TYPE battleType;
+
     private final String attacker, defender, islandID;
     private String winnerID, loserID;
 
@@ -22,12 +23,14 @@ public class BattleEntry {
         this.attacker = attacker;
         this.defender = defender;
         this.islandID = islandID;
+        this.battleType = BATTLE_TYPE.EMPIRES;
     }
 
     public BattleEntry(String attacker, String islandID) {
         this.attacker = attacker;
         this.defender = null;
         this.islandID = islandID;
+        this.battleType = BATTLE_TYPE.WILD;
     }
 
     public Map<String, Integer> getShipsLostByDefender() {
@@ -65,6 +68,10 @@ public class BattleEntry {
         this.shipsLostByDefender.put(shipType, this.shipsLostByDefender.get(shipType)+1);
     }
 
+    public BATTLE_TYPE getBattleType() {
+        return battleType;
+    }
+
     public boolean equals(String id1, String id2, String islandID, BATTLE_TYPE battleType) {
         switch (battleType) {
             case EMPIRES -> {
@@ -90,6 +97,10 @@ public class BattleEntry {
         else this.addShipsLostByDefender(ship.type());
 
         return this;
+    }
+
+    public boolean containsEmpire(String islandID) {
+        return islandID.equals(attacker) || islandID.equals(defender);
     }
 
     public String getWinner() {

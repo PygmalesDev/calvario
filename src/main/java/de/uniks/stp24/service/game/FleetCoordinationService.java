@@ -200,7 +200,7 @@ public class FleetCoordinationService {
             gameFleet.setCurrentPoint(distancePoints.removeFirst());
             gameFleet.setLayoutX(location.getX());
             gameFleet.setLayoutY(location.getY());
-            gameFleet.setRotate(this.getDirectionalAngle(
+            gameFleet.fleetImage.setRotate(this.getDirectionalAngle(
                     gameFleet.getCurrentPoint().getPrev(),
                     gameFleet.getCurrentPoint()));
             this.processSpeedChanged(gameFleet);
@@ -301,7 +301,7 @@ public class FleetCoordinationService {
     private List<KeyFrame> createTravelKeyFrames(GameFleetController fleet, DistancePoint nextPoint, double speed) {
         return List.of(
                 new KeyFrame(Duration.seconds(ROTATE_DURATION),
-                        new KeyValue(fleet.rotateProperty(), getDirectionalAngle(nextPoint.getPrev(), nextPoint), Interpolator.EASE_BOTH),
+                        new KeyValue(fleet.fleetImage.rotateProperty(), getDirectionalAngle(nextPoint.getPrev(), nextPoint), Interpolator.EASE_BOTH),
                         new KeyValue(fleet.layoutXProperty(), nextPoint.getPrev().getX()-FLEET_HW, Interpolator.EASE_BOTH),
                         new KeyValue(fleet.layoutYProperty(), nextPoint.getPrev().getY()-FLEET_HW, Interpolator.EASE_BOTH)),
                 new KeyFrame(Duration.seconds((speed/ (double) this.timerService.getServerSpeed())-ROTATE_DURATION),
@@ -329,7 +329,7 @@ public class FleetCoordinationService {
         DistancePoint parkingPoint = this.findParkingPoint(returnPoint);
         return List.of(
                 new KeyFrame(Duration.seconds(ROTATE_DURATION),
-                        new KeyValue(fleet.rotateProperty(), getDirectionalAngle(
+                        new KeyValue(fleet.fleetImage.rotateProperty(), getDirectionalAngle(
                                 fleet.getCurrentLocation(), parkingPoint), Interpolator.EASE_BOTH)),
 
                 new KeyFrame(Duration.seconds(4),

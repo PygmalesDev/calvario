@@ -408,7 +408,7 @@ public class InGameController extends BasicController {
         });
         this.createContextMenuButtons();
 
-        this.battleResultContainer.setVisible(false);
+        this.battleResultComponent.setVisible(false);
         this.battleResultContainer.setPickOnBounds(false);
 
         // make pop ups draggable
@@ -684,7 +684,7 @@ public class InGameController extends BasicController {
                     if (Objects.nonNull(updatedIsland.owner())) {
 
                         if (Objects.nonNull(oldIsland.owner()) && !oldIsland.owner().equals(event.data().owner()))
-                            this.battleService.checkBattleConditionOnIslandClaimed(isle.island.id());
+                            this.battleService.checkBattleConditionOnIslandClaimed(isle.island);
 
                         // apply drop shadow and flag
                         isle.applyEmpireInfo();

@@ -501,15 +501,12 @@ public class FleetCoordinationService {
         this.onFleetSelectedConsumers.clear();
     }
 
-    public void monitorFleetCollisions(GameFleetController fleet) {
-        for (IslandComponent islandComponent : islandsService.getIslandComponentList()) {
-            if (islandComponent.isCollided(fleet.getLayoutX(), fleet.getLayoutY(), Constants.FLEET_COLLISION_RADIUS)) {
-                if(Objects.nonNull(islandComponent.getIsland().owner())) {
-                    if (!islandComponent.getIsland().owner().equals(fleet.getFleet().empire()) &&
-                            !islandComponent.getIsland().owner().equals(this.tokenStorage.getEmpireId())){
-                        islandsService.refreshListOfColonizedSystems();
-                        contactsService.addEnemy(islandComponent.getIsland().owner(), islandComponent.getIsland().id());
-                    }
+    public void monitorFleetCollisions(IslandComponent islandComponent) {
+        if (islandComponent.isCollided(selectedFleet.getLayoutX(), selectedFleet.getLayoutY(), Constants.FLEET_COLLISION_RADIUS)) {
+            if(Objects.nonNull(islandComponent.getIsland().owner())){
+                if (!islandComponent.getIsland().owner().equals(selectedFleet.getFleet().empire()) && !islandComponent.getIsland().owner().equals(this.tokenStorage.getEmpireId())){
+                    islandsService.refreshListOfColonizedSystems();
+                    contactsService.addEnemy(islandComponent.getIsland().owner(), islandComponent.getIsland().id());
                 }
             }
         }

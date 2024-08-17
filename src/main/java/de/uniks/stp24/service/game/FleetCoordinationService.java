@@ -247,24 +247,24 @@ public class FleetCoordinationService {
 
     private void processSpeedChanged(GameFleetController fleet) {
         if (this.timerService.getServerSpeed() == 0) fleet.stopTravel();
-        else fleet.travelToPoint(this.createSpeedChangedKeyframe(fleet), fleet.getCurrentPoint());
+        else fleet.travelToPoint(this.createSpeedChangedKeyframe(fleet), fleet.getCurrentPoint(), true);
     }
 
     private void processTravel() {
         this.coordinatedPaths.forEach((fleet, points) -> {
             if (!points.isEmpty())
-                fleet.travelToPoint(this.createTravelKeyFrames(fleet, points.getFirst(), 60), points.removeFirst());
+                fleet.travelToPoint(this.createTravelKeyFrames(fleet, points.getFirst(), 60), points.removeFirst(), true);
         });
     }
 
     private void processTravel(GameFleetController fleet) {
         fleet.travelToPoint(this.createTravelKeyFrames(fleet, this.coordinatedPaths.get(fleet).getFirst(), 60),
-                this.coordinatedPaths.get(fleet).removeFirst());
+                this.coordinatedPaths.get(fleet).removeFirst(), true);
     }
 
     private void processFinish(GameFleetController fleet, IslandComponent finishIsland) {
         DistancePoint endPoint = this.findParkingPoint(new DistancePoint(finishIsland, fleet.getCurrentPoint()));
-        fleet.travelToPoint(this.createTravelKeyFrames(fleet, endPoint, 60), endPoint);
+        fleet.travelToPoint(this.createTravelKeyFrames(fleet, endPoint, 60), endPoint, true);
     }
 
     private void processReturn(GameFleetController fleet) {
@@ -276,7 +276,7 @@ public class FleetCoordinationService {
             while (Objects.nonNull(prevIslandPoint.getPrev()) && !prevIslandPoint.getType().equals(POINT_TYPE.ISLAND))
                 prevIslandPoint = prevIslandPoint.getPrev();
         }
-        fleet.travelToPoint(this.createReturnKeyFrames(fleet, prevIslandPoint), prevIslandPoint);
+        fleet.travelToPoint(this.createReturnKeyFrames(fleet, prevIslandPoint), prevIslandPoint, true);
     }
 
     private void processTravelForEnemyFleets(Fleet fleet) {
@@ -286,7 +286,7 @@ public class FleetCoordinationService {
                         DistancePoint destination = this.findParkingPoint(new DistancePoint(
                                 this.islandsService.getIslandComponent(fleet.location()),
                                 gameFleet.getCurrentLocation()));
-                        gameFleet.travelToPoint(this.createTravelKeyFrames(gameFleet, destination, 24), destination);
+                        gameFleet.travelToPoint(this.createTravelKeyFrames(gameFleet, destination, 24), destination, false);
                         gameFleet.setFleet(fleet);
                         return gameFleet;
                     }).orElseThrow();

@@ -47,6 +47,7 @@ public class GameFleetController extends Pane {
     private DistancePoint currentPoint;
     private final Timeline travelTimeline = new Timeline();
     private final Rotate rotate = new Rotate();
+    private boolean ownFleet;
     public Fleet fleet;
 
 
@@ -76,10 +77,12 @@ public class GameFleetController extends Pane {
     }
 
     private void listenerTimeMethod(ObservableValue<? extends Duration> observableValue, Duration duration, Duration duration1) {
-        fleetCoordinationService.inGameController.removeFogFromShape(new Circle(this.getLayoutX() + FLEET_HW/2 + 10,
-                this.getLayoutY() + FLEET_HW/2 + 15,
-                collisionCircle.getRadius()*1.3)
-        );
+        if (this.ownFleet) {
+            fleetCoordinationService.inGameController.removeFogFromShape(new Circle(this.getLayoutX() + FLEET_HW / 2 + 10,
+                    this.getLayoutY() + FLEET_HW / 2 + 15,
+                    collisionCircle.getRadius() * 1.3)
+            );
+        }
     }
 
     public void renderWithColor(String color) {
@@ -101,11 +104,11 @@ public class GameFleetController extends Pane {
         else this.fleetImage.setEffect(null);
     }
 
-    public void travelToPoint(List<KeyFrame> keyFrame, DistancePoint currentPoint) {
+    public void travelToPoint(List<KeyFrame> keyFrame, DistancePoint currentPoint, boolean ownFleet) {
         this.travelTimeline.stop();
         this.travelTimeline.getKeyFrames().clear();
         this.currentPoint = currentPoint;
-
+        this.ownFleet = ownFleet;
         this.travelTimeline.getKeyFrames().addAll(keyFrame);
         this.travelTimeline.play();
     }

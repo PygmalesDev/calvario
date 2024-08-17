@@ -137,10 +137,10 @@ public class FleetCoordinationService {
         } else {
             this.selectedFleet = fleet;
             fleet.toggleActive();
-//            if (!fleet.getFleet().size().isEmpty()) {
-//            System.out.println("your fleet has these ships: " + fleet.getFleet().size() );
-//            fleet.showHealth();
-//        }
+            if (!fleet.getFleet().size().isEmpty()) {
+            System.out.println("your fleet has these ships: " + fleet.getFleet().size() );
+            fleet.refreshListOfShips();
+            }
         }
         this.onFleetSelectedConsumers.forEach(func -> func.accept(this.getSelectedFleet()));
     }
@@ -231,7 +231,7 @@ public class FleetCoordinationService {
         this.timerService.onGameTicked(this::processTravel);
         this.timerService.onSpeedChanged(this::processSpeedChanged);
         this.timerService.onGameTicked(() -> islandsService.refreshListOfColonizedSystems());
-            // this.timerService.onGameSec(() -> fleetService.updateTheseFleetsHealth());
+         this.timerService.onGameTicked(() -> fleetService.updateTheseFleetsHealth());
     }
 
     public Fleet getSelectedFleet() {

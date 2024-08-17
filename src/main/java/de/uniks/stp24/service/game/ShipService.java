@@ -121,6 +121,7 @@ public class ShipService {
             ReadShipDTO ship = readShipDTOFromShip(event.data());
             switch (event.suffix()) {
                 case "created" -> {
+                    giveInfo(event.data().fleet());
                     if (!ship._id().equals(this.lastShipCreation)) {
                         this.addShipToGroups(ship);
                         this.lastShipCreation = ship._id();
@@ -191,7 +192,7 @@ public class ShipService {
     }
 
     public void recreateListOfShips(String fleetID, ObservableList<ReadShipDTO> list) {
-        System.out.println("recreate liste for " + fleetID.substring(20));
+        System.out.println("recreate list for " + fleetID.substring(20));
         System.out.println(mapOfFleetComponents.containsKey(fleetID));
         this.subscriber.subscribe(shipsApiService.getAllShips(this.tokenStorage.getGameId(), fleetID),
           result ->     {

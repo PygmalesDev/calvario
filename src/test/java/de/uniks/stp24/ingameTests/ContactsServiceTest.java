@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.uniks.stp24.ControllerTest;
 import de.uniks.stp24.component.game.ContactDetailsComponent;
 import de.uniks.stp24.component.game.ContactsComponent;
-import de.uniks.stp24.dto.CreateWarDto;
-import de.uniks.stp24.dto.EmpirePrivateDto;
-import de.uniks.stp24.dto.ReadEmpireDto;
-import de.uniks.stp24.dto.WarDto;
+import de.uniks.stp24.dto.*;
 import de.uniks.stp24.model.Contact;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.rest.EmpireApiService;
@@ -59,7 +56,7 @@ public class ContactsServiceTest extends ControllerTest {
     WarsApiService warsApiService;
 
     final EmpirePrivateDto emptyPrivateDto = new EmpirePrivateDto(new HashMap<>());
-    EmpirePrivateDto empirePrivateDto, falsePrivateDto;
+    EmpirePrivate empirePrivateDto, falsePrivateDto;
     ReadEmpireDto player, enemy, enemy2;
     WarDto meAsDef, meAsAtt;
     protected final Subject<Event<WarDto>> WAR_SUBJECT = BehaviorSubject.create();
@@ -113,8 +110,8 @@ public class ContactsServiceTest extends ControllerTest {
         mapPrivate.put("empire2",new ArrayList<String>());
         Map<String,Object> falsePrivate = new HashMap<>();
         falsePrivate.put("emp",false);
-        empirePrivateDto = new EmpirePrivateDto(mapPrivate);
-        falsePrivateDto = new EmpirePrivateDto(falsePrivate);
+        empirePrivateDto = new EmpirePrivate(mapPrivate);
+        falsePrivateDto = new EmpirePrivate(falsePrivate);
 
         meAsDef = new WarDto("today", "today", "defWar", GAME_ID, enemy2._id(), player._id(), "" );
         meAsAtt = new WarDto("today", "today", "attWar", GAME_ID, player._id(), enemy._id(),"" );

@@ -2,7 +2,7 @@ package de.uniks.stp24.service.game;
 
 import de.uniks.stp24.component.game.ContactsComponent;
 import de.uniks.stp24.dto.CreateWarDto;
-import de.uniks.stp24.dto.EmpirePrivateDto;
+import de.uniks.stp24.dto.EmpirePrivate;
 import de.uniks.stp24.dto.ReadEmpireDto;
 import de.uniks.stp24.dto.WarDto;
 import de.uniks.stp24.model.Contact;
@@ -198,7 +198,7 @@ public class ContactsService {
                     final Map<String, Object> newPrivate = new HashMap<>(
                             mapContacts(Objects.nonNull(result._private()) ?
                                     result._private() : new HashMap<>()));
-                    subscriber.subscribe(this.empireApiService.savePrivate(this.gameID, this.myOwnEmpireID, new EmpirePrivateDto(newPrivate)),
+                    subscriber.subscribe(this.empireApiService.savePrivateContact(this.gameID, this.myOwnEmpireID, new EmpirePrivate(newPrivate)),
                             saved -> {
                             },
                             error -> System.out.println("error while saving contacts...."));

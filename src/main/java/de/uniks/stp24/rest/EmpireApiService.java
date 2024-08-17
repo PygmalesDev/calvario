@@ -51,8 +51,8 @@ public interface EmpireApiService {
     Observable<UpdateEmpireMarketDto> savePrivate(@Path("game") String game, @Path("empire") String empire, @Body EmpirePrivate empirePrivate);
 
     @GET("games/{game}/empires/{empire}")
-    Observable<EmpirePrivate> getPrivate(@Path("game") String game, @Path("empire") String empire);
+    Observable<EmpirePrivate> getPrivate(@Path("game") String game, @Path("empire") String empirePrivate);
 
     @PATCH("games/{game}/empires/{empire}")
-    Observable<EmpirePrivateDto> savePrivate(@Path("game") String game, @Path("empire") String empire, @Body EmpirePrivateDto privateDto);
+    Observable<EmpirePrivate> savePrivateContact(@Path("game") String game, @Path("empire") String empire, @Body EmpirePrivate empirePrivate);
 }

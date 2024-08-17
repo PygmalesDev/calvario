@@ -67,6 +67,7 @@ public class FleetCoordinationService {
     private ObservableList<Job> travelJobs = FXCollections.observableArrayList();
     private final List<Consumer<Fleet>> onFleetSelectedConsumers = new ArrayList<>();
     private final List<GameFleetController> enemyFleets = new ArrayList<>();
+    final Map<String, GameFleetController> mapOfFleetComponents = new HashMap<>();
 
     private final int ROTATE_DURATION = 2;
     public InGameController inGameController;
@@ -91,6 +92,7 @@ public class FleetCoordinationService {
         this.fleetService.onFleetCreated(this::putFleetOnMap);
         this.fleetService.onFleetDestroyed(this::deleteFleetFromMap);
         this.fleetService.onFleetLocationChanged(this::processTravelForEnemyFleets);
+        this.shipService.aliveFleets.clear();
     }
 
     private void setOnJobDeletion(Job job) {
@@ -144,6 +146,10 @@ public class FleetCoordinationService {
     }
 
     private void deleteFleetFromMap(Fleet fleet) {
+        var comp = shipService.mapOfFleetComponent.remove(fleet._id());
+        shipService.aliveFleets.remove(comp);
+        fleetService.updateFleets.remove(comp);
+        fleetService.mapOfFleetComponents.remove(fleet._id());
         this.mapGrid.removeIf(node -> {
             if (node instanceof GameFleetController fleetController)
                 return (fleetController.getFleet().equals(fleet));
@@ -180,6 +186,9 @@ public class FleetCoordinationService {
         gameFleet.setLayoutY(parkingPoint.getY());
         gameFleet.setStartingPoint();
         gameFleet.collisionCircle.setRadius(Constants.FLEET_COLLISION_RADIUS);
+        mapOfFleetComponents.put(fleet._id(), gameFleet);
+        shipService.addFleetComponent(fleet._id(), gameFleet);
+        fleetService.mapOfFleetComponents.put(fleet._id(), gameFleet);
         return null;
     }
 
@@ -222,6 +231,7 @@ public class FleetCoordinationService {
         this.timerService.onGameTicked(this::processTravel);
         this.timerService.onSpeedChanged(this::processSpeedChanged);
         this.timerService.onGameTicked(() -> islandsService.refreshListOfColonizedSystems());
+            // this.timerService.onGameSec(() -> fleetService.updateTheseFleetsHealth());
     }
 
     public Fleet getSelectedFleet() {
@@ -298,7 +308,7 @@ public class FleetCoordinationService {
     private List<KeyFrame> createTravelKeyFrames(GameFleetController fleet, DistancePoint nextPoint, double speed) {
         return List.of(
                 new KeyFrame(Duration.seconds(ROTATE_DURATION),
-                        new KeyValue(fleet.rotateProperty(), getDirectionalAngle(nextPoint.getPrev(), nextPoint), Interpolator.EASE_BOTH),
+                        new KeyValue(fleet.fleetImage.rotateProperty(), getDirectionalAngle(nextPoint.getPrev(), nextPoint), Interpolator.EASE_BOTH),
                         new KeyValue(fleet.layoutXProperty(), nextPoint.getPrev().getX()-FLEET_HW, Interpolator.EASE_BOTH),
                         new KeyValue(fleet.layoutYProperty(), nextPoint.getPrev().getY()-FLEET_HW, Interpolator.EASE_BOTH)),
                 new KeyFrame(Duration.seconds((speed/ (double) this.timerService.getServerSpeed())-ROTATE_DURATION),
@@ -326,7 +336,7 @@ public class FleetCoordinationService {
         DistancePoint parkingPoint = this.findParkingPoint(returnPoint);
         return List.of(
                 new KeyFrame(Duration.seconds(ROTATE_DURATION),
-                        new KeyValue(fleet.rotateProperty(), getDirectionalAngle(
+                        new KeyValue(fleet.fleetImage.rotateProperty(), getDirectionalAngle(
                                 fleet.getCurrentLocation(), parkingPoint), Interpolator.EASE_BOTH)),
 
                 new KeyFrame(Duration.seconds(4),
@@ -496,6 +506,7 @@ public class FleetCoordinationService {
         this.enemyFleets.clear();
         this.pathEntries.clear();
         this.onFleetSelectedConsumers.clear();
+        this.mapOfFleetComponents.clear();
     }
 
     public void monitorFleetCollisions() {

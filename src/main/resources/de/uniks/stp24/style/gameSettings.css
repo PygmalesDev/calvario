@@ -1,0 +1,43 @@
+@font-face {
+    font-family: 'Blackadder ITC';
+    src: url("/de/uniks/stp24/fonts/Blackladder.ttf");
+}
+
+@font-face {
+    font-family: 'Tempus Sans ITC';
+    src: url("/de/uniks/stp24/fonts/TempusSans.ttf");
+}
+
+@font-face {
+    font-family: 'Stencil';
+    src: url("/de/uniks/stp24/assets/fonts/Stencil.ttf");
+}
+
+@font-face {
+    font-family: 'Baskerville Old Face';
+    src: url("/de/uniks/stp24/fonts/Baskerville.ttf");
+}
+
+Label {
+    -fx-font-size: 20;
+    -fx-font-family: 'Baskerville Old Face';
+    -fx-text-fill: white;
+}
+
+.background-box {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/game_setting_background.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100% 100%;
+}
+
+.text-field {
+    -fx-background-color: transparent;
+    -fx-background-image: url("/de/uniks/stp24/assets/backgrounds/member_background.png");
+    -fx-background-size: 100% 100%; /* Stretches the image to fill the entire background */
+    -fx-background-repeat: no-repeat;
+    -fx-text-fill: white;
+    -fx-font-size: 30;
+    -fx-padding: 0 0 12px 0;
+    -fx-font-family: 'Baskerville Old Face';
+}

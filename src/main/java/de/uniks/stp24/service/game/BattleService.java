@@ -87,8 +87,11 @@ public class BattleService {
                     // TODO: PROVIDE TO WEBJAW fleetName has left the battle on islandName?
 
                     if (this.fleetService.getFleetsOnIsland(oldFleet.location())
-                            .filtered(other -> oldFleet.empire().equals(other.empire())).isEmpty())
-                        this.finishBattle(battleEntry);
+                            .filtered(other -> oldFleet.empire().equals(other.empire())).isEmpty()) {
+                        this.battles.remove(battleEntry);
+                        this.islandsService.getIslandComponent(battleEntry.getLocation())
+                                .toggleSableVisibility(false);
+                    }
 
                     return battleEntry;
                 });

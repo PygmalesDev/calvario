@@ -408,6 +408,8 @@ public class InGameController extends BasicController {
         });
         this.createContextMenuButtons();
 
+        this.battleResultContainer.setPickOnBounds(false);
+
         // make pop ups draggable
         draggables.add(eventContainer);
         draggables.add(deleteStructureWarningContainer);

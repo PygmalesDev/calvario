@@ -62,11 +62,6 @@ public class GameFleetController extends Pane {
         this.selectedDropShadow.setSpread(0.9);
 
         this.setId("ingameFleet_" + fleet._id());
-       // this.travelTimeline.setOnFinished(event -> {
-       //     if (this.currentPoint.getType().equals(POINT_TYPE.ISLAND)){
-       //         this.fleetCoordinationService.monitorFleetCollisions();
-       //     }
-       // });
 
         this.travelTimeline.currentTimeProperty().addListener(this::listenerTimeMethod);
 
@@ -81,7 +76,6 @@ public class GameFleetController extends Pane {
 
     private void listenerTimeMethod(ObservableValue<? extends Duration> observableValue, Duration duration, Duration duration1) {
         if (this.ownFleet) {
-            System.out.println(this.currentPoint.ownFleet);
             fleetCoordinationService.inGameController.removeFogFromShape(new Circle(this.getLayoutX() + FLEET_HW / 2 + 10,
                     this.getLayoutY() + FLEET_HW / 2 + 15,
                     collisionCircle.getRadius() * 1.3)

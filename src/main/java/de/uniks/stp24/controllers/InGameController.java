@@ -110,6 +110,8 @@ public class InGameController extends BasicController {
     StackPane pauseMenuContainer;
     @FXML
     StackPane islandClaimingContainer;
+    @FXML
+    StackPane battleResultContainer;
 
     @FXML
     public StackPane clockComponentContainer;
@@ -135,7 +137,9 @@ public class InGameController extends BasicController {
     public FleetCoordinationService fleetCoordinationService;
     @Inject
     public TechnologyService technologyService;
+
     @Inject
+    @SubComponent
     public BattleResultComponent battleResultComponent;
 
     @SubComponent
@@ -420,7 +424,7 @@ public class InGameController extends BasicController {
         contactsOverviewComponent.setParents(contextMenuContainer, contactDetailsContainer);
         contactsOverviewComponent.contactDetailsComponent.setWarComponent(warComponent);
         warComponent.setParent(warContainer);
-        warContainer.getChildren().add(battleResultComponent);
+        this.battleResultContainer.getChildren().add(battleResultComponent);
         battleService.setBattleResultComponent(battleResultComponent);
         contactService.setContactOverview(contactsOverviewComponent);
 

@@ -99,11 +99,16 @@ public class AnnouncementsService {
                     message = gameResourceBundle.getString("captain.ship.ready")
                             .replace("{shipType}", gameResourceBundle.getString("ship." + job.ship()))
                             .replace("{fleetName}", fleetService.getFleet(job.fleet()).name());
+                    forwardMethods.add(jobsService.getJobInspector("show_fleet_manager"));
+                    forwardIcon = "-fx-background-image: url('[PATH]')"
+                            .replace("[PATH]", "/de/uniks/stp24/assets/buttons/fleetManager_button.png");
                 }
                 case "travel" -> {
                     message = gameResourceBundle.getString("captain.travel.ready")
                             .replace("{islandName}", this.islandsService.getIsland(job.path().getLast()).name())
                             .replace("{fleetName}", fleetService.getFleet(job.fleet()).name());
+                    forwardIcon = "-fx-background-image: url('[PATH]')"
+                            .replace("[PATH]", "/de/uniks/stp24/assets/other/fleet_on_map.png");
                 }
             }
             announcements.addFirst(new Announcement(message, forwardIcon, forwardMethods, job));

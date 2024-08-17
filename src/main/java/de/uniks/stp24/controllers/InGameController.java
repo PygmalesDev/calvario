@@ -815,6 +815,9 @@ public class InGameController extends BasicController {
                 showTechnologies()
         );
 
+        this.jobsService.setJobInspector("show_fleet_manager", (Jobs.Job job) ->
+                showFleetManager()
+        );
     }
 
     public void showOverview() {

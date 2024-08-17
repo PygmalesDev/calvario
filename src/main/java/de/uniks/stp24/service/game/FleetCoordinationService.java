@@ -146,7 +146,7 @@ public class FleetCoordinationService {
     }
 
     private void deleteFleetFromMap(Fleet fleet) {
-        var comp = shipService.mapOfFleetComponent.remove(fleet._id());
+        var comp = shipService.mapOfFleetComponents.remove(fleet._id());
         shipService.aliveFleets.remove(comp);
         fleetService.updateFleets.remove(comp);
         fleetService.mapOfFleetComponents.remove(fleet._id());

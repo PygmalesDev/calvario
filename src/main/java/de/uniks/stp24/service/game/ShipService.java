@@ -1,5 +1,6 @@
 package de.uniks.stp24.service.game;
 
+import de.uniks.stp24.component.game.GameFleetController;
 import de.uniks.stp24.model.Jobs;
 import de.uniks.stp24.rest.JobsApiService;
 import de.uniks.stp24.rest.ShipsApiService;
@@ -13,7 +14,6 @@ import org.fulib.fx.controller.Subscriber;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static de.uniks.stp24.model.Fleets.Fleet;
@@ -46,6 +46,9 @@ public class ShipService {
     private String lastShipUpdate = "";
     private String lastShipCreation = "";
     private String lastShipDeletion= "";
+    public Map<String, GameFleetController> mapOfFleetComponents = new HashMap<>();
+    List<GameFleetController> aliveFleets = new ArrayList<>();
+
 
 
     public void initShipTypes(){
@@ -185,6 +188,59 @@ public class ShipService {
 
     public Observable<Ship> changeFleetOfShip(String newFleetID, ReadShipDTO readShipDTO){
         return this.shipsApiService.patchShip(this.tokenStorage.getGameId(), readShipDTO.fleet(), readShipDTO._id(), new UpdateShipDTO(newFleetID, readShipDTO._public(), new HashMap<>()));
+    }
+
+    public void recreateListOfShips(String fleetID, ObservableList<ReadShipDTO> list) {
+        System.out.println("recreate liste for " + fleetID.substring(20));
+        System.out.println(mapOfFleetComponents.containsKey(fleetID));
+        this.subscriber.subscribe(shipsApiService.getAllShips(this.tokenStorage.getGameId(), fleetID),
+          result ->     {
+              Arrays.stream(result).forEach(ship -> {
+                  if (ship.fleet().equals(fleetID) && !list.contains(ship)) {
+                      list.add(ship);
+                  }
+              });
+              mapOfFleetComponents.get(fleetID).refreshHealthInfo();
+          },
+          error -> {
+              System.out.println("error by creating list of ships in fleet: " + fleetID);
+          } );
+    }
+
+    public void giveInfo(String fleetID) {
+        System.out.println( "ship in " + fleetID + " ready");
+        GameFleetController tmp = mapOfFleetComponents.getOrDefault(fleetID,null);
+        System.out.println("fleet ctrl " + tmp);
+        //        if (Objects.nonNull(tmp)) updateShipOfEmpire(fleetID, tmp.shipInFleet);
+        if (Objects.nonNull(tmp)) recreateListOfShips(fleetID, tmp.dynShipInFleet);
+    }
+
+    public void addFleetComponent (String id, GameFleetController ctrl) {
+        System.out.println("adding " + id + ", " + ctrl);
+        this.mapOfFleetComponents.put(id,ctrl);
+        this.aliveFleets.add(ctrl);
+        System.out.println("ok");
+    }
+
+    public void removeFleetComponent (String id) {
+        this.mapOfFleetComponents.remove(id);
+
+    }
+
+    public Map<String, Double> getMaxHealthInfoMap() {
+        Map<String, Double> tmp = new HashMap<>();
+        for (ShipType ship : shipTypesAttributes){
+            tmp.put(ship._id(), ship.health());
+        }
+        return tmp;
+    }
+
+    public void updateAllFleetHealth() {
+        System.out.println("all fleets " + aliveFleets.size() );
+        for (GameFleetController ctrl : aliveFleets) {
+            System.out.println(ctrl.fleet._id().substring(20) + " -> " + ctrl.dynShipInFleet.size());
+            ctrl.refreshListOfShips();
+        }
     }
 }
 

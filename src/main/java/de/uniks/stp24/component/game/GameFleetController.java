@@ -31,6 +31,7 @@ import org.fulib.fx.annotation.event.OnRender;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static de.uniks.stp24.service.Constants.FLEET_HW;
@@ -191,7 +192,7 @@ public class GameFleetController extends Pane {
     }
 
     public void calculateMaxHealth() {
-        Map<String, Integer> maxHealthOfShips = shipService.getMaxHealthInfoMap();
+        Map<String, Double> maxHealthOfShips = shipService.getMaxHealthInfoMap();
         health = 0;
         maxHealth = 0;
         for (Ships.ReadShipDTO ship : dynShipInFleet) {

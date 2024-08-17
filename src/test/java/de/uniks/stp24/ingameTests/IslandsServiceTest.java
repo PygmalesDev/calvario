@@ -38,7 +38,6 @@ public class IslandsServiceTest extends ControllerTest {
 
     final SystemDto[] systems = new SystemDto[3];
     List<IslandComponent> testIsleComps;
-    Island island1;
 
     @Override
     public void start(Stage stage) throws Exception{
@@ -52,16 +51,16 @@ public class IslandsServiceTest extends ControllerTest {
         ArrayList<String> buildings = new ArrayList<>(Arrays.asList("power_plant", "mine", "farm", "research_lab", "foundry", "factory", "refinery"));
         systems[0] = new SystemDto("a","b","system1","game1","agriculture",
                 "name",null,null,25,null, Upgrade.unexplored,0,
-                Map.of("home",22),1.46,-20.88,null);
+                Map.of("home",22),1.46,-20.88,null, 100);
         systems[1] = new SystemDto("a","b","system2","game1","energy",
                 "name",null,
           Map.of("city",2, "industry", 3, "mining",4, "energy",5, "agriculture",6),
           26,buildings, Upgrade.unexplored,0,
-                Map.of("home",18),-7.83,-11.04,"empire");
+                Map.of("home",18),-7.83,-11.04,"empire", 100);
         systems[2] = new SystemDto("a","b","home","game1","uninhabitable_0", "name",
                 Map.of("city",2, "industry", 3, "mining",4, "energy",5, "agriculture",6),
                 Map.of("city",2, "industry", 2, "mining",3, "energy",4, "agriculture",6), 22,
-                buildings,Upgrade.developed,25,Map.of("system1",22,"system2",18),-5.23,4.23,"empire"
+                buildings,Upgrade.developed,25,Map.of("system1",22,"system2",18),-5.23,4.23,"empire", 100
         );
         doReturn(Observable.just(systems)).when(gameSystemsApiService).getSystems(any());
 

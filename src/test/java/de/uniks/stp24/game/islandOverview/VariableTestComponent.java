@@ -12,8 +12,8 @@ import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 public class VariableTestComponent extends IslandOverviewTestInitializer{
 
@@ -29,6 +29,9 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
     final List<Island> islands = new ArrayList<>();
     final Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
     final Map<String,List<SeasonComponent>> _private = new HashMap<>();
+    protected final AggregateResultDto HEALTH_DEF_DTO = new AggregateResultDto(200,null);
+    protected final List<WarDto> EMPTY_WARDTO_LIST = new ArrayList<>();
+    protected final Subject<Event<WarDto>> WAR_SUBJECT = BehaviorSubject.create();
 
 
     Island testIsland;
@@ -46,6 +49,7 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
                 null))).when(this.empireService).getEmpire(any(), any());
 
         doReturn(FXCollections.observableArrayList()).when(this.jobsService).getObservableListForSystem(any());
+
         doReturn(Observable.just(new Game("a", "a", "123456", "gameName", "gameOwner", 2, 1, true, 1, 1, null))).when(gamesApiService).getGame(any());
         doReturn(empireDtoSubject).when(this.eventListener).listen(eq("games.123456.empires.testEmpireID.updated"), eq(EmpireDto.class));
         doReturn(Observable.just(new Event<>("games.123456.ticked", new Game("a", "a", "123456", "gameName", "gameOwner", 2, 1, true, 1, 1, null))))
@@ -64,7 +68,8 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
                 buildings,
                 "1",
                 "explored",
-                "TestIsland1"
+                "TestIsland1",
+          100
         );
 
         this.islandAttributeStorage.setIsland(testIsland);
@@ -121,6 +126,10 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
         doReturn(Observable.just(new SystemDto[]{})).when(this.gameSystemsApiService).getSystems(any());
 
         doReturn(Observable.just(_private)).when(this.marketService).getSeasonalTrades(any(),any());
+//        when(this.gameLogicApiService.getAggregate(any(),any(),any())).thenReturn(Observable.just(HEALTH_DEF_DTO));
+        when(this.warService.getWars(any(),any())).thenReturn(Observable.just(EMPTY_WARDTO_LIST));
+//        when(this.empireApiService.getPrivate(any(),any())).thenReturn(Observable.just(new EmpirePrivateDto(new HashMap<>())));
+
 
         doReturn(Observable.empty()).when(empireApiService).getPrivate(any(), any());
 
@@ -134,6 +143,11 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
     private void mockFleets(){
         // Mock get Fleets and ships
         ArrayList<Fleets.ReadFleetDTO> fleets = new ArrayList<>(Collections.singleton(new Fleets.ReadFleetDTO("a", "a", "fleetID", "123456", "testEmpireID", "fleetName", "fleetLocation", 4, new HashMap<>(), new HashMap<>())));
-        doNothing().when(this.fleetService).initializeShipListener();
+//        doReturn(Observable.just(fleets)).when(this.fleetApiService).getGameFleets("123456");
+//        doNothing().when(this.fleetService).initializeFleetListeners();
+        doNothing().when(contactsService).loadContactsData();
+        doNothing().when(contactsService).createWarListener();
+//        doNothing().when(contactsComponent).init();
+//        doReturn(Observable.just(new ArrayList<WarDto>())).when(warService).getWars(any(),any());
     }
 }

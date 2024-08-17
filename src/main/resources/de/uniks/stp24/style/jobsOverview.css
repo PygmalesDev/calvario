@@ -3,7 +3,7 @@
     src: url("/de/uniks/stp24/fonts/Baskerville.ttf");
 }
 
-.jobsOverviewBackgorund {
+.jobsOverviewBackground {
     -fx-background-color: transparent;
     -fx-background-image: url("/de/uniks/stp24/assets/jobsOverview/job_overview_background.png");
     -fx-background-position: center;

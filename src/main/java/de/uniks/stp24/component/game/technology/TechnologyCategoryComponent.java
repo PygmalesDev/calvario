@@ -61,7 +61,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
     public StackPane researchJobContainer;
     @FXML
     public Text researchText;
-    public String technologieCategoryName;
+    public String technologyCategoryName;
     @Inject
     App app;
     @Inject
@@ -119,7 +119,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
     }
 
     public void updateTechnologies() {
-        unlockedAndResearchList = technologyService.getUnlockedAndResearch(technologieCategoryName);
+        unlockedAndResearchList = technologyService.getUnlockedAndResearch(technologyCategoryName);
 
         unlockedTechnologies.clear();
         researchTechnologies.clear();

@@ -68,7 +68,7 @@ public class InGameTestLoader extends ControllerTest {
     @Spy
     TimerService timerService;
     @Spy
-    GameLogicApiService gameLogicApiService;
+    public GameLogicApiService gameLogicApiService;
     @Spy
     VariableDependencyService variableDependencyService;
     @Spy

@@ -4,6 +4,7 @@ import de.uniks.stp24.appTestModules.AppTest3Module;
 import de.uniks.stp24.appTestModules.IngameModule;
 import de.uniks.stp24.model.Trait;
 import de.uniks.stp24.ws.Event;
+import io.reactivex.rxjava3.core.Observable;
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
@@ -13,13 +14,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class AppTest3 extends AppTest3Module {
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
-
+        when(this.gameLogicApiService.getAggregate(any(),any(),any())).thenReturn(Observable.just(HEALTH_DEF_DTO));
         this.app.show(this.lobbyController);
     }
 

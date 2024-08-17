@@ -2,18 +2,22 @@ package de.uniks.stp24.fleetMovement;
 
 import de.uniks.stp24.appTestModules.FleetMovementModule;
 import de.uniks.stp24.ws.Event;
+import io.reactivex.rxjava3.core.Observable;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.util.WaitForAsyncUtils;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 public class TestFleetMovement extends FleetMovementModule {
     @Override
     public void start(Stage stage) throws Exception {
         super.start(stage);
-
+        when(this.gameLogicApiService.getAggregate(any(),any(),any())).thenReturn(Observable.just(HEALTH_DEF_DTO));
         this.app.show(this.lobbyController);
 
         this.joinGameHelper.joinGame(GAME_ID, true);

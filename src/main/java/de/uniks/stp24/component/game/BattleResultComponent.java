@@ -82,6 +82,7 @@ public class BattleResultComponent extends Pane {
                     this.resultImageView.setImage(this.imageCache.get("/de/uniks/stp24/assets/other/battle_lost.png"));
                 }
                 battleEntry.getShipsLostByAttacker().forEach(this::setYourLostShips);
+                battleEntry.getShipsLostByDefender().forEach(this::setTheirLostShips);
             }
         }
     }

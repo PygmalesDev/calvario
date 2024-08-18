@@ -175,9 +175,11 @@ public class FleetService {
       System.out.println("groups 1");
         this.gameFleets.removeIf(other -> other.equals(fleet));
         System.out.println("groups 2");
-        this.empireFleets.remove(fleet.empire()); //get(fleet.empire()).removeIf(other -> other.equals(fleet));
+//        this.empireFleets.remove(fleet.empire()); //get(fleet.empire()).removeIf(other -> other.equals(fleet));
+        this.empireFleets.get(fleet.empire()).removeIf(other -> other.equals(fleet));
         System.out.println("groups 3");
-        this.islandFleets.remove(fleet.location()); //get(fleet.location()).removeIf(other -> other.equals(fleet));
+//        this.islandFleets.remove(fleet.location()); //get(fleet.location()).removeIf(other -> other.equals(fleet));
+        this.islandFleets.get(fleet.location()).removeIf(other -> other.equals(fleet));
         System.out.println("groups 4");
         this.fleetDestroyedConsumers.forEach(func -> func.accept(fleet));
         System.out.println("groups 5");

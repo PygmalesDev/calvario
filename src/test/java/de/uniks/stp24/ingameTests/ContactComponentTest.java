@@ -166,7 +166,10 @@ public class ContactComponentTest extends ControllerTest {
         Contact cont = contactsComponent.contactsListView.getItems().getFirst();
         cont.setPane(contactDetailsComponent);
         sleep(1000);
-        app.show(contactDetailsComponent);
+        Platform.runLater(() -> {
+            app.show(contactDetailsComponent);
+
+        });
 //        contactDetailsComponent.setVisible(true);
         contactDetailsComponent.getStylesheets().clear();
 

@@ -58,8 +58,6 @@ public class EditGameControllerTest extends ControllerTest {
 
         clickOn("#editPasswordTextField");
         write("1");
-        clickOn("#editRepeatPasswordTextField");
-        write("1");
 
         WaitForAsyncUtils.waitForFxEvents();
 

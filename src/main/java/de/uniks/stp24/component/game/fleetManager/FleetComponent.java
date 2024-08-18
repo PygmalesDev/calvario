@@ -60,9 +60,16 @@ public class FleetComponent extends VBox implements ReusableItemComponent<Fleet>
     }
 
     public void deleteFleet(){
-        int jobCount = this.jobsService.getJobObservableListOfType("ship").stream().filter(job -> job.fleet().equals(this.fleet._id())).toList().size();
-        jobCount += this.jobsService.getJobObservableListOfType("travel").stream().filter(job -> job.fleet().equals(this.fleet._id())).toList().size();
-        jobCount += this.jobsService.getJobObservableListOfType("upgrade").stream().filter(job -> job.fleet() != null && job.fleet().equals(this.fleet._id())).toList().size();
+        int jobCount = 0;
+        if (this.jobsService.getJobObservableListOfType("ship") != null) {
+            jobCount = this.jobsService.getJobObservableListOfType("ship").stream().filter(job -> job.fleet().equals(this.fleet._id())).toList().size();
+        }
+        if (this.jobsService.getJobObservableListOfType("travel") != null) {
+            jobCount += this.jobsService.getJobObservableListOfType("travel").stream().filter(job -> job.fleet().equals(this.fleet._id())).toList().size();
+        }
+        if (this.jobsService.getJobObservableListOfType("upgrade") != null) {
+            jobCount += this.jobsService.getJobObservableListOfType("upgrade").stream().filter(job -> job.fleet() != null && job.fleet().equals(this.fleet._id())).toList().size();
+        }
         if(jobCount == 0) {
             this.subscriber.subscribe(this.fleetService.deleteFleet(this.tokenStorage.getGameId(), this.fleet._id()),
                     result -> {

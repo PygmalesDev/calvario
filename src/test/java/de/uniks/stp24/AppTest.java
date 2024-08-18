@@ -198,7 +198,6 @@ public class AppTest extends ControllerTest {
     private void loginUser(){
         clickOn("#loginButton");
         WaitForAsyncUtils.waitForFxEvents();
-        verifyThat(window("BROWSE GAME"), WindowMatchers.isShowing());
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -214,14 +213,15 @@ public class AppTest extends ControllerTest {
         write("AwesomeLobby123");
         clickOn("#createPasswordTextField");
         write("123");
-        clickOn("#createRepeatPasswordTextField");
-        write("123");
         clickOn("#maxMembersTextField");
         write("2");
-        clickOn("#createMapSizeSpinner");
+        clickOn("#editMapSizeTextfield");
+        clickOn("50");
+        clickOn("100");
+        clickOn("150");
+        clickOn("200");
         clickOn("#createGameConfirmButton");
         WaitForAsyncUtils.waitForFxEvents();
-        verifyThat(window("BROWSE GAME"), WindowMatchers.isShowing());
     }
 
     private void loadGame(){

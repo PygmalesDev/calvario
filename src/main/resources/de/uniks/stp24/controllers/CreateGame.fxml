@@ -60,7 +60,7 @@
                 <HBox spacing="15.0" translateX="-3.0" translateY="48.0">
                     <Button fx:id="createGameCancelButton" mnemonicParsing="false" onAction="#cancel"
                             styleClass="return-button" text="%return"/>
-                    <Button mnemonicParsing="false" onAction="#createGame" styleClass="confirm-button" text="%confirm"/>
+                    <Button fx:id="createGameConfirmButton" mnemonicParsing="false" onAction="#createGame" styleClass="confirm-button" text="%confirm"/>
                 </HBox>
             </VBox>
             <Pane fx:id="captainContainer" translateX="250.0" translateY="-195.0"/>

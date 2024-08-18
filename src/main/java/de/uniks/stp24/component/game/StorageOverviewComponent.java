@@ -107,7 +107,7 @@ public class StorageOverviewComponent extends AnchorPane {
 
 
     private void resourceListGeneration(EmpireDto empireDto, AggregateItemDto[] aggregateItems) {
-        Map<String, Integer> resourceMap = empireDto.resources();
+        Map<String, Double> resourceMap = empireDto.resources();
         resourcesService.setCurrentResources(resourceMap);
         ObservableList<Resource> resourceList = resourcesService.generateResourceList(resourceMap, resourceListView.getItems(), aggregateItems, true);
         this.resourceListView.setItems(resourceList);

@@ -5,9 +5,9 @@ import java.util.Map;
 public record DistrictAttributes(
         String id,
         double build_time,
-        Map<String, Integer> chance,
-        Map<String, Integer> cost,
-        Map<String, Integer> upkeep,
-        Map<String, Integer> production
+        Map<String, Double> chance,
+        Map<String, Double> cost,
+        Map<String, Double> upkeep,
+        Map<String, Double> production
 ) {
 }

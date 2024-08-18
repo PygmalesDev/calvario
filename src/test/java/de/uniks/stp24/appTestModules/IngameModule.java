@@ -31,27 +31,27 @@ public class IngameModule extends LobbyTestLoader {
             USER_ID = "testUserID",
             ENEMY_ID = "enemyID";
 
-    protected final Map<String, Integer> DEV_RESOURCES = Map.of(
-            "credits", 1000000000,
-            "energy", 1000000000,
-            "minerals", 1000000000,
-            "food", 1000000000,
-            "fuel", 1000000000,
-            "research", 1000000000,
-            "alloys", 1000000000,
-            "consumer_goods", 1000000000
+    protected final Map<String, Double> DEV_RESOURCES = Map.of(
+            "credits", 1000000000.0,
+            "energy", 1000000000.0,
+            "minerals", 1000000000.0,
+            "food", 1000000000.0,
+            "fuel", 1000000000.0,
+            "research", 1000000000.0,
+            "alloys", 1000000000.0,
+            "consumer_goods", 1000000000.0
     );
 
-    protected final BuildingDto BUILDING_DTO = new BuildingDto("refinery", 3,
-            Map.of("minerals", 100),
-            Map.of("minerals", 10, "energy", 15),
-            Map.of("fuel", 10));
+    protected final BuildingDto BUILDING_DTO = new BuildingDto("refinery", 3.0,
+            Map.of("minerals", 100.0),
+            Map.of("minerals", 10.0, "energy", 15.0),
+            Map.of("fuel", 10.0));
 
-    protected final DistrictAttributes DISTRICT_ATTRIBUTES = new DistrictAttributes("energy", 3,
+    protected final DistrictAttributes DISTRICT_ATTRIBUTES = new DistrictAttributes("energy", 3.0,
             new HashMap<>(),
-            Map.of("minerals", 75),
-            Map.of("minerals", 2),
-            Map.of("energy", 30));
+            Map.of("minerals", 75.0),
+            Map.of("minerals", 2.0),
+            Map.of("energy", 30.0));
 
     protected final String[] JOB_EVENT_PATHS = new String[]{
             "games.FFFFFFFFFFFFFFFFFFF.empires.testEmpireID.jobs.jobClaimingID_1.",
@@ -148,9 +148,9 @@ public class IngameModule extends LobbyTestLoader {
             new ExplainedVariableDTO("resources.consumer_goods.credit_value", 6.0, new ArrayList<>(), 6.0),
             new ExplainedVariableDTO("resources.consumer_goods.empire.market.fee", 0.3, new ArrayList<>(), 0.3)));
 
-    protected final SystemDto[] GAME_SYSTEMS = new SystemDto[]{
+    protected SystemDto[] GAME_SYSTEMS = new SystemDto[]{
             new SystemDto("0", "0", "islandID_1", GAME_ID, "regular", "TestIslandOne",
-                    Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(List.of(
+                    Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(List.of("energy",
                     "shipyard", "mine", "research")), Upgrade.colonized, 13, Map.of("islandID_2", 20,
                     "islandID_3", 20, "enemyIslandID", 20), 50, 50, EMPIRE_ID, 0),
 
@@ -210,7 +210,7 @@ public class IngameModule extends LobbyTestLoader {
                     new LinkedList<>(List.of("islandID_1", "islandID_2", "islandID_4", "islandID_5")), new HashMap<>(), null)
     };
 
-    protected final ArrayList<ReadFleetDTO> FLEET_DTOS = new ArrayList<>(List.of(
+    protected ArrayList<ReadFleetDTO> FLEET_DTOS = new ArrayList<>(List.of(
             new ReadFleetDTO("a", "a",
                     "testFleetID_1", GAME_ID, EMPIRE_ID, "fleetName", GAME_SYSTEMS[0]._id(),
                     4, new HashMap<>(), new HashMap<>()),
@@ -311,10 +311,13 @@ public class IngameModule extends LobbyTestLoader {
     public void start(Stage stage) throws Exception {
         super.start(stage);
 
+        this.reassignData();
         this.initializeApiMocks();
         this.initializeEventListenerMocks();
         this.loadUnloadableData();
     }
+
+    protected void reassignData() {}
 
     protected void initializeEventListenerMocks() {
         doReturn(GAME_SUBJECT).when(this.eventListener)
@@ -336,7 +339,7 @@ public class IngameModule extends LobbyTestLoader {
     }
 
     protected void initializeApiMocks() {
-        doReturn(null).when(this.imageCache).get(any());
+//        doReturn(null).when(this.imageCache).get(any());
 
         when(this.tokenStorage.getEmpireId()).thenReturn(this.EMPIRE_ID);
         when(this.tokenStorage.getGameId()).thenReturn(GAME_ID);
@@ -368,22 +371,20 @@ public class IngameModule extends LobbyTestLoader {
         doAnswer(inv -> this.app.show(this.lobbyController)).when(this.app).show(eq("/lobby"), any());
 
         when(this.warService.getWars(any(),any())).thenReturn(Observable.just(EMPTY_WARDTO_LIST));
-        when(this.empireApiService.getPrivate(any(),any())).thenReturn(Observable.just(new EmpirePrivate(new HashMap<>())));
-//        when(this.gameLogicApiService.getAggregate(any(),any(),any())).thenReturn(Observable.just(HEALTH_DEF_DTO));
+        when(this.empireApiService.getPrivate(any(),any()))
+                .thenReturn(Observable.just(new EmpirePrivate(new HashMap<>())));
     }
 
-    private void loadUnloadableData() {
+    protected void loadUnloadableData() {
         this.islandAttributeStorage.systemUpgradeAttributes = new SystemUpgrades(
-                null, null, new UpgradeStatus("0","upgraded", 1, 0, Map.of("energy", 100),
-                Map.of("energy", 100), 0), null, null);
+                null, null, new UpgradeStatus("0","upgraded", 1, 0, Map.of("energy", 100.0),
+                Map.of("energy", 100.0), 0), null, null);
         this.islandAttributeStorage.buildingsAttributes = new ArrayList<>(List.of(new BuildingAttributes(
                 BUILDING_DTO.id(), BUILDING_DTO.build_time(), BUILDING_DTO.cost(), BUILDING_DTO.upkeep(),
                 BUILDING_DTO.production())));
         this.islandAttributeStorage.districtAttributes = new ArrayList<>(List.of(DISTRICT_ATTRIBUTES));
         this.shipService.shipSpeeds = Map.of("explorer", 10.0, "colonizer", 2.0);
     }
-
-
 
     protected Event<Game> tickGame(int speed) {
         return new Event<>("games." + GAME_ID + ".ticked",

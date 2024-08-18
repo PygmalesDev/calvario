@@ -54,7 +54,7 @@ public class IslandComponent extends Pane {
     @FXML
     ImageView defenseIcon;
     @FXML
-    ImageView sableImage;
+    public ImageView sableImage;
 
     @Inject
     TokenStorage tokenStorage;

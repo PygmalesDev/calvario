@@ -261,7 +261,7 @@ public class SitePropertiesComponent extends AnchorPane {
         // 1) if empire has enough resources to build a site cell
         // 2) if island has enough capacity for this building
         if (Objects.nonNull(siteType)) {
-            Map<String, Integer> costSite = Objects.requireNonNull(getCertainSite()).cost();
+            Map<String, Double> costSite = Objects.requireNonNull(getCertainSite()).cost();
             int islandJobsInQueue = jobsService.getStructureJobsInQueueCount(islandAttributeStorage.getIsland().id());
             buildSiteButton.setDisable(!resourcesService.hasEnoughResources(costSite)
             ||

@@ -499,6 +499,7 @@ public class InGameTestLoader extends ControllerTest {
 
         this.fleetService.jobsApiService = this.jobsApiService;
         this.fleetService.eventListener = this.eventListener;
+        this.fleetService.jobsService = this.jobsService;
         this.fleetService.subscriber = new Subscriber();
 
         this.islandTravelComponent.fleetCoordinationService = this.fleetCoordinationService;

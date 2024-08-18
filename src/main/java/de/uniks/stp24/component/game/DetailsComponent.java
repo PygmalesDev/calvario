@@ -98,23 +98,23 @@ public class DetailsComponent extends AnchorPane {
     total consumption and total production of current selected island.
      */
 
-    public void setSumProduction(Map<String, Integer> totalProduction){
+    public void setSumProduction(Map<String, Double> totalProduction){
         resetResources();
         int i = 0;
-        for (Map.Entry<String, Integer> entry : totalProduction.entrySet()) {
+        for (Map.Entry<String, Double> entry : totalProduction.entrySet()) {
             resImages.get(i).setImage(this.imageCache.get("/"+resourceImagePath.get(entry.getKey())));
-            resInf.get(i).setText("+" + entry.getValue());
-            i++;
+            resInf.get(i).setText("+" + Math.round(entry.getValue() * 100.0) / 100.0);
+            i ++;
         }
         title.setText("     " + gameResourceBundle.getString("total.production"));
     }
 
-    public void setSumConsumption(Map<String, Integer> totalConsumption){
+    public void setSumConsumption(Map<String, Double> totalConsumption){
         resetResources();
         int i = 0;
-        for (Map.Entry<String, Integer> entry : totalConsumption.entrySet()) {
+        for (Map.Entry<String, Double> entry : totalConsumption.entrySet()) {
             resImages.get(i).setImage(this.imageCache.get("/"+resourceImagePath.get(entry.getKey())));
-            resInf.get(i).setText("-" + entry.getValue());
+            resInf.get(i).setText("-" + Math.round(entry.getValue() * 100.0) / 100.0);
             i++;
         }
         title.setText("  " + gameResourceBundle.getString("total.consumption"));

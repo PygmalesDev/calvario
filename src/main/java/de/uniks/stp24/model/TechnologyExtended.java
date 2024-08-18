@@ -4,7 +4,7 @@ public record TechnologyExtended(
         String id,
         Effect[] effects,
         String[] tags,
-        int cost,
+        double cost,
         String[] requires,
         String[] precedes
 ) {

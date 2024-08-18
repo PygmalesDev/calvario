@@ -214,7 +214,7 @@ public class TechnologyCategoryComponent extends AnchorPane {
     public void showResearchComponent(TechnologyExtended technology) {
 
         this.technology = technology;
-        Map<String, Integer> technologyCostMap = new HashMap<>();
+        Map<String, Double> technologyCostMap = new HashMap<>();
         technologyCostMap.put("research", technology.cost() * 100);
         if (resourcesService.hasEnoughResources(technologyCostMap)) handleJobRunning(technology);
         researchJobComponent.setEffectListView();

@@ -44,7 +44,7 @@ public class Ships {
             double speed,
             Map<String, Integer> attack,
             Map<String, Integer> defense,
-            Map<String, Integer> cost,
+            Map<String, Double> cost,
             Map<String, Double> upkeep
     ){}
 

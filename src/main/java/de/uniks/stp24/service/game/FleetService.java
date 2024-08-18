@@ -1,5 +1,6 @@
 package de.uniks.stp24.service.game;
 
+import de.uniks.stp24.component.game.GameFleetController;
 import de.uniks.stp24.model.Fleets;
 import de.uniks.stp24.model.Jobs.Job;
 import de.uniks.stp24.model.Jobs;
@@ -56,6 +57,8 @@ public class FleetService {
     private String lastShipCreation = "";
     private String lastShipDeletion= "";
     private boolean loadingFinished = false;
+    public Map<String, GameFleetController> mapOfFleetComponents = new HashMap<>();
+    List<GameFleetController> updateFleets = new ArrayList<>();
 
     public void loadGameFleets() {
         this.subscriber.subscribe(this.fleetApiService.getGameFleets(this.tokenStorage.getGameId(), true),
@@ -74,6 +77,7 @@ public class FleetService {
             switch (event.suffix()) {
                 case "created" -> this.addFleetToGroups(fleet);
                 case "updated" -> {
+                    mapOfFleetComponents.get(fleet._id()).showHealth();
                     Fleet oldFleet = this.gameFleets.filtered(fleetDto -> fleetDto._id().equals(fleet._id())).getFirst();
                     this.updateFleetInGroups(oldFleet,
                             new Fleet(fleet.createdAt(), fleet.updatedAt(), fleet._id(), fleet.game(), fleet.empire(), fleet.name(),
@@ -94,6 +98,12 @@ public class FleetService {
                         adaptShipCount(ship.fleet(), 1);
                         this.lastShipCreation = ship._id();
                     }
+                }
+                case "updated" -> {
+                    System.out.println(ship.type() + " in fleet " + ship.fleet().substring(20) + " updated");
+                    System.out.println("health: " + event.data().health());
+                    GameFleetController tmp = mapOfFleetComponents.get(event.data().fleet());
+                    if (!updateFleets.contains(tmp)) updateFleets.add(tmp);
                 }
                 case "deleted" -> {
                     if (!ship._id().equals(this.lastShipDeletion)) {
@@ -161,12 +171,18 @@ public class FleetService {
                 job.fleet().equals(fleet._id())).toList().forEach(job ->
             this.subscriber.subscribe(this.jobsService.stopJob(job._id()), result -> {},
                     Throwable::printStackTrace));
-
+        
+      System.out.println("groups 1");
         this.gameFleets.removeIf(other -> other.equals(fleet));
+        System.out.println("groups 2");
+//        this.empireFleets.remove(fleet.empire()); //get(fleet.empire()).removeIf(other -> other.equals(fleet));
         this.empireFleets.get(fleet.empire()).removeIf(other -> other.equals(fleet));
+        System.out.println("groups 3");
+//        this.islandFleets.remove(fleet.location()); //get(fleet.location()).removeIf(other -> other.equals(fleet));
         this.islandFleets.get(fleet.location()).removeIf(other -> other.equals(fleet));
-
+        System.out.println("groups 4");
         this.fleetDestroyedConsumers.forEach(func -> func.accept(fleet));
+        System.out.println("groups 5");
     }
 
     public Observable<Job> beginTravelJob(ArrayList<String> path, String fleetID) {
@@ -235,6 +251,15 @@ public class FleetService {
         newSize.put(shipTypeID, plannedShips);
         return this.fleetApiService.patchFleet(this.tokenStorage.getGameId(),fleet._id(),
                 new UpdateFleetDTO(fleet.name(), newSize, fleet._public(), fleet._private(), fleet.effects()));
+    }
+
+    public void updateTheseFleetsHealth() {
+        if (!updateFleets.isEmpty()) System.out.println("update fleets " + updateFleets.size() );
+        for (GameFleetController ctrl : updateFleets) {
+            System.out.println(ctrl.fleet._id().substring(20) + " -> " + ctrl.dynShipInFleet.size());
+            ctrl.refreshListOfShips();
+        }
+        updateFleets.clear();
     }
 
     public void dispose() {

@@ -2,12 +2,18 @@ package de.uniks.stp24.component.game;
 
 import de.uniks.stp24.controllers.helper.DistancePoint;
 import de.uniks.stp24.model.Fleets.Fleet;
+import de.uniks.stp24.model.Ships;
 import de.uniks.stp24.service.Constants.POINT_TYPE;
 import de.uniks.stp24.service.ImageCache;
 import de.uniks.stp24.service.TokenStorage;
 import de.uniks.stp24.service.game.FleetCoordinationService;
+import de.uniks.stp24.service.game.ShipService;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Label;
 import de.uniks.stp24.service.game.FleetService;
 import javafx.animation.*;
 import javafx.beans.value.ObservableValue;
@@ -21,8 +27,11 @@ import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
 import org.fulib.fx.annotation.event.OnDestroy;
+import org.fulib.fx.annotation.event.OnRender;
+
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static de.uniks.stp24.service.Constants.FLEET_HW;
@@ -31,12 +40,17 @@ import static de.uniks.stp24.service.Constants.FLEET_HW;
 @Component(view = "GameFleet.fxml")
 public class GameFleetController extends Pane {
     public Circle collisionCircle;
+    
     public Text fleetNameText;
 
     @FXML
-    public ProgressBar healthBar;
+    public Text healthText;
+    @FXML
+    public ImageView healthIcon;
+    // @FXML
+    // public Label nameLabel;
 
-    private double fleetHealth;
+    // private double fleetHealth;
     public Circle empireCircle;
     public ImageView fleetImage;
     private final DropShadow selectedDropShadow;
@@ -49,6 +63,13 @@ public class GameFleetController extends Pane {
     private final Rotate rotate = new Rotate();
     private boolean ownFleet;
     public Fleet fleet;
+    public final ObservableList<Ships.ReadShipDTO> dynShipInFleet = FXCollections.observableArrayList();
+    public String clientOwner;
+    BooleanProperty statsVisibility = new SimpleBooleanProperty(false);
+    public int health, maxHealth;
+    public final ShipService shipService;
+
+    private FadeTransition fadeHealth, fadeHealthIcon;
 
 
     @Inject
@@ -58,6 +79,7 @@ public class GameFleetController extends Pane {
         this.imageCache = fleetCoordinationService.imageCache;
         this.fleetCoordinationService = fleetCoordinationService;
         this.tokenStorage = fleetCoordinationService.tokenStorage;
+        this.shipService = fleetCoordinationService.shipService;
 
         this.selectedDropShadow = new DropShadow();
         this.selectedDropShadow.setHeight(20);
@@ -67,6 +89,9 @@ public class GameFleetController extends Pane {
         this.setId("ingameFleet_" + fleet._id());
         travelTimeline.currentTimeProperty().addListener(this::listenerTimeMethod);
         this.travelTimeline.statusProperty().addListener(this::listenerStatusMethod);
+
+        this.healthIcon = new ImageView();
+        this.clientOwner = this.fleetCoordinationService.tokenStorage.getEmpireId();
     }
 
     private void listenerStatusMethod(ObservableValue<? extends Animation.Status> observableValue, Animation.Status status, Animation.Status status1) {
@@ -151,6 +176,58 @@ public class GameFleetController extends Pane {
 
     public void setFleet(Fleet fleet) {
         this.fleet = fleet;
+    }
+
+    public void showHealth() {
+        if (Objects.isNull(fleet.empire()) || health == maxHealth) {
+            this.fadeHealth.stop();
+            this.fadeHealthIcon.stop();
+            this.statsVisibility.setValue(true);
+            this.fadeHealth.setFromValue(1);
+            this.fadeHealth.setToValue(0);
+            this.fadeHealthIcon.setFromValue(1);
+            this.fadeHealthIcon.setToValue(0);
+            this.fadeHealth.play();
+            this.fadeHealthIcon.play();
+        } else {
+            this.statsVisibility.setValue(true);
+        }
+    }
+
+    public void calculateMaxHealth() {
+        Map<String, Double> maxHealthOfShips = shipService.getMaxHealthInfoMap();
+        health = 0;
+        maxHealth = 0;
+        for (Ships.ReadShipDTO ship : dynShipInFleet) {
+            health += ship.health();
+            maxHealth +=  maxHealthOfShips.get(ship.type());
+        }
+        this.healthText.setText(health + "/" + maxHealth);
+    }
+
+    public void refreshListOfShips(){
+        if (Objects.isNull(fleet) )  return;
+
+//         Objects.isNull(fleet.empire()) || !fleetOwner.equals(fleet.empire()) || fleet.size().isEmpty()
+        dynShipInFleet.clear();
+        shipService.recreateListOfShips(fleet._id(), dynShipInFleet);
+    }
+
+    public void refreshHealthInfo() {
+        calculateMaxHealth();
+        System.out.println(health + "/" + maxHealth);
+        showHealth();
+    }
+
+    @OnRender
+    public void createBinding(){
+        this.healthIcon.visibleProperty().bind(statsVisibility);
+        this.healthText.visibleProperty().bind(statsVisibility);
+        this.healthIcon.setImage(imageCache.get("assets/contactsAndWars/health.png"));
+        this.fadeHealth = new FadeTransition(Duration.seconds(8), this.healthText);
+        this.fadeHealthIcon = new FadeTransition(Duration.seconds(8), this.healthIcon);
+        // this.nameLabel.setText(fleet.name());
+        // this.nameLabel.setVisible(true);
     }
 
     @OnDestroy

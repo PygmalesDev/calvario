@@ -67,6 +67,7 @@ public class FleetCoordinationService {
     private ObservableList<Job> travelJobs = FXCollections.observableArrayList();
     private final List<Consumer<Fleet>> onFleetSelectedConsumers = new ArrayList<>();
     private final List<GameFleetController> enemyFleets = new ArrayList<>();
+    final Map<String, GameFleetController> mapOfFleetComponents = new HashMap<>();
 
     private final int ROTATE_DURATION = 2;
     public InGameController inGameController;
@@ -91,6 +92,7 @@ public class FleetCoordinationService {
         this.fleetService.onFleetCreated(this::putFleetOnMap);
         this.fleetService.onFleetDestroyed(this::deleteFleetFromMap);
         this.fleetService.onFleetLocationChanged(this::processTravelForEnemyFleets);
+        this.shipService.aliveFleets.clear();
     }
 
     private void setOnJobDeletion(Job job) {
@@ -135,15 +137,19 @@ public class FleetCoordinationService {
         } else {
             this.selectedFleet = fleet;
             fleet.toggleActive();
-//            if (!fleet.getFleet().size().isEmpty()) {
-//            System.out.println("your fleet has these ships: " + fleet.getFleet().size() );
-//            fleet.showHealth();
-//        }
+            if (!fleet.getFleet().size().isEmpty()) {
+            System.out.println("your fleet has these ships: " + fleet.getFleet().size() );
+            fleet.refreshListOfShips();
+            }
         }
         this.onFleetSelectedConsumers.forEach(func -> func.accept(this.getSelectedFleet()));
     }
 
     private void deleteFleetFromMap(Fleet fleet) {
+        var comp = shipService.mapOfFleetComponents.remove(fleet._id());
+        shipService.aliveFleets.remove(comp);
+        fleetService.updateFleets.remove(comp);
+        fleetService.mapOfFleetComponents.remove(fleet._id());
         if (Objects.nonNull(this.selectedFleet) && fleet.equals(this.selectedFleet.getFleet()))
             this.selectedFleet = null;
 
@@ -183,6 +189,9 @@ public class FleetCoordinationService {
         gameFleet.setLayoutY(parkingPoint.getY());
         gameFleet.setStartingPoint();
         gameFleet.collisionCircle.setRadius(Constants.FLEET_COLLISION_RADIUS);
+        mapOfFleetComponents.put(fleet._id(), gameFleet);
+        shipService.addFleetComponent(fleet._id(), gameFleet);
+        fleetService.mapOfFleetComponents.put(fleet._id(), gameFleet);
         return null;
     }
 
@@ -225,6 +234,7 @@ public class FleetCoordinationService {
         this.timerService.onGameTicked(this::processTravel);
         this.timerService.onSpeedChanged(this::processSpeedChanged);
         this.timerService.onGameTicked(() -> islandsService.refreshListOfColonizedSystems());
+         this.timerService.onGameTicked(() -> fleetService.updateTheseFleetsHealth());
     }
 
     public Fleet getSelectedFleet() {
@@ -499,6 +509,7 @@ public class FleetCoordinationService {
         this.enemyFleets.clear();
         this.pathEntries.clear();
         this.onFleetSelectedConsumers.clear();
+        this.mapOfFleetComponents.clear();
     }
 
     public void monitorFleetCollisions(IslandComponent islandComponent) {

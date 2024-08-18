@@ -150,7 +150,7 @@ public class IngameModule extends LobbyTestLoader {
 
     protected SystemDto[] GAME_SYSTEMS = new SystemDto[]{
             new SystemDto("0", "0", "islandID_1", GAME_ID, "regular", "TestIslandOne",
-                    Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(List.of(
+                    Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(List.of("energy",
                     "shipyard", "mine", "research")), Upgrade.colonized, 13, Map.of("islandID_2", 20,
                     "islandID_3", 20, "enemyIslandID", 20), 50, 50, EMPIRE_ID, 0),
 

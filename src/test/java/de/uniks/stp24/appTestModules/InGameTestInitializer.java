@@ -63,6 +63,8 @@ public class InGameTestInitializer extends ControllerTest {
     @Spy
     EmpireService empireService;
     @Spy
+    BattleService battleService;
+    @Spy
     public GameSystemsApiService gameSystemsApiService;
     @Spy
     PresetsApiService presetsApiService;
@@ -182,6 +184,8 @@ public class InGameTestInitializer extends ControllerTest {
     ContactDetailsComponent contactDetailsComponent;
     @InjectMocks
     WarComponent warComponent;
+    @InjectMocks
+    BattleResultComponent battleResultComponent;
 
     final Provider<MarketSeasonComponent> marketSeasonComponentProvider = () -> {
         MarketSeasonComponent comp = new MarketSeasonComponent();
@@ -195,6 +199,7 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.technologiesComponent = this.technologyOverviewComponent;
         this.inGameController.technologiesComponent.technologyCategoryComponent = this.technologyCategoryComponent;
         this.inGameController.technologiesComponent.technologyCategoryComponent.researchJobComponent = this.researchJobComponent;
+        this.inGameController.battleResultComponent = this.battleResultComponent;
 
 //        this.inGameController.technologiesComponent.technologyService = this.technologyService;
 //        this.inGameController.technologiesComponent.technologyCategoryComponent.technologyService = this.technologyService;
@@ -319,6 +324,12 @@ public class InGameTestInitializer extends ControllerTest {
         this.inGameController.contextMenuButtons = new HBox();
         this.islandsService.tokenStorage = new TokenStorage();
         this.islandsService.gameSystemsService = this.gameSystemsApiService;
+        this.islandsService.imageCache = this.imageCache;
+
+        this.battleService.fleetService = this.fleetService;
+        this.battleService.islandsService = this.islandsService;
+        this.battleService.contactsService = this.contactsService;
+        this.battleService.tokenStorage = this.tokenStorage;
 
         this.inGameController.fleetService = this.fleetService;
         this.inGameController.fleetCoordinationService = this.fleetCoordinationService;

@@ -40,6 +40,7 @@
     <Pane fx:id="shadow" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
     <StackPane id="eventContainer" fx:id="eventContainer" layoutX="450.0" layoutY="50.0" style=": ;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
     <StackPane fx:id="warContainer" layoutX="517.0" layoutY="292.0" prefHeight="260.0" prefWidth="450.0" />
+   <StackPane fx:id="battleResultContainer" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="250.0" />
     <StackPane fx:id="pauseMenuContainer" layoutX="440.0" layoutY="40.0" prefHeight="600.0" prefWidth="400.0" style=": ;" visible="false" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="440.0" AnchorPane.rightAnchor="440.0" AnchorPane.topAnchor="40.0" />
     <StackPane fx:id="helpWindowContainer" layoutX="450.0" layoutY="50.0" prefHeight="600.0" prefWidth="400.0" style=": ;" visible="false" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="450.0" AnchorPane.rightAnchor="430.0" AnchorPane.topAnchor="50.0" />
     <stylesheets>

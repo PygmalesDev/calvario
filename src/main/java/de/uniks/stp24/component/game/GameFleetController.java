@@ -96,7 +96,7 @@ public class GameFleetController extends Pane {
         if (status1.equals(Animation.Status.STOPPED) && this.currentPoint.getType().equals(POINT_TYPE.ISLAND) &&
         this.ownFleet) {
             this.fleetCoordinationService.inGameController.removeFogFromIsland(true, this.currentPoint.islandComponent);
-            this.fleetCoordinationService.monitorFleetCollisions();
+            this.fleetCoordinationService.monitorFleetCollisions(this.currentPoint.islandComponent);
         }
     }
 

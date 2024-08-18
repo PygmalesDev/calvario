@@ -15,6 +15,6 @@ public record EmpireDto(
         int portrait,
         String homeSystem,
         String[] traits,
-        Map<String, Integer> resources,
+        Map<String, Double> resources,
         String[] technologies) {
 }

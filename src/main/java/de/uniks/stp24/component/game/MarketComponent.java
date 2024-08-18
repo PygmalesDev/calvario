@@ -42,6 +42,8 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.*;
 
+import static de.uniks.stp24.component.game.ResourceComponent.refactorNumber;
+
 @Component(view = "MarketComponent.fxml")
 public class MarketComponent extends StackPane {
     @FXML
@@ -69,7 +71,7 @@ public class MarketComponent extends StackPane {
     @FXML
     ImageView selectedIconImage;
     @FXML
-    public ListView<Map.Entry<String, Integer>> resourcesListView;
+    public ListView<Map.Entry<String, Double>> resourcesListView;
     @FXML
     ListView<SeasonComponent> seasonalTradesListView;
 
@@ -107,17 +109,17 @@ public class MarketComponent extends StackPane {
     private String lastSeasonUpdate;
 
     public String selectedItem;
-    public int sellingPrice;
-    public int buyingPrice;
-    public int userCredits;
+    public double sellingPrice;
+    public double buyingPrice;
+    public double userCredits;
     public double marketFee;
-    public int resourceAmount;
+    public double resourceAmount;
     public boolean noPurchase;
 
     public Map<String, Double> variables = new HashMap<>();
-    public Map<String, Integer> resourceCountMap = new HashMap<>();
+    public Map<String, Double> resourceCountMap = new HashMap<>();
     public final Map<String, Double> resourcePriceMap = new HashMap<>();
-    public Map<String, Integer> resourceCountMapCopy = new HashMap<>();
+    public Map<String, Double> resourceCountMapCopy = new HashMap<>();
 
     @Inject
     public Provider<MarketSeasonComponent> marketSeasonComponentProvider = () -> {
@@ -186,7 +188,7 @@ public class MarketComponent extends StackPane {
      */
     private void setCreditCount() {
         userCredits = resourceCountMap.get("credits");
-        userCreditsLabel.setText(String.valueOf(userCredits));
+        userCreditsLabel.setText(refactorNumber(userCredits, gameResourceBundle));
     }
 
     /**
@@ -206,7 +208,7 @@ public class MarketComponent extends StackPane {
                         "games." + tokenStorage.getGameId() + ".empires." + tokenStorage.getEmpireId() + ".updated", EmpireDto.class),
                 event -> {
                     if (!lastUpdate.equals(event.data().updatedAt())) {
-                        Map<String, Integer> eventResources = event.data().resources();
+                        Map<String, Double> eventResources = event.data().resources();
                         if (!eventResources.equals(resourceCountMapCopy)) {
                             return;
                         }
@@ -232,7 +234,7 @@ public class MarketComponent extends StackPane {
         boolean userSelectedItem = selectedItem != null;
         boolean moreThanZeroGoods = numberOfGoods > 0;
         boolean enoughCredits = userCredits > buyingPrice;
-        boolean enoughResources = resourceCountMap.getOrDefault(selectedItem, 0) >= numberOfGoods;
+        boolean enoughResources = resourceCountMap.getOrDefault(selectedItem, 0.0) >= numberOfGoods;
 
         boolean userCanBuy = noDebts && enoughCredits && userSelectedItem && moreThanZeroGoods;
         boolean userCanSell = enoughResources && userSelectedItem && moreThanZeroGoods;
@@ -289,8 +291,8 @@ public class MarketComponent extends StackPane {
         this.sellingPrice = (int) Math.round((resourcePriceMap.get(resource) * numberOfGoods) * (1 - this.marketFee));
         this.buyingPrice = (int) Math.round((resourcePriceMap.get(resource) * numberOfGoods) * (1 + this.marketFee));
 
-        buyingPriceLabel.setText(String.valueOf(buyingPrice));
-        sellingPriceLabel.setText(String.valueOf(sellingPrice));
+        buyingPriceLabel.setText(refactorNumber(buyingPrice, gameResourceBundle));
+        sellingPriceLabel.setText(refactorNumber(sellingPrice, gameResourceBundle));
         buttonLogic();
     }
 
@@ -305,8 +307,8 @@ public class MarketComponent extends StackPane {
             noPurchase = true;
             resourceCountMapCopy = new HashMap<>(resourceCountMap);
             userCredits -= buyingPrice;
-            userCreditsLabel.setText(String.valueOf(userCredits));
-            int result = resourceCountMap.get(selectedItem) + resourceAmount;
+            userCreditsLabel.setText(refactorNumber(userCredits, gameResourceBundle));
+            double result = resourceCountMap.get(selectedItem) + resourceAmount;
             resourceCountMap.put(selectedItem, result);
             updateResources();
             refreshListview();
@@ -326,7 +328,7 @@ public class MarketComponent extends StackPane {
             resourceCountMapCopy = new HashMap<>(resourceCountMap);
 
             userCredits += sellingPrice;
-            userCreditsLabel.setText(String.valueOf(userCredits));
+            userCreditsLabel.setText(refactorNumber(userCredits, gameResourceBundle));
             resourceCountMap.put(selectedItem, resourceCountMap.get(selectedItem) + resourceAmount);
             updateResources();
             refreshListview();
@@ -385,7 +387,7 @@ public class MarketComponent extends StackPane {
     /**
      * Custom ListCell for displaying resources in the ListView.
      */
-    public class ResourceCell extends ListCell<Map.Entry<String, Integer>> {
+    public class ResourceCell extends ListCell<Map.Entry<String, Double>> {
         private final VBox vBox = new VBox();
         private final ImageView imageView = new ImageView();
         private final Text text = new Text();
@@ -399,7 +401,7 @@ public class MarketComponent extends StackPane {
         }
 
         @Override
-        protected void updateItem(Map.Entry<String, Integer> item, boolean empty) {
+        protected void updateItem(Map.Entry<String, Double> item, boolean empty) {
             super.updateItem(item, empty);
             if (empty || item == null) {
                 setText(null);
@@ -409,7 +411,7 @@ public class MarketComponent extends StackPane {
                 imageView.setImage(imageCache.get("/de/uniks/stp24/assets/market/buttons/" + item.getKey() + ".png"));
                 imageView.setFitWidth(35);
                 imageView.setFitHeight(35);
-                text.setText(String.valueOf(item.getValue()));
+                text.setText(refactorNumber(item.getValue(), gameResourceBundle));
                 text.setId(item.getKey() + "_marketGoods");
                 setGraphic(vBox);
             }
@@ -429,7 +431,7 @@ public class MarketComponent extends StackPane {
     @OnRender
     public void render() {
         loadSeasonalTrades();
-      
+
         // Create a Timeline for repeated action
         Timeline incrementTimeline = new Timeline(new KeyFrame(Duration.millis(100), actionEvent -> incrementAmount()));
         Timeline decrementTimeline = new Timeline(new KeyFrame(Duration.millis(100), actionEvent -> decrementAmount()));
@@ -447,21 +449,10 @@ public class MarketComponent extends StackPane {
     }
 
     private void setEvent(Timeline timelineInc, Timeline timelineDec, @NotNull Button buttonInc, @NotNull Button buttonDec) {
-        // Start the timeline when the button is pressed
-        buttonInc.setOnMousePressed(event -> {
-            timelineInc.playFromStart();
-        });
-        // Stop the timeline when the button is released
-        buttonInc.setOnMouseReleased(event -> {
-            timelineInc.stop();
-        });
-
-        buttonDec.setOnMousePressed(event -> {
-            timelineDec.playFromStart();
-        });
-        buttonDec.setOnMouseReleased(event -> {
-            timelineDec.stop();
-        });
+        buttonInc.setOnMousePressed(event -> timelineInc.playFromStart());
+        buttonInc.setOnMouseReleased(event -> timelineInc.stop());
+        buttonDec.setOnMousePressed(event -> timelineDec.playFromStart());
+        buttonDec.setOnMouseReleased(event -> timelineDec.stop());
     }
 
     /**
@@ -474,7 +465,7 @@ public class MarketComponent extends StackPane {
     /**
      * Adds a seasonal transaction.
      */
-    private void addSeasonalTransaction(String transactionType, int price) {
+    private void addSeasonalTransaction(String transactionType, double price) {
         SeasonComponent seasonComponent = new SeasonComponent(transactionType, this.selectedItem, resourceAmount, price, true);
         seasonComponents.add(seasonComponent);
         saveSeasonalTrades();
@@ -508,7 +499,7 @@ public class MarketComponent extends StackPane {
                 }
             }
         }
-        userCreditsLabel.setText(String.valueOf(userCredits));
+        userCreditsLabel.setText(refactorNumber(userCredits, gameResourceBundle));
     }
 
     /**
@@ -527,9 +518,9 @@ public class MarketComponent extends StackPane {
     /**
      * Performs a seasonal buy transaction.
      */
-    private void performSeasonalBuy(String resourceType, int resourceAmount) {
+    private void performSeasonalBuy(String resourceType, double resourceAmount) {
         this.resourceAmount = resourceAmount;
-        int buyCost = (int) Math.round((resourcePriceMap.get(resourceType) * this.resourceAmount) * (1 + this.marketFee));
+        double buyCost = Math.round((resourcePriceMap.get(resourceType) * this.resourceAmount) * (1 + this.marketFee));
         if (userCredits >= buyCost) {
             resourceCountMapCopy = resourceCountMap;
             userCredits -= buyCost;
@@ -542,9 +533,9 @@ public class MarketComponent extends StackPane {
     /**
      * Performs a seasonal sell transaction.
      */
-    private void performSeasonalSell(String resourceType, int resourceAmount) {
+    private void performSeasonalSell(String resourceType, double resourceAmount) {
         this.resourceAmount = resourceAmount;
-        int sellCost = (int) Math.round((resourcePriceMap.get(resourceType) * resourceAmount) * (1 - this.marketFee));
+        double sellCost = Math.round((resourcePriceMap.get(resourceType) * resourceAmount) * (1 - this.marketFee));
         if (resourceCountMap.get(resourceType) >= resourceAmount) {
             resourceCountMapCopy = new HashMap<>(resourceCountMap);
             userCredits += sellCost;

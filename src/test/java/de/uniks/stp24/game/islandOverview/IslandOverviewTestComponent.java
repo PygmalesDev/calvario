@@ -42,13 +42,13 @@ public class IslandOverviewTestComponent extends IslandOverviewTestInitializer {
     final ArrayList<String> buildings = new ArrayList();
     final List<Island> islands = new ArrayList<>();
 
-    final Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
-    final Map<String, Integer> upkeep = Map.of("energy", 3, "fuel", 8);
+    final Map<String, Double> cost = Map.of("energy", 3.0, "fuel", 2.0);
+    final Map<String, Double> upkeep = Map.of("energy", 3.0, "fuel", 8.0);
 
-    final Map<String, Integer> productionBuilding = Map.of("energy", 10, "fuel", 13);
-    final Map<String, Integer> productionSites = Map.of("energy", 13, "fuel", 12);
-    final Map<String, Integer> consumptionBuilding = Map.of("energy", 5, "fuel", 6);
-    final Map<String, Integer> consumptionSites = Map.of("energy", 20, "fuel", 19);
+    final Map<String, Double> productionBuilding = Map.of("energy", 10.0, "fuel", 13.0);
+    final Map<String, Double> productionSites = Map.of("energy", 13.0, "fuel", 12.0);
+    final Map<String, Double> consumptionBuilding = Map.of("energy", 5.0, "fuel", 6.0);
+    final Map<String, Double> consumptionSites = Map.of("energy", 20.0, "fuel", 19.0);
 
 
     final UpgradeStatus unexplored = new UpgradeStatus("unexplored", null, 0, 1, cost, upkeep, 1);

@@ -76,12 +76,12 @@ public class TestChartedIsland extends IslandOverviewTestComponent{
         Text amount2 = lookup("#amount2").query();
         Node showCons = lookup("#showConsumption").query();
 
-        assertEquals("+195", amount1.getText());
-        assertEquals("+199", amount2.getText());
+        assertEquals("+195.0", amount1.getText());
+        assertEquals("+199.0", amount2.getText());
         clickOn(showCons);
         waitForFxEvents();
-        assertEquals("-265", amount1.getText());
-        assertEquals("-275", amount2.getText());
+        assertEquals("-265.0", amount1.getText());
+        assertEquals("-275.0", amount2.getText());
 
         //"Sites" selected
         clickOn(this.inGameController.overviewSitesComponent.sitesButton);

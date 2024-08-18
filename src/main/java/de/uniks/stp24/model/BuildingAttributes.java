@@ -5,8 +5,8 @@ import java.util.Map;
 public record BuildingAttributes(
         String id,
         double build_time,
-        Map<String, Integer> cost,
-        Map<String, Integer> upkeep,
-        Map<String, Integer> production
+        Map<String, Double> cost,
+        Map<String, Double> upkeep,
+        Map<String, Double> production
 ) {
 }

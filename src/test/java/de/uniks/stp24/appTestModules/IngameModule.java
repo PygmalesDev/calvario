@@ -31,27 +31,27 @@ public class IngameModule extends LobbyTestLoader {
             USER_ID = "testUserID",
             ENEMY_ID = "enemyID";
 
-    protected final Map<String, Integer> DEV_RESOURCES = Map.of(
-            "credits", 1000000000,
-            "energy", 1000000000,
-            "minerals", 1000000000,
-            "food", 1000000000,
-            "fuel", 1000000000,
-            "research", 1000000000,
-            "alloys", 1000000000,
-            "consumer_goods", 1000000000
+    protected final Map<String, Double> DEV_RESOURCES = Map.of(
+            "credits", 1000000000.0,
+            "energy", 1000000000.0,
+            "minerals", 1000000000.0,
+            "food", 1000000000.0,
+            "fuel", 1000000000.0,
+            "research", 1000000000.0,
+            "alloys", 1000000000.0,
+            "consumer_goods", 1000000000.0
     );
 
-    protected final BuildingDto BUILDING_DTO = new BuildingDto("refinery", 3,
-            Map.of("minerals", 100),
-            Map.of("minerals", 10, "energy", 15),
-            Map.of("fuel", 10));
+    protected final BuildingDto BUILDING_DTO = new BuildingDto("refinery", 3.0,
+            Map.of("minerals", 100.0),
+            Map.of("minerals", 10.0, "energy", 15.0),
+            Map.of("fuel", 10.0));
 
-    protected final DistrictAttributes DISTRICT_ATTRIBUTES = new DistrictAttributes("energy", 3,
+    protected final DistrictAttributes DISTRICT_ATTRIBUTES = new DistrictAttributes("energy", 3.0,
             new HashMap<>(),
-            Map.of("minerals", 75),
-            Map.of("minerals", 2),
-            Map.of("energy", 30));
+            Map.of("minerals", 75.0),
+            Map.of("minerals", 2.0),
+            Map.of("energy", 30.0));
 
     protected final String[] JOB_EVENT_PATHS = new String[]{
             "games.FFFFFFFFFFFFFFFFFFF.empires.testEmpireID.jobs.jobClaimingID_1.",
@@ -377,8 +377,8 @@ public class IngameModule extends LobbyTestLoader {
 
     protected void loadUnloadableData() {
         this.islandAttributeStorage.systemUpgradeAttributes = new SystemUpgrades(
-                null, null, new UpgradeStatus("0","upgraded", 1, 0, Map.of("energy", 100),
-                Map.of("energy", 100), 0), null, null);
+                null, null, new UpgradeStatus("0","upgraded", 1, 0, Map.of("energy", 100.0),
+                Map.of("energy", 100.0), 0), null, null);
         this.islandAttributeStorage.buildingsAttributes = new ArrayList<>(List.of(new BuildingAttributes(
                 BUILDING_DTO.id(), BUILDING_DTO.build_time(), BUILDING_DTO.cost(), BUILDING_DTO.upkeep(),
                 BUILDING_DTO.production())));

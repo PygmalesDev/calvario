@@ -27,7 +27,7 @@ public class VariableTestComponent extends IslandOverviewTestInitializer{
     final IslandType myTestIsland = IslandType.valueOf("uninhabitable_0");
     final ArrayList<String> buildings = new ArrayList();
     final List<Island> islands = new ArrayList<>();
-    final Map<String, Integer> cost = Map.of("energy", 3, "fuel", 2);
+    final Map<String, Double> cost = Map.of("energy", 3.0, "fuel", 2.0);
     final Map<String,List<SeasonComponent>> _private = new HashMap<>();
     protected final AggregateResultDto HEALTH_DEF_DTO = new AggregateResultDto(200,null);
     protected final List<WarDto> EMPTY_WARDTO_LIST = new ArrayList<>();

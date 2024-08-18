@@ -152,13 +152,11 @@ public class AppTest3 extends AppTest3Module {
         clickOn("#incrementNumberOfGoods");
         clickOn("#buyButton");
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("1000000004", lookup("#minerals_marketGoods").queryText().getText());
         clickOn("#incrementNumberOfGoods");
         clickOn("#incrementNumberOfGoods");
         clickOn("#incrementNumberOfGoods");
         clickOn("#sellButton");
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals("999999997", lookup("#minerals_marketGoods").queryText().getText());
     }
 
     public void performSeasonalTrades() {

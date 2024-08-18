@@ -148,7 +148,7 @@ public class IngameModule extends LobbyTestLoader {
             new ExplainedVariableDTO("resources.consumer_goods.credit_value", 6.0, new ArrayList<>(), 6.0),
             new ExplainedVariableDTO("resources.consumer_goods.empire.market.fee", 0.3, new ArrayList<>(), 0.3)));
 
-    protected final SystemDto[] GAME_SYSTEMS = new SystemDto[]{
+    protected SystemDto[] GAME_SYSTEMS = new SystemDto[]{
             new SystemDto("0", "0", "islandID_1", GAME_ID, "regular", "TestIslandOne",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(List.of(
                     "shipyard", "mine", "research")), Upgrade.colonized, 13, Map.of("islandID_2", 20,
@@ -210,7 +210,7 @@ public class IngameModule extends LobbyTestLoader {
                     new LinkedList<>(List.of("islandID_1", "islandID_2", "islandID_4", "islandID_5")), new HashMap<>(), null)
     };
 
-    protected final ArrayList<ReadFleetDTO> FLEET_DTOS = new ArrayList<>(List.of(
+    protected ArrayList<ReadFleetDTO> FLEET_DTOS = new ArrayList<>(List.of(
             new ReadFleetDTO("a", "a",
                     "testFleetID_1", GAME_ID, EMPIRE_ID, "fleetName", GAME_SYSTEMS[0]._id(),
                     4, new HashMap<>(), new HashMap<>()),
@@ -311,10 +311,13 @@ public class IngameModule extends LobbyTestLoader {
     public void start(Stage stage) throws Exception {
         super.start(stage);
 
+        this.reassignData();
         this.initializeApiMocks();
         this.initializeEventListenerMocks();
         this.loadUnloadableData();
     }
+
+    protected void reassignData() {}
 
     protected void initializeEventListenerMocks() {
         doReturn(GAME_SUBJECT).when(this.eventListener)
@@ -336,7 +339,7 @@ public class IngameModule extends LobbyTestLoader {
     }
 
     protected void initializeApiMocks() {
-        doReturn(null).when(this.imageCache).get(any());
+//        doReturn(null).when(this.imageCache).get(any());
 
         when(this.tokenStorage.getEmpireId()).thenReturn(this.EMPIRE_ID);
         when(this.tokenStorage.getGameId()).thenReturn(GAME_ID);
@@ -368,11 +371,11 @@ public class IngameModule extends LobbyTestLoader {
         doAnswer(inv -> this.app.show(this.lobbyController)).when(this.app).show(eq("/lobby"), any());
 
         when(this.warService.getWars(any(),any())).thenReturn(Observable.just(EMPTY_WARDTO_LIST));
-        when(this.empireApiService.getPrivate(any(),any())).thenReturn(Observable.just(new EmpirePrivate(new HashMap<>())));
-//        when(this.gameLogicApiService.getAggregate(any(),any(),any())).thenReturn(Observable.just(HEALTH_DEF_DTO));
+        when(this.empireApiService.getPrivate(any(),any()))
+                .thenReturn(Observable.just(new EmpirePrivate(new HashMap<>())));
     }
 
-    private void loadUnloadableData() {
+    protected void loadUnloadableData() {
         this.islandAttributeStorage.systemUpgradeAttributes = new SystemUpgrades(
                 null, null, new UpgradeStatus("0","upgraded", 1, 0, Map.of("energy", 100),
                 Map.of("energy", 100), 0), null, null);
@@ -382,8 +385,6 @@ public class IngameModule extends LobbyTestLoader {
         this.islandAttributeStorage.districtAttributes = new ArrayList<>(List.of(DISTRICT_ATTRIBUTES));
         this.shipService.shipSpeeds = Map.of("explorer", 10.0, "colonizer", 2.0);
     }
-
-
 
     protected Event<Game> tickGame(int speed) {
         return new Event<>("games." + GAME_ID + ".ticked",

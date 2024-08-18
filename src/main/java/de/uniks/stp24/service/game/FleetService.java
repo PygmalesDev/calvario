@@ -100,8 +100,6 @@ public class FleetService {
                     }
                 }
                 case "updated" -> {
-                    System.out.println(ship.type() + " in fleet " + ship.fleet().substring(20) + " updated");
-                    System.out.println("health: " + event.data().health());
                     GameFleetController tmp = mapOfFleetComponents.get(event.data().fleet());
                     if (!updateFleets.contains(tmp)) updateFleets.add(tmp);
                 }
@@ -172,17 +170,11 @@ public class FleetService {
             this.subscriber.subscribe(this.jobsService.stopJob(job._id()), result -> {},
                     Throwable::printStackTrace));
         
-      System.out.println("groups 1");
         this.gameFleets.removeIf(other -> other.equals(fleet));
-        System.out.println("groups 2");
-//        this.empireFleets.remove(fleet.empire()); //get(fleet.empire()).removeIf(other -> other.equals(fleet));
-        this.empireFleets.get(fleet.empire()).removeIf(other -> other.equals(fleet));
-        System.out.println("groups 3");
-//        this.islandFleets.remove(fleet.location()); //get(fleet.location()).removeIf(other -> other.equals(fleet));
+        if (Objects.nonNull(fleet.empire()))
+            this.empireFleets.get(fleet.empire()).removeIf(other -> other.equals(fleet));
         this.islandFleets.get(fleet.location()).removeIf(other -> other.equals(fleet));
-        System.out.println("groups 4");
         this.fleetDestroyedConsumers.forEach(func -> func.accept(fleet));
-        System.out.println("groups 5");
     }
 
     public Observable<Job> beginTravelJob(ArrayList<String> path, String fleetID) {
@@ -254,11 +246,7 @@ public class FleetService {
     }
 
     public void updateTheseFleetsHealth() {
-        if (!updateFleets.isEmpty()) System.out.println("update fleets " + updateFleets.size() );
-        for (GameFleetController ctrl : updateFleets) {
-            System.out.println(ctrl.fleet._id().substring(20) + " -> " + ctrl.dynShipInFleet.size());
-            ctrl.refreshListOfShips();
-        }
+        for (GameFleetController ctrl : updateFleets) ctrl.refreshListOfShips();
         updateFleets.clear();
     }
 

@@ -4,6 +4,7 @@ import de.uniks.stp24.model.Ships.Ship;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class BattleEntry {
     public enum BATTLE_TYPE {
@@ -73,18 +74,11 @@ public class BattleEntry {
     }
 
     public boolean equals(String id1, String id2, String islandID, BATTLE_TYPE battleType) {
-        switch (battleType) {
-            case EMPIRES -> {
-                return this.islandID.equals(islandID) && (id1.equals(attacker) && id2.equals(defender) ||
-                        id1.equals(defender) && id2.equals(attacker));
-            }
-            case WILD -> {
-                return this.attacker.equals(id1) && this.islandID.equals(islandID);
-            }
-            default -> {
-                return false;
-            }
-        }
+        return switch (battleType) {
+            case EMPIRES -> this.islandID.equals(islandID) && (id1.equals(attacker) && id2.equals(defender) ||
+                            id1.equals(defender) && id2.equals(attacker));
+            case WILD -> this.attacker.equals(id1) && this.islandID.equals(islandID);
+        };
     }
 
     public boolean equals(String id1, String id2) {
@@ -92,6 +86,11 @@ public class BattleEntry {
     }
 
     public BattleEntry addShip(Ship ship) {
+        if (Objects.isNull(ship.empire())) {
+            this.addShipsLostByDefender(ship.type());
+            return this;
+        }
+
         if (ship.empire().equals(this.attacker))
             this.addShipsLostByAttacker(ship.type());
         else this.addShipsLostByDefender(ship.type());

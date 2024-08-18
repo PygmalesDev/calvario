@@ -72,6 +72,7 @@ public class VariableService {
 
 
     public void loadVariablesDataStructure() {
+        if(this.tokenStorage.isSpectator()) return;
         subscriber.subscribe(getFirstHalfOfVariables(),
                 firstHalf -> {
                     for (ExplainedVariableDTO explainedVariableDTO : firstHalf) {

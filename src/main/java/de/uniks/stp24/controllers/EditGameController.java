@@ -41,7 +41,7 @@ public class EditGameController extends BasicController {
     @FXML
     TextField editRepeatPasswordTextField;
     @FXML
-    Spinner<Integer> editMapSizeSpinner;
+    TextField editMapSizeTextfield;
     @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
@@ -66,11 +66,12 @@ public class EditGameController extends BasicController {
     @OnRender
     public void initialize() {
         editGameService.setEditGameController(this);
-        initializeSpinner();
         errorMessageTextEdit.setText("");
         errorBoxEdit.setVisible(true);
         initializeMaxMembersTextField();
         this.controlResponses = responseConstants.respEditGame;
+
+        CreateGameController.initializeMapSizeTextField(editMapSizeTextfield);
     }
 
     @OnRender
@@ -79,28 +80,21 @@ public class EditGameController extends BasicController {
         this.bubbleComponent.setCaptainText("");
     }
 
-    public void initializeSpinner() {
-        SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(50, 200);
-        editMapSizeSpinner.setValueFactory(valueFactory);
-    }
-
     // class was modified! some code was refactored
 // now use subscriber
     @OnKey(code = KeyCode.ENTER)
     public void editGame() {
         this.bubbleComponent.setErrorMode(false);
         int maxMembers = 0;
-        if (!maxMembersTextField.getText().isEmpty()) {
+        int mapSize = 0;
+        if (!maxMembersTextField.getText().isEmpty() && !editMapSizeTextfield.getText().isEmpty()) {
             maxMembers = Integer.parseInt(maxMembersTextField.getText());
+            mapSize = Integer.parseInt(editMapSizeTextfield.getText());
         }
-        GameSettings settings = new GameSettings(this.editMapSizeSpinner.getValue());
+        GameSettings settings = new GameSettings(mapSize);
         String gameName = this.editNameTextField.getText();
         String password = this.editPasswordTextField.getText();
-        boolean pwdMatch = password.equals(editRepeatPasswordTextField.getText());
-        if (checkIt(gameName, password) &&
-                pwdMatch &&
-                editGameService.nameIsAvailable(gameName) && maxMembers > 0) {
+        if (checkIt(gameName, password) && editGameService.nameIsAvailable(gameName) && maxMembers > 0 && !editMapSizeTextfield.getText().isEmpty()) {
             subscriber.subscribe(editGameService.editGame(gameName, settings, password, maxMembers),
                     result -> {
                         browseGameController.init();
@@ -115,7 +109,6 @@ public class EditGameController extends BasicController {
             this.bubbleComponent.setCaptainText(getErrorInfoText(409));
         } else {
             this.bubbleComponent.setErrorMode(true);
-            this.bubbleComponent.setCaptainText(getErrorInfoText(!pwdMatch ? -2 : -1));
         }
     }
 
@@ -135,8 +128,7 @@ public class EditGameController extends BasicController {
 
     @OnDestroy
     public void destroy() {
-        backgroundAnchorPane.setStyle("-fx-background-image: null");
-        cardBackgroundVBox.setStyle("-fx-background-image: null");
+
     }
 
     /*
@@ -150,6 +142,21 @@ public class EditGameController extends BasicController {
             }
             return null;
         }));
+    }
 
+    public void mapSize50() {
+        editMapSizeTextfield.setText("50");
+    }
+
+    public void mapSize100() {
+        editMapSizeTextfield.setText("100");
+    }
+
+    public void mapSize150() {
+        editMapSizeTextfield.setText("150");
+    }
+
+    public void mapSize200() {
+        editMapSizeTextfield.setText("200");
     }
 }

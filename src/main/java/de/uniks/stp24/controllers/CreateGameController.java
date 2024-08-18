@@ -14,7 +14,6 @@ import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Controller;
 import org.fulib.fx.annotation.controller.SubComponent;
 import org.fulib.fx.annotation.controller.Title;
-import org.fulib.fx.annotation.event.OnDestroy;
 import org.fulib.fx.annotation.event.OnKey;
 import org.fulib.fx.annotation.event.OnRender;
 
@@ -38,9 +37,7 @@ public class CreateGameController extends BasicController {
     @FXML
     TextField createPasswordTextField;
     @FXML
-    TextField createRepeatPasswordTextField;
-    @FXML
-    Spinner<Integer> createMapSizeSpinner;
+    TextField editMapSizeTextfield;
     @FXML
     AnchorPane backgroundAnchorPane;
     @FXML
@@ -54,9 +51,10 @@ public class CreateGameController extends BasicController {
     Pane captainContainer;
 
     @Inject
-    public CreateGameController(){
+    public CreateGameController() {
 
     }
+
     @Inject
     CreateGameService createGameService;
 
@@ -64,9 +62,26 @@ public class CreateGameController extends BasicController {
     public void initialize() {
         createGameService = (createGameService == null) ? new CreateGameService() : createGameService;
         createGameService.setCreateGameController(this);
-        initializeSpinner();
         initializeMaxMembersTextField();
         this.controlResponses = responseConstants.respCreateGame;
+        initializeMapSizeTextField(editMapSizeTextfield);
+    }
+
+    static void initializeMapSizeTextField(TextField editMapSizeTextfield) {
+        editMapSizeTextfield.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                editMapSizeTextfield.setText(newValue.replaceAll("\\D", ""));
+            } else if (!newValue.isEmpty()) {
+                try {
+                    int number = Integer.parseInt(newValue);
+                    if (number > 200) {
+                        editMapSizeTextfield.setText(oldValue);  // Wenn die Zahl >= 200 ist, bleibt der alte Wert bestehen
+                    }
+                } catch (NumberFormatException e) {
+                    editMapSizeTextfield.setText(oldValue);  // Falls eine ungültige Zahl eingegeben wurde, alten Wert setzen
+                }
+            }
+        });
     }
 
     @OnRender
@@ -75,51 +90,41 @@ public class CreateGameController extends BasicController {
         this.bubbleComponent.setCaptainText(this.resources.getString("pirate.newGame"));
     }
 
-    //Spinner for incrementing map size between 50 and 200
-    public void initializeSpinner(){
-        SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(50, 200);
-        createMapSizeSpinner.setValueFactory(valueFactory);
-    }
-
     // class was modified! some code was refactored
     // now use subscriber
     @OnKey(code = KeyCode.ENTER)
     public void createGame() {
+        int mapSize = 0;
+        int maxMembers = 0;
         String gameName = this.createNameTextField.getText();
         String password = this.createPasswordTextField.getText();
-        int maxMembers = 0;
-        if(!maxMembersTextField.getText().isEmpty()) {
+        if (!maxMembersTextField.getText().isEmpty() && !editMapSizeTextfield.getText().isEmpty()) {
             maxMembers = Integer.parseInt(maxMembersTextField.getText());
+            mapSize = Integer.parseInt(editMapSizeTextfield.getText());
         }
-        GameSettings settings = new GameSettings(this.createMapSizeSpinner.getValue());
-        boolean pwdMatch = (this.createPasswordTextField.getText().equals(createRepeatPasswordTextField.getText()));
-        if (checkIt(gameName, password) &&
-          pwdMatch &&
-          this.createMapSizeSpinner.getValue() != null &&
-          createGameService.nameIsAvailable(gameName) && maxMembers > 0) {
+        GameSettings settings = new GameSettings(mapSize);
+        if (checkIt(gameName, password) && !this.editMapSizeTextfield.getText().isEmpty() &&
+                createGameService.nameIsAvailable(gameName) && maxMembers > 0) {
             subscriber.subscribe(createGameService.createGame(gameName, settings, password, maxMembers),
-              result -> {
-                      browseGameController.init();
-                      app.show(browseGameController);
-              },
-              error -> {
-                  this.bubbleComponent.setErrorMode(true);
-                  this.bubbleComponent.setCaptainText(getErrorInfoText(error));
-              });
+                    result -> {
+                        browseGameController.init();
+                        app.show(browseGameController);
+                    },
+                    error -> {
+                        this.bubbleComponent.setErrorMode(true);
+                        this.bubbleComponent.setCaptainText(getErrorInfoText(error));
+                    });
 
         } else if (!createGameService.nameIsAvailable(gameName)) {
             this.bubbleComponent.setErrorMode(true);
-            this.bubbleComponent.setCaptainText(getErrorInfoText(409)); }
-        else {
+            this.bubbleComponent.setCaptainText(getErrorInfoText(409));
+        } else {
             this.bubbleComponent.setErrorMode(true);
-            this.bubbleComponent.setCaptainText(getErrorInfoText(
-              !pwdMatch ? -2 : -1));
         }
     }
 
     @OnKey(code = KeyCode.ESCAPE)
-    public void cancel(){
+    public void cancel() {
         app.show("/browseGames");
     }
 
@@ -141,10 +146,20 @@ public class CreateGameController extends BasicController {
         }));
     }
 
-    @OnDestroy
-    public void destroy(){
-        backgroundAnchorPane.setStyle("-fx-background-image: null");
-        cardBackgroundVBox.setStyle("-fx-background-image: null");
+    public void mapSize50() {
+        editMapSizeTextfield.setText("50");
+    }
+
+    public void mapSize100() {
+        editMapSizeTextfield.setText("100");
+    }
+
+    public void mapSize150() {
+        editMapSizeTextfield.setText("150");
+    }
+
+    public void mapSize200() {
+        editMapSizeTextfield.setText("200");
     }
 }
 

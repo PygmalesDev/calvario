@@ -59,8 +59,6 @@ public class CreateGameControllerTest extends ControllerTest {
 
         clickOn("#createPasswordTextField");
         write("1");
-        clickOn("#createRepeatPasswordTextField");
-        write("1");
 
         WaitForAsyncUtils.waitForFxEvents();
 

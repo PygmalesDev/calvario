@@ -49,17 +49,16 @@ public class PopupBuilder {
 
     public void setBlur(Node screenToBlur, Node screenTwoToBlur){
             this.screenOneToBlur = screenToBlur;
-
-            BoxBlur blur = new BoxBlur(10, 10, 3);
-            this.screenOneToBlur.setEffect(blur);
-            this.screenOneToBlur.setMouseTransparent(true);
-            if (screenTwoToBlur != null){
-                this.screenTwoToBlur = screenTwoToBlur;
-                this.screenTwoToBlur.setEffect(blur);
-                this.screenTwoToBlur.setMouseTransparent(true);
+            if (screenOneToBlur != null) {
+                BoxBlur blur = new BoxBlur(10, 10, 3);
+                this.screenOneToBlur.setEffect(blur);
+                this.screenOneToBlur.setMouseTransparent(true);
+                if (screenTwoToBlur != null) {
+                    this.screenTwoToBlur = screenTwoToBlur;
+                    this.screenTwoToBlur.setEffect(blur);
+                    this.screenTwoToBlur.setMouseTransparent(true);
+                }
             }
-
-
     }
 
     public void removeBlur(){

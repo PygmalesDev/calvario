@@ -110,22 +110,6 @@ ToggleButton:hover{
 }
 
 
-.languageButton:selected {
-    -fx-font-family: "PT Serif";
-    -fx-font-size: 20;
-    -fx-font-weight: bold;
-    -fx-background-color: #BF9000;
-    -fx-text-fill: WHITE;
-}
-
-.languageButton {
-    -fx-font-family: "PT Serif";
-    -fx-font-size: 20;
-    -fx-font-weight: bold;
-    -fx-background-color: #FFD966;
-    -fx-text-fill: BLACK;
-}
-
 .deleteAndSaveButton{
     -fx-font-family: "PT Serif";
     -fx-font-size: 20;
@@ -231,19 +215,7 @@ ToggleButton:hover{
     -fx-pref-height: 75px;
 }
 
-.eyeButton{
-    -fx-background-image: url("/de/uniks/stp24/icons/eye.png");
-    -fx-background-color: transparent;
-    -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-padding: 0;
-    -fx-border-width: 0;
-    -fx-pref-width: 25px;
-    -fx-pref-height: 25px;
-}
-
-.rememberMe {
+/*.rememberMe {
     -fx-font-family: "PT Serif";
     -fx-font-size: 24;
     -fx-font-weight: bold;
@@ -266,7 +238,7 @@ ToggleButton:hover{
 .rememberMe:selected .mark {
     -fx-background-color: #bf9000;
     -fx-border-color: #5d5454;
-}
+}*/
 
 .backButton{
     -fx-font-family: "PT Serif";
@@ -288,7 +260,7 @@ ToggleButton:hover{
     -fx-font-size: 20;
 }
 
-.licensesButton{
+/*.licensesButton{
     -fx-font-family: "PT Serif";
     -fx-font-size: 24;
     -fx-font-weight: bold;
@@ -299,7 +271,7 @@ ToggleButton:hover{
     -fx-background-position: center;
     -fx-padding: 0;
     -fx-border-width: 0;
-}
+}*/
 
 .license-back-button {
     -fx-font-family: "Stencil";
@@ -538,65 +510,11 @@ ToggleButton:hover{
 
 /**********************************************************************************************************************************/
 /************************* Lists **************************************************************************************************/
-.listBrowseGame, .listEnterGame{
-    -fx-background-color: transparent;
-}
-
-.listBrowseGame .list-cell{
-    -fx-font-family: "PT Serif";
-    -fx-font-size: 18;
-    -fx-font-weight: bold;
-    -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
-    -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-pref-width: 100;
-    -fx-pref-height: 50;
-}
 
 .userComponentText{
     -fx-font-family: "PT Serif";
     -fx-font-size: 10;
     -fx-font-weight: bold;
-}
-
-.listEnterGame .list-cell{
-    -fx-font-family: "PT Serif";
-    -fx-font-size: 16;
-    -fx-font-weight: bold;
-    -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
-    -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-pref-width: 180;
-    -fx-pref-height: 70;
-}
-
-.listBrowseGame .scroll-bar:vertical,
-.listEnterGame .scroll-bar:vertical{
-    -fx-background-color: transparent;
-    -fx-border-width: 1;
-}
-
-.listBrowseGame .virtual-flow .scroll-bar:vertical .thumb {
-    -fx-background-color: transparent;
-    -fx-background-size: 100% 100%;
-    -fx-background-image: url("/de/uniks/stp24/assets/buttons/listViewThumb.png");
-}
-
-.listEnterGame .virtual-flow .scroll-bar:vertical .thumb,
-.backgroundTextArea .scroll-bar:vertical .thumb {
-    -fx-background-color: black;
-}
-
-.listBrowseGame .scroll-bar:vertical .increment-button .increment-arrow, .listBrowseGame .scroll-bar .decrement-button .decrement-arrow,
-.listEnterGame .scroll-bar .increment-button .increment-arrow, .listEnterGame .scroll-bar .decrement-button .decrement-arrow,
-.backgroundTextArea .scroll-bar:vertical .increment-button .increment-arrow, .backgroundTextArea .decrement-button .decrement-arrow
-{
-    -fx-background-color: transparent;
-    -fx-background-image: none;
 }
 
 .listHeader{

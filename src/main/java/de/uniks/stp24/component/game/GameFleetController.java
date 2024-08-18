@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
@@ -30,6 +31,7 @@ import static de.uniks.stp24.service.Constants.FLEET_HW;
 @Component(view = "GameFleet.fxml")
 public class GameFleetController extends Pane {
     public Circle collisionCircle;
+    public Text fleetNameText;
 
     @FXML
     public ProgressBar healthBar;
@@ -48,6 +50,7 @@ public class GameFleetController extends Pane {
     private boolean ownFleet;
     public Fleet fleet;
 
+
     @Inject
     public GameFleetController(Fleet fleet, FleetCoordinationService fleetCoordinationService){
         this.fleet = fleet;
@@ -62,9 +65,7 @@ public class GameFleetController extends Pane {
         this.selectedDropShadow.setSpread(0.9);
 
         this.setId("ingameFleet_" + fleet._id());
-
-        this.travelTimeline.currentTimeProperty().addListener(this::listenerTimeMethod);
-
+        travelTimeline.currentTimeProperty().addListener(this::listenerTimeMethod);
         this.travelTimeline.statusProperty().addListener(this::listenerStatusMethod);
     }
 
@@ -89,6 +90,7 @@ public class GameFleetController extends Pane {
         this.empireCircle.setStroke(Color.web(color));
         this.selectedDropShadow.setColor(Color.web(color));
 
+        this.fleetNameText.setText(this.fleet.name());
         this.fleetImage.setImage(this.imageCache.get("/de/uniks/stp24/assets/other/fleet_on_map.png"));
         this.collisionCircle.setPickOnBounds(true);
     }

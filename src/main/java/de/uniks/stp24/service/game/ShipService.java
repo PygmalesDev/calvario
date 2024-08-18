@@ -136,7 +136,7 @@ public class ShipService {
                     }
                 }
             }
-        }, error -> System.out.println("Error initializing shipListener in ShipService :\n" + error.getMessage()));
+        }, Throwable::printStackTrace);
     }
 
     public void deleteShipFromGroups(ReadShipDTO ship) {

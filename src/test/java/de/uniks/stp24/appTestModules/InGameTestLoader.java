@@ -68,6 +68,8 @@ public class InGameTestLoader extends ControllerTest {
     @Spy
     TimerService timerService;
     @Spy
+    BattleService battleService;
+    @Spy
     public GameLogicApiService gameLogicApiService;
     @Spy
     VariableDependencyService variableDependencyService;
@@ -154,6 +156,8 @@ public class InGameTestLoader extends ControllerTest {
     protected JobsService jobsService;
     @InjectMocks
     protected CoolerBubbleComponent coolerBubbleComponent;
+    @InjectMocks
+    protected BattleResultComponent battleResultComponent;
 
     @InjectMocks
     protected ContactsComponent contactsComponent;
@@ -261,6 +265,7 @@ public class InGameTestLoader extends ControllerTest {
         this.inGameController.contactsOverviewComponent.warService = this.warService;
         this.inGameController.warComponent = this.warComponent;
         this.inGameController.contactsOverviewComponent.contactDetailsComponent = this.contactDetailsComponent;
+        this.inGameController.battleResultComponent = this.battleResultComponent;
 
         this.coolerBubbleComponent.announcementsService = this.announcementsService;
         this.coolerBubbleComponent.gameResourceBundle = this.gameResourceBundle;
@@ -344,6 +349,7 @@ public class InGameTestLoader extends ControllerTest {
         this.islandsService.tokenStorage = this.tokenStorage;
         this.islandsService.subscriber = new Subscriber();
         this.islandsService.app = this.app;
+        this.islandsService.imageCache = this.imageCache;
 
         this.inGameService.presetsApiService = this.presetsApiService;
         this.inGameService.gameStatus = this.gameStatus;
@@ -387,6 +393,11 @@ public class InGameTestLoader extends ControllerTest {
         this.timerService.gamesApiService = this.gamesApiService;
         this.timerService.tokenStorage = this.tokenStorage;
         this.timerService.subscriber = new Subscriber();
+
+        this.battleService.fleetService = this.fleetService;
+        this.battleService.islandsService = this.islandsService;
+        this.battleService.contactsService = this.contactsService;
+        this.battleService.tokenStorage = this.tokenStorage;
 
         this.eventComponent.tokenStorage = this.tokenStorage;
         this.eventComponent.subscriber = new Subscriber();
@@ -477,7 +488,6 @@ public class InGameTestLoader extends ControllerTest {
 
         this.technologyCategoryComponent.jobsService = this.jobsService;
 
-
         this.fleetCoordinationService.islandsService = this.islandsService;
         this.fleetCoordinationService.timerService = this.timerService;
         this.fleetCoordinationService.tokenStorage = this.tokenStorage;
@@ -490,7 +500,6 @@ public class InGameTestLoader extends ControllerTest {
         this.fleetService.jobsApiService = this.jobsApiService;
         this.fleetService.eventListener = this.eventListener;
         this.fleetService.subscriber = new Subscriber();
-
 
         this.islandTravelComponent.fleetCoordinationService = this.fleetCoordinationService;
         this.islandTravelComponent.fleetService = this.fleetService;

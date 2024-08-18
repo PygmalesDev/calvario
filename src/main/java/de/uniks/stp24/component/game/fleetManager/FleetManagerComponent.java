@@ -188,6 +188,8 @@ public class FleetManagerComponent extends AnchorPane {
         blueprintButton.setVisible(false);
         shipsButton.setVisible(false);
         createFleetButton.setVisible(true);
+        this.blueprintsListView.setCellFactory(list -> new ComponentListCell<>(app, blueprintsNotAddableComponentProvider));
+
 
         this.fleetNameText.setText("Fleets");
 
@@ -200,7 +202,6 @@ public class FleetManagerComponent extends AnchorPane {
         this.blueprints.clear();
         System.out.println(shipService.shipTypesAttributes);
         this.blueprints.addAll(shipService.shipTypesAttributes);
-        this.blueprintsListView.setCellFactory(list -> new ComponentListCell<>(app, blueprintsNotAddableComponentProvider));
 
         this.shipsVBox.setVisible(false);
         this.blueprintsListView.setVisible(true);

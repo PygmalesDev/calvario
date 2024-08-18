@@ -35,6 +35,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static de.uniks.stp24.model.Jobs.Job;
@@ -145,6 +146,9 @@ public class FleetManagerComponent extends AnchorPane {
         this.jobsService.onJobsLoadingFinished("ship", this::setShipFinisher);
         this.newFleetComponent.setFleetManager(this);
         this.changeFleetComponent.setFleetManager(this);
+        this.fleetService.onFleetDestroyed(fleet -> {
+            if (Objects.nonNull(this.editedFleet) && this.editedFleet.equals(fleet)) this.showFleets();
+        });
     }
 
     @OnRender
@@ -183,6 +187,8 @@ public class FleetManagerComponent extends AnchorPane {
         this.shipService.clearEditedFleetInfos();
         shipImageView.setImage(imageCache.get("icons/ships/ship_Image_With_Frame1.png"));
 
+        this.blueprintsListView.setCellFactory(list -> new ComponentListCell<>(app, blueprintsNotAddableComponentProvider));
+
         commandLimitLabel.setVisible(false);
         islandLabel.setVisible(false);
         blueprintButton.setVisible(false);
@@ -198,9 +204,7 @@ public class FleetManagerComponent extends AnchorPane {
     public void showBlueprints() {
         this.shipLabel.setText("Blueprints");
         this.blueprints.clear();
-        System.out.println(shipService.shipTypesAttributes);
         this.blueprints.addAll(shipService.shipTypesAttributes);
-        this.blueprintsListView.setCellFactory(list -> new ComponentListCell<>(app, blueprintsNotAddableComponentProvider));
 
         this.shipsVBox.setVisible(false);
         this.blueprintsListView.setVisible(true);
@@ -213,6 +217,7 @@ public class FleetManagerComponent extends AnchorPane {
     }
 
     public void close() {
+        this.shipService.clearEditedFleetInfos();
         this.setVisible(false);
     }
 

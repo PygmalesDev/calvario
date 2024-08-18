@@ -144,6 +144,9 @@ public class FleetCoordinationService {
     }
 
     private void deleteFleetFromMap(Fleet fleet) {
+        if (Objects.nonNull(this.selectedFleet) && fleet.equals(this.selectedFleet.getFleet()))
+            this.selectedFleet = null;
+
         this.mapGrid.removeIf(node -> {
             if (node instanceof GameFleetController fleetController)
                 return (fleetController.getFleet().equals(fleet));
@@ -197,7 +200,7 @@ public class FleetCoordinationService {
             gameFleet.setCurrentPoint(distancePoints.removeFirst());
             gameFleet.setLayoutX(location.getX());
             gameFleet.setLayoutY(location.getY());
-            gameFleet.setRotate(this.getDirectionalAngle(
+            gameFleet.fleetImage.setRotate(this.getDirectionalAngle(
                     gameFleet.getCurrentPoint().getPrev(),
                     gameFleet.getCurrentPoint()));
             this.processSpeedChanged(gameFleet);
@@ -244,24 +247,24 @@ public class FleetCoordinationService {
 
     private void processSpeedChanged(GameFleetController fleet) {
         if (this.timerService.getServerSpeed() == 0) fleet.stopTravel();
-        else fleet.travelToPoint(this.createSpeedChangedKeyframe(fleet), fleet.getCurrentPoint());
+        else fleet.travelToPoint(this.createSpeedChangedKeyframe(fleet), fleet.getCurrentPoint(), true);
     }
 
     private void processTravel() {
         this.coordinatedPaths.forEach((fleet, points) -> {
             if (!points.isEmpty())
-                fleet.travelToPoint(this.createTravelKeyFrames(fleet, points.getFirst(), 60), points.removeFirst());
+                fleet.travelToPoint(this.createTravelKeyFrames(fleet, points.getFirst(), 60), points.removeFirst(), true);
         });
     }
 
     private void processTravel(GameFleetController fleet) {
         fleet.travelToPoint(this.createTravelKeyFrames(fleet, this.coordinatedPaths.get(fleet).getFirst(), 60),
-                this.coordinatedPaths.get(fleet).removeFirst());
+                this.coordinatedPaths.get(fleet).removeFirst(), true);
     }
 
     private void processFinish(GameFleetController fleet, IslandComponent finishIsland) {
         DistancePoint endPoint = this.findParkingPoint(new DistancePoint(finishIsland, fleet.getCurrentPoint()));
-        fleet.travelToPoint(this.createTravelKeyFrames(fleet, endPoint, 60), endPoint);
+        fleet.travelToPoint(this.createTravelKeyFrames(fleet, endPoint, 60), endPoint, true);
     }
 
     private void processReturn(GameFleetController fleet) {
@@ -273,7 +276,7 @@ public class FleetCoordinationService {
             while (Objects.nonNull(prevIslandPoint.getPrev()) && !prevIslandPoint.getType().equals(POINT_TYPE.ISLAND))
                 prevIslandPoint = prevIslandPoint.getPrev();
         }
-        fleet.travelToPoint(this.createReturnKeyFrames(fleet, prevIslandPoint), prevIslandPoint);
+        fleet.travelToPoint(this.createReturnKeyFrames(fleet, prevIslandPoint), prevIslandPoint, true);
     }
 
     private void processTravelForEnemyFleets(Fleet fleet) {
@@ -283,7 +286,7 @@ public class FleetCoordinationService {
                         DistancePoint destination = this.findParkingPoint(new DistancePoint(
                                 this.islandsService.getIslandComponent(fleet.location()),
                                 gameFleet.getCurrentLocation()));
-                        gameFleet.travelToPoint(this.createTravelKeyFrames(gameFleet, destination, 24), destination);
+                        gameFleet.travelToPoint(this.createTravelKeyFrames(gameFleet, destination, 24), destination, false);
                         gameFleet.setFleet(fleet);
                         return gameFleet;
                     }).orElseThrow();
@@ -298,7 +301,7 @@ public class FleetCoordinationService {
     private List<KeyFrame> createTravelKeyFrames(GameFleetController fleet, DistancePoint nextPoint, double speed) {
         return List.of(
                 new KeyFrame(Duration.seconds(ROTATE_DURATION),
-                        new KeyValue(fleet.rotateProperty(), getDirectionalAngle(nextPoint.getPrev(), nextPoint), Interpolator.EASE_BOTH),
+                        new KeyValue(fleet.fleetImage.rotateProperty(), getDirectionalAngle(nextPoint.getPrev(), nextPoint), Interpolator.EASE_BOTH),
                         new KeyValue(fleet.layoutXProperty(), nextPoint.getPrev().getX()-FLEET_HW, Interpolator.EASE_BOTH),
                         new KeyValue(fleet.layoutYProperty(), nextPoint.getPrev().getY()-FLEET_HW, Interpolator.EASE_BOTH)),
                 new KeyFrame(Duration.seconds((speed/ (double) this.timerService.getServerSpeed())-ROTATE_DURATION),
@@ -326,7 +329,7 @@ public class FleetCoordinationService {
         DistancePoint parkingPoint = this.findParkingPoint(returnPoint);
         return List.of(
                 new KeyFrame(Duration.seconds(ROTATE_DURATION),
-                        new KeyValue(fleet.rotateProperty(), getDirectionalAngle(
+                        new KeyValue(fleet.fleetImage.rotateProperty(), getDirectionalAngle(
                                 fleet.getCurrentLocation(), parkingPoint), Interpolator.EASE_BOTH)),
 
                 new KeyFrame(Duration.seconds(4),
@@ -498,22 +501,12 @@ public class FleetCoordinationService {
         this.onFleetSelectedConsumers.clear();
     }
 
-    public void monitorFleetCollisions() {
-        for (IslandComponent islandComponent : islandsService.getIslandComponentList()) {
-            if (islandComponent.isCollided(selectedFleet.getLayoutX(), selectedFleet.getLayoutY(), Constants.FLEET_COLLISION_RADIUS)) {
-                System.out.println("------------------------------------------COLLISION-------------------------------------- ");
-                System.out.println("island: " + islandComponent.getIsland().id() + " at "
-                  + islandComponent.getPosX() + ", " + islandComponent.getPosY());
-                System.out.println("islandOwnerID" + islandComponent.getIsland().owner());
-                System.out.println("fleetOwnerID" + selectedFleet.getFleet().empire());
-
-                if(Objects.nonNull(islandComponent.getIsland().owner())){
-                    if (!islandComponent.getIsland().owner().equals(selectedFleet.getFleet().empire()) && !islandComponent.getIsland().owner().equals(this.tokenStorage.getEmpireId())){
-                        System.out.println("Enemy  detected");
-                        islandsService.refreshListOfColonizedSystems();
-                        contactsService.addEnemy(islandComponent.getIsland().owner(), islandComponent.getIsland().id());
-//                        battleService.startBattle(tokenStorage.getEmpireId(), islandComponent.getIsland().owner(), islandComponent.island.id());
-                    }
+    public void monitorFleetCollisions(IslandComponent islandComponent) {
+        if (islandComponent.isCollided(selectedFleet.getLayoutX(), selectedFleet.getLayoutY(), Constants.FLEET_COLLISION_RADIUS)) {
+            if(Objects.nonNull(islandComponent.getIsland().owner())){
+                if (!islandComponent.getIsland().owner().equals(selectedFleet.getFleet().empire()) && !islandComponent.getIsland().owner().equals(this.tokenStorage.getEmpireId())){
+                    islandsService.refreshListOfColonizedSystems();
+                    contactsService.addEnemy(islandComponent.getIsland().owner(), islandComponent.getIsland().id());
                 }
             }
         }

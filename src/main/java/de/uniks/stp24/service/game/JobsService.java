@@ -32,7 +32,7 @@ public class JobsService {
     @Inject
     public EventListener eventListener;
 
-    final Map<String, ObservableList<Job>> jobCollections = new HashMap<>();
+    public final Map<String, ObservableList<Job>> jobCollections = new HashMap<>();
     final Map<String, ArrayList<Runnable>> jobCompletionFunctions = new HashMap<>();
     final Map<String, ArrayList<Runnable>> jobDeletionFunctions = new HashMap<>();
     final Map<String, Consumer<Job>> jobInspectionFunctions = new HashMap<>();

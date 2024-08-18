@@ -16,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import org.fulib.fx.annotation.controller.Component;
@@ -30,6 +31,7 @@ import static de.uniks.stp24.service.Constants.FLEET_HW;
 @Component(view = "GameFleet.fxml")
 public class GameFleetController extends Pane {
     public Circle collisionCircle;
+    public Text fleetNameText;
 
     @FXML
     public ProgressBar healthBar;
@@ -45,6 +47,7 @@ public class GameFleetController extends Pane {
     private DistancePoint currentPoint;
     private final Timeline travelTimeline = new Timeline();
     private final Rotate rotate = new Rotate();
+    private boolean ownFleet;
     public Fleet fleet;
 
 
@@ -62,36 +65,32 @@ public class GameFleetController extends Pane {
         this.selectedDropShadow.setSpread(0.9);
 
         this.setId("ingameFleet_" + fleet._id());
-       // this.travelTimeline.setOnFinished(event -> {
-       //     if (this.currentPoint.getType().equals(POINT_TYPE.ISLAND)){
-       //         this.fleetCoordinationService.monitorFleetCollisions();
-       //     }
-       // });
-
         travelTimeline.currentTimeProperty().addListener(this::listenerTimeMethod);
-
         this.travelTimeline.statusProperty().addListener(this::listenerStatusMethod);
     }
 
     private void listenerStatusMethod(ObservableValue<? extends Animation.Status> observableValue, Animation.Status status, Animation.Status status1) {
-        if (status1.equals(Animation.Status.STOPPED) && this.currentPoint.getType().equals(POINT_TYPE.ISLAND)){
-//            this.travelTimeline.currentTimeProperty().removeListener(this::listenerTimeMethod);
+        if (status1.equals(Animation.Status.STOPPED) && this.currentPoint.getType().equals(POINT_TYPE.ISLAND) &&
+        this.ownFleet) {
             this.fleetCoordinationService.inGameController.removeFogFromIsland(true, this.currentPoint.islandComponent);
-//            travelTimeline.currentTimeProperty().addListener(this::listenerTimeMethod);
+            this.fleetCoordinationService.monitorFleetCollisions(this.currentPoint.islandComponent);
         }
     }
 
     private void listenerTimeMethod(ObservableValue<? extends Duration> observableValue, Duration duration, Duration duration1) {
-        fleetCoordinationService.inGameController.removeFogFromShape(new Circle(this.getLayoutX() + FLEET_HW/2 + 10,
-                this.getLayoutY() + FLEET_HW/2 + 15,
-                collisionCircle.getRadius()*1.3)
-        );
+        if (this.ownFleet) {
+            fleetCoordinationService.inGameController.removeFogFromShape(new Circle(this.getLayoutX() + FLEET_HW / 2 + 10,
+                    this.getLayoutY() + FLEET_HW / 2 + 15,
+                    collisionCircle.getRadius() * 1.3)
+            );
+        }
     }
 
     public void renderWithColor(String color) {
         this.empireCircle.setStroke(Color.web(color));
         this.selectedDropShadow.setColor(Color.web(color));
 
+        this.fleetNameText.setText(this.fleet.name());
         this.fleetImage.setImage(this.imageCache.get("/de/uniks/stp24/assets/other/fleet_on_map.png"));
         this.collisionCircle.setPickOnBounds(true);
     }
@@ -106,11 +105,11 @@ public class GameFleetController extends Pane {
         else this.fleetImage.setEffect(null);
     }
 
-    public void travelToPoint(List<KeyFrame> keyFrame, DistancePoint currentPoint) {
+    public void travelToPoint(List<KeyFrame> keyFrame, DistancePoint currentPoint, boolean ownFleet) {
         this.travelTimeline.stop();
         this.travelTimeline.getKeyFrames().clear();
         this.currentPoint = currentPoint;
-
+        this.ownFleet = ownFleet;
         this.travelTimeline.getKeyFrames().addAll(keyFrame);
         this.travelTimeline.play();
     }

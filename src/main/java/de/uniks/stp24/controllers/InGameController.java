@@ -11,7 +11,6 @@ import de.uniks.stp24.dto.SystemDto;
 import de.uniks.stp24.model.GameStatus;
 import de.uniks.stp24.model.Island;
 import de.uniks.stp24.model.Jobs;
-import de.uniks.stp24.model.*;
 import de.uniks.stp24.records.GameListenerTriple;
 import de.uniks.stp24.rest.GameSystemsApiService;
 import de.uniks.stp24.service.InGameService;
@@ -111,6 +110,8 @@ public class InGameController extends BasicController {
     StackPane pauseMenuContainer;
     @FXML
     StackPane islandClaimingContainer;
+    @FXML
+    StackPane battleResultContainer;
 
     @FXML
     public StackPane clockComponentContainer;
@@ -136,6 +137,10 @@ public class InGameController extends BasicController {
     public FleetCoordinationService fleetCoordinationService;
     @Inject
     public TechnologyService technologyService;
+
+    @Inject
+    @SubComponent
+    public BattleResultComponent battleResultComponent;
 
     @SubComponent
     @Inject
@@ -205,6 +210,8 @@ public class InGameController extends BasicController {
     public FleetManagerComponent fleetManagerComponent;
     @Inject
     public FogOfWar fogOfWar;
+    @Inject
+    public BattleService battleService;
 
     public List<IslandComponent> islandComponentList;
     Map<String, IslandComponent> islandComponentMap;
@@ -294,6 +301,7 @@ public class InGameController extends BasicController {
 
         variableService.addRunnable(this::loadGameAttributes);
         variableService.initVariables();
+        battleService.setBattleConditionUpdates();
 
         if (!tokenStorage.isSpectator()) {
             this.subscriber.subscribe(empireService.getEmpire(gameID, empireID),
@@ -400,6 +408,9 @@ public class InGameController extends BasicController {
         });
         this.createContextMenuButtons();
 
+        this.battleResultComponent.setVisible(false);
+        this.battleResultContainer.setPickOnBounds(false);
+
         // make pop ups draggable
         draggables.add(eventContainer);
         draggables.add(deleteStructureWarningContainer);
@@ -416,11 +427,13 @@ public class InGameController extends BasicController {
         contactsOverviewComponent.setParents(contextMenuContainer, contactDetailsContainer);
         contactsOverviewComponent.contactDetailsComponent.setWarComponent(warComponent);
         warComponent.setParent(warContainer);
+        this.battleResultContainer.getChildren().add(battleResultComponent);
+        battleService.setBattleResultComponent(battleResultComponent);
         contactService.setContactOverview(contactsOverviewComponent);
 
         this.fleetService.loadGameFleets();
-        this.fleetService.initializeFleetListeners();
         this.fleetService.initializeShipListener();
+        this.fleetService.initializeFleetListeners();
 
 //        this.mapGrid.setOnMouseClicked(this.fleetCoordinationService::travelToMousePosition);
         explanationService.setInGameController(this);
@@ -450,7 +463,6 @@ public class InGameController extends BasicController {
                 System.out.println("in InGameController cannot be refreshed");
             }
         });
-        System.out.println("end of render. devs?  " + islandsService.getDevIsles().size() );
         contactService.getEmpiresInGame();
 
     }
@@ -646,7 +658,7 @@ public class InGameController extends BasicController {
          * zoom function working but not perfect!
          * it's necessary to check deltaX and deltaY because 'shiftdown' switches deltas in event
          */
-        mapGrid.setOnScroll(event -> {
+        zoomPane.setOnScroll(event -> {
             if (event.isShiftDown() && (event.getDeltaY() > 0 || event.getDeltaX() > 0)) {
                 scale += 0.1;
                 scale = Math.min(scale, 3);
@@ -665,9 +677,15 @@ public class InGameController extends BasicController {
                         tokenStorage.getGameId(), "*"), SystemDto.class),
                 event -> {
                     IslandComponent isle = islandsService.getIslandComponent(event.data()._id());
+                    Island oldIsland = isle.getIsland();
                     Island updatedIsland = islandsService.convertToIsland(event.data());
                     isle.applyInfo(updatedIsland);
+
                     if (Objects.nonNull(updatedIsland.owner())) {
+
+                        if (Objects.nonNull(oldIsland.owner()) && !oldIsland.owner().equals(event.data().owner()))
+                            this.battleService.checkBattleConditionOnIslandClaimed(isle.island);
+
                         // apply drop shadow and flag
                         isle.applyEmpireInfo();
                         this.islandsService.updateIsles(updatedIsland);
@@ -815,6 +833,9 @@ public class InGameController extends BasicController {
                 showTechnologies()
         );
 
+        this.jobsService.setJobInspector("show_fleet_manager", (Jobs.Job job) ->
+                showFleetManager()
+        );
     }
 
     public void showOverview() {

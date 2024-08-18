@@ -150,8 +150,9 @@ public class IngameModule extends LobbyTestLoader {
 
     protected final SystemDto[] GAME_SYSTEMS = new SystemDto[]{
             new SystemDto("0", "0", "islandID_1", GAME_ID, "regular", "TestIslandOne",
-                    Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
-                    Upgrade.colonized, 13, Map.of("islandID_2", 20, "islandID_3", 20), 50, 50, EMPIRE_ID, 100),
+                    Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(List.of(
+                    "shipyard", "mine", "research")), Upgrade.colonized, 13, Map.of("islandID_2", 20,
+                    "islandID_3", 20, "enemyIslandID", 20), 50, 50, EMPIRE_ID, 0),
 
             new SystemDto("0", "0", "islandID_2", GAME_ID, "regular", "TestIslandTwo",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
@@ -167,7 +168,12 @@ public class IngameModule extends LobbyTestLoader {
 
             new SystemDto("0", "0", "islandID_5", GAME_ID, "regular", "TestIslandFive",
                     Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
-                    Upgrade.explored, 13, Map.of("islandID_4", 20), 85, 62, null, 100)
+                    Upgrade.explored, 13, Map.of("islandID_4", 20), 85, 62, null, 0),
+
+            new SystemDto("0", "0", "enemyIslandID", GAME_ID, "regular", "EnemyIsland",
+                    Map.of("energy", 13), Map.of("energy", 0), 23, new ArrayList<>(),
+                    Upgrade.colonized, 13, Map.of("islandID_1", 20), 35, 60, ENEMY_EMPIRE_ID, 0)
+
     };
 
     protected final CreateSystemsDto CREATE_SYSTEM_DTO = new CreateSystemsDto(

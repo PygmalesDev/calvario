@@ -52,7 +52,7 @@ public class App extends FulibFxApp {
             cssFxStop = CSSFX.start(primaryStage);
 
             primaryStage.setWidth(1280);
-            primaryStage.setHeight(680);
+            primaryStage.setHeight(720);
 
             primaryStage.centerOnScreen();
             setAppIcon(primaryStage);

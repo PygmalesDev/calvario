@@ -45,7 +45,6 @@ public class GameComponent extends HBox implements ReusableItemComponent<Game> {
         this.setOnMouseClicked(event -> {
             editGameService.setClickedGame(game);
             browseGameService.handleGameSelection(game);
-            game_name.setFill(Color.RED);
             bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.which.game"));
         });
     }
@@ -59,9 +58,9 @@ public class GameComponent extends HBox implements ReusableItemComponent<Game> {
         }
         //Your game will be displayed in color green
         if (game.owner().equals(tokenStorage.getUserId())) {
-            game_name.setFill(Color.BLUE);
-        } else {
             game_name.setFill(Color.BLACK);
+        } else {
+            game_name.setFill(Color.WHITE);
         }
         this.game = game;
     }

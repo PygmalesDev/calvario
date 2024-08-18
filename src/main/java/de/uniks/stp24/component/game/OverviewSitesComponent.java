@@ -258,7 +258,7 @@ public class OverviewSitesComponent extends AnchorPane {
     public void setIslandName() {
         if (this.isNameEditable) {
             this.inputIslandName.setEditable(false);
-            this.inputIslandName.setStyle("-fx-text-fill: black");
+//            this.inputIslandName.setStyle("-fx-text-fill: black");
             this.islandNameButton.getStyleClass().clear();
             this.islandNameButton.getStyleClass().add("islandChangeNameDisabled");
 
@@ -272,7 +272,7 @@ public class OverviewSitesComponent extends AnchorPane {
                             "OverviewSitesComponent: \n%s", error.getMessage()));
         } else {
             this.inputIslandName.setEditable(true);
-            this.inputIslandName.setStyle("-fx-text-fill: blue");
+//            this.inputIslandName.setStyle("-fx-text-fill: blue");
             this.islandNameButton.getStyleClass().clear();
             this.islandNameButton.getStyleClass().add("islandChangeNameActive");
         }

@@ -21,6 +21,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -42,8 +43,7 @@ import org.fulib.fx.constructs.listview.ComponentListCell;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
-import java.util.Comparator;
-import java.util.Map;
+import java.util.*;
 
 @Title("%browse.game")
 @Controller
@@ -68,9 +68,9 @@ BrowseGameController extends BasicController {
     @FXML
     public VBox browseGameVBoxList;
     @FXML
-    StackPane logoutWarningContainer;
+    public Label userName;
     @FXML
-    ImageView deleteIconImageView;
+    StackPane logoutWarningContainer;
     @FXML
     AnchorPane gameListAnchorPane;
     @FXML
@@ -83,6 +83,12 @@ BrowseGameController extends BasicController {
     Pane captainContainer;
     @FXML
     StackPane warningWindowContainer;
+    @FXML
+    ImageView backgroundImage;
+    @FXML
+    ImageView portraitImage;
+    @FXML
+    ImageView frameImage;
 
     @SubComponent
     @Inject
@@ -116,6 +122,11 @@ BrowseGameController extends BasicController {
     CreateGameService createGameService;
     final PopupBuilder popup = new PopupBuilder();
 
+    final Map<String, Integer> avatarMap = new HashMap<>();
+    final ArrayList<Image> backgroundsList = new ArrayList<>();
+    final ArrayList<Image> portraitsList = new ArrayList<>();
+    final ArrayList<Image> framesList = new ArrayList<>();
+
     final Provider<GameComponent> gameComponentProvider = () -> new GameComponent(this.bubbleComponent, this.browseGameService, this.editGameService, this.tokenStorage, this.resources);
 
     @Inject
@@ -128,8 +139,6 @@ BrowseGameController extends BasicController {
 
     private final ObservableList<Game> games = FXCollections.observableArrayList();
     private BooleanBinding deleteWarningIsInvisible;
-    private Image deleteIconRedImage;
-    private Image deleteIconBlackImage;
 
     @OnRender
     void createBindings() {
@@ -143,6 +152,26 @@ BrowseGameController extends BasicController {
         });
     }
 
+    public void initializeAvatarImage(Map<String, Integer> avatarMap) {
+        String resourcesPaths = "/de/uniks/stp24/assets/avatar/";
+        String backgroundFolderPath = "backgrounds/background_";
+        String frameFolderPath = "frames/frame_";
+        String portraitsFolderPath = "portraits/portrait_";
+
+        for (int i = 0; i <= 9; i++) {
+            backgroundsList.add(this.imageCache.get(resourcesPaths + backgroundFolderPath + i + ".png"));
+            framesList.add(this.imageCache.get(resourcesPaths + frameFolderPath + i + ".png"));
+            portraitsList.add(this.imageCache.get(resourcesPaths + portraitsFolderPath + i + ".png"));
+        }
+        setImageCode(avatarMap.get("backgroundIndex"), avatarMap.get("portraitIndex"), avatarMap.get("frameIndex"));
+    }
+
+    private void setImageCode(int backgroundIndex, int potraitIndex, int frameIndex) {
+        backgroundImage.setImage(backgroundsList.get(backgroundIndex));
+        portraitImage.setImage(portraitsList.get(potraitIndex));
+        frameImage.setImage(framesList.get(frameIndex));
+    }
+
     private void sortNewGamesOnTop() {
         this.games.sort(Comparator.comparing(Game::createdAt).reversed());
         this.games.sort(Comparator.comparing(game -> !game.owner().equals(this.tokenStorage.getUserId())));
@@ -151,8 +180,6 @@ BrowseGameController extends BasicController {
     //Load list of games as soon as BrowseGame-Screen is shown
     @OnInit
     void init() {
-        deleteIconRedImage = imageCache.get("icons/deleteRed.png");
-        deleteIconBlackImage = imageCache.get("icons/deleteBlack.png");
         this.controlResponses = responseConstants.respDelGame;
         this.textInfo = new Text("");
 
@@ -166,6 +193,7 @@ BrowseGameController extends BasicController {
                     editGameService.setGamesList(games);
                     createGameService.setGamesList(games);
                     this.sortNewGamesOnTop();
+                    this.userName.setText(tokenStorage.getName());
                 }),
                 error -> {
                     bubbleComponent.setErrorMode(true);
@@ -198,6 +226,15 @@ BrowseGameController extends BasicController {
     @OnRender
     void render() {
         this.deleteWarningIsInvisible = this.warningWindowContainer.visibleProperty().not();
+        if (Objects.isNull(tokenStorage.getAvatar())) {
+            avatarMap.put("backgroundIndex", 0);
+            avatarMap.put("portraitIndex", 8);
+            avatarMap.put("frameIndex", 8);
+            tokenStorage.setAvatarMap(avatarMap);
+            initializeAvatarImage(avatarMap);
+        } else initializeAvatarImage(tokenStorage.getAvatarMap());
+
+        logoutComponent.setParent(warningWindowContainer);
     }
 
     @OnRender
@@ -205,14 +242,11 @@ BrowseGameController extends BasicController {
         // delete Button has red text and icon when selected and the captain says something different
         this.del_game_b.styleProperty().bind(Bindings.createStringBinding(() -> {
             if (deleteWarningIsInvisible.get()) {
-                this.deleteIconImageView.setImage(deleteIconBlackImage);
                 bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.which.game"));
-                return "-fx-text-fill: Black";
             } else {
-                this.deleteIconImageView.setImage(deleteIconRedImage);
                 bubbleComponent.setCaptainText(resources.getString("pirate.browseGame.whiping.off.the.map"));
-                return "-fx-text-fill: #CF2A27";
             }
+            return "-fx-text-fill: White";
         }, this.deleteWarningIsInvisible));
     }
 
@@ -222,7 +256,8 @@ BrowseGameController extends BasicController {
 
     public void logOut() {
         popup.showPopup(logoutWarningContainer, logoutComponent);
-        popup.setBlur(gameListAnchorPane, browseGameVBoxButtons);
+        warningWindowContainer.setStyle("-fx-opacity: 0.5; -fx-background-color: black;");
+        warningWindowContainer.setVisible(true);
     }
 
     public void newGame() {
@@ -267,10 +302,5 @@ BrowseGameController extends BasicController {
     @OnDestroy
     void destroy() {
         subscriber.dispose();
-        backgroundAnchorPane.setStyle("-fx-background-image: null");
-        cardBackgroundVBox.setStyle("-fx-background-image: null");
-        deleteIconBlackImage = null;
-        deleteIconRedImage = null;
     }
-
 }

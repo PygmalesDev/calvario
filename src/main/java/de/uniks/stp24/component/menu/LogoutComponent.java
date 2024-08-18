@@ -7,6 +7,7 @@ import de.uniks.stp24.service.menu.BrowseGameService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import org.fulib.fx.annotation.controller.Component;
@@ -43,6 +44,7 @@ public class LogoutComponent extends VBox {
     @Inject
     @Resource
     ResourceBundle resources;
+    private Pane parent;
 
     @Inject
     public LogoutComponent(){
@@ -57,13 +59,20 @@ public class LogoutComponent extends VBox {
 
     @OnKey(code = KeyCode.ENTER)
     public void logout() {
-        this.subscriber.subscribe(browseGameService.logout(""));
-        this.getParent().setVisible(false);
-        app.show("/login");
+        if (this.getParent() != null && this.getParent().isVisible()) {
+            this.subscriber.subscribe(browseGameService.logout(""));
+            this.getParent().setVisible(false);
+            app.show("/login");
+        }
+    }
+
+    public void setParent(Pane parent) {
+        this.parent = parent;
     }
 
     public void cancel() {
         this.getParent().setVisible(false);
+        this.parent.setVisible(false);
     }
 
     @OnDestroy

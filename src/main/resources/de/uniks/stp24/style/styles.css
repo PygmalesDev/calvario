@@ -510,65 +510,11 @@ ToggleButton:hover{
 
 /**********************************************************************************************************************************/
 /************************* Lists **************************************************************************************************/
-.listBrowseGame, .listEnterGame{
-    -fx-background-color: transparent;
-}
-
-.listBrowseGame .list-cell{
-    -fx-font-family: "PT Serif";
-    -fx-font-size: 18;
-    -fx-font-weight: bold;
-    -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
-    -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-pref-width: 100;
-    -fx-pref-height: 50;
-}
 
 .userComponentText{
     -fx-font-family: "PT Serif";
     -fx-font-size: 10;
     -fx-font-weight: bold;
-}
-
-.listEnterGame .list-cell{
-    -fx-font-family: "PT Serif";
-    -fx-font-size: 16;
-    -fx-font-weight: bold;
-    -fx-background-color: transparent;
-    -fx-background-image: url("/de/uniks/stp24/assets/buttons/actionButton.png");
-    -fx-background-size: 100% 100%;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
-    -fx-pref-width: 180;
-    -fx-pref-height: 70;
-}
-
-.listBrowseGame .scroll-bar:vertical,
-.listEnterGame .scroll-bar:vertical{
-    -fx-background-color: transparent;
-    -fx-border-width: 1;
-}
-
-.listBrowseGame .virtual-flow .scroll-bar:vertical .thumb {
-    -fx-background-color: transparent;
-    -fx-background-size: 100% 100%;
-    -fx-background-image: url("/de/uniks/stp24/assets/buttons/listViewThumb.png");
-}
-
-.listEnterGame .virtual-flow .scroll-bar:vertical .thumb,
-.backgroundTextArea .scroll-bar:vertical .thumb {
-    -fx-background-color: black;
-}
-
-.listBrowseGame .scroll-bar:vertical .increment-button .increment-arrow, .listBrowseGame .scroll-bar .decrement-button .decrement-arrow,
-.listEnterGame .scroll-bar .increment-button .increment-arrow, .listEnterGame .scroll-bar .decrement-button .decrement-arrow,
-.backgroundTextArea .scroll-bar:vertical .increment-button .increment-arrow, .backgroundTextArea .decrement-button .decrement-arrow
-{
-    -fx-background-color: transparent;
-    -fx-background-image: none;
 }
 
 .listHeader{

@@ -194,6 +194,8 @@ public class FleetManagerComponent extends AnchorPane {
         blueprintButton.setVisible(false);
         shipsButton.setVisible(false);
         createFleetButton.setVisible(true);
+        this.blueprintsListView.setCellFactory(list -> new ComponentListCell<>(app, blueprintsNotAddableComponentProvider));
+
 
         this.fleetNameText.setText("Fleets");
 
